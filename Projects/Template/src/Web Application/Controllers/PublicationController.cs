@@ -25,5 +25,19 @@ namespace asi.asicentral.web.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult Edit(int id)
+        {
+            Publication publication = _objectService.GetAll<Publication>().Where(pub => pub.PublicationId == id).FirstOrDefault();
+            if (publication != null)
+            {
+                ViewBag.Title = "Publication - " + publication.Name;
+                ViewBag.Message = "Viewing the detailed information of a specific publication";
+                return View(publication);
+            }
+            else
+                throw new Exception("Invalid identifier for a publication: " + id);
+        }
+
     }
 }

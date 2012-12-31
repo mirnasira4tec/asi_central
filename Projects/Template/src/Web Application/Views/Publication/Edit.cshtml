@@ -1,0 +1,23 @@
+﻿@inherits System.Web.Mvc.WebViewPage<asi.asicentral.model.Publication>
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title.</h1>
+                <h2>@ViewBag.Message</h2>
+            </hgroup>
+            <p>
+                This Web page shows how to view/edit a specific database item.
+            </p>
+        </div>
+    </section>
+}
+<h3>Publication @Model.Name</h3>
+<h4>Schedule</h4>
+<table>
+    <tr><th style="width:100px">Identifier</th><th style="width:200px">Name</th></tr>
+    @foreach (asi.asicentral.model.PublicationIssue issue in Model.Issues)
+    {
+        <tr><td>@issue.PublicationIssueId</td><td>@issue.Name</td></tr>
+    }
+</table>
