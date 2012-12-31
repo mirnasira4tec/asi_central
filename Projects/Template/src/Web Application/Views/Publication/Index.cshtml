@@ -1,0 +1,28 @@
+﻿@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title.</h1>
+                <h2>@ViewBag.Message</h2>
+            </hgroup>
+            <p>
+                This Web page shows how to retrieve data from the database and using the full stack.<br />
+                Should try to do the same using jquery template and knockout<br />
+            </p>
+        </div>
+    </section>
+}
+<h3>List of Publications</h3>
+<h4>Todos</h4>
+<ul>
+<li>Add a new one</li>
+<li>Edit one</li>
+<li>Delete one</li>
+</ul>
+<table>
+    <tr><th style="width:100px">Identifier</th><th style="width:200px">Name</th></tr>
+    @foreach (asi.asicentral.model.Publication publication in ViewBag.Publications)
+    {
+        <tr><td>@publication.PublicationId</td><td>@publication.Name</td></tr>
+    }
+</table>

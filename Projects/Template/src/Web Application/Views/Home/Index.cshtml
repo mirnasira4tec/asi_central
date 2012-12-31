@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title.</h1>
+                <h2>@ViewBag.Message</h2>
+            </hgroup>
+            <p>
+                This Web application is a template used to experiment with technology stack and good practices.
+                This should only contain a minimum of data and can have multiple pages for each of the technology/practices being used.
+            </p>
+        </div>
+    </section>
+}
+<h3>List of experiments:</h3>
+<ol class="round">
+    <li class="one">
+        <h5>MVC Stack</h5>
+        Using a full stack which includes Entity Framework - Repository Pattern - Structure Map - Service Layer - MVC 4.<br />
+        This @Html.ActionLink("page", "Index", "Publication") contains a list of Publications and some simple binding examples.<br />
+        VS2012 Automatically includes css and js optimization using <a href="http://codebetter.com/howarddierking/2012/06/04/web-optimization-in-visual-studio-2012-rc/">Web Grease</a>.</br>
+        Seems to automatically include <a href="http://modernizr.com/">modernizr</a> which may not be required for all projects. It is used to test html5 browser compatibility.<br />
+        Also seems to contain <a href="http://knockoutjs.com/">knockout</a> an open source java library used to separate data from UI and implement the <a href="http://addyosmani.com/blog/understanding-mvvm-a-guide-for-javascript-developers/">MVVM pattern</a>.<br />
+    </li>
+
+    <li class="two">
+        <h5>Bootstrap</h5>
+        To be implemented...
+    </li>
+
+    <li class="three">
+        <h5>OAuth</h5>
+        To be Implemented...
+    </li>
+</ol>
