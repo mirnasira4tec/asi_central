@@ -1,4 +1,4 @@
-﻿In order to add a new Model class:
+﻿In order to add a new Model class: 
 1- Create the model in model folder
 2- If the mapping for the model will be non standard, create a configuration file under database\mappings
 3- Create or update the appropriate Context file (representing the database to connect to)
