@@ -23,6 +23,6 @@
     <tr><th style="width:100px">Identifier</th><th style="width:200px">Name</th></tr>
     @foreach (asi.asicentral.model.Publication publication in ViewBag.Publications)
     {
-        <tr><td>@publication.PublicationId</td><td>@publication.Name</td></tr>
+        <tr><td>@publication.PublicationId</td><td>@Html.ActionLink(publication.Name, "Edit", "Publication", new { id = publication.PublicationId }, null)</td></tr>
     }
 </table>

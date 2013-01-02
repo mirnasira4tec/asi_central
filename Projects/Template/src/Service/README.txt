@@ -12,4 +12,4 @@
 4- Update the EFRegistry
 	a- Add creation of context if new one was created (i.e. For<ASIInternetContext>().HybridHttpOrThreadLocalScoped().Use<ASIInternetContext>();)
 	b- Add creation of the repository with the appropriate context
-5- if specialied business logic method need to be added, they will need to be added to ObjectService class
+5- if specialized business logic method need to be added, they will need to be added to ObjectService class
