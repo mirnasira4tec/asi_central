@@ -172,6 +172,7 @@
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\NgonController.cs" />
     <Compile Include="Controllers\PublicationController.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyResolver.cs" />
@@ -283,6 +284,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Publication\Index.cshtml" />
     <Content Include="Views\Publication\Edit.cshtml" />
+    <Content Include="Views\Ngon\Ngon.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
