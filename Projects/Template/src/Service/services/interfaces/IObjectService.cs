@@ -25,8 +25,6 @@ namespace asi.asicentral.services.interfaces
 
         /// <summary>
         /// Used to update an object currently not attached
-        /// Dangerous, make sure the model is fully populated
-        /// If not sure, retrieve the object using GetAll and update the properties individually
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="entity"></param>

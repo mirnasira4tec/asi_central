@@ -28,7 +28,7 @@ namespace asi.asicentral.web.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            Publication publication = _objectService.GetAll<Publication>().Where(pub => pub.PublicationId == id).FirstOrDefault();
+            Publication publication = _objectService.GetAll<Publication>(true).Where(pub => pub.PublicationId == id).FirstOrDefault();
             if (publication != null)
             {
                 ViewBag.Title = "Publication - " + publication.Name;
@@ -44,18 +44,18 @@ namespace asi.asicentral.web.Controllers
         {
             if (ModelState.IsValid)
             {
-                //because the model is not simple (has relationships), it cannot be added directly using update
-                Publication original = _objectService.GetAll<Publication>().Where(pub => pub.PublicationId == publication.PublicationId).FirstOrDefault();
-                if (original != null)
-                {
-                    original.Name = publication.Name;
-                    _objectService.SaveChanges();
-                }
-                else
-                {
-                    throw new Exception("Invalid Identifier for the model: " + publication.PublicationId);
-                }
+                _objectService.Update<Publication>(publication);
+                _objectService.SaveChanges();
+                return RedirectToAction("Index");
             }
+            else
+            {
+                //because we do not store the many-many in the input fields, the publication object is incomplete
+                Publication original = _objectService.GetAll<Publication>(true).Where(pub => pub.PublicationId == publication.PublicationId).FirstOrDefault();
+                if (original != null) publication.Issues = original.Issues;
+            }
+            ViewBag.Title = "Publication - " + publication.Name;
+            ViewBag.Message = "Viewing the detailed information of a specific publication";
             return View(publication);
         }
 

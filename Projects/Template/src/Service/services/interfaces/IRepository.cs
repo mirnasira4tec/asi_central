@@ -25,7 +25,6 @@ namespace asi.asicentral.services.interfaces
 
         /// <summary>
         /// Used to update an object currently not attached
-        /// Dangerous, make sure the model is fully populated
         /// </summary>
         /// <param name="entity"></param>
         void Update(T entity);

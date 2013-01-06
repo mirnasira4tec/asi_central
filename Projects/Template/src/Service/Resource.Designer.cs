@@ -22,7 +22,7 @@ namespace asi.asicentral {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resource {
+    public class Resource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace asi.asicentral {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("asi.asicentral.Resource", typeof(Resource).Assembly);
@@ -51,7 +51,7 @@ namespace asi.asicentral {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,9 +61,9 @@ namespace asi.asicentral {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This field is a required field.
+        ///   Looks up a localized string similar to This field is required.
         /// </summary>
-        internal static string FieldRequired {
+        public static string FieldRequired {
             get {
                 return ResourceManager.GetString("FieldRequired", resourceCulture);
             }
@@ -72,9 +72,18 @@ namespace asi.asicentral {
         /// <summary>
         ///   Looks up a localized string similar to The name cannot be more than 50 characters.
         /// </summary>
-        internal static string NameLength {
+        public static string NameLength {
             get {
                 return ResourceManager.GetString("NameLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Publication Name.
+        /// </summary>
+        public static string PublicationName {
+            get {
+                return ResourceManager.GetString("PublicationName", resourceCulture);
             }
         }
     }

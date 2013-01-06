@@ -13,7 +13,7 @@
     </section>
 }
 @using (Html.BeginForm()) {
-<h3>Publication</h3>  <input type="submit" value="Save" />
+<h3>Publication</h3>  <input type="submit" value="Save" /> @Html.ActionLink("Cancel", "Index");
 @Html.HiddenFor(model=>model.PublicationId)
 <div class="editor-label">@Html.LabelFor(model => model.Name)</div>
 <div class="editor-field">@Html.EditorFor(model => model.Name) @Html.ValidationMessageFor(model => model.Name) </div>
