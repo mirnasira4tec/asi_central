@@ -9,7 +9,7 @@ namespace asi.asicentral.services.interfaces
     /// <summary>
     /// Repository pattern which will allow retrieving model from persistence
     /// </summary>
-    public interface IRepository<T> : IDisposable
+    public interface IRepository<T> : IDisposable where T : class
     {
         /// <summary>
         /// Adds a new entity
@@ -22,6 +22,13 @@ namespace asi.asicentral.services.interfaces
         /// </summary>
         /// <param name="entity"></param>
         void Delete(object entity);
+
+        /// <summary>
+        /// Used to update an object currently not attached
+        /// Dangerous, make sure the model is fully populated
+        /// </summary>
+        /// <param name="entity"></param>
+        void Update(T entity);
 
         /// <summary>
         /// Get a queryable object for the class

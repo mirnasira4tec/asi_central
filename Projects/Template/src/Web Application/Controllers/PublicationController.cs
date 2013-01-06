@@ -39,5 +39,25 @@ namespace asi.asicentral.web.Controllers
                 throw new Exception("Invalid identifier for a publication: " + id);
         }
 
+        [HttpPost]
+        public ActionResult Edit(Publication publication)
+        {
+            if (ModelState.IsValid)
+            {
+                //because the model is not simple (has relationships), it cannot be added directly using update
+                Publication original = _objectService.GetAll<Publication>().Where(pub => pub.PublicationId == publication.PublicationId).FirstOrDefault();
+                if (original != null)
+                {
+                    original.Name = publication.Name;
+                    _objectService.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("Invalid Identifier for the model: " + publication.PublicationId);
+                }
+            }
+            return View(publication);
+        }
+
     }
 }

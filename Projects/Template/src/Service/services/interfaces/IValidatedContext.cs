@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,5 +26,14 @@ namespace asi.asicentral.services.interfaces
         /// <param name="type"></param>
         /// <returns></returns>
         DbSet GetSet(Type type);
+
+        /// <summary>
+        /// To be used to attach a simple model and update the database
+        /// Entry(entity).State = EntityState.Modified;
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        DbEntityEntry<T> Entry<T>(T entity) where T : class;
     }
 }

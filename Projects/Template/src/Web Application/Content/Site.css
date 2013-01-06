@@ -596,4 +596,13 @@ tr.pager td {
         footer p {
             margin: 0;
         }
+
+    /* Form fields
+    ----------------------------------------------------------*/
+    div.editor-label {
+        font-weight: bold;
+    }
+
+    div.editor-field {
+    }
 }
