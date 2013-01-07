@@ -117,22 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="FieldRequired" xml:space="preserve">
-    <value>This field is required</value>
+  <data name="PublicationEditDescription" xml:space="preserve">
+    <value>Viewing the detailed information of a specific publication</value>
   </data>
-  <data name="NameLength" xml:space="preserve">
-    <value>The name cannot be more than 50 characters</value>
+  <data name="PublicationEditFieldsSchedule" xml:space="preserve">
+    <value>Assigned Schedules</value>
   </data>
-  <data name="PublicationId" xml:space="preserve">
-    <value>Publication Identifier</value>
+  <data name="PublicationEditFieldsTitle" xml:space="preserve">
+    <value>Publication</value>
   </data>
-  <data name="PublicationIssueId" xml:space="preserve">
-    <value>Identifier</value>
-  </data>
-  <data name="PublicationIssueName" xml:space="preserve">
-    <value>Issue Name</value>
-  </data>
-  <data name="PublicationName" xml:space="preserve">
-    <value>Publication Name</value>
+  <data name="PublicationEditTitle" xml:space="preserve">
+    <value>Publication - {0}</value>
   </data>
 </root>

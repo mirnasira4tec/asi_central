@@ -16,27 +16,38 @@ namespace asi.asicentral.services
         private static Container _container = new Container(new EFRegistry());
         private IDictionary<string, IUnitOfWork> repositories = new Dictionary<string, IUnitOfWork>();
 
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
         public ObjectService()
         {
-            //nothing to do at this point
-            var i = 0;
         }
 
-        public void Add<T>(T entity)
+        #region IObjectService
+
+        public void Add<T>(T entity) where T : class
         {
             if (entity == null) throw new Exception("You cannot add a null object");
             IRepository<T> repository = GetRepository<T>();
             repository.Add(entity);
         }
 
-        public void Delete<T>(T entity)
+        public void Delete<T>(T entity) where T : class
         {
             if (entity == null) throw new Exception("You cannot delete a null object");
             IRepository<T> repository = GetRepository<T>();
             repository.Delete(entity);
         }
 
-        public IQueryable<T> GetAll<T>(bool readOnly = false)
+        public T Update<T>(T entity) where T : class
+        {
+            if (entity == null) throw new Exception("You cannot Update a null object");
+            IRepository<T> repository = GetRepository<T>();
+            repository.Update(entity);
+            return entity;
+        }
+
+        public IQueryable<T> GetAll<T>(bool readOnly = false) where T : class
         {
             IRepository<T> repository = GetRepository<T>();
             IQueryable<T> query = repository.GetAll(readOnly);
@@ -50,6 +61,10 @@ namespace asi.asicentral.services
             return i;
         }
 
+        #endregion IObjectService
+
+        #region IDisposable
+
         public void Dispose()
         {
             foreach (IUnitOfWork repository in repositories.Values)
@@ -59,12 +74,14 @@ namespace asi.asicentral.services
             }
         }
 
+        #endregion IDisposable
+
         /// <summary>
         /// Method used to lookup and maintain the cache for the repository
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        private IRepository<T> GetRepository<T>()
+        private IRepository<T> GetRepository<T>() where T : class
         {
             IRepository<T> repository = null;
             string name = typeof(T).FullName;

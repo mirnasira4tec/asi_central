@@ -4,6 +4,7 @@ using asi.asicentral.services.interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,6 +33,8 @@ namespace asi.asicentral.database
             base.OnModelCreating(modelBuilder);
         }
 
+        #region IValidatedContext
+
         public void Supports(Type type)
         {
             if (type != typeof(Publication) && type != typeof(PublicationIssue))
@@ -52,5 +55,7 @@ namespace asi.asicentral.database
             }
             throw new Exception("Incompatible class for this context");
         }
+
+        #endregion IValidatedContext
     }
 }

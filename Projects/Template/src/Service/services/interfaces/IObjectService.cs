@@ -15,19 +15,27 @@ namespace asi.asicentral.services.interfaces
         /// Adds a new entity
         /// </summary>
         /// <param name="entity"></param>
-        void Add<T>(T entity);
+        void Add<T>(T entity) where T : class;
 
         /// <summary>
         /// Deletes an object
         /// </summary>
         /// <param name="entity"></param>
-        void Delete<T>(T entity);
+        void Delete<T>(T entity) where T : class;
+
+        /// <summary>
+        /// Used to update an object currently not attached
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        T Update<T>(T entity) where T : class;
 
         /// <summary>
         /// Get a queryable object for the class
         /// </summary>
         /// <returns></returns>
-        IQueryable<T> GetAll<T>(bool readOnly = false);
+        IQueryable<T> GetAll<T>(bool readOnly = false) where T : class;
 
         /// <summary>
         /// Saves any pending changes, returns number of records updated

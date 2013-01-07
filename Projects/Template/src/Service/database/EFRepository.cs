@@ -9,17 +9,20 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database
 {
-    public class EFRepository<T> : IRepository<T>, IDisposable, IUnitOfWork
+    public class EFRepository<T> : IRepository<T>, IDisposable, IUnitOfWork where T : class
     {
         IValidatedContext _context = null;
 
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
+        /// <param name="context">The context to use for the repository</param>
         public EFRepository(IValidatedContext context)
         {
             _context = context;
-            ReadOnly = false;
         }
 
-        public bool ReadOnly { get; set; }
+        #region IRepository
 
         public void Add(object entity)
         {
@@ -43,14 +46,26 @@ namespace asi.asicentral.database
             else return _context.GetSet(typeof(T)) as IQueryable<T>;
         }
 
-        public void Dispose()
+        public void Update(T entity)
         {
-            _context.Dispose();
+            _context.Supports(typeof(T));
+            _context.Entry(entity).State = System.Data.EntityState.Modified;
+            _context.Entry<T>(entity).State = System.Data.EntityState.Modified;
         }
 
         public int SaveChanges()
         {
             return _context.SaveChanges();
         }
+
+        #endregion IRepository
+
+        #region IDisposable
+
+        public void Dispose()
+        {
+            _context.Dispose();
+        }
+        #endregion IDisposable
     }
 }
