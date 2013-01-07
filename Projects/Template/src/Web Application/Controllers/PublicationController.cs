@@ -21,8 +21,7 @@ namespace asi.asicentral.web.Controllers
         {
             ViewBag.Title = "Publications";
             ViewBag.Message = "Publications stored in the database";
-            ViewBag.Publications = _objectService.GetAll<Publication>(true).ToList();
-            return View("Index");
+            return View("Index", _objectService.GetAll<Publication>(true).ToList());
         }
 
         [HttpGet]
