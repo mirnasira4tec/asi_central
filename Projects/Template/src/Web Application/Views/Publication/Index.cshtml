@@ -1,4 +1,5 @@
-﻿@section featured {
+﻿@inherits System.Web.Mvc.WebViewPage<IList<asi.asicentral.model.Publication>>
+@section featured {
     <section class="featured">
         <div class="content-wrapper">
             <hgroup class="title">
@@ -20,7 +21,7 @@
 </ul>
 <table>
     <tr><th style="width:100px">Identifier</th><th style="width:200px">Name</th></tr>
-    @foreach (asi.asicentral.model.Publication publication in ViewBag.Publications)
+    @foreach (asi.asicentral.model.Publication publication in Model)
     {
         <tr><td>@publication.PublicationId</td><td>@Html.ActionLink(publication.Name, "Edit", "Publication", new { id = publication.PublicationId }, null)</td></tr>
     }
