@@ -14,8 +14,11 @@ namespace asi.asicentral.model
             if (this.GetType() == typeof(PublicationIssue))
                 Publications = new List<Publication>();
         }
+
+        [Display(Name = "PublicationIssueId", ResourceType = typeof(Resource))]
         public int PublicationIssueId { get; set; }
 
+        [Display(Name = "PublicationIssueName", ResourceType = typeof(Resource))]
         [Required(ErrorMessageResourceName = "FieldRequired")]
         [MaxLength(50, ErrorMessageResourceName = "NameLength")]
         public string Name { get; set; }

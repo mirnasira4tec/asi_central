@@ -15,6 +15,7 @@ namespace asi.asicentral.model
                 Issues = new List<PublicationIssue>();
         }
 
+        [Display(Name = "PublicationId", ResourceType = typeof(Resource))]
         public int PublicationId { get; set; }
 
         [Display(Name = "PublicationName", ResourceType = typeof(Resource))]

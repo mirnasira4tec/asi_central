@@ -22,7 +22,7 @@ namespace asi.asicentral.web.Controllers
             ViewBag.Title = "Publications";
             ViewBag.Message = "Publications stored in the database";
             ViewBag.Publications = _objectService.GetAll<Publication>(true).ToList();
-            return View();
+            return View("Index");
         }
 
         [HttpGet]
@@ -31,15 +31,16 @@ namespace asi.asicentral.web.Controllers
             Publication publication = _objectService.GetAll<Publication>(true).Where(pub => pub.PublicationId == id).FirstOrDefault();
             if (publication != null)
             {
-                ViewBag.Title = "Publication - " + publication.Name;
-                ViewBag.Message = "Viewing the detailed information of a specific publication";
-                return View(publication);
+                ViewBag.Title = String.Format(Resource.PublicationEditTitle, publication.Name);
+                ViewBag.Message = Resource.PublicationEditDescription;
+                return View("Edit", publication);
             }
             else
                 throw new Exception("Invalid identifier for a publication: " + id);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(Publication publication)
         {
             if (ModelState.IsValid)
@@ -56,7 +57,7 @@ namespace asi.asicentral.web.Controllers
             }
             ViewBag.Title = "Publication - " + publication.Name;
             ViewBag.Message = "Viewing the detailed information of a specific publication";
-            return View(publication);
+            return View("Edit", publication);
         }
 
     }

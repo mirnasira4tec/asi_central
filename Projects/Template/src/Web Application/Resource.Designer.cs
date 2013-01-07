@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace asi.asicentral {
+namespace asi.asicentral.web {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace asi.asicentral {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("asi.asicentral.Resource", typeof(Resource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("asi.asicentral.web.Resource", typeof(Resource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,56 +61,38 @@ namespace asi.asicentral {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This field is required.
+        ///   Looks up a localized string similar to Viewing the detailed information of a specific publication.
         /// </summary>
-        public static string FieldRequired {
+        public static string PublicationEditDescription {
             get {
-                return ResourceManager.GetString("FieldRequired", resourceCulture);
+                return ResourceManager.GetString("PublicationEditDescription", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The name cannot be more than 50 characters.
+        ///   Looks up a localized string similar to Assigned Schedules.
         /// </summary>
-        public static string NameLength {
+        public static string PublicationEditFieldsSchedule {
             get {
-                return ResourceManager.GetString("NameLength", resourceCulture);
+                return ResourceManager.GetString("PublicationEditFieldsSchedule", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Publication Identifier.
+        ///   Looks up a localized string similar to Publication.
         /// </summary>
-        public static string PublicationId {
+        public static string PublicationEditFieldsTitle {
             get {
-                return ResourceManager.GetString("PublicationId", resourceCulture);
+                return ResourceManager.GetString("PublicationEditFieldsTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Identifier.
+        ///   Looks up a localized string similar to Publication - {0}.
         /// </summary>
-        public static string PublicationIssueId {
+        public static string PublicationEditTitle {
             get {
-                return ResourceManager.GetString("PublicationIssueId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Issue Name.
-        /// </summary>
-        public static string PublicationIssueName {
-            get {
-                return ResourceManager.GetString("PublicationIssueName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Publication Name.
-        /// </summary>
-        public static string PublicationName {
-            get {
-                return ResourceManager.GetString("PublicationName", resourceCulture);
+                return ResourceManager.GetString("PublicationEditTitle", resourceCulture);
             }
         }
     }
