@@ -1,17 +1,68 @@
 <html>
 <head>
-<title>ASI Central Admin Page</title>
+<title>ASI Central Admin: Counselor Upload</title>
 </head>
-<body>
-<h1>ASI Central Admin Tools</h1>
-<ul>
-<li><a href="http://prep.new.asicentral.com/CounselorUpload.aspx" target="_blank">Counselor</a></li>
-<li><a href="http://prep.new.asicentral.com/stichesnewsupload.aspx" target="_blank">Stitches News</a></li>
-<li><a href="http://prep.new.asicentral.com/stitchesadmin.aspx" target="_blank">Stitches Admin (Blogs, Newsletters)</a></li>
-<li><a href="http://prep.new.asicentral.com/newslettersupload.aspx" target="_blank">Old Ektron Database (Newsletters, Press, Legal, Case Studies)</a></li>
-<li><a href="http://prep.new.asicentral.com/newsRotatorAdminUpload.aspx" target="_blank">News Rotator</a></li>
-<li><a href="http://admin.asicentral.asinetwork.local/index.asp" target="_blank">ASI Central Admin (Feeds ESP Web)</a></li>
-</ul>
+<body bgcolor="#E3E3E3">
+<h1>Counselor Tool</h1>
+
+ <select>
+	<option value="1">News</option>
+	<option value="2">Case Studies</option>
+	<option value="3">Apparel</option>
+	<option value="4">Social</option>
+	<option value="5">Research</option>
+	<option value="6">Video</option>
+	<option value="7">Awards</option>
+	<option value="8">Road Tour</option>
+</select>
+<br />
+<br />
+ Title:  
+        <input name="txtTitle" type="text" id="txtTitle" />
+        <br />
+        <br />
+        Author:  
+        <input name="txtAuthor" type="text" id="txtAuthor" />
+        <br />
+        <br />
+         Date:  
+        <input name="txtDate" type="text" id="TextDate" />
+        <br />
+        <br />
+        Social Media:  
+        <input name="txtSocMed" type="text" id="txtSocMed" />
+        <br />
+        <br />
+        Small Image:  
+        <input name="txtImgSm" type="text" id="txtImgSm" />
+        <br />
+        <br />
+        Large Image:  
+        <input name="txtImgLg" type="text" id="txtImgLg" />
+        <br />
+        <br />
+        Tagline:  
+        <br />
+        <textarea name="txtTagline" id="txtTagline" style="width:600px;"></textarea>
+        <br />
+        <br />
+        Teaser:  
+        <br />
+        <textarea name="txtTeaser" id="txtTeaser" style="height:100px;width:600px;"></textarea>
+        <br />
+        <br />
+        Content: 
+        <br /> 
+        <textarea name="txtContent" rows="2" cols="20" id="txtContent" style="height:700px;width:600px;"></textarea>
+        <br />
+        <br />
+        Active?:  
+        <input id="cbActive" type="checkbox" name="cbActive" />
+        <br />
+        <br />
+        <input type="submit" name="btnSubmit" value="Submit" id="btnSubmit" />
+
+
 
 </body>
 </html>
