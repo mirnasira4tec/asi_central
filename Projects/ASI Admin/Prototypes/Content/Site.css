@@ -1,0 +1,12 @@
+	div.main-body {
+		margin: 0 0 0 30px;
+	}
+
+    /* Form fields
+    ----------------------------------------------------------*/
+    div.editor-label {
+        font-weight: bold;
+    }
+
+    div.editor-field {
+    }
