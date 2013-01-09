@@ -12,6 +12,10 @@ namespace asi.asicentral.web.Controllers
     {
         IObjectService _objectService;
 
+        /// <summary>
+        /// Controller for any Publication related functionality
+        /// </summary>
+        /// <param name="objectService">Required as we will be retrieving records from the database</param>
         public PublicationController(IObjectService objectService)
         {
             _objectService = objectService;

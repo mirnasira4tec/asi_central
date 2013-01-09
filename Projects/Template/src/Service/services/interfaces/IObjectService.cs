@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace asi.asicentral.services.interfaces
 {
     /// <summary>
-    /// Used to access business logic
+    /// Used to access persistence logic
     /// </summary>
     public interface IObjectService : IDisposable
     {
