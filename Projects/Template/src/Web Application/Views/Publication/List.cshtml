@@ -17,12 +17,14 @@
 <h4>Todos</h4>
 <ul>
 <li>Add a new one</li>
-<li>Delete one</li>
 </ul>
-<table>
-    <tr><th style="width:100px">Identifier</th><th style="width:200px">Name</th></tr>
+
+<table class="table table-bordered table-condensed table-striped">
+    <thead><tr><th>Name</th></tr></thead>
+    <tbody>
     @foreach (asi.asicentral.model.Publication publication in Model)
     {
-        <tr><td>@publication.PublicationId</td><td>@Html.ActionLink(publication.Name, "Edit", "Publication", new { id = publication.PublicationId }, null)</td></tr>
+        <tr><td><a href="@Url.Action("Delete", "Publication", new { id = publication.PublicationId })"><i class="icon-remove-circle"></i></a>&nbsp;&nbsp;@Html.ActionLink(publication.Name, "Edit", "Publication", new { id = publication.PublicationId }, null)</td></tr>
     }
+    </tbody>
 </table>
