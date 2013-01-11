@@ -24,7 +24,15 @@
     <tbody>
     @foreach (asi.asicentral.model.Publication publication in Model)
     {
-        <tr><td><a href="@Url.Action("Delete", "Publication", new { id = publication.PublicationId })"><i class="icon-remove-circle"></i></a>&nbsp;&nbsp;@Html.ActionLink(publication.Name, "Edit", "Publication", new { id = publication.PublicationId }, null)</td></tr>
+        <tr><td><a class="remove" href="@Url.Action("Delete", "Publication", new { id = publication.PublicationId })"><i class="icon-remove-circle"></i></a>&nbsp;&nbsp;@Html.ActionLink(publication.Name, "Edit", "Publication", new { id = publication.PublicationId }, null)</td></tr>
     }
     </tbody>
 </table>
+@section Scripts {
+<script>
+$(".remove").click(function (e) {
+    if (!confirm("Are you sure you want to delete this item?"))
+        e.preventDefault();
+});
+</script>
+}
