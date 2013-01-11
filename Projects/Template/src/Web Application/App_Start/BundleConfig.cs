@@ -25,8 +25,8 @@ namespace asi.asicentral.web
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/site.css",
-                        "~/Content/bootstrap-responsive.css",
-                        "~/Content/bootstrap.css"));
+                        "~/Content/bootstrap.css",
+                        "~/Content/bootstrap-responsive.css"));
         }
     }
 }

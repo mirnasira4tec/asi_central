@@ -135,4 +135,7 @@
   <data name="PublicationName" xml:space="preserve">
     <value>Publication Name</value>
   </data>
+  <data name="PublicationPrompt" xml:space="preserve">
+    <value>Enter the Publication Name...</value>
+  </data>
 </root>

@@ -113,5 +113,14 @@ namespace asi.asicentral {
                 return ResourceManager.GetString("PublicationName", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the Publication Name....
+        /// </summary>
+        public static string PublicationPrompt {
+            get {
+                return ResourceManager.GetString("PublicationPrompt", resourceCulture);
+            }
+        }
     }
 }

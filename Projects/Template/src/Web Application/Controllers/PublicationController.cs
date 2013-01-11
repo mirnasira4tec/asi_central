@@ -23,9 +23,14 @@ namespace asi.asicentral.web.Controllers
 
         public ActionResult Index()
         {
+            return List();
+        }
+
+        public ActionResult List()
+        {
             ViewBag.Title = "Publications";
             ViewBag.Message = "Publications stored in the database";
-            return View("Index", _objectService.GetAll<Publication>(true).ToList());
+            return View("List", _objectService.GetAll<Publication>(true).ToList());
         }
 
         [HttpGet]
@@ -42,6 +47,20 @@ namespace asi.asicentral.web.Controllers
                 throw new Exception("Invalid identifier for a publication: " + id);
         }
 
+        [HttpGet]
+        public ActionResult Delete(int id)
+        {
+            Publication publication = _objectService.GetAll<Publication>().Where(pub => pub.PublicationId == id).FirstOrDefault();
+            if (publication != null)
+            {
+                _objectService.Delete(publication);
+                _objectService.SaveChanges();
+                return RedirectToAction("List");
+            }
+            else
+                throw new Exception("Invalid identifier for a publication: " + id);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Publication publication)
@@ -50,7 +69,7 @@ namespace asi.asicentral.web.Controllers
             {
                 _objectService.Update<Publication>(publication);
                 _objectService.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("List");
             }
             else
             {

@@ -15,12 +15,12 @@ namespace asi.asicentral.model
                 Issues = new List<PublicationIssue>();
         }
 
-        [Display(Name = "PublicationId", ResourceType = typeof(Resource))]
+        [Display(ResourceType = typeof(Resource), Name = "PublicationId")]
         public int PublicationId { get; set; }
 
-        [Display(Name = "PublicationName", ResourceType = typeof(Resource))]
+        [Display(ResourceType = typeof(Resource), Name = "PublicationName", Prompt = "PublicationPrompt")]
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
-        [MaxLength(50, ErrorMessageResourceName = "NameLength", ErrorMessageResourceType = typeof(Resource))]
+        [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "NameLength")]
         public string Name { get; set; }
 
         public virtual IList<PublicationIssue> Issues { get; set; }

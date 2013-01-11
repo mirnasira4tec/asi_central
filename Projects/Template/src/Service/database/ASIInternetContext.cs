@@ -37,7 +37,7 @@ namespace asi.asicentral.database
 
         public void Supports(Type type)
         {
-            if (type != typeof(Publication) && type != typeof(PublicationIssue))
+            if (!typeof(Publication).IsAssignableFrom(type) && !typeof(PublicationIssue).IsAssignableFrom(type))
             {
                 throw new Exception("Invalid context for the class: " + type.FullName);
             }
@@ -45,11 +45,11 @@ namespace asi.asicentral.database
 
         public DbSet GetSet(Type type)
         {
-            if (type == typeof(Publication))
+            if (typeof(Publication).IsAssignableFrom(type))
             {
                 return Publications;
             }
-            else if (type == typeof(PublicationIssue))
+            else if (typeof(PublicationIssue).IsAssignableFrom(type))
             {
                 return PublicationIssues;
             }
