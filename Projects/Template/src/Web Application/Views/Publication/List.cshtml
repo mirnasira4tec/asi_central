@@ -17,6 +17,7 @@
 <h4>Todos</h4>
 <ul>
 <li>Add a new one</li>
+<li>esc and enter for the dialog box</li>
 </ul>
 
 <table class="table table-bordered table-condensed table-striped">
@@ -24,15 +25,22 @@
     <tbody>
     @foreach (asi.asicentral.model.Publication publication in Model)
     {
-        <tr><td><a class="remove" href="@Url.Action("Delete", "Publication", new { id = publication.PublicationId })"><i class="icon-remove-circle"></i></a>&nbsp;&nbsp;@Html.ActionLink(publication.Name, "Edit", "Publication", new { id = publication.PublicationId }, null)</td></tr>
+        <tr><td><a class="remove" href="#"><i data-id="@publication.PublicationId" class="icon-remove-circle"></i></a>&nbsp;&nbsp;@Html.ActionLink(publication.Name, "Edit", "Publication", new { id = publication.PublicationId }, null)</td></tr>
     }
     </tbody>
 </table>
+@using (Html.BeginForm("Delete", "Publication",FormMethod.Post, new { id = "deleteForm"} )) {
+@Html.AntiForgeryToken()
+<input type="hidden" name="id" value="0" />
+}
 @section Scripts {
+<script src="/Scripts/asi-modal.js"></script>
 <script>
 $(".remove").click(function (e) {
-    if (!confirm("Are you sure you want to delete this item?"))
-        e.preventDefault();
+    $("#deleteForm").find('input[name="id"]').val($(e.target).data("id"));
+    asi.modal.confirm("Confirm Delete", "Are you sure you want to delete this item?", function () {
+        $("#deleteForm").submit();
+    });
 });
 </script>
 }

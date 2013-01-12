@@ -47,7 +47,8 @@ namespace asi.asicentral.web.Controllers
                 throw new Exception("Invalid identifier for a publication: " + id);
         }
 
-        [HttpGet]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
             Publication publication = _objectService.GetAll<Publication>().Where(pub => pub.PublicationId == id).FirstOrDefault();
