@@ -197,7 +197,7 @@
     <Content Include="Global.asax" />
     <None Include="Properties\PublishProfiles\Web App Deploy.pubxml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
-    <Content Include="Scripts\asi-modal.js" />
+    <Content Include="Scripts\asi.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
@@ -243,6 +243,7 @@
     <Content Include="Views\Publication\Edit.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\string.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MultilineText.cshtml" />
+    <Content Include="Views\Publication\Add.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

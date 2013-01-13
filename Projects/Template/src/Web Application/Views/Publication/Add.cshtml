@@ -1,0 +1,26 @@
+﻿@model asi.asicentral.model.Publication
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title.</h1>
+                <h2>@ViewBag.Message</h2>
+            </hgroup>
+            <p>
+                This Web page shows how to add a specific database item. All other strings are from a Resource file.
+            </p>
+        </div>
+    </section>
+}
+@using (Html.BeginForm()) {
+@Html.AntiForgeryToken()
+<h3>@Html.Encode(asi.asicentral.web.Resource.PublicationAddTitle)</h3>  <input type="submit" value="Save" /> @Html.ActionLink("Cancel", "Index");
+@Html.HiddenFor(model=>model.PublicationId)
+<div class="form-group">
+<div class="editor-label">@Html.LabelFor(model => model.Name)</div>
+<div class="editor-field">@Html.EditorFor(model => model.Name) @Html.ValidationMessageFor(model => model.Name)</div><br />
+</div>
+}
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

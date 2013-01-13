@@ -43,8 +43,6 @@ header .content-wrapper {
     padding-top: 20px;
 }
 
-
-
 /* site title
 ----------------------------------------------------------*/
 .site-title {
@@ -221,9 +219,32 @@ input[type="checkbox"].input-validation-error {
 
 /* Form fields
     ----------------------------------------------------------*/
-div.editor-label {
+div.form-group {
+    width: 50%;
+    border-width:thin; 
+    border-style:solid;
+    border-color: #888888;
+    margin: 10px 10px 10px 0px;
+    padding: 10px 10px 10px 10px;
+    box-shadow: 3px 3px 5px #888888;
+}
+
+div.editor-label label {
     font-weight: bold;
 }
 
 div.editor-field {
+}
+
+input[type="submit"],
+input[type="button"],
+button {
+    background-color: #d3dce0;
+    border: 1px solid #787878;
+    cursor: pointer;
+    font-size: 1.2em;
+    font-weight: 600;
+    padding: 7px;
+    margin-right: 8px;
+    width: auto;
 }

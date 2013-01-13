@@ -61,11 +61,65 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this item?.
+        /// </summary>
+        public static string ConfirmDeleteMessage {
+            get {
+                return ResourceManager.GetString("ConfirmDeleteMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm Delete.
+        /// </summary>
+        public static string ConfirmDeleteTitle {
+            get {
+                return ResourceManager.GetString("ConfirmDeleteTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click to delete the item.
+        /// </summary>
+        public static string DeleteTooltip {
+            get {
+                return ResourceManager.GetString("DeleteTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This page allows the user to add a new Publication.
+        /// </summary>
+        public static string PublicationAddDescription {
+            get {
+                return ResourceManager.GetString("PublicationAddDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Publication.
+        /// </summary>
+        public static string PublicationAddTitle {
+            get {
+                return ResourceManager.GetString("PublicationAddTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Viewing the detailed information of a specific publication.
         /// </summary>
         public static string PublicationEditDescription {
             get {
                 return ResourceManager.GetString("PublicationEditDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This Publication has no schedule assigned.
+        /// </summary>
+        public static string PublicationEditFieldsNoSchedule {
+            get {
+                return ResourceManager.GetString("PublicationEditFieldsNoSchedule", resourceCulture);
             }
         }
         
@@ -79,7 +133,7 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Publication.
+        ///   Looks up a localized string similar to Edit Publication.
         /// </summary>
         public static string PublicationEditFieldsTitle {
             get {
