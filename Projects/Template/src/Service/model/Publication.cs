@@ -24,5 +24,24 @@ namespace asi.asicentral.model
         public string Name { get; set; }
 
         public virtual IList<PublicationIssue> Issues { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("Publication: {0} - {1}", PublicationId, Name);
+        }
+
+        public override bool Equals(object obj)
+        {
+            bool equals = false;
+
+            Publication publication = obj as Publication;
+            if (publication != null) equals = publication.PublicationId == PublicationId;
+            return equals;
+        }
+
+        public override int GetHashCode()
+        {
+            return PublicationId.GetHashCode();
+        }
     }
 }

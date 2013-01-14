@@ -23,5 +23,24 @@ namespace asi.asicentral.model
         [MaxLength(50, ErrorMessageResourceName = "NameLength")]
         public string Name { get; set; }
         public virtual IList<Publication> Publications { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("PublicationIssue: {0} - {1}", PublicationIssueId, Name);
+        }
+
+        public override bool Equals(object obj)
+        {
+            bool equals = false;
+
+            PublicationIssue publication = obj as PublicationIssue;
+            if (publication != null) equals = publication.PublicationIssueId == PublicationIssueId;
+            return equals;
+        }
+
+        public override int GetHashCode()
+        {
+            return PublicationIssueId.GetHashCode();
+        }
     }
 }
