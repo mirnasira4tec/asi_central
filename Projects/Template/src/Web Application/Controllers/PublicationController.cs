@@ -61,6 +61,9 @@ namespace asi.asicentral.web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        /// <summary>
+        /// Could use Edit for this one but there might be validation specific to Add operation which does not apply to Edit
+        /// </summary>
         public ActionResult Add(Publication publication)
         {
             if (ModelState.IsValid)
