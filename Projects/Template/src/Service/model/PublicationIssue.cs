@@ -19,8 +19,8 @@ namespace asi.asicentral.model
         public int PublicationIssueId { get; set; }
 
         [Display(Name = "PublicationIssueName", ResourceType = typeof(Resource))]
-        [Required(ErrorMessageResourceName = "FieldRequired")]
-        [MaxLength(50, ErrorMessageResourceName = "NameLength")]
+        [Required(ErrorMessageResourceName = "FieldRequired", ResourceType = typeof(Resource))]
+        [MaxLength(50, ErrorMessageResourceName = "NameLength", ResourceType = typeof(Resource))]
         public string Name { get; set; }
         public virtual IList<Publication> Publications { get; set; }
 
