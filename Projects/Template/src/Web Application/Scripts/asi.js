@@ -8,29 +8,28 @@ asi.modal = asi.modal || {};
     var modalCallback = null;
 
     modal.confirm = function (title, message, callback, okText, cancelText) {
-        modalCallback = callback;
-        var modalModel = {
+        var modalData = {
             title: title,
             message: message,
             okText: (okText ? okText : "OK"),
             cancelText: (cancelText ? cancelText : "Cancel"),
         };
-        addModal(modalModel);
+        showModal('/Scripts/templates/dialog.html', modalData, callback);
     };
 
-    function addModal(modalModel) {
+    function showModal(template, modalData, callback) {
         if ($('#asi-modal')) $('#asi-modal').parent().remove();
-        $('body').append($('<div>').load('/Scripts/templates/dialog.html', function () {
-            ko.applyBindings(modalModel);
+        $('body').append($('<div>').load(template, function () {
+            ko.applyBindings(modalData);
             var div = $('#asi-modal');
             var okBtn = div.find("a.btn-primary");
-            okBtn.on("click", null, function () { if (modalCallback) { modalCallback(true); modalCallback = null; } });
+            okBtn.on("click", null, function () { if (callback) { callback(true); callback = null; } });
             div.on("keypress", null, function (e) {
                 var code = (e.keyCode ? e.keyCode : e.which);
                 if (code === 13) { okBtn.click(); }
             });
-            div.on("hide", null, function () { if (modalCallback) { modalCallback(false); modalCallback = null; } });
-            $("#asi-modal").modal({});
+            div.on("hide", null, function () { if (callback) { callback(false); callback = null; } });
+            div.modal({});
         }));
     };
 }(asi.modal, jQuery));
