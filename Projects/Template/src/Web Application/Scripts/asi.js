@@ -8,38 +8,29 @@ asi.modal = asi.modal || {};
     var modalCallback = null;
 
     modal.confirm = function (title, message, callback, okText, cancelText) {
-        modalCallback = callback;
-        addModal(title, message, okText, cancelText);
-        $("#asi-modal").modal({});
+        var modalData = {
+            title: title,
+            message: message,
+            okText: (okText ? okText : "OK"),
+            cancelText: (cancelText ? cancelText : "Cancel"),
+        };
+        showModal('/Scripts/templates/dialog.html', modalData, callback);
     };
 
-    function addModal(title, message, okText, cancelText) {
-        var parts = ['<div id="asi-modal" class="modal hide fade" tabindex="-1">'];
-        parts.push('<div class="modal-header">');
-        parts.push('<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>');
-        parts.push('<h3>' + title + '</h3>');
-        parts.push('</div>');
-        parts.push('<div class="modal-body"><p>' + message + "</p></div>")
-        parts.push('<div class="modal-footer">');
-        if (okText == undefined)
-            parts.push('<a href="#" data-dismiss="modal" class="btn btn-primary">OK</a>');
-        else
-            parts.push('<a href="#" data-dismiss="modal" class="btn btn-primary">' + okText + '</a>');
-        if (cancelText == undefined)
-            parts.push('<a href="#" data-dismiss="modal" class="btn btn-cancel">Cancel</a></div>');
-        else
-            parts.push('<a href="#" data-dismiss="modal" class="btn btn-cancel">' + cancelText + '</a>');
-        parts.push('</div>');
-        parts.push('</div>');
-        var div = $(parts.join("\n"));
-        $("body").append(div);
-        var okBtn = div.find("a.btn-primary");
-        okBtn.on("click", null, function() {if (modalCallback) {modalCallback(true); modalCallback = null;}});
-        div.on("keypress", null, function (e) {
-            var code = (e.keyCode ? e.keyCode : e.which);
-            if (code == 13) { okBtn.click();}
-        });
-        div.on("hide", null, function (){if (modalCallback) {modalCallback(false); modalCallback = null;}});
+    function showModal(template, modalData, callback) {
+        if ($('#asi-modal')) $('#asi-modal').parent().remove();
+        $('body').append($('<div>').load(template, function () {
+            ko.applyBindings(modalData);
+            var div = $('#asi-modal');
+            var okBtn = div.find("a.btn-primary");
+            okBtn.on("click", null, function () { if (callback) { callback(true); callback = null; } });
+            div.on("keypress", null, function (e) {
+                var code = (e.keyCode ? e.keyCode : e.which);
+                if (code === 13) { okBtn.click(); }
+            });
+            div.on("hide", null, function () { if (callback) { callback(false); callback = null; } });
+            div.modal({});
+        }));
     };
 }(asi.modal, jQuery));
 
