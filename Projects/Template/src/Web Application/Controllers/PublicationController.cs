@@ -47,6 +47,27 @@ namespace asi.asicentral.web.Controllers
                 throw new Exception("Invalid identifier for a publication: " + id);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Publication publication)
+        {
+            if (ModelState.IsValid)
+            {
+                _objectService.Update<Publication>(publication);
+                _objectService.SaveChanges();
+                return RedirectToAction("List");
+            }
+            else
+            {
+                //because we do not store the many-many in the input fields, the publication object is incomplete
+                Publication original = _objectService.GetAll<Publication>(true).Where(pub => pub.PublicationId == publication.PublicationId).FirstOrDefault();
+                if (original != null) publication.Issues = original.Issues;
+            }
+            ViewBag.Title = "Publication - " + publication.Name;
+            ViewBag.Message = "Viewing the detailed information of a specific publication";
+            return View("Edit", publication);
+        }
+
         [HttpGet]
         /// <summary>
         /// Use this one to define default values. Could re-use edit but an Add could have specific reduced amount of fields from edit.
@@ -79,27 +100,6 @@ namespace asi.asicentral.web.Controllers
                 ViewBag.Message = Resource.PublicationAddDescription;
                 return View("Add", publication);
             }
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(Publication publication)
-        {
-            if (ModelState.IsValid)
-            {
-                _objectService.Update<Publication>(publication);
-                _objectService.SaveChanges();
-                return RedirectToAction("List");
-            }
-            else
-            {
-                //because we do not store the many-many in the input fields, the publication object is incomplete
-                Publication original = _objectService.GetAll<Publication>(true).Where(pub => pub.PublicationId == publication.PublicationId).FirstOrDefault();
-                if (original != null) publication.Issues = original.Issues;
-            }
-            ViewBag.Title = "Publication - " + publication.Name;
-            ViewBag.Message = "Viewing the detailed information of a specific publication";
-            return View("Edit", publication);
         }
 
         [HttpPost]
