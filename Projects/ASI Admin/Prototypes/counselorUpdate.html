@@ -2,71 +2,101 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>ASI Central Admin: Counselor Upload</title>
+	<title>ASI Central Admin: Upload Tool</title>
     <meta name="viewport" content="width=device-width" />
-	<link href="Content/Site.css" rel="stylesheet"/>
 	<link href="Content/bootstrap-responsive.css" rel="stylesheet"/>
 	<link href="Content/bootstrap.css" rel="stylesheet"/>
+	<link href="Content/Site.css" rel="stylesheet"/>
 </head>
 <body>
-<h1>Counselor Tool</h1>
 <div class="main-body">
- <select>
-	<option value="1">News</option>
-	<option value="2">Case Studies</option>
-	<option value="3">Apparel</option>
-	<option value="4">Social</option>
-	<option value="5">Research</option>
-	<option value="6">Video</option>
-	<option value="7">Awards</option>
-	<option value="8">Road Tour</option>
-</select>
-<br />
-<br />
- Title:  
-        <input name="txtTitle" type="text" id="txtTitle" />
-        <br />
-        <br />
-        <div class="editor-label">Author:</div>
-        <input name="txtAuthor" type="text" id="txtAuthor" />
-        <br />
-        <br />
-         Date:  
-        <input name="txtDate" type="text" id="TextDate" />
-        <br />
-        <br />
-        Social Media:  
-        <input name="txtSocMed" type="text" id="txtSocMed" />
-        <br />
-        <br />
-        Small Image:  
-        <input name="txtImgSm" type="text" id="txtImgSm" />
-        <br />
-        <br />
-        Large Image:  
-        <input name="txtImgLg" type="text" id="txtImgLg" />
-        <br />
-        <br />
-        Tagline:  
-        <br />
-        <textarea name="txtTagline" id="txtTagline" style="width:600px;"></textarea>
-        <br />
-        <br />
-        Teaser:  
-        <br />
-        <textarea name="txtTeaser" id="txtTeaser" style="height:100px;width:600px;"></textarea>
-        <br />
-        <br />
-        Content: 
-        <br /> 
-        <textarea name="txtContent" rows="2" cols="20" id="txtContent" style="height:700px;width:600px;"></textarea>
-        <br />
-        <br />
-        Active?:  
-        <input id="cbActive" type="checkbox" name="cbActive" />
-        <br />
-        <br />
-        <input type="submit" name="btnSubmit" value="Submit" id="btnSubmit" />
+
+
+
+<form>
+<fieldset>
+    <legend>Upload Tool</legend>
+    
+    <label class="checkbox inline">
+    <input type="checkbox" value="ESP Web">ESP Web
+    </label>    
+    <label class="checkbox inline">
+    <input type="checkbox" value="Counselor">Counselor
+    </label>    
+    <label class="checkbox inline">
+    <input type="checkbox" value="NewsRotator">News Rotator
+    </label>    
+    <label class="checkbox inline">
+    <input type="checkbox" value="ASICentralSummary">ASI Central Summary
+    </label>
+    
+    
+    <label for="inputCounselorCat">Counselor Category
+    <select>
+	    <option value="1">News</option>
+	    <option value="2">Case Studies</option>
+	    <option value="3">Apparel</option>
+	    <option value="4">Social</option>
+	    <option value="5">Research</option>
+	    <option value="6">Video</option>
+	    <option value="7">Awards</option>
+	    <option value="8">Road Tour</option>
+    </select>
+    </label>
+    
+    <label for="inputRotatorPosition">Rotator Position
+    <select>
+	    <option value="1">Large</option>
+	    <option value="2">Small</option>
+    </select>
+    </label>
+    
+   
+    <label for="inputTitle">Title
+    <input type="text" id="inputTitle" placeholder="Title" />
+    </label>     
+
+    <label for="inputAuthor">Author
+    <input type="text" id="inputAuthor" placeholder="Author" />
+    </label>       
+  
+    <label for="inputDate">Date
+    <input type="text" id="inputDate" placeholder="Date" />
+    </label>
+
+    <label for="inputImage">Image
+    <input type="text" id="inputImage" placeholder="Image" />
+    </label>
+    
+    <label for="inputTagline">Tagline
+    <textarea class="input-xxlarge" rows="3" id="inputTagline"></textarea>
+    </label>
+    
+    
+    <label for="inputSummary">Summary
+    <textarea class="input-xxlarge" rows="3" id="inputSummary"></textarea>
+    </label>
+    
+    
+    <label for="inputContent">Content
+    <textarea class="input-xxlarge" rows="20" id="inputContent"></textarea>
+    </label>
+    
+   
+    <label for="inputDescription">Description    
+    <textarea class="input-xxlarge" rows="20" id="Textarea1"></textarea>
+    </label>
+       
+    <button type="submit" class="btn">Submit</button>
+
+  </fieldset>
+</form>
+            
+            
+      
+            
+      
+            
 
 </div>
 	<script src="/Scripts/bootstrap.js"></script>
