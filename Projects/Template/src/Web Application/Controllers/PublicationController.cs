@@ -23,9 +23,14 @@ namespace asi.asicentral.web.Controllers
 
         public ActionResult Index()
         {
+            return List();
+        }
+
+        public ActionResult List()
+        {
             ViewBag.Title = "Publications";
             ViewBag.Message = "Publications stored in the database";
-            return View("Index", _objectService.GetAll<Publication>(true).ToList());
+            return View("List", _objectService.GetAll<Publication>(true).OrderBy(pub=>pub.Name).ToList());
         }
 
         [HttpGet]
@@ -50,7 +55,7 @@ namespace asi.asicentral.web.Controllers
             {
                 _objectService.Update<Publication>(publication);
                 _objectService.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("List");
             }
             else
             {
@@ -63,5 +68,53 @@ namespace asi.asicentral.web.Controllers
             return View("Edit", publication);
         }
 
+        [HttpGet]
+        /// <summary>
+        /// Use this one to define default values. Could re-use edit but an Add could have specific reduced amount of fields from edit.
+        /// </summary>
+        public ActionResult Add()
+        {
+            Publication publication = new Publication();
+            ViewBag.Title = Resource.PublicationAddTitle;
+            ViewBag.Message = Resource.PublicationAddDescription;
+            return View("Add", publication);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        /// <summary>
+        /// Could use Edit for this one but there might be validation specific to Add operation which does not apply to Edit
+        /// </summary>
+        public ActionResult Add(Publication publication)
+        {
+            if (ModelState.IsValid)
+            {
+                _objectService.Add<Publication>(publication);
+                _objectService.SaveChanges();
+                //could return to edit 
+                return RedirectToAction("List");
+            }
+            else
+            {
+                ViewBag.Title = Resource.PublicationAddTitle;
+                ViewBag.Message = Resource.PublicationAddDescription;
+                return View("Add", publication);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
+        {
+            Publication publication = _objectService.GetAll<Publication>().Where(pub => pub.PublicationId == id).FirstOrDefault();
+            if (publication != null)
+            {
+                _objectService.Delete(publication);
+                _objectService.SaveChanges();
+                return RedirectToAction("List");
+            }
+            else
+                throw new Exception("Invalid identifier for a publication: " + id);
+        }
     }
 }

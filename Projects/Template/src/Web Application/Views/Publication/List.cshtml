@@ -1,0 +1,42 @@
+﻿@inherits System.Web.Mvc.WebViewPage<IList<asi.asicentral.model.Publication>>
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title.</h1>
+                <h2>@ViewBag.Message</h2>
+            </hgroup>
+            <p>
+                This Web page shows how to retrieve data from the database and using the full stack.<br />
+                Should try to do the same using jquery template and knockout<br />
+            </p>
+        </div>
+    </section>
+}
+<h3>List of Publications <a href="@Url.Action("Add", "Publication")" class="btn"><i class="icon-plus"></i> Add New</a></h3> 
+
+<table class="table table-bordered table-condensed table-striped">
+    <thead><tr><th>@Html.Encode(asi.asicentral.Resource.PublicationName)</th></tr></thead>
+    <tbody>
+    @foreach (asi.asicentral.model.Publication publication in Model)
+    {
+        <tr><td><a rel="tooltip" data-placement="left" title="@Html.Encode(asi.asicentral.web.Resource.DeleteTooltip)" class="remove" href="#"><i data-id="@publication.PublicationId" class="icon-remove-circle"></i></a>&nbsp;&nbsp;@Html.ActionLink(publication.Name, "Edit", "Publication", new { id = publication.PublicationId }, null)</td></tr>
+    }
+    </tbody>
+</table>
+@using (Html.BeginForm("Delete", "Publication", FormMethod.Post, new { id = "deleteForm"} )) {
+@Html.AntiForgeryToken()
+<input type="hidden" name="id" value="0" />
+}
+
+@section Scripts {
+<script src="/Scripts/asi.js"></script>
+<script>
+$(".remove").click(function (e) {
+    $("#deleteForm").find('input[name="id"]').val($(e.target).data("id"));
+    asi.modal.confirm("@Html.Encode(asi.asicentral.web.Resource.ConfirmDeleteTitle)", "@Html.Encode(asi.asicentral.web.Resource.ConfirmDeleteMessage)", function (result) {
+        if (result) $("#deleteForm").submit();
+    });
+});
+</script>
+}

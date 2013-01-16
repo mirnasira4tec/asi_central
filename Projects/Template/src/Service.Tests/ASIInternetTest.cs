@@ -39,7 +39,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void PublicationIssues()
         {
             using (var context = new ASIInternetContext())
@@ -63,7 +63,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void PublicationIssueAssociation()
         {
             using (var context = new ASIInternetContext())
@@ -114,6 +114,16 @@ namespace asi.asicentral.Tests
                 publicationRepository.SaveChanges();
                 Assert.IsTrue(publicationRepository.GetAll().Count() == count);
             }
+        }
+
+        [TestMethod]
+        public void ModelTest()
+        {
+            Publication pub1 = new Publication() { PublicationId = 1, Name = "test" };
+            Publication pub2 = new Publication() { PublicationId = 1, Name = "test2" };
+            Assert.IsFalse(pub1.Equals(null));
+            Assert.AreEqual(pub1, pub2);
+            Assert.AreEqual("Publication: 1 - test", pub1.ToString());
         }
     }
 }

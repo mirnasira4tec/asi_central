@@ -21,7 +21,7 @@ namespace asi.asicentral.Tests
             Assert.IsNotNull(publicationRepository);
             IList<Publication> publications = publicationRepository.GetAll(true).ToList();
             Assert.IsTrue(publications.Count > 0);
-            publicationRepository = container.GetInstance<IRepository<Publication>>("asi.asicentral.model.Publication");
+            publicationRepository = container.GetInstance<IRepository<Publication>>();
             Assert.IsNotNull(publicationRepository);
         }
     }
