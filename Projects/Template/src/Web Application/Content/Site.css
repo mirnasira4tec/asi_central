@@ -183,6 +183,7 @@ ol.round {
 
 
 /* styles for validation helpers */
+
 .field-validation-error {
     color: #e80c4d;
     font-weight: bold;
@@ -200,18 +201,6 @@ input[type="checkbox"].input-validation-error {
     border: 0 none;
 }
 
-.validation-summary-errors {
-    color: #e80c4d;
-    font-weight: bold;
-    font-size: 1.1em;
-}
-
-.validation-summary-valid {
-    display: none;
-}
-
-
-
 /* Form fields
     ----------------------------------------------------------*/
 div.form-group {
@@ -222,13 +211,6 @@ div.form-group {
     margin: 10px 10px 10px 0px;
     padding: 10px 10px 10px 10px;
     box-shadow: 3px 3px 5px #888888;
-}
-
-div.editor-label label {
-    font-weight: bold;
-}
-
-div.editor-field {
 }
 
 input[type="submit"],

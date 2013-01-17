@@ -36,7 +36,7 @@ namespace asi.asicentral.database
         {
             if (entity == null) throw new Exception("You cannot add a null entity");
             _context.Supports(entity.GetType());
-            _context.GetSet(typeof(T)).Remove(entity);
+            _context.Entry(entity).State = System.Data.EntityState.Deleted;
         }
 
         public IQueryable<T> GetAll(bool readOnly = false)
@@ -50,7 +50,7 @@ namespace asi.asicentral.database
         {
             _context.Supports(typeof(T));
             _context.Entry(entity).State = System.Data.EntityState.Modified;
-            _context.Entry<T>(entity).State = System.Data.EntityState.Modified;
+            _context.Entry(entity).State = System.Data.EntityState.Modified;
         }
 
         public int SaveChanges()
