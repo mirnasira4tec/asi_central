@@ -35,5 +35,32 @@ namespace asi.asicentral.Tests
                 Assert.IsTrue(objectService.GetAll<Publication>(true).ToList().Count == count);
             }
         }
+
+        [TestMethod]
+        public void Delete()
+        {
+            int count = 0;
+            Publication publication = new Publication { Name = "DeleteTest" };
+            using (IObjectService objectService = new ObjectService())
+            {
+                var publications = objectService.GetAll<Publication>(true).ToList();
+                count = publications.Count;
+                publication.PublicationId = count + 1;
+                objectService.Add<Publication>(publication);
+                objectService.SaveChanges();
+            }
+            //create a new object service which would not hold the state
+            using (IObjectService objectService = new ObjectService())
+            {
+                objectService.Delete<Publication>(publication);
+                objectService.SaveChanges();
+            }
+            //create a new object service which would not hold the state
+            using (IObjectService objectService = new ObjectService())
+            {
+                int newCount = objectService.GetAll<Publication>(true).Count();
+                Assert.AreEqual(count, newCount);
+            }
+        }
     }
 }
