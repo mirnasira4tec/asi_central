@@ -22,13 +22,14 @@
 @Html.HiddenFor(model=>model.PublicationId)
 <div class="form-group">
     @Html.LabelFor(model => model.Name) @Html.EditorFor(model => model.Name) @Html.ValidationMessageFor(model => model.Name)
-    @Html.LabelFor(model => model.Description) @Html.TextAreaFor(model => model.Description) @Html.ValidationMessageFor(model => model.Description)
+    @Html.LabelFor(model => model.Description) @Html.EditorFor(model => model.Description) @Html.ValidationMessageFor(model => model.Description)
+    @Html.LabelFor(model => model.Color) @Html.EditorFor(model => model.Color) @Html.ValidationMessageFor(model => model.Color)
     <label class="checkbox" for="IsPublic">@Html.EditorFor(model => model.IsPublic) @Html.DisplayNameFor(model => model.IsPublic)</label>
 
     <div id="StartDatePicker" class="input-append date">@Html.LabelFor(model => model.StartDate) @Html.EditorFor(model => model.StartDate) @Html.ValidationMessageFor(model => model.StartDate)</div>
     <div id="datetimepicker1" class="input-append date"><input data-format="dd/MM/yyyy hh:mm:ss" type="text"/><span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span></div>
 
-    @Html.LabelFor(model => model.EndDate)<div id="EndDatePicker" class="input-append date" data-date="">@Html.EditorFor(model => model.EndDate)<span class="add-on"><i class="icon-calendar"></i></span></div>@Html.ValidationMessageFor(model => model.EndDate)
+    @Html.LabelFor(model => model.EndDate)@Html.EditorFor(model => model.EndDate) @Html.ValidationMessageFor(model => model.EndDate)
 
 @if (Model.Issues == null || Model.Issues.Count == 0)
 {
@@ -49,8 +50,6 @@ else {
     @Scripts.Render("~/bundles/form")
 <script>
     $('#EndDate').datepicker();
-    $('#dp3').datepicker();
-    $('#EndDatePicker').datepicker();
     $('#datetimepicker1').datetimepicker();
 </script>
 }

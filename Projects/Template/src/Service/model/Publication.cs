@@ -30,11 +30,15 @@ namespace asi.asicentral.model
         [Display(ResourceType = typeof(Resource), Name = "EndDate")]
         public DateTime? EndDate { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = "Description")]
+        [Display(ResourceType = typeof(Resource), Name = "Description", Prompt = "DescriptionPrompt")]
+        [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "IsPublic")]
         public bool IsPublic { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "Color")]
+        public string Color { get; set; }
 
         public virtual IList<PublicationIssue> Issues { get; set; }
 
