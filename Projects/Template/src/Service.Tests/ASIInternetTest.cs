@@ -15,24 +15,40 @@ namespace asi.asicentral.Tests
         [TestMethod]
         public void PublicationTest()
         {
+            int count = 0;
+            Publication publication = null;
             //basic crud operations for Publication
             using (var context = new ASIInternetContext())
             {
-                int count = context.Publications.Count();
+                count = context.Publications.Count();
                 //make sure we have some
                 Assert.IsTrue(count > 0);
                 Publication pub = context.Publications.First();
                 Assert.IsNotNull(pub);
                 Assert.IsTrue(pub.Issues.Count > 0);
                 //add a new one and then remove it
-                Publication publication = new Publication()
+                publication = new Publication()
                 {
                     Name = DateTime.Now.ToShortDateString(),
                     PublicationId = count + 1,
+                    Description = "Description",
+                    StartDate = DateTime.UtcNow,
+                    IsPublic = true,
                 };
                 context.Publications.Add(publication);
                 context.SaveChanges();
                 Assert.IsTrue(context.Publications.Count() == count + 1);
+            }
+            //clear the cach and make sure we can get all properties
+            using (var context = new ASIInternetContext())
+            {
+                publication = context.Publications.Where(pub => pub.PublicationId == publication.PublicationId).FirstOrDefault();
+                Assert.IsNotNull(publication);
+                Assert.IsNotNull(publication.Name);
+                Assert.IsNotNull(publication.Description);
+                Assert.IsTrue(publication.IsPublic);
+                Assert.IsTrue(DateTime.UtcNow.AddDays(-1).CompareTo(publication.StartDate) < 0); //make sure value is not the min value
+                Assert.IsNull(publication.EndDate);
                 context.Publications.Remove(publication);
                 context.SaveChanges();
                 Assert.IsTrue(context.Publications.Count() == count);

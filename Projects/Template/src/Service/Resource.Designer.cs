@@ -61,11 +61,38 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End Date.
+        /// </summary>
+        public static string EndDate {
+            get {
+                return ResourceManager.GetString("EndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This field is required.
         /// </summary>
         public static string FieldRequired {
             get {
                 return ResourceManager.GetString("FieldRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Public?.
+        /// </summary>
+        public static string IsPublic {
+            get {
+                return ResourceManager.GetString("IsPublic", resourceCulture);
             }
         }
         
@@ -120,6 +147,15 @@ namespace asi.asicentral {
         public static string PublicationPrompt {
             get {
                 return ResourceManager.GetString("PublicationPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Date.
+        /// </summary>
+        public static string StartDate {
+            get {
+                return ResourceManager.GetString("StartDate", resourceCulture);
             }
         }
     }
