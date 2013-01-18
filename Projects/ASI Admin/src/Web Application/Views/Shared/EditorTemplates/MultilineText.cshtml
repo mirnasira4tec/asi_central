@@ -1,0 +1,10 @@
+﻿@{
+    // make placeholder work from [Display(Prompt =
+    IDictionary<string, object> attributes = new Dictionary<string, object>();
+    if (!string.IsNullOrEmpty(ViewData.ModelMetadata.Watermark))
+    {
+        attributes.Add("placeholder", ViewData.ModelMetadata.Watermark);
+    }
+    attributes.Add("class", "text-box multi-line");
+}
+@Html.TextArea("", ViewData.TemplateInfo.FormattedModelValue.ToString(), 0, 0, attributes)

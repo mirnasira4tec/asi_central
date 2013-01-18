@@ -1,0 +1,32 @@
+﻿html {
+    margin: 0;
+    padding: 0;
+}
+
+body 
+{
+    padding: 50px 50px 50px 50px;
+}
+
+.float-left {
+    float: left;
+}
+
+/* styles for validation helpers */
+
+.field-validation-error {
+    color: #e80c4d;
+    font-weight: bold;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #e80c4d;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}

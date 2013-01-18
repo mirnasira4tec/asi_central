@@ -1,0 +1,17 @@
+﻿@model asi.asicentral.model.sgr.Company
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit a Company</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+    @Html.HiddenFor(company => company.Id)
+    @Html.LabelFor(company => company.Name) @Html.EditorFor(company => company.Name) @Html.ValidationMessageFor(company => company.Name)
+    @Html.LabelFor(company => company.Summary) @Html.EditorFor(company => company.Summary) @Html.ValidationMessageFor(company => company.Summary)
+
+    </div>
+}
