@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings
 {
-    public class CompanyConfiguration :  EntityTypeConfiguration<Company>
+    internal class CompanyConfiguration :  EntityTypeConfiguration<Company>
     {
         public CompanyConfiguration()
         {
             ToTable("CENT_SGRInternCompany_SGRC");
             HasKey(company => company.Id);
+
             Property(company => company.Id)
                 .HasColumnName("SGRC_SGRInternCompanyID")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);

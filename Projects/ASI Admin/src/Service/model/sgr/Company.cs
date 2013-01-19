@@ -80,5 +80,26 @@ namespace asi.asicentral.model.sgr
 
         [Display(Name = "YearEstablished")]
         public string YearEstablished { get; set; }
+
+        public virtual IList<Product> Products { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("Company: {0} - {1}", Id, Name);
+        }
+
+        public override bool Equals(object obj)
+        {
+            bool equals = false;
+
+            Company company = obj as Company;
+            if (company != null) equals = company.Id == Id;
+            return equals;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
     }
 }
