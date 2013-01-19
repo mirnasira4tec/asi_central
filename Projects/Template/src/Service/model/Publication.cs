@@ -23,6 +23,23 @@ namespace asi.asicentral.model
         [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "NameLength")]
         public string Name { get; set; }
 
+        [Display(ResourceType = typeof(Resource), Name = "StartDate")]
+        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
+        public DateTime StartDate { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "EndDate")]
+        public DateTime? EndDate { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "Description", Prompt = "DescriptionPrompt")]
+        [DataType(DataType.MultilineText)]
+        public string Description { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "IsPublic")]
+        public bool IsPublic { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "Color")]
+        public string Color { get; set; }
+
         public virtual IList<PublicationIssue> Issues { get; set; }
 
         public override string ToString()

@@ -28,6 +28,8 @@ namespace asi.asicentral.database.mappings
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
             Property(publication => publication.Name)
                 .HasColumnName("PubName");
+            Property(publication => publication.IsPublic)
+                .HasColumnName("PublicFlag");
         }
     }
 }
