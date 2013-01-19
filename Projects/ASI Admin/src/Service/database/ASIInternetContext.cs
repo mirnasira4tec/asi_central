@@ -21,6 +21,8 @@ namespace asi.asicentral.database
 
         public DbSet<Company> Companies { get; set; }
 
+        public DbSet<Product> Products { get; set; }
+
         /// <summary>
         /// Use to enhance the default mapping for the model
         /// </summary>
@@ -29,13 +31,14 @@ namespace asi.asicentral.database
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Configurations.Add(new CompanyConfiguration());
+            modelBuilder.Configurations.Add(new ProductConfiguration());
         }
 
         #region IValidatedContext
 
         public void Supports(Type type)
         {
-            if (!typeof(Company).IsAssignableFrom(type))
+            if (!typeof(Company).IsAssignableFrom(type) || !typeof(Product).IsAssignableFrom(type))
             {
                 throw new Exception("Invalid context for the class: " + type.FullName);
             }
@@ -47,7 +50,12 @@ namespace asi.asicentral.database
             {
                 return Companies;
             }
-            throw new Exception("Incompatible class for this context");
+            else if (typeof(Product).IsAssignableFrom(type))
+            {
+                return Products;
+            }
+            else
+                throw new Exception("Incompatible class for this context");
         }
 
         #endregion IValidatedContext
