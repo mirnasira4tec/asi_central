@@ -1,10 +1,17 @@
 ﻿@{
     // make placeholder work from [Display(Prompt =
     IDictionary<string, object> attributes = new Dictionary<string, object>();
-    if (!string.IsNullOrEmpty(ViewData.ModelMetadata.Watermark))
+    string classValue = "text-box multi-line valid ";
+    foreach (string key in ViewData.Keys)
+    {
+        object value = ViewData[key];
+        if (key == "class") {classValue += (string)ViewData[key];}
+        else if (value != null && value is string) {attributes.Add(key, (string)value);}
+    }
+    attributes.Add("class", classValue);
+    if (!string.IsNullOrEmpty(ViewData.ModelMetadata.Watermark) && !attributes.ContainsKey("placeholder"))
     {
         attributes.Add("placeholder", ViewData.ModelMetadata.Watermark);
     }
-    attributes.Add("class", "text-box multi-line");
 }
 @Html.TextArea("", ViewData.TemplateInfo.FormattedModelValue.ToString(), 0, 0, attributes)
