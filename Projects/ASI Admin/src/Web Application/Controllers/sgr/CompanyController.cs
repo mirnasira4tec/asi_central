@@ -6,36 +6,31 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace asi.asicentral.web.Controllers
+namespace asi.asicentral.web.Controllers.sgr
 {
-    public class SGRController : Controller
+    public class CompanyController : Controller
     {
         private IObjectService _objectService;
 
-        public SGRController(IObjectService objectService)
+        public CompanyController(IObjectService objectService)
         {
             _objectService = objectService;
         }
 
-        public ActionResult Index()
-        {
-            return View("CompanyList");
-        }
-
-        public ActionResult CompanyList()
+        public ActionResult List()
         {
             IList<Company> companies = _objectService.GetAll<Company>().OrderBy(company => company.Name).ToList();
             ViewBag.Title = "List of Companies";
-            return View("CompanyList", companies);
+            return View("../sgr/Company/List", companies);
         }
 
         [HttpGet]
-        public ActionResult CompanyEdit(int id)
+        public ActionResult Edit(int id)
         {
             Company company = _objectService.GetAll<Company>().Where(comp => comp.Id == id).FirstOrDefault();
             if (company == null) throw new Exception("Invalid identifier for a company");
             ViewBag.Title = "Edit a Company";
-            return View("CompanyEdit", company);
+            return View("../sgr/Company/Edit", company);
         }
     }
 }

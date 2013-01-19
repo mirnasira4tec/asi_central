@@ -10,6 +10,6 @@
     <tr><th>Name</th></tr>
     @foreach (Company company in Model)
     {
-        <tr><td>@Html.ActionLink(company.Name, "CompanyEdit", new { id = company.Id })</td></tr>
+        <tr><td>@Html.ActionLink(company.Name, "Edit", "../sgr/Company", new { id = company.Id }, null)</td></tr>
     }
 </table>
