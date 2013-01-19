@@ -9,6 +9,14 @@ namespace asi.asicentral.model.sgr
 {
     public class Product
     {
+        public Product()
+        {
+            if (this.GetType() == typeof(Product))
+            {
+                Categories = new List<Category>();
+            }
+        }
+
         [Display(Name = "Id")]
         [Required]
         public int Id { get; set; }
@@ -19,7 +27,7 @@ namespace asi.asicentral.model.sgr
 
         public string ModelNumber { get; set; }
 
-        public Decimal Price { get; set; }
+        public Decimal? Price { get; set; }
 
         public Decimal? PriceCeiling { get; set; }
 
@@ -39,6 +47,8 @@ namespace asi.asicentral.model.sgr
 
         [Required]
         public virtual Company Company { get; set; }
+
+        public virtual IList<Category> Categories { get; set; }
 
         public override string ToString()
         {

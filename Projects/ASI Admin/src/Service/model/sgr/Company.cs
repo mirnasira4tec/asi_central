@@ -9,6 +9,15 @@ namespace asi.asicentral.model.sgr
 {
     public class Company
     {
+        public Company()
+        {
+            if (this.GetType() == typeof(Category))
+            {
+                Products = new List<Product>();
+                Categories = new List<Category>();
+            }
+        }
+
         [Display(Name="Id")]
         [Required]
         public int Id { get; set; }
@@ -82,6 +91,8 @@ namespace asi.asicentral.model.sgr
         public string YearEstablished { get; set; }
 
         public virtual IList<Product> Products { get; set; }
+
+        public virtual IList<Category> Categories { get; set; }
 
         public override string ToString()
         {

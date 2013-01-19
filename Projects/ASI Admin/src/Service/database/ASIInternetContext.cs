@@ -20,8 +20,8 @@ namespace asi.asicentral.database
         }
 
         public DbSet<Company> Companies { get; set; }
-
         public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -30,15 +30,17 @@ namespace asi.asicentral.database
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Configurations.Add(new CompanyConfiguration());
-            modelBuilder.Configurations.Add(new ProductConfiguration());
+            modelBuilder.Configurations
+               .Add(new CompanyConfiguration())
+               .Add(new ProductConfiguration())
+               .Add(new CategoryConfiguration());
         }
 
         #region IValidatedContext
 
         public void Supports(Type type)
         {
-            if (!typeof(Company).IsAssignableFrom(type) || !typeof(Product).IsAssignableFrom(type))
+            if (!typeof(Company).IsAssignableFrom(type) || !typeof(Product).IsAssignableFrom(type) || !typeof(Category).IsAssignableFrom(type))
             {
                 throw new Exception("Invalid context for the class: " + type.FullName);
             }
@@ -53,6 +55,10 @@ namespace asi.asicentral.database
             else if (typeof(Product).IsAssignableFrom(type))
             {
                 return Products;
+            }
+            else if (typeof(Category).IsAssignableFrom(type))
+            {
+                return Categories;
             }
             else
                 throw new Exception("Incompatible class for this context");
