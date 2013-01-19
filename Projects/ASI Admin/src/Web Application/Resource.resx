@@ -126,25 +126,4 @@
   <data name="DeleteTooltip" xml:space="preserve">
     <value>Click to delete the item</value>
   </data>
-  <data name="PublicationAddDescription" xml:space="preserve">
-    <value>This page allows the user to add a new Publication</value>
-  </data>
-  <data name="PublicationAddTitle" xml:space="preserve">
-    <value>Add Publication</value>
-  </data>
-  <data name="PublicationEditDescription" xml:space="preserve">
-    <value>Viewing the detailed information of a specific publication</value>
-  </data>
-  <data name="PublicationEditFieldsNoSchedule" xml:space="preserve">
-    <value>This Publication has no schedule assigned</value>
-  </data>
-  <data name="PublicationEditFieldsSchedule" xml:space="preserve">
-    <value>Assigned Schedules</value>
-  </data>
-  <data name="PublicationEditFieldsTitle" xml:space="preserve">
-    <value>Edit Publication</value>
-  </data>
-  <data name="PublicationEditTitle" xml:space="preserve">
-    <value>Publication - {0}</value>
-  </data>
 </root>
