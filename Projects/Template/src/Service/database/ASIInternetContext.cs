@@ -17,6 +17,7 @@ namespace asi.asicentral.database
             : base("name=ASIInternetContext")
         {
             //nothing to be done
+            Database.SetInitializer<ASIInternetContext>(null);
         }
 
         public DbSet<Publication> Publications { get; set; }

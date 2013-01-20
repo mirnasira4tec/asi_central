@@ -25,9 +25,11 @@ namespace asi.asicentral.model
 
         [Display(ResourceType = typeof(Resource), Name = "StartDate")]
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
+        [DataType(DataType.DateTime)]
         public DateTime StartDate { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "EndDate")]
+        [DataType(DataType.Date)]
         public DateTime? EndDate { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "Description", Prompt = "DescriptionPrompt")]

@@ -1,4 +1,5 @@
-﻿using asi.asicentral.model;
+﻿using asi.asicentral.database.mappings;
+using asi.asicentral.model;
 using asi.asicentral.services;
 using asi.asicentral.services.interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -16,7 +17,7 @@ namespace asi.asicentral.Tests
         [TestMethod]
         public void Publication()
         {
-            using (IObjectService objectService = new ObjectService())
+            using (IObjectService objectService = new ObjectService(new Container(new EFRegistry())))
             {
                 var publications = objectService.GetAll<Publication>(true).ToList();
                 int count = publications.Count;
@@ -41,7 +42,7 @@ namespace asi.asicentral.Tests
         {
             int count = 0;
             Publication publication = new Publication { Name = "DeleteTest" };
-            using (IObjectService objectService = new ObjectService())
+            using (IObjectService objectService = new ObjectService(new Container(new EFRegistry())))
             {
                 var publications = objectService.GetAll<Publication>(true).ToList();
                 count = publications.Count;
@@ -50,13 +51,13 @@ namespace asi.asicentral.Tests
                 objectService.SaveChanges();
             }
             //create a new object service which would not hold the state
-            using (IObjectService objectService = new ObjectService())
+            using (IObjectService objectService = new ObjectService(new Container(new EFRegistry())))
             {
                 objectService.Delete<Publication>(publication);
                 objectService.SaveChanges();
             }
             //create a new object service which would not hold the state
-            using (IObjectService objectService = new ObjectService())
+            using (IObjectService objectService = new ObjectService(new Container(new EFRegistry())))
             {
                 int newCount = objectService.GetAll<Publication>(true).Count();
                 Assert.AreEqual(count, newCount);
