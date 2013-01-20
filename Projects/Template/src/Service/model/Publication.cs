@@ -23,12 +23,12 @@ namespace asi.asicentral.model
         [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "NameLength")]
         public string Name { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = "StartDate")]
+        [Display(ResourceType = typeof(Resource), Name = "StartDate", Prompt = "DateTimePrompt")]
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [DataType(DataType.DateTime)]
         public DateTime StartDate { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = "EndDate")]
+        [Display(ResourceType = typeof(Resource), Name = "EndDate", Prompt = "DatePrompt")]
         [DataType(DataType.Date)]
         public DateTime? EndDate { get; set; }
 

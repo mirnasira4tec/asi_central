@@ -1,17 +1,12 @@
 ﻿@{
+    string dateTimeFormat = "MM/dd/yyyy HH:mm:ss";
     // make placeholder work from [Display(Prompt =
     IDictionary<string, object> attributes = new Dictionary<string, object>();
-    string classValue = "text-box single-line valid ";
-    foreach (string key in ViewData.Keys) 
-    {
-        object value = ViewData[key];
-        if (key == "class") {classValue += (string)ViewData[key];}
-        else if (value != null && value is string) {attributes.Add(key, (string)value);}
-    }
-    attributes.Add("class", classValue);
+    attributes.Add("class", "text-box single-line valid");
     if (!string.IsNullOrEmpty(ViewData.ModelMetadata.Watermark) && !attributes.ContainsKey("placeholder"))
     {
         attributes.Add("placeholder", ViewData.ModelMetadata.Watermark);
     }
+    attributes.Add("data-format", dateTimeFormat.ToLower());
 }
-<div id="StartDatePicker" class="input-append date">@Html.TextBox("", ViewData.TemplateInfo.FormattedModelValue, attributes)<span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span></div>
+<div id="@(ViewData.ModelMetadata.PropertyName + "Picker")" class="input-append date">@Html.TextBox("", (object)String.Format("{0:" + dateTimeFormat + "}", Model), attributes)<span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span></div>

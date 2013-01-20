@@ -70,6 +70,24 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a Date....
+        /// </summary>
+        public static string DatePrompt {
+            get {
+                return ResourceManager.GetString("DatePrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter Date and Time....
+        /// </summary>
+        public static string DateTimePrompt {
+            get {
+                return ResourceManager.GetString("DateTimePrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Description.
         /// </summary>
         public static string Description {

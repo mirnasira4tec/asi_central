@@ -1,14 +1,7 @@
 ﻿@{
     // make placeholder work from [Display(Prompt =
     IDictionary<string, object> attributes = new Dictionary<string, object>();
-    string classValue = "text-box single-line valid ";
-    foreach (string key in ViewData.Keys) 
-    {
-        object value = ViewData[key];
-        if (key == "class") {classValue += (string)ViewData[key];}
-        else if (value != null && value is string) {attributes.Add(key, (string)value);}
-    }
-    attributes.Add("class", classValue);
+    attributes.Add("class", "text-box single-line valid");
     if (!string.IsNullOrEmpty(ViewData.ModelMetadata.Watermark) && !attributes.ContainsKey("placeholder"))
     {
         attributes.Add("placeholder", ViewData.ModelMetadata.Watermark);

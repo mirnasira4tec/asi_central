@@ -120,6 +120,12 @@
   <data name="Color" xml:space="preserve">
     <value>Publication Color</value>
   </data>
+  <data name="DatePrompt" xml:space="preserve">
+    <value>Enter a Date...</value>
+  </data>
+  <data name="DateTimePrompt" xml:space="preserve">
+    <value>Enter Date and Time...</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Description</value>
   </data>

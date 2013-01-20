@@ -25,10 +25,7 @@
     @Html.LabelFor(model => model.Description) @Html.EditorFor(model => model.Description) @Html.ValidationMessageFor(model => model.Description)
     @Html.LabelFor(model => model.Color) @Html.EditorFor(model => model.Color) @Html.ValidationMessageFor(model => model.Color)
     <label class="checkbox" for="IsPublic">@Html.EditorFor(model => model.IsPublic) @Html.DisplayNameFor(model => model.IsPublic)</label>
-
-    <div id="StartDatePicker" class="input-append date">@Html.LabelFor(model => model.StartDate) @Html.EditorFor(model => model.StartDate) @Html.ValidationMessageFor(model => model.StartDate)</div>
-    <div id="datetimepicker1" class="input-append date"><input data-format="dd/MM/yyyy hh:mm:ss" type="text"/><span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span></div>
-
+    @Html.LabelFor(model => model.StartDate) @Html.EditorFor(model => model.StartDate) @Html.ValidationMessageFor(model => model.StartDate)
     @Html.LabelFor(model => model.EndDate)@Html.EditorFor(model => model.EndDate) @Html.ValidationMessageFor(model => model.EndDate)
 
 @if (Model.Issues == null || Model.Issues.Count == 0)
@@ -51,5 +48,6 @@ else {
 <script>
     $('#EndDate').datepicker();
     $('#datetimepicker1').datetimepicker();
+    $('#StartDatePicker').datetimepicker();
 </script>
 }
