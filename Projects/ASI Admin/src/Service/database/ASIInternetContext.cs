@@ -40,7 +40,7 @@ namespace asi.asicentral.database
 
         public void Supports(Type type)
         {
-            if (!typeof(Company).IsAssignableFrom(type) || !typeof(Product).IsAssignableFrom(type) || !typeof(Category).IsAssignableFrom(type))
+            if (!(typeof(Company).IsAssignableFrom(type) || typeof(Product).IsAssignableFrom(type) || typeof(Category).IsAssignableFrom(type)))
             {
                 throw new Exception("Invalid context for the class: " + type.FullName);
             }
