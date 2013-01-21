@@ -16,12 +16,14 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using asi.asicentral.database.mappings;
 using asi.asicentral.services;
 using asi.asicentral.services.interfaces;
 using StructureMap;
+using StructureMap.Configuration.DSL;
 namespace asi.asicentral.web.DependencyResolution {
     public static class IoC {
-        public static IContainer Initialize() {
+        public static StructureMap.IContainer Initialize() {
             ObjectFactory.Initialize(x =>
                         {
                             x.Scan(scan =>
@@ -30,9 +32,18 @@ namespace asi.asicentral.web.DependencyResolution {
                                         scan.WithDefaultConventions();
                                     });
 
+                            x.For<Registry>()
+                                .Use<EFRegistry>();
+
+                            x.For<asi.asicentral.services.interfaces.IContainer>()
+                                .Singleton()
+                                .Use<asi.asicentral.services.Container>()
+                                .Ctor<Registry>();
+
                             x.For<IObjectService>()
                                 .HttpContextScoped()
-                                .Use<ObjectService>();
+                                .Use<ObjectService>()
+                                .Ctor<asi.asicentral.services.interfaces.IContainer>();
                         });
             return ObjectFactory.Container;
         }

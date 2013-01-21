@@ -1,6 +1,4 @@
 ﻿using asi.asicentral.services.interfaces;
-using asi.asicentral.database.mappings;
-using StructureMap;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,14 +11,15 @@ namespace asi.asicentral.services
     {
         //load container to resolve Repository based on the model. No need to load everytime. 
         //Definition is on code so it can be static
-        private static Container _container = new Container(new EFRegistry());
+        private IContainer _container;
         private IDictionary<string, IUnitOfWork> repositories = new Dictionary<string, IUnitOfWork>();
 
         /// <summary>
         /// Default Constructor
         /// </summary>
-        public ObjectService()
+        public ObjectService(IContainer container)
         {
+            _container = container;
         }
 
         #region IObjectService
@@ -72,6 +71,7 @@ namespace asi.asicentral.services
                 IDisposable dispose = repository as IDisposable;
                 if (dispose != null) dispose.Dispose();
             }
+            _container.Dispose();
         }
 
         #endregion IDisposable
