@@ -41,6 +41,11 @@ namespace asi.asicentral.web.Controllers
             {
                 ViewBag.Title = String.Format(Resource.PublicationEditTitle, publication.Name);
                 ViewBag.Message = Resource.PublicationEditDescription;
+                IList<SelectListItem> colors = new List<SelectListItem>();
+                colors.Add(new SelectListItem() { Text = "Blue", Value = "1", Selected = false });
+                colors.Add(new SelectListItem() { Text = "Green", Value = "2", Selected = false });
+                ViewBag.ColorList = new SelectList(colors,"Value", "Text");
+
                 return View("Edit", publication);
             }
             else
@@ -51,6 +56,7 @@ namespace asi.asicentral.web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Publication publication)
         {
+            var request = Request;
             if (ModelState.IsValid)
             {
                 _objectService.Update<Publication>(publication);

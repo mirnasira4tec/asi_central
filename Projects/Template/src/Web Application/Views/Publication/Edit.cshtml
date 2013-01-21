@@ -26,7 +26,9 @@
     @Html.LabelFor(model => model.Color) @Html.EditorFor(model => model.Color) @Html.ValidationMessageFor(model => model.Color)
     <label class="checkbox" for="IsPublic">@Html.EditorFor(model => model.IsPublic) @Html.DisplayNameFor(model => model.IsPublic)</label>
     @Html.LabelFor(model => model.StartDate) @Html.EditorFor(model => model.StartDate) @Html.ValidationMessageFor(model => model.StartDate)
-    @Html.LabelFor(model => model.EndDate)@Html.EditorFor(model => model.EndDate) @Html.ValidationMessageFor(model => model.EndDate)
+    @Html.LabelFor(model => model.EndDate) @Html.EditorFor(model => model.EndDate) @Html.ValidationMessageFor(model => model.EndDate)
+    @Html.LabelFor(model => model.ColorIndex) @Html.DropDownList("Color", (SelectList)ViewBag.ColorList,"--select--") @Html.ValidationMessageFor(model => model.ColorIndex)
+    @Html.LabelFor(model => model.ColorIndex) @Html.DropDownListFor(model => model.ColorIndex, (SelectList)ViewBag.ColorList,"--select--") @Html.ValidationMessageFor(model => model.ColorIndex)
 
 @if (Model.Issues == null || Model.Issues.Count == 0)
 {
