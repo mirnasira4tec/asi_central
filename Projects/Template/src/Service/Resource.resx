@@ -117,8 +117,29 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Color" xml:space="preserve">
+    <value>Publication Color</value>
+  </data>
+  <data name="DatePrompt" xml:space="preserve">
+    <value>Enter a Date...</value>
+  </data>
+  <data name="DateTimePrompt" xml:space="preserve">
+    <value>Enter Date and Time...</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="DescriptionPrompt" xml:space="preserve">
+    <value>Enter a Description...</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
   <data name="FieldRequired" xml:space="preserve">
     <value>This field is required</value>
+  </data>
+  <data name="IsPublic" xml:space="preserve">
+    <value>Is Public?</value>
   </data>
   <data name="NameLength" xml:space="preserve">
     <value>The name cannot be more than 50 characters</value>
@@ -137,5 +158,8 @@
   </data>
   <data name="PublicationPrompt" xml:space="preserve">
     <value>Enter the Publication Name...</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Start Date</value>
   </data>
 </root>
