@@ -1,14 +1,43 @@
-﻿@model asi.asicentral.model.sgr.Company
+﻿
+@using asi.asicentral.model
+@using asi.asicentral.web
+@model asi.asicentral.model.sgr.Company
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit a Company</h2>
+<h2>@ViewBag.Title</h2>
+<div class="form-actions">
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(company => company.Id)
-    @Html.LabelFor(company => company.Name) @Html.EditorFor(company => company.Name, new { @class = "input-xxlarge" }) @Html.ValidationMessageFor(company => company.Name)
-    @Html.LabelFor(company => company.Summary) @Html.EditorFor(company => company.Summary, new { @class = "input-xxlarge" }) @Html.ValidationMessageFor(company => company.Summary)
+    @Html.LabelFor(company => company.Name) @Html.EditorFor(company => company.Name, new { @class = "input-xxlarge" }) @Html.ValidationMessageFor(company => company.Id)
+    @Html.LabelFor(company => company.Summary) @Html.EditorFor(company => company.Summary, new { @class = "input-xxlarge"}) @Html.ValidationMessageFor(company => company.Summary)
+    @Html.LabelFor(company => company.ASINumber) @Html.EditorFor(company => company.ASINumber, new { @class = "input-xxlarge"}) 
+    <label class="checkbox" for="IsActive">@Html.EditorFor(company => company.IsActive) @Html.DisplayNameFor(company => company.IsActive)</label>
+    @Html.LabelFor(company => company.BusinessType) @Html.EditorFor(company => company.BusinessType, new { @class = "input-xxlarge" })
+    @Html.LabelFor(company => company.Address) @Html.TextAreaFor(company => company.Address, new { @class = "input-xxlarge" }) 
+    @Html.LabelFor(company => company.ProductionTime) @Html.EditorFor(company => company.ProductionTime, new { @class = "input-xxlarge" })    
+    @Html.LabelFor(company => company.NumberOfEmployees) @Html.EditorFor(company => company.NumberOfEmployees, new { @class = "input-xxlarge"})
+    @Html.LabelFor(company => company.Email) @Html.EditorFor(company => company.Email, new { @class = "input-xxlarge"})
+    @Html.LabelFor(company => company.URL) @Html.EditorFor(company => company.URL, new { @class = "input-xxlarge"})
+    @Html.LabelFor(company => company.AnnualSalesTurnover) @Html.EditorFor(company => company.AnnualSalesTurnover, new { @class = "input-xxlarge"})
+    @Html.LabelFor(company => company.CountryCode) @Html.EditorFor(company => company.CountryCode, new { @class = "input-xxlarge"})
+    @Html.LabelFor(company => company.PhoneAreaCode) @Html.EditorFor(company => company.PhoneAreaCode, new { @class = "input-xxlarge"})
+    @Html.LabelFor(company => company.Phone) @Html.EditorFor(company => company.PhoneAreaCode, new { @class = "input-xxlarge" })
+    @Html.LabelFor(company => company.PhoneExtension) @Html.EditorFor(company => company.PhoneExtension, new { @class = "input-xxlarge"})
+    @Html.LabelFor(company => company.FaxCountryCode) @Html.EditorFor(company => company.FaxCountryCode, new { @class = "input-xxlarge" })
+    @Html.LabelFor(company => company.FaxAreaCode) @Html.EditorFor(company => company.FaxAreaCode, new { @class = "input-xxlarge" })
+    @Html.LabelFor(company => company.Fax) @Html.EditorFor(company => company.Fax, new { @class = "input-xxlarge" })
+    @Html.LabelFor(company => company.FaxExtension) @Html.EditorFor(company => company.FaxExtension, new { @class = "input-xxlarge" })
+    @Html.LabelFor(company => company.ContactName) @Html.EditorFor(company => company.ContactName, new { @class = "input-xxlarge" })
+    @Html.LabelFor(company => company.ContactEmail) @Html.EditorFor(company => company.ContactEmail, new { @class = "input-xxlarge" })
+    @Html.LabelFor(company => company.YearEstablished) @Html.EditorFor(company => company.YearEstablished, new { @class = "input-xxlarge" })
+        
+    <br />
+    <input type="submit" value="Save" class="btn" />
+    @Html.ActionLink(Resource.Cancel, "List")
 }
+</div>

@@ -32,5 +32,47 @@ namespace asi.asicentral.web.Controllers.sgr
             ViewBag.Title = "Edit a Company";
             return View("../sgr/Company/Edit", company);
         }
+
+        //TODO figure out how to validate data while allowing html data
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
+        public ActionResult Edit(Company company)
+        {
+            ViewBag.Title = "Edit a Company";
+            if (ModelState.IsValid)
+            {
+                _objectService.Update<Company>(company);
+                _objectService.SaveChanges();
+                return RedirectToAction("List");
+            }
+            else
+                return View("../sgr/Company/Edit", company);
+        }
+
+        [HttpGet]
+        public ActionResult Add()
+        {
+            ViewBag.Title = "Add a Company";
+            Company company = new Company();
+            return View("../sgr/Company/Edit", company);
+        }
+
+        //TODO fiure out how to validate data while allowing html data
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
+        public ActionResult Add(Company company)
+        {
+            ViewBag.Title = "Add a Company";
+            if (ModelState.IsValid)
+            {
+                _objectService.Add<Company>(company);
+                _objectService.SaveChanges();
+                return RedirectToAction("List");
+            }
+            else
+                return View("../sgr/Company/Edit", company);
+        }
     }
 }

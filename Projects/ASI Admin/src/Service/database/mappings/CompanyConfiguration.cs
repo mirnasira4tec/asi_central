@@ -15,10 +15,9 @@ namespace asi.asicentral.database.mappings
         {
             ToTable("CENT_SGRInternCompany_SGRC");
             HasKey(company => company.Id);
-
             Property(company => company.Id)
                 .HasColumnName("SGRC_SGRInternCompanyID")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(company => company.Name)
                 .HasColumnName("SGRC_SGRInternCompDesc");
             Property(company => company.Summary)

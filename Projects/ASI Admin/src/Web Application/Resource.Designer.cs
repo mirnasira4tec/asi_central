@@ -61,6 +61,15 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this item?.
         /// </summary>
         public static string ConfirmDeleteMessage {
@@ -84,6 +93,15 @@ namespace asi.asicentral.web {
         public static string DeleteTooltip {
             get {
                 return ResourceManager.GetString("DeleteTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SGR Maintenance.
+        /// </summary>
+        public static string SGRMaintenanceLink {
+            get {
+                return ResourceManager.GetString("SGRMaintenanceLink", resourceCulture);
             }
         }
     }
