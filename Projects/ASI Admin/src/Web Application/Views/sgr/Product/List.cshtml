@@ -1,0 +1,18 @@
+﻿@using asi.asicentral.model.sgr
+@model IList<Company>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>List of Products</h2>
+
+<a class="btn btn-small" href="@Url.Action("Add", "../sgr/Company", null)">
+    <i class="icon-star"></i>
+    Add a Company
+</a>
+
+<table class="table table-bordered table-condensed table-striped">
+    <tr><th>Products</th></tr>
+
+</table>
