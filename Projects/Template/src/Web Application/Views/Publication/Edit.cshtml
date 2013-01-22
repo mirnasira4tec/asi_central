@@ -1,4 +1,4 @@
-﻿@inherits System.Web.Mvc.WebViewPage<asi.asicentral.model.Publication>
+﻿@inherits System.Web.Mvc.WebViewPage<asi.asicentral.web.Models.PublicationView>
 @section css {
     @Styles.Render("~/Content/form")
 }
@@ -26,7 +26,7 @@
     <label class="checkbox" for="IsPublic">@Html.EditorFor(model => model.IsPublic) @Html.DisplayNameFor(model => model.IsPublic)</label>
     @Html.LabelFor(model => model.StartDate) @Html.EditorFor(model => model.StartDate) @Html.ValidationMessageFor(model => model.StartDate)
     @Html.LabelFor(model => model.EndDate) @Html.EditorFor(model => model.EndDate) @Html.ValidationMessageFor(model => model.EndDate)
-    @Html.LabelFor(model => model.Color) @Html.DropDownListFor(model => model.Color, (SelectList)ViewBag.ColorList) @Html.ValidationMessageFor(model => model.Color)
+    @Html.LabelFor(model => model.Color) @Html.DropDownListFor(model => model.Color, Model.ColorList) @Html.ValidationMessageFor(model => model.Color)
 
 @if (Model.Issues == null || Model.Issues.Count == 0)
 {

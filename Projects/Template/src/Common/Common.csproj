@@ -58,14 +58,13 @@
     <Compile Include="services\interfaces\IUnitOfWork.cs" />
     <Compile Include="services\interfaces\IValidatedContext.cs" />
     <Compile Include="services\ObjectService.cs" />
+    <Compile Include="util\HtmlHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="util\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
