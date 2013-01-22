@@ -1,10 +1,1 @@
-﻿@{
-    // make placeholder work from [Display(Prompt =
-    IDictionary<string, object> attributes = new Dictionary<string, object>();
-    attributes.Add("class", "text-box multi-line valid");
-    if (!string.IsNullOrEmpty(ViewData.ModelMetadata.Watermark) && !attributes.ContainsKey("placeholder"))
-    {
-        attributes.Add("placeholder", ViewData.ModelMetadata.Watermark);
-    }
-}
-@Html.TextArea("", ViewData.TemplateInfo.FormattedModelValue.ToString(), 0, 0, attributes)
+﻿@Html.TextBox("", ViewData.TemplateInfo.FormattedModelValue, asi.asicentral.util.HtmlHelper.GetAttributes(ViewData, "text-box multi-line valid"))
