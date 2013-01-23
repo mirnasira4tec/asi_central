@@ -17,6 +17,7 @@
     @foreach (Company company in Model)
     {
         <tr>
+<<<<<<< HEAD
             <td>
                 <a class="btn btn-small" href="@Url.Action("Edit", "Company", new { id = company.Id })">
                     <i class="icon-pencil"></i>
@@ -29,6 +30,10 @@
                 </a>
                     @company.Name
             </td>
+=======
+            <td><a href="#" rel="tooltip" data-placement="right" title="Import Spreadsheet"><i class="icon-upload"></i></a></td>
+            <td>@Html.ActionLink(company.Name, "Edit", "../sgr/Company", new { id = company.Id }, null)</td>
+>>>>>>> 346856fd4a0a7ab0ef91e68cd453c3ede0f9d008
         </tr>
     }
 </table>

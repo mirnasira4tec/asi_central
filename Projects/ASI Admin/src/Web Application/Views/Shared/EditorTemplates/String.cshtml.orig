@@ -1,0 +1,14 @@
+<<<<<<< HEAD
+﻿@{
+    // make placeholder work from [Display(Prompt =
+    IDictionary<string, object> attributes = new Dictionary<string, object>();
+    attributes.Add("class", "text-box single-line valid " + (ViewData["class"] != null ? ViewData["class"] : ""));
+    if (!string.IsNullOrEmpty(ViewData.ModelMetadata.Watermark) && !attributes.ContainsKey("placeholder"))
+    {
+        attributes.Add("placeholder", ViewData.ModelMetadata.Watermark);
+    }
+}
+@Html.TextBox("", ViewData.TemplateInfo.FormattedModelValue, attributes)
+=======
+﻿@Html.TextBox("", ViewData.TemplateInfo.FormattedModelValue, asi.asicentral.util.HtmlHelper.GetAttributes(ViewData, "text-box single-line valid"))
+>>>>>>> 346856fd4a0a7ab0ef91e68cd453c3ede0f9d008

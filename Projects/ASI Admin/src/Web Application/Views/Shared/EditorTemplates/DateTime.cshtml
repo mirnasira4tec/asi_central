@@ -1,12 +1,6 @@
 ﻿@{
     string dateTimeFormat = "MM/dd/yyyy HH:mm:ss";
-    // make placeholder work from [Display(Prompt =
-    IDictionary<string, object> attributes = new Dictionary<string, object>();
-    attributes.Add("class", "text-box single-line valid");
-    if (!string.IsNullOrEmpty(ViewData.ModelMetadata.Watermark) && !attributes.ContainsKey("placeholder"))
-    {
-        attributes.Add("placeholder", ViewData.ModelMetadata.Watermark);
-    }
+    IDictionary<string, object> attributes = asi.asicentral.util.HtmlHelper.GetAttributes(ViewData, "text-box single-line valid");
     attributes.Add("data-format", dateTimeFormat.ToLower());
 }
 <div id="@(ViewData.ModelMetadata.PropertyName + "Picker")" class="input-append date">@Html.TextBox("", (object)String.Format("{0:" + dateTimeFormat + "}", Model), attributes)<span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span></div>
