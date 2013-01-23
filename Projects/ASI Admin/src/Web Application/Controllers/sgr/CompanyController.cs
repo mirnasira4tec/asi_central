@@ -19,7 +19,7 @@ namespace asi.asicentral.web.Controllers.sgr
 
         public ActionResult List()
         {
-            IList<Company> companies = _objectService.GetAll<Company>().OrderBy(company => company.Name).ToList();
+            IList<Company> companies = _objectService.GetAll<Company>().ToList();
             ViewBag.Title = "List of Companies";
             return View("../sgr/Company/List", companies);
         }

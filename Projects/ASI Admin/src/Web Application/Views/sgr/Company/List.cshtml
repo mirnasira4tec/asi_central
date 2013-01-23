@@ -8,7 +8,7 @@
 <h2>List of Companies</h2>
 
 <a class="btn btn-small" href="@Url.Action("Add", "../sgr/Company", null)">
-    <i class="icon-star"></i>
+    <i class="icon-plus-sign"></i>
     Add a Company
 </a>
 
@@ -16,6 +16,19 @@
     <tr><th>Name</th></tr>
     @foreach (Company company in Model)
     {
-        <tr><td>@Html.ActionLink(company.Name, "Edit", "../sgr/Company", new { id = company.Id }, null)</td></tr>
+        <tr>
+            <td>
+                <a class="btn btn-small" href="@Url.Action("Edit", "Company", new { id = company.Id })">
+                    <i class="icon-pencil"></i>
+                    Edit Company
+                </a>
+
+                <a class="btn btn-small" href="@Url.Action("ListCategory", "Product", new { id = company.Id })">
+                    <i class="icon-eye-open"></i>
+                    View Products
+                </a>
+                    @company.Name
+            </td>
+        </tr>
     }
 </table>

@@ -172,6 +172,7 @@
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\sgr\CategoryController.cs" />
     <Compile Include="Controllers\sgr\CompanyController.cs" />
     <Compile Include="Controllers\sgr\ProductController.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
@@ -251,13 +252,15 @@
     <Content Include="Views\Shared\EditorTemplates\MultilineText.cshtml" />
     <Content Include="Views\sgr\Company\List.cshtml" />
     <Content Include="Views\sgr\Company\Edit.cshtml" />
-    <Content Include="Views\sgr\Product\List.cshtml" />
+    <Content Include="Views\sgr\Product\ListCategory.cshtml" />
+    <Content Include="Views\sgr\Product\ListProduct.cshtml" />
+    <Content Include="Views\sgr\Product\Edit.cshtml" />
+    <Content Include="Views\sgr\Category\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\sgr\Category\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -292,16 +295,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>5187</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:1918/</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>
