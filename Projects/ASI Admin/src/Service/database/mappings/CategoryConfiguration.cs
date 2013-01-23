@@ -35,7 +35,7 @@ namespace asi.asicentral.database.mappings
 
             Property(category => category.Id)
                 .HasColumnName("CategoryID")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(category => category.Name)
                 .HasColumnName("CategoryDescription");
         }
