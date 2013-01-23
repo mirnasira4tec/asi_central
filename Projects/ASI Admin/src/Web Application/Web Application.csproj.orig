@@ -252,12 +252,15 @@
     <Content Include="Views\Shared\EditorTemplates\MultilineText.cshtml" />
     <Content Include="Views\sgr\Company\List.cshtml" />
     <Content Include="Views\sgr\Company\Edit.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\Date.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
-    <Content Include="Views\sgr\Product\Edit.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\sgr\Product\ListCategory.cshtml" />
     <Content Include="Views\sgr\Product\ListProduct.cshtml" />
+    <Content Include="Views\sgr\Product\Edit.cshtml" />
     <Content Include="Views\sgr\Category\Edit.cshtml" />
+=======
+    <Content Include="Views\Shared\EditorTemplates\Date.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
+>>>>>>> 346856fd4a0a7ab0ef91e68cd453c3ede0f9d008
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -297,6 +300,9 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
+<<<<<<< HEAD
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
+=======
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>5187</DevelopmentServerPort>
@@ -307,6 +313,7 @@
           <CustomServerUrl>
           </CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+>>>>>>> 346856fd4a0a7ab0ef91e68cd453c3ede0f9d008
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>

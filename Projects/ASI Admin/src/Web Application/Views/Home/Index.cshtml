@@ -1,4 +1,7 @@
-﻿<p>This is the landing page for the Admin tool. It will contain links to anything which we need to access</p>
+﻿@using asi.asicentral.web
+
+<p>This is the landing page for the Admin tool. It will contain links to anything which we need to access</p>
+
 <p>
-    @Html.ActionLink("SGR Maintenance", "List", "../sgr/Company")   
+    @Html.ActionLink(Resource.SGRMaintenanceLink, "List", "../sgr/Company")   
 </p>

@@ -1,0 +1,37 @@
+﻿@using asi.asicentral.model.sgr
+@using asi.asicentral.web
+@model Product
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+<div class="form-actions">
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(product => Model.Id)
+    @Html.HiddenFor(product => Model.Company.Id)
+    @Html.HiddenFor(Product => Model.Categories)
+    
+    @Html.LabelFor(product => Model.Name) @Html.EditorFor(product => Model.Name, new { @class = "input-xxlarge" })  @Html.ValidationMessageFor(company => Model.Name)
+    @Html.LabelFor(product => Model.ModelNumber) @Html.EditorFor(product => Model.ModelNumber, new { @class = "input-xxlarge" }) @Html.ValidationMessageFor(company => Model.ModelNumber)
+    @Html.LabelFor(product => Model.Price) @Html.EditorFor(product => Model.Price, new { @class = "input-xxlarge" })
+    @Html.LabelFor(product => Model.PriceCeiling) @Html.EditorFor(product => Model.PriceCeiling, new { @class = "input-xxlarge" })
+    @Html.LabelFor(product => Model.MinimumOrderQuantity) @Html.EditorFor(product => Model.MinimumOrderQuantity, new { @class = "input-xxlarge" })
+    @Html.LabelFor(product => Model.PaymentTerms) @Html.EditorFor(product => Model.PaymentTerms, new { @class = "input-xxlarge" })
+    @Html.LabelFor(product => Model.KeySpecifications) @Html.EditorFor(product => Model.KeySpecifications, new { @class = "input-xxlarge" })
+    @Html.LabelFor(product => Model.ImageLarge) @Html.EditorFor(product => Model.ImageLarge, new { @class = "input-xxlarge" })
+    @Html.LabelFor(product => Model.ImageSmall) @Html.EditorFor(product => Model.ImageSmall, new { @class = "input-xxlarge" })
+
+    <br />
+    <label>Is Deleted? @Html.CheckBoxFor(product => Model.IsActive) </label>
+    
+    <br />
+    <input type="submit" value="Save" class="btn" />
+    @Html.ActionLink(Resource.Cancel, "ListProduct", new { companyId = Model.Company.Id, categoryId = Model.Categories.First().Id })
+}
+
+</div>

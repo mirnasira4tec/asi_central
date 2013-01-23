@@ -2,71 +2,121 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>ASI Central Admin: Counselor Upload</title>
+	<title>ASI Central Admin: Counselor Upload Tool</title>
     <meta name="viewport" content="width=device-width" />
-	<link href="Content/Site.css" rel="stylesheet"/>
 	<link href="Content/bootstrap-responsive.css" rel="stylesheet"/>
 	<link href="Content/bootstrap.css" rel="stylesheet"/>
+	<link href="Content/Site.css" rel="stylesheet"/>
 </head>
 <body>
-<h1>Counselor Tool</h1>
 <div class="main-body">
- <select>
-	<option value="1">News</option>
-	<option value="2">Case Studies</option>
-	<option value="3">Apparel</option>
-	<option value="4">Social</option>
-	<option value="5">Research</option>
-	<option value="6">Video</option>
-	<option value="7">Awards</option>
-	<option value="8">Road Tour</option>
-</select>
-<br />
-<br />
- Title:  
-        <input name="txtTitle" type="text" id="txtTitle" />
-        <br />
-        <br />
-        <div class="editor-label">Author:</div>
-        <input name="txtAuthor" type="text" id="txtAuthor" />
-        <br />
-        <br />
-         Date:  
-        <input name="txtDate" type="text" id="TextDate" />
-        <br />
-        <br />
-        Social Media:  
-        <input name="txtSocMed" type="text" id="txtSocMed" />
-        <br />
-        <br />
-        Small Image:  
-        <input name="txtImgSm" type="text" id="txtImgSm" />
-        <br />
-        <br />
-        Large Image:  
-        <input name="txtImgLg" type="text" id="txtImgLg" />
-        <br />
-        <br />
-        Tagline:  
-        <br />
-        <textarea name="txtTagline" id="txtTagline" style="width:600px;"></textarea>
-        <br />
-        <br />
-        Teaser:  
-        <br />
-        <textarea name="txtTeaser" id="txtTeaser" style="height:100px;width:600px;"></textarea>
-        <br />
-        <br />
-        Content: 
-        <br /> 
-        <textarea name="txtContent" rows="2" cols="20" id="txtContent" style="height:700px;width:600px;"></textarea>
-        <br />
-        <br />
-        Active?:  
-        <input id="cbActive" type="checkbox" name="cbActive" />
-        <br />
-        <br />
-        <input type="submit" name="btnSubmit" value="Submit" id="btnSubmit" />
+
+
+
+<form>
+<fieldset>
+    <legend>Counselor Upload Tool</legend>
+    <label class="checkbox inline">
+    <input type="checkbox" value="Counselor">Push to Counselorgam.com
+    </label> 
+    <label class="checkbox inline">
+    <input type="checkbox" value="ESP Web">Push to ESP Web
+    </label>    
+    <label class="checkbox inline">
+    <input type="checkbox" value="NewsRotator">Push to News Rotator
+    </label>    
+
+    
+    
+    <label for="inputCounselorCat">Counselor Category
+    <select>
+	    <option value="1">News</option>
+	    <option value="2">Case Studies</option>
+	    <option value="3">Apparel</option>
+	    <option value="4">Social</option>
+	    <option value="5">Research</option>
+	    <option value="6">Video</option>
+	    <option value="7">Awards</option>
+	    <option value="8">Road Tour</option>
+    </select><span class="help-inline">Determines under which Counselor Sub page it will appear</span>
+    </label>
+    
+    <label for="inputRotatorPosition">Rotator Position
+    <select>
+	    <option value="1">Large</option>
+	    <option value="2">Small</option>
+    </select><span class="help-inline">Determines if it's a large or small rotator item</span>
+    </label>
+    
+   
+    <label for="inputTitle">Title
+    <input type="text" id="inputTitle" placeholder="Title" /><span class="help-inline">Headline of the article</span>
+    </label>     
+
+    <label for="inputAuthor">Author
+    <input type="text" id="inputAuthor" placeholder="Author" /><span class="help-inline">If no byline given (PromoGram), just say Counselor</span>
+    </label>       
+  
+    <label for="inputDate">Date
+    <input type="text" id="inputDate" placeholder="Date" /><span class="help-inline">Active or live date</span>
+    </label>
+
+    <label for="inputImage455">Image (455)
+    <input type="text" id="inputImage455" placeholder="Image" /><span class="help-inline">Large image on Counselor Homepage</span>
+    </label>
+    
+    <label for="inputImage320">Image (320)
+    <input type="text" id="inputImage320" placeholder="Image" /><span class="help-inline">Large image on Counselor Sub pages</span>
+    </label>
+    
+    <label for="inputImage284">Image (284)
+    <input type="text" id="inputImage284" placeholder="Image" /><span class="help-inline">Large image on ASI Central Homepage</span>
+    </label> 
+    
+    <label for="inputImage149">Image (149)
+    <input type="text" id="inputImage149" placeholder="Image" /><span class="help-inline">Small image thumbnail on Counselor Sub pages</span>
+    </label>   
+    
+    <label for="inputImage135">Image (135)
+    <input type="text" id="inputImage135" placeholder="Image" /><span class="help-inline">Small image thumbnail on ASI Central Homepage</span>
+    </label> 
+    
+    <label for="inputImage111">Image (111)
+    <input type="text" id="inputImage111" placeholder="Image" /><span class="help-inline">Small image on Counselor Homepage</span>
+    </label>  
+    
+    <label for="inputTagline">Tagline
+    <textarea class="input-xxlarge" rows="3" id="inputTagline"></textarea><span class="help-inline">Further detail about Counselor headline, usually just a few words</span>
+    </label>
+    
+    
+    <label for="inputSummaryLG">Summary Large
+    <textarea class="input-xxlarge" rows="3" id="inputSummaryLG"></textarea><span class="help-inline">ASI Central homepage, large image summary, 100 chars plus end punct</span>
+    </label>
+    
+    <label for="inputSummarySM">Summary Small
+    <textarea class="input-xxlarge" rows="3" id="inputSummarySM"></textarea><span class="help-inline">ASI Central homepage, small image summary, abt 50 chars, no end punct</span>
+    </label>
+    
+    <label for="inputContent">Content
+    <textarea class="input-xxlarge" rows="20" id="inputContent"></textarea><span class="help-inline">Article Body - Will appear inside Counselormag.com template</span>
+    </label>
+    
+   
+    <label for="inputDescription">Description    
+    <textarea class="input-xxlarge" rows="20" id="Textarea1"></textarea><span class="help-inline">Article Body - Will appear inside ASI Central template for ESP Web users</span>
+    </label>
+       
+    <button type="submit" class="btn">Submit</button>
+
+  </fieldset>
+</form>
+            
+            
+      
+            
+      
+            
 
 </div>
 	<script src="/Scripts/bootstrap.js"></script>
