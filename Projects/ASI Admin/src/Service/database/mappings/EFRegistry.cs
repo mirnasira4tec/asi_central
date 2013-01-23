@@ -20,10 +20,13 @@ namespace asi.asicentral.database.mappings
             For<ASIInternetContext>().HybridHttpOrThreadLocalScoped().Use<ASIInternetContext>();
             //for each model - get the repository class with the appropriate context
             For<IRepository<Company>>().Use<EFRepository<Company>>()
-                .Ctor<IValidatedContext>("context").Is<ASIInternetContext>();
+                .Ctor<IValidatedContext>().Is<ASIInternetContext>();
 
             For<IRepository<Product>>().Use<EFRepository<Product>>()
-                .Ctor<IValidatedContext>("context").Is<ASIInternetContext>();
+                .Ctor<IValidatedContext>().Is<ASIInternetContext>();
+
+            For<IRepository<Category>>().Use<EFRepository<Category>>()
+                .Ctor<IValidatedContext>().Is<ASIInternetContext>();
         }
     }
 }
