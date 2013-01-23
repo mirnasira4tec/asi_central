@@ -23,10 +23,17 @@ namespace asi.asicentral.database.mappings
                 .Ctor<IValidatedContext>().Is<ASIInternetContext>();
 
             For<IRepository<Product>>().Use<EFRepository<Product>>()
+<<<<<<< HEAD
                 .Ctor<IValidatedContext>().Is<ASIInternetContext>();
 
             For<IRepository<Category>>().Use<EFRepository<Category>>()
                 .Ctor<IValidatedContext>().Is<ASIInternetContext>();
+=======
+                .Ctor<IValidatedContext>("context").Is<ASIInternetContext>();
+
+            For<IRepository<Category>>().Use<EFRepository<Category>>()
+                .Ctor<IValidatedContext>("context").Is<ASIInternetContext>();
+>>>>>>> d80d3354d1ba5dfb872f4b4768499a8dfdb7634a
         }
     }
 }

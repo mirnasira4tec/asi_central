@@ -21,7 +21,7 @@ namespace asi.asicentral.database.mappings
 
             Property(product => product.Id)
                 .HasColumnName("SGRS_SpecsID")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(product => product.Name)
                 .HasColumnName("SGRS_ProdName");
             Property(product => product.ModelNumber)
