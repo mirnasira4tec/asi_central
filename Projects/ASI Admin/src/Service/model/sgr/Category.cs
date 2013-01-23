@@ -18,11 +18,11 @@ namespace asi.asicentral.model.sgr
             }
         }
 
-        [Display(Name = "Id")]
+        [Display(ResourceType = typeof(Resource), Name = "CategoryID")]
         [Required]
         public int Id { get; set; }
 
-        [Display(Name = "Name")]
+        [Display(ResourceType = typeof(Resource), Name = "CategoryName")]
         [Required]
         public string Name { get; set; }
 

@@ -117,4 +117,115 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ASINumber" xml:space="preserve">
+    <value>ASI Number</value>
+  </data>
+  <data name="CategoryID" xml:space="preserve">
+    <value>Category Id</value>
+  </data>
+  <data name="CategoryName" xml:space="preserve">
+    <value>Category Name</value>
+  </data>
+  <data name="CompanyAddress" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="CompanyAnnualSalesTurnover" xml:space="preserve">
+    <value>Annual Sales Turnover</value>
+  </data>
+  <data name="CompanyBusinessType" xml:space="preserve">
+    <value>Buisness Type</value>
+  </data>
+  <data name="CompanyContactEmail" xml:space="preserve">
+    <value>Contact Email</value>
+  </data>
+  <data name="CompanyContactName" xml:space="preserve">
+    <value>Contact Name</value>
+  </data>
+  <data name="CompanyID" xml:space="preserve">
+    <value>Company Id</value>
+  </data>
+  <data name="CompanyIsActive" xml:space="preserve">
+    <value>Is Active?</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Company Name</value>
+  </data>
+  <data name="CompanyNumOfEmployees" xml:space="preserve">
+    <value>Number Of Employees</value>
+  </data>
+  <data name="CompanyProductionTime" xml:space="preserve">
+    <value>Production Time</value>
+  </data>
+  <data name="CompanySummary" xml:space="preserve">
+    <value>Company Summary</value>
+  </data>
+  <data name="CompanyURL" xml:space="preserve">
+    <value>Company Url</value>
+  </data>
+  <data name="CountryCode" xml:space="preserve">
+    <value>Country Code</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Fax" xml:space="preserve">
+    <value>Fax Number</value>
+  </data>
+  <data name="FaxAreaCode" xml:space="preserve">
+    <value>Fax Area Code</value>
+  </data>
+  <data name="FaxCountryCode" xml:space="preserve">
+    <value>Fax Country Code</value>
+  </data>
+  <data name="FaxExt" xml:space="preserve">
+    <value>Fax Extension</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
+  <data name="PhoneAreaCode" xml:space="preserve">
+    <value>Phone Area Code</value>
+  </data>
+  <data name="PhoneExt" xml:space="preserve">
+    <value>Phone Extension</value>
+  </data>
+  <data name="ProductID" xml:space="preserve">
+    <value>Product Id</value>
+  </data>
+  <data name="ProductIsActive" xml:space="preserve">
+    <value>Is Active?</value>
+  </data>
+  <data name="ProductKeySpecifications" xml:space="preserve">
+    <value>Key Specifications</value>
+  </data>
+  <data name="ProductLargeImg" xml:space="preserve">
+    <value>Large Image</value>
+  </data>
+  <data name="ProductMinOrderQuantity" xml:space="preserve">
+    <value>Minimum Order Quanity</value>
+  </data>
+  <data name="ProductModelNumber" xml:space="preserve">
+    <value>Model Number</value>
+  </data>
+  <data name="ProductName" xml:space="preserve">
+    <value>Product Name</value>
+  </data>
+  <data name="ProductPaymentTerms" xml:space="preserve">
+    <value>Payment Terms</value>
+  </data>
+  <data name="ProductPrice" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="ProductPriceCeiling" xml:space="preserve">
+    <value>Price Ceiling</value>
+  </data>
+  <data name="ProductSmallImg" xml:space="preserve">
+    <value>Small Image</value>
+  </data>
+  <data name="Summary" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="YearEst" xml:space="preserve">
+    <value>Year Established</value>
+  </data>
 </root>

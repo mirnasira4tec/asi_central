@@ -1,0 +1,39 @@
+﻿@using asi.asicentral.model.sgr
+@model Company
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int categoryid = Model.Categories.First().Id;
+}
+
+<h2>@Model.Name</h2>
+
+    <a class="btn btn-small" href="@Url.Action("ListCategory", "Product", new { id = Model.Id, categoryid = categoryid })">
+        <i class="icon-backward"></i>
+        Back
+    </a>
+
+    <a class="btn btn-small" href="@Url.Action("Add", "Product", new { companyId = Model.Id, categoryId = categoryid })">
+        <i class="icon-plus"></i>
+        Add Product
+    </a>
+
+<table class="table table-bordered table-condensed table-striped">
+    <tr><th>ID</th><th>Product</th><th>Model Number</th></tr>
+    
+    @foreach (Product product in Model.Categories.First().Products)
+    {
+       <tr>
+           <td>
+               @product.Id
+           </td>
+           <td>                
+               @Html.ActionLink(@product.Name, "Edit", new { productId = product.Id, categoryId = categoryid })
+           </td>
+           <td>
+               @product.ModelNumber
+           </td>
+       </tr>
+    }
+
+</table>

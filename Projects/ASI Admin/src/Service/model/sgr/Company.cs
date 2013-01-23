@@ -18,76 +18,76 @@ namespace asi.asicentral.model.sgr
             }
         }
 
-        [Display(Name="Id")]
+        [Display(ResourceType = typeof(Resource), Name = "CompanyID")]
         [Required]
         public int Id { get; set; }
 
-        [Display(Name = "Name")]
+        [Display(ResourceType = typeof(Resource), Name = "CompanyName")]
         [Required]
         public string Name { get; set; }
 
-        [Display(Name = "Summary")]
+        [Display(ResourceType = typeof(Resource), Name = "CompanySummary")]
         [DataType(DataType.MultilineText)]
         public string Summary { get; set; }
 
-        [Display(Name = "ASI Number")]
+        [Display(ResourceType = typeof(Resource), Name = "ASINumber")]
         public string ASINumber { get; set; }
 
-        [Display(Name = "IsActive")]
+        [Display(ResourceType = typeof(Resource), Name = "CompanyIsActive")]
         public bool IsActive { get; set; }
 
-        [Display(Name = "BusinessType")]
+        [Display(ResourceType = typeof(Resource), Name = "CompanyBusinessType")]
         public string BusinessType { get; set; }
 
-        [Display(Name = "Address")]
+        [Display(ResourceType = typeof(Resource), Name = "CompanyAddress")]
         public string Address { get; set; }
 
-        [Display(Name = "ProductionTime")]
+        [Display(ResourceType = typeof(Resource), Name = "CompanyProductionTime")]
         public string ProductionTime { get; set; }
 
-        [Display(Name = "NumberOfEmployees")]
+        [Display(ResourceType = typeof(Resource), Name = "CompanyNumOfEmployees")]
         public string NumberOfEmployees { get; set; }
 
-        [Display(Name = "Email")]
+        [Display(ResourceType = typeof(Resource), Name = "Email")]
         public string Email { get; set; }
 
-        [Display(Name = "URL")]
+        [Display(ResourceType = typeof(Resource), Name = "CompanyURL")]
         public string URL { get; set; }
 
-        [Display(Name = "AnnualSalesTurnover")]
+        [Display(ResourceType = typeof(Resource), Name = "CompanyAnnualSalesTurnover")]
         public string AnnualSalesTurnover { get; set; }
 
-        [Display(Name = "CountryCode")]
+        [Display(ResourceType = typeof(Resource), Name = "CountryCode")]
         public string CountryCode { get; set; }
 
-        [Display(Name = "PhoneAreaCode")]
+        [Display(ResourceType = typeof(Resource), Name = "PhoneAreaCode")]
         public string PhoneAreaCode { get; set; }
 
-        [Display(Name = "Phone")]
+        [Display(ResourceType = typeof(Resource), Name = "Phone")]
         public string Phone { get; set; }
 
-        [Display(Name = "PhoneExtension")]
+        [Display(ResourceType = typeof(Resource), Name = "PhoneExt")]
         public string PhoneExtension { get; set; }
 
-        [Display(Name = "FaxCountryCode")]
+        [Display(ResourceType = typeof(Resource), Name = "FaxCountryCode")]
         public string FaxCountryCode { get; set; }
 
-        [Display(Name = "FaxAreaCode")]
+        [Display(ResourceType = typeof(Resource), Name = "FaxAreaCode")]
         public string FaxAreaCode { get; set; }
 
-        [Display(Name = "Fax")]
+        [Display(ResourceType = typeof(Resource), Name = "Fax")]
         public string Fax { get; set; }
 
-        [Display(Name = "FaxExtension")]
+        [Display(ResourceType = typeof(Resource), Name = "FaxExt")]
         public string FaxExtension { get; set; }
 
-        [Display(Name = "ContactName")]
+        [Display(ResourceType = typeof(Resource), Name = "CompanyContactName")]
         public string ContactName { get; set; }
 
-        [Display(Name = "ContactEmail")]
+        [Display(ResourceType = typeof(Resource), Name = "CompanyContactEmail")]
         public string ContactEmail { get; set; }
 
-        [Display(Name = "YearEstablished")]
+        [Display(ResourceType = typeof(Resource), Name = "YearEst")]
         public string YearEstablished { get; set; }
 
         public virtual IList<Product> Products { get; set; }

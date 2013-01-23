@@ -17,32 +17,41 @@ namespace asi.asicentral.model.sgr
             }
         }
 
-        [Display(Name = "Id")]
+        [Display(ResourceType = typeof(Resource), Name = "ProductID")]
         [Required]
         public int Id { get; set; }
 
-        [Display(Name = "Name")]
+        [Display(ResourceType = typeof(Resource), Name = "ProductName")]
         [Required]
         public string Name { get; set; }
 
+        [Display(ResourceType = typeof(Resource), Name = "ProductModelNumber")]
+        [Required]
         public string ModelNumber { get; set; }
 
+        [Display(ResourceType = typeof(Resource), Name = "ProductPrice")]
         public Decimal? Price { get; set; }
 
+        [Display(ResourceType = typeof(Resource), Name = "ProductPriceCeiling")]
         public Decimal? PriceCeiling { get; set; }
 
+        [Display(ResourceType = typeof(Resource), Name = "ProductMinOrderQuantity")]
         public string MinimumOrderQuantity { get; set; }
 
+        [Display(ResourceType = typeof(Resource), Name = "ProductPaymentTerms")]
         public string PaymentTerms { get; set; }
 
         [DataType(DataType.MultilineText)]
+        [Display(ResourceType = typeof(Resource), Name = "ProductKeySpecifications")]
         public string KeySpecifications { get; set; }
 
+        [Display(ResourceType = typeof(Resource), Name = "ProductSmallImg")]
         public string ImageSmall { get; set; }
 
+        [Display(ResourceType = typeof(Resource), Name = "ProductLargeImg")]
         public string ImageLarge { get; set; }
 
-        [Display(Name = "IsActive")]
+        [Display(ResourceType = typeof(Resource), Name = "ProductIsActive")]
         public bool IsActive { get; set; }
 
         [Required]
@@ -67,6 +76,6 @@ namespace asi.asicentral.model.sgr
         public override int GetHashCode()
         {
             return Id.GetHashCode();
-        }    
+        }
     }
 }
