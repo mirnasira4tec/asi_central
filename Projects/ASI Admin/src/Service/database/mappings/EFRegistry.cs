@@ -24,6 +24,9 @@ namespace asi.asicentral.database.mappings
 
             For<IRepository<Product>>().Use<EFRepository<Product>>()
                 .Ctor<IValidatedContext>("context").Is<ASIInternetContext>();
+
+            For<IRepository<Category>>().Use<EFRepository<Category>>()
+                .Ctor<IValidatedContext>("context").Is<ASIInternetContext>();
         }
     }
 }
