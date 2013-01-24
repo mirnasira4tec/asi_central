@@ -20,14 +20,8 @@
             <td>
                 <a class="btn btn-small" href="@Url.Action("Edit", "Company", new { id = company.Id })">
                     <i class="icon-pencil"></i>
-                    Edit Company
                 </a>
-
-                <a class="btn btn-small" href="@Url.Action("ListCategory", "Product", new { id = company.Id })">
-                    <i class="icon-eye-open"></i>
-                    View Products
-                </a>
-                    @company.Name
+                @Html.ActionLink(company.Name, "List", "Product", new { id = company.Id}, null)
             </td>
         </tr>
     }

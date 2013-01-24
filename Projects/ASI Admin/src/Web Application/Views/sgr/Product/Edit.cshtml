@@ -13,8 +13,6 @@
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(product => Model.Id)
-    @Html.HiddenFor(product => Model.Company.Id)
-    @Html.HiddenFor(Product => Model.Categories)
     
     @Html.LabelFor(product => Model.Name) @Html.EditorFor(product => Model.Name, new { @class = "input-xxlarge" })  @Html.ValidationMessageFor(company => Model.Name)
     @Html.LabelFor(product => Model.ModelNumber) @Html.EditorFor(product => Model.ModelNumber, new { @class = "input-xxlarge" }) @Html.ValidationMessageFor(company => Model.ModelNumber)
@@ -31,7 +29,7 @@
     
     <br />
     <input type="submit" value="Save" class="btn" />
-    @Html.ActionLink(Resource.Cancel, "ListProduct", new { companyId = Model.Company.Id, categoryId = Model.Categories.First().Id })
+    @Html.ActionLink(Resource.Cancel, "List", new { id = Model.Company.Id, categoryId = ViewBag.CategoryID })
 }
 
 </div>
