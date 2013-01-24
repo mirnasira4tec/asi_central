@@ -1,14 +1,30 @@
 ﻿@using asi.asicentral.model.sgr
+@using asi.asicentral.web
 @model Category
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Add Category</h2>
+<h2>@ViewBag.Title</h2>
 
-<a class="btn btn-small" href="@Url.Action("List", "../sgr/Company", null)">
-    <i class="icon-backward"></i>
-    Back
-</a>
+<div class="form-actions">
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <!-- TODO figure out why Html.HiddenFor(category => Model.Id) value is always 1 when constructed for clientside -->    
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <input type="hidden" name="companyId" value="@ViewBag.CompanyID" />
+       
+    @Html.LabelFor(category => category.Name) @Html.EditorFor(category => Model.Name)
+    
+    <br />
+    <input type="submit" value="Save" class="btn" />
+    @Html.ActionLink(Resource.Cancel, "List", "Product", new { id = ViewBag.CompanyID, categoryId = ViewBag.CategoryID }, null)
+}
+</div>
 
+@section Scripts {
+    <script src="/Scripts/asi.js"></script>
+}
