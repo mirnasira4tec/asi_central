@@ -61,19 +61,9 @@ namespace SGRImport
         {
             if (!_loadingExcel)
             {
-                //read first 10 lines of spreadsheet, or less
-                int[] cols = new int[7];
-                cols[0] = FindIndex(cmbName.Text, cmbName.Items);
-                cols[1] = FindIndex(cmbModel.Text, cmbName.Items);
-                cols[2] = FindIndex(cmbPrice.Text, cmbName.Items);
-                cols[3] = FindIndex(cmbCeiling.Text, cmbName.Items);
-                cols[4] = FindIndex(cmbMin.Text, cmbName.Items);
-                cols[5] = FindIndex(cmbTerms.Text, cmbName.Items);
-                cols[6] = FindIndex(cmbSpecs.Text, cmbName.Items);
-                //create product list
-                //create/populate product based on selected columns
+                IList<Product> productList = GetProductList(8);
                 //display in the grid
-                Console.WriteLine("");
+                dgProducts.DataSource = productList;
             }
         }
 
@@ -128,6 +118,7 @@ namespace SGRImport
         {
             base.OnClosing(e);
             _excelFile.Dispose();
+            _objectService.Dispose();
         }
 
         private void cmbName_SelectedIndexChanged(object sender, EventArgs e)
@@ -163,6 +154,63 @@ namespace SGRImport
         private void cmbSpecs_SelectedIndexChanged(object sender, EventArgs e)
         {
             PopulatePreview();
+        }
+
+        private void cmbCompanyList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Company company = cmbCompanyList.SelectedItem as Company;
+            txtImage.Text = company != null ? company.Name : string.Empty;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btnImport_Click(object sender, EventArgs e)
+        {
+            Company company = (Company)cmbCompanyList.SelectedItem;
+            IList<Product> productList = GetProductList(0);
+            foreach (Product product in productList)
+            {
+                product.Company = company;
+                //TODO set the image properties _lg and _sm
+                _objectService.Add<Product>(product);
+            }
+            _objectService.SaveChanges();
+        }
+
+        private IList<Product> GetProductList(int rows)
+        {
+            //read first 10 lines of spreadsheet, or less
+            int[] cols = new int[7];
+            cols[0] = FindIndex(cmbName.Text, cmbName.Items);
+            cols[1] = FindIndex(cmbModel.Text, cmbName.Items);
+            cols[2] = FindIndex(cmbPrice.Text, cmbName.Items);
+            cols[3] = FindIndex(cmbCeiling.Text, cmbName.Items);
+            cols[4] = FindIndex(cmbMin.Text, cmbName.Items);
+            cols[5] = FindIndex(cmbTerms.Text, cmbName.Items);
+            cols[6] = FindIndex(cmbSpecs.Text, cmbName.Items);
+            //create product list
+            List<Product> productList = new List<Product>();
+            int i = 2; //skip the first row, excel starts at 1
+            string cellValue = _excelFile.GetValue(i, cols[0]);
+            while ( (rows < 1 || i < rows + 2) && cellValue != null)
+            {
+                decimal tempDecimal;
+                //create/populate product based on selected columns
+                Product product = new Product();
+                productList.Add(product);
+                product.Name = cellValue;
+                product.ModelNumber = _excelFile.GetValue(i, cols[1]);
+                if (Decimal.TryParse(_excelFile.GetValue(i, cols[2]), out tempDecimal)) product.Price = tempDecimal;
+                if (Decimal.TryParse(_excelFile.GetValue(i, cols[3]), out tempDecimal)) product.PriceCeiling = tempDecimal;
+                product.MinimumOrderQuantity = _excelFile.GetValue(i, cols[4]);
+                product.PaymentTerms = _excelFile.GetValue(i, cols[5]);
+                product.KeySpecifications = _excelFile.GetValue(i, cols[6]);
+                cellValue = _excelFile.GetValue(i++, cols[0]);
+            }
+            return productList;
         }
     }
 }

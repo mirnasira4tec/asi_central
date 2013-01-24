@@ -43,7 +43,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dgProducts = new System.Windows.Forms.DataGridView();
             this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.modelNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -65,7 +65,11 @@
             this.cmbMin = new System.Windows.Forms.ComboBox();
             this.cmbTerms = new System.Windows.Forms.ComboBox();
             this.cmbSpecs = new System.Windows.Forms.ComboBox();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.label10 = new System.Windows.Forms.Label();
+            this.txtImage = new System.Windows.Forms.TextBox();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.btnImport = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.dgProducts)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.productBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -108,6 +112,7 @@
             this.cmbCompanyList.Name = "cmbCompanyList";
             this.cmbCompanyList.Size = new System.Drawing.Size(287, 21);
             this.cmbCompanyList.TabIndex = 3;
+            this.cmbCompanyList.SelectedIndexChanged += new System.EventHandler(this.cmbCompanyList_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -121,7 +126,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(50, 81);
+            this.label3.Location = new System.Drawing.Point(50, 91);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 13);
             this.label3.TabIndex = 5;
@@ -130,7 +135,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(148, 81);
+            this.label4.Location = new System.Drawing.Point(148, 91);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(76, 13);
             this.label4.TabIndex = 6;
@@ -139,7 +144,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(250, 81);
+            this.label5.Location = new System.Drawing.Point(250, 91);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(31, 13);
             this.label5.TabIndex = 7;
@@ -148,7 +153,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(349, 81);
+            this.label6.Location = new System.Drawing.Point(349, 91);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(65, 13);
             this.label6.TabIndex = 8;
@@ -157,7 +162,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(449, 81);
+            this.label7.Location = new System.Drawing.Point(449, 91);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(85, 13);
             this.label7.TabIndex = 9;
@@ -166,7 +171,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(551, 81);
+            this.label8.Location = new System.Drawing.Point(551, 91);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(80, 13);
             this.label8.TabIndex = 10;
@@ -175,19 +180,19 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(649, 81);
+            this.label9.Location = new System.Drawing.Point(649, 91);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(94, 13);
             this.label9.TabIndex = 11;
             this.label9.Text = "Key Specifications";
             // 
-            // dataGridView1
+            // dgProducts
             // 
-            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.dgProducts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridView1.AutoGenerateColumns = false;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgProducts.AutoGenerateColumns = false;
+            this.dgProducts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgProducts.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.idDataGridViewTextBoxColumn,
             this.nameDataGridViewTextBoxColumn,
             this.modelNumberDataGridViewTextBoxColumn,
@@ -201,11 +206,11 @@
             this.isActiveDataGridViewCheckBoxColumn,
             this.companyDataGridViewTextBoxColumn,
             this.categoriesDataGridViewTextBoxColumn});
-            this.dataGridView1.DataSource = this.productBindingSource;
-            this.dataGridView1.Location = new System.Drawing.Point(7, 125);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(775, 122);
-            this.dataGridView1.TabIndex = 12;
+            this.dgProducts.DataSource = this.productBindingSource;
+            this.dgProducts.Location = new System.Drawing.Point(7, 135);
+            this.dgProducts.Name = "dgProducts";
+            this.dgProducts.Size = new System.Drawing.Size(755, 237);
+            this.dgProducts.TabIndex = 12;
             // 
             // idDataGridViewTextBoxColumn
             // 
@@ -298,7 +303,7 @@
             // cmbName
             // 
             this.cmbName.FormattingEnabled = true;
-            this.cmbName.Location = new System.Drawing.Point(49, 98);
+            this.cmbName.Location = new System.Drawing.Point(49, 108);
             this.cmbName.Name = "cmbName";
             this.cmbName.Size = new System.Drawing.Size(98, 21);
             this.cmbName.TabIndex = 13;
@@ -307,7 +312,7 @@
             // cmbModel
             // 
             this.cmbModel.FormattingEnabled = true;
-            this.cmbModel.Location = new System.Drawing.Point(151, 97);
+            this.cmbModel.Location = new System.Drawing.Point(151, 107);
             this.cmbModel.Name = "cmbModel";
             this.cmbModel.Size = new System.Drawing.Size(98, 21);
             this.cmbModel.TabIndex = 14;
@@ -316,7 +321,7 @@
             // cmbPrice
             // 
             this.cmbPrice.FormattingEnabled = true;
-            this.cmbPrice.Location = new System.Drawing.Point(253, 97);
+            this.cmbPrice.Location = new System.Drawing.Point(253, 107);
             this.cmbPrice.Name = "cmbPrice";
             this.cmbPrice.Size = new System.Drawing.Size(93, 21);
             this.cmbPrice.TabIndex = 15;
@@ -325,7 +330,7 @@
             // cmbCeiling
             // 
             this.cmbCeiling.FormattingEnabled = true;
-            this.cmbCeiling.Location = new System.Drawing.Point(352, 98);
+            this.cmbCeiling.Location = new System.Drawing.Point(352, 108);
             this.cmbCeiling.Name = "cmbCeiling";
             this.cmbCeiling.Size = new System.Drawing.Size(92, 21);
             this.cmbCeiling.TabIndex = 16;
@@ -334,7 +339,7 @@
             // cmbMin
             // 
             this.cmbMin.FormattingEnabled = true;
-            this.cmbMin.Location = new System.Drawing.Point(452, 97);
+            this.cmbMin.Location = new System.Drawing.Point(452, 107);
             this.cmbMin.Name = "cmbMin";
             this.cmbMin.Size = new System.Drawing.Size(92, 21);
             this.cmbMin.TabIndex = 17;
@@ -343,7 +348,7 @@
             // cmbTerms
             // 
             this.cmbTerms.FormattingEnabled = true;
-            this.cmbTerms.Location = new System.Drawing.Point(550, 97);
+            this.cmbTerms.Location = new System.Drawing.Point(550, 107);
             this.cmbTerms.Name = "cmbTerms";
             this.cmbTerms.Size = new System.Drawing.Size(92, 21);
             this.cmbTerms.TabIndex = 18;
@@ -352,17 +357,57 @@
             // cmbSpecs
             // 
             this.cmbSpecs.FormattingEnabled = true;
-            this.cmbSpecs.Location = new System.Drawing.Point(652, 97);
+            this.cmbSpecs.Location = new System.Drawing.Point(652, 107);
             this.cmbSpecs.Name = "cmbSpecs";
             this.cmbSpecs.Size = new System.Drawing.Size(92, 21);
             this.cmbSpecs.TabIndex = 19;
             this.cmbSpecs.SelectedIndexChanged += new System.EventHandler(this.cmbSpecs_SelectedIndexChanged);
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(25, 65);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(109, 13);
+            this.label10.TabIndex = 20;
+            this.label10.Text = "Images: /images/sgr/";
+            // 
+            // txtImage
+            // 
+            this.txtImage.Location = new System.Drawing.Point(136, 60);
+            this.txtImage.Name = "txtImage";
+            this.txtImage.Size = new System.Drawing.Size(287, 20);
+            this.txtImage.TabIndex = 21;
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(677, 391);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 22;
+            this.btnCancel.Text = "&Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // btnImport
+            // 
+            this.btnImport.Location = new System.Drawing.Point(596, 390);
+            this.btnImport.Name = "btnImport";
+            this.btnImport.Size = new System.Drawing.Size(75, 23);
+            this.btnImport.TabIndex = 23;
+            this.btnImport.Text = "&Import";
+            this.btnImport.UseVisualStyleBackColor = true;
+            this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
+            // 
             // frmImport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 301);
+            this.ClientSize = new System.Drawing.Size(764, 426);
+            this.Controls.Add(this.btnImport);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.txtImage);
+            this.Controls.Add(this.label10);
             this.Controls.Add(this.cmbSpecs);
             this.Controls.Add(this.cmbTerms);
             this.Controls.Add(this.cmbMin);
@@ -370,7 +415,7 @@
             this.Controls.Add(this.cmbPrice);
             this.Controls.Add(this.cmbModel);
             this.Controls.Add(this.cmbName);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.dgProducts);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
@@ -386,7 +431,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmImport";
             this.Text = "SGR Import";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgProducts)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.productBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -408,7 +453,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dgProducts;
         private System.Windows.Forms.DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn modelNumberDataGridViewTextBoxColumn;
@@ -430,6 +475,10 @@
         private System.Windows.Forms.ComboBox cmbMin;
         private System.Windows.Forms.ComboBox cmbTerms;
         private System.Windows.Forms.ComboBox cmbSpecs;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox txtImage;
+        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Button btnImport;
     }
 }
 

@@ -53,6 +53,19 @@ namespace SGRImport
             return headers.ToArray();
         }
 
+        public string GetValue(int rowIndex, int colIndex)
+        {
+            string tempValue = null;
+            if (_worksheet != null && rowIndex > 0 && colIndex > 0)
+            {
+                object cellValue = _worksheet.Cells[rowIndex, colIndex].Value;
+                if (cellValue != null) tempValue = cellValue.ToString();
+                if (string.IsNullOrEmpty(tempValue)) tempValue = null;
+                else tempValue = tempValue.Trim();
+            }
+            return tempValue;
+        }
+
         public void Dispose()
         {
             if (_worksheet != null) Marshal.FinalReleaseComObject(_worksheet);
