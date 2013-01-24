@@ -255,8 +255,7 @@
     <Content Include="Views\Shared\EditorTemplates\Date.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
     <Content Include="Views\sgr\Product\Edit.cshtml" />
-    <Content Include="Views\sgr\Product\ListCategory.cshtml" />
-    <Content Include="Views\sgr\Product\ListProduct.cshtml" />
+    <Content Include="Views\sgr\Product\List.cshtml" />
     <Content Include="Views\sgr\Category\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
