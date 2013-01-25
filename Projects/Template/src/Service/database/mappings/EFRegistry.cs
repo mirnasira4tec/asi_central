@@ -18,12 +18,14 @@ namespace asi.asicentral.database.mappings
         public EFRegistry()
         {
             //Use only one context across repository per http context or thread
-            For<ASIInternetContext>().Use<ASIInternetContext>();
+            For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIInternetContext>().Name = "ASIInternetContext";
+
             //for each model - get the repository class with the appropriate context
             For<IRepository<Publication>>().Use<EFRepository<Publication>>()
-                .Ctor<IValidatedContext>().Is<ASIInternetContext>();
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
             For<IRepository<PublicationIssue>>().Use<EFRepository<PublicationIssue>>()
-                .Ctor<IValidatedContext>().Is<ASIInternetContext>();
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
         }
     }
 }
