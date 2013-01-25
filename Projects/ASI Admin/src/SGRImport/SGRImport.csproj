@@ -65,6 +65,7 @@
     <Compile Include="frmImport.Designer.cs">
       <DependentUpon>frmImport.cs</DependentUpon>
     </Compile>
+    <Compile Include="model\ProductView.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmImport.resx">
@@ -83,6 +84,7 @@
     <None Include="Properties\DataSources\asi.asicentral.model.sgr.Category.datasource" />
     <None Include="Properties\DataSources\asi.asicentral.model.sgr.Company.datasource" />
     <None Include="Properties\DataSources\asi.asicentral.model.sgr.Product.datasource" />
+    <None Include="Properties\DataSources\SGRImport.model.ProductView.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -44,6 +44,20 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.dgProducts = new System.Windows.Forms.DataGridView();
+            this.cmbName = new System.Windows.Forms.ComboBox();
+            this.cmbModel = new System.Windows.Forms.ComboBox();
+            this.cmbPrice = new System.Windows.Forms.ComboBox();
+            this.cmbCeiling = new System.Windows.Forms.ComboBox();
+            this.cmbMin = new System.Windows.Forms.ComboBox();
+            this.cmbTerms = new System.Windows.Forms.ComboBox();
+            this.cmbSpecs = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.txtImage = new System.Windows.Forms.TextBox();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.btnImport = new System.Windows.Forms.Button();
+            this.label11 = new System.Windows.Forms.Label();
+            this.cmbCategory = new System.Windows.Forms.ComboBox();
+            this.Category = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.modelNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -56,19 +70,7 @@
             this.imageLargeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.isActiveDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.companyDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.categoriesDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.productBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.cmbName = new System.Windows.Forms.ComboBox();
-            this.cmbModel = new System.Windows.Forms.ComboBox();
-            this.cmbPrice = new System.Windows.Forms.ComboBox();
-            this.cmbCeiling = new System.Windows.Forms.ComboBox();
-            this.cmbMin = new System.Windows.Forms.ComboBox();
-            this.cmbTerms = new System.Windows.Forms.ComboBox();
-            this.cmbSpecs = new System.Windows.Forms.ComboBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.txtImage = new System.Windows.Forms.TextBox();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.btnImport = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgProducts)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.productBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -201,104 +203,16 @@
             this.minimumOrderQuantityDataGridViewTextBoxColumn,
             this.paymentTermsDataGridViewTextBoxColumn,
             this.keySpecificationsDataGridViewTextBoxColumn,
+            this.Category,
             this.imageSmallDataGridViewTextBoxColumn,
             this.imageLargeDataGridViewTextBoxColumn,
             this.isActiveDataGridViewCheckBoxColumn,
-            this.companyDataGridViewTextBoxColumn,
-            this.categoriesDataGridViewTextBoxColumn});
+            this.companyDataGridViewTextBoxColumn});
             this.dgProducts.DataSource = this.productBindingSource;
             this.dgProducts.Location = new System.Drawing.Point(7, 135);
             this.dgProducts.Name = "dgProducts";
-            this.dgProducts.Size = new System.Drawing.Size(755, 237);
+            this.dgProducts.Size = new System.Drawing.Size(852, 237);
             this.dgProducts.TabIndex = 12;
-            // 
-            // idDataGridViewTextBoxColumn
-            // 
-            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
-            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
-            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
-            this.idDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // nameDataGridViewTextBoxColumn
-            // 
-            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
-            this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
-            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
-            // 
-            // modelNumberDataGridViewTextBoxColumn
-            // 
-            this.modelNumberDataGridViewTextBoxColumn.DataPropertyName = "ModelNumber";
-            this.modelNumberDataGridViewTextBoxColumn.HeaderText = "ModelNumber";
-            this.modelNumberDataGridViewTextBoxColumn.Name = "modelNumberDataGridViewTextBoxColumn";
-            // 
-            // priceDataGridViewTextBoxColumn
-            // 
-            this.priceDataGridViewTextBoxColumn.DataPropertyName = "Price";
-            this.priceDataGridViewTextBoxColumn.HeaderText = "Price";
-            this.priceDataGridViewTextBoxColumn.Name = "priceDataGridViewTextBoxColumn";
-            // 
-            // priceCeilingDataGridViewTextBoxColumn
-            // 
-            this.priceCeilingDataGridViewTextBoxColumn.DataPropertyName = "PriceCeiling";
-            this.priceCeilingDataGridViewTextBoxColumn.HeaderText = "PriceCeiling";
-            this.priceCeilingDataGridViewTextBoxColumn.Name = "priceCeilingDataGridViewTextBoxColumn";
-            // 
-            // minimumOrderQuantityDataGridViewTextBoxColumn
-            // 
-            this.minimumOrderQuantityDataGridViewTextBoxColumn.DataPropertyName = "MinimumOrderQuantity";
-            this.minimumOrderQuantityDataGridViewTextBoxColumn.HeaderText = "MinimumOrderQuantity";
-            this.minimumOrderQuantityDataGridViewTextBoxColumn.Name = "minimumOrderQuantityDataGridViewTextBoxColumn";
-            // 
-            // paymentTermsDataGridViewTextBoxColumn
-            // 
-            this.paymentTermsDataGridViewTextBoxColumn.DataPropertyName = "PaymentTerms";
-            this.paymentTermsDataGridViewTextBoxColumn.HeaderText = "PaymentTerms";
-            this.paymentTermsDataGridViewTextBoxColumn.Name = "paymentTermsDataGridViewTextBoxColumn";
-            // 
-            // keySpecificationsDataGridViewTextBoxColumn
-            // 
-            this.keySpecificationsDataGridViewTextBoxColumn.DataPropertyName = "KeySpecifications";
-            this.keySpecificationsDataGridViewTextBoxColumn.HeaderText = "KeySpecifications";
-            this.keySpecificationsDataGridViewTextBoxColumn.Name = "keySpecificationsDataGridViewTextBoxColumn";
-            // 
-            // imageSmallDataGridViewTextBoxColumn
-            // 
-            this.imageSmallDataGridViewTextBoxColumn.DataPropertyName = "ImageSmall";
-            this.imageSmallDataGridViewTextBoxColumn.HeaderText = "ImageSmall";
-            this.imageSmallDataGridViewTextBoxColumn.Name = "imageSmallDataGridViewTextBoxColumn";
-            this.imageSmallDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // imageLargeDataGridViewTextBoxColumn
-            // 
-            this.imageLargeDataGridViewTextBoxColumn.DataPropertyName = "ImageLarge";
-            this.imageLargeDataGridViewTextBoxColumn.HeaderText = "ImageLarge";
-            this.imageLargeDataGridViewTextBoxColumn.Name = "imageLargeDataGridViewTextBoxColumn";
-            this.imageLargeDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // isActiveDataGridViewCheckBoxColumn
-            // 
-            this.isActiveDataGridViewCheckBoxColumn.DataPropertyName = "IsActive";
-            this.isActiveDataGridViewCheckBoxColumn.HeaderText = "IsActive";
-            this.isActiveDataGridViewCheckBoxColumn.Name = "isActiveDataGridViewCheckBoxColumn";
-            this.isActiveDataGridViewCheckBoxColumn.Visible = false;
-            // 
-            // companyDataGridViewTextBoxColumn
-            // 
-            this.companyDataGridViewTextBoxColumn.DataPropertyName = "Company";
-            this.companyDataGridViewTextBoxColumn.HeaderText = "Company";
-            this.companyDataGridViewTextBoxColumn.Name = "companyDataGridViewTextBoxColumn";
-            this.companyDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // categoriesDataGridViewTextBoxColumn
-            // 
-            this.categoriesDataGridViewTextBoxColumn.DataPropertyName = "Categories";
-            this.categoriesDataGridViewTextBoxColumn.HeaderText = "Categories";
-            this.categoriesDataGridViewTextBoxColumn.Name = "categoriesDataGridViewTextBoxColumn";
-            this.categoriesDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // productBindingSource
-            // 
-            this.productBindingSource.DataSource = typeof(asi.asicentral.model.sgr.Product);
             // 
             // cmbName
             // 
@@ -399,11 +313,117 @@
             this.btnImport.UseVisualStyleBackColor = true;
             this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(753, 91);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(49, 13);
+            this.label11.TabIndex = 24;
+            this.label11.Text = "Category";
+            // 
+            // cmbCategory
+            // 
+            this.cmbCategory.FormattingEnabled = true;
+            this.cmbCategory.Location = new System.Drawing.Point(750, 107);
+            this.cmbCategory.Name = "cmbCategory";
+            this.cmbCategory.Size = new System.Drawing.Size(92, 21);
+            this.cmbCategory.TabIndex = 25;
+            // 
+            // Category
+            // 
+            this.Category.DataPropertyName = "Category";
+            this.Category.HeaderText = "Category";
+            this.Category.Name = "Category";
+            // 
+            // idDataGridViewTextBoxColumn
+            // 
+            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
+            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
+            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
+            this.idDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // nameDataGridViewTextBoxColumn
+            // 
+            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
+            this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
+            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
+            // 
+            // modelNumberDataGridViewTextBoxColumn
+            // 
+            this.modelNumberDataGridViewTextBoxColumn.DataPropertyName = "ModelNumber";
+            this.modelNumberDataGridViewTextBoxColumn.HeaderText = "ModelNumber";
+            this.modelNumberDataGridViewTextBoxColumn.Name = "modelNumberDataGridViewTextBoxColumn";
+            // 
+            // priceDataGridViewTextBoxColumn
+            // 
+            this.priceDataGridViewTextBoxColumn.DataPropertyName = "Price";
+            this.priceDataGridViewTextBoxColumn.HeaderText = "Price";
+            this.priceDataGridViewTextBoxColumn.Name = "priceDataGridViewTextBoxColumn";
+            // 
+            // priceCeilingDataGridViewTextBoxColumn
+            // 
+            this.priceCeilingDataGridViewTextBoxColumn.DataPropertyName = "PriceCeiling";
+            this.priceCeilingDataGridViewTextBoxColumn.HeaderText = "PriceCeiling";
+            this.priceCeilingDataGridViewTextBoxColumn.Name = "priceCeilingDataGridViewTextBoxColumn";
+            // 
+            // minimumOrderQuantityDataGridViewTextBoxColumn
+            // 
+            this.minimumOrderQuantityDataGridViewTextBoxColumn.DataPropertyName = "MinimumOrderQuantity";
+            this.minimumOrderQuantityDataGridViewTextBoxColumn.HeaderText = "MinimumOrderQuantity";
+            this.minimumOrderQuantityDataGridViewTextBoxColumn.Name = "minimumOrderQuantityDataGridViewTextBoxColumn";
+            // 
+            // paymentTermsDataGridViewTextBoxColumn
+            // 
+            this.paymentTermsDataGridViewTextBoxColumn.DataPropertyName = "PaymentTerms";
+            this.paymentTermsDataGridViewTextBoxColumn.HeaderText = "PaymentTerms";
+            this.paymentTermsDataGridViewTextBoxColumn.Name = "paymentTermsDataGridViewTextBoxColumn";
+            // 
+            // keySpecificationsDataGridViewTextBoxColumn
+            // 
+            this.keySpecificationsDataGridViewTextBoxColumn.DataPropertyName = "KeySpecifications";
+            this.keySpecificationsDataGridViewTextBoxColumn.HeaderText = "KeySpecifications";
+            this.keySpecificationsDataGridViewTextBoxColumn.Name = "keySpecificationsDataGridViewTextBoxColumn";
+            // 
+            // imageSmallDataGridViewTextBoxColumn
+            // 
+            this.imageSmallDataGridViewTextBoxColumn.DataPropertyName = "ImageSmall";
+            this.imageSmallDataGridViewTextBoxColumn.HeaderText = "ImageSmall";
+            this.imageSmallDataGridViewTextBoxColumn.Name = "imageSmallDataGridViewTextBoxColumn";
+            this.imageSmallDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // imageLargeDataGridViewTextBoxColumn
+            // 
+            this.imageLargeDataGridViewTextBoxColumn.DataPropertyName = "ImageLarge";
+            this.imageLargeDataGridViewTextBoxColumn.HeaderText = "ImageLarge";
+            this.imageLargeDataGridViewTextBoxColumn.Name = "imageLargeDataGridViewTextBoxColumn";
+            this.imageLargeDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // isActiveDataGridViewCheckBoxColumn
+            // 
+            this.isActiveDataGridViewCheckBoxColumn.DataPropertyName = "IsActive";
+            this.isActiveDataGridViewCheckBoxColumn.HeaderText = "IsActive";
+            this.isActiveDataGridViewCheckBoxColumn.Name = "isActiveDataGridViewCheckBoxColumn";
+            this.isActiveDataGridViewCheckBoxColumn.Visible = false;
+            // 
+            // companyDataGridViewTextBoxColumn
+            // 
+            this.companyDataGridViewTextBoxColumn.DataPropertyName = "Company";
+            this.companyDataGridViewTextBoxColumn.HeaderText = "Company";
+            this.companyDataGridViewTextBoxColumn.Name = "companyDataGridViewTextBoxColumn";
+            this.companyDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // productBindingSource
+            // 
+            this.productBindingSource.DataSource = typeof(SGRImport.model.ProductView);
+            // 
             // frmImport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(764, 426);
+            this.ClientSize = new System.Drawing.Size(861, 426);
+            this.Controls.Add(this.cmbCategory);
+            this.Controls.Add(this.label11);
             this.Controls.Add(this.btnImport);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.txtImage);
@@ -454,19 +474,6 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.DataGridView dgProducts;
-        private System.Windows.Forms.DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn modelNumberDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn priceDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn priceCeilingDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn minimumOrderQuantityDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn paymentTermsDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn keySpecificationsDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn imageSmallDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn imageLargeDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn isActiveDataGridViewCheckBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn companyDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn categoriesDataGridViewTextBoxColumn;
         private System.Windows.Forms.BindingSource productBindingSource;
         private System.Windows.Forms.ComboBox cmbName;
         private System.Windows.Forms.ComboBox cmbModel;
@@ -479,6 +486,21 @@
         private System.Windows.Forms.TextBox txtImage;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnImport;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.ComboBox cmbCategory;
+        private System.Windows.Forms.DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn modelNumberDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn priceDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn priceCeilingDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn minimumOrderQuantityDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn paymentTermsDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn keySpecificationsDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Category;
+        private System.Windows.Forms.DataGridViewTextBoxColumn imageSmallDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn imageLargeDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn isActiveDataGridViewCheckBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn companyDataGridViewTextBoxColumn;
     }
 }
 

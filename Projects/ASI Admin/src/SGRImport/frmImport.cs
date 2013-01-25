@@ -2,6 +2,7 @@
 using asi.asicentral.model.sgr;
 using asi.asicentral.services;
 using asi.asicentral.services.interfaces;
+using SGRImport.model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -51,6 +52,7 @@ namespace SGRImport
                 UpdateHeaderCombo(cmbTerms, headers, "Terms");
                 UpdateHeaderCombo(cmbCeiling, headers, "Ceiling");
                 UpdateHeaderCombo(cmbSpecs, headers, "Specs");
+                UpdateHeaderCombo(cmbCategory, headers, "Category");
                 _loadingExcel = false;
                 //populate example rows
                 PopulatePreview();
@@ -61,7 +63,7 @@ namespace SGRImport
         {
             if (!_loadingExcel)
             {
-                IList<Product> productList = GetProductList(8);
+                IList<ProductView> productList = GetProductList(8);
                 //display in the grid
                 dgProducts.DataSource = productList;
             }
@@ -169,21 +171,51 @@ namespace SGRImport
 
         private void btnImport_Click(object sender, EventArgs e)
         {
-            Company company = (Company)cmbCompanyList.SelectedItem;
-            IList<Product> productList = GetProductList(0);
-            foreach (Product product in productList)
+            try
             {
-                product.Company = company;
-                //TODO set the image properties _lg and _sm
-                _objectService.Add<Product>(product);
+                Company company = (Company)cmbCompanyList.SelectedItem;
+                IList<ProductView> productList = GetProductList(0);
+                foreach (ProductView productView in productList)
+                {
+                    Product product = productView.GetProduct();
+                    product.Company = company;
+                    //set the images
+                    string imagePath = txtImage.Text;
+                    if (!string.IsNullOrWhiteSpace(imagePath)) imagePath += "/";
+                    else imagePath = string.Empty;
+                    product.ImageSmall = imagePath + product.ModelNumber + "_sm.jpg";
+                    product.ImageLarge = imagePath + product.ModelNumber + "_lg.jpg";
+                    //update the category
+                    string categoryName = (!string.IsNullOrWhiteSpace(productView.Category) ? productView.Category.Trim() : "All");
+                    Category category = company.Categories.Where(cat => cat.Name == categoryName).FirstOrDefault();
+                    if (category == null)
+                    {
+                        //category not asssigned to the company, looking in the database
+                        category = _objectService.GetAll<Category>().Where(cat => cat.Name == categoryName).FirstOrDefault();
+                        if (category == null)
+                        {
+                            //not in the database, add it
+                            category = new Category();
+                            category.Name = categoryName;
+                        }
+                        company.Categories.Add(category);
+                    }
+                    product.Categories.Add(category);
+                    _objectService.Add<Product>(product);
+                }
+                //_objectService.SaveChanges();
+                MessageBox.Show("The products have been imported");
             }
-            _objectService.SaveChanges();
+            catch (Exception exception)
+            {
+                MessageBox.Show("Sorry, the import did not work: " + exception.Message);
+            }
         }
 
-        private IList<Product> GetProductList(int rows)
+        private IList<ProductView> GetProductList(int rows)
         {
             //read first 10 lines of spreadsheet, or less
-            int[] cols = new int[7];
+            int[] cols = new int[8];
             cols[0] = FindIndex(cmbName.Text, cmbName.Items);
             cols[1] = FindIndex(cmbModel.Text, cmbName.Items);
             cols[2] = FindIndex(cmbPrice.Text, cmbName.Items);
@@ -191,15 +223,16 @@ namespace SGRImport
             cols[4] = FindIndex(cmbMin.Text, cmbName.Items);
             cols[5] = FindIndex(cmbTerms.Text, cmbName.Items);
             cols[6] = FindIndex(cmbSpecs.Text, cmbName.Items);
+            cols[7] = FindIndex(cmbCategory.Text, cmbName.Items);
             //create product list
-            List<Product> productList = new List<Product>();
+            List<ProductView> productList = new List<ProductView>();
             int i = 2; //skip the first row, excel starts at 1
             string cellValue = _excelFile.GetValue(i, cols[0]);
             while ( (rows < 1 || i < rows + 2) && cellValue != null)
             {
                 decimal tempDecimal;
                 //create/populate product based on selected columns
-                Product product = new Product();
+                ProductView product = new ProductView();
                 productList.Add(product);
                 product.Name = cellValue;
                 product.ModelNumber = _excelFile.GetValue(i, cols[1]);
