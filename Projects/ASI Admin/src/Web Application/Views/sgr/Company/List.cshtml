@@ -4,13 +4,8 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <h2>List of Companies</h2>
-
-<a class="btn btn-small" href="@Url.Action("Add", "../sgr/Company", null)">
-    <i class="icon-plus-sign"></i>
-    Add a Company
-</a>
+<a class="btn btn-small" href="@Url.Action("Add", "../sgr/Company", null)"><i class="icon-plus-sign"></i>Add a Company</a>
 
 <table class="table table-bordered table-condensed table-striped">
     <tr><th>Name</th></tr>
@@ -21,11 +16,29 @@
                 <a class="btn btn-small" href="@Url.Action("Edit", "Company", new { id = company.Id })">
                     <i class="icon-pencil"></i>
                 </a>
-                @Html.ActionLink(company.Name, "List", "Product", new { id = company.Id}, null)
+
+                <a rel="tooltip" data-placement="right" title="@Html.Encode(asi.asicentral.web.Resource.DeleteTooltip)" class="remove" href="#"><i data-id="@company.Id" class="icon-remove-circle"></i></a>
+
+                @Html.ActionLink(company.Name, "List", "Product", new { id = company.Id }, null)
+
             </td>
         </tr>
     }
 </table>
+
+@using (Html.BeginForm("Delete", "Company", FormMethod.Post, new { id = "deleteForm"} )) {
+@Html.AntiForgeryToken()
+<input type="hidden" name="id" value="0" />
+}
+
 @section Scripts {
     <script src="/Scripts/asi.js"></script>
+    <script>
+    $(".remove").click(function (e) {
+        $("#deleteForm").find('input[name="id"]').val($(e.target).data("id"));
+        asi.modal.confirm("@Html.Encode(asi.asicentral.web.Resource.ConfirmDeleteTitle)", "@Html.Encode(asi.asicentral.web.Resource.ConfirmDeleteMessage)", function (result) {
+            if (result) $("#deleteForm").submit();
+        });
+    });
+    </script>
 }

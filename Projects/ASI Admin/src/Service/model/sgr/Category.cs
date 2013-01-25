@@ -9,6 +9,8 @@ namespace asi.asicentral.model.sgr
 {
     public class Category
     {
+        public static const int CATEGORY_ALL = 32;
+
         public Category()
         {
             if (this.GetType() == typeof(Category))
@@ -23,7 +25,7 @@ namespace asi.asicentral.model.sgr
         public int Id { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "CategoryName")]
-        [Required]
+        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public string Name { get; set; }
 
         public virtual IList<Company> Companies { get; set; }

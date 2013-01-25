@@ -67,12 +67,46 @@ namespace asi.asicentral.web.Controllers.sgr
             ViewBag.Title = "Add a Company";
             if (ModelState.IsValid)
             {
+                // TODO Fix hardcoded value
+                //Category category = _objectService.GetAll<Category>().Where(c => c.Id == 32).SingleOrDefault();
+                //company.Categories = new List<Category>();
+                //_objectService.Add<Company>(company);
+                //_objectService.SaveChanges();
+                //company.Categories.Add(category);
+                //_objectService.Update(company);
+                //_objectService.SaveChanges();
+
+                Category category = _objectService.GetAll<Category>().Where(c => c.Id == 32).SingleOrDefault();
+                company.Categories.Add(category);
                 _objectService.Add<Company>(company);
                 _objectService.SaveChanges();
+
                 return RedirectToAction("List");
             }
             else
                 return View("../sgr/Company/Edit", company);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
+        {
+            Company company = _objectService.GetAll<Company>().Where(c => c.Id == id).SingleOrDefault();
+            if (company != null)
+            {
+                //first delete the products associated with the company
+                int productCount = company.Products.Count;
+                for (int i = productCount; i > 0; i--)
+                {
+                    _objectService.Delete<Product>(company.Products[i - 1]);
+                }
+                _objectService.Delete<Company>(company);
+                _objectService.SaveChanges();
+
+                return Redirect("List");
+            }
+            else
+                throw new Exception("IObjectService returned a null value.");
         }
     }
 }
