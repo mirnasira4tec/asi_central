@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="database\EFRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="services\Container.cs" />
     <Compile Include="services\interfaces\IContainer.cs" />

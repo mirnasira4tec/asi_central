@@ -5,6 +5,7 @@ using asi.asicentral.services.interfaces;
 using SGRImport.model;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -99,9 +100,9 @@ namespace SGRImport
 
         private IList<Product> ImportData(Company company)
         {
-            IList<Product> createdProductList = new List<Product>();
-            IList<ProductView> productList = GetProductList(0);
-            foreach (ProductView productView in productList)
+            IList<Product> createdProducts = new List<Product>();
+            IList<ProductView> products = GetProductList(0);
+            foreach (ProductView productView in products)
             {
                 Product product = productView.GetProduct();
                 product.Company = company;
@@ -128,10 +129,29 @@ namespace SGRImport
                 }
                 product.Categories.Add(category);
                 _objectService.Add<Product>(product);
-                createdProductList.Add(product);
+                createdProducts.Add(product);
             }
             _objectService.SaveChanges();
-            return createdProductList;
+            return createdProducts;
+        }
+
+        private void CreateWorsheet(IList<Product> products)
+        {
+            _excelFile.AddWorksheet("Links");
+            string baseURL = ConfigurationManager.AppSettings["BaseURL"];
+            if (string.IsNullOrWhiteSpace(baseURL)) baseURL = "http://www.asicentral.com";
+            //set header row
+            _excelFile.SetValue(1, 1, "Product");
+            _excelFile.SetValue(1, 2, "Model");
+            _excelFile.SetValue(1, 3, "Link");
+            int i = 2;
+            foreach (Product product in products)
+            {
+                _excelFile.SetValue(i, 1, product.Name);
+                _excelFile.SetValue(i, 2, product.ModelNumber);
+                _excelFile.SetValue(i, 3, baseURL + "/sgr/sgrproductdetails.aspx?pid=" + product.Id + "&cid=" + product.Company.Id);
+                i++;
+            }
         }
 
         #region Form Events
@@ -245,18 +265,21 @@ namespace SGRImport
 
         private void btnImport_Click(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
             try
             {
                 Company company = (Company)cmbCompanyList.SelectedItem;
-                ImportData(company);
+                IList<Product> products = ImportData(company);
+                CreateWorsheet(products);                
                 MessageBox.Show("The products have been imported");
             }
             catch (Exception exception)
             {
                 MessageBox.Show("Sorry, the import did not work: " + exception.Message);
             }
+            Cursor.Current = Cursors.WaitCursor;
+        }
 
         #endregion Form Events
-        }
     }
 }

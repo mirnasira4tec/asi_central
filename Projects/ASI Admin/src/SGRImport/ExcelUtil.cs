@@ -99,16 +99,23 @@ namespace SGRImport
 
         public void Dispose()
         {
-            if (_worksheet != null) Marshal.FinalReleaseComObject(_worksheet);
-            if (_workbook != null)
+            try
             {
-                Application excel = _workbook.Application;
-                _workbook.Close( true, Type.Missing, Type.Missing); //save the changes
-                Marshal.FinalReleaseComObject(_workbook);
-                _workbook = null;
-                excel.Quit();
-                Marshal.FinalReleaseComObject(excel);
-                excel = null;
+                if (_worksheet != null) Marshal.FinalReleaseComObject(_worksheet);
+                if (_workbook != null)
+                {
+                    Application excel = _workbook.Application;
+                    _workbook.Close(true, Type.Missing, Type.Missing); //save the changes
+                    Marshal.FinalReleaseComObject(_workbook);
+                    _workbook = null;
+                    excel.Quit();
+                    Marshal.FinalReleaseComObject(excel);
+                    excel = null;
+                }
+            }
+            catch (Exception)
+            {
+                //nothing to do
             }
         }
     }

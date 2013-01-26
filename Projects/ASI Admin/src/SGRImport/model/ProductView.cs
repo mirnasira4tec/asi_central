@@ -14,18 +14,7 @@ namespace SGRImport.model
         public Product GetProduct()
         {
             Product product = new Product();
-            product.Id = this.Id;
-            product.Name = this.Name;
-            product.Company = this.Company;
-            product.ImageLarge = this.ImageLarge;
-            product.ImageSmall = this.ImageSmall;
-            product.IsActive = this.IsActive;
-            product.KeySpecifications = this.KeySpecifications;
-            product.MinimumOrderQuantity = this.MinimumOrderQuantity;
-            product.ModelNumber = this.ModelNumber;
-            product.PaymentTerms = this.PaymentTerms;
-            product.Price = this.Price;
-            product.PriceCeiling = this.PriceCeiling;
+            this.CopyTo(product);
             return product;
         }
     }

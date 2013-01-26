@@ -52,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="database\ASIInternetContext.cs" />
-    <Compile Include="database\EFRepository.cs" />
     <Compile Include="database\mappings\CategoryConfiguration.cs" />
     <Compile Include="database\mappings\CompanyConfiguration.cs" />
     <Compile Include="database\mappings\EFRegistry.cs" />

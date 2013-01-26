@@ -59,6 +59,22 @@ namespace asi.asicentral.model.sgr
 
         public virtual IList<Category> Categories { get; set; }
 
+        public void CopyTo(Product product)
+        {
+            product.Id = this.Id;
+            product.Name = this.Name;
+            product.Company = this.Company;
+            product.ImageLarge = this.ImageLarge;
+            product.ImageSmall = this.ImageSmall;
+            product.IsActive = this.IsActive;
+            product.KeySpecifications = this.KeySpecifications;
+            product.MinimumOrderQuantity = this.MinimumOrderQuantity;
+            product.ModelNumber = this.ModelNumber;
+            product.PaymentTerms = this.PaymentTerms;
+            product.Price = this.Price;
+            product.PriceCeiling = this.PriceCeiling;
+        }
+        
         public override string ToString()
         {
             return string.Format("Product: {0} - {1}", Id, Name);
