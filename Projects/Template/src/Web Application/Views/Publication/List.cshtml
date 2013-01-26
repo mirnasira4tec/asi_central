@@ -28,18 +28,13 @@
     }
     </tbody>
 </table>
-@using (Html.BeginForm("Delete", "Publication", FormMethod.Post, new { id = "deleteForm"} )) {
-@Html.AntiForgeryToken()
-<input type="hidden" name="id" value="0" />
-}
 
 @section Scripts {
 <script src="/Scripts/asi.js"></script>
 <script>
 $(".remove").click(function (e) {
-    $("#deleteForm").find('input[name="id"]').val($(e.target).data("id"));
     asi.modal.confirm("@Html.Encode(asi.asicentral.web.Resource.ConfirmDeleteTitle)", "@Html.Encode(asi.asicentral.web.Resource.ConfirmDeleteMessage)", function (result) {
-        if (result) $("#deleteForm").submit();
+        if (result) asi.util.submit('@Url.Action("Delete")', [{ Name: 'id', Value: $(e.target).data("id") }]);
     });
 });
 </script>

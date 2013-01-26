@@ -1,0 +1,9 @@
+﻿@{
+    Layout = "";
+}
+<form id="asi-form" method="post" data-bind="attr: {action: Url}">
+@Html.AntiForgeryToken()
+<!-- ko foreach: Parameters -->
+    <input type="hidden" data-bind="attr: {value: Value, name: Name }" />
+<!-- /ko -->
+</form>

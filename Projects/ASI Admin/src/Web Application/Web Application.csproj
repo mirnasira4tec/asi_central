@@ -175,6 +175,7 @@
     <Compile Include="Controllers\sgr\CategoryController.cs" />
     <Compile Include="Controllers\sgr\CompanyController.cs" />
     <Compile Include="Controllers\sgr\ProductController.cs" />
+    <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyResolver.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
@@ -220,7 +221,6 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
-    <Content Include="Scripts\templates\dialog.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -257,6 +257,8 @@
     <Content Include="Views\sgr\Product\Edit.cshtml" />
     <Content Include="Views\sgr\Product\List.cshtml" />
     <Content Include="Views\sgr\Category\Edit.cshtml" />
+    <Content Include="Views\Template\Dialog.cshtml" />
+    <Content Include="Views\Template\Form.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
