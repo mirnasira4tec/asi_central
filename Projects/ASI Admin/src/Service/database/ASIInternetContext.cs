@@ -17,7 +17,6 @@ namespace asi.asicentral.database
             : base("name=ASIInternetContext")
         {
             //nothing to be done
-            Console.WriteLine("");
         }
 
         public DbSet<Company> Companies { get; set; }

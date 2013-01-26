@@ -39,6 +39,25 @@ namespace SGRImport
             }
         }
 
+        public void AddWorksheet(string name)
+        {
+            if (_workbook != null)
+            {
+                if (_worksheet != null)
+                {
+                    Marshal.FinalReleaseComObject(_worksheet);
+                    _worksheet = null;
+                }
+                _worksheet = _workbook.Worksheets.Add(Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                _worksheet.Name = name;
+            }
+            else
+            {
+                throw new Exception("Need to have a workbook to do this");
+            }
+
+        }
+
         public string[] GetHeaders()
         {
             int colIndex = 1;
@@ -66,13 +85,25 @@ namespace SGRImport
             return tempValue;
         }
 
+        public void SetValue(int rowIndex, int colIndex, object value)
+        {
+            if (_worksheet != null && rowIndex > 0 && colIndex > 0)
+            {
+                _worksheet.Cells[rowIndex, colIndex].Value = value;
+            }
+            else
+            {
+                throw new Exception("Invalid call to this method");
+            }
+        }
+
         public void Dispose()
         {
             if (_worksheet != null) Marshal.FinalReleaseComObject(_worksheet);
             if (_workbook != null)
             {
                 Application excel = _workbook.Application;
-                _workbook.Close(Type.Missing, Type.Missing, Type.Missing);
+                _workbook.Close( true, Type.Missing, Type.Missing); //save the changes
                 Marshal.FinalReleaseComObject(_workbook);
                 _workbook = null;
                 excel.Quit();

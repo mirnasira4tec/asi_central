@@ -44,6 +44,20 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.dgProducts = new System.Windows.Forms.DataGridView();
+            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.modelNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.priceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.priceCeilingDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.minimumOrderQuantityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.paymentTermsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.keySpecificationsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Category = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.imageSmallDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.imageLargeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.isActiveDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.companyDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.productBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.cmbName = new System.Windows.Forms.ComboBox();
             this.cmbModel = new System.Windows.Forms.ComboBox();
             this.cmbPrice = new System.Windows.Forms.ComboBox();
@@ -57,20 +71,6 @@
             this.btnImport = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.cmbCategory = new System.Windows.Forms.ComboBox();
-            this.Category = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.modelNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.priceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.priceCeilingDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.minimumOrderQuantityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.paymentTermsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.keySpecificationsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.imageSmallDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.imageLargeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.isActiveDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.companyDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.productBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgProducts)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.productBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -211,8 +211,95 @@
             this.dgProducts.DataSource = this.productBindingSource;
             this.dgProducts.Location = new System.Drawing.Point(7, 135);
             this.dgProducts.Name = "dgProducts";
-            this.dgProducts.Size = new System.Drawing.Size(852, 237);
+            this.dgProducts.Size = new System.Drawing.Size(849, 237);
             this.dgProducts.TabIndex = 12;
+            // 
+            // idDataGridViewTextBoxColumn
+            // 
+            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
+            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
+            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
+            this.idDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // nameDataGridViewTextBoxColumn
+            // 
+            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
+            this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
+            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
+            // 
+            // modelNumberDataGridViewTextBoxColumn
+            // 
+            this.modelNumberDataGridViewTextBoxColumn.DataPropertyName = "ModelNumber";
+            this.modelNumberDataGridViewTextBoxColumn.HeaderText = "ModelNumber";
+            this.modelNumberDataGridViewTextBoxColumn.Name = "modelNumberDataGridViewTextBoxColumn";
+            // 
+            // priceDataGridViewTextBoxColumn
+            // 
+            this.priceDataGridViewTextBoxColumn.DataPropertyName = "Price";
+            this.priceDataGridViewTextBoxColumn.HeaderText = "Price";
+            this.priceDataGridViewTextBoxColumn.Name = "priceDataGridViewTextBoxColumn";
+            // 
+            // priceCeilingDataGridViewTextBoxColumn
+            // 
+            this.priceCeilingDataGridViewTextBoxColumn.DataPropertyName = "PriceCeiling";
+            this.priceCeilingDataGridViewTextBoxColumn.HeaderText = "PriceCeiling";
+            this.priceCeilingDataGridViewTextBoxColumn.Name = "priceCeilingDataGridViewTextBoxColumn";
+            // 
+            // minimumOrderQuantityDataGridViewTextBoxColumn
+            // 
+            this.minimumOrderQuantityDataGridViewTextBoxColumn.DataPropertyName = "MinimumOrderQuantity";
+            this.minimumOrderQuantityDataGridViewTextBoxColumn.HeaderText = "MinimumOrderQuantity";
+            this.minimumOrderQuantityDataGridViewTextBoxColumn.Name = "minimumOrderQuantityDataGridViewTextBoxColumn";
+            // 
+            // paymentTermsDataGridViewTextBoxColumn
+            // 
+            this.paymentTermsDataGridViewTextBoxColumn.DataPropertyName = "PaymentTerms";
+            this.paymentTermsDataGridViewTextBoxColumn.HeaderText = "PaymentTerms";
+            this.paymentTermsDataGridViewTextBoxColumn.Name = "paymentTermsDataGridViewTextBoxColumn";
+            // 
+            // keySpecificationsDataGridViewTextBoxColumn
+            // 
+            this.keySpecificationsDataGridViewTextBoxColumn.DataPropertyName = "KeySpecifications";
+            this.keySpecificationsDataGridViewTextBoxColumn.HeaderText = "KeySpecifications";
+            this.keySpecificationsDataGridViewTextBoxColumn.Name = "keySpecificationsDataGridViewTextBoxColumn";
+            // 
+            // Category
+            // 
+            this.Category.DataPropertyName = "Category";
+            this.Category.HeaderText = "Category";
+            this.Category.Name = "Category";
+            // 
+            // imageSmallDataGridViewTextBoxColumn
+            // 
+            this.imageSmallDataGridViewTextBoxColumn.DataPropertyName = "ImageSmall";
+            this.imageSmallDataGridViewTextBoxColumn.HeaderText = "ImageSmall";
+            this.imageSmallDataGridViewTextBoxColumn.Name = "imageSmallDataGridViewTextBoxColumn";
+            this.imageSmallDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // imageLargeDataGridViewTextBoxColumn
+            // 
+            this.imageLargeDataGridViewTextBoxColumn.DataPropertyName = "ImageLarge";
+            this.imageLargeDataGridViewTextBoxColumn.HeaderText = "ImageLarge";
+            this.imageLargeDataGridViewTextBoxColumn.Name = "imageLargeDataGridViewTextBoxColumn";
+            this.imageLargeDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // isActiveDataGridViewCheckBoxColumn
+            // 
+            this.isActiveDataGridViewCheckBoxColumn.DataPropertyName = "IsActive";
+            this.isActiveDataGridViewCheckBoxColumn.HeaderText = "IsActive";
+            this.isActiveDataGridViewCheckBoxColumn.Name = "isActiveDataGridViewCheckBoxColumn";
+            this.isActiveDataGridViewCheckBoxColumn.Visible = false;
+            // 
+            // companyDataGridViewTextBoxColumn
+            // 
+            this.companyDataGridViewTextBoxColumn.DataPropertyName = "Company";
+            this.companyDataGridViewTextBoxColumn.HeaderText = "Company";
+            this.companyDataGridViewTextBoxColumn.Name = "companyDataGridViewTextBoxColumn";
+            this.companyDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // productBindingSource
+            // 
+            this.productBindingSource.DataSource = typeof(SGRImport.model.ProductView);
             // 
             // cmbName
             // 
@@ -295,7 +382,8 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(677, 391);
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.Location = new System.Drawing.Point(771, 383);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 22;
@@ -305,7 +393,8 @@
             // 
             // btnImport
             // 
-            this.btnImport.Location = new System.Drawing.Point(596, 390);
+            this.btnImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnImport.Location = new System.Drawing.Point(690, 383);
             this.btnImport.Name = "btnImport";
             this.btnImport.Size = new System.Drawing.Size(75, 23);
             this.btnImport.TabIndex = 23;
@@ -330,98 +419,11 @@
             this.cmbCategory.Size = new System.Drawing.Size(92, 21);
             this.cmbCategory.TabIndex = 25;
             // 
-            // Category
-            // 
-            this.Category.DataPropertyName = "Category";
-            this.Category.HeaderText = "Category";
-            this.Category.Name = "Category";
-            // 
-            // idDataGridViewTextBoxColumn
-            // 
-            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
-            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
-            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
-            this.idDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // nameDataGridViewTextBoxColumn
-            // 
-            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
-            this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
-            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
-            // 
-            // modelNumberDataGridViewTextBoxColumn
-            // 
-            this.modelNumberDataGridViewTextBoxColumn.DataPropertyName = "ModelNumber";
-            this.modelNumberDataGridViewTextBoxColumn.HeaderText = "ModelNumber";
-            this.modelNumberDataGridViewTextBoxColumn.Name = "modelNumberDataGridViewTextBoxColumn";
-            // 
-            // priceDataGridViewTextBoxColumn
-            // 
-            this.priceDataGridViewTextBoxColumn.DataPropertyName = "Price";
-            this.priceDataGridViewTextBoxColumn.HeaderText = "Price";
-            this.priceDataGridViewTextBoxColumn.Name = "priceDataGridViewTextBoxColumn";
-            // 
-            // priceCeilingDataGridViewTextBoxColumn
-            // 
-            this.priceCeilingDataGridViewTextBoxColumn.DataPropertyName = "PriceCeiling";
-            this.priceCeilingDataGridViewTextBoxColumn.HeaderText = "PriceCeiling";
-            this.priceCeilingDataGridViewTextBoxColumn.Name = "priceCeilingDataGridViewTextBoxColumn";
-            // 
-            // minimumOrderQuantityDataGridViewTextBoxColumn
-            // 
-            this.minimumOrderQuantityDataGridViewTextBoxColumn.DataPropertyName = "MinimumOrderQuantity";
-            this.minimumOrderQuantityDataGridViewTextBoxColumn.HeaderText = "MinimumOrderQuantity";
-            this.minimumOrderQuantityDataGridViewTextBoxColumn.Name = "minimumOrderQuantityDataGridViewTextBoxColumn";
-            // 
-            // paymentTermsDataGridViewTextBoxColumn
-            // 
-            this.paymentTermsDataGridViewTextBoxColumn.DataPropertyName = "PaymentTerms";
-            this.paymentTermsDataGridViewTextBoxColumn.HeaderText = "PaymentTerms";
-            this.paymentTermsDataGridViewTextBoxColumn.Name = "paymentTermsDataGridViewTextBoxColumn";
-            // 
-            // keySpecificationsDataGridViewTextBoxColumn
-            // 
-            this.keySpecificationsDataGridViewTextBoxColumn.DataPropertyName = "KeySpecifications";
-            this.keySpecificationsDataGridViewTextBoxColumn.HeaderText = "KeySpecifications";
-            this.keySpecificationsDataGridViewTextBoxColumn.Name = "keySpecificationsDataGridViewTextBoxColumn";
-            // 
-            // imageSmallDataGridViewTextBoxColumn
-            // 
-            this.imageSmallDataGridViewTextBoxColumn.DataPropertyName = "ImageSmall";
-            this.imageSmallDataGridViewTextBoxColumn.HeaderText = "ImageSmall";
-            this.imageSmallDataGridViewTextBoxColumn.Name = "imageSmallDataGridViewTextBoxColumn";
-            this.imageSmallDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // imageLargeDataGridViewTextBoxColumn
-            // 
-            this.imageLargeDataGridViewTextBoxColumn.DataPropertyName = "ImageLarge";
-            this.imageLargeDataGridViewTextBoxColumn.HeaderText = "ImageLarge";
-            this.imageLargeDataGridViewTextBoxColumn.Name = "imageLargeDataGridViewTextBoxColumn";
-            this.imageLargeDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // isActiveDataGridViewCheckBoxColumn
-            // 
-            this.isActiveDataGridViewCheckBoxColumn.DataPropertyName = "IsActive";
-            this.isActiveDataGridViewCheckBoxColumn.HeaderText = "IsActive";
-            this.isActiveDataGridViewCheckBoxColumn.Name = "isActiveDataGridViewCheckBoxColumn";
-            this.isActiveDataGridViewCheckBoxColumn.Visible = false;
-            // 
-            // companyDataGridViewTextBoxColumn
-            // 
-            this.companyDataGridViewTextBoxColumn.DataPropertyName = "Company";
-            this.companyDataGridViewTextBoxColumn.HeaderText = "Company";
-            this.companyDataGridViewTextBoxColumn.Name = "companyDataGridViewTextBoxColumn";
-            this.companyDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // productBindingSource
-            // 
-            this.productBindingSource.DataSource = typeof(SGRImport.model.ProductView);
-            // 
             // frmImport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(861, 426);
+            this.ClientSize = new System.Drawing.Size(858, 418);
             this.Controls.Add(this.cmbCategory);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.btnImport);
