@@ -11,7 +11,7 @@ namespace asi.asicentral.model.sgr
     {
         public Company()
         {
-            if (this.GetType() == typeof(Category))
+            if (this.GetType() == typeof(Company))
             {
                 Products = new List<Product>();
                 Categories = new List<Category>();
@@ -23,10 +23,11 @@ namespace asi.asicentral.model.sgr
         public int Id { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "CompanyName")]
-        [Required]
+        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public string Name { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "CompanySummary")]
+        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [DataType(DataType.MultilineText)]
         public string Summary { get; set; }
 

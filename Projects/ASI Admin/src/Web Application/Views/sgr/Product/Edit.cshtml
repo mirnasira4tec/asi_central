@@ -12,20 +12,20 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    @Html.HiddenFor(product => Model.Id)
+    @Html.HiddenFor(product => product.Id)
     
-    @Html.LabelFor(product => Model.Name) @Html.EditorFor(product => Model.Name, new { @class = "input-xxlarge" })  @Html.ValidationMessageFor(company => Model.Name)
-    @Html.LabelFor(product => Model.ModelNumber) @Html.EditorFor(product => Model.ModelNumber, new { @class = "input-xxlarge" }) @Html.ValidationMessageFor(company => Model.ModelNumber)
-    @Html.LabelFor(product => Model.Price) @Html.EditorFor(product => Model.Price, new { @class = "input-xxlarge" })
-    @Html.LabelFor(product => Model.PriceCeiling) @Html.EditorFor(product => Model.PriceCeiling, new { @class = "input-xxlarge" })
-    @Html.LabelFor(product => Model.MinimumOrderQuantity) @Html.EditorFor(product => Model.MinimumOrderQuantity, new { @class = "input-xxlarge" })
-    @Html.LabelFor(product => Model.PaymentTerms) @Html.EditorFor(product => Model.PaymentTerms, new { @class = "input-xxlarge" })
-    @Html.LabelFor(product => Model.KeySpecifications) @Html.EditorFor(product => Model.KeySpecifications, new { @class = "input-xxlarge" })
-    @Html.LabelFor(product => Model.ImageLarge) @Html.EditorFor(product => Model.ImageLarge, new { @class = "input-xxlarge" })
-    @Html.LabelFor(product => Model.ImageSmall) @Html.EditorFor(product => Model.ImageSmall, new { @class = "input-xxlarge" })
+    @Html.LabelFor(product => product.Name) @Html.EditorFor(product => product.Name, new { @class = "input-xxlarge" })  @Html.ValidationMessageFor(product => product.Name)
+    @Html.LabelFor(product => product.ModelNumber) @Html.EditorFor(product => product.ModelNumber, new { @class = "input-xxlarge" }) @Html.ValidationMessageFor(product => product.ModelNumber)
+    @Html.LabelFor(product => product.Price) @Html.EditorFor(product => product.Price, new { @class = "input-xxlarge" })
+    @Html.LabelFor(product => product.PriceCeiling) @Html.EditorFor(product => product.PriceCeiling, new { @class = "input-xxlarge" })
+    @Html.LabelFor(product => product.MinimumOrderQuantity) @Html.EditorFor(product => product.MinimumOrderQuantity, new { @class = "input-xxlarge" })
+    @Html.LabelFor(product => product.PaymentTerms) @Html.EditorFor(product => product.PaymentTerms, new { @class = "input-xxlarge" })
+    @Html.LabelFor(product => product.KeySpecifications) @Html.EditorFor(product => product.KeySpecifications, new { @class = "input-xxlarge" })
+    @Html.LabelFor(product => product.ImageLarge) @Html.EditorFor(product => product.ImageLarge, new { @class = "input-xxlarge" })
+    @Html.LabelFor(product => product.ImageSmall) @Html.EditorFor(product => product.ImageSmall, new { @class = "input-xxlarge" })
 
     <br />
-    <label>Is Deleted? @Html.CheckBoxFor(product => Model.IsActive) </label>
+    <label>Is Deleted? @Html.CheckBoxFor(product => product.IsActive) </label>
     
     <br />
     <input type="submit" value="Save" class="btn" />

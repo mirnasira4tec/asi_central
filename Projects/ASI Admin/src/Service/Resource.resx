@@ -180,6 +180,9 @@
   <data name="FaxExt" xml:space="preserve">
     <value>Fax Extension</value>
   </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Field Required</value>
+  </data>
   <data name="Phone" xml:space="preserve">
     <value>Phone Number</value>
   </data>
