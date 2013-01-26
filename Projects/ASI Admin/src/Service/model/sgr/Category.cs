@@ -9,7 +9,7 @@ namespace asi.asicentral.model.sgr
 {
     public class Category
     {
-        public static const int CATEGORY_ALL = 32;
+        public static int CATEGORY_ALL = 32;
 
         public Category()
         {

@@ -49,6 +49,20 @@ namespace asi.asicentral.model
             return string.Format("Publication: {0} - {1}", PublicationId, Name);
         }
 
+        public void CopyTo(Publication publication)
+        {
+            if (publication == null) throw new Exception("Cannot copy data to a null object");
+            publication.PublicationId = PublicationId;
+            publication.Color = Color;
+            publication.Description = Description;
+            publication.EndDate = EndDate;
+            publication.IsPublic = IsPublic;
+            publication.Name = Name;
+            publication.StartDate = StartDate;
+            //might need to make copies of issues. Not required for now
+            publication.Issues = Issues;
+        }
+
         public override bool Equals(object obj)
         {
             bool equals = false;

@@ -17,7 +17,7 @@ namespace asi.asicentral.Tests
             using (IObjectService objectService = new ObjectService(new Container(new EFRegistry())))
             {
                 Company company = objectService.GetAll<Company>().FirstOrDefault();
-                Category category = objectService.GetAll<Category>().Where(cat => cat.Name == "All").FirstOrDefault();
+                Category category = objectService.GetAll<Category>().Where(cat => cat.Id == Category.CATEGORY_ALL).Single();
                 for (int i = 0; i < 2; i++)
                 {
                     Product product = new Product();

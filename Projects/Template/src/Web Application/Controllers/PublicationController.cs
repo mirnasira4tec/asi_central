@@ -42,7 +42,7 @@ namespace asi.asicentral.web.Controllers
             {
                 ViewBag.Title = String.Format(Resource.PublicationEditTitle, publication.Name);
                 ViewBag.Message = Resource.PublicationEditDescription;
-                PublicationView viewModel = PublicationView.GetPublicationView(publication);
+                PublicationView viewModel = PublicationView.CreateFromPublication(publication);
 
                 IList<SelectListItem> colors = new List<SelectListItem>();
                 colors.Add(new SelectListItem() { Text = "Blue", Value = "1", Selected = false });
