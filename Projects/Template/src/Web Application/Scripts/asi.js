@@ -2,11 +2,10 @@
 asi.util = asi.util || {};
 
 //defining modal funcionality requires jquery and bootstrap
+//templates need TemplateController and the Views/Template folder
 asi.modal = asi.modal || {};
 
 (function (modal, $, undefined) {
-    var modalCallback = null;
-
     modal.confirm = function (title, message, callback, okText, cancelText) {
         var modalData = {
             title: title,
@@ -14,7 +13,8 @@ asi.modal = asi.modal || {};
             okText: (okText ? okText : "OK"),
             cancelText: (cancelText ? cancelText : "Cancel"),
         };
-        showModal('/Scripts/templates/dialog.html', modalData, callback);
+        asi.util.log("Show Modal Dialog");
+        showModal('/Template/Dialog', modalData, callback);
     };
 
     function showModal(template, modalData, callback) {
@@ -23,14 +23,20 @@ asi.modal = asi.modal || {};
             ko.applyBindings(modalData);
             var div = $('#asi-modal');
             var okBtn = div.find("a.btn-primary");
-            okBtn.on("click", null, function () { if (callback) { callback(true); callback = null; } });
+            okBtn.on("click", null, function () { modalClosing(true, div, callback) });
             div.on("keypress", null, function (e) {
                 var code = (e.keyCode ? e.keyCode : e.which);
                 if (code === 13) { okBtn.click(); }
             });
-            div.on("hide", null, function () { if (callback) { callback(false); callback = null; } });
+            div.on("hide", null, function () { modalClosing(false, div, callback) });
             div.modal({});
         }));
+    };
+
+    function modalClosing(okClicked, div, callback) {
+        div.remove();
+        if (callback) callback(okClicked);
+        callback = null;
     };
 }(asi.modal, jQuery));
 
@@ -51,6 +57,18 @@ asi.util = asi.util || {};
                 $("body").append('<div class="text-warning">' + msg + '</div>');
             }
         }
+    };
+
+    util.submit = function (url, parameters) {
+        var formData = {
+            Url: url,
+            Parameters: parameters
+        };
+        asi.util.log("Form url: " + url);
+        $('body').append($('<div>').load('/Template/Form', function () {
+            ko.applyBindings(formData);
+            $('#asi-form').submit(); //No need to remove the form as page getting refreshed
+        }));
     };
 }(asi.util, jQuery));
 
