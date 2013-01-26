@@ -15,9 +15,9 @@
     
     <!-- TODO figure out why Html.HiddenFor(category => Model.Id) value is always 1 when constructed for clientside -->    
     <input type="hidden" name="Id" value="@Model.Id" />
-    <input type="hidden" name="companyId" value="@ViewBag.CompanyID" />
+    <input type="hidden" name="companyId" value="@ViewBag.CompanyID" /> 
        
-    @Html.LabelFor(category => category.Name) @Html.EditorFor(category => Model.Name)
+    @Html.LabelFor(category => category.Name) @Html.EditorFor(category => Model.Name) @Html.ValidationMessageFor(model => model.Name)
     
     <br />
     <input type="submit" value="Save" class="btn" />

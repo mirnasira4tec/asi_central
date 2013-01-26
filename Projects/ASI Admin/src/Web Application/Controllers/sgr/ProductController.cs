@@ -21,18 +21,22 @@ namespace asi.asicentral.web.Controllers.sgr
         [HttpGet]
         public ActionResult List(int id, int? categoryId)
         {
-            if (categoryId == null)
-                ViewBag.CategoryID = 32;
-            else
-                ViewBag.CategoryID = categoryId;
-
             Company company = _objectService.GetAll<Company>().Where(c => c.Id == id).SingleOrDefault();
+
+            if (categoryId != null)
+            {
+                Category category = company.Categories.Where(c => c.Id == categoryId).SingleOrDefault();
+                company.Products.Clear();
+                company.Products = category.Products.Where(p => p.Company.Id == company.Id).ToList();
+                ViewBag.CategoryID = categoryId;
+                return View("../sgr/Product/List", company);
+            }
 
             return View("../sgr/Product/List", company);
         }
 
         [HttpGet]
-        public ActionResult Add(int id, int categoryId)
+        public ActionResult Add(int id, int? categoryId)
         {
             Product product = new Product();
             product.Company = _objectService.GetAll<Company>().Where(c => c.Id == id).SingleOrDefault();
@@ -76,8 +80,6 @@ namespace asi.asicentral.web.Controllers.sgr
 
             product.Categories.Add(category);
             company.Products.Add(product);
-
-            _objectService.Update<Company>(company);
             _objectService.SaveChanges();
 
             return RedirectToAction("List", new { id = product.Company.Id, categoryId = categoryId });
@@ -87,12 +89,12 @@ namespace asi.asicentral.web.Controllers.sgr
         public ActionResult Edit(int productId, int? categoryId)
         {
             if (categoryId == null)
-                ViewBag.CategoryID = 32;
+                ViewBag.CategoryID = Category.CATEGORY_ALL;
             else
                 ViewBag.CategoryID = categoryId;
 
             Product product = _objectService.GetAll<Product>().Where(p => p.Id == productId).SingleOrDefault();
-            Category category = product.Categories.Where(c => c.Id == categoryId).SingleOrDefault();
+            Category category = product.Categories.Where(c => c.Id == categoryId).Single();
 
             product.Categories.Clear();
             product.Categories.Add(category);
