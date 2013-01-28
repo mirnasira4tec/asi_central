@@ -180,4 +180,10 @@
   <data name="TitleCategories" xml:space="preserve">
     <value>Categories</value>
   </data>
+  <data name="AddCategory" xml:space="preserve">
+    <value>Add Category</value>
+  </data>
+  <data name="AddCompany" xml:space="preserve">
+    <value>Add Comapny</value>
+  </data>
 </root>

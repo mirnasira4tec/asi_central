@@ -97,24 +97,22 @@ namespace asi.asicentral.web.Controllers.sgr
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(ViewCategory viewCategory)
+        public ActionResult Delete(int id, int companyId)
         {
-            Category category = _objectService.GetAll<Category>().Where(c => c.Id == viewCategory.Id).SingleOrDefault();
-           
-            if (category == null)
-                throw new Exception("Invalid identifier for a category: " + viewCategory.Id);
+            //Category category = _objectService.GetAll<Category>().Where(c => c.Id == id).SingleOrDefault();
+            //if (category == null)
+            //    throw new Exception("Invalid identifier for a category: " + id);
 
-            Company company = category.Companies.Where(c => c.Id == viewCategory.CompanyID).SingleOrDefault();
+            //Company company = category.Companies.Where(c => c.Id == companyId).SingleOrDefault();
+            //if (company == null)
+            //    throw new Exception("Invalid identifier for a company: " + company.Id);
 
-            if (company == null)
-                throw new Exception("Invalid identifier for a company: " + company.Id);
+            //category.Companies.Remove(company);
 
-            category.Companies.Remove(company);
+            //_objectService.Update<Category>(category);
+            //_objectService.SaveChanges();
 
-            _objectService.Update<Category>(category);
-            _objectService.SaveChanges();
-
-            return RedirectToAction("List", "Product", new ViewCompany { Id = viewCategory.CompanyID, CategoryID = Category.CATEGORY_ALL });
+            return RedirectToAction("List", "Product", new ViewCompany { Id = id, CategoryID = Category.CATEGORY_ALL });
         }
     }
 }

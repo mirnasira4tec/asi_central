@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <h2>@Html.Encode(asi.asicentral.web.Resource.TitleListCompanies)</h2>
-<a class="btn btn-small" href="@Url.Action("Add", "../sgr/Company", null)"><i class="icon-plus-sign"></i>@Html.Encode(asi.asicentral.web.Resource.SGRAddCompany)</a>
+<a class="btn btn-small" href="@Url.Action("Add", "../sgr/Company", null)"><i class="icon-plus-sign"></i>@Html.Encode(asi.asicentral.web.Resource.AddCompany)</a>
 <table class="table table-bordered table-condensed table-striped">
     <tr><th>Name</th></tr>
     @foreach (Company company in Model.OrderBy(c => c.Name))
