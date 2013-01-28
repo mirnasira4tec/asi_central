@@ -35,6 +35,7 @@ asi.modal = asi.modal || {};
 
     function modalClosing(okClicked, div, callback) {
         div.remove();
+        asi.util.log("ok clicked: " + okClicked);
         if (callback) callback(okClicked);
         callback = null;
     };
