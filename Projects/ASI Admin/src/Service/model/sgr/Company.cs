@@ -95,6 +95,36 @@ namespace asi.asicentral.model.sgr
 
         public virtual IList<Category> Categories { get; set; }
 
+        public void CopyTo(Company company)
+        {
+            if (company == null) throw new Exception("Cannot copy data to a null Company object");
+            company.Id = Id;
+            company.Name = Name;
+            company.Summary = Summary;
+            company.ASINumber = ASINumber;
+            company.IsActive = IsActive;
+            company.BusinessType = BusinessType;
+            company.Address = Address;
+            company.ProductionTime = ProductionTime;
+            company.NumberOfEmployees = NumberOfEmployees;
+            company.Email = Email;
+            company.URL = URL;
+            company.AnnualSalesTurnover = AnnualSalesTurnover;
+            company.CountryCode = CountryCode;
+            company.PhoneAreaCode = PhoneAreaCode;
+            company.Phone = Phone;
+            company.PhoneExtension = PhoneExtension;
+            company.FaxCountryCode = FaxCountryCode;
+            company.FaxAreaCode = FaxCountryCode;
+            company.Fax = Fax;
+            company.FaxExtension = FaxExtension;
+            company.ContactName = ContactName;
+            company.ContactEmail = ContactEmail;
+            company.YearEstablished = YearEstablished;
+            company.Products = Products;
+            company.Categories = Categories;
+        }
+
         public override string ToString()
         {
             return string.Format("Company: {0} - {1}", Id, Name);

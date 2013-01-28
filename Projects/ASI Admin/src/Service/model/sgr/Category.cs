@@ -31,6 +31,13 @@ namespace asi.asicentral.model.sgr
         public virtual IList<Company> Companies { get; set; }
         public virtual IList<Product> Products { get; set; }
 
+        public void CopyTo(Category category)
+        {
+            category.Id = Id;
+            category.Name = Name;
+            category.Products = Products;
+        }
+
         public override string ToString()
         {
             return string.Format("Category: {0} - {1}", Id, Name);

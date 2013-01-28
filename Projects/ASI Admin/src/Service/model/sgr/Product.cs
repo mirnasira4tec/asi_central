@@ -18,15 +18,15 @@ namespace asi.asicentral.model.sgr
         }
 
         [Display(ResourceType = typeof(Resource), Name = "ProductID")]
-        [Required]
+        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public int Id { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "ProductName")]
-        [Required]
+        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public string Name { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "ProductModelNumber")]
-        [Required]
+        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public string ModelNumber { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "ProductPrice")]
@@ -54,7 +54,7 @@ namespace asi.asicentral.model.sgr
         [Display(ResourceType = typeof(Resource), Name = "ProductIsActive")]
         public bool IsActive { get; set; }
 
-        [Required]
+        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public virtual Company Company { get; set; }
 
         public virtual IList<Category> Categories { get; set; }
