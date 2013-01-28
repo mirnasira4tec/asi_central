@@ -14,6 +14,7 @@
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(product => product.Id)
+    @Html.HiddenFor(product => product.Company.Id)
     
     @Html.LabelFor(product => product.Name) @Html.EditorFor(product => product.Name, new { @class = "input-xxlarge" })  @Html.ValidationMessageFor(product => product.Name)
     @Html.LabelFor(product => product.ModelNumber) @Html.EditorFor(product => product.ModelNumber, new { @class = "input-xxlarge" }) @Html.ValidationMessageFor(product => product.ModelNumber)

@@ -88,6 +88,42 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is Inactive?.
+        /// </summary>
+        public static string ColumnIsInactive {
+            get {
+                return ResourceManager.GetString("ColumnIsInactive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Large Image.
+        /// </summary>
+        public static string ColumnLargeImage {
+            get {
+                return ResourceManager.GetString("ColumnLargeImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Product Name.
+        /// </summary>
+        public static string ColumnProductName {
+            get {
+                return ResourceManager.GetString("ColumnProductName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Small Image.
+        /// </summary>
+        public static string ColumnSmallImage {
+            get {
+                return ResourceManager.GetString("ColumnSmallImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this item?.
         /// </summary>
         public static string ConfirmDeleteMessage {
@@ -124,6 +160,15 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Click to edit the item.
+        /// </summary>
+        public static string EditToolTip {
+            get {
+                return ResourceManager.GetString("EditToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string Save {
@@ -138,6 +183,69 @@ namespace asi.asicentral.web {
         public static string SGRMaintenanceLink {
             get {
                 return ResourceManager.GetString("SGRMaintenanceLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Category.
+        /// </summary>
+        public static string TitleAddCategory {
+            get {
+                return ResourceManager.GetString("TitleAddCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add a Company.
+        /// </summary>
+        public static string TitleAddCompany {
+            get {
+                return ResourceManager.GetString("TitleAddCompany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Product.
+        /// </summary>
+        public static string TitleAddProduct {
+            get {
+                return ResourceManager.GetString("TitleAddProduct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categories.
+        /// </summary>
+        public static string TitleCategories {
+            get {
+                return ResourceManager.GetString("TitleCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Category.
+        /// </summary>
+        public static string TitleEditCategory {
+            get {
+                return ResourceManager.GetString("TitleEditCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Company.
+        /// </summary>
+        public static string TitleEditCompany {
+            get {
+                return ResourceManager.GetString("TitleEditCompany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List of Companies.
+        /// </summary>
+        public static string TitleListCompanies {
+            get {
+                return ResourceManager.GetString("TitleListCompanies", resourceCulture);
             }
         }
     }

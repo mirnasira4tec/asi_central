@@ -1,4 +1,5 @@
-﻿@using asi.asicentral.model.sgr
+﻿@using asi.asicentral.web;
+@using asi.asicentral.model.sgr
 @using asi.asicentral.web.Models.sgr
 @model ViewCompany
 
@@ -14,29 +15,34 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span3">
-            <a class="btn btn-small" href="@Url.Action("Add", "../sgr/Category", new { id = Model.Id, categoryId = Model.CategoryID })">
+            <a class="btn btn-small" href="@Url.Action("Add", "../sgr/Category", new { CompanyID = Model.Id })">
             <i class="icon-plus"></i>
-            Add Category
+            @Html.Encode(Resource.TitleListCompanies)
             </a>
             <table class="table table-bordered table-condensed table-striped">
-            <tr><th>Categories</th></tr>
+            <tr><th>@Html.Encode(Resource.TitleCategories)</th></tr>
             @foreach (Category category in Model.Categories.OrderBy(c => c.Name))
             {
-               <tr><td>   
-                    <a class="btn btn-small" href="@Url.Action("Edit", "../sgr/Category", new { id = Model.Id, categoryId = category.Id })"><i class="icon-pencil"></i></a>
-                    @Html.ActionLink(@category.Name, "List", "Product", new ViewCompany { Id = Model.Id, CategoryID = category.Id }, null)
-               </td></tr>
+               <tr>
+               <td>   
+                   <a rel="tooltip" data-placement="right" title="@Html.Encode(asi.asicentral.web.Resource.EditToolTip)" class="icon-pencil" 
+                        href="@Url.Action("Edit", "../sgr/Category", new ViewCategory { Id = category.Id, CompanyID = Model.Id })"></a>
+                   <a class="remove" rel="tooltip" data-placement="right" title="@Html.Encode(asi.asicentral.web.Resource.DeleteTooltip)" href="#">
+                       <i data-id="@(new ViewCategory { Id = category.Id, CompanyID = Model.Id })" class="icon-remove-circle"></i></a>
+                   @Html.ActionLink(@category.Name, "List", "Product", new ViewCompany { Id = Model.Id, CategoryID = category.Id }, null)
+               </td>
+               </tr>
             }
             </table>
         </div>
         <div class="span8">
-            <a class="btn btn-small" href="@Url.Action("Add", "../sgr/Product", new { id = Model.Id, categoryId = Model.CategoryID })">
+            <a class="btn btn-small" href="@Url.Action("Add", "../sgr/Product", new { companyId = Model.Id, categoryId = Model.CategoryID })">
             <i class="icon-plus"></i>
-            Add Product
+            @Html.Encode(Resource.TitleAddProduct)
             </a> 
             <table class="table table-bordered table-condensed table-striped">
-                <tr><th>Product Name</th><th>Small Image</th><th>Large Image</th> <th>Is Delete?</th></tr>
-                @foreach (Product product in Model.Products.OrderBy(p => p.IsActive == false))
+                <tr><th>@Html.Encode(Resource.ColumnProductName)</th><th>@Html.Encode(Resource.ColumnSmallImage)</th><th>@Html.Encode(Resource.ColumnLargeImage)</th><th>@Html.Encode(Resource.ColumnIsInactive)</th></tr>
+                @foreach (Product product in Model.Products.Where(p => p.Company.Id == Model.Id).OrderBy(p => p.IsActive == false))
                 {
                    <tr>
                        <td>@Html.ActionLink(@product.Name, "Edit", "Product", new { productId = product.Id, categoryId = Model.CategoryID }, null)</td>
@@ -52,3 +58,14 @@
 
 <div>
 </div>
+
+@section Scripts {
+    <script src="/Scripts/asi.js"></script>
+    <script>
+    $(".remove").click(function (e) {
+        asi.modal.confirm("@Html.Encode(asi.asicentral.web.Resource.ConfirmDeleteTitle)", "@Html.Encode(asi.asicentral.web.Resource.ConfirmDeleteMessage)", function (result) {
+            if (result) asi.util.submit('@Url.Action("../Category/Delete")', [{ Name: 'id', Value: $(e.target).data("id") }]);
+        });
+    });
+    </script>
+}

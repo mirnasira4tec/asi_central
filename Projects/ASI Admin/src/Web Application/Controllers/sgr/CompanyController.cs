@@ -20,7 +20,7 @@ namespace asi.asicentral.web.Controllers.sgr
         public ActionResult List()
         {
             IList<Company> companies = _objectService.GetAll<Company>().ToList();
-            ViewBag.Title = "List of Companies";
+            ViewBag.Title = Resource.TitleListCompanies;
             return View("../sgr/Company/List", companies);
         }
 
@@ -29,7 +29,7 @@ namespace asi.asicentral.web.Controllers.sgr
         {
             Company company = _objectService.GetAll<Company>().Where(comp => comp.Id == id).FirstOrDefault();
             if (company == null) throw new Exception("Invalid identifier for a company");
-            ViewBag.Title = "Edit a Company";
+            ViewBag.Title = Resource.TitleEditCompany;
             return View("../sgr/Company/Edit", company);
         }
 
@@ -39,7 +39,7 @@ namespace asi.asicentral.web.Controllers.sgr
         [ValidateInput(false)]
         public ActionResult Edit(Company company)
         {
-            ViewBag.Title = "Edit a Company";
+            ViewBag.Title = Resource.TitleEditCompany;
             if (ModelState.IsValid)
             {
                 _objectService.Update<Company>(company);
@@ -53,7 +53,7 @@ namespace asi.asicentral.web.Controllers.sgr
         [HttpGet]
         public ActionResult Add()
         {
-            ViewBag.Title = "Add a Company";
+            ViewBag.Title = Resource.TitleAddCompany;
             Company company = new Company();
             return View("../sgr/Company/Edit", company);
         }
@@ -64,19 +64,14 @@ namespace asi.asicentral.web.Controllers.sgr
         [ValidateInput(false)]
         public ActionResult Add(Company company)
         {
-            ViewBag.Title = "Add a Company";
+            ViewBag.Title = Resource.TitleAddCompany;
             if (ModelState.IsValid)
             {
-                // TODO Fix hardcoded value
-                //Category category = _objectService.GetAll<Category>().Where(c => c.Id == 32).SingleOrDefault();
-                //company.Categories = new List<Category>();
-                //_objectService.Add<Company>(company);
-                //_objectService.SaveChanges();
-                //company.Categories.Add(category);
-                //_objectService.Update(company);
-                //_objectService.SaveChanges();
+                Category category = _objectService.GetAll<Category>().Where(c => c.Id == Category.CATEGORY_ALL).SingleOrDefault();
 
-                Category category = _objectService.GetAll<Category>().Where(c => c.Id == 32).SingleOrDefault();
+                if (category == null) 
+                    throw new Exception("Invalid identifier for a category: " + Category.CATEGORY_ALL);
+                
                 company.Categories.Add(category);
                 _objectService.Add<Company>(company);
                 _objectService.SaveChanges();
