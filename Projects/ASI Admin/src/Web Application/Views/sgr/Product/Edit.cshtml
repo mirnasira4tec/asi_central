@@ -1,6 +1,7 @@
 ﻿@using asi.asicentral.model.sgr
 @using asi.asicentral.web
-@model Product
+@using asi.asicentral.web.Models.sgr
+@model ViewProduct
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -13,6 +14,7 @@
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(product => product.Id)
+    @Html.HiddenFor(product => product.Company.Id)
     
     @Html.LabelFor(product => product.Name) @Html.EditorFor(product => product.Name, new { @class = "input-xxlarge" })  @Html.ValidationMessageFor(product => product.Name)
     @Html.LabelFor(product => product.ModelNumber) @Html.EditorFor(product => product.ModelNumber, new { @class = "input-xxlarge" }) @Html.ValidationMessageFor(product => product.ModelNumber)
@@ -29,7 +31,7 @@
     
     <br />
     <input type="submit" value="Save" class="btn" />
-    @Html.ActionLink(Resource.Cancel, "List", new { id = Model.Company.Id, categoryId = ViewBag.CategoryID })
+    @Html.ActionLink(Resource.Cancel, "List", new ViewCompany { Id = Model.Company.Id, CategoryID = Model.CategoryID })
 }
 
 </div>

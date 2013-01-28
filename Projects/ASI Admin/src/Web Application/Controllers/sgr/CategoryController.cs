@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 using asi.asicentral.model.sgr;
 using asi.asicentral.services.interfaces;
+using asi.asicentral.web.Models.sgr;
 
 namespace asi.asicentral.web.Controllers.sgr
 {
@@ -19,49 +20,61 @@ namespace asi.asicentral.web.Controllers.sgr
         }
 
         [HttpGet]
-        public ActionResult Add(int id)
+        public ActionResult Add(int companyId)
         {
-            ViewBag.Title = "Add Category";
-            ViewBag.CompanyID = id;
-            ViewBag.CategoryID = 32;
+            ViewCategory viewCategory = new ViewCategory();
+            viewCategory.CompanyID = companyId;
 
-            Category category = new Category();
-            return View("../sgr/Category/Edit", category);
+            return View("../sgr/Category/Edit", viewCategory);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        public ActionResult Add(Category category, int companyId)
+        public ActionResult Add(ViewCategory viewCategory)
         {
             if (ModelState.IsValid)
             {
-                Company company = _objectService.GetAll<Company>().Where(c => c.Id == companyId).SingleOrDefault();
-                company.Categories.Add(category);
+                Company company = _objectService.GetAll<Company>().Where(c => c.Id == viewCategory.CompanyID).SingleOrDefault();
+                if (company == null) 
+                    throw new Exception("Invalid identifier for a category: " + viewCategory.Id);                
+
+                // check to see if the category exist
+                Category existingCategory = _objectService.GetAll<Category>().Where(c => c.Name == viewCategory.Name).SingleOrDefault();
+                if (existingCategory != null)
+                {
+                    company.Categories.Add(existingCategory);
+                }
+                else
+                {
+                    Category category = new Category();
+                    viewCategory.CopyTo(category);
+                    company.Categories.Add(category);
+                }
                 _objectService.Update<Company>(company);
                 _objectService.SaveChanges();
-
-                return RedirectToAction("List", "Product", new { id = companyId });
+                return RedirectToAction("List", "Product", new ViewCompany { Id = viewCategory.CompanyID, CategoryID = Category.CATEGORY_ALL });
             }
             else
             {
-                ViewBag.Title = "Add Category";
-                ViewBag.CompanyID = companyId;
-                ViewBag.CategoryID = 32;
-                return View("../sgr/Category/Edit", category);
+                ViewBag.Title = Resource.TitleAddCategory;
+                return View("../sgr/Category/Edit", viewCategory);
             }
         }
 
         [HttpGet]
-        public ActionResult Edit(int id, int? categoryId)
+        public ActionResult Edit(ViewCategory viewCategory)
         {
-            ViewBag.Title = "Edit Category";
-            ViewBag.CompanyID = id;
-            ViewBag.CategoryID = categoryId;
+            ViewBag.Title = Resource.TitleEditCategory;
 
-            Category category = _objectService.GetAll<Category>().Where(c => c.Id == categoryId).SingleOrDefault();
+            Category category = _objectService.GetAll<Category>().Where(c => c.Id == viewCategory.Id).SingleOrDefault();
+            
+            if (category == null)
+                throw new Exception("Invalid identifier for a category: " + viewCategory.Id);
 
-            return View("../sgr/Category/Edit", category); 
+            category.CopyTo(viewCategory);
+
+            return View("../sgr/Category/Edit", viewCategory); 
         }
 
         [HttpPost]
@@ -73,15 +86,35 @@ namespace asi.asicentral.web.Controllers.sgr
             {
                 _objectService.Update<Category>(category);
                 _objectService.SaveChanges();
-                return RedirectToAction("List", "Product", new { id = companyId });
+                return RedirectToAction("List", "Product", new ViewCompany { Id = companyId, CategoryID = category.Id });
             }
             else
             {
-                ViewBag.Title = "Edit Category";
-                ViewBag.CompanyID = companyId;
-                ViewBag.CategoryID = category.Id;
-                return View("../sgr/Category/Edit", category);
+                ViewBag.Title = Resource.TitleEditCategory;
+                return View("../sgr/Category/Edit", new ViewCategory { Id = category.Id, CompanyID = companyId });
             }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(ViewCategory viewCategory)
+        {
+            Category category = _objectService.GetAll<Category>().Where(c => c.Id == viewCategory.Id).SingleOrDefault();
+           
+            if (category == null)
+                throw new Exception("Invalid identifier for a category: " + viewCategory.Id);
+
+            Company company = category.Companies.Where(c => c.Id == viewCategory.CompanyID).SingleOrDefault();
+
+            if (company == null)
+                throw new Exception("Invalid identifier for a company: " + company.Id);
+
+            category.Companies.Remove(company);
+
+            _objectService.Update<Category>(category);
+            _objectService.SaveChanges();
+
+            return RedirectToAction("List", "Product", new ViewCompany { Id = viewCategory.CompanyID, CategoryID = Category.CATEGORY_ALL });
         }
     }
 }

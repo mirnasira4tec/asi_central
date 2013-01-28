@@ -144,4 +144,40 @@
   <data name="SGRMaintenanceLink" xml:space="preserve">
     <value>SGR Maintenance</value>
   </data>
+  <data name="EditToolTip" xml:space="preserve">
+    <value>Click to edit the item</value>
+  </data>
+  <data name="TitleAddCategory" xml:space="preserve">
+    <value>Add Category</value>
+  </data>
+  <data name="TitleAddCompany" xml:space="preserve">
+    <value>Add a Company</value>
+  </data>
+  <data name="TitleEditCategory" xml:space="preserve">
+    <value>Edit Category</value>
+  </data>
+  <data name="TitleEditCompany" xml:space="preserve">
+    <value>Edit Company</value>
+  </data>
+  <data name="TitleListCompanies" xml:space="preserve">
+    <value>List of Companies</value>
+  </data>
+  <data name="ColumnIsInactive" xml:space="preserve">
+    <value>Is Inactive?</value>
+  </data>
+  <data name="ColumnLargeImage" xml:space="preserve">
+    <value>Large Image</value>
+  </data>
+  <data name="ColumnProductName" xml:space="preserve">
+    <value>Product Name</value>
+  </data>
+  <data name="ColumnSmallImage" xml:space="preserve">
+    <value>Small Image</value>
+  </data>
+  <data name="TitleAddProduct" xml:space="preserve">
+    <value>Add Product</value>
+  </data>
+  <data name="TitleCategories" xml:space="preserve">
+    <value>Categories</value>
+  </data>
 </root>
