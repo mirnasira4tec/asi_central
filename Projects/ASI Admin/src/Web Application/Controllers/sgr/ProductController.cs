@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+using asi.asicentral.web.Models.sgr;
 using asi.asicentral.services.interfaces;
 using asi.asicentral.model.sgr;
 
@@ -19,20 +20,17 @@ namespace asi.asicentral.web.Controllers.sgr
         }
 
         [HttpGet]
-        public ActionResult List(int id, int? categoryId)
+        public ActionResult List(ViewCompany viewCompany)
         {
-            Company company = _objectService.GetAll<Company>().Where(c => c.Id == id).SingleOrDefault();
+            Company company = _objectService.GetAll<Company>().Where(c => c.Id == viewCompany.Id).SingleOrDefault();
+            
+            if (company == null) 
+                throw new Exception("Invalid identifier for a company: " + viewCompany.Id);
 
-            if (categoryId != null)
-            {
-                Category category = company.Categories.Where(c => c.Id == categoryId).SingleOrDefault();
-                company.Products.Clear();
-                company.Products = category.Products.Where(p => p.Company.Id == company.Id).ToList();
-                ViewBag.CategoryID = categoryId;
-                return View("../sgr/Product/List", company);
-            }
+            company.CopyTo(viewCompany);
+            viewCompany.Products = company.Categories.Where(c => c.Id == viewCompany.CategoryID).SingleOrDefault().Products.ToList();
 
-            return View("../sgr/Product/List", company);
+            return View("../sgr/Product/List", viewCompany);
         }
 
         [HttpGet]
@@ -86,44 +84,40 @@ namespace asi.asicentral.web.Controllers.sgr
         }
 
         [HttpGet]
-        public ActionResult Edit(int productId, int? categoryId)
+        public ActionResult Edit(int productId, int categoryId)
         {
-            if (categoryId == null)
-                ViewBag.CategoryID = Category.CATEGORY_ALL;
-            else
-                ViewBag.CategoryID = categoryId;
+            Product product = _objectService.GetAll<Product>(false).Where(p => p.Id == productId).SingleOrDefault();
+            
+            if (product == null) throw new Exception("Invalid identifier for a product: " + productId);
 
-            Product product = _objectService.GetAll<Product>().Where(p => p.Id == productId).SingleOrDefault();
-            Category category = product.Categories.Where(c => c.Id == categoryId).Single();
+            ViewProduct viewProduct = new ViewProduct();
+            viewProduct.CategoryID = categoryId;
+            product.CopyTo(viewProduct);
 
-            product.Categories.Clear();
-            product.Categories.Add(category);
-
-            return View("../sgr/Product/Edit", product);
+            return View("../sgr/Product/Edit", viewProduct);
         }
 
+        //TODO figure out why model validation is still false
         //TODO figure out how to validate data while allowing html data
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        public ActionResult Edit(Product product, int categoryId)
+        public ActionResult Edit(ViewProduct viewProduct)
         {
-            // TODO figure out why validation is coming up false
-            //if (ModelState.IsValid)
-            //{
-            //    _objectService.Update<Product>(product);
-            //    _objectService.SaveChanges();
-            //    return RedirectToAction("ListCategory", new { id = product.Company.Id, categoryId = categoryId });
-            //}
-            //else
-            //{
-            //    ViewBag.CategoryID = categoryId;
-            //    return View("../sgr/Product/Edit", product);
-            //}
+            if (ModelState.IsValid)
+            {
+                _objectService.Update<Product>(viewProduct);
+                _objectService.SaveChanges();
+                RedirectToAction("List", new ViewCompany { Id = viewProduct.Company.Id, CategoryID = viewProduct.CategoryID });
+            }
 
-            _objectService.Update<Product>(product);
-            _objectService.SaveChanges();
-            return RedirectToAction("List", new { id = product.Company.Id, categoryId = categoryId });
+            Product product = _objectService.GetAll<Product>(false).Where(p => p.Id == viewProduct.Id).SingleOrDefault();
+
+            if (product == null) throw new Exception("Invalid identifier for a product: " + viewProduct.Id);
+
+            product.CopyTo(viewProduct);
+
+            return View("../sgr/Product/Edit", viewProduct);
         }
     }
 }

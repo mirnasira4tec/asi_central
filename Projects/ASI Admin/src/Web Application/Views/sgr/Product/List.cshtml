@@ -1,5 +1,6 @@
 ﻿@using asi.asicentral.model.sgr
-@model Company
+@using asi.asicentral.web.Models.sgr
+@model ViewCompany
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,52 +11,40 @@
         </a> 
         @Model.Name
     </h3>
-
 <div class="container-fluid">
-
     <div class="row-fluid">
-
         <div class="span3">
-            <a class="btn btn-small" href="@Url.Action("Add", "../sgr/Category", new { id = Model.Id, categoryId = ViewBag.CategoryID })">
+            <a class="btn btn-small" href="@Url.Action("Add", "../sgr/Category", new { id = Model.Id, categoryId = Model.CategoryID })">
             <i class="icon-plus"></i>
             Add Category
             </a>
             <table class="table table-bordered table-condensed table-striped">
             <tr><th>Categories</th></tr>
-
             @foreach (Category category in Model.Categories.OrderBy(c => c.Name))
             {
-               <tr>
-                   <td>   
-                       <a class="btn btn-small" href="@Url.Action("Edit", "../sgr/Category", new { id = Model.Id, categoryId = category.Id })">
-                           <i class="icon-pencil"></i>
-                       </a>
-                       @Html.ActionLink(@category.Name, "List", "Product", new { categoryId = category.Id }, null)
-                   </td>
-               </tr>
+               <tr><td>   
+                    <a class="btn btn-small" href="@Url.Action("Edit", "../sgr/Category", new { id = Model.Id, categoryId = category.Id })"><i class="icon-pencil"></i></a>
+                    @Html.ActionLink(@category.Name, "List", "Product", new ViewCompany { Id = Model.Id, CategoryID = category.Id }, null)
+               </td></tr>
             }
             </table>
         </div>
         <div class="span8">
-
-            <a class="btn btn-small" href="@Url.Action("Add", "../sgr/Product", new { id = Model.Id, categoryId = ViewBag.CategoryID })">
+            <a class="btn btn-small" href="@Url.Action("Add", "../sgr/Product", new { id = Model.Id, categoryId = Model.CategoryID })">
             <i class="icon-plus"></i>
             Add Product
             </a> 
-
             <table class="table table-bordered table-condensed table-striped">
                 <tr><th>Product Name</th><th>Small Image</th><th>Large Image</th> <th>Is Delete?</th></tr>
-
                 @foreach (Product product in Model.Products.OrderBy(p => p.IsActive == false))
                 {
                    <tr>
-                       <td>@Html.ActionLink(@product.Name, "Edit", "Product", new { productId = product.Id, categoryId = ViewBag.CategoryID }, null)</td>
+                       <td>@Html.ActionLink(@product.Name, "Edit", "Product", new { productId = product.Id, categoryId = Model.CategoryID }, null)</td>
                        <td><img src="@System.Configuration.ConfigurationManager.AppSettings["BaseURL"]/images/sgr/@(product.ImageSmall)" width="50" height="50" /></td>
                        <td><img src="@System.Configuration.ConfigurationManager.AppSettings["BaseURL"]/images/sgr/@(product.ImageLarge)" width="50" height="50"/></td>
                        <td>@product.IsActive</td>
                    </tr>
                 }
-
             </table>
         </div>
     </div>

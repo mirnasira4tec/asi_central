@@ -1,4 +1,5 @@
 ﻿@using asi.asicentral.model.sgr
+@using asi.asicentral.web.Models.sgr;
 @model IList<Company>
 
 @{
@@ -13,13 +14,13 @@
     {
         <tr>
             <td>
-                <a class="btn btn-small" href="@Url.Action("Edit", "Company", new { id = company.Id })">
+                <a class="btn btn-small" href="@Url.Action("Edit", "Company", new { Id = company.Id })">
                     <i class="icon-pencil"></i>
                 </a>
 
                 <a rel="tooltip" data-placement="right" title="@Html.Encode(asi.asicentral.web.Resource.DeleteTooltip)" class="remove" href="#"><i data-id="@company.Id" class="icon-remove-circle"></i></a>
 
-                @Html.ActionLink(company.Name, "List", "Product", new { id = company.Id }, null)
+                @Html.ActionLink(company.Name, "List", "Product", new ViewCompany { Id = company.Id, CategoryID = Category.CATEGORY_ALL }, null)
 
             </td>
         </tr>

@@ -1,6 +1,7 @@
 ﻿@using asi.asicentral.model.sgr
 @using asi.asicentral.web
-@model Product
+@using asi.asicentral.web.Models.sgr
+@model ViewProduct
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -29,7 +30,7 @@
     
     <br />
     <input type="submit" value="Save" class="btn" />
-    @Html.ActionLink(Resource.Cancel, "List", new { id = Model.Company.Id, categoryId = ViewBag.CategoryID })
+    @Html.ActionLink(Resource.Cancel, "List", new ViewCompany { Id = Model.Company.Id, CategoryID = Model.CategoryID })
 }
 
 </div>
