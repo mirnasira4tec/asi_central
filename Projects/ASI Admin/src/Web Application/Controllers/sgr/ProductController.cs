@@ -113,5 +113,19 @@ namespace asi.asicentral.web.Controllers.sgr
             //product.CopyTo(viewProduct);
             //return View("../sgr/Product/Edit", viewProduct);
         }
+
+        [HttpPost]
+        public ActionResult Delete(int id, int categoryid)
+        {
+            Product product = _objectService.GetAll<Product>().Where(p => p.Id == id).SingleOrDefault();
+            if (product == null)
+                throw new Exception("Invalid identifier for a product: " + id);
+
+            int companyId = product.Company.Id;
+            _objectService.Delete<Product>(product);
+            _objectService.SaveChanges();
+
+            return RedirectToAction("List", new ViewCompany { Id = companyId, CategoryID = categoryid });
+        }
     }
 }

@@ -17,7 +17,7 @@
         <div class="span3">
             <a class="btn btn-small" href="@Url.Action("Add", "../sgr/Category", new { CompanyID = Model.Id })">
             <i class="icon-plus"></i>
-            @Html.Encode(Resource.TitleListCompanies)
+            @Html.Encode(Resource.AddCategory)
             </a>
             <table class="table table-bordered table-condensed table-striped">
             <tr><th>@Html.Encode(Resource.TitleCategories)</th></tr>
@@ -27,8 +27,8 @@
                <td>   
                    <a rel="tooltip" data-placement="right" title="@Html.Encode(asi.asicentral.web.Resource.EditToolTip)" class="icon-pencil" 
                         href="@Url.Action("Edit", "../sgr/Category", new ViewCategory { Id = category.Id, CompanyID = Model.Id })"></a>
-                   <a class="remove" rel="tooltip" data-placement="right" title="@Html.Encode(asi.asicentral.web.Resource.DeleteTooltip)" href="#">
-                       <i data-id="@(new ViewCategory { Id = category.Id, CompanyID = Model.Id })" class="icon-remove-circle"></i></a>
+                   <a class="RemoveCategory" rel="tooltip" data-placement="right" title="@Html.Encode(asi.asicentral.web.Resource.DeleteTooltip)" href="#">
+                       <i data-id="@category.Id" data-companyid="@Model.Id" class="icon-remove-circle"></i></a>
                    @Html.ActionLink(@category.Name, "List", "Product", new ViewCompany { Id = Model.Id, CategoryID = category.Id }, null)
                </td>
                </tr>
@@ -45,7 +45,11 @@
                 @foreach (Product product in Model.Products.Where(p => p.Company.Id == Model.Id).OrderBy(p => p.IsActive == false))
                 {
                    <tr>
-                       <td>@Html.ActionLink(@product.Name, "Edit", "Product", new { productId = product.Id, categoryId = Model.CategoryID }, null)</td>
+                       <td>
+                           <a class="RemoveProduct" rel="tooltip" data-placement="right" title="@Html.Encode(asi.asicentral.web.Resource.DeleteTooltip)" href="#">
+                           <i data-id="@product.Id" data-categoryid="@Model.CategoryID" class="icon-remove-circle"></i></a>                           
+                           @Html.ActionLink(@product.Name, "Edit", "Product", new { productId = product.Id, categoryId = Model.CategoryID }, null)
+                       </td>
                        <td><img src="@System.Configuration.ConfigurationManager.AppSettings["BaseURL"]/images/sgr/@(product.ImageSmall)" width="50" height="50" /></td>
                        <td><img src="@System.Configuration.ConfigurationManager.AppSettings["BaseURL"]/images/sgr/@(product.ImageLarge)" width="50" height="50"/></td>
                        <td>@product.IsActive</td>
@@ -62,9 +66,15 @@
 @section Scripts {
     <script src="/Scripts/asi.js"></script>
     <script>
-    $(".remove").click(function (e) {
+    $(".RemoveCategory").click(function (e) {
+            asi.modal.confirm("@Html.Encode(asi.asicentral.web.Resource.ConfirmDeleteTitle)", "@Html.Encode(asi.asicentral.web.Resource.ConfirmDeleteMessage)", function (result) {
+                if (result) asi.util.submit('@Url.Action("../Category/Delete")', [{ Name: 'id', Value: $(e.target).data("id") }, { Name: 'companyid', Value: $(e.target).data("companyid") }]);
+        });
+    });
+
+    $(".RemoveProduct").click(function (e) {
         asi.modal.confirm("@Html.Encode(asi.asicentral.web.Resource.ConfirmDeleteTitle)", "@Html.Encode(asi.asicentral.web.Resource.ConfirmDeleteMessage)", function (result) {
-            if (result) asi.util.submit('@Url.Action("../Category/Delete")', [{ Name: 'id', Value: $(e.target).data("id") }]);
+            if (result) asi.util.submit('@Url.Action("../Product/Delete")', [{ Name: 'id', Value: $(e.target).data("id") }, { Name: 'categoryid', Value: $(e.target).data("categoryid") }]);
         });
     });
     </script>
