@@ -32,9 +32,11 @@ namespace SGRImport
         {
             if (!_loadingExcel)
             {
+                Cursor.Current = Cursors.WaitCursor;
                 IList<ProductView> productList = GetProductList(8);
                 //display in the grid
                 dgProducts.DataSource = productList;
+                Cursor.Current = Cursors.Default;
             }
         }
 
@@ -102,6 +104,12 @@ namespace SGRImport
         {
             IList<Product> createdProducts = new List<Product>();
             IList<ProductView> products = GetProductList(0);
+            Category allCategory = _objectService.GetAll<Category>().Where(cat => cat.Id == asi.asicentral.model.sgr.Category.CATEGORY_ALL).FirstOrDefault();
+            //make sure the company has the all category already
+            if (!company.Categories.Contains(allCategory))
+            {
+                company.Categories.Add(allCategory);
+            }
             foreach (ProductView productView in products)
             {
                 Product product = productView.GetProduct();
@@ -113,21 +121,26 @@ namespace SGRImport
                 product.ImageSmall = imagePath + product.ModelNumber + "_sm.jpg";
                 product.ImageLarge = imagePath + product.ModelNumber + "_lg.jpg";
                 //update the category
-                string categoryName = (!string.IsNullOrWhiteSpace(productView.Category) ? productView.Category.Trim() : "All");
-                Category category = company.Categories.Where(cat => cat.Name == categoryName).FirstOrDefault();
-                if (category == null)
+                string categoryName = !string.IsNullOrWhiteSpace(productView.Category) ? productView.Category.Trim() : null;
+                //also add the product one if specified
+                if (categoryName != null)
                 {
-                    //category not asssigned to the company, looking in the database
-                    category = _objectService.GetAll<Category>().Where(cat => cat.Name == categoryName).FirstOrDefault();
+                    Category category = company.Categories.Where(cat => cat.Name == categoryName).FirstOrDefault();
                     if (category == null)
                     {
-                        //not in the database, add it
-                        category = new Category();
-                        category.Name = categoryName;
+                        //category not asssigned to the company, looking in the database
+                        category = _objectService.GetAll<Category>().Where(cat => cat.Name == categoryName).FirstOrDefault();
+                        if (category == null)
+                        {
+                            //not in the database, add it
+                            category = new Category();
+                            category.Name = categoryName;
+                        }
+                        company.Categories.Add(category);
                     }
-                    company.Categories.Add(category);
+                    product.Categories.Add(category);
                 }
-                product.Categories.Add(category);
+                product.Categories.Add(allCategory);
                 _objectService.Add<Product>(product);
                 createdProducts.Add(product);
             }
@@ -252,6 +265,11 @@ namespace SGRImport
             PopulatePreview();
         }
 
+        private void cmbCategory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PopulatePreview();
+        }
+
         private void cmbCompanyList_SelectedIndexChanged(object sender, EventArgs e)
         {
             Company company = cmbCompanyList.SelectedItem as Company;
@@ -270,7 +288,7 @@ namespace SGRImport
             {
                 Company company = (Company)cmbCompanyList.SelectedItem;
                 IList<Product> products = ImportData(company);
-                CreateWorsheet(products);                
+                CreateWorsheet(products);
                 MessageBox.Show("The products have been imported");
             }
             catch (Exception exception)
