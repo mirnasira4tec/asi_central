@@ -22,6 +22,8 @@ namespace asi.asicentral.web.Controllers.sgr
         [HttpGet]
         public ActionResult Add(int companyId)
         {
+            ViewBag.Title = Resource.TitleAddCategory;
+
             ViewCategory viewCategory = new ViewCategory();
             viewCategory.CompanyID = companyId;
 
@@ -99,20 +101,22 @@ namespace asi.asicentral.web.Controllers.sgr
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, int companyId)
         {
-            //Category category = _objectService.GetAll<Category>().Where(c => c.Id == id).SingleOrDefault();
-            //if (category == null)
-            //    throw new Exception("Invalid identifier for a category: " + id);
+            Category category = _objectService.GetAll<Category>().Where(c => c.Id == id).SingleOrDefault();
+            if (category == null)
+                throw new Exception("Invalid identifier for a category: " + id);
+            else if (category.Id == Category.CATEGORY_ALL)
+                throw new Exception("Cannot delete a category with identifier: " + id);
 
-            //Company company = category.Companies.Where(c => c.Id == companyId).SingleOrDefault();
-            //if (company == null)
-            //    throw new Exception("Invalid identifier for a company: " + company.Id);
+            Company company = category.Companies.Where(c => c.Id == companyId).SingleOrDefault();
+            if (company == null)
+                throw new Exception("Invalid identifier for a company: " + companyId);
 
-            //category.Companies.Remove(company);
+            category.Companies.Remove(company);
 
-            //_objectService.Update<Category>(category);
-            //_objectService.SaveChanges();
+            _objectService.Update<Category>(category);
+            _objectService.SaveChanges();
 
-            return RedirectToAction("List", "Product", new ViewCompany { Id = id, CategoryID = Category.CATEGORY_ALL });
+            return RedirectToAction("List", "Product", new ViewCompany { Id = companyId, CategoryID = Category.CATEGORY_ALL });
         }
     }
 }
