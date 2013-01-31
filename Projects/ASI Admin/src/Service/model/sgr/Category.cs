@@ -28,8 +28,8 @@ namespace asi.asicentral.model.sgr
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public string Name { get; set; }
 
-        public virtual IList<Company> Companies { get; set; }
-        public virtual IList<Product> Products { get; set; }
+        public virtual ICollection<Company> Companies { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
 
         public void CopyTo(Category category)
         {

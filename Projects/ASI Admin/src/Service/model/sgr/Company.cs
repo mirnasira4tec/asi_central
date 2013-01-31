@@ -91,9 +91,9 @@ namespace asi.asicentral.model.sgr
         [Display(ResourceType = typeof(Resource), Name = "YearEst")]
         public string YearEstablished { get; set; }
 
-        public virtual IList<Product> Products { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
 
-        public virtual IList<Category> Categories { get; set; }
+        public virtual ICollection<Category> Categories { get; set; }
 
         public void CopyTo(Company company)
         {

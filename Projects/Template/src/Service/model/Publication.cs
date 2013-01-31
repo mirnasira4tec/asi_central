@@ -42,7 +42,7 @@ namespace asi.asicentral.model
         [Display(ResourceType = typeof(Resource), Name = "Color")]
         public virtual string Color { get; set; }
 
-        public virtual IList<PublicationIssue> Issues { get; set; }
+        public virtual ICollection<PublicationIssue> Issues { get; set; }
 
         public override string ToString()
         {

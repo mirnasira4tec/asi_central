@@ -23,7 +23,7 @@ namespace asi.asicentral.model
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [MaxLength(50, ErrorMessageResourceName = "NameLength", ErrorMessageResourceType = typeof(Resource))]
         public string Name { get; set; }
-        public virtual IList<Publication> Publications { get; set; }
+        public virtual ICollection<Publication> Publications { get; set; }
 
         public override string ToString()
         {

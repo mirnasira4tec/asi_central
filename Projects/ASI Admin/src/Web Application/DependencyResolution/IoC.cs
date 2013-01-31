@@ -26,12 +26,6 @@ namespace asi.asicentral.web.DependencyResolution {
         public static StructureMap.IContainer Initialize() {
             ObjectFactory.Initialize(x =>
                         {
-                            x.Scan(scan =>
-                                    {
-                                        scan.TheCallingAssembly();
-                                        scan.WithDefaultConventions();
-                                    });
-
                             x.For<Registry>()
                                 .Use<EFRegistry>();
 
