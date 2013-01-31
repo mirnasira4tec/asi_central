@@ -39,12 +39,6 @@ namespace asi.asicentral.web.DependencyResolution {
                                 .HttpContextScoped()
                                 .Use<ObjectService>()
                                 .Ctor<asi.asicentral.services.interfaces.IContainer>();
-
-                            x.Scan(scan =>
-                            {
-                                scan.TheCallingAssembly();
-                                scan.WithDefaultConventions();
-                            });
                         });
             return ObjectFactory.Container;
         }

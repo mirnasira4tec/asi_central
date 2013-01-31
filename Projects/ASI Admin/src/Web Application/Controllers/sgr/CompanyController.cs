@@ -93,7 +93,7 @@ namespace asi.asicentral.web.Controllers.sgr
                 int productCount = company.Products.Count;
                 for (int i = productCount; i > 0; i--)
                 {
-                    _objectService.Delete<Product>(company.Products[i - 1]);
+                    _objectService.Delete<Product>(company.Products.ElementAt(i - 1));
                 }
                 _objectService.Delete<Company>(company);
                 _objectService.SaveChanges();

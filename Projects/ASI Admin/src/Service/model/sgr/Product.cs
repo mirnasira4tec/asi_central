@@ -57,7 +57,7 @@ namespace asi.asicentral.model.sgr
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public virtual Company Company { get; set; }
 
-        public virtual IList<Category> Categories { get; set; }
+        public virtual ICollection<Category> Categories { get; set; }
 
         public void CopyTo(Product product)
         {
