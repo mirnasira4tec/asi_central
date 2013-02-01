@@ -1,6 +1,6 @@
 ﻿
 using asi.asicentral.model;
-using asi.asicentral.services.interfaces;
+using asi.asicentral.interfaces;
 using StructureMap.Configuration.DSL;
 using System;
 using System.Collections.Generic;

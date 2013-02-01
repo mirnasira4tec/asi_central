@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 
 using asi.asicentral.model.sgr;
-using asi.asicentral.services.interfaces;
+using asi.asicentral.interfaces;
 using asi.asicentral.web.Models.sgr;
 
 namespace asi.asicentral.web.Controllers.sgr

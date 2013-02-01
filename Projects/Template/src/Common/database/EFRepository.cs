@@ -1,4 +1,4 @@
-﻿using asi.asicentral.services.interfaces;
+﻿using asi.asicentral.interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -27,8 +27,9 @@ namespace asi.asicentral.database
         {
             if (entity == null) throw new Exception("You cannot add a null entity");
             if (!(entity is T)) throw new Exception("Invalid entity type for this class");
+            T entityValue = entity as T;
             _context.Supports(entity.GetType());
-            _context.GetSet(typeof(T)).Add(entity);
+            _context.GetSet<T>().Add(entityValue);
         }
 
         public void Delete(object entity)
@@ -41,8 +42,8 @@ namespace asi.asicentral.database
         public IQueryable<T> GetAll(bool readOnly = false)
         {
             _context.Supports(typeof(T));
-            if (readOnly) return _context.GetSet(typeof(T)).AsNoTracking() as IQueryable<T>;
-            else return _context.GetSet(typeof(T)) as IQueryable<T>;
+            if (readOnly) return _context.GetSet<T>().AsNoTracking() as IQueryable<T>;
+            else return _context.GetSet<T>() as IQueryable<T>;
         }
 
         public void Update(T entity)

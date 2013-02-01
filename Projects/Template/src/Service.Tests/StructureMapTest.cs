@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.database.mappings;
 using asi.asicentral.model;
-using asi.asicentral.services.interfaces;
+using asi.asicentral.interfaces;
 using System.Collections.Generic;
 using asi.asicentral.services;
 

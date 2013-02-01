@@ -1,7 +1,7 @@
 ﻿using asi.asicentral.database.mappings;
 using asi.asicentral.model.sgr;
 using asi.asicentral.services;
-using asi.asicentral.services.interfaces;
+using asi.asicentral.interfaces;
 using SGRImport.model;
 using System;
 using System.Collections.Generic;

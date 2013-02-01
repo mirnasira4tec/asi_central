@@ -18,7 +18,7 @@
 
 using asi.asicentral.database.mappings;
 using asi.asicentral.services;
-using asi.asicentral.services.interfaces;
+using asi.asicentral.interfaces;
 using StructureMap;
 using StructureMap.Configuration.DSL;
 namespace asi.asicentral.web.DependencyResolution {
@@ -29,7 +29,7 @@ namespace asi.asicentral.web.DependencyResolution {
                             x.For<Registry>()
                                 .Use<EFRegistry>();
 
-                            x.For<asi.asicentral.services.interfaces.IContainer>()
+                            x.For<asi.asicentral.interfaces.IContainer>()
                                 .Singleton()
                                 .Use<asi.asicentral.services.Container>()
                                 .Ctor<Registry>();
@@ -37,7 +37,7 @@ namespace asi.asicentral.web.DependencyResolution {
                             x.For<IObjectService>()
                                 .HttpContextScoped()
                                 .Use<ObjectService>()
-                                .Ctor<asi.asicentral.services.interfaces.IContainer>();
+                                .Ctor<asi.asicentral.interfaces.IContainer>();
                         });
             return ObjectFactory.Container;
         }

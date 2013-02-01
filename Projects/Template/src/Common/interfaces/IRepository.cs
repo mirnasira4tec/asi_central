@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace asi.asicentral.services.interfaces
+namespace asi.asicentral.interfaces
 {
     /// <summary>
     /// Repository pattern which will allow retrieving model from persistence
