@@ -50,14 +50,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="database\BaseContext.cs" />
     <Compile Include="database\EFRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="services\Container.cs" />
-    <Compile Include="services\interfaces\IContainer.cs" />
-    <Compile Include="services\interfaces\IObjectService.cs" />
-    <Compile Include="services\interfaces\IRepository.cs" />
-    <Compile Include="services\interfaces\IUnitOfWork.cs" />
-    <Compile Include="services\interfaces\IValidatedContext.cs" />
+    <Compile Include="interfaces\IContainer.cs" />
+    <Compile Include="interfaces\IObjectService.cs" />
+    <Compile Include="interfaces\IRepository.cs" />
+    <Compile Include="interfaces\IUnitOfWork.cs" />
+    <Compile Include="interfaces\IValidatedContext.cs" />
     <Compile Include="services\ObjectService.cs" />
     <Compile Include="util\HtmlHelper.cs" />
   </ItemGroup>

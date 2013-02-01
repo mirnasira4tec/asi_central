@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace asi.asicentral.services.interfaces
+namespace asi.asicentral.interfaces
 {
     /// <summary>
     /// The main "container" object that implements the Service Locator pattern

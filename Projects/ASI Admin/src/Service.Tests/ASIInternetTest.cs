@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.database;
 using asi.asicentral.model;
 using System.Collections.Generic;
-using asi.asicentral.services.interfaces;
+using asi.asicentral.interfaces;
 using asi.asicentral.model.sgr;
 
 namespace asi.asicentral.Tests

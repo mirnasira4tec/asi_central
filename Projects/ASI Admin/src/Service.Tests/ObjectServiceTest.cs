@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using asi.asicentral.services.interfaces;
+using asi.asicentral.interfaces;
 using asi.asicentral.services;
 using asi.asicentral.database.mappings;
 using asi.asicentral.model.sgr;

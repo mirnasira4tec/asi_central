@@ -1,6 +1,6 @@
 ﻿using asi.asicentral.database.mappings;
 using asi.asicentral.model.sgr;
-using asi.asicentral.services.interfaces;
+using asi.asicentral.interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -11,12 +11,11 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database
 {
-    public class ASIInternetContext : DbContext, IValidatedContext
+    public class ASIInternetContext : BaseContext
     {
         public ASIInternetContext()
             : base("name=ASIInternetContext")
         {
-            //nothing to be done
             Database.SetInitializer<ASIInternetContext>(null);
         }
 
@@ -36,35 +35,5 @@ namespace asi.asicentral.database
                .Add(new ProductConfiguration())
                .Add(new CategoryConfiguration());
         }
-
-        #region IValidatedContext
-
-        public void Supports(Type type)
-        {
-            if (!(typeof(Company).IsAssignableFrom(type) || typeof(Product).IsAssignableFrom(type) || typeof(Category).IsAssignableFrom(type)))
-            {
-                throw new Exception("Invalid context for the class: " + type.FullName);
-            }
-        }
-
-        public DbSet GetSet(Type type)
-        {
-            if (typeof(Company).IsAssignableFrom(type))
-            {
-                return Companies;
-            }
-            else if (typeof(Product).IsAssignableFrom(type))
-            {
-                return Products;
-            }
-            else if (typeof(Category).IsAssignableFrom(type))
-            {
-                return Categories;
-            }
-            else
-                throw new Exception("Incompatible class for this context");
-        }
-
-        #endregion IValidatedContext
     }
 }

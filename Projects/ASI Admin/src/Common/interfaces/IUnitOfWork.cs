@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace asi.asicentral.services.interfaces
+namespace asi.asicentral.interfaces
 {
     /// <summary>
     /// Represents a set of operations which need to be performed at once

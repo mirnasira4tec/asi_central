@@ -1,5 +1,5 @@
 ﻿using asi.asicentral.model.sgr;
-using asi.asicentral.services.interfaces;
+using asi.asicentral.interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

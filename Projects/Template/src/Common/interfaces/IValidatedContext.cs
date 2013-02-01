@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace asi.asicentral.services.interfaces
+namespace asi.asicentral.interfaces
 {
     /// <summary>
     /// Created to accommodate with the need for the application to be able to talk to multiple databases
@@ -25,7 +25,7 @@ namespace asi.asicentral.services.interfaces
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        DbSet GetSet(Type type);
+        DbSet<T> GetSet<T>() where T : class;
 
         /// <summary>
         /// To be used to attach a simple model and update the database
