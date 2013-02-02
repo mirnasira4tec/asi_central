@@ -8,11 +8,11 @@ namespace asi.asicentral.web.Controllers
 {
     public class TemplateController : Controller
     {
-        public ActionResult Form()
+        public virtual ActionResult Form()
         {
             return View("Form");
         }
-        public ActionResult Dialog()
+        public virtual ActionResult Dialog()
         {
             return View("Dialog");
         }

@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using asi.asicentral.interfaces;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace asi.asicentral.services
     /// <summary>
     /// Service to be used to log information
     /// </summary>
-    public class LogService
+    public class LogService : ILogService
     {
         private ILog _log;
 

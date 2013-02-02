@@ -20,7 +20,8 @@ namespace asi.asicentral.WebApplication.Tests.Controllers
 
             Mock<IObjectService> mockjObjectService = new Mock<IObjectService>();
             mockjObjectService.Setup(objectService => objectService.GetAll<Publication>(true)).Returns(publications.AsQueryable());
-            PublicationController controller = new PublicationController(mockjObjectService.Object);
+            PublicationController controller = new PublicationController();
+            controller.ObjectService = mockjObjectService.Object;
             ViewResult result = controller.List() as ViewResult;
             //verify the view returns the list
             Assert.IsNotNull(result.Model);
@@ -34,7 +35,8 @@ namespace asi.asicentral.WebApplication.Tests.Controllers
         {
             Publication publication = new Publication() { Name = "test" };
             Mock<IObjectService> mockjObjectService = new Mock<IObjectService>();
-            PublicationController controller = new PublicationController(mockjObjectService.Object);
+            PublicationController controller = new PublicationController();
+            controller.ObjectService = mockjObjectService.Object;
 
             ActionResult result = controller.Add(publication);
             //make sure we redirect after adding
@@ -52,7 +54,8 @@ namespace asi.asicentral.WebApplication.Tests.Controllers
 
             Mock<IObjectService> mockjObjectService = new Mock<IObjectService>();
             mockjObjectService.Setup(objectService => objectService.GetAll<Publication>(false)).Returns(publications.AsQueryable());
-            PublicationController controller = new PublicationController(mockjObjectService.Object);
+            PublicationController controller = new PublicationController();
+            controller.ObjectService = mockjObjectService.Object;
             controller.Delete(publication.PublicationId);
             mockjObjectService.Verify(objectService => objectService.Delete<Publication>(publication), Times.Exactly(1));
             mockjObjectService.Verify(objectService => objectService.SaveChanges(), Times.Exactly(1));

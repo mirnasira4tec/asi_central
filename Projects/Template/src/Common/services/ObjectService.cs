@@ -24,21 +24,21 @@ namespace asi.asicentral.services
 
         #region IObjectService
 
-        public void Add<T>(T entity) where T : class
+        public virtual void Add<T>(T entity) where T : class
         {
             if (entity == null) throw new Exception("You cannot add a null object");
             IRepository<T> repository = GetRepository<T>();
             repository.Add(entity);
         }
 
-        public void Delete<T>(T entity) where T : class
+        public virtual void Delete<T>(T entity) where T : class
         {
             if (entity == null) throw new Exception("You cannot delete a null object");
             IRepository<T> repository = GetRepository<T>();
             repository.Delete(entity);
         }
 
-        public T Update<T>(T entity) where T : class
+        public virtual T Update<T>(T entity) where T : class
         {
             if (entity == null) throw new Exception("You cannot Update a null object");
             IRepository<T> repository = GetRepository<T>();
@@ -46,14 +46,14 @@ namespace asi.asicentral.services
             return entity;
         }
 
-        public IQueryable<T> GetAll<T>(bool readOnly = false) where T : class
+        public virtual IQueryable<T> GetAll<T>(bool readOnly = false) where T : class
         {
             IRepository<T> repository = GetRepository<T>();
             IQueryable<T> query = repository.GetAll(readOnly);
             return query;
         }
 
-        public int SaveChanges()
+        public virtual int SaveChanges()
         {
             int i = 0;
             foreach (IUnitOfWork repository in repositories.Values) i = i + repository.SaveChanges();
@@ -64,7 +64,7 @@ namespace asi.asicentral.services
 
         #region IDisposable
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             foreach (IUnitOfWork repository in repositories.Values)
             {

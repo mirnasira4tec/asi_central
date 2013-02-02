@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using StructureMap.Attributes;
 
 namespace asi.asicentral.web.Controllers
 {
@@ -17,25 +18,31 @@ namespace asi.asicentral.web.Controllers
         /// Controller for any Publication related functionality
         /// </summary>
         /// <param name="objectService">Required as we will be retrieving records from the database</param>
-        public PublicationController(IObjectService objectService)
+        public PublicationController()
         {
-            _objectService = objectService;
+            //_objectService = objectService;
         }
 
-        public ActionResult Index()
+        public IObjectService ObjectService
+        {
+            get { return _objectService; }
+            set { _objectService = value; }
+        }
+
+        public virtual ActionResult Index()
         {
             return List();
         }
 
-        public ActionResult List()
+        public virtual ActionResult List()
         {
             ViewBag.Title = "Publications";
             ViewBag.Message = "Publications stored in the database";
-            return View("List", _objectService.GetAll<Publication>(true).OrderBy(pub=>pub.Name).ToList());
+            return View("List", _objectService.GetAll<Publication>(true).OrderBy(pub => pub.Name).ToList());
         }
 
         [HttpGet]
-        public ActionResult Edit(int id)
+        public virtual ActionResult Edit(int id)
         {
             Publication publication = _objectService.GetAll<Publication>(true).Where(pub => pub.PublicationId == id).FirstOrDefault();
             if (publication != null)
@@ -47,7 +54,7 @@ namespace asi.asicentral.web.Controllers
                 IList<SelectListItem> colors = new List<SelectListItem>();
                 colors.Add(new SelectListItem() { Text = "Blue", Value = "1", Selected = false });
                 colors.Add(new SelectListItem() { Text = "Green", Value = "2", Selected = false });
-                ViewBag.ColorList = new SelectList(colors,"Value", "Text");
+                ViewBag.ColorList = new SelectList(colors, "Value", "Text");
 
                 return View("Edit", viewModel);
             }
@@ -57,7 +64,7 @@ namespace asi.asicentral.web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(PublicationView publicationView)
+        public virtual ActionResult Edit(PublicationView publicationView)
         {
             var request = Request;
             if (ModelState.IsValid)
@@ -81,7 +88,7 @@ namespace asi.asicentral.web.Controllers
         /// <summary>
         /// Use this one to define default values. Could re-use edit but an Add could have specific reduced amount of fields from edit.
         /// </summary>
-        public ActionResult Add()
+        public virtual ActionResult Add()
         {
             Publication publication = new Publication();
             ViewBag.Title = Resource.PublicationAddTitle;
@@ -94,7 +101,7 @@ namespace asi.asicentral.web.Controllers
         /// <summary>
         /// Could use Edit for this one but there might be validation specific to Add operation which does not apply to Edit
         /// </summary>
-        public ActionResult Add(Publication publication)
+        public virtual ActionResult Add(Publication publication)
         {
             if (ModelState.IsValid)
             {
@@ -113,7 +120,7 @@ namespace asi.asicentral.web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id)
+        public virtual ActionResult Delete(int id)
         {
             Publication publication = _objectService.GetAll<Publication>().Where(pub => pub.PublicationId == id).FirstOrDefault();
             if (publication != null)
