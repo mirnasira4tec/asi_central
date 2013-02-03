@@ -1,0 +1,21 @@
+2013-02-02 19:52:09,824 [5] DEBUG Web_Application.Controllers.HomeController - Instanciating Web_Application.Controllers.HomeController
+2013-02-02 19:52:09,907 [5] DEBUG Web_Application.Controllers.HomeController - Start Execute
+2013-02-02 19:52:09,908 [5] DEBUG Web_Application.Controllers.HomeController - 	Execute Param[0] = /Home/Index
+2013-02-02 19:52:11,655 [5] DEBUG Web_Application.Controllers.HomeController - Duration of Execute(): 1.748s
+2013-02-02 19:52:13,670 [15] DEBUG asi.asicentral.database.mappings.EFRegistry - Instanciating asi.asicentral.database.mappings.EFRegistry
+2013-02-02 19:52:13,705 [15] DEBUG asi.asicentral.services.ObjectService - Instanciating asi.asicentral.services.ObjectService
+2013-02-02 19:52:13,720 [15] DEBUG asi.asicentral.web.Controllers.sgr.CompanyController - Instanciating asi.asicentral.web.Controllers.sgr.CompanyController
+2013-02-02 19:52:13,722 [15] DEBUG asi.asicentral.web.Controllers.sgr.CompanyController - Start Execute
+2013-02-02 19:52:13,722 [15] DEBUG asi.asicentral.web.Controllers.sgr.CompanyController - 	Execute Param[0] = /Company/List
+2013-02-02 19:52:13,724 [15] DEBUG asi.asicentral.services.ObjectService - Start GetAll
+2013-02-02 19:52:13,724 [15] DEBUG asi.asicentral.services.ObjectService - 	GetAll Param[0] = False
+2013-02-02 19:52:13,752 [15] DEBUG asi.asicentral.services.ObjectService - Duration of GetAll(): 0.028s
+2013-02-02 19:52:14,857 [15] DEBUG asi.asicentral.web.Controllers.sgr.CompanyController - Duration of Execute(): 1.135s
+2013-02-02 19:52:17,122 [5] DEBUG asi.asicentral.services.ObjectService - Instanciating asi.asicentral.services.ObjectService
+2013-02-02 19:52:17,123 [5] DEBUG asi.asicentral.web.Controllers.sgr.ProductController - Instanciating asi.asicentral.web.Controllers.sgr.ProductController
+2013-02-02 19:52:17,125 [5] DEBUG asi.asicentral.web.Controllers.sgr.ProductController - Start Execute
+2013-02-02 19:52:17,125 [5] DEBUG asi.asicentral.web.Controllers.sgr.ProductController - 	Execute Param[0] = /Product/List/20
+2013-02-02 19:52:17,139 [5] DEBUG asi.asicentral.services.ObjectService - Start GetAll
+2013-02-02 19:52:17,139 [5] DEBUG asi.asicentral.services.ObjectService - 	GetAll Param[0] = False
+2013-02-02 19:52:17,140 [5] DEBUG asi.asicentral.services.ObjectService - Duration of GetAll(): 0.001s
+2013-02-02 19:52:18,636 [5] DEBUG asi.asicentral.web.Controllers.sgr.ProductController - Duration of Execute(): 1.511s

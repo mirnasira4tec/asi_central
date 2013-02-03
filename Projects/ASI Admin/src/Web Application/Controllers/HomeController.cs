@@ -8,7 +8,7 @@ namespace Web_Application.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        public virtual ActionResult Index()
         {
             ViewBag.Message = "Playing with the technology stack and good practices";
 

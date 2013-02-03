@@ -62,10 +62,27 @@ namespace asi.asicentral.database
 
         #region IDisposable
 
-        public virtual void Dispose()
+        public void Dispose()
         {
-            _context.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
+
+        // The bulk of the clean-up code is implemented in Dispose(bool)
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // free managed resources
+                if (_context != null)
+                {
+                    _context.Dispose();
+                    _context = null;
+                }
+            }
+            //no unmanaged resource to free at this point
+        }
+
         #endregion IDisposable
     }
 }
