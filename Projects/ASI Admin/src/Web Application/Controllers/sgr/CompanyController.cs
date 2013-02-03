@@ -10,24 +10,23 @@ namespace asi.asicentral.web.Controllers.sgr
 {
     public class CompanyController : Controller
     {
-        private IObjectService _objectService;
-
-        public CompanyController(IObjectService objectService)
+        public CompanyController()
         {
-            _objectService = objectService;
         }
 
-        public ActionResult List()
+        public IObjectService ObjectService { get; set; }
+
+        public virtual ActionResult List()
         {
-            IList<Company> companies = _objectService.GetAll<Company>().ToList();
+            IList<Company> companies = ObjectService.GetAll<Company>().ToList();
             ViewBag.Title = Resource.TitleListCompanies;
             return View("../sgr/Company/List", companies);
         }
 
         [HttpGet]
-        public ActionResult Edit(int id)
+        public virtual ActionResult Edit(int id)
         {
-            Company company = _objectService.GetAll<Company>().Where(comp => comp.Id == id).FirstOrDefault();
+            Company company = ObjectService.GetAll<Company>().Where(comp => comp.Id == id).FirstOrDefault();
             if (company == null) throw new Exception("Invalid identifier for a company");
             ViewBag.Title = Resource.TitleEditCompany;
             return View("../sgr/Company/Edit", company);
@@ -37,13 +36,13 @@ namespace asi.asicentral.web.Controllers.sgr
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        public ActionResult Edit(Company company)
+        public virtual ActionResult Edit(Company company)
         {
             ViewBag.Title = Resource.TitleEditCompany;
             if (ModelState.IsValid)
             {
-                _objectService.Update<Company>(company);
-                _objectService.SaveChanges();
+                ObjectService.Update<Company>(company);
+                ObjectService.SaveChanges();
                 return RedirectToAction("List");
             }
             else
@@ -51,7 +50,7 @@ namespace asi.asicentral.web.Controllers.sgr
         }
 
         [HttpGet]
-        public ActionResult Add()
+        public virtual ActionResult Add()
         {
             ViewBag.Title = Resource.TitleAddCompany;
             Company company = new Company();
@@ -62,19 +61,19 @@ namespace asi.asicentral.web.Controllers.sgr
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        public ActionResult Add(Company company)
+        public virtual ActionResult Add(Company company)
         {
             ViewBag.Title = Resource.TitleAddCompany;
             if (ModelState.IsValid)
             {
-                Category category = _objectService.GetAll<Category>().Where(c => c.Id == Category.CATEGORY_ALL).SingleOrDefault();
+                Category category = ObjectService.GetAll<Category>().Where(c => c.Id == Category.CATEGORY_ALL).SingleOrDefault();
 
                 if (category == null) 
                     throw new Exception("Invalid identifier for a category: " + Category.CATEGORY_ALL);
                 
                 company.Categories.Add(category);
-                _objectService.Add<Company>(company);
-                _objectService.SaveChanges();
+                ObjectService.Add<Company>(company);
+                ObjectService.SaveChanges();
 
                 return RedirectToAction("List");
             }
@@ -84,19 +83,19 @@ namespace asi.asicentral.web.Controllers.sgr
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id)
+        public virtual ActionResult Delete(int id)
         {
-            Company company = _objectService.GetAll<Company>().Where(c => c.Id == id).SingleOrDefault();
+            Company company = ObjectService.GetAll<Company>().Where(c => c.Id == id).SingleOrDefault();
             if (company != null)
             {
                 //first delete the products associated with the company
                 int productCount = company.Products.Count;
                 for (int i = productCount; i > 0; i--)
                 {
-                    _objectService.Delete<Product>(company.Products.ElementAt(i - 1));
+                    ObjectService.Delete<Product>(company.Products.ElementAt(i - 1));
                 }
-                _objectService.Delete<Company>(company);
-                _objectService.SaveChanges();
+                ObjectService.Delete<Company>(company);
+                ObjectService.SaveChanges();
 
                 return Redirect("List");
             }
