@@ -12,7 +12,7 @@ namespace asi.asicentral.services
         //load container to resolve Repository based on the model. No need to load everytime. 
         //Definition is on code so it can be static
         private IContainer _container;
-        private IDictionary<string, IUnitOfWork> repositories = new Dictionary<string, IUnitOfWork>();
+        private IDictionary<string, IUnitOfWork> _repositories = new Dictionary<string, IUnitOfWork>();
 
         /// <summary>
         /// Default Constructor
@@ -56,7 +56,7 @@ namespace asi.asicentral.services
         public virtual int SaveChanges()
         {
             int i = 0;
-            foreach (IUnitOfWork repository in repositories.Values) i = i + repository.SaveChanges();
+            foreach (IUnitOfWork repository in _repositories.Values) i = i + repository.SaveChanges();
             return i;
         }
 
@@ -64,14 +64,35 @@ namespace asi.asicentral.services
 
         #region IDisposable
 
-        public virtual void Dispose()
+        public void Dispose()
         {
-            foreach (IUnitOfWork repository in repositories.Values)
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        // The bulk of the clean-up code is implemented in Dispose(bool)
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
             {
-                IDisposable dispose = repository as IDisposable;
-                if (dispose != null) dispose.Dispose();
+                // free managed resources
+                if (_repositories != null)
+                {
+                    foreach (IUnitOfWork repository in _repositories.Values)
+                    {
+                        IDisposable dispose = repository as IDisposable;
+                        if (dispose != null) dispose.Dispose();
+                    }
+                    _repositories.Clear();
+                    _repositories = null;
+                }
+                if (_container != null)
+                {
+                    _container.Dispose();
+                    _container = null;
+                }
             }
-            _container.Dispose();
+            //no unmanaged resource to free at this point
         }
 
         #endregion IDisposable
@@ -85,16 +106,16 @@ namespace asi.asicentral.services
         {
             IRepository<T> repository = null;
             string name = typeof(T).FullName;
-            if (repositories.ContainsKey(name))
+            if (_repositories.ContainsKey(name))
             {
-                repository = repositories[name] as IRepository<T>;
+                repository = _repositories[name] as IRepository<T>;
             }
             else
             {
-                lock (repositories)
+                lock (_repositories)
                 {
                     repository = _container.GetInstance<IRepository<T>>();
-                    repositories.Add(name, repository as IUnitOfWork);
+                    _repositories.Add(name, repository as IUnitOfWork);
                 }
             }
             return repository;

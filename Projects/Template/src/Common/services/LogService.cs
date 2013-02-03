@@ -11,7 +11,7 @@ namespace asi.asicentral.services
     /// <summary>
     /// Service to be used to log information
     /// </summary>
-    public class LogService : ILogService
+    public class LogService : ILogService, IDisposable
     {
         private ILog _log;
 
@@ -59,7 +59,7 @@ namespace asi.asicentral.services
         /// </summary>
         /// <param name="name">Name to use to reference the log</param>
         /// <returns></returns>
-        public static LogService GetLog(string name) 
+        public static LogService GetLog(string name)
         {
             return new LogService(name);
         }
@@ -72,6 +72,27 @@ namespace asi.asicentral.services
         public static LogService GetLog(Type type)
         {
             return new LogService(type);
-        }        
+        }
+
+        #region IDisposable
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        // The bulk of the clean-up code is implemented in Dispose(bool)
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // free managed resources
+                _log = null;
+            }
+            //no unmanaged resource to free at this point
+        }
+
+        #endregion
     }
 }
