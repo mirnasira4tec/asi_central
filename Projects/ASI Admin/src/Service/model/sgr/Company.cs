@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace asi.asicentral.model.sgr
 {
@@ -29,6 +30,7 @@ namespace asi.asicentral.model.sgr
         [Display(ResourceType = typeof(Resource), Name = "CompanySummary")]
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [DataType(DataType.MultilineText)]
+        [AllowHtml]
         public string Summary { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "ASINumber")]
