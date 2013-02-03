@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security.AntiXss;
 
 namespace asi.asicentral.web.Controllers.sgr
 {
@@ -32,10 +33,8 @@ namespace asi.asicentral.web.Controllers.sgr
             return View("../sgr/Company/Edit", company);
         }
 
-        //TODO figure out how to validate data while allowing html data
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ValidateInput(false)]
         public virtual ActionResult Edit(Company company)
         {
             ViewBag.Title = Resource.TitleEditCompany;
@@ -57,10 +56,8 @@ namespace asi.asicentral.web.Controllers.sgr
             return View("../sgr/Company/Edit", company);
         }
 
-        //TODO fiure out how to validate data while allowing html data
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ValidateInput(false)]
         public virtual ActionResult Add(Company company)
         {
             ViewBag.Title = Resource.TitleAddCompany;
