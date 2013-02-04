@@ -38,6 +38,8 @@ namespace asi.asicentral.web.Controllers.sgr
         [HttpGet]
         public virtual ActionResult Add(int companyId, int categoryId)
         {
+            ViewBag.Title = Resource.TitleAddProduct;
+
             ViewProduct viewProduct = new ViewProduct();
             viewProduct.Company = new Company();
 
@@ -47,34 +49,45 @@ namespace asi.asicentral.web.Controllers.sgr
             return View("../sgr/Product/Edit", viewProduct);
         }
 
-        //TODO figure out how to validate data while allowing html data
-        //TODO figure out why model validation is still showing up false
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ValidateInput(false)]
+        [ValidateInput(true)]
         public virtual ActionResult Add(ViewProduct viewProduct)
         {
-            Company company = ObjectService.GetAll<Company>().Where(c => c.Id == viewProduct.Company.Id).SingleOrDefault();
-            if (company == null)
-                throw new Exception("Invalid identifier for a product: " + viewProduct.Company.Id);
+            ModelState.Remove("Company.Summary");
+            ModelState.Remove("Company.Name");
 
-            Product product = viewProduct.GetProduct();
+            if (ModelState.IsValid)
+            {
+                Company company = ObjectService.GetAll<Company>().Where(c => c.Id == viewProduct.Company.Id).SingleOrDefault();
+                if (company == null)
+                    throw new Exception("Invalid identifier for a product: " + viewProduct.Company.Id);
 
-            Category category = ObjectService.GetAll<Category>().Where(c => c.Id == viewProduct.CategoryID).SingleOrDefault();
-            if (category == null)
-                throw new Exception("Invalid identifier for a category: " + viewProduct.CategoryID);
+                Product product = viewProduct.GetProduct();
 
-            product.Categories.Add(category);
-            company.Products.Add(product);
-            ObjectService.Update<Company>(company);
-            ObjectService.SaveChanges();
-            
-            return RedirectToAction("List", new ViewCompany { Id = viewProduct.Company.Id, CategoryID = viewProduct.CategoryID });
+                Category category = ObjectService.GetAll<Category>().Where(c => c.Id == viewProduct.CategoryID).SingleOrDefault();
+                if (category == null)
+                    throw new Exception("Invalid identifier for a category: " + viewProduct.CategoryID);
+
+                product.Categories.Add(category);
+                company.Products.Add(product);
+                ObjectService.Update<Company>(company);
+                ObjectService.SaveChanges();
+
+                return RedirectToAction("List", new ViewCompany { Id = viewProduct.Company.Id, CategoryID = viewProduct.CategoryID });
+            }
+            else
+            {
+                ViewBag.Title = Resource.TitleAddProduct;
+                return View("../sgr/Product/Edit", viewProduct);
+            }
         }
 
         [HttpGet]
         public virtual ActionResult Edit(int productId, int categoryId)
         {
+            ViewBag.Title = Resource.TitleEditProduct;
+
             Product product = ObjectService.GetAll<Product>(false).Where(p => p.Id == productId).SingleOrDefault();
             if (product == null) 
                 throw new Exception("Invalid identifier for a product: " + productId);
@@ -87,30 +100,31 @@ namespace asi.asicentral.web.Controllers.sgr
         }
 
         
-        //TODO figure out how to validate data while allowing html data
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ValidateInput(false)]
+        [ValidateInput(true)]
         public virtual ActionResult Edit(ViewProduct viewProduct)
         {
-            Product product = viewProduct.GetProduct();
-            ObjectService.Update(product);
-            ObjectService.SaveChanges();
-            return RedirectToAction("List", new ViewCompany { Id = viewProduct.Company.Id, CategoryID = viewProduct.CategoryID });
+            ModelState.Remove("Company.Summary");
+            ModelState.Remove("Company.Name");
 
-            //TODO figure out why model validation is still showing up false
-            //viewProduct.Company = ObjectService.GetAll<Company>().Where(c => c.Id == viewProduct.Company.Id).SingleOrDefault();
-            //if (ModelState.IsValid)
-            //{
-            //    ObjectService.Update<Product>(viewProduct);
-            //    ObjectService.SaveChanges();
-            //    RedirectToAction("List", new ViewCompany { Id = viewProduct.Company.Id, CategoryID = viewProduct.CategoryID });
-            //}
+            if (ModelState.IsValid)
+            {
+                ObjectService.Update<Product>(viewProduct.GetProduct());
+                ObjectService.SaveChanges();
+                return RedirectToAction("List", new ViewCompany { Id = viewProduct.Company.Id, CategoryID = viewProduct.CategoryID });
+            }
+            else
+            {
+                ViewBag.Title = Resource.TitleEditProduct;
 
-            //Product product = ObjectService.GetAll<Product>(false).Where(p => p.Id == viewProduct.Id).SingleOrDefault();
-            //if (product == null) throw new Exception("Invalid identifier for a product: " + viewProduct.Id);
-            //product.CopyTo(viewProduct);
-            //return View("../sgr/Product/Edit", viewProduct);
+                Product product = ObjectService.GetAll<Product>(false).Where(p => p.Id == viewProduct.Id).SingleOrDefault();
+                if (product == null) 
+                    throw new Exception("Invalid identifier for a product: " + viewProduct.Id);
+                
+                product.CopyTo(viewProduct);
+                return View("../sgr/Product/Edit", viewProduct);
+            }
         }
 
         [HttpPost]

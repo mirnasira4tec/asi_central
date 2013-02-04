@@ -34,11 +34,9 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.sgr
         [TestMethod]
         public void Edit()
         {
-            ViewResult result;
-
             // arrange
             IList<Company> companies = new List<Company>();
-            companies.Add(new Company { Id = 1, Name = "Test Company 1" });
+            companies.Add(new Company { Id = 1, Name = "Test Company 1", Summary = "Summary" });
             
             Mock<IObjectService> mockObjectService = new Mock<IObjectService>();
             mockObjectService.Setup(objectService => objectService.GetAll<Company>(false)).Returns(companies.AsQueryable());
@@ -46,17 +44,52 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.sgr
             controller.ObjectService = mockObjectService.Object;
 
             // returning a Company model to the view
-            result = controller.Edit(1) as ViewResult;
+            ViewResult result = controller.Edit(1) as ViewResult;
             Assert.IsNotNull(result.Model);
             Assert.IsInstanceOfType(result.Model, typeof(Company));
             Assert.IsInstanceOfType(result, typeof(ViewResult));
 
             // editing and saving a Company model to the database
-            Company company = (Company)result.Model;
-            company.Id = 2;
+            Company company = new Company();
             company.Name = "New Company";
             company.Summary = "Summary";
-            result = controller.Edit(company) as ViewResult;
+            ActionResult actionResult = controller.Edit(company);
+            Assert.IsInstanceOfType(actionResult, typeof(RedirectToRouteResult));
+            mockObjectService.Verify(objectService => objectService.Update<Company>(company), Times.Exactly(1));
+            mockObjectService.Verify(objectService => objectService.SaveChanges(), Times.Exactly(1));
+        }
+
+        [TestMethod]
+        public void Add()
+        {
+            // arrange
+            IList<Company> companies = new List<Company>();
+            IList<Category> categories = new List<Category>();
+            categories.Add(new Category { Id = 32, Name = "All" });
+
+            Mock<IObjectService> mockObjectService = new Mock<IObjectService>();
+            mockObjectService.Setup(objectService => objectService.GetAll<Company>(false)).Returns(companies.AsQueryable());
+            mockObjectService.Setup(objectService => objectService.GetAll<Category>(false)).Returns(categories.AsQueryable());
+            CompanyController controller = new CompanyController();
+            controller.ObjectService = mockObjectService.Object;
+
+            // create new model and pass it to the view
+            ViewResult viewResult = controller.Add() as ViewResult;
+            Assert.IsNotNull(viewResult.Model);
+            Assert.IsNotNull(viewResult.ViewBag.Title);
+
+            // add new company to the data
+            Company company = new Company { Id = 1, Name = "New Company", Summary = "Summary" };
+            ActionResult actionResult = controller.Add(company);
+            Assert.IsInstanceOfType(actionResult, typeof(RedirectToRouteResult));
+            mockObjectService.Verify(objectService => objectService.Add<Company>(company), Times.Exactly(1));
+            mockObjectService.Verify(objectService => objectService.SaveChanges());
+        }
+
+        [TestMethod]
+        public void Delete()
+        {
+
         }
     }
 }

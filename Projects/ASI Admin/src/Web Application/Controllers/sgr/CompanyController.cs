@@ -11,11 +11,13 @@ namespace asi.asicentral.web.Controllers.sgr
 {
     public class CompanyController : Controller
     {
-        public CompanyController()
-        {
-        }
 
         public IObjectService ObjectService { get; set; }
+
+        public CompanyController()
+        {
+
+        }
 
         public virtual ActionResult List()
         {
@@ -34,6 +36,7 @@ namespace asi.asicentral.web.Controllers.sgr
         }
 
         [HttpPost]
+        [ValidateInput(true)]
         [ValidateAntiForgeryToken]
         public virtual ActionResult Edit(Company company)
         {
@@ -59,17 +62,17 @@ namespace asi.asicentral.web.Controllers.sgr
         }
 
         [HttpPost]
+        [ValidateInput(true)]
         [ValidateAntiForgeryToken]
         public virtual ActionResult Add(Company company)
         {
-            ViewBag.Title = Resource.TitleAddCompany;
             if (ModelState.IsValid)
             {
                 Category category = ObjectService.GetAll<Category>().Where(c => c.Id == Category.CATEGORY_ALL).SingleOrDefault();
 
-                if (category == null) 
+                if (category == null)
                     throw new Exception("Invalid identifier for a category: " + Category.CATEGORY_ALL);
-                
+
                 company.Categories.Add(category);
                 ObjectService.Add<Company>(company);
                 ObjectService.SaveChanges();
@@ -77,7 +80,10 @@ namespace asi.asicentral.web.Controllers.sgr
                 return RedirectToAction("List");
             }
             else
+            {
+                ViewBag.Title = Resource.TitleAddCompany;
                 return View("../sgr/Company/Edit", company);
+            }
         }
 
         [HttpPost]
@@ -99,7 +105,7 @@ namespace asi.asicentral.web.Controllers.sgr
                 return Redirect("List");
             }
             else
-                throw new Exception("IObjectService returned a null value.");
+                throw new Exception("Invalid identifier for a company: " + id);
         }
     }
 }

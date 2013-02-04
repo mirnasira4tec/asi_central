@@ -12,12 +12,13 @@ namespace asi.asicentral.web.Controllers.sgr
 {
     public class CategoryController : Controller
     {
-        public CategoryController()
-        {
-        }
-
         public IObjectService ObjectService { get; set; }
 
+        public CategoryController()
+        {
+
+        }
+        
         [HttpGet]
         public virtual ActionResult Add(int companyId)
         {

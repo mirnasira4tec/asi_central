@@ -295,7 +295,7 @@ namespace asi.asicentral {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is Active?.
+        ///   Looks up a localized string similar to Is Inactive?.
         /// </summary>
         public static string ProductIsActive {
             get {

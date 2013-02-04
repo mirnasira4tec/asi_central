@@ -67,6 +67,7 @@ namespace asi.asicentral.model.sgr
             product.ImageLarge = this.ImageLarge;
             product.ImageSmall = this.ImageSmall;
             product.IsActive = this.IsActive;
+            product.Company = this.Company;
             product.KeySpecifications = this.KeySpecifications;
             product.MinimumOrderQuantity = this.MinimumOrderQuantity;
             product.ModelNumber = this.ModelNumber;
