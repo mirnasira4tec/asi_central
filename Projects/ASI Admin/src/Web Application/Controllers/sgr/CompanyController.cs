@@ -28,7 +28,7 @@ namespace asi.asicentral.web.Controllers.sgr
         public ActionResult Edit(int id)
         {
             Company company = _objectService.GetAll<Company>().Where(comp => comp.Id == id).FirstOrDefault();
-            if (company == null) throw new Exception("Invalid identifier for a company");
+            if (company == null) throw new Exception("Invalid identifier for a company " + id);
             ViewBag.Title = Resource.TitleEditCompany;
             return View("../sgr/Company/Edit", company);
         }
@@ -39,7 +39,6 @@ namespace asi.asicentral.web.Controllers.sgr
         [ValidateInput(false)]
         public ActionResult Edit(Company company)
         {
-            ViewBag.Title = Resource.TitleEditCompany;
             if (ModelState.IsValid)
             {
                 _objectService.Update<Company>(company);
@@ -47,7 +46,10 @@ namespace asi.asicentral.web.Controllers.sgr
                 return RedirectToAction("List");
             }
             else
+            {
+                ViewBag.Title = Resource.TitleEditCompany;
                 return View("../sgr/Company/Edit", company);
+            }
         }
 
         [HttpGet]

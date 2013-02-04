@@ -39,7 +39,7 @@ namespace asi.asicentral.web.Controllers.sgr
             {
                 Company company = _objectService.GetAll<Company>().Where(c => c.Id == viewCategory.CompanyID).SingleOrDefault();
                 if (company == null) 
-                    throw new Exception("Invalid identifier for a category: " + viewCategory.Id);                
+                    throw new Exception("Invalid identifier for a company: " + viewCategory.CompanyID);                
 
                 // check to see if the category exist
                 Category existingCategory = _objectService.GetAll<Category>().Where(c => c.Name == viewCategory.Name).SingleOrDefault();
