@@ -37,7 +37,7 @@ namespace asi.asicentral.model.sgr
         public string ASINumber { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "CompanyIsInactive")]
-        public bool IsActive { get; set; }
+        public bool IsInactive { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "CompanyBusinessType")]
         public string BusinessType { get; set; }
@@ -104,7 +104,7 @@ namespace asi.asicentral.model.sgr
             company.Name = Name;
             company.Summary = Summary;
             company.ASINumber = ASINumber;
-            company.IsActive = IsActive;
+            company.IsInactive = IsInactive;
             company.BusinessType = BusinessType;
             company.Address = Address;
             company.ProductionTime = ProductionTime;
