@@ -27,8 +27,13 @@ namespace asi.asicentral.web.Controllers.sgr
         [HttpGet]
         public virtual ActionResult Edit(int id)
         {
-            Company company = ObjectService.GetAll<Company>().Where(comp => comp.Id == id).FirstOrDefault();
+<<<<<<< HEAD
+            Company company = _objectService.GetAll<Company>().Where(comp => comp.Id == id).FirstOrDefault();
             if (company == null) throw new Exception("Invalid identifier for a company " + id);
+=======
+            Company company = ObjectService.GetAll<Company>().Where(comp => comp.Id == id).FirstOrDefault();
+            if (company == null) throw new Exception("Invalid identifier for a company");
+>>>>>>> 5e96f7f9b4a56c830c1b9c57360cb6dd7ccc6665
             ViewBag.Title = Resource.TitleEditCompany;
             return View("../sgr/Company/Edit", company);
         }

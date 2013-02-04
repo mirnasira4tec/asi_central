@@ -22,7 +22,8 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.sgr
             IList<Company> companies = new List<Company>();
             Mock<IObjectService> mockObjectService = new Mock<IObjectService>();
             mockObjectService.Setup(objectService => objectService.GetAll<Company>(true)).Returns(companies.AsQueryable());
-            CompanyController controller = new CompanyController(mockObjectService.Object);
+            CompanyController controller = new CompanyController();
+            controller.ObjectService = mockObjectService.Object;
 
             // act
             ViewResult result = controller.List() as ViewResult;
@@ -41,7 +42,8 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.sgr
             
             Mock<IObjectService> mockObjectService = new Mock<IObjectService>();
             mockObjectService.Setup(objectService => objectService.GetAll<Company>(false)).Returns(companies.AsQueryable());
-            CompanyController controller = new CompanyController(mockObjectService.Object);
+            CompanyController controller = new CompanyController();
+            controller.ObjectService = mockObjectService.Object;
 
             // returning a Company model to the view
             result = controller.Edit(1) as ViewResult;

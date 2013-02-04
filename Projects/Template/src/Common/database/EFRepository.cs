@@ -23,7 +23,7 @@ namespace asi.asicentral.database
 
         #region IRepository
 
-        public void Add(object entity)
+        public virtual void Add(object entity)
         {
             if (entity == null) throw new Exception("You cannot add a null entity");
             if (!(entity is T)) throw new Exception("Invalid entity type for this class");
@@ -32,28 +32,28 @@ namespace asi.asicentral.database
             _context.GetSet<T>().Add(entityValue);
         }
 
-        public void Delete(object entity)
+        public virtual void Delete(object entity)
         {
             if (entity == null) throw new Exception("You cannot add a null entity");
             _context.Supports(entity.GetType());
             _context.Entry(entity).State = System.Data.EntityState.Deleted;
         }
 
-        public IQueryable<T> GetAll(bool readOnly = false)
+        public virtual IQueryable<T> GetAll(bool readOnly = false)
         {
             _context.Supports(typeof(T));
             if (readOnly) return _context.GetSet<T>().AsNoTracking() as IQueryable<T>;
             else return _context.GetSet<T>() as IQueryable<T>;
         }
 
-        public void Update(T entity)
+        public virtual void Update(T entity)
         {
             _context.Supports(typeof(T));
             _context.Entry(entity).State = System.Data.EntityState.Modified;
             _context.Entry(entity).State = System.Data.EntityState.Modified;
         }
 
-        public int SaveChanges()
+        public virtual int SaveChanges()
         {
             return _context.SaveChanges();
         }
@@ -64,8 +64,25 @@ namespace asi.asicentral.database
 
         public void Dispose()
         {
-            _context.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
+
+        // The bulk of the clean-up code is implemented in Dispose(bool)
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // free managed resources
+                if (_context != null)
+                {
+                    _context.Dispose();
+                    _context = null;
+                }
+            }
+            //no unmanaged resource to free at this point
+        }
+
         #endregion IDisposable
     }
 }

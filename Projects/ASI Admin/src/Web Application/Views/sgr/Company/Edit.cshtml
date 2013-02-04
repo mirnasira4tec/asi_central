@@ -12,7 +12,7 @@
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(company => company.Id)
-    @Html.LabelFor(company => company.Name) @Html.EditorFor(company => company.Name, new { @class = "input-xxlarge" }) @Html.ValidationMessageFor(company => company.Id)
+    @Html.LabelFor(company => company.Name) @Html.EditorFor(company => company.Name, new { @class = "input-xxlarge" }) @Html.ValidationMessageFor(company => company.Name)
     @Html.LabelFor(company => company.Summary) @Html.EditorFor(company => company.Summary, new { @class = "input-xxlarge"}) @Html.ValidationMessageFor(company => company.Summary)
     @Html.LabelFor(company => company.ASINumber) @Html.EditorFor(company => company.ASINumber, new { @class = "input-xxlarge"}) 
     <label class="checkbox" for="IsActive">@Html.EditorFor(company => company.IsActive) @Html.DisplayNameFor(company => company.IsActive)</label>

@@ -55,6 +55,20 @@ namespace asi.asicentral.database
             return value;
         }
 
-        #endregion IValidatedContext
+        #endregion IValidatedContext 
+
+        #region IDisposable
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (disposing && _supportedTypes != null)
+            {
+                _supportedTypes.Clear();
+                _supportedTypes = null;
+            }
+        }
+
+        #endregion
     }
 }

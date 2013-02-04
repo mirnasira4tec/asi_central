@@ -12,15 +12,14 @@ namespace asi.asicentral.web.Controllers.sgr
 {
     public class CategoryController : Controller
     {
-        private IObjectService _objectService;
-
-        public CategoryController(IObjectService objectService)
+        public CategoryController()
         {
-            _objectService = objectService;
         }
 
+        public IObjectService ObjectService { get; set; }
+
         [HttpGet]
-        public ActionResult Add(int companyId)
+        public virtual ActionResult Add(int companyId)
         {
             ViewBag.Title = Resource.TitleAddCategory;
 
@@ -33,16 +32,16 @@ namespace asi.asicentral.web.Controllers.sgr
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        public ActionResult Add(ViewCategory viewCategory)
+        public virtual ActionResult Add(ViewCategory viewCategory)
         {
             if (ModelState.IsValid)
             {
-                Company company = _objectService.GetAll<Company>().Where(c => c.Id == viewCategory.CompanyID).SingleOrDefault();
+                Company company = ObjectService.GetAll<Company>().Where(c => c.Id == viewCategory.CompanyID).SingleOrDefault();
                 if (company == null) 
                     throw new Exception("Invalid identifier for a company: " + viewCategory.CompanyID);                
 
                 // check to see if the category exist
-                Category existingCategory = _objectService.GetAll<Category>().Where(c => c.Name == viewCategory.Name).SingleOrDefault();
+                Category existingCategory = ObjectService.GetAll<Category>().Where(c => c.Name == viewCategory.Name).SingleOrDefault();
                 if (existingCategory != null)
                 {
                     company.Categories.Add(existingCategory);
@@ -53,8 +52,8 @@ namespace asi.asicentral.web.Controllers.sgr
                     viewCategory.CopyTo(category);
                     company.Categories.Add(category);
                 }
-                _objectService.Update<Company>(company);
-                _objectService.SaveChanges();
+                ObjectService.Update<Company>(company);
+                ObjectService.SaveChanges();
                 return RedirectToAction("List", "Product", new ViewCompany { Id = viewCategory.CompanyID, CategoryID = Category.CATEGORY_ALL });
             }
             else
@@ -65,11 +64,11 @@ namespace asi.asicentral.web.Controllers.sgr
         }
 
         [HttpGet]
-        public ActionResult Edit(ViewCategory viewCategory)
+        public virtual ActionResult Edit(ViewCategory viewCategory)
         {
             ViewBag.Title = Resource.TitleEditCategory;
 
-            Category category = _objectService.GetAll<Category>().Where(c => c.Id == viewCategory.Id).SingleOrDefault();
+            Category category = ObjectService.GetAll<Category>().Where(c => c.Id == viewCategory.Id).SingleOrDefault();
             
             if (category == null)
                 throw new Exception("Invalid identifier for a category: " + viewCategory.Id);
@@ -82,12 +81,12 @@ namespace asi.asicentral.web.Controllers.sgr
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        public ActionResult Edit(Category category, int companyId)
+        public virtual ActionResult Edit(Category category, int companyId)
         {
             if (ModelState.IsValid)
             {
-                _objectService.Update<Category>(category);
-                _objectService.SaveChanges();
+                ObjectService.Update<Category>(category);
+                ObjectService.SaveChanges();
                 return RedirectToAction("List", "Product", new ViewCompany { Id = companyId, CategoryID = category.Id });
             }
             else
@@ -99,9 +98,9 @@ namespace asi.asicentral.web.Controllers.sgr
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, int companyId)
+        public virtual ActionResult Delete(int id, int companyId)
         {
-            Category category = _objectService.GetAll<Category>().Where(c => c.Id == id).SingleOrDefault();
+            Category category = ObjectService.GetAll<Category>().Where(c => c.Id == id).SingleOrDefault();
             if (category == null)
                 throw new Exception("Invalid identifier for a category: " + id);
             else if (category.Id == Category.CATEGORY_ALL)
@@ -113,8 +112,8 @@ namespace asi.asicentral.web.Controllers.sgr
 
             category.Companies.Remove(company);
 
-            _objectService.Update<Category>(category);
-            _objectService.SaveChanges();
+            ObjectService.Update<Category>(category);
+            ObjectService.SaveChanges();
 
             return RedirectToAction("List", "Product", new ViewCompany { Id = companyId, CategoryID = Category.CATEGORY_ALL });
         }
