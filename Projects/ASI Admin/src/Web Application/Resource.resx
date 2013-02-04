@@ -186,4 +186,7 @@
   <data name="AddCompany" xml:space="preserve">
     <value>Add Comapny</value>
   </data>
+  <data name="TitleEditProduct" xml:space="preserve">
+    <value>Edit Product</value>
+  </data>
 </root>

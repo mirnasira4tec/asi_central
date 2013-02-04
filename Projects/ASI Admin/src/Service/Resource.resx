@@ -196,7 +196,7 @@
     <value>Product Id</value>
   </data>
   <data name="ProductIsActive" xml:space="preserve">
-    <value>Is Active?</value>
+    <value>Is Inactive?</value>
   </data>
   <data name="ProductKeySpecifications" xml:space="preserve">
     <value>Key Specifications</value>
