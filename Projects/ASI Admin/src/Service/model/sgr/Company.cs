@@ -36,7 +36,7 @@ namespace asi.asicentral.model.sgr
         [Display(ResourceType = typeof(Resource), Name = "ASINumber")]
         public string ASINumber { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = "CompanyIsActive")]
+        [Display(ResourceType = typeof(Resource), Name = "CompanyIsInactive")]
         public bool IsActive { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "CompanyBusinessType")]
