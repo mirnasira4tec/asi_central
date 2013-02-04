@@ -14,7 +14,7 @@ namespace asi.asicentral.model.store
         public Nullable<bool> HallmarkResult { get; set; }
 
         public virtual Order Order { get; set; }
-        //public virtual Product Product { get; set; }
+        public virtual OrderProduct Product { get; set; }
 
         public override string ToString()
         {

@@ -21,7 +21,7 @@ namespace SGRImport
             //Identify the worksheet
             if (_workbook.Worksheets.Count == 1)
             {
-                _worksheet = _workbook.Worksheets.Item[0] as Worksheet;
+                _worksheet = _workbook.Worksheets.Item[1] as Worksheet;
             }
             else if (_workbook.Worksheets.Count > 1)
             {

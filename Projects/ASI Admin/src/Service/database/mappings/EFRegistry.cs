@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using asi.asicentral.model.store;
 
 namespace asi.asicentral.database.mappings
 {
@@ -27,6 +28,18 @@ namespace asi.asicentral.database.mappings
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
             For<IRepository<Category>>().Use<EFRepository<Category>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
+            For<IRepository<Order>>().Use<EFRepository<Order>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
+            For<IRepository<OrderDetail>>().Use<EFRepository<OrderDetail>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
+            For<IRepository<OrderProduct>>().Use<EFRepository<OrderProduct>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
+            For<IRepository<OrderCreditCard>>().Use<EFRepository<OrderCreditCard>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
         }
     }

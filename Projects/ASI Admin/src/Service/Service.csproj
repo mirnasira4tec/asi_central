@@ -57,19 +57,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="database\ASIInternetContext.cs" />
-    <Compile Include="database\mappings\CategoryConfiguration.cs" />
-    <Compile Include="database\mappings\CompanyConfiguration.cs" />
+    <Compile Include="database\mappings\CategoryMap.cs" />
+    <Compile Include="database\mappings\CompanyMap.cs" />
     <Compile Include="database\mappings\EFRegistry.cs" />
-    <Compile Include="database\mappings\OrderConfiguration.cs" />
-    <Compile Include="database\mappings\OrderDetailConfiguration.cs" />
-    <Compile Include="database\mappings\OrderProductConfiguration.cs" />
-    <Compile Include="database\mappings\ProductConfiguration.cs" />
+    <Compile Include="database\mappings\OrderMap.cs" />
+    <Compile Include="database\mappings\OrderCreditCardMap.cs" />
+    <Compile Include="database\mappings\OrderDetailMap.cs" />
+    <Compile Include="database\mappings\OrderProductMap.cs" />
+    <Compile Include="database\mappings\ProductMap.cs" />
     <Compile Include="model\sgr\Category.cs" />
     <Compile Include="model\sgr\Company.cs" />
     <Compile Include="model\sgr\Product.cs" />
     <Compile Include="model\store\Order.cs" />
+    <Compile Include="model\store\OrderCreditCard.cs" />
     <Compile Include="model\store\OrderDetail.cs" />
-    <Compile Include="model\store\StoreProduct.cs" />
+    <Compile Include="model\store\OrderProduct.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>

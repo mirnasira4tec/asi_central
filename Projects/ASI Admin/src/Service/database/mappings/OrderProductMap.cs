@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings
 {
-    internal class StoreProductConfiguration : EntityTypeConfiguration<StoreProduct>
+    internal class StoreProductConfiguration : EntityTypeConfiguration<OrderProduct>
     {
         public StoreProductConfiguration()
         {

@@ -3,12 +3,8 @@ using System.Collections.Generic;
 
 namespace asi.asicentral.model.store
 {
-    public class StoreProduct
+    public class OrderProduct
     {
-        public StoreProduct()
-        {
-        }
-
         public int Id { get; set; }
         public string Description { get; set; }
         public string Summary { get; set; }
@@ -33,7 +29,7 @@ namespace asi.asicentral.model.store
         {
             bool equals = false;
 
-            StoreProduct product = obj as StoreProduct;
+            OrderProduct product = obj as OrderProduct;
             if (product != null) equals = product.Id == Id;
             return equals;
         }

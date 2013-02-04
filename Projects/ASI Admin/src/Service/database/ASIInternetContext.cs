@@ -8,6 +8,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using asi.asicentral.model.store;
 
 namespace asi.asicentral.database
 {
@@ -22,9 +23,10 @@ namespace asi.asicentral.database
         public DbSet<Company> Companies { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<asi.asicentral.model.store.Order> Orders { get; set; }
-        public DbSet<asi.asicentral.model.store.OrderDetail> OrderDetails { get; set; }
-        public DbSet<asi.asicentral.model.store.StoreProduct> StoreProducts { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<OrderProduct> OrderProducts { get; set; }
+        public DbSet<OrderCreditCard> OrderCreditCards { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -34,12 +36,13 @@ namespace asi.asicentral.database
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Configurations
-               .Add(new CompanyConfiguration())
-               .Add(new ProductConfiguration())
-               .Add(new CategoryConfiguration())
-               .Add(new OrderConfiguration())
-               .Add(new OrderDetailConfiguration())
-               .Add(new StoreProductConfiguration());
+               .Add(new CompanyMap())
+               .Add(new ProductMap())
+               .Add(new CategoryMap())
+               .Add(new OrderMap())
+               .Add(new OrderDetailMap())
+               .Add(new StoreProductConfiguration())
+               .Add(new OrderCreditCardMap());
         }
     }
 }

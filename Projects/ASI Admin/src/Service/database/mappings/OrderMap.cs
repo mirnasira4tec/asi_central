@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings
 {
-    internal class OrderConfiguration : EntityTypeConfiguration<Order>
+    internal class OrderMap : EntityTypeConfiguration<Order>
     {
-        public OrderConfiguration()
+        public OrderMap()
         {
             this.ToTable("STOR_Orders_ORDR");
             this.HasKey(order => order.Id);
