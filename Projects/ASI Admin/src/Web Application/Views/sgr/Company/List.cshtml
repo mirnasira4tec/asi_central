@@ -8,14 +8,17 @@
 <h2>@Html.Encode(asi.asicentral.web.Resource.TitleListCompanies)</h2>
 <a class="btn btn-small" href="@Url.Action("Add", "../sgr/Company", null)"><i class="icon-plus-sign"></i>@Html.Encode(asi.asicentral.web.Resource.AddCompany)</a>
 <table class="table table-bordered table-condensed table-striped">
-    <tr><th>Name</th></tr>
-    @foreach (Company company in Model.OrderBy(c => c.Name))
+    <tr><th>Name</th><th>Is Inactive?</th></tr>
+    @foreach (Company company in Model.OrderBy(c => c.Name).OrderBy(c => c.IsInactive == false))
     {
         <tr>
         <td>
            <a rel="tooltip" data-placement="right" title="@Html.Encode(asi.asicentral.web.Resource.EditToolTip)" class="icon-pencil" href="@Url.Action("Edit", "Company", new { Id = company.Id })"></a>
            <a rel="tooltip" data-placement="right" title="@Html.Encode(asi.asicentral.web.Resource.DeleteTooltip)" class="remove" href="#"><i data-id="@company.Id" class="icon-remove-circle"></i></a>
            @Html.ActionLink(company.Name, "List", "Product", new ViewCompany { Id = company.Id, CategoryID = Category.CATEGORY_ALL }, null)
+        </td>
+        <td>
+            @company.IsInactive
         </td>
         </tr>
     }

@@ -42,7 +42,7 @@
             </a> 
             <table class="table table-bordered table-condensed table-striped">
                 <tr><th>@Html.Encode(Resource.ColumnProductName)</th><th>@Html.Encode(Resource.ColumnSmallImage)</th><th>@Html.Encode(Resource.ColumnLargeImage)</th><th>@Html.Encode(Resource.ColumnIsInactive)</th></tr>
-                @foreach (Product product in Model.Products.Where(p => p.Company.Id == Model.Id).OrderBy(p => p.IsActive == false))
+                @foreach (Product product in Model.Products.Where(p => p.Company.Id == Model.Id).OrderBy(p => p.IsInactive == false))
                 {
                    <tr>
                        <td>
@@ -52,7 +52,7 @@
                        </td>
                        <td><img src="@System.Configuration.ConfigurationManager.AppSettings["BaseURL"]/images/sgr/@(product.ImageSmall)" width="50" height="50" /></td>
                        <td><img src="@System.Configuration.ConfigurationManager.AppSettings["BaseURL"]/images/sgr/@(product.ImageLarge)" width="50" height="50"/></td>
-                       <td>@product.IsActive</td>
+                       <td>@product.IsInactive</td>
                    </tr>
                 }
             </table>

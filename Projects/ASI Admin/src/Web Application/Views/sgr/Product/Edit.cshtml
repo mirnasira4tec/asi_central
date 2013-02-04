@@ -26,8 +26,7 @@
     @Html.LabelFor(product => product.ImageLarge) @Html.EditorFor(product => product.ImageLarge, new { @class = "input-xxlarge" })
     @Html.LabelFor(product => product.ImageSmall) @Html.EditorFor(product => product.ImageSmall, new { @class = "input-xxlarge" })
 
-    <br />
-    <label>Is Deleted? @Html.CheckBoxFor(product => product.IsActive) </label>
+    <label>Is Inactive?  @Html.CheckBoxFor(product => product.IsInactive) </label>
     
     <br />
     <input type="submit" value="Save" class="btn" />
