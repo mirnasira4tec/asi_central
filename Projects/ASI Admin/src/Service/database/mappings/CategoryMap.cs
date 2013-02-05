@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings
 {
-    public class CategoryConfiguration : EntityTypeConfiguration<Category>
+    public class CategoryMap : EntityTypeConfiguration<Category>
     {
-        public CategoryConfiguration()
+        public CategoryMap()
         {
             ToTable("CENT_SGRInternCategoryDescription_SGCD");
             HasKey(category => category.Id);

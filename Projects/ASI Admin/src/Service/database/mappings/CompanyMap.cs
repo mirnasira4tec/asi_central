@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings
 {
-    internal class CompanyConfiguration :  EntityTypeConfiguration<Company>
+    internal class CompanyMap :  EntityTypeConfiguration<Company>
     {
-        public CompanyConfiguration()
+        public CompanyMap()
         {
             ToTable("CENT_SGRInternCompany_SGRC");
             HasKey(company => company.Id);
