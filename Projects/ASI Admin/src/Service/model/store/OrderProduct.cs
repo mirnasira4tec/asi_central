@@ -20,6 +20,8 @@ namespace asi.asicentral.model.store
         public Nullable<int> LocaleId { get; set; }
         public Nullable<int> TermId { get; set; }
 
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+
         public override string ToString()
         {
             return string.Format("Product of {0} - {1}", Id, Description);

@@ -14,13 +14,13 @@ namespace asi.asicentral.database.mappings
         public OrderDetailMap()
         {
             this.ToTable("STOR_OrderDetail_ODET");
-            this.HasKey(detail => new { detail.OrderId, detail.ProdId });
+            this.HasKey(detail => new { detail.OrderId, detail.ProductId });
             
             this.Property(detail => detail.OrderId)
                 .HasColumnName("ORDR_OrderID")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
-            this.Property(detail => detail.ProdId)
+            this.Property(detail => detail.ProductId)
                 .HasColumnName("PROD_ProdID")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
@@ -41,12 +41,12 @@ namespace asi.asicentral.database.mappings
 
             // Relationships
             this.HasRequired(detail => detail.Order)
-                .WithMany(detail => detail.OrderDetails)
+                .WithMany(order => order.OrderDetails)
                 .HasForeignKey(detail => detail.OrderId);
 
-            //this.HasRequired(t => t.STOR_Products_PROD)
-            //    .WithMany(t => t.STOR_OrderDetail_ODET)
-            //    .HasForeignKey(d => d.PROD_ProdID);
+            this.HasRequired(detail => detail.Product)
+                .WithMany(product => product.OrderDetails)
+                .HasForeignKey(detail => detail.ProductId);
         }
     }
 }

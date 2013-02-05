@@ -6,7 +6,7 @@ namespace asi.asicentral.model.store
     public class OrderDetail
     {
         public int OrderId { get; set; }
-        public int ProdId { get; set; }
+        public int ProductId { get; set; }
         public Nullable<int> Quantity { get; set; }
         public Nullable<System.DateTime> Added { get; set; }
         public string Application { get; set; }
@@ -14,6 +14,7 @@ namespace asi.asicentral.model.store
         public Nullable<bool> HallmarkResult { get; set; }
 
         public virtual Order Order { get; set; }
+
         public virtual OrderProduct Product { get; set; }
 
         public override string ToString()
@@ -26,13 +27,13 @@ namespace asi.asicentral.model.store
             bool equals = false;
 
             OrderDetail orderDetail = obj as OrderDetail;
-            if (orderDetail != null) equals = (orderDetail.OrderId == OrderId && orderDetail.ProdId == ProdId);
+            if (orderDetail != null) equals = (orderDetail.OrderId == OrderId && orderDetail.ProductId == ProductId);
             return equals;
         }
 
         public override int GetHashCode()
         {
-            return OrderId.GetHashCode() * 47 + ProdId.GetHashCode();
+            return OrderId.GetHashCode() * 47 + ProductId.GetHashCode();
         }
     }
 }

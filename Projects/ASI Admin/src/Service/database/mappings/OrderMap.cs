@@ -75,6 +75,10 @@ namespace asi.asicentral.database.mappings
 
             this.Property(t => t.OrderTypeId)
                 .HasColumnName("ORTY_OrderTypeID");
+
+            // Relationships
+            this.HasOptional(order => order.CreditCard)
+                .WithRequired();
         }
     }
 }

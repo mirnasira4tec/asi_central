@@ -27,6 +27,7 @@ namespace asi.asicentral.model.store
         public string IPAdd { get; set; }
         public Nullable<int> OrderTypeId { get; set; }
 
+        public virtual OrderCreditCard CreditCard { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
 
         public override string ToString()
