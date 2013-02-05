@@ -11,13 +11,11 @@ namespace asi.asicentral.web.Controllers.sgr
 {
     public class CompanyController : Controller
     {
-
-        public IObjectService ObjectService { get; set; }
-
         public CompanyController()
         {
-
         }
+
+        public IObjectService ObjectService { get; set; }
 
         public virtual ActionResult List()
         {
@@ -29,14 +27,18 @@ namespace asi.asicentral.web.Controllers.sgr
         [HttpGet]
         public virtual ActionResult Edit(int id)
         {
-            Company company = ObjectService.GetAll<Company>().Where(comp => comp.Id == id).FirstOrDefault();
+<<<<<<< HEAD
+            Company company = _objectService.GetAll<Company>().Where(comp => comp.Id == id).FirstOrDefault();
             if (company == null) throw new Exception("Invalid identifier for a company " + id);
+=======
+            Company company = ObjectService.GetAll<Company>().Where(comp => comp.Id == id).FirstOrDefault();
+            if (company == null) throw new Exception("Invalid identifier for a company");
+>>>>>>> 5e96f7f9b4a56c830c1b9c57360cb6dd7ccc6665
             ViewBag.Title = Resource.TitleEditCompany;
             return View("../sgr/Company/Edit", company);
         }
 
         [HttpPost]
-        [ValidateInput(true)]
         [ValidateAntiForgeryToken]
         public virtual ActionResult Edit(Company company)
         {
@@ -62,17 +64,17 @@ namespace asi.asicentral.web.Controllers.sgr
         }
 
         [HttpPost]
-        [ValidateInput(true)]
         [ValidateAntiForgeryToken]
         public virtual ActionResult Add(Company company)
         {
+            ViewBag.Title = Resource.TitleAddCompany;
             if (ModelState.IsValid)
             {
                 Category category = ObjectService.GetAll<Category>().Where(c => c.Id == Category.CATEGORY_ALL).SingleOrDefault();
 
-                if (category == null)
+                if (category == null) 
                     throw new Exception("Invalid identifier for a category: " + Category.CATEGORY_ALL);
-
+                
                 company.Categories.Add(category);
                 ObjectService.Add<Company>(company);
                 ObjectService.SaveChanges();
@@ -80,10 +82,7 @@ namespace asi.asicentral.web.Controllers.sgr
                 return RedirectToAction("List");
             }
             else
-            {
-                ViewBag.Title = Resource.TitleAddCompany;
                 return View("../sgr/Company/Edit", company);
-            }
         }
 
         [HttpPost]
@@ -105,7 +104,7 @@ namespace asi.asicentral.web.Controllers.sgr
                 return Redirect("List");
             }
             else
-                throw new Exception("Invalid identifier for a company: " + id);
+                throw new Exception("IObjectService returned a null value.");
         }
     }
 }

@@ -24,7 +24,7 @@ namespace asi.asicentral.database.mappings
                 .HasColumnName("SGRC_Intro");
             Property(company => company.ASINumber)
                 .HasColumnName("SGRC_SGRInternASINo");
-            Property(company => company.IsActive)
+            Property(company => company.IsInactive)
                 .HasColumnName("SGRC_SGRInternCoDeleted");
             Property(company => company.BusinessType)
                 .HasColumnName("SGRC_BusinessType");

@@ -259,6 +259,15 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit Product.
+        /// </summary>
+        public static string TitleEditProduct {
+            get {
+                return ResourceManager.GetString("TitleEditProduct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to List of Companies.
         /// </summary>
         public static string TitleListCompanies {

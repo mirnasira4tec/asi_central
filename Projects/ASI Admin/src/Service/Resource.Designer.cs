@@ -142,11 +142,11 @@ namespace asi.asicentral {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is Active?.
+        ///   Looks up a localized string similar to Is inactive?.
         /// </summary>
-        public static string CompanyIsActive {
+        public static string CompanyIsInactive {
             get {
-                return ResourceManager.GetString("CompanyIsActive", resourceCulture);
+                return ResourceManager.GetString("CompanyIsInactive", resourceCulture);
             }
         }
         
@@ -295,7 +295,7 @@ namespace asi.asicentral {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is Active?.
+        ///   Looks up a localized string similar to Is Inactive?.
         /// </summary>
         public static string ProductIsActive {
             get {

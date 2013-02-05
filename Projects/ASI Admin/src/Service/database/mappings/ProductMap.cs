@@ -40,7 +40,7 @@ namespace asi.asicentral.database.mappings
                 .HasColumnName("SGRS_AdImgSm");
             Property(product => product.ImageLarge)
                 .HasColumnName("SGRS_AdImgLg");
-            Property(product => product.IsActive)
+            Property(product => product.IsInactive)
                 .HasColumnName("SGRS_AdDeleted");
         }
     }

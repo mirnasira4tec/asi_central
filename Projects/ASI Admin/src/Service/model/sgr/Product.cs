@@ -52,7 +52,7 @@ namespace asi.asicentral.model.sgr
         public string ImageLarge { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "ProductIsActive")]
-        public bool IsActive { get; set; }
+        public bool IsInactive { get; set; }
 
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public virtual Company Company { get; set; }
@@ -66,7 +66,8 @@ namespace asi.asicentral.model.sgr
             product.Company = this.Company;
             product.ImageLarge = this.ImageLarge;
             product.ImageSmall = this.ImageSmall;
-            product.IsActive = this.IsActive;
+            product.IsInactive = this.IsInactive;
+            product.Company = this.Company;
             product.KeySpecifications = this.KeySpecifications;
             product.MinimumOrderQuantity = this.MinimumOrderQuantity;
             product.ModelNumber = this.ModelNumber;
