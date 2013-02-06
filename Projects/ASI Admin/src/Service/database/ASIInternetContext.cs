@@ -42,7 +42,9 @@ namespace asi.asicentral.database
                .Add(new OrderMap())
                .Add(new OrderDetailMap())
                .Add(new StoreProductConfiguration())
-               .Add(new OrderCreditCardMap());
+               .Add(new OrderCreditCardMap())
+               .Add(new DistributorMembershipApplicationMap())
+               .Add(new SupplierMembershipApplicationMap());
         }
     }
 }

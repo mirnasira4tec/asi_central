@@ -87,5 +87,12 @@ namespace asi.asicentral.Tests
                 }
             }
         }
+
+        [TestMethod]
+        public void OrderApplicationRetrieveTest()
+        {
+            //order 10491 has one line item of type 102 (Supplier Application)
+            //order 288 has one line item of type 103 (Distributor Application)
+        }
     }
 }

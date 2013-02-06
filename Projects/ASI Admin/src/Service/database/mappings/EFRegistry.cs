@@ -41,6 +41,12 @@ namespace asi.asicentral.database.mappings
 
             For<IRepository<OrderCreditCard>>().Use<EFRepository<OrderCreditCard>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
+            For<IRepository<SupplierMembershipApplication>>().Use<EFRepository<SupplierMembershipApplication>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
+            For<IRepository<DistributorMembershipApplication>>().Use<EFRepository<DistributorMembershipApplication>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
         }
     }
 }
