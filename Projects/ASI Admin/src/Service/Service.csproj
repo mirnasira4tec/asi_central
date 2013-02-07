@@ -59,15 +59,20 @@
     <Compile Include="database\ASIInternetContext.cs" />
     <Compile Include="database\mappings\CategoryMap.cs" />
     <Compile Include="database\mappings\CompanyMap.cs" />
+    <Compile Include="database\mappings\DistributorMembershipApplicationMap.cs" />
     <Compile Include="database\mappings\EFRegistry.cs" />
     <Compile Include="database\mappings\OrderMap.cs" />
     <Compile Include="database\mappings\OrderCreditCardMap.cs" />
     <Compile Include="database\mappings\OrderDetailMap.cs" />
     <Compile Include="database\mappings\OrderProductMap.cs" />
     <Compile Include="database\mappings\ProductMap.cs" />
+    <Compile Include="database\mappings\SupplierMembershipApplicationMap.cs" />
+    <Compile Include="interfaces\IStoreService.cs" />
     <Compile Include="model\sgr\Category.cs" />
     <Compile Include="model\sgr\Company.cs" />
     <Compile Include="model\sgr\Product.cs" />
+    <Compile Include="model\store\DistributorMembershipApplication.cs" />
+    <Compile Include="model\store\SupplierMembershipApplication.cs" />
     <Compile Include="model\store\Order.cs" />
     <Compile Include="model\store\OrderCreditCard.cs" />
     <Compile Include="model\store\OrderDetail.cs" />
@@ -78,6 +83,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
+    <Compile Include="services\StoreService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

@@ -1,13 +1,6 @@
 ﻿using asi.asicentral.database.mappings;
 using asi.asicentral.model.sgr;
-using asi.asicentral.interfaces;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using asi.asicentral.model.store;
 
 namespace asi.asicentral.database
@@ -27,6 +20,8 @@ namespace asi.asicentral.database
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<OrderProduct> OrderProducts { get; set; }
         public DbSet<OrderCreditCard> OrderCreditCards { get; set; }
+        public DbSet<DistributorMembershipApplication> DistributorMembershipApplications { get; set; }
+        public DbSet<SupplierMembershipApplication> SupplierMembershipApplications { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -42,7 +37,9 @@ namespace asi.asicentral.database
                .Add(new OrderMap())
                .Add(new OrderDetailMap())
                .Add(new StoreProductConfiguration())
-               .Add(new OrderCreditCardMap());
+               .Add(new OrderCreditCardMap())
+               .Add(new DistributorMembershipApplicationMap())
+               .Add(new SupplierMembershipApplicationMap());
         }
     }
 }

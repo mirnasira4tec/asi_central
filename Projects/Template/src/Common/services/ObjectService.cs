@@ -102,7 +102,7 @@ namespace asi.asicentral.services
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        private IRepository<T> GetRepository<T>() where T : class
+        protected IRepository<T> GetRepository<T>() where T : class
         {
             IRepository<T> repository = null;
             string name = typeof(T).FullName;

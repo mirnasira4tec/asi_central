@@ -49,7 +49,14 @@ namespace asi.asicentral.web.DependencyResolution
                         .EnrichWith(objectService => proxyGenerator.CreateClassProxyWithTarget(objectService.GetType(), objectService, new object[] { null }, new IInterceptor[] { new LogInterceptor(objectService.GetType()) }))
                         .Ctor<asi.asicentral.interfaces.IContainer>();
 
+                    x.For<IStoreService>()
+                        .HttpContextScoped()
+                        .Use<StoreService>()
+                        .EnrichWith(storeService => proxyGenerator.CreateClassProxyWithTarget(storeService.GetType(), storeService, new object[] { null }, new IInterceptor[] { new LogInterceptor(storeService.GetType()) }))
+                        .Ctor<asi.asicentral.interfaces.IContainer>();
+
                     x.SetAllProperties(instance => instance.OfType<IObjectService>());
+                    x.SetAllProperties(instance => instance.OfType<IStoreService>());
 
                     x.For<IController>()
                         .EnrichAllWith(controller => proxyGenerator.CreateInterfaceProxyWithTarget(controller, new IInterceptor[] { new LogInterceptor(controller.GetType()) }));

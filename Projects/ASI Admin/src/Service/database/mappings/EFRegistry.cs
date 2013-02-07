@@ -1,11 +1,6 @@
 ﻿using asi.asicentral.model.sgr;
 using asi.asicentral.interfaces;
 using StructureMap.Configuration.DSL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using asi.asicentral.model.store;
 
 namespace asi.asicentral.database.mappings
@@ -40,6 +35,12 @@ namespace asi.asicentral.database.mappings
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
             For<IRepository<OrderCreditCard>>().Use<EFRepository<OrderCreditCard>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
+            For<IRepository<SupplierMembershipApplication>>().Use<EFRepository<SupplierMembershipApplication>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
+            For<IRepository<DistributorMembershipApplication>>().Use<EFRepository<DistributorMembershipApplication>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
         }
     }
