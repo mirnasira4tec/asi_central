@@ -17,7 +17,7 @@ namespace asi.asicentral.database
         {
             if (_supportedTypes == null)
             {
-                _supportedTypes = new Dictionary<Type, PropertyInfo>();
+                IDictionary<Type, PropertyInfo> supportedTypes = new Dictionary<Type, PropertyInfo>();
                 //read the dbset properties and create a hasmap of 
                 var properties = this.GetType().GetProperties();
                 foreach (PropertyInfo info in properties)
@@ -31,10 +31,11 @@ namespace asi.asicentral.database
                             //record the generic type of the 
                             var genericArgument = info.PropertyType.GetGenericArguments();
                             if (genericArgument != null && genericArgument.Length > 0)
-                                _supportedTypes.Add(genericArgument[0], info);
+                                supportedTypes.Add(genericArgument[0], info);
                         }
                     }
                 }
+                _supportedTypes = supportedTypes;
             }
         }
 

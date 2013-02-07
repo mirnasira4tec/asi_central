@@ -1,10 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.database;
-using asi.asicentral.model;
-using System.Collections.Generic;
-using asi.asicentral.interfaces;
 using asi.asicentral.model.sgr;
 using asi.asicentral.model.store;
 
@@ -86,13 +82,6 @@ namespace asi.asicentral.Tests
                     Assert.IsNotNull(detail.Product);
                 }
             }
-        }
-
-        [TestMethod]
-        public void OrderApplicationRetrieveTest()
-        {
-            //order 10491 has one line item of type 102 (Supplier Application)
-            //order 288 has one line item of type 103 (Distributor Application)
         }
     }
 }

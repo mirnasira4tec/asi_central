@@ -67,6 +67,7 @@
     <Compile Include="database\mappings\OrderProductMap.cs" />
     <Compile Include="database\mappings\ProductMap.cs" />
     <Compile Include="database\mappings\SupplierMembershipApplicationMap.cs" />
+    <Compile Include="interfaces\IStoreService.cs" />
     <Compile Include="model\sgr\Category.cs" />
     <Compile Include="model\sgr\Company.cs" />
     <Compile Include="model\sgr\Product.cs" />
@@ -82,6 +83,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
+    <Compile Include="services\StoreService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

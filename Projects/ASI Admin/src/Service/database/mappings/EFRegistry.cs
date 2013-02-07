@@ -1,11 +1,6 @@
 ﻿using asi.asicentral.model.sgr;
 using asi.asicentral.interfaces;
 using StructureMap.Configuration.DSL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using asi.asicentral.model.store;
 
 namespace asi.asicentral.database.mappings
