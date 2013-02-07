@@ -39,6 +39,9 @@ namespace asi.asicentral.Tests
                 Assert.IsNotNull(distributorOrderDetail);
                 DistributorMembershipApplication distributorApplication = storeService.GetDistributorApplication(distributorOrderDetail);
                 Assert.IsNotNull(distributorApplication);
+
+                Assert.IsNull(storeService.GetSupplierApplication(distributorOrderDetail));
+                Assert.IsNull(storeService.GetDistributorApplication(supplierOrderDetail));
             }
         }
     }
