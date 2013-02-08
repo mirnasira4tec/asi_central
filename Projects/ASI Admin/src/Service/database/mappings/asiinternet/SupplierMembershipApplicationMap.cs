@@ -2,7 +2,7 @@ using asi.asicentral.model.store;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
-namespace asi.asicentral.database.mappings
+namespace asi.asicentral.database.mappings.asiinternet
 {
     public class SupplierMembershipApplicationMap : EntityTypeConfiguration<SupplierMembershipApplication>
     {

@@ -11,7 +11,7 @@ namespace asi.asicentral.database
 {
     public abstract class BaseContext : DbContext, IValidatedContext
     {
-        private static IDictionary<Type, PropertyInfo> _supportedTypes;
+        private IDictionary<Type, PropertyInfo> _supportedTypes;
 
         public BaseContext(string connectionString) : base(connectionString)
         {

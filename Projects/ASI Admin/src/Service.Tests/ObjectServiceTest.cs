@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using asi.asicentral.database.mappings;
 using asi.asicentral.interfaces;
-using asi.asicentral.services;
-using asi.asicentral.database.mappings;
+using asi.asicentral.model.counselor;
 using asi.asicentral.model.sgr;
+using asi.asicentral.services;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
 namespace asi.asicentral.Tests
 {
@@ -27,6 +27,19 @@ namespace asi.asicentral.Tests
                     //this will create an error if we have multiple instances of the context class
                     objectService.Add<Product>(product);
                 }                
+            }
+        }
+
+        [TestMethod]
+        public void MultipleContextTest()
+        {
+            //make sure we can retrieve data from 2 separate contexts using the one object service
+            using (IObjectService objectService = new ObjectService(new Container(new EFRegistry())))
+            {
+                int rows = objectService.GetAll<Company>().Count();
+                Assert.IsTrue(rows > 0);
+                rows = objectService.GetAll<CounselorCategory>().Count();
+                Assert.IsTrue(rows > 0);
             }
         }
     }

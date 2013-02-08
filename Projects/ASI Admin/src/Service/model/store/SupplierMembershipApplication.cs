@@ -3,15 +3,13 @@ using System.Collections.Generic;
 
 namespace asi.asicentral.model.store
 {
-    public class SupplierMembershipApplication
+    public class SupplierMembershipApplication : OrderDetailApplication
     {
         public SupplierMembershipApplication()
         {
             //this.CENT_SuppJoinAppContact_SAPP = new List<CENT_SuppJoinAppContact_SAPP>();
         }
 
-        public System.Guid Id { get; set; }
-        public System.Guid UserId { get; set; }
         public Nullable<int> ApplicationStatusId { get; set; }
         public string Company { get; set; }
         public string BillingAddress { get; set; }

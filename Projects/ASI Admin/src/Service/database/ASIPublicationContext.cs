@@ -1,8 +1,6 @@
-﻿using asi.asicentral.database.mappings;
-using asi.asicentral.model.sgr;
+﻿using asi.asicentral.database.mappings.asipublication;
+using asi.asicentral.model.counselor;
 using System.Data.Entity;
-using asi.asicentral.model.store;
-using Publications.Models.Mapping;
 
 namespace asi.asicentral.database
 {
@@ -14,6 +12,10 @@ namespace asi.asicentral.database
             Database.SetInitializer<ASIPublicationContext>(null);
         }
 
+        public DbSet<CounselorCategory> Categories { get; set; }
+        public DbSet<CounselorContent> Contents { get; set; }
+        public DbSet<CounselorFeature> Features { get; set; }
+        public DbSet<CounselorFeatureRotator> FeatureRotators { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -23,9 +25,10 @@ namespace asi.asicentral.database
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Configurations
-               .Add(new CounselorCategoryMap())
-               .Add(new CounselorContentMap())
-               .Add(new CounselorFeatureContentMap());
+               .Add(new CategoryMap())
+               .Add(new ContentMap())
+               .Add(new FeatureContentMap())
+               .Add(new FeatureContentRotatorMap());
         }
     }
 }

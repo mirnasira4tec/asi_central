@@ -41,5 +41,21 @@ namespace asi.asicentral.services
             }
             return application;
         }
+
+        public OrderDetailApplication GetApplication(OrderDetail orderDetail)
+        {
+            OrderDetailApplication application = null;
+            if (orderDetail.Order != null && orderDetail.Order.UserId != null)
+            {
+                switch (orderDetail.ProductId)
+                {
+                    case OrderProduct.DISTRIBUTOR_APPLICATION:
+                        return GetDistributorApplication(orderDetail);
+                    case OrderProduct.SUPPLIER_APPLICATION:
+                        return GetSupplierApplication(orderDetail);
+                }
+            }
+            return application;
+        }
     }
 }

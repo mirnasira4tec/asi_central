@@ -1,4 +1,4 @@
-﻿using asi.asicentral.database.mappings;
+﻿using asi.asicentral.database.mappings.asiinternet;
 using asi.asicentral.model.sgr;
 using System.Data.Entity;
 using asi.asicentral.model.store;

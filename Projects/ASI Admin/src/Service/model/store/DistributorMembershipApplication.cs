@@ -3,10 +3,8 @@ using System.Collections.Generic;
 
 namespace asi.asicentral.model.store
 {
-    public class DistributorMembershipApplication
+    public class DistributorMembershipApplication : OrderDetailApplication
     {
-        public System.Guid Id { get; set; }
-        public System.Guid UserId { get; set; }
         public Nullable<int> ApplicationStatusId { get; set; }
         public string Company { get; set; }
         public string Street1 { get; set; }

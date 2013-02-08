@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace asi.asicentral.database.mappings
+namespace asi.asicentral.database.mappings.asiinternet
 {
     public class CategoryMap : EntityTypeConfiguration<Category>
     {

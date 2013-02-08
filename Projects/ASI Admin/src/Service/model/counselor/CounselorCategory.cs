@@ -1,20 +1,17 @@
 using System;
 using System.Collections.Generic;
 
-namespace Publications.Models
+namespace asi.asicentral.model.counselor
 {
-    public partial class COUN_Categories_CSCT
+    public class CounselorCategory
     {
-        public COUN_Categories_CSCT()
+        public CounselorCategory()
         {
-            this.COUN_Content_CSCO1 = new List<COUN_Content_CSCO>();
+            this.Contents = new List<CounselorContent>();
         }
 
-        public int CatId_CSCT { get; set; }
-        public string CatDesc_CSCT { get; set; }
-        public Nullable<int> FeatureID_CSCT { get; set; }
-        public virtual COUN_Content_CSCO COUN_Content_CSCO { get; set; }
-        public virtual COUN_FeatureContent_COFC COUN_FeatureContent_COFC { get; set; }
-        public virtual ICollection<COUN_Content_CSCO> COUN_Content_CSCO1 { get; set; }
+        public int Id { get; set; }
+        public string Description { get; set; }
+        public virtual ICollection<CounselorContent> Contents { get; set; }
     }
 }
