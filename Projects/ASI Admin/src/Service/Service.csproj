@@ -57,17 +57,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="database\ASIInternetContext.cs" />
-    <Compile Include="database\mappings\CategoryMap.cs" />
-    <Compile Include="database\mappings\CompanyMap.cs" />
-    <Compile Include="database\mappings\DistributorMembershipApplicationMap.cs" />
+    <Compile Include="database\ASIPublicationContext.cs" />
+    <Compile Include="database\mappings\asiinternet\CategoryMap.cs" />
+    <Compile Include="database\mappings\asiinternet\CompanyMap.cs" />
+    <Compile Include="database\mappings\asiinternet\DistributorMembershipApplicationMap.cs" />
+    <Compile Include="database\mappings\asipublication\CounselorCategoryMap.cs" />
+    <Compile Include="database\mappings\asipublication\CounselorContentMap.cs" />
+    <Compile Include="database\mappings\asipublication\CounselorFeatureContentMap.cs" />
     <Compile Include="database\mappings\EFRegistry.cs" />
-    <Compile Include="database\mappings\OrderMap.cs" />
-    <Compile Include="database\mappings\OrderCreditCardMap.cs" />
-    <Compile Include="database\mappings\OrderDetailMap.cs" />
-    <Compile Include="database\mappings\OrderProductMap.cs" />
-    <Compile Include="database\mappings\ProductMap.cs" />
-    <Compile Include="database\mappings\SupplierMembershipApplicationMap.cs" />
+    <Compile Include="database\mappings\asiinternet\OrderMap.cs" />
+    <Compile Include="database\mappings\asiinternet\OrderCreditCardMap.cs" />
+    <Compile Include="database\mappings\asiinternet\OrderDetailMap.cs" />
+    <Compile Include="database\mappings\asiinternet\OrderProductMap.cs" />
+    <Compile Include="database\mappings\asiinternet\ProductMap.cs" />
+    <Compile Include="database\mappings\asiinternet\SupplierMembershipApplicationMap.cs" />
     <Compile Include="interfaces\IStoreService.cs" />
+    <Compile Include="model\counselor\CounselorCategory.cs" />
+    <Compile Include="model\counselor\CounselorContent.cs" />
+    <Compile Include="model\counselor\CounselorFeatureContent.cs" />
     <Compile Include="model\sgr\Category.cs" />
     <Compile Include="model\sgr\Company.cs" />
     <Compile Include="model\sgr\Product.cs" />

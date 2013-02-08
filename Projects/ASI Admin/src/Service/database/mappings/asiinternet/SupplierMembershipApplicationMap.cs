@@ -9,10 +9,10 @@ namespace asi.asicentral.database.mappings
         public SupplierMembershipApplicationMap()
         {
             this.ToTable("CENT_SuppJoinApp_SAPP");
-            this.HasKey(t => t.ApplicationId);
+            this.HasKey(t => t.Id);
 
             // Properties
-            this.Property(t => t.ApplicationId)
+            this.Property(t => t.Id)
                 .HasColumnName("SAPP_AppID");
             
             this.Property(t => t.UserId)

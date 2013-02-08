@@ -5,7 +5,7 @@ namespace asi.asicentral.model.store
 {
     public class DistributorMembershipApplication
     {
-        public System.Guid ApplicationId { get; set; }
+        public System.Guid Id { get; set; }
         public System.Guid UserId { get; set; }
         public Nullable<int> ApplicationStatusId { get; set; }
         public string Company { get; set; }

@@ -10,7 +10,7 @@ namespace asi.asicentral.model.store
             //this.CENT_SuppJoinAppContact_SAPP = new List<CENT_SuppJoinAppContact_SAPP>();
         }
 
-        public System.Guid ApplicationId { get; set; }
+        public System.Guid Id { get; set; }
         public System.Guid UserId { get; set; }
         public Nullable<int> ApplicationStatusId { get; set; }
         public string Company { get; set; }
