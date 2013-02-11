@@ -61,11 +61,209 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Affiliate ASI Number.
+        /// </summary>
+        public static string AffiliateASINumber {
+            get {
+                return ResourceManager.GetString("AffiliateASINumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Affiliate Company Name.
+        /// </summary>
+        public static string AffiliateCompanyName {
+            get {
+                return ResourceManager.GetString("AffiliateCompanyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Agreed to ASI terms and condition.
+        /// </summary>
+        public static string AgreeASITermsAndConditions {
+            get {
+                return ResourceManager.GetString("AgreeASITermsAndConditions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Agreed to recieve promotion products?.
+        /// </summary>
+        public static string AgreeReceivePromotionalProducts {
+            get {
+                return ResourceManager.GetString("AgreeReceivePromotionalProducts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Agree to the terms and condition?.
+        /// </summary>
+        public static string AgreeTermsAndConditions {
+            get {
+                return ResourceManager.GetString("AgreeTermsAndConditions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Agreed to UPS terms and condition.
+        /// </summary>
+        public static string AgreeUPSTermsAndConditions {
+            get {
+                return ResourceManager.GetString("AgreeUPSTermsAndConditions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Annual Sales Volume.
+        /// </summary>
+        public static string AnnualSalesVolume {
+            get {
+                return ResourceManager.GetString("AnnualSalesVolume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Annual Sales Volume ASP.
+        /// </summary>
+        public static string AnnualSalesVolumeASP {
+            get {
+                return ResourceManager.GetString("AnnualSalesVolumeASP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Applicant Email.
+        /// </summary>
+        public static string ApplicantEmail {
+            get {
+                return ResourceManager.GetString("ApplicantEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Applicant Name.
+        /// </summary>
+        public static string ApplicantName {
+            get {
+                return ResourceManager.GetString("ApplicantName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application Status.
+        /// </summary>
+        public static string ApplicationStatus {
+            get {
+                return ResourceManager.GetString("ApplicationStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ASI Contact.
+        /// </summary>
+        public static string ASIContact {
+            get {
+                return ResourceManager.GetString("ASIContact", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ASI Number.
         /// </summary>
         public static string ASINumber {
             get {
                 return ResourceManager.GetString("ASINumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Authorize UPS New Account.
+        /// </summary>
+        public static string AuthorizeUPSNewAccount {
+            get {
+                return ResourceManager.GetString("AuthorizeUPSNewAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Billing Address.
+        /// </summary>
+        public static string BillingAddress {
+            get {
+                return ResourceManager.GetString("BillingAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Billing City.
+        /// </summary>
+        public static string BillingCity {
+            get {
+                return ResourceManager.GetString("BillingCity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Billing Email.
+        /// </summary>
+        public static string BillingEmail {
+            get {
+                return ResourceManager.GetString("BillingEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Billing Fax Number.
+        /// </summary>
+        public static string BillingFax {
+            get {
+                return ResourceManager.GetString("BillingFax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Billing Phone Number.
+        /// </summary>
+        public static string BillingPhone {
+            get {
+                return ResourceManager.GetString("BillingPhone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Billing State.
+        /// </summary>
+        public static string BillingState {
+            get {
+                return ResourceManager.GetString("BillingState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Billing Toll Free Phone.
+        /// </summary>
+        public static string BillingTollPhone {
+            get {
+                return ResourceManager.GetString("BillingTollPhone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Billing Web URL.
+        /// </summary>
+        public static string BillingWebUrl {
+            get {
+                return ResourceManager.GetString("BillingWebUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Billing Zipcode.
+        /// </summary>
+        public static string BillingZip {
+            get {
+                return ResourceManager.GetString("BillingZip", resourceCulture);
             }
         }
         
@@ -84,6 +282,15 @@ namespace asi.asicentral {
         public static string CategoryName {
             get {
                 return ResourceManager.GetString("CategoryName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to City.
+        /// </summary>
+        public static string City {
+            get {
+                return ResourceManager.GetString("City", resourceCulture);
             }
         }
         
@@ -196,6 +403,51 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Contact Email.
+        /// </summary>
+        public static string ContactEmail {
+            get {
+                return ResourceManager.GetString("ContactEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contact Name.
+        /// </summary>
+        public static string ContactName {
+            get {
+                return ResourceManager.GetString("ContactName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contact Phone.
+        /// </summary>
+        public static string ContactPhone {
+            get {
+                return ResourceManager.GetString("ContactPhone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contact Title.
+        /// </summary>
+        public static string ContactTitle {
+            get {
+                return ResourceManager.GetString("ContactTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Corporate Officer.
+        /// </summary>
+        public static string CorporateOfficer {
+            get {
+                return ResourceManager.GetString("CorporateOfficer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Country Code.
         /// </summary>
         public static string CountryCode {
@@ -250,11 +502,227 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Federal Tax ID.
+        /// </summary>
+        public static string FedTaxId {
+            get {
+                return ResourceManager.GetString("FedTaxId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Field Required.
         /// </summary>
         public static string FieldRequired {
             get {
                 return ResourceManager.GetString("FieldRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First Name.
+        /// </summary>
+        public static string FirstName {
+            get {
+                return ResourceManager.GetString("FirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Informs ASI of Change.
+        /// </summary>
+        public static string InformASIOfChange {
+            get {
+                return ResourceManager.GetString("InformASIOfChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IP Address.
+        /// </summary>
+        public static string IPAddress {
+            get {
+                return ResourceManager.GetString("IPAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is For Profit.
+        /// </summary>
+        public static string IsForProfit {
+            get {
+                return ResourceManager.GetString("IsForProfit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Importer.
+        /// </summary>
+        public static string IsImporter {
+            get {
+                return ResourceManager.GetString("IsImporter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Imprinter/Decorator.
+        /// </summary>
+        public static string IsImprinterVsDecorator {
+            get {
+                return ResourceManager.GetString("IsImprinterVsDecorator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Major For Resale.
+        /// </summary>
+        public static string IsMajorForResale {
+            get {
+                return ResourceManager.GetString("IsMajorForResale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is majority distribution for resale?.
+        /// </summary>
+        public static string IsMajorityDistributeForResale {
+            get {
+                return ResourceManager.GetString("IsMajorityDistributeForResale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Manufacturer.
+        /// </summary>
+        public static string IsManufacturer {
+            get {
+                return ResourceManager.GetString("IsManufacturer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Retailer.
+        /// </summary>
+        public static string IsRetailer {
+            get {
+                return ResourceManager.GetString("IsRetailer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Rush Service Available.
+        /// </summary>
+        public static string IsRushServiceAvailable {
+            get {
+                return ResourceManager.GetString("IsRushServiceAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Union Made.
+        /// </summary>
+        public static string IsUnionMade {
+            get {
+                return ResourceManager.GetString("IsUnionMade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is UPS Available.
+        /// </summary>
+        public static string IsUPSAvailable {
+            get {
+                return ResourceManager.GetString("IsUPSAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Wholesaler.
+        /// </summary>
+        public static string IsWholesaler {
+            get {
+                return ResourceManager.GetString("IsWholesaler", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last Name.
+        /// </summary>
+        public static string LastName {
+            get {
+                return ResourceManager.GetString("LastName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line Names.
+        /// </summary>
+        public static string LineNames {
+            get {
+                return ResourceManager.GetString("LineNames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line Minority Owned.
+        /// </summary>
+        public static string MinorityOwned {
+            get {
+                return ResourceManager.GetString("MinorityOwned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of Employee.
+        /// </summary>
+        public static string NumberOfEmployee {
+            get {
+                return ResourceManager.GetString("NumberOfEmployee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of Sales Employee.
+        /// </summary>
+        public static string NumberOfSalesEmployee {
+            get {
+                return ResourceManager.GetString("NumberOfSalesEmployee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Office Hours.
+        /// </summary>
+        public static string OfficeHour {
+            get {
+                return ResourceManager.GetString("OfficeHour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  Office Hour End.
+        /// </summary>
+        public static string OfficeHourEnd {
+            get {
+                return ResourceManager.GetString("OfficeHourEnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Other Business Revenue.
+        /// </summary>
+        public static string OtherBusinessRevenue {
+            get {
+                return ResourceManager.GetString("OtherBusinessRevenue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Other Decorator.
+        /// </summary>
+        public static string OtherDec {
+            get {
+                return ResourceManager.GetString("OtherDec", resourceCulture);
             }
         }
         
@@ -291,6 +759,15 @@ namespace asi.asicentral {
         public static string ProductID {
             get {
                 return ResourceManager.GetString("ProductID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Production Time.
+        /// </summary>
+        public static string ProductionTime {
+            get {
+                return ResourceManager.GetString("ProductionTime", resourceCulture);
             }
         }
         
@@ -385,6 +862,168 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Provide Invoice On Demand.
+        /// </summary>
+        public static string ProvideInvoiceOnDemand {
+            get {
+                return ResourceManager.GetString("ProvideInvoiceOnDemand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sales Volume.
+        /// </summary>
+        public static string SalesVolume {
+            get {
+                return ResourceManager.GetString("SalesVolume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sell Through Affiliate.
+        /// </summary>
+        public static string SellThruAffiliate {
+            get {
+                return ResourceManager.GetString("SellThruAffiliate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sell Through Direct Marketing.
+        /// </summary>
+        public static string SellThruDirectMarketing {
+            get {
+                return ResourceManager.GetString("SellThruDirectMarketing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sell Through Distributors.
+        /// </summary>
+        public static string SellThruDistributors {
+            get {
+                return ResourceManager.GetString("SellThruDistributors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sell Through Internet.
+        /// </summary>
+        public static string SellThruInternet {
+            get {
+                return ResourceManager.GetString("SellThruInternet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sell Through Retail.
+        /// </summary>
+        public static string SellThruRetail {
+            get {
+                return ResourceManager.GetString("SellThruRetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sell to End Users.
+        /// </summary>
+        public static string SellToEndUsers {
+            get {
+                return ResourceManager.GetString("SellToEndUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shipping Address.
+        /// </summary>
+        public static string ShippingAddress {
+            get {
+                return ResourceManager.GetString("ShippingAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seconday Shipping Address.
+        /// </summary>
+        public static string ShippingAddress2 {
+            get {
+                return ResourceManager.GetString("ShippingAddress2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shipping City.
+        /// </summary>
+        public static string ShippingCity {
+            get {
+                return ResourceManager.GetString("ShippingCity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shipping State.
+        /// </summary>
+        public static string ShippingState {
+            get {
+                return ResourceManager.GetString("ShippingState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shipping Zipcode.
+        /// </summary>
+        public static string ShippingZip {
+            get {
+                return ResourceManager.GetString("ShippingZip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Signature Type.
+        /// </summary>
+        public static string SignatureType {
+            get {
+                return ResourceManager.GetString("SignatureType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soley Workname.
+        /// </summary>
+        public static string SolelyWorkName {
+            get {
+                return ResourceManager.GetString("SolelyWorkName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to State.
+        /// </summary>
+        public static string State {
+            get {
+                return ResourceManager.GetString("State", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Street Address .
+        /// </summary>
+        public static string Street1 {
+            get {
+                return ResourceManager.GetString("Street1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Secondary Street Address.
+        /// </summary>
+        public static string Street2 {
+            get {
+                return ResourceManager.GetString("Street2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Summary.
         /// </summary>
         public static string Summary {
@@ -394,11 +1033,101 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to True Answers?.
+        /// </summary>
+        public static string TrueAnswers {
+            get {
+                return ResourceManager.GetString("TrueAnswers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPS Address.
+        /// </summary>
+        public static string UPSAddress {
+            get {
+                return ResourceManager.GetString("UPSAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPS City.
+        /// </summary>
+        public static string UPSCity {
+            get {
+                return ResourceManager.GetString("UPSCity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPS Shipping Number.
+        /// </summary>
+        public static string UPSShippingNumber {
+            get {
+                return ResourceManager.GetString("UPSShippingNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPS State.
+        /// </summary>
+        public static string UPSState {
+            get {
+                return ResourceManager.GetString("UPSState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPS Zip.
+        /// </summary>
+        public static string UPSZip {
+            get {
+                return ResourceManager.GetString("UPSZip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web Address.
+        /// </summary>
+        public static string WebUrl {
+            get {
+                return ResourceManager.GetString("WebUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year Entered Advertising Specialty Industry.
+        /// </summary>
+        public static string YearEnteredAdvertising {
+            get {
+                return ResourceManager.GetString("YearEnteredAdvertising", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Year Established.
         /// </summary>
         public static string YearEst {
             get {
                 return ResourceManager.GetString("YearEst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year Established.
+        /// </summary>
+        public static string YearEstablished {
+            get {
+                return ResourceManager.GetString("YearEstablished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zipcode.
+        /// </summary>
+        public static string Zipcode {
+            get {
+                return ResourceManager.GetString("Zipcode", resourceCulture);
             }
         }
     }

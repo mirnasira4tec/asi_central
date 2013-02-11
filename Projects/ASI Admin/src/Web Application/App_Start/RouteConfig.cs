@@ -14,6 +14,13 @@ namespace asi.asicentral.web
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "Store",
+                url: "Store/{controller}/{action}/{id}",
+                namespaces: new string[] { "asi.asicentral.web.Controllers.store" },
+                defaults: new { controller = "Orders", action = "List", id = UrlParameter.Optional }
+             );
+
+            routes.MapRoute(
                 name: "sgr",
                 url: "sgr/{controller}/{action}/{id}",
                 namespaces: new string[] { "asi.asicentral.web.Controllers.sgr" },

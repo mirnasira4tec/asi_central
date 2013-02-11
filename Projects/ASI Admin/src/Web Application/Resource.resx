@@ -189,4 +189,109 @@
   <data name="TitleEditProduct" xml:space="preserve">
     <value>Edit Product</value>
   </data>
+  <data name="StoreAdminLink" xml:space="preserve">
+    <value>ASI Store Admin</value>
+  </data>
+  <data name="StoreApplication" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="StoreASINumber" xml:space="preserve">
+    <value>ASI#</value>
+  </data>
+  <data name="StoreBillingAddress" xml:space="preserve">
+    <value>Billing Address</value>
+  </data>
+  <data name="StoreClosedDate" xml:space="preserve">
+    <value>Closed Date</value>
+  </data>
+  <data name="StoreCompany" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="StoreCompanyName" xml:space="preserve">
+    <value>Company Name</value>
+  </data>
+  <data name="StoreDateOrderCreated" xml:space="preserve">
+    <value>Date Order Created</value>
+  </data>
+  <data name="StoreEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="StoreItem" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="StoreName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="StoreOrderAmount" xml:space="preserve">
+    <value>Billing Amount</value>
+  </data>
+  <data name="StoreOrderClosedDate" xml:space="preserve">
+    <value>Order Closed Date</value>
+  </data>
+  <data name="StoreOrderDate" xml:space="preserve">
+    <value>Order Date</value>
+  </data>
+  <data name="StoreOrderID" xml:space="preserve">
+    <value>Order Id</value>
+  </data>
+  <data name="StorePhone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="StoreProduct" xml:space="preserve">
+    <value>Product</value>
+  </data>
+  <data name="StoreQuantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="StoreSearchButton" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="StoreSearchMessage" xml:space="preserve">
+    <value>Enter a date range to search:</value>
+  </data>
+  <data name="StoreStatus" xml:space="preserve">
+    <value>Order Status</value>
+  </data>
+  <data name="StoreStatusClosed" xml:space="preserve">
+    <value>Closed</value>
+  </data>
+  <data name="StoreStatusOpened" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="StoreTitleDistributorApplication" xml:space="preserve">
+    <value>Distributor Application</value>
+  </data>
+  <data name="StoreTitleOpenCarts" xml:space="preserve">
+    <value>Open Carts</value>
+  </data>
+  <data name="StoreTitleOrders" xml:space="preserve">
+    <value>Orders</value>
+  </data>
+  <data name="StoreTitleSupplierApplication" xml:space="preserve">
+    <value>Supplier Application</value>
+  </data>
+  <data name="StoreTotalAnnualSalesVolume" xml:space="preserve">
+    <value>Total Annual Sales Volume</value>
+  </data>
+  <data name="TitleASIStoreAdmin" xml:space="preserve">
+    <value>ASI Store Admin</value>
+  </data>
+  <data name="DistributorAgreements" xml:space="preserve">
+    <value>Agreements</value>
+  </data>
+  <data name="DistributorAppProductLines" xml:space="preserve">
+    <value>Product Lines</value>
+  </data>
+  <data name="DistributorAppTypesOfAccount" xml:space="preserve">
+    <value>Types of Accounts</value>
+  </data>
+  <data name="SupplierAppCompanyContacts" xml:space="preserve">
+    <value>Company Contacts</value>
+  </data>
+  <data name="SupplierAppMethodsOfImprinting" xml:space="preserve">
+    <value>Methods of Imprinting</value>
+  </data>
+  <data name="SupplierAppSalesForce" xml:space="preserve">
+    <value>Sales Force</value>
+  </data>
 </root>

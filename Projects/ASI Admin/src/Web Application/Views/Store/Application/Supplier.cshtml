@@ -1,0 +1,62 @@
+﻿@using asi.asicentral.web
+@model asi.asicentral.model.store.SupplierMembershipApplication
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Resource.StoreTitleSupplierApplication</h2>
+
+<table class="table table-bordered table-condensed table-striped">
+
+    <tr><td>@Html.LabelFor(m => m.Company)</td><td>@Model.Company</td></tr>
+    <tr><td>@Html.LabelFor(m => m.BillingAddress)</td><td>@Model.BillingAddress</td></tr>
+    <tr><td>@Html.LabelFor(m => m.BillingPhone)</td><td>@Model.BillingPhone</td></tr>
+    <tr><td>@Html.LabelFor(m => m.BillingTollFree)</td><td>@Model.BillingTollFree</td></tr>
+    <tr><td>@Html.LabelFor(m => m.BillingFax)</td><td>@Model.BillingFax</td></tr>
+    <tr><td>@Html.LabelFor(m => m.BillingEmail)</td><td>@Model.BillingEmail</td></tr>
+    <tr><td>@Html.LabelFor(m => m.BillingWebUrl)</td><td>@Model.BillingWebUrl</td></tr>
+    <tr><td>@Html.LabelFor(m => m.ShippingAddress)</td><td>@Model.ShippingAddress</td></tr>
+    <tr><td>@Html.LabelFor(m => m.ContactName)</td><td>@Model.ContactName</td></tr>
+    <tr><td>@Html.LabelFor(m => m.ContactTitle)</td><td>@Model.ContactTitle</td></tr>
+    <tr><td>@Html.LabelFor(m => m.ContactEmail)</td><td>@Model.ContactEmail</td></tr>
+    <tr><td>@Html.LabelFor(m => m.ContactPhone)</td><td>@Model.ContactPhone</td></tr>
+    
+    <tr><td>@Html.LabelFor(m => m.LineNames)</td><td> </td>@Model.LineNames</tr>
+    <tr><td>@Html.LabelFor(m => m.LineMinorityOwned)</td><td>@Model.LineMinorityOwned</td></tr>
+    <tr><td>@Html.LabelFor(m => m.SalesVolume)</td><td>@Model.SalesVolume</td></tr>
+    <tr><td>@Html.LabelFor(m => m.YearEstablished)</td><td>@Model.YearEstablished</td></tr>
+    <tr><td>@Html.LabelFor(m => m.YearEnteredAdvertising)</td><td>@Model.YearEnteredAdvertising</td></tr>
+    <tr><td>@Html.LabelFor(m => m.OfficeHourStart)</td><td>@Model.OfficeHourStart</td></tr>
+    <tr><td>@Html.LabelFor(m => m.NumberOfEmployee)</td><td>@Model.NumberOfEmployee</td></tr>
+    
+    <!-- TODO: sales force? -->
+    <!-- <tr><td>@Resource.SupplierAppSalesForce</td><td> </td></tr> -->
+    
+    <tr><td>@Html.LabelFor(m => m.IsImprinterVsDecorator)</td><td>@Model.IsImprinterVsDecorator</td></tr>
+    <tr><td>@Html.LabelFor(m => m.IsImporter)</td><td>@Model.IsImporter</td></tr>
+    <tr><td>@Html.LabelFor(m => m.IsManufacturer)</td><td>@Model.IsManufacturer</td></tr>
+    <tr><td>@Html.LabelFor(m => m.IsRetailer)</td><td>@Model.IsRetailer</td></tr>
+    <tr><td>@Html.LabelFor(m => m.IsWholesaler)</td><td>@Model.IsWholesaler</td></tr>
+    <tr><td>@Html.LabelFor(m => m.FedTaxId)</td><td>@Model.FedTaxId</td></tr>
+    <tr><td>@Html.LabelFor(m => m.SellToEndUsers)</td><td>@Model.SellToEndUsers</td></tr>
+    <tr><td>@Html.LabelFor(m => m.SellThruInternet)</td><td>@Model.SellThruInternet</td></tr>
+    <tr><td>@Html.LabelFor(m => m.SellThruRetail)</td><td>@Model.SellThruRetail</td></tr>
+    <tr><td>@Html.LabelFor(m => m.SellThruDirectMarketing)</td><td>@Model.SellThruDirectMarketing</td></tr>
+    <tr><td>@Html.LabelFor(m => m.SellThruAffiliate)</td><td>@Model.SellThruAffiliate</td></tr>
+
+    <tr><td>@Html.LabelFor(m => m.AffiliateCompanyName)</td><td>@Model.AffiliateCompanyName</td></tr>
+    <tr><td>@Html.LabelFor(m => m.AffiliateASINumber)</td><td>@Model.AffiliateASINumber</td></tr>
+    <tr><td>@Html.LabelFor(m => m.IsUnionMade)</td><td>@Model.IsUnionMade</td></tr>
+    <tr><td>@Html.LabelFor(m => m.ProductionTime)</td><td>@Model.ProductionTime</td></tr>
+    <tr><td>@Html.LabelFor(m => m.IsRushServiceAvailable)</td><td>@Model.IsRushServiceAvailable</td></tr>
+    <tr><td>@Html.LabelFor(m => m.UPSAddress)</td><td>@Model.UPSAddress</td></tr>
+</table>
+
+<h3>@Resource.SupplierAppMethodsOfImprinting</h3>
+
+<h3>@Resource.SupplierAppCompanyContacts</h3>
+
+@section Scripts {
+    <script src="/Scripts/asi.js"></script>
+}
