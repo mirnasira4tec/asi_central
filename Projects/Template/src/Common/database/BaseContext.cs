@@ -44,14 +44,18 @@ namespace asi.asicentral.database
         public void Supports(Type type)
         {
             if (!_supportedTypes.Keys.Contains(type))
-            {
-                throw new Exception("Invalid context for the class: " + type.FullName);
-            }
+                if (type.BaseType == null || !_supportedTypes.Keys.Contains(type.BaseType))
+                    throw new Exception("Invalid context for the class: " + type.FullName);
         }
 
         public DbSet<T> GetSet<T>() where T : class
         {
-            PropertyInfo info = _supportedTypes[typeof(T)];
+            PropertyInfo info = null;
+            Type type = typeof(T);
+            if (_supportedTypes.Keys.Contains(type))
+                info = _supportedTypes[typeof(T)];
+            else if (type.BaseType != null && _supportedTypes.Keys.Contains(type))
+                info = _supportedTypes[type.BaseType];
             DbSet<T> value = info.GetValue(this, null) as DbSet<T>;
             return value;
         }
