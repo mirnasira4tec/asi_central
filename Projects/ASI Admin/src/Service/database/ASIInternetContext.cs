@@ -1,4 +1,4 @@
-﻿using asi.asicentral.database.mappings;
+﻿using asi.asicentral.database.mappings.asiinternet;
 using asi.asicentral.model.sgr;
 using System.Data.Entity;
 using asi.asicentral.model.store;
@@ -10,7 +10,7 @@ namespace asi.asicentral.database
         public ASIInternetContext()
             : base("name=ASIInternetContext")
         {
-            Database.SetInitializer<ASIInternetContext>(null);
+            Database.SetInitializer<ASIPublicationContext>(null);
         }
 
         public DbSet<Company> Companies { get; set; }

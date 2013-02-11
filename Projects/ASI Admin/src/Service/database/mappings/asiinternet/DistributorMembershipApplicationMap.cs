@@ -2,18 +2,19 @@ using asi.asicentral.model.store;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
-namespace asi.asicentral.database.mappings
+namespace asi.asicentral.database.mappings.asiinternet
 {
     public class DistributorMembershipApplicationMap : EntityTypeConfiguration<DistributorMembershipApplication>
     {
         public DistributorMembershipApplicationMap()
         {
             this.ToTable("CENT_DistJoinApp_DAPP");
-            this.HasKey(t => t.ApplicationId);
+            this.HasKey(t => t.Id);
 
             // Properties
-            this.Property(t => t.ApplicationId)
-                .HasColumnName("DAPP_AppID");
+            this.Property(t => t.Id)
+                .HasColumnName("DAPP_AppID")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.UserId)
                 .HasColumnName("DAPP_UserID");

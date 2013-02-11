@@ -2,18 +2,19 @@ using asi.asicentral.model.store;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
-namespace asi.asicentral.database.mappings
+namespace asi.asicentral.database.mappings.asiinternet
 {
     public class SupplierMembershipApplicationMap : EntityTypeConfiguration<SupplierMembershipApplication>
     {
         public SupplierMembershipApplicationMap()
         {
             this.ToTable("CENT_SuppJoinApp_SAPP");
-            this.HasKey(t => t.ApplicationId);
+            this.HasKey(t => t.Id);
 
             // Properties
-            this.Property(t => t.ApplicationId)
-                .HasColumnName("SAPP_AppID");
+            this.Property(t => t.Id)
+                .HasColumnName("SAPP_AppID")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             
             this.Property(t => t.UserId)
                 .HasColumnName("SAPP_UserID");

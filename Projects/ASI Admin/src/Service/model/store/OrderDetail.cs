@@ -19,7 +19,7 @@ namespace asi.asicentral.model.store
 
         public override string ToString()
         {
-            return string.Format("Order Detail of {0}", OrderId);
+            return string.Format("Order Detail of {0} for {1}", OrderId, ProductId);
         }
 
         public override bool Equals(object obj)

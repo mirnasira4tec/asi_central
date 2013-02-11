@@ -5,8 +5,8 @@ namespace asi.asicentral.model.store
 {
     public class OrderProduct
     {
-        public static int SUPPLIER_APPLICATION = 102;
-        public static int DISTRIBUTOR_APPLICATION = 103;
+        public const int SUPPLIER_APPLICATION = 102;
+        public const int DISTRIBUTOR_APPLICATION = 103;
 
         public int Id { get; set; }
         public string Description { get; set; }
