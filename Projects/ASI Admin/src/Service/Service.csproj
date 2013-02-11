@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="database\ASIInternetContext.cs" />
     <Compile Include="database\ASIPublicationContext.cs" />
+    <Compile Include="database\InternetContext.cs" />
     <Compile Include="database\mappings\asiinternet\CategoryMap.cs" />
     <Compile Include="database\mappings\asiinternet\CompanyMap.cs" />
     <Compile Include="database\mappings\asiinternet\DistributorMembershipApplicationMap.cs" />
@@ -72,11 +73,17 @@
     <Compile Include="database\mappings\asiinternet\OrderProductMap.cs" />
     <Compile Include="database\mappings\asiinternet\ProductMap.cs" />
     <Compile Include="database\mappings\asiinternet\SupplierMembershipApplicationMap.cs" />
+    <Compile Include="database\mappings\internet\NewsRotatorMap.cs" />
+    <Compile Include="database\mappings\internet\NewsMap.cs" />
+    <Compile Include="database\mappings\internet\NewsSourceMap.cs" />
     <Compile Include="interfaces\IStoreService.cs" />
     <Compile Include="model\counselor\CounselorCategory.cs" />
     <Compile Include="model\counselor\CounselorContent.cs" />
     <Compile Include="model\counselor\CounselorFeature.cs" />
     <Compile Include="model\counselor\CounselorFeatureRotator.cs" />
+    <Compile Include="model\news\NewsRotator.cs" />
+    <Compile Include="model\news\News.cs" />
+    <Compile Include="model\news\NewsSource.cs" />
     <Compile Include="model\sgr\Category.cs" />
     <Compile Include="model\sgr\Company.cs" />
     <Compile Include="model\sgr\Product.cs" />

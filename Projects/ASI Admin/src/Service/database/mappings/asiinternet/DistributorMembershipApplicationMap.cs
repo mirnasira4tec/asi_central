@@ -13,7 +13,8 @@ namespace asi.asicentral.database.mappings.asiinternet
 
             // Properties
             this.Property(t => t.Id)
-                .HasColumnName("DAPP_AppID");
+                .HasColumnName("DAPP_AppID")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.UserId)
                 .HasColumnName("DAPP_UserID");

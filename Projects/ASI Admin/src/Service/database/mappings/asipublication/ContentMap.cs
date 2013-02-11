@@ -13,7 +13,8 @@ namespace asi.asicentral.database.mappings.asipublication
 
             // Properties
             this.Property(t => t.Id)
-                .HasColumnName("ID_CSCO");
+                .HasColumnName("ID_CSCO")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             this.Property(t => t.Title)
                 .HasColumnName("Title_CSCO")

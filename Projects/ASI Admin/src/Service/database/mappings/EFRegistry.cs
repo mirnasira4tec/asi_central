@@ -3,6 +3,7 @@ using asi.asicentral.model.counselor;
 using asi.asicentral.interfaces;
 using StructureMap.Configuration.DSL;
 using asi.asicentral.model.store;
+using asi.asicentral.model.news;
 
 namespace asi.asicentral.database.mappings
 {
@@ -16,8 +17,12 @@ namespace asi.asicentral.database.mappings
             //Use only one context across repository per http context or thread
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIInternetContext>().Name = "ASIInternetContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIPublicationContext>().Name = "ASIPublicationContext";
+            For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<InternetContext>().Name = "InternetContext";
 
             //for each model - get the repository class with the appropriate context
+
+            #region ASIInternetContext
+
             For<IRepository<Company>>().Use<EFRepository<Company>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
@@ -45,6 +50,10 @@ namespace asi.asicentral.database.mappings
             For<IRepository<DistributorMembershipApplication>>().Use<EFRepository<DistributorMembershipApplication>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
+            #endregion ASIInternetContext
+
+            #region ASIPublicationContext
+
             For<IRepository<CounselorCategory>>().Use<EFRepository<CounselorCategory>>()
                 .Ctor<IValidatedContext>().Named("ASIPublicationContext");
 
@@ -53,6 +62,21 @@ namespace asi.asicentral.database.mappings
 
             For<IRepository<CounselorFeature>>().Use<EFRepository<CounselorFeature>>()
                 .Ctor<IValidatedContext>().Named("ASIPublicationContext");
+
+            #endregion ASIPublicationContext
+
+            #region InternetContext
+
+            For<IRepository<News>>().Use<EFRepository<News>>()
+                .Ctor<IValidatedContext>().Named("InternetContext");
+
+            For<IRepository<NewsRotator>>().Use<EFRepository<NewsRotator>>()
+                .Ctor<IValidatedContext>().Named("InternetContext");
+
+            For<IRepository<NewsSource>>().Use<EFRepository<NewsSource>>()
+                .Ctor<IValidatedContext>().Named("InternetContext");
+
+            #endregion InternetContext
         }
     }
 }
