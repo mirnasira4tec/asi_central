@@ -2,6 +2,7 @@
 
 <p>This is the landing page for the Admin tool. It will contain links to anything which we need to access</p>
 
-<p>
-    @Html.ActionLink(Resource.SGRMaintenanceLink, "List", "../sgr/Company")   
-</p>
+<ul>
+    <li>@Html.ActionLink(Resource.SGRMaintenanceLink, "List", "../sgr/Company")</li>
+    <li>@Html.ActionLink(Resource.StoreAdminLink, "List", "../store/Orders")</li>
+</ul>

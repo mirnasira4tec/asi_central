@@ -117,14 +117,83 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AffiliateASINumber" xml:space="preserve">
+    <value>Affiliate ASI Number</value>
+  </data>
+  <data name="AffiliateCompanyName" xml:space="preserve">
+    <value>Affiliate Company Name</value>
+  </data>
+  <data name="AgreeASITermsAndConditions" xml:space="preserve">
+    <value>Agreed to ASI terms and condition</value>
+  </data>
+  <data name="AgreeReceivePromotionalProducts" xml:space="preserve">
+    <value>Agreed to recieve promotion products?</value>
+  </data>
+  <data name="AgreeTermsAndConditions" xml:space="preserve">
+    <value>Agree to the terms and condition?</value>
+  </data>
+  <data name="AgreeUPSTermsAndConditions" xml:space="preserve">
+    <value>Agreed to UPS terms and condition</value>
+  </data>
+  <data name="AnnualSalesVolume" xml:space="preserve">
+    <value>Annual Sales Volume</value>
+  </data>
+  <data name="AnnualSalesVolumeASP" xml:space="preserve">
+    <value>Annual Sales Volume ASP</value>
+  </data>
+  <data name="ApplicantEmail" xml:space="preserve">
+    <value>Applicant Email</value>
+  </data>
+  <data name="ApplicantName" xml:space="preserve">
+    <value>Applicant Name</value>
+  </data>
+  <data name="ApplicationStatus" xml:space="preserve">
+    <value>Application Status</value>
+  </data>
+  <data name="ASIContact" xml:space="preserve">
+    <value>ASI Contact</value>
+  </data>
   <data name="ASINumber" xml:space="preserve">
     <value>ASI Number</value>
+  </data>
+  <data name="AuthorizeUPSNewAccount" xml:space="preserve">
+    <value>Authorize UPS New Account</value>
+  </data>
+  <data name="BillingAddress" xml:space="preserve">
+    <value>Billing Address</value>
+  </data>
+  <data name="BillingCity" xml:space="preserve">
+    <value>Billing City</value>
+  </data>
+  <data name="BillingEmail" xml:space="preserve">
+    <value>Billing Email</value>
+  </data>
+  <data name="BillingFax" xml:space="preserve">
+    <value>Billing Fax Number</value>
+  </data>
+  <data name="BillingPhone" xml:space="preserve">
+    <value>Billing Phone Number</value>
+  </data>
+  <data name="BillingState" xml:space="preserve">
+    <value>Billing State</value>
+  </data>
+  <data name="BillingTollPhone" xml:space="preserve">
+    <value>Billing Toll Free Phone</value>
+  </data>
+  <data name="BillingWebUrl" xml:space="preserve">
+    <value>Billing Web URL</value>
+  </data>
+  <data name="BillingZip" xml:space="preserve">
+    <value>Billing Zipcode</value>
   </data>
   <data name="CategoryID" xml:space="preserve">
     <value>Category Id</value>
   </data>
   <data name="CategoryName" xml:space="preserve">
     <value>Category Name</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>City</value>
   </data>
   <data name="CompanyAddress" xml:space="preserve">
     <value>Address</value>
@@ -162,6 +231,21 @@
   <data name="CompanyURL" xml:space="preserve">
     <value>Company Url</value>
   </data>
+  <data name="ContactEmail" xml:space="preserve">
+    <value>Contact Email</value>
+  </data>
+  <data name="ContactName" xml:space="preserve">
+    <value>Contact Name</value>
+  </data>
+  <data name="ContactPhone" xml:space="preserve">
+    <value>Contact Phone</value>
+  </data>
+  <data name="ContactTitle" xml:space="preserve">
+    <value>Contact Title</value>
+  </data>
+  <data name="CorporateOfficer" xml:space="preserve">
+    <value>Corporate Officer</value>
+  </data>
   <data name="CountryCode" xml:space="preserve">
     <value>Country Code</value>
   </data>
@@ -180,8 +264,80 @@
   <data name="FaxExt" xml:space="preserve">
     <value>Fax Extension</value>
   </data>
+  <data name="FedTaxId" xml:space="preserve">
+    <value>Federal Tax ID</value>
+  </data>
   <data name="FieldRequired" xml:space="preserve">
     <value>Field Required</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="InformASIOfChange" xml:space="preserve">
+    <value>Informs ASI of Change</value>
+  </data>
+  <data name="IPAddress" xml:space="preserve">
+    <value>IP Address</value>
+  </data>
+  <data name="IsForProfit" xml:space="preserve">
+    <value>Is For Profit</value>
+  </data>
+  <data name="IsImporter" xml:space="preserve">
+    <value>Is Importer</value>
+  </data>
+  <data name="IsImprinterVsDecorator" xml:space="preserve">
+    <value>Is Imprinter/Decorator</value>
+  </data>
+  <data name="IsMajorForResale" xml:space="preserve">
+    <value>Is Major For Resale</value>
+  </data>
+  <data name="IsMajorityDistributeForResale" xml:space="preserve">
+    <value>Is majority distribution for resale?</value>
+  </data>
+  <data name="IsManufacturer" xml:space="preserve">
+    <value>Is Manufacturer</value>
+  </data>
+  <data name="IsRetailer" xml:space="preserve">
+    <value>Is Retailer</value>
+  </data>
+  <data name="IsRushServiceAvailable" xml:space="preserve">
+    <value>Is Rush Service Available</value>
+  </data>
+  <data name="IsUnionMade" xml:space="preserve">
+    <value>Is Union Made</value>
+  </data>
+  <data name="IsUPSAvailable" xml:space="preserve">
+    <value>Is UPS Available</value>
+  </data>
+  <data name="IsWholesaler" xml:space="preserve">
+    <value>Is Wholesaler</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="LineNames" xml:space="preserve">
+    <value>Line Names</value>
+  </data>
+  <data name="MinorityOwned" xml:space="preserve">
+    <value>Line Minority Owned</value>
+  </data>
+  <data name="NumberOfEmployee" xml:space="preserve">
+    <value>Number of Employee</value>
+  </data>
+  <data name="NumberOfSalesEmployee" xml:space="preserve">
+    <value>Number of Sales Employee</value>
+  </data>
+  <data name="OfficeHour" xml:space="preserve">
+    <value>Office Hours</value>
+  </data>
+  <data name="OfficeHourEnd" xml:space="preserve">
+    <value> Office Hour End</value>
+  </data>
+  <data name="OtherBusinessRevenue" xml:space="preserve">
+    <value>Other Business Revenue</value>
+  </data>
+  <data name="OtherDec" xml:space="preserve">
+    <value>Other Decorator</value>
   </data>
   <data name="Phone" xml:space="preserve">
     <value>Phone Number</value>
@@ -194,6 +350,9 @@
   </data>
   <data name="ProductID" xml:space="preserve">
     <value>Product Id</value>
+  </data>
+  <data name="ProductionTime" xml:space="preserve">
+    <value>Production Time</value>
   </data>
   <data name="ProductIsActive" xml:space="preserve">
     <value>Is Inactive?</value>
@@ -225,10 +384,94 @@
   <data name="ProductSmallImg" xml:space="preserve">
     <value>Small Image</value>
   </data>
+  <data name="ProvideInvoiceOnDemand" xml:space="preserve">
+    <value>Provide Invoice On Demand</value>
+  </data>
+  <data name="SalesVolume" xml:space="preserve">
+    <value>Sales Volume</value>
+  </data>
+  <data name="SellThruAffiliate" xml:space="preserve">
+    <value>Sell Through Affiliate</value>
+  </data>
+  <data name="SellThruDirectMarketing" xml:space="preserve">
+    <value>Sell Through Direct Marketing</value>
+  </data>
+  <data name="SellThruDistributors" xml:space="preserve">
+    <value>Sell Through Distributors</value>
+  </data>
+  <data name="SellThruInternet" xml:space="preserve">
+    <value>Sell Through Internet</value>
+  </data>
+  <data name="SellThruRetail" xml:space="preserve">
+    <value>Sell Through Retail</value>
+  </data>
+  <data name="SellToEndUsers" xml:space="preserve">
+    <value>Sell to End Users</value>
+  </data>
+  <data name="ShippingAddress" xml:space="preserve">
+    <value>Shipping Address</value>
+  </data>
+  <data name="ShippingAddress2" xml:space="preserve">
+    <value>Seconday Shipping Address</value>
+  </data>
+  <data name="ShippingCity" xml:space="preserve">
+    <value>Shipping City</value>
+  </data>
+  <data name="ShippingState" xml:space="preserve">
+    <value>Shipping State</value>
+  </data>
+  <data name="ShippingZip" xml:space="preserve">
+    <value>Shipping Zipcode</value>
+  </data>
+  <data name="SignatureType" xml:space="preserve">
+    <value>Signature Type</value>
+  </data>
+  <data name="SolelyWorkName" xml:space="preserve">
+    <value>Soley Workname</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="Street1" xml:space="preserve">
+    <value>Street Address </value>
+  </data>
+  <data name="Street2" xml:space="preserve">
+    <value>Secondary Street Address</value>
+  </data>
   <data name="Summary" xml:space="preserve">
     <value>Summary</value>
   </data>
+  <data name="TrueAnswers" xml:space="preserve">
+    <value>True Answers?</value>
+  </data>
+  <data name="UPSAddress" xml:space="preserve">
+    <value>UPS Address</value>
+  </data>
+  <data name="UPSCity" xml:space="preserve">
+    <value>UPS City</value>
+  </data>
+  <data name="UPSShippingNumber" xml:space="preserve">
+    <value>UPS Shipping Number</value>
+  </data>
+  <data name="UPSState" xml:space="preserve">
+    <value>UPS State</value>
+  </data>
+  <data name="UPSZip" xml:space="preserve">
+    <value>UPS Zip</value>
+  </data>
+  <data name="WebUrl" xml:space="preserve">
+    <value>Web Address</value>
+  </data>
+  <data name="YearEnteredAdvertising" xml:space="preserve">
+    <value>Year Entered Advertising Specialty Industry</value>
+  </data>
   <data name="YearEst" xml:space="preserve">
     <value>Year Established</value>
+  </data>
+  <data name="YearEstablished" xml:space="preserve">
+    <value>Year Established</value>
+  </data>
+  <data name="Zipcode" xml:space="preserve">
+    <value>Zipcode</value>
   </data>
 </root>

@@ -1,0 +1,35 @@
+﻿@using asi.asicentral.web;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Resource.TitleASIStoreAdmin</h2>
+
+<p>@Resource.StoreSearchMessage</p>
+
+@using (Html.BeginForm("List", "../store/Orders", FormMethod.Get))
+{
+    <input id="start_date" type="text" /><input id="end_date" type="text" /> 
+    <input type="submit" value="Search" class="button-search" />
+}
+
+<h3>@Resource.StoreTitleOrders</h3>
+<table class="table table-bordered table-condensed table-striped">
+    <tr><th>@Resource.StoreOrderID</th><th>@Resource.StoreASINumber</th><th>@Resource.StoreEmail</th><th>@Resource.StoreQuantity</th><th>@Resource.StoreApplication</th><th>@Resource.StoreItem</th><th>@Resource.StoreBillingAddress</th><th>@Resource.StoreOrderAmount</th><th>@Resource.StoreStatus</th></tr>
+</table>
+@if (Model == null) { <div class="alert">Please select a date range to view orders</div> }
+
+<h3>@Resource.StoreTitleOpenCarts</h3>
+<table class="table table-bordered table-condensed table-striped">
+    <tr><th>@Resource.StoreOrderID</th><th>@Resource.StoreASINumber</th><th>@Resource.StoreEmail</th><th>@Resource.StoreName</th><th>@Resource.StoreCompany</th><th>@Resource.StorePhone</th><th>@Resource.StoreProduct</th><th>@Resource.StoreBillingAddress</th><th>@Resource.StoreDateOrderCreated</th></tr>
+</table>
+@if (Model == null) { <div class="alert">Please select a date range to view open carts</div> }
+
+@section Scripts {
+    @Scripts.Render("~/bundles/form")
+    <script src="/Scripts/asi.js"></script>
+    <script>
+        $("#start_date").datepicker();
+        $("#end_date").datepicker();
+    </script>
+}
