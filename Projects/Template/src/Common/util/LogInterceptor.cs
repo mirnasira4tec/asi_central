@@ -34,6 +34,7 @@ namespace asi.asicentral.util
         {
             if (_log.IsDebugEnabled)
             {
+                Exception exception = null;
                 DateTime startTime = DateTime.Now;
                 _log.Debug(String.Format("Start {0}", invocation.Method.Name));
                 int i = 0;
@@ -41,14 +42,31 @@ namespace asi.asicentral.util
                 {
                     _log.Debug(String.Format("\t{0} Param[{1}] = {2}", invocation.Method.Name, i++, Format(param)));
                 }
-                invocation.Proceed();
+                try
+                {
+                    invocation.Proceed();
+                }
+                catch (Exception ex)
+                {
+                    _log.Error(ex.Message + ex.StackTrace);
+                    exception = ex;
+                }
                 DateTime endTime = DateTime.Now;
                 var duration = endTime.Subtract(startTime).TotalSeconds.ToString("N3");
                 _log.Debug(string.Format("Duration of {0}(): {1}s", invocation.Method.Name, duration));
+                if (exception != null) throw exception;
             }
             else
             {
-                invocation.Proceed();
+                try
+                {
+                    invocation.Proceed();
+                }
+                catch (Exception exception)
+                {
+                    _log.Error(exception.Message + exception.StackTrace);
+                    throw exception;
+                }
             }
         }
 
