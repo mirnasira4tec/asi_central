@@ -9,7 +9,7 @@ namespace asi.asicentral.interfaces
     /// <summary>
     /// Used to encrypt data
     /// </summary>
-    public interface ISecurityService
+    public interface IEncryptionService
     {
         /// <summary>
         /// Used to encrypt a string using key for the encryption

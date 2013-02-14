@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.services
 {
-    public class SecurityService : ISecurityService
+    public class EncryptionService : IEncryptionService
     {
         private static byte[] _salt = Encoding.ASCII.GetBytes("What happens at ASI stays at ASI");
 

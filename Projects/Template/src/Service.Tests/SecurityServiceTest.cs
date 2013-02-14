@@ -11,7 +11,7 @@ namespace asi.asicentral.Tests
         [TestMethod]
         public void EncryptDecryptTest()
         {
-            ISecurityService securityService = new SecurityService();
+            IEncryptionService securityService = new EncryptionService();
             string key = "My Key";
             string test = "Test to encrypt";
             string encryptedTest = securityService.Encrypt(key, test);
