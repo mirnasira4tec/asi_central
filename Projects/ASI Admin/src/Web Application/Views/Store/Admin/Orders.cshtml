@@ -1,35 +1,90 @@
-﻿@using asi.asicentral.web;
+﻿@using asi.asicentral.web
+@using asi.asicentral.web.Models.Store
+@using asi.asicentral.model.store
+@model ViewOrders
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>@Resource.TitleASIStoreAdmin</h2>
-
 <p>@Resource.StoreSearchMessage</p>
 
-@using (Html.BeginForm("List", "../store/Orders", FormMethod.Get))
+@using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-horizontal" }))
 {
-    <input id="start_date" type="text" /><input id="end_date" type="text" /> 
-    <input type="submit" value="Search" class="button-search" />
+    <div class="control-group">
+        <label class="control-label" for="startDate">Start Date</label>
+        <div class="controls">
+            <input id="startDate" name="startDate" type="text" value="@ViewBag.StartDate" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="endDate">End Date</label>
+        <div class="controls">
+            <input id="endDate" name="endDate" type="text" value="@ViewBag.EndDate" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="endDate">Show Open Orders</label>
+        <div class="controls">
+            <input id="showOpenOrders" name="endDate" type="checkbox" />
+            <input type="submit" value="Search" class="btn" />
+        </div>
+    </div>
+       
+    <p>@ViewBag.Message</p>
 }
 
-<h3>@Resource.StoreTitleOrders</h3>
-<table class="table table-bordered table-condensed table-striped">
-    <tr><th>@Resource.StoreOrderID</th><th>@Resource.StoreASINumber</th><th>@Resource.StoreEmail</th><th>@Resource.StoreQuantity</th><th>@Resource.StoreApplication</th><th>@Resource.StoreItem</th><th>@Resource.StoreBillingAddress</th><th>@Resource.StoreOrderAmount</th><th>@Resource.StoreStatus</th></tr>
+<h4>@Resource.StoreTitleOrders</h4>
+<table class="table table-bordered table-condensed">
+    <thead><tr><th>Id</th><th>Name</th><th>Address</th><th>Phone</th></tr></thead>
+    <tbody>
+    @foreach (ClosedOrder order in Model.closedOrders)
+    {
+    <tr><td>@order.OrderId</td><td>@order.Name</td><td>@order.BillingAddress</td><td>@order.BillPhone</td></tr>
+        if (order.Details.Count > 0)
+        {
+        <tr><td colspan="4">
+            <table class="table table-bordered table-condensed table-striped">
+            <thead><tr><th>Product</th><th>Application</th><th>Quantity</th><th>Price</th></tr></thead>
+            <tbody>
+            @foreach (Detail detail in order.Details)
+            {
+                <tr><td>@detail.ProductName</td>
+                @if (detail.HasApplication)
+                {
+                    <td>@Html.ActionLink("Application", "Edit", "Application", new OrderDetail { OrderId = detail.OrderId, ProductId = detail.ProductId }, new { target = "_blank" })</td>
+                }
+                else
+                {
+                    <td>&nbsp</td>
+                } 
+                <td>@detail.Quantity</td><td>@detail.Price</td></tr>
+            }
+            <tr><th colspan="3"><span class="pull-right">Total</span></th><td>@order.TotalAmount</td></tr>
+            </tbody>
+            </table>
+        </td></tr>
+        }
+    }
+    </tbody>
 </table>
-@if (Model == null) { <div class="alert">Please select a date range to view orders</div> }
 
-<h3>@Resource.StoreTitleOpenCarts</h3>
+@if (Model == null)
+{ <div class="alert">Please select a date range to view orders</div> }
+
+<h4>@Resource.StoreTitleOpenCarts</h4>
 <table class="table table-bordered table-condensed table-striped">
-    <tr><th>@Resource.StoreOrderID</th><th>@Resource.StoreASINumber</th><th>@Resource.StoreEmail</th><th>@Resource.StoreName</th><th>@Resource.StoreCompany</th><th>@Resource.StorePhone</th><th>@Resource.StoreProduct</th><th>@Resource.StoreBillingAddress</th><th>@Resource.StoreDateOrderCreated</th></tr>
+    <tr><th>@Resource.StoreOrderID</th><th>@Resource.StoreName</th><th>@Resource.StoreCompany</th><th>@Resource.StorePhone</th><th>@Resource.StoreProduct</th><th>@Resource.StoreBillingAddress</th><th>@Resource.StoreDateOrderCreated</th></tr>
 </table>
-@if (Model == null) { <div class="alert">Please select a date range to view open carts</div> }
+@if (Model == null)
+{ <div class="alert">Please select a date range to view open carts</div> }
 
 @section Scripts {
     @Scripts.Render("~/bundles/form")
     <script src="/Scripts/asi.js"></script>
     <script>
-        $("#start_date").datepicker();
-        $("#end_date").datepicker();
+        $("#startDate").datepicker();
+        $("#endDate").datepicker();
     </script>
 }

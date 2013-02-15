@@ -30,10 +30,10 @@ namespace asi.asicentral.model.sgr
         public string ModelNumber { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "ProductPrice")]
-        public Decimal? Price { get; set; }
+        public string Price { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "ProductPriceCeiling")]
-        public Decimal? PriceCeiling { get; set; }
+        public string PriceCeiling { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "ProductMinOrderQuantity")]
         public string MinimumOrderQuantity { get; set; }

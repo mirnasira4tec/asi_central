@@ -83,14 +83,13 @@ namespace SGRImport
             string cellValue = _excelFile.GetValue(i, cols[0]);
             while ((rows < 1 || i < rows + 2) && cellValue != null)
             {
-                decimal tempDecimal;
                 //create/populate product based on selected columns
                 ProductView product = new ProductView();
                 productList.Add(product);
                 product.Name = cellValue;
                 product.ModelNumber = _excelFile.GetValue(i, cols[1]);
-                if (Decimal.TryParse(_excelFile.GetValue(i, cols[2]), out tempDecimal)) product.Price = tempDecimal;
-                if (Decimal.TryParse(_excelFile.GetValue(i, cols[3]), out tempDecimal)) product.PriceCeiling = tempDecimal;
+                product.Price = _excelFile.GetValue(i, cols[2]);
+                product.PriceCeiling = _excelFile.GetValue(i, cols[3]);
                 product.MinimumOrderQuantity = _excelFile.GetValue(i, cols[4]);
                 product.PaymentTerms = _excelFile.GetValue(i, cols[5]);
                 product.KeySpecifications = _excelFile.GetValue(i, cols[6]);
