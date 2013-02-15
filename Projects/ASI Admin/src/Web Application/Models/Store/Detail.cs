@@ -14,6 +14,7 @@ namespace asi.asicentral.web.Models.Store
         public String ProductName { set; get; }
         public Nullable<int> Quantity { set; get; }
         public Nullable<Decimal> Price { set; get; }
+        public OrderDetailApplication Application { set; get; }
         public bool HasApplication { set; get; }
 
         public void GetDataFrom(OrderDetail orderDetail)

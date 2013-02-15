@@ -36,9 +36,13 @@ namespace asi.asicentral.web.Models.Store
 
             foreach (OrderDetail orderDetailItem in order.OrderDetails)
             {
-                TotalAmount += orderDetailItem.Subtotal;
+                if ( orderDetailItem.Subtotal.HasValue) {
+                    TotalAmount += orderDetailItem.Subtotal;
+                    orderDetailItem.Subtotal = Math.Round(orderDetailItem.Subtotal.Value, 2);
+                }
             }
             if (TotalAmount == null) TotalAmount = 0.00M;
+            else TotalAmount = Math.Round(TotalAmount.Value, 2);
         }
     }
 }
