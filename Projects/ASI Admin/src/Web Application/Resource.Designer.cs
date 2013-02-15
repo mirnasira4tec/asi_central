@@ -295,6 +295,15 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start date must not be after end date.
+        /// </summary>
+        public static string StoreDateErrorMessage {
+            get {
+                return ResourceManager.GetString("StoreDateErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Date Order Created.
         /// </summary>
         public static string StoreDateOrderCreated {

@@ -10,7 +10,7 @@ namespace asi.asicentral.database
         public ASIInternetContext()
             : base("name=ASIInternetContext")
         {
-            Database.SetInitializer<ASIPublicationContext>(null);
+            Database.SetInitializer<ASIInternetContext>(null);
         }
 
         public DbSet<Company> Companies { get; set; }
