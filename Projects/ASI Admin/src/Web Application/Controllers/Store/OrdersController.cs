@@ -32,7 +32,6 @@ namespace asi.asicentral.web.Controllers.Store
             }
 
             if (dateTimeStart > dateTimeEnd) ViewBag.Message = Resource.StoreDateErrorMessage;
-            else ViewBag.Message = "";
 
             ViewBag.StartDate = dateTimeStart.ToString("MM/dd/yyyy");
             ViewBag.EndDate = dateTimeEnd.ToString("MM/dd/yyyy");
@@ -54,35 +53,18 @@ namespace asi.asicentral.web.Controllers.Store
                 {
                     Detail detail = new Detail();
 
-                    if (StoreObjectService.GetApplication(orderDetailItem) != null)
+                    OrderDetailApplication application = StoreObjectService.GetApplication(orderDetailItem);
+                    if (application != null)
+                    {
+                        detail.Application = application;
                         detail.HasApplication = true;
-                
+                    }
+
                     detail.GetDataFrom(orderDetailItem);
                     closedOrder.Details.Add(detail);
                 }
             }
             return View("../Store/Admin/Orders", viewOrders);
         }
-
-        //[HttpGet]
-        //public virtual ActionResult GetApplication(OrderDetail orderDetail)
-        //{
-        //    if (orderDetail == null)
-        //        throw new Exception("Parameter orderDetail cannot be null");
-
-        //    orderDetail = StoreObjectService.GetAll<OrderDetail>(true).Where(orderDtail => orderDtail.OrderId == orderDetail.OrderId && orderDtail.ProductId == orderDetail.ProductId).SingleOrDefault();
-        //    if (orderDetail == null)
-        //        throw new Exception("Invalid identifier for an order detail with id " + orderDetail.OrderId);
-
-        //    OrderDetailApplication application = StoreObjectService.GetApplication(orderDetail);
-        //    if (application != null)
-        //    {
-        //        if (application is DistributorMembershipApplication) return View("../Store/Application/Distributor", application);
-        //        else if (application is SupplierMembershipApplication) return View("../Store/Application/Supplier", application);
-        //    }
-            
-        //    // can't find any application - return nothing
-        //    return new EmptyResult();
-        //}
     }
 }
