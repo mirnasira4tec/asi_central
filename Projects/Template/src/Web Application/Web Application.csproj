@@ -277,9 +277,9 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
+    <ProjectReference Include="..\Core\Core.csproj">
       <Project>{941aa4de-b070-47c8-ae2e-541a7cfaaee2}</Project>
-      <Name>Common</Name>
+      <Name>Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Service\Service.csproj">
       <Project>{5f16e4e1-f26a-43c1-8a08-5733354acb76}</Project>
