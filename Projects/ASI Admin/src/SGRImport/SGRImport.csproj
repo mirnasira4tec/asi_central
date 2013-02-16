@@ -62,9 +62,8 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="asi.asicentral.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\library\asi.asicentral.Common.dll</HintPath>
+    <Reference Include="asi.asicentral.Core">
+      <HintPath>..\..\library\asi.asicentral.Core.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -141,9 +140,9 @@
     <Content Include="images\favicon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Service\Service.csproj">
-      <Project>{5f16e4e1-f26a-43c1-8a08-5733354acb76}</Project>
-      <Name>Service</Name>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{b74b2258-2b47-435c-a0ea-6a0c1ffe18de}</Project>
+      <Name>Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace asi.asicentral {
+namespace asi.asicentral.Common {
     using System;
     
     
