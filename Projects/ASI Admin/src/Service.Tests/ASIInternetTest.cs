@@ -83,5 +83,32 @@ namespace asi.asicentral.Tests
                 }
             }
         }
+
+        [TestMethod]
+        public void ASPNetMembership()
+        {
+            int count = 0;
+            using (var context = new ASIInternetContext())
+            {
+                count = context.ASPNetMemberships.Count();
+                Assert.IsTrue(count > 0);
+            }
+        }
+
+        [TestMethod]
+        public void Order()
+        {
+            int count = 0;
+            using (var context = new ASIInternetContext())
+            {
+                count = context.Orders.Count();
+                Assert.IsTrue(count > 0);
+                //checking current order details work
+                Order order = context.Orders.Where(or => or.Id == 10335).SingleOrDefault();
+                Assert.IsNotNull(order);
+                OrderDetail detail = order.OrderDetails.Where(det => det.ProductId == 104).SingleOrDefault();
+                Assert.IsNotNull(detail);
+            }
+        }
     }
 }

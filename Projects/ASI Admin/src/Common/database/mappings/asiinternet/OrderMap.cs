@@ -76,6 +76,14 @@ namespace asi.asicentral.database.mappings.asiinternet
             this.Property(t => t.OrderTypeId)
                 .HasColumnName("ORTY_OrderTypeID");
 
+            this.Property(t => t.ExternalReference)
+                .HasColumnName("ORDR_ExternalReference")
+                .HasMaxLength(150);
+
+            this.Property(t => t.Campaign)
+                .HasColumnName("ORDR_Campaign")
+                .HasMaxLength(150);
+
             // Relationships
             this.HasOptional(order => order.CreditCard)
                 .WithRequired();

@@ -36,6 +36,10 @@ namespace asi.asicentral.database.mappings.asiinternet
                 .HasColumnName("ORCC_ExpYear")
                 .HasMaxLength(15);
 
+            this.Property(t => t.ExternalReference)
+                .HasColumnName("ORCC_ExternalReference")
+                .HasMaxLength(150);
+
             this.Property(t => t.TotalAmount)
                 .HasColumnName("ORCC_TotalAmt");
         }
