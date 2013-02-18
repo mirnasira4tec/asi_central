@@ -27,6 +27,7 @@ namespace asi.asicentral.Tests
                 Assert.IsNotNull(supplierOrderDetail);
                 SupplierMembershipApplication supplierapplication = storeService.GetSupplierApplication(supplierOrderDetail);
                 Assert.IsNotNull(supplierapplication);
+                Assert.IsTrue(supplierapplication.Contacts.Count > 0);
 
                 //order 288 has one line item of type 103 (Distributor Application)
                 Order distributorOrder = storeService.GetAll<Order>().Where(theOrder => theOrder.Id == 288).SingleOrDefault();

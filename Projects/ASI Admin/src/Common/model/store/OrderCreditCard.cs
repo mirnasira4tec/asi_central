@@ -11,6 +11,7 @@ namespace asi.asicentral.model.store
         public string Number { get; set; }
         public string ExpMonth { get; set; }
         public string ExpYear { get; set; }
+        public string ExternalReference { get; set; }
         public Nullable<decimal> TotalAmount { get; set; }
     }
 }

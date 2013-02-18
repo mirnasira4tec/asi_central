@@ -50,6 +50,9 @@ namespace asi.asicentral.database.mappings
             For<IRepository<DistributorMembershipApplication>>().Use<EFRepository<DistributorMembershipApplication>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
+            For<IRepository<ASPNetMembership>>().Use<EFRepository<ASPNetMembership>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
             #endregion ASIInternetContext
 
             #region ASIPublicationContext

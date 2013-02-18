@@ -26,6 +26,8 @@ namespace asi.asicentral.model.store
         public Nullable<bool> Status { get; set; }
         public string IPAdd { get; set; }
         public Nullable<int> OrderTypeId { get; set; }
+        public string ExternalReference { get; set; }
+        public string Campaign { get; set; }
 
         public virtual OrderCreditCard CreditCard { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }

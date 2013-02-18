@@ -132,5 +132,7 @@ namespace asi.asicentral.model.store
 
         [Display(ResourceType = typeof(Resource), Name = "OtherBusinessRevenue")]
         public string OtherBusinessRevenue { get; set; }
+
+        public virtual ICollection<DistributorMembershipApplicationContact> Contacts { get; set; }
     }
 }
