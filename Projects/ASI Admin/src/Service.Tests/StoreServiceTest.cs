@@ -5,6 +5,7 @@ using asi.asicentral.interfaces;
 using asi.asicentral.services;
 using asi.asicentral.database.mappings;
 using asi.asicentral.model.store;
+using System.Collections.Generic;
 
 namespace asi.asicentral.Tests
 {
@@ -43,6 +44,132 @@ namespace asi.asicentral.Tests
 
                 Assert.IsNull(storeService.GetSupplierApplication(distributorOrderDetail));
                 Assert.IsNull(storeService.GetDistributorApplication(supplierOrderDetail));
+            }
+        }
+
+        [TestMethod]
+        public void OrderSupplierProduct()
+        {
+            using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
+            {
+                // select product screen
+                OrderProduct orderProduct = new OrderProduct { Id = OrderProduct.SUPPLIER_APPLICATION };
+                OrderDetail orderDetail = new OrderDetail
+                {
+                    ProductId = orderProduct.Id,
+                    Quantity = 1,
+                    Added = DateTime.Now
+                };
+
+                // company information screen
+                Order order = new Order();
+                order.TransId = Guid.NewGuid();
+                order.UserId = order.TransId.Value;
+                order.Status = false;
+                order.DateCreated = DateTime.Now;
+                order.BillCity = "City";
+                order.BillCountry = "Country";
+                order.BillFirstName = "FirstName";
+                order.BillLastName = "LastName";
+                order.OrderDetails.Add(orderDetail);
+
+                SupplierMembershipApplicationContact supplierAppContact = new SupplierMembershipApplicationContact();
+                supplierAppContact.Name = "First Last";
+                supplierAppContact.Title = "Title";
+                //supplierAppContact.SalesId = 1;
+                supplierAppContact.Email = "Email@Email.com";
+                supplierAppContact.Phone = "1231231234";
+                supplierAppContact.AppplicationId = order.UserId.Value;
+
+                SupplierMembershipApplication supplierApplication = new SupplierMembershipApplication();
+                supplierApplication.UserId = order.TransId.Value;
+                supplierApplication.Company = "Company";
+                supplierApplication.Contacts = new List<SupplierMembershipApplicationContact>();
+                supplierApplication.Contacts.Add(supplierAppContact);
+
+                storeService.Add<Order>(order);
+                storeService.Add<SupplierMembershipApplication>(supplierApplication);
+                storeService.SaveChanges();
+
+                // billing and shipping screen
+                Order billingOrder = storeService.GetAll<Order>().Where(theOrder => theOrder.Id == order.Id).SingleOrDefault();
+                if (billingOrder == null) throw new Exception("Invalid identifier for order id " + order.Id);
+                SupplierMembershipApplication billingSupplierApplication = storeService.GetAll<SupplierMembershipApplication>()
+                    .Where(application => application.UserId == billingOrder.UserId).SingleOrDefault();
+
+                if (billingSupplierApplication == null) throw new Exception("Illegal supplier application with id " + billingSupplierApplication.UserId);
+
+                billingOrder.BillFirstName = "New First Name";
+                billingOrder.BillLastName = "New Last Name";
+
+                billingSupplierApplication.ShippingAddress = "shipping address";
+                billingSupplierApplication.ShippingCity = "shipping city";
+                billingSupplierApplication.ShippingZip = "19111";
+
+                OrderCreditCard creditcard = new OrderCreditCard()
+                {
+                    ExpMonth = "March",
+                    ExpYear = "2013",
+                    Name = "first last",
+                    Number = "5555444433332222",
+                    Type = "Mastercard",
+                    TotalAmount = orderDetail.Subtotal
+                };
+
+                // TODO: find out how to fix this
+                billingOrder.CreditCard = creditcard;
+
+                storeService.Update<SupplierMembershipApplication>(billingSupplierApplication);
+                storeService.Update<Order>(billingOrder);
+                storeService.SaveChanges();
+
+                // review screen
+                Order reviewOrder = storeService.GetAll<Order>().Where(theOrder => theOrder.Id == order.Id).SingleOrDefault();
+                if (reviewOrder == null) throw new Exception("Invalid identifier for order id " + order.Id);
+
+                ASPNetMembership membership = new ASPNetMembership();
+                membership.ApplicationId = new Guid("71792474-3BB3-4108-9C88-E26179DB443A");
+                membership.UserId = reviewOrder.UserId.Value;
+                membership.Email = supplierAppContact.Email;
+                membership.Password = "na";
+                membership.PasswordFormat = 2;
+                membership.PasswordSalt = "na";
+                membership.IsApproved = false;
+                membership.IsLockedOut = false;
+                membership.Comment = "na";
+                membership.CreateDate = DateTime.Now;
+                membership.LastLoginDate = DateTime.Now;
+                membership.LastPasswordChangedDate = DateTime.Now;
+                membership.LastLockoutDate = DateTime.Now;
+                membership.FailedPasswordAnswerAttemptCount = 0;
+                membership.FailedPasswordAnswerAttemptWindowStart = DateTime.Now;
+                membership.FailedPasswordAttemptCount = 0;
+                membership.FailedPasswordAttemptWindowStart = DateTime.Now;
+
+                reviewOrder.Status = true;
+                storeService.Update<Order>(reviewOrder);
+                storeService.Add<ASPNetMembership>(membership);
+                storeService.SaveChanges();
+
+                // option screen
+                SupplierMembershipApplication supplierMembershipApplication = storeService.GetAll<SupplierMembershipApplication>()
+                    .Where(application => application.UserId == reviewOrder.UserId.Value).SingleOrDefault();
+
+                supplierMembershipApplication.UserId = reviewOrder.UserId.Value;
+                supplierMembershipApplication.IsImporter = true;
+                supplierMembershipApplication.IsImprinterVsDecorator = true;
+                supplierMembershipApplication.IsManufacturer = true;
+                supplierMembershipApplication.IsRetailer = true;
+                supplierMembershipApplication.IsWholesaler = true;
+                supplierMembershipApplication.LineMinorityOwned = true;
+                supplierMembershipApplication.LineNames = "Line names";
+                supplierMembershipApplication.YearEstablished = 2013;
+                supplierMembershipApplication.YearEnteredAdvertising = 2013;
+                supplierMembershipApplication.ApplicationStatusId = 1;
+                // need data field for "is your company women owned?"
+
+                storeService.Update<SupplierMembershipApplication>(supplierMembershipApplication);
+                storeService.SaveChanges();
             }
         }
     }
