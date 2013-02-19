@@ -22,13 +22,14 @@
         <label class="control-label" for="endDate">End Date</label>
         <div class="controls">
             <input id="endDate" name="endDate" type="text" value="@ViewBag.EndDate" />
-            <input type="submit" value="Search" class="btn" />
+            
         </div>
     </div>
     <div class="control-group">
         <label class="control-label" for="endDate">Show Open Orders</label>
         <div class="controls">
             <input id="showOpenOrders" name="endDate" type="checkbox" />
+            <input type="submit" value="Search" class="btn" />
         </div>
     </div>
     
@@ -38,12 +39,12 @@
 <h4>@Resource.StoreTitleOrders</h4>
 
 <table class="table table-bordered table-condensed">
-    <thead><tr><th>Id</th><th>Name</th><th>Address</th><th>Phone</th></tr></thead>
+    <thead><tr><th>Id</th><th>Date</th><th>Name</th><th>Address</th><th>Phone</th></tr></thead>
     <tbody>
     @foreach(ClosedOrder order in Model.closedOrders)
     {
         <tr><td><a rel="tooltip" data-placement="top" title="Click here to show/hide the details" class="accordion-toggle" data-toggle="collapse" href="#@order.OrderId"><i class="icon-circle-arrow-right"></i></a>@order.OrderId</td>
-        <td>@order.Name</td><td>@order.BillingAddress</td><td>@order.BillPhone</td></tr>
+        <td>@order.Name</td><td>@order.DateCreated</td><td>@order.BillingAddress</td><td>@order.BillPhone</td></tr>
         
         if(order.Details.Count > 0)
         {

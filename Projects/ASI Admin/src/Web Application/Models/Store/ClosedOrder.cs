@@ -17,9 +17,9 @@ namespace asi.asicentral.web.Models.Store
 
         public int OrderId { get; set; }
         public String Name { get; set; }
-        public DateTime DateCreate { get; set; }
         public String BillingAddress { get; set; }
         public String BillPhone { set; get; }
+        public Nullable<DateTime> DateCreated { get; set; }
         public Nullable<Decimal> TotalAmount { get; set; }
         public List<Detail> Details { set; get; }
 
@@ -33,10 +33,13 @@ namespace asi.asicentral.web.Models.Store
             billingAddress += order.BillCountry;
             this.BillingAddress = billingAddress;
             this.BillPhone = order.BillPhone;
-
+            
+            if (order.DateCreated.HasValue) this.DateCreated = order.DateCreated;
+            
             foreach (OrderDetail orderDetailItem in order.OrderDetails)
             {
-                if ( orderDetailItem.Subtotal.HasValue) {
+                if (orderDetailItem.Subtotal.HasValue) 
+                {
                     TotalAmount += orderDetailItem.Subtotal;
                     orderDetailItem.Subtotal = Math.Round(orderDetailItem.Subtotal.Value, 2);
                 }
