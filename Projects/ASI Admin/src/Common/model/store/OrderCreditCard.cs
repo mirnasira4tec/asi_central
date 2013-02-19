@@ -13,5 +13,6 @@ namespace asi.asicentral.model.store
         public string ExpYear { get; set; }
         public string ExternalReference { get; set; }
         public Nullable<decimal> TotalAmount { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

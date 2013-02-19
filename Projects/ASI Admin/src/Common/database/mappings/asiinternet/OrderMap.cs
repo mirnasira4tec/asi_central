@@ -83,10 +83,6 @@ namespace asi.asicentral.database.mappings.asiinternet
             this.Property(t => t.Campaign)
                 .HasColumnName("ORDR_Campaign")
                 .HasMaxLength(150);
-
-            // Relationships
-            this.HasOptional(order => order.CreditCard)
-                .WithRequired();
         }
     }
 }
