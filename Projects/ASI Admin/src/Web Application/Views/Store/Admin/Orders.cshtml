@@ -10,66 +10,40 @@
 <h2>@Resource.TitleASIStoreAdmin</h2>
 <p>@Resource.StoreSearchMessage</p>
 
-@using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-horizontal" }))
+@using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline" }))
 {
-    <div class="control-group">
-        <label class="control-label" for="startDate">Start Date</label>
-        <div class="controls">
-            <input id="startDate" name="startDate" type="text" value="@ViewBag.StartDate" />
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label" for="endDate">End Date</label>
-        <div class="controls">
-            <input id="endDate" name="endDate" type="text" value="@ViewBag.EndDate" />
-            
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label" for="endDate">Show Open Orders</label>
-        <div class="controls">
-            <input id="showOpenOrders" name="endDate" type="checkbox" />
-            <input type="submit" value="Search" class="btn" />
-        </div>
-    </div>
+    <label for="startDate">Start Date</label>
+    <input id="startDate" name="startDate" type="text" value="@ViewBag.StartDate" />
+        
+    <label for="endDate">End Date</label>
+    <input id="endDate" name="endDate" type="text" value="@ViewBag.EndDate" />
+
+    <input type="submit" value="Search" class="btn" />
     
-    if(ViewBag.Message != null || ViewBag.Message == "")
+    <div class="form-horizontal">
+    <label for="endDate">Show Open Orders</label>
+    <input id="showOpenOrders" name="endDate" type="checkbox" />
+    
+    @if (ViewBag.Message != null || ViewBag.Message == "")
     {   <div class="alert">@ViewBag.Message</div>   }
+    </div>
 }
 <h4>@Resource.StoreTitleOrders</h4>
 
 <table class="table table-bordered table-condensed">
-    <thead><tr><th>Id</th><th>Date</th><th>Name</th><th>Address</th><th>Phone</th></tr></thead>
+    <thead><tr><th>OrderID</th><th>Email</th><th>Item</th><th>Application</th><th>Quantity</th><th>Price</th><th>Billing Address</th></tr></thead>
     <tbody>
-    @foreach(ClosedOrder order in Model.closedOrders)
+    @foreach (ClosedOrder order in Model.closedOrders)
     {
-        <tr><td><a rel="tooltip" data-placement="top" title="Click here to show/hide the details" class="accordion-toggle" data-toggle="collapse" href="#@order.OrderId"><i class="icon-circle-arrow-right"></i></a>@order.OrderId</td>
-        <td>@order.Name</td><td>@order.DateCreated</td><td>@order.BillingAddress</td><td>@order.BillPhone</td></tr>
-        
-        if(order.Details.Count > 0)
-        {
         <tr>
-        <td colspan="4">
-            <div id="@order.OrderId" class="accordion-body collapse"><div class="accordion-inner">  
-            <table class="table table-bordered table-condensed table-striped">
-            <thead><tr><th>Product</th><th>Application</th><th>Quantity</th><th>Price</th></tr></thead>
-            <tbody>
-            
-            @foreach(Detail detail in order.Details)
-            {
-                <tr><td>@detail.ProductName</td>
-                        @if(detail.HasApplication) 
-                        { <td>@Html.ActionLink("Application", "Edit", "Application", new { id = detail.Application.Id }, new { target = "_blank" })</td>  }
-                        else 
-                        { <td>&nbsp</td> }
-                    <td>@detail.Quantity</td><td>@detail.Price</td></tr>
-            }
-            <tr><th colspan="3"><span class="pull-right">Total</span></th><td>@order.TotalAmount</td></tr>
-            </tbody></table>
-            </div></div>  
-        </td>
+            <td>@order.orderDetail.OrderId</td>
+            <td>email</td>
+            <td>@order.orderDetail.Product.Description</td>
+            <td></td>
+            <td>@order.orderDetail.Quantity</td>
+            <td>@order.orderDetail.Subtotal</td>
+            <td>@order.Billing</td>
         </tr>
-        }
     }
     </tbody>
 </table>
@@ -77,6 +51,8 @@
 <h4>@Resource.StoreTitleOpenCarts</h4>
 <table class="table table-bordered table-condensed table-striped">
     <tr><th>@Resource.StoreOrderID</th><th>@Resource.StoreName</th><th>@Resource.StoreCompany</th><th>@Resource.StorePhone</th><th>@Resource.StoreProduct</th><th>@Resource.StoreBillingAddress</th><th>@Resource.StoreDateOrderCreated</th></tr>
+    <tbody>
+    </tbody>
 </table>
 
 @section Scripts {

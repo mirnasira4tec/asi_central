@@ -17,7 +17,7 @@ namespace asi.asicentral.web.Controllers.Store
         [HttpGet]
         public virtual ActionResult List(string startDate, string endDate)
         {
-            DateTime dateTimeStart; 
+            DateTime dateTimeStart;
             DateTime dateTimeEnd;
 
             try
@@ -37,33 +37,21 @@ namespace asi.asicentral.web.Controllers.Store
             ViewBag.EndDate = dateTimeEnd.ToString("MM/dd/yyyy");
 
             // get closed orders: status = true means closed 
-            IList<Order> orders =
-                StoreObjectService.GetAll<Order>(true).Where
-                (theOrder => theOrder.DateCreated >= dateTimeStart && theOrder.DateCreated <= dateTimeEnd
-                && theOrder.Status == true).OrderBy(theOrder => theOrder.Id).ToList();
+            IList<OrderDetail> orderDetails =
+                StoreObjectService.GetAll<OrderDetail>(true).Where
+                (detail => detail.Order.DateCreated >= dateTimeStart && detail.Order.DateCreated <= dateTimeEnd
+                && detail.Order.Status == true).OrderByDescending(detail => detail.OrderId).ToList();
 
             ViewOrders viewOrders = new ViewOrders();
-            foreach (Order orderItem in orders)
+            foreach (OrderDetail order in orderDetails)
             {
                 ClosedOrder closedOrder = new ClosedOrder();
-                closedOrder.GetDataFrom(orderItem);
+                closedOrder.orderDetail = order;
+                closedOrder.SetApplicationFromService(this.StoreObjectService);
+
                 viewOrders.closedOrders.Add(closedOrder);
-
-                foreach (OrderDetail orderDetailItem in orderItem.OrderDetails)
-                {
-                    Detail detail = new Detail();
-
-                    OrderDetailApplication application = StoreObjectService.GetApplication(orderDetailItem);
-                    if (application != null)
-                    {
-                        detail.Application = application;
-                        detail.HasApplication = true;
-                    }
-
-                    detail.GetDataFrom(orderDetailItem);
-                    closedOrder.Details.Add(detail);
-                }
             }
+
             return View("../Store/Admin/Orders", viewOrders);
         }
     }
