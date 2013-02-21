@@ -39,6 +39,9 @@ namespace asi.asicentral.database.mappings.asiinternet
             this.Property(t => t.AppplicationId)
                 .HasColumnName("DAPP_AppID");
 
+            this.Property(t => t.Department)
+                .HasColumnName("SAPP_Department");
+
             // Relationships
             this.HasOptional(t => t.DistributorApplication)
                 .WithMany(t => t.Contacts)

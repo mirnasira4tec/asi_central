@@ -177,6 +177,8 @@ namespace asi.asicentral.model.store
         [Display(ResourceType = typeof(Resource), Name = "AgreeASITermsAndConditions")]
         public Nullable<bool> AgreeASITermsAndConditions { get; set; }
 
+        public Nullable<bool> WomanOwned { get; set; }
+
         public virtual ICollection<SupplierMembershipApplicationContact> Contacts { get; set; }
    }
 }
