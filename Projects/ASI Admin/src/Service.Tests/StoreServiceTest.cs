@@ -19,6 +19,8 @@ namespace asi.asicentral.Tests
                 //order 10491 has one line item of type 102 (Supplier Application)
                 Order supplierOrder = storeService.GetAll<Order>().Where(theOrder => theOrder.Id == 10491).SingleOrDefault();
                 Assert.IsTrue(supplierOrder != null && supplierOrder.OrderDetails.Count > 0);
+                Assert.IsNotNull(supplierOrder.Membership);
+                Assert.AreEqual(OrderStatus.Approved, supplierOrder.ProcessStatus);
                 OrderDetail supplierOrderDetail = null;
                 foreach (OrderDetail orderDetail in supplierOrder.OrderDetails)
                 {

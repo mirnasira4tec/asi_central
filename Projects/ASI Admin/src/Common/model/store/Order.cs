@@ -3,6 +3,13 @@ using System.Collections.Generic;
 
 namespace asi.asicentral.model.store
 {
+    public enum OrderStatus
+    {
+        Pending = 0,
+        Approved = 1,
+        Rejected = 2
+    }
+
     public class Order
     {
         public Order()
@@ -24,12 +31,14 @@ namespace asi.asicentral.model.store
         public string BillCountry { get; set; }
         public string BillPhone { get; set; }
         public Nullable<bool> Status { get; set; }
+        public OrderStatus ProcessStatus { get; set; }
         public string IPAdd { get; set; }
         public Nullable<int> OrderTypeId { get; set; }
         public string ExternalReference { get; set; }
         public string Campaign { get; set; }
 
         public virtual OrderCreditCard CreditCard { get; set; }
+        public virtual ASPNetMembership Membership { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
 
         public override string ToString()
