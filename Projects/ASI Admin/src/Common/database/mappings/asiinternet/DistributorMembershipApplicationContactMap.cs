@@ -13,31 +13,31 @@ namespace asi.asicentral.database.mappings.asiinternet
 
             // Properties
             this.Property(t => t.Id)
-                .HasColumnName("SAPP_ContactID")
+                .HasColumnName("DAPP_ContactID")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.Name)
-                .HasColumnName("SAPP_ContactName")
+                .HasColumnName("DAPP_ContactName")
                 .HasMaxLength(50);
 
             this.Property(t => t.Title)
-                .HasColumnName("SAPP_ContactTitle")
+                .HasColumnName("DAPP_ContactTitle")
                 .HasMaxLength(50);
 
             this.Property(t => t.Email)
-                .HasColumnName("SAPP_ContactEmail")
+                .HasColumnName("DAPP_ContactEmail")
                 .HasMaxLength(50);
 
             this.Property(t => t.Phone)
-                .HasColumnName("SAPP_ContactPhone")
+                .HasColumnName("DAPP_ContactPhone")
                 .HasMaxLength(50);
 
             this.Property(t => t.Fax)
-                .HasColumnName("SAPP_ContactFax")
+                .HasColumnName("DAPP_ContactFax")
                 .HasMaxLength(50);
 
             this.Property(t => t.AppplicationId)
-                .HasColumnName("SAPP_AppID");
+                .HasColumnName("DAPP_AppID");
 
             this.Property(t => t.Department)
                 .HasColumnName("SAPP_Department");

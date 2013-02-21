@@ -13,8 +13,7 @@ namespace asi.asicentral.database.mappings.asiinternet
 
             // Properties
             this.Property(t => t.OrderId)
-                .HasColumnName("ORDR_OrderID")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+                .HasColumnName("ORDR_OrderID");
 
             this.Property(t => t.Name)
                 .HasColumnName("ORCC_CCName")
@@ -42,6 +41,10 @@ namespace asi.asicentral.database.mappings.asiinternet
 
             this.Property(t => t.TotalAmount)
                 .HasColumnName("ORCC_TotalAmt");
+
+            // Relationships
+            this.HasRequired(credit => credit.Order)
+                .WithRequiredDependent(order => order.CreditCard);
         }
     }
 }
