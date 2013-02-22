@@ -4,6 +4,7 @@ using asi.asicentral.interfaces;
 using StructureMap.Configuration.DSL;
 using asi.asicentral.model.store;
 using asi.asicentral.model.news;
+using asi.asicentral.model.product;
 
 namespace asi.asicentral.database.mappings
 {
@@ -18,6 +19,7 @@ namespace asi.asicentral.database.mappings
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIInternetContext>().Name = "ASIInternetContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIPublicationContext>().Name = "ASIPublicationContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<InternetContext>().Name = "InternetContext";
+            For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ProductContext>().Name = "ProductContext";
 
             //for each model - get the repository class with the appropriate context
 
@@ -80,6 +82,13 @@ namespace asi.asicentral.database.mappings
                 .Ctor<IValidatedContext>().Named("InternetContext");
 
             #endregion InternetContext
+
+            #region ProductContext
+
+            For<IRepository<Context>>().Use<EFRepository<Context>>()
+                .Ctor<IValidatedContext>().Named("ProductContext");
+
+            #endregion ProductContext
         }
     }
 }

@@ -82,6 +82,8 @@
   <ItemGroup>
     <Compile Include="database\ASIInternetContext.cs" />
     <Compile Include="database\ASIPublicationContext.cs" />
+    <Compile Include="database\mappings\product\ContextMap.cs" />
+    <Compile Include="database\ProductContext.cs" />
     <Compile Include="database\InternetContext.cs" />
     <Compile Include="database\mappings\asiinternet\ASPNetMembershipMap.cs" />
     <Compile Include="database\mappings\asiinternet\CategoryMap.cs" />
@@ -111,6 +113,7 @@
     <Compile Include="model\news\News.cs" />
     <Compile Include="model\news\NewsRotator.cs" />
     <Compile Include="model\news\NewsSource.cs" />
+    <Compile Include="model\product\Context.cs" />
     <Compile Include="model\sgr\Category.cs" />
     <Compile Include="model\sgr\Company.cs" />
     <Compile Include="model\sgr\Product.cs" />

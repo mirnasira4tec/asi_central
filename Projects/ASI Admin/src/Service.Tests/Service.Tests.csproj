@@ -68,6 +68,7 @@
     <Compile Include="ObjectServiceTest.cs" />
     <Compile Include="StoreServiceTest.cs" />
     <Compile Include="ASIPublicationTest.cs" />
+    <Compile Include="ProductTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
