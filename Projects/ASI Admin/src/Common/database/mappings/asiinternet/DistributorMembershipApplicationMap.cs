@@ -183,6 +183,21 @@ namespace asi.asicentral.database.mappings.asiinternet
             this.Property(t => t.OtherBusinessRevenue)
                 .HasColumnName("DAPP_BusinessRevOther")
                 .HasMaxLength(250);
+
+            this.Property(t => t.AccountTypes)
+                .HasColumnName("DAPP_AccountTypes")
+                .HasMaxLength(500);
+
+            this.Property(t => t.AccountTypes)
+                .HasColumnName("DAPP_AccountTypes")
+                .HasMaxLength(500);
+
+            this.Property(t => t.ProductLines)
+                .HasColumnName("DAPP_ProductLines")
+                .HasMaxLength(500);
+
+            this.Property(t => t.EstablishedDate)
+                .HasColumnName("DAPP_EstablishedDate");
         }
     }
 }

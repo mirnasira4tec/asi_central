@@ -83,6 +83,16 @@ namespace asi.asicentral.database.mappings.asiinternet
             this.Property(t => t.Campaign)
                 .HasColumnName("ORDR_Campaign")
                 .HasMaxLength(150);
+
+            this.Property(t => t.ProcessStatus)
+                .HasColumnName("ORDR_ProcessStatus");
+
+            // Relationships
+            this.HasOptional(order => order.CreditCard)
+                .WithRequired();
+            this.HasOptional(order => order.Membership)
+                .WithMany()
+                .HasForeignKey(order => order.UserId);
         }
     }
 }

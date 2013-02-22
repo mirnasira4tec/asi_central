@@ -215,6 +215,9 @@ namespace asi.asicentral.database.mappings.asiinternet
 
             this.Property(t => t.AgreeASITermsAndConditions)
                 .HasColumnName("SAPP_AsiTerms");
+
+            this.Property(t => t.WomanOwned)
+                .HasColumnName("SAPP_WomanOwned");
         }
     }
 }
