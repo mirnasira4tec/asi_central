@@ -241,6 +241,24 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Orders processed through the store.
+        /// </summary>
+        public static string StoreAdminOrders {
+            get {
+                return ResourceManager.GetString("StoreAdminOrders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List of Products driving the store.
+        /// </summary>
+        public static string StoreAdminProducts {
+            get {
+                return ResourceManager.GetString("StoreAdminProducts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application.
         /// </summary>
         public static string StoreApplication {

@@ -36,6 +36,14 @@ namespace asi.asicentral.interfaces
         IQueryable<T> GetAll(bool readOnly = false);
 
         /// <summary>
+        /// Get a queryable object for the class
+        /// </summary>
+        /// <param name="include">Include condition for retrieving the data</param>
+        /// <param name="readOnly">Whether the data will be used to update the original records</param>
+        /// <returns></returns>
+        IQueryable<T> GetAll(string include, bool readOnly = false);
+
+        /// <summary>
         /// Saves any pending changes, returns number of records updated
         /// </summary>
         /// <returns></returns>

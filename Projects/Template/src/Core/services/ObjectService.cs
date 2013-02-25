@@ -53,6 +53,13 @@ namespace asi.asicentral.services
             return query;
         }
 
+        public virtual IQueryable<T> GetAll<T>(string include, bool readOnly = false) where T : class
+        {
+            IRepository<T> repository = GetRepository<T>();
+            IQueryable<T> query = repository.GetAll(include, readOnly);
+            return query;
+        }
+
         public virtual int SaveChanges()
         {
             int i = 0;

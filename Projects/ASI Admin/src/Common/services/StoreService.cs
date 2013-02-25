@@ -16,6 +16,11 @@ namespace asi.asicentral.services
             //nothing to do right now
         }
 
+        public override IQueryable<T> GetAll<T>(bool readOnly = false)
+        {
+            return base.GetAll<T>(readOnly);
+        }
+
         public virtual DistributorMembershipApplication GetDistributorApplication(model.store.OrderDetail orderDetail)
         {
             DistributorMembershipApplication application = null;
