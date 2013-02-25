@@ -4,45 +4,67 @@ using System.Linq;
 using System.Web;
 
 using asi.asicentral.model.store;
+using asi.asicentral.interfaces;
 
 namespace asi.asicentral.web.Models.Store
 {
     public class ClosedOrder
     {
-        public ClosedOrder() 
+        private OrderDetail orderDetail;
+        
+        public OrderDetailApplication Application { set; get; }
+        public String Email { set; get; }
+        public int Quantity
         {
-            Details = new List<Detail>();
-            TotalAmount = 0; 
+            get
+            {
+                return orderDetail.Quantity.HasValue ? orderDetail.Quantity.Value : 0;
+            }
         }
 
-        public int OrderId { get; set; }
-        public String Name { get; set; }
-        public DateTime DateCreate { get; set; }
-        public String BillingAddress { get; set; }
-        public String BillPhone { set; get; }
-        public Nullable<Decimal> TotalAmount { get; set; }
-        public List<Detail> Details { set; get; }
-
-        public void GetDataFrom(Order order)
+        public int OrderId
         {
-            this.OrderId = order.Id;
-            this.Name = order.BillFirstName + " " + order.BillLastName;
-            String billingAddress;
-            billingAddress = order.BillFirstName + " " + order.BillLastName + ", ";
-            billingAddress += order.BillStreet1 + ", " + order.BillCity + ", " + order.BillState + " " + order.BillZip + " ";
-            billingAddress += order.BillCountry;
-            this.BillingAddress = billingAddress;
-            this.BillPhone = order.BillPhone;
-
-            foreach (OrderDetail orderDetailItem in order.OrderDetails)
+            get
             {
-                if ( orderDetailItem.Subtotal.HasValue) {
-                    TotalAmount += orderDetailItem.Subtotal;
-                    orderDetailItem.Subtotal = Math.Round(orderDetailItem.Subtotal.Value, 2);
-                }
+                return orderDetail.OrderId;
             }
-            if (TotalAmount == null) TotalAmount = 0.00M;
-            else TotalAmount = Math.Round(TotalAmount.Value, 2);
+        }
+        public String Item
+        {
+            get
+            {
+                return orderDetail.Product.Description;
+            }
+        }
+        public Decimal Price
+        {
+            get
+            {
+                if (this.orderDetail.Subtotal.HasValue) return Math.Round(this.orderDetail.Subtotal.Value, 2);
+                else return 0.00M;
+            }
+        }
+        public String Billing
+        {
+            get
+            {
+                return orderDetail.Order.BillFirstName + " " +
+                    orderDetail.Order.BillLastName + ", " +
+                    orderDetail.Order.BillCity + ", " +
+                    orderDetail.Order.BillState + ", " +
+                    orderDetail.Order.BillZip + ", " +
+                    orderDetail.Order.BillCountry + ". Phone: " + orderDetail.Order.BillPhone;
+            }
+        }
+
+        public void SetOrderDetail(OrderDetail orderDetail)
+        {
+            this.orderDetail = orderDetail;
+        }
+
+        public void SetApplicationFromService(IStoreService StoreService)
+        {
+            this.Application = StoreService.GetApplication(this.orderDetail);
         }
     }
 }
