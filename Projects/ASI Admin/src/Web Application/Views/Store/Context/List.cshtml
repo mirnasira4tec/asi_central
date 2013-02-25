@@ -1,0 +1,19 @@
+﻿@model IList<asi.asicentral.model.store.Context>
+
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Product Context List</h2>
+<p>Used to show the list of available contexts</p>
+<table class="table table-bordered table-condensed">
+    <thead><tr><th>Name</th><th># Products</th><th># Features</th></tr></thead>
+    <tbody>
+        @foreach (asi.asicentral.model.store.Context context in Model)
+        {
+            <tr><td>@Html.ActionLink(context.Name, "ProductComparison", "Context", new { id = @context.ContextId }, null)</td><td>@context.Products.Count()</td><td>@context.Features.Count()</td></tr>
+        }
+    </tbody>
+</table>
+<div style="padding-bottom:20px" />

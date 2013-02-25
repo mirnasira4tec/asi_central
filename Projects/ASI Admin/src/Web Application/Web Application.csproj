@@ -185,6 +185,7 @@
     <Compile Include="Controllers\sgr\CompanyController.cs" />
     <Compile Include="Controllers\sgr\ProductController.cs" />
     <Compile Include="Controllers\Store\ApplicationController.cs" />
+    <Compile Include="Controllers\Store\ContextController.cs" />
     <Compile Include="Controllers\Store\OrdersController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
@@ -284,6 +285,8 @@
     <Content Include="Views\Store\Admin\Orders.cshtml" />
     <Content Include="Views\Store\Application\Distributor.cshtml" />
     <Content Include="Views\Store\Application\Supplier.cshtml" />
+    <Content Include="Views\Store\Context\List.cshtml" />
+    <Content Include="Views\Store\Context\Productcomparison.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

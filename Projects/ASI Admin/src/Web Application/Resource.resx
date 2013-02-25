@@ -297,4 +297,10 @@
   <data name="StoreDateErrorMessage" xml:space="preserve">
     <value>Start date must not be after end date</value>
   </data>
+  <data name="StoreAdminOrders" xml:space="preserve">
+    <value>Orders processed through the store</value>
+  </data>
+  <data name="StoreAdminProducts" xml:space="preserve">
+    <value>List of Products driving the store</value>
+  </data>
 </root>
