@@ -35,15 +35,15 @@ namespace asi.asicentral.web.Controllers.Store
             // TODO
             // if valid order id
             // reject order, redirect to "../Store/Admin/Orders"
-            Order order = StoreObjectService.GetAll<Order>().Where(theOrder => theOrder.Id == orderid).SingleOrDefault();
-            PageViewModel viewOrders = new PageViewModel();
+            //Order order = StoreObjectService.GetAll<Order>().Where(theOrder => theOrder.Id == orderid).SingleOrDefault();
+            //PageViewModel viewOrders = new PageViewModel(storeo);
             
-            foreach (OrderDetail item in order.OrderDetails)
-            {
-                CompletedOrders closedOrder = new CompletedOrders();
-                closedOrder.SetOrderDetail(item);
-                viewOrders.completedOrders.Add(closedOrder);
-            }
+            //foreach (OrderDetail item in order.OrderDetails)
+            //{
+            //    CompletedOrder closedOrder = new CompletedOrder();
+            //    closedOrder.SetOrderDetail(item);
+            //    viewOrders.CompletedOrders.Add(closedOrder);
+            //}
             return null;
         }
 
@@ -54,15 +54,15 @@ namespace asi.asicentral.web.Controllers.Store
             // TODO
             // if valid order id
             // accept order, redirect to "../Store/Admin/Orders"
-            Order order = StoreObjectService.GetAll<Order>().Where(theOrder => theOrder.Id == orderid).SingleOrDefault();
-            PageViewModel viewOrders = new PageViewModel();
+            //Order order = StoreObjectService.GetAll<Order>().Where(theOrder => theOrder.Id == orderid).SingleOrDefault();
+            //PageViewModel viewOrders = new PageViewModel();
 
-            foreach (OrderDetail item in order.OrderDetails)
-            {
-                CompletedOrders closedOrder = new CompletedOrders();
-                closedOrder.SetOrderDetail(item);
-                viewOrders.completedOrders.Add(closedOrder);
-            }
+            //foreach (OrderDetail item in order.OrderDetails)
+            //{
+            //    CompletedOrder closedOrder = new CompletedOrder();
+            //    closedOrder.SetOrderDetail(item);
+            //    viewOrders.CompletedOrders.Add(closedOrder);
+            //}
             return null;
         }
     }

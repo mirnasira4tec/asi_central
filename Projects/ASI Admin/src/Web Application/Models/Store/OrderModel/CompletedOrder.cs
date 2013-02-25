@@ -9,12 +9,32 @@ using System.Text;
 
 namespace asi.asicentral.web.Models.Store
 {
-    public class CompletedOrders
+    public class CompletedOrder
     {
         private OrderDetail orderDetail;
         
         public OrderDetailApplication Application { set; get; }
-        public String Email { set; get; }
+        
+        public String Email 
+        {
+            get 
+            {
+                if (this.orderDetail.Order.Membership == null) return "";
+                else return (this.orderDetail.Order.Membership.Email);
+            } 
+        }
+
+        public String Name
+        {
+            get 
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                if (!String.IsNullOrEmpty(this.orderDetail.Order.BillFirstName)) stringBuilder.Append(this.orderDetail.Order.BillFirstName + ", ");
+                if (!String.IsNullOrEmpty(this.orderDetail.Order.BillLastName)) stringBuilder.Append(this.orderDetail.Order.BillLastName);
+                return stringBuilder.ToString();
+            }
+        }
+
         public int Quantity
         {
             get { return orderDetail.Quantity.HasValue ? orderDetail.Quantity.Value : 0; }

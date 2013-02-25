@@ -10,7 +10,7 @@
 <h2>@Resource.TitleASIStoreAdmin</h2>
 <div class="tabbable tabs-below small">
     <h5>Search by</h5>
-    <ul id="formtab" class="nav nav-tabs" data-type="tab">
+    <ul id="formtab" class="nav nav-tabs">
         <li class="active"><a href="#date">Date</a></li>
         <li><a href="#order">Order Id</a></li>
         <li><a href="#product">Product Id</a></li>
@@ -19,52 +19,61 @@
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="date">
+            <div class="well">
             @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline" }))
-            {
-                <div class="well">
-                <input type="hidden" value="completedorders" name="formtab" />
-                <label for="startDate">Start Date</label> <input data-type="date" name="DateStart" type="text" value="@ViewBag.StartDate" />
+            {                
+                <label for="startDate">Start Date</label><input data-type="date" name="DateStart" type="text" value="@ViewBag.StartDate" />
                 <label for="endDate">End Date</label> <input data-type="date" name="DateEnd" type="text" value="@ViewBag.EndDate" />
+                <input type="hidden" value="@Model.FormTab" name="formtab" />
+                <input type="hidden" value="@Model.OrderTab" name="ordertab" />                
                 <input type="submit" value="Search" class="btn" />
-                </div>
             }
+            </div>
         </div>
         <div class="tab-pane" id="order">
             <div class="well">
-            @using (Html.BeginForm("ListByOrderId", "../store/Orders", FormMethod.Get, new { @class = "form-inline" }))
+            @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline" }))
             {
                 <label for="orderid">Order Id</label> <input id="orderid" name="orderid" type="text" value="" />
+                <input type="hidden" value="@Model.FormTab" name="formtab" />
+                <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
                 <input type="submit" value="Search" class="btn" />
             }
             </div>
         </div>
         <div class="tab-pane" id="product">
+            <div class="well">
             @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline" }))
             {
-                <div class="well">
                 <label for="startDate">Start Date</label> <input data-type="date" name="startDate" type="text" value="@ViewBag.StartDate" />
                 <label for="endDate">End Date</label> <input data-type="date" name="endDate" type="text" value="@ViewBag.EndDate" /><br /><br /><!--TODO find better solution than using br-->
                 <label for="productid">Product ID</label> <input name="productid" type="text" />
+                <input type="hidden" value="@Model.FormTab" name="formtab" />
+                <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
                 <input type="submit" value="Search" class="btn" />
-                </div>
             }
+            </div>
         </div>
         <div class="tab-pane" id="name">
-            @using (Html.BeginForm("ListByName", "../store/Orders", FormMethod.Get, new { @class = "form-inline" }))
+            <div class="well">
+            @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline" }))
             {
-                <div class="well">
                 <label for="firstname">First or last name</label> <input id="firstname" name="firstlastname" type="text" value="" /><br /><br />
                 <label for="startDate">Start Date</label> <input data-type="date" name="startDate" type="text" value="@ViewBag.StartDate" />
                 <label for="endDate">End Date</label> <input data-type="date" name="endDate" type="text" value="@ViewBag.EndDate" />
+                <input type="hidden" value="@Model.FormTab" name="formtab" />
+                <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
                 <input type="submit" value="Search" class="btn" />
-                </div>
             }
+            </div>
         </div>
         <div class="tab-pane" id="timms">
-            @using (Html.BeginForm("ListByTimms", "../store/Orders", FormMethod.Get, new { @class = "form-inline" }))
+            @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline" }))
             {
                 <div class="well">
                 <label for="timmsid">TIMMS ID</label> <input id="timmsid" name="id" type="text" value="" />
+                <input type="hidden" value="@Model.FormTab" name="formtab" />
+                <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
                 <input type="submit" value="Search" class="btn" />
                 </div>
             }
@@ -74,16 +83,16 @@
 @if (ViewBag.Message != null || ViewBag.Message == "")
 {   <div class="alert">@ViewBag.Message</div>   }
 <div class="tabbable tabls-below">
-    <ul id="ordertab" class="nav nav-tabs" data-type="tab">
-        <li class="active"><a href="#closeOrders">Completed Orders</a></li>
-        <li><a href="#openOrders">Pending Orders</a></li>
+    <ul id="ordertab" class="nav nav-tabs">
+        <li class="active"><a href="#completedorders">Completed Orders</a></li>
+        <li><a href="#pendingorders">Pending Orders</a></li>
     </ul>
     <div class="tab-content">
-        <div id="closeOrders" class="tab-pane active">
+        <div id="completedorders" class="tab-pane active">
         <table class="table table-bordered table-condensed table-striped">
             <thead><tr><th>Order ID</th><th>Name</th><th>Email</th><th>Item</th><th>Application</th><th>Quantity</th><th>Price</th><th>Billing Information</th></tr></thead>
             <tbody>            
-            @foreach (CompletedOrders order in Model.completedOrders)
+            @foreach (CompletedOrder order in Model.CompletedOrders)
             {
                 <tr><td>
                 <a rel="tooltip" data-placement="top" title="Click here to reject the order" href="#"><i data-orderid="@order.OrderId" class="icon-remove"></i></a>
@@ -104,7 +113,7 @@
             </tbody>
         </table>
         </div>
-        <div id="openOrders" class="tab-pane">
+        <div id="pendingorders" class="tab-pane">
         <table class="table table-bordered table-condensed table-striped">
             <tr><th>@Resource.StoreOrderID</th><th>Email</th><th>@Resource.StoreCompany</th><th>@Resource.StorePhone</th><th>@Resource.StoreProduct</th><th>@Resource.StoreBillingAddress</th><th>@Resource.StoreDateOrderCreated</th></tr>
             <tbody>
@@ -119,12 +128,26 @@
     <script src="/Scripts/asi.js"></script>
     <script>
         $('input[data-type*="date"]').datepicker();
-        $('ul[data-type*="tab"] a').click(function (e) {
+
+        $('ul[id*="formtab"] a').click(function (e) {
             e.preventDefault();
+            var tabname = e.target.toString();
+            tabname = tabname.substr(tabname.indexOf("#") + 1);
+            $('input[name*="formtab"]').val(tabname);
             $(this).tab('show');
-        });            
-        $('#formtab a[href="#@ViewBag.FormTab"]').tab('show');
-        $('#ordertab a[href="#closeOrders"]').tab('show');
-    </script>
+        });
+
+        $('ul[id*="ordertab"] a').click(function (e) {
+            e.preventDefault();
+            var tabname = e.target.toString();
+            tabname = tabname.substr(tabname.indexOf("#") + 1);
+            $('input[name*="ordertab"]').val(tabname);
+            $(this).tab('show');
+        });
+
+        $('#formtab a[href="#@Model.FormTab"]').tab('show');
+        $('#ordertab a[href="#@Model.OrderTab"]').tab('show');
+    
+   </script>
 }
 

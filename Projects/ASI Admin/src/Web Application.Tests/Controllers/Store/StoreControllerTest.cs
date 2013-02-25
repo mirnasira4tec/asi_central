@@ -17,20 +17,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
         [TestMethod]
         public void GetApplication()
         {
-            // prepare
-            PageViewModel viewOrders = new PageViewModel();
-            IList<Order> orders = new List<Order>();
-            IList<OrderDetail> orderDetails = new List<OrderDetail>();
 
-            // create some orders, details and products
-
-
-            Mock<IStoreService> mockObjectService = new Mock<IStoreService>();
-            mockObjectService.Setup(objectService => objectService.GetAll<Order>(true)).Returns(orders.AsQueryable());
-            OrdersController controller = new OrdersController();
-            controller.StoreObjectService = mockObjectService.Object;
-            
-            // act - pass ViewOrder object from controller to view
 
         }
     }
