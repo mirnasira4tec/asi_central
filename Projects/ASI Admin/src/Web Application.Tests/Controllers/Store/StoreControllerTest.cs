@@ -18,7 +18,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
         public void GetApplication()
         {
             // prepare
-            ViewOrders viewOrders = new ViewOrders();
+            PageViewModel viewOrders = new PageViewModel();
             IList<Order> orders = new List<Order>();
             IList<OrderDetail> orderDetails = new List<OrderDetail>();
 

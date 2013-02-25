@@ -196,10 +196,10 @@
     <Compile Include="Models\sgr\ViewCategory.cs" />
     <Compile Include="Models\sgr\ViewCompany.cs" />
     <Compile Include="Models\sgr\ViewProduct.cs" />
-    <Compile Include="Models\Store\ClosedOrder.cs" />
-    <Compile Include="Models\Store\OpenOrder.cs" />
-    <Compile Include="Models\Store\Detail.cs" />
-    <Compile Include="Models\Store\ViewOrders.cs" />
+    <Compile Include="Models\Store\OrderModel\CompletedOrders.cs" />
+    <Compile Include="Models\Store\PageModel\DateRange.cs" />
+    <Compile Include="Models\Store\OrderModel\PendingOrders.cs" />
+    <Compile Include="Models\Store\PageViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>

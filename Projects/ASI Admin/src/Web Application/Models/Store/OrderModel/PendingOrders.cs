@@ -5,7 +5,7 @@ using System.Web;
 
 namespace asi.asicentral.web.Models.Store
 {
-    public class OpenOrder
+    public class PendingOrders
     {
         public int OrderId { get; set; }
         public String Name { get; set; }
