@@ -4,5 +4,8 @@
 
 <ul>
     <li>@Html.ActionLink(Resource.SGRMaintenanceLink, "List", "../sgr/Company")</li>
-    <li>@Html.ActionLink(Resource.StoreAdminLink, "List", "../store/Orders")</li>
+    <li>@Resource.StoreAdminLink<ul>
+        <li>@Html.ActionLink(Resource.StoreAdminOrders, "List", "../store/Orders")</li>
+        <li>@Html.ActionLink(Resource.StoreAdminProducts, "List", "../store/Context")</li>
+    </ul></li>
 </ul>

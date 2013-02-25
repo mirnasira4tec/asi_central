@@ -82,7 +82,11 @@
   <ItemGroup>
     <Compile Include="database\ASIInternetContext.cs" />
     <Compile Include="database\ASIPublicationContext.cs" />
+    <Compile Include="database\mappings\product\ContextFeatureProductMap.cs" />
     <Compile Include="database\mappings\product\ContextMap.cs" />
+    <Compile Include="database\mappings\product\ContextProductMap.cs" />
+    <Compile Include="database\mappings\product\ContextFeatureMap.cs" />
+    <Compile Include="database\mappings\product\ContextProductSequenceMap.cs" />
     <Compile Include="database\ProductContext.cs" />
     <Compile Include="database\InternetContext.cs" />
     <Compile Include="database\mappings\asiinternet\ASPNetMembershipMap.cs" />
@@ -106,6 +110,7 @@
     <Compile Include="database\mappings\internet\NewsRotatorMap.cs" />
     <Compile Include="database\mappings\internet\NewsSourceMap.cs" />
     <Compile Include="interfaces\IStoreService.cs" />
+    <Compile Include="model\store\ContextFeature.cs" />
     <Compile Include="model\counselor\CounselorCategory.cs" />
     <Compile Include="model\counselor\CounselorContent.cs" />
     <Compile Include="model\counselor\CounselorFeature.cs" />
@@ -113,11 +118,14 @@
     <Compile Include="model\news\News.cs" />
     <Compile Include="model\news\NewsRotator.cs" />
     <Compile Include="model\news\NewsSource.cs" />
-    <Compile Include="model\product\Context.cs" />
+    <Compile Include="model\store\Context.cs" />
     <Compile Include="model\sgr\Category.cs" />
     <Compile Include="model\sgr\Company.cs" />
     <Compile Include="model\sgr\Product.cs" />
     <Compile Include="model\store\ASPNetMembership.cs" />
+    <Compile Include="model\store\ContextFeatureProduct.cs" />
+    <Compile Include="model\store\ContextProduct.cs" />
+    <Compile Include="model\store\ContextProductSequence.cs" />
     <Compile Include="model\store\DistributorMembershipApplicationContact.cs" />
     <Compile Include="model\store\SupplierMembershipApplicationContact.cs" />
     <Compile Include="model\store\DistributorMembershipApplication.cs" />

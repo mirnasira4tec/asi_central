@@ -1,0 +1,65 @@
+﻿@model asi.asicentral.model.store.Context
+
+@{
+    ViewBag.Title = "Product Comparison";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Product Comparison: @Model.Name</h2>
+
+<p>cellpadding and cellspacing are no longer html5. Shouldn't the header row be multiple rows rather then use &lt;br /&gt;</p>
+
+<table cellpadding="0" cellspacing="0" border="0">
+	<tr class="product-title-row">
+		<td class="instructions">Choose one of our<br/>	ASI Supplier Membership	Packages:</td>
+@foreach (asi.asicentral.model.store.ContextProductSequence productSequence in Model.Products)
+{
+    <td><span class="">@Html.Raw(string.IsNullOrEmpty(productSequence.Qualifier) ? "&nbsp;" : productSequence.Qualifier)</span><br />@productSequence.Product.Name<br /><span class="">$@productSequence.Product.Cost</span></td>
+}
+    </tr>
+	<tr class="button-row">
+		<td class="description">Member benefits:</td>
+@foreach (asi.asicentral.model.store.ContextProductSequence productSequence in Model.Products.OrderBy(ctxtProductSeq => ctxtProductSeq.Sequence))
+{
+		<td><button type="button" value="select" class="btn btn-primary">select</button></td>
+}
+	</tr>
+@{ int i = 0;}
+@foreach (asi.asicentral.model.store.ContextFeature feature in Model.Features.OrderBy(ctxFeat => ctxFeat.Sequence))
+{
+    i++;
+    <tr class="row@(i)"><td class="description">@feature.Name</td>
+    @foreach (asi.asicentral.model.store.ContextProductSequence productSequence in Model.Products.OrderBy(ctxtProductSeq => ctxtProductSeq.Sequence))
+    {
+        string label = feature.GetProductLabel(productSequence.Product);
+        if (string.IsNullOrEmpty(label)) { 
+        @:<td>&nbsp;</td>
+        } else if (label == "True") { 
+        @:<td><img src="/images/checkmark.gif" alt="ASI Number included in this package"></td>
+        } else {
+        @:<td>@label</td> 
+        }
+    }
+    </tr>      
+    if (feature.ChildFeatures != null && feature.ChildFeatures.Count > 0)
+    {
+        foreach (asi.asicentral.model.store.ContextFeature subFeature in feature.ChildFeatures.OrderBy(ctxFeat => ctxFeat.Sequence))
+        {
+            i++;
+            <tr class="row@(i)"><td class="description"><ul><li>@subFeature.Name</li></ul></td>
+            @foreach (asi.asicentral.model.store.ContextProductSequence productSequence in Model.Products.OrderBy(ctxtProductSeq => ctxtProductSeq.Sequence))
+            {
+                string label = subFeature.GetProductLabel(productSequence.Product);
+                if (string.IsNullOrEmpty(label)) { 
+                @:<td>&nbsp;</td>
+                } else if (label == "True") { 
+                @:<td><img src="/images/checkmark.gif" alt="ASI Number included in this package"></td>
+                } else {
+                @:<td>@label</td> 
+                }
+            }        
+            </tr>
+        }
+    }
+}
+</table>

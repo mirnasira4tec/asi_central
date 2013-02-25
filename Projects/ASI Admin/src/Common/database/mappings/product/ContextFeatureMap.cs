@@ -6,15 +6,16 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace asi.asicentral.database.mappings.product
 {
-    public class ContextMap : EntityTypeConfiguration<Context>
+    public class ContextFeatureMap : EntityTypeConfiguration<ContextFeature>
     {
-        public ContextMap()
+        public ContextFeatureMap()
         {
-            this.ToTable("PROD_Context");
-            this.HasKey(t => t.ContextId);
+            this.ToTable("PROD_Feature");
+            this.HasKey(t => t.ContextFeatureId);
 
             //Properties
-            this.Property(t => t.ContextId)
+            this.Property(t => t.ContextFeatureId)
+                .HasColumnName("FeatureId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             this.Property(t => t.CreateDate)
@@ -24,13 +25,13 @@ namespace asi.asicentral.database.mappings.product
                 .HasColumnName("UpdateDateUTC");
 
             //Relationships
-            HasMany(ctxt => ctxt.Features)
+            HasMany(feature => feature.ChildFeatures)
                 .WithOptional()
-                .Map(m => m.MapKey("ContextId"));
+                .Map(m => m.MapKey("ParentFeatureId"));
 
-            HasMany(ctxt => ctxt.Products)
+            HasMany(feature => feature.AssociatedProducts)
                 .WithOptional()
-                .Map(m => m.MapKey("ContextId"));
+                .Map(featProd => { featProd.MapKey("FeatureId"); });
         }
     }
 }

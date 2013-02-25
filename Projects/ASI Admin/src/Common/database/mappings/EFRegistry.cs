@@ -4,7 +4,6 @@ using asi.asicentral.interfaces;
 using StructureMap.Configuration.DSL;
 using asi.asicentral.model.store;
 using asi.asicentral.model.news;
-using asi.asicentral.model.product;
 
 namespace asi.asicentral.database.mappings
 {
@@ -86,6 +85,18 @@ namespace asi.asicentral.database.mappings
             #region ProductContext
 
             For<IRepository<Context>>().Use<EFRepository<Context>>()
+                .Ctor<IValidatedContext>().Named("ProductContext");
+
+            For<IRepository<ContextProduct>>().Use<EFRepository<ContextProduct>>()
+                .Ctor<IValidatedContext>().Named("ProductContext");
+
+            For<IRepository<ContextFeature>>().Use<EFRepository<ContextFeature>>()
+                .Ctor<IValidatedContext>().Named("ProductContext");
+
+            For<IRepository<ContextFeatureProduct>>().Use<EFRepository<ContextFeatureProduct>>()
+                .Ctor<IValidatedContext>().Named("ProductContext");
+
+            For<IRepository<ContextProductSequence>>().Use<EFRepository<ContextProductSequence>>()
                 .Ctor<IValidatedContext>().Named("ProductContext");
 
             #endregion ProductContext

@@ -41,9 +41,23 @@ namespace asi.asicentral.database
 
         public virtual IQueryable<T> GetAll(bool readOnly = false)
         {
-            _context.Supports(typeof(T));
             if (readOnly) return _context.GetSet<T>().AsNoTracking() as IQueryable<T>;
             else return _context.GetSet<T>() as IQueryable<T>;
+        }
+
+        public virtual IQueryable<T> GetAll(string include, bool readOnly = false)
+        {
+            _context.Supports(typeof(T));
+            if (string.IsNullOrEmpty(include))
+            {
+                if (readOnly) return _context.GetSet<T>().AsNoTracking() as IQueryable<T>;
+                else return _context.GetSet<T>() as IQueryable<T>;
+            }
+            else
+            {
+                if (readOnly) return _context.GetSet<T>().AsNoTracking().Include(include) as IQueryable<T>;
+                else return _context.GetSet<T>().Include(include) as IQueryable<T>;
+            }
         }
 
         public virtual void Update(T entity)
