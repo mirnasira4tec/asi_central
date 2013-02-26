@@ -1,113 +1,153 @@
 ﻿@using asi.asicentral.web
 @using asi.asicentral.web.Models.Store
 @using asi.asicentral.model.store
-@model ViewOrders
+@model PageViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>@Resource.TitleASIStoreAdmin</h2>
-<p>@Resource.StoreSearchMessage</p>
-
-<div class="tabbable tabs-left small">
+<div class="tabbable tabs-below small">
+    <h5>Search by</h5>
     <ul id="formtab" class="nav nav-tabs">
-        <li class="active"><a href="#first">Search by Date</a></li>
-        <li><a href="#second">Search by Order Id</a></li>
-        <li><a href="#third">Search by Product Id</a></li>
-        <li><a href="#fourth">Search by Name</a></li>
+        <li class="active"><a href="#date">Date</a></li>
+        <li><a href="#order">Order Id</a></li>
+        <li><a href="#product">Product Id</a></li>
+        <li><a href="#name">Name</a></li>
+        <li><a href="#timms">Timms</a></li>
     </ul>
     <div class="tab-content">
-        <div class="tab-pane active" id="first">
+        <div class="tab-pane active" id="date">
+            <div class="well">
             @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline" }))
-            {
-                <label for="startDate">Start Date</label> <input id="startDate" name="startDate" type="text" value="@ViewBag.StartDate" />
-                <label for="endDate">End Date</label> <input id="endDate" name="endDate" type="text" value="@ViewBag.EndDate" />
+            {                
+                <label for="startDate">Start Date</label><input data-type="date" name="DateStart" type="text" value="@ViewBag.StartDate" />
+                <label for="endDate">End Date</label> <input data-type="date" name="DateEnd" type="text" value="@ViewBag.EndDate" />
+                <input type="hidden" value="@Model.FormTab" name="formtab" />
+                <input type="hidden" value="@Model.OrderTab" name="ordertab" />                
                 <input type="submit" value="Search" class="btn" />
             }
+            </div>
         </div>
-        <div class="tab-pane" id="second">
+        <div class="tab-pane" id="order">
+            <div class="well">
             @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline" }))
             {
                 <label for="orderid">Order Id</label> <input id="orderid" name="orderid" type="text" value="" />
+                <input type="hidden" value="@Model.FormTab" name="formtab" />
+                <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
                 <input type="submit" value="Search" class="btn" />
             }
+            </div>
         </div>
-        <div class="tab-pane" id="third">
+        <div class="tab-pane" id="product">
+            <div class="well">
             @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline" }))
             {
-                <label for="productid">Product Id</label> <input id="productid" name="productid" type="text" value="" />
+                <label for="startDate">Start Date</label> <input data-type="date" name="startDate" type="text" value="@ViewBag.StartDate" />
+                <label for="endDate">End Date</label> <input data-type="date" name="endDate" type="text" value="@ViewBag.EndDate" /><br /><br /><!--TODO find better solution than using br-->
+                <label for="productid">Product ID</label> <input name="productid" type="text" />
+                <input type="hidden" value="@Model.FormTab" name="formtab" />
+                <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
                 <input type="submit" value="Search" class="btn" />
             }
+            </div>
         </div>
-        <div class="tab-pane" id="fourth">
+        <div class="tab-pane" id="name">
+            <div class="well">
             @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline" }))
             {
-                <label for="firstname">First Name</label> <input id="firstname" name="firstname" type="text" value="" />
-                <label for="lastname">Last Name</label> <input id="lastname" name="lastname" type="text" value="" />
+                <label for="firstname">First or last name</label> <input id="firstname" name="firstlastname" type="text" value="" /><br /><br />
+                <label for="startDate">Start Date</label> <input data-type="date" name="startDate" type="text" value="@ViewBag.StartDate" />
+                <label for="endDate">End Date</label> <input data-type="date" name="endDate" type="text" value="@ViewBag.EndDate" />
+                <input type="hidden" value="@Model.FormTab" name="formtab" />
+                <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
                 <input type="submit" value="Search" class="btn" />
+            }
+            </div>
+        </div>
+        <div class="tab-pane" id="timms">
+            @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline" }))
+            {
+                <div class="well">
+                <label for="timmsid">TIMMS ID</label> <input id="timmsid" name="id" type="text" value="" />
+                <input type="hidden" value="@Model.FormTab" name="formtab" />
+                <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
+                <input type="submit" value="Search" class="btn" />
+                </div>
             }
         </div>
     </div>
-    <label for="showOpenOrders">Show Open Orders </label><input id="showOpenOrders" name="endDate" type="checkbox" />
 </div>
-
 @if (ViewBag.Message != null || ViewBag.Message == "")
 {   <div class="alert">@ViewBag.Message</div>   }
-
-<h4>@Resource.StoreTitleOrders</h4>
-<table class="table table-bordered table-condensed">
-    <thead><tr><th>OrderID</th><th>Email</th><th>Item</th><th>Application</th><th>Quantity</th><th>Price</th><th>Billing Address</th></tr></thead>
-    <tbody>
-    @foreach (ClosedOrder order in Model.closedOrders)
-    {
-        <tr>
-            <td>
-            <a class="RejectOrder" rel="tooltip" data-placement="top" title="Click here to reject the order" href="#"><i data-orderid="@order.OrderId" class="icon-remove"></i></a>
-            <a class="AcceptOrder" rel="tooltip" data-placement="top" title="Click here to accept the order" href="#"><i data-orderid="@order.OrderId" class="icon-ok"></i></a>
-            @order.OrderId
-            </td>
-            <td>@order.Email</td>
-            <td>@order.Item</td>
-            @if (order.Application != null)
-            { <td><a href="@Url.Action("Edit", "Application", new OrderDetailApplication { Id = order.Application.Id })" target="_blank">Application</a></td> }
-            else
-            { <td>&nbsp</td> }
-            <td>@order.Quantity</td>
-            <td>@order.Price</td>
-            <td>@order.Billing</td>
-        </tr>
-    }
-    </tbody>
-</table>
-
-<h4>@Resource.StoreTitleOpenCarts</h4>
-<table class="table table-bordered table-condensed table-striped">
-    <tr><th>@Resource.StoreOrderID</th><th>Email</th><th>@Resource.StoreCompany</th><th>@Resource.StorePhone</th><th>@Resource.StoreProduct</th><th>@Resource.StoreBillingAddress</th><th>@Resource.StoreDateOrderCreated</th></tr>
-    <tbody>
-    </tbody>
-</table>
+<div class="tabbable tabls-below">
+    <ul id="ordertab" class="nav nav-tabs">
+        <li class="active"><a href="#completedorders">Completed Orders</a></li>
+        <li><a href="#pendingorders">Pending Orders</a></li>
+    </ul>
+    <div class="tab-content">
+        <div id="completedorders" class="tab-pane active">
+        <table class="table table-bordered table-condensed table-striped">
+            <thead><tr><th>Order ID</th><th>Name</th><th>Email</th><th>Item</th><th>Application</th><th>Quantity</th><th>Price</th><th>Billing Information</th></tr></thead>
+            <tbody>            
+            @foreach (CompletedOrder order in Model.CompletedOrders)
+            {
+                <tr><td>
+                <a rel="tooltip" data-placement="top" title="Click here to reject the order" href="#"><i data-orderid="@order.OrderId" class="icon-remove"></i></a>
+                <a rel="tooltip" data-placement="top" title="Click here to accept the order" href="#"><i data-orderid="@order.OrderId" class="icon-ok"></i></a>
+                @order.OrderId
+                </td>
+                <td>Name</td>
+                <td>@order.Email</td>
+                <td>@order.Item</td>
+                @if (order.Application != null)
+                { <td><a href="@Url.Action("Edit", "Application", new OrderDetailApplication { Id = order.Application.Id })">Application</a></td> }
+                else
+                { <td>&nbsp</td> }
+                <td>@order.Quantity</td>
+                <td>$@order.Price</td>
+                <td>@order.Billing</td></tr>
+            }
+            </tbody>
+        </table>
+        </div>
+        <div id="pendingorders" class="tab-pane">
+        <table class="table table-bordered table-condensed table-striped">
+            <tr><th>@Resource.StoreOrderID</th><th>Email</th><th>@Resource.StoreCompany</th><th>@Resource.StorePhone</th><th>@Resource.StoreProduct</th><th>@Resource.StoreBillingAddress</th><th>@Resource.StoreDateOrderCreated</th></tr>
+            <tbody>
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
-    <script src="/Scripts/asi.js"></script>
     @Scripts.Render("~/bundles/form")
+    <script src="/Scripts/asi.js"></script>
     <script>
-        $("#startDate").datepicker();
-        $("#endDate").datepicker();
-        $(".RejectOrder").click(function (e) {
-            asi.modal.confirm("@Html.Encode("Confirm reject?")", "Are you sure you want to reject this item?", function (result) {
-            if (result) asi.util.submit('@Url.Action("../Orders/Reject")', [{ Name: 'orderid', Value: $(e.target).data("orderid") }, { Name: 'startDate', Value: $("#startDate").val() }, { Name: 'endDate', Value: $("#endDate").val() }]);
-            });
-        });
-        $(".AcceptOrder").click(function (e) {
-            asi.modal.confirm("@Html.Encode("Confirm reject?")", "Are you sure you want to reject this item?", function (result) {
-                if (result) asi.util.submit('@Url.Action("../Orders/Reject")', [{ Name: 'orderid', Value: $(e.target).data("orderid") }, { Name: 'startDate', Value: $("#startDate").val() }, { Name: 'endDate', Value: $("#endDate").val() }]);
-            });
-        });
-        $('#formtab a').click(function (e) {
+        $('input[data-type*="date"]').datepicker();
+
+        $('ul[id*="formtab"] a').click(function (e) {
             e.preventDefault();
+            var tabname = e.target.toString();
+            tabname = tabname.substr(tabname.indexOf("#") + 1);
+            $('input[name*="formtab"]').val(tabname);
             $(this).tab('show');
-        })
-    </script>
+        });
+
+        $('ul[id*="ordertab"] a').click(function (e) {
+            e.preventDefault();
+            var tabname = e.target.toString();
+            tabname = tabname.substr(tabname.indexOf("#") + 1);
+            $('input[name*="ordertab"]').val(tabname);
+            $(this).tab('show');
+        });
+
+        $('#formtab a[href="#@Model.FormTab"]').tab('show');
+        $('#ordertab a[href="#@Model.OrderTab"]').tab('show');
+    
+   </script>
 }
 
