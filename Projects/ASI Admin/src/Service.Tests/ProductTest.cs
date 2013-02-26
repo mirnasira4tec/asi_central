@@ -56,6 +56,7 @@ namespace asi.asicentral.Tests
                     UpdateSource = "ProductTest.PopulateDemoData",
                 };
                 objectContext.Contexts.Add(distributorMembership);
+                objectContext.SaveChanges();
                 ContextProduct product = new ContextProduct()
                 {
                     ProductId = Guid.NewGuid(),
