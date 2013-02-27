@@ -36,6 +36,16 @@ namespace asi.asicentral.Tests
                 Assert.IsTrue(objectService.GetAll<Publication>(true).ToList().Count == count);
             }
         }
+        [TestMethod]
+        public void Include()
+        {
+            using (IObjectService objectService = new ObjectService(new Container(new EFRegistry())))
+            {
+                var publications = objectService.GetAll<Publication>("Issues",true).ToList();
+                int count = publications.Count;
+                Assert.IsTrue(count > 0);
+            }
+        }
 
         [TestMethod]
         public void Delete()

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,8 +56,12 @@ namespace asi.asicentral.database
             }
             else
             {
-                if (readOnly) return _context.GetSet<T>().AsNoTracking().Include(include) as IQueryable<T>;
-                else return _context.GetSet<T>().Include(include) as IQueryable<T>;
+                string[] includes = include.Split(';');
+                DbQuery query = (readOnly ? _context.GetSet<T>().AsNoTracking().Include(includes[0]) : _context.GetSet<T>().Include(includes[0]));
+                for (int i = 1; i < includes.Length; i++)
+                    query = query.Include(includes[i]);
+
+                return query as IQueryable<T>;
             }
         }
 

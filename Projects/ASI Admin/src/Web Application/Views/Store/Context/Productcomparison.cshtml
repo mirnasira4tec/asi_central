@@ -6,13 +6,17 @@
 }
 
 <h2>Product Comparison: @Model.Name</h2>
-
+<style>
+    dfn {
+        color: blue;
+    }
+</style>
 <p>cellpadding and cellspacing are no longer html5. Shouldn't the header row be multiple rows rather then use &lt;br /&gt;</p>
 
-<table cellpadding="0" cellspacing="0" border="0">
+<table cellpadding="5" cellspacing="5" border="0">
 	<tr class="product-title-row">
 		<td class="instructions">Choose one of our<br/>	ASI Supplier Membership	Packages:</td>
-@foreach (asi.asicentral.model.store.ContextProductSequence productSequence in Model.Products)
+@foreach (asi.asicentral.model.store.ContextProductSequence productSequence in Model.Products.OrderBy(ctxtProductSeq => ctxtProductSeq.Sequence))
 {
     <td><span class="">@Html.Raw(string.IsNullOrEmpty(productSequence.Qualifier) ? "&nbsp;" : productSequence.Qualifier)</span><br />@productSequence.Product.Name<br /><span class="">$@productSequence.Product.Cost</span></td>
 }
@@ -28,7 +32,7 @@
 @foreach (asi.asicentral.model.store.ContextFeature feature in Model.Features.OrderBy(ctxFeat => ctxFeat.Sequence))
 {
     i++;
-    <tr class="row@(i)"><td class="description">@feature.Name</td>
+    <tr class="row@(i)"><td class="description">@Html.Raw(feature.Name)</td>
     @foreach (asi.asicentral.model.store.ContextProductSequence productSequence in Model.Products.OrderBy(ctxtProductSeq => ctxtProductSeq.Sequence))
     {
         string label = feature.GetProductLabel(productSequence.Product);

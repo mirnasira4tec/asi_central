@@ -8,7 +8,7 @@ namespace asi.asicentral.model.store
 {
     public class ContextProductSequence
     {
-        public Guid ContextProductSequenceId { get; set; }
+        public int ContextProductSequenceId { get; set; }
         public int Sequence { get; set; }
         public string Qualifier { get; set; }
         public virtual ContextProduct Product { get; set; }

@@ -23,9 +23,9 @@ namespace asi.asicentral.web.Controllers.Store
             return View("../Store/Context/List", contextList);
         }
 
-        public ActionResult ProductComparison(Guid id)
+        public ActionResult ProductComparison(int id)
         {
-            Context context = StoreObjectService.GetAll<Context>("Features.AssociatedProducts.Product", true).Where(ctx => ctx.ContextId == id).SingleOrDefault();
+            Context context = StoreObjectService.GetAll<Context>(true).Where(ctx => ctx.ContextId == id).SingleOrDefault();
             if (context == null) throw new Exception("Invalid identifier for a context");
             return View("../Store/Context/ProductComparison", context);
         }

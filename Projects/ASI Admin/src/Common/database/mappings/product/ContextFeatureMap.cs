@@ -16,7 +16,7 @@ namespace asi.asicentral.database.mappings.product
             //Properties
             this.Property(t => t.ContextFeatureId)
                 .HasColumnName("FeatureId")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.CreateDate)
                 .HasColumnName("CreateDateUTC");
@@ -31,7 +31,7 @@ namespace asi.asicentral.database.mappings.product
 
             HasMany(feature => feature.AssociatedProducts)
                 .WithOptional()
-                .Map(featProd => { featProd.MapKey("FeatureId"); });
+                .Map(m => { m.MapKey("FeatureId"); });
         }
     }
 }

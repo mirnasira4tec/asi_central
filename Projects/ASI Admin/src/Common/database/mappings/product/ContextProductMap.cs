@@ -15,13 +15,18 @@ namespace asi.asicentral.database.mappings.product
 
             //Properties
             this.Property(t => t.ProductId)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.CreateDate)
                 .HasColumnName("CreateDateUTC");
 
             this.Property(t => t.UpdateDate)
                 .HasColumnName("UpdateDateUTC");
+
+            //relationships
+            HasMany(ctxt => ctxt.Features)
+            .WithRequired(feat => feat.Product)
+            .HasForeignKey(ctxt => ctxt.ProductId);
         }
     }
 }
