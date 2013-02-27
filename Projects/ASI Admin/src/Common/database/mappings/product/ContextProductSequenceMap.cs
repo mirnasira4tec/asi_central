@@ -1,6 +1,7 @@
 ﻿using asi.asicentral.model.store;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,9 @@ namespace asi.asicentral.database.mappings.product
         {
             ToTable("PROD_ContextProduct");
             HasKey(prodSequence => prodSequence.ContextProductSequenceId);
+
+            this.Property(t => t.ContextProductSequenceId)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.CreateDate)
                 .HasColumnName("CreateDateUTC");

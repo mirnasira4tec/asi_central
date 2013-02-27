@@ -15,7 +15,7 @@ namespace asi.asicentral.database.mappings.product
 
             //Properties
             this.Property(t => t.ContextId)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.CreateDate)
                 .HasColumnName("CreateDateUTC");

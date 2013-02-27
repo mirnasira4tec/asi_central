@@ -16,7 +16,7 @@ namespace asi.asicentral.model.store
             }
         }
 
-        public Guid ProductId { get; set; }
+        public int ProductId { get; set; }
         public string Name { get; set; }
         public decimal Cost { get; set; }
         public string Currency { get; set; }

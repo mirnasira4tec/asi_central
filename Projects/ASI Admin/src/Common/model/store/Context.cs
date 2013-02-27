@@ -17,7 +17,7 @@ namespace asi.asicentral.model.store
             }
         }
 
-        public Guid ContextId { get; set; }
+        public int ContextId { get; set; }
         public string Name { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
