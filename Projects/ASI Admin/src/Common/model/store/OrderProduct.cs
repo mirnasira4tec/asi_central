@@ -8,6 +8,14 @@ namespace asi.asicentral.model.store
         public const int SUPPLIER_APPLICATION = 102;
         public const int DISTRIBUTOR_APPLICATION = 103;
 
+        public OrderProduct()
+        {
+            if (this.GetType() == typeof(OrderProduct))
+            {
+                OrderDetails = new List<OrderDetail>();
+            }
+        }
+
         public int Id { get; set; }
         public string Description { get; set; }
         public string Summary { get; set; }

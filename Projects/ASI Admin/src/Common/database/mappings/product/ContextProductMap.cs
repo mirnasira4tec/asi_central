@@ -22,6 +22,11 @@ namespace asi.asicentral.database.mappings.product
 
             this.Property(t => t.UpdateDate)
                 .HasColumnName("UpdateDateUTC");
+
+            //relationships
+            HasMany(ctxt => ctxt.Features)
+            .WithRequired(feat => feat.Product)
+            .Map(m => m.MapKey("ProductId"));
         }
     }
 }

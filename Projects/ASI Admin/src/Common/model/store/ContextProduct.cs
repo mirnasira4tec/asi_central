@@ -8,6 +8,14 @@ namespace asi.asicentral.model.store
 {
     public class ContextProduct
     {
+        public ContextProduct()
+        {
+            if (this.GetType() == typeof(ContextProduct))
+            {
+                Features = new List<ContextFeatureProduct>();
+            }
+        }
+
         public Guid ProductId { get; set; }
         public string Name { get; set; }
         public decimal Cost { get; set; }
@@ -16,6 +24,8 @@ namespace asi.asicentral.model.store
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
+        
+        public virtual ICollection<ContextFeatureProduct> Features { get; set; }
 
         public override string ToString()
         {

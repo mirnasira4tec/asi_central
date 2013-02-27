@@ -16,15 +16,15 @@ namespace asi.asicentral.Tests
             //Delete the current data
             using (var objectContext = new ProductContext())
             {
-                IList<ContextProductSequence> ProdSequenceList = objectContext.ProductSequences.ToList();
-                foreach (ContextProductSequence prodSequence in ProdSequenceList)
-                {
-                    objectContext.ProductSequences.Remove(prodSequence);
-                }
                 IList<ContextFeatureProduct> featureProductList = objectContext.FeatureProducts.ToList();
                 foreach (ContextFeatureProduct featureProduct in featureProductList)
                 {
                     objectContext.FeatureProducts.Remove(featureProduct);
+                }
+                IList<ContextProductSequence> ProdSequenceList = objectContext.ProductSequences.ToList();
+                foreach (ContextProductSequence prodSequence in ProdSequenceList)
+                {
+                    objectContext.ProductSequences.Remove(prodSequence);
                 }
                 IList<ContextFeature> featureList = objectContext.Features.ToList();
                 foreach (ContextFeature feature in featureList)
@@ -153,49 +153,17 @@ namespace asi.asicentral.Tests
                 ContextFeature feature = new ContextFeature()
                 {
                     ContextFeatureId = Guid.NewGuid(),
-                    Name = "ASI Number",
+                    Name = "<dfn>ASI Number</dfn>",
                     Sequence = 1,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
                     UpdateSource = "ProductTest.PopulateDemoData",                    
                 };
                 distributorMembership.Features.Add(feature);
-
-                feature.AssociatedProducts.Add(new ContextFeatureProduct()
-                {
-                    ContextFeatureProductId = Guid.NewGuid(),
-                    Label = "",
-                    Product = objectContext.Products.Local.Where(prod => prod.Name == "Basic").FirstOrDefault(),
-                    UpdateSource = "ProductTest.PopulateDemoData",
-                });
-                feature.AssociatedProducts.Add(new ContextFeatureProduct()
-                {
-                    ContextFeatureProductId = Guid.NewGuid(),
-                    Label = "1",
-                    Product = objectContext.Products.Local.Where(prod => prod.Name == "Standard").FirstOrDefault(),
-                    UpdateSource = "ProductTest.PopulateDemoData",
-                });
-                feature.AssociatedProducts.Add(new ContextFeatureProduct()
-                {
-                    ContextFeatureProductId = Guid.NewGuid(),
-                    Label = "2",
-                    Product = objectContext.Products.Local.Where(prod => prod.Name == "Executive").FirstOrDefault(),
-                    UpdateSource = "ProductTest.PopulateDemoData",
-                });
                 feature = new ContextFeature()
                 {
                     ContextFeatureId = Guid.NewGuid(),
-                    Name = "Free admission to ASI shows",
-                    Sequence = 2,
-                    CreateDate = DateTime.UtcNow,
-                    UpdateDate = DateTime.UtcNow,
-                    UpdateSource = "ProductTest.PopulateDemoData",
-                };
-                distributorMembership.Features.Add(feature);
-                feature = new ContextFeature()
-                {
-                    ContextFeatureId = Guid.NewGuid(),
-                    Name = "Free industry education sessions",
+                    Name = "Free industry <dfn>education</dfn> sessions",
                     Sequence = 3,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -205,14 +173,14 @@ namespace asi.asicentral.Tests
                 feature = new ContextFeature()
                 {
                     ContextFeatureId = Guid.NewGuid(),
-                    Name = "ESP Users",
+                    Name = "<dfn>ESP</dfn> Users",
                     Sequence = 4,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
                     UpdateSource = "ProductTest.PopulateDemoData",
                 };
                 distributorMembership.Features.Add(feature);
-                ContextFeature subFeature = new ContextFeature();
+                ContextFeature subFeature = null;
                 subFeature = new ContextFeature()
                 {
                     ContextFeatureId = Guid.NewGuid(),
@@ -223,7 +191,6 @@ namespace asi.asicentral.Tests
                     UpdateSource = "ProductTest.PopulateDemoData",
                 };
                 feature.ChildFeatures.Add(subFeature);
-                subFeature = new ContextFeature();
                 subFeature = new ContextFeature()
                 {
                     ContextFeatureId = Guid.NewGuid(),
@@ -234,6 +201,95 @@ namespace asi.asicentral.Tests
                     UpdateSource = "ProductTest.PopulateDemoData",
                 };
                 feature.ChildFeatures.Add(subFeature);
+                subFeature = new ContextFeature()
+                {
+                    ContextFeatureId = Guid.NewGuid(),
+                    Name = "Order Management",
+                    Sequence = 3,
+                    CreateDate = DateTime.UtcNow,
+                    UpdateDate = DateTime.UtcNow,
+                    UpdateSource = "ProductTest.PopulateDemoData",
+                };
+                feature.ChildFeatures.Add(subFeature);
+                subFeature = new ContextFeature()
+                {
+                    ContextFeatureId = Guid.NewGuid(),
+                    Name = "Mobile",
+                    Sequence = 4,
+                    CreateDate = DateTime.UtcNow,
+                    UpdateDate = DateTime.UtcNow,
+                    UpdateSource = "ProductTest.PopulateDemoData",
+                };
+                feature.ChildFeatures.Add(subFeature);
+                feature = new ContextFeature()
+                {
+                    ContextFeatureId = Guid.NewGuid(),
+                    Name = "<dfn>ESP Websites</dfn> Users",
+                    Sequence = 5,
+                    CreateDate = DateTime.UtcNow,
+                    UpdateDate = DateTime.UtcNow,
+                    UpdateSource = "ProductTest.PopulateDemoData",
+                };
+                distributorMembership.Features.Add(feature);
+                subFeature = new ContextFeature()
+                {
+                    ContextFeatureId = Guid.NewGuid(),
+                    Name = "Ecommerce Site",
+                    Sequence = 1,
+                    CreateDate = DateTime.UtcNow,
+                    UpdateDate = DateTime.UtcNow,
+                    UpdateSource = "ProductTest.PopulateDemoData",
+                };
+                feature.ChildFeatures.Add(subFeature);
+                subFeature = new ContextFeature()
+                {
+                    ContextFeatureId = Guid.NewGuid(),
+                    Name = "100's of designs",
+                    Sequence = 2,
+                    CreateDate = DateTime.UtcNow,
+                    UpdateDate = DateTime.UtcNow,
+                    UpdateSource = "ProductTest.PopulateDemoData",
+                };
+                feature.ChildFeatures.Add(subFeature);
+                subFeature = new ContextFeature()
+                {
+                    ContextFeatureId = Guid.NewGuid(),
+                    Name = "Ready-to-use content",
+                    Sequence = 3,
+                    CreateDate = DateTime.UtcNow,
+                    UpdateDate = DateTime.UtcNow,
+                    UpdateSource = "ProductTest.PopulateDemoData",
+                };
+                feature.ChildFeatures.Add(subFeature);
+                feature = new ContextFeature()
+                {
+                    ContextFeatureId = Guid.NewGuid(),
+                    Name = "<dfn>CRM</dfn> Per Users",
+                    Sequence = 6,
+                    CreateDate = DateTime.UtcNow,
+                    UpdateDate = DateTime.UtcNow,
+                    UpdateSource = "ProductTest.PopulateDemoData",
+                };
+                int i = 0;
+                foreach (ContextFeature featr in distributorMembership.Features.OrderBy(feat => feat.Sequence))
+                {
+                    if (i <3)
+                    {
+                        foreach (ContextProductSequence prod in distributorMembership.Products.OrderBy(prodct => prodct.Sequence))
+                        {
+                            featr.AssociatedProducts.Add(new ContextFeatureProduct()
+                            {
+                                ContextFeatureProductId = Guid.NewGuid(),
+                                CreateDate = DateTime.UtcNow,
+                                UpdateDate = DateTime.UtcNow,
+                                Label = "",
+                                Product = prod.Product,
+                                UpdateSource = "ProductTest.PopulateDemoData",
+                            });
+                        }
+                    }
+                    i++;
+                }
                 objectContext.SaveChanges();
             }
         }
@@ -283,11 +339,11 @@ namespace asi.asicentral.Tests
                 Assert.IsNotNull(distributorMembership);
                 IList<ContextFeature> features = distributorMembership.Features.OrderBy(ctxFeature => ctxFeature.Sequence).ToList();
                 Assert.IsTrue(features.Count > 0);
-                ContextFeature feature = features.Where(feat => feat.Name == "ESP Users").SingleOrDefault();
+                ContextFeature feature = features.Where(feat => feat.Name == "<dfn>ESP</dfn> Users").SingleOrDefault();
                 Assert.IsNotNull(feature);
                 Assert.IsNotNull(feature.ChildFeatures);
                 Assert.IsTrue(feature.ChildFeatures.Count > 0);
-                feature = features.Where(feat => feat.Name == "ASI Number").SingleOrDefault();
+                feature = features.Where(feat => feat.Name == "<dfn>ASI Number</dfn>").SingleOrDefault();
                 Assert.IsNotNull(feature);
                 Assert.IsNotNull(feature.AssociatedProducts);
                 foreach (ContextFeatureProduct featProd in feature.AssociatedProducts)

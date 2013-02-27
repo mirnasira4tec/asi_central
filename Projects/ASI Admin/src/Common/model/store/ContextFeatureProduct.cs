@@ -17,7 +17,7 @@ namespace asi.asicentral.model.store
 
         public override string ToString()
         {
-            return string.Format("Feature Product: {0} - {1}", ContextFeatureProductId, Label);
+            return string.Format("Feature Product: Label({0}) - {1}", Label, Product.Name);
         }
 
         public override bool Equals(object obj)
