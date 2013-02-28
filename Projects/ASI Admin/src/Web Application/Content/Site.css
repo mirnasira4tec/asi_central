@@ -8,6 +8,21 @@ body
     padding: 50px 50px 50px 50px;
 }
 
+div.formField 
+{
+    padding: 5px 0px 5px 0px;
+}
+
+div.well 
+{
+    padding: 0px 0px 0px 0px;
+    margin-bottom: 10px
+}
+
+    div.well form {
+        margin: 0px 0px 0px 0px;
+    }
+
 .float-left {
     float: left;
 }

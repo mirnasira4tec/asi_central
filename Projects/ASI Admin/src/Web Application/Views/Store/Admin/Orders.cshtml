@@ -1,7 +1,7 @@
 ﻿@using asi.asicentral.web
 @using asi.asicentral.web.Models.Store
 @using asi.asicentral.model.store
-@model PageViewModel
+@model OrderPageModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -13,68 +13,68 @@
     <ul id="formtab" class="nav nav-tabs">
         <li class="active"><a href="#date">Date</a></li>
         <li><a href="#order">Order Id</a></li>
-        <li><a href="#product">Product Id</a></li>
+        <li><a href="#product">Product</a></li>
         <li><a href="#name">Name</a></li>
         <li><a href="#timms">Timms</a></li>
     </ul>
     <div class="tab-content">
-        <div class="tab-pane active" id="date">
+        <div class="tab-pane active" id="@OrderPageModel.TAB_DATE">
             <div class="well">
             @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline" }))
             {                
-                <label for="startDate">Start Date</label><input data-type="date" name="DateStart" type="text" value="@ViewBag.StartDate" />
-                <label for="endDate">End Date</label> <input data-type="date" name="DateEnd" type="text" value="@ViewBag.EndDate" />
-                <input type="hidden" value="@Model.FormTab" name="formtab" />
+                <div class="formField"><label for="startDate">Start Date</label> <input data-type="date" name="DateStart" type="text" value="@Model.StartDate" />
+                <label for="endDate">End Date</label> <input data-type="date" name="DateEnd" type="text" value="@Model.EndDate" />
+                <input type="hidden" value="@OrderPageModel.TAB_DATE" name="formtab" />
                 <input type="hidden" value="@Model.OrderTab" name="ordertab" />                
-                <input type="submit" value="Search" class="btn" />
+                <input type="submit" value="Search" class="btn" /></div>
             }
             </div>
         </div>
-        <div class="tab-pane" id="order">
+        <div class="tab-pane" id="@OrderPageModel.TAB_ORDER">
             <div class="well">
             @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline" }))
             {
-                <label for="orderid">Order Id</label> <input id="orderid" name="orderid" type="text" value="" />
-                <input type="hidden" value="@Model.FormTab" name="formtab" />
+                <div class="formField"><label for="orderid">Order Id</label> <input id="orderid" name="orderid" type="text" value="" />
+                <input type="hidden" value="@OrderPageModel.TAB_ORDER" name="formtab" />
                 <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
-                <input type="submit" value="Search" class="btn" />
+                <input type="submit" value="Search" class="btn" /></div>
             }
             </div>
         </div>
-        <div class="tab-pane" id="product">
+        <div class="tab-pane" id="@OrderPageModel.TAB_PRODUCT">
             <div class="well">
             @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline" }))
             {
-                <label for="startDate">Start Date</label> <input data-type="date" name="startDate" type="text" value="@ViewBag.StartDate" />
-                <label for="endDate">End Date</label> <input data-type="date" name="endDate" type="text" value="@ViewBag.EndDate" /><br /><br /><!--TODO find better solution than using br-->
-                <label for="productid">Product ID</label> <input name="productid" type="text" />
-                <input type="hidden" value="@Model.FormTab" name="formtab" />
+                <div class="formField"><label for="productid">Product Name</label> <input name="product" type="text" value="@Model.Product"/></div>
+                <div class="formField"><label for="startDate">Start Date</label> <input data-type="date" name="DateStart" type="text" value="@Model.StartDate" />
+                <label for="endDate">End Date</label> <input data-type="date" name="DateEnd" type="text" value="@Model.EndDate" />
+                <input type="hidden" value="@OrderPageModel.TAB_PRODUCT" name="formtab" />
                 <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
-                <input type="submit" value="Search" class="btn" />
+                <input type="submit" value="Search" class="btn" /></div>
             }
             </div>
         </div>
-        <div class="tab-pane" id="name">
+        <div class="tab-pane" id="@OrderPageModel.TAB_NAME">
             <div class="well">
             @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline" }))
             {
-                <label for="firstname">First or last name</label> <input id="firstname" name="firstlastname" type="text" value="" /><br /><br />
-                <label for="startDate">Start Date</label> <input data-type="date" name="startDate" type="text" value="@ViewBag.StartDate" />
-                <label for="endDate">End Date</label> <input data-type="date" name="endDate" type="text" value="@ViewBag.EndDate" />
-                <input type="hidden" value="@Model.FormTab" name="formtab" />
+                <div class="formField"><label for="firstname">First or last name</label> <input id="firstname" name="firstlastname" type="text" value="" /></div>
+                <div class="formField"><label for="startDate">Start Date</label> <input data-type="date" name="DateStart" type="text" value="@Model.StartDate" />
+                <label for="endDate">End Date</label> <input data-type="date" name="DateEnd" type="text" value="@Model.EndDate" />
+                <input type="hidden" value="@OrderPageModel.TAB_NAME" name="formtab" />
                 <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
-                <input type="submit" value="Search" class="btn" />
+                <input type="submit" value="Search" class="btn" /></div>
             }
             </div>
         </div>
-        <div class="tab-pane" id="timms">
+        <div class="tab-pane" id="@OrderPageModel.TAB_TIMMS">
             @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline" }))
             {
                 <div class="well">
-                <label for="timmsid">TIMMS ID</label> <input id="timmsid" name="id" type="text" value="" />
-                <input type="hidden" value="@Model.FormTab" name="formtab" />
+                <div class="formField"><label for="timmsid">TIMMS ID</label> <input id="timmsid" name="id" type="text" value="" />
+                <input type="hidden" value="@OrderPageModel.TAB_TIMMS" name="formtab" />
                 <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
-                <input type="submit" value="Search" class="btn" />
+                <input type="submit" value="Search" class="btn" /></div>
                 </div>
             }
         </div>
@@ -90,25 +90,20 @@
     <div class="tab-content">
         <div id="completedorders" class="tab-pane active">
         <table class="table table-bordered table-condensed table-striped">
-            <thead><tr><th>Order ID</th><th>Name</th><th>Email</th><th>Item</th><th>Application</th><th>Quantity</th><th>Price</th><th>Billing Information</th></tr></thead>
+            <thead><tr><th>@Resource.StoreOrderID</th><th>Name</th><th>Email</th><th>Item</th><th>Application</th><th>Quantity</th><th>Price</th><th>Billing Information</th><th>@Resource.StoreDateOrderCreated</th></tr></thead>
             <tbody>            
-            @foreach (CompletedOrder order in Model.CompletedOrders)
+            @foreach (asi.asicentral.web.Models.Store.Order order in Model.Orders)
             {
                 <tr><td>
                 <a rel="tooltip" data-placement="top" title="Click here to reject the order" href="#"><i data-orderid="@order.OrderId" class="icon-remove"></i></a>
                 <a rel="tooltip" data-placement="top" title="Click here to accept the order" href="#"><i data-orderid="@order.OrderId" class="icon-ok"></i></a>
                 @order.OrderId
-                </td>
-                <td>Name</td>
-                <td>@order.Email</td>
-                <td>@order.Item</td>
+                </td><td>Name</td><td>@order.Email</td><td>@order.Item</td>
                 @if (order.Application != null)
                 { <td><a href="@Url.Action("Edit", "Application", new OrderDetailApplication { Id = order.Application.Id })">Application</a></td> }
                 else
                 { <td>&nbsp</td> }
-                <td>@order.Quantity</td>
-                <td>$@order.Price</td>
-                <td>@order.Billing</td></tr>
+                <td>@order.Quantity</td><td>$@order.Price</td><td>@order.Billing</td><td>@order.DateOrderCreated</td></tr>
             }
             </tbody>
         </table>

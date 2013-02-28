@@ -1,5 +1,7 @@
-﻿using System;
+﻿using asi.asicentral.Common;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +12,9 @@ namespace asi.asicentral.model.store
     {
         public System.Guid Id { get; set; }
         public System.Guid UserId { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "CompanyName")]
+        public string Company { get; set; }
 
         public override string ToString()
         {
