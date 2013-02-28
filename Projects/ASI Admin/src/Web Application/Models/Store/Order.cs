@@ -42,6 +42,14 @@ namespace asi.asicentral.web.Models.Store
                 return name;
             }
         }
+
+        public OrderStatus ApprovalStatus
+        {
+            get { return orderDetail.Order.ProcessStatus; }
+        }
+
+        public string CreditCard { private set; get; }
+
         public String Item
         {
             get { return (orderDetail.Product != null ? orderDetail.Product.Description : String.Empty); }
@@ -92,6 +100,15 @@ namespace asi.asicentral.web.Models.Store
             order.Application = storeService.GetApplication(orderDetail);
             if (order.Application != null) 
                 order.Company = order.Application.Company;
+            if (orderDetail.Order.CreditCard != null && !string.IsNullOrEmpty(orderDetail.Order.CreditCard.Number))
+            {
+                order.CreditCard = orderDetail.Order.CreditCard.Number;
+                if (orderDetail.Order.CreditCard.ExpMonth != null && orderDetail.Order.CreditCard.ExpMonth.Length > 1 &&
+                    orderDetail.Order.CreditCard.ExpYear != null && orderDetail.Order.CreditCard.ExpYear.Length > 1)
+
+                    order.CreditCard += " (exp " + orderDetail.Order.CreditCard.ExpMonth + "/" + orderDetail.Order.CreditCard.ExpYear.Substring(orderDetail.Order.CreditCard.ExpYear.Length - 2) + ")";
+            }
+
             return order;
         }
     }

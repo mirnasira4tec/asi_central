@@ -14,8 +14,9 @@ namespace asi.asicentral.web.Models.Store
         public const String TAB_PRODUCT = "product";
         public const String TAB_NAME = "name";
         public const String TAB_TIMMS = "timms";
-        public const String COMPLETED = "completedorders";
-        public const String PENDING = "pendingorders";
+        public const String ORDER_COMPLETED = "completedorders";
+        public const String ORDER_INCOMPLETE = "incompleteorders";
+        public const String ORDER_PENDING = "pendingorders";
 
         public IList<Order> Orders { set; get; }
         public String FormTab { get; set; }
@@ -23,6 +24,8 @@ namespace asi.asicentral.web.Models.Store
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public string Product { get; set; }
+        public int OrderIdentifier { get; set; }
+        public string Name { get; set; }
 
         public OrderPageModel(IStoreService storeService, IList<OrderDetail> orderDetails) 
         {
