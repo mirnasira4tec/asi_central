@@ -30,13 +30,13 @@ namespace asi.asicentral.web.Controllers.Store
                 else dateEnd = dateEnd.Value.Date + new TimeSpan(23, 59, 50);
                 orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.DateCreated >= dateStart && detail.Order.DateCreated <= dateEnd);
             }
-            if (formTab == OrderPageModel.TAB_PRODUCT && product != null)
+            if (formTab == OrderPageModel.TAB_PRODUCT && !string.IsNullOrEmpty(product))
                 orderDetailQuery = orderDetailQuery.Where(detail => detail.Product != null && detail.Product.Description != null && detail.Product.Description.Contains(product.ToLower()));
 
             if (formTab == OrderPageModel.TAB_ORDER && orderId.HasValue)
                 orderDetailQuery = orderDetailQuery.Where(detail => detail.OrderId == orderId.Value);
 
-            if (formTab == OrderPageModel.TAB_NAME && name != null)
+            if (formTab == OrderPageModel.TAB_NAME && !string.IsNullOrEmpty(name))
             {
                 string nameCondition = name.ToLower();
                 orderDetailQuery = orderDetailQuery

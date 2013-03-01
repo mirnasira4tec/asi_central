@@ -98,7 +98,7 @@
             {
                 <tr><td>@if(order.ApprovalStatus == OrderStatus.Pending) { <a rel="tooltip" data-placement="top" title="Click here to reject the order" href="#"><i data-orderid="@order.OrderId" class="icon-remove"></i></a><a rel="tooltip" data-placement="top" title="Click here to accept the order" href="#"><i data-orderid="@order.OrderId" class="icon-ok"></i></a> }
                 @order.OrderId
-                </td><td>Name</td><td>@order.Email</td><td>@order.Item</td>
+                </td><td>@order.Name</td><td>@order.Email</td><td><a href="#" class="productRef">@order.Item</a></td>
                 @if (order.Application != null)
                 { <td><a href="@Url.Action("Edit", "Application", new OrderDetailApplication { Id = order.Application.Id })">Application</a></td> }
                 else
@@ -139,7 +139,11 @@
             $('form[id="form-' + tab + '"] input[name=ordertab]').val(tabname);
             $('form[id="form-' + tab + '"]').submit();
         });
-        $('#ordertab a[href="#@Model.OrderTab"]').tab('show');
+        $('a.productRef').click(function (e) {
+            e.preventDefault();
+            $('form[id="form-@OrderPageModel.TAB_PRODUCT"] input[name=product]').val(e.target.textContent);
+            $('form[id="form-@OrderPageModel.TAB_PRODUCT"]').submit();
+        });
    </script>
 }
 

@@ -74,8 +74,7 @@ namespace asi.asicentral.web.Models.Store
             get
             {
                 StringBuilder billing = new StringBuilder();
-                if (!String.IsNullOrEmpty(orderDetail.Order.BillFirstName)) billing.Append(orderDetail.Order.BillFirstName + ", ");
-                if (!String.IsNullOrEmpty(orderDetail.Order.BillLastName)) billing.Append(orderDetail.Order.BillLastName + ", ");
+                if (orderDetail.Order.CreditCard != null && !String.IsNullOrEmpty(orderDetail.Order.CreditCard.Name)) billing.Append(orderDetail.Order.CreditCard.Name + ", ");
                 if (!String.IsNullOrEmpty(orderDetail.Order.BillCity)) billing.Append(orderDetail.Order.BillCity + ", ");
                 if (!String.IsNullOrEmpty(orderDetail.Order.BillState)) billing.Append(orderDetail.Order.BillState + ", ");
                 if (!String.IsNullOrEmpty(orderDetail.Order.BillZip)) billing.Append(orderDetail.Order.BillZip + ", ");
