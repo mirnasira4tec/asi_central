@@ -34,6 +34,10 @@ namespace asi.asicentral.web.DependencyResolution
 
             ObjectFactory.Initialize(x =>
                 {
+                    x.For<IEncryptionService>()
+                        .Use<EncryptionService>()
+                        .EnrichWith(encryption => proxyGenerator.CreateClassProxyWithTarget(encryption, new IInterceptor[] { new LogInterceptor(encryption.GetType()) }));
+
                     x.For<Registry>()
                         .Use<EFRegistry>()
                         .EnrichWith(registry => proxyGenerator.CreateClassProxyWithTarget(registry, new IInterceptor[] { new LogInterceptor(registry.GetType()) }));
@@ -57,6 +61,7 @@ namespace asi.asicentral.web.DependencyResolution
 
                     x.SetAllProperties(instance => instance.OfType<IObjectService>());
                     x.SetAllProperties(instance => instance.OfType<IStoreService>());
+                    x.SetAllProperties(instance => instance.OfType<IEncryptionService>());
 
                     x.For<IController>()
                         .EnrichAllWith(controller => proxyGenerator.CreateInterfaceProxyWithTarget(controller, new IInterceptor[] { new LogInterceptor(controller.GetType()) }));

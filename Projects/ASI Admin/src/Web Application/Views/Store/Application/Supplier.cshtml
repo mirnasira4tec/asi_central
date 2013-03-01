@@ -1,6 +1,5 @@
 ﻿@using asi.asicentral.web
-@using asi.asicentral.web.Models.Store.Application
-@model ApplicationPageModel
+@model asi.asicentral.model.store.SupplierMembershipApplication
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -13,31 +12,31 @@
 <div class="row-fluid">
     <div class="span3">
         @Html.AntiForgeryToken()
-        @Html.LabelFor(m => m.supplierApplication.Company) @Html.EditorFor(m => m.supplierApplication.Company)
-        @Html.LabelFor(m => m.supplierApplication.BillingAddress) @Html.EditorFor(m => m.supplierApplication.BillingAddress)
-        @Html.LabelFor(m => m.supplierApplication.BillingPhone) @Html.EditorFor(m => m.supplierApplication.BillingPhone)
-        @Html.LabelFor(m => m.supplierApplication.BillingTollFree) @Html.EditorFor(m => m.supplierApplication.BillingTollFree)
-        @Html.LabelFor(m => m.supplierApplication.BillingFax) @Html.EditorFor(m => m.supplierApplication.BillingFax)
-        @Html.LabelFor(m => m.supplierApplication.BillingEmail) @Html.EditorFor(m => m.supplierApplication.BillingEmail)
-        @Html.LabelFor(m => m.supplierApplication.BillingWebUrl) @Html.EditorFor(m => m.supplierApplication.BillingWebUrl)
-        @Html.LabelFor(m => m.supplierApplication.ShippingAddress) @Html.EditorFor(m => m.supplierApplication.ShippingAddress)
-        @Html.LabelFor(m => m.supplierApplication.ContactName) @Html.EditorFor(m => m.supplierApplication.ContactName)
-        @Html.LabelFor(m => m.supplierApplication.ContactTitle) @Html.EditorFor(m => m.supplierApplication.ContactTitle)
-        @Html.LabelFor(m => m.supplierApplication.ContactEmail) @Html.EditorFor(m => m.supplierApplication.ContactEmail)
-        @Html.LabelFor(m => m.supplierApplication.ContactPhone) @Html.EditorFor(m => m.supplierApplication.ContactPhone)
+        @Html.LabelFor(m => m.Company) @Html.EditorFor(m => m.Company)
+        @Html.LabelFor(m => m.BillingAddress) @Html.EditorFor(m => m.BillingAddress)
+        @Html.LabelFor(m => m.BillingPhone) @Html.EditorFor(m => m.BillingPhone)
+        @Html.LabelFor(m => m.BillingTollFree) @Html.EditorFor(m => m.BillingTollFree)
+        @Html.LabelFor(m => m.BillingFax) @Html.EditorFor(m => m.BillingFax)
+        @Html.LabelFor(m => m.BillingEmail) @Html.EditorFor(m => m.BillingEmail)
+        @Html.LabelFor(m => m.BillingWebUrl) @Html.EditorFor(m => m.BillingWebUrl)
+        @Html.LabelFor(m => m.ShippingAddress) @Html.EditorFor(m => m.ShippingAddress)
+        @Html.LabelFor(m => m.ContactName) @Html.EditorFor(m => m.ContactName)
+        @Html.LabelFor(m => m.ContactTitle) @Html.EditorFor(m => m.ContactTitle)
+        @Html.LabelFor(m => m.ContactEmail) @Html.EditorFor(m => m.ContactEmail)
+        @Html.LabelFor(m => m.ContactPhone) @Html.EditorFor(m => m.ContactPhone)
 
-        @Html.LabelFor(m => m.supplierApplication.LineNames) @Html.EditorFor(m => m.supplierApplication.LineNames)
-        @Html.LabelFor(m => m.supplierApplication.LineMinorityOwned) @Html.EditorFor(m => m.supplierApplication.LineMinorityOwned)
-        @Html.LabelFor(m => m.supplierApplication.SalesVolume) @Html.EditorFor(m => m.supplierApplication.SalesVolume)
-        @Html.LabelFor(m => m.supplierApplication.YearEstablished) @Html.EditorFor(m => m.supplierApplication.YearEstablished)
-        @Html.LabelFor(m => m.supplierApplication.YearEnteredAdvertising) @Html.EditorFor(m => m.supplierApplication.YearEnteredAdvertising)
-        @Html.LabelFor(m => m.supplierApplication.OfficeHourStart) @Html.EditorFor(m => m.supplierApplication.OfficeHourStart)
-        @Html.LabelFor(m => m.supplierApplication.NumberOfEmployee) @Html.EditorFor(m => m.supplierApplication.NumberOfEmployee)
-        @Html.LabelFor(m => m.supplierApplication.AffiliateCompanyName) @Html.EditorFor(m => m.supplierApplication.AffiliateCompanyName)
-        @Html.LabelFor(m => m.supplierApplication.AffiliateASINumber) @Html.EditorFor(m => m.supplierApplication.AffiliateASINumber)
-        @Html.LabelFor(m => m.supplierApplication.ProductionTime) @Html.EditorFor(m => m.supplierApplication.ProductionTime)
-        @Html.LabelFor(m => m.supplierApplication.UPSAddress) @Html.EditorFor(m => m.supplierApplication.UPSAddress)
-        @Html.LabelFor(m => m.supplierApplication.FedTaxId) @Html.EditorFor(m => m.supplierApplication.FedTaxId)
+        @Html.LabelFor(m => m.LineNames) @Html.EditorFor(m => m.LineNames)
+        @Html.LabelFor(m => m.LineMinorityOwned) @Html.EditorFor(m => m.LineMinorityOwned)
+        @Html.LabelFor(m => m.SalesVolume) @Html.EditorFor(m => m.SalesVolume)
+        @Html.LabelFor(m => m.YearEstablished) @Html.EditorFor(m => m.YearEstablished)
+        @Html.LabelFor(m => m.YearEnteredAdvertising) @Html.EditorFor(m => m.YearEnteredAdvertising)
+        @Html.LabelFor(m => m.OfficeHourStart) @Html.EditorFor(m => m.OfficeHourStart)
+        @Html.LabelFor(m => m.NumberOfEmployee) @Html.EditorFor(m => m.NumberOfEmployee)
+        @Html.LabelFor(m => m.AffiliateCompanyName) @Html.EditorFor(m => m.AffiliateCompanyName)
+        @Html.LabelFor(m => m.AffiliateASINumber) @Html.EditorFor(m => m.AffiliateASINumber)
+        @Html.LabelFor(m => m.ProductionTime) @Html.EditorFor(m => m.ProductionTime)
+        @Html.LabelFor(m => m.UPSAddress) @Html.EditorFor(m => m.UPSAddress)
+        @Html.LabelFor(m => m.FedTaxId) @Html.EditorFor(m => m.FedTaxId)
     </div>
     <div class="span3">
         <!-- TODO find a way to error trap nullable boolean values -->
@@ -60,8 +59,8 @@
         <div class="well">
         
         </div>
-        <input type="submit" name="command" value="@ApplicationPageModel.ACCEPT" class="btn" />
-        <input type="submit" name="command" value="@ApplicationPageModel.REJECT" class="btn" />
+        <input type="submit" name="command" value="Accept" class="btn" />
+        <input type="submit" name="command" value="Reject" class="btn" />
     </div>
 </div>
 }
