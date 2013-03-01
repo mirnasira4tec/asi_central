@@ -96,14 +96,17 @@
             <tbody>            
             @foreach (asi.asicentral.web.Models.Store.Order order in Model.Orders)
             {
-                <tr><td>@if(order.ApprovalStatus == OrderStatus.Pending) { <a rel="tooltip" data-placement="top" title="Click here to reject the order" href="#"><i data-orderid="@order.OrderId" class="icon-remove"></i></a><a rel="tooltip" data-placement="top" title="Click here to accept the order" href="#"><i data-orderid="@order.OrderId" class="icon-ok"></i></a> }
+                <tr><td>@if(order.ApprovalStatus == OrderStatus.Pending) { 
+                    <a rel="tooltip" data-placement="top" title="Click here to reject the order" href="#"><i data-orderid="@order.OrderId" class="icon-remove"></i></a>
+                    <a rel="tooltip" data-placement="top" title="Click here to accept the order" href="@Url.Action("Edit", "Application", new { Id = order.Application.Id })"><i data-orderid="@order.OrderId" class="icon-ok"></i></a> 
+                }
                 @order.OrderId
                 </td><td>@order.Name</td><td>@order.Email</td><td><a href="#" class="productRef">@order.Item</a></td>
                 @if (order.Application != null)
-                { <td><a href="@Url.Action("Edit", "Application", new OrderDetailApplication { Id = order.Application.Id })">Application</a></td> }
+                { <td><a href="@Url.Action("Edit", "Application", new { Id = order.Application.Id })">Application</a></td> }
                 else
                 { <td>&nbsp</td> }
-                <td>@order.Quantity</td><td>$@order.Price</td><td>@order.Billing</td><td>@order.CreditCard</td><td>@order.DateOrderCreated</td></tr>
+                <td>@order.Quantity</td><td>$@order.Price</td><td>@order.Billing</td><td>@order.CreditCard</td><td>@order.DateOrderCreated.ToString("MM/dd/yy")</td></tr>
             }
             </tbody>
         </table>

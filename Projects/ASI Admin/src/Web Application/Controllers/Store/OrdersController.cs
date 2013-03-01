@@ -14,6 +14,8 @@ namespace asi.asicentral.web.Controllers.Store
     {
         public IStoreService StoreService { get; set; }
 
+        public IEncryptionService encryptionService { get; set; }
+
         [HttpGet]
         public virtual ActionResult List(Nullable<DateTime> dateStart, Nullable<DateTime> dateEnd, string product, Nullable<int> orderId, string name, String formTab, String orderTab)
         {
@@ -55,7 +57,7 @@ namespace asi.asicentral.web.Controllers.Store
             //query has been constructed - get the data
             IList<OrderDetail> orderDetails = orderDetailQuery.OrderByDescending(detail => detail.OrderId).ToList();
 
-            OrderPageModel viewModel = new OrderPageModel(StoreService, orderDetails);
+            OrderPageModel viewModel = new OrderPageModel(StoreService, encryptionService, orderDetails);
 
             //pass the search values back into the page model so they can be displayed again
             if (dateStart.HasValue) viewModel.StartDate = dateStart.Value.ToString("MM/dd/yyyy");

@@ -22,9 +22,17 @@ namespace asi.asicentral.interfaces
         /// <summary>
         /// Used to decrypt a string using the key for the decryption
         /// </summary>
-        /// <param name="key">The vlaue of the key which was used to encrypt the data</param>
+        /// <param name="key">The value of the key which was used to encrypt the data</param>
         /// <param name="text">The encrypted text to be decrypted</param>
         /// <returns>The decrypted text</returns>
         string Decrypt(string key, string text);
+
+        /// <summary>
+        /// Used to decrypt strings encoded using legacy system. Will not work with the encrypt method.
+        /// </summary>
+        /// <param name="key">The value of the key which was used to encrypt the data</param>
+        /// <param name="encryptedText">The encrypted text to be decrypted</param>
+        /// <returns>The decrypted text or the original text if it could not be decrypted</returns>
+        string LegacyDecrypt(string key, string encryptedText);
     }
 }
