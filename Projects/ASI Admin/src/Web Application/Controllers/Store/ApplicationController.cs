@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
 using asi.asicentral.web.Models.Store;
+using asi.asicentral.web.Models.Store.Application;
 
 namespace asi.asicentral.web.Controllers.Store
 {
@@ -14,15 +15,20 @@ namespace asi.asicentral.web.Controllers.Store
         public IStoreService StoreObjectService { get; set; }
 
         [HttpGet]
-        public virtual ActionResult Edit(OrderDetailApplication orderDetailApplication)
+        public virtual ActionResult Edit(Guid id)
         {
-            OrderDetailApplication application;
+            OrderDetailApplication application = StoreObjectService.GetAll<SupplierMembershipApplication>(true).Where(theApp => theApp.Id == id).SingleOrDefault() as SupplierMembershipApplication;
+            if (application != null)
+            {
+                ApplicationPageModel pageView = new ApplicationPageModel(StoreObjectService, application);
+                return View("../Store/Application/Supplier", pageView);
+            }
 
-            application = StoreObjectService.GetAll<SupplierMembershipApplication>(true).Where(theApp => theApp.Id == orderDetailApplication.Id).SingleOrDefault() as SupplierMembershipApplication;
-            if (application != null) return View("../Store/Application/Supplier", application);
-
-            application = StoreObjectService.GetAll<DistributorMembershipApplication>(true).Where(theApp => theApp.Id == orderDetailApplication.Id).SingleOrDefault() as DistributorMembershipApplication;
-            if (application != null) return View("../Store/Application/Distributor", application);
+            application = StoreObjectService.GetAll<DistributorMembershipApplication>(true).Where(theApp => theApp.Id == id).SingleOrDefault() as DistributorMembershipApplication;
+            {
+                ApplicationPageModel pageView = new ApplicationPageModel(StoreObjectService, application);
+                if (application != null) return View("../Store/Application/Distributor", pageView);
+            }
 
             // can't find any application - return nothing
             return new EmptyResult();
@@ -30,40 +36,11 @@ namespace asi.asicentral.web.Controllers.Store
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public virtual ActionResult Reject(int orderid, string startDate, string endDate)
+        [ValidateInput(true)]
+        public virtual ActionResult Edit(OrderDetailApplication orderDetailApplication, String command)
         {
-            // TODO
-            // if valid order id
-            // reject order, redirect to "../Store/Admin/Orders"
-            //Order order = StoreObjectService.GetAll<Order>().Where(theOrder => theOrder.Id == orderid).SingleOrDefault();
-            //PageViewModel viewOrders = new PageViewModel(storeo);
-            
-            //foreach (OrderDetail item in order.OrderDetails)
-            //{
-            //    CompletedOrder closedOrder = new CompletedOrder();
-            //    closedOrder.SetOrderDetail(item);
-            //    viewOrders.CompletedOrders.Add(closedOrder);
-            //}
-            return null;
-        }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public virtual ActionResult Accept(int orderid, string startDate, string endDate)
-       { 
-            // TODO
-            // if valid order id
-            // accept order, redirect to "../Store/Admin/Orders"
-            //Order order = StoreObjectService.GetAll<Order>().Where(theOrder => theOrder.Id == orderid).SingleOrDefault();
-            //PageViewModel viewOrders = new PageViewModel();
-
-            //foreach (OrderDetail item in order.OrderDetails)
-            //{
-            //    CompletedOrder closedOrder = new CompletedOrder();
-            //    closedOrder.SetOrderDetail(item);
-            //    viewOrders.CompletedOrders.Add(closedOrder);
-            //}
-            return null;
+            return new EmptyResult();
         }
     }
 }

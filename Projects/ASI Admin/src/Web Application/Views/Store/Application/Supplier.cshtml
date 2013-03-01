@@ -1,5 +1,6 @@
 ﻿@using asi.asicentral.web
-@model asi.asicentral.model.store.SupplierMembershipApplication
+@using asi.asicentral.web.Models.Store.Application
+@model ApplicationPageModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,55 +8,67 @@
 
 <h2>@Resource.StoreTitleSupplierApplication</h2>
 
-<table class="table table-bordered table-condensed table-striped">
+@using (Html.BeginForm())
+{
+<div class="row-fluid">
+    <div class="span3">
+        @Html.AntiForgeryToken()
+        @Html.LabelFor(m => m.supplierApplication.Company) @Html.EditorFor(m => m.supplierApplication.Company)
+        @Html.LabelFor(m => m.supplierApplication.BillingAddress) @Html.EditorFor(m => m.supplierApplication.BillingAddress)
+        @Html.LabelFor(m => m.supplierApplication.BillingPhone) @Html.EditorFor(m => m.supplierApplication.BillingPhone)
+        @Html.LabelFor(m => m.supplierApplication.BillingTollFree) @Html.EditorFor(m => m.supplierApplication.BillingTollFree)
+        @Html.LabelFor(m => m.supplierApplication.BillingFax) @Html.EditorFor(m => m.supplierApplication.BillingFax)
+        @Html.LabelFor(m => m.supplierApplication.BillingEmail) @Html.EditorFor(m => m.supplierApplication.BillingEmail)
+        @Html.LabelFor(m => m.supplierApplication.BillingWebUrl) @Html.EditorFor(m => m.supplierApplication.BillingWebUrl)
+        @Html.LabelFor(m => m.supplierApplication.ShippingAddress) @Html.EditorFor(m => m.supplierApplication.ShippingAddress)
+        @Html.LabelFor(m => m.supplierApplication.ContactName) @Html.EditorFor(m => m.supplierApplication.ContactName)
+        @Html.LabelFor(m => m.supplierApplication.ContactTitle) @Html.EditorFor(m => m.supplierApplication.ContactTitle)
+        @Html.LabelFor(m => m.supplierApplication.ContactEmail) @Html.EditorFor(m => m.supplierApplication.ContactEmail)
+        @Html.LabelFor(m => m.supplierApplication.ContactPhone) @Html.EditorFor(m => m.supplierApplication.ContactPhone)
 
-    <tr><td>@Html.LabelFor(m => m.Company)</td><td>@Model.Company</td></tr>
-    <tr><td>@Html.LabelFor(m => m.BillingAddress)</td><td>@Model.BillingAddress</td></tr>
-    <tr><td>@Html.LabelFor(m => m.BillingPhone)</td><td>@Model.BillingPhone</td></tr>
-    <tr><td>@Html.LabelFor(m => m.BillingTollFree)</td><td>@Model.BillingTollFree</td></tr>
-    <tr><td>@Html.LabelFor(m => m.BillingFax)</td><td>@Model.BillingFax</td></tr>
-    <tr><td>@Html.LabelFor(m => m.BillingEmail)</td><td>@Model.BillingEmail</td></tr>
-    <tr><td>@Html.LabelFor(m => m.BillingWebUrl)</td><td>@Model.BillingWebUrl</td></tr>
-    <tr><td>@Html.LabelFor(m => m.ShippingAddress)</td><td>@Model.ShippingAddress</td></tr>
-    <tr><td>@Html.LabelFor(m => m.ContactName)</td><td>@Model.ContactName</td></tr>
-    <tr><td>@Html.LabelFor(m => m.ContactTitle)</td><td>@Model.ContactTitle</td></tr>
-    <tr><td>@Html.LabelFor(m => m.ContactEmail)</td><td>@Model.ContactEmail</td></tr>
-    <tr><td>@Html.LabelFor(m => m.ContactPhone)</td><td>@Model.ContactPhone</td></tr>
+        @Html.LabelFor(m => m.supplierApplication.LineNames) @Html.EditorFor(m => m.supplierApplication.LineNames)
+        @Html.LabelFor(m => m.supplierApplication.LineMinorityOwned) @Html.EditorFor(m => m.supplierApplication.LineMinorityOwned)
+        @Html.LabelFor(m => m.supplierApplication.SalesVolume) @Html.EditorFor(m => m.supplierApplication.SalesVolume)
+        @Html.LabelFor(m => m.supplierApplication.YearEstablished) @Html.EditorFor(m => m.supplierApplication.YearEstablished)
+        @Html.LabelFor(m => m.supplierApplication.YearEnteredAdvertising) @Html.EditorFor(m => m.supplierApplication.YearEnteredAdvertising)
+        @Html.LabelFor(m => m.supplierApplication.OfficeHourStart) @Html.EditorFor(m => m.supplierApplication.OfficeHourStart)
+        @Html.LabelFor(m => m.supplierApplication.NumberOfEmployee) @Html.EditorFor(m => m.supplierApplication.NumberOfEmployee)
+        @Html.LabelFor(m => m.supplierApplication.AffiliateCompanyName) @Html.EditorFor(m => m.supplierApplication.AffiliateCompanyName)
+        @Html.LabelFor(m => m.supplierApplication.AffiliateASINumber) @Html.EditorFor(m => m.supplierApplication.AffiliateASINumber)
+        @Html.LabelFor(m => m.supplierApplication.ProductionTime) @Html.EditorFor(m => m.supplierApplication.ProductionTime)
+        @Html.LabelFor(m => m.supplierApplication.UPSAddress) @Html.EditorFor(m => m.supplierApplication.UPSAddress)
+        @Html.LabelFor(m => m.supplierApplication.FedTaxId) @Html.EditorFor(m => m.supplierApplication.FedTaxId)
+    </div>
+    <div class="span3">
+        <!-- TODO find a way to error trap nullable boolean values -->
+@*        @Html.LabelFor(m => m.IsImprinterVsDecorator)  @Html.CheckBoxFor(m => m.IsImprinterVsDecorator.Value)
+        @Html.LabelFor(m => m.IsImporter) @Html.CheckBoxFor(m => m.IsImporter.Value)
+        @Html.LabelFor(m => m.IsManufacturer) @Html.CheckBoxFor(m => m.IsManufacturer.Value)
+        @Html.LabelFor(m => m.IsRetailer) @Html.CheckBoxFor(m => m.IsRetailer.Value)
+        @Html.LabelFor(m => m.IsWholesaler) @Html.CheckBoxFor(m => m.IsWholesaler.Value)
+        @Html.LabelFor(m => m.IsUnionMade) @Html.CheckBoxFor(m => m.IsUnionMade.Value)
+        @Html.LabelFor(m => m.IsRushServiceAvailable) @Html.CheckBoxFor(m => m.IsRushServiceAvailable.Value)
     
-    <tr><td>@Html.LabelFor(m => m.LineNames)</td><td> </td>@Model.LineNames</tr>
-    <tr><td>@Html.LabelFor(m => m.LineMinorityOwned)</td><td>@Model.LineMinorityOwned</td></tr>
-    <tr><td>@Html.LabelFor(m => m.SalesVolume)</td><td>@Model.SalesVolume</td></tr>
-    <tr><td>@Html.LabelFor(m => m.YearEstablished)</td><td>@Model.YearEstablished</td></tr>
-    <tr><td>@Html.LabelFor(m => m.YearEnteredAdvertising)</td><td>@Model.YearEnteredAdvertising</td></tr>
-    <tr><td>@Html.LabelFor(m => m.OfficeHourStart)</td><td>@Model.OfficeHourStart</td></tr>
-    <tr><td>@Html.LabelFor(m => m.NumberOfEmployee)</td><td>@Model.NumberOfEmployee</td></tr>
-    
-    <!-- TODO: sales force? -->
-    <!-- <tr><td>@Resource.SupplierAppSalesForce</td><td> </td></tr> -->
-    
-    <tr><td>@Html.LabelFor(m => m.IsImprinterVsDecorator)</td><td>@Model.IsImprinterVsDecorator</td></tr>
-    <tr><td>@Html.LabelFor(m => m.IsImporter)</td><td>@Model.IsImporter</td></tr>
-    <tr><td>@Html.LabelFor(m => m.IsManufacturer)</td><td>@Model.IsManufacturer</td></tr>
-    <tr><td>@Html.LabelFor(m => m.IsRetailer)</td><td>@Model.IsRetailer</td></tr>
-    <tr><td>@Html.LabelFor(m => m.IsWholesaler)</td><td>@Model.IsWholesaler</td></tr>
-    <tr><td>@Html.LabelFor(m => m.FedTaxId)</td><td>@Model.FedTaxId</td></tr>
-    <tr><td>@Html.LabelFor(m => m.SellToEndUsers)</td><td>@Model.SellToEndUsers</td></tr>
-    <tr><td>@Html.LabelFor(m => m.SellThruInternet)</td><td>@Model.SellThruInternet</td></tr>
-    <tr><td>@Html.LabelFor(m => m.SellThruRetail)</td><td>@Model.SellThruRetail</td></tr>
-    <tr><td>@Html.LabelFor(m => m.SellThruDirectMarketing)</td><td>@Model.SellThruDirectMarketing</td></tr>
-    <tr><td>@Html.LabelFor(m => m.SellThruAffiliate)</td><td>@Model.SellThruAffiliate</td></tr>
+        @Html.LabelFor(m => m.SellToEndUsers) @Html.CheckBoxFor(m => m.SellToEndUsers.Value)
+        @Html.LabelFor(m => m.SellThruInternet) @Html.CheckBoxFor(m => m.SellThruInternet.Value)
+        @Html.LabelFor(m => m.SellThruRetail) @Html.CheckBoxFor(m => m.SellThruRetail.Value)
+        @Html.LabelFor(m => m.SellThruDirectMarketing) @Html.CheckBoxFor(m => m.SellThruDirectMarketing.Value)
+        @Html.LabelFor(m => m.SellThruAffiliate) @Html.CheckBoxFor(m => m.SellThruAffiliate.Value)*@
+    </div>
+    <div class="span3">
+        <h4>Order Status</h4>
+        <div class="well">
+        
+        </div>
+        <input type="submit" name="command" value="@ApplicationPageModel.ACCEPT" class="btn" />
+        <input type="submit" name="command" value="@ApplicationPageModel.REJECT" class="btn" />
+    </div>
+</div>
+}
 
-    <tr><td>@Html.LabelFor(m => m.AffiliateCompanyName)</td><td>@Model.AffiliateCompanyName</td></tr>
-    <tr><td>@Html.LabelFor(m => m.AffiliateASINumber)</td><td>@Model.AffiliateASINumber</td></tr>
-    <tr><td>@Html.LabelFor(m => m.IsUnionMade)</td><td>@Model.IsUnionMade</td></tr>
-    <tr><td>@Html.LabelFor(m => m.ProductionTime)</td><td>@Model.ProductionTime</td></tr>
-    <tr><td>@Html.LabelFor(m => m.IsRushServiceAvailable)</td><td>@Model.IsRushServiceAvailable</td></tr>
-    <tr><td>@Html.LabelFor(m => m.UPSAddress)</td><td>@Model.UPSAddress</td></tr>
-</table>
-
+@*
 <h3>@Resource.SupplierAppMethodsOfImprinting</h3>
-
-<h3>@Resource.SupplierAppCompanyContacts</h3>
+<h3>@Resource.SupplierAppCompanyContacts</h3>*@
 
 @section Scripts {
     <script src="/Scripts/asi.js"></script>
