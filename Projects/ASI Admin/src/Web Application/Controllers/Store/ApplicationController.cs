@@ -36,43 +36,5 @@ namespace asi.asicentral.web.Controllers.Store
 
             return new EmptyResult();
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public virtual ActionResult Reject(int orderid, string startDate, string endDate)
-        {
-            // TODO
-            // if valid order id
-            // reject order, redirect to "../Store/Admin/Orders"
-            //Order order = StoreObjectService.GetAll<Order>().Where(theOrder => theOrder.Id == orderid).SingleOrDefault();
-            //PageViewModel viewOrders = new PageViewModel(storeo);
-            
-            //foreach (OrderDetail item in order.OrderDetails)
-            //{
-            //    CompletedOrder closedOrder = new CompletedOrder();
-            //    closedOrder.SetOrderDetail(item);
-            //    viewOrders.CompletedOrders.Add(closedOrder);
-            //}
-            return null;
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public virtual ActionResult Accept(int orderid, string startDate, string endDate)
-       { 
-            // TODO
-            // if valid order id
-            // accept order, redirect to "../Store/Admin/Orders"
-            //Order order = StoreObjectService.GetAll<Order>().Where(theOrder => theOrder.Id == orderid).SingleOrDefault();
-            //PageViewModel viewOrders = new PageViewModel();
-
-            //foreach (OrderDetail item in order.OrderDetails)
-            //{
-            //    CompletedOrder closedOrder = new CompletedOrder();
-            //    closedOrder.SetOrderDetail(item);
-            //    viewOrders.CompletedOrders.Add(closedOrder);
-            //}
-            return null;
-        }
     }
 }
