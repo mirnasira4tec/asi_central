@@ -6,7 +6,6 @@ using System.Web.Mvc;
 using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
 using asi.asicentral.web.Models.Store;
-using asi.asicentral.web.Models.Store.Application;
 
 namespace asi.asicentral.web.Controllers.Store
 {
@@ -17,21 +16,19 @@ namespace asi.asicentral.web.Controllers.Store
         [HttpGet]
         public virtual ActionResult Edit(Guid id)
         {
-            OrderDetailApplication application = StoreObjectService.GetAll<SupplierMembershipApplication>(true).Where(theApp => theApp.Id == id).SingleOrDefault() as SupplierMembershipApplication;
-            if (application != null)
+            SupplierMembershipApplication supplierApplication = StoreObjectService.GetAll<SupplierMembershipApplication>(true).Where(theApp => theApp.Id == id).SingleOrDefault();
+            if (supplierApplication != null)
+                return View("../Store/Application/Supplier", supplierApplication);
+            else
             {
-                ApplicationPageModel pageView = new ApplicationPageModel(StoreObjectService, application);
-                return View("../Store/Application/Supplier", pageView);
+                DistributorMembershipApplication distributorApplication = StoreObjectService.GetAll<DistributorMembershipApplication>(true).Where(theApp => theApp.Id == id).SingleOrDefault();
+                if (distributorApplication != null) return View("../Store/Application/Distributor", distributorApplication);
+                else
+                {
+                    // can't find any application - return nothing
+                    return new EmptyResult();
+                }
             }
-
-            application = StoreObjectService.GetAll<DistributorMembershipApplication>(true).Where(theApp => theApp.Id == id).SingleOrDefault() as DistributorMembershipApplication;
-            {
-                ApplicationPageModel pageView = new ApplicationPageModel(StoreObjectService, application);
-                if (application != null) return View("../Store/Application/Distributor", pageView);
-            }
-
-            // can't find any application - return nothing
-            return new EmptyResult();
         }
 
         [HttpPost]

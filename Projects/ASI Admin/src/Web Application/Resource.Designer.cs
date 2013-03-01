@@ -322,7 +322,7 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Date Order Created.
+        ///   Looks up a localized string similar to Date Created.
         /// </summary>
         public static string StoreDateOrderCreated {
             get {

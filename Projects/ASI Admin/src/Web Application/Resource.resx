@@ -211,7 +211,7 @@
     <value>Company Name</value>
   </data>
   <data name="StoreDateOrderCreated" xml:space="preserve">
-    <value>Date Order Created</value>
+    <value>Date Created</value>
   </data>
   <data name="StoreEmail" xml:space="preserve">
     <value>Email</value>
