@@ -14,14 +14,14 @@ namespace asi.asicentral.web.Controllers.Store
         public IStoreService StoreObjectService { get; set; }
 
         [HttpGet]
-        public virtual ActionResult Edit(OrderDetailApplication orderDetailApplication)
+        public virtual ActionResult Edit(Guid id)
         {
             OrderDetailApplication application;
 
-            application = StoreObjectService.GetAll<SupplierMembershipApplication>(true).Where(theApp => theApp.Id == orderDetailApplication.Id).SingleOrDefault() as SupplierMembershipApplication;
+            application = StoreObjectService.GetAll<SupplierMembershipApplication>(true).Where(theApp => theApp.Id == id).SingleOrDefault() as SupplierMembershipApplication;
             if (application != null) return View("../Store/Application/Supplier", application);
 
-            application = StoreObjectService.GetAll<DistributorMembershipApplication>(true).Where(theApp => theApp.Id == orderDetailApplication.Id).SingleOrDefault() as DistributorMembershipApplication;
+            application = StoreObjectService.GetAll<DistributorMembershipApplication>(true).Where(theApp => theApp.Id == id).SingleOrDefault() as DistributorMembershipApplication;
             if (application != null) return View("../Store/Application/Distributor", application);
 
             // can't find any application - return nothing
@@ -30,40 +30,11 @@ namespace asi.asicentral.web.Controllers.Store
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public virtual ActionResult Reject(int orderid, string startDate, string endDate)
+        [ValidateInput(true)]
+        public virtual ActionResult Edit(OrderDetailApplication orderDetailApplication)
         {
-            // TODO
-            // if valid order id
-            // reject order, redirect to "../Store/Admin/Orders"
-            //Order order = StoreObjectService.GetAll<Order>().Where(theOrder => theOrder.Id == orderid).SingleOrDefault();
-            //PageViewModel viewOrders = new PageViewModel(storeo);
-            
-            //foreach (OrderDetail item in order.OrderDetails)
-            //{
-            //    CompletedOrder closedOrder = new CompletedOrder();
-            //    closedOrder.SetOrderDetail(item);
-            //    viewOrders.CompletedOrders.Add(closedOrder);
-            //}
-            return null;
-        }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public virtual ActionResult Accept(int orderid, string startDate, string endDate)
-       { 
-            // TODO
-            // if valid order id
-            // accept order, redirect to "../Store/Admin/Orders"
-            //Order order = StoreObjectService.GetAll<Order>().Where(theOrder => theOrder.Id == orderid).SingleOrDefault();
-            //PageViewModel viewOrders = new PageViewModel();
-
-            //foreach (OrderDetail item in order.OrderDetails)
-            //{
-            //    CompletedOrder closedOrder = new CompletedOrder();
-            //    closedOrder.SetOrderDetail(item);
-            //    viewOrders.CompletedOrders.Add(closedOrder);
-            //}
-            return null;
+            return new EmptyResult();
         }
     }
 }

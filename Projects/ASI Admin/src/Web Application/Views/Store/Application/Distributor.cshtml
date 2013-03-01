@@ -7,19 +7,23 @@
 
 <h2>@Resource.StoreTitleDistributorApplication</h2>
 
-<table class="table table-bordered table-condensed table-striped">
-    <tr><td>@Html.LabelFor(m => m.Company)</td><td>@Model.Company</td></tr>
-    <tr><td>@Html.LabelFor(m => m.Street1)</td><td>@Model.Street1</td></tr>
-    <tr><td>@Html.LabelFor(m => m.Phone)</td><td>@Model.Phone</td></tr>
-    <tr><td>@Html.LabelFor(m => m.Fax)</td><td>@Model.Fax</td></tr>
-    <tr><td>@Html.LabelFor(m => m.WebUrl)</td><td>@Model.WebUrl</td></tr>
-    <tr><td>@Html.LabelFor(m => m.ApplicantName)</td><td>@Model.ApplicantName</td></tr>
-    <tr><td>@Html.LabelFor(m => m.ShippingStreet1)</td><td>@Model.ShippingStreet1</td></tr>
-    <tr><td>@Html.LabelFor(m => m.NumberOfEmployee)</td><td>@Model.NumberOfEmployee</td></tr>
-    <tr><td>@Html.LabelFor(m => m.NumberOfSalesEmployee)</td><td>@Model.NumberOfSalesEmployee</td></tr>
-    <tr><td>@Html.LabelFor(m => m.AnnualSalesVolume)</td><td>@Model.AnnualSalesVolume</td></tr>
-    <tr><td>@Html.LabelFor(m => m.ASIContact)</td><td>@Model.ASIContact</td></tr>
-</table>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.LabelFor(m => m.Company) @Html.EditorFor(m => m.Company)
+    @Html.LabelFor(m => m.Street1) @Html.EditorFor(m => m.Street1)
+    @Html.LabelFor(m => m.Phone)@Html.EditorFor(m => m.Phone)
+    @Html.LabelFor(m => m.Fax)@Html.EditorFor(m => m.Fax)
+    @Html.LabelFor(m => m.WebUrl) @Html.EditorFor(m => m.WebUrl)
+    @Html.LabelFor(m => m.ApplicantName) @Html.EditorFor(m => m.ApplicantName)
+    @Html.LabelFor(m => m.ShippingStreet1) @Html.EditorFor(m => m.ShippingStreet1)
+    @Html.LabelFor(m => m.NumberOfEmployee) @Html.EditorFor(m => m.NumberOfEmployee)
+    @Html.LabelFor(m => m.NumberOfSalesEmployee) @Html.EditorFor(m => m.NumberOfSalesEmployee)
+    @Html.LabelFor(m => m.AnnualSalesVolume) @Html.EditorFor(m => m.AnnualSalesVolume)
+    @Html.LabelFor(m => m.ASIContact) @Html.EditorFor(m => m.ASIContact)
+
+    <input type="submit" value="Save" class="btn" />
+}
 
 <h3>@Resource.DistributorAppTypesOfAccount</h3>
 <h3>@Resource.DistributorAppProductLines</h3>
