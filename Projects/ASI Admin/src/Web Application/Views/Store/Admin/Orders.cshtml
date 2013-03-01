@@ -100,7 +100,7 @@
                 @order.OrderId
                 </td><td>@order.Name</td><td>@order.Email</td><td><a href="#" class="productRef">@order.Item</a></td>
                 @if (order.Application != null)
-                { <td><a href="@Url.Action("Edit", "Application", new OrderDetailApplication { Id = order.Application.Id })">Application</a></td> }
+                { <td><a href="@Url.Action("Edit", "Application", new { Id = order.Application.Id })">Application</a></td> }
                 else
                 { <td>&nbsp</td> }
                 <td>@order.Quantity</td><td>$@order.Price</td><td>@order.Billing</td><td>@order.CreditCard</td><td>@order.DateOrderCreated</td></tr>

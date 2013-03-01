@@ -14,17 +14,26 @@ namespace asi.asicentral.web.Controllers.Store
         public IStoreService StoreObjectService { get; set; }
 
         [HttpGet]
-        public virtual ActionResult Edit(OrderDetailApplication orderDetailApplication)
+        public virtual ActionResult Edit(Guid id)
         {
             OrderDetailApplication application;
 
-            application = StoreObjectService.GetAll<SupplierMembershipApplication>(true).Where(theApp => theApp.Id == orderDetailApplication.Id).SingleOrDefault() as SupplierMembershipApplication;
+            application = StoreObjectService.GetAll<SupplierMembershipApplication>(true).Where(theApp => theApp.Id == id).SingleOrDefault() as SupplierMembershipApplication;
             if (application != null) return View("../Store/Application/Supplier", application);
 
-            application = StoreObjectService.GetAll<DistributorMembershipApplication>(true).Where(theApp => theApp.Id == orderDetailApplication.Id).SingleOrDefault() as DistributorMembershipApplication;
+            application = StoreObjectService.GetAll<DistributorMembershipApplication>(true).Where(theApp => theApp.Id == id).SingleOrDefault() as DistributorMembershipApplication;
             if (application != null) return View("../Store/Application/Distributor", application);
 
             // can't find any application - return nothing
+            return new EmptyResult();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(true)]
+        public virtual ActionResult Edit(OrderDetailApplication orderDetailApplication)
+        {
+
             return new EmptyResult();
         }
 
