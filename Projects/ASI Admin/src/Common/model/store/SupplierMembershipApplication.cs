@@ -15,9 +15,6 @@ namespace asi.asicentral.model.store
         [Display(ResourceType = typeof(Resource), Name = "ApplicationStatus")]
         public Nullable<int> ApplicationStatusId { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = "CompanyName")]
-        public string Company { get; set; }
-
         [Display(ResourceType = typeof(Resource), Name = "BillingAddress")]
         public string BillingAddress { get; set; }
 

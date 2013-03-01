@@ -197,9 +197,8 @@
     <Compile Include="Models\sgr\ViewCategory.cs" />
     <Compile Include="Models\sgr\ViewCompany.cs" />
     <Compile Include="Models\sgr\ViewProduct.cs" />
-    <Compile Include="Models\Store\OrderModel\CompletedOrder.cs" />
-    <Compile Include="Models\Store\OrderModel\PendingOrder.cs" />
-    <Compile Include="Models\Store\PageViewModel.cs" />
+    <Compile Include="Models\Store\Order.cs" />
+    <Compile Include="Models\Store\OrderPageModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>
