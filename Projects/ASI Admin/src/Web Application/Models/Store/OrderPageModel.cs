@@ -24,7 +24,7 @@ namespace asi.asicentral.web.Models.Store
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public string Product { get; set; }
-        public int OrderIdentifier { get; set; }
+        public int? OrderIdentifier { get; set; }
         public string Name { get; set; }
 
         public OrderPageModel(IStoreService storeService, IList<OrderDetail> orderDetails) 

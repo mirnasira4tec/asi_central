@@ -45,6 +45,13 @@ namespace asi.asicentral.web.Controllers.Store
                     (detail.Order.CreditCard != null && detail.Order.CreditCard.Name.Contains(nameCondition)) ||
                     (detail.Order.Membership != null && detail.Order.Membership.Email.Contains(nameCondition)));
             }
+            if (orderTab == OrderPageModel.ORDER_COMPLETED)
+                orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.Status == true);
+            else if (orderTab == OrderPageModel.ORDER_INCOMPLETE)
+                orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.Status == false);
+            else if (orderTab == OrderPageModel.ORDER_PENDING)
+                orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.Status == true && detail.Order.ProcessStatus == OrderStatus.Pending);
+
             //query has been constructed - get the data
             IList<OrderDetail> orderDetails = orderDetailQuery.OrderByDescending(detail => detail.OrderId).ToList();
 
