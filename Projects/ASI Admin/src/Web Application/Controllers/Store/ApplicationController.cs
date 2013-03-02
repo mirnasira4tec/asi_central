@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
-using asi.asicentral.web.Models.Store;
+using asi.asicentral.web.model.store;
 
 namespace asi.asicentral.web.Controllers.Store
 {
@@ -14,25 +14,34 @@ namespace asi.asicentral.web.Controllers.Store
         public IStoreService StoreObjectService { get; set; }
 
         [HttpGet]
-        public virtual ActionResult Edit(Guid id)
+        public virtual ActionResult Edit(Guid id, int orderId)
         {
             OrderDetailApplication application = GetApplication(id);
-            if (application != null)
+            Order order = StoreObjectService.GetAll<Order>(true).Where(ordr => ordr.Id == orderId).SingleOrDefault();
+            if (application != null && order != null)
             {
-                if (application is SupplierMembershipApplication) return View("../Store/Application/Supplier", (SupplierMembershipApplication)application);
+                if (application is SupplierMembershipApplication) return View("../Store/Application/Supplier", new SupplierApplicationModel((SupplierMembershipApplication)application, order));
                 else if (application is DistributorMembershipApplication) return View("../Store/Application/Supplier", (DistributorMembershipApplication)application);
                 else throw new Exception("Retieved an unknown type of application");
             }
             else
             {
-                throw new Exception("Could not find the application");
+                throw new Exception("Could not find the application or the order");
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(true)]
-        public virtual ActionResult Edit(OrderDetailApplication orderDetailApplication, String command)
+        public virtual ActionResult Approve(OrderDetailApplication orderDetailApplication)
+        {
+            return Save(orderDetailApplication);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(true)]
+        public virtual ActionResult Save(OrderDetailApplication orderDetailApplication)
         {
             return new EmptyResult();
         }

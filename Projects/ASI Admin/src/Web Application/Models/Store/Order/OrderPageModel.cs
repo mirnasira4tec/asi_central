@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace asi.asicentral.web.Models.Store
+namespace asi.asicentral.web.model.store
 {
     public class OrderPageModel
     {
@@ -18,7 +18,7 @@ namespace asi.asicentral.web.Models.Store
         public const String ORDER_INCOMPLETE = "incompleteorders";
         public const String ORDER_PENDING = "pendingorders";
 
-        public IList<Order> Orders { set; get; }
+        public IList<OrderModel> Orders { set; get; }
         public String FormTab { get; set; }
         public String OrderTab { get; set; }
         public string StartDate { get; set; }
@@ -29,12 +29,12 @@ namespace asi.asicentral.web.Models.Store
 
         public OrderPageModel(IStoreService storeService, IEncryptionService encryptionService, IList<OrderDetail> orderDetails) 
         {
-            Orders = new List<Order>();
+            Orders = new List<OrderModel>();
             if (orderDetails != null && storeService != null)
             {
                 foreach (OrderDetail orderDetail in orderDetails)
                 {
-                    Orders.Add(Order.CreateOrder(storeService, encryptionService, orderDetail));
+                    Orders.Add(OrderModel.CreateOrder(storeService, encryptionService, orderDetail));
                 }
             }
         }

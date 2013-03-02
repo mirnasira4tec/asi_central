@@ -1,5 +1,5 @@
 ﻿@using asi.asicentral.web
-@model asi.asicentral.model.store.SupplierMembershipApplication
+@model asi.asicentral.web.model.store.SupplierApplicationModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,8 +9,9 @@
 
 @using (Html.BeginForm())
 {
+<input type="submit" value="Approve" /> <input type="submit" value="Reject" /> <input type="submit" value="Save" />
 <div class="row-fluid">
-    <div class="span3">
+    <div class="span6">
         @Html.AntiForgeryToken()
         @Html.LabelFor(m => m.Company) @Html.EditorFor(m => m.Company)
         @Html.LabelFor(m => m.BillingAddress) @Html.EditorFor(m => m.BillingAddress)
@@ -38,7 +39,7 @@
         @Html.LabelFor(m => m.UPSAddress) @Html.EditorFor(m => m.UPSAddress)
         @Html.LabelFor(m => m.FedTaxId) @Html.EditorFor(m => m.FedTaxId)
     </div>
-    <div class="span3">
+    <div class="span6">
         <!-- TODO find a way to error trap nullable boolean values -->
 @*        @Html.LabelFor(m => m.IsImprinterVsDecorator)  @Html.CheckBoxFor(m => m.IsImprinterVsDecorator.Value)
         @Html.LabelFor(m => m.IsImporter) @Html.CheckBoxFor(m => m.IsImporter.Value)
@@ -53,14 +54,6 @@
         @Html.LabelFor(m => m.SellThruRetail) @Html.CheckBoxFor(m => m.SellThruRetail.Value)
         @Html.LabelFor(m => m.SellThruDirectMarketing) @Html.CheckBoxFor(m => m.SellThruDirectMarketing.Value)
         @Html.LabelFor(m => m.SellThruAffiliate) @Html.CheckBoxFor(m => m.SellThruAffiliate.Value)*@
-    </div>
-    <div class="span3">
-        <h4>Order Status</h4>
-        <div class="well">
-        
-        </div>
-        <input type="submit" name="command" value="Accept" class="btn" />
-        <input type="submit" name="command" value="Reject" class="btn" />
     </div>
 </div>
 }
