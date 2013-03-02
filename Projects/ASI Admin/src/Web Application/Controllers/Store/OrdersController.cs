@@ -70,5 +70,28 @@ namespace asi.asicentral.web.Controllers.Store
 
             return View("../Store/Admin/Orders", viewModel);
         }
+
+        [HttpPost]
+        public JsonResult Reject(int id)
+        {
+            string error = string.Empty;
+            asi.asicentral.model.store.Order order = StoreService.GetAll<asi.asicentral.model.store.Order>().Where(ordr => ordr.Id == id).SingleOrDefault();
+            if (order != null)
+            {
+                if (order.ProcessStatus == OrderStatus.Pending)
+                {
+                    order.ProcessStatus = OrderStatus.Rejected;
+                    StoreService.SaveChanges();
+                }
+            }
+            else
+            {
+                error = "Could not find the order";
+            }
+            return new JsonResult
+            {
+                Data = new { Success = (error.Length == 0), Error = error }
+            };
+        }
     }
 }

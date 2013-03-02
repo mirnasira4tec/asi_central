@@ -97,9 +97,10 @@
             @foreach (asi.asicentral.web.Models.Store.Order order in Model.Orders)
             {
                 <tr><td>@if(order.ApprovalStatus == OrderStatus.Pending) { 
-                    <a rel="tooltip" data-placement="top" title="Click here to reject the order" href="#"><i data-orderid="@order.OrderId" class="icon-remove"></i></a>
+                    <a id="@order.OrderId" rel="tooltip" data-placement="top" data-type="reject" title="Click here to reject the order" href="#"><i class="icon-remove"></i></a>
                     <a rel="tooltip" data-placement="top" title="Click here to accept the order" href="@Url.Action("Edit", "Application", new { Id = order.Application.Id })"><i data-orderid="@order.OrderId" class="icon-ok"></i></a> 
                 }
+                else { <img src="/images/transparent.gif" style="height:1px;width:33px" /> }
                 @order.OrderId
                 </td><td>@order.Name</td><td>@order.Email</td><td><a href="#" class="productRef">@order.Item</a></td>
                 @if (order.Application != null)
@@ -146,6 +147,27 @@
             e.preventDefault();
             $('form[id="form-@OrderPageModel.TAB_PRODUCT"] input[name=product]').val(e.target.textContent);
             $('form[id="form-@OrderPageModel.TAB_PRODUCT"]').submit();
+        });
+
+        $('a[data-type="reject"]').click(function (e) {
+            e.preventDefault();
+            asi.modal.confirm("Reject Order", "Are you sure you want to reject this order?", function (result) {
+                if (result) {
+                    $.ajax({
+                        type: "POST",
+                        url: "Orders/Reject/" + e.target.parentElement.id,
+                    }).done(function (status) {
+                        if (status.Success) {
+                            //refresh the page
+                            var tab = $('div[id*="formtab-content"] div.active')[0].id;
+                            $('form[id="form-' + tab + '"]').submit();
+                        }
+                        else {
+                            alert("Failed to update the order: " + status.Error);
+                        }
+                    });
+                };
+            });
         });
    </script>
 }
