@@ -16,18 +16,16 @@ namespace asi.asicentral.web.Controllers.Store
         [HttpGet]
         public virtual ActionResult Edit(Guid id)
         {
-            SupplierMembershipApplication supplierApplication = StoreObjectService.GetAll<SupplierMembershipApplication>(true).Where(theApp => theApp.Id == id).SingleOrDefault();
-            if (supplierApplication != null)
-                return View("../Store/Application/Supplier", supplierApplication);
+            OrderDetailApplication application = GetApplication(id);
+            if (application != null)
+            {
+                if (application is SupplierMembershipApplication) return View("../Store/Application/Supplier", (SupplierMembershipApplication)application);
+                else if (application is DistributorMembershipApplication) return View("../Store/Application/Supplier", (DistributorMembershipApplication)application);
+                else throw new Exception("Retieved an unknown type of application");
+            }
             else
             {
-                DistributorMembershipApplication distributorApplication = StoreObjectService.GetAll<DistributorMembershipApplication>(true).Where(theApp => theApp.Id == id).SingleOrDefault();
-                if (distributorApplication != null) return View("../Store/Application/Distributor", distributorApplication);
-                else
-                {
-                    // can't find any application - return nothing
-                    return new EmptyResult();
-                }
+                throw new Exception("Could not find the application");
             }
         }
 
@@ -36,8 +34,19 @@ namespace asi.asicentral.web.Controllers.Store
         [ValidateInput(true)]
         public virtual ActionResult Edit(OrderDetailApplication orderDetailApplication, String command)
         {
-
             return new EmptyResult();
+        }
+
+        private OrderDetailApplication GetApplication(Guid id)
+        {
+            OrderDetailApplication application = null;
+            //we have more distributor applications than supplier ones
+            application = StoreObjectService.GetAll<DistributorMembershipApplication>(true).Where(theApp => theApp.Id == id).SingleOrDefault();
+            if (application == null)
+            {
+                application = StoreObjectService.GetAll<SupplierMembershipApplication>(true).Where(theApp => theApp.Id == id).SingleOrDefault();
+            }
+            return application;
         }
     }
 }

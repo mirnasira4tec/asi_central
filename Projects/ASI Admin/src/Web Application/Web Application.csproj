@@ -221,6 +221,8 @@
     <None Include="Properties\PublishProfiles\Local File.pubxml" />
     <None Include="Properties\PublishProfiles\Web App Deploy.pubxml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="Images\checkmark.gif" />
+    <Content Include="Images\transparent.gif" />
     <Content Include="Scripts\asi.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
