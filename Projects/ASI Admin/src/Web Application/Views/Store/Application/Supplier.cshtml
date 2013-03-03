@@ -52,8 +52,8 @@ else { @Html.ActionLink("Cancel", "../Orders") }
     </div>
     <div class="span6">
         <!-- TODO find a way to error trap nullable boolean values -->
+        @Html.LabelFor(m => m.IsImporter) @Html.CheckBox("IsImporter")
 @*        @Html.LabelFor(m => m.IsImprinterVsDecorator)  @Html.CheckBoxFor(m => m.IsImprinterVsDecorator.Value)
-        @Html.LabelFor(m => m.IsImporter) @Html.CheckBoxFor(m => m.IsImporter.Value)
         @Html.LabelFor(m => m.IsManufacturer) @Html.CheckBoxFor(m => m.IsManufacturer.Value)
         @Html.LabelFor(m => m.IsRetailer) @Html.CheckBoxFor(m => m.IsRetailer.Value)
         @Html.LabelFor(m => m.IsWholesaler) @Html.CheckBoxFor(m => m.IsWholesaler.Value)
