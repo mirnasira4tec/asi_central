@@ -17,6 +17,9 @@ namespace asi.asicentral.database.mappings.product
             this.Property(t => t.ContextId)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
+            this.Property(t => t.ExpiryDate)
+                .HasColumnName("ExpiryDateUTC");
+
             this.Property(t => t.CreateDate)
                 .HasColumnName("CreateDateUTC");
 

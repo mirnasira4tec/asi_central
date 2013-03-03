@@ -51,7 +51,8 @@ namespace asi.asicentral.Tests
             {
                 distributorMembership = new Context()
                 {
-                    Name = "Distributor Membership",
+                    Name = "Distributor no Processing Fee",
+                    Type = "Distributor Membership",
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
                     UpdateSource = "ProductTest.PopulateDemoData",
@@ -61,9 +62,6 @@ namespace asi.asicentral.Tests
                 ContextProduct product = new ContextProduct()
                 {
                     Name = "Membership",
-                    Cost = 29.99m,
-                    Currency = "USD",
-                    Frequency = "mo",
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
                     UpdateSource = "ProductTest.PopulateDemoData",
@@ -75,6 +73,9 @@ namespace asi.asicentral.Tests
                     Product = product,
                     Qualifier = "",
                     Sequence = 1,
+                    Cost = 29.99m,
+                    Currency = "USD",
+                    Frequency = "mo",
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
                     UpdateSource = "ProductTest.PopulateDemoData",
@@ -82,9 +83,6 @@ namespace asi.asicentral.Tests
                 product = new ContextProduct()
                 {
                     Name = "Basic",
-                    Cost = 139.99m,
-                    Currency = "USD",
-                    Frequency = "mo",
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
                     UpdateSource = "ProductTest.PopulateDemoData",
@@ -96,6 +94,9 @@ namespace asi.asicentral.Tests
                 {
                     Product = product,
                     Qualifier = "Good",
+                    Cost = 139.99m,
+                    Currency = "USD",
+                    Frequency = "mo",
                     Sequence = 2,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -104,9 +105,6 @@ namespace asi.asicentral.Tests
                 product = new ContextProduct()
                 {
                     Name = "Standard",
-                    Cost = 199.99m,
-                    Currency = "USD",
-                    Frequency = "mo",
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
                     UpdateSource = "ProductTest.PopulateDemoData",
@@ -117,6 +115,9 @@ namespace asi.asicentral.Tests
                 {
                     Product = product,
                     Qualifier = "Better",
+                    Cost = 199.99m,
+                    Currency = "USD",
+                    Frequency = "mo",
                     Sequence = 3,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -125,9 +126,6 @@ namespace asi.asicentral.Tests
                 product = new ContextProduct()
                 {
                     Name = "Executive",
-                    Cost = 219.99m,
-                    Currency = "USD",
-                    Frequency = "mo",
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
                     UpdateSource = "ProductTest.PopulateDemoData",
@@ -138,6 +136,9 @@ namespace asi.asicentral.Tests
                 {
                     Product = product,
                     Qualifier = "Best Value!",
+                    Cost = 219.99m,
+                    Currency = "USD",
+                    Frequency = "mo",
                     Sequence = 4,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -421,7 +422,8 @@ namespace asi.asicentral.Tests
             {
                 supplierMembership = new Context()
                 {
-                    Name = "Supplier Membership",
+                    Type = "Supplier Membership",
+                    Name = "Supplier no processing fees",
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
                     UpdateSource = "ProductTest.PopulateDemoData",
@@ -431,9 +433,6 @@ namespace asi.asicentral.Tests
                 ContextProduct product = new ContextProduct()
                 {
                     Name = "Standard",
-                    Cost = 199m,
-                    Currency = "USD",
-                    Frequency = "mo",
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
                     UpdateSource = "ProductTest.PopulateDemoData",
@@ -444,6 +443,9 @@ namespace asi.asicentral.Tests
                 {
                     Product = product,
                     Qualifier = "",
+                    Cost = 199m,
+                    Currency = "USD",
+                    Frequency = "mo",
                     Sequence = 1,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -452,9 +454,6 @@ namespace asi.asicentral.Tests
                 product = new ContextProduct()
                 {
                     Name = "Sales Pro",
-                    Cost = 299m,
-                    Currency = "USD",
-                    Frequency = "mo",
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
                     UpdateSource = "ProductTest.PopulateDemoData",
@@ -465,6 +464,9 @@ namespace asi.asicentral.Tests
                 {
                     Product = product,
                     Qualifier = "",
+                    Cost = 299m,
+                    Currency = "USD",
+                    Frequency = "mo",
                     Sequence = 2,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -473,9 +475,6 @@ namespace asi.asicentral.Tests
                 product = new ContextProduct()
                 {
                     Name = "Show",
-                    Cost = 399m,
-                    Currency = "USD",
-                    Frequency = "mo",
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
                     UpdateSource = "ProductTest.PopulateDemoData",
@@ -486,6 +485,9 @@ namespace asi.asicentral.Tests
                 {
                     Product = product,
                     Qualifier = "",
+                    Cost = 399m,
+                    Currency = "USD",
+                    Frequency = "mo",
                     Sequence = 3,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -494,9 +496,6 @@ namespace asi.asicentral.Tests
                 product = new ContextProduct()
                 {
                     Name = "Advantage Show",
-                    Cost = 599m,
-                    Currency = "USD",
-                    Frequency = "mo",
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
                     UpdateSource = "ProductTest.PopulateDemoData",
@@ -507,6 +506,9 @@ namespace asi.asicentral.Tests
                 {
                     Product = product,
                     Qualifier = "",
+                    Cost = 599m,
+                    Currency = "USD",
+                    Frequency = "mo",
                     Sequence = 4,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -711,6 +713,7 @@ namespace asi.asicentral.Tests
                 Context context = new Context()
                 {
                     Name = name,
+                    Type = name,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
                     UpdateSource = "Test Case",
@@ -741,7 +744,7 @@ namespace asi.asicentral.Tests
             {
                 Context distributorMembership = objectContext.Contexts
                     .Include("Features.AssociatedProducts.Product")
-                    .Where(ctxt => ctxt.Name == "Distributor Membership").SingleOrDefault();
+                    .Where(ctxt => ctxt.Name == "Distributor no Processing Fee").SingleOrDefault();
                 Assert.IsNotNull(distributorMembership);
                 IList<ContextFeature> features = distributorMembership.Features.OrderBy(ctxFeature => ctxFeature.Sequence).ToList();
                 Assert.IsTrue(features.Count > 0);

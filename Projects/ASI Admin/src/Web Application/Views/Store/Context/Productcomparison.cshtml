@@ -18,7 +18,7 @@
 		<td class="instructions">Choose one of our<br/>	ASI Supplier Membership	Packages:</td>
 @foreach (asi.asicentral.model.store.ContextProductSequence productSequence in Model.Products.OrderBy(ctxtProductSeq => ctxtProductSeq.Sequence))
 {
-    <td><span class="">@Html.Raw(string.IsNullOrEmpty(productSequence.Qualifier) ? "&nbsp;" : productSequence.Qualifier)</span><br />@productSequence.Product.Name<br /><span class="">$@productSequence.Product.Cost</span></td>
+    <td><span class="">@Html.Raw(string.IsNullOrEmpty(productSequence.Qualifier) ? "&nbsp;" : productSequence.Qualifier)</span><br />@productSequence.Product.Name<br /><span class="">$@productSequence.Cost</span></td>
 }
     </tr>
 	<tr class="button-row">

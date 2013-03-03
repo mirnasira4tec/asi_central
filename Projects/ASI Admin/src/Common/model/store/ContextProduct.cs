@@ -18,9 +18,6 @@ namespace asi.asicentral.model.store
 
         public int ProductId { get; set; }
         public string Name { get; set; }
-        public decimal Cost { get; set; }
-        public string Currency { get; set; }
-        public string Frequency { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
