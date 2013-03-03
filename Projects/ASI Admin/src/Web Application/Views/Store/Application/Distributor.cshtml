@@ -1,15 +1,27 @@
 ﻿@using asi.asicentral.web
 @using asi.asicentral.model.store
-@model asi.asicentral.model.store.DistributorMembershipApplication
+@using asi.asicentral.web.Controllers.Store;
+@model asi.asicentral.web.model.store.DistributorApplicationModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>@Resource.StoreTitleDistributorApplication</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("EditDistributor", "Application"))
 {
+if (Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved) {
+<input class="command" type="submit" value="@ApplicationController.COMMAND_ACCEPT" /> <input class="command" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+} 
+else if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending) { 
+<input class="command" type="submit" value="@ApplicationController.COMMAND_REJECT" />
+}
+if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved){ @Html.ActionLink("Close", "../Orders") }
+else { @Html.ActionLink("Cancel", "../Orders") }
+<br />
     @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id) @Html.HiddenFor(m => m.UserId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
+    @Html.LabelFor(m => m.ExternalReference) @Html.EditorFor(m => m.ExternalReference)
     @Html.LabelFor(m => m.Company) @Html.EditorFor(m => m.Company)
     @Html.LabelFor(m => m.Street1) @Html.EditorFor(m => m.Street1)
     @Html.LabelFor(m => m.Phone)@Html.EditorFor(m => m.Phone)
@@ -21,8 +33,6 @@
     @Html.LabelFor(m => m.NumberOfSalesEmployee) @Html.EditorFor(m => m.NumberOfSalesEmployee)
     @Html.LabelFor(m => m.AnnualSalesVolume) @Html.EditorFor(m => m.AnnualSalesVolume)
     @Html.LabelFor(m => m.ASIContact) @Html.EditorFor(m => m.ASIContact)
-
-    <input type="submit" value="Save" class="btn" />
 }
 
 <h3>@Resource.DistributorAppTypesOfAccount</h3>
@@ -31,4 +41,16 @@
 
 @section Scripts {
     <script src="/Scripts/asi.js"></script>
+    <script>
+        $('input.command').click(function (e) {
+            $('#ActionName').val(e.target.value);
+            if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
+                //make sure we have Timms value
+                if (!$('#ExternalReference').val()) {
+                    alert('You need to pass a TIMMS reference to approve the order');
+                    e.preventDefault();
+                }
+            }
+        });
+    </script>
 }

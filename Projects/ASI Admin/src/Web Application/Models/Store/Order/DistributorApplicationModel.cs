@@ -6,17 +6,17 @@ using System.Web;
 
 namespace asi.asicentral.web.model.store
 {
-    public class SupplierApplicationModel : SupplierMembershipApplication
+    public class DistributorApplicationModel : DistributorMembershipApplication
     {
         /// <summary>
         /// Required for MVC to rebuild the model
         /// </summary>
-        public SupplierApplicationModel()
+        public DistributorApplicationModel()
         {
             //nothing to do
         }
 
-        public SupplierApplicationModel(SupplierMembershipApplication application, asi.asicentral.model.store.Order order)
+        public DistributorApplicationModel(DistributorMembershipApplication application, asi.asicentral.model.store.Order order)
         {
             application.CopyTo(this);
             ActionName = "Approve";

@@ -136,5 +136,60 @@ namespace asi.asicentral.model.store
         public Nullable<DateTime> EstablishedDate { get; set; }
 
         public virtual ICollection<DistributorMembershipApplicationContact> Contacts { get; set; }
+
+        public void CopyTo(DistributorMembershipApplication application)
+        {
+            application.AccountTypes = AccountTypes;
+            application.AgreeReceivePromotionalProducts = AgreeReceivePromotionalProducts;
+            application.AgreeTermsAndConditions = AgreeTermsAndConditions;
+            application.AnnualSalesVolume = AnnualSalesVolume;
+            application.AnnualSalesVolumeASP = AnnualSalesVolumeASP;
+            application.ApplicantEmail = ApplicantEmail;
+            application.ApplicantName = ApplicantName;
+            application.ApplicationStatusId = ApplicationStatusId;
+            application.ASIContact = ASIContact;
+            application.City = City;
+            application.Company = Company;
+            application.Contacts = Contacts;
+            application.CorporateOfficer = CorporateOfficer;
+            application.Custom1 = Custom1;
+            application.Custom2 = Custom2;
+            application.Custom3 = Custom3;
+            application.Custom4 = Custom4;
+            application.Custom5 = Custom5;
+            application.Email = Email;
+            application.EstablishedDate = EstablishedDate;
+            application.Fax = Fax;
+            application.FirstName = FirstName;
+            application.Id = Id;
+            application.InformASIOfChange = InformASIOfChange;
+            application.IPAddress = IPAddress;
+            application.IsForProfit = IsForProfit;
+            application.IsMajorForResale = IsMajorForResale;
+            application.IsMajorityDistributeForResale = IsMajorityDistributeForResale;
+            application.IsSolelyWork = IsSolelyWork;
+            application.LastName = LastName;
+            application.NumberOfEmployee = NumberOfEmployee;
+            application.NumberOfSalesEmployee = NumberOfSalesEmployee;
+            application.OtherBusinessRevenue = OtherBusinessRevenue;
+            application.Phone = Phone;
+            application.PrimaryBusinessRevenueId = PrimaryBusinessRevenueId;
+            application.ProductLines = ProductLines;
+            application.ProvideInvoiceOnDemand = ProvideInvoiceOnDemand;
+            application.ShippingCity = ShippingCity;
+            application.ShippingState = ShippingState;
+            application.ShippingStreet1 = ShippingStreet1;
+            application.ShippingStreet2 = ShippingStreet2;
+            application.ShippingZip = ShippingZip;
+            application.SignatureType = SignatureType;
+            application.SolelyWorkName = SolelyWorkName;
+            application.State = State;
+            application.Street1 = Street1;
+            application.Street2 = Street2;
+            application.TrueAnswers = TrueAnswers;
+            application.UserId = UserId;
+            application.WebUrl = WebUrl;
+            application.Zip = Zip;
+        }
     }
 }
