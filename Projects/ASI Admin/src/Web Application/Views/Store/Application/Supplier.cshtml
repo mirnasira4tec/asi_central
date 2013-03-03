@@ -9,18 +9,9 @@
 <h2>@Resource.StoreTitleSupplierApplication</h2>
 
 @using (Html.BeginForm("EditSupplier", "Application"))
-{
-if (Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved) {
-<input class="command" type="submit" value="@ApplicationController.COMMAND_ACCEPT" /> <input class="command" type="submit" value="@ApplicationController.COMMAND_SAVE" />
-} 
-else if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending) { 
-<input class="command" type="submit" value="@ApplicationController.COMMAND_REJECT" />
-}
-if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved){ @Html.ActionLink("Close", "../Orders") }
-else { @Html.ActionLink("Cancel", "../Orders") }
-<br />
+{        
 <div class="row-fluid">
-    <div class="span6">
+    <div class="span3">
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.Id) @Html.HiddenFor(m => m.UserId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
         @Html.LabelFor(m => m.ExternalReference) @Html.EditorFor(m => m.ExternalReference)
@@ -50,21 +41,34 @@ else { @Html.ActionLink("Cancel", "../Orders") }
         @Html.LabelFor(m => m.UPSAddress) @Html.EditorFor(m => m.UPSAddress)
         @Html.LabelFor(m => m.FedTaxId) @Html.EditorFor(m => m.FedTaxId)
     </div>
-    <div class="span6">
-        <!-- TODO find a way to error trap nullable boolean values -->
+    <div class="span3">
+        @Html.LabelFor(m => m.IsImprinterVsDecorator)  @Html.CheckBox("IsImprinterVsDecorator")
         @Html.LabelFor(m => m.IsImporter) @Html.CheckBox("IsImporter")
-@*        @Html.LabelFor(m => m.IsImprinterVsDecorator)  @Html.CheckBoxFor(m => m.IsImprinterVsDecorator.Value)
-        @Html.LabelFor(m => m.IsManufacturer) @Html.CheckBoxFor(m => m.IsManufacturer.Value)
-        @Html.LabelFor(m => m.IsRetailer) @Html.CheckBoxFor(m => m.IsRetailer.Value)
-        @Html.LabelFor(m => m.IsWholesaler) @Html.CheckBoxFor(m => m.IsWholesaler.Value)
-        @Html.LabelFor(m => m.IsUnionMade) @Html.CheckBoxFor(m => m.IsUnionMade.Value)
-        @Html.LabelFor(m => m.IsRushServiceAvailable) @Html.CheckBoxFor(m => m.IsRushServiceAvailable.Value)
-    
-        @Html.LabelFor(m => m.SellToEndUsers) @Html.CheckBoxFor(m => m.SellToEndUsers.Value)
-        @Html.LabelFor(m => m.SellThruInternet) @Html.CheckBoxFor(m => m.SellThruInternet.Value)
-        @Html.LabelFor(m => m.SellThruRetail) @Html.CheckBoxFor(m => m.SellThruRetail.Value)
-        @Html.LabelFor(m => m.SellThruDirectMarketing) @Html.CheckBoxFor(m => m.SellThruDirectMarketing.Value)
-        @Html.LabelFor(m => m.SellThruAffiliate) @Html.CheckBoxFor(m => m.SellThruAffiliate.Value)*@
+        @Html.LabelFor(m => m.IsManufacturer) @Html.CheckBox("IsManufacturer")
+        @Html.LabelFor(m => m.IsRetailer) @Html.CheckBox("IsRetailer")
+        @Html.LabelFor(m => m.IsWholesaler) @Html.CheckBox("IsWholesaler")
+        @Html.LabelFor(m => m.IsUnionMade) @Html.CheckBox("IsUnionMade")
+        @Html.LabelFor(m => m.IsRushServiceAvailable) @Html.CheckBox("IsRushServiceAvailable")
+        @Html.LabelFor(m => m.SellToEndUsers) @Html.CheckBox("SellToEndUsers")
+        @Html.LabelFor(m => m.SellThruInternet) @Html.CheckBox("SellThruInternet")
+        @Html.LabelFor(m => m.SellThruRetail) @Html.CheckBox("SellThruRetail")
+        @Html.LabelFor(m => m.SellThruDirectMarketing) @Html.CheckBox("SellThruDirectMarketing")
+        @Html.LabelFor(m => m.SellThruAffiliate) @Html.CheckBox("SellThruAffiliate")
+    </div>
+    <div class="span4">
+        <h4>Order Status</h4>
+        <div class="well">
+           Order Status: <span>@Model.OrderStatus</span> <br />
+           Has Timms ID: @if (Model.ExternalReference != null) { @Model.ExternalReference.ToString(); } else { <span>No reference to Timms</span> }
+        </div>
+        @if (Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved) {
+        <input class="command" type="submit" value="@ApplicationController.COMMAND_ACCEPT" /> <input class="command" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+        } 
+        else if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending) { 
+        <input class="command" type="submit" value="@ApplicationController.COMMAND_REJECT" />
+        }
+        @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved){ @Html.ActionLink("Close", "../Orders") }
+        else { @Html.ActionLink("Cancel", "../Orders") }
     </div>
 </div>
 }
