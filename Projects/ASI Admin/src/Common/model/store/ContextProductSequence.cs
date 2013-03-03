@@ -11,6 +11,9 @@ namespace asi.asicentral.model.store
         public int ContextProductSequenceId { get; set; }
         public int Sequence { get; set; }
         public string Qualifier { get; set; }
+        public decimal Cost { get; set; }
+        public string Currency { get; set; }
+        public string Frequency { get; set; }
         public virtual ContextProduct Product { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
