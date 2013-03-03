@@ -7,7 +7,7 @@ using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.web.Controllers.Store;
-using asi.asicentral.web.Models.Store;
+using asi.asicentral.web.model.store;
 
 namespace asi.asicentral.WebApplication.Tests.Controllers.Store
 {

@@ -6,14 +6,14 @@ using System.Linq;
 using System.Web;
 using asi.asicentral.interfaces;
 
-namespace asi.asicentral.web.Models.Store
+namespace asi.asicentral.web.model.store
 {
-    public class Order
+    public class OrderModel
     {
         private const string DECRYPT_KEY = "mk8$3njkl";
         private OrderDetail orderDetail;
 
-        private Order()
+        private OrderModel()
         {
         }
 
@@ -93,9 +93,9 @@ namespace asi.asicentral.web.Models.Store
 
         public OrderDetailApplication Application { private set; get; }
 
-        public static Order CreateOrder(IStoreService storeService, IEncryptionService encryptionService, OrderDetail orderDetail)
+        public static OrderModel CreateOrder(IStoreService storeService, IEncryptionService encryptionService, OrderDetail orderDetail)
         {
-            Order order = new Order();
+            OrderModel order = new OrderModel();
             order.orderDetail = orderDetail;
             order.Application = storeService.GetApplication(orderDetail);
             if (order.Application != null)

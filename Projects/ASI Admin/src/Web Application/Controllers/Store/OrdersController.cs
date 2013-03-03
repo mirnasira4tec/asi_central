@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
-using asi.asicentral.web.Models.Store;
+using asi.asicentral.web.model.store;
 using System.Text;
 
 namespace asi.asicentral.web.Controllers.Store

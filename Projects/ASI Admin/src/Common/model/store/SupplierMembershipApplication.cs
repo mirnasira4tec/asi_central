@@ -177,5 +177,67 @@ namespace asi.asicentral.model.store
         public Nullable<bool> WomanOwned { get; set; }
 
         public virtual ICollection<SupplierMembershipApplicationContact> Contacts { get; set; }
+
+        public void CopyTo(SupplierMembershipApplication application)
+        {
+            application.AffiliateASINumber = AffiliateASINumber;
+            application.AffiliateCompanyName = AffiliateCompanyName;
+            application.AgreeASITermsAndConditions = AgreeASITermsAndConditions;
+            application.AgreeUPSTermsAndConditions = AgreeUPSTermsAndConditions;
+            application.ApplicationStatusId = ApplicationStatusId;
+            application.AuthorizeUPSNewAccount = AuthorizeUPSNewAccount;
+            application.BillingAddress = BillingAddress;
+            application.BillingCity = BillingCity;
+            application.BillingEmail = BillingEmail;
+            application.BillingFax = BillingFax;
+            application.BillingPhone = BillingPhone;
+            application.BillingState = BillingState;
+            application.BillingTollFree = BillingTollFree;
+            application.BillingWebUrl = BillingWebUrl;
+            application.BillingZip = BillingZip;
+            application.Company = Company;
+            application.ContactEmail = ContactEmail;
+            application.ContactName = ContactName;
+            application.ContactPhone = ContactPhone;
+            application.ContactTitle = ContactTitle;
+            application.FedTaxId = FedTaxId;
+            application.Id = Id;
+            application.IsImporter = IsImporter;
+            application.IsImprinterVsDecorator = IsImprinterVsDecorator;
+            application.IsManufacturer = IsManufacturer;
+            application.IsRetailer = IsRetailer;
+            application.IsRushServiceAvailable = IsRushServiceAvailable;
+            application.IsUnionMade = IsUnionMade;
+            application.IsUPSAvailable = IsUPSAvailable;
+            application.IsWholesaler = IsWholesaler;
+            application.LineMinorityOwned = LineMinorityOwned;
+            application.LineNames = LineNames;
+            application.NumberOfEmployee = NumberOfEmployee;
+            application.NumberOfSalesEmployee = NumberOfSalesEmployee;
+            application.OfficeHourEnd = OfficeHourEnd;
+            application.OfficeHourStart = OfficeHourStart;
+            application.OtherDec = OtherDec;
+            application.ProductionTime = ProductionTime;
+            application.SalesVolume = SalesVolume;
+            application.SellThruAffiliate = SellThruAffiliate;
+            application.SellThruDirectMarketing = SellThruDirectMarketing;
+            application.SellThruDistributors = SellThruDistributors;
+            application.SellThruInternet = SellThruInternet;
+            application.SellThruRetail = SellThruRetail;
+            application.SellToEndUsers = SellToEndUsers;
+            application.ShippingAddress = ShippingAddress;
+            application.ShippingCity = ShippingCity;
+            application.ShippingState = ShippingState;
+            application.ShippingZip = ShippingZip;
+            application.UPSAddress = UPSAddress;
+            application.UPSCity = UPSCity;
+            application.UPSShippingNumber = UPSShippingNumber;
+            application.UPSState = UPSState;
+            application.UPSZip = UPSZip;
+            application.UserId = UserId;
+            application.WomanOwned = WomanOwned;
+            application.YearEnteredAdvertising = YearEnteredAdvertising;
+            application.YearEstablished = YearEstablished;
+        }
    }
 }
