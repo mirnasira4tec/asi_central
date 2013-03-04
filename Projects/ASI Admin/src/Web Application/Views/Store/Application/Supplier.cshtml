@@ -11,7 +11,7 @@
 @using (Html.BeginForm("EditSupplier", "Application"))
 {        
 <div class="row-fluid">
-    <div class="span2">
+    <div class="span4">
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.Id) @Html.HiddenFor(m => m.UserId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
         @Html.LabelFor(m => m.ExternalReference) @Html.EditorFor(m => m.ExternalReference)
@@ -22,7 +22,13 @@
         @Html.LabelFor(m => m.BillingFax) @Html.EditorFor(m => m.BillingFax)
         @Html.LabelFor(m => m.BillingEmail) @Html.EditorFor(m => m.BillingEmail)
         @Html.LabelFor(m => m.BillingWebUrl) @Html.EditorFor(m => m.BillingWebUrl)
+        
         @Html.LabelFor(m => m.ShippingAddress) @Html.EditorFor(m => m.ShippingAddress)
+        @Html.LabelFor(m => m.ShippingCity) @Html.EditorFor(m => m.ShippingCity)
+        @Html.LabelFor(m => m.ShippingState) @Html.EditorFor(m => m.ShippingState)
+        @Html.LabelFor(m => m.ShippingZip) @Html.EditorFor(m => m.ShippingZip)
+        @Html.LabelFor(m => m.UPSShippingNumber) @Html.EditorFor(m => m.UPSShippingNumber)
+
         @Html.LabelFor(m => m.ContactName) @Html.EditorFor(m => m.ContactName)
         @Html.LabelFor(m => m.ContactTitle) @Html.EditorFor(m => m.ContactTitle)
         @Html.LabelFor(m => m.ContactEmail) @Html.EditorFor(m => m.ContactEmail)
@@ -41,7 +47,7 @@
         @Html.LabelFor(m => m.UPSAddress) @Html.EditorFor(m => m.UPSAddress)
         @Html.LabelFor(m => m.FedTaxId) @Html.EditorFor(m => m.FedTaxId)
     </div>
-    <div class="span3">
+    <div class="span4">
         @Html.LabelFor(m => m.IsImprinterVsDecorator)  @Html.CheckBox("IsImprinterVsDecorator")
         @Html.LabelFor(m => m.IsImporter) @Html.CheckBox("IsImporter")
         @Html.LabelFor(m => m.IsManufacturer) @Html.CheckBox("IsManufacturer")
@@ -54,12 +60,28 @@
         @Html.LabelFor(m => m.SellThruRetail) @Html.CheckBox("SellThruRetail")
         @Html.LabelFor(m => m.SellThruDirectMarketing) @Html.CheckBox("SellThruDirectMarketing")
         @Html.LabelFor(m => m.SellThruAffiliate) @Html.CheckBox("SellThruAffiliate")
+
+        @if (Model.Contacts != null)
+        {
+            <h3>@Resource.SupplierAppCompanyContacts</h3>
+            for (int i = 0; i < Model.Contacts.Count; i++)
+            {
+                if (Model.Contacts.ElementAt(i) != null)
+                { 
+                    <h4>@Model.Contacts.ElementAt(i).Title Contact</h4>
+                    <p>Name: @Model.Contacts.ElementAt(i).Name</p>
+                    <p>Title: @Model.Contacts.ElementAt(i).Title</p>
+                    <p>Email: @Model.Contacts.ElementAt(i).Email</p>
+                    <p>Phone: @Model.Contacts.ElementAt(i).Phone</p>
+                    <p>Fax: @Model.Contacts.ElementAt(i).Fax</p>
+                }
+            }
+        }
     </div>
     <div class="span4">
         <h4>Order Status</h4>
         <div class="well">
            Order Status: <span>@Model.OrderStatus</span> <br />
-           Has Timms ID: @if (Model.ExternalReference != null) { @Model.ExternalReference.ToString(); } else { <span>No reference to Timms</span> }
         </div>
         @if (Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved) {
         <input class="command" type="submit" value="@ApplicationController.COMMAND_ACCEPT" /> <input class="command" type="submit" value="@ApplicationController.COMMAND_SAVE" />
@@ -73,10 +95,6 @@
 </div>
 }
 
-@*
-<h3>@Resource.SupplierAppMethodsOfImprinting</h3>
-<h3>@Resource.SupplierAppCompanyContacts</h3>*@
-
 @section Scripts {
     <script src="/Scripts/asi.js"></script>
     <script>
@@ -88,7 +106,15 @@
                     alert('You need to pass a TIMMS reference to approve the order');
                     e.preventDefault();
                 }
+                else {
+                    var isnum = /^\d+$/.test($('#ExternalReference').val());
+                    if (!isnum) {
+                        alert("TIMMS reference must contain only numbers");
+                        e.preventDefault();
+                    }
+                }
             }
         });
+
     </script>
 }

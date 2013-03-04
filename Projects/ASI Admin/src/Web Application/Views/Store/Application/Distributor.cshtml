@@ -19,20 +19,48 @@ else if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending) {
 if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved){ @Html.ActionLink("Close", "../Orders") }
 else { @Html.ActionLink("Cancel", "../Orders") }
 <br />
+<div class="row-fluid">
+    <div class="span4">    
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.Id) @Html.HiddenFor(m => m.UserId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
     @Html.LabelFor(m => m.ExternalReference) @Html.EditorFor(m => m.ExternalReference)
     @Html.LabelFor(m => m.Company) @Html.EditorFor(m => m.Company)
+    @Html.LabelFor(m => m.ApplicantName) @Html.EditorFor(m => m.ApplicantName)
     @Html.LabelFor(m => m.Street1) @Html.EditorFor(m => m.Street1)
     @Html.LabelFor(m => m.Phone)@Html.EditorFor(m => m.Phone)
     @Html.LabelFor(m => m.Fax)@Html.EditorFor(m => m.Fax)
     @Html.LabelFor(m => m.WebUrl) @Html.EditorFor(m => m.WebUrl)
-    @Html.LabelFor(m => m.ApplicantName) @Html.EditorFor(m => m.ApplicantName)
     @Html.LabelFor(m => m.ShippingStreet1) @Html.EditorFor(m => m.ShippingStreet1)
+    @Html.LabelFor(m => m.ShippingStreet2) @Html.EditorFor(m => m.ShippingStreet2)
+    @Html.LabelFor(m => m.ShippingZip) @Html.EditorFor(m => m.ShippingZip)
+    @Html.LabelFor(m => m.ShippingCity) @Html.EditorFor(m => m.ShippingCity)
+    @Html.LabelFor(m => m.ShippingState) @Html.EditorFor(m => m.ShippingState)
+
     @Html.LabelFor(m => m.NumberOfEmployee) @Html.EditorFor(m => m.NumberOfEmployee)
     @Html.LabelFor(m => m.NumberOfSalesEmployee) @Html.EditorFor(m => m.NumberOfSalesEmployee)
     @Html.LabelFor(m => m.AnnualSalesVolume) @Html.EditorFor(m => m.AnnualSalesVolume)
     @Html.LabelFor(m => m.ASIContact) @Html.EditorFor(m => m.ASIContact)
+    </div>
+    <div class="span4">
+
+        @if (Model.Contacts != null && Model.Contacts.Count > 0)
+        {
+            <h3>Distributor Company Contacts</h3>
+            for (int i = 0; i < Model.Contacts.Count; i++)
+            {
+                if (Model.Contacts.ElementAt(i) != null)
+                { 
+                    <h4>@Model.Contacts.ElementAt(i).Title Contact</h4>
+                    <p>Name: @Model.Contacts.ElementAt(i).Name</p>
+                    <p>Title: @Model.Contacts.ElementAt(i).Title</p>
+                    <p>Email: @Model.Contacts.ElementAt(i).Email</p>
+                    <p>Phone: @Model.Contacts.ElementAt(i).Phone</p>
+                    <p>Fax: @Model.Contacts.ElementAt(i).Fax</p>
+                }
+            }
+        }
+    </div>
+</div>
 }
 
 <h3>@Resource.DistributorAppTypesOfAccount</h3>
