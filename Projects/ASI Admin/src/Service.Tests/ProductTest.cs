@@ -53,6 +53,7 @@ namespace asi.asicentral.Tests
                 {
                     Name = "Distributor no Processing Fee",
                     Type = "Distributor Membership",
+                    Active = true,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
                     UpdateSource = "ProductTest.PopulateDemoData",
@@ -424,6 +425,7 @@ namespace asi.asicentral.Tests
                 {
                     Type = "Supplier Membership",
                     Name = "Supplier no processing fees",
+                    Active = true,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
                     UpdateSource = "ProductTest.PopulateDemoData",
