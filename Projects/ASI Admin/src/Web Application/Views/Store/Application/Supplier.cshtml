@@ -11,7 +11,7 @@
 @using (Html.BeginForm("EditSupplier", "Application"))
 {        
 <div class="row-fluid">
-    <div class="span3">
+    <div class="span2">
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.Id) @Html.HiddenFor(m => m.UserId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
         @Html.LabelFor(m => m.ExternalReference) @Html.EditorFor(m => m.ExternalReference)
