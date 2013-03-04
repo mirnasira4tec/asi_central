@@ -10,6 +10,9 @@
     dfn {
         color: blue;
     }
+    tr.offer {
+        background-color : lightsalmon;
+    }
 </style>
 <p>cellpadding and cellspacing are no longer html5. Shouldn't the header row be multiple rows rather then use &lt;br /&gt;</p>
 
@@ -32,14 +35,14 @@
 @foreach (asi.asicentral.model.store.ContextFeature feature in Model.Features.OrderBy(ctxFeat => ctxFeat.Sequence))
 {
     i++;
-    <tr class="row@(i)"><td class="description">@Html.Raw(feature.Name)</td>
+    <tr class="row@(i) @Html.Raw(feature.IsOffer ? "offer" : "")"><td class="description">@Html.Raw(feature.Name)</td>
     @foreach (asi.asicentral.model.store.ContextProductSequence productSequence in Model.Products.OrderBy(ctxtProductSeq => ctxtProductSeq.Sequence))
     {
         string label = feature.GetProductLabel(productSequence.Product);
         if (string.IsNullOrEmpty(label)) { 
         @:<td>&nbsp;</td>
         } else if (label == "True") { 
-        @:<td><img src="/images/checkmark.gif" alt="ASI Number included in this package"></td>
+        @:<td><img src="/images/checkmark.gif" alt="Included in this package"></td>
         } else {
         @:<td>@label</td> 
         }
