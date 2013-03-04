@@ -18,6 +18,9 @@ namespace asi.asicentral.database.mappings.product
                 .HasColumnName("FeatureId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
+            this.Property(t => t.IsOffer)
+                .HasColumnName("Offer");
+
             this.Property(t => t.CreateDate)
                 .HasColumnName("CreateDateUTC");
 

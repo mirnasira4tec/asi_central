@@ -19,6 +19,7 @@ namespace asi.asicentral.model.store
 
         public int ContextFeatureId { get; set; }
         public string Name { get; set; }
+        public bool IsOffer { get; set; }
         public int Sequence { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
