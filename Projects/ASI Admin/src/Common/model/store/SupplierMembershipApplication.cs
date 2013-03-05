@@ -180,6 +180,7 @@ namespace asi.asicentral.model.store
 
         public void CopyTo(SupplierMembershipApplication application)
         {
+            application.Contacts = Contacts;
             application.AffiliateASINumber = AffiliateASINumber;
             application.AffiliateCompanyName = AffiliateCompanyName;
             application.AgreeASITermsAndConditions = AgreeASITermsAndConditions;
