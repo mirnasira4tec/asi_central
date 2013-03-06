@@ -25,6 +25,7 @@ namespace asi.asicentral.model.store
         public string Zip { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "State")]
         public string State { get; set; }
+        [Display(ResourceType = typeof(Resource), Name = "Country")]
         public string Country { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "Phone")]
         public string Phone { get; set; }
@@ -49,6 +50,9 @@ namespace asi.asicentral.model.store
         [Display(ResourceType = typeof(Resource), Name = "Zipcode")]
         public string BillingZip { get; set; }
 
+        [Display(ResourceType = typeof(Resource), Name = "Country")]
+        public string BillingCountry { get; set; }
+
         [Display(ResourceType = typeof(Resource), Name = "Phone")]
         public string BillingPhone { get; set; }
 
@@ -62,7 +66,6 @@ namespace asi.asicentral.model.store
         public string BillingWebUrl { get; set; }
 
         #endregion Billing information
-
 
         #region shipping information
 
@@ -80,6 +83,9 @@ namespace asi.asicentral.model.store
 
         [Display(ResourceType = typeof(Resource), Name = "ShippingZip")]
         public string ShippingZip { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "Country")]
+        public string ShippingCountry { get; set; }
 
         #endregion shipping information
 
