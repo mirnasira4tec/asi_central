@@ -10,53 +10,11 @@ namespace asi.asicentral.model.store
         [Display(ResourceType = typeof(Resource), Name = "ApplicationStatus")]
         public Nullable<int> ApplicationStatusId { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = "Street1")]
-        public string Street1 { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "Street2")]
-        public string Street2 { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "City")]
-        public string City { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "State")]
-        public string State { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "Zipcode")]
-        public string Zip { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "Phone")]
-        public string Phone { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "Fax")]
-        public string Fax { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "Email")]
-        public string Email { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "WebUrl")]
-        public string WebUrl { get; set; }
-
         [Display(ResourceType = typeof(Resource), Name = "FirstName")]
         public string FirstName { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "LastName")]
         public string LastName { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "ShippingAddress")]
-        public string ShippingStreet1 { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "ShippingAddress2")]
-        public string ShippingStreet2 { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "ShippingCity")]
-        public string ShippingCity { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "ShippingState")]
-        public string ShippingState { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "ShippingZip")]
-        public string ShippingZip { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "NumberOfEmployee")]
         public Nullable<int> NumberOfEmployee { get; set; }
@@ -148,7 +106,7 @@ namespace asi.asicentral.model.store
             application.ApplicantName = ApplicantName;
             application.ApplicationStatusId = ApplicationStatusId;
             application.ASIContact = ASIContact;
-            application.City = City;
+            application.BillingCity = BillingCity;
             application.Company = Company;
             application.Contacts = Contacts;
             application.CorporateOfficer = CorporateOfficer;
@@ -157,9 +115,9 @@ namespace asi.asicentral.model.store
             application.Custom3 = Custom3;
             application.Custom4 = Custom4;
             application.Custom5 = Custom5;
-            application.Email = Email;
+            application.BillingEmail = BillingEmail;
             application.EstablishedDate = EstablishedDate;
-            application.Fax = Fax;
+            application.BillingFax = BillingFax;
             application.FirstName = FirstName;
             application.Id = Id;
             application.InformASIOfChange = InformASIOfChange;
@@ -172,7 +130,7 @@ namespace asi.asicentral.model.store
             application.NumberOfEmployee = NumberOfEmployee;
             application.NumberOfSalesEmployee = NumberOfSalesEmployee;
             application.OtherBusinessRevenue = OtherBusinessRevenue;
-            application.Phone = Phone;
+            application.BillingPhone = BillingPhone;
             application.PrimaryBusinessRevenueId = PrimaryBusinessRevenueId;
             application.ProductLines = ProductLines;
             application.ProvideInvoiceOnDemand = ProvideInvoiceOnDemand;
@@ -183,13 +141,13 @@ namespace asi.asicentral.model.store
             application.ShippingZip = ShippingZip;
             application.SignatureType = SignatureType;
             application.SolelyWorkName = SolelyWorkName;
-            application.State = State;
-            application.Street1 = Street1;
-            application.Street2 = Street2;
+            application.BillingState = BillingState;
+            application.BillingAddress1 = BillingAddress1;
+            application.BillingAddress2 = BillingAddress2;
             application.TrueAnswers = TrueAnswers;
             application.UserId = UserId;
-            application.WebUrl = WebUrl;
-            application.Zip = Zip;
+            application.BillingWebUrl = BillingWebUrl;
+            application.BillingZip = BillingZip;
         }
     }
 }
