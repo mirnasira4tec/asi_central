@@ -39,6 +39,9 @@ namespace asi.asicentral.database.mappings.asiinternet
             this.Property(detail => detail.HallmarkResult)
                 .HasColumnName("ODET_HallmarkResult");
 
+            this.Property(detail => detail.ExternalReference)
+                .HasColumnName("ODET_ExternalReference");
+
             // Relationships
             this.HasRequired(detail => detail.Order)
                 .WithMany(order => order.OrderDetails)
