@@ -10,20 +10,11 @@
 
 @using (Html.BeginForm("EditDistributor", "Application"))
 {
-if (Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved) {
-<input class="command" type="submit" value="@ApplicationController.COMMAND_ACCEPT" /> <input class="command" type="submit" value="@ApplicationController.COMMAND_SAVE" />
-} 
-else if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending) { 
-<input class="command" type="submit" value="@ApplicationController.COMMAND_REJECT" />
-}
-if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved){ @Html.ActionLink("Close", "../Orders") }
-else { @Html.ActionLink("Cancel", "../Orders") }
-<br />
 <div class="row-fluid">
     <div class="span4">    
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.Id) @Html.HiddenFor(m => m.UserId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
-    @Html.LabelFor(m => m.ExternalReference) @Html.EditorFor(m => m.ExternalReference)
+    @Html.Label("Timms ID") @Html.EditorFor(m => m.ExternalReference)
     @Html.LabelFor(m => m.Company) @Html.EditorFor(m => m.Company)
     @Html.LabelFor(m => m.ApplicantName) @Html.EditorFor(m => m.ApplicantName)
     @Html.LabelFor(m => m.Street1) @Html.EditorFor(m => m.Street1)
@@ -60,6 +51,20 @@ else { @Html.ActionLink("Cancel", "../Orders") }
             }
         }
     </div>
+    <div class="span4">
+        <h4>Order Status</h4>
+        <div class="well">
+           Order Status: <span>@Model.OrderStatus</span><br />
+        </div>
+        @if (Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved) {
+        <input class="command" type="submit" value="@ApplicationController.COMMAND_ACCEPT" /> <input class="command" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+        } 
+        else if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending) { 
+        <input class="command" type="submit" value="@ApplicationController.COMMAND_REJECT" />
+        }
+        @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved){ @Html.ActionLink("Close", "../Orders") }
+        else { @Html.ActionLink("Cancel", "../Orders") }
+    </div>
 </div>
 }
 
@@ -77,6 +82,13 @@ else { @Html.ActionLink("Cancel", "../Orders") }
                 if (!$('#ExternalReference').val()) {
                     alert('You need to pass a TIMMS reference to approve the order');
                     e.preventDefault();
+                }
+                else {
+                    var isnum = /^\d+$/.test($('#ExternalReference').val());
+                    if (!isnum) {
+                        alert("TIMMS reference must contain only numbers");
+                        e.preventDefault();
+                    }
                 }
             }
         });
