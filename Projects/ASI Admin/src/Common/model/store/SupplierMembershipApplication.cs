@@ -15,44 +15,8 @@ namespace asi.asicentral.model.store
         [Display(ResourceType = typeof(Resource), Name = "ApplicationStatus")]
         public Nullable<int> ApplicationStatusId { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = "BillingAddress")]
-        public string BillingAddress { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "BillingCity")]
-        public string BillingCity { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "BillingState")]
-        public string BillingState { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "BillingZip")]
-        public string BillingZip { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "BillingPhone")]
-        public string BillingPhone { get; set; }
-
         [Display(ResourceType = typeof(Resource), Name = "BillingTollPhone")]
         public string BillingTollFree { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "BillingFax")]
-        public string BillingFax { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "BillingWebUrl")]
-        public string BillingWebUrl { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "BillingEmail")]
-        public string BillingEmail { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "ShippingAddress")]
-        public string ShippingAddress { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "ShippingCity")]
-        public string ShippingCity { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "ShippingState")]
-        public string ShippingState { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "ShippingZip")]
-        public string ShippingZip { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "ContactName")]
         public string ContactName { get; set; }
@@ -187,7 +151,7 @@ namespace asi.asicentral.model.store
             application.AgreeUPSTermsAndConditions = AgreeUPSTermsAndConditions;
             application.ApplicationStatusId = ApplicationStatusId;
             application.AuthorizeUPSNewAccount = AuthorizeUPSNewAccount;
-            application.BillingAddress = BillingAddress;
+            application.BillingAddress1 = BillingAddress1;
             application.BillingCity = BillingCity;
             application.BillingEmail = BillingEmail;
             application.BillingFax = BillingFax;
@@ -226,7 +190,7 @@ namespace asi.asicentral.model.store
             application.SellThruInternet = SellThruInternet;
             application.SellThruRetail = SellThruRetail;
             application.SellToEndUsers = SellToEndUsers;
-            application.ShippingAddress = ShippingAddress;
+            application.ShippingStreet1 = ShippingStreet1;
             application.ShippingCity = ShippingCity;
             application.ShippingState = ShippingState;
             application.ShippingZip = ShippingZip;

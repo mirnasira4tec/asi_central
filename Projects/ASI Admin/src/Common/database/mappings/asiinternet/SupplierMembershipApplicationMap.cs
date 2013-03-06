@@ -26,9 +26,13 @@ namespace asi.asicentral.database.mappings.asiinternet
                 .HasColumnName("SAPP_Company")
                 .HasMaxLength(100);
 
-            this.Property(t => t.BillingAddress)
+            this.Property(t => t.BillingAddress1)
                 .HasColumnName("SAPP_BillAddress")
                 .HasMaxLength(150);
+
+            this.Property(t => t.BillingAddress2)
+                .HasColumnName("SAPP_BillAddress2")
+                .HasMaxLength(100);
 
             this.Property(t => t.BillingCity)
                 .HasColumnName("SAPP_BillCity")
@@ -62,9 +66,13 @@ namespace asi.asicentral.database.mappings.asiinternet
                 .HasColumnName("SAPP_BillEmail")
                 .HasMaxLength(256);
 
-            this.Property(t => t.ShippingAddress)
+            this.Property(t => t.ShippingStreet1)
                 .HasColumnName("SAPP_ShipAddress")
                 .HasMaxLength(150);
+
+            this.Property(t => t.ShippingStreet2)
+                .HasColumnName("SAPP_ShipAddress2")
+                .HasMaxLength(100);
 
             this.Property(t => t.ShippingCity)
                 .HasColumnName("SAPP_ShipCity")

@@ -104,7 +104,7 @@ namespace asi.asicentral.Tests
                 billingOrder.BillFirstName = "New First Name";
                 billingOrder.BillLastName = "New Last Name";
 
-                billingSupplierApplication.ShippingAddress = "shipping address";
+                billingSupplierApplication.ShippingStreet1 = "shipping address";
                 billingSupplierApplication.ShippingCity = "shipping city";
                 billingSupplierApplication.ShippingZip = "19111";
 
