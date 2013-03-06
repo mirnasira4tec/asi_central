@@ -218,6 +218,36 @@ namespace asi.asicentral.database.mappings.asiinternet
 
             this.Property(t => t.WomanOwned)
                 .HasColumnName("SAPP_WomanOwned");
+
+            this.Property(t => t.Address1)
+                .HasColumnName("SAPP_ComAddress1");
+
+            this.Property(t => t.Address2)
+                .HasColumnName("SAPP_ComAddress2");
+
+            this.Property(t => t.City)
+                .HasColumnName("SAPP_ComCity");
+
+            this.Property(t => t.Zip)
+                .HasColumnName("SAPP_ComZip");
+
+            this.Property(t => t.State)
+                .HasColumnName("SAPP_ComState");
+
+            this.Property(t => t.Country)
+                .HasColumnName("SAPP_ComCountry");
+
+            this.Property(t => t.Phone)
+                .HasColumnName("SAPP_ComPhone");
+
+            this.Property(t => t.InternationalPhone)
+                .HasColumnName("SAPP_ComIntPhone");
+
+            this.Property(t => t.HasShipAddress)
+                .HasColumnName("SAPP_HasShipAddress");
+
+            this.Property(t => t.HasBillAddress)
+                .HasColumnName("SAPP_HasBillAddress");
         }
     }
 }

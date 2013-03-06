@@ -198,6 +198,36 @@ namespace asi.asicentral.database.mappings.asiinternet
 
             this.Property(t => t.EstablishedDate)
                 .HasColumnName("DAPP_EstablishedDate");
+
+            this.Property(t => t.Address1)
+                .HasColumnName("DAPP_ComAddress1");
+
+            this.Property(t => t.Address2)
+                .HasColumnName("DAPP_ComAddress2");
+
+            this.Property(t => t.City)
+                .HasColumnName("DAPP_ComCity");
+
+            this.Property(t => t.Zip)
+                .HasColumnName("DAPP_ComZip");
+
+            this.Property(t => t.State)
+                .HasColumnName("DAPP_ComState");
+
+            this.Property(t => t.Country)
+                .HasColumnName("DAPP_ComCountry");
+
+            this.Property(t => t.Phone)
+                .HasColumnName("DAPP_ComPhone");
+
+            this.Property(t => t.InternationalPhone)
+                .HasColumnName("DAPP_ComIntPhone");
+
+            this.Property(t => t.HasShipAddress)
+                .HasColumnName("DAPP_HasShipAddress");
+
+            this.Property(t => t.HasBillAddress)
+                .HasColumnName("DAPP_HasBillAddress");
         }
     }
 }
