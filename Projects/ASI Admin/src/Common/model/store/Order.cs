@@ -35,7 +35,9 @@ namespace asi.asicentral.model.store
         public string IPAdd { get; set; }
         public Nullable<int> OrderTypeId { get; set; }
         public string ExternalReference { get; set; }
+        public int CompletedStep { get; set; }
         public string Campaign { get; set; }
+        public int? ContextId { get; set; }
 
         public virtual OrderCreditCard CreditCard { get; set; }
         public virtual ASPNetMembership Membership { get; set; }

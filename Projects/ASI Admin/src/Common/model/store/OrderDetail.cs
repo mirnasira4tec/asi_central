@@ -12,6 +12,7 @@ namespace asi.asicentral.model.store
         public string Application { get; set; }
         public Nullable<decimal> Subtotal { get; set; }
         public Nullable<bool> HallmarkResult { get; set; }
+        public string ExternalReference { get; set; }
 
         public virtual Order Order { get; set; }
 

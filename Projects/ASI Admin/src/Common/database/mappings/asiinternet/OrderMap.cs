@@ -87,6 +87,12 @@ namespace asi.asicentral.database.mappings.asiinternet
             this.Property(t => t.ProcessStatus)
                 .HasColumnName("ORDR_ProcessStatus");
 
+            this.Property(t => t.CompletedStep)
+                .HasColumnName("ORDR_CompletedStep");
+
+            this.Property(t => t.ContextId)
+                .HasColumnName("ORDR_ContextID");
+
             // Relationships
             this.HasOptional(order => order.CreditCard)
                 .WithRequired();
