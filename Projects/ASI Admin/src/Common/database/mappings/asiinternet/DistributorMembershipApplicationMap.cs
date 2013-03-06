@@ -26,39 +26,39 @@ namespace asi.asicentral.database.mappings.asiinternet
                 .HasColumnName("DAPP_Company")
                 .HasMaxLength(100);
 
-            this.Property(t => t.Street1)
+            this.Property(t => t.BillingAddress1)
                 .HasColumnName("DAPP_Street1")
                 .HasMaxLength(150);
 
-            this.Property(t => t.Street2)
+            this.Property(t => t.BillingAddress2)
                 .HasColumnName("DAPP_Street2")
                 .HasMaxLength(150);
 
-            this.Property(t => t.City)
+            this.Property(t => t.BillingCity)
                 .HasColumnName("DAPP_City")
                 .HasMaxLength(75);
 
-            this.Property(t => t.State)
+            this.Property(t => t.BillingState)
                 .HasColumnName("DAPP_StateID")
                 .HasMaxLength(15);
 
-            this.Property(t => t.Zip)
+            this.Property(t => t.BillingZip)
                 .HasColumnName("DAPP_Zip")
                 .HasMaxLength(15);
 
-            this.Property(t => t.Phone)
+            this.Property(t => t.BillingPhone)
                 .HasColumnName("DAPP_Phone")
                 .HasMaxLength(35);
 
-            this.Property(t => t.Fax)
+            this.Property(t => t.BillingFax)
                 .HasColumnName("DAPP_Fax")
                 .HasMaxLength(35);
 
-            this.Property(t => t.Email)
+            this.Property(t => t.BillingEmail)
                 .HasColumnName("DAPP_Email")
                 .HasMaxLength(256);
 
-            this.Property(t => t.WebUrl)
+            this.Property(t => t.BillingWebUrl)
                 .HasColumnName("DAPP_WebAdd")
                 .HasMaxLength(256);
 
