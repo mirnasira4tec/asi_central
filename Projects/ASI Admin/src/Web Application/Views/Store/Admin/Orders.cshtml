@@ -96,7 +96,7 @@
             <tbody>            
             @foreach (OrderModel order in Model.Orders)
             {
-                <tr><td>@if(order.ApprovalStatus == OrderStatus.Pending) { 
+                <tr><td>@if(order.ApprovalStatus == OrderStatus.Pending && order.Application != null) { 
                     <a id="@order.OrderId" rel="tooltip" data-placement="top" data-type="reject" title="Click here to reject the order" href="#"><i class="icon-remove"></i></a>
                     <a rel="tooltip" data-placement="top" title="Click here to accept the order" href="@Url.Action("Edit", "Application", new { Id = order.Application.Id, OrderId = order.OrderId })"><i data-orderid="@order.OrderId" class="icon-ok"></i></a> 
                 }

@@ -46,6 +46,10 @@ namespace asi.asicentral.database.mappings.asiinternet
                 .HasColumnName("DAPP_Zip")
                 .HasMaxLength(15);
 
+            this.Property(t => t.BillingCountry)
+                .HasColumnName("DAPP_Country")
+                .HasMaxLength(100);
+
             this.Property(t => t.BillingPhone)
                 .HasColumnName("DAPP_Phone")
                 .HasMaxLength(35);
@@ -89,6 +93,10 @@ namespace asi.asicentral.database.mappings.asiinternet
             this.Property(t => t.ShippingZip)
                 .HasColumnName("DAPP_ShipZip")
                 .HasMaxLength(15);
+
+            this.Property(t => t.ShippingCountry)
+                .HasColumnName("DAPP_ShipCountry")
+                .HasMaxLength(100);
 
             this.Property(t => t.NumberOfEmployee)
                 .HasColumnName("DAPP_NoEmp");

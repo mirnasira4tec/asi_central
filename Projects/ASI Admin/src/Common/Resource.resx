@@ -474,4 +474,7 @@
   <data name="Zipcode" xml:space="preserve">
     <value>Zipcode</value>
   </data>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
 </root>
