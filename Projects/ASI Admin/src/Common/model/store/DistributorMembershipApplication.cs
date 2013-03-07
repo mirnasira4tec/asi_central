@@ -7,6 +7,14 @@ namespace asi.asicentral.model.store
 {
     public class DistributorMembershipApplication : OrderDetailApplication
     {
+        public DistributorMembershipApplication()
+        {
+            if (this.GetType() == typeof(DistributorMembershipApplication))
+            {
+                Contacts = new List<DistributorMembershipApplicationContact>();
+            }
+        }
+
         [Display(ResourceType = typeof(Resource), Name = "ApplicationStatus")]
         public Nullable<int> ApplicationStatusId { get; set; }
 
