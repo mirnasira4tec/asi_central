@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>@Resource.StoreTitleDistributorApplication</h2>
+<h3>@Resource.StoreTitleDistributorApplication</h3>
 
 @using (Html.BeginForm("EditDistributor", "Application"))
 {
@@ -14,56 +14,88 @@
     <div class="span4">    
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.Id) @Html.HiddenFor(m => m.UserId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
-    @Html.Label("Timms ID") @Html.EditorFor(m => m.ExternalReference)
+    <fieldset><legend><small>Company Information</small></legend>
     @Html.LabelFor(m => m.Company) @Html.EditorFor(m => m.Company)
-    @Html.LabelFor(m => m.ApplicantName) @Html.EditorFor(m => m.ApplicantName)
-    @Html.LabelFor(m => m.Street1) @Html.EditorFor(m => m.Street1)
-    @Html.LabelFor(m => m.Phone)@Html.EditorFor(m => m.Phone)
-    @Html.LabelFor(m => m.Fax)@Html.EditorFor(m => m.Fax)
-    @Html.LabelFor(m => m.WebUrl) @Html.EditorFor(m => m.WebUrl)
+    @Html.LabelFor(m => m.Address1) @Html.EditorFor(m => m.Address1)
+    @Html.LabelFor(m => m.Address2) @Html.EditorFor(m => m.Address2)
+    @Html.LabelFor(m => m.City) @Html.EditorFor(m => m.City)
+    @Html.LabelFor(m => m.State) @Html.EditorFor(m => m.State)
+    @Html.LabelFor(m => m.Zip) @Html.EditorFor(m => m.Zip)
+    </fieldset>
+    <fieldset><legend><small>Billing Information</small></legend>
+    @Html.LabelFor(m => m.BillingAddress1) @Html.EditorFor(m => m.BillingAddress1)
+    @Html.LabelFor(m => m.BillingAddress2) @Html.EditorFor(m => m.BillingAddress2)
+    @Html.LabelFor(m => m.BillingCity) @Html.EditorFor(m => m.BillingCity)
+    @Html.LabelFor(m => m.BillingState) @Html.EditorFor(m => m.BillingState)
+    @Html.LabelFor(m => m.BillingZip) @Html.EditorFor(m => m.BillingZip)
+    @Html.LabelFor(m => m.BillingPhone) @Html.EditorFor(m => m.BillingPhone)
+    @Html.LabelFor(m => m.BillingFax) @Html.EditorFor(m => m.BillingFax)
+    @Html.LabelFor(m => m.BillingEmail) @Html.EditorFor(m => m.BillingEmail)
+    @Html.LabelFor(m => m.BillingWebUrl) @Html.EditorFor(m => m.BillingWebUrl)
+    </fieldset>
+    <fieldset><legend><small>Shipping Information</small></legend>
     @Html.LabelFor(m => m.ShippingStreet1) @Html.EditorFor(m => m.ShippingStreet1)
     @Html.LabelFor(m => m.ShippingStreet2) @Html.EditorFor(m => m.ShippingStreet2)
-    @Html.LabelFor(m => m.ShippingZip) @Html.EditorFor(m => m.ShippingZip)
     @Html.LabelFor(m => m.ShippingCity) @Html.EditorFor(m => m.ShippingCity)
     @Html.LabelFor(m => m.ShippingState) @Html.EditorFor(m => m.ShippingState)
-
+    @Html.LabelFor(m => m.ShippingZip) @Html.EditorFor(m => m.ShippingZip)
+    </fieldset>
+    <fieldset><legend><small>Form Data</small></legend>
+    </fieldset>
     @Html.LabelFor(m => m.NumberOfEmployee) @Html.EditorFor(m => m.NumberOfEmployee)
     @Html.LabelFor(m => m.NumberOfSalesEmployee) @Html.EditorFor(m => m.NumberOfSalesEmployee)
     @Html.LabelFor(m => m.AnnualSalesVolume) @Html.EditorFor(m => m.AnnualSalesVolume)
     @Html.LabelFor(m => m.ASIContact) @Html.EditorFor(m => m.ASIContact)
     </div>
-    <div class="span4">
 
-        @if (Model.Contacts != null && Model.Contacts.Count > 0)
+    <div class="span4">
+    @if (Model.Contacts != null && Model.Contacts.Count > 0)
+    {
+        <fieldset><legend><small>Primary Contact</small></legend>
+        @Html.LabelFor(m => m.Contacts.First().Name) @Html.EditorFor(m => m.Contacts.First().Name)
+        @Html.LabelFor(m => m.Contacts.First().Title) @Html.EditorFor(m => m.Contacts.First().Title)
+        @Html.LabelFor(m => m.Contacts.First().Email) @Html.EditorFor(m => m.Contacts.First().Email)
+        @Html.LabelFor(m => m.Contacts.First().Phone) @Html.EditorFor(m => m.Contacts.First().Phone)
+        @Html.LabelFor(m => m.Contacts.First().Fax) @Html.EditorFor(m => m.Contacts.First().Fax)
+        </fieldset>
+        if (Model.Contacts.Count > 1)
         {
-            <h3>Distributor Company Contacts</h3>
-            for (int i = 0; i < Model.Contacts.Count; i++)
+        <fieldset><legend><small>Company Contacts</small></legend>
+            @for (int i = 1; i < Model.Contacts.Count; i++)
             {
                 if (Model.Contacts.ElementAt(i) != null)
                 { 
-                    <h4>@Model.Contacts.ElementAt(i).Title Contact</h4>
-                    <p>Name: @Model.Contacts.ElementAt(i).Name</p>
-                    <p>Title: @Model.Contacts.ElementAt(i).Title</p>
-                    <p>Email: @Model.Contacts.ElementAt(i).Email</p>
-                    <p>Phone: @Model.Contacts.ElementAt(i).Phone</p>
-                    <p>Fax: @Model.Contacts.ElementAt(i).Fax</p>
+                @Html.LabelFor(m => m.Contacts.ElementAt(i).Name) @Html.EditorFor(m => m.Contacts.ElementAt(i).Name)
+                @Html.LabelFor(m => m.Contacts.ElementAt(i).Title) @Html.EditorFor(m => m.Contacts.ElementAt(i).Title)
+                @Html.LabelFor(m => m.Contacts.ElementAt(i).Email) @Html.EditorFor(m => m.Contacts.ElementAt(i).Email)
+                @Html.LabelFor(m => m.Contacts.ElementAt(i).Phone) @Html.EditorFor(m => m.Contacts.ElementAt(i).Phone)
+                @Html.LabelFor(m => m.Contacts.ElementAt(i).Fax) @Html.EditorFor(m => m.Contacts.ElementAt(i).Fax)
                 }
             }
+        </fieldset> 
         }
+    }
+    <fieldset><legend><small>Terms and Conditions</small></legend>
+    
+    </fieldset>
     </div>
     <div class="span4">
-        <h4>Order Status</h4>
-        <div class="well">
-           Order Status: <span>@Model.OrderStatus</span><br />
-        </div>
-        @if (Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved) {
+        <fieldset><legend><small>Order Status</small></legend>
+        <div class="well">@Model.OrderStatus<br /></div>
+        @Html.Label("Timms ID") @Html.EditorFor(m => m.ExternalReference) <br /> <span class="text-error" data-errortype="invalidformat"><small>Required field</small></span><span class="text-error" data-errortype="invalidformat"><small>TIMMS reference must contain only numbers</small></span>
+        @if (Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
+        {
         <input class="command" type="submit" value="@ApplicationController.COMMAND_ACCEPT" /> <input class="command" type="submit" value="@ApplicationController.COMMAND_SAVE" />
-        } 
-        else if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending) { 
+        }
+        else if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
+        { 
         <input class="command" type="submit" value="@ApplicationController.COMMAND_REJECT" />
         }
-        @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved){ @Html.ActionLink("Close", "../Orders") }
-        else { @Html.ActionLink("Cancel", "../Orders") }
+        @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
+        { @Html.ActionLink("Close", "../Orders") }
+        else
+        { @Html.ActionLink("Cancel", "../Orders") }
+        </fieldset>
     </div>
 </div>
 }
