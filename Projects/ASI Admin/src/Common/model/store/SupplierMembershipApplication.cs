@@ -9,7 +9,10 @@ namespace asi.asicentral.model.store
     {
         public SupplierMembershipApplication()
         {
-            //this.CENT_SuppJoinAppContact_SAPP = new List<CENT_SuppJoinAppContact_SAPP>();
+            if (this.GetType() == typeof(SupplierMembershipApplication))
+            {
+                Contacts = new List<SupplierMembershipApplicationContact>();
+            }
         }
 
         [Display(ResourceType = typeof(Resource), Name = "ApplicationStatus")]
@@ -205,5 +208,5 @@ namespace asi.asicentral.model.store
             application.YearEnteredAdvertising = YearEnteredAdvertising;
             application.YearEstablished = YearEstablished;
         }
-   }
+    }
 }
