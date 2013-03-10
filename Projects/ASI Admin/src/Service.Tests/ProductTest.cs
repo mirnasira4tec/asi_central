@@ -502,7 +502,7 @@ namespace asi.asicentral.Tests
                 });
                 ContextFeature feature = new ContextFeature()
                 {
-                    Name = "No Processing fees",
+                    Name = "Web purchase - $250 application fee waived",
                     Sequence = 1,
                     IsOffer = true,
                     CreateDate = DateTime.UtcNow,
