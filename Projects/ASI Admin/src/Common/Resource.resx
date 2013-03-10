@@ -124,7 +124,7 @@
     <value>Affiliate Company Name</value>
   </data>
   <data name="AgreeASITermsAndConditions" xml:space="preserve">
-    <value>Agreed to ASI terms and condition</value>
+    <value>I agree to the terms and conditions</value>
   </data>
   <data name="AgreeReceivePromotionalProducts" xml:space="preserve">
     <value>Agreed to recieve promotion products?</value>
@@ -133,7 +133,7 @@
     <value>Agree to the terms and condition?</value>
   </data>
   <data name="AgreeUPSTermsAndConditions" xml:space="preserve">
-    <value>Agreed to UPS terms and condition</value>
+    <value>I hereby request and authorize ASI to open a UPS® account for my company to take advantage of the ASI shipping program incentives. I understand the shipping incentives will begin 10 working days after I receive my ASI number and there are no other incentives available to my existing UPS® account number.</value>
   </data>
   <data name="AnnualSalesVolume" xml:space="preserve">
     <value>Annual Sales Volume</value>
@@ -142,10 +142,10 @@
     <value>Annual Sales Volume ASP</value>
   </data>
   <data name="ApplicantEmail" xml:space="preserve">
-    <value>Applicant Email</value>
+    <value>Applicant Email address</value>
   </data>
   <data name="ApplicantName" xml:space="preserve">
-    <value>Applicant Name</value>
+    <value>Individual’s Name (filling out the online form):</value>
   </data>
   <data name="ApplicationStatus" xml:space="preserve">
     <value>Application Status</value>
@@ -232,19 +232,19 @@
     <value>Company Url</value>
   </data>
   <data name="ContactEmail" xml:space="preserve">
-    <value>Contact Email</value>
+    <value>Email</value>
   </data>
   <data name="ContactName" xml:space="preserve">
-    <value>Contact Name</value>
+    <value>Name</value>
   </data>
   <data name="ContactPhone" xml:space="preserve">
-    <value>Contact Phone</value>
+    <value>Phone</value>
   </data>
   <data name="ContactTitle" xml:space="preserve">
-    <value>Contact Title</value>
+    <value>Title</value>
   </data>
   <data name="CorporateOfficer" xml:space="preserve">
-    <value>Corporate Officer</value>
+    <value>I am a corporate officer, partner, or owner of the company submitting the ASI memberapplication, and am authorized to do so.</value>
   </data>
   <data name="CountryCode" xml:space="preserve">
     <value>Country Code</value>
@@ -274,13 +274,13 @@
     <value>First Name</value>
   </data>
   <data name="InformASIOfChange" xml:space="preserve">
-    <value>Informs ASI of Change</value>
+    <value>If the above conditions should change, I will inform ASI ofthe change.</value>
   </data>
   <data name="IPAddress" xml:space="preserve">
     <value>IP Address</value>
   </data>
   <data name="IsForProfit" xml:space="preserve">
-    <value>Is For Profit</value>
+    <value>My company is a for-profit re-seller of advertising specialties,or related items, such as printed promotional items, trophies, awards, imprintedapparel, screen-printed or embroidered items, signs and other related items.</value>
   </data>
   <data name="IsImporter" xml:space="preserve">
     <value>Is Importer</value>
@@ -289,10 +289,10 @@
     <value>Is Imprinter/Decorator</value>
   </data>
   <data name="IsMajorForResale" xml:space="preserve">
-    <value>Is Major For Resale</value>
+    <value>The majority (51%) of the advertising specialties the company plans to buy are forre-sale and not for my company nor for any person or a company affiliated with mycompany (other than as a paying customer).</value>
   </data>
   <data name="IsMajorityDistributeForResale" xml:space="preserve">
-    <value>Is majority distribution for resale?</value>
+    <value>My company is a distributor/reseller of ad specialties or related business and isa for profit entity under U.S. state or federal law. The majority of ad specialtieswe distribute or will distribute are for re-sale to customers that are not owned,operated, controlled, franchised, affiliated, or connected to our company.</value>
   </data>
   <data name="IsManufacturer" xml:space="preserve">
     <value>Is Manufacturer</value>
@@ -385,7 +385,7 @@
     <value>Small Image</value>
   </data>
   <data name="ProvideInvoiceOnDemand" xml:space="preserve">
-    <value>Provide Invoice On Demand</value>
+    <value>I agree that upon request, I will provide the number of invoicesand other information ASI requests in order to demonstrate that I am a re-sellerof advertising specialties or related items, such as printed promotional items,trophies, awards, imprinted apparel, screen-printed or embroidered items, signsand other related items consistent with membership requirements. I under stand thata failure to do so may result in the de-listing of the company as an ASI member.</value>
   </data>
   <data name="SalesVolume" xml:space="preserve">
     <value>Sales Volume</value>
@@ -424,10 +424,10 @@
     <value>Shipping Zipcode</value>
   </data>
   <data name="SignatureType" xml:space="preserve">
-    <value>Signature Type</value>
+    <value>Approved Signatures</value>
   </data>
   <data name="SolelyWorkName" xml:space="preserve">
-    <value>Soley Workname</value>
+    <value>If the answer to Question No. 5 is "no" what is the name ofthe other company you work for?</value>
   </data>
   <data name="State" xml:space="preserve">
     <value>State</value>
@@ -442,7 +442,7 @@
     <value>Summary</value>
   </data>
   <data name="TrueAnswers" xml:space="preserve">
-    <value>True Answers?</value>
+    <value>I certify that the answers I have provided above and in the ASI MembershipApplication are true and accurate. If ASI determines otherwise, I understand thatASI, in it sole discretion, may de-list my company as an ASI member.</value>
   </data>
   <data name="UPSAddress" xml:space="preserve">
     <value>UPS Address</value>
@@ -473,6 +473,12 @@
   </data>
   <data name="Zipcode" xml:space="preserve">
     <value>Zipcode</value>
+  </data>
+  <data name="IsSolelyWork" xml:space="preserve">
+    <value>I work solely for the company applying for membership.</value>
+  </data>
+  <data name="IsWomanOwned" xml:space="preserve">
+    <value>Is Woman Owned</value>
   </data>
   <data name="Country" xml:space="preserve">
     <value>Country</value>
