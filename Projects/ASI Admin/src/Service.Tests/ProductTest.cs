@@ -557,7 +557,7 @@ namespace asi.asicentral.Tests
                 supplierMembership.Features.Add(feature);
                 feature = new ContextFeature()
                 {
-                    Name = "$300 of <dfn>ASI avertising</dfn> credit",
+                    Name = "$500 of <dfn>ASI avertising</dfn> credit",
                     Sequence = 7,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -604,15 +604,6 @@ namespace asi.asicentral.Tests
                 {
                     Name = "<dfn>EmailExpress</dfn> blast three times a year",
                     Sequence = 12,
-                    CreateDate = DateTime.UtcNow,
-                    UpdateDate = DateTime.UtcNow,
-                    UpdateSource = "ProductTest.PopulateDemoData",
-                };
-                supplierMembership.Features.Add(feature);
-                feature = new ContextFeature()
-                {
-                    Name = "Additional $200 ASI advertising credit",
-                    Sequence = 13,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
                     UpdateSource = "ProductTest.PopulateDemoData",
