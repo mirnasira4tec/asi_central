@@ -12,6 +12,7 @@ namespace Web_Application.Controllers
         {
             ViewBag.Message = "Playing with the technology stack and good practices";
 
+
             return View("Index");
         }
     }
