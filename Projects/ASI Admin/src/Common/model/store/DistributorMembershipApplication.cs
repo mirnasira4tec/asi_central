@@ -114,7 +114,6 @@ namespace asi.asicentral.model.store
             application.ApplicantName = ApplicantName;
             application.ApplicationStatusId = ApplicationStatusId;
             application.ASIContact = ASIContact;
-            application.BillingCity = BillingCity;
             application.Company = Company;
             application.Contacts = Contacts;
             application.CorporateOfficer = CorporateOfficer;
@@ -123,7 +122,6 @@ namespace asi.asicentral.model.store
             application.Custom3 = Custom3;
             application.Custom4 = Custom4;
             application.Custom5 = Custom5;
-            application.BillingEmail = BillingEmail;
             application.EstablishedDate = EstablishedDate;
             application.BillingFax = BillingFax;
             application.FirstName = FirstName;
@@ -138,7 +136,6 @@ namespace asi.asicentral.model.store
             application.NumberOfEmployee = NumberOfEmployee;
             application.NumberOfSalesEmployee = NumberOfSalesEmployee;
             application.OtherBusinessRevenue = OtherBusinessRevenue;
-            application.BillingPhone = BillingPhone;
             application.PrimaryBusinessRevenueId = PrimaryBusinessRevenueId;
             application.ProductLines = ProductLines;
             application.ProvideInvoiceOnDemand = ProvideInvoiceOnDemand;
@@ -147,15 +144,26 @@ namespace asi.asicentral.model.store
             application.ShippingStreet1 = ShippingStreet1;
             application.ShippingStreet2 = ShippingStreet2;
             application.ShippingZip = ShippingZip;
+            application.ShippingCountry = ShippingCountry;
             application.SignatureType = SignatureType;
             application.SolelyWorkName = SolelyWorkName;
-            application.BillingState = BillingState;
+            application.BillingEmail = BillingEmail;
+            application.BillingPhone = BillingPhone;
             application.BillingAddress1 = BillingAddress1;
             application.BillingAddress2 = BillingAddress2;
+            application.BillingState = BillingState;
+            application.BillingCity = BillingCity;
+            application.BillingZip = BillingZip;
+            application.BillingCountry = BillingCountry;
             application.TrueAnswers = TrueAnswers;
             application.UserId = UserId;
             application.BillingWebUrl = BillingWebUrl;
-            application.BillingZip = BillingZip;
+            application.Address1 = Address1;
+            application.Address2 = Address2;
+            application.City = City;
+            application.State = State;
+            application.Zip = Zip;
+            application.Country = Country;
         }
     }
 }

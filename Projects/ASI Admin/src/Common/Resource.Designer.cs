@@ -79,7 +79,7 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Agreed to ASI terms and condition.
+        ///   Looks up a localized string similar to I agree to the terms and conditions.
         /// </summary>
         public static string AgreeASITermsAndConditions {
             get {
@@ -106,7 +106,7 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Agreed to UPS terms and condition.
+        ///   Looks up a localized string similar to I hereby request and authorize ASI to open a UPS® account for my company to take advantage of the ASI shipping program incentives. I understand the shipping incentives will begin 10 working days after I receive my ASI number and there are no other incentives available to my existing UPS® account number..
         /// </summary>
         public static string AgreeUPSTermsAndConditions {
             get {
@@ -133,7 +133,7 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Applicant Email.
+        ///   Looks up a localized string similar to Applicant Email address.
         /// </summary>
         public static string ApplicantEmail {
             get {
@@ -142,7 +142,7 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Applicant Name.
+        ///   Looks up a localized string similar to Individual’s Name (filling out the online form):.
         /// </summary>
         public static string ApplicantName {
             get {
@@ -403,7 +403,7 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contact Email.
+        ///   Looks up a localized string similar to Email.
         /// </summary>
         public static string ContactEmail {
             get {
@@ -412,7 +412,7 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contact Name.
+        ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string ContactName {
             get {
@@ -421,7 +421,7 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contact Phone.
+        ///   Looks up a localized string similar to Phone.
         /// </summary>
         public static string ContactPhone {
             get {
@@ -430,7 +430,7 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contact Title.
+        ///   Looks up a localized string similar to Title.
         /// </summary>
         public static string ContactTitle {
             get {
@@ -439,7 +439,7 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Corporate Officer.
+        ///   Looks up a localized string similar to I am a corporate officer, partner, or owner of the company submitting the ASI memberapplication, and am authorized to do so..
         /// </summary>
         public static string CorporateOfficer {
             get {
@@ -538,7 +538,7 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Informs ASI of Change.
+        ///   Looks up a localized string similar to If the above conditions should change, I will inform ASI ofthe change..
         /// </summary>
         public static string InformASIOfChange {
             get {
@@ -556,7 +556,7 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is For Profit.
+        ///   Looks up a localized string similar to My company is a for-profit re-seller of advertising specialties,or related items, such as printed promotional items, trophies, awards, imprintedapparel, screen-printed or embroidered items, signs and other related items..
         /// </summary>
         public static string IsForProfit {
             get {
@@ -583,7 +583,7 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is Major For Resale.
+        ///   Looks up a localized string similar to The majority (51%) of the advertising specialties the company plans to buy are forre-sale and not for my company nor for any person or a company affiliated with mycompany (other than as a paying customer)..
         /// </summary>
         public static string IsMajorForResale {
             get {
@@ -592,7 +592,7 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is majority distribution for resale?.
+        ///   Looks up a localized string similar to My company is a distributor/reseller of ad specialties or related business and isa for profit entity under U.S. state or federal law. The majority of ad specialtieswe distribute or will distribute are for re-sale to customers that are not owned,operated, controlled, franchised, affiliated, or connected to our company..
         /// </summary>
         public static string IsMajorityDistributeForResale {
             get {
@@ -628,6 +628,15 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to I work solely for the company applying for membership..
+        /// </summary>
+        public static string IsSolelyWork {
+            get {
+                return ResourceManager.GetString("IsSolelyWork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is Union Made.
         /// </summary>
         public static string IsUnionMade {
@@ -651,6 +660,15 @@ namespace asi.asicentral.Common {
         public static string IsWholesaler {
             get {
                 return ResourceManager.GetString("IsWholesaler", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Woman Owned.
+        /// </summary>
+        public static string IsWomanOwned {
+            get {
+                return ResourceManager.GetString("IsWomanOwned", resourceCulture);
             }
         }
         
@@ -871,7 +889,7 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provide Invoice On Demand.
+        ///   Looks up a localized string similar to I agree that upon request, I will provide the number of invoicesand other information ASI requests in order to demonstrate that I am a re-sellerof advertising specialties or related items, such as printed promotional items,trophies, awards, imprinted apparel, screen-printed or embroidered items, signsand other related items consistent with membership requirements. I under stand thata failure to do so may result in the de-listing of the company as an ASI member..
         /// </summary>
         public static string ProvideInvoiceOnDemand {
             get {
@@ -988,7 +1006,7 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Signature Type.
+        ///   Looks up a localized string similar to Approved Signatures.
         /// </summary>
         public static string SignatureType {
             get {
@@ -997,7 +1015,7 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Soley Workname.
+        ///   Looks up a localized string similar to If the answer to Question No. 5 is &quot;no&quot; what is the name ofthe other company you work for?.
         /// </summary>
         public static string SolelyWorkName {
             get {
@@ -1042,7 +1060,7 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to True Answers?.
+        ///   Looks up a localized string similar to I certify that the answers I have provided above and in the ASI MembershipApplication are true and accurate. If ASI determines otherwise, I understand thatASI, in it sole discretion, may de-list my company as an ASI member..
         /// </summary>
         public static string TrueAnswers {
             get {

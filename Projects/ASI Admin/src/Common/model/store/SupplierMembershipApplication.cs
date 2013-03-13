@@ -141,12 +141,14 @@ namespace asi.asicentral.model.store
         [Display(ResourceType = typeof(Resource), Name = "AgreeASITermsAndConditions")]
         public Nullable<bool> AgreeASITermsAndConditions { get; set; }
 
+        [Display(ResourceType = typeof(Resource), Name = "IsWomanOwned")]
         public Nullable<bool> WomanOwned { get; set; }
 
         public virtual ICollection<SupplierMembershipApplicationContact> Contacts { get; set; }
 
         public void CopyTo(SupplierMembershipApplication application)
         {
+            application.Contacts = Contacts;
             application.AffiliateASINumber = AffiliateASINumber;
             application.AffiliateCompanyName = AffiliateCompanyName;
             application.AgreeASITermsAndConditions = AgreeASITermsAndConditions;
@@ -154,11 +156,13 @@ namespace asi.asicentral.model.store
             application.ApplicationStatusId = ApplicationStatusId;
             application.AuthorizeUPSNewAccount = AuthorizeUPSNewAccount;
             application.BillingAddress1 = BillingAddress1;
+            application.BillingAddress2 = BillingAddress2;
             application.BillingCity = BillingCity;
             application.BillingEmail = BillingEmail;
             application.BillingFax = BillingFax;
             application.BillingPhone = BillingPhone;
             application.BillingState = BillingState;
+            application.BillingCountry = BillingCountry;
             application.BillingTollFree = BillingTollFree;
             application.BillingWebUrl = BillingWebUrl;
             application.BillingZip = BillingZip;
@@ -193,9 +197,11 @@ namespace asi.asicentral.model.store
             application.SellThruRetail = SellThruRetail;
             application.SellToEndUsers = SellToEndUsers;
             application.ShippingStreet1 = ShippingStreet1;
+            application.ShippingStreet2 = ShippingStreet2;
             application.ShippingCity = ShippingCity;
             application.ShippingState = ShippingState;
             application.ShippingZip = ShippingZip;
+            application.ShippingCountry = ShippingCountry;
             application.UPSAddress = UPSAddress;
             application.UPSCity = UPSCity;
             application.UPSShippingNumber = UPSShippingNumber;
@@ -205,6 +211,12 @@ namespace asi.asicentral.model.store
             application.WomanOwned = WomanOwned;
             application.YearEnteredAdvertising = YearEnteredAdvertising;
             application.YearEstablished = YearEstablished;
+            application.Address1 = Address1;
+            application.Address2 = Address2;
+            application.City = City;
+            application.State = State;
+            application.Zip = Zip;
+            application.Country = Country;
         }
     }
 }

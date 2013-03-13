@@ -40,7 +40,7 @@ namespace asi.asicentral.database.mappings.asiinternet
 
             this.Property(t => t.BillingState)
                 .HasColumnName("SAPP_BillState")
-                .HasMaxLength(15);
+                .HasMaxLength(50);
 
             this.Property(t => t.BillingZip)
                 .HasColumnName("SAPP_BillZip")
@@ -84,7 +84,7 @@ namespace asi.asicentral.database.mappings.asiinternet
 
             this.Property(t => t.ShippingState)
                 .HasColumnName("SAPP_ShipState")
-                .HasMaxLength(15);
+                .HasMaxLength(50);
 
             this.Property(t => t.ShippingZip)
                 .HasColumnName("SAPP_ShipZip")
@@ -248,7 +248,8 @@ namespace asi.asicentral.database.mappings.asiinternet
                 .HasColumnName("SAPP_ComZip");
 
             this.Property(t => t.State)
-                .HasColumnName("SAPP_ComState");
+                .HasColumnName("SAPP_ComState")
+                .HasMaxLength(50);
 
             this.Property(t => t.Country)
                 .HasColumnName("SAPP_ComCountry");
