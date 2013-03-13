@@ -1,6 +1,4 @@
-﻿using asi.asicentral.database.mappings.asipublication;
-using asi.asicentral.database.mappings.internet;
-using asi.asicentral.model.counselor;
+﻿using asi.asicentral.database.mappings.internet;
 using asi.asicentral.model.news;
 using System.Data.Entity;
 

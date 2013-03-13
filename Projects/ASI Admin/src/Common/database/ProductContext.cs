@@ -1,7 +1,4 @@
-﻿using asi.asicentral.database.mappings.asipublication;
-using asi.asicentral.database.mappings.product;
-using asi.asicentral.model.counselor;
-using asi.asicentral.model.news;
+﻿using asi.asicentral.database.mappings.product;
 using asi.asicentral.model.store;
 using System.Data.Entity;
 
