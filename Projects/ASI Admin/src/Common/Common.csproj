@@ -82,11 +82,18 @@
   <ItemGroup>
     <Compile Include="database\ASIInternetContext.cs" />
     <Compile Include="database\ASIPublicationContext.cs" />
+    <Compile Include="database\TIMSSContext.cs" />
     <Compile Include="database\mappings\product\ContextFeatureProductMap.cs" />
     <Compile Include="database\mappings\product\ContextMap.cs" />
     <Compile Include="database\mappings\product\ContextProductMap.cs" />
     <Compile Include="database\mappings\product\ContextFeatureMap.cs" />
     <Compile Include="database\mappings\product\ContextProductSequenceMap.cs" />
+    <Compile Include="database\mappings\timss\TIMSSAccountTypeMap.cs" />
+    <Compile Include="database\mappings\timss\TIMSSAdditionalInfoMap.cs" />
+    <Compile Include="database\mappings\timss\TIMSSCompanyMap.cs" />
+    <Compile Include="database\mappings\timss\TIMSSContactMap.cs" />
+    <Compile Include="database\mappings\timss\TIMSSCreditInfoMap.cs" />
+    <Compile Include="database\mappings\timss\TIMSSProductTypeMap.cs" />
     <Compile Include="database\ProductContext.cs" />
     <Compile Include="database\InternetContext.cs" />
     <Compile Include="database\mappings\asiinternet\ASPNetMembershipMap.cs" />
@@ -135,6 +142,12 @@
     <Compile Include="model\store\OrderDetailApplication.cs" />
     <Compile Include="model\store\OrderProduct.cs" />
     <Compile Include="model\store\SupplierMembershipApplication.cs" />
+    <Compile Include="model\timss\TIMSSAccountType.cs" />
+    <Compile Include="model\timss\TIMSSAdditionalInfo.cs" />
+    <Compile Include="model\timss\TIMSSCompany.cs" />
+    <Compile Include="model\timss\TIMSSContact.cs" />
+    <Compile Include="model\timss\TIMSSCreditInfo.cs" />
+    <Compile Include="model\timss\TIMSSProductType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
       <DependentUpon>Resource.resx</DependentUpon>
