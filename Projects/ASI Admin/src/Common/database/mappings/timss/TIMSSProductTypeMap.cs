@@ -9,7 +9,7 @@ namespace asi.asicentral.database.mappings.timss
         public TIMSSProductTypeMap()
         {
             this.ToTable("TIMSS_APPLICATION_INPUT_ProdType");
-            this.HasKey(t => new { DAPP_AppID = t.ApplicationId, DAPP_UserID = t.DAPP_UserId, ProdTypeDesc = t.Description });
+            this.HasKey(t => new { t.ApplicationId, t.DAPP_UserId, t.Description });
 
             // Properties
             this.Property(t => t.ApplicationId)

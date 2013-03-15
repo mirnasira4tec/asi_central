@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.model.store;
 using asi.asicentral.interfaces;
 using asi.asicentral.services;
 using asi.asicentral.database.mappings;
+using System.Globalization;
+using System.Collections.Generic;
+using asi.asicentral.model.timss;
 
 namespace asi.asicentral.Tests
 {
@@ -24,7 +28,8 @@ namespace asi.asicentral.Tests
                 BillZip = "Bill Zip",
                 BillState = "Bill State",
                 BillCountry = "Bill Country",
-                ExternalReference = "1001", //TIMSS ID
+                ExternalReference = "000008939544", //TIMSS ID
+                UserId = Guid.NewGuid(),
                 CreditCard = new OrderCreditCard()
                 {
                     Type = "VISA",
@@ -51,19 +56,19 @@ namespace asi.asicentral.Tests
                 City = "City",
                 Zip = "Zip",
                 State = "State",
-                Country = "Country",
+                Country = "USA",
                 BillingAddress1 = "Bill Street1",
                 BillingAddress2 = "Bill Street2",
                 BillingCity = "Bill City",
                 BillingZip = "Bill Zip",
                 BillingState = "Bill State",
-                BillingCountry = "Bill Country",
+                BillingCountry = "USA",
                 ShippingStreet1 = "Ship Street1",
                 ShippingStreet2 = "Ship Street2",
                 ShippingCity = "Ship City",
                 ShippingZip = "Ship Zip",
                 ShippingState = "Ship State",
-                ShippingCountry = "Ship Country",
+                ShippingCountry = "USA",
                 ContactName = "First Last",
                 ContactTitle = "Contact Title",
                 ContactEmail = "Contact@asi.com",
@@ -99,6 +104,15 @@ namespace asi.asicentral.Tests
             //check the database to see if the records were added
             using (IObjectService objectService = new ObjectService(new Container(new EFRegistry())))
             {
+                //make sure company record is created
+                TIMSSCompany company = objectService.GetAll<TIMSSCompany>(true).Where(comp => comp.DAPP_UserId == order.UserId.Value).SingleOrDefault();
+                Assert.IsNotNull(company);
+                //make sure a credit card record is created
+                TIMSSCreditInfo creditCard = objectService.GetAll<TIMSSCreditInfo>(true).Where(cc => cc.DAPP_UserId == order.UserId.Value).SingleOrDefault();
+                Assert.IsNotNull(creditCard);
+                //make sure 2 contact records are created
+                IList<TIMSSContact> contacts = objectService.GetAll<TIMSSContact>(true).Where(cont => cont.DAPP_UserId == order.UserId.Value).ToList();
+                Assert.AreEqual(2, contacts.Count);
             }
         }
     }

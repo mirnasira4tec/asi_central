@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,33 @@ namespace asi.asicentral.util
             }
             //todo iterate through html- attributes to add new ones
             return attributes;
+        }
+
+        /// <summary>
+        /// Create a list of countries and their ISO country code
+        /// </summary>
+        /// <returns></returns>
+        public static IList<SelectListItem> GetCountries()
+        {
+            IList<SelectListItem> countries = new List<SelectListItem>();
+
+            Dictionary<string, string> countriesDic = new Dictionary<string, string>();
+
+            foreach (CultureInfo cultureInfo in CultureInfo.GetCultures(CultureTypes.SpecificCultures & ~CultureTypes.NeutralCultures))
+            {
+                RegionInfo objRegionInfo = new RegionInfo(cultureInfo.Name);
+                if (!countriesDic.ContainsKey(objRegionInfo.EnglishName))
+                {
+                    countriesDic.Add(objRegionInfo.EnglishName, objRegionInfo.ThreeLetterISORegionName);
+                }
+            }
+            List<string> countryNames = countriesDic.Keys.ToList();
+            countryNames.Sort();
+            foreach (string countryName in countryNames)
+            {
+                countries.Add(new SelectListItem { Text = countryName, Value = countriesDic[countryName] });
+            }
+            return countries;
         }
     }
 }

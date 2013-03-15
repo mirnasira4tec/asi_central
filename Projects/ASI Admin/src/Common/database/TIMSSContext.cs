@@ -14,9 +14,6 @@ namespace asi.asicentral.database
 
         public DbSet<TIMSSAccountType> AccountTypes { get; set; }
         public DbSet<TIMSSAdditionalInfo> AdditionalInfos { get; set; }
-        public DbSet<TIMSSAddress> Addresses { get; set; }
-        public DbSet<TIMSSAppId> AppIds { get; set; }
-        public DbSet<TIMSSCommunication> Communications { get; set; }
         public DbSet<TIMSSCompany> Companies { get; set; }
         public DbSet<TIMSSContact> Contacts { get; set; }
         public DbSet<TIMSSCreditInfo> CreditInfos { get; set; }
@@ -32,9 +29,6 @@ namespace asi.asicentral.database
             modelBuilder.Configurations
                 .Add(new TIMSSAccountTypeMap())
                 .Add(new TIMSSAdditionalInfoMap())
-                .Add(new TIMSSAddressMap())
-                .Add(new TIMSSAppIdMap())
-                .Add(new TIMSSCommunicationMap())
                 .Add(new TIMSSCompanyMap())
                 .Add(new TIMSSContactMap())
                 .Add(new TIMSSCreditInfoMap())

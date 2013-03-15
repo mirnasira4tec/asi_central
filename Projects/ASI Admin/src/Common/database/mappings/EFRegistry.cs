@@ -19,7 +19,7 @@ namespace asi.asicentral.database.mappings
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIInternetContext>().Name = "ASIInternetContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIPublicationContext>().Name = "ASIPublicationContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<InternetContext>().Name = "InternetContext";
-            For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<TIMSSContext>().Name = "ProductContext";
+            For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ProductContext>().Name = "ProductContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<TIMSSContext>().Name = "TIMSSContext";
 
             //for each model - get the repository class with the appropriate context
@@ -109,15 +109,6 @@ namespace asi.asicentral.database.mappings
                 .Ctor<IValidatedContext>().Named("TIMSSContext");
 
             For<IRepository<TIMSSAdditionalInfo>>().Use<EFRepository<TIMSSAdditionalInfo>>()
-                .Ctor<IValidatedContext>().Named("TIMSSContext");
-
-            For<IRepository<TIMSSAddress>>().Use<EFRepository<TIMSSAddress>>()
-                .Ctor<IValidatedContext>().Named("TIMSSContext");
-
-            For<IRepository<TIMSSAppId>>().Use<EFRepository<TIMSSAppId>>()
-                .Ctor<IValidatedContext>().Named("TIMSSContext");
-
-            For<IRepository<TIMSSCommunication>>().Use<EFRepository<TIMSSCommunication>>()
                 .Ctor<IValidatedContext>().Named("TIMSSContext");
 
             For<IRepository<TIMSSCompany>>().Use<EFRepository<TIMSSCompany>>()
