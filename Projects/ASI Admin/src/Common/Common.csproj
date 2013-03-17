@@ -84,6 +84,8 @@
     <Compile Include="database\ASIPublicationContext.cs" />
     <Compile Include="database\mappings\asiinternet\DistributorAccountTypeMap.cs" />
     <Compile Include="database\mappings\asiinternet\DistributorProductLineMap.cs" />
+    <Compile Include="database\mappings\asiinternet\SupplierDecoratingTypeMap.cs" />
+    <Compile Include="model\store\SupplierDecoratingType.cs" />
     <Compile Include="model\store\DistributorAccountType.cs" />
     <Compile Include="database\mappings\asiinternet\DistributorBusinessRevenueMap.cs" />
     <Compile Include="database\TIMSSContext.cs" />

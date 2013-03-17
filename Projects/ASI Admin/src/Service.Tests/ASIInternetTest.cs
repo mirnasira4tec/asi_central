@@ -114,6 +114,33 @@ namespace asi.asicentral.Tests
         }
 
         [TestMethod]
+        public void SupplierAppTest()
+        {
+            Guid appIdentifier;
+            using (var context = new ASIInternetContext())
+            {
+                SupplierMembershipApplication application = new SupplierMembershipApplication()
+                {
+                    Company = "SupplierTest",
+                };
+                IList<SupplierDecoratingType> decoratingTypes = context.SupplierDecoratingTypes.ToList();
+                Assert.IsTrue(decoratingTypes.Count > 1);
+                application.DecoratingTypes.Add(decoratingTypes[0]);
+                application.DecoratingTypes.Add(decoratingTypes[1]);
+                context.SupplierMembershipApplications.Add(application);
+                context.SaveChanges();
+                appIdentifier = application.Id;
+            }
+            using (var context = new ASIInternetContext())
+            {
+                //try to retrieve it
+                SupplierMembershipApplication application = context.SupplierMembershipApplications.Where(app => app.Id == appIdentifier).SingleOrDefault();
+                Assert.IsNotNull(application);
+                Assert.AreEqual(2, application.DecoratingTypes.Count);
+            }
+        }
+
+        [TestMethod]
         public void DistributorAppTest()
         {
             Guid appIdentifier;

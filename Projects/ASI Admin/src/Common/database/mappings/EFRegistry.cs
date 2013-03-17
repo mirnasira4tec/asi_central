@@ -58,6 +58,9 @@ namespace asi.asicentral.database.mappings
 
             For<IRepository<Product>>().Use<EFRepository<Product>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
+      
+            For<IRepository<SupplierDecoratingType>>().Use<EFRepository<SupplierDecoratingType>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
             For<IRepository<SupplierMembershipApplication>>().Use<EFRepository<SupplierMembershipApplication>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");

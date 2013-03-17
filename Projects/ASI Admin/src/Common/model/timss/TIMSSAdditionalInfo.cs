@@ -42,7 +42,7 @@ namespace asi.asicentral.model.timss
         public Nullable<decimal> YearEstablishedAsAdSpecialist { get; set; }
         public string WomanOwned { get; set; }
         public string MinorityOwned { get; set; }
-        public string AMER_MADE_AVAIL { get; set; }
+        public string HasAmericanProducts { get; set; }
         public string BusinessHours { get; set; }
         public Nullable<decimal> ProductionTime { get; set; }
         public string RushService { get; set; }

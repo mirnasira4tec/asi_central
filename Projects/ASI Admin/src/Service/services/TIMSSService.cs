@@ -88,6 +88,78 @@ namespace asi.asicentral.services
                 }
                 //need to commit the data so far or the database will fail FK for Additional Information
                 _objectService.SaveChanges();
+                TIMSSAdditionalInfo additionalInformation = new TIMSSAdditionalInfo()
+                {
+                    DAPP_UserId = order.UserId.Value,
+                    YearEstablished = supplierApplication.YearEstablished.HasValue ? supplierApplication.YearEstablished.Value : (int?)null,
+                    YearEstablishedAsAdSpecialist = supplierApplication.YearEnteredAdvertising.HasValue ? supplierApplication.YearEnteredAdvertising.Value : (int?)null,
+                    WomanOwned = supplierApplication.WomanOwned.HasValue ? (supplierApplication.WomanOwned.Value ? "Y" : "N") : null,
+                    MinorityOwned = supplierApplication.LineMinorityOwned.HasValue ? (supplierApplication.LineMinorityOwned.Value ? "Y" : "N") : null,
+                    NumberOfEmployees = supplierApplication.NumberOfEmployee,
+                    HasAmericanProducts = supplierApplication.HasAmericanProducts.HasValue ? (supplierApplication.HasAmericanProducts.Value ? "Y" : "N") : null,
+                    BusinessHours = supplierApplication.BusinessHours,
+                    //TODO ProductionTime = supplierApplication.ProductionTime, issue with data types clashing
+                    RushService = supplierApplication.IsRushServiceAvailable.HasValue ? (supplierApplication.IsRushServiceAvailable.Value ? "Y" : "N") : null,
+                    Importer = supplierApplication.IsImporter.HasValue ? (supplierApplication.IsImporter.Value ? "Y" : "N") : null,
+                    Manufacturer = supplierApplication.IsManufacturer.HasValue ? (supplierApplication.IsManufacturer.Value ? "Y" : "N") : null,
+                    Retailer = supplierApplication.IsRetailer.HasValue ? (supplierApplication.IsRetailer.Value ? "Y" : "N") : null,
+                    Wholesaler = supplierApplication.IsWholesaler.HasValue ? (supplierApplication.IsWholesaler.Value ? "Y" : "N") : null,
+                    Imprinter = supplierApplication.IsImprinterVsDecorator.HasValue ? (supplierApplication.IsImprinterVsDecorator.Value ? "Y" : "N") : null,
+                };
+                //need to store the decorating type - probably a switch all properties are in this class
+                foreach (var decoratingAndImprinting in supplierApplication.DecoratingTypes)
+                {
+                    switch (decoratingAndImprinting.Name)
+                    {
+                        case "Etching":
+                            additionalInformation.Etching = "Y";
+                            break;
+                        case "Hot Stamping":
+                            additionalInformation.HotStamping = "Y";
+                            break;
+                        case "Silkscreen":
+                            additionalInformation.SilkScreen = "Y";
+                            break;
+                        case "Pad Print":
+                            additionalInformation.PadPrinting = "Y";
+                            break;
+                        case "Direct Embroidery":
+                            additionalInformation.DirectEmbroidery = "Y";
+                            break;
+                        case "Foil Stamping":
+                            additionalInformation.FoilStamping = "Y";
+                            break;
+                        case "Lithography":
+                            additionalInformation.Lithography = "Y";
+                            break;
+                        case "Sublimation":
+                            additionalInformation.Sublimation = "Y";
+                            break;
+                        case "Four Color Process":
+                            additionalInformation.FourColorProcess = "Y";
+                            break;
+                        case "Engraving":
+                            additionalInformation.Engraving = "Y";
+                            break;
+                        case "Laser":
+                            additionalInformation.Laser = "Y";
+                            break;
+                        case "Offset":
+                            additionalInformation.Offset = "Y";
+                            break;
+                        case "Transfer":
+                            additionalInformation.Transfer = "Y";
+                            break;
+                        case "Full Color Process":
+                            additionalInformation.FullColorProcess = "Y";
+                            break;
+                        case "Die Stamp":
+                            additionalInformation.DieStamp = "Y";
+                            break;
+                    }
+                    //TODO imprint other value, nowhere to add the value stored in supplierApplication.OtherDec
+                }
+                _objectService.Add<TIMSSAdditionalInfo>(additionalInformation);
             }
             else if (application is DistributorMembershipApplication)
             {

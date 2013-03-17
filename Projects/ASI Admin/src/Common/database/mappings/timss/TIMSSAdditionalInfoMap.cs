@@ -155,7 +155,7 @@ namespace asi.asicentral.database.mappings.timss
                 .HasColumnName("MINORITY_OWNED")
                 .HasMaxLength(1);
 
-            this.Property(t => t.AMER_MADE_AVAIL)
+            this.Property(t => t.HasAmericanProducts)
                 .HasColumnName("AMER_MADE_AVAIL")
                 .HasMaxLength(3);
 

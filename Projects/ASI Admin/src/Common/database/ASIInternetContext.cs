@@ -26,6 +26,7 @@ namespace asi.asicentral.database
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<OrderProduct> OrderProducts { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<SupplierDecoratingType> SupplierDecoratingTypes { get; set; }
         public DbSet<SupplierMembershipApplication> SupplierMembershipApplications { get; set; }
         public DbSet<SupplierMembershipApplicationContact> SupplierMembershipApplicationContacts { get; set; }
 
@@ -50,6 +51,7 @@ namespace asi.asicentral.database
                .Add(new OrderMap())
                .Add(new ProductMap())
                .Add(new StoreProductConfiguration())
+               .Add(new SupplierDecoratingTypeMap())
                .Add(new SupplierMembershipApplicationMap())
                .Add(new SupplierMembershipApplicationContactMap());
         }

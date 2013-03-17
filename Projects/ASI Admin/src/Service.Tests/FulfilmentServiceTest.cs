@@ -33,8 +33,8 @@ namespace asi.asicentral.Tests
                 WomanOwned = false,
                 LineMinorityOwned = false,
                 NumberOfEmployee = "500+",
-                //American made Products
-                //Business Hours
+                HasAmericanProducts = true,
+                BusinessHours = "Very Flexible Hours",
                 ProductionTime = "Very Fast",
                 IsRushServiceAvailable = false,
                 IsImprinterVsDecorator = true,
@@ -42,7 +42,6 @@ namespace asi.asicentral.Tests
                 IsManufacturer = true,
                 IsRetailer = false,
                 IsWholesaler = false,
-                //method of imprinting and decorating
             };
             PopulateApplication(application);
             application.Contacts.Add(new SupplierMembershipApplicationContact()
@@ -61,8 +60,16 @@ namespace asi.asicentral.Tests
                 Phone = "987 987 9876",
                 Email = "Contact2@asi.com",
             });
-            #endregion create the order to store
+            using (IObjectService objectService = new ObjectService(new Container(new EFRegistry())))
+            {
+                //method of imprinting and decorating
+                IList<SupplierDecoratingType> decoratingTypes = objectService.GetAll<SupplierDecoratingType>().ToList();
+                Assert.IsTrue(decoratingTypes.Count > 1);
+                application.DecoratingTypes.Add(decoratingTypes[0]);
+                application.DecoratingTypes.Add(decoratingTypes[1]);
+            }
 
+            #endregion create the order to store
             using (IFulfilmentService fulfilmentService = new TIMSSService(new ObjectService(new Container(new EFRegistry()))))
             {
                 fulfilmentService.Process(order, application);
