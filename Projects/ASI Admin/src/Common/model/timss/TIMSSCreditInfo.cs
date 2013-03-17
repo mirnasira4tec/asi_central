@@ -6,7 +6,7 @@ namespace asi.asicentral.model.timss
     public class TIMSSCreditInfo
     {
         public System.Guid DAPP_UserId { get; set; }
-        public int RecordId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
         public string Number { get; set; }

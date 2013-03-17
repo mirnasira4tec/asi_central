@@ -3,6 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.database;
 using asi.asicentral.model.sgr;
 using asi.asicentral.model.store;
+using System;
+using System.Collections.Generic;
 
 namespace asi.asicentral.Tests
 {
@@ -108,6 +110,72 @@ namespace asi.asicentral.Tests
                 Assert.IsNotNull(order);
                 OrderDetail detail = order.OrderDetails.Where(det => det.ProductId == 104).SingleOrDefault();
                 Assert.IsNotNull(detail);
+            }
+        }
+
+        [TestMethod]
+        public void SupplierAppTest()
+        {
+            Guid appIdentifier;
+            using (var context = new ASIInternetContext())
+            {
+                SupplierMembershipApplication application = new SupplierMembershipApplication()
+                {
+                    Company = "SupplierTest",
+                };
+                IList<SupplierDecoratingType> decoratingTypes = context.SupplierDecoratingTypes.ToList();
+                Assert.IsTrue(decoratingTypes.Count > 1);
+                application.DecoratingTypes.Add(decoratingTypes[0]);
+                application.DecoratingTypes.Add(decoratingTypes[1]);
+                context.SupplierMembershipApplications.Add(application);
+                context.SaveChanges();
+                appIdentifier = application.Id;
+            }
+            using (var context = new ASIInternetContext())
+            {
+                //try to retrieve it
+                SupplierMembershipApplication application = context.SupplierMembershipApplications.Where(app => app.Id == appIdentifier).SingleOrDefault();
+                Assert.IsNotNull(application);
+                Assert.AreEqual(2, application.DecoratingTypes.Count);
+            }
+        }
+
+        [TestMethod]
+        public void DistributorAppTest()
+        {
+            Guid appIdentifier;
+            using (var context = new ASIInternetContext())
+            {
+                DistributorBusinessRevenue revenue = context.DistributorBusinessRevenues.FirstOrDefault();
+                Assert.IsNotNull(revenue);
+                //create a new app
+                DistributorMembershipApplication application = new DistributorMembershipApplication()
+                {
+                    Company = "DistributorAppTest",
+                    PrimaryBusinessRevenue = revenue,
+                };
+                context.DistributorMembershipApplications.Add(application);
+                //add a few accont types
+                IList<DistributorAccountType> accountTypes = context.DistributorAccountTypes.ToList();
+                Assert.IsTrue(accountTypes.Count > 1);
+                application.AccountTypes.Add(accountTypes[0]);
+                application.AccountTypes.Add(accountTypes[1]);
+                //add a few product lines
+                IList<DistributorProductLine> productLines = context.DistributorProductLines.ToList();
+                Assert.IsTrue(productLines.Count > 1);
+                application.ProductLines.Add(productLines[0]);
+                application.ProductLines.Add(productLines[1]);
+                context.SaveChanges();
+                appIdentifier = application.Id;
+            }
+            using (var context = new ASIInternetContext())
+            {
+                //try to retrieve it
+                DistributorMembershipApplication application = context.DistributorMembershipApplications.Where(app => app.Id == appIdentifier).SingleOrDefault();
+                Assert.IsNotNull(application);
+                Assert.IsNotNull(application.PrimaryBusinessRevenueId);
+                Assert.AreEqual(2, application.AccountTypes.Count);
+                Assert.AreEqual(2, application.ProductLines.Count);
             }
         }
     }

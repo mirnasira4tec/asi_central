@@ -96,6 +96,7 @@ namespace asi.asicentral.database.mappings.asiinternet
             // Relationships
             this.HasOptional(order => order.CreditCard)
                 .WithRequired();
+
             this.HasOptional(order => order.Membership)
                 .WithMany()
                 .HasForeignKey(order => order.UserId);

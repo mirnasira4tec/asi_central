@@ -9,9 +9,13 @@ namespace asi.asicentral.database.mappings.timss
         public TIMSSAdditionalInfoMap()
         {
             this.ToTable("TIMSS_APPLICATION_INPUT_ADDITIONAL_INFO");
-            this.HasKey(t => t.DAPP_UserId);
+            this.HasKey(t => t.Id);
 
             // Properties
+            this.Property(t => t.Id)
+                .HasColumnName("RecId")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
             this.Property(t => t.DAPP_UserId)
                 .HasColumnName("DAPP_UserID");
 
@@ -151,7 +155,7 @@ namespace asi.asicentral.database.mappings.timss
                 .HasColumnName("MINORITY_OWNED")
                 .HasMaxLength(1);
 
-            this.Property(t => t.AMER_MADE_AVAIL)
+            this.Property(t => t.HasAmericanProducts)
                 .HasColumnName("AMER_MADE_AVAIL")
                 .HasMaxLength(3);
 

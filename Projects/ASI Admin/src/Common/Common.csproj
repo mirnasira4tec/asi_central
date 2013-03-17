@@ -82,6 +82,12 @@
   <ItemGroup>
     <Compile Include="database\ASIInternetContext.cs" />
     <Compile Include="database\ASIPublicationContext.cs" />
+    <Compile Include="database\mappings\asiinternet\DistributorAccountTypeMap.cs" />
+    <Compile Include="database\mappings\asiinternet\DistributorProductLineMap.cs" />
+    <Compile Include="database\mappings\asiinternet\SupplierDecoratingTypeMap.cs" />
+    <Compile Include="model\store\SupplierDecoratingType.cs" />
+    <Compile Include="model\store\DistributorAccountType.cs" />
+    <Compile Include="database\mappings\asiinternet\DistributorBusinessRevenueMap.cs" />
     <Compile Include="database\TIMSSContext.cs" />
     <Compile Include="database\mappings\product\ContextFeatureProductMap.cs" />
     <Compile Include="database\mappings\product\ContextMap.cs" />
@@ -133,7 +139,10 @@
     <Compile Include="model\store\ContextFeatureProduct.cs" />
     <Compile Include="model\store\ContextProduct.cs" />
     <Compile Include="model\store\ContextProductSequence.cs" />
+    <Compile Include="model\store\DistributorBusinessRevenue.cs" />
     <Compile Include="model\store\DistributorMembershipApplicationContact.cs" />
+    <Compile Include="model\store\DistributorProductLine.cs" />
+    <Compile Include="model\store\MembershipApplicationContact.cs" />
     <Compile Include="model\store\SupplierMembershipApplicationContact.cs" />
     <Compile Include="model\store\DistributorMembershipApplication.cs" />
     <Compile Include="model\store\Order.cs" />

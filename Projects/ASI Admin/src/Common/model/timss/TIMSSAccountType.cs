@@ -5,7 +5,6 @@ namespace asi.asicentral.model.timss
 {
     public partial class TIMSSAccountType
     {
-        public System.Guid APP_AppId { get; set; }
         public System.Guid DAPP_UserId { get; set; }
         public string Description { get; set; }
         public string SubCode { get; set; }

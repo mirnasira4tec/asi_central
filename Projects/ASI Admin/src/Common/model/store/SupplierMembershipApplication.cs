@@ -12,6 +12,7 @@ namespace asi.asicentral.model.store
             if (this.GetType() == typeof(SupplierMembershipApplication))
             {
                 Contacts = new List<SupplierMembershipApplicationContact>();
+                DecoratingTypes = new List<SupplierDecoratingType>();
             }
         }
 
@@ -143,8 +144,11 @@ namespace asi.asicentral.model.store
 
         [Display(ResourceType = typeof(Resource), Name = "IsWomanOwned")]
         public Nullable<bool> WomanOwned { get; set; }
+        public Nullable<bool> HasAmericanProducts { get; set; }
+        public string BusinessHours { get; set; }
 
         public virtual ICollection<SupplierMembershipApplicationContact> Contacts { get; set; }
+        public virtual ICollection<SupplierDecoratingType> DecoratingTypes { get; set; }
 
         public void CopyTo(SupplierMembershipApplication application)
         {

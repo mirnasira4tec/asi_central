@@ -26,16 +26,28 @@ namespace asi.asicentral.database.mappings
 
             #region ASIInternetContext
 
-            For<IRepository<Company>>().Use<EFRepository<Company>>()
-                .Ctor<IValidatedContext>().Named("ASIInternetContext");
-
-            For<IRepository<Product>>().Use<EFRepository<Product>>()
+            For<IRepository<ASPNetMembership>>().Use<EFRepository<ASPNetMembership>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
             For<IRepository<Category>>().Use<EFRepository<Category>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
+            For<IRepository<Company>>().Use<EFRepository<Company>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
+            For<IRepository<DistributorAccountType>>().Use<EFRepository<DistributorAccountType>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
+            For<IRepository<DistributorMembershipApplication>>().Use<EFRepository<DistributorMembershipApplication>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
+            For<IRepository<DistributorProductLine>>().Use<EFRepository<DistributorProductLine>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
             For<IRepository<Order>>().Use<EFRepository<Order>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
+            For<IRepository<OrderCreditCard>>().Use<EFRepository<OrderCreditCard>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
             For<IRepository<OrderDetail>>().Use<EFRepository<OrderDetail>>()
@@ -44,16 +56,13 @@ namespace asi.asicentral.database.mappings
             For<IRepository<OrderProduct>>().Use<EFRepository<OrderProduct>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
-            For<IRepository<OrderCreditCard>>().Use<EFRepository<OrderCreditCard>>()
+            For<IRepository<Product>>().Use<EFRepository<Product>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+      
+            For<IRepository<SupplierDecoratingType>>().Use<EFRepository<SupplierDecoratingType>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
             For<IRepository<SupplierMembershipApplication>>().Use<EFRepository<SupplierMembershipApplication>>()
-                .Ctor<IValidatedContext>().Named("ASIInternetContext");
-
-            For<IRepository<DistributorMembershipApplication>>().Use<EFRepository<DistributorMembershipApplication>>()
-                .Ctor<IValidatedContext>().Named("ASIInternetContext");
-
-            For<IRepository<ASPNetMembership>>().Use<EFRepository<ASPNetMembership>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
             #endregion ASIInternetContext

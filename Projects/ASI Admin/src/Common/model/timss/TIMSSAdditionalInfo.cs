@@ -5,7 +5,7 @@ namespace asi.asicentral.model.timss
 {
     public partial class TIMSSAdditionalInfo
     {
-        public System.Guid DAPP_AppId { get; set; }
+        public int Id { get; set; }
         public System.Guid DAPP_UserId { get; set; }
         public string NumberOfEmployees { get; set; }
         public string NumberOfSalesPeople { get; set; }
@@ -42,7 +42,7 @@ namespace asi.asicentral.model.timss
         public Nullable<decimal> YearEstablishedAsAdSpecialist { get; set; }
         public string WomanOwned { get; set; }
         public string MinorityOwned { get; set; }
-        public string AMER_MADE_AVAIL { get; set; }
+        public string HasAmericanProducts { get; set; }
         public string BusinessHours { get; set; }
         public Nullable<decimal> ProductionTime { get; set; }
         public string RushService { get; set; }

@@ -6,7 +6,7 @@ namespace asi.asicentral.model.timss
     public class TIMSSContact
     {
         public System.Guid DAPP_UserId { get; set; }
-        public int RecordId { get; set; }
+        public int Id { get; set; }
         public string Prefix { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }

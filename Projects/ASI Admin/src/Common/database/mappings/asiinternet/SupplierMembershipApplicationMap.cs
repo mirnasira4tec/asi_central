@@ -265,6 +265,23 @@ namespace asi.asicentral.database.mappings.asiinternet
 
             this.Property(t => t.HasBillAddress)
                 .HasColumnName("SAPP_HasBillAddress");
+
+            this.Property(t => t.HasAmericanProducts)
+                .HasColumnName("SAPP_AmericanProducts");
+
+            this.Property(t => t.BusinessHours)
+                .HasColumnName("SAPP_BusinessHours")
+                .HasMaxLength(100);
+
+            //Relationships
+            HasMany(t => t.DecoratingTypes)
+                .WithMany(decType => decType.SupplierApplications)
+                .Map(category =>
+                {
+                    category.MapLeftKey("SAPP_AppID");
+                    category.MapRightKey("SAPP_DecID");
+                    category.ToTable("CENT_SuppJoinAppDecApp");
+                });
         }
     }
 }
