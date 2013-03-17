@@ -5,7 +5,7 @@ namespace asi.asicentral.model.timss
 {
     public partial class TIMSSAdditionalInfo
     {
-        public System.Guid DAPP_AppId { get; set; }
+        public int Id { get; set; }
         public System.Guid DAPP_UserId { get; set; }
         public string NumberOfEmployees { get; set; }
         public string NumberOfSalesPeople { get; set; }

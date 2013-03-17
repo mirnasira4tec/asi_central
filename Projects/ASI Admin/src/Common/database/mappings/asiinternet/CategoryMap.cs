@@ -23,6 +23,7 @@ namespace asi.asicentral.database.mappings.asiinternet
             Property(category => category.Name)
                 .HasColumnName("CategoryDescription");
 
+            //relationships
             HasMany(category => category.Companies)
                 .WithMany(company => company.Categories)
                 .Map(category =>
@@ -40,7 +41,6 @@ namespace asi.asicentral.database.mappings.asiinternet
                     category.MapRightKey("SGRS_SpecsID");
                     category.ToTable("CENT_SGRInternSpecsCatDescSGIC");
                 });
-
         }
     }
 }

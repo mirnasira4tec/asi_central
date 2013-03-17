@@ -15,7 +15,7 @@ namespace asi.asicentral.database.mappings.timss
             this.Property(t => t.DAPP_UserId)
                 .HasColumnName("DAPP_UserID");
 
-            this.Property(t => t.RecordId)
+            this.Property(t => t.Id)
                 .HasColumnName("RecId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 

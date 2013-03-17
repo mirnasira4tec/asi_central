@@ -12,6 +12,8 @@ namespace asi.asicentral.model.store
             if (this.GetType() == typeof(DistributorMembershipApplication))
             {
                 Contacts = new List<DistributorMembershipApplicationContact>();
+                AccountTypes = new List<DistributorAccountType>();
+                ProductLines = new List<DistributorProductLine>();
             }
         }
 
@@ -96,16 +98,15 @@ namespace asi.asicentral.model.store
         [Display(ResourceType = typeof(Resource), Name = "OtherBusinessRevenue")]
         public string OtherBusinessRevenue { get; set; }
 
-        public string AccountTypes { get; set; }
-
-        public string ProductLines { get; set; }
         public Nullable<DateTime> EstablishedDate { get; set; }
 
+        public virtual DistributorBusinessRevenue PrimaryBusinessRevenue { get; set; }
         public virtual ICollection<DistributorMembershipApplicationContact> Contacts { get; set; }
+        public virtual ICollection<DistributorAccountType> AccountTypes { get; set; }
+        public virtual ICollection<DistributorProductLine> ProductLines { get; set; }
 
         public void CopyTo(DistributorMembershipApplication application)
         {
-            application.AccountTypes = AccountTypes;
             application.AgreeReceivePromotionalProducts = AgreeReceivePromotionalProducts;
             application.AgreeTermsAndConditions = AgreeTermsAndConditions;
             application.AnnualSalesVolume = AnnualSalesVolume;
@@ -137,7 +138,6 @@ namespace asi.asicentral.model.store
             application.NumberOfSalesEmployee = NumberOfSalesEmployee;
             application.OtherBusinessRevenue = OtherBusinessRevenue;
             application.PrimaryBusinessRevenueId = PrimaryBusinessRevenueId;
-            application.ProductLines = ProductLines;
             application.ProvideInvoiceOnDemand = ProvideInvoiceOnDemand;
             application.ShippingCity = ShippingCity;
             application.ShippingState = ShippingState;

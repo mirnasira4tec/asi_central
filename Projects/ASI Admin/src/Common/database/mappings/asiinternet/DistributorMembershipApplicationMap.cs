@@ -192,18 +192,6 @@ namespace asi.asicentral.database.mappings.asiinternet
                 .HasColumnName("DAPP_BusinessRevOther")
                 .HasMaxLength(250);
 
-            this.Property(t => t.AccountTypes)
-                .HasColumnName("DAPP_AccountTypes")
-                .HasMaxLength(500);
-
-            this.Property(t => t.AccountTypes)
-                .HasColumnName("DAPP_AccountTypes")
-                .HasMaxLength(500);
-
-            this.Property(t => t.ProductLines)
-                .HasColumnName("DAPP_ProductLines")
-                .HasMaxLength(500);
-
             this.Property(t => t.EstablishedDate)
                 .HasColumnName("DAPP_EstablishedDate");
 
@@ -237,6 +225,29 @@ namespace asi.asicentral.database.mappings.asiinternet
 
             this.Property(t => t.HasBillAddress)
                 .HasColumnName("DAPP_HasBillAddress");
+
+            // Relationships
+            this.HasOptional(t => t.PrimaryBusinessRevenue)
+                .WithMany()
+                .HasForeignKey(t => t.PrimaryBusinessRevenueId);
+            
+            HasMany(t => t.AccountTypes)
+                .WithMany(account => account.DistributorApplications)
+                .Map(category =>
+                {
+                    category.MapLeftKey("DAPP_AppID");
+                    category.MapRightKey("CENT_AcctTypeID_ACCT");
+                    category.ToTable("CENT_JoinAppAcctType_AATY");
+                });
+        
+            HasMany(t => t.ProductLines)
+                .WithMany(account => account.DistributorApplications)
+                .Map(category =>
+                {
+                    category.MapLeftKey("DAPP_AppID");
+                    category.MapRightKey("CENT_ProdTypeID_PROD");
+                    category.ToTable("CENT_JoinAppProdType");
+                });
         }
     }
 }

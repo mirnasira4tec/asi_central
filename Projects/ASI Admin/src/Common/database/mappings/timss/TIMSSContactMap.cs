@@ -9,10 +9,10 @@ namespace asi.asicentral.database.mappings.timss
         public TIMSSContactMap()
         {
             this.ToTable("TIMSS_APPLICATION_INPUT_CONTACT");
-            this.HasKey(t => new { t.DAPP_UserId, t.RecordId });
+            this.HasKey(t => new { t.DAPP_UserId, t.Id });
 
             // Properties
-            this.Property(t => t.RecordId)
+            this.Property(t => t.Id)
                 .HasColumnName("RecId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 

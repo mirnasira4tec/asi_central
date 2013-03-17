@@ -9,12 +9,9 @@ namespace asi.asicentral.database.mappings.timss
         public TIMSSAccountTypeMap()
         {
             this.ToTable("TIMSS_APPLICATION_INPUT_AcctType");
-            this.HasKey(t => new { t.APP_AppId, t.DAPP_UserId, t.Description });
+            this.HasKey(t => new { t.DAPP_UserId, t.SubCode });
 
             // Properties
-            this.Property(t => t.APP_AppId)
-                .HasColumnName("APP_AppID");
-
             this.Property(t => t.DAPP_UserId)
                 .HasColumnName("DAPP_UserID");
 
