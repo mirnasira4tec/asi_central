@@ -49,6 +49,7 @@ namespace asi.asicentral.util
                 }
             }
             List<string> countryNames = countriesDic.Keys.ToList();
+            countries.Add(new SelectListItem { Selected = true, Value = "", Text = "-- Select a Country --" });
             countryNames.Sort();
             foreach (string countryName in countryNames)
             {
