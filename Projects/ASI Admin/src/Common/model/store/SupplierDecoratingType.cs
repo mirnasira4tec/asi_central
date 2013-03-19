@@ -9,7 +9,7 @@ namespace asi.asicentral.model.store
     public class SupplierDecoratingType
     {
         public const string DECORATION_ETCHING = "Etching";
-        public const string DECORATION_HOTSTAMPING = "const";
+        public const string DECORATION_HOTSTAMPING = "Hot Stamping";
         public const string DECORATION_SILKSCREEN = "Silkscreen";
         public const string DECORATION_PADPRINT = "Pad Print";
         public const string DECORATION_DIRECTEMBROIDERY = "Direct Embroidery";
