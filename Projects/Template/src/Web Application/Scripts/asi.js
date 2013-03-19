@@ -23,11 +23,14 @@ asi.modal = asi.modal || {};
             ko.applyBindings(modalData);
             var div = $('#asi-modal');
             var okBtn = div.find("a.btn-primary");
-            okBtn.on("click", null, function () { modalClosing(true, div, callback) });
-            div.on("keypress", null, function (e) {
-                var code = (e.keyCode ? e.keyCode : e.which);
-                if (code === 13) { okBtn.click(); }
-            });
+            if (okBtn.text() == "#hide") okBtn[0].className = okBtn[0].className + " hide";
+            else {
+                okBtn.on("click", null, function () { modalClosing(true, div, callback) });
+                div.on("keypress", null, function (e) {
+                    var code = (e.keyCode ? e.keyCode : e.which);
+                    if (code === 13) { okBtn.click(); }
+                });
+            }
             div.on("hide", null, function () { modalClosing(false, div, callback) });
             div.modal({});
         }));
