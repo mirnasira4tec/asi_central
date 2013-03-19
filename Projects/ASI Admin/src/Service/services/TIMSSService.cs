@@ -22,7 +22,7 @@ namespace asi.asicentral.services
             _objectService = objectService;
         }
 
-        public void Process(model.store.Order order, model.store.OrderDetailApplication application)
+        public virtual void Process(model.store.Order order, model.store.OrderDetailApplication application)
         {
             if (order == null || !order.UserId.HasValue || order.CreditCard == null || string.IsNullOrEmpty(order.CreditCard.ExternalReference)) throw new InvalidOperationException("You must pass a valid Order for this method");
             if (application == null) throw new InvalidOperationException("You must pass a valid Application for this method");

@@ -14,6 +14,7 @@ namespace asi.asicentral.services
             : base(container)
         {
             //nothing to do right now
+            Console.WriteLine("hi");
         }
 
         public override IQueryable<T> GetAll<T>(bool readOnly = false)
