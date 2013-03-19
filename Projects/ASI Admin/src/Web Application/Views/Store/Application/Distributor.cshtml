@@ -81,16 +81,18 @@
     </div>
     <div class="span4">
         <fieldset><legend><small>Order Status</small></legend>
+        <fieldset><legend><small>Order Status</small></legend>
         <div class="well">@Model.OrderStatus<br /></div>
-        @Html.Label("Timms ID") @Html.EditorFor(m => m.ExternalReference) <br /> <span class="text-error" data-errortype="invalidformat"><small>Required field</small></span><span class="text-error" data-errortype="invalidformat"><small>TIMMS reference must contain only numbers</small></span>
+        @Html.Label("Timms ID") @Html.EditorFor(m => m.ExternalReference) <br /> <span class="text-error" data-type="errormessage"><small></small></span>
         @if (Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
         {
-        <input class="command" type="submit" value="@ApplicationController.COMMAND_ACCEPT" /> <input class="command" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+        <input class="command" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
         }
-        else if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
+        @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
         { 
         <input class="command" type="submit" value="@ApplicationController.COMMAND_REJECT" />
         }
+        <input class="command" type="submit" value="@ApplicationController.COMMAND_SAVE" />
         @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
         { @Html.ActionLink("Close", "../Orders") }
         else
