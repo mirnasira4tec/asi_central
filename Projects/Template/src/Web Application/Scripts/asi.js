@@ -23,7 +23,7 @@ asi.modal = asi.modal || {};
             ko.applyBindings(modalData);
             var div = $('#asi-modal');
             var okBtn = div.find("a.btn-primary");
-            if (okBtn.text() == "#hide") okBtn[0].className = okBtn[0].className + " hide";
+            if (okBtn.text() == "#hide") okBtn.attr('class', okBtn.attr('class') + " hide");
             else {
                 okBtn.on("click", null, function () { modalClosing(true, div, callback) });
                 div.on("keypress", null, function (e) {
