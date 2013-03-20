@@ -230,6 +230,7 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Views\Shared\EditorTemplates\Int32.cshtml" />
     <None Include="Views\Template\Dialog.cshtml" />
     <None Include="Views\Template\Form.cshtml" />
     <Content Include="Web.config">
