@@ -27,6 +27,7 @@
     @Html.LabelFor(model => model.StartDate) @Html.EditorFor(model => model.StartDate) @Html.ValidationMessageFor(model => model.StartDate)
     @Html.LabelFor(model => model.EndDate) @Html.EditorFor(model => model.EndDate) @Html.ValidationMessageFor(model => model.EndDate)
     @Html.LabelFor(model => model.Color) @Html.DropDownListFor(model => model.Color, Model.ColorList) @Html.ValidationMessageFor(model => model.Color)
+    @Html.LabelFor(model => model.Number) @Html.EditorFor(model => model.Number) @Html.ValidationMessageFor(model => model.Number)
 
 @if (Model.Issues == null || Model.Issues.Count == 0)
 {

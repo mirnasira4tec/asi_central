@@ -26,7 +26,10 @@ namespace asi.asicentral.util
             {
                 attributes.Add("placeholder", ViewData.ModelMetadata.Watermark);
             }
-            //todo iterate through html- attributes to add new ones
+            //TODO iterate through html- attributes to add new ones
+            //Add html5 attributes
+            if (ViewData.ModelMetadata.ModelType == typeof(int) || ViewData.ModelMetadata.ModelType == typeof(Nullable<int>))
+                attributes.Add("type", "number");
             return attributes;
         }
 
