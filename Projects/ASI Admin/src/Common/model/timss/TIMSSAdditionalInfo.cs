@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace asi.asicentral.model.timss
 {
-    public partial class TIMSSAdditionalInfo
+    public class TIMSSAdditionalInfo
     {
         public int Id { get; set; }
         public System.Guid DAPP_UserId { get; set; }
         public string NumberOfEmployees { get; set; }
-        public string NumberOfSalesPeople { get; set; }
-        public string AnnualSalesVol { get; set; }
+        public Nullable<int> NumberOfSalesPeople { get; set; }
+        public Nullable<int> AnnualSalesVol { get; set; }
         public string ASIContact { get; set; }
-        public string AnnualSalesVolumeASP { get; set; }
+        public Nullable<int> AnnualSalesVolumeASP { get; set; }
         public string BusinessRevenue { get; set; }
         public string BusinessRevenueOther { get; set; }
         public string IPAddress { get; set; }

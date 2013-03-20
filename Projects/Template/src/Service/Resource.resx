@@ -144,6 +144,9 @@
   <data name="NameLength" xml:space="preserve">
     <value>The name cannot be more than 50 characters</value>
   </data>
+  <data name="Number" xml:space="preserve">
+    <value>A Numerical Value</value>
+  </data>
   <data name="PublicationId" xml:space="preserve">
     <value>Publication Identifier</value>
   </data>
