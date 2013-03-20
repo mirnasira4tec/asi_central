@@ -10,9 +10,8 @@ using System.Threading.Tasks;
 namespace asi.asicentral.services
 {
     //questions for gary
-    //  CountryCode?
-    //  Credit Date Created UTC?
-    //  Contact Primary Key
+    //  Phone CountryCode?
+    //Production time - Rush probably not needed
     public class TIMSSService : IFulfilmentService
     {
         IObjectService _objectService;

@@ -164,7 +164,7 @@ namespace asi.asicentral.database.mappings.timss
                 .HasMaxLength(60);
 
             this.Property(t => t.ProductionTime)
-                .HasColumnName("PROD_TIME");
+                .HasColumnName("PROD_TIME_MIN");
 
             this.Property(t => t.RushService)
                 .HasColumnName("RUSH_SERVICE")
