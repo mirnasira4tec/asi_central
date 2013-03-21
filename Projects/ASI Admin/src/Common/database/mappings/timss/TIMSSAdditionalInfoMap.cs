@@ -23,20 +23,17 @@ namespace asi.asicentral.database.mappings.timss
                 .HasColumnName("DAPP_NoEmp");
 
             this.Property(t => t.NumberOfSalesPeople)
-                .HasColumnName("DAPP_NoSalesPeople")
-                .HasMaxLength(50);
+                .HasColumnName("DAPP_NoSalesPeople");
 
             this.Property(t => t.AnnualSalesVol)
-                .HasColumnName("DAPP_AnnSalesVol")
-                .HasMaxLength(50);
+                .HasColumnName("DAPP_AnnSalesVol");
 
             this.Property(t => t.ASIContact)
                 .HasColumnName("DAPP_ASIContact")
                 .HasMaxLength(150);
 
             this.Property(t => t.AnnualSalesVolumeASP)
-                .HasColumnName("DAPP_AnnSalesVolASP")
-                .HasMaxLength(50);
+                .HasColumnName("DAPP_AnnSalesVolASP");
 
             this.Property(t => t.BusinessRevenue)
                 .HasColumnName("DAPP_BusinessRev")

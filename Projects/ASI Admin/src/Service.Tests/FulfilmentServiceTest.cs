@@ -20,6 +20,7 @@ namespace asi.asicentral.Tests
             #region create the order to store
             Order order = CreateOrder();
 
+            order.ExternalReference = "8939514";
             //create the supplier application
             SupplierMembershipApplication application = new SupplierMembershipApplication()
             {
@@ -85,7 +86,7 @@ namespace asi.asicentral.Tests
         public void DistributorOrder()
         {
             Order order = CreateOrder();
-
+            order.ExternalReference = "8939541";
             //create the supplier application
             DistributorMembershipApplication application = new DistributorMembershipApplication()
             {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace asi.asicentral.model.timss
 {
-    public partial class TIMSSAccountType
+    public class TIMSSAccountType
     {
         public System.Guid DAPP_UserId { get; set; }
         public string Description { get; set; }

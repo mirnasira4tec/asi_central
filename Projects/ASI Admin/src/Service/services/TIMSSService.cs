@@ -9,9 +9,11 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.services
 {
-    //questions for gary
+    //Issues for the conversion
     //  Phone CountryCode?
     //Production time - Rush probably not needed
+    //state for international
+    //DAPP_AnnSalesVol and 
     public class TIMSSService : IFulfilmentService
     {
         IObjectService _objectService;
@@ -186,13 +188,17 @@ namespace asi.asicentral.services
                 {
                     DAPP_UserId = order.UserId.Value,
                     NumberOfEmployees = distributorApplication.NumberOfEmployee.HasValue ? distributorApplication.NumberOfEmployee.Value.ToString() : null,
-                    NumberOfSalesPeople = distributorApplication.NumberOfSalesEmployee.HasValue ? distributorApplication.NumberOfSalesEmployee.Value.ToString() : null,
-                    AnnualSalesVol = distributorApplication.AnnualSalesVolume,
-                    AnnualSalesVolumeASP = distributorApplication.AnnualSalesVolumeASP,
+                    NumberOfSalesPeople = distributorApplication.NumberOfSalesEmployee,
                     YearEstablished = distributorApplication.EstablishedDate.HasValue ? distributorApplication.EstablishedDate.Value.Year : (int?)null,
                     BusinessRevenue = distributorApplication.PrimaryBusinessRevenue != null ? distributorApplication.PrimaryBusinessRevenue.Name : null,
                     BusinessRevenueOther = distributorApplication.OtherBusinessRevenue,
                 };
+                //try to convert different data types
+                try { additionalInformation.AnnualSalesVol = int.Parse(distributorApplication.AnnualSalesVolume); }
+                catch (Exception){}
+                try { additionalInformation.AnnualSalesVolumeASP = int.Parse(distributorApplication.AnnualSalesVolumeASP); }
+                catch (Exception){}
+
                 _objectService.Add<TIMSSAdditionalInfo>(additionalInformation);
                 //add the TIMSSAccountType description + subcode
                 foreach (var accountType in distributorApplication.AccountTypes)
