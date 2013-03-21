@@ -59,9 +59,9 @@ namespace asi.asicentral.web.Controllers.Store
             if (order == null) throw new Exception("Invalid reference to an order");
             if (supplierApplication == null) throw new Exception("Invalid reference to an application");
             order.ExternalReference = application.ExternalReference;
+           
             application.CopyTo(supplierApplication);
-            
-            // TODO write code for save contact
+            application.SaveModelContactsTo(supplierApplication);
 
             return ProcessCommand(StoreService, FulfilmentService, order, application.Id, application.ActionName);
         }

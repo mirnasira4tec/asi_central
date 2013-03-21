@@ -158,6 +158,7 @@ namespace asi.asicentral.model.store
         {
             application.HasBillAddress = HasBillAddress;
             application.HasShipAddress = HasShipAddress;
+            application.DecoratingTypes = DecoratingTypes;
             application.Contacts = Contacts;
             application.AffiliateASINumber = AffiliateASINumber;
             application.AffiliateCompanyName = AffiliateCompanyName;

@@ -54,6 +54,26 @@
         @Html.CheckBox("IsWholesaler") @Html.LabelFor(m => m.IsWholesaler)<br />
         </div>
         </fieldset>
+        <fieldset><legend><small>Methods of Imprinting</small></legend>
+        <div class="form-inline">
+        @Html.CheckBox("Etching", Model.Etching) @Html.LabelFor(m => m.Etching) <br />
+        @Html.CheckBox("HotStamping") @Html.LabelFor(m => m.HotStamping) <br />
+        @Html.CheckBox("SilkScreen") @Html.LabelFor(m => m.SilkScreen) <br />
+        @Html.CheckBox("PadPrint") @Html.LabelFor(m => m.PadPrint) <br />
+        @Html.CheckBox("DirectEmbroidery") @Html.LabelFor(m => m.DirectEmbroidery) <br />
+        @Html.CheckBox("FoilStamping") @Html.LabelFor(m => m.FoilStamping) <br />
+        @Html.CheckBox("Lithography") @Html.LabelFor(m => m.Lithography) <br />
+        @Html.CheckBox("Sublimination") @Html.LabelFor(m => m.Sublimination) <br />
+        @Html.CheckBox("FourColourProcess") @Html.LabelFor(m => m.FourColourProcess) <br />
+        @Html.CheckBox("Engraving") @Html.LabelFor(m => m.Engraving) <br />
+        @Html.CheckBox("Laser") @Html.LabelFor(m => m.Laser) <br />
+        @Html.CheckBox("Offset") @Html.LabelFor(m => m.Offset) <br />
+        @Html.CheckBox("Transfer") @Html.LabelFor(m => m.Transfer) <br />
+        @Html.CheckBox("FullColourProcess") @Html.LabelFor(m => m.FullColourProcess) <br />
+        @Html.CheckBox("DieStamp") @Html.LabelFor(m => m.DieStamp) <br />
+        @Html.CheckBox("OtherDecoratingMethod") @Html.LabelFor(m => m.OtherDecoratingMethod) @Html.EditorFor(m => m.OtherDec)
+        </div>
+        </fieldset>
         <fieldset><legend><small>Form Data</small></legend>
         <div class="form-inline">
         @Html.CheckBox("IsUnionMade") @Html.LabelFor(m => m.IsUnionMade) <br />
@@ -96,14 +116,14 @@
                 if (Model.Contacts.ElementAt(i) != null)
                 {
                 <fieldset><legend><small>Contacts</small></legend>
-                @Html.HiddenFor(m => m.ModelContacts[i].Id)
-                @Html.HiddenFor(m => m.Id)
-                @Html.LabelFor(m => m.ModelContacts[i].Name) @Html.EditorFor(m => m.ModelContacts[i].Name)                
-@*              @Html.LabelFor(m => m.Contacts.ElementAt(i).Name) @Html.EditorFor(m => m.modelContacts[i].Name)
-                @Html.LabelFor(m => m.Contacts.ElementAt(i).Title) @Html.EditorFor(m => m.modelContacts[i].Title)
-                @Html.LabelFor(m => m.Contacts.ElementAt(i).Email) @Html.EditorFor(m => m.modelContacts[i].Email)
-                @Html.LabelFor(m => m.Contacts.ElementAt(i).Phone) @Html.EditorFor(m => m.modelContacts[i].Phone)
-                @Html.LabelFor(m => m.Contacts.ElementAt(i).Fax) @Html.EditorFor(m => m.modelContacts[i].Fax)*@
+                @Html.HiddenFor(m => Model.ModelContacts[i].Id)
+                @Html.HiddenFor(m => Model.ModelContacts[i].AppplicationId)
+                @Html.HiddenFor(m => Model.ModelContacts[i].SupplierApplication)
+                @Html.LabelFor(m => Model.ModelContacts[i].Name) @Html.EditorFor(m => Model.ModelContacts[i].Name)
+                @Html.LabelFor(m => Model.ModelContacts[i].Title) @Html.EditorFor(m => Model.ModelContacts[i].Title)
+                @Html.LabelFor(m => Model.ModelContacts[i].Email) @Html.EditorFor(m => Model.ModelContacts[i].Email)
+                @Html.LabelFor(m => Model.ModelContacts[i].Phone) @Html.EditorFor(m => Model.ModelContacts[i].Phone)
+                @Html.LabelFor(m => Model.ModelContacts[i].Fax) @Html.EditorFor(m => Model.ModelContacts[i].Fax)
                 </fieldset>
                 }
             }
