@@ -52,7 +52,7 @@ namespace asi.asicentral.database.mappings.asiinternet
 
             this.Property(order => order.BillState)
                 .HasColumnName("ORDR_BillState")
-                .HasMaxLength(15);
+                .HasMaxLength(50);
 
             this.Property(order => order.BillZip)
                 .HasColumnName("ORDR_BillZip")

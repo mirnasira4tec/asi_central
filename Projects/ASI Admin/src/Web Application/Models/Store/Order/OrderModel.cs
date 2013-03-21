@@ -89,6 +89,8 @@ namespace asi.asicentral.web.model.store
             get { return this.orderDetail.Order.DateCreated.Value; }
         }
 
+        public bool ShowIcons { get; set; }
+
         public String Company { get; private set; }
 
         public OrderDetailApplication Application { private set; get; }
@@ -98,6 +100,7 @@ namespace asi.asicentral.web.model.store
             OrderModel order = new OrderModel();
             order.orderDetail = orderDetail;
             order.Application = storeService.GetApplication(orderDetail);
+            order.ShowIcons = orderDetail.Order.ProcessStatus == OrderStatus.Pending && order.Application != null && orderDetail.Order.Status != null && orderDetail.Order.Status == true;
             if (order.Application != null)
                 order.Company = order.Application.Company;
             if (orderDetail.Order.CreditCard != null && !string.IsNullOrEmpty(orderDetail.Order.CreditCard.Number))
