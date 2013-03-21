@@ -11,13 +11,25 @@ namespace asi.asicentral.web.model.store
         /// <summary>
         /// Required for MVC to rebuild the model
         /// </summary>
+        /// 
+
+        public List<SupplierMembershipApplicationContact> ModelContacts { set; get; }
+        
         public SupplierApplicationModel()
         {
             //nothing to do
         }
 
+        public List<SupplierMembershipApplicationContact> GetContactsFrom(SupplierMembershipApplication application)
+        {
+            List<SupplierMembershipApplicationContact> list = application.Contacts.ToList();
+            return list;
+        }
+        
         public SupplierApplicationModel(SupplierMembershipApplication application, asi.asicentral.model.store.Order order)
         {
+            this.ModelContacts = GetContactsFrom(application);
+
             application.CopyTo(this);
             ActionName = "Approve";
             ExternalReference = order.ExternalReference;

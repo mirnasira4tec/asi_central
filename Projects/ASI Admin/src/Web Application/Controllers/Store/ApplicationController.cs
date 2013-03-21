@@ -60,6 +60,9 @@ namespace asi.asicentral.web.Controllers.Store
             if (supplierApplication == null) throw new Exception("Invalid reference to an application");
             order.ExternalReference = application.ExternalReference;
             application.CopyTo(supplierApplication);
+            
+            // TODO write code for save contact
+
             return ProcessCommand(StoreService, FulfilmentService, order, application.Id, application.ActionName);
         }
 
@@ -86,7 +89,7 @@ namespace asi.asicentral.web.Controllers.Store
             }
             StoreService.SaveChanges();
             if (command == ApplicationController.COMMAND_REJECT)
-                return RedirectToAction("List", "../Orders");
+                return RedirectToAction("List", "Orders");
             else
                 return RedirectToAction("Edit", "Application", new { id = applicationId, orderId = order.Id });
         }

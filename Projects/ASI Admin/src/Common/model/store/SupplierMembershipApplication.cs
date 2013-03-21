@@ -144,7 +144,11 @@ namespace asi.asicentral.model.store
 
         [Display(ResourceType = typeof(Resource), Name = "IsWomanOwned")]
         public Nullable<bool> WomanOwned { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "HasAmericanProducts")]
         public Nullable<bool> HasAmericanProducts { get; set; }
+        
+        [Display(ResourceType = typeof(Resource), Name = "BusinessHours")]
         public string BusinessHours { get; set; }
 
         public virtual ICollection<SupplierMembershipApplicationContact> Contacts { get; set; }
@@ -152,6 +156,8 @@ namespace asi.asicentral.model.store
 
         public void CopyTo(SupplierMembershipApplication application)
         {
+            application.HasBillAddress = HasBillAddress;
+            application.HasShipAddress = HasShipAddress;
             application.Contacts = Contacts;
             application.AffiliateASINumber = AffiliateASINumber;
             application.AffiliateCompanyName = AffiliateCompanyName;
@@ -177,6 +183,8 @@ namespace asi.asicentral.model.store
             application.ContactTitle = ContactTitle;
             application.FedTaxId = FedTaxId;
             application.Id = Id;
+            application.BusinessHours = BusinessHours;
+            application.HasAmericanProducts = HasAmericanProducts;
             application.IsImporter = IsImporter;
             application.IsImprinterVsDecorator = IsImprinterVsDecorator;
             application.IsManufacturer = IsManufacturer;

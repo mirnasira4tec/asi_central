@@ -268,6 +268,15 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Business Hours.
+        /// </summary>
+        public static string BusinessHours {
+            get {
+                return ResourceManager.GetString("BusinessHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Category Id.
         /// </summary>
         public static string CategoryID {
@@ -534,6 +543,15 @@ namespace asi.asicentral.Common {
         public static string FirstName {
             get {
                 return ResourceManager.GetString("FirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Has American Products.
+        /// </summary>
+        public static string HasAmericanProducts {
+            get {
+                return ResourceManager.GetString("HasAmericanProducts", resourceCulture);
             }
         }
         
