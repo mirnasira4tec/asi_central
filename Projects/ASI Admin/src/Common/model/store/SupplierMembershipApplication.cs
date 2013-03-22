@@ -151,7 +151,7 @@ namespace asi.asicentral.model.store
         [Display(ResourceType = typeof(Resource), Name = "BusinessHours")]
         public string BusinessHours { get; set; }
 
-        public virtual ICollection<SupplierMembershipApplicationContact> Contacts { get; set; }
+        public virtual IList<SupplierMembershipApplicationContact> Contacts { get; set; }
         public virtual ICollection<SupplierDecoratingType> DecoratingTypes { get; set; }
 
         public void CopyTo(SupplierMembershipApplication application)

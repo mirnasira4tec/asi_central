@@ -30,8 +30,6 @@ namespace asi.asicentral.web.model.store
         public bool OtherDecoratingMethod { set; get; }
         public string OtherDecoratingMethodName { set; get; }
 
-        public List<SupplierMembershipApplicationContact> ModelContacts { set; get; }
-       
         public SupplierApplicationModel()
         {
             //nothing to do
@@ -39,7 +37,6 @@ namespace asi.asicentral.web.model.store
 
         public SupplierApplicationModel(SupplierMembershipApplication application, asi.asicentral.model.store.Order order)
         {
-            this.ModelContacts = GetContactsFrom(application);
             application.CopyTo(this);
             GetDecoratingTypesFrom(this.DecoratingTypes);
 
@@ -54,6 +51,11 @@ namespace asi.asicentral.web.model.store
             ExternalReference = order.ExternalReference;
             OrderId = order.Id;
             OrderStatus = order.ProcessStatus;
+        }
+
+        public void SaveDecoratingTypesTo(SupplierMembershipApplication application)
+        {
+            // TODO save decorating types to the applicatiojn
         }
 
         public void GetDecoratingTypesFrom(ICollection<SupplierDecoratingType> decorationTypes)
@@ -77,32 +79,9 @@ namespace asi.asicentral.web.model.store
 
         public bool HasDecoration(string DecorationName, ICollection<SupplierDecoratingType> decorationTypes)
         {
-            return decorationTypes.Where(type => type.Name == DecorationName).SingleOrDefault() == null ? 
-                false : true;
+            return decorationTypes.Where(type => type.Name == DecorationName).SingleOrDefault() == null ? false : true;
         }
 
-        public void SaveModelContactsTo(SupplierMembershipApplication application)
-        {
-            SupplierMembershipApplicationContact contact = null;
-            foreach (SupplierMembershipApplicationContact item in this.ModelContacts)
-            {
-                contact = application.Contacts.Where(theContact => theContact.Id == item.Id).SingleOrDefault();
-                if (contact != null)
-                {
-                    contact.Name = item.Name;
-                    contact.Title = item.Title;
-                    contact.Email = item.Email;
-                    contact.Phone = item.Phone;
-                }
-            }
-        }
-
-        public List<SupplierMembershipApplicationContact> GetContactsFrom(SupplierMembershipApplication application)
-        {
-            List<SupplierMembershipApplicationContact> list = application.Contacts.ToList();
-            return list;
-        }
-        
         public int OrderId { get; set; }
         public string ActionName { get; set; }
         public string ExternalReference { get; set; }

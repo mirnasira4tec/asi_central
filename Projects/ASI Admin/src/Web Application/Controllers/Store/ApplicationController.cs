@@ -61,7 +61,6 @@ namespace asi.asicentral.web.Controllers.Store
             order.ExternalReference = application.ExternalReference;
            
             application.CopyTo(supplierApplication);
-            application.SaveModelContactsTo(supplierApplication);
 
             return ProcessCommand(StoreService, FulfilmentService, order, application.Id, application.ActionName);
         }

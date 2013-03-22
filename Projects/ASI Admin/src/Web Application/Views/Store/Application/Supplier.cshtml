@@ -111,19 +111,19 @@
         </fieldset>
         @if(Model.Contacts != null && Model.Contacts.Count > 0)
         {
-            for (int i = 0; i < Model.ModelContacts.Count; i++)
+            for (int i = 0; i < Model.Contacts.Count; i++)
             {
-                if (Model.Contacts.ElementAt(i) != null)
+                if (Model.Contacts[i] != null)
                 {
                 <fieldset><legend><small>Contacts</small></legend>
-                @Html.HiddenFor(m => Model.ModelContacts[i].Id)
-                @Html.HiddenFor(m => Model.ModelContacts[i].AppplicationId)
-                @Html.HiddenFor(m => Model.ModelContacts[i].SupplierApplication)
-                @Html.LabelFor(m => Model.ModelContacts[i].Name) @Html.EditorFor(m => Model.ModelContacts[i].Name)
-                @Html.LabelFor(m => Model.ModelContacts[i].Title) @Html.EditorFor(m => Model.ModelContacts[i].Title)
-                @Html.LabelFor(m => Model.ModelContacts[i].Email) @Html.EditorFor(m => Model.ModelContacts[i].Email)
-                @Html.LabelFor(m => Model.ModelContacts[i].Phone) @Html.EditorFor(m => Model.ModelContacts[i].Phone)
-                @Html.LabelFor(m => Model.ModelContacts[i].Fax) @Html.EditorFor(m => Model.ModelContacts[i].Fax)
+                @Html.HiddenFor(m => Model.Contacts[i].Id)
+                @Html.HiddenFor(m => Model.Contacts[i].AppplicationId)
+                @Html.CheckBoxFor(m => Model.Contacts[i].IsPrimary) @Html.LabelFor(m => Model.Contacts[i].IsPrimary)
+                @Html.LabelFor(m => Model.Contacts[i].Name) @Html.EditorFor(m => Model.Contacts[i].Name)
+                @Html.LabelFor(m => Model.Contacts[i].Title) @Html.EditorFor(m => Model.Contacts[i].Title)
+                @Html.LabelFor(m => Model.Contacts[i].Email) @Html.EditorFor(m => Model.Contacts[i].Email)
+                @Html.LabelFor(m => Model.Contacts[i].Phone) @Html.EditorFor(m => Model.Contacts[i].Phone)
+                @Html.LabelFor(m => Model.Contacts[i].Fax) @Html.EditorFor(m => Model.Contacts[i].Fax)
                 </fieldset>
                 }
             }
