@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 namespace asi.asicentral.services
 {
     //Issues for the conversion
-    //  Phone CountryCode?
+    //Phone CountryCode?
     //Production time - Rush probably not needed
-    //state for international
-    //DAPP_AnnSalesVol and 
+    //state for international - limited to 15 chars in TIMSS
+    //DAPP_AnnSalesVol and DAPP_AnnSalesVolSAP expect numbers
     public class TIMSSService : IFulfilmentService
     {
         IObjectService _objectService;
