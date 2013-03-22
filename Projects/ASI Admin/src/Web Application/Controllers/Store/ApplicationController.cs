@@ -46,7 +46,7 @@ namespace asi.asicentral.web.Controllers.Store
             if (distributorApplication == null) throw new Exception("Invalid reference to an application");
             order.ExternalReference = application.ExternalReference;
             application.CopyTo(distributorApplication);
-            return ProcessCommand(StoreService, FulfilmentService, order, application.Id, application.ActionName);
+            return ProcessCommand(StoreService, FulfilmentService, order, distributorApplication, application.ActionName);
         }
 
         [HttpPost]
@@ -60,7 +60,7 @@ namespace asi.asicentral.web.Controllers.Store
             if (supplierApplication == null) throw new Exception("Invalid reference to an application");
             order.ExternalReference = application.ExternalReference;
             application.CopyTo(supplierApplication);
-            return ProcessCommand(StoreService, FulfilmentService, order, application.Id, application.ActionName);
+            return ProcessCommand(StoreService, FulfilmentService, order, supplierApplication, application.ActionName);
         }
 
         /// <summary>
@@ -71,13 +71,13 @@ namespace asi.asicentral.web.Controllers.Store
         /// <param name="applicationId"></param>
         /// <param name="command"></param>
         /// <returns></returns>
-        private ActionResult ProcessCommand(IStoreService storeService, IFulfilmentService fulfilmentService, Order order, Guid applicationId, string command)
+        private ActionResult ProcessCommand(IStoreService storeService, IFulfilmentService fulfilmentService, Order order, OrderDetailApplication application, string command)
         {
             if (command == ApplicationController.COMMAND_ACCEPT)
             {
                 //make sure we have external reference
                 if (string.IsNullOrEmpty(order.ExternalReference)) throw new Exception("You need to specify a Timms id to approve an order");
-                fulfilmentService.Process(order, GetApplication(applicationId));
+                fulfilmentService.Process(order, application);
                 order.ProcessStatus = OrderStatus.Approved;
             }
             else if (command == ApplicationController.COMMAND_REJECT)
@@ -88,7 +88,7 @@ namespace asi.asicentral.web.Controllers.Store
             if (command == ApplicationController.COMMAND_REJECT)
                 return RedirectToAction("List", "../Orders");
             else
-                return RedirectToAction("Edit", "Application", new { id = applicationId, orderId = order.Id });
+                return RedirectToAction("Edit", "Application", new { id = application.Id, orderId = order.Id });
         }
 
         private OrderDetailApplication GetApplication(Guid id)
