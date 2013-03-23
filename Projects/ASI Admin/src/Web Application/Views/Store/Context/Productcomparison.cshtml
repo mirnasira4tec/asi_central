@@ -1,21 +1,14 @@
 ﻿@model asi.asicentral.model.store.Context
 
 @{
-    ViewBag.Title = "Product Comparison";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
 }
 
-<h2>Product Comparison: @Model.Name</h2>
+<h1>Product Comparison: @Model.Name</h1>
 <style>
-    dfn {
-        color: blue;
-    }
-    tr.offer {
-        background-color : lightsalmon;
-    }
+    dfn { color: blue; }
+    tr.offer { background-color : lightsalmon; }
 </style>
-<p>cellpadding and cellspacing are no longer html5. Shouldn't the header row be multiple rows rather then use &lt;br /&gt;</p>
-
 <table cellpadding="5" cellspacing="5" border="0">
 	<tr class="product-title-row">
 		<td class="instructions">Choose one of our<br/>	ASI Supplier Membership	Packages:</td>

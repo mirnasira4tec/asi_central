@@ -22,7 +22,7 @@ namespace asi.asicentral.web.Controllers.sgr
         [HttpGet]
         public virtual ActionResult Add(int companyId)
         {
-            ViewBag.Title = Resource.TitleAddCategory;
+            ViewBag.SubTitle = Resource.TitleAddCategory;
 
             ViewCategory viewCategory = new ViewCategory();
             viewCategory.CompanyID = companyId;
@@ -59,7 +59,7 @@ namespace asi.asicentral.web.Controllers.sgr
             }
             else
             {
-                ViewBag.Title = Resource.TitleAddCategory;
+                ViewBag.SubTitle = Resource.TitleAddCategory;
                 return View("../sgr/Category/Edit", viewCategory);
             }
         }
@@ -67,8 +67,6 @@ namespace asi.asicentral.web.Controllers.sgr
         [HttpGet]
         public virtual ActionResult Edit(ViewCategory viewCategory)
         {
-            ViewBag.Title = Resource.TitleEditCategory;
-
             Category category = ObjectService.GetAll<Category>().Where(c => c.Id == viewCategory.Id).SingleOrDefault();
             
             if (category == null)
@@ -92,7 +90,7 @@ namespace asi.asicentral.web.Controllers.sgr
             }
             else
             {
-                ViewBag.Title = Resource.TitleEditCategory;
+                ViewBag.SubTitle = Resource.TitleEditCategory;
                 return View("../sgr/Category/Edit", new ViewCategory { Id = category.Id, CompanyID = companyId });
             }
         }

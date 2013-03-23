@@ -4,10 +4,11 @@
 @model OrderPageModel
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+    ViewBag.BodyClass = "max";
 }
 
-<h2>@Resource.TitleASIStoreAdmin</h2>
+<h1>Store Orders</h1>
 <div class="tabbable tabs-below small">
     <h5>Search by</h5>
     <ul id="formtab" class="nav nav-tabs">

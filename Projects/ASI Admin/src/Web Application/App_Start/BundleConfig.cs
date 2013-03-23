@@ -27,9 +27,9 @@ namespace asi.asicentral.web
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                        "~/Content/site.css",
                         "~/Content/bootstrap.css",
-                        "~/Content/bootstrap-responsive.css"));
+                        "~/Content/bootstrap-responsive.css",
+                        "~/Content/site.css"));
 
             bundles.Add(new StyleBundle("~/Content/form").Include(
                         "~/Content/datepicker.css",

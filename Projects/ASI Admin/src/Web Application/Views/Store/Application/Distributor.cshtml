@@ -3,10 +3,10 @@
 @using asi.asicentral.web.Controllers.Store;
 @model asi.asicentral.web.model.store.DistributorApplicationModel
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
 }
 
-<h3>@Resource.StoreTitleDistributorApplication</h3>
+<h1>@Resource.StoreTitleDistributorApplication</h1>
 
 @using (Html.BeginForm("EditDistributor", "Application"))
 {
@@ -80,7 +80,6 @@
     </fieldset>
     </div>
     <div class="span4">
-        <fieldset><legend><small>Order Status</small></legend>
         <fieldset><legend><small>Order Status</small></legend>
         <div class="well">@Model.OrderStatus<br /></div>
         @Html.Label("Timms ID") @Html.EditorFor(m => m.ExternalReference) <br /> <span class="text-error" data-type="errormessage"><small></small></span>
