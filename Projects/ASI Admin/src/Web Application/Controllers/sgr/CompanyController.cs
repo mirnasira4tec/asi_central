@@ -22,7 +22,7 @@ namespace asi.asicentral.web.Controllers.sgr
         public virtual ActionResult List()
         {
             IList<Company> companies = ObjectService.GetAll<Company>().ToList();
-            ViewBag.Title = Resource.TitleListCompanies;
+            ViewBag.SubTitle = Resource.TitleListCompanies;
             return View("../sgr/Company/List", companies);
         }
 
@@ -31,7 +31,7 @@ namespace asi.asicentral.web.Controllers.sgr
         {
             Company company = ObjectService.GetAll<Company>().Where(comp => comp.Id == id).FirstOrDefault();
             if (company == null) throw new Exception("Invalid identifier for a company " + id);
-            ViewBag.Title = Resource.TitleEditCompany;
+            ViewBag.SubTitle = Resource.TitleEditCompany;
             return View("../sgr/Company/Edit", company);
         }
 
@@ -48,7 +48,7 @@ namespace asi.asicentral.web.Controllers.sgr
             }
             else
             {
-                ViewBag.Title = Resource.TitleEditCompany;
+                ViewBag.SubTitle = Resource.TitleEditCompany;
                 return View("../sgr/Company/Edit", company);
             }
         }
@@ -56,7 +56,7 @@ namespace asi.asicentral.web.Controllers.sgr
         [HttpGet]
         public virtual ActionResult Add()
         {
-            ViewBag.Title = Resource.TitleAddCompany;
+            ViewBag.SubTitle = Resource.TitleAddCompany;
             Company company = new Company();
             return View("../sgr/Company/Edit", company);
         }
@@ -81,7 +81,7 @@ namespace asi.asicentral.web.Controllers.sgr
             }
             else
             {
-                ViewBag.Title = Resource.TitleAddCompany;
+                ViewBag.SubTitle = Resource.TitleAddCompany;
                 return View("../sgr/Company/Edit", company);
             }
         }

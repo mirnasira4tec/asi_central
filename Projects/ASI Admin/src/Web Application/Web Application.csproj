@@ -227,7 +227,9 @@
     <Content Include="Images\admin-asi-store.gif" />
     <Content Include="Images\admin-sgr.gif" />
     <Content Include="Images\asi-logo.gif" />
+    <Content Include="Images\checkmark.gif" />
     <Content Include="Images\sitebgtile.gif" />
+    <Content Include="Images\transparent.gif" />
     <Content Include="Scripts\asi.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
@@ -258,7 +260,6 @@
     </Content>
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Images\accent.png" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
