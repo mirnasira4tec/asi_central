@@ -489,4 +489,10 @@
   <data name="HasAmericanProducts" xml:space="preserve">
     <value>Has American Products</value>
   </data>
+  <data name="FieldInvalidNumber" xml:space="preserve">
+    <value>Please enter a valid phone number.</value>
+  </data>
+  <data name="FieldInvalidEmail" xml:space="preserve">
+    <value>Please enter a valid email address.</value>
+  </data>
 </root>

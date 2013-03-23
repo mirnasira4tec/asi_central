@@ -1,5 +1,6 @@
 ﻿using asi.asicentral.model.store;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -38,8 +39,8 @@ namespace asi.asicentral.web.model.store
         public SupplierApplicationModel(SupplierMembershipApplication application, asi.asicentral.model.store.Order order)
         {
             application.CopyTo(this);
+            
             GetDecoratingTypesFrom(this.DecoratingTypes);
-
             if (!String.IsNullOrEmpty(OtherDec))
             {
                 OtherDecoratingMethod = true;
@@ -51,11 +52,6 @@ namespace asi.asicentral.web.model.store
             ExternalReference = order.ExternalReference;
             OrderId = order.Id;
             OrderStatus = order.ProcessStatus;
-        }
-
-        public void SaveDecoratingTypesTo(SupplierMembershipApplication application)
-        {
-            // TODO save decorating types to the applicatiojn
         }
 
         public void GetDecoratingTypesFrom(ICollection<SupplierDecoratingType> decorationTypes)
