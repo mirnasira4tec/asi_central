@@ -22,7 +22,7 @@ namespace asi.asicentral.database.mappings
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ProductContext>().Name = "ProductContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<TIMSSContext>().Name = "TIMSSContext";
 
-            //for each model - get the repository class with the appropriate context
+            //for each model - get the repository class with the appropriate context 
 
             #region ASIInternetContext
 
@@ -36,6 +36,9 @@ namespace asi.asicentral.database.mappings
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
             For<IRepository<DistributorAccountType>>().Use<EFRepository<DistributorAccountType>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
+            For<IRepository<DistributorBusinessRevenue>>().Use<EFRepository<DistributorBusinessRevenue>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
             For<IRepository<DistributorMembershipApplication>>().Use<EFRepository<DistributorMembershipApplication>>()
