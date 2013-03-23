@@ -46,7 +46,7 @@ namespace asi.asicentral.web.Controllers.Store
             if (distributorApplication == null) throw new Exception("Invalid reference to an application");
             order.ExternalReference = application.ExternalReference;
             application.CopyTo(distributorApplication);
-            return ProcessCommand(StoreService, FulfilmentService, order, distributorApplication, application.ActionName);
+            return ProcessCommand(StoreService, FulfilmentService, order, application.Id, application.ActionName);
         }
 
         [HttpPost]
@@ -60,8 +60,10 @@ namespace asi.asicentral.web.Controllers.Store
             if (supplierApplication == null) throw new Exception("Invalid reference to an application");
             order.ExternalReference = application.ExternalReference;
             application.CopyTo(supplierApplication);
-            return ProcessCommand(StoreService, FulfilmentService, order, supplierApplication, application.ActionName);
+            SaveDecoratingTypesTo(application, supplierApplication);
+            return ProcessCommand(StoreService, FulfilmentService, order, application.Id, application.ActionName);
         }
+
 
         /// <summary>
         /// Common code between Edit supplier and distributor
@@ -71,13 +73,13 @@ namespace asi.asicentral.web.Controllers.Store
         /// <param name="applicationId"></param>
         /// <param name="command"></param>
         /// <returns></returns>
-        private ActionResult ProcessCommand(IStoreService storeService, IFulfilmentService fulfilmentService, Order order, OrderDetailApplication application, string command)
+        private ActionResult ProcessCommand(IStoreService storeService, IFulfilmentService fulfilmentService, Order order, Guid applicationId, string command)
         {
             if (command == ApplicationController.COMMAND_ACCEPT)
             {
                 //make sure we have external reference
                 if (string.IsNullOrEmpty(order.ExternalReference)) throw new Exception("You need to specify a Timms id to approve an order");
-                fulfilmentService.Process(order, application);
+                fulfilmentService.Process(order, GetApplication(applicationId));
                 order.ProcessStatus = OrderStatus.Approved;
             }
             else if (command == ApplicationController.COMMAND_REJECT)
@@ -86,9 +88,9 @@ namespace asi.asicentral.web.Controllers.Store
             }
             StoreService.SaveChanges();
             if (command == ApplicationController.COMMAND_REJECT)
-                return RedirectToAction("List", "../Orders");
+                return RedirectToAction("List", "Orders");
             else
-                return RedirectToAction("Edit", "Application", new { id = application.Id, orderId = order.Id });
+                return RedirectToAction("Edit", "Application", new { id = applicationId, orderId = order.Id });
         }
 
         private OrderDetailApplication GetApplication(Guid id)
@@ -102,5 +104,34 @@ namespace asi.asicentral.web.Controllers.Store
             }
             return application;
         }
+
+        public void SaveDecoratingTypesTo(SupplierApplicationModel applicationModel, SupplierMembershipApplication application)
+        {
+            // TODO save decorating types to the application
+            List<SupplierDecoratingType> decoratingTypes = StoreService.GetAll<SupplierDecoratingType>(false).ToList();
+            AddTypeToApplication(applicationModel.Etching, SupplierDecoratingType.DECORATION_ETCHING, application, decoratingTypes);
+            AddTypeToApplication(applicationModel.HotStamping, SupplierDecoratingType.DECORATION_HOTSTAMPING, application, decoratingTypes);
+            AddTypeToApplication(applicationModel.SilkScreen, SupplierDecoratingType.DECORATION_SILKSCREEN, application, decoratingTypes);
+            AddTypeToApplication(applicationModel.PadPrint, SupplierDecoratingType.DECORATION_PADPRINT, application, decoratingTypes);
+            AddTypeToApplication(applicationModel.DirectEmbroidery, SupplierDecoratingType.DECORATION_DIRECTEMBROIDERY, application, decoratingTypes);
+            AddTypeToApplication(applicationModel.FoilStamping, SupplierDecoratingType.DECORATION_FOILSTAMPING, application, decoratingTypes);
+            AddTypeToApplication(applicationModel.Lithography, SupplierDecoratingType.DECORATION_LITHOGRAPHY, application, decoratingTypes);
+            AddTypeToApplication(applicationModel.Sublimination, SupplierDecoratingType.DECORATION_SUBLIMINATION, application, decoratingTypes);
+            AddTypeToApplication(applicationModel.FourColourProcess, SupplierDecoratingType.DECORATION_FOURCOLOR, application, decoratingTypes);
+            AddTypeToApplication(applicationModel.Engraving, SupplierDecoratingType.DECORATION_ENGRAVING, application, decoratingTypes);
+            AddTypeToApplication(applicationModel.Laser, SupplierDecoratingType.DECORATION_LASER, application, decoratingTypes);
+            AddTypeToApplication(applicationModel.Offset, SupplierDecoratingType.DECORATION_OFFSET, application, decoratingTypes);
+            AddTypeToApplication(applicationModel.Transfer, SupplierDecoratingType.DECORATION_TRANSFER, application, decoratingTypes);
+            AddTypeToApplication(applicationModel.FullColourProcess, SupplierDecoratingType.DECORATION_FULLCOLOR, application, decoratingTypes);
+            AddTypeToApplication(applicationModel.DieStamp, SupplierDecoratingType.DECORATION_DIESTAMP, application, decoratingTypes);
+        }
+
+        private void AddTypeToApplication(bool selected, String typeName, SupplierMembershipApplication application, List<SupplierDecoratingType> decoratingTypes)
+        {
+            SupplierDecoratingType existing = application.DecoratingTypes.Where(type => type.Name == typeName).SingleOrDefault();
+            if (selected && existing == null) application.DecoratingTypes.Add(decoratingTypes.Where(type => type.Name == typeName).SingleOrDefault());
+            else if (!selected && existing != null) application.DecoratingTypes.Remove(existing);
+        }
+
     }
 }

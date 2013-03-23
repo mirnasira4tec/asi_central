@@ -268,6 +268,15 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Business Hours.
+        /// </summary>
+        public static string BusinessHours {
+            get {
+                return ResourceManager.GetString("BusinessHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Category Id.
         /// </summary>
         public static string CategoryID {
@@ -520,6 +529,24 @@ namespace asi.asicentral.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter a valid email address..
+        /// </summary>
+        public static string FieldInvalidEmail {
+            get {
+                return ResourceManager.GetString("FieldInvalidEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a valid phone number..
+        /// </summary>
+        public static string FieldInvalidNumber {
+            get {
+                return ResourceManager.GetString("FieldInvalidNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Field Required.
         /// </summary>
         public static string FieldRequired {
@@ -534,6 +561,15 @@ namespace asi.asicentral.Common {
         public static string FirstName {
             get {
                 return ResourceManager.GetString("FirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Has American Products.
+        /// </summary>
+        public static string HasAmericanProducts {
+            get {
+                return ResourceManager.GetString("HasAmericanProducts", resourceCulture);
             }
         }
         
