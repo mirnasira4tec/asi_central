@@ -28,7 +28,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.sgr
             // act
             ViewResult result = controller.List() as ViewResult;
             Assert.IsNotNull(result.Model);
-            Assert.IsNotNull(result.ViewBag.Title);
+            Assert.IsNotNull(result.ViewBag.SubTitle);
         }
 
         [TestMethod]
@@ -76,7 +76,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.sgr
             // create new model and pass it to the view
             ViewResult viewResult = controller.Add() as ViewResult;
             Assert.IsNotNull(viewResult.Model);
-            Assert.IsNotNull(viewResult.ViewBag.Title);
+            Assert.IsNotNull(viewResult.ViewBag.SubTitle);
 
             // add new company to the data
             Company company = new Company { Id = 1, Name = "New Company", Summary = "Summary" };
