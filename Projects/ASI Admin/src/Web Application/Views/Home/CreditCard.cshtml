@@ -1,0 +1,44 @@
+﻿@model asi.asicentral.web.model.CreditCardModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Credit Card Service";
+}
+
+<h1>Credit Card Service</h1>
+<p>This page is used to make sure the Credit card service is installed properly and is working</p>
+<br />
+<form method="post">
+<div class="row-fluid">
+    <div class="span4"><label for="Username">Username:</label><input type="text" name="Username" value="@Model.Username" /><input type="submit" class="btn btn-primary" value="Generate Password" /></div>
+    @if (!string.IsNullOrEmpty(@Model.Password))
+    {
+        <div class="span8 alert alert-success"><br />@Model.Password<br /><br /></div>
+    }
+</div>
+</form>
+<br /><br />
+<form method="post">
+<div class="row-fluid">
+    <div class="span4"><label for="ServiceUrl">Service Url:</label><input type="hidden" name="Username" value="test" /><input type="text" name="ServiceUrl" value="@Model.ServiceUrl" /><input type="submit" class="btn btn-primary" value="Test The service" /></div>
+    <div class="span8">
+        @if (Model.SuccessMessages.Count > 0)
+        {
+            <p class="alert alert-success">
+            @foreach (string message in Model.SuccessMessages)
+            {
+                @message<br />
+            }
+            </p>
+        }
+        @if (Model.ErrorMessages.Count > 0)
+        {
+            <p class="alert alert-error">
+            @foreach (string message in Model.ErrorMessages)
+            {
+                <br />@message
+            }
+            <br /></p>
+        }
+    </div>
+</div>
+</form>
