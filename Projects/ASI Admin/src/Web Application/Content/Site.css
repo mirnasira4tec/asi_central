@@ -29,6 +29,19 @@ h1 {
 	padding: 10px 0px 10px 0px;
 	}
 
+h2 {
+	font-size: 20px;
+	line-height: 20px;
+	margin: 0;
+	padding: 10px 0px 10px 0px;
+	}
+h3 {
+	font-size: 18px;
+	line-height: 18px;
+	margin: 0;
+	padding: 10px 0px 10px 0px;
+	}
+
 header#site-header {
 	border-bottom: 14px solid #808080;
 	margin: 0px;

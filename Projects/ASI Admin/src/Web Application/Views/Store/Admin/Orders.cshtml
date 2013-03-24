@@ -93,7 +93,7 @@
         <div id="@Model.OrderTab" class="tab-pane active">
         @if (Model.Orders != null && Model.Orders.Count > 0) {
         <table class="table table-bordered table-condensed table-striped">
-            <thead><tr><th>@Resource.StoreOrderID</th><th>Name</th><th>Email</th><th>Item</th><th>Application</th><th>Quantity</th><th>Price</th><th>Billing Information</th><th>CreditCard</th><th>@Resource.StoreDateOrderCreated</th></tr></thead>
+            <thead><tr><th>@Resource.StoreOrderID</th><th>Name</th><th>Email</th><th>Item</th><th>Application</th><th>Step</th><th>Quantity</th><th>Price</th><th>Billing Information</th><th>CreditCard</th><th>@Resource.StoreDateOrderCreated</th></tr></thead>
             <tbody>            
             @foreach (OrderModel order in Model.Orders)
             {
@@ -107,7 +107,7 @@
                 { <td><a href="@Url.Action("Edit", "Application", new { Id = order.Application.Id, OrderId = order.OrderId })">Application</a></td> }
                 else
                 { <td>&nbsp</td> }
-                <td>@order.Quantity</td><td>$@order.Price</td><td>@order.Billing</td><td>@order.CreditCard</td><td>@order.DateOrderCreated.ToString("MM/dd/yy")</td></tr>
+                <td>@order.CompletedStep</td><td>@order.Quantity</td><td>$@order.Price</td><td>@order.Billing</td><td>@order.CreditCard</td><td>@order.DateOrderCreated.ToString("MM/dd/yy")</td></tr>
             }
             </tbody>
         </table>

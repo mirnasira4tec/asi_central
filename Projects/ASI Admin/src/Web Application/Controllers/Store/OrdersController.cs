@@ -7,6 +7,8 @@ using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
 using asi.asicentral.web.model.store;
 using System.Text;
+using asi.asicentral.web.model.store.order;
+using System.Data.Objects.SqlClient;
 
 namespace asi.asicentral.web.Controllers.Store
 {
@@ -29,7 +31,7 @@ namespace asi.asicentral.web.Controllers.Store
                 //form uses date filter
                 if (dateStart == null) dateStart = DateTime.Now.AddDays(-7);
                 if (dateEnd == null) dateEnd = DateTime.Now;
-                else dateEnd = dateEnd.Value.Date + new TimeSpan(23, 59, 50);
+                else dateEnd = dateEnd.Value.Date + new TimeSpan(23, 59, 59);
                 orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.DateCreated >= dateStart && detail.Order.DateCreated <= dateEnd);
             }
             if (formTab == OrderPageModel.TAB_PRODUCT && !string.IsNullOrEmpty(product))
@@ -92,6 +94,51 @@ namespace asi.asicentral.web.Controllers.Store
             {
                 Data = new { Success = (error.Length == 0), Error = error }
             };
+        }
+
+        public virtual ActionResult Statistics(OrderStatisticData orderStatisticsData)
+        {
+            if (string.IsNullOrEmpty(orderStatisticsData.Campaign) && !orderStatisticsData.StartDate.HasValue) 
+                orderStatisticsData.StartDate = DateTime.Now.AddDays(-7);
+            if (string.IsNullOrEmpty(orderStatisticsData.Campaign) && !orderStatisticsData.EndDate.HasValue)
+                orderStatisticsData.EndDate = DateTime.Now;
+            if (orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = orderStatisticsData.EndDate.Value.Date + new TimeSpan(23, 59, 59);
+            IQueryable<Order> ordersQuery = StoreService.GetAll<Order>();
+            if (!string.IsNullOrEmpty(orderStatisticsData.Campaign)) ordersQuery = ordersQuery.Where(order => order.Campaign == orderStatisticsData.Campaign);
+            if (orderStatisticsData.StartDate.HasValue) ordersQuery = ordersQuery.Where(order => order.DateCreated >= orderStatisticsData.StartDate);
+            if (orderStatisticsData.EndDate.HasValue) ordersQuery = ordersQuery.Where(order => order.DateCreated <= orderStatisticsData.EndDate);
+
+            orderStatisticsData.Data = ordersQuery
+                .GroupBy(order => new { order.Campaign, order.CompletedStep })
+                .Select(grouped => new GroupedData() { Campaign = grouped.Key.Campaign, CompletedStep = SqlFunctions.StringConvert((double)grouped.Key.CompletedStep), Count = grouped.Count() })
+                .OrderBy(data => new { data.Campaign, data.CompletedStep })
+                .ToList();
+            //change completed steps with more meaningful title
+            foreach (GroupedData data in orderStatisticsData.Data)
+            {
+                switch (data.CompletedStep.Trim())
+                {
+                    case "0":
+                        data.CompletedStep = "Clicked on the link";
+                        break;
+                    case "1":
+                        data.CompletedStep = "Selected a product";
+                        break;
+                    case "2":
+                        data.CompletedStep = "Entered Company information";
+                        break;
+                    case "3":
+                        data.CompletedStep = "Entered billing/shipping information";
+                        break;
+                    case "4":
+                        data.CompletedStep = "Confirmed the order";
+                        break;
+                    case "5":
+                        data.CompletedStep = "Entered optional information";
+                        break;
+                }
+            }
+            return View("../Store/Admin/Statistics", orderStatisticsData);
         }
     }
 }

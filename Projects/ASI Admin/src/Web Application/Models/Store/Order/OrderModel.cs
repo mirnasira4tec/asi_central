@@ -90,7 +90,7 @@ namespace asi.asicentral.web.model.store
         }
 
         public bool ShowIcons { get; set; }
-
+        public string CompletedStep { get; set; }
         public String Company { get; private set; }
 
         public OrderDetailApplication Application { private set; get; }
@@ -99,6 +99,7 @@ namespace asi.asicentral.web.model.store
         {
             OrderModel order = new OrderModel();
             order.orderDetail = orderDetail;
+            order.CompletedStep = orderDetail.Order.CompletedStep.ToString();
             order.Application = storeService.GetApplication(orderDetail);
             order.ShowIcons = orderDetail.Order.ProcessStatus == OrderStatus.Pending && order.Application != null && orderDetail.Order.Status != null && orderDetail.Order.Status == true;
             if (order.Application != null)
