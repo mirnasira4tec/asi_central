@@ -288,6 +288,7 @@
     <Content Include="Views\Shared\_StoreLayout.cshtml" />
     <Content Include="Views\Home\CreditCard.cshtml" />
     <Content Include="Views\Store\Admin\Statistics.cshtml" />
+    <Content Include="Views\Home\Diagnostic.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
