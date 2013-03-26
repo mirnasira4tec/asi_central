@@ -495,4 +495,7 @@
   <data name="FieldInvalidEmail" xml:space="preserve">
     <value>Please enter a valid email address.</value>
   </data>
+  <data name="FieldYearRange" xml:space="preserve">
+    <value>Please enter a year between 1700 and 2050.</value>
+  </data>
 </root>

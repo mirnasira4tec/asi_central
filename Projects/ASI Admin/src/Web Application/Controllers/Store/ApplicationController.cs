@@ -40,13 +40,28 @@ namespace asi.asicentral.web.Controllers.Store
         [ValidateInput(true)]
         public virtual ActionResult EditDistributor(DistributorApplicationModel application)
         {
-            Order order = StoreService.GetAll<Order>().Where(ordr => ordr.Id == application.OrderId).SingleOrDefault();
-            DistributorMembershipApplication distributorApplication = StoreService.GetAll<DistributorMembershipApplication>().Where(app => app.Id == application.Id).SingleOrDefault();
-            if (order == null) throw new Exception("Invalid reference to an order");
-            if (distributorApplication == null) throw new Exception("Invalid reference to an application");
-            order.ExternalReference = application.ExternalReference;
-            application.CopyTo(distributorApplication);
-            return ProcessCommand(StoreService, FulfilmentService, order, application.Id, application.ActionName);
+            if (ModelState.IsValid)
+            {
+                Order order = StoreService.GetAll<Order>().Where(ordr => ordr.Id == application.OrderId).SingleOrDefault();
+                DistributorMembershipApplication distributorApplication = StoreService.GetAll<DistributorMembershipApplication>().Where(app => app.Id == application.Id).SingleOrDefault();
+                if (order == null) throw new Exception("Invalid reference to an order");
+                if (distributorApplication == null) throw new Exception("Invalid reference to an application");
+                order.ExternalReference = application.ExternalReference;
+                //view does not contain some of the collections, copy from the ones in the database
+                application.AccountTypes = distributorApplication.AccountTypes;
+                application.ProductLines = distributorApplication.ProductLines;
+                application.CopyTo(distributorApplication);
+                ProcessCommand(StoreService, FulfilmentService, order, distributorApplication, application.ActionName);
+                StoreService.SaveChanges();
+                if (application.ActionName == ApplicationController.COMMAND_REJECT)
+                    return RedirectToAction("List", "Orders");
+                else
+                    return RedirectToAction("Edit", "Application", new { id = application.Id, orderId = order.Id });
+            }
+            else
+            {
+                return View("../Store/Application/Distributor", application);
+            }
         }
 
         [HttpPost]
@@ -54,16 +69,29 @@ namespace asi.asicentral.web.Controllers.Store
         [ValidateInput(true)]
         public virtual ActionResult EditSupplier(SupplierApplicationModel application)
         {
-            Order order = StoreService.GetAll<Order>().Where(ordr => ordr.Id == application.OrderId).SingleOrDefault();
-            SupplierMembershipApplication supplierApplication = StoreService.GetAll<SupplierMembershipApplication>().Where(app => app.Id == application.Id).SingleOrDefault();
-            if (order == null) throw new Exception("Invalid reference to an order");
-            if (supplierApplication == null) throw new Exception("Invalid reference to an application");
-            order.ExternalReference = application.ExternalReference;
-            application.CopyTo(supplierApplication);
-            SaveDecoratingTypesTo(application, supplierApplication);
-            return ProcessCommand(StoreService, FulfilmentService, order, application.Id, application.ActionName);
+            if (ModelState.IsValid)
+            {
+                Order order = StoreService.GetAll<Order>(false).Where(ordr => ordr.Id == application.OrderId).SingleOrDefault();
+                SupplierMembershipApplication supplierApplication = StoreService.GetAll<SupplierMembershipApplication>(false).Where(app => app.Id == application.Id).SingleOrDefault();
+                if (order == null) throw new Exception("Invalid reference to an order");
+                if (supplierApplication == null) throw new Exception("Invalid reference to an application");
+                order.ExternalReference = application.ExternalReference;
+                //view model does not have the decorating types, get the ones from the database
+                application.DecoratingTypes = supplierApplication.DecoratingTypes;
+                application.UpdateDecoratingTypes(StoreService.GetAll<SupplierDecoratingType>().ToList());
+                application.CopyTo(supplierApplication);
+                ProcessCommand(StoreService, FulfilmentService, order, supplierApplication, application.ActionName);
+                StoreService.SaveChanges();
+                if (application.ActionName == ApplicationController.COMMAND_REJECT)
+                    return RedirectToAction("List", "Orders");
+                else
+                    return RedirectToAction("Edit", "Application", new { id = application.Id, orderId = order.Id });
+            }
+            else
+            {
+                return View("../Store/Application/Supplier", application);
+            }
         }
-
 
         /// <summary>
         /// Common code between Edit supplier and distributor
@@ -73,24 +101,25 @@ namespace asi.asicentral.web.Controllers.Store
         /// <param name="applicationId"></param>
         /// <param name="command"></param>
         /// <returns></returns>
-        private ActionResult ProcessCommand(IStoreService storeService, IFulfilmentService fulfilmentService, Order order, Guid applicationId, string command)
+        private void ProcessCommand(IStoreService storeService, IFulfilmentService fulfilmentService, Order order, OrderDetailApplication application, string command)
         {
             if (command == ApplicationController.COMMAND_ACCEPT)
             {
                 //make sure we have external reference
                 if (string.IsNullOrEmpty(order.ExternalReference)) throw new Exception("You need to specify a Timms id to approve an order");
-                fulfilmentService.Process(order, GetApplication(applicationId));
+
+                //make sure timms id contains numbers only
+                int num;
+                bool success = int.TryParse(order.ExternalReference, out num);
+                if (!success) throw new Exception("Timms id must be numbers only.");
+                
+                fulfilmentService.Process(order, application);
                 order.ProcessStatus = OrderStatus.Approved;
             }
             else if (command == ApplicationController.COMMAND_REJECT)
             {
                 order.ProcessStatus = OrderStatus.Rejected;
             }
-            StoreService.SaveChanges();
-            if (command == ApplicationController.COMMAND_REJECT)
-                return RedirectToAction("List", "Orders");
-            else
-                return RedirectToAction("Edit", "Application", new { id = applicationId, orderId = order.Id });
         }
 
         private OrderDetailApplication GetApplication(Guid id)
@@ -104,34 +133,5 @@ namespace asi.asicentral.web.Controllers.Store
             }
             return application;
         }
-
-        public void SaveDecoratingTypesTo(SupplierApplicationModel applicationModel, SupplierMembershipApplication application)
-        {
-            // TODO save decorating types to the application
-            List<SupplierDecoratingType> decoratingTypes = StoreService.GetAll<SupplierDecoratingType>(false).ToList();
-            AddTypeToApplication(applicationModel.Etching, SupplierDecoratingType.DECORATION_ETCHING, application, decoratingTypes);
-            AddTypeToApplication(applicationModel.HotStamping, SupplierDecoratingType.DECORATION_HOTSTAMPING, application, decoratingTypes);
-            AddTypeToApplication(applicationModel.SilkScreen, SupplierDecoratingType.DECORATION_SILKSCREEN, application, decoratingTypes);
-            AddTypeToApplication(applicationModel.PadPrint, SupplierDecoratingType.DECORATION_PADPRINT, application, decoratingTypes);
-            AddTypeToApplication(applicationModel.DirectEmbroidery, SupplierDecoratingType.DECORATION_DIRECTEMBROIDERY, application, decoratingTypes);
-            AddTypeToApplication(applicationModel.FoilStamping, SupplierDecoratingType.DECORATION_FOILSTAMPING, application, decoratingTypes);
-            AddTypeToApplication(applicationModel.Lithography, SupplierDecoratingType.DECORATION_LITHOGRAPHY, application, decoratingTypes);
-            AddTypeToApplication(applicationModel.Sublimination, SupplierDecoratingType.DECORATION_SUBLIMINATION, application, decoratingTypes);
-            AddTypeToApplication(applicationModel.FourColourProcess, SupplierDecoratingType.DECORATION_FOURCOLOR, application, decoratingTypes);
-            AddTypeToApplication(applicationModel.Engraving, SupplierDecoratingType.DECORATION_ENGRAVING, application, decoratingTypes);
-            AddTypeToApplication(applicationModel.Laser, SupplierDecoratingType.DECORATION_LASER, application, decoratingTypes);
-            AddTypeToApplication(applicationModel.Offset, SupplierDecoratingType.DECORATION_OFFSET, application, decoratingTypes);
-            AddTypeToApplication(applicationModel.Transfer, SupplierDecoratingType.DECORATION_TRANSFER, application, decoratingTypes);
-            AddTypeToApplication(applicationModel.FullColourProcess, SupplierDecoratingType.DECORATION_FULLCOLOR, application, decoratingTypes);
-            AddTypeToApplication(applicationModel.DieStamp, SupplierDecoratingType.DECORATION_DIESTAMP, application, decoratingTypes);
-        }
-
-        private void AddTypeToApplication(bool selected, String typeName, SupplierMembershipApplication application, List<SupplierDecoratingType> decoratingTypes)
-        {
-            SupplierDecoratingType existing = application.DecoratingTypes.Where(type => type.Name == typeName).SingleOrDefault();
-            if (selected && existing == null) application.DecoratingTypes.Add(decoratingTypes.Where(type => type.Name == typeName).SingleOrDefault());
-            else if (!selected && existing != null) application.DecoratingTypes.Remove(existing);
-        }
-
     }
 }
