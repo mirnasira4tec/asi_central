@@ -64,7 +64,7 @@ namespace asi.asicentral.database.mappings.timss
 
             this.Property(t => t.BillState)
                 .HasColumnName("Bill_STATE")
-                .HasMaxLength(15);
+                .HasMaxLength(50);
 
             this.Property(t => t.BillPostalCode)
                 .HasColumnName("Bill_POSTALCODE")
@@ -96,7 +96,7 @@ namespace asi.asicentral.database.mappings.timss
 
             this.Property(t => t.ShipState)
                 .HasColumnName("Ship_State")
-                .HasMaxLength(15);
+                .HasMaxLength(50);
 
             this.Property(t => t.ShipPostalCode)
                 .HasColumnName("Ship_PostalCode")
