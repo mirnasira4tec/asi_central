@@ -2,7 +2,10 @@
 	
 	<Import Project="$(MSBuildExtensionsPath)\ExtensionPack\MSBuild.ExtensionPack.tasks" Condition="Exists('$(MSBuildExtensionsPath)\ExtensionPack\MSBuild.ExtensionPack.tasks')" />	
 	<Import Project="$(ExtensionTasksPath)MSBuild.ExtensionPack.tasks" Condition="Exists('$(ExtensionTasksPath)MSBuild.ExtensionPack.tasks') And !Exists('$(MSBuildExtensionsPath)\ExtensionPack\MSBuild.ExtensionPack.tasks')" />
-
+	<PropertyGroup>
+		<NuGetExe Condition="$(NuGetExe) == ''">.\.nuget\nuget.exe</NuGetExe>
+	</PropertyGroup>
+	
 	<Target Name="NuGet">
 		<ItemGroup>
 			<NuGetPackageConfigs Include="**\**\packages.config" />
