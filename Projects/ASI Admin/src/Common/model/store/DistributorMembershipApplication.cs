@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -100,69 +101,113 @@ namespace asi.asicentral.model.store
         public Nullable<DateTime> EstablishedDate { get; set; }
 
         public virtual DistributorBusinessRevenue PrimaryBusinessRevenue { get; set; }
-        public virtual ICollection<DistributorMembershipApplicationContact> Contacts { get; set; }
+        public virtual IList<DistributorMembershipApplicationContact> Contacts { get; set; }
         public virtual ICollection<DistributorAccountType> AccountTypes { get; set; }
         public virtual ICollection<DistributorProductLine> ProductLines { get; set; }
 
-        public void CopyTo(DistributorMembershipApplication application)
+        public void CopyTo(DistributorMembershipApplication target)
         {
-            application.AgreeReceivePromotionalProducts = AgreeReceivePromotionalProducts;
-            application.AgreeTermsAndConditions = AgreeTermsAndConditions;
-            application.AnnualSalesVolume = AnnualSalesVolume;
-            application.AnnualSalesVolumeASP = AnnualSalesVolumeASP;
-            application.ApplicantEmail = ApplicantEmail;
-            application.ApplicantName = ApplicantName;
-            application.ApplicationStatusId = ApplicationStatusId;
-            application.ASIContact = ASIContact;
-            application.Company = Company;
-            application.Contacts = Contacts;
-            application.CorporateOfficer = CorporateOfficer;
-            application.Custom1 = Custom1;
-            application.Custom2 = Custom2;
-            application.Custom3 = Custom3;
-            application.Custom4 = Custom4;
-            application.Custom5 = Custom5;
-            application.EstablishedDate = EstablishedDate;
-            application.BillingFax = BillingFax;
-            application.FirstName = FirstName;
-            application.Id = Id;
-            application.InformASIOfChange = InformASIOfChange;
-            application.IPAddress = IPAddress;
-            application.IsForProfit = IsForProfit;
-            application.IsMajorForResale = IsMajorForResale;
-            application.IsMajorityDistributeForResale = IsMajorityDistributeForResale;
-            application.IsSolelyWork = IsSolelyWork;
-            application.LastName = LastName;
-            application.NumberOfEmployee = NumberOfEmployee;
-            application.NumberOfSalesEmployee = NumberOfSalesEmployee;
-            application.OtherBusinessRevenue = OtherBusinessRevenue;
-            application.PrimaryBusinessRevenueId = PrimaryBusinessRevenueId;
-            application.ProvideInvoiceOnDemand = ProvideInvoiceOnDemand;
-            application.ShippingCity = ShippingCity;
-            application.ShippingState = ShippingState;
-            application.ShippingStreet1 = ShippingStreet1;
-            application.ShippingStreet2 = ShippingStreet2;
-            application.ShippingZip = ShippingZip;
-            application.ShippingCountry = ShippingCountry;
-            application.SignatureType = SignatureType;
-            application.SolelyWorkName = SolelyWorkName;
-            application.BillingEmail = BillingEmail;
-            application.BillingPhone = BillingPhone;
-            application.BillingAddress1 = BillingAddress1;
-            application.BillingAddress2 = BillingAddress2;
-            application.BillingState = BillingState;
-            application.BillingCity = BillingCity;
-            application.BillingZip = BillingZip;
-            application.BillingCountry = BillingCountry;
-            application.TrueAnswers = TrueAnswers;
-            application.UserId = UserId;
-            application.BillingWebUrl = BillingWebUrl;
-            application.Address1 = Address1;
-            application.Address2 = Address2;
-            application.City = City;
-            application.State = State;
-            application.Zip = Zip;
-            application.Country = Country;
+            //sync the contacts
+            if (target.Contacts == null || target.Contacts.Count == 0) target.Contacts = Contacts;
+            else
+            {
+                //got through the target contacts and update
+                for (int i = Contacts.Count - 1; i >= 0; i--)
+                {
+                    DistributorMembershipApplicationContact originalContact = Contacts[i];
+                    DistributorMembershipApplicationContact targetContact = target.Contacts.Where(theContact => theContact.Id == originalContact.Id).SingleOrDefault();
+                    if (targetContact != null)
+                    {
+                        //contact already there, update it
+                        targetContact.Name = originalContact.Name;
+                        targetContact.Title = originalContact.Title;
+                        targetContact.Email = originalContact.Email;
+                        targetContact.Phone = originalContact.Phone;
+                        targetContact.Fax = originalContact.Fax;
+                        targetContact.IsPrimary = originalContact.IsPrimary;
+                    }
+                    else
+                    {
+                        //target is missing a contact
+                        target.Contacts.Add(new DistributorMembershipApplicationContact()
+                        {
+                            Email = targetContact.Email,
+                            Fax = targetContact.Fax,
+                            IsPrimary = targetContact.IsPrimary,
+                            Name = targetContact.Name,
+                            Department = targetContact.Name,
+                            Phone = targetContact.Phone,
+                            Title = targetContact.Title,
+                        });
+                    }
+                }
+                for (int i = target.Contacts.Count - 1; i >= 0; i--)
+                {
+                    DistributorMembershipApplicationContact targetContact = target.Contacts[i];
+                    DistributorMembershipApplicationContact originalContact = Contacts.Where(theContact => theContact.Id == targetContact.Id).SingleOrDefault();
+                    if (originalContact == null) target.Contacts.Remove(targetContact);
+                }
+            }
+
+
+
+            target.AgreeReceivePromotionalProducts = AgreeReceivePromotionalProducts;
+            target.AgreeTermsAndConditions = AgreeTermsAndConditions;
+            target.AnnualSalesVolume = AnnualSalesVolume;
+            target.AnnualSalesVolumeASP = AnnualSalesVolumeASP;
+            target.ApplicantEmail = ApplicantEmail;
+            target.ApplicantName = ApplicantName;
+            target.ApplicationStatusId = ApplicationStatusId;
+            target.ASIContact = ASIContact;
+            target.Company = Company;
+            target.Contacts = Contacts;
+            target.CorporateOfficer = CorporateOfficer;
+            target.Custom1 = Custom1;
+            target.Custom2 = Custom2;
+            target.Custom3 = Custom3;
+            target.Custom4 = Custom4;
+            target.Custom5 = Custom5;
+            target.EstablishedDate = EstablishedDate;
+            target.BillingFax = BillingFax;
+            target.FirstName = FirstName;
+            target.Id = Id;
+            target.InformASIOfChange = InformASIOfChange;
+            target.IPAddress = IPAddress;
+            target.IsForProfit = IsForProfit;
+            target.IsMajorForResale = IsMajorForResale;
+            target.IsMajorityDistributeForResale = IsMajorityDistributeForResale;
+            target.IsSolelyWork = IsSolelyWork;
+            target.LastName = LastName;
+            target.NumberOfEmployee = NumberOfEmployee;
+            target.NumberOfSalesEmployee = NumberOfSalesEmployee;
+            target.OtherBusinessRevenue = OtherBusinessRevenue;
+            target.PrimaryBusinessRevenueId = PrimaryBusinessRevenueId;
+            target.ProvideInvoiceOnDemand = ProvideInvoiceOnDemand;
+            target.ShippingCity = ShippingCity;
+            target.ShippingState = ShippingState;
+            target.ShippingStreet1 = ShippingStreet1;
+            target.ShippingStreet2 = ShippingStreet2;
+            target.ShippingZip = ShippingZip;
+            target.ShippingCountry = ShippingCountry;
+            target.SignatureType = SignatureType;
+            target.SolelyWorkName = SolelyWorkName;
+            target.BillingEmail = BillingEmail;
+            target.BillingPhone = BillingPhone;
+            target.BillingAddress1 = BillingAddress1;
+            target.BillingAddress2 = BillingAddress2;
+            target.BillingState = BillingState;
+            target.BillingCity = BillingCity;
+            target.BillingZip = BillingZip;
+            target.BillingCountry = BillingCountry;
+            target.TrueAnswers = TrueAnswers;
+            target.UserId = UserId;
+            target.BillingWebUrl = BillingWebUrl;
+            target.Address1 = Address1;
+            target.Address2 = Address2;
+            target.City = City;
+            target.State = State;
+            target.Zip = Zip;
+            target.Country = Country;
         }
     }
 }

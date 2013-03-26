@@ -303,4 +303,58 @@
   <data name="StoreAdminProducts" xml:space="preserve">
     <value>List of Products driving the store</value>
   </data>
+  <data name="ContactName" xml:space="preserve">
+    <value>Contact Name</value>
+  </data>
+  <data name="DieStamp" xml:space="preserve">
+    <value>Die Stamp</value>
+  </data>
+  <data name="DirectEmbroidery" xml:space="preserve">
+    <value>Direct Embroidery</value>
+  </data>
+  <data name="Engraving" xml:space="preserve">
+    <value>Engraving</value>
+  </data>
+  <data name="Etching" xml:space="preserve">
+    <value>Etching</value>
+  </data>
+  <data name="FoilStamping" xml:space="preserve">
+    <value>Foil Stamping</value>
+  </data>
+  <data name="FourColourProcess" xml:space="preserve">
+    <value>Four Color Process</value>
+  </data>
+  <data name="FullColourProcess" xml:space="preserve">
+    <value>Full Colour Process</value>
+  </data>
+  <data name="HotStamping" xml:space="preserve">
+    <value>Hot Stamping</value>
+  </data>
+  <data name="Lithography" xml:space="preserve">
+    <value>Lithography</value>
+  </data>
+  <data name="Offset" xml:space="preserve">
+    <value>Offset</value>
+  </data>
+  <data name="OtherDecoratingMethod" xml:space="preserve">
+    <value>Other Decorating Method</value>
+  </data>
+  <data name="OtherDecoratingMethodName" xml:space="preserve">
+    <value>Other Decorating Method Name</value>
+  </data>
+  <data name="PadPrint" xml:space="preserve">
+    <value>Pad Print</value>
+  </data>
+  <data name="SilkScreen" xml:space="preserve">
+    <value>SilkScreen</value>
+  </data>
+  <data name="Sublimination" xml:space="preserve">
+    <value>Sublimination</value>
+  </data>
+  <data name="Transfer" xml:space="preserve">
+    <value>Transfer</value>
+  </data>
+  <data name="FieldIMustBeNumber" xml:space="preserve">
+    <value>Field must be a number</value>
+  </data>
 </root>

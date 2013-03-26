@@ -46,9 +46,11 @@ namespace asi.asicentral.model.store
         [Display(ResourceType = typeof(Resource), Name = "SalesVolume")]
         public string SalesVolume { get; set; }
 
+        [Range(1700, 2050, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldYearRange")]
         [Display(ResourceType = typeof(Resource), Name = "YearEstablished")]
         public Nullable<int> YearEstablished { get; set; }
 
+        [Range(1700, 2050, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldYearRange")]
         [Display(ResourceType = typeof(Resource), Name = "YearEnteredAdvertising")]
         public Nullable<int> YearEnteredAdvertising { get; set; }
 
@@ -159,27 +161,24 @@ namespace asi.asicentral.model.store
 
         public void CopyTo(SupplierMembershipApplication target)
         {
-            target.HasBillAddress = HasBillAddress;
-            target.HasShipAddress = HasShipAddress;
-            target.DecoratingTypes = DecoratingTypes;
-
-            if (target.Contacts == null) target.Contacts = Contacts;
+            //sync the contacts
+            if (target.Contacts == null || target.Contacts.Count == 0) target.Contacts = Contacts;
             else
             {
                 //got through the target contacts and update
                 for (int i = Contacts.Count - 1; i >= 0; i--)
                 {
-                    SupplierMembershipApplicationContact viewContact = Contacts[i];
-                    SupplierMembershipApplicationContact targetContact = target.Contacts.Where(theContact => theContact.Id == viewContact.Id).SingleOrDefault();
+                    SupplierMembershipApplicationContact originalContact = Contacts[i];
+                    SupplierMembershipApplicationContact targetContact = target.Contacts.Where(theContact => theContact.Id == originalContact.Id).SingleOrDefault();
                     if (targetContact != null)
                     {
                         //contact already there, update it
-                        targetContact.Name = viewContact.Name;
-                        targetContact.Title = viewContact.Title;
-                        targetContact.Email = viewContact.Email;
-                        targetContact.Phone = viewContact.Phone;
-                        targetContact.Fax = viewContact.Fax;
-                        targetContact.IsPrimary = viewContact.IsPrimary;
+                        targetContact.Name = originalContact.Name;
+                        targetContact.Title = originalContact.Title;
+                        targetContact.Email = originalContact.Email;
+                        targetContact.Phone = originalContact.Phone;
+                        targetContact.Fax = originalContact.Fax;
+                        targetContact.IsPrimary = originalContact.IsPrimary;
                     }
                     else
                     {
@@ -199,12 +198,36 @@ namespace asi.asicentral.model.store
                 }
                 for (int i = target.Contacts.Count - 1; i >= 0; i--)
                 {
-                    SupplierMembershipApplicationContact targetContact = Contacts[i];
-                    SupplierMembershipApplicationContact viewContact = Contacts.Where(theContact => theContact.Id == targetContact.Id).SingleOrDefault();
-                    if (viewContact == null) target.Contacts.Remove(targetContact);
+                    SupplierMembershipApplicationContact targetContact = target.Contacts[i];
+                    SupplierMembershipApplicationContact originalContact = Contacts.Where(theContact => theContact.Id == targetContact.Id).SingleOrDefault();
+                    if (originalContact == null) target.Contacts.Remove(targetContact);
                 }
             }
-
+            //sync the decorating types
+            if (target.DecoratingTypes == null || target.DecoratingTypes.Count == 0) target.DecoratingTypes = DecoratingTypes;
+            else
+            {
+                //got through the target Decorating types and update
+                for (int i = DecoratingTypes.Count - 1; i >= 0; i--)
+                {
+                    SupplierDecoratingType originalDecType = DecoratingTypes.ElementAt(i);
+                    SupplierDecoratingType targetDecType = target.DecoratingTypes.Where(decType => decType.Name == originalDecType.Name).SingleOrDefault();
+                    if (targetDecType == null)
+                    {
+                        //target is missing a contact
+                        target.DecoratingTypes.Add(originalDecType);
+                    }
+                }
+                for (int i = target.DecoratingTypes.Count - 1; i >= 0; i--)
+                {
+                    SupplierDecoratingType targetDecType = target.DecoratingTypes.ElementAt(i);
+                    SupplierDecoratingType originalDecType = DecoratingTypes.Where(decType => decType.Name == targetDecType.Name).SingleOrDefault();
+                    if (originalDecType == null) target.DecoratingTypes.Remove(targetDecType);
+                }
+            }
+            //sync the fields
+            target.HasBillAddress = HasBillAddress;
+            target.HasShipAddress = HasShipAddress;
             target.AffiliateASINumber = AffiliateASINumber;
             target.AffiliateCompanyName = AffiliateCompanyName;
             target.AgreeASITermsAndConditions = AgreeASITermsAndConditions;

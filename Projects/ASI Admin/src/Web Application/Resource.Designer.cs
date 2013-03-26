@@ -160,6 +160,15 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Contact Name.
+        /// </summary>
+        public static string ContactName {
+            get {
+                return ResourceManager.GetString("ContactName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {
@@ -174,6 +183,24 @@ namespace asi.asicentral.web {
         public static string DeleteTooltip {
             get {
                 return ResourceManager.GetString("DeleteTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Die Stamp.
+        /// </summary>
+        public static string DieStamp {
+            get {
+                return ResourceManager.GetString("DieStamp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Direct Embroidery.
+        /// </summary>
+        public static string DirectEmbroidery {
+            get {
+                return ResourceManager.GetString("DirectEmbroidery", resourceCulture);
             }
         }
         
@@ -214,6 +241,114 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Engraving.
+        /// </summary>
+        public static string Engraving {
+            get {
+                return ResourceManager.GetString("Engraving", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Etching.
+        /// </summary>
+        public static string Etching {
+            get {
+                return ResourceManager.GetString("Etching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field must be a number.
+        /// </summary>
+        public static string FieldIMustBeNumber {
+            get {
+                return ResourceManager.GetString("FieldIMustBeNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Foil Stamping.
+        /// </summary>
+        public static string FoilStamping {
+            get {
+                return ResourceManager.GetString("FoilStamping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Four Color Process.
+        /// </summary>
+        public static string FourColourProcess {
+            get {
+                return ResourceManager.GetString("FourColourProcess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Full Colour Process.
+        /// </summary>
+        public static string FullColourProcess {
+            get {
+                return ResourceManager.GetString("FullColourProcess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hot Stamping.
+        /// </summary>
+        public static string HotStamping {
+            get {
+                return ResourceManager.GetString("HotStamping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lithography.
+        /// </summary>
+        public static string Lithography {
+            get {
+                return ResourceManager.GetString("Lithography", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Offset.
+        /// </summary>
+        public static string Offset {
+            get {
+                return ResourceManager.GetString("Offset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Other Decorating Method.
+        /// </summary>
+        public static string OtherDecoratingMethod {
+            get {
+                return ResourceManager.GetString("OtherDecoratingMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Other Decorating Method Name.
+        /// </summary>
+        public static string OtherDecoratingMethodName {
+            get {
+                return ResourceManager.GetString("OtherDecoratingMethodName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pad Print.
+        /// </summary>
+        public static string PadPrint {
+            get {
+                return ResourceManager.GetString("PadPrint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string Save {
@@ -228,6 +363,15 @@ namespace asi.asicentral.web {
         public static string SGRMaintenanceLink {
             get {
                 return ResourceManager.GetString("SGRMaintenanceLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SilkScreen.
+        /// </summary>
+        public static string SilkScreen {
+            get {
+                return ResourceManager.GetString("SilkScreen", resourceCulture);
             }
         }
         
@@ -511,6 +655,15 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sublimination.
+        /// </summary>
+        public static string Sublimination {
+            get {
+                return ResourceManager.GetString("Sublimination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company Contacts.
         /// </summary>
         public static string SupplierAppCompanyContacts {
@@ -615,6 +768,15 @@ namespace asi.asicentral.web {
         public static string TitleListCompanies {
             get {
                 return ResourceManager.GetString("TitleListCompanies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transfer.
+        /// </summary>
+        public static string Transfer {
+            get {
+                return ResourceManager.GetString("Transfer", resourceCulture);
             }
         }
     }

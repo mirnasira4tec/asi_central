@@ -556,6 +556,15 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter a year between 1700 and 2050..
+        /// </summary>
+        public static string FieldYearRange {
+            get {
+                return ResourceManager.GetString("FieldYearRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to First Name.
         /// </summary>
         public static string FirstName {

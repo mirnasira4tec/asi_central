@@ -118,7 +118,7 @@
                 <fieldset><legend><small>Contacts</small></legend>
                 @Html.HiddenFor(m => Model.Contacts[i].Id)
                 @Html.HiddenFor(m => Model.Contacts[i].AppplicationId)                                   
-                <input type="radio" id="@Html.IdFor(m => Model.Contacts[i].IsPrimary)" name="isPrimaryGroup" value="true" checked="" />
+                @Html.CheckBoxFor(m => Model.Contacts[i].IsPrimary, new { rel="isprimary" })
                 @Html.LabelFor(m => Model.Contacts[i].Name) @Html.EditorFor(m => Model.Contacts[i].Name) @Html.ValidationMessageFor(m => Model.Contacts[i].Name)
                 @Html.LabelFor(m => Model.Contacts[i].Title) @Html.EditorFor(m => Model.Contacts[i].Title) @Html.ValidationMessageFor(m => Model.Contacts[i].Title)
                 @Html.LabelFor(m => Model.Contacts[i].Email) @Html.EditorFor(m => Model.Contacts[i].Email) @Html.ValidationMessageFor(m => Model.Contacts[i].Email)
@@ -137,7 +137,7 @@
         <fieldset><legend><small>Order Status</small></legend>
         <div class="well">@Model.OrderStatus<br /></div>
         @Html.Label("Timms ID") @Html.EditorFor(m => m.ExternalReference) <br /> 
-        <small><span id="timmsErrorMessage" class="text-error" data-type="errormessage"></span></small> <br />
+        <span id="timmsErrorMessage" class="field-validation-error" data-type="errormessage"></span><br />
         @if (Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
         {
         <input class="command" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
@@ -165,18 +165,25 @@
             if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
                 //make sure we have Timms value
                 if (!$('#ExternalReference').val()) {
-                    $("#timmsErrorMessage").text("You need to pass a TIMMS reference to approve the order");
+                    asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
+                    $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                    $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
                     e.preventDefault();
                 }
                 else {
                     var isnum = /^\d+$/.test($('#ExternalReference').val());
                     if (!isnum) {
-                        $("#timmsErrorMessage").text("TIMMS reference must contain only numbers");
+                        asi.modal.confirm('Error', 'TIMMS ID must contain only numbers.', null, "#hide", "Close");
+                        $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                        $("#timmsErrorMessage").text("TIMMS ID must contain only numbers.");
                         e.preventDefault();
                     }
                 }
             }
         });
-
+        $('[rel*="isprimary"]').change(function () {
+            $('[rel*="isprimary"]').attr("checked", false);
+            this.checked = true;
+        });
     </script>
 }
