@@ -8,6 +8,7 @@ namespace asi.asicentral.WebApplication.Tests.Model.store
     [TestClass]
     public class SupplierMembershipApplicationTest
     {
+        // TODO: move this to service test solution
         [TestMethod]
         public void CopyTo()
         {
@@ -38,8 +39,7 @@ namespace asi.asicentral.WebApplication.Tests.Model.store
 
             supplierApplication.CopyTo(target);
             Assert.AreEqual(supplierApplication.Contacts[0].Name, target.Contacts[0].Name);
-
-
+            
             // copy to a target that already has a list of contacts but missing one.
             // The target's existing contact should be updated, and the missing ones should be added.
         }
