@@ -69,6 +69,7 @@ namespace asi.asicentral.model.store
         public string ApplicantName { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "ApplicantEmail")]
+        [DataType(DataType.EmailAddress)]
         public string ApplicantEmail { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "TrueAnswers")]
