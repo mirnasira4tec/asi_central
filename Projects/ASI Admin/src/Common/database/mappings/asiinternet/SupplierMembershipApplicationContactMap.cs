@@ -18,7 +18,7 @@ namespace asi.asicentral.database.mappings.asiinternet
 
             this.Property(t => t.Name)
                 .HasColumnName("SAPP_ContactName")
-                .HasMaxLength(50);
+                .HasMaxLength(200);
 
             this.Property(t => t.Title)
                 .HasColumnName("SAPP_ContactTitle")
