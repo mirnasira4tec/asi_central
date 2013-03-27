@@ -71,5 +71,12 @@ asi.util = asi.util || {};
     };
 }(asi.util, jQuery));
 
+//Trim does not work in older version of IE
+if (typeof String.prototype.trim !== 'function') {
+    String.prototype.trim = function () {
+        return this.replace(/^\s+|\s+$/g, '');
+    }
+}
+
 //Enabling tooltip by default
 $("[rel='tooltip']").tooltip();
