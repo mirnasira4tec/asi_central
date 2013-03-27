@@ -61,7 +61,11 @@ namespace asi.asicentral.web.Controllers.Store
                     application.PrimaryBusinessRevenue = PrimaryBusinessRevenue;
                     application.PrimaryBusinessRevenueId = PrimaryBusinessRevenue.Id;
                 }
-                
+                else
+                {
+                    application.PrimaryBusinessRevenue = null;
+                    application.PrimaryBusinessRevenueId = null;
+                }
                 application.CopyTo(distributorApplication);
 
                 ProcessCommand(StoreService, FulfilmentService, order, distributorApplication, application.ActionName);
