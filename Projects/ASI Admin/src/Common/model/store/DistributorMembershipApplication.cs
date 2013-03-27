@@ -105,7 +105,7 @@ namespace asi.asicentral.model.store
         public virtual ICollection<DistributorAccountType> AccountTypes { get; set; }
         public virtual ICollection<DistributorProductLine> ProductLines { get; set; }
 
-        public void CopyTo(DistributorMembershipApplication target)
+        private void SyncContactsWith(DistributorMembershipApplication target)
         {
             //sync the contacts
             if (target.Contacts == null || target.Contacts.Count == 0) target.Contacts = Contacts;
@@ -148,7 +148,10 @@ namespace asi.asicentral.model.store
                     if (originalContact == null) target.Contacts.Remove(targetContact);
                 }
             }
+        }
 
+        private void SyncAccountTypesWith(DistributorMembershipApplication target)
+        {
             // sync the account types
             if (target.AccountTypes == null || target.AccountTypes.Count == 0) target.AccountTypes = AccountTypes;
             else
@@ -183,9 +186,53 @@ namespace asi.asicentral.model.store
                     if (originalAccountType == null) target.AccountTypes.Remove(targetAccountType);
                 }
             }
+        }
 
+        private void SyncProductLinesWith(DistributorMembershipApplication target)
+        {
             // sync the product lines
+            if (target.ProductLines == null || target.ProductLines.Count == 0) target.ProductLines = ProductLines;
+            else
+            {
+                for (int i = ProductLines.Count - 1; i >= 0; i--)
+                {
+                    DistributorProductLine originalProductLine = ProductLines.ElementAt(i);
+                    DistributorProductLine targetProductLine = target.ProductLines.Where(productLine => productLine.Id == originalProductLine.Id).SingleOrDefault();
+                    if (targetProductLine != null)
+                    {
+                        // update existing
+                        targetProductLine.Deleted = originalProductLine.Deleted;
+                        targetProductLine.Description = originalProductLine.Description;
+                        targetProductLine.MemberTypeRole = originalProductLine.MemberTypeRole;
+                        targetProductLine.SubCode = originalProductLine.SubCode;
+                    }
+                    else
+                    {
+                        target.ProductLines.Add(new DistributorProductLine()
+                        {
+                            Deleted = targetProductLine.Deleted,
+                            Description = targetProductLine.Description,
+                            MemberTypeRole = targetProductLine.MemberTypeRole,
+                            SubCode = targetProductLine.SubCode
+                        });
+                    }
+                }
+                for (int i = target.ProductLines.Count - 1; i >= 0; i--)
+                {
+                    DistributorProductLine targetProductLine = target.ProductLines.ElementAt(i);
+                    DistributorProductLine originalProductLine = ProductLines.Where(productLine => productLine.Id == targetProductLine.Id).SingleOrDefault();
+                    if (originalProductLine == null) target.ProductLines.Remove(targetProductLine);
+                }
+            }
+        }
 
+        public void CopyTo(DistributorMembershipApplication target)
+        {
+
+            // sync the collections
+            SyncContactsWith(target);
+            SyncAccountTypesWith(target);
+            SyncProductLinesWith(target);
 
             target.PrimaryBusinessRevenue = PrimaryBusinessRevenue;
 
