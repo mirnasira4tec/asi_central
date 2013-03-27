@@ -54,7 +54,14 @@ namespace asi.asicentral.web.Controllers.Store
                 //view does not contain some of the collections, copy from the ones in the database
                 application.AccountTypes = distributorApplication.AccountTypes;
                 application.ProductLines = distributorApplication.ProductLines;
-                application.PrimaryBusinessRevenue = StoreService.GetAll<DistributorBusinessRevenue>(false).Where(revenue => revenue.Name == application.BuisnessRevenue).SingleOrDefault();
+                
+                DistributorBusinessRevenue PrimaryBusinessRevenue = StoreService.GetAll<DistributorBusinessRevenue>(false).Where(revenue => revenue.Name == application.BuisnessRevenue).SingleOrDefault();
+                if (PrimaryBusinessRevenue != null)
+                {
+                    application.PrimaryBusinessRevenue = PrimaryBusinessRevenue;
+                    application.PrimaryBusinessRevenueId = PrimaryBusinessRevenue.Id;
+                }
+                
                 application.CopyTo(distributorApplication);
 
                 ProcessCommand(StoreService, FulfilmentService, order, distributorApplication, application.ActionName);

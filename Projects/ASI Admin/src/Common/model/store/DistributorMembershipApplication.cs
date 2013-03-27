@@ -234,8 +234,6 @@ namespace asi.asicentral.model.store
             SyncAccountTypesWith(target);
             SyncProductLinesWith(target);
 
-            target.PrimaryBusinessRevenue = PrimaryBusinessRevenue;
-
             target.AgreeReceivePromotionalProducts = AgreeReceivePromotionalProducts;
             target.AgreeTermsAndConditions = AgreeTermsAndConditions;
             target.AnnualSalesVolume = AnnualSalesVolume;
