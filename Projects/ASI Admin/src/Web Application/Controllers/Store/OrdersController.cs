@@ -110,31 +110,36 @@ namespace asi.asicentral.web.Controllers.Store
 
             orderStatisticsData.Data = ordersQuery
                 .GroupBy(order => new { order.Campaign, order.CompletedStep })
-                .Select(grouped => new GroupedData() { Campaign = grouped.Key.Campaign, CompletedStep = SqlFunctions.StringConvert((double)grouped.Key.CompletedStep), Count = grouped.Count() })
+                .Select(grouped => new GroupedData() { 
+                    Campaign = grouped.Key.Campaign, 
+                    CompletedStep = grouped.Key.CompletedStep, 
+                    StepLabel = SqlFunctions.StringConvert((double)grouped.Key.CompletedStep), 
+                    Count = grouped.Count(), 
+                    Amount = grouped.Sum(order => order.CreditCard.TotalAmount)})
                 .OrderBy(data => new { data.Campaign, data.CompletedStep })
                 .ToList();
             //change completed steps with more meaningful title
             foreach (GroupedData data in orderStatisticsData.Data)
             {
-                switch (data.CompletedStep.Trim())
+                switch (data.CompletedStep)
                 {
-                    case "0":
-                        data.CompletedStep = "Clicked on the link";
+                    case 0:
+                        data.StepLabel = "Clicked on the link";
                         break;
-                    case "1":
-                        data.CompletedStep = "Selected a product";
+                    case 1:
+                        data.StepLabel = "Selected a product";
                         break;
-                    case "2":
-                        data.CompletedStep = "Entered Company information";
+                    case 2:
+                        data.StepLabel = "Entered Company information";
                         break;
-                    case "3":
-                        data.CompletedStep = "Entered billing/shipping information";
+                    case 3:
+                        data.StepLabel = "Entered billing/shipping information";
                         break;
-                    case "4":
-                        data.CompletedStep = "Confirmed the order";
+                    case 4:
+                        data.StepLabel = "Confirmed the order";
                         break;
-                    case "5":
-                        data.CompletedStep = "Entered optional information";
+                    case 5:
+                        data.StepLabel = "Entered optional information";
                         break;
                 }
             }

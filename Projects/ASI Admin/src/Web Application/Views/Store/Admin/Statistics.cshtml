@@ -31,6 +31,7 @@
         string oldGroupName = string.Empty;
         string currentGroupName = oldGroupName;
         int count = 0;
+        decimal? total = 0;
         foreach (asi.asicentral.web.model.store.order.GroupedData data in Model.Data)
         {
             currentGroupName = string.IsNullOrEmpty(data.Campaign) ? "(Unknown)" : data.Campaign;
@@ -41,9 +42,13 @@
                     <div class="span1">&nbsp;</div>
                     <div class="span4"><h3>Total</h3></div>
                     <div class="span1"><h3>@count</h3></div>
-                    <div class="span6">&nbsp;</div>
+                    <div class="span1"><h3>@total.Value.ToString("C")</h3></div>
+                    <div class="span1">&nbsp;</div>
+                    <div class="span3"><h3>(@((total.Value * 12).ToString("C")))</h3></div>
+                    <div class="span1">&nbsp;</div>
                 </div>
                 count = 0;
+                total = 0;
             }
             if (currentGroupName != oldGroupName)
             {
@@ -54,18 +59,26 @@
                 oldGroupName = currentGroupName;
             }
             count += data.Count;
+            if (data.CompletedStep > 3 && data.Amount.HasValue)
+            {
+                total += data.Amount;
+            }
             <div class="row-fluid">
                 <div class="span1">&nbsp;</div>
-                <div class="span4">@data.CompletedStep</div>
+                <div class="span4">@data.StepLabel</div>
                 <div class="span1">@data.Count</div>
-                <div class="span6">&nbsp;</div>
+                <div class="span1">@(data.CompletedStep > 3 ? data.Amount.Value.ToString("C") : "")</div>
+                <div class="span5">&nbsp;</div>
             </div>
         }
         <div class="row-fluid">
             <div class="span1">&nbsp;</div>
             <div class="span4"><h3>Total</h3></div>
             <div class="span1"><h3>@count</h3></div>
-            <div class="span6">&nbsp;</div>
+            <div class="span1"><h3>@total.Value.ToString("C")</h3></div>
+            <div class="span1">&nbsp;</div>
+            <div class="span3"><h3>(@((total.Value * 12).ToString("C")))</h3></div>
+            <div class="span1">&nbsp;</div>
         </div>
     }
 @section scripts {

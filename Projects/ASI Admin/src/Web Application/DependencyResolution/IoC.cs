@@ -65,10 +65,15 @@ namespace asi.asicentral.web.DependencyResolution
                         .EnrichWith(timssService => proxyGenerator.CreateClassProxyWithTarget(timssService.GetType(), timssService, new object[] { null }, new IInterceptor[] { new LogInterceptor(timssService.GetType()) }))
                         .Ctor<IObjectService>();
 
+                    x.For<ICreditCardService>()
+                        .Use<asi.asicentral.services.CreditCardService>()
+                        .EnrichWith(cardService => proxyGenerator.CreateClassProxyWithTarget(cardService.GetType(), cardService, new IInterceptor[] { new LogInterceptor(cardService.GetType()) }));
+
                     x.SetAllProperties(instance => instance.OfType<IObjectService>());
                     x.SetAllProperties(instance => instance.OfType<IStoreService>());
                     x.SetAllProperties(instance => instance.OfType<IEncryptionService>());
                     x.SetAllProperties(instance => instance.OfType<IFulfilmentService>());
+                    x.SetAllProperties(instance => instance.OfType<ICreditCardService>());
 
                     x.For<IController>()
                         .EnrichAllWith(controller => proxyGenerator.CreateInterfaceProxyWithTarget(controller, new IInterceptor[] { new LogInterceptor(controller.GetType()) }));
