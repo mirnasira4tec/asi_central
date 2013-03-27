@@ -49,12 +49,12 @@
     @Html.LabelFor(m => m.AnnualSalesVolume) @Html.EditorFor(m => m.AnnualSalesVolume) @Html.ValidationMessageFor(m=>m.AnnualSalesVolume)   
     </fieldset> 
     <fieldset><legend><small>Primary business revenue</small></legend>
-    <label class="radio">@Html.RadioButtonFor(m => m.PrimaryBusinessRevenue_modelview, DistributorBusinessRevenue.BUSINESSREVENUE_PRINTING, Model.Printing ? new { @checked = "checked"} : null) @DistributorBusinessRevenue.BUSINESSREVENUE_PRINTING </label>
-    <label class="radio">@Html.RadioButtonFor(m => m.PrimaryBusinessRevenue_modelview, DistributorBusinessRevenue.BUSINESSREVENUE_PROMOTIONALPRODUCTS, Model.PromotionalProducts ? new { @checked = "checked"} : null) @DistributorBusinessRevenue.BUSINESSREVENUE_PROMOTIONALPRODUCTS </label>
-    <label class="radio">@Html.RadioButtonFor(m => m.PrimaryBusinessRevenue_modelview, DistributorBusinessRevenue.BUSINESSREVENUE_SIGNS, Model.Signs ? new { @checked = "checked"} : null) @DistributorBusinessRevenue.BUSINESSREVENUE_SIGNS</label>
-    <label class="radio">@Html.RadioButtonFor(m => m.PrimaryBusinessRevenue_modelview, DistributorBusinessRevenue.BUSINESSREVENUE_TROPHYAWARDS, Model.TrophyAwards ? new { @checked = "checked"} : null) @DistributorBusinessRevenue.BUSINESSREVENUE_TROPHYAWARDS</label>
-    <label class="radio">@Html.RadioButtonFor(m => m.PrimaryBusinessRevenue_modelview, DistributorBusinessRevenue.BUSINESSREVENUE_SCREENPRINTING, Model.ScreenPrinting ? new { @checked = "checked"} : null) @DistributorBusinessRevenue.BUSINESSREVENUE_SCREENPRINTING</label>
-    <label class="radio">@Html.RadioButtonFor(m => m.PrimaryBusinessRevenue_modelview, "Other", Model.Other ? new { @checked = "checked"} : null) @Html.LabelFor(m=>m.OtherBusinessRevenue) @Html.EditorFor(m => m.OtherBusinessRevenue) @Html.ValidationMessageFor(m=>m.OtherBusinessRevenue) </label>
+    <label class="radio">@Html.RadioButtonFor(m => m.BuisnessRevenue, DistributorBusinessRevenue.BUSINESSREVENUE_PRINTING, Model.Printing ? new { @checked = "checked"} : null) @DistributorBusinessRevenue.BUSINESSREVENUE_PRINTING </label>
+    <label class="radio">@Html.RadioButtonFor(m => m.BuisnessRevenue, DistributorBusinessRevenue.BUSINESSREVENUE_PROMOTIONALPRODUCTS, Model.PromotionalProducts ? new { @checked = "checked"} : null) @DistributorBusinessRevenue.BUSINESSREVENUE_PROMOTIONALPRODUCTS </label>
+    <label class="radio">@Html.RadioButtonFor(m => m.BuisnessRevenue, DistributorBusinessRevenue.BUSINESSREVENUE_SIGNS, Model.Signs ? new { @checked = "checked"} : null) @DistributorBusinessRevenue.BUSINESSREVENUE_SIGNS</label>
+    <label class="radio">@Html.RadioButtonFor(m => m.BuisnessRevenue, DistributorBusinessRevenue.BUSINESSREVENUE_TROPHYAWARDS, Model.TrophyAwards ? new { @checked = "checked"} : null) @DistributorBusinessRevenue.BUSINESSREVENUE_TROPHYAWARDS</label>
+    <label class="radio">@Html.RadioButtonFor(m => m.BuisnessRevenue, DistributorBusinessRevenue.BUSINESSREVENUE_SCREENPRINTING, Model.ScreenPrinting ? new { @checked = "checked"} : null) @DistributorBusinessRevenue.BUSINESSREVENUE_SCREENPRINTING</label>
+    <label class="radio">@Html.RadioButtonFor(m => m.BuisnessRevenue, "Other", Model.Other ? new { @checked = "checked"} : null) Other </label> @Html.EditorFor(m => m.OtherBusinessRevenue, Model.Other ? new { @class = "input-medium" } : new { @class = "input-medium hidden" }) @Html.ValidationMessageFor(m=>m.OtherBusinessRevenue) 
     </fieldset>
     </div>
     <div class="span4">
@@ -127,6 +127,17 @@
                         e.preventDefault();
                     }
                 }
+            }
+        });
+        $('[rel*="isprimary"]').change(function () {
+            $('[rel*="isprimary"]').attr("checked", false);
+            this.checked = true;
+        });
+        $(".radio").change(function (evt) {
+            if ($(evt.target).val() == "Other") $("#OtherBusinessRevenue").attr("class", "input-medium");
+            else {
+                $("#OtherBusinessRevenue").attr("class", "input-medium hidden");
+                $("#OtherBusinessRevenue").val("");
             }
         });
     </script>

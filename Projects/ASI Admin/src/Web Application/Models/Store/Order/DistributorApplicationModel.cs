@@ -8,7 +8,8 @@ namespace asi.asicentral.web.model.store
 {
     public class DistributorApplicationModel : DistributorMembershipApplication
     {
-        public string PrimaryBusinessRevenue_modelview { set; get; }
+        public string BuisnessRevenue { set; get; }
+
         public bool Signs { set; get; }
         public bool TrophyAwards { set; get; }
         public bool Printing { set; get; }

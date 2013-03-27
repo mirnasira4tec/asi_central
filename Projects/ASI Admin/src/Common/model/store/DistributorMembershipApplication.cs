@@ -148,7 +148,9 @@ namespace asi.asicentral.model.store
                     if (originalContact == null) target.Contacts.Remove(targetContact);
                 }
             }
-            
+
+            target.PrimaryBusinessRevenue = PrimaryBusinessRevenue;
+
             target.AgreeReceivePromotionalProducts = AgreeReceivePromotionalProducts;
             target.AgreeTermsAndConditions = AgreeTermsAndConditions;
             target.AnnualSalesVolume = AnnualSalesVolume;
