@@ -47,6 +47,8 @@ namespace asi.asicentral.web.Controllers.Store
                 if (order == null) throw new Exception("Invalid reference to an order");
                 if (distributorApplication == null) throw new Exception("Invalid reference to an application");
                 order.ExternalReference = application.ExternalReference;
+                //TODO temporary until the ui gets the contacts
+                application.Contacts = distributorApplication.Contacts;
                 //view does not contain some of the collections, copy from the ones in the database
                 application.AccountTypes = distributorApplication.AccountTypes;
                 application.ProductLines = distributorApplication.ProductLines;
