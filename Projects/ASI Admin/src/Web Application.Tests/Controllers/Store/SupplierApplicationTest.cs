@@ -25,6 +25,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
 
             Guid guid = Guid.NewGuid();
             Order order = new Order() { Id = 0, BillFirstName = "FirstName", UserId = guid };
+            order.CreditCard = new OrderCreditCard() { ExternalReference = "111" };
             Order orderRef = order;
             SupplierMembershipApplication application = new SupplierMembershipApplication() { Id = guid, UserId = guid };
             application.DecoratingTypes = new List<SupplierDecoratingType>();

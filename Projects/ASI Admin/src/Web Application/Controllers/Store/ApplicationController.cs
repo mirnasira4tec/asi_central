@@ -49,12 +49,24 @@ namespace asi.asicentral.web.Controllers.Store
                 if (order == null) throw new Exception("Invalid reference to an order");
                 if (distributorApplication == null) throw new Exception("Invalid reference to an application");
                 order.ExternalReference = application.ExternalReference;
-                //TODO temporary until the ui gets the contacts
-                application.Contacts = distributorApplication.Contacts;
+
                 //view does not contain some of the collections, copy from the ones in the database
-                application.AccountTypes = distributorApplication.AccountTypes;
-                application.ProductLines = distributorApplication.ProductLines;
+                application.SyncAccountTypesFrom(StoreService.GetAll<DistributorAccountType>().ToList());
+                application.SyncProductLinesFrom(StoreService.GetAll<DistributorProductLine>().ToList());
+                
+                DistributorBusinessRevenue PrimaryBusinessRevenue = StoreService.GetAll<DistributorBusinessRevenue>(false).Where(revenue => revenue.Name == application.BuisnessRevenue).SingleOrDefault();
+                if (PrimaryBusinessRevenue != null)
+                {
+                    application.PrimaryBusinessRevenue = PrimaryBusinessRevenue;
+                    application.PrimaryBusinessRevenueId = PrimaryBusinessRevenue.Id;
+                }
+                else
+                {
+                    application.PrimaryBusinessRevenue = null;
+                    application.PrimaryBusinessRevenueId = null;
+                }
                 application.CopyTo(distributorApplication);
+
                 ProcessCommand(StoreService, FulfilmentService, order, distributorApplication, application.ActionName);
                 StoreService.SaveChanges();
                 if (application.ActionName == ApplicationController.COMMAND_REJECT)

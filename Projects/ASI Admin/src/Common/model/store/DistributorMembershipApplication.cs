@@ -69,6 +69,7 @@ namespace asi.asicentral.model.store
         public string ApplicantName { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "ApplicantEmail")]
+        [DataType(DataType.EmailAddress)]
         public string ApplicantEmail { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "TrueAnswers")]
@@ -105,7 +106,7 @@ namespace asi.asicentral.model.store
         public virtual ICollection<DistributorAccountType> AccountTypes { get; set; }
         public virtual ICollection<DistributorProductLine> ProductLines { get; set; }
 
-        public void CopyTo(DistributorMembershipApplication target)
+        private void SyncContactsWith(DistributorMembershipApplication target)
         {
             //sync the contacts
             if (target.Contacts == null || target.Contacts.Count == 0) target.Contacts = Contacts;
@@ -148,7 +149,73 @@ namespace asi.asicentral.model.store
                     if (originalContact == null) target.Contacts.Remove(targetContact);
                 }
             }
-            
+        }
+
+        private void SyncAccountTypesWith(DistributorMembershipApplication target)
+        {
+            // sync the account types
+            if (target.AccountTypes == null || target.AccountTypes.Count == 0) target.AccountTypes = AccountTypes;
+            else
+            {
+                for (int i = AccountTypes.Count - 1; i >= 0; i--)
+                {
+                    DistributorAccountType originalAcccountType = AccountTypes.ElementAt(i);
+                    DistributorAccountType targetAccountType = target.AccountTypes.Where(theAccountType => theAccountType.Id == originalAcccountType.Id).SingleOrDefault();
+                    if (targetAccountType != null)
+                    {
+                        // update existing
+                        target.AccountTypes.Add(targetAccountType);
+                    }
+                    else
+                    {
+                        target.AccountTypes.Add(originalAcccountType);
+                    }
+                }
+                for (int i = target.AccountTypes.Count - 1; i >= 0; i--)
+                {
+                    DistributorAccountType targetAccountType = target.AccountTypes.ElementAt(i);
+                    DistributorAccountType originalAccountType = AccountTypes.Where(accountType => accountType.Id == targetAccountType.Id).SingleOrDefault();
+                    if (originalAccountType == null) target.AccountTypes.Remove(targetAccountType);
+                }
+            }
+        }
+
+        private void SyncProductLinesWith(DistributorMembershipApplication target)
+        {
+            // sync the product lines
+            if (target.ProductLines == null || target.ProductLines.Count == 0) target.ProductLines = ProductLines;
+            else
+            {
+                for (int i = ProductLines.Count - 1; i >= 0; i--)
+                {
+                    DistributorProductLine originalProductLine = ProductLines.ElementAt(i);
+                    DistributorProductLine targetProductLine = target.ProductLines.Where(productLine => productLine.Id == originalProductLine.Id).SingleOrDefault();
+                    if (targetProductLine != null)
+                    {
+                        // update existing
+                        target.ProductLines.Add(targetProductLine);
+                    }
+                    else
+                    {
+                        target.ProductLines.Add(originalProductLine);
+                    }
+                }
+                for (int i = target.ProductLines.Count - 1; i >= 0; i--)
+                {
+                    DistributorProductLine targetProductLine = target.ProductLines.ElementAt(i);
+                    DistributorProductLine originalProductLine = ProductLines.Where(productLine => productLine.Id == targetProductLine.Id).SingleOrDefault();
+                    if (originalProductLine == null) target.ProductLines.Remove(targetProductLine);
+                }
+            }
+        }
+
+        public void CopyTo(DistributorMembershipApplication target)
+        {
+            // sync the collections
+            SyncContactsWith(target);
+            SyncAccountTypesWith(target);
+            SyncProductLinesWith(target);
+
             target.AgreeReceivePromotionalProducts = AgreeReceivePromotionalProducts;
             target.AgreeTermsAndConditions = AgreeTermsAndConditions;
             target.AnnualSalesVolume = AnnualSalesVolume;
@@ -158,7 +225,7 @@ namespace asi.asicentral.model.store
             target.ApplicationStatusId = ApplicationStatusId;
             target.ASIContact = ASIContact;
             target.Company = Company;
-            target.Contacts = Contacts;
+
             target.CorporateOfficer = CorporateOfficer;
             target.Custom1 = Custom1;
             target.Custom2 = Custom2;
