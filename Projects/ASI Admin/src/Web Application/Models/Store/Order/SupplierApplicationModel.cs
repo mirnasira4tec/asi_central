@@ -10,11 +10,6 @@ namespace asi.asicentral.web.model.store
 {
     public class SupplierApplicationModel : SupplierMembershipApplication
     {
-        /// <summary>
-        /// Required for MVC to rebuild the model
-        /// </summary>
-        /// 
-
         [Display(ResourceType = typeof(Resource), Name = "Etching")]
         public bool Etching { set; get; }
 
@@ -66,6 +61,10 @@ namespace asi.asicentral.web.model.store
         [Display(ResourceType = typeof(Resource), Name = "OtherDecoratingMethodName")]
         public string OtherDecoratingMethodName { set; get; }
 
+        /// <summary>
+        /// Required for MVC to rebuild the model
+        /// </summary>
+        /// 
         public SupplierApplicationModel()
         {
             //nothing to do

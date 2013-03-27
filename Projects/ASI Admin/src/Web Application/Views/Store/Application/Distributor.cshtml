@@ -15,66 +15,74 @@
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.Id) @Html.HiddenFor(m => m.UserId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
     <fieldset><legend><small>Company Information</small></legend>
-    @Html.LabelFor(m => m.Company) @Html.EditorFor(m => m.Company)
-    @Html.LabelFor(m => m.Address1) @Html.EditorFor(m => m.Address1)
-    @Html.LabelFor(m => m.Address2) @Html.EditorFor(m => m.Address2)
-    @Html.LabelFor(m => m.City) @Html.EditorFor(m => m.City)
-    @Html.LabelFor(m => m.State) @Html.EditorFor(m => m.State)
-    @Html.LabelFor(m => m.Zip) @Html.EditorFor(m => m.Zip)
+    @Html.LabelFor(m => m.Company) @Html.EditorFor(m => m.Company) @Html.ValidationMessageFor(m => m.Company)
+    @Html.LabelFor(m => m.Address1) @Html.EditorFor(m => m.Address1) @Html.ValidationMessageFor(m => m.Address1)
+    @Html.LabelFor(m => m.Address2) @Html.EditorFor(m => m.Address2) @Html.ValidationMessageFor(m => m.Address2)
+    @Html.LabelFor(m => m.City) @Html.EditorFor(m => m.City) @Html.ValidationMessageFor(m => m.City)
+    @Html.LabelFor(m => m.State) @Html.EditorFor(m => m.State) @Html.ValidationMessageFor(m => m.State)
+    @Html.LabelFor(m => m.Zip) @Html.EditorFor(m => m.Zip) @Html.ValidationMessageFor(m => m.Zip)
     </fieldset>
+    @if(Model.HasBillAddress){
     <fieldset><legend><small>Billing Information</small></legend>
-    @Html.LabelFor(m => m.BillingAddress1) @Html.EditorFor(m => m.BillingAddress1)
-    @Html.LabelFor(m => m.BillingAddress2) @Html.EditorFor(m => m.BillingAddress2)
-    @Html.LabelFor(m => m.BillingCity) @Html.EditorFor(m => m.BillingCity)
-    @Html.LabelFor(m => m.BillingState) @Html.EditorFor(m => m.BillingState)
-    @Html.LabelFor(m => m.BillingZip) @Html.EditorFor(m => m.BillingZip)
-    @Html.LabelFor(m => m.BillingPhone) @Html.EditorFor(m => m.BillingPhone)
-    @Html.LabelFor(m => m.BillingFax) @Html.EditorFor(m => m.BillingFax)
-    @Html.LabelFor(m => m.BillingEmail) @Html.EditorFor(m => m.BillingEmail)
-    @Html.LabelFor(m => m.BillingWebUrl) @Html.EditorFor(m => m.BillingWebUrl)
-    </fieldset>
+    @Html.LabelFor(m => m.BillingAddress1) @Html.EditorFor(m => m.BillingAddress1) @Html.ValidationMessageFor(m=>m.BillingAddress1)
+    @Html.LabelFor(m => m.BillingAddress2) @Html.EditorFor(m => m.BillingAddress2) @Html.ValidationMessageFor(m=>m.BillingAddress2)
+    @Html.LabelFor(m => m.BillingCity) @Html.EditorFor(m => m.BillingCity) @Html.ValidationMessageFor(m=>m.BillingCity)
+    @Html.LabelFor(m => m.BillingState) @Html.EditorFor(m => m.BillingState) @Html.ValidationMessageFor(m=>m.BillingState)
+    @Html.LabelFor(m => m.BillingZip) @Html.EditorFor(m => m.BillingZip) @Html.ValidationMessageFor(m=>m.BillingZip)
+    @Html.LabelFor(m => m.BillingPhone) @Html.EditorFor(m => m.BillingPhone) @Html.ValidationMessageFor(m=>m.BillingPhone)
+    @Html.LabelFor(m => m.BillingFax) @Html.EditorFor(m => m.BillingFax) @Html.ValidationMessageFor(m=>m.BillingFax)
+    @Html.LabelFor(m => m.BillingEmail) @Html.EditorFor(m => m.BillingEmail) @Html.ValidationMessageFor(m=>m.BillingEmail)
+    @Html.LabelFor(m => m.BillingWebUrl) @Html.EditorFor(m => m.BillingWebUrl) @Html.ValidationMessageFor(m=>m.BillingWebUrl)
+    </fieldset>} 
+    @if(Model.HasShipAddress){
     <fieldset><legend><small>Shipping Information</small></legend>
-    @Html.LabelFor(m => m.ShippingStreet1) @Html.EditorFor(m => m.ShippingStreet1)
-    @Html.LabelFor(m => m.ShippingStreet2) @Html.EditorFor(m => m.ShippingStreet2)
-    @Html.LabelFor(m => m.ShippingCity) @Html.EditorFor(m => m.ShippingCity)
-    @Html.LabelFor(m => m.ShippingState) @Html.EditorFor(m => m.ShippingState)
-    @Html.LabelFor(m => m.ShippingZip) @Html.EditorFor(m => m.ShippingZip)
-    </fieldset>
+    @Html.LabelFor(m => m.ShippingStreet1) @Html.EditorFor(m => m.ShippingStreet1) @Html.ValidationMessageFor(m=>m.ShippingStreet1)
+    @Html.LabelFor(m => m.ShippingStreet2) @Html.EditorFor(m => m.ShippingStreet2) @Html.ValidationMessageFor(m=>m.ShippingStreet2)
+    @Html.LabelFor(m => m.ShippingCity) @Html.EditorFor(m => m.ShippingCity) @Html.ValidationMessageFor(m=>m.ShippingCity)
+    @Html.LabelFor(m => m.ShippingState) @Html.EditorFor(m => m.ShippingState) @Html.ValidationMessageFor(m=>m.ShippingState)
+    @Html.LabelFor(m => m.ShippingZip) @Html.EditorFor(m => m.ShippingZip) @Html.ValidationMessageFor(m=>m.ShippingZip)
+    </fieldset>}
     <fieldset><legend><small>Form Data</small></legend>
+    @Html.LabelFor(m => m.NumberOfEmployee) @Html.EditorFor(m => m.NumberOfEmployee) @Html.ValidationMessageFor(m=>m.NumberOfEmployee)
+    @Html.LabelFor(m => m.NumberOfSalesEmployee) @Html.EditorFor(m => m.NumberOfSalesEmployee) @Html.ValidationMessageFor(m=>m.NumberOfSalesEmployee)
+    @Html.LabelFor(m => m.AnnualSalesVolumeASP) @Html.EditorFor(m => m.AnnualSalesVolumeASP) @Html.ValidationMessageFor(m=>m.AnnualSalesVolumeASP)
+    @Html.LabelFor(m => m.AnnualSalesVolume) @Html.EditorFor(m => m.AnnualSalesVolume) @Html.ValidationMessageFor(m=>m.AnnualSalesVolume)   
+    </fieldset> 
+    <fieldset><legend><small>Primary business revenue</small></legend>
+    <label class="radio">@Html.RadioButtonFor(m => m.PrimaryBusinessRevenue_modelview, DistributorBusinessRevenue.BUSINESSREVENUE_PRINTING, Model.Printing ? new { @checked = "checked"} : null) @DistributorBusinessRevenue.BUSINESSREVENUE_PRINTING </label>
+    <label class="radio">@Html.RadioButtonFor(m => m.PrimaryBusinessRevenue_modelview, DistributorBusinessRevenue.BUSINESSREVENUE_PROMOTIONALPRODUCTS, Model.PromotionalProducts ? new { @checked = "checked"} : null) @DistributorBusinessRevenue.BUSINESSREVENUE_PROMOTIONALPRODUCTS </label>
+    <label class="radio">@Html.RadioButtonFor(m => m.PrimaryBusinessRevenue_modelview, DistributorBusinessRevenue.BUSINESSREVENUE_SIGNS, Model.Signs ? new { @checked = "checked"} : null) @DistributorBusinessRevenue.BUSINESSREVENUE_SIGNS</label>
+    <label class="radio">@Html.RadioButtonFor(m => m.PrimaryBusinessRevenue_modelview, DistributorBusinessRevenue.BUSINESSREVENUE_TROPHYAWARDS, Model.TrophyAwards ? new { @checked = "checked"} : null) @DistributorBusinessRevenue.BUSINESSREVENUE_TROPHYAWARDS</label>
+    <label class="radio">@Html.RadioButtonFor(m => m.PrimaryBusinessRevenue_modelview, DistributorBusinessRevenue.BUSINESSREVENUE_SCREENPRINTING, Model.ScreenPrinting ? new { @checked = "checked"} : null) @DistributorBusinessRevenue.BUSINESSREVENUE_SCREENPRINTING</label>
+    <label class="radio">@Html.RadioButtonFor(m => m.PrimaryBusinessRevenue_modelview, "Other", Model.Other ? new { @checked = "checked"} : null) @Html.LabelFor(m=>m.OtherBusinessRevenue) @Html.EditorFor(m => m.OtherBusinessRevenue) @Html.ValidationMessageFor(m=>m.OtherBusinessRevenue) </label>
     </fieldset>
-    @Html.LabelFor(m => m.NumberOfEmployee) @Html.EditorFor(m => m.NumberOfEmployee)
-    @Html.LabelFor(m => m.NumberOfSalesEmployee) @Html.EditorFor(m => m.NumberOfSalesEmployee)
-    @Html.LabelFor(m => m.AnnualSalesVolume) @Html.EditorFor(m => m.AnnualSalesVolume)
-    @Html.LabelFor(m => m.ASIContact) @Html.EditorFor(m => m.ASIContact)
     </div>
-
     <div class="span4">
-    @if (Model.Contacts != null && Model.Contacts.Count > 0)
-    {
-        <fieldset><legend><small>Primary Contact</small></legend>
-        @Html.LabelFor(m => m.Contacts.First().Name) @Html.EditorFor(m => m.Contacts.First().Name)
-        @Html.LabelFor(m => m.Contacts.First().Title) @Html.EditorFor(m => m.Contacts.First().Title)
-        @Html.LabelFor(m => m.Contacts.First().Email) @Html.EditorFor(m => m.Contacts.First().Email)
-        @Html.LabelFor(m => m.Contacts.First().Phone) @Html.EditorFor(m => m.Contacts.First().Phone)
-        @Html.LabelFor(m => m.Contacts.First().Fax) @Html.EditorFor(m => m.Contacts.First().Fax)
+        <fieldset><legend><small>Application: Company Contact Person</small></legend>
+        @Html.LabelFor(m => m.FirstName) @Html.EditorFor(m => m.FirstName) @Html.ValidationMessageFor(m => m.FirstName)
+        @Html.LabelFor(m => m.LastName) @Html.EditorFor(m => m.LastName) @Html.ValidationMessageFor(m => m.LastName)
+        @Html.LabelFor(m => m.ApplicantEmail) @Html.EditorFor(m => m.ApplicantEmail) @Html.ValidationMessageFor(m => m.ApplicantEmail)
+        @Html.LabelFor(m => m.Phone) @Html.EditorFor(m => m.Phone) @Html.ValidationMessageFor(m => m.Phone)
         </fieldset>
-        if (Model.Contacts.Count > 1)
+        @if(Model.Contacts != null && Model.Contacts.Count > 0)
         {
-        <fieldset><legend><small>Company Contacts</small></legend>
-            @for (int i = 1; i < Model.Contacts.Count; i++)
+            for (int i = 0; i < Model.Contacts.Count; i++)
             {
-                if (Model.Contacts.ElementAt(i) != null)
-                { 
-                @Html.LabelFor(m => m.Contacts.ElementAt(i).Name) @Html.EditorFor(m => m.Contacts.ElementAt(i).Name)
-                @Html.LabelFor(m => m.Contacts.ElementAt(i).Title) @Html.EditorFor(m => m.Contacts.ElementAt(i).Title)
-                @Html.LabelFor(m => m.Contacts.ElementAt(i).Email) @Html.EditorFor(m => m.Contacts.ElementAt(i).Email)
-                @Html.LabelFor(m => m.Contacts.ElementAt(i).Phone) @Html.EditorFor(m => m.Contacts.ElementAt(i).Phone)
-                @Html.LabelFor(m => m.Contacts.ElementAt(i).Fax) @Html.EditorFor(m => m.Contacts.ElementAt(i).Fax)
+                if (Model.Contacts[i] != null)
+                {
+                <fieldset><legend><small>Contacts</small></legend>
+                @Html.HiddenFor(m => Model.Contacts[i].Id)
+                @Html.HiddenFor(m => Model.Contacts[i].AppplicationId)                                   
+                @Html.CheckBoxFor(m => Model.Contacts[i].IsPrimary, new { rel="isprimary" })
+                @Html.LabelFor(m => Model.Contacts[i].Name) @Html.EditorFor(m => Model.Contacts[i].Name) @Html.ValidationMessageFor(m => Model.Contacts[i].Name)
+                @Html.LabelFor(m => Model.Contacts[i].Title) @Html.EditorFor(m => Model.Contacts[i].Title) @Html.ValidationMessageFor(m => Model.Contacts[i].Title)
+                @Html.LabelFor(m => Model.Contacts[i].Email) @Html.EditorFor(m => Model.Contacts[i].Email) @Html.ValidationMessageFor(m => Model.Contacts[i].Email)
+                @Html.LabelFor(m => Model.Contacts[i].Phone) @Html.EditorFor(m => Model.Contacts[i].Phone) @Html.ValidationMessageFor(m => Model.Contacts[i].Phone)
+                @Html.LabelFor(m => Model.Contacts[i].Fax) @Html.EditorFor(m => Model.Contacts[i].Fax) @Html.ValidationMessageFor(m => Model.Contacts[i].Fax)
+                </fieldset>
                 }
             }
-        </fieldset> 
         }
-    }
     <fieldset><legend><small>Terms and Conditions</small></legend>
     
     </fieldset>
@@ -101,10 +109,6 @@
 </div>
 }
 
-<h3>@Resource.DistributorAppTypesOfAccount</h3>
-<h3>@Resource.DistributorAppProductLines</h3>
-<h3>@Resource.DistributorAgreements</h3>
-
 @section Scripts {
     <script src="/Scripts/asi.js"></script>
     <script>
@@ -113,13 +117,13 @@
             if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
                 //make sure we have Timms value
                 if (!$('#ExternalReference').val()) {
-                    alert('You need to pass a TIMMS reference to approve the order');
+                    asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
                     e.preventDefault();
                 }
                 else {
                     var isnum = /^\d+$/.test($('#ExternalReference').val());
                     if (!isnum) {
-                        alert("TIMMS reference must contain only numbers");
+                        asi.modal.confirm('Error', 'TIMMS ID must contain only numbers.', null, "#hide", "Close");
                         e.preventDefault();
                     }
                 }
