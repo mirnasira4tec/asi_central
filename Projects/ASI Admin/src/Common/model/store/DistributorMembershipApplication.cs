@@ -149,6 +149,44 @@ namespace asi.asicentral.model.store
                 }
             }
 
+            // sync the account types
+            if (target.AccountTypes == null || target.AccountTypes.Count == 0) target.AccountTypes = AccountTypes;
+            else
+            {
+                for (int i = AccountTypes.Count - 1; i >= 0; i--)
+                {
+                    DistributorAccountType originalAcccountType = AccountTypes.ElementAt(i);
+                    DistributorAccountType targetAccountType = target.AccountTypes.Where(theAccountType => theAccountType.Id == originalAcccountType.Id).SingleOrDefault();
+                    if (targetAccountType != null)
+                    {
+                        // update existing
+                        targetAccountType.Deleted = originalAcccountType.Deleted;
+                        targetAccountType.Description = originalAcccountType.Description;
+                        targetAccountType.MemberTypeRole = originalAcccountType.MemberTypeRole;
+                        targetAccountType.SubCode = originalAcccountType.SubCode;
+                    }
+                    else
+                    {
+                        target.AccountTypes.Add(new DistributorAccountType()
+                        {
+                            Deleted = targetAccountType.Deleted,
+                            Description = targetAccountType.Description,
+                            MemberTypeRole = targetAccountType.MemberTypeRole,
+                            SubCode = targetAccountType.SubCode
+                        });
+                    }
+                }
+                for (int i = target.AccountTypes.Count - 1; i >= 0; i--)
+                {
+                    DistributorAccountType targetAccountType = target.AccountTypes.ElementAt(i);
+                    DistributorAccountType originalAccountType = AccountTypes.Where(accountType => accountType.Id == targetAccountType.Id).SingleOrDefault();
+                    if (originalAccountType == null) target.AccountTypes.Remove(targetAccountType);
+                }
+            }
+
+            // sync the product lines
+
+
             target.PrimaryBusinessRevenue = PrimaryBusinessRevenue;
 
             target.AgreeReceivePromotionalProducts = AgreeReceivePromotionalProducts;
