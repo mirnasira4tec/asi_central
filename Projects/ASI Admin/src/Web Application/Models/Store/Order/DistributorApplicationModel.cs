@@ -89,6 +89,8 @@ namespace asi.asicentral.web.model.store
         {
             application.CopyTo(this);
             GetPrimaryBusinessRevenue();
+            GetProductLines();
+            GetAccountTypes();
             ActionName = "Approve";
             ExternalReference = order.ExternalReference;
             OrderId = order.Id;
@@ -103,6 +105,163 @@ namespace asi.asicentral.web.model.store
             ScreenPrinting = HasPrimaryBuisnessRevenue(DistributorBusinessRevenue.BUSINESSREVENUE_SCREENPRINTING);
             PromotionalProducts = HasPrimaryBuisnessRevenue(DistributorBusinessRevenue.BUSINESSREVENUE_PROMOTIONALPRODUCTS);
             Other = string.IsNullOrEmpty(this.OtherBusinessRevenue) ? false : true;
+        }
+
+        private void AddType(bool selected, String codeName, IList<DistributorAccountType> accountTypes)
+        {
+            if (AccountTypes == null) AccountTypes = new List<DistributorAccountType>();
+            DistributorAccountType account = accountTypes.Where(type => type.SubCode == codeName).SingleOrDefault();
+            if (selected && account != null) this.AccountTypes.Add(account);
+        }
+
+        private void AddProductLine(bool selected, String codeName, IList<DistributorProductLine> productLines)
+        {
+            if (ProductLines == null) ProductLines = new List<DistributorProductLine>();
+            DistributorProductLine line = productLines.Where(productline => productline.SubCode == codeName).SingleOrDefault();
+            if (selected && line != null) this.ProductLines.Add(line);
+        }
+
+        public void SyncProductLinesFrom(IList<DistributorProductLine> productLines)
+        {
+            AddProductLine(Product1, "1", productLines);
+            AddProductLine(Product2, "2", productLines);
+            AddProductLine(Product3, "3", productLines);
+            AddProductLine(Product4, "4", productLines);
+            AddProductLine(Product5, "5", productLines);
+            AddProductLine(ProductA, "A", productLines);
+            AddProductLine(ProductB, "B", productLines);
+            AddProductLine(ProductC, "C", productLines);
+            AddProductLine(ProductD, "D", productLines);
+            AddProductLine(ProductE, "E", productLines);
+            AddProductLine(ProductF, "F", productLines);
+            AddProductLine(ProductG, "G", productLines);
+            AddProductLine(ProductH, "H", productLines);
+            AddProductLine(ProductI, "I", productLines);
+            AddProductLine(ProductJ, "J", productLines);
+            AddProductLine(ProductK, "K", productLines);
+            AddProductLine(ProductL, "L", productLines);
+            AddProductLine(ProductM, "M", productLines);
+            AddProductLine(ProductN, "N", productLines);
+            AddProductLine(ProductO, "O", productLines);
+            AddProductLine(ProductP, "P", productLines);
+            AddProductLine(ProductQ, "Q", productLines);
+            AddProductLine(ProductR, "R", productLines);
+            AddProductLine(ProductS, "S", productLines);
+            AddProductLine(ProductT, "T", productLines);
+            AddProductLine(ProductU, "U", productLines);
+            AddProductLine(ProductV, "V", productLines);
+            AddProductLine(ProductW, "W", productLines);
+            AddProductLine(ProductX, "X", productLines);
+            AddProductLine(ProductY, "Y", productLines);
+            AddProductLine(ProductZ, "Z", productLines);
+
+        }
+
+        public void SyncAccountTypesFrom(IList<DistributorAccountType> accountTypes)
+        {
+            AddType(Account1, "1", accountTypes);
+            AddType(AccountA, "A", accountTypes);
+            AddType(AccountB, "B", accountTypes);
+            AddType(AccountC, "C", accountTypes);
+            AddType(AccountD, "D", accountTypes);
+            AddType(AccountE, "E", accountTypes);
+            AddType(AccountF, "F", accountTypes);
+            AddType(AccountG, "G", accountTypes);
+            AddType(AccountH, "H", accountTypes);
+            AddType(AccountI, "I", accountTypes);
+            AddType(AccountJ, "J", accountTypes);
+            AddType(AccountK, "K", accountTypes);
+            AddType(AccountL, "L", accountTypes);
+            AddType(AccountM, "M", accountTypes);
+            AddType(AccountN, "N", accountTypes);
+            AddType(AccountO, "O", accountTypes);
+            AddType(AccountP, "P", accountTypes);
+            AddType(AccountQ, "Q", accountTypes);
+            AddType(AccountR, "R", accountTypes);
+            AddType(AccountS, "S", accountTypes);
+            AddType(AccountT, "T", accountTypes);
+            AddType(AccountU, "U", accountTypes);
+            AddType(AccountV, "V", accountTypes);
+            AddType(AccountW, "W", accountTypes);
+            AddType(AccountX, "X", accountTypes);
+            AddType(AccountY, "Y", accountTypes);
+            AddType(AccountZ, "Z", accountTypes);
+        }
+
+        private void GetAccountTypes()
+        {
+            Account1 = HasAccountType("1");
+            AccountA = HasAccountType("A");
+            AccountB = HasAccountType("B");
+            AccountC = HasAccountType("C");
+            AccountD = HasAccountType("D");
+            AccountE = HasAccountType("E");
+            AccountF = HasAccountType("F");
+            AccountG = HasAccountType("G");
+            AccountH = HasAccountType("H");
+            AccountI = HasAccountType("I");
+            AccountJ = HasAccountType("J");
+            AccountK = HasAccountType("K");
+            AccountL = HasAccountType("L");
+            AccountM = HasAccountType("M");
+            AccountN = HasAccountType("N");
+            AccountO = HasAccountType("O");
+            AccountP = HasAccountType("P");
+            AccountQ = HasAccountType("Q");
+            AccountR = HasAccountType("R");
+            AccountS = HasAccountType("S");
+            AccountT = HasAccountType("T");
+            AccountU = HasAccountType("U");
+            AccountV = HasAccountType("V");
+            AccountW = HasAccountType("W");
+            AccountX = HasAccountType("X");
+            AccountY = HasAccountType("Y");
+            AccountZ = HasAccountType("Z");
+        }
+
+        private void GetProductLines()
+        {
+            Product1 = HasProductLine("1");
+            Product2 = HasProductLine("2");
+            Product3 = HasProductLine("3");
+            Product4 = HasProductLine("4");
+            Product5 = HasProductLine("5");
+            ProductA = HasProductLine("A");
+            ProductB = HasProductLine("B");
+            ProductC = HasProductLine("C");
+            ProductD = HasProductLine("D");
+            ProductE = HasProductLine("E");
+            ProductF = HasProductLine("F");
+            ProductG = HasProductLine("G");
+            ProductH = HasProductLine("H");
+            ProductI = HasProductLine("I");
+            ProductJ = HasProductLine("J");
+            ProductK = HasProductLine("K");
+            ProductL = HasProductLine("L");
+            ProductM = HasProductLine("M");
+            ProductN = HasProductLine("N");
+            ProductO = HasProductLine("O");
+            ProductP = HasProductLine("P");
+            ProductQ = HasProductLine("Q");
+            ProductR = HasProductLine("R");
+            ProductS = HasProductLine("S");
+            ProductT = HasProductLine("T");
+            ProductU = HasProductLine("U");
+            ProductV = HasProductLine("V");
+            ProductW = HasProductLine("W");
+            ProductX = HasProductLine("X");
+            ProductY = HasProductLine("Y");
+            ProductZ = HasProductLine("Z");
+        }
+
+        private bool HasAccountType(string code)
+        {
+            return (this.AccountTypes.Where(accountType => accountType.SubCode == code).Count() == 1);
+        }
+
+        private bool HasProductLine(string code)
+        {
+            return (this.ProductLines.Where(productLines => productLines.SubCode == code).Count() == 1);
         }
 
         private bool HasPrimaryBuisnessRevenue(string name)

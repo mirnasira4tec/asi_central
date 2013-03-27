@@ -163,20 +163,11 @@ namespace asi.asicentral.model.store
                     if (targetAccountType != null)
                     {
                         // update existing
-                        targetAccountType.Deleted = originalAcccountType.Deleted;
-                        targetAccountType.Description = originalAcccountType.Description;
-                        targetAccountType.MemberTypeRole = originalAcccountType.MemberTypeRole;
-                        targetAccountType.SubCode = originalAcccountType.SubCode;
+                        target.AccountTypes.Add(targetAccountType);
                     }
                     else
                     {
-                        target.AccountTypes.Add(new DistributorAccountType()
-                        {
-                            Deleted = targetAccountType.Deleted,
-                            Description = targetAccountType.Description,
-                            MemberTypeRole = targetAccountType.MemberTypeRole,
-                            SubCode = targetAccountType.SubCode
-                        });
+                        target.AccountTypes.Add(originalAcccountType);
                     }
                 }
                 for (int i = target.AccountTypes.Count - 1; i >= 0; i--)
@@ -201,20 +192,11 @@ namespace asi.asicentral.model.store
                     if (targetProductLine != null)
                     {
                         // update existing
-                        targetProductLine.Deleted = originalProductLine.Deleted;
-                        targetProductLine.Description = originalProductLine.Description;
-                        targetProductLine.MemberTypeRole = originalProductLine.MemberTypeRole;
-                        targetProductLine.SubCode = originalProductLine.SubCode;
+                        target.ProductLines.Add(targetProductLine);
                     }
                     else
                     {
-                        target.ProductLines.Add(new DistributorProductLine()
-                        {
-                            Deleted = targetProductLine.Deleted,
-                            Description = targetProductLine.Description,
-                            MemberTypeRole = targetProductLine.MemberTypeRole,
-                            SubCode = targetProductLine.SubCode
-                        });
+                        target.ProductLines.Add(originalProductLine);
                     }
                 }
                 for (int i = target.ProductLines.Count - 1; i >= 0; i--)
@@ -228,7 +210,6 @@ namespace asi.asicentral.model.store
 
         public void CopyTo(DistributorMembershipApplication target)
         {
-
             // sync the collections
             SyncContactsWith(target);
             SyncAccountTypesWith(target);
@@ -243,7 +224,7 @@ namespace asi.asicentral.model.store
             target.ApplicationStatusId = ApplicationStatusId;
             target.ASIContact = ASIContact;
             target.Company = Company;
-            target.Contacts = Contacts;
+
             target.CorporateOfficer = CorporateOfficer;
             target.Custom1 = Custom1;
             target.Custom2 = Custom2;
