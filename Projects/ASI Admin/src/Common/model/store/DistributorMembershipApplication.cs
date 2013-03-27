@@ -267,6 +267,7 @@ namespace asi.asicentral.model.store
             target.NumberOfSalesEmployee = NumberOfSalesEmployee;
             target.OtherBusinessRevenue = OtherBusinessRevenue;
             target.PrimaryBusinessRevenueId = PrimaryBusinessRevenueId;
+            target.PrimaryBusinessRevenue = PrimaryBusinessRevenue;
             target.ProvideInvoiceOnDemand = ProvideInvoiceOnDemand;
             target.ShippingCity = ShippingCity;
             target.ShippingState = ShippingState;

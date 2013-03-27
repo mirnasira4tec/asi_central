@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
 using asi.asicentral.web.model.store;
+using asi.asicentral.services;
 
 namespace asi.asicentral.web.Controllers.Store
 {
@@ -17,6 +18,7 @@ namespace asi.asicentral.web.Controllers.Store
 
         public IStoreService StoreService { get; set; }
         public IFulfilmentService FulfilmentService { get; set; }
+        public ICreditCardService CreditCardService { get; set; }
 
         [HttpGet]
         public virtual ActionResult Edit(Guid id, int orderId)
@@ -47,6 +49,8 @@ namespace asi.asicentral.web.Controllers.Store
                 if (order == null) throw new Exception("Invalid reference to an order");
                 if (distributorApplication == null) throw new Exception("Invalid reference to an application");
                 order.ExternalReference = application.ExternalReference;
+                //TODO temporary until the ui gets the contacts
+                application.Contacts = distributorApplication.Contacts;
                 //view does not contain some of the collections, copy from the ones in the database
                 application.AccountTypes = distributorApplication.AccountTypes;
                 application.ProductLines = distributorApplication.ProductLines;
@@ -121,6 +125,17 @@ namespace asi.asicentral.web.Controllers.Store
             else if (command == ApplicationController.COMMAND_REJECT)
             {
                 order.ProcessStatus = OrderStatus.Rejected;
+                try
+                {
+                    if (order.CreditCard != null && !string.IsNullOrEmpty(order.CreditCard.ExternalReference))
+                        CreditCardService.Delete(order.CreditCard.ExternalReference);
+                }
+                catch (Exception exception)
+                {
+                    ILogService log = LogService.GetLog(this.GetType());
+                    log.Error("Could not remove a credit card record: " + exception.Message);
+                }
+                order.CreditCard.ExternalReference = null;
             }
         }
 
