@@ -93,6 +93,8 @@ namespace SGRImport
                 product.MinimumOrderQuantity = _excelFile.GetValue(i, cols[4]);
                 product.PaymentTerms = _excelFile.GetValue(i, cols[5]);
                 product.KeySpecifications = _excelFile.GetValue(i, cols[6]);
+                if (!string.IsNullOrEmpty(product.KeySpecifications) && product.KeySpecifications.Length > 1000) 
+                    product.KeySpecifications = product.KeySpecifications.Substring(0, 1000);
                 product.Category = _excelFile.GetValue(i, cols[7]);
                 cellValue = _excelFile.GetValue(++i, cols[0]);
             }
