@@ -14,6 +14,7 @@ namespace asi.asicentral.services
     //Production time - Rush probably not needed
     //state for international - limited to 15 chars in TIMSS
     //DAPP_AnnSalesVol and DAPP_AnnSalesVolSAP expect numbers
+    //supplier decorating other label cannot be stored
     public class TIMSSService : IFulfilmentService
     {
         IObjectService _objectService;
@@ -99,7 +100,6 @@ namespace asi.asicentral.services
                     NumberOfEmployees = supplierApplication.NumberOfEmployee,
                     HasAmericanProducts = supplierApplication.HasAmericanProducts.HasValue ? (supplierApplication.HasAmericanProducts.Value ? "Y" : "N") : null,
                     BusinessHours = supplierApplication.BusinessHours,
-                    //TODO ProductionTime = supplierApplication.ProductionTime, issue with data types clashing
                     RushService = supplierApplication.IsRushServiceAvailable.HasValue ? (supplierApplication.IsRushServiceAvailable.Value ? "Y" : "N") : null,
                     Importer = supplierApplication.IsImporter.HasValue ? (supplierApplication.IsImporter.Value ? "Y" : "N") : null,
                     Manufacturer = supplierApplication.IsManufacturer.HasValue ? (supplierApplication.IsManufacturer.Value ? "Y" : "N") : null,
@@ -107,58 +107,63 @@ namespace asi.asicentral.services
                     Wholesaler = supplierApplication.IsWholesaler.HasValue ? (supplierApplication.IsWholesaler.Value ? "Y" : "N") : null,
                     Imprinter = supplierApplication.IsImprinterVsDecorator.HasValue ? (supplierApplication.IsImprinterVsDecorator.Value ? "Y" : "N") : null,
                 };
+                //try to convert different data types
+                //ProductionTime = supplierApplication.ProductionTime, issue with data types clashing
+                try { additionalInformation.ProductionTime = int.Parse(supplierApplication.ProductionTime); }
+                catch (Exception) { }
                 //need to store the decorating type - probably a switch all properties are in this class
                 foreach (var decoratingAndImprinting in supplierApplication.DecoratingTypes)
                 {
                     switch (decoratingAndImprinting.Name)
                     {
-                        case "Etching":
+                        case SupplierDecoratingType.DECORATION_ETCHING:
                             additionalInformation.Etching = "Y";
                             break;
-                        case "Hot Stamping":
+                        case SupplierDecoratingType.DECORATION_HOTSTAMPING:
                             additionalInformation.HotStamping = "Y";
                             break;
-                        case "Silkscreen":
+                        case SupplierDecoratingType.DECORATION_SILKSCREEN:
                             additionalInformation.SilkScreen = "Y";
                             break;
-                        case "Pad Print":
+                        case SupplierDecoratingType.DECORATION_PADPRINT:
                             additionalInformation.PadPrinting = "Y";
                             break;
-                        case "Direct Embroidery":
+                        case SupplierDecoratingType.DECORATION_DIRECTEMBROIDERY:
                             additionalInformation.DirectEmbroidery = "Y";
                             break;
-                        case "Foil Stamping":
+                        case SupplierDecoratingType.DECORATION_FOILSTAMPING:
                             additionalInformation.FoilStamping = "Y";
                             break;
-                        case "Lithography":
+                        case SupplierDecoratingType.DECORATION_LITHOGRAPHY:
                             additionalInformation.Lithography = "Y";
                             break;
-                        case "Sublimation":
+                        case SupplierDecoratingType.DECORATION_SUBLIMINATION:
                             additionalInformation.Sublimation = "Y";
                             break;
-                        case "Four Color Process":
+                        case SupplierDecoratingType.DECORATION_FOURCOLOR:
                             additionalInformation.FourColorProcess = "Y";
                             break;
-                        case "Engraving":
+                        case SupplierDecoratingType.DECORATION_ENGRAVING:
                             additionalInformation.Engraving = "Y";
                             break;
-                        case "Laser":
+                        case SupplierDecoratingType.DECORATION_LASER:
                             additionalInformation.Laser = "Y";
                             break;
-                        case "Offset":
+                        case SupplierDecoratingType.DECORATION_OFFSET:
                             additionalInformation.Offset = "Y";
                             break;
-                        case "Transfer":
+                        case SupplierDecoratingType.DECORATION_TRANSFER:
                             additionalInformation.Transfer = "Y";
                             break;
-                        case "Full Color Process":
+                        case SupplierDecoratingType.DECORATION_FULLCOLOR:
                             additionalInformation.FullColorProcess = "Y";
                             break;
-                        case "Die Stamp":
+                        case SupplierDecoratingType.DECORATION_DIESTAMP:
                             additionalInformation.DieStamp = "Y";
                             break;
                     }
                     //TODO imprint other value, nowhere to add the value stored in supplierApplication.OtherDec
+                    if (!string.IsNullOrEmpty(supplierApplication.OtherDec)) additionalInformation.ImprintOther = "Y";
                 }
                 _objectService.Add<TIMSSAdditionalInfo>(additionalInformation);
             }

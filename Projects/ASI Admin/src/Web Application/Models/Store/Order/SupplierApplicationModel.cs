@@ -61,20 +61,24 @@ namespace asi.asicentral.web.model.store
         [Display(ResourceType = typeof(Resource), Name = "OtherDecoratingMethodName")]
         public string OtherDecoratingMethodName { set; get; }
 
+        public int OrderId { get; set; }
+        public string ActionName { get; set; }
+        public string ExternalReference { get; set; }
+        public OrderStatus OrderStatus { get; set; }
+
         /// <summary>
         /// Required for MVC to rebuild the model
         /// </summary>
         /// 
-        public SupplierApplicationModel()
+        public SupplierApplicationModel() : base()
         {
-            //nothing to do
+            this.DecoratingTypes = new List<SupplierDecoratingType>();
         }
 
         public SupplierApplicationModel(SupplierMembershipApplication application, asi.asicentral.model.store.Order order)
         {
             application.CopyTo(this);
-            
-            GetDecoratingTypesFrom();
+            UpdateDecoratingTypesProperties();
             if (!String.IsNullOrEmpty(OtherDec))
             {
                 OtherDecoratingMethod = true;
@@ -88,7 +92,7 @@ namespace asi.asicentral.web.model.store
             OrderStatus = order.ProcessStatus;
         }
 
-        private void GetDecoratingTypesFrom()
+        private void UpdateDecoratingTypesProperties()
         {
             Etching = HasDecorating(SupplierDecoratingType.DECORATION_ETCHING);
             HotStamping = HasDecorating(SupplierDecoratingType.DECORATION_HOTSTAMPING);
@@ -116,35 +120,32 @@ namespace asi.asicentral.web.model.store
         /// Apply the extra bool values from the view model to the many to many
         /// </summary>
         /// <param name="StoreService"></param>
-        public void UpdateDecoratingTypes(IList<SupplierDecoratingType> decoratingTypes)
+        public void SyncDecoratingTypes(IList<SupplierDecoratingType> decoratingTypes)
         {
-            SyncDecoratingType(this.Etching, SupplierDecoratingType.DECORATION_ETCHING, decoratingTypes);
-            SyncDecoratingType(this.HotStamping, SupplierDecoratingType.DECORATION_HOTSTAMPING, decoratingTypes);
-            SyncDecoratingType(this.SilkScreen, SupplierDecoratingType.DECORATION_SILKSCREEN, decoratingTypes);
-            SyncDecoratingType(this.PadPrint, SupplierDecoratingType.DECORATION_PADPRINT, decoratingTypes);
-            SyncDecoratingType(this.DirectEmbroidery, SupplierDecoratingType.DECORATION_DIRECTEMBROIDERY, decoratingTypes);
-            SyncDecoratingType(this.FoilStamping, SupplierDecoratingType.DECORATION_FOILSTAMPING, decoratingTypes);
-            SyncDecoratingType(this.Lithography, SupplierDecoratingType.DECORATION_LITHOGRAPHY, decoratingTypes);
-            SyncDecoratingType(this.Sublimination, SupplierDecoratingType.DECORATION_SUBLIMINATION, decoratingTypes);
-            SyncDecoratingType(this.FourColourProcess, SupplierDecoratingType.DECORATION_FOURCOLOR, decoratingTypes);
-            SyncDecoratingType(this.Engraving, SupplierDecoratingType.DECORATION_ENGRAVING, decoratingTypes);
-            SyncDecoratingType(this.Laser, SupplierDecoratingType.DECORATION_LASER, decoratingTypes);
-            SyncDecoratingType(this.Offset, SupplierDecoratingType.DECORATION_OFFSET, decoratingTypes);
-            SyncDecoratingType(this.Transfer, SupplierDecoratingType.DECORATION_TRANSFER, decoratingTypes);
-            SyncDecoratingType(this.FullColourProcess, SupplierDecoratingType.DECORATION_FULLCOLOR, decoratingTypes);
-            SyncDecoratingType(this.DieStamp, SupplierDecoratingType.DECORATION_DIESTAMP, decoratingTypes);
+            AddDecoratingType(this.Etching, SupplierDecoratingType.DECORATION_ETCHING, decoratingTypes);
+            AddDecoratingType(this.HotStamping, SupplierDecoratingType.DECORATION_HOTSTAMPING, decoratingTypes);
+            AddDecoratingType(this.SilkScreen, SupplierDecoratingType.DECORATION_SILKSCREEN, decoratingTypes);
+            AddDecoratingType(this.PadPrint, SupplierDecoratingType.DECORATION_PADPRINT, decoratingTypes);
+            AddDecoratingType(this.DirectEmbroidery, SupplierDecoratingType.DECORATION_DIRECTEMBROIDERY, decoratingTypes);
+            AddDecoratingType(this.FoilStamping, SupplierDecoratingType.DECORATION_FOILSTAMPING, decoratingTypes);
+            AddDecoratingType(this.Lithography, SupplierDecoratingType.DECORATION_LITHOGRAPHY, decoratingTypes);
+            AddDecoratingType(this.Sublimination, SupplierDecoratingType.DECORATION_SUBLIMINATION, decoratingTypes);
+            AddDecoratingType(this.FourColourProcess, SupplierDecoratingType.DECORATION_FOURCOLOR, decoratingTypes);
+            AddDecoratingType(this.Engraving, SupplierDecoratingType.DECORATION_ENGRAVING, decoratingTypes);
+            AddDecoratingType(this.Laser, SupplierDecoratingType.DECORATION_LASER, decoratingTypes);
+            AddDecoratingType(this.Offset, SupplierDecoratingType.DECORATION_OFFSET, decoratingTypes);
+            AddDecoratingType(this.Transfer, SupplierDecoratingType.DECORATION_TRANSFER, decoratingTypes);
+            AddDecoratingType(this.FullColourProcess, SupplierDecoratingType.DECORATION_FULLCOLOR, decoratingTypes);
+            AddDecoratingType(this.DieStamp, SupplierDecoratingType.DECORATION_DIESTAMP, decoratingTypes);
         }
 
-        private void SyncDecoratingType(bool selected, String typeName, IList<SupplierDecoratingType> decoratingTypes)
+        private void AddDecoratingType(bool selected, String typeName, IList<SupplierDecoratingType> decoratingTypes)
         {
-            SupplierDecoratingType existing = DecoratingTypes.Where(type => type.Name == typeName).SingleOrDefault();
-            if (selected && existing == null) DecoratingTypes.Add(decoratingTypes.Where(type => type.Name == typeName).SingleOrDefault());
-            else if (!selected && existing != null) DecoratingTypes.Remove(existing);
+            if (selected)
+            {
+                SupplierDecoratingType type = decoratingTypes.Where(decType => decType.Name == typeName).SingleOrDefault();
+                if (type != null) DecoratingTypes.Add(type);
+            }
         }
-
-        public int OrderId { get; set; }
-        public string ActionName { get; set; }
-        public string ExternalReference { get; set; }
-        public OrderStatus OrderStatus { get; set; }
     }
 }
