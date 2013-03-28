@@ -106,6 +106,7 @@ namespace asi.asicentral.services
                     Retailer = supplierApplication.IsRetailer.HasValue ? (supplierApplication.IsRetailer.Value ? "Y" : "N") : null,
                     Wholesaler = supplierApplication.IsWholesaler.HasValue ? (supplierApplication.IsWholesaler.Value ? "Y" : "N") : null,
                     Imprinter = supplierApplication.IsImprinterVsDecorator.HasValue ? (supplierApplication.IsImprinterVsDecorator.Value ? "Y" : "N") : null,
+                    LineName = supplierApplication.LineNames,
                 };
                 //try to convert different data types
                 //ProductionTime = supplierApplication.ProductionTime, issue with data types clashing

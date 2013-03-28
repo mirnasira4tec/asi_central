@@ -46,5 +46,6 @@ namespace asi.asicentral.model.timss
         public string BusinessHours { get; set; }
         public Nullable<decimal> ProductionTime { get; set; }
         public string RushService { get; set; }
+        public string LineName { get; set; }
     }
 }
