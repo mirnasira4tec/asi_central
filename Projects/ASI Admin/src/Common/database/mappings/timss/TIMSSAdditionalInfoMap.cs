@@ -166,6 +166,10 @@ namespace asi.asicentral.database.mappings.timss
             this.Property(t => t.RushService)
                 .HasColumnName("RUSH_SERVICE")
                 .HasMaxLength(3);
+
+            this.Property(t => t.LineName)
+                .HasColumnName("LineName")
+                .HasMaxLength(50);
         }
     }
 }

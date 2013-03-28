@@ -96,13 +96,13 @@
         <span id="timmsErrorMessage" class="field-validation-error" data-type="errormessage"></span><br />
         @if (Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
         {
-        <input class="command" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
+        <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
         }
         @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
         { 
-        <input class="command" type="submit" value="@ApplicationController.COMMAND_REJECT" />
+        <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
         }
-        <input class="command" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+        <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
         @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
         { @Html.ActionLink("Close", "../Orders") }
         else

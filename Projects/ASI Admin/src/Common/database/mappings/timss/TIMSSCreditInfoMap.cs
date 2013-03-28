@@ -67,7 +67,7 @@ namespace asi.asicentral.database.mappings.timss
 
             this.Property(t => t.State)
                 .HasColumnName("BillState")
-                .HasMaxLength(15);
+                .HasMaxLength(40);
 
             this.Property(t => t.Zip)
                 .HasColumnName("BillZip")
