@@ -226,25 +226,62 @@ namespace asi.asicentral.model.store
                 }
             }
             //sync the fields
-            target.HasBillAddress = HasBillAddress;
-            target.HasShipAddress = HasShipAddress;
             target.AffiliateASINumber = AffiliateASINumber;
             target.AffiliateCompanyName = AffiliateCompanyName;
             target.AgreeASITermsAndConditions = AgreeASITermsAndConditions;
             target.AgreeUPSTermsAndConditions = AgreeUPSTermsAndConditions;
             target.ApplicationStatusId = ApplicationStatusId;
             target.AuthorizeUPSNewAccount = AuthorizeUPSNewAccount;
-            target.BillingAddress1 = BillingAddress1;
-            target.BillingAddress2 = BillingAddress2;
-            target.BillingCity = BillingCity;
+            target.Address1 = Address1;
+            target.Address2 = Address2;
+            target.City = City;
+            target.State = State;
+            target.Zip = Zip;
+            target.Country = Country;
+            target.HasBillAddress = HasBillAddress;
+            if (target.HasBillAddress)
+            {
+                target.BillingAddress1 = BillingAddress1;
+                target.BillingAddress2 = BillingAddress2;
+                target.BillingCity = BillingCity;
+                target.BillingState = BillingState;
+                target.BillingCountry = BillingCountry;
+                target.BillingZip = BillingZip;
+            }
+            else
+            {
+                target.BillingAddress1 = Address1;
+                target.BillingAddress2 = Address2;
+                target.BillingCity = City;
+                target.BillingState = State;
+                target.BillingCountry = Country;
+                target.BillingZip = Zip;
+            }
             target.BillingEmail = BillingEmail;
             target.BillingFax = BillingFax;
             target.BillingPhone = BillingPhone;
-            target.BillingState = BillingState;
-            target.BillingCountry = BillingCountry;
             target.BillingTollFree = BillingTollFree;
             target.BillingWebUrl = BillingWebUrl;
-            target.BillingZip = BillingZip;
+
+            target.HasShipAddress = HasShipAddress;
+            if (target.HasShipAddress)
+            {
+                target.ShippingStreet1 = ShippingStreet1;
+                target.ShippingStreet2 = ShippingStreet2;
+                target.ShippingCity = ShippingCity;
+                target.ShippingState = ShippingState;
+                target.ShippingZip = ShippingZip;
+                target.ShippingCountry = ShippingCountry;
+            }
+            else
+            {
+                target.ShippingStreet1 = Address1;
+                target.ShippingStreet2 = Address2;
+                target.ShippingCity = City;
+                target.ShippingState = State;
+                target.ShippingZip = Zip;
+                target.ShippingCountry = Country;
+            }
             target.Company = Company;
             target.ContactEmail = ContactEmail;
             target.ContactName = ContactName;
@@ -277,12 +314,6 @@ namespace asi.asicentral.model.store
             target.SellThruInternet = SellThruInternet;
             target.SellThruRetail = SellThruRetail;
             target.SellToEndUsers = SellToEndUsers;
-            target.ShippingStreet1 = ShippingStreet1;
-            target.ShippingStreet2 = ShippingStreet2;
-            target.ShippingCity = ShippingCity;
-            target.ShippingState = ShippingState;
-            target.ShippingZip = ShippingZip;
-            target.ShippingCountry = ShippingCountry;
             target.UPSAddress = UPSAddress;
             target.UPSCity = UPSCity;
             target.UPSShippingNumber = UPSShippingNumber;
@@ -292,12 +323,6 @@ namespace asi.asicentral.model.store
             target.WomanOwned = WomanOwned;
             target.YearEnteredAdvertising = YearEnteredAdvertising;
             target.YearEstablished = YearEstablished;
-            target.Address1 = Address1;
-            target.Address2 = Address2;
-            target.City = City;
-            target.State = State;
-            target.Zip = Zip;
-            target.Country = Country;
         }
     }
 }

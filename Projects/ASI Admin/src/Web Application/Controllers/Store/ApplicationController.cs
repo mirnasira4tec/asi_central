@@ -92,9 +92,8 @@ namespace asi.asicentral.web.Controllers.Store
                 if (order == null) throw new Exception("Invalid reference to an order");
                 if (supplierApplication == null) throw new Exception("Invalid reference to an application");
                 order.ExternalReference = application.ExternalReference;
-                //view model does not have the decorating types, get the ones from the database
-                application.DecoratingTypes = supplierApplication.DecoratingTypes;
-                application.UpdateDecoratingTypes(StoreService.GetAll<SupplierDecoratingType>().ToList());
+                //copy decorating types bool to the collections
+                application.SyncDecoratingTypes(StoreService.GetAll<SupplierDecoratingType>().ToList());
                 application.CopyTo(supplierApplication);
                 ProcessCommand(StoreService, FulfilmentService, order, supplierApplication, application.ActionName);
                 StoreService.SaveChanges();

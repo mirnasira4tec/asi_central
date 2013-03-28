@@ -106,49 +106,96 @@ namespace asi.asicentral.model.store
         public virtual ICollection<DistributorAccountType> AccountTypes { get; set; }
         public virtual ICollection<DistributorProductLine> ProductLines { get; set; }
 
-        private void SyncContactsWith(DistributorMembershipApplication target)
+        public void CopyTo(DistributorMembershipApplication target)
         {
-            //sync the contacts
-            if (target.Contacts == null || target.Contacts.Count == 0) target.Contacts = Contacts;
+            // sync the collections
+            SyncContactsWith(target);
+            SyncAccountTypesWith(target);
+            SyncProductLinesWith(target);
+
+            target.AgreeReceivePromotionalProducts = AgreeReceivePromotionalProducts;
+            target.AgreeTermsAndConditions = AgreeTermsAndConditions;
+            target.AnnualSalesVolume = AnnualSalesVolume;
+            target.AnnualSalesVolumeASP = AnnualSalesVolumeASP;
+            target.ApplicantEmail = ApplicantEmail;
+            target.ApplicantName = ApplicantName;
+            target.ApplicationStatusId = ApplicationStatusId;
+            target.ASIContact = ASIContact;
+            target.Company = Company;
+            target.Address1 = Address1;
+            target.Address2 = Address2;
+            target.City = City;
+            target.State = State;
+            target.Zip = Zip;
+            target.Country = Country;
+            target.HasBillAddress = HasBillAddress;
+            if (HasBillAddress)
+            {
+                target.BillingEmail = BillingEmail;
+                target.BillingPhone = BillingPhone;
+                target.BillingAddress1 = BillingAddress1;
+                target.BillingAddress2 = BillingAddress2;
+                target.BillingState = BillingState;
+                target.BillingCity = BillingCity;
+                target.BillingZip = BillingZip;
+                target.BillingCountry = BillingCountry;
+                target.BillingWebUrl = BillingWebUrl;
+            }
             else
             {
-                //got through the target contacts and update
-                for (int i = Contacts.Count - 1; i >= 0; i--)
-                {
-                    DistributorMembershipApplicationContact originalContact = Contacts[i];
-                    DistributorMembershipApplicationContact targetContact = target.Contacts.Where(theContact => theContact.Id == originalContact.Id).SingleOrDefault();
-                    if (targetContact != null)
-                    {
-                        //contact already there, update it
-                        targetContact.Name = originalContact.Name;
-                        targetContact.Title = originalContact.Title;
-                        targetContact.Email = originalContact.Email;
-                        targetContact.Phone = originalContact.Phone;
-                        targetContact.Fax = originalContact.Fax;
-                        targetContact.IsPrimary = originalContact.IsPrimary;
-                    }
-                    else
-                    {
-                        //target is missing a contact
-                        target.Contacts.Add(new DistributorMembershipApplicationContact()
-                        {
-                            Email = targetContact.Email,
-                            Fax = targetContact.Fax,
-                            IsPrimary = targetContact.IsPrimary,
-                            Name = targetContact.Name,
-                            Department = targetContact.Name,
-                            Phone = targetContact.Phone,
-                            Title = targetContact.Title,
-                        });
-                    }
-                }
-                for (int i = target.Contacts.Count - 1; i >= 0; i--)
-                {
-                    DistributorMembershipApplicationContact targetContact = target.Contacts[i];
-                    DistributorMembershipApplicationContact originalContact = Contacts.Where(theContact => theContact.Id == targetContact.Id).SingleOrDefault();
-                    if (originalContact == null) target.Contacts.Remove(targetContact);
-                }
+                target.BillingAddress1 = Address1;
+                target.BillingAddress2 = Address2;
+                target.BillingState = State;
+                target.BillingCity = City;
+                target.BillingZip = Zip;
+                target.BillingCountry = Country;
             }
+            target.HasShipAddress = HasShipAddress;
+            if (target.HasShipAddress)
+            {
+                target.ShippingStreet1 = ShippingStreet1;
+                target.ShippingStreet2 = ShippingStreet2;
+                target.ShippingCity = ShippingCity;
+                target.ShippingState = ShippingState;
+                target.ShippingZip = ShippingZip;
+                target.ShippingCountry = ShippingCountry;
+            }
+            else
+            {
+                target.ShippingStreet1 = Address1;
+                target.ShippingStreet2 = Address2;
+                target.ShippingCity = City;
+                target.ShippingState = State;
+                target.ShippingZip = Zip;
+                target.ShippingCountry = Country;
+            }
+            target.CorporateOfficer = CorporateOfficer;
+            target.Custom1 = Custom1;
+            target.Custom2 = Custom2;
+            target.Custom3 = Custom3;
+            target.Custom4 = Custom4;
+            target.Custom5 = Custom5;
+            target.EstablishedDate = EstablishedDate;
+            target.BillingFax = BillingFax;
+            target.FirstName = FirstName;
+            target.Id = Id;
+            target.InformASIOfChange = InformASIOfChange;
+            target.IPAddress = IPAddress;
+            target.IsForProfit = IsForProfit;
+            target.IsMajorForResale = IsMajorForResale;
+            target.IsMajorityDistributeForResale = IsMajorityDistributeForResale;
+            target.IsSolelyWork = IsSolelyWork;
+            target.LastName = LastName;
+            target.NumberOfEmployee = NumberOfEmployee;
+            target.NumberOfSalesEmployee = NumberOfSalesEmployee;
+            target.OtherBusinessRevenue = OtherBusinessRevenue;
+            target.PrimaryBusinessRevenueId = PrimaryBusinessRevenueId;
+            target.PrimaryBusinessRevenue = PrimaryBusinessRevenue;
+            target.ProvideInvoiceOnDemand = ProvideInvoiceOnDemand;
+            target.SignatureType = SignatureType;
+            target.SolelyWorkName = SolelyWorkName;
+            target.TrueAnswers = TrueAnswers;
+            target.UserId = UserId;
         }
 
         private void SyncAccountTypesWith(DistributorMembershipApplication target)
@@ -209,71 +256,49 @@ namespace asi.asicentral.model.store
             }
         }
 
-        public void CopyTo(DistributorMembershipApplication target)
+        private void SyncContactsWith(DistributorMembershipApplication target)
         {
-            // sync the collections
-            SyncContactsWith(target);
-            SyncAccountTypesWith(target);
-            SyncProductLinesWith(target);
-
-            target.AgreeReceivePromotionalProducts = AgreeReceivePromotionalProducts;
-            target.AgreeTermsAndConditions = AgreeTermsAndConditions;
-            target.AnnualSalesVolume = AnnualSalesVolume;
-            target.AnnualSalesVolumeASP = AnnualSalesVolumeASP;
-            target.ApplicantEmail = ApplicantEmail;
-            target.ApplicantName = ApplicantName;
-            target.ApplicationStatusId = ApplicationStatusId;
-            target.ASIContact = ASIContact;
-            target.Company = Company;
-
-            target.CorporateOfficer = CorporateOfficer;
-            target.Custom1 = Custom1;
-            target.Custom2 = Custom2;
-            target.Custom3 = Custom3;
-            target.Custom4 = Custom4;
-            target.Custom5 = Custom5;
-            target.EstablishedDate = EstablishedDate;
-            target.BillingFax = BillingFax;
-            target.FirstName = FirstName;
-            target.Id = Id;
-            target.InformASIOfChange = InformASIOfChange;
-            target.IPAddress = IPAddress;
-            target.IsForProfit = IsForProfit;
-            target.IsMajorForResale = IsMajorForResale;
-            target.IsMajorityDistributeForResale = IsMajorityDistributeForResale;
-            target.IsSolelyWork = IsSolelyWork;
-            target.LastName = LastName;
-            target.NumberOfEmployee = NumberOfEmployee;
-            target.NumberOfSalesEmployee = NumberOfSalesEmployee;
-            target.OtherBusinessRevenue = OtherBusinessRevenue;
-            target.PrimaryBusinessRevenueId = PrimaryBusinessRevenueId;
-            target.PrimaryBusinessRevenue = PrimaryBusinessRevenue;
-            target.ProvideInvoiceOnDemand = ProvideInvoiceOnDemand;
-            target.ShippingCity = ShippingCity;
-            target.ShippingState = ShippingState;
-            target.ShippingStreet1 = ShippingStreet1;
-            target.ShippingStreet2 = ShippingStreet2;
-            target.ShippingZip = ShippingZip;
-            target.ShippingCountry = ShippingCountry;
-            target.SignatureType = SignatureType;
-            target.SolelyWorkName = SolelyWorkName;
-            target.BillingEmail = BillingEmail;
-            target.BillingPhone = BillingPhone;
-            target.BillingAddress1 = BillingAddress1;
-            target.BillingAddress2 = BillingAddress2;
-            target.BillingState = BillingState;
-            target.BillingCity = BillingCity;
-            target.BillingZip = BillingZip;
-            target.BillingCountry = BillingCountry;
-            target.TrueAnswers = TrueAnswers;
-            target.UserId = UserId;
-            target.BillingWebUrl = BillingWebUrl;
-            target.Address1 = Address1;
-            target.Address2 = Address2;
-            target.City = City;
-            target.State = State;
-            target.Zip = Zip;
-            target.Country = Country;
+            //sync the contacts
+            if (target.Contacts == null || target.Contacts.Count == 0) target.Contacts = Contacts;
+            else
+            {
+                //got through the target contacts and update
+                for (int i = Contacts.Count - 1; i >= 0; i--)
+                {
+                    DistributorMembershipApplicationContact originalContact = Contacts[i];
+                    DistributorMembershipApplicationContact targetContact = target.Contacts.Where(theContact => theContact.Id == originalContact.Id).SingleOrDefault();
+                    if (targetContact != null)
+                    {
+                        //contact already there, update it
+                        targetContact.Name = originalContact.Name;
+                        targetContact.Title = originalContact.Title;
+                        targetContact.Email = originalContact.Email;
+                        targetContact.Phone = originalContact.Phone;
+                        targetContact.Fax = originalContact.Fax;
+                        targetContact.IsPrimary = originalContact.IsPrimary;
+                    }
+                    else
+                    {
+                        //target is missing a contact
+                        target.Contacts.Add(new DistributorMembershipApplicationContact()
+                        {
+                            Email = targetContact.Email,
+                            Fax = targetContact.Fax,
+                            IsPrimary = targetContact.IsPrimary,
+                            Name = targetContact.Name,
+                            Department = targetContact.Name,
+                            Phone = targetContact.Phone,
+                            Title = targetContact.Title,
+                        });
+                    }
+                }
+                for (int i = target.Contacts.Count - 1; i >= 0; i--)
+                {
+                    DistributorMembershipApplicationContact targetContact = target.Contacts[i];
+                    DistributorMembershipApplicationContact originalContact = Contacts.Where(theContact => theContact.Id == targetContact.Id).SingleOrDefault();
+                    if (originalContact == null) target.Contacts.Remove(targetContact);
+                }
+            }
         }
     }
 }

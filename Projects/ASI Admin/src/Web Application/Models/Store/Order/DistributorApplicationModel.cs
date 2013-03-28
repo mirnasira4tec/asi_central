@@ -80,9 +80,10 @@ namespace asi.asicentral.web.model.store
         /// <summary>
         /// Required for MVC to rebuild the model
         /// </summary>
-        public DistributorApplicationModel()
+        public DistributorApplicationModel() : base()
         {
-            //nothing to do
+            this.ProductLines = new List<DistributorProductLine>();
+            this.AccountTypes = new List<DistributorAccountType>();
         }
 
         public DistributorApplicationModel(DistributorMembershipApplication application, asi.asicentral.model.store.Order order)
@@ -109,16 +110,20 @@ namespace asi.asicentral.web.model.store
 
         private void AddType(bool selected, String codeName, IList<DistributorAccountType> accountTypes)
         {
-            if (AccountTypes == null) AccountTypes = new List<DistributorAccountType>();
-            DistributorAccountType account = accountTypes.Where(type => type.SubCode == codeName).SingleOrDefault();
-            if (selected && account != null) this.AccountTypes.Add(account);
+            if (selected)
+            {
+                DistributorAccountType account = accountTypes.Where(type => type.SubCode == codeName).SingleOrDefault();
+                if (account != null) this.AccountTypes.Add(account);
+            }
         }
 
         private void AddProductLine(bool selected, String codeName, IList<DistributorProductLine> productLines)
         {
-            if (ProductLines == null) ProductLines = new List<DistributorProductLine>();
-            DistributorProductLine line = productLines.Where(productline => productline.SubCode == codeName).SingleOrDefault();
-            if (selected && line != null) this.ProductLines.Add(line);
+            if (selected)
+            {
+                DistributorProductLine line = productLines.Where(productline => productline.SubCode == codeName).SingleOrDefault();
+                if (line != null) this.ProductLines.Add(line);
+            }
         }
 
         public void SyncProductLinesFrom(IList<DistributorProductLine> productLines)
