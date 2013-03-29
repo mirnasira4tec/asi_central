@@ -69,6 +69,7 @@
     <Compile Include="ASIInternetTest.cs" />
     <Compile Include="StructureMapTest.cs" />
     <Compile Include="SecurityServiceTest.cs" />
+    <Compile Include="TemplateTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
@@ -83,6 +84,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="Template\TemplateTest.cshtml" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
