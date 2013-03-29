@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,5 +15,11 @@ namespace asi.asicentral.interfaces
         /// </summary>
         /// <param name="mail"></param>
         void SendMail(Mail mail);
+
+        /// <summary>
+        /// Sends an email
+        /// </summary>
+        /// <param name="mail"></param>
+        void SendMail(MailMessage mail);
     }
 }
