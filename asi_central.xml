@@ -23,33 +23,33 @@
 	
 	<Target Name="Package Template" DependsOnTargets="Compile Template" Condition="'$(CREATEZIP)'=='true'">
 		<CreateItem Include=".\Projects\Template\src\Web Application\**\*" 
-			Exclude=".\Projects\Template\src\**\*.cs;.\Projects\Template\src\Web Application\App_Start\**;.\Projects\Template\src\Web Application\Properties\**;.\Projects\Template\src\Web Application\obj\**;.\Projects\Template\src\Web Application\*.config;.\Projects\Template\src\Web Application\Web Application.csproj;.\Projects\Template\src\Web Application\Web Application.csproj.user">
+			Exclude=".\Projects\Template\src\Web Application\**\*.cs;.\Projects\Template\src\Web Application\**\*.resx;.\Projects\Template\src\Web Application\**\thumb.db;.\Projects\Template\src\Web Application\Properties\**;.\Projects\Template\src\Web Application\obj\**;.\Projects\Template\src\Web Application\Web*.config;.\Projects\Template\src\Web Application\Web Application.csproj;.\Projects\Template\src\Web Application\Web Application.csproj.user">
 			
-			<Output TaskParameter="Include" ItemName="WebFiles"/>
+			<Output TaskParameter="Include" ItemName="TemplateWebFiles"/>
 		</CreateItem>
 		<CreateItem Include=".\Projects\Template\Config\**\*">
-			<Output TaskParameter="Include" ItemName="ConfigFiles"/>
+			<Output TaskParameter="Include" ItemName="TemplateConfigFiles"/>
 		</CreateItem>
 		<CreateItem Include=".\Projects\Template\sql\**\*">
-			<Output TaskParameter="Include" ItemName="SQLFiles"/>
+			<Output TaskParameter="Include" ItemName="TemplateSQLFiles"/>
 		</CreateItem>
-		<MSBuild.ExtensionPack.Compression.Zip TaskAction="Create" RemoveRoot="\Projects\asi_central\Projects\Template\src" CompressFiles="@(WebFiles)" ZipFileName="$(BUILDTARGETDIR)\$(JOB_NAME)-Template-$(BUILD_NUMBER).zip"/>
-		<MSBuild.ExtensionPack.Compression.Zip TaskAction="AddFiles" RemoveRoot="\Projects\asi_central\Projects\Template" CompressFiles="@(ConfigFiles)" ZipFileName="$(BUILDTARGETDIR)\$(JOB_NAME)-Template-$(BUILD_NUMBER).zip"/>
-		<MSBuild.ExtensionPack.Compression.Zip TaskAction="AddFiles" RemoveRoot="\Projects\asi_central\Projects\Template" CompressFiles="@(SQLFiles)" ZipFileName="$(BUILDTARGETDIR)\$(JOB_NAME)-Template-$(BUILD_NUMBER).zip"/>
+		<MSBuild.ExtensionPack.Compression.Zip TaskAction="Create" RemoveRoot="\Projects\asi_central\Projects\Template\src" CompressFiles="@(TemplateWebFiles)" ZipFileName="$(BUILDTARGETDIR)\$(JOB_NAME)-Template-$(BUILD_NUMBER).zip"/>
+		<MSBuild.ExtensionPack.Compression.Zip TaskAction="AddFiles" RemoveRoot="\Projects\asi_central\Projects\Template" CompressFiles="@(TemplateConfigFiles)" ZipFileName="$(BUILDTARGETDIR)\$(JOB_NAME)-Template-$(BUILD_NUMBER).zip"/>
+		<MSBuild.ExtensionPack.Compression.Zip TaskAction="AddFiles" RemoveRoot="\Projects\asi_central\Projects\Template" CompressFiles="@(TemplateSQLFiles)" ZipFileName="$(BUILDTARGETDIR)\$(JOB_NAME)-Template-$(BUILD_NUMBER).zip"/>
 		<Message Text="Zip file created" />
 	</Target>
 
 	<Target Name="Package ASI Admin" DependsOnTargets="Compile ASI Admin" Condition="'$(CREATEZIP)'=='true'">
 		<CreateItem Include=".\Projects\ASI Admin\src\Web Application\**\*" 
-			Exclude=".\Projects\ASI Admin\src\**\*.cs;.\Projects\ASI Admin\src\Web Application\Properties\**;.\Projects\ASI Admin\src\Web Application\obj\**;.\Projects\ASI Admin\src\Web Application\*.config;.\Projects\ASI Admin\src\Web Application\Web Application.csproj;.\Projects\ASI Admin\src\Web Application\Web Application.csproj.user">
+			Exclude=".\Projects\ASI Admin\src\Web Application\**\*.cs;.\Projects\ASI Admin\src\Web Application\**\*.resx;.\Projects\ASI Admin\src\Web Application\**\thumb.db;.\Projects\ASI Admin\src\Web Application\Properties\**;.\Projects\ASI Admin\src\Web Application\obj\**;.\Projects\ASI Admin\src\Web Application\Web*.config;.\Projects\ASI Admin\src\Web Application\Web Application.csproj;.\Projects\ASI Admin\src\Web Application\Web Application.csproj.user">
 			
-			<Output TaskParameter="Include" ItemName="WebFiles2"/>
+			<Output TaskParameter="Include" ItemName="ASIAdminWebFiles"/>
 		</CreateItem>
 		<CreateItem Include=".\Projects\ASI Admin\Config\**\*">
-			<Output TaskParameter="Include" ItemName="ConfigFiles2"/>
+			<Output TaskParameter="Include" ItemName="ASIAdminConfigFiles"/>
 		</CreateItem>
-		<MSBuild.ExtensionPack.Compression.Zip TaskAction="Create" RemoveRoot="\Projects\asi_central\Projects\ASI Admin\src" CompressFiles="@(WebFiles2)" ZipFileName="$(BUILDTARGETDIR)\$(JOB_NAME)-ASIAdmin-$(BUILD_NUMBER).zip"/>
-		<MSBuild.ExtensionPack.Compression.Zip TaskAction="AddFiles" RemoveRoot="\Projects\asi_central\Projects\ASI Admin" CompressFiles="@(ConfigFiles2)" ZipFileName="$(BUILDTARGETDIR)\$(JOB_NAME)-ASIAdmin-$(BUILD_NUMBER).zip"/>
+		<MSBuild.ExtensionPack.Compression.Zip TaskAction="Create" RemoveRoot="\Projects\asi_central\Projects\ASI Admin\src" CompressFiles="@(ASIAdminWebFiles)" ZipFileName="$(BUILDTARGETDIR)\$(JOB_NAME)-ASIAdmin-$(BUILD_NUMBER).zip"/>
+		<MSBuild.ExtensionPack.Compression.Zip TaskAction="AddFiles" RemoveRoot="\Projects\asi_central\Projects\ASI Admin" CompressFiles="@(ASIAdminConfigFiles)" ZipFileName="$(BUILDTARGETDIR)\$(JOB_NAME)-ASIAdmin-$(BUILD_NUMBER).zip"/>
 		<Message Text="Zip file created" />
 	</Target>
 
