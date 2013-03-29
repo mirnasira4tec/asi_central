@@ -13,6 +13,7 @@ namespace asi.asicentral.WebApplication.Tests.Model.store
         public void CopyTo_SyncContacts()
         {
             // prepare for SupplierMembershipApplication's CopyTo(SupplierMembershipApplication target)
+            // for syncing contacts
             SupplierMembershipApplication supplierApplication = new SupplierMembershipApplication();
             SupplierMembershipApplication model = new SupplierMembershipApplication();
             supplierApplication.Contacts.Add(new SupplierMembershipApplicationContact() { Id = 0, Name = "contact0" });
@@ -34,18 +35,20 @@ namespace asi.asicentral.WebApplication.Tests.Model.store
         public void CopyTo_SyncDecorationTypes()
         {
             // prepare for SupplierMembershipApplication's CopyTo(SupplierMembershipApplication target)
+            // for syncing decoration types
             SupplierMembershipApplication supplierApplication = new SupplierMembershipApplication();
             SupplierMembershipApplication model = new SupplierMembershipApplication();
-            supplierApplication.DecoratingTypes.Add(new SupplierDecoratingType() { Id = 0, Name = "type1" });
-            supplierApplication.DecoratingTypes.Add(new SupplierDecoratingType() { Id = 1, Name = "type2" });
-            supplierApplication.DecoratingTypes.Add(new SupplierDecoratingType() { Id = 2, Name = "type3" });
-            model.DecoratingTypes.Add(new SupplierDecoratingType() { Id = 7, Name = "type7" });
+            supplierApplication.DecoratingTypes.Add(new SupplierDecoratingType() { Name = "type0" });
+            supplierApplication.DecoratingTypes.Add(new SupplierDecoratingType() { Name = "type1" });
+            supplierApplication.DecoratingTypes.Add(new SupplierDecoratingType() { Name = "type2" });
+            model.DecoratingTypes.Add(new SupplierDecoratingType() { Name = "type7" });
+            model.DecoratingTypes.Add(new SupplierDecoratingType() { Name = "type2" });
 
             // model copy to target, target should have new data from the model
             model.CopyTo(supplierApplication);
             Assert.AreEqual(model.DecoratingTypes.Count, supplierApplication.DecoratingTypes.Count);
-            Assert.AreEqual(model.DecoratingTypes.ElementAt(0).Name, supplierApplication.DecoratingTypes.ElementAt(0).Name);
-            Assert.AreEqual(model.DecoratingTypes.ElementAt(0).Id, supplierApplication.DecoratingTypes.ElementAt(0).Id);
+            Assert.IsTrue(supplierApplication.DecoratingTypes.ElementAt(0).Name == "type2");
+            Assert.IsTrue(supplierApplication.DecoratingTypes.ElementAt(1).Name == "type7");
         }
     }
 }

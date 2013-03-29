@@ -208,13 +208,9 @@ namespace asi.asicentral.model.store
                 {
                     DistributorAccountType originalAcccountType = AccountTypes.ElementAt(i);
                     DistributorAccountType targetAccountType = target.AccountTypes.Where(theAccountType => theAccountType.Id == originalAcccountType.Id).SingleOrDefault();
-                    if (targetAccountType != null)
+                    if (targetAccountType == null)
                     {
-                        // update existing
-                        target.AccountTypes.Add(targetAccountType);
-                    }
-                    else
-                    {
+                        // target is missing an account type
                         target.AccountTypes.Add(originalAcccountType);
                     }
                 }
