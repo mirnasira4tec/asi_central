@@ -591,6 +591,7 @@ namespace asi.asicentral.Tests
                     UpdateDate = DateTime.UtcNow,
                     UpdateSource = "ProductTest.PopulateDemoData",
                 };
+                supplierMembership.Features.Add(feature);
                 feature = new ContextFeature()
                 {
                     Name = "Access to two top-notch <dfn>CRM tools</dfn>",
@@ -631,7 +632,7 @@ namespace asi.asicentral.Tests
                 int i = 0;
                 foreach (ContextFeature featr in supplierMembership.Features.OrderBy(feat => feat.Sequence))
                 {
-                    if (i < 8)
+                    if (i < 9)
                     {
                         foreach (ContextProductSequence prod in supplierMembership.Products.OrderBy(prodct => prodct.Sequence))
                         {
@@ -647,7 +648,7 @@ namespace asi.asicentral.Tests
                         }
                         objectContext.SaveChanges();
                     }
-                    else if (i == 8)
+                    else if (i == 9)
                     {
                         foreach (ContextProductSequence prod in supplierMembership.Products.OrderBy(prodct => prodct.Sequence))
                         {
@@ -666,7 +667,7 @@ namespace asi.asicentral.Tests
                         }
                         objectContext.SaveChanges();
                     }
-                    else if (i == 9)
+                    else if (i == 10)
                     {
                         foreach (ContextProductSequence prod in supplierMembership.Products.OrderBy(prodct => prodct.Sequence))
                         {
@@ -685,7 +686,7 @@ namespace asi.asicentral.Tests
                         }
                         objectContext.SaveChanges();
                     }
-                    else if (i >= 10)
+                    else
                     {
                         ContextProductSequence prod = supplierMembership.Products.OrderBy(prodct => prodct.Sequence).Last();
                         featr.AssociatedProducts.Add(new ContextFeatureProduct()
