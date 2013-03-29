@@ -21,7 +21,7 @@ namespace asi.asicentral.services
             _baseAssembly = assembly;
         }
 
-        public string ReadContent(string fileName)
+        public virtual string ReadContent(string fileName)
         {
             string content = string.Empty;
 
@@ -33,7 +33,7 @@ namespace asi.asicentral.services
             return content;
         }
 
-        public bool Exists(string fileName)
+        public virtual bool Exists(string fileName)
         {
             return _baseAssembly.GetManifestResourceNames().Contains(fileName);
         }
