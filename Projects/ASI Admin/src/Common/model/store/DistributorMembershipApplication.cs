@@ -233,13 +233,9 @@ namespace asi.asicentral.model.store
                 {
                     DistributorProductLine originalProductLine = ProductLines.ElementAt(i);
                     DistributorProductLine targetProductLine = target.ProductLines.Where(productLine => productLine.Id == originalProductLine.Id).SingleOrDefault();
-                    if (targetProductLine != null)
+                    if (targetProductLine == null)
                     {
                         // update existing
-                        target.ProductLines.Add(targetProductLine);
-                    }
-                    else
-                    {
                         target.ProductLines.Add(originalProductLine);
                     }
                 }

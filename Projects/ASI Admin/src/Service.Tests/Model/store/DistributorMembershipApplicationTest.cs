@@ -51,5 +51,25 @@ namespace asi.asicentral.Tests.Model.store
             DistributorAccountType type = distributorApplication.AccountTypes.Where(theType => theType.Id == 0).SingleOrDefault();
             Assert.IsNull(type);
         }
+
+        [TestMethod]
+        public void CopyTo_SyncProductLines()
+        {
+            // prepare for DistributorMembershipApplication's CopyTo(DistributorMembershipApplication target)
+            // for syncing product lines
+            DistributorMembershipApplication distributorApplication = new DistributorMembershipApplication();
+            DistributorMembershipApplication model = new DistributorMembershipApplication();
+            distributorApplication.ProductLines.Add(new DistributorProductLine() { Id = 0 });
+            distributorApplication.ProductLines.Add(new DistributorProductLine() { Id = 1 });
+            distributorApplication.ProductLines.Add(new DistributorProductLine() { Id = 2 });
+            model.ProductLines.Add(new DistributorProductLine() { Id = 1 });
+            model.ProductLines.Add(new DistributorProductLine() { Id = 5 });
+
+            // model copy to target, target should have model's new information
+            model.CopyTo(distributorApplication);
+            Assert.AreEqual(model.ProductLines.Count, distributorApplication.ProductLines.Count);
+            DistributorProductLine productline = distributorApplication.ProductLines.Where(line => line.Id == 0).SingleOrDefault();
+            Assert.IsNull(productline);
+        }
     }
 }
