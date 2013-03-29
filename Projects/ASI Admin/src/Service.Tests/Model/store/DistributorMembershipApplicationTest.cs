@@ -10,14 +10,14 @@ namespace asi.asicentral.Tests.Model.store
     public class DistributorMembershipApplicationTest
     {
         [TestMethod]
-        public void CopyTo_SyncContacts()
+        public void CopyTo_SyncDistContacts()
         {
             // prepare for DistributorMembershipApplication's CopyTo(DistributorMembershipApplication target)
             // for syncing contacts
             DistributorMembershipApplication distributorApplication = new DistributorMembershipApplication();
             DistributorMembershipApplication model = new DistributorMembershipApplication();
-            distributorApplication.Contacts.Add(new DistributorMembershipApplicationContact() { Id = 0, Name = "contact1" });
             distributorApplication.Contacts.Add(new DistributorMembershipApplicationContact() { Id = 1, Name = "contact2" });
+            distributorApplication.Contacts.Add(new DistributorMembershipApplicationContact() { Id = 0, Name = "contact1" });
             distributorApplication.Contacts.Add(new DistributorMembershipApplicationContact() { Id = 3, Name = "contact3" });
             model.Contacts.Add(new DistributorMembershipApplicationContact() { Id = 0, Name = "new contact" });
             model.Contacts.Add(new DistributorMembershipApplicationContact() { Id = 1, Name = "new contact" });
@@ -25,9 +25,13 @@ namespace asi.asicentral.Tests.Model.store
             // model copy to target, target should have information provided by model.
             model.CopyTo(distributorApplication);
             Assert.AreEqual(distributorApplication.Contacts.Count, model.Contacts.Count);
-            Assert.AreEqual(distributorApplication.Contacts[0].Name, model.Contacts[0].Name);
-            DistributorMembershipApplicationContact contact = distributorApplication.Contacts.Where(c => c.Id == 3).SingleOrDefault();
+            DistributorMembershipApplicationContact contact = null;
+            contact = distributorApplication.Contacts.Where(c => c.Id == 3).SingleOrDefault();
             Assert.IsNull(contact);
+            contact = distributorApplication.Contacts.Where(c => c.Id == 0).SingleOrDefault();
+            Assert.IsNotNull(contact);
+            contact = distributorApplication.Contacts.Where(c => c.Id == 1).SingleOrDefault();
+            Assert.IsNotNull(contact);
         }
 
         [TestMethod]
@@ -42,14 +46,19 @@ namespace asi.asicentral.Tests.Model.store
             model.AccountTypes.Add(new DistributorAccountType() { Id = 1 });
             model.AccountTypes.Add(new DistributorAccountType() { Id = 2 });
             model.AccountTypes.Add(new DistributorAccountType() { Id = 3 });
-            model.AccountTypes.Add(new DistributorAccountType() { Id = 4 });
-            model.AccountTypes.Add(new DistributorAccountType() { Id = 5 });
 
             // model copy to target, target should have model's new information
             model.CopyTo(distributorApplication);
             Assert.AreEqual(model.AccountTypes.Count, distributorApplication.AccountTypes.Count);
-            DistributorAccountType type = distributorApplication.AccountTypes.Where(theType => theType.Id == 0).SingleOrDefault();
+            DistributorAccountType type = null;
+            type = distributorApplication.AccountTypes.Where(theType => theType.Id == 0).SingleOrDefault();
             Assert.IsNull(type);
+            type = distributorApplication.AccountTypes.Where(theType => theType.Id == 1).SingleOrDefault();
+            Assert.IsNotNull(type);
+            type = distributorApplication.AccountTypes.Where(theType => theType.Id == 2).SingleOrDefault();
+            Assert.IsNotNull(type);
+            type = distributorApplication.AccountTypes.Where(theType => theType.Id == 3).SingleOrDefault();
+            Assert.IsNotNull(type);
         }
 
         [TestMethod]
@@ -68,8 +77,13 @@ namespace asi.asicentral.Tests.Model.store
             // model copy to target, target should have model's new information
             model.CopyTo(distributorApplication);
             Assert.AreEqual(model.ProductLines.Count, distributorApplication.ProductLines.Count);
-            DistributorProductLine productline = distributorApplication.ProductLines.Where(line => line.Id == 0).SingleOrDefault();
+            DistributorProductLine productline = null;
+            productline = distributorApplication.ProductLines.Where(line => line.Id == 0).SingleOrDefault();
             Assert.IsNull(productline);
+            productline = distributorApplication.ProductLines.Where(line => line.Id == 5).SingleOrDefault();
+            Assert.IsNotNull(productline);
+            productline = distributorApplication.ProductLines.Where(line => line.Id == 1).SingleOrDefault();
+            Assert.IsNotNull(productline);
         }
     }
 }

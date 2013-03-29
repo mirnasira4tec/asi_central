@@ -10,7 +10,7 @@ namespace asi.asicentral.WebApplication.Tests.Model.store
     public class SupplierMembershipApplicationTest
     {
         [TestMethod]
-        public void CopyTo_SyncContacts()
+        public void CopyTo_SyncSuppContacts()
         {
             // prepare for SupplierMembershipApplication's CopyTo(SupplierMembershipApplication target)
             // for syncing contacts
@@ -25,10 +25,13 @@ namespace asi.asicentral.WebApplication.Tests.Model.store
             // model copy to the target, target should have 2 contacts which are provided by the model
             model.CopyTo(supplierApplication);
             Assert.AreEqual(model.Contacts.Count, supplierApplication.Contacts.Count);
-            Assert.AreEqual(model.Contacts[0].Name, supplierApplication.Contacts[0].Name);
-            Assert.AreEqual(model.Contacts[1].Name, supplierApplication.Contacts[1].Name);
-            SupplierMembershipApplicationContact contact = supplierApplication.Contacts.Where(theContact => theContact.Id == 2).SingleOrDefault();
+            SupplierMembershipApplicationContact contact = null;
+            contact = supplierApplication.Contacts.Where(theContact => theContact.Id == 2).SingleOrDefault();
             Assert.IsNull(contact);
+            contact = supplierApplication.Contacts.Where(theContact => theContact.Id == 1).SingleOrDefault();
+            Assert.IsNotNull(contact);
+            contact = supplierApplication.Contacts.Where(theContact => theContact.Id == 0).SingleOrDefault();
+            Assert.IsNotNull(contact);
         }
 
         [TestMethod]
@@ -47,8 +50,11 @@ namespace asi.asicentral.WebApplication.Tests.Model.store
             // model copy to target, target should have new data from the model
             model.CopyTo(supplierApplication);
             Assert.AreEqual(model.DecoratingTypes.Count, supplierApplication.DecoratingTypes.Count);
-            Assert.IsTrue(supplierApplication.DecoratingTypes.ElementAt(0).Name == "type2");
-            Assert.IsTrue(supplierApplication.DecoratingTypes.ElementAt(1).Name == "type7");
+            SupplierDecoratingType type = null;
+            type = supplierApplication.DecoratingTypes.Where(p => p.Name == "type2").SingleOrDefault();
+            Assert.IsNotNull(type);
+            type = supplierApplication.DecoratingTypes.Where(p => p.Name == "type7").SingleOrDefault();
+            Assert.IsNotNull(type);
         }
     }
 }
