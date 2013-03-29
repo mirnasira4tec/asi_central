@@ -17,9 +17,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
         [TestMethod]
         public void OrderList()
         {
-            // arrange
-            //const string EncryptKey = "mk8$3njkl";
-            
+            // arrange            
             OrdersController controller = new OrdersController();
             IList<OrderDetail> orderDetails = new List<OrderDetail>();
 

@@ -159,7 +159,7 @@ namespace asi.asicentral.model.store
         public virtual IList<SupplierMembershipApplicationContact> Contacts { get; set; }
         public virtual ICollection<SupplierDecoratingType> DecoratingTypes { get; set; }
 
-        public void CopyTo(SupplierMembershipApplication target)
+        private void SyncContactsWith(SupplierMembershipApplication target)
         {
             //sync the contacts
             if (target.Contacts == null || target.Contacts.Count == 0) target.Contacts = Contacts;
@@ -203,6 +203,10 @@ namespace asi.asicentral.model.store
                     if (originalContact == null) target.Contacts.Remove(targetContact);
                 }
             }
+        }
+
+        private void SyncDecorationTypesWith(SupplierMembershipApplication target)
+        {
             //sync the decorating types
             if (target.DecoratingTypes == null || target.DecoratingTypes.Count == 0) target.DecoratingTypes = DecoratingTypes;
             else
@@ -214,7 +218,7 @@ namespace asi.asicentral.model.store
                     SupplierDecoratingType targetDecType = target.DecoratingTypes.Where(decType => decType.Name == originalDecType.Name).SingleOrDefault();
                     if (targetDecType == null)
                     {
-                        //target is missing a contact
+                        //target is missing a type
                         target.DecoratingTypes.Add(originalDecType);
                     }
                 }
@@ -225,6 +229,13 @@ namespace asi.asicentral.model.store
                     if (originalDecType == null) target.DecoratingTypes.Remove(targetDecType);
                 }
             }
+        }
+
+        public void CopyTo(SupplierMembershipApplication target)
+        {
+            SyncContactsWith(target);
+            SyncDecorationTypesWith(target);
+
             //sync the fields
             target.AffiliateASINumber = AffiliateASINumber;
             target.AffiliateCompanyName = AffiliateCompanyName;

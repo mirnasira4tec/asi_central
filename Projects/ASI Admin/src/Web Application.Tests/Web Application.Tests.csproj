@@ -105,7 +105,6 @@
     <Compile Include="Controllers\Store\StoreControllerTest.cs" />
     <Compile Include="Controllers\Store\SupplierApplicationTest.cs" />
     <Compile Include="Controllers\TemplateControllerTest.cs" />
-    <Compile Include="Model\store\SupplierMembershipApplicationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
   </ItemGroup>
