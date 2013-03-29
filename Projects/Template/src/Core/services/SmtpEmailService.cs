@@ -37,6 +37,16 @@ namespace asi.asicentral.services
 
         public virtual void SendMail(model.Mail mail)
         {
+            MailMessage mailObject = new MailMessage();
+            mailObject.To.Add(mail.To);
+            mailObject.Subject = mail.Subject;
+            mailObject.Body = mail.Body;
+            SendMail(mailObject);
+        }
+
+
+        public virtual void SendMail(MailMessage mail)
+        {
             if (string.IsNullOrEmpty(smtpAddress) || string.IsNullOrEmpty(from))
             {
                 if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["SmtpServer"]))
@@ -58,15 +68,11 @@ namespace asi.asicentral.services
                     throw new Exception("The SmtpEmailService was not initialized properly");
                 }
             }
-            MailMessage mailObject = new MailMessage();
             SmtpClient SmtpServer = new SmtpClient(smtpAddress);
             SmtpServer.Port = port;
             SmtpServer.EnableSsl = ssl;
-            mailObject.From = new MailAddress(from);
-            mailObject.To.Add(mail.To);
-            mailObject.Subject = mail.Subject;
-            mailObject.Body = mail.Body;
-            SmtpServer.Send(mailObject);
+            if (mail.From == null) mail.From = new MailAddress(from);
+            SmtpServer.Send(mail);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace asi.asicentral.services
             _fileService = fileService;
         }
 
-        public string Render<T>(string templateName, T model)
+        public virtual string Render<T>(string templateName, T model)
         {
             lock (_syncLock)
             {
@@ -26,7 +26,7 @@ namespace asi.asicentral.services
             }
         }
 
-        public string Render(string templateName, dynamic model)
+        public virtual string Render(string templateName, dynamic model)
         {
             lock (_syncLock)
             {
