@@ -10,6 +10,8 @@ namespace asi.asicentral.model.store
         public Nullable<int> Quantity { get; set; }
         public Nullable<System.DateTime> Added { get; set; }
         public string Application { get; set; }
+        public Nullable<decimal> TaxSubtotal { get; set; }
+        public Nullable<decimal> PreTaxSubtotal { get; set; }
         public Nullable<decimal> Subtotal { get; set; }
         public Nullable<bool> HallmarkResult { get; set; }
         public string ExternalReference { get; set; }
