@@ -60,6 +60,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(1));
 
             // user clicks reject - order should be updated to reject
+            model.DecoratingTypes.Clear();
             model.ActionName = ApplicationController.COMMAND_REJECT;
             RedirectToRouteResult result2 = controller.EditSupplier(model) as RedirectToRouteResult;
             Assert.AreEqual(result2.RouteValues["controller"], "Orders");
@@ -67,6 +68,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(2));
 
             // user clicks approve with reference id
+            model.DecoratingTypes.Clear();
             model.ActionName = ApplicationController.COMMAND_ACCEPT;
             RedirectToRouteResult result3 = controller.EditSupplier(model) as RedirectToRouteResult;
             Assert.AreEqual(orderRef.ProcessStatus, OrderStatus.Approved);
