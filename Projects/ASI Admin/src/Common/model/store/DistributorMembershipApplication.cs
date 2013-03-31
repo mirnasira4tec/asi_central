@@ -208,13 +208,9 @@ namespace asi.asicentral.model.store
                 {
                     DistributorAccountType originalAcccountType = AccountTypes.ElementAt(i);
                     DistributorAccountType targetAccountType = target.AccountTypes.Where(theAccountType => theAccountType.Id == originalAcccountType.Id).SingleOrDefault();
-                    if (targetAccountType != null)
+                    if (targetAccountType == null)
                     {
-                        // update existing
-                        target.AccountTypes.Add(targetAccountType);
-                    }
-                    else
-                    {
+                        // target is missing an account type
                         target.AccountTypes.Add(originalAcccountType);
                     }
                 }
@@ -237,13 +233,9 @@ namespace asi.asicentral.model.store
                 {
                     DistributorProductLine originalProductLine = ProductLines.ElementAt(i);
                     DistributorProductLine targetProductLine = target.ProductLines.Where(productLine => productLine.Id == originalProductLine.Id).SingleOrDefault();
-                    if (targetProductLine != null)
+                    if (targetProductLine == null)
                     {
                         // update existing
-                        target.ProductLines.Add(targetProductLine);
-                    }
-                    else
-                    {
                         target.ProductLines.Add(originalProductLine);
                     }
                 }
