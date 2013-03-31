@@ -10,7 +10,7 @@
 		<ItemGroup>
 			<NuGetPackageConfigs Include="**\**\packages.config" />
 		</ItemGroup>
-		<Exec Command="$(NuGetExe) install %(NuGetPackageConfigs.Identity) -o packages" />
+		<Exec Command='$(NuGetExe) install "%(NuGetPackageConfigs.Identity)" -o packages' />
 	</Target>
 	
 	<Target Name="Compile ASI Admin" DependsOnTargets="NuGet">
