@@ -159,7 +159,7 @@ namespace asi.asicentral.Tests
                 distributorMembership.Features.Add(feature);
                 feature = new ContextFeature()
                 {
-                    Name = "Free admission to ASI Shows",
+                    Name = "Free admission to ASI Shows®",
                     Sequence = 2,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -177,7 +177,7 @@ namespace asi.asicentral.Tests
                 distributorMembership.Features.Add(feature);
                 feature = new ContextFeature()
                 {
-                    Name = "<dfn>ESP</dfn> Licenses",
+                    Name = "<dfn>ESP</dfn>® Licenses",
                     Sequence = 4,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -223,7 +223,7 @@ namespace asi.asicentral.Tests
                 feature.ChildFeatures.Add(subFeature);
                 feature = new ContextFeature()
                 {
-                    Name = "<dfn>ESP Websites</dfn> Licenses",
+                    Name = "<dfn>ESP Websites</dfn>™ Licenses",
                     Sequence = 5,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -232,7 +232,7 @@ namespace asi.asicentral.Tests
                 distributorMembership.Features.Add(feature);
                 subFeature = new ContextFeature()
                 {
-                    Name = "Ecommerce ready Site",
+                    Name = "eCommerce-ready Site",
                     Sequence = 1,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -241,7 +241,7 @@ namespace asi.asicentral.Tests
                 feature.ChildFeatures.Add(subFeature);
                 subFeature = new ContextFeature()
                 {
-                    Name = "Products powered by ESP",
+                    Name = "Products powered by ESP®",
                     Sequence = 2,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -259,7 +259,7 @@ namespace asi.asicentral.Tests
                 feature.ChildFeatures.Add(subFeature);
                 feature = new ContextFeature()
                 {
-                    Name = "<dfn>CRM</dfn> Per Users",
+                    Name = "<dfn>CRM</dfn> Per User",
                     Sequence = 6,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -531,7 +531,7 @@ namespace asi.asicentral.Tests
                 supplierMembership.Features.Add(feature);
                 feature = new ContextFeature()
                 {
-                    Name = "Inclusion in the <dfn>ESP</dfn> Database",
+                    Name = "Inclusion in the <dfn>ESP</dfn>® Database",
                     Sequence = 3,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -540,7 +540,7 @@ namespace asi.asicentral.Tests
                 supplierMembership.Features.Add(feature);
                 feature = new ContextFeature()
                 {
-                    Name = "ESP homepage banner",
+                    Name = "ESP® home page banner",
                     Sequence = 4,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -549,7 +549,7 @@ namespace asi.asicentral.Tests
                 supplierMembership.Features.Add(feature);
                 feature = new ContextFeature()
                 {
-                    Name = "Inclusion in the <dfn>ESP Websites</dfn> Network",
+                    Name = "Inclusion in the <dfn>ESP Websites</dfn>™ Network",
                     Sequence = 5,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -576,7 +576,7 @@ namespace asi.asicentral.Tests
                 supplierMembership.Features.Add(feature);
                 feature = new ContextFeature()
                 {
-                    Name = "<dfn>Supplier Global Resource</dfn> subscription",
+                    Name = "<dfn>Supplier Global Resource</dfn>™ subscription",
                     Sequence = 8,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -603,7 +603,7 @@ namespace asi.asicentral.Tests
                 supplierMembership.Features.Add(feature);
                 feature = new ContextFeature()
                 {
-                    Name = "Booth space at 1 of out 5 <dfn>ASI Shows</dfn>",
+                    Name = "Booth space at 1 of our 5 <dfn>ASI Shows</dfn>®",
                     Sequence = 11,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -612,7 +612,7 @@ namespace asi.asicentral.Tests
                 supplierMembership.Features.Add(feature);
                 feature = new ContextFeature()
                 {
-                    Name = "1/4 page <dfn>Advantages</dfn> ad placement",
+                    Name = "1/4 page <dfn>Advantages</dfn>® ad placement",
                     Sequence = 12,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -621,7 +621,7 @@ namespace asi.asicentral.Tests
                 supplierMembership.Features.Add(feature);
                 feature = new ContextFeature()
                 {
-                    Name = "<dfn>EmailExpress</dfn> blast three times a year",
+                    Name = "<dfn>EmailExpress</dfn>™ blast three times a year",
                     Sequence = 13,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
@@ -754,7 +754,7 @@ namespace asi.asicentral.Tests
                 Assert.IsNotNull(distributorMembership);
                 IList<ContextFeature> features = distributorMembership.Features.OrderBy(ctxFeature => ctxFeature.Sequence).ToList();
                 Assert.IsTrue(features.Count > 0);
-                ContextFeature feature = features.Where(feat => feat.Name == "<dfn>ESP</dfn> Licenses").SingleOrDefault();
+                ContextFeature feature = features.Where(feat => feat.Name == "<dfn>ESP</dfn>® Licenses").SingleOrDefault();
                 Assert.IsNotNull(feature);
                 Assert.IsNotNull(feature.ChildFeatures);
                 Assert.IsTrue(feature.ChildFeatures.Count > 0);
