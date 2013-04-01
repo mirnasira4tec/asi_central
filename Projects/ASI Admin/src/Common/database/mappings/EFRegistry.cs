@@ -113,6 +113,9 @@ namespace asi.asicentral.database.mappings
             For<IRepository<ContextProductSequence>>().Use<EFRepository<ContextProductSequence>>()
                 .Ctor<IValidatedContext>().Named("ProductContext");
 
+            For<IRepository<TaxRate>>().Use<EFRepository<TaxRate>>()
+                .Ctor<IValidatedContext>().Named("ProductContext");
+
             #endregion ProductContext
 
             #region TIMSS Context

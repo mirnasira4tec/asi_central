@@ -91,6 +91,7 @@
     <Compile Include="database\mappings\asiinternet\DistributorAccountTypeMap.cs" />
     <Compile Include="database\mappings\asiinternet\DistributorProductLineMap.cs" />
     <Compile Include="database\mappings\asiinternet\SupplierDecoratingTypeMap.cs" />
+    <Compile Include="database\mappings\product\TaxRateMap.cs" />
     <Compile Include="interfaces\ICreditCardService.cs" />
     <Compile Include="model\CreditCard.cs" />
     <Compile Include="model\store\SupplierDecoratingType.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="model\store\OrderDetailApplication.cs" />
     <Compile Include="model\store\OrderProduct.cs" />
     <Compile Include="model\store\SupplierMembershipApplication.cs" />
+    <Compile Include="model\store\TaxRate.cs" />
     <Compile Include="model\timss\TIMSSAccountType.cs" />
     <Compile Include="model\timss\TIMSSAdditionalInfo.cs" />
     <Compile Include="model\timss\TIMSSCompany.cs" />

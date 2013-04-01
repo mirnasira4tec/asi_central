@@ -776,5 +776,14 @@ namespace asi.asicentral.Tests
                 }
             }
         }
+
+        [TestMethod]
+        public void RetrieveTax()
+        {
+            using (var objectContext = new ProductContext())
+            {
+                Assert.IsTrue(objectContext.TaxRates.Count() > 0);
+            }
+        }
     }
 }
