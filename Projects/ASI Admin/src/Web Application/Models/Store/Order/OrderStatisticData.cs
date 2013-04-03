@@ -22,5 +22,10 @@ namespace asi.asicentral.web.model.store.order
         public int CompletedStep { get; set; }
         public int Count { get; set; }
         public decimal? Amount { get; set; }
+
+        public int CountRejected { get; set; }
+        public decimal? AmountRejected { set; get; }
+        public int CountApproved { get; set; }
+        public decimal? AmountApproved { set; get; }
     }
 }
