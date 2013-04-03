@@ -98,10 +98,18 @@ namespace asi.asicentral.web.Controllers.Store
 
         public virtual ActionResult Statistics(OrderStatisticData orderStatisticsData)
         {
-            if (string.IsNullOrEmpty(orderStatisticsData.Campaign) && !orderStatisticsData.StartDate.HasValue) 
-                orderStatisticsData.StartDate = DateTime.Now.AddDays(-7);
-            if (string.IsNullOrEmpty(orderStatisticsData.Campaign) && !orderStatisticsData.EndDate.HasValue)
+            if (orderStatisticsData.StartDate > orderStatisticsData.EndDate)
+            {
+                ViewBag.Message = Resource.StoreDateErrorMessage;
+                orderStatisticsData.StartDate = DateTime.Now.AddDays(-7).Date;
                 orderStatisticsData.EndDate = DateTime.Now;
+                return View("../Store/Admin/Statistics", orderStatisticsData);
+            }
+
+            if (string.IsNullOrEmpty(orderStatisticsData.Campaign) && !orderStatisticsData.StartDate.HasValue)
+                orderStatisticsData.StartDate = DateTime.Now.AddDays(-7).Date;
+            if (string.IsNullOrEmpty(orderStatisticsData.Campaign) && !orderStatisticsData.EndDate.HasValue)
+                orderStatisticsData.EndDate = DateTime.Now.Date;
             if (orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = orderStatisticsData.EndDate.Value.Date + new TimeSpan(23, 59, 59);
             IQueryable<Order> ordersQuery = StoreService.GetAll<Order>();
             if (!string.IsNullOrEmpty(orderStatisticsData.Campaign)) ordersQuery = ordersQuery.Where(order => order.Campaign == orderStatisticsData.Campaign);
@@ -110,12 +118,17 @@ namespace asi.asicentral.web.Controllers.Store
 
             orderStatisticsData.Data = ordersQuery
                 .GroupBy(order => new { order.Campaign, order.CompletedStep })
-                .Select(grouped => new GroupedData() { 
+                .Select(grouped => new GroupedData() {
                     Campaign = grouped.Key.Campaign, 
                     CompletedStep = grouped.Key.CompletedStep, 
                     StepLabel = SqlFunctions.StringConvert((double)grouped.Key.CompletedStep), 
                     Count = grouped.Count(), 
-                    Amount = grouped.Sum(order => order.CreditCard.TotalAmount)})
+                    Amount = grouped.Sum(order => order.CreditCard.TotalAmount),
+                    CountRejected = grouped.Count(order => order.ProcessStatus == OrderStatus.Rejected),
+                    CountApproved = grouped.Count(order => order.ProcessStatus == OrderStatus.Approved),
+                    AmountRejected = grouped.Where(order => order.ProcessStatus == OrderStatus.Rejected).Sum(order => order.CreditCard.TotalAmount),
+                    AmountApproved = grouped.Where(order => order.ProcessStatus == OrderStatus.Approved).Sum(order => order.CreditCard.TotalAmount),
+                })
                 .OrderBy(data => new { data.Campaign, data.CompletedStep })
                 .ToList();
             //change completed steps with more meaningful title
@@ -144,6 +157,80 @@ namespace asi.asicentral.web.Controllers.Store
                 }
             }
             return View("../Store/Admin/Statistics", orderStatisticsData);
+        }
+
+        public ActionResult DownloadCSV(string campaign, DateTime? startdate, DateTime? enddate)
+        {
+            List<Order> ordersQuery = null;
+
+            if (!string.IsNullOrEmpty(campaign)) ordersQuery = StoreService.GetAll<Order>().Where(order => order.Campaign == campaign).ToList();
+            else if (string.IsNullOrEmpty(campaign) && startdate.HasValue && enddate.HasValue)
+            {
+                if (startdate.Value > enddate.Value) throw new Exception("Start date must not be after end date.");
+                ordersQuery = StoreService.GetAll<Order>().Where(order => order.Campaign == null && order.DateCreated >= startdate && order.DateCreated <= enddate).ToList();
+            }
+
+            StringBuilder csv = new StringBuilder();
+            string separator = ",";
+            csv.Append("Order ID" + separator + "Timss ID" + separator + "Company Name" + separator + "Contact Name" + separator + "Contact Phone" + separator + "Contact Email" + separator + "Orderstatus" + separator + "Amount" + separator + "Date");
+            csv.Append(System.Environment.NewLine);
+
+            foreach (Order order in ordersQuery)
+            {
+                string orderid = string.Empty, timss = string.Empty, companyname = string.Empty, contactname = string.Empty, contactphone = string.Empty, contactemail = string.Empty, orderstatus = string.Empty, amount = string.Empty;
+                DateTime date = new DateTime();
+
+                orderid = order.Id.ToString();
+                timss = order.ExternalReference;
+                orderstatus = order.ProcessStatus == OrderStatus.Approved ? "True" : "False";
+                if (order.CreditCard != null && order.CreditCard.TotalAmount.HasValue) amount = order.CreditCard.TotalAmount.Value.ToString("C");
+                else amount = String.Format("{0:C}", 0m);
+                if (order.DateCreated.HasValue) date = order.DateCreated.Value;
+
+                OrderDetailApplication application = GetOrderDetailApplication(order);
+                if (application != null)
+                {
+                    companyname = application.Company;
+                    if (application is SupplierMembershipApplication)
+                    {
+                        SupplierMembershipApplicationContact contacts = ((SupplierMembershipApplication)application).Contacts.Where(c => c.IsPrimary == true).SingleOrDefault();
+                        if (contacts != null)
+                        {
+                            contactname = contacts.Name;
+                            contactphone = contacts.Phone;
+                            contactemail = contacts.Email;
+                        }
+                    }
+                    if (application is DistributorMembershipApplication)
+                    {
+                        DistributorMembershipApplicationContact contacts = ((DistributorMembershipApplication)application).Contacts.Where(c => c.IsPrimary == true).SingleOrDefault();
+                        if (contacts != null)
+                        {
+                            contactname = contacts.Name;
+                            contactphone = contacts.Phone;
+                            contactemail = contacts.Email;
+                        }
+                    }
+                }
+                csv.Append(orderid + separator + timss + separator + companyname + separator + contactname + separator + contactphone + separator + contactemail + separator + orderstatus + separator + amount + separator + date.ToString());
+                csv.Append(System.Environment.NewLine);
+            }
+            return File(new System.Text.UTF8Encoding().GetBytes(csv.ToString()), "text/csv", "report.csv");
+        }
+
+        private OrderDetailApplication GetOrderDetailApplication(Order order)
+        {
+            if (order != null && order.OrderDetails != null && order.OrderDetails.Count > 0)
+            {
+                foreach (OrderDetail orderDetail in order.OrderDetails)
+                {
+                    OrderDetailApplication application = StoreService.GetApplication(orderDetail);
+                    if (application != null) return application;
+                }
+                return null;
+            }
+            else
+                return null;
         }
     }
 }
