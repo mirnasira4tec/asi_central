@@ -139,11 +139,11 @@
         <div class="well">@Model.OrderStatus<br /></div>
         @Html.Label("Timms ID") @Html.EditorFor(m => m.ExternalReference) <br /> 
         <span id="timmsErrorMessage" class="field-validation-error" data-type="errormessage"></span><br />
-        @if (Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
+        @if (Model.Completed && Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
         {
         <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
         }
-        @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
+        @if (Model.Completed && Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
         { 
         <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
         }
