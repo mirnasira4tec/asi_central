@@ -27,8 +27,8 @@
     </div>
 </div>
 
-@if (ViewBag.Message != null || ViewBag.Message == "")
-{   <div class="alert">@ViewBag.Message</div>   }
+@if (Model.Message != null || Model.Message == "")
+{   <div class="alert">@Model.Message</div>   }
 
 </form>
     @if (Model.Data != null && Model.Data.Count > 0)
@@ -178,15 +178,9 @@
             var campaign = $(this).attr("data-campaign");
             var startdate = $(this).attr("data-startdate");
             var enddate = $(this).attr("data-enddate");
-            var location;
-            if (!campaign && startdate && enddate) {
-                var startdate = $(this).attr("data-startdate");
-                var enddate = $(this).attr("data-enddate");
-                location = "/Store/Orders/DownloadCSV/?startdate=" + startdate + "&enddate=" + enddate;
-            } else if (campaign) {
-                location = "/Store/Orders/DownloadCSV/?campaign=" + campaign;
-            }
+            var location = "@Url.Action("DownloadCSV", "Orders", null)/" + "?Campaign=" + campaign + "&StartDate=" + startdate + "&EndDate=" + enddate;
             document.location = location;
         });
+        
     </script>
 }

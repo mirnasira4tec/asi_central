@@ -13,6 +13,7 @@ namespace asi.asicentral.web.model.store.order
         public string Campaign { get; set; }
         public IList<GroupedData> Data { get; set; }
         public decimal TotalAmount { get; set; }
+        public string Message { set; get; }
     }
 
     public class GroupedData

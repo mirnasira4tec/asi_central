@@ -100,22 +100,12 @@ namespace asi.asicentral.web.Controllers.Store
         {
             if (orderStatisticsData.StartDate > orderStatisticsData.EndDate)
             {
-                ViewBag.Message = Resource.StoreDateErrorMessage;
+                orderStatisticsData.Message = Resource.StoreDateErrorMessage;
                 orderStatisticsData.StartDate = DateTime.Now.AddDays(-7).Date;
                 orderStatisticsData.EndDate = DateTime.Now;
                 return View("../Store/Admin/Statistics", orderStatisticsData);
             }
-
-            if (string.IsNullOrEmpty(orderStatisticsData.Campaign) && !orderStatisticsData.StartDate.HasValue)
-                orderStatisticsData.StartDate = DateTime.Now.AddDays(-7).Date;
-            if (string.IsNullOrEmpty(orderStatisticsData.Campaign) && !orderStatisticsData.EndDate.HasValue)
-                orderStatisticsData.EndDate = DateTime.Now.Date;
-            if (orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = orderStatisticsData.EndDate.Value.Date + new TimeSpan(23, 59, 59);
-            IQueryable<Order> ordersQuery = StoreService.GetAll<Order>();
-            if (!string.IsNullOrEmpty(orderStatisticsData.Campaign)) ordersQuery = ordersQuery.Where(order => order.Campaign == orderStatisticsData.Campaign);
-            if (orderStatisticsData.StartDate.HasValue) ordersQuery = ordersQuery.Where(order => order.DateCreated >= orderStatisticsData.StartDate);
-            if (orderStatisticsData.EndDate.HasValue) ordersQuery = ordersQuery.Where(order => order.DateCreated <= orderStatisticsData.EndDate);
-
+            IQueryable<Order> ordersQuery = GetOrderBy(orderStatisticsData);
             orderStatisticsData.Data = ordersQuery
                 .GroupBy(order => new { order.Campaign, order.CompletedStep })
                 .Select(grouped => new GroupedData() {
@@ -159,16 +149,11 @@ namespace asi.asicentral.web.Controllers.Store
             return View("../Store/Admin/Statistics", orderStatisticsData);
         }
 
-        public ActionResult DownloadCSV(string campaign, DateTime? startdate, DateTime? enddate)
+        public ActionResult DownloadCSV(OrderStatisticData orderStatisticsData)
         {
-            List<Order> ordersQuery = null;
-
-            if (!string.IsNullOrEmpty(campaign)) ordersQuery = StoreService.GetAll<Order>().Where(order => order.Campaign == campaign).ToList();
-            else if (string.IsNullOrEmpty(campaign) && startdate.HasValue && enddate.HasValue)
-            {
-                if (startdate.Value > enddate.Value) throw new Exception("Start date must not be after end date.");
-                ordersQuery = StoreService.GetAll<Order>().Where(order => order.Campaign == null && order.DateCreated >= startdate && order.DateCreated <= enddate).ToList();
-            }
+            IQueryable<Order> ordersQuery = GetOrderBy(orderStatisticsData);
+            if (string.IsNullOrEmpty(orderStatisticsData.Campaign))
+                ordersQuery = ordersQuery.Where(order => order.Campaign == null || order.Campaign == string.Empty);
 
             StringBuilder csv = new StringBuilder();
             string separator = ",";
@@ -216,6 +201,21 @@ namespace asi.asicentral.web.Controllers.Store
                 csv.Append(System.Environment.NewLine);
             }
             return File(new System.Text.UTF8Encoding().GetBytes(csv.ToString()), "text/csv", "report.csv");
+        }
+
+        private IQueryable<Order> GetOrderBy(OrderStatisticData orderStatisticsData)
+        {
+            if (string.IsNullOrEmpty(orderStatisticsData.Campaign) && !orderStatisticsData.StartDate.HasValue)
+                orderStatisticsData.StartDate = DateTime.Now.AddDays(-7).Date;
+            if (string.IsNullOrEmpty(orderStatisticsData.Campaign) && !orderStatisticsData.EndDate.HasValue)
+                orderStatisticsData.EndDate = DateTime.Now.Date;
+            if (orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = orderStatisticsData.EndDate.Value.Date + new TimeSpan(23, 59, 59);
+            IQueryable<Order> ordersQuery = StoreService.GetAll<Order>();
+            if (!string.IsNullOrEmpty(orderStatisticsData.Campaign)) ordersQuery = ordersQuery.Where(order => order.Campaign == orderStatisticsData.Campaign);
+            if (orderStatisticsData.StartDate.HasValue) ordersQuery = ordersQuery.Where(order => order.DateCreated >= orderStatisticsData.StartDate);
+            if (orderStatisticsData.EndDate.HasValue) ordersQuery = ordersQuery.Where(order => order.DateCreated <= orderStatisticsData.EndDate);
+
+            return ordersQuery;
         }
 
         private OrderDetailApplication GetOrderDetailApplication(Order order)
