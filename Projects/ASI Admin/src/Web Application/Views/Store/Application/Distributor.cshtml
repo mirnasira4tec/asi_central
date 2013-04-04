@@ -48,6 +48,7 @@
     @Html.LabelFor(m => m.ShippingCountry) @Html.EditorFor(m => m.ShippingCountry) @Html.ValidationMessageFor(m => m.ShippingCountry)
     </fieldset>}
     <fieldset><legend><small>Form Data</small></legend>
+    @Html.LabelFor(m => m.ASIContact) @Html.EditorFor(m => m.ASIContact) @Html.ValidationMessageFor(m => m.ASIContact)
     @Html.LabelFor(m => m.NumberOfEmployee) @Html.EditorFor(m => m.NumberOfEmployee) @Html.ValidationMessageFor(m=>m.NumberOfEmployee)
     @Html.LabelFor(m => m.NumberOfSalesEmployee) @Html.EditorFor(m => m.NumberOfSalesEmployee) @Html.ValidationMessageFor(m=>m.NumberOfSalesEmployee)
     @Html.LabelFor(m => m.AnnualSalesVolumeASP) @Html.EditorFor(m => m.AnnualSalesVolumeASP) @Html.ValidationMessageFor(m=>m.AnnualSalesVolumeASP)
@@ -63,31 +64,25 @@
     </fieldset>
     </div>
     <div class="span4">
-        <fieldset><legend><small>Application: Company Contact Person</small></legend>
-        @Html.LabelFor(m => m.FirstName) @Html.EditorFor(m => m.FirstName) @Html.ValidationMessageFor(m => m.FirstName)
-        @Html.LabelFor(m => m.LastName) @Html.EditorFor(m => m.LastName) @Html.ValidationMessageFor(m => m.LastName)
-        @Html.LabelFor(m => m.ApplicantEmail) @Html.EditorFor(m => m.ApplicantEmail) @Html.ValidationMessageFor(m => m.ApplicantEmail)
-        @Html.LabelFor(m => m.Phone) @Html.EditorFor(m => m.Phone) @Html.ValidationMessageFor(m => m.Phone)
-        </fieldset>
-        @if(Model.Contacts != null && Model.Contacts.Count > 0)
+    @if(Model.Contacts != null && Model.Contacts.Count > 0)
+    {
+        for (int i = 0; i < Model.Contacts.Count; i++)
         {
-            for (int i = 0; i < Model.Contacts.Count; i++)
+            if (Model.Contacts[i] != null)
             {
-                if (Model.Contacts[i] != null)
-                {
-                <fieldset><legend><small>Contacts</small></legend>
-                @Html.HiddenFor(m => Model.Contacts[i].Id)
-                @Html.HiddenFor(m => Model.Contacts[i].AppplicationId)                                   
-                @Html.CheckBoxFor(m => Model.Contacts[i].IsPrimary, new { rel="isprimary" })
-                @Html.LabelFor(m => Model.Contacts[i].Name) @Html.EditorFor(m => Model.Contacts[i].Name) @Html.ValidationMessageFor(m => Model.Contacts[i].Name)
-                @Html.LabelFor(m => Model.Contacts[i].Title) @Html.EditorFor(m => Model.Contacts[i].Title) @Html.ValidationMessageFor(m => Model.Contacts[i].Title)
-                @Html.LabelFor(m => Model.Contacts[i].Email) @Html.EditorFor(m => Model.Contacts[i].Email) @Html.ValidationMessageFor(m => Model.Contacts[i].Email)
-                @Html.LabelFor(m => Model.Contacts[i].Phone) @Html.EditorFor(m => Model.Contacts[i].Phone) @Html.ValidationMessageFor(m => Model.Contacts[i].Phone)
-                @Html.LabelFor(m => Model.Contacts[i].Fax) @Html.EditorFor(m => Model.Contacts[i].Fax) @Html.ValidationMessageFor(m => Model.Contacts[i].Fax)
-                </fieldset>
-                }
+            <fieldset><legend><small>Contacts</small></legend>
+            @Html.HiddenFor(m => Model.Contacts[i].Id)
+            @Html.HiddenFor(m => Model.Contacts[i].AppplicationId)                                   
+            @Html.CheckBoxFor(m => Model.Contacts[i].IsPrimary, new { rel="isprimary" })
+            @Html.LabelFor(m => Model.Contacts[i].Name) @Html.EditorFor(m => Model.Contacts[i].Name) @Html.ValidationMessageFor(m => Model.Contacts[i].Name)
+            @Html.LabelFor(m => Model.Contacts[i].Title) @Html.EditorFor(m => Model.Contacts[i].Title) @Html.ValidationMessageFor(m => Model.Contacts[i].Title)
+            @Html.LabelFor(m => Model.Contacts[i].Email) @Html.EditorFor(m => Model.Contacts[i].Email) @Html.ValidationMessageFor(m => Model.Contacts[i].Email)
+            @Html.LabelFor(m => Model.Contacts[i].Phone) @Html.EditorFor(m => Model.Contacts[i].Phone) @Html.ValidationMessageFor(m => Model.Contacts[i].Phone)
+            @Html.LabelFor(m => Model.Contacts[i].Fax) @Html.EditorFor(m => Model.Contacts[i].Fax) @Html.ValidationMessageFor(m => Model.Contacts[i].Fax)
+            </fieldset>
             }
         }
+    }
     </div>
     <div class="span4">
         <fieldset><legend><small>Order Status</small></legend>
