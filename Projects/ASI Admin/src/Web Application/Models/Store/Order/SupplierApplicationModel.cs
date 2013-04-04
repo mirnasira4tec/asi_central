@@ -64,6 +64,7 @@ namespace asi.asicentral.web.model.store
         public int OrderId { get; set; }
         public string ActionName { get; set; }
         public string ExternalReference { get; set; }
+        public bool Completed { get; set; }
         public OrderStatus OrderStatus { get; set; }
 
         /// <summary>
@@ -90,6 +91,7 @@ namespace asi.asicentral.web.model.store
             ExternalReference = order.ExternalReference;
             OrderId = order.Id;
             OrderStatus = order.ProcessStatus;
+            Completed = order.Status.HasValue ? order.Status.Value : false;
         }
 
         private void UpdateDecoratingTypesProperties()

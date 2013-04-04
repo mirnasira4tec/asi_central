@@ -96,6 +96,7 @@ namespace asi.asicentral.web.model.store
             ExternalReference = order.ExternalReference;
             OrderId = order.Id;
             OrderStatus = order.ProcessStatus;
+            Completed = order.Status.HasValue ? order.Status.HasValue : false;
         }
 
         private void GetPrimaryBusinessRevenue()
@@ -279,5 +280,6 @@ namespace asi.asicentral.web.model.store
         public string ActionName { get; set; }
         public string ExternalReference { get; set; }
         public OrderStatus OrderStatus { get; set; }
+        public bool Completed { get; set; }
     }
 }

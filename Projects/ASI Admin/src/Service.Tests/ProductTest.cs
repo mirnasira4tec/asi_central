@@ -92,7 +92,7 @@ namespace asi.asicentral.Tests
                 distributorMembership.Products.Add(new ContextProductSequence()
                 {
                     Product = product,
-                    Qualifier = "Good",
+                    Qualifier = "",
                     Cost = 139.99m,
                     Sequence = 2,
                     CreateDate = DateTime.UtcNow,
@@ -111,7 +111,7 @@ namespace asi.asicentral.Tests
                 distributorMembership.Products.Add(new ContextProductSequence()
                 {
                     Product = product,
-                    Qualifier = "Better",
+                    Qualifier = "",
                     Cost = 199.99m,
                     Sequence = 3,
                     CreateDate = DateTime.UtcNow,

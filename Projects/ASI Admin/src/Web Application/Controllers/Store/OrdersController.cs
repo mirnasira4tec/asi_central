@@ -154,6 +154,9 @@ namespace asi.asicentral.web.Controllers.Store
                     case 5:
                         data.StepLabel = "Entered optional information";
                         break;
+                    case 6:
+                        data.StepLabel = "Supplier provided a product List";
+                        break;
                 }
             }
             return View("../Store/Admin/Statistics", orderStatisticsData);
