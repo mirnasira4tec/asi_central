@@ -27,6 +27,7 @@ namespace asi.asicentral.web.Controllers.Store
             Order order = StoreService.GetAll<Order>(true).Where(ordr => ordr.Id == orderId).SingleOrDefault();
             if (application != null && order != null)
             {
+                if (application.UserId != order.UserId) throw new Exception("The order and the application do not match");
                 if (application is SupplierMembershipApplication) return View("../Store/Application/Supplier", new SupplierApplicationModel((SupplierMembershipApplication)application, order));
                 else if (application is DistributorMembershipApplication) return View("../Store/Application/Distributor", new DistributorApplicationModel((DistributorMembershipApplication)application, order));
                 else throw new Exception("Retieved an unknown type of application");
