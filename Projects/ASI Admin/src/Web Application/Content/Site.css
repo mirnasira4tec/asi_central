@@ -153,6 +153,14 @@ div.well
         margin: 0px 0px 0px 0px;
     }
 
+.helper-text {
+    color: #414141;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 14px;
+}
+
 	
 /* utility classes */
 .float-left {
