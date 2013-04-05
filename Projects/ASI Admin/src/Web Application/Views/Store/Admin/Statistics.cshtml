@@ -15,16 +15,13 @@
     </div>
     <div class="span3">
         <label for="StartDate">Start Date:</label>
-        <input class="input-medium" type="text" data-type="date" name="StartDate" value="@(Model.StartDate.HasValue ? Model.StartDate.Value.ToString("MM/dd/yyyy") : "")" />
+        <div class="input-append"><input class="input-medium" type="text" data-type="date" name="StartDate" value="@(Model.StartDate.HasValue ? Model.StartDate.Value.ToString("MM/dd/yyyy") : "")" /><span class="add-on"><i class="icon-remove" data-name="StartDate"></i></span></div>
     </div>
     <div class="span3">
         <label for="StartDate">End Date:</label>
-        <input class="input-medium" type="text" data-type="date" name="EndDate" value="@(Model.EndDate.HasValue ? Model.EndDate.Value.ToString("MM/dd/yyyy") : "")" />
+        <div class="input-append"><input class="input-medium" type="text" data-type="date" name="EndDate" value="@(Model.EndDate.HasValue ? Model.EndDate.Value.ToString("MM/dd/yyyy") : "")" /><span class="add-on"><i class="icon-remove" data-name="EndDate"></i></span></div>
     </div>
-    <div class="span2">
-        <br />
-        <input class="btn btn-primary" type="submit" value="Refresh" />
-    </div>
+    <div class="span2"><br /><input class="btn btn-primary" type="submit" value="Refresh" /></div>
 </div>
 
 @if (Model.Message != null || Model.Message == "")
@@ -97,7 +94,7 @@
             {
                 <div class="row-fluid">
                     <div class="span3"><h2>@currentGroupName</h2></div>
-                    <div class="span4"><a rel="download" data-campaign="@data.Campaign" data-startdate="@Model.StartDate" data-enddate="@Model.EndDate"  href="#">Download data</a></div>
+                    <div class="span4"><a rel="download" data-campaign="@data.Campaign" href="#">Download data</a></div>
                     <div class="span5">&nbsp;</div>
                 </div>
                 oldGroupName = currentGroupName;
@@ -168,19 +165,22 @@
     @Scripts.Render("~/bundles/form")
     <script>
         $('input[data-type*="date"]').datepicker();
-
-        $('input[name="Campaign"]').click(function (e) {
-            $('input[name="StartDate"]').val("");
-            $('input[name="EndDate"]').val("");
+        $('.icon-remove').click(function (e) {
+            $('input[name="' + $(e.target).data("name") + '"]').val("");
+        });
+        $('input[name="Campaign"]').change(function (e) {
+            if ($(e.target).val()) {
+                $('input[name="StartDate"]').val("");
+                $('input[name="EndDate"]').val("");
+            }
         });
 
         $('a[rel="download"]').click(function (e) {
-            var campaign = $(this).attr("data-campaign");
-            var startdate = $(this).attr("data-startdate");
-            var enddate = $(this).attr("data-enddate");
+            var campaign = $(this).data("campaign");
+            var startdate = '@Model.StartDate';
+            var enddate = '@Model.EndDate';
             var location = "@Url.Action("DownloadCSV", "Orders", null)/" + "?Campaign=" + campaign + "&StartDate=" + startdate + "&EndDate=" + enddate;
             document.location = location;
-        });
-        
+        });       
     </script>
 }
