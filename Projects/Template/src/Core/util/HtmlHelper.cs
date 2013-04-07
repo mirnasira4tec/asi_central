@@ -4,7 +4,9 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.WebPages;
 
 namespace asi.asicentral.util
 {
@@ -34,7 +36,7 @@ namespace asi.asicentral.util
         }
 
         /// <summary>
-        /// Create a list of countries and their ISO country code
+        /// Create a list of countries and their ISO country code for displaying in the UI
         /// </summary>
         /// <returns></returns>
         public static IList<SelectListItem> GetCountries()
@@ -61,6 +63,10 @@ namespace asi.asicentral.util
             return countries;
         }
 
+        /// <summary>
+        /// Get a list of US states and their codes for displaying in the UI
+        /// </summary>
+        /// <returns></returns>
         public static IList<SelectListItem> GetStates()
         {
             IList<SelectListItem> states = new List<SelectListItem>();
@@ -117,6 +123,60 @@ namespace asi.asicentral.util
             states.Add(new SelectListItem() { Text = "Wisconsin", Value = "WI" });
             states.Add(new SelectListItem() { Text = "Wyoming", Value = "WY" });
             return states;
+        }
+
+        /// <summary>
+        /// Used to allow for multiple displays based on the device.
+        /// This method needs to be called in Application_Start method
+        /// </summary>
+        public static void EvaluateDisplayMode()
+        {
+            //set up condition for mobile devices
+            DisplayModeProvider.Instance.Modes.Insert(0, new DefaultDisplayMode("Mobile")
+            {
+                //look at user agent to figure out what the client is
+                ContextCondition = (ctx => IsMobileDevice(ctx)),
+            });
+
+            //set up condition for tablet devices
+            DisplayModeProvider.Instance.Modes.Insert(1, new DefaultDisplayMode("Tablet")
+            {
+                //look at user agent to figure out what the client is
+                ContextCondition = (ctx => IsTabletDevice(ctx)),
+            });
+        }
+
+        /// <summary>
+        /// Checks if the agent is a mobile one
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static bool IsMobileDevice(HttpContextBase context)
+        {
+            bool isMobile = context.GetOverriddenUserAgent() != null &&
+            (
+                context.GetOverriddenUserAgent().IndexOf("iPhone", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                context.GetOverriddenUserAgent().IndexOf("iPod", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                (context.GetOverriddenUserAgent().IndexOf("android", StringComparison.OrdinalIgnoreCase) >= 0 && context.GetOverriddenUserAgent().IndexOf("mobile", StringComparison.OrdinalIgnoreCase) >= 0) ||
+                context.GetOverriddenBrowser().IsMobileDevice
+            );
+            return isMobile;
+        }
+
+        /// <summary>
+        /// Checks if the agent is a tablet one
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static bool IsTabletDevice(HttpContextBase context)
+        {
+            bool isTablet = context.GetOverriddenUserAgent() != null &&
+            (
+                context.GetOverriddenUserAgent().IndexOf("iPad", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                context.GetOverriddenUserAgent().IndexOf("Playbook", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                (context.GetOverriddenUserAgent().IndexOf("android", StringComparison.OrdinalIgnoreCase) >= 0 && context.GetOverriddenUserAgent().IndexOf("mobile", StringComparison.OrdinalIgnoreCase) == -1)
+            );
+            return isTablet;
         }
     }
 }
