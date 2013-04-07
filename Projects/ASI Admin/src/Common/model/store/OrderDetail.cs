@@ -12,6 +12,7 @@ namespace asi.asicentral.model.store
         public string Application { get; set; }
         public Nullable<decimal> TaxSubtotal { get; set; }
         public Nullable<decimal> PreTaxSubtotal { get; set; }
+        public Nullable<decimal> Shipping { get; set; }
         public Nullable<decimal> Subtotal { get; set; }
         public Nullable<bool> HallmarkResult { get; set; }
         public string ExternalReference { get; set; }
