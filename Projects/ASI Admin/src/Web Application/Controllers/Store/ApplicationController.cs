@@ -10,6 +10,7 @@ using asi.asicentral.services;
 
 namespace asi.asicentral.web.Controllers.Store
 {
+    [Authorize]
     public class ApplicationController : Controller
     {
         public const string COMMAND_SAVE = "Save";

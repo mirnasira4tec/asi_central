@@ -9,6 +9,7 @@ using System.Web.Security.AntiXss;
 
 namespace asi.asicentral.web.Controllers.sgr
 {
+    [Authorize]
     public class CompanyController : Controller
     {
 

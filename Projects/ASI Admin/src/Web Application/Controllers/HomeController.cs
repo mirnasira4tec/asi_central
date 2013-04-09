@@ -12,6 +12,7 @@ using System.Web.Mvc;
 
 namespace Web_Application.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         public IObjectService ObjectService { get; set; }

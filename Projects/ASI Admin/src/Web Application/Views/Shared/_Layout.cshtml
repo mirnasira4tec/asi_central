@@ -21,7 +21,7 @@
 <header id="site-header" class="clearfix">
 	<a href="/"><img class="float-left" src="/images/asi-logo.gif" alt="Logo of ASI The Advertising Specialty Institute"></a>
 	<div id="account-admin">
-		<p>You are logged in as Firstname Lastname.</p>
+		<p>You are logged in as @(((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name).</p>
         <div class="title">@ViewBag.Title</div>
 	</div>
 </header><!-- END #site-header -->
