@@ -10,6 +10,7 @@ using asi.asicentral.model.sgr;
 
 namespace asi.asicentral.web.Controllers.sgr
 {
+    [Authorize]
     public class ProductController : Controller
     {
         public ProductController()

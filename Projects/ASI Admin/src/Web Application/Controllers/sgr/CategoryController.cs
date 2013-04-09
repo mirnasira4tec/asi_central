@@ -10,6 +10,7 @@ using asi.asicentral.web.Models.sgr;
 
 namespace asi.asicentral.web.Controllers.sgr
 {
+    [Authorize]
     public class CategoryController : Controller
     {
         public IObjectService ObjectService { get; set; }

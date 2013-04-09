@@ -12,6 +12,7 @@ using System.Data.Objects.SqlClient;
 
 namespace asi.asicentral.web.Controllers.Store
 {
+    [Authorize]
     public class OrdersController : Controller
     {
         public IStoreService StoreService { get; set; }

@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace asi.asicentral.web.Controllers.Store
 {
+    [Authorize]
     public class ContextController : Controller
     {
         public IStoreService StoreObjectService { get; set; }
