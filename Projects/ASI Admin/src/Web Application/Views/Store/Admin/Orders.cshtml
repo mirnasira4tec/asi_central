@@ -35,7 +35,7 @@
             <div class="well">
             @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class="form-inline", @id="form-" + @OrderPageModel.TAB_ORDER }))
             {
-                <div class="formField"><label for="orderid">Order Id</label> <input name="orderId" type="text" value="@Model.OrderIdentifier" />
+                <div class="formField"><label for="orderid">Order Id</label> <input name="id" type="text" value="@Model.Identifier" />
                 <input type="hidden" value="@OrderPageModel.TAB_ORDER" name="formtab" />
                 <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
                 <input type="submit" value="Search" class="btn" /></div>
@@ -72,7 +72,7 @@
             @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class="form-inline", @id="form-" + @OrderPageModel.TAB_TIMMS }))
             {
                 <div class="well">
-                <div class="formField"><label for="timmsid">TIMMS ID</label> <input id="timmsid" name="id" type="text" value="" />
+                <div class="formField"><label for="timmsid">TIMMS ID</label> <input id="timmsid" name="id" type="text" value="@Model.Identifier" />
                 <input type="hidden" value="@OrderPageModel.TAB_TIMMS" name="formtab" />
                 <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
                 <input type="submit" value="Search" class="btn" /></div>
