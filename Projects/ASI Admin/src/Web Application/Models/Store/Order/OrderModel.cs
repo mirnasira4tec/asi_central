@@ -86,7 +86,12 @@ namespace asi.asicentral.web.model.store
 
         public DateTime DateOrderCreated
         {
-            get { return this.orderDetail.Order.DateCreated.Value; }
+            get {
+                DateTime date = DateTime.MinValue;
+                if (this.orderDetail != null && this.orderDetail.Order != null && this.orderDetail.Order.DateCreated.HasValue)
+                    date = this.orderDetail.Order.DateCreated.Value;
+                return date;
+            }
         }
 
         public bool ShowIcons { get; set; }
