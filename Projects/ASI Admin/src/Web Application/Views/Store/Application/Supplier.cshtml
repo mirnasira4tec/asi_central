@@ -6,8 +6,8 @@
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
 }
 
-<h1>@Resource.StoreTitleSupplierApplication</h1>
-
+<h1>@Resource.StoreTitleSupplierApplication (#@Model.OrderId)</h1>
+<p>The Membership fee ordered is for @Model.Price.ToString("C")</p>
 @using (Html.BeginForm("EditSupplier", "Application"))
 {        
 <div class="row-fluid">

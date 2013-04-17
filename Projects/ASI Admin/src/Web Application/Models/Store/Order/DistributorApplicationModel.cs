@@ -16,6 +16,8 @@ namespace asi.asicentral.web.model.store
         public bool ScreenPrinting { set; get; }
         public bool PromotionalProducts { set; get; }
         public bool Other { set; get; }
+        public decimal MonthlyPrice { get; set; }
+        public decimal Price { get; set; }
         
         public bool ProductA { get; set; }
         public bool ProductB { get; set; }
@@ -97,6 +99,17 @@ namespace asi.asicentral.web.model.store
             OrderId = order.Id;
             OrderStatus = order.ProcessStatus;
             Completed = order.Status.HasValue ? order.Status.HasValue : false;
+            if (order.OrderDetails.Count == 1 && order.OrderDetails.ElementAt(0).Subtotal.HasValue)
+            {
+                if (order.OrderDetails.ElementAt(0).PreTaxSubtotal.HasValue) MonthlyPrice = order.OrderDetails.ElementAt(0).PreTaxSubtotal.Value;
+                else MonthlyPrice = order.OrderDetails.ElementAt(0).Subtotal.Value;
+                Price = order.OrderDetails.ElementAt(0).Subtotal.Value;
+            }
+            else
+            {
+                MonthlyPrice = 0m;
+                Price = 0m;
+            }
         }
 
         private void GetPrimaryBusinessRevenue()
