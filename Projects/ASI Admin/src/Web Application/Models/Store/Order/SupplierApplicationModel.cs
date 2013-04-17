@@ -66,6 +66,7 @@ namespace asi.asicentral.web.model.store
         public string ExternalReference { get; set; }
         public bool Completed { get; set; }
         public OrderStatus OrderStatus { get; set; }
+        public decimal Price { get; set; }
 
         /// <summary>
         /// Required for MVC to rebuild the model
@@ -91,6 +92,10 @@ namespace asi.asicentral.web.model.store
             ExternalReference = order.ExternalReference;
             OrderId = order.Id;
             OrderStatus = order.ProcessStatus;
+            if (order.OrderDetails.Count == 1 && order.OrderDetails.ElementAt(0).Subtotal.HasValue)
+                Price = order.OrderDetails.ElementAt(0).Subtotal.Value;
+            else
+                Price = 0m;
             Completed = order.Status.HasValue ? order.Status.Value : false;
         }
 
