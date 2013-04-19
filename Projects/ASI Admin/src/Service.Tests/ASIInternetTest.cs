@@ -65,16 +65,12 @@ namespace asi.asicentral.Tests
         [TestMethod]
         public void OrderRetreiveTest()
         {
-            int orderIdentifier = 1;
-
             int count = 0;
-            //using orders from the database dump, might need to improve that
-            //Needed to make sure we can retrieve legacy orders and that all objects are populated properly
             using (var context = new ASIInternetContext())
             {
                 count = context.Orders.Count();
                 Assert.IsTrue(count > 0);
-                Order order = context.Orders.Where(theOrder => theOrder.Id == orderIdentifier).SingleOrDefault();
+                Order order = context.Orders.Where(theOrder => theOrder.CreditCard != null && theOrder.OrderDetails.Count > 0).FirstOrDefault();
                 Assert.IsNotNull(order);
                 Assert.IsNotNull(order.CreditCard);
                 Assert.IsNotNull(order.OrderDetails);
