@@ -7,7 +7,7 @@
 }
 
 <h1>@Resource.StoreTitleDistributorApplication (#@Model.OrderId)</h1>
-<p>The membership fee ordered is for @Model.MonthlyPrice.ToString("C") and a one of total price of @Model.Price.ToString("C")</p>
+<p>The membership fee selected is for @Model.MonthlyPrice.ToString("C") and the final price (including taxes & Shipping) is @Model.Price.ToString("C")</p>
 
 @using (Html.BeginForm("EditDistributor", "Application"))
 {
