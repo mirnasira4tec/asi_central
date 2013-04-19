@@ -85,8 +85,7 @@
                 if (Model.Contacts[i] != null)
                 {
                 <fieldset><legend><small>Contacts</small></legend>
-                @Html.HiddenFor(m => Model.Contacts[i].Id)
-                @Html.HiddenFor(m => Model.Contacts[i].AppplicationId)                                   
+                @Html.HiddenFor(m => Model.Contacts[i].Id) @Html.HiddenFor(m => Model.Contacts[i].IsPrimary) @Html.HiddenFor(m => Model.Contacts[i].AppplicationId)
                 @(Model.Contacts[i].IsPrimary ? Html.Raw(" <strong>Primary Contact</strong>"): Html.Raw(""))
                 @Html.LabelFor(m => Model.Contacts[i].Name) @Html.EditorFor(m => Model.Contacts[i].Name) @Html.ValidationMessageFor(m => Model.Contacts[i].Name)
                 @Html.LabelFor(m => Model.Contacts[i].Title) @Html.EditorFor(m => Model.Contacts[i].Title) @Html.ValidationMessageFor(m => Model.Contacts[i].Title)
