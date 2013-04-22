@@ -10,6 +10,7 @@ using asi.asicentral.model.sgr;
 
 namespace asi.asicentral.web.Controllers.sgr
 {
+    [Authorize]
     public class ProductController : Controller
     {
         public ProductController()
@@ -22,30 +23,24 @@ namespace asi.asicentral.web.Controllers.sgr
         public virtual ActionResult List(ViewCompany viewCompany)
         {
             Company company = ObjectService.GetAll<Company>().Where(c => c.Id == viewCompany.Id).SingleOrDefault();
-            
             if (company == null) 
                 throw new Exception("Invalid identifier for a company: " + viewCompany.Id);
 
             company.CopyTo(viewCompany);
-            
             Category category = company.Categories.Where(c => c.Id == viewCompany.CategoryID).SingleOrDefault();
-
             viewCompany.Products = category.Products;
-
             return View("../sgr/Product/List", viewCompany);
         }
 
         [HttpGet]
         public virtual ActionResult Add(int companyId, int categoryId)
         {
-            ViewBag.Title = Resource.TitleAddProduct;
+            ViewBag.SubTitle = Resource.TitleAddProduct;
 
             ViewProduct viewProduct = new ViewProduct();
             viewProduct.Company = new Company();
-
             viewProduct.Company.Id = companyId;
             viewProduct.CategoryID = categoryId;
-
             return View("../sgr/Product/Edit", viewProduct);
         }
 
@@ -78,7 +73,7 @@ namespace asi.asicentral.web.Controllers.sgr
             }
             else
             {
-                ViewBag.Title = Resource.TitleAddProduct;
+                ViewBag.SubTitle = Resource.TitleAddProduct;
                 return View("../sgr/Product/Edit", viewProduct);
             }
         }
@@ -86,7 +81,7 @@ namespace asi.asicentral.web.Controllers.sgr
         [HttpGet]
         public virtual ActionResult Edit(int productId, int categoryId)
         {
-            ViewBag.Title = Resource.TitleEditProduct;
+            ViewBag.SubTitle = Resource.TitleEditProduct;
 
             Product product = ObjectService.GetAll<Product>(false).Where(p => p.Id == productId).SingleOrDefault();
             if (product == null) 
@@ -116,7 +111,7 @@ namespace asi.asicentral.web.Controllers.sgr
             }
             else
             {
-                ViewBag.Title = Resource.TitleEditProduct;
+                ViewBag.SubTitle = Resource.TitleEditProduct;
 
                 Product product = ObjectService.GetAll<Product>(false).Where(p => p.Id == viewProduct.Id).SingleOrDefault();
                 if (product == null) 

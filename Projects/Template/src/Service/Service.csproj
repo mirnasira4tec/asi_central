@@ -88,9 +88,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="README.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
       <Project>{941aa4de-b070-47c8-ae2e-541a7cfaaee2}</Project>
       <Name>Core</Name>

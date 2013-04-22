@@ -1,11 +1,26 @@
-﻿@using asi.asicentral.web
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Content Administration";
+}
 
-<p>This is the landing page for the Admin tool. It will contain links to anything which we need to access</p>
+<h1>Welcome to the ASI Administration Area.</h1>
+<p>Please select a content area to update from the options below.  If you do not see the area you wish to update, please contact <a href="mailto:asicentral-team@asinetwork.local">Content Administration Support.</a></p>
 
-<ul>
-    <li>@Html.ActionLink(Resource.SGRMaintenanceLink, "List", "../sgr/Company")</li>
-    <li>@Resource.StoreAdminLink<ul>
-        <li>@Html.ActionLink(Resource.StoreAdminOrders, "List", "../store/Orders")</li>
-        <li>@Html.ActionLink(Resource.StoreAdminProducts, "List", "../store/Context")</li>
-    </ul></li>
-</ul>
+<!-- BEGIN listing of admin areas -->
+<div id="admin-areas" class="clearfix">
+	<section>
+		<h1><a href="/store/Orders">ASI Store</a></h1>
+		<a href="/store/Orders"><img src="images/admin-asi-store.gif" alt="ASI Store"></a>
+		<p>Adding/Modifying the ASI Store Products and Content</p>
+	</section>
+	<section>
+		<h1><a href="/sgr/Company">Supplier Global Resource</a></h1>
+		<a href="/sgr/Company"><img src="images/admin-sgr.gif" alt="Supplier Global Resource"></a>
+		<p>Supplier Global Resource (SGR) product and content maintenance</p>
+	</section>
+	<section>
+		<h1><a href="/Home/CreditCard">Credit Card Service</a></h1>
+		<a href="/Home/CreditCard"><img src="images/admin-asi-creditcard.gif" alt="Credit Card Service"></a>
+		<p>Testing and checking the credit card service which stores all card number encrypted</p>
+	</section>
+</div><!-- END #admin-areas -->

@@ -4,10 +4,11 @@
 @model OrderPageModel
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+    ViewBag.BodyClass = "max";
 }
 
-<h2>@Resource.TitleASIStoreAdmin</h2>
+<h1>Store Orders</h1>
 <div class="tabbable tabs-below small">
     <h5>Search by</h5>
     <ul id="formtab" class="nav nav-tabs">
@@ -34,7 +35,7 @@
             <div class="well">
             @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class="form-inline", @id="form-" + @OrderPageModel.TAB_ORDER }))
             {
-                <div class="formField"><label for="orderid">Order Id</label> <input name="orderId" type="text" value="@Model.OrderIdentifier" />
+                <div class="formField"><label for="orderid">Order Id</label> <input name="id" type="text" value="@Model.Identifier" />
                 <input type="hidden" value="@OrderPageModel.TAB_ORDER" name="formtab" />
                 <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
                 <input type="submit" value="Search" class="btn" /></div>
@@ -71,7 +72,7 @@
             @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class="form-inline", @id="form-" + @OrderPageModel.TAB_TIMMS }))
             {
                 <div class="well">
-                <div class="formField"><label for="timmsid">TIMMS ID</label> <input id="timmsid" name="id" type="text" value="" />
+                <div class="formField"><label for="timmsid">TIMMS ID</label> <input id="timmsid" name="id" type="text" value="@Model.Identifier" />
                 <input type="hidden" value="@OrderPageModel.TAB_TIMMS" name="formtab" />
                 <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
                 <input type="submit" value="Search" class="btn" /></div>
@@ -92,22 +93,21 @@
         <div id="@Model.OrderTab" class="tab-pane active">
         @if (Model.Orders != null && Model.Orders.Count > 0) {
         <table class="table table-bordered table-condensed table-striped">
-            <thead><tr><th>@Resource.StoreOrderID</th><th>Name</th><th>Email</th><th>Item</th><th>Application</th><th>Quantity</th><th>Price</th><th>Billing Information</th><th>CreditCard</th><th>@Resource.StoreDateOrderCreated</th></tr></thead>
+            <thead><tr><th>@Resource.StoreOrderID</th><th>Name</th><th>Email</th><th>Item</th><th>Application</th><th>Step</th><th>Quantity</th><th>Price</th><th>Billing Information</th><th>CreditCard</th><th>@Resource.StoreDateOrderCreated</th></tr></thead>
             <tbody>            
             @foreach (OrderModel order in Model.Orders)
             {
-                <tr><td>@if(order.ApprovalStatus == OrderStatus.Pending && order.Application != null) { 
+                <tr><td width="80px">@if (order.ShowIcons) { 
                     <a id="@order.OrderId" rel="tooltip" data-placement="top" data-type="reject" title="Click here to reject the order" href="#"><i class="icon-remove"></i></a>
                     <a rel="tooltip" data-placement="top" title="Click here to accept the order" href="@Url.Action("Edit", "Application", new { Id = order.Application.Id, OrderId = order.OrderId })"><i data-orderid="@order.OrderId" class="icon-ok"></i></a> 
                 }
                 else { <img src="/images/transparent.gif" style="height:1px;width:33px" /> }
-                @order.OrderId
-                </td><td>@order.Name</td><td>@order.Email</td><td><a href="#" class="productRef">@order.Item</a></td>
+                @order.OrderId</td><td>@order.Name</td><td>@order.Email</td><td><a href="#" class="productRef">@order.Item</a></td>
                 @if (order.Application != null)
                 { <td><a href="@Url.Action("Edit", "Application", new { Id = order.Application.Id, OrderId = order.OrderId })">Application</a></td> }
                 else
                 { <td>&nbsp</td> }
-                <td>@order.Quantity</td><td>$@order.Price</td><td>@order.Billing</td><td>@order.CreditCard</td><td>@order.DateOrderCreated.ToString("MM/dd/yy")</td></tr>
+                <td>@order.CompletedStep</td><td>@order.Quantity</td><td>$@order.Price</td><td>@order.Billing</td><td>@order.CreditCard</td><td>@order.DateOrderCreated.ToString("MM/dd/yy")</td></tr>
             }
             </tbody>
         </table>

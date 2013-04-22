@@ -1,5 +1,4 @@
-﻿using asi.asicentral.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -27,6 +26,7 @@ namespace asi.asicentral.model.store
         public string State { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "Country")]
         public string Country { get; set; }
+        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
         [Display(ResourceType = typeof(Resource), Name = "Phone")]
         public string Phone { get; set; }
         public string InternationalPhone { get; set; }
@@ -54,15 +54,19 @@ namespace asi.asicentral.model.store
         public string BillingCountry { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "Phone")]
+        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
         public string BillingPhone { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "Fax")]
+        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
         public string BillingFax { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "Email")]
+        [DataType(DataType.EmailAddress)]
         public string BillingEmail { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "WebUrl")]
+        [DataType(DataType.Url)]
         public string BillingWebUrl { get; set; }
 
         #endregion Billing information

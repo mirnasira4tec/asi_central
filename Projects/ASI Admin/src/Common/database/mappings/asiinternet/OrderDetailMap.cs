@@ -33,6 +33,15 @@ namespace asi.asicentral.database.mappings.asiinternet
             this.Property(detail => detail.Application)
                 .HasColumnName("ODET_Application");
 
+            this.Property(detail => detail.TaxSubtotal)
+                .HasColumnName("ODET_TaxSubtotal");
+
+            this.Property(detail => detail.Shipping)
+                .HasColumnName("ODET_Shipping");
+
+            this.Property(detail => detail.PreTaxSubtotal)
+                .HasColumnName("ODET_PreTaxSubtotal");
+
             this.Property(detail => detail.Subtotal)
                 .HasColumnName("ODET_Subtotal");
 

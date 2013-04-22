@@ -86,9 +86,16 @@ namespace asi.asicentral.web.model.store
 
         public DateTime DateOrderCreated
         {
-            get { return this.orderDetail.Order.DateCreated.Value; }
+            get {
+                DateTime date = DateTime.MinValue;
+                if (this.orderDetail != null && this.orderDetail.Order != null && this.orderDetail.Order.DateCreated.HasValue)
+                    date = this.orderDetail.Order.DateCreated.Value;
+                return date;
+            }
         }
 
+        public bool ShowIcons { get; set; }
+        public string CompletedStep { get; set; }
         public String Company { get; private set; }
 
         public OrderDetailApplication Application { private set; get; }
@@ -97,7 +104,9 @@ namespace asi.asicentral.web.model.store
         {
             OrderModel order = new OrderModel();
             order.orderDetail = orderDetail;
+            order.CompletedStep = orderDetail.Order.CompletedStep.ToString();
             order.Application = storeService.GetApplication(orderDetail);
+            order.ShowIcons = orderDetail.Order.ProcessStatus == OrderStatus.Pending && order.Application != null && orderDetail.Order.Status != null && orderDetail.Order.Status == true;
             if (order.Application != null)
                 order.Company = order.Application.Company;
             if (orderDetail.Order.CreditCard != null && !string.IsNullOrEmpty(orderDetail.Order.CreditCard.Number))

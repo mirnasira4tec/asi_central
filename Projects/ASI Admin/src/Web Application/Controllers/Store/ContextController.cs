@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace asi.asicentral.web.Controllers.Store
 {
+    [Authorize]
     public class ContextController : Controller
     {
         public IStoreService StoreObjectService { get; set; }
@@ -17,10 +18,29 @@ namespace asi.asicentral.web.Controllers.Store
             return View("List");
         }
         
+        [HttpGet]
         public ActionResult List()
         {
             IList<Context> contextList = StoreObjectService.GetAll<Context>(true).ToList();
             return View("../Store/Context/List", contextList);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult List(IList<Context> contexts)
+        {
+            IList<Context> contextList = StoreObjectService.GetAll<Context>().ToList();
+            foreach (Context context in contexts)
+            {
+                Context contextToUpdate = contextList.Where(ctx => ctx.ContextId == context.ContextId).FirstOrDefault();
+                if (contextToUpdate != null)
+                {
+                    contextToUpdate.HeaderImage = context.HeaderImage;
+                    contextToUpdate.NotificationEmails = context.NotificationEmails;
+                }
+            }
+            StoreObjectService.SaveChanges();
+            return new RedirectResult("/Store/Context/List");
         }
 
         public ActionResult ProductComparison(int id)

@@ -2,12 +2,142 @@
     margin: 0;
     padding: 0;
 }
-
-body 
-{
-    padding: 50px 50px 50px 50px;
+body {
+	background: #dadada url('/images/sitebgtile.gif') top left repeat scroll;
+	background-color: #dadada;
+	font-family: Arial, Helvetica, Tahoma, sans-serif;
+	margin: 0 auto;
 }
+    body.normal {
+	    max-width: 940px;
+	    min-width: 420px;
+    }
+    body.max {
+	    max-width: 90%;
+	    min-width: 420px;
+    }
+.container-fluid {
+	background-color: #FFFFFF;
+	padding-bottom: 20px;
+	padding-left: 40px;
+	padding-right: 40px;
+}
+h1 {
+	font-size: 22px;
+	line-height: 22px;
+	margin: 0;
+	padding: 10px 0px 10px 0px;
+	}
 
+h2 {
+	font-size: 20px;
+	line-height: 20px;
+	margin: 0;
+	padding: 10px 0px 10px 0px;
+	}
+h3 {
+	font-size: 18px;
+	line-height: 18px;
+	margin: 0;
+	padding: 10px 0px 10px 0px;
+	}
+
+header#site-header {
+	border-bottom: 14px solid #808080;
+	margin: 0px;
+	padding: 20px 0px 0px 0px;	
+}
+	header#site-header #account-admin {
+		color: #7a7a7a;	
+		font-size: 12px;
+		font-style: italic;
+		text-align: right;
+	}
+		header#site-header #account-admin p {
+			line-height: 16px;
+			margin: 0;
+		}
+		header#site-header #account-admin div {
+			font-size: 24px;
+			color: red;
+            font-style: italic;
+            margin-top:20px;
+            margin-bottom:5px;
+		}
+	
+#admin-areas  {
+	display: block;
+	margin: 30px 0px 10px 0px;
+	position: relative;
+}	
+	#admin-areas section {
+		display: block;
+		float: left;
+		padding-right: 10px;
+		position: relative;
+		min-height: 250px;
+		width: 190px;
+	}
+	#admin-areas section h1 {
+		font-size: 15px;
+		line-height: 17px;	
+	}
+	#admin-areas section img {
+		border: 1px solid #aeaeae;
+		margin: 0px 0px 5px 0px;
+	}
+	#admin-areas section p {
+		font-size: 13px;
+		line-height: 17px;
+	}
+	
+nav#admin-subnavigation  {
+	background-color: #f0f0f0;
+	margin-bottom: 30px;
+}	
+	nav#admin-subnavigation ul {
+		display: block;
+		margin: 0;
+		position: relative;
+		width: 100%;
+	}
+		nav#admin-subnavigation ul li {
+			float: left;
+			list-style-position: inside;
+			list-style-type: none;
+			text-indent: 0px;
+			text-decoration: none;
+		}
+		nav#admin-subnavigation ul li form{
+			padding: 4px 0px 0px 15px;
+			margin: 0;
+		}
+		nav#admin-subnavigation ul li a {
+			border-right: 1px solid #aeaeae;
+			display: block;
+			font-size: 13px;
+			font-weight: bold;
+			line-height: 30px;
+			padding-left: 15px;
+			padding-right: 15px;
+			margin: 3px 0px 3px 0px;
+		}
+table.table-bordered tr.button-row  td {
+	background-color: #e2f1f6;
+	padding: 7px;
+}
+a.add-item  {
+	font-size: 10px;
+	font-weight: normal;
+	padding-left: 3px;
+	}
+		
+footer {
+	font-size: 12px;
+	padding-top: 10px;
+	text-align: center;
+	}
+	
 div.formField 
 {
     padding: 5px 0px 5px 0px;
@@ -23,8 +153,20 @@ div.well
         margin: 0px 0px 0px 0px;
     }
 
+.helper-text {
+    color: #414141;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 14px;
+}
+
+	
+/* utility classes */
 .float-left {
+	display: block;
     float: left;
+	position: relative;
 }
 
 /* styles for validation helpers */

@@ -2,6 +2,7 @@
 asi.util = asi.util || {};
 
 //defining modal funcionality requires jquery and bootstrap
+//templates need TemplateController and the Views/Template folder
 asi.modal = asi.modal || {};
 
 (function (modal, $, undefined) {
@@ -22,11 +23,14 @@ asi.modal = asi.modal || {};
             ko.applyBindings(modalData);
             var div = $('#asi-modal');
             var okBtn = div.find("a.btn-primary");
-            okBtn.on("click", null, function () { modalClosing(true, div, callback) });
-            div.on("keypress", null, function (e) {
-                var code = (e.keyCode ? e.keyCode : e.which);
-                if (code === 13) { okBtn.click(); }
-            });
+            if (okBtn.text() == "#hide") okBtn.attr('class', okBtn.attr('class') + " hide");
+            else {
+                okBtn.on("click", null, function () { modalClosing(true, div, callback) });
+                div.on("keypress", null, function (e) {
+                    var code = (e.keyCode ? e.keyCode : e.which);
+                    if (code === 13) { okBtn.click(); }
+                });
+            }
             div.on("hide", null, function () { modalClosing(false, div, callback) });
             div.modal({});
         }));
@@ -34,6 +38,7 @@ asi.modal = asi.modal || {};
 
     function modalClosing(okClicked, div, callback) {
         div.remove();
+        asi.util.log("ok clicked: " + okClicked);
         if (callback) callback(okClicked);
         callback = null;
     };
@@ -70,6 +75,13 @@ asi.util = asi.util || {};
         }));
     };
 }(asi.util, jQuery));
+
+//Trim does not work in older version of IE
+if (typeof String.prototype.trim !== 'function') {
+    String.prototype.trim = function () {
+        return this.replace(/^\s+|\s+$/g, '');
+    }
+}
 
 //Enabling tooltip by default
 $("[rel='tooltip']").tooltip();

@@ -65,6 +65,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -194,12 +196,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CreditCardModel.cs" />
     <Compile Include="Models\sgr\ViewCategory.cs" />
     <Compile Include="Models\sgr\ViewCompany.cs" />
     <Compile Include="Models\sgr\ViewProduct.cs" />
     <Compile Include="Models\Store\Order\DistributorApplicationModel.cs" />
     <Compile Include="Models\Store\Order\OrderModel.cs" />
     <Compile Include="Models\Store\Order\OrderPageModel.cs" />
+    <Compile Include="Models\Store\Order\OrderStatisticData.cs" />
     <Compile Include="Models\Store\Order\SupplierApplicationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
@@ -223,7 +227,12 @@
     <None Include="Properties\PublishProfiles\Local File.pubxml" />
     <None Include="Properties\PublishProfiles\Web App Deploy.pubxml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="Images\admin-asi-creditcard.gif" />
+    <Content Include="Images\admin-asi-store.gif" />
+    <Content Include="Images\admin-sgr.gif" />
+    <Content Include="Images\asi-logo.gif" />
     <Content Include="Images\checkmark.gif" />
+    <Content Include="Images\sitebgtile.gif" />
     <Content Include="Images\transparent.gif" />
     <Content Include="Scripts\asi.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
@@ -255,20 +264,6 @@
     </Content>
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Images\accent.png" />
-    <Content Include="Images\bullet.png" />
-    <Content Include="Images\heroAccent.png" />
-    <Content Include="Images\orderedList0.png" />
-    <Content Include="Images\orderedList1.png" />
-    <Content Include="Images\orderedList2.png" />
-    <Content Include="Images\orderedList3.png" />
-    <Content Include="Images\orderedList4.png" />
-    <Content Include="Images\orderedList5.png" />
-    <Content Include="Images\orderedList6.png" />
-    <Content Include="Images\orderedList7.png" />
-    <Content Include="Images\orderedList8.png" />
-    <Content Include="Images\orderedList9.png" />
-    <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -289,6 +284,11 @@
     <Content Include="Views\Store\Application\Supplier.cshtml" />
     <Content Include="Views\Store\Context\List.cshtml" />
     <Content Include="Views\Store\Context\Productcomparison.cshtml" />
+    <Content Include="Views\Shared\_SGRLayout.cshtml" />
+    <Content Include="Views\Shared\_StoreLayout.cshtml" />
+    <Content Include="Views\Home\CreditCard.cshtml" />
+    <Content Include="Views\Store\Admin\Statistics.cshtml" />
+    <Content Include="Views\Home\Diagnostic.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -301,6 +301,14 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{b74b2258-2b47-435c-a0ea-6a0c1ffe18de}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Service.Tests\Service.Tests.csproj">
+      <Project>{ee6df0c2-aceb-4108-8f43-5d5138c5a3eb}</Project>
+      <Name>Service.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Service\Service.csproj">
+      <Project>{cec7f727-f96b-484c-8687-e9426deb76a2}</Project>
+      <Name>Service</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -341,6 +349,9 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>del "$(TargetDir)WebMatrix.*.*"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

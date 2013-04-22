@@ -1,7 +1,4 @@
-﻿using asi.asicentral.database.mappings.asipublication;
-using asi.asicentral.database.mappings.product;
-using asi.asicentral.model.counselor;
-using asi.asicentral.model.news;
+﻿using asi.asicentral.database.mappings.product;
 using asi.asicentral.model.store;
 using System.Data.Entity;
 
@@ -20,6 +17,7 @@ namespace asi.asicentral.database
         public DbSet<ContextFeature> Features { get; set; }
         public DbSet<ContextFeatureProduct> FeatureProducts { get; set; } //consider removing
         public DbSet<ContextProductSequence> ProductSequences { get; set; } //consider removing
+        public DbSet<TaxRate> TaxRates { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -33,7 +31,8 @@ namespace asi.asicentral.database
                 .Add(new ContextProductMap())
                 .Add(new ContextFeatureMap())
                 .Add(new ContextFeatureProductMap())
-                .Add(new ContextProductSequenceMap());
+                .Add(new ContextProductSequenceMap())
+                .Add(new TaxRateMap());
         }
     }
 }

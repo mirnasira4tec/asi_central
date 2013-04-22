@@ -52,7 +52,7 @@ namespace asi.asicentral.database.mappings.asiinternet
 
             this.Property(order => order.BillState)
                 .HasColumnName("ORDR_BillState")
-                .HasMaxLength(15);
+                .HasMaxLength(50);
 
             this.Property(order => order.BillZip)
                 .HasColumnName("ORDR_BillZip")
@@ -96,6 +96,7 @@ namespace asi.asicentral.database.mappings.asiinternet
             // Relationships
             this.HasOptional(order => order.CreditCard)
                 .WithRequired();
+
             this.HasOptional(order => order.Membership)
                 .WithMany()
                 .HasForeignKey(order => order.UserId);

@@ -1,5 +1,5 @@
-using asi.asicentral.Common;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -12,6 +12,8 @@ namespace asi.asicentral.model.store
             if (this.GetType() == typeof(DistributorMembershipApplication))
             {
                 Contacts = new List<DistributorMembershipApplicationContact>();
+                AccountTypes = new List<DistributorAccountType>();
+                ProductLines = new List<DistributorProductLine>();
             }
         }
 
@@ -67,6 +69,7 @@ namespace asi.asicentral.model.store
         public string ApplicantName { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "ApplicantEmail")]
+        [DataType(DataType.EmailAddress)]
         public string ApplicantEmail { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "TrueAnswers")]
@@ -96,74 +99,198 @@ namespace asi.asicentral.model.store
         [Display(ResourceType = typeof(Resource), Name = "OtherBusinessRevenue")]
         public string OtherBusinessRevenue { get; set; }
 
-        public string AccountTypes { get; set; }
-
-        public string ProductLines { get; set; }
         public Nullable<DateTime> EstablishedDate { get; set; }
 
-        public virtual ICollection<DistributorMembershipApplicationContact> Contacts { get; set; }
+        public virtual DistributorBusinessRevenue PrimaryBusinessRevenue { get; set; }
+        public virtual IList<DistributorMembershipApplicationContact> Contacts { get; set; }
+        public virtual ICollection<DistributorAccountType> AccountTypes { get; set; }
+        public virtual ICollection<DistributorProductLine> ProductLines { get; set; }
 
-        public void CopyTo(DistributorMembershipApplication application)
+        public void CopyTo(DistributorMembershipApplication target)
         {
-            application.AccountTypes = AccountTypes;
-            application.AgreeReceivePromotionalProducts = AgreeReceivePromotionalProducts;
-            application.AgreeTermsAndConditions = AgreeTermsAndConditions;
-            application.AnnualSalesVolume = AnnualSalesVolume;
-            application.AnnualSalesVolumeASP = AnnualSalesVolumeASP;
-            application.ApplicantEmail = ApplicantEmail;
-            application.ApplicantName = ApplicantName;
-            application.ApplicationStatusId = ApplicationStatusId;
-            application.ASIContact = ASIContact;
-            application.Company = Company;
-            application.Contacts = Contacts;
-            application.CorporateOfficer = CorporateOfficer;
-            application.Custom1 = Custom1;
-            application.Custom2 = Custom2;
-            application.Custom3 = Custom3;
-            application.Custom4 = Custom4;
-            application.Custom5 = Custom5;
-            application.EstablishedDate = EstablishedDate;
-            application.BillingFax = BillingFax;
-            application.FirstName = FirstName;
-            application.Id = Id;
-            application.InformASIOfChange = InformASIOfChange;
-            application.IPAddress = IPAddress;
-            application.IsForProfit = IsForProfit;
-            application.IsMajorForResale = IsMajorForResale;
-            application.IsMajorityDistributeForResale = IsMajorityDistributeForResale;
-            application.IsSolelyWork = IsSolelyWork;
-            application.LastName = LastName;
-            application.NumberOfEmployee = NumberOfEmployee;
-            application.NumberOfSalesEmployee = NumberOfSalesEmployee;
-            application.OtherBusinessRevenue = OtherBusinessRevenue;
-            application.PrimaryBusinessRevenueId = PrimaryBusinessRevenueId;
-            application.ProductLines = ProductLines;
-            application.ProvideInvoiceOnDemand = ProvideInvoiceOnDemand;
-            application.ShippingCity = ShippingCity;
-            application.ShippingState = ShippingState;
-            application.ShippingStreet1 = ShippingStreet1;
-            application.ShippingStreet2 = ShippingStreet2;
-            application.ShippingZip = ShippingZip;
-            application.ShippingCountry = ShippingCountry;
-            application.SignatureType = SignatureType;
-            application.SolelyWorkName = SolelyWorkName;
-            application.BillingEmail = BillingEmail;
-            application.BillingPhone = BillingPhone;
-            application.BillingAddress1 = BillingAddress1;
-            application.BillingAddress2 = BillingAddress2;
-            application.BillingState = BillingState;
-            application.BillingCity = BillingCity;
-            application.BillingZip = BillingZip;
-            application.BillingCountry = BillingCountry;
-            application.TrueAnswers = TrueAnswers;
-            application.UserId = UserId;
-            application.BillingWebUrl = BillingWebUrl;
-            application.Address1 = Address1;
-            application.Address2 = Address2;
-            application.City = City;
-            application.State = State;
-            application.Zip = Zip;
-            application.Country = Country;
+            // sync the collections
+            SyncContactsWith(target);
+            SyncAccountTypesWith(target);
+            SyncProductLinesWith(target);
+
+            target.AgreeReceivePromotionalProducts = AgreeReceivePromotionalProducts;
+            target.AgreeTermsAndConditions = AgreeTermsAndConditions;
+            target.AnnualSalesVolume = AnnualSalesVolume;
+            target.AnnualSalesVolumeASP = AnnualSalesVolumeASP;
+            target.ApplicantEmail = ApplicantEmail;
+            target.ApplicantName = ApplicantName;
+            target.ApplicationStatusId = ApplicationStatusId;
+            target.ASIContact = ASIContact;
+            target.Company = Company;
+            target.Address1 = Address1;
+            target.Address2 = Address2;
+            target.City = City;
+            target.State = State;
+            target.Zip = Zip;
+            target.Country = Country;
+            target.HasBillAddress = HasBillAddress;
+            if (HasBillAddress)
+            {
+                target.BillingEmail = BillingEmail;
+                target.BillingPhone = BillingPhone;
+                target.BillingAddress1 = BillingAddress1;
+                target.BillingAddress2 = BillingAddress2;
+                target.BillingState = BillingState;
+                target.BillingCity = BillingCity;
+                target.BillingZip = BillingZip;
+                target.BillingCountry = BillingCountry;
+                target.BillingWebUrl = BillingWebUrl;
+            }
+            else
+            {
+                target.BillingAddress1 = Address1;
+                target.BillingAddress2 = Address2;
+                target.BillingState = State;
+                target.BillingCity = City;
+                target.BillingZip = Zip;
+                target.BillingCountry = Country;
+            }
+            target.HasShipAddress = HasShipAddress;
+            if (target.HasShipAddress)
+            {
+                target.ShippingStreet1 = ShippingStreet1;
+                target.ShippingStreet2 = ShippingStreet2;
+                target.ShippingCity = ShippingCity;
+                target.ShippingState = ShippingState;
+                target.ShippingZip = ShippingZip;
+                target.ShippingCountry = ShippingCountry;
+            }
+            else
+            {
+                target.ShippingStreet1 = Address1;
+                target.ShippingStreet2 = Address2;
+                target.ShippingCity = City;
+                target.ShippingState = State;
+                target.ShippingZip = Zip;
+                target.ShippingCountry = Country;
+            }
+            target.CorporateOfficer = CorporateOfficer;
+            target.Custom1 = Custom1;
+            target.Custom2 = Custom2;
+            target.Custom3 = Custom3;
+            target.Custom4 = Custom4;
+            target.Custom5 = Custom5;
+            target.EstablishedDate = EstablishedDate;
+            target.BillingFax = BillingFax;
+            target.FirstName = FirstName;
+            target.Id = Id;
+            target.InformASIOfChange = InformASIOfChange;
+            target.IPAddress = IPAddress;
+            target.IsForProfit = IsForProfit;
+            target.IsMajorForResale = IsMajorForResale;
+            target.IsMajorityDistributeForResale = IsMajorityDistributeForResale;
+            target.IsSolelyWork = IsSolelyWork;
+            target.LastName = LastName;
+            target.NumberOfEmployee = NumberOfEmployee;
+            target.NumberOfSalesEmployee = NumberOfSalesEmployee;
+            target.OtherBusinessRevenue = OtherBusinessRevenue;
+            target.PrimaryBusinessRevenueId = PrimaryBusinessRevenueId;
+            target.PrimaryBusinessRevenue = PrimaryBusinessRevenue;
+            target.ProvideInvoiceOnDemand = ProvideInvoiceOnDemand;
+            target.SignatureType = SignatureType;
+            target.SolelyWorkName = SolelyWorkName;
+            target.TrueAnswers = TrueAnswers;
+            target.UserId = UserId;
+        }
+
+        private void SyncAccountTypesWith(DistributorMembershipApplication target)
+        {
+            // sync the account types
+            if (target.AccountTypes == null || target.AccountTypes.Count == 0) target.AccountTypes = AccountTypes;
+            else
+            {
+                for (int i = AccountTypes.Count - 1; i >= 0; i--)
+                {
+                    DistributorAccountType originalAcccountType = AccountTypes.ElementAt(i);
+                    DistributorAccountType targetAccountType = target.AccountTypes.Where(theAccountType => theAccountType.Id == originalAcccountType.Id).SingleOrDefault();
+                    if (targetAccountType == null)
+                    {
+                        // target is missing an account type
+                        target.AccountTypes.Add(originalAcccountType);
+                    }
+                }
+                for (int i = target.AccountTypes.Count - 1; i >= 0; i--)
+                {
+                    DistributorAccountType targetAccountType = target.AccountTypes.ElementAt(i);
+                    DistributorAccountType originalAccountType = AccountTypes.Where(accountType => accountType.Id == targetAccountType.Id).SingleOrDefault();
+                    if (originalAccountType == null) target.AccountTypes.Remove(targetAccountType);
+                }
+            }
+        }
+
+        private void SyncProductLinesWith(DistributorMembershipApplication target)
+        {
+            // sync the product lines
+            if (target.ProductLines == null || target.ProductLines.Count == 0) target.ProductLines = ProductLines;
+            else
+            {
+                for (int i = ProductLines.Count - 1; i >= 0; i--)
+                {
+                    DistributorProductLine originalProductLine = ProductLines.ElementAt(i);
+                    DistributorProductLine targetProductLine = target.ProductLines.Where(productLine => productLine.Id == originalProductLine.Id).SingleOrDefault();
+                    if (targetProductLine == null)
+                    {
+                        // update existing
+                        target.ProductLines.Add(originalProductLine);
+                    }
+                }
+                for (int i = target.ProductLines.Count - 1; i >= 0; i--)
+                {
+                    DistributorProductLine targetProductLine = target.ProductLines.ElementAt(i);
+                    DistributorProductLine originalProductLine = ProductLines.Where(productLine => productLine.Id == targetProductLine.Id).SingleOrDefault();
+                    if (originalProductLine == null) target.ProductLines.Remove(targetProductLine);
+                }
+            }
+        }
+
+        private void SyncContactsWith(DistributorMembershipApplication target)
+        {
+            //sync the contacts
+            if (target.Contacts == null || target.Contacts.Count == 0) target.Contacts = Contacts;
+            else
+            {
+                //got through the target contacts and update
+                for (int i = Contacts.Count - 1; i >= 0; i--)
+                {
+                    DistributorMembershipApplicationContact originalContact = Contacts[i];
+                    DistributorMembershipApplicationContact targetContact = target.Contacts.Where(theContact => theContact.Id == originalContact.Id).SingleOrDefault();
+                    if (targetContact != null)
+                    {
+                        //contact already there, update it
+                        targetContact.Name = originalContact.Name;
+                        targetContact.Title = originalContact.Title;
+                        targetContact.Email = originalContact.Email;
+                        targetContact.Phone = originalContact.Phone;
+                        targetContact.Fax = originalContact.Fax;
+                        targetContact.IsPrimary = originalContact.IsPrimary;
+                    }
+                    else
+                    {
+                        //target is missing a contact
+                        target.Contacts.Add(new DistributorMembershipApplicationContact()
+                        {
+                            Email = targetContact.Email,
+                            Fax = targetContact.Fax,
+                            IsPrimary = targetContact.IsPrimary,
+                            Name = targetContact.Name,
+                            Department = targetContact.Name,
+                            Phone = targetContact.Phone,
+                            Title = targetContact.Title,
+                        });
+                    }
+                }
+                for (int i = target.Contacts.Count - 1; i >= 0; i--)
+                {
+                    DistributorMembershipApplicationContact targetContact = target.Contacts[i];
+                    DistributorMembershipApplicationContact originalContact = Contacts.Where(theContact => theContact.Id == targetContact.Id).SingleOrDefault();
+                    if (originalContact == null) target.Contacts.Remove(targetContact);
+                }
+            }
         }
     }
 }

@@ -103,9 +103,9 @@
   <ItemGroup>
     <Compile Include="Controllers\sgr\CompanyControllerTest.cs" />
     <Compile Include="Controllers\Store\StoreControllerTest.cs" />
+    <Compile Include="Controllers\Store\SupplierApplicationTest.cs" />
     <Compile Include="Controllers\TemplateControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Controllers\HomeControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
@@ -118,10 +118,17 @@
       <Project>{b74b2258-2b47-435c-a0ea-6a0c1ffe18de}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Service\Service.csproj">
+      <Project>{cec7f727-f96b-484c-8687-e9426deb76a2}</Project>
+      <Name>Service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Web Application\Web Application.csproj">
       <Project>{F91A81D1-69FF-4C32-8BD7-5E0169A235AF}</Project>
       <Name>Web Application</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
