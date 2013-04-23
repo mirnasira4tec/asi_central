@@ -498,4 +498,7 @@
   <data name="FieldYearRange" xml:space="preserve">
     <value>Please enter a year between 1700 and 2050.</value>
   </data>
+  <data name="Sequence" xml:space="preserve">
+    <value>Sequence</value>
+  </data>
 </root>
