@@ -8,6 +8,9 @@
 
 <h1>@ViewBag.SubTitle</h1>
 <div class="form-actions">
+    <input type="submit" value="Save" class="btn btn-primary" />
+    @Html.ActionLink(Resource.Cancel, "List")
+    <br /><br />
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -16,6 +19,7 @@
     @Html.LabelFor(company => company.Summary) @Html.EditorFor(company => company.Summary, new { @class = "input-xxlarge"}) @Html.ValidationMessageFor(company => company.Summary)
     @Html.LabelFor(company => company.ASINumber) @Html.EditorFor(company => company.ASINumber, new { @class = "input-xxlarge"}) 
     <label class="checkbox" for="IsActive">@Html.EditorFor(company => company.IsInactive) @Html.DisplayNameFor(company => company.IsInactive)</label>
+    @Html.LabelFor(company => company.Sequence) @Html.EditorFor(company => company.Sequence, new { @class="input-xxlarge" })  @Html.ValidationMessageFor(company => company.Sequence)
     @Html.LabelFor(company => company.BusinessType) @Html.EditorFor(company => company.BusinessType, new { @class = "input-xxlarge" })
     @Html.LabelFor(company => company.Address) @Html.TextAreaFor(company => company.Address, new { @class = "input-xxlarge" }) 
     @Html.LabelFor(company => company.ProductionTime) @Html.EditorFor(company => company.ProductionTime, new { @class = "input-xxlarge" })    
@@ -36,7 +40,7 @@
     @Html.LabelFor(company => company.YearEstablished) @Html.EditorFor(company => company.YearEstablished, new { @class = "input-xxlarge" })
         
     <br />
-    <input type="submit" value="Save" class="btn" />
+    <input type="submit" value="Save" class="btn btn-primary" />
     @Html.ActionLink(Resource.Cancel, "List")
 }
 </div>

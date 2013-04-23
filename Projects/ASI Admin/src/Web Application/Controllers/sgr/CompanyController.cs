@@ -22,7 +22,11 @@ namespace asi.asicentral.web.Controllers.sgr
 
         public virtual ActionResult List()
         {
-            IList<Company> companies = ObjectService.GetAll<Company>().ToList();
+            IList<Company> companies = ObjectService.GetAll<Company>()
+                .OrderBy(c => c.IsInactive == true)
+                .ThenByDescending(c => c.Sequence)
+                .ThenBy(c => c.Name)
+                .ToList();
             ViewBag.SubTitle = Resource.TitleListCompanies;
             return View("../sgr/Company/List", companies);
         }

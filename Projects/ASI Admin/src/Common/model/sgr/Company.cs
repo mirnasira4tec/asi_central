@@ -27,6 +27,10 @@ namespace asi.asicentral.model.sgr
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public string Name { get; set; }
 
+        [Display(ResourceType = typeof(Resource), Name = "Sequence")]
+        [Required]
+        public int Sequence { get; set; }
+
         [Display(ResourceType = typeof(Resource), Name = "CompanySummary")]
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [DataType(DataType.MultilineText)]
