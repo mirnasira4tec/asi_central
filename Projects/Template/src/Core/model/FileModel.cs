@@ -67,6 +67,11 @@ namespace asi.asicentral.model
                 return base.Equals(obj);
         }
 
+        public override int GetHashCode()
+        {
+            return FullPath.GetHashCode();
+        }
+
         public override string ToString()
         {
             return RelativePath;
