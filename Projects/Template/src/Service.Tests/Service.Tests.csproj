@@ -70,7 +70,7 @@
     <Compile Include="StructureMapTest.cs" />
     <Compile Include="SecurityServiceTest.cs" />
     <Compile Include="TemplateTest.cs" />
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="FileSystemHelperTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
