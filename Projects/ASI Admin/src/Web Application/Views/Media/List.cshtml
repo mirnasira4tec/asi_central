@@ -1,0 +1,39 @@
+﻿@model asi.asicentral.web.model.MediaFolderModel
+@{
+    ViewBag.Title = "Media Drive";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="span1"><img src="/images/folder.png" width="32" height="32" alt="folder" /></div> 
+    <div class="span3"><h2>@(string.IsNullOrEmpty(Model.Path) ? "/" : Model.Path)</h2></div> 
+</div>
+<div class="row">
+    <div class="span12">
+        <a href="#"><img src="/images/upload.png" alt="Upload" /></a>
+        <a href="#"><img src="/images/download.png" alt="download" /></a>
+        @if (!string.IsNullOrEmpty(Model.Path))
+        {
+        <a href="#"><img src="/images/delete.jpg" alt="delete " /></a>
+        }
+        </div> 
+</div>
+<br />
+<table class="table table-condensed table-stripped">
+    <tr><th>Name</th><th>Created</th><th>Modified</th></tr>
+    @foreach (asi.asicentral.model.FileModel fileItem in Model.Children)
+    {
+        <tr>
+        @if (fileItem.Type == asi.asicentral.model.FileModel.FileType.Folder) 
+        {            
+            <td><img src="/images/folder_small.png" width="20" height="20" alt="folder" /> <a href="/Media/List?path=@fileItem.RelativePath">@fileItem.Name</a></td>
+        }
+        else 
+        {
+            <td><img src="/images/file_small.png" width="20" height="20" alt="file" /> <a href="@(Model.URL + fileItem.RelativePath)">@fileItem.Name</a></td>
+        }
+            <td>@fileItem.Created</td>
+            <td>@fileItem.Modified</td>
+        </tr>
+    }
+</table>
