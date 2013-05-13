@@ -160,7 +160,6 @@ div.well
     font-weight: normal;
     line-height: 14px;
 }
-
 	
 /* utility classes */
 .float-left {
@@ -190,10 +189,12 @@ input[type="checkbox"].input-validation-error {
 
 
 /*
-    NEW LOOK
-    - there are duplicate styles in this css, try to remove redundancies
+    Below are the CSS styles for distributor applications.
 */
 
+.order-status-header3 {
+    float: left;
+}
 
 /* utility column layout classes - ONLY use these if the bootstrap automatic column stacking is NOT desired */
 .two-column-1, .two-column-2, .three-column-1, .three-column-2, .three-column-3 {
@@ -317,6 +318,8 @@ header#site-header {
 
 /*-----------------Order Status-------------*/
 .order-status{
+    padding-top: 11px;
+    padding-left: 3px;
 	float:left;
 	font-weight:bold;
 	color:#da1c23;
