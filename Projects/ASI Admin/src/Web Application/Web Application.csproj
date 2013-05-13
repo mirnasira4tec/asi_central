@@ -183,6 +183,7 @@
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MediaController.cs" />
     <Compile Include="Controllers\sgr\CategoryController.cs" />
     <Compile Include="Controllers\sgr\CompanyController.cs" />
     <Compile Include="Controllers\sgr\ProductController.cs" />
@@ -197,6 +198,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CreditCardModel.cs" />
+    <Compile Include="Models\MediaFolderModel.cs" />
     <Compile Include="Models\sgr\ViewCategory.cs" />
     <Compile Include="Models\sgr\ViewCompany.cs" />
     <Compile Include="Models\sgr\ViewProduct.cs" />
@@ -229,11 +231,19 @@
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Images\admin-asi-creditcard.gif" />
     <Content Include="Images\admin-asi-store.gif" />
+    <Content Include="Images\admin-media-links.gif" />
     <Content Include="Images\admin-sgr.gif" />
     <Content Include="Images\asi-logo.gif" />
     <Content Include="Images\checkmark.gif" />
+    <Content Include="Images\delete.jpg" />
+    <Content Include="Images\download.png" />
+    <Content Include="Images\file.png" />
+    <Content Include="Images\file_small.png" />
+    <Content Include="Images\folder.png" />
+    <Content Include="Images\folder_small.png" />
     <Content Include="Images\sitebgtile.gif" />
     <Content Include="Images\transparent.gif" />
+    <Content Include="Images\upload.png" />
     <Content Include="Scripts\asi.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
@@ -289,6 +299,7 @@
     <Content Include="Views\Home\CreditCard.cshtml" />
     <Content Include="Views\Store\Admin\Statistics.cshtml" />
     <Content Include="Views\Home\Diagnostic.cshtml" />
+    <Content Include="Views\Media\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
