@@ -8,11 +8,11 @@
 
 <h1>@ViewBag.SubTitle</h1>
 <div class="form-actions">
+@using (Html.BeginForm())
+{
     <input type="submit" value="Save" class="btn btn-primary" />
     @Html.ActionLink(Resource.Cancel, "List")
     <br /><br />
-@using (Html.BeginForm())
-{
     @Html.AntiForgeryToken()
     @Html.HiddenFor(company => company.Id)
     @Html.LabelFor(company => company.Name) @Html.EditorFor(company => company.Name, new { @class = "input-xxlarge" }) @Html.ValidationMessageFor(company => company.Name)
