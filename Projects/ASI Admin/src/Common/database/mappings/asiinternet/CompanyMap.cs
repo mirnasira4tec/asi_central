@@ -23,6 +23,9 @@ namespace asi.asicentral.database.mappings.asiinternet
             Property(company => company.Name)
                 .HasColumnName("SGRC_SGRInternCompDesc");
 
+            Property(company => company.Sequence)
+                .HasColumnName("SGRC_Sequence");
+
             Property(company => company.Summary)
                 .HasColumnName("SGRC_Intro");
 
