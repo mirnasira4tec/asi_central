@@ -7,175 +7,518 @@
 }
 
 <h1>@Resource.StoreTitleDistributorApplication (#@Model.OrderId)</h1>
-<p>The membership fee selected is for @Model.MonthlyPrice.ToString("C") and the final price (including taxes & Shipping) is @Model.Price.ToString("C")</p>
 
 @using (Html.BeginForm("EditDistributor", "Application"))
 {
-<div class="row-fluid">
-    <div class="span4">    
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.Id) @Html.HiddenFor(m => m.UserId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
-    <fieldset><legend><small>Company Information</small></legend>
-    @Html.LabelFor(m => m.Company) @Html.EditorFor(m => m.Company) @Html.ValidationMessageFor(m => m.Company)
-    @Html.LabelFor(m => m.Address1) @Html.EditorFor(m => m.Address1) @Html.ValidationMessageFor(m => m.Address1)
-    @Html.LabelFor(m => m.Address2) @Html.EditorFor(m => m.Address2) @Html.ValidationMessageFor(m => m.Address2)
-    @Html.LabelFor(m => m.City) @Html.EditorFor(m => m.City) @Html.ValidationMessageFor(m => m.City)
-    @Html.LabelFor(m => m.State) @Html.EditorFor(m => m.State) @Html.ValidationMessageFor(m => m.State)
-    @Html.LabelFor(m => m.Zip) @Html.EditorFor(m => m.Zip) @Html.ValidationMessageFor(m => m.Zip)
-    @Html.LabelFor(m => m.Country) @Html.EditorFor(m => m.Country) @Html.ValidationMessageFor(m => m.Country)
-    </fieldset>
-    @Html.HiddenFor(m => m.HasBillAddress)
-    @if(Model.HasBillAddress){
-    <fieldset><legend><small>Billing Information</small></legend>
-    @Html.LabelFor(m => m.BillingAddress1) @Html.EditorFor(m => m.BillingAddress1) @Html.ValidationMessageFor(m=>m.BillingAddress1)
-    @Html.LabelFor(m => m.BillingAddress2) @Html.EditorFor(m => m.BillingAddress2) @Html.ValidationMessageFor(m=>m.BillingAddress2)
-    @Html.LabelFor(m => m.BillingCity) @Html.EditorFor(m => m.BillingCity) @Html.ValidationMessageFor(m=>m.BillingCity)
-    @Html.LabelFor(m => m.BillingState) @Html.EditorFor(m => m.BillingState) @Html.ValidationMessageFor(m=>m.BillingState)
-    @Html.LabelFor(m => m.BillingZip) @Html.EditorFor(m => m.BillingZip) @Html.ValidationMessageFor(m=>m.BillingZip)
-    @Html.LabelFor(m => m.BillingCountry) @Html.EditorFor(m => m.BillingCountry) @Html.ValidationMessageFor(m=>m.BillingCountry)
-    @Html.LabelFor(m => m.BillingPhone) @Html.EditorFor(m => m.BillingPhone) @Html.ValidationMessageFor(m=>m.BillingPhone)
-    @Html.LabelFor(m => m.BillingFax) @Html.EditorFor(m => m.BillingFax) @Html.ValidationMessageFor(m=>m.BillingFax)
-    @Html.LabelFor(m => m.BillingEmail) @Html.EditorFor(m => m.BillingEmail) @Html.ValidationMessageFor(m=>m.BillingEmail)
-    @Html.LabelFor(m => m.BillingWebUrl) @Html.EditorFor(m => m.BillingWebUrl) @Html.ValidationMessageFor(m=>m.BillingWebUrl)
-    </fieldset>} 
-    @Html.HiddenFor(m => m.HasShipAddress)
-    @if(Model.HasShipAddress){
-    <fieldset><legend><small>Shipping Information</small></legend>
-    @Html.LabelFor(m => m.ShippingStreet1) @Html.EditorFor(m => m.ShippingStreet1) @Html.ValidationMessageFor(m=>m.ShippingStreet1)
-    @Html.LabelFor(m => m.ShippingStreet2) @Html.EditorFor(m => m.ShippingStreet2) @Html.ValidationMessageFor(m=>m.ShippingStreet2)
-    @Html.LabelFor(m => m.ShippingCity) @Html.EditorFor(m => m.ShippingCity) @Html.ValidationMessageFor(m=>m.ShippingCity)
-    @Html.LabelFor(m => m.ShippingState) @Html.EditorFor(m => m.ShippingState) @Html.ValidationMessageFor(m=>m.ShippingState)
-    @Html.LabelFor(m => m.ShippingZip) @Html.EditorFor(m => m.ShippingZip) @Html.ValidationMessageFor(m=>m.ShippingZip)
-    @Html.LabelFor(m => m.ShippingCountry) @Html.EditorFor(m => m.ShippingCountry) @Html.ValidationMessageFor(m => m.ShippingCountry)
-    </fieldset>}
-    <fieldset><legend><small>Product Lines</small></legend>
-    <label class="checkbox product" for="ProductA">@Html.CheckBoxFor(model => model.ProductA) Auto Accessories</label>
-    <label class="checkbox product" for="ProductB">@Html.CheckBoxFor(model => model.ProductB) Awards, Trophies &amp; Plaques</label>
-    <label class="checkbox product" for="ProductC">@Html.CheckBoxFor(model => model.ProductC) Badges, Buttons</label>
-    <label class="checkbox product" for="Product1">@Html.CheckBoxFor(model => model.Product1) Bags (Canvas, Tote, Paper, Plastic, etc)</label>
-    <label class="checkbox product" for="ProductD">@Html.CheckBoxFor(model => model.ProductD) Calendars and timepieces</label>
-    <label class="checkbox product" for="ProductO">@Html.CheckBoxFor(model => model.ProductO) Cards (business, greeting and stationery), Signs &amp; displays</label>
-    <label class="checkbox product" for="ProductY">@Html.CheckBoxFor(model => model.ProductY) Cups and mugs</label>
-    <label class="checkbox product" for="ProductZ">@Html.CheckBoxFor(model => model.ProductZ) Decals, transfers, emblems</label>	
-    <label class="checkbox product" for="ProductL">@Html.CheckBoxFor(model => model.ProductL) Electronic/computer products</label>
-    <label class="checkbox product" for="ProductG">@Html.CheckBoxFor(model => model.ProductG) Emblematic jewelry</label>	
-    <label class="checkbox product" for="ProductF">@Html.CheckBoxFor(model => model.ProductF) Food, Edibles</label>
-    <label class="checkbox product" for="ProductI">@Html.CheckBoxFor(model => model.ProductI) Glass and ceramic products (crystal)</label>		
-    <label class="checkbox product" for="ProductV">@Html.CheckBoxFor(model => model.ProductV) Health, safety and environmental products</label>
-    <label class="checkbox product" for="ProductJ">@Html.CheckBoxFor(model => model.ProductJ) Housewares and home products (flashlights, cutlery, etc)</label>
-    <label class="checkbox product" for="ProductH">@Html.CheckBoxFor(model => model.ProductH) Industrial and safety items</label>
-    <label class="checkbox product" for="ProductK">@Html.CheckBoxFor(model => model.ProductK) Inflatables (balloons, etc)</label>
-    <label class="checkbox product" for="ProductU">@Html.CheckBoxFor(model => model.ProductU) Key tags</label>
-    <label class="checkbox product" for="ProductX">@Html.CheckBoxFor(model => model.ProductX) Magnetic products</label>	
-    <label class="checkbox product" for="ProductM">@Html.CheckBoxFor(model => model.ProductM) Office and desk products</label>
-    <label class="checkbox product" for="ProductN">@Html.CheckBoxFor(model => model.ProductN) Paper products (Pocket reminders, diaries)</label>
-    <label class="checkbox product" for="Product3">@Html.CheckBoxFor(model => model.Product3) Party Products (Balloons, Napkins, Plates, etc)</label>
-    <label class="checkbox product" for="Product4">@Html.CheckBoxFor(model => model.Product4) Personal Care, Beauty Products</label>
-    <label class="checkbox product" for="Product5">@Html.CheckBoxFor(model => model.Product5) Phone calling cards</label>
-    <label class="checkbox product" for="ProductE">@Html.CheckBoxFor(model => model.ProductE) Plastic (non-vinyl)</label>
-    <label class="checkbox product" for="ProductP">@Html.CheckBoxFor(model => model.ProductP) Sports Accessories (Bottles, coolers, equipment, golf balls, etc)</label>		
-    <label class="checkbox product" for="ProductQ">@Html.CheckBoxFor(model => model.ProductQ) Toys &amp; stuffed Animals</label>
-    <label class="checkbox product" for="ProductW">@Html.CheckBoxFor(model => model.ProductW) Travel products</label>
-    <label class="checkbox product" for="Product2">@Html.CheckBoxFor(model => model.Product2) Umbrellas/sunglasses</label>
-    <label class="checkbox product" for="ProductR">@Html.CheckBoxFor(model => model.ProductR) Vinyl (pocket, desk, home)</label>
-    <label class="checkbox product" for="ProductS">@Html.CheckBoxFor(model => model.ProductS) Wearables (Caps, jackets, shirts, etc)</label>
-    <label class="checkbox product" for="ProductT">@Html.CheckBoxFor(model => model.ProductT) Writing instruments</label>
-    </fieldset>
+    
+    <div>
+        <h3 class="order-status-header3">Order Status: </h3>
+        <div class="order-status">Approved<br>
+        </div>
+        <div class="timms-info">
+            <div class="span3">
+                <label class="order-status-label" for="Timms_ID">Timms ID:</label>
+                <div class="order-status-input">
+                    @Html.EditorFor(m => m.ExternalReference, new { @class = "span2" })
+                    <span id="timmsErrorMessage" data-type="errormessage" class="field-validation-error"></span>
+                </div>
+            </div>
+            <div class="status-btns">
+                @if (Model.Completed && Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
+                {
+                <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
+                }
+                @if (Model.Completed && Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
+                { 
+                <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
+                }
+                <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+                @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
+                { @Html.ActionLink("Close", "../Orders") }
+                else
+                { @Html.ActionLink("Cancel", "../Orders") }
+
+            </div>
+        </div>
     </div>
-    <div class="span4">
-    @if(Model.Contacts == null || Model.Contacts.Count == 0) {
-        <fieldset><legend><small>Application: Company Contact Person</small></legend>
-        @Html.LabelFor(m => m.FirstName) @Html.EditorFor(m => m.FirstName) @Html.ValidationMessageFor(m => m.FirstName)
-        @Html.LabelFor(m => m.LastName) @Html.EditorFor(m => m.LastName) @Html.ValidationMessageFor(m => m.LastName)
-        @Html.LabelFor(m => m.ApplicantEmail) @Html.EditorFor(m => m.ApplicantEmail) @Html.ValidationMessageFor(m => m.ApplicantEmail)
-        @Html.LabelFor(m => m.Phone) @Html.EditorFor(m => m.Phone) @Html.ValidationMessageFor(m => m.Phone)
-        </fieldset>
-    }
-    @if(Model.Contacts != null && Model.Contacts.Count > 0)
-    {
-        for (int i = 0; i < Model.Contacts.Count; i++)
-        {
-            if (Model.Contacts[i] != null)
+
+	<nav>
+		<ul class="nav nav-tabs" id="tabs">
+			<li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
+			<li><a href="#tabproduct" data-toggle="tab">Product Information</a></li>
+			<li><a href="#tabaccount" data-toggle="tab">Account Information</a></li>
+		</ul>
+	</nav>
+
+	<div class="tab-content">
+	
+		<div id="tabbasic" class="basic-information tab-pane fade in active">
+			<fieldset class="company-info-form">
+				
+				<legend>
+					Company Information	
+				</legend>
+					<span class="lable-row">
+						@Html.LabelFor(m => m.Company) 
+						@Html.EditorFor(m => m.Company, new { @class = "long" }) @Html.ValidationMessageFor(m => m.Company)
+					</span>
+					<span class="lable-row">
+						@Html.LabelFor(m => m.Address1)
+						@Html.LabelFor(m => m.Address2)
+						@Html.LabelFor(m => m.City)
+					</span>
+					<span class="lable-row">
+						@Html.EditorFor(m => m.Address1) @Html.ValidationMessageFor(m => m.Address1)
+						@Html.EditorFor(m => m.Address2) @Html.ValidationMessageFor(m => m.Address2)
+						@Html.EditorFor(m => m.City) @Html.ValidationMessageFor(m => m.City)
+					</span>
+					<span class="lable-row">
+						@Html.LabelFor(m => m.State, new { @class = "span3" }) 
+						@Html.LabelFor(m => m.Zip, new { @class = "span3" })
+						@Html.LabelFor(m => m.Country, new { @class = "span3" })
+                    </span>
+					<span class="lable-row">
+						@Html.EditorFor(m => m.State, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.State)
+						@Html.EditorFor(m => m.Zip, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.Zip)
+						@Html.EditorFor(m => m.Country, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.Country)
+					</span>
+			
+			</fieldset>
+
+			<fieldset class="contact-info-form">
+				<legend>
+					Contacts
+				</legend>
+
+                @if (Model.Contacts != null && Model.Contacts.Count > 0)
+                {
+                    for (int i = 0; i < Model.Contacts.Count; i++)
+                    {
+                        if (Model.Contacts[i] != null)
+                        {
+                            @Html.HiddenFor(m => Model.Contacts[i].Id) @Html.HiddenFor(m => Model.Contacts[i].IsPrimary) @Html.HiddenFor(m => Model.Contacts[i].AppplicationId)
+                            <span class="row">@(Model.Contacts[i].IsPrimary ? Html.Raw("<strong>Primary Contact</strong>") : Html.Raw("<strong>Secondary Contact</strong>"))</span>
+                            <span class="lable-row">
+					            @Html.LabelFor(m => Model.Contacts[i].Name)
+					            @Html.LabelFor(m => Model.Contacts[i].Title)
+					            @Html.LabelFor(m => Model.Contacts[i].Email)
+				            </span>
+				            <span class="lable-row">
+					            @Html.EditorFor(m => Model.Contacts[i].Name) @Html.ValidationMessageFor(m => Model.Contacts[i].Name)
+					            @Html.EditorFor(m => Model.Contacts[i].Title) @Html.ValidationMessageFor(m => Model.Contacts[i].Title)
+					            @Html.EditorFor(m => Model.Contacts[i].Email) @Html.ValidationMessageFor(m => Model.Contacts[i].Email)
+				            </span>
+				            <span class="lable-row">
+					            @Html.LabelFor(m => Model.Contacts[i].Phone)
+					            @Html.LabelFor(m => Model.Contacts[i].Fax)
+				            </span>
+				            <span class="lable-row">
+					            @Html.EditorFor(m => Model.Contacts[i].Phone) @Html.ValidationMessageFor(m => Model.Contacts[i].Phone)
+					            @Html.EditorFor(m => Model.Contacts[i].Fax) @Html.ValidationMessageFor(m => Model.Contacts[i].Fax)
+				            </span>
+                        }
+                    }
+                }
+			</fieldset>	
+
+            @Html.HiddenFor(m => m.HasBillAddress)
+            @if (Model.HasBillAddress)
             {
-            <fieldset><legend><small>Contacts</small></legend>
-            @Html.HiddenFor(m => Model.Contacts[i].Id) @Html.HiddenFor(m => Model.Contacts[i].IsPrimary) @Html.HiddenFor(m => Model.Contacts[i].AppplicationId)                                   
-            @(Model.Contacts[i].IsPrimary ? Html.Raw(" <strong>Primary Contact</strong>"): Html.Raw(""))
-            @Html.LabelFor(m => Model.Contacts[i].Name) @Html.EditorFor(m => Model.Contacts[i].Name) @Html.ValidationMessageFor(m => Model.Contacts[i].Name)
-            @Html.LabelFor(m => Model.Contacts[i].Title) @Html.EditorFor(m => Model.Contacts[i].Title) @Html.ValidationMessageFor(m => Model.Contacts[i].Title)
-            @Html.LabelFor(m => Model.Contacts[i].Email) @Html.EditorFor(m => Model.Contacts[i].Email) @Html.ValidationMessageFor(m => Model.Contacts[i].Email)
-            @Html.LabelFor(m => Model.Contacts[i].Phone) @Html.EditorFor(m => Model.Contacts[i].Phone) @Html.ValidationMessageFor(m => Model.Contacts[i].Phone)
-            @Html.LabelFor(m => Model.Contacts[i].Fax) @Html.EditorFor(m => Model.Contacts[i].Fax) @Html.ValidationMessageFor(m => Model.Contacts[i].Fax)
-            </fieldset>
-            }
-        }
-    }
-    <fieldset><legend><small>Form Data</small></legend>
-    @Html.LabelFor(m => m.ASIContact) @Html.EditorFor(m => m.ASIContact) @Html.ValidationMessageFor(m => m.ASIContact)
-    @Html.LabelFor(m => m.NumberOfEmployee) @Html.EditorFor(m => m.NumberOfEmployee) @Html.ValidationMessageFor(m=>m.NumberOfEmployee)
-    @Html.LabelFor(m => m.NumberOfSalesEmployee) @Html.EditorFor(m => m.NumberOfSalesEmployee) @Html.ValidationMessageFor(m=>m.NumberOfSalesEmployee)
-    @Html.LabelFor(m => m.AnnualSalesVolumeASP) @Html.EditorFor(m => m.AnnualSalesVolumeASP) @Html.ValidationMessageFor(m=>m.AnnualSalesVolumeASP)
-    @Html.LabelFor(m => m.AnnualSalesVolume) @Html.EditorFor(m => m.AnnualSalesVolume) @Html.ValidationMessageFor(m=>m.AnnualSalesVolume)   
-    </fieldset> 
-    <fieldset><legend><small>Types of Accounts</small></legend>
-    <label class="checkbox account" for="AccountA">@Html.CheckBoxFor(model => model.AccountA) Agriculture &amp; Farming</label>
-	<label class="checkbox account" for="AccountV">@Html.CheckBoxFor(model => model.AccountV) Automotive dealers &amp; Mfgs.</label>
-	<label class="checkbox account" for="AccountK">@Html.CheckBoxFor(model => model.AccountK) Chemical &amp; Pharmaceutical companies</label>
-	<label class="checkbox account" for="AccountS">@Html.CheckBoxFor(model => model.AccountS) Construction companies</label>
-	<label class="checkbox account" for="AccountB">@Html.CheckBoxFor(model => model.AccountB) Clubs, Associates, Civic Groups, Non Profits</label>
-	<label class="checkbox account" for="AccountI">@Html.CheckBoxFor(model => model.AccountI) Clothing, Appliances, Soft goods, Mfgs</label>
-	<label class="checkbox account" for="AccountJ">@Html.CheckBoxFor(model => model.AccountJ) Food, Tobacco, Sundries</label>
-	<label class="checkbox account" for="AccountC">@Html.CheckBoxFor(model => model.AccountC) Financial (banks, S&amp;L, credit unions)</label>
-	<label class="checkbox account" for="AccountD">@Html.CheckBoxFor(model => model.AccountD) Government agencies</label>
-	<label class="checkbox account" for="AccountT">@Html.CheckBoxFor(model => model.AccountT) Health and Medical</label>
-	<label class="checkbox account" for="AccountW">@Html.CheckBoxFor(model => model.AccountW) Hospitality (resorts, hotels, restaurants, etc)</label>
-	<label class="checkbox account" for="AccountF">@Html.CheckBoxFor(model => model.AccountF) Insurance companies and agencies</label>
-	<label class="checkbox account" for="AccountH">@Html.CheckBoxFor(model => model.AccountH) Industrial Products</label>
-	<label class="checkbox account" for="AccountO">@Html.CheckBoxFor(model => model.AccountO) Marketing Services (ad agencies)</label>
-	<label class="checkbox account" for="AccountX">@Html.CheckBoxFor(model => model.AccountX) Manufacturing</label>
-	<label class="checkbox account" for="AccountY">@Html.CheckBoxFor(model => model.AccountY) Media (Radio, TV, Newspapers, Magazines)</label>
-	<label class="checkbox account" for="AccountL">@Html.CheckBoxFor(model => model.AccountL) Political parties and candidates</label>
-	<label class="checkbox account" for="AccountM">@Html.CheckBoxFor(model => model.AccountM) Retail (stores, shopping centers)</label>
-	<label class="checkbox account" for="AccountU">@Html.CheckBoxFor(model => model.AccountU) Recreation (Theaters, Bowling, etc)</label>
-	<label class="checkbox account" for="AccountN">@Html.CheckBoxFor(model => model.AccountN) Professional Offices (Lawyers, Doctors)</label>
-	<label class="checkbox account" for="AccountP">@Html.CheckBoxFor(model => model.AccountP) Service businesses (real estate, personnel)</label>
-	<label class="checkbox account" for="AccountE">@Html.CheckBoxFor(model => model.AccountE) Schools, colleges, universities, etc.</label>
-	<label class="checkbox account" for="AccountZ">@Html.CheckBoxFor(model => model.AccountZ) Sports Related (Professional Teams)</label>
-	<label class="checkbox account" for="AccountQ">@Html.CheckBoxFor(model => model.AccountQ) Transportation (Airlines, Freight companies)</label>
-	<label class="checkbox account" for="Account1">@Html.CheckBoxFor(model => model.Account1) Technology (Computers, Software Mfgs/Internet, Web Developers)</label>
-	<label class="checkbox account" for="AccountG">@Html.CheckBoxFor(model => model.AccountG) Utilities</label>
-	<label class="checkbox account" for="AccountR">@Html.CheckBoxFor(model => model.AccountR) Wholesalers</label>
-    </fieldset>
-    </div>
-    <div class="span4">
-        <fieldset><legend><small>Order Status</small></legend>
-        <div class="well">@Model.OrderStatus<br /></div>
-        @Html.Label("Timms ID") @Html.EditorFor(m => m.ExternalReference) <br /> 
-        <span id="timmsErrorMessage" class="field-validation-error" data-type="errormessage"></span><br />
-        @if (Model.Completed && Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
-        {
-        <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
-        }
-        @if (Model.Completed && Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
-        { 
-        <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
-        }
-        <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
-        @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
-        { @Html.ActionLink("Close", "../Orders") }
-        else
-        { @Html.ActionLink("Cancel", "../Orders") }
-        <br /><br />
-        </fieldset>
-        <fieldset><legend><small>Primary business revenue</small></legend>
-        <label class="radio">@Html.RadioButtonFor(m => m.BuisnessRevenue, DistributorBusinessRevenue.BUSINESSREVENUE_PRINTING, Model.Printing ? new { @checked = "checked"} : null) @DistributorBusinessRevenue.BUSINESSREVENUE_PRINTING </label>
-        <label class="radio">@Html.RadioButtonFor(m => m.BuisnessRevenue, DistributorBusinessRevenue.BUSINESSREVENUE_PROMOTIONALPRODUCTS, Model.PromotionalProducts ? new { @checked = "checked"} : null) @DistributorBusinessRevenue.BUSINESSREVENUE_PROMOTIONALPRODUCTS </label>
-        <label class="radio">@Html.RadioButtonFor(m => m.BuisnessRevenue, DistributorBusinessRevenue.BUSINESSREVENUE_SIGNS, Model.Signs ? new { @checked = "checked"} : null) @DistributorBusinessRevenue.BUSINESSREVENUE_SIGNS</label>
-        <label class="radio">@Html.RadioButtonFor(m => m.BuisnessRevenue, DistributorBusinessRevenue.BUSINESSREVENUE_TROPHYAWARDS, Model.TrophyAwards ? new { @checked = "checked"} : null) @DistributorBusinessRevenue.BUSINESSREVENUE_TROPHYAWARDS</label>
-        <label class="radio">@Html.RadioButtonFor(m => m.BuisnessRevenue, DistributorBusinessRevenue.BUSINESSREVENUE_SCREENPRINTING, Model.ScreenPrinting ? new { @checked = "checked"} : null) @DistributorBusinessRevenue.BUSINESSREVENUE_SCREENPRINTING</label>
-        <label class="radio">@Html.RadioButtonFor(m => m.BuisnessRevenue, "Other", Model.Other ? new { @checked = "checked"} : null) Other </label> @Html.EditorFor(m => m.OtherBusinessRevenue, Model.Other ? new { @class = "input-medium" } : new { @class = "input-medium hidden" }) @Html.ValidationMessageFor(m=>m.OtherBusinessRevenue) 
-        </fieldset>
-    </div>
-</div>
+			<fieldset class="billing-info-form">
+				<legend>
+					Billing Information
+				</legend>
+
+				<span class="lable-row">
+					@Html.LabelFor(m => m.BillingAddress1) 
+					@Html.LabelFor(m => m.BillingAddress2) 
+					@Html.LabelFor(m => m.BillingCity)
+				</span>
+				<span class="lable-row">
+					@Html.EditorFor(m => m.BillingAddress1) @Html.ValidationMessageFor(m => m.BillingAddress1)
+					@Html.EditorFor(m => m.BillingAddress2) @Html.ValidationMessageFor(m => m.BillingAddress2)
+					@Html.EditorFor(m => m.BillingCity) @Html.ValidationMessageFor(m => m.BillingCity)
+				</span>
+				
+				<span class="lable-row">
+					@Html.LabelFor(m => m.BillingState) 
+					@Html.LabelFor(m => m.BillingZip) 
+					@Html.LabelFor(m => m.BillingCountry)
+				</span>
+				<span class="lable-row">
+					@Html.EditorFor(m => m.BillingState) @Html.ValidationMessageFor(m => m.BillingState)
+					@Html.EditorFor(m => m.BillingZip) @Html.ValidationMessageFor(m => m.BillingZip)
+					@Html.EditorFor(m => m.BillingCountry) @Html.ValidationMessageFor(m => m.BillingCountry)
+				</span>
+					<span class="lable-row span11">
+					@Html.LabelFor(m => m.BillingPhone) 
+					@Html.LabelFor(m => m.BillingFax) 
+					@Html.LabelFor(m => m.BillingEmail)
+				</span>
+				<span class="lable-row">
+					@Html.EditorFor(m => m.BillingPhone) @Html.ValidationMessageFor(m => m.BillingPhone)
+					@Html.EditorFor(m => m.BillingFax) @Html.ValidationMessageFor(m => m.BillingFax)
+					@Html.EditorFor(m => m.BillingEmail) @Html.ValidationMessageFor(m => m.BillingEmail)
+				</span>
+				<span class="lable-row span11">
+					@Html.LabelFor(m => m.BillingWebUrl) 
+				</span>
+				<span class="lable-row">
+					@Html.EditorFor(m => m.BillingWebUrl) @Html.ValidationMessageFor(m => m.BillingWebUrl)
+				</span>
+			</fieldset>                
+            } 
+            @Html.HiddenFor(m => m.HasShipAddress)
+            @if (Model.HasShipAddress)
+            {
+			<fieldset class="billing-info-form">
+				<legend>
+					Shipping Information
+				</legend>
+
+				<span class="lable-row">
+					@Html.LabelFor(m => m.ShippingStreet1) 
+					@Html.LabelFor(m => m.ShippingStreet2) 
+					@Html.LabelFor(m => m.ShippingCity) 
+				</span>
+				<span class="lable-row">
+					@Html.EditorFor(m => m.ShippingStreet1) @Html.ValidationMessageFor(m => m.ShippingStreet1)
+					@Html.EditorFor(m => m.ShippingStreet2) @Html.ValidationMessageFor(m => m.ShippingStreet2)
+					@Html.EditorFor(m => m.ShippingCity) @Html.ValidationMessageFor(m => m.ShippingCity)
+				</span>
+				
+				<span class="lable-row">
+					@Html.LabelFor(m => m.ShippingState) 
+					@Html.LabelFor(m => m.ShippingZip) 
+					@Html.LabelFor(m => m.ShippingCountry)
+				</span>
+				<span class="lable-row">
+					@Html.EditorFor(m => m.ShippingState) @Html.ValidationMessageFor(m => m.ShippingState)
+					@Html.EditorFor(m => m.ShippingZip) @Html.ValidationMessageFor(m => m.ShippingZip)
+					@Html.EditorFor(m => m.ShippingCountry) @Html.ValidationMessageFor(m => m.ShippingCountry)
+				</span>
+			</fieldset>                
+            } 
+		</div><!-- END #basic-information -->		
+<!------------------------------------product-information---------------------------------->					
+		<div id="tabproduct" class="product-information tab-pane fade">
+			<fieldset class="primary-business-revenue">
+				<legend>
+					Primary Business Revenue
+				</legend>
+				<span class="primary-business-row">
+					<label class="primary-business-radio radio">
+						@Html.RadioButtonFor(m => m.BuisnessRevenue, DistributorBusinessRevenue.BUSINESSREVENUE_PRINTING, Model.Printing ? new { @checked = "checked" } : null)
+						@DistributorBusinessRevenue.BUSINESSREVENUE_PRINTING
+					</label>
+					<label class="primary-business-radio radio">
+						@Html.RadioButtonFor(m => m.BuisnessRevenue, DistributorBusinessRevenue.BUSINESSREVENUE_PROMOTIONALPRODUCTS, Model.PromotionalProducts ? new { @checked = "checked" } : null)
+						@DistributorBusinessRevenue.BUSINESSREVENUE_PROMOTIONALPRODUCTS
+					</label>
+					<label class="primary-business-radio radio">
+						@Html.RadioButtonFor(m => m.BuisnessRevenue, DistributorBusinessRevenue.BUSINESSREVENUE_SIGNS, Model.Signs ? new { @checked = "checked" } : null)
+						@DistributorBusinessRevenue.BUSINESSREVENUE_SIGNS
+					</label>
+					<label class="primary-business-radio radio">
+						@Html.RadioButtonFor(m => m.BuisnessRevenue, DistributorBusinessRevenue.BUSINESSREVENUE_TROPHYAWARDS, Model.TrophyAwards ? new { @checked = "checked" } : null)
+						@DistributorBusinessRevenue.BUSINESSREVENUE_TROPHYAWARDS
+					</label>
+					<label class="primary-business-radio radio">
+						@Html.RadioButtonFor(m => m.BuisnessRevenue, DistributorBusinessRevenue.BUSINESSREVENUE_SCREENPRINTING, Model.ScreenPrinting ? new { @checked = "checked" } : null)
+						@DistributorBusinessRevenue.BUSINESSREVENUE_SCREENPRINTING
+					</label>
+					<label class="primary-business-radio radio">
+						@Html.RadioButtonFor(m => m.BuisnessRevenue, "Other", Model.Other ? new { @checked = "checked" } : null)
+						Other
+					</label>
+                    @Html.EditorFor(m => m.OtherBusinessRevenue, Model.Other ? new { @class = "input-medium" } : new { @class = "input-medium hidden" }) @Html.ValidationMessageFor(m => m.OtherBusinessRevenue)
+				</span>
+				<span class="lable-row">
+					@Html.LabelFor(m => m.NumberOfEmployee) 
+					@Html.LabelFor(m => m.NumberOfSalesEmployee) 
+					@Html.LabelFor(m => m.AnnualSalesVolumeASP) 
+				</span>
+				<span class="lable-row">
+					@Html.EditorFor(m => m.NumberOfEmployee) @Html.ValidationMessageFor(m => m.NumberOfEmployee) 
+					@Html.EditorFor(m => m.NumberOfSalesEmployee) @Html.ValidationMessageFor(m => m.NumberOfSalesEmployee)
+					@Html.EditorFor(m => m.AnnualSalesVolumeASP) @Html.ValidationMessageFor(m => m.AnnualSalesVolumeASP)
+				</span>
+				<span class="lable-row">
+					@Html.LabelFor(m => m.AnnualSalesVolume, new { @class = "span3" }) 
+				</span>
+				<span class="lable-row">
+					@Html.EditorFor(m => m.AnnualSalesVolume) @Html.ValidationMessageFor(m => m.AnnualSalesVolume)	
+				</span>
+			</fieldset>
+			<fieldset class="product-lines">
+				<legend>
+					Product Lines	
+				</legend>
+				<span class="checkbox-left">
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductA)">
+						@Html.CheckBoxFor(model => model.ProductA)
+						Auto Accessories
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductB)">
+						@Html.CheckBoxFor(model => model.ProductB)
+						Awards, Trophies &amp; Plaques 
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductC)">
+						@Html.CheckBoxFor(model => model.ProductC)
+						Badges, Buttons  
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Product1)">
+						@Html.CheckBoxFor(model => model.Product1)
+						Bags (Canvas, Tote, Paper, Plastic, etc) 
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductD)">
+						@Html.CheckBoxFor(model => model.ProductD)
+						Calendars and timepieces  
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductO)">
+						@Html.CheckBoxFor(model => model.ProductO)
+						Cards (business, greeting and stationery), Signs &amp; displays  
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductY)">
+						@Html.CheckBoxFor(model => model.ProductY)
+						Cups and mugs   
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductZ)">
+						@Html.CheckBoxFor(model => model.ProductZ)
+						Decals, transfers, emblems	  
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductL)">
+						@Html.CheckBoxFor(model => model.ProductL)
+						Electronic/computer products 	  
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductG)">
+						@Html.CheckBoxFor(model => model.ProductG)
+						Emblematic jewelry	  
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductF)">
+						@Html.CheckBoxFor(model => model.ProductF)
+						Food, Edibles 	  
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductI)">
+						@Html.CheckBoxFor(model => model.ProductI)
+						Glass and ceramic products (crystal)	 	  
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductK)">
+						@Html.CheckBoxFor(model => model.ProductK)
+						Inflatables (balloons, etc)	 	  
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductV)">
+						@Html.CheckBoxFor(model => model.ProductV)
+						Health, safety and environmental products 	 	  
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductJ)">
+						@Html.CheckBoxFor(model => model.ProductJ)
+						Housewares and home products (flashlights, cutlery, etc) 	 	  
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductH)">
+						@Html.CheckBoxFor(model => model.ProductH)
+						Industrial and safety items Inflatables (balloons, etc)  	 	  
+					</label>
+				</span>
+				<span class="checkbox-right">
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductU)">
+						@Html.CheckBoxFor(model => model.ProductU)
+						Key tags
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductX)">
+						@Html.CheckBoxFor(model => model.ProductX)
+						Magnetic products
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductM)">
+						@Html.CheckBoxFor(model => model.ProductM)
+						Office and desk products
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductN)">
+						@Html.CheckBoxFor(model => model.ProductN)
+						Paper products (Pocket reminders, diaries) 
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Product3)">
+						@Html.CheckBoxFor(model => model.Product3)
+						Party Products (Balloons, Napkins, Plates, etc) 
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Product4)">
+						@Html.CheckBoxFor(model => model.Product4)
+						Personal Care, Beauty Products 
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Product5)">
+						@Html.CheckBoxFor(model => model.Product5)
+						Phone calling cards 
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductE)">
+						@Html.CheckBoxFor(model => model.ProductE)
+						Plastic (non-vinyl) 
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductP)">
+						@Html.CheckBoxFor(model => model.ProductP)
+						Sports Accessories (Bottles, coolers, equipment, golf balls, etc)
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductQ)">
+						@Html.CheckBoxFor(model => model.ProductQ)
+						Toys &amp; stuffed Animals 
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductW)">
+						@Html.CheckBoxFor(model => model.ProductW)
+						Travel products 
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Product2)">
+						@Html.CheckBoxFor(model => model.Product2)
+						Umbrellas/sunglasses 
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductR)">
+						@Html.CheckBoxFor(model => model.ProductR)
+						Vinyl (pocket, desk, home) 
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductS)">
+						@Html.CheckBoxFor(model => model.ProductS)
+                        Wearables (Caps, jackets, shirts, etc)
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductT)">
+						@Html.CheckBoxFor(model => model.ProductT)
+						Writing instruments
+					</label>
+				</span>
+			</fieldset>
+		</div><!-- END #product-information -->			
+<!------------------------------------account-information---------------------------------->			
+		<div id="tabaccount" class="account-information tab-pane fade">
+			<fieldset class="asi-contact">
+				<legend>
+					ASI Contact
+				</legend>
+				<span class="lable-row">
+					@Html.LabelFor(m => m.ASIContact) 
+				</span>
+				<span class="lable-row">
+					@Html.EditorFor(m => m.ASIContact, new { @class = "long" }) @Html.ValidationMessageFor(m => m.ASIContact) 
+				</span>
+			</fieldset>
+			<fieldset class="type-account">
+				<legend>
+					Type of Account
+				</legend>
+				<span class="checkbox-left">
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountA)">
+						@Html.CheckBoxFor(model => model.AccountA)
+						Agriculture &amp; Farming 
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountV)">
+						@Html.CheckBoxFor(model => model.AccountV)
+						Automotive dealers &amp; Mfgs
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountK)">
+						@Html.CheckBoxFor(model => model.AccountK)
+						Chemical &amp; Pharmaceutical companies   
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountS)">
+						@Html.CheckBoxFor(model => model.AccountS)
+						Construction companies
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountB)">
+						@Html.CheckBoxFor(model => model.AccountB)
+						Clubs, Associates, Civic Groups, Non Profits 
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountI)">
+						@Html.CheckBoxFor(model => model.AccountI)
+						Clothing, Appliances, Soft goods, Mfgs  
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountJ)">
+						@Html.CheckBoxFor(model => model.AccountJ)
+						Food, Tobacco, Sundries  
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountC)">
+						@Html.CheckBoxFor(model => model.AccountC)
+						Financial (banks, S&amp;L, credit unions)   
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountD)">
+						@Html.CheckBoxFor(model => model.AccountD)
+						Government agencies   
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountT)">
+						@Html.CheckBoxFor(model => model.AccountT)
+						Health &amp; Medical   
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountW)">
+						@Html.CheckBoxFor(model => model.AccountW)
+						Hospitality (resorts, hotels, restaurants, etc)   
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountF)">
+						@Html.CheckBoxFor(model => model.AccountF)
+						Insurance companies &amp; agencies    
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountH)">
+						@Html.CheckBoxFor(model => model.AccountH)
+						Industrial Products    
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountO)">
+						@Html.CheckBoxFor(model => model.AccountO)
+						Marketing Services (ad agencies)      
+					</label>
+				</span>
+				<span class="checkbox-right">
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountX)">
+						@Html.CheckBoxFor(model => model.AccountX)
+						Manufacturing
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountY)">
+						@Html.CheckBoxFor(model => model.AccountY)
+						Media (Radio, TV, Newspapers, Magazines) 
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountL)">
+						@Html.CheckBoxFor(model => model.AccountL)
+						Political parties and candidates  
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountM)">
+						@Html.CheckBoxFor(model => model.AccountM)
+						Retail (stores, shopping centers)   
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountU)">
+						@Html.CheckBoxFor(model => model.AccountU)
+						Recreation (Theaters, Bowling, etc)    
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountN)">
+						@Html.CheckBoxFor(model => model.AccountN)
+						Professional Offices (Lawyers, Doctors) 
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountP)">
+						@Html.CheckBoxFor(model => model.AccountP)
+						Service businesses (real estate, personnel)  
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountE)">
+						@Html.CheckBoxFor(model => model.AccountE)
+						Schools, colleges, universities, etc.   
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountZ)">
+						@Html.CheckBoxFor(model => model.AccountZ)
+						Sports Related (Professional Teams)    
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountQ)">
+						@Html.CheckBoxFor(model => model.AccountQ)
+						Transportation (Airlines, Freight companies)    
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Account1)">
+						@Html.CheckBoxFor(model => model.Account1)
+						Technology (Computers, Software Mfgs/Internet, Web Developers)    
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountG)">
+						@Html.CheckBoxFor(model => model.AccountG)
+						Utilities     
+					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AccountR)">
+						@Html.CheckBoxFor(model => model.AccountR)
+						Wholesalers    
+					</label>
+				</span>
+			  </fieldset>
+		</div><!-- END #account-information -->	
+		
+	</div><!-- END .tab-content -->    
 }
 
 @section Scripts {
@@ -188,7 +531,7 @@
                 //make sure we have Timms value
                 if (!$('#ExternalReference').val()) {
                     asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
-                    $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                    $("#ExternalReference").attr("class", "text-box single-line input-validation-error span2");
                     $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
                     e.preventDefault();
                 }
@@ -196,7 +539,7 @@
                     var isnum = /^\d+$/.test($('#ExternalReference').val());
                     if (!isnum) {
                         asi.modal.confirm('Error', 'TIMMS ID must contain only numbers.', null, "#hide", "Close");
-                        $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                        $("#ExternalReference").attr("class", "text-box single-line input-validation-error span2");
                         $("#timmsErrorMessage").text("TIMMS ID must contain only numbers.");
                         e.preventDefault();
                     }
