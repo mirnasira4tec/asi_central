@@ -160,7 +160,6 @@ div.well
     font-weight: normal;
     line-height: 14px;
 }
-
 	
 /* utility classes */
 .float-left {
@@ -186,4 +185,238 @@ input.input-validation-error {
 
 input[type="checkbox"].input-validation-error {
     border: 0 none;
+}
+
+
+/*
+    Below are the CSS styles for distributor applications.
+*/
+
+.order-status-header3 {
+    float: left;
+}
+
+/* utility column layout classes - ONLY use these if the bootstrap automatic column stacking is NOT desired */
+.two-column-1, .two-column-2, .three-column-1, .three-column-2, .three-column-3 {
+	display: block;
+	position: relative;
+}
+.two-column-1 {
+	float: left;
+	padding-left: 2%;
+	width: 45%;
+}
+.two-column-2 {
+	float: right;
+	padding-left: 2%;
+	width: 45%;
+}
+
+/* ----------------------------------------------BASE HTML TAGS ----------------------------------------------*/
+
+.tab-content{
+	overflow:hidden;
+}
+legend{
+	background-color:#ccc;
+	color:#333333;
+	font-size:16px;
+	font-weight:bold;
+	padding-left:17px;
+	width:97%;
+}
+
+form{
+	background-color:#ffffff;
+	padding:2%;
+	width:96%;
+	margin:0;
+}
+
+fieldset{
+	padding: 0 0 3%;
+}
+
+/*----------------------------------------------header ----------------------------------------------*/
+
+/* site header area */
+header#site-header {
+	border-bottom: 14px solid #808080;
+	padding: 20px 0px 0px 0px;
+	
+}
+	header#site-header #header-banner {
+		text-align: right;
+	}
+
+	#header-loged-in{
+		margin-top:4%;
+		text-align:right;
+	}
+	
+[class*="span"]{
+	margin-left:0px;
+}
+.users-name{
+	color:#da1c23;
+}
+
+/* Membership Comparison chart content hide and display tab navigation */
+.nav {
+  margin-bottom: 0px;
+  margin-left: 0;
+  list-style: none;
+}
+.nav-tabs {
+  border-bottom: 1px solid #A8A8A8;
+}
+	.nav-tabs > li {
+		margin-bottom: -1px;
+	}
+		.nav-tabs > li > a {
+			background: #eff2f6; /* Old browsers */
+			background: -moz-linear-gradient(top,  #eff2f6 0%, #dbe3ef 100%); /* FF3.6+ */
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eff2f6), color-stop(100%,#dbe3ef)); /* Chrome,Safari4+ */
+			background: -webkit-linear-gradient(top,  #eff2f6 0%,#dbe3ef 100%); /* Chrome10+,Safari5.1+ */
+			background: -o-linear-gradient(top,  #eff2f6 0%,#dbe3ef 100%); /* Opera 11.10+ */
+			background: -ms-linear-gradient(top,  #eff2f6 0%,#dbe3ef 100%); /* IE10+ */
+			background: linear-gradient(to bottom,  #eff2f6 0%,#dbe3ef 100%); /* W3C */
+			border: 1px solid #A8A8A8;
+			-webkit-border-radius: 4px 4px 0 0;
+			-moz-border-radius: 4px 4px 0 0;
+			border-radius: 4px 4px 0 0;
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eff2f6', endColorstr='#dbe3ef',GradientType=0 ); /* IE6-9 */
+			line-height: 14px;
+			margin-right: 2px;
+			padding-top: 8px 12px 8px 12px;
+		}
+		.nav-tabs > li.active > a,
+		.nav-tabs > li > a:hover {
+			background: #FFFFFF; /* Old browsers */
+			background: -moz-linear-gradient(top,  #FFFFFF 0%, #FFFFFF 100%); /* FF3.6+ */
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(100%,#FFFFFF)); /* Chrome,Safari4+ */
+			background: -webkit-linear-gradient(top,  #FFFFFF 0%,#FFFFFF 100%); /* Chrome10+,Safari5.1+ */
+			background: -o-linear-gradient(top,  #FFFFFF 0%,#FFFFFF 100%); /* Opera 11.10+ */
+			background: -ms-linear-gradient(top,  #FFFFFF 0%,#FFFFFF 100%); /* IE10+ */
+			background: linear-gradient(to bottom,  #FFFFFF 0%,#FFFFFF 100%); /* W3C */
+			background-color: #FFFFFF;
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#FFFFFF',GradientType=0 ); /* IE6-9 */
+		}
+		.nav-tabs > li > a:hover {
+			border-color: #A8A8A8 #A8A8A8 #A8A8A8 #A8A8A8;
+		}
+	.nav-tabs > .active > a,
+	.nav-tabs > .active > a:hover {
+		color: #555555;
+		cursor: default;
+		background-color: #ffffff;
+		border: 1px solid #ddd;
+		border-color: #A8A8A8 #A8A8A8 transparent;
+	}
+
+/* ---------------------------------------------- FORM ---------------------------- */
+
+/*-----------------Order Status-------------*/
+.order-status{
+    padding-top: 11px;
+    padding-left: 3px;
+	float:left;
+	font-weight:bold;
+	color:#da1c23;
+}
+
+.status-btns{
+	width:auto;
+	padding-top: 0.5%;
+	float:left;
+	}
+.timms-info{
+	width:100%;
+	padding-top:1%;
+	padding-bottom:2%;
+	float:left;
+}
+.admin-btns{
+	float:left;
+}
+.order-status-label{
+	float:left;
+	padding-top:3%;
+	padding-right:3%;
+}
+.order-status-input{
+	margin-left:30%;
+}
+
+/*--------------------body--------------*/
+#tabbasic, #tabproduct, #tabaccount{
+	border-bottom: 1px solid #a8a8a8;
+	border-left: 1px solid #a8a8a8;
+	border-right: 1px solid #a8a8a8;
+	padding:2%;
+	background-color:#ececec;
+}
+/*-----------------basic information-------------*/
+.lable-row {
+	width:98%;
+	float:left;
+	padding-left:2%;
+}
+	.lable-row label{
+		width:30%;
+		display:inline;
+		float:left;
+		padding-left:2%
+	}
+	.lable-row  input{
+		width:29%;
+		margin-left:1%;
+	}
+	.lable-row  .long{
+		width:94%;
+	}
+/*-------------------product information--------------*/
+.primary-business-row{
+	float:left;
+	width:100%;
+	padding-top:1%;
+	padding-bottom:3%;
+}
+.primary-business-radio{
+	margin-left:3%;
+	width:26%;
+	float:left;
+}
+.checkbox-left {
+	width:46%;
+	float:left;
+}
+.checkbox-right {
+	width:46%;
+	float:left;
+}
+.account-checkbox{
+	width:90%;
+	margin-left:11%;
+	float:left;
+}
+/*-------------------------------------------FOOTER-----------------------------------*/
+#asi-brand-bar{
+	text-align:center;
+	margin-top:3%;
+}
+	#asi-brand-bar a{
+		color:#da1c23;
+	}
+
+
+@media (max-width: 600px) {
+    .lable-row input {
+        width: 27%;
+    }
+
+    .nav-tabs > li > a, .nav-pills > li > a {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
 }

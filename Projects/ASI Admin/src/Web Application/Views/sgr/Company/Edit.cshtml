@@ -10,12 +10,16 @@
 <div class="form-actions">
 @using (Html.BeginForm())
 {
+    <input type="submit" value="Save" class="btn btn-primary" />
+    @Html.ActionLink(Resource.Cancel, "List")
+    <br /><br />
     @Html.AntiForgeryToken()
     @Html.HiddenFor(company => company.Id)
     @Html.LabelFor(company => company.Name) @Html.EditorFor(company => company.Name, new { @class = "input-xxlarge" }) @Html.ValidationMessageFor(company => company.Name)
     @Html.LabelFor(company => company.Summary) @Html.EditorFor(company => company.Summary, new { @class = "input-xxlarge"}) @Html.ValidationMessageFor(company => company.Summary)
     @Html.LabelFor(company => company.ASINumber) @Html.EditorFor(company => company.ASINumber, new { @class = "input-xxlarge"}) 
     <label class="checkbox" for="IsActive">@Html.EditorFor(company => company.IsInactive) @Html.DisplayNameFor(company => company.IsInactive)</label>
+    @Html.LabelFor(company => company.Sequence) @Html.EditorFor(company => company.Sequence, new { @class="input-xxlarge" })  @Html.ValidationMessageFor(company => company.Sequence)
     @Html.LabelFor(company => company.BusinessType) @Html.EditorFor(company => company.BusinessType, new { @class = "input-xxlarge" })
     @Html.LabelFor(company => company.Address) @Html.TextAreaFor(company => company.Address, new { @class = "input-xxlarge" }) 
     @Html.LabelFor(company => company.ProductionTime) @Html.EditorFor(company => company.ProductionTime, new { @class = "input-xxlarge" })    
@@ -25,7 +29,7 @@
     @Html.LabelFor(company => company.AnnualSalesTurnover) @Html.EditorFor(company => company.AnnualSalesTurnover, new { @class = "input-xxlarge"})
     @Html.LabelFor(company => company.CountryCode) @Html.EditorFor(company => company.CountryCode, new { @class = "input-xxlarge"})
     @Html.LabelFor(company => company.PhoneAreaCode) @Html.EditorFor(company => company.PhoneAreaCode, new { @class = "input-xxlarge"})
-    @Html.LabelFor(company => company.Phone) @Html.EditorFor(company => company.PhoneAreaCode, new { @class = "input-xxlarge" })
+    @Html.LabelFor(company => company.Phone) @Html.EditorFor(company => company.Phone, new { @class = "input-xxlarge" })
     @Html.LabelFor(company => company.PhoneExtension) @Html.EditorFor(company => company.PhoneExtension, new { @class = "input-xxlarge"})
     @Html.LabelFor(company => company.FaxCountryCode) @Html.EditorFor(company => company.FaxCountryCode, new { @class = "input-xxlarge" })
     @Html.LabelFor(company => company.FaxAreaCode) @Html.EditorFor(company => company.FaxAreaCode, new { @class = "input-xxlarge" })
@@ -36,7 +40,7 @@
     @Html.LabelFor(company => company.YearEstablished) @Html.EditorFor(company => company.YearEstablished, new { @class = "input-xxlarge" })
         
     <br />
-    <input type="submit" value="Save" class="btn" />
+    <input type="submit" value="Save" class="btn btn-primary" />
     @Html.ActionLink(Resource.Cancel, "List")
 }
 </div>

@@ -1006,6 +1006,15 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sequence.
+        /// </summary>
+        public static string Sequence {
+            get {
+                return ResourceManager.GetString("Sequence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shipping Address.
         /// </summary>
         public static string ShippingAddress {
