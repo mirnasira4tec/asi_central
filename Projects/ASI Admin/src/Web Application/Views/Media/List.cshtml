@@ -12,7 +12,7 @@
         <img src="/images/folder.png" width="32" height="32" alt="folder" />
     </div> 
     
-    <div class="span3"><h2>@(string.IsNullOrEmpty(Model.Path) ? "/" : Model.Path)</h2></div> <br />
+    <div class="span3"><h2>@(string.IsNullOrEmpty(Model.Path) ? "/" : Model.Path)</h2></div>
 </div>
 
 <table class="table table-condensed table-stripped">
@@ -43,40 +43,41 @@
 </table>
 
 <!-- Create Directory -->
-<div id="CreateDirectoryModalWindow" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    @using (Html.BeginForm("CreateDirectory", "Media", new { directoryPath = (string.IsNullOrEmpty(Model.Path) ? "" : Model.Path) }, FormMethod.Post))
-    {
+@using (Html.BeginForm("CreateDirectory", "Media", new { directoryPath = (string.IsNullOrEmpty(Model.Path) ? "" : Model.Path) }, FormMethod.Post))
+{
+    <div id="CreateDirectoryModalWindow" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-header">			
-		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 		    <h3 id="myModalLabel">Create Directory</h3>
 	    </div>
-        <div>Enter directory Name: <br />
-            @Html.TextBox("dirName")
-            <input class="btn-primary" type="submit" name="Submit" id="btnDir" value="Create Directory" onclick="CreateDirectory()" />
-           </div>
+        <div class="modal-body">
+            <p>Enter directory Name: @Html.TextBox("dirName") </p> 
+        </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <input class="btn btn-primary" type="submit" name="Submit" value="Ok" />
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
 	    </div>	
-    }
-</div>
+   </div>
+}
 
 <!-- Upload files -->
-<div id="UploadFilesModalWindow" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    @using (Html.BeginForm("Upload", "Media", new { uploadPath = (string.IsNullOrEmpty(Model.Path) ? "" : Model.Path) }, FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
+ @using (Html.BeginForm("Upload", "Media", new { uploadPath = (string.IsNullOrEmpty(Model.Path) ? "" : Model.Path) }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div id="UploadFilesModalWindow" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-header">			
-		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 		    <h3 id="myModalLabel1">Upload Files</h3>
 	    </div>	
         <div class="modal-body">
              <input type="file" name="files" multiple="multiple" />
-             <input class="btn btn-primary" type="submit" name="Submit" id="Submit" value="Upload" />
         </div>
         <div class="modal-footer">
+            <input class="btn btn-primary" type="submit" name="Submit" value="Upload" />
 		    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
 	    </div>		
-    }
 </div>
+}
+
 <form id="frmDelete" method="post" action="/Media/Delete">
     <input type="hidden" name="file" />
 </form>
