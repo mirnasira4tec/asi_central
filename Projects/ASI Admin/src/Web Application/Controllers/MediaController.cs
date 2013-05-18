@@ -33,16 +33,12 @@ namespace asi.asicentral.web.Controllers
                 return View("List", model);
             }
             catch (Exception e)
-            {
-                log.Error(string.Format("Could not list the content of a folder, the error is {1}", e.Message));
-                throw e;
-            }
-        }
 
         [HttpPost]
         public virtual ActionResult Upload(string uploadPath)
         {
-            //string uploadPath = ConfigurationManager.AppSettings["UploadPath"];
+            string refreshPath = uploadPath;
+            string msg = string.Empty;
             uploadPath = ConfigurationManager.AppSettings["MediaPath"] + uploadPath;
 
             IList<HttpPostedFileBase> files = Request.Files.GetMultiple("files");
@@ -54,11 +50,11 @@ namespace asi.asicentral.web.Controllers
                     if (!System.IO.Directory.Exists(uploadPath))
                         System.IO.Directory.CreateDirectory(uploadPath);
 
-                    var path = Path.Combine(uploadPath, fileName);
+                     var path = Path.Combine(uploadPath, fileName);
                     file.SaveAs(path);
                  }
             }
-            return RedirectToAction("Index");
+            return new RedirectResult(string.Format("/Media/List?path={0}", refreshPath));
         }
 
         public void Download(string file)
@@ -91,6 +87,7 @@ namespace asi.asicentral.web.Controllers
             }
         }
 
+        [HttpPost]
         public ActionResult Delete(string file)
         {
             string filePath = ConfigurationManager.AppSettings["MediaPath"] + file;
@@ -100,14 +97,30 @@ namespace asi.asicentral.web.Controllers
             else if (System.IO.File.Exists(filePath))
                  System.IO.File.Delete(filePath);
             
-            return RedirectToAction("Index");
+            return new RedirectResult(string.Format("/Media/List?path={0}", GetUrlToSendToList(file)));
         }
 
-        private void FileOrDirectorySave(string SaveFileName)
+        [HttpPost]
+        public virtual ActionResult CreateDirectory(string directoryPath)
         {
+            string directoryName = String.Format("{0}", Request.Form["dirName"]);
+
+            string refreshPath = directoryPath;
+            directoryPath = ConfigurationManager.AppSettings["MediaPath"] + directoryPath + @"\" + directoryName;
+
+            if (!System.IO.Directory.Exists(directoryPath))
+                System.IO.Directory.CreateDirectory(directoryPath);
+
+            return new RedirectResult(string.Format("/Media/List?path={0}", refreshPath));
+        }
+
+        private void FileOrDirectorySave(string SavedPath)
+        {
+            string SaveFileName = SavedPath.Replace("\\", "/");
+            SaveFileName = SaveFileName.Substring(SaveFileName.LastIndexOf('/') + 1);
             Response.Clear();
             Response.AddHeader("content-disposition", "attachment; filename=" + SaveFileName);
-            Response.WriteFile(SaveFileName);
+            Response.WriteFile(SavedPath);
             Response.ContentType = "";
             Response.End();
         }
@@ -119,6 +132,14 @@ namespace asi.asicentral.web.Controllers
             if (string.IsNullOrEmpty(model.BasePath)) throw new Exception("The media properties need to be setup");
             if (!Directory.Exists(model.BasePath)) throw new Exception("The media properties seem to be incorrect");
             return model;
+        }
+
+        private string GetUrlToSendToList(string path)
+        {
+            string url = string.Empty;
+            if (path != null && path != string.Empty)
+                url = path.Substring(0, path.LastIndexOf('/'));
+            return url;
         }
     }
 }
