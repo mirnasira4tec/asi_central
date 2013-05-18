@@ -6,6 +6,7 @@ using asi.asicentral.web.model;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -83,6 +84,18 @@ namespace Web_Application.Controllers
             catch (Exception exception)
             {
                 messages.Add("Error could not access order database: " + exception.Message);
+            }
+            //Accessing the Media Server
+            try
+            {
+                MediaFolderModel model = new MediaFolderModel();
+                model.BasePath = ConfigurationManager.AppSettings["MediaPath"];
+                if (string.IsNullOrEmpty(model.BasePath)) throw new Exception("The media properties need to be setup");
+                if (!Directory.Exists(model.BasePath)) throw new Exception("The media properties seem to be incorrect, could not find '" + model.BasePath + "'");
+            }
+            catch (Exception exception)
+            {
+                messages.Add("Error could not access the media server: " + exception.Message);
             }
             return View("Diagnostic", messages);
         }

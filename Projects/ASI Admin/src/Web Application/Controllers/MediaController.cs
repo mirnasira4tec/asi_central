@@ -1,4 +1,5 @@
 ﻿using asi.asicentral.model;
+using asi.asicentral.services;
 using asi.asicentral.util;
 using asi.asicentral.web.model;
 using Ionic.Zip;
@@ -21,18 +22,22 @@ namespace asi.asicentral.web.Controllers
 
         public ActionResult List(string path = null)
         {
-            MediaFolderModel model = InitMediaFolder();
-            model.Path = string.IsNullOrEmpty(path) ? string.Empty : path;
-            model.URL = string.IsNullOrEmpty(path) ? model.BaseURL : model.BaseURL + path.Replace("\\", "/");;
-            model.Children = FileSystemHelper.GetFiles(model.BasePath + model.Path, model.BasePath);
-            return View("List", model);
+            LogService log = LogService.GetLog(this.GetType());
+            try
+            {
+                MediaFolderModel model = InitMediaFolder();
+                model.Path = string.IsNullOrEmpty(path) ? string.Empty : path;
+                model.URL = string.IsNullOrEmpty(path) ? model.BaseURL : model.BaseURL + path.Replace("\\", "/");
+                log.Debug(string.Format("Accessing file system '{0}' using base folder '{1}'", model.BasePath + model.Path, model.Path));
+                model.Children = FileSystemHelper.GetFiles(model.BasePath + model.Path, model.BasePath);
+                return View("List", model);
+            }
+            catch (Exception e)
+            {
+                log.Error(string.Format("Could not list the content of a folder, the error is {1}", e.Message));
+                throw e;
+            }
         }
-
-        //[HttpGet]
-        //public virtual ActionResult UploadFiles()
-        //{
-        //    return View("UploadFiles");
-        //}
 
         [HttpPost]
         public virtual ActionResult Upload(string uploadPath)

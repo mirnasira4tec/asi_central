@@ -27,7 +27,7 @@ namespace asi.asicentral.database.mappings.product
 
             //Relationships
             HasRequired(ctxProduct => ctxProduct.Product)
-                .WithOptional()
+                .WithMany()
                 .Map(m => m.MapKey("ProductId"));
         }
     }

@@ -47,6 +47,12 @@
     <Reference Include="Castle.Core">
       <HintPath>..\packages\Castle.Core.3.1.0\lib\net40-client\Castle.Core.dll</HintPath>
     </Reference>
+    <Reference Include="EFProviderWrapperToolkit">
+      <HintPath>..\packages\CommunityEFProviderWrappers.EFProviderWrapperToolkit.1.0.0\lib\net40-Client\EFProviderWrapperToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="EFTracingProvider">
+      <HintPath>..\packages\CommunityEFProviderWrappers.EFTracingProvider.1.0.0\lib\net40-Client\EFTracingProvider.dll</HintPath>
+    </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\..\library\Ionic.Zip.dll</HintPath>
     </Reference>

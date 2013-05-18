@@ -20,7 +20,7 @@ namespace asi.asicentral.database
         private ILogService _log;
 
         public BaseContext(string connectionString)
-            : base(connectionString)
+            : base(CreateTracingConnection(connectionString), true)
         {
             if (_supportedTypes == null)
             {

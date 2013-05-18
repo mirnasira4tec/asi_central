@@ -38,6 +38,12 @@
     <Reference Include="asi.asicentral.Core">
       <HintPath>..\..\library\asi.asicentral.Core.dll</HintPath>
     </Reference>
+    <Reference Include="EFProviderWrapperToolkit">
+      <HintPath>..\packages\CommunityEFProviderWrappers.EFProviderWrapperToolkit.1.0.0\lib\net40-Client\EFProviderWrapperToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="EFTracingProvider">
+      <HintPath>..\packages\CommunityEFProviderWrappers.EFTracingProvider.1.0.0\lib\net40-Client\EFTracingProvider.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Moq">
