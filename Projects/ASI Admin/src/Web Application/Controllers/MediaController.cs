@@ -33,6 +33,11 @@ namespace asi.asicentral.web.Controllers
                 return View("List", model);
             }
             catch (Exception e)
+            {
+                log.Error(e.Message);
+                throw e;
+            }
+        }
 
         [HttpPost]
         public virtual ActionResult Upload(string uploadPath)
