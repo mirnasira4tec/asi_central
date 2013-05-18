@@ -18,6 +18,8 @@ namespace asi.asicentral.database
             : base("name=ASIInternetContext")
         {
             Database.SetInitializer<ASIInternetContext>(null);
+            // enable sql tracing
+            this.EnableTracing(typeof(ASIInternetContext));
         }
 
         public DbSet<Publication> Publications { get; set; }

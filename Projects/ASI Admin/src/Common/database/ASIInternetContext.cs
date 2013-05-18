@@ -11,6 +11,7 @@ namespace asi.asicentral.database
             : base("name=ASIInternetContext")
         {
             Database.SetInitializer<ASIInternetContext>(null);
+            EnableTracing(typeof(ASIInternetContext));
         }
 
         public DbSet<ASPNetMembership> ASPNetMemberships { get; set; }

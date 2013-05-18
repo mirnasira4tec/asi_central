@@ -10,13 +10,14 @@ namespace asi.asicentral.database
             : base("name=ProductContext")
         {
             Database.SetInitializer<ProductContext>(null);
+            EnableTracing(typeof(ProductContext));
         }
 
         public DbSet<Context> Contexts { get; set; }
         public DbSet<ContextProduct> Products { get; set; }
         public DbSet<ContextFeature> Features { get; set; }
-        public DbSet<ContextFeatureProduct> FeatureProducts { get; set; } //consider removing
-        public DbSet<ContextProductSequence> ProductSequences { get; set; } //consider removing
+        public DbSet<ContextFeatureProduct> FeatureProducts { get; set; } 
+        public DbSet<ContextProductSequence> ProductSequences { get; set; }
         public DbSet<TaxRate> TaxRates { get; set; }
 
         /// <summary>
