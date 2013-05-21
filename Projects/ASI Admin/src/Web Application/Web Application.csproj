@@ -244,7 +244,9 @@
     <Content Include="Images\admin-sgr.gif" />
     <Content Include="Images\asi-logo.gif" />
     <Content Include="Images\checkmark.gif" />
+    <Content Include="Images\CreateDirectory.png" />
     <Content Include="Images\delete.jpg" />
+    <Content Include="Images\delete_small.jpg" />
     <Content Include="Images\download.png" />
     <Content Include="Images\file.png" />
     <Content Include="Images\file_small.png" />
