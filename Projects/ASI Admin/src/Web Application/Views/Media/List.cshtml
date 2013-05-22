@@ -8,7 +8,7 @@
     <div class="span2">
         <a href="../Media/Download?file=@(string.IsNullOrEmpty(Model.Path) ? "" : Model.Path)"><img src="/images/download.png" alt="download" /></a>
         <a href="#UploadFilesModalWindow" class="modal-link" data-toggle="modal"><img src="/images/upload.png" alt="Upload" /></a>
-        <a href="#CreateDirectoryModalWindow" class="modal-link" data-toggle="modal"><img src="/images/CreateDirectory.png" width="32" height="32" alt="CreateDirectory" /></a>
+        <a href="#CreateDirectoryModalWindow" class="modal-link" data-toggle="modal"><img style="width:32px; height:32px" src="/images/CreateDirectory.png" width="32" height="32" alt="CreateDirectory" /></a>
         <img src="/images/folder.png" width="32" height="32" alt="folder" />
     </div> 
     
@@ -22,7 +22,7 @@
         <tr>
             @if (@fileItem.RelativePath != "")
             {
-                <td><a id="@fileItem.RelativePath" href="/Media/Delete?file=@fileItem.RelativePath" data-type="reject"><img id="imgDelete" src="/images/delete.jpg" width="20" height="20" class="command btn-primary" alt="delete " /></a></td>    
+                <td><a id="@fileItem.RelativePath" href="/Media/Delete?file=@fileItem.RelativePath" data-type="reject"><img id="imgDelete" src="/images/delete_small.jpg" width="20" height="20" class="command btn-primary" alt="delete " /></a></td>    
             }
             else
             {
