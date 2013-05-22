@@ -4,9 +4,9 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace asi.asicentral.database.mappings.timss
 {
-    public class LegacyTIMSSCreditInfoMap : EntityTypeConfiguration<TIMSSCreditInfo>
+    public class TIMSSCreditInfoMap : EntityTypeConfiguration<TIMSSCreditInfo>
     {
-        public LegacyTIMSSCreditInfoMap()
+        public TIMSSCreditInfoMap()
         {
             this.ToTable("TIMSS_APPLICATION_INPUT_Credit_Info");
             this.HasKey(t => t.DAPP_UserId);

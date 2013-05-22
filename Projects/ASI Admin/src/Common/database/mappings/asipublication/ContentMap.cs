@@ -4,9 +4,9 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace asi.asicentral.database.mappings.asipublication
 {
-    public class LegacyContentMap : EntityTypeConfiguration<CounselorContent>
+    public class ContentMap : EntityTypeConfiguration<CounselorContent>
     {
-        public LegacyContentMap()
+        public ContentMap()
         {
             this.ToTable("COUN_Content_CSCO");
             this.HasKey(t => t.Id);

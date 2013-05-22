@@ -24,9 +24,9 @@ namespace asi.asicentral.database
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Configurations
-                .Add(new LegacyNewsMap())
-                .Add(new LegacyNewsSourceMap())
-                .Add(new LegacyNewsRotatorMap());
+                .Add(new NewsMap())
+                .Add(new NewsSourceMap())
+                .Add(new NewsRotatorMap());
         }
     }
 }

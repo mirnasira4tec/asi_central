@@ -5,9 +5,9 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace asi.asicentral.database.mappings.internet
 {
-    public class LegacyNewsSourceMap : EntityTypeConfiguration<NewsSource>
+    public class NewsSourceMap : EntityTypeConfiguration<NewsSource>
     {
-        public LegacyNewsSourceMap()
+        public NewsSourceMap()
         {
             this.ToTable("tblNewsSource");
             this.HasKey(t => t.Id);

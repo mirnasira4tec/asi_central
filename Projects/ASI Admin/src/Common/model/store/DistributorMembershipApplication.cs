@@ -5,15 +5,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace asi.asicentral.model.store
 {
-    public class DistributorMembershipApplication : OrderDetailApplication
+    public class LegacyDistributorMembershipApplication : LegacyOrderDetailApplication
     {
-        public DistributorMembershipApplication()
+        public LegacyDistributorMembershipApplication()
         {
-            if (this.GetType() == typeof(DistributorMembershipApplication))
+            if (this.GetType() == typeof(LegacyDistributorMembershipApplication))
             {
-                Contacts = new List<DistributorMembershipApplicationContact>();
-                AccountTypes = new List<DistributorAccountType>();
-                ProductLines = new List<DistributorProductLine>();
+                Contacts = new List<LegacyDistributorMembershipApplicationContact>();
+                AccountTypes = new List<LegacyDistributorAccountType>();
+                ProductLines = new List<LegacyDistributorProductLine>();
             }
         }
 
@@ -101,12 +101,12 @@ namespace asi.asicentral.model.store
 
         public Nullable<DateTime> EstablishedDate { get; set; }
 
-        public virtual DistributorBusinessRevenue PrimaryBusinessRevenue { get; set; }
-        public virtual IList<DistributorMembershipApplicationContact> Contacts { get; set; }
-        public virtual ICollection<DistributorAccountType> AccountTypes { get; set; }
-        public virtual ICollection<DistributorProductLine> ProductLines { get; set; }
+        public virtual LegacyDistributorBusinessRevenue PrimaryBusinessRevenue { get; set; }
+        public virtual IList<LegacyDistributorMembershipApplicationContact> Contacts { get; set; }
+        public virtual ICollection<LegacyDistributorAccountType> AccountTypes { get; set; }
+        public virtual ICollection<LegacyDistributorProductLine> ProductLines { get; set; }
 
-        public void CopyTo(DistributorMembershipApplication target)
+        public void CopyTo(LegacyDistributorMembershipApplication target)
         {
             // sync the collections
             SyncContactsWith(target);
@@ -198,7 +198,7 @@ namespace asi.asicentral.model.store
             target.UserId = UserId;
         }
 
-        private void SyncAccountTypesWith(DistributorMembershipApplication target)
+        private void SyncAccountTypesWith(LegacyDistributorMembershipApplication target)
         {
             // sync the account types
             if (target.AccountTypes == null || target.AccountTypes.Count == 0) target.AccountTypes = AccountTypes;
@@ -206,8 +206,8 @@ namespace asi.asicentral.model.store
             {
                 for (int i = AccountTypes.Count - 1; i >= 0; i--)
                 {
-                    DistributorAccountType originalAcccountType = AccountTypes.ElementAt(i);
-                    DistributorAccountType targetAccountType = target.AccountTypes.Where(theAccountType => theAccountType.Id == originalAcccountType.Id).SingleOrDefault();
+                    LegacyDistributorAccountType originalAcccountType = AccountTypes.ElementAt(i);
+                    LegacyDistributorAccountType targetAccountType = target.AccountTypes.Where(theAccountType => theAccountType.Id == originalAcccountType.Id).SingleOrDefault();
                     if (targetAccountType == null)
                     {
                         // target is missing an account type
@@ -216,14 +216,14 @@ namespace asi.asicentral.model.store
                 }
                 for (int i = target.AccountTypes.Count - 1; i >= 0; i--)
                 {
-                    DistributorAccountType targetAccountType = target.AccountTypes.ElementAt(i);
-                    DistributorAccountType originalAccountType = AccountTypes.Where(accountType => accountType.Id == targetAccountType.Id).SingleOrDefault();
+                    LegacyDistributorAccountType targetAccountType = target.AccountTypes.ElementAt(i);
+                    LegacyDistributorAccountType originalAccountType = AccountTypes.Where(accountType => accountType.Id == targetAccountType.Id).SingleOrDefault();
                     if (originalAccountType == null) target.AccountTypes.Remove(targetAccountType);
                 }
             }
         }
 
-        private void SyncProductLinesWith(DistributorMembershipApplication target)
+        private void SyncProductLinesWith(LegacyDistributorMembershipApplication target)
         {
             // sync the product lines
             if (target.ProductLines == null || target.ProductLines.Count == 0) target.ProductLines = ProductLines;
@@ -231,8 +231,8 @@ namespace asi.asicentral.model.store
             {
                 for (int i = ProductLines.Count - 1; i >= 0; i--)
                 {
-                    DistributorProductLine originalProductLine = ProductLines.ElementAt(i);
-                    DistributorProductLine targetProductLine = target.ProductLines.Where(productLine => productLine.Id == originalProductLine.Id).SingleOrDefault();
+                    LegacyDistributorProductLine originalProductLine = ProductLines.ElementAt(i);
+                    LegacyDistributorProductLine targetProductLine = target.ProductLines.Where(productLine => productLine.Id == originalProductLine.Id).SingleOrDefault();
                     if (targetProductLine == null)
                     {
                         // update existing
@@ -241,14 +241,14 @@ namespace asi.asicentral.model.store
                 }
                 for (int i = target.ProductLines.Count - 1; i >= 0; i--)
                 {
-                    DistributorProductLine targetProductLine = target.ProductLines.ElementAt(i);
-                    DistributorProductLine originalProductLine = ProductLines.Where(productLine => productLine.Id == targetProductLine.Id).SingleOrDefault();
+                    LegacyDistributorProductLine targetProductLine = target.ProductLines.ElementAt(i);
+                    LegacyDistributorProductLine originalProductLine = ProductLines.Where(productLine => productLine.Id == targetProductLine.Id).SingleOrDefault();
                     if (originalProductLine == null) target.ProductLines.Remove(targetProductLine);
                 }
             }
         }
 
-        private void SyncContactsWith(DistributorMembershipApplication target)
+        private void SyncContactsWith(LegacyDistributorMembershipApplication target)
         {
             //sync the contacts
             if (target.Contacts == null || target.Contacts.Count == 0) target.Contacts = Contacts;
@@ -257,8 +257,8 @@ namespace asi.asicentral.model.store
                 //got through the target contacts and update
                 for (int i = Contacts.Count - 1; i >= 0; i--)
                 {
-                    DistributorMembershipApplicationContact originalContact = Contacts[i];
-                    DistributorMembershipApplicationContact targetContact = target.Contacts.Where(theContact => theContact.Id == originalContact.Id).SingleOrDefault();
+                    LegacyDistributorMembershipApplicationContact originalContact = Contacts[i];
+                    LegacyDistributorMembershipApplicationContact targetContact = target.Contacts.Where(theContact => theContact.Id == originalContact.Id).SingleOrDefault();
                     if (targetContact != null)
                     {
                         //contact already there, update it
@@ -272,7 +272,7 @@ namespace asi.asicentral.model.store
                     else
                     {
                         //target is missing a contact
-                        target.Contacts.Add(new DistributorMembershipApplicationContact()
+                        target.Contacts.Add(new LegacyDistributorMembershipApplicationContact()
                         {
                             Email = targetContact.Email,
                             Fax = targetContact.Fax,
@@ -286,8 +286,8 @@ namespace asi.asicentral.model.store
                 }
                 for (int i = target.Contacts.Count - 1; i >= 0; i--)
                 {
-                    DistributorMembershipApplicationContact targetContact = target.Contacts[i];
-                    DistributorMembershipApplicationContact originalContact = Contacts.Where(theContact => theContact.Id == targetContact.Id).SingleOrDefault();
+                    LegacyDistributorMembershipApplicationContact targetContact = target.Contacts[i];
+                    LegacyDistributorMembershipApplicationContact originalContact = Contacts.Where(theContact => theContact.Id == targetContact.Id).SingleOrDefault();
                     if (originalContact == null) target.Contacts.Remove(targetContact);
                 }
             }

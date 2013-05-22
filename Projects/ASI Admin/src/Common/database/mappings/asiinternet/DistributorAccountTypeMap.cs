@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings.asiinternet
 {
-    public class LegacyDistributorAccountTypeMap : EntityTypeConfiguration<DistributorAccountType>
+    public class DistributorAccountTypeMap : EntityTypeConfiguration<LegacyDistributorAccountType>
     {
-        public LegacyDistributorAccountTypeMap()
+        public DistributorAccountTypeMap()
         {
             // Primary Key
             this.ToTable("CENT_JoinASIAcctType_ACCT");

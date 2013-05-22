@@ -5,14 +5,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace asi.asicentral.model.store
 {
-    public class SupplierMembershipApplication : OrderDetailApplication
+    public class LegacySupplierMembershipApplication : LegacyOrderDetailApplication
     {
-        public SupplierMembershipApplication()
+        public LegacySupplierMembershipApplication()
         {
-            if (this.GetType() == typeof(SupplierMembershipApplication))
+            if (this.GetType() == typeof(LegacySupplierMembershipApplication))
             {
-                Contacts = new List<SupplierMembershipApplicationContact>();
-                DecoratingTypes = new List<SupplierDecoratingType>();
+                Contacts = new List<LegacySupplierMembershipApplicationContact>();
+                DecoratingTypes = new List<LegacySupplierDecoratingType>();
             }
         }
 
@@ -156,10 +156,10 @@ namespace asi.asicentral.model.store
         [Display(ResourceType = typeof(Resource), Name = "BusinessHours")]
         public string BusinessHours { get; set; }
 
-        public virtual IList<SupplierMembershipApplicationContact> Contacts { get; set; }
-        public virtual ICollection<SupplierDecoratingType> DecoratingTypes { get; set; }
+        public virtual IList<LegacySupplierMembershipApplicationContact> Contacts { get; set; }
+        public virtual ICollection<LegacySupplierDecoratingType> DecoratingTypes { get; set; }
 
-        private void SyncContactsWith(SupplierMembershipApplication target)
+        private void SyncContactsWith(LegacySupplierMembershipApplication target)
         {
             //sync the contacts
             if (target.Contacts == null || target.Contacts.Count == 0) target.Contacts = Contacts;
@@ -168,8 +168,8 @@ namespace asi.asicentral.model.store
                 //got through the target contacts and update
                 for (int i = Contacts.Count - 1; i >= 0; i--)
                 {
-                    SupplierMembershipApplicationContact originalContact = Contacts[i];
-                    SupplierMembershipApplicationContact targetContact = target.Contacts.Where(theContact => theContact.Id == originalContact.Id).SingleOrDefault();
+                    LegacySupplierMembershipApplicationContact originalContact = Contacts[i];
+                    LegacySupplierMembershipApplicationContact targetContact = target.Contacts.Where(theContact => theContact.Id == originalContact.Id).SingleOrDefault();
                     if (targetContact != null)
                     {
                         //contact already there, update it
@@ -183,7 +183,7 @@ namespace asi.asicentral.model.store
                     else
                     {
                         //target is missing a contact
-                        target.Contacts.Add(new SupplierMembershipApplicationContact()
+                        target.Contacts.Add(new LegacySupplierMembershipApplicationContact()
                         {
                             Email = targetContact.Email,
                             Fax = targetContact.Fax,
@@ -198,14 +198,14 @@ namespace asi.asicentral.model.store
                 }
                 for (int i = target.Contacts.Count - 1; i >= 0; i--)
                 {
-                    SupplierMembershipApplicationContact targetContact = target.Contacts[i];
-                    SupplierMembershipApplicationContact originalContact = Contacts.Where(theContact => theContact.Id == targetContact.Id).SingleOrDefault();
+                    LegacySupplierMembershipApplicationContact targetContact = target.Contacts[i];
+                    LegacySupplierMembershipApplicationContact originalContact = Contacts.Where(theContact => theContact.Id == targetContact.Id).SingleOrDefault();
                     if (originalContact == null) target.Contacts.Remove(targetContact);
                 }
             }
         }
 
-        private void SyncDecorationTypesWith(SupplierMembershipApplication target)
+        private void SyncDecorationTypesWith(LegacySupplierMembershipApplication target)
         {
             //sync the decorating types
             if (target.DecoratingTypes == null || target.DecoratingTypes.Count == 0) target.DecoratingTypes = DecoratingTypes;
@@ -214,8 +214,8 @@ namespace asi.asicentral.model.store
                 //got through the target Decorating types and update
                 for (int i = DecoratingTypes.Count - 1; i >= 0; i--)
                 {
-                    SupplierDecoratingType originalDecType = DecoratingTypes.ElementAt(i);
-                    SupplierDecoratingType targetDecType = target.DecoratingTypes.Where(decType => decType.Name == originalDecType.Name).SingleOrDefault();
+                    LegacySupplierDecoratingType originalDecType = DecoratingTypes.ElementAt(i);
+                    LegacySupplierDecoratingType targetDecType = target.DecoratingTypes.Where(decType => decType.Name == originalDecType.Name).SingleOrDefault();
                     if (targetDecType == null)
                     {
                         //target is missing a type
@@ -224,14 +224,14 @@ namespace asi.asicentral.model.store
                 }
                 for (int i = target.DecoratingTypes.Count - 1; i >= 0; i--)
                 {
-                    SupplierDecoratingType targetDecType = target.DecoratingTypes.ElementAt(i);
-                    SupplierDecoratingType originalDecType = DecoratingTypes.Where(decType => decType.Name == targetDecType.Name).SingleOrDefault();
+                    LegacySupplierDecoratingType targetDecType = target.DecoratingTypes.ElementAt(i);
+                    LegacySupplierDecoratingType originalDecType = DecoratingTypes.Where(decType => decType.Name == targetDecType.Name).SingleOrDefault();
                     if (originalDecType == null) target.DecoratingTypes.Remove(targetDecType);
                 }
             }
         }
 
-        public void CopyTo(SupplierMembershipApplication target)
+        public void CopyTo(LegacySupplierMembershipApplication target)
         {
             SyncContactsWith(target);
             SyncDecorationTypesWith(target);

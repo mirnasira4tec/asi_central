@@ -4,9 +4,9 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace asi.asicentral.database.mappings.asipublication
 {
-    public class LegacyCategoryMap : EntityTypeConfiguration<CounselorCategory>
+    public class CategoryMap : EntityTypeConfiguration<CounselorCategory>
     {
-        public LegacyCategoryMap()
+        public CategoryMap()
         {
             this.ToTable("COUN_Categories_CSCT");
             this.HasKey(t => t.Id);

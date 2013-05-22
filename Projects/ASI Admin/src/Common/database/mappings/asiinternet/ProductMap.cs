@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings.asiinternet
 {
-    internal class LegacyProductMap : EntityTypeConfiguration<Product>
+    internal class ProductMap : EntityTypeConfiguration<Product>
     {
-        public LegacyProductMap()
+        public ProductMap()
         {
             ToTable("CENT_SGRInternSpecs_SGRS");
             HasKey(product => product.Id);

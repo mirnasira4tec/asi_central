@@ -4,9 +4,9 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace asi.asicentral.database.mappings.timss
 {
-    public class LegacyTIMSSCompanyMap : EntityTypeConfiguration<TIMSSCompany>
+    public class TIMSSCompanyMap : EntityTypeConfiguration<TIMSSCompany>
     {
-        public LegacyTIMSSCompanyMap()
+        public TIMSSCompanyMap()
         {
             this.ToTable("TIMSS_APPLICATION_INPUT_COMPANY");
             this.HasKey(t => t.DAPP_UserId);

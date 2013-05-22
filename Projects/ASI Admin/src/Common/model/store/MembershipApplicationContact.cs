@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.model.store
 {
-    public class MembershipApplicationContact
+    public class LegacyMembershipApplicationContact
     {
         public int Id { get; set; }
         public string Name { get; set; }

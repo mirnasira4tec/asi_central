@@ -21,42 +21,42 @@ namespace asi.asicentral.services
             return base.GetAll<T>(readOnly);
         }
 
-        public virtual DistributorMembershipApplication GetDistributorApplication(model.store.OrderDetail orderDetail)
+        public virtual LegacyDistributorMembershipApplication GetDistributorApplication(model.store.LegacyOrderDetail orderDetail)
         {
-            DistributorMembershipApplication application = null;
+            LegacyDistributorMembershipApplication application = null;
             //103 hardcoded value coming from the legacy application representing a distributor membership application
-            if (orderDetail.Order != null && orderDetail.Order.UserId != null && orderDetail.ProductId == OrderProduct.DISTRIBUTOR_APPLICATION)
+            if (orderDetail.Order != null && orderDetail.Order.UserId != null && orderDetail.ProductId == LegacyOrderProduct.DISTRIBUTOR_APPLICATION)
             {
-                Order order = orderDetail.Order;
-                IRepository<DistributorMembershipApplication> distributorRepository = GetRepository<DistributorMembershipApplication>();
+                LegacyOrder order = orderDetail.Order;
+                IRepository<LegacyDistributorMembershipApplication> distributorRepository = GetRepository<LegacyDistributorMembershipApplication>();
                 application = distributorRepository.GetAll().Where(app => app.UserId == order.UserId).SingleOrDefault();
             }
             return application;
         }
 
-        public virtual model.store.SupplierMembershipApplication GetSupplierApplication(model.store.OrderDetail orderDetail)
+        public virtual model.store.LegacySupplierMembershipApplication GetSupplierApplication(model.store.LegacyOrderDetail orderDetail)
         {
-            SupplierMembershipApplication application = null;
+            LegacySupplierMembershipApplication application = null;
             //102 hardcoded value coming from the legacy application representing a supplier membership application
-            if (orderDetail.Order != null && orderDetail.Order.UserId != null && orderDetail.ProductId == OrderProduct.SUPPLIER_APPLICATION)
+            if (orderDetail.Order != null && orderDetail.Order.UserId != null && orderDetail.ProductId == LegacyOrderProduct.SUPPLIER_APPLICATION)
             {
-                Order order = orderDetail.Order;
-                IRepository<SupplierMembershipApplication> supplierRepository = GetRepository<SupplierMembershipApplication>();
+                LegacyOrder order = orderDetail.Order;
+                IRepository<LegacySupplierMembershipApplication> supplierRepository = GetRepository<LegacySupplierMembershipApplication>();
                 application = supplierRepository.GetAll().Where(app => app.UserId == order.UserId).SingleOrDefault();
             }
             return application;
         }
 
-        public OrderDetailApplication GetApplication(OrderDetail orderDetail)
+        public LegacyOrderDetailApplication GetApplication(LegacyOrderDetail orderDetail)
         {
-            OrderDetailApplication application = null;
+            LegacyOrderDetailApplication application = null;
             if (orderDetail.Order != null && orderDetail.Order.UserId != null)
             {
                 switch (orderDetail.ProductId)
                 {
-                    case OrderProduct.DISTRIBUTOR_APPLICATION:
+                    case LegacyOrderProduct.DISTRIBUTOR_APPLICATION:
                         return GetDistributorApplication(orderDetail);
-                    case OrderProduct.SUPPLIER_APPLICATION:
+                    case LegacyOrderProduct.SUPPLIER_APPLICATION:
                         return GetSupplierApplication(orderDetail);
                 }
             }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.model.store
 {
-    public class OrderDetailApplication
+    public class LegacyOrderDetailApplication
     {
         public System.Guid Id { get; set; }
         public System.Guid UserId { get; set; }
@@ -102,7 +102,7 @@ namespace asi.asicentral.model.store
         {
             bool equals = false;
 
-            OrderDetailApplication orderApplication = obj as OrderDetailApplication;
+            LegacyOrderDetailApplication orderApplication = obj as LegacyOrderDetailApplication;
             if (orderApplication != null) equals = orderApplication.Id == Id;
             return equals;
         }

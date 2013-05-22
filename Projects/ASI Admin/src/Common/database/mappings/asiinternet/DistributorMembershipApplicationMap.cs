@@ -4,9 +4,9 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace asi.asicentral.database.mappings.asiinternet
 {
-    public class LegacyDistributorMembershipApplicationMap : EntityTypeConfiguration<DistributorMembershipApplication>
+    public class DistributorMembershipApplicationMap : EntityTypeConfiguration<LegacyDistributorMembershipApplication>
     {
-        public LegacyDistributorMembershipApplicationMap()
+        public DistributorMembershipApplicationMap()
         {
             this.ToTable("CENT_DistJoinApp_DAPP");
             this.HasKey(t => t.Id);

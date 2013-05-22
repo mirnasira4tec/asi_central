@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings.asiinternet
 {
-    public class LegacyDistributorProductLineMap : EntityTypeConfiguration<DistributorProductLine>
+    public class DistributorProductLineMap : EntityTypeConfiguration<LegacyDistributorProductLine>
     {
-        public LegacyDistributorProductLineMap()
+        public DistributorProductLineMap()
         {
             this.ToTable("CENT_JoinASIProdType_PROD");
             this.HasKey(t => t.Id);

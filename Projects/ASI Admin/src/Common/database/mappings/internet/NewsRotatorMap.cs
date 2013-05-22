@@ -5,9 +5,9 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace asi.asicentral.database.mappings.internet
 {
-    public class LegacyNewsRotatorMap : EntityTypeConfiguration<NewsRotator>
+    public class NewsRotatorMap : EntityTypeConfiguration<NewsRotator>
     {
-        public LegacyNewsRotatorMap()
+        public NewsRotatorMap()
         {
             this.ToTable("CENT_NewsRotator_NROT");
             this.HasKey(t => t.Id);

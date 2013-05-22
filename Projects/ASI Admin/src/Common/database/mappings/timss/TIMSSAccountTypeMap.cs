@@ -4,9 +4,9 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace asi.asicentral.database.mappings.timss
 {
-    public class LegacyTIMSSAccountTypeMap : EntityTypeConfiguration<TIMSSAccountType>
+    public class TIMSSAccountTypeMap : EntityTypeConfiguration<TIMSSAccountType>
     {
-        public LegacyTIMSSAccountTypeMap()
+        public TIMSSAccountTypeMap()
         {
             this.ToTable("TIMSS_APPLICATION_INPUT_AcctType");
             this.HasKey(t => new { t.DAPP_UserId, t.SubCode });

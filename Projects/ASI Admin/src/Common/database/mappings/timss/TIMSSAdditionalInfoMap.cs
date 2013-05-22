@@ -4,9 +4,9 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace asi.asicentral.database.mappings.timss
 {
-    public class LegacyTIMSSAdditionalInfoMap : EntityTypeConfiguration<TIMSSAdditionalInfo>
+    public class TIMSSAdditionalInfoMap : EntityTypeConfiguration<TIMSSAdditionalInfo>
     {
-        public LegacyTIMSSAdditionalInfoMap()
+        public TIMSSAdditionalInfoMap()
         {
             this.ToTable("TIMSS_APPLICATION_INPUT_ADDITIONAL_INFO");
             this.HasKey(t => t.Id);
