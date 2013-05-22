@@ -39,21 +39,21 @@ namespace asi.asicentral.database
             base.OnModelCreating(modelBuilder);
             modelBuilder.Configurations
                .Add(new ASPNetMembershipMap())
-               .Add(new CategoryMap())
-               .Add(new CompanyMap())
-               .Add(new DistributorAccountTypeMap())
-               .Add(new DistributorBusinessRevenueMap())
-               .Add(new DistributorMembershipApplicationMap())
-               .Add(new DistributorMembershipApplicationContactMap())
-               .Add(new DistributorProductLineMap())
-               .Add(new OrderCreditCardMap())
-               .Add(new OrderDetailMap())
-               .Add(new OrderMap())
-               .Add(new ProductMap())
-               .Add(new StoreProductConfiguration())
-               .Add(new SupplierDecoratingTypeMap())
-               .Add(new SupplierMembershipApplicationMap())
-               .Add(new SupplierMembershipApplicationContactMap());
+               .Add(new LegacyCategoryMap())
+               .Add(new LegacyCompanyMap())
+               .Add(new LegacyDistributorAccountTypeMap())
+               .Add(new LegacyDistributorBusinessRevenueMap())
+               .Add(new LegacyDistributorMembershipApplicationMap())
+               .Add(new LegacyDistributorMembershipApplicationContactMap())
+               .Add(new LegacyDistributorProductLineMap())
+               .Add(new LegacyOrderCreditCardMap())
+               .Add(new LegacyOrderDetailMap())
+               .Add(new LegacyOrderMap())
+               .Add(new LegacyProductMap())
+               .Add(new LegacyStoreProductConfiguration())
+               .Add(new LegacySupplierDecoratingTypeMap())
+               .Add(new LegacySupplierMembershipApplicationMap())
+               .Add(new LegacySupplierMembershipApplicationContactMap());
         }
     }
 }

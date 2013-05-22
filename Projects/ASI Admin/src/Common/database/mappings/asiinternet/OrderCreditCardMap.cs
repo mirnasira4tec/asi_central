@@ -4,9 +4,9 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace asi.asicentral.database.mappings.asiinternet
 {
-    public class OrderCreditCardMap : EntityTypeConfiguration<OrderCreditCard>
+    public class LegacyOrderCreditCardMap : EntityTypeConfiguration<OrderCreditCard>
     {
-        public OrderCreditCardMap()
+        public LegacyOrderCreditCardMap()
         {
             this.ToTable("STOR_OrderCredit_ORCC");
             this.HasKey(t => t.OrderId);

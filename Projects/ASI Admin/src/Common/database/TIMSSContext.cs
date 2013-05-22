@@ -27,12 +27,12 @@ namespace asi.asicentral.database
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Configurations
-                .Add(new TIMSSAccountTypeMap())
-                .Add(new TIMSSAdditionalInfoMap())
-                .Add(new TIMSSCompanyMap())
-                .Add(new TIMSSContactMap())
-                .Add(new TIMSSCreditInfoMap())
-                .Add(new TIMSSProductTypeMap());
+                .Add(new LegacyTIMSSAccountTypeMap())
+                .Add(new LegacyTIMSSAdditionalInfoMap())
+                .Add(new LegacyTIMSSCompanyMap())
+                .Add(new LegacyTIMSSContactMap())
+                .Add(new LegacyTIMSSCreditInfoMap())
+                .Add(new LegacyTIMSSProductTypeMap());
         }
     }
 }

@@ -25,10 +25,10 @@ namespace asi.asicentral.database
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Configurations
-               .Add(new CategoryMap())
-               .Add(new ContentMap())
-               .Add(new FeatureContentMap())
-               .Add(new FeatureContentRotatorMap());
+               .Add(new LegacyCategoryMap())
+               .Add(new LegacyContentMap())
+               .Add(new LegacyFeatureContentMap())
+               .Add(new LegacyFeatureContentRotatorMap());
         }
     }
 }

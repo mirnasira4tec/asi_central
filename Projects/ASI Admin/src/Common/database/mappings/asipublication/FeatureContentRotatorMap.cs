@@ -4,9 +4,9 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace asi.asicentral.database.mappings.asipublication
 {
-    public class FeatureContentRotatorMap : EntityTypeConfiguration<CounselorFeatureRotator>
+    public class LegacyFeatureContentRotatorMap : EntityTypeConfiguration<CounselorFeatureRotator>
     {
-        public FeatureContentRotatorMap()
+        public LegacyFeatureContentRotatorMap()
         {
             this.ToTable("COUN_FeatureContentRotator_CFCR");
             this.HasKey(t => t.Id);

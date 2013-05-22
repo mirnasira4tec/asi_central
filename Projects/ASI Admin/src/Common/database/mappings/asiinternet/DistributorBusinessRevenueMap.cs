@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings.asiinternet
 {
-    public class DistributorBusinessRevenueMap : EntityTypeConfiguration<DistributorBusinessRevenue>
+    public class LegacyDistributorBusinessRevenueMap : EntityTypeConfiguration<DistributorBusinessRevenue>
     {
-        public DistributorBusinessRevenueMap() 
+        public LegacyDistributorBusinessRevenueMap() 
         {
             this.ToTable("CENT_DistBusRev");
             this.HasKey(t => t.Id);

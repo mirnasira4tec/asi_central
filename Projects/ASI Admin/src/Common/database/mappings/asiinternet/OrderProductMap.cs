@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings.asiinternet
 {
-    internal class StoreProductConfiguration : EntityTypeConfiguration<OrderProduct>
+    internal class LegacyStoreProductConfiguration : EntityTypeConfiguration<OrderProduct>
     {
-        public StoreProductConfiguration()
+        public LegacyStoreProductConfiguration()
         {
             this.ToTable("STOR_Products_PROD");
             this.HasKey(product => product.Id);

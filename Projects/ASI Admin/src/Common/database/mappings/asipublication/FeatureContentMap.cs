@@ -4,9 +4,9 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace asi.asicentral.database.mappings.asipublication
 {
-    public class FeatureContentMap : EntityTypeConfiguration<CounselorFeature>
+    public class LegacyFeatureContentMap : EntityTypeConfiguration<CounselorFeature>
     {
-        public FeatureContentMap()
+        public LegacyFeatureContentMap()
         {
             this.ToTable("COUN_FeatureContent_COFC");
             this.HasKey(t => t.Id);

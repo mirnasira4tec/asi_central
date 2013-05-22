@@ -4,9 +4,9 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace asi.asicentral.database.mappings.timss
 {
-    public class TIMSSContactMap : EntityTypeConfiguration<TIMSSContact>
+    public class LegacyTIMSSContactMap : EntityTypeConfiguration<TIMSSContact>
     {
-        public TIMSSContactMap()
+        public LegacyTIMSSContactMap()
         {
             this.ToTable("TIMSS_APPLICATION_INPUT_CONTACT");
             this.HasKey(t => new { t.DAPP_UserId, t.Id });

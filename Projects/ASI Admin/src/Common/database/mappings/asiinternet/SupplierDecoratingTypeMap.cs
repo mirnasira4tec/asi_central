@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings.asiinternet
 {
-    public class SupplierDecoratingTypeMap : EntityTypeConfiguration<SupplierDecoratingType>
+    public class LegacySupplierDecoratingTypeMap : EntityTypeConfiguration<SupplierDecoratingType>
     {
-        public SupplierDecoratingTypeMap()
+        public LegacySupplierDecoratingTypeMap()
         {
             this.ToTable("CENT_SuppJoinDecType_SAPP");
             this.HasKey(t => t.Id);
