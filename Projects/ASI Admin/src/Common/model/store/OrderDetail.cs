@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace asi.asicentral.model.store
 {
-    public class OrderDetail
+    public class LegacyOrderDetail
     {
         public int OrderId { get; set; }
         public int ProductId { get; set; }
@@ -17,9 +17,9 @@ namespace asi.asicentral.model.store
         public Nullable<bool> HallmarkResult { get; set; }
         public string ExternalReference { get; set; }
 
-        public virtual Order Order { get; set; }
+        public virtual LegacyOrder Order { get; set; }
 
-        public virtual OrderProduct Product { get; set; }
+        public virtual LegacyOrderProduct Product { get; set; }
 
         public override string ToString()
         {
@@ -30,7 +30,7 @@ namespace asi.asicentral.model.store
         {
             bool equals = false;
 
-            OrderDetail orderDetail = obj as OrderDetail;
+            LegacyOrderDetail orderDetail = obj as LegacyOrderDetail;
             if (orderDetail != null) equals = (orderDetail.OrderId == OrderId && orderDetail.ProductId == ProductId);
             return equals;
         }

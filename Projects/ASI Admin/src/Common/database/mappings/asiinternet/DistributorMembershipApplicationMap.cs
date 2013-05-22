@@ -4,7 +4,7 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace asi.asicentral.database.mappings.asiinternet
 {
-    public class DistributorMembershipApplicationMap : EntityTypeConfiguration<DistributorMembershipApplication>
+    public class DistributorMembershipApplicationMap : EntityTypeConfiguration<LegacyDistributorMembershipApplication>
     {
         public DistributorMembershipApplicationMap()
         {

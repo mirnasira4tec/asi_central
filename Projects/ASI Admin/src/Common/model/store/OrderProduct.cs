@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace asi.asicentral.model.store
 {
-    public class OrderProduct
+    public class LegacyOrderProduct
     {
         public const int SUPPLIER_APPLICATION = 102;
         public const int DISTRIBUTOR_APPLICATION = 103;
 
-        public OrderProduct()
+        public LegacyOrderProduct()
         {
-            if (this.GetType() == typeof(OrderProduct))
+            if (this.GetType() == typeof(LegacyOrderProduct))
             {
-                OrderDetails = new List<OrderDetail>();
+                OrderDetails = new List<LegacyOrderDetail>();
             }
         }
 
@@ -31,7 +31,7 @@ namespace asi.asicentral.model.store
         public Nullable<int> LocaleId { get; set; }
         public Nullable<int> TermId { get; set; }
 
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public virtual ICollection<LegacyOrderDetail> OrderDetails { get; set; }
 
         public override string ToString()
         {
@@ -42,7 +42,7 @@ namespace asi.asicentral.model.store
         {
             bool equals = false;
 
-            OrderProduct product = obj as OrderProduct;
+            LegacyOrderProduct product = obj as LegacyOrderProduct;
             if (product != null) equals = product.Id == Id;
             return equals;
         }

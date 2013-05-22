@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.model.store
 {
-    public class DistributorBusinessRevenue
+    public class LegacyDistributorBusinessRevenue
     {
         public const string BUSINESSREVENUE_SIGNS = "Signs";
         public const string BUSINESSREVENUE_TROPHYAWARDS = "Trophy and Awards";

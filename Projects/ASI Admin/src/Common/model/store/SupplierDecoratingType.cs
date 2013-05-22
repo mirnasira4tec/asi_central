@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.model.store
 {
-    public class SupplierDecoratingType
+    public class LegacySupplierDecoratingType
     {
         public const string DECORATION_ETCHING = "Etching";
         public const string DECORATION_HOTSTAMPING = "Hot Stamping";
@@ -26,7 +26,7 @@ namespace asi.asicentral.model.store
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public virtual ICollection<SupplierMembershipApplication> SupplierApplications { get; set; }
+        public virtual ICollection<LegacySupplierMembershipApplication> SupplierApplications { get; set; }
 
         public override bool Equals(object obj)
         {

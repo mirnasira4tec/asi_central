@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace asi.asicentral.model.store
 {
-    public class DistributorMembershipApplicationContact : MembershipApplicationContact
+    public class LegacyDistributorMembershipApplicationContact : LegacyMembershipApplicationContact
     {
-        public virtual DistributorMembershipApplication DistributorApplication { get; set; }
+        public virtual LegacyDistributorMembershipApplication DistributorApplication { get; set; }
     }
 }
