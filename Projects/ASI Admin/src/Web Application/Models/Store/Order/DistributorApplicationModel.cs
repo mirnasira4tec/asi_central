@@ -6,7 +6,7 @@ using System.Web;
 
 namespace asi.asicentral.web.model.store
 {
-    public class DistributorApplicationModel : DistributorMembershipApplication
+    public class DistributorApplicationModel : LegacyDistributorMembershipApplication
     {
         public string BuisnessRevenue { set; get; }
 
@@ -84,11 +84,11 @@ namespace asi.asicentral.web.model.store
         /// </summary>
         public DistributorApplicationModel() : base()
         {
-            this.ProductLines = new List<DistributorProductLine>();
-            this.AccountTypes = new List<DistributorAccountType>();
+            this.ProductLines = new List<LegacyDistributorProductLine>();
+            this.AccountTypes = new List<LegacyDistributorAccountType>();
         }
 
-        public DistributorApplicationModel(DistributorMembershipApplication application, asi.asicentral.model.store.Order order)
+        public DistributorApplicationModel(LegacyDistributorMembershipApplication application, asi.asicentral.model.store.LegacyOrder order)
         {
             application.CopyTo(this);
             GetPrimaryBusinessRevenue();
@@ -114,33 +114,33 @@ namespace asi.asicentral.web.model.store
 
         private void GetPrimaryBusinessRevenue()
         {
-            Signs = HasPrimaryBuisnessRevenue(DistributorBusinessRevenue.BUSINESSREVENUE_SIGNS);
-            TrophyAwards = HasPrimaryBuisnessRevenue(DistributorBusinessRevenue.BUSINESSREVENUE_TROPHYAWARDS);
-            Printing = HasPrimaryBuisnessRevenue(DistributorBusinessRevenue.BUSINESSREVENUE_PRINTING);
-            ScreenPrinting = HasPrimaryBuisnessRevenue(DistributorBusinessRevenue.BUSINESSREVENUE_SCREENPRINTING);
-            PromotionalProducts = HasPrimaryBuisnessRevenue(DistributorBusinessRevenue.BUSINESSREVENUE_PROMOTIONALPRODUCTS);
+            Signs = HasPrimaryBuisnessRevenue(LegacyDistributorBusinessRevenue.BUSINESSREVENUE_SIGNS);
+            TrophyAwards = HasPrimaryBuisnessRevenue(LegacyDistributorBusinessRevenue.BUSINESSREVENUE_TROPHYAWARDS);
+            Printing = HasPrimaryBuisnessRevenue(LegacyDistributorBusinessRevenue.BUSINESSREVENUE_PRINTING);
+            ScreenPrinting = HasPrimaryBuisnessRevenue(LegacyDistributorBusinessRevenue.BUSINESSREVENUE_SCREENPRINTING);
+            PromotionalProducts = HasPrimaryBuisnessRevenue(LegacyDistributorBusinessRevenue.BUSINESSREVENUE_PROMOTIONALPRODUCTS);
             Other = string.IsNullOrEmpty(this.OtherBusinessRevenue) ? false : true;
         }
 
-        private void AddType(bool selected, String codeName, IList<DistributorAccountType> accountTypes)
+        private void AddType(bool selected, String codeName, IList<LegacyDistributorAccountType> accountTypes)
         {
             if (selected)
             {
-                DistributorAccountType account = accountTypes.Where(type => type.SubCode == codeName).SingleOrDefault();
+                LegacyDistributorAccountType account = accountTypes.Where(type => type.SubCode == codeName).SingleOrDefault();
                 if (account != null) this.AccountTypes.Add(account);
             }
         }
 
-        private void AddProductLine(bool selected, String codeName, IList<DistributorProductLine> productLines)
+        private void AddProductLine(bool selected, String codeName, IList<LegacyDistributorProductLine> productLines)
         {
             if (selected)
             {
-                DistributorProductLine line = productLines.Where(productline => productline.SubCode == codeName).SingleOrDefault();
+                LegacyDistributorProductLine line = productLines.Where(productline => productline.SubCode == codeName).SingleOrDefault();
                 if (line != null) this.ProductLines.Add(line);
             }
         }
 
-        public void SyncProductLinesFrom(IList<DistributorProductLine> productLines)
+        public void SyncProductLinesFrom(IList<LegacyDistributorProductLine> productLines)
         {
             AddProductLine(Product1, "1", productLines);
             AddProductLine(Product2, "2", productLines);
@@ -176,7 +176,7 @@ namespace asi.asicentral.web.model.store
 
         }
 
-        public void SyncAccountTypesFrom(IList<DistributorAccountType> accountTypes)
+        public void SyncAccountTypesFrom(IList<LegacyDistributorAccountType> accountTypes)
         {
             AddType(Account1, "1", accountTypes);
             AddType(AccountA, "A", accountTypes);

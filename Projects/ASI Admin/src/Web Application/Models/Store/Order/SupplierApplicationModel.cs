@@ -8,7 +8,7 @@ using asi.asicentral.interfaces;
 
 namespace asi.asicentral.web.model.store
 {
-    public class SupplierApplicationModel : SupplierMembershipApplication
+    public class SupplierApplicationModel : LegacySupplierMembershipApplication
     {
         [Display(ResourceType = typeof(Resource), Name = "Etching")]
         public bool Etching { set; get; }
@@ -74,10 +74,10 @@ namespace asi.asicentral.web.model.store
         /// 
         public SupplierApplicationModel() : base()
         {
-            this.DecoratingTypes = new List<SupplierDecoratingType>();
+            this.DecoratingTypes = new List<LegacySupplierDecoratingType>();
         }
 
-        public SupplierApplicationModel(SupplierMembershipApplication application, asi.asicentral.model.store.Order order)
+        public SupplierApplicationModel(LegacySupplierMembershipApplication application, asi.asicentral.model.store.LegacyOrder order)
         {
             application.CopyTo(this);
             UpdateDecoratingTypesProperties();
@@ -101,21 +101,21 @@ namespace asi.asicentral.web.model.store
 
         private void UpdateDecoratingTypesProperties()
         {
-            Etching = HasDecorating(SupplierDecoratingType.DECORATION_ETCHING);
-            HotStamping = HasDecorating(SupplierDecoratingType.DECORATION_HOTSTAMPING);
-            SilkScreen = HasDecorating(SupplierDecoratingType.DECORATION_SILKSCREEN);
-            PadPrint = HasDecorating(SupplierDecoratingType.DECORATION_PADPRINT);
-            DirectEmbroidery = HasDecorating(SupplierDecoratingType.DECORATION_DIRECTEMBROIDERY);
-            FoilStamping = HasDecorating(SupplierDecoratingType.DECORATION_FOILSTAMPING);
-            Lithography = HasDecorating(SupplierDecoratingType.DECORATION_LITHOGRAPHY);
-            Sublimination = HasDecorating(SupplierDecoratingType.DECORATION_SUBLIMINATION);
-            FourColourProcess = HasDecorating(SupplierDecoratingType.DECORATION_FOURCOLOR);
-            Engraving = HasDecorating(SupplierDecoratingType.DECORATION_ENGRAVING);
-            Laser = HasDecorating(SupplierDecoratingType.DECORATION_ENGRAVING);
-            Offset = HasDecorating(SupplierDecoratingType.DECORATION_OFFSET);
-            Transfer = HasDecorating(SupplierDecoratingType.DECORATION_TRANSFER);
-            FullColourProcess = HasDecorating(SupplierDecoratingType.DECORATION_FULLCOLOR);
-            DieStamp = HasDecorating(SupplierDecoratingType.DECORATION_DIESTAMP);
+            Etching = HasDecorating(LegacySupplierDecoratingType.DECORATION_ETCHING);
+            HotStamping = HasDecorating(LegacySupplierDecoratingType.DECORATION_HOTSTAMPING);
+            SilkScreen = HasDecorating(LegacySupplierDecoratingType.DECORATION_SILKSCREEN);
+            PadPrint = HasDecorating(LegacySupplierDecoratingType.DECORATION_PADPRINT);
+            DirectEmbroidery = HasDecorating(LegacySupplierDecoratingType.DECORATION_DIRECTEMBROIDERY);
+            FoilStamping = HasDecorating(LegacySupplierDecoratingType.DECORATION_FOILSTAMPING);
+            Lithography = HasDecorating(LegacySupplierDecoratingType.DECORATION_LITHOGRAPHY);
+            Sublimination = HasDecorating(LegacySupplierDecoratingType.DECORATION_SUBLIMINATION);
+            FourColourProcess = HasDecorating(LegacySupplierDecoratingType.DECORATION_FOURCOLOR);
+            Engraving = HasDecorating(LegacySupplierDecoratingType.DECORATION_ENGRAVING);
+            Laser = HasDecorating(LegacySupplierDecoratingType.DECORATION_ENGRAVING);
+            Offset = HasDecorating(LegacySupplierDecoratingType.DECORATION_OFFSET);
+            Transfer = HasDecorating(LegacySupplierDecoratingType.DECORATION_TRANSFER);
+            FullColourProcess = HasDecorating(LegacySupplierDecoratingType.DECORATION_FULLCOLOR);
+            DieStamp = HasDecorating(LegacySupplierDecoratingType.DECORATION_DIESTAMP);
         }
 
         private bool HasDecorating(string DecorationName)
@@ -127,30 +127,30 @@ namespace asi.asicentral.web.model.store
         /// Apply the extra bool values from the view model to the many to many
         /// </summary>
         /// <param name="StoreService"></param>
-        public void SyncDecoratingTypes(IList<SupplierDecoratingType> decoratingTypes)
+        public void SyncDecoratingTypes(IList<LegacySupplierDecoratingType> decoratingTypes)
         {
-            AddDecoratingType(this.Etching, SupplierDecoratingType.DECORATION_ETCHING, decoratingTypes);
-            AddDecoratingType(this.HotStamping, SupplierDecoratingType.DECORATION_HOTSTAMPING, decoratingTypes);
-            AddDecoratingType(this.SilkScreen, SupplierDecoratingType.DECORATION_SILKSCREEN, decoratingTypes);
-            AddDecoratingType(this.PadPrint, SupplierDecoratingType.DECORATION_PADPRINT, decoratingTypes);
-            AddDecoratingType(this.DirectEmbroidery, SupplierDecoratingType.DECORATION_DIRECTEMBROIDERY, decoratingTypes);
-            AddDecoratingType(this.FoilStamping, SupplierDecoratingType.DECORATION_FOILSTAMPING, decoratingTypes);
-            AddDecoratingType(this.Lithography, SupplierDecoratingType.DECORATION_LITHOGRAPHY, decoratingTypes);
-            AddDecoratingType(this.Sublimination, SupplierDecoratingType.DECORATION_SUBLIMINATION, decoratingTypes);
-            AddDecoratingType(this.FourColourProcess, SupplierDecoratingType.DECORATION_FOURCOLOR, decoratingTypes);
-            AddDecoratingType(this.Engraving, SupplierDecoratingType.DECORATION_ENGRAVING, decoratingTypes);
-            AddDecoratingType(this.Laser, SupplierDecoratingType.DECORATION_LASER, decoratingTypes);
-            AddDecoratingType(this.Offset, SupplierDecoratingType.DECORATION_OFFSET, decoratingTypes);
-            AddDecoratingType(this.Transfer, SupplierDecoratingType.DECORATION_TRANSFER, decoratingTypes);
-            AddDecoratingType(this.FullColourProcess, SupplierDecoratingType.DECORATION_FULLCOLOR, decoratingTypes);
-            AddDecoratingType(this.DieStamp, SupplierDecoratingType.DECORATION_DIESTAMP, decoratingTypes);
+            AddDecoratingType(this.Etching, LegacySupplierDecoratingType.DECORATION_ETCHING, decoratingTypes);
+            AddDecoratingType(this.HotStamping, LegacySupplierDecoratingType.DECORATION_HOTSTAMPING, decoratingTypes);
+            AddDecoratingType(this.SilkScreen, LegacySupplierDecoratingType.DECORATION_SILKSCREEN, decoratingTypes);
+            AddDecoratingType(this.PadPrint, LegacySupplierDecoratingType.DECORATION_PADPRINT, decoratingTypes);
+            AddDecoratingType(this.DirectEmbroidery, LegacySupplierDecoratingType.DECORATION_DIRECTEMBROIDERY, decoratingTypes);
+            AddDecoratingType(this.FoilStamping, LegacySupplierDecoratingType.DECORATION_FOILSTAMPING, decoratingTypes);
+            AddDecoratingType(this.Lithography, LegacySupplierDecoratingType.DECORATION_LITHOGRAPHY, decoratingTypes);
+            AddDecoratingType(this.Sublimination, LegacySupplierDecoratingType.DECORATION_SUBLIMINATION, decoratingTypes);
+            AddDecoratingType(this.FourColourProcess, LegacySupplierDecoratingType.DECORATION_FOURCOLOR, decoratingTypes);
+            AddDecoratingType(this.Engraving, LegacySupplierDecoratingType.DECORATION_ENGRAVING, decoratingTypes);
+            AddDecoratingType(this.Laser, LegacySupplierDecoratingType.DECORATION_LASER, decoratingTypes);
+            AddDecoratingType(this.Offset, LegacySupplierDecoratingType.DECORATION_OFFSET, decoratingTypes);
+            AddDecoratingType(this.Transfer, LegacySupplierDecoratingType.DECORATION_TRANSFER, decoratingTypes);
+            AddDecoratingType(this.FullColourProcess, LegacySupplierDecoratingType.DECORATION_FULLCOLOR, decoratingTypes);
+            AddDecoratingType(this.DieStamp, LegacySupplierDecoratingType.DECORATION_DIESTAMP, decoratingTypes);
         }
 
-        private void AddDecoratingType(bool selected, String typeName, IList<SupplierDecoratingType> decoratingTypes)
+        private void AddDecoratingType(bool selected, String typeName, IList<LegacySupplierDecoratingType> decoratingTypes)
         {
             if (selected)
             {
-                SupplierDecoratingType type = decoratingTypes.Where(decType => decType.Name == typeName).SingleOrDefault();
+                LegacySupplierDecoratingType type = decoratingTypes.Where(decType => decType.Name == typeName).SingleOrDefault();
                 if (type != null) DecoratingTypes.Add(type);
             }
         }

@@ -70,12 +70,12 @@ namespace asi.asicentral.Tests
             {
                 count = context.Orders.Count();
                 Assert.IsTrue(count > 0);
-                Order order = context.Orders.Where(theOrder => theOrder.CreditCard != null && theOrder.OrderDetails.Count > 0).FirstOrDefault();
+                LegacyOrder order = context.Orders.Where(theOrder => theOrder.CreditCard != null && theOrder.OrderDetails.Count > 0).FirstOrDefault();
                 Assert.IsNotNull(order);
                 Assert.IsNotNull(order.CreditCard);
                 Assert.IsNotNull(order.OrderDetails);
                 Assert.IsTrue(order.OrderDetails.Count() > 0);
-                foreach (OrderDetail detail in order.OrderDetails)
+                foreach (LegacyOrderDetail detail in order.OrderDetails)
                 {
                     Assert.IsNotNull(detail.Product);
                 }
@@ -102,9 +102,9 @@ namespace asi.asicentral.Tests
                 count = context.Orders.Count();
                 Assert.IsTrue(count > 0);
                 //checking current order details work
-                Order order = context.Orders.Where(or => or.Id == 10335).SingleOrDefault();
+                LegacyOrder order = context.Orders.Where(or => or.Id == 10335).SingleOrDefault();
                 Assert.IsNotNull(order);
-                OrderDetail detail = order.OrderDetails.Where(det => det.ProductId == 104).SingleOrDefault();
+                LegacyOrderDetail detail = order.OrderDetails.Where(det => det.ProductId == 104).SingleOrDefault();
                 Assert.IsNotNull(detail);
             }
         }
@@ -115,11 +115,11 @@ namespace asi.asicentral.Tests
             Guid appIdentifier;
             using (var context = new ASIInternetContext())
             {
-                SupplierMembershipApplication application = new SupplierMembershipApplication()
+                LegacySupplierMembershipApplication application = new LegacySupplierMembershipApplication()
                 {
                     Company = "SupplierTest",
                 };
-                IList<SupplierDecoratingType> decoratingTypes = context.SupplierDecoratingTypes.ToList();
+                IList<LegacySupplierDecoratingType> decoratingTypes = context.SupplierDecoratingTypes.ToList();
                 Assert.IsTrue(decoratingTypes.Count > 1);
                 application.DecoratingTypes.Add(decoratingTypes[0]);
                 application.DecoratingTypes.Add(decoratingTypes[1]);
@@ -130,7 +130,7 @@ namespace asi.asicentral.Tests
             using (var context = new ASIInternetContext())
             {
                 //try to retrieve it
-                SupplierMembershipApplication application = context.SupplierMembershipApplications.Where(app => app.Id == appIdentifier).SingleOrDefault();
+                LegacySupplierMembershipApplication application = context.SupplierMembershipApplications.Where(app => app.Id == appIdentifier).SingleOrDefault();
                 Assert.IsNotNull(application);
                 Assert.AreEqual(2, application.DecoratingTypes.Count);
             }
@@ -142,22 +142,22 @@ namespace asi.asicentral.Tests
             Guid appIdentifier;
             using (var context = new ASIInternetContext())
             {
-                DistributorBusinessRevenue revenue = context.DistributorBusinessRevenues.FirstOrDefault();
+                LegacyDistributorBusinessRevenue revenue = context.DistributorBusinessRevenues.FirstOrDefault();
                 Assert.IsNotNull(revenue);
                 //create a new app
-                DistributorMembershipApplication application = new DistributorMembershipApplication()
+                LegacyDistributorMembershipApplication application = new LegacyDistributorMembershipApplication()
                 {
                     Company = "DistributorAppTest",
                     PrimaryBusinessRevenue = revenue,
                 };
                 context.DistributorMembershipApplications.Add(application);
                 //add a few accont types
-                IList<DistributorAccountType> accountTypes = context.DistributorAccountTypes.ToList();
+                IList<LegacyDistributorAccountType> accountTypes = context.DistributorAccountTypes.ToList();
                 Assert.IsTrue(accountTypes.Count > 1);
                 application.AccountTypes.Add(accountTypes[0]);
                 application.AccountTypes.Add(accountTypes[1]);
                 //add a few product lines
-                IList<DistributorProductLine> productLines = context.DistributorProductLines.ToList();
+                IList<LegacyDistributorProductLine> productLines = context.DistributorProductLines.ToList();
                 Assert.IsTrue(productLines.Count > 1);
                 application.ProductLines.Add(productLines[0]);
                 application.ProductLines.Add(productLines[1]);
@@ -167,7 +167,7 @@ namespace asi.asicentral.Tests
             using (var context = new ASIInternetContext())
             {
                 //try to retrieve it
-                DistributorMembershipApplication application = context.DistributorMembershipApplications.Where(app => app.Id == appIdentifier).SingleOrDefault();
+                LegacyDistributorMembershipApplication application = context.DistributorMembershipApplications.Where(app => app.Id == appIdentifier).SingleOrDefault();
                 Assert.IsNotNull(application);
                 Assert.IsNotNull(application.PrimaryBusinessRevenueId);
                 Assert.AreEqual(2, application.AccountTypes.Count);

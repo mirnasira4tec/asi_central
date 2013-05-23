@@ -11,7 +11,7 @@ namespace asi.asicentral.web.model.store
     public class OrderModel
     {
         private const string DECRYPT_KEY = "mk8$3njkl";
-        private OrderDetail orderDetail;
+        private LegacyOrderDetail orderDetail;
 
         private OrderModel()
         {
@@ -98,9 +98,9 @@ namespace asi.asicentral.web.model.store
         public string CompletedStep { get; set; }
         public String Company { get; private set; }
 
-        public OrderDetailApplication Application { private set; get; }
+        public LegacyOrderDetailApplication Application { private set; get; }
 
-        public static OrderModel CreateOrder(IStoreService storeService, IEncryptionService encryptionService, OrderDetail orderDetail)
+        public static OrderModel CreateOrder(IStoreService storeService, IEncryptionService encryptionService, LegacyOrderDetail orderDetail)
         {
             OrderModel order = new OrderModel();
             order.orderDetail = orderDetail;
