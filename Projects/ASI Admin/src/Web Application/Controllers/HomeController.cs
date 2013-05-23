@@ -77,7 +77,7 @@ namespace Web_Application.Controllers
             //Accessing the ASIInternet database
             try
             {
-                Order order = ObjectService.GetAll<Order>().FirstOrDefault();
+                LegacyOrder order = ObjectService.GetAll<LegacyOrder>().FirstOrDefault();
                 if (order != null) messages.Add("Successfully accessed the Order database");
                 else messages.Add("Error accessing the Order database");
             }

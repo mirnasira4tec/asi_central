@@ -19,7 +19,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
         {
             // arrange            
             OrdersController controller = new OrdersController();
-            IList<OrderDetail> orderDetails = new List<OrderDetail>();
+            IList<LegacyOrderDetail> orderDetails = new List<LegacyOrderDetail>();
 
             Guid userid = Guid.NewGuid();
 
@@ -30,7 +30,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
                 CreateDate = DateTime.Now.AddDays(-6),
             };
 
-            Order order = new Order()
+            LegacyOrder order = new LegacyOrder()
             {
                 Id = 0,
                 BillFirstName = "Billing Name",
@@ -43,14 +43,14 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
                 Membership = membership
             };
 
-            OrderProduct orderProduct = new OrderProduct()
+            LegacyOrderProduct orderProduct = new LegacyOrderProduct()
             {
                 Id = 102,
                 Description = "Supplier Membership",
                 Summary = "Supplier"
             };
 
-            OrderDetail orderDetail = new OrderDetail()
+            LegacyOrderDetail orderDetail = new LegacyOrderDetail()
             {
                 Added = DateTime.Now.AddDays(-3),
                 Order = order,
@@ -61,7 +61,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
                 Subtotal = 500,
             };
 
-            OrderCreditCard orderCreditCard = new OrderCreditCard()
+            LegacyOrderCreditCard orderCreditCard = new LegacyOrderCreditCard()
             {
                 ExpMonth = "May",
                 ExpYear = "2015",
@@ -76,7 +76,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             orderDetails.Add(orderDetail);
 
             Mock<IStoreService> mockObjectService = new Mock<IStoreService>();
-            mockObjectService.Setup(objectService => objectService.GetAll<OrderDetail>("Order;Order.Membership;Order.CreditCard", true)).Returns(orderDetails.AsQueryable());
+            mockObjectService.Setup(objectService => objectService.GetAll<LegacyOrderDetail>("Order;Order.Membership;Order.CreditCard", true)).Returns(orderDetails.AsQueryable());
             controller.StoreService = mockObjectService.Object;
 
             // act - getting results from the last 6 days
