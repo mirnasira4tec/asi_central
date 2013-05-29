@@ -14,18 +14,18 @@ namespace asi.asicentral.WebApplication.Tests.Model.store
         {
             // prepare for SupplierMembershipApplication's CopyTo(SupplierMembershipApplication target)
             // for syncing contacts
-            SupplierMembershipApplication supplierApplication = new SupplierMembershipApplication();
-            SupplierMembershipApplication model = new SupplierMembershipApplication();
-            supplierApplication.Contacts.Add(new SupplierMembershipApplicationContact() { Id = 0, Name = "contact0" });
-            supplierApplication.Contacts.Add(new SupplierMembershipApplicationContact() { Id = 1, Name = "contact1" });
-            supplierApplication.Contacts.Add(new SupplierMembershipApplicationContact() { Id = 2, Name = "contact2" });
-            model.Contacts.Add(new SupplierMembershipApplicationContact() { Id = 0, Name = "new contact" });
-            model.Contacts.Add(new SupplierMembershipApplicationContact() { Id = 1, Name = "new contact" });
+            LegacySupplierMembershipApplication supplierApplication = new LegacySupplierMembershipApplication();
+            LegacySupplierMembershipApplication model = new LegacySupplierMembershipApplication();
+            supplierApplication.Contacts.Add(new LegacySupplierMembershipApplicationContact() { Id = 0, Name = "contact0" });
+            supplierApplication.Contacts.Add(new LegacySupplierMembershipApplicationContact() { Id = 1, Name = "contact1" });
+            supplierApplication.Contacts.Add(new LegacySupplierMembershipApplicationContact() { Id = 2, Name = "contact2" });
+            model.Contacts.Add(new LegacySupplierMembershipApplicationContact() { Id = 0, Name = "new contact" });
+            model.Contacts.Add(new LegacySupplierMembershipApplicationContact() { Id = 1, Name = "new contact" });
             
             // model copy to the target, target should have 2 contacts which are provided by the model
             model.CopyTo(supplierApplication);
             Assert.AreEqual(model.Contacts.Count, supplierApplication.Contacts.Count);
-            SupplierMembershipApplicationContact contact = null;
+            LegacySupplierMembershipApplicationContact contact = null;
             contact = supplierApplication.Contacts.Where(theContact => theContact.Id == 2).SingleOrDefault();
             Assert.IsNull(contact);
             contact = supplierApplication.Contacts.Where(theContact => theContact.Id == 1).SingleOrDefault();
@@ -39,18 +39,18 @@ namespace asi.asicentral.WebApplication.Tests.Model.store
         {
             // prepare for SupplierMembershipApplication's CopyTo(SupplierMembershipApplication target)
             // for syncing decoration types
-            SupplierMembershipApplication supplierApplication = new SupplierMembershipApplication();
-            SupplierMembershipApplication model = new SupplierMembershipApplication();
-            supplierApplication.DecoratingTypes.Add(new SupplierDecoratingType() { Name = "type0" });
-            supplierApplication.DecoratingTypes.Add(new SupplierDecoratingType() { Name = "type1" });
-            supplierApplication.DecoratingTypes.Add(new SupplierDecoratingType() { Name = "type2" });
-            model.DecoratingTypes.Add(new SupplierDecoratingType() { Name = "type7" });
-            model.DecoratingTypes.Add(new SupplierDecoratingType() { Name = "type2" });
+            LegacySupplierMembershipApplication supplierApplication = new LegacySupplierMembershipApplication();
+            LegacySupplierMembershipApplication model = new LegacySupplierMembershipApplication();
+            supplierApplication.DecoratingTypes.Add(new LegacySupplierDecoratingType() { Name = "type0" });
+            supplierApplication.DecoratingTypes.Add(new LegacySupplierDecoratingType() { Name = "type1" });
+            supplierApplication.DecoratingTypes.Add(new LegacySupplierDecoratingType() { Name = "type2" });
+            model.DecoratingTypes.Add(new LegacySupplierDecoratingType() { Name = "type7" });
+            model.DecoratingTypes.Add(new LegacySupplierDecoratingType() { Name = "type2" });
 
             // model copy to target, target should have new data from the model
             model.CopyTo(supplierApplication);
             Assert.AreEqual(model.DecoratingTypes.Count, supplierApplication.DecoratingTypes.Count);
-            SupplierDecoratingType type = null;
+            LegacySupplierDecoratingType type = null;
             type = supplierApplication.DecoratingTypes.Where(p => p.Name == "type2").SingleOrDefault();
             Assert.IsNotNull(type);
             type = supplierApplication.DecoratingTypes.Where(p => p.Name == "type7").SingleOrDefault();

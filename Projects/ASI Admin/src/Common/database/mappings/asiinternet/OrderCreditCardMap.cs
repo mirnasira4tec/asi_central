@@ -4,7 +4,7 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace asi.asicentral.database.mappings.asiinternet
 {
-    public class OrderCreditCardMap : EntityTypeConfiguration<OrderCreditCard>
+    public class OrderCreditCardMap : EntityTypeConfiguration<LegacyOrderCreditCard>
     {
         public OrderCreditCardMap()
         {

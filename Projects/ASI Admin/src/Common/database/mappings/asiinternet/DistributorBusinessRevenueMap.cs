@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings.asiinternet
 {
-    public class DistributorBusinessRevenueMap : EntityTypeConfiguration<DistributorBusinessRevenue>
+    public class DistributorBusinessRevenueMap : EntityTypeConfiguration<LegacyDistributorBusinessRevenue>
     {
         public DistributorBusinessRevenueMap() 
         {

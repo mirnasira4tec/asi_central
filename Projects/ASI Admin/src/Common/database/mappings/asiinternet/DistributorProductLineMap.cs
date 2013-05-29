@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings.asiinternet
 {
-    public class DistributorProductLineMap : EntityTypeConfiguration<DistributorProductLine>
+    public class DistributorProductLineMap : EntityTypeConfiguration<LegacyDistributorProductLine>
     {
         public DistributorProductLineMap()
         {

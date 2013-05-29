@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings.asiinternet
 {
-    public class DistributorAccountTypeMap : EntityTypeConfiguration<DistributorAccountType>
+    public class DistributorAccountTypeMap : EntityTypeConfiguration<LegacyDistributorAccountType>
     {
         public DistributorAccountTypeMap()
         {

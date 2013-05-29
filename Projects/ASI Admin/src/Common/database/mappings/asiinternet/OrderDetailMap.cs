@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings.asiinternet
 {
-    internal class OrderDetailMap : EntityTypeConfiguration<OrderDetail>
+    internal class OrderDetailMap : EntityTypeConfiguration<LegacyOrderDetail>
     {
         public OrderDetailMap()
         {

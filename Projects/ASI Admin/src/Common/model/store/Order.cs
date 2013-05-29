@@ -10,11 +10,11 @@ namespace asi.asicentral.model.store
         Rejected = 2
     }
 
-    public class Order
+    public class LegacyOrder
     {
-        public Order()
+        public LegacyOrder()
         {
-            this.OrderDetails = new List<OrderDetail>();
+            this.OrderDetails = new List<LegacyOrderDetail>();
         }
 
         public int Id { get; set; }
@@ -39,9 +39,9 @@ namespace asi.asicentral.model.store
         public string Campaign { get; set; }
         public int? ContextId { get; set; }
 
-        public virtual OrderCreditCard CreditCard { get; set; }
+        public virtual LegacyOrderCreditCard CreditCard { get; set; }
         public virtual ASPNetMembership Membership { get; set; }
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public virtual ICollection<LegacyOrderDetail> OrderDetails { get; set; }
 
         public override string ToString()
         {
@@ -52,7 +52,7 @@ namespace asi.asicentral.model.store
         {
             bool equals = false;
 
-            Order order = obj as Order;
+            LegacyOrder order = obj as LegacyOrder;
             if (order != null) equals = order.Id == Id;
             return equals;
         }
