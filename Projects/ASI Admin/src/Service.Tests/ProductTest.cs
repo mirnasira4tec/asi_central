@@ -785,33 +785,5 @@ namespace asi.asicentral.Tests
                 Assert.IsTrue(objectContext.TaxRates.Count() > 0);
             }
         }
-
-        [TestMethod]
-        public void BugtTest()
-        {
-            Console.WriteLine("test");
-            LogService.GetLog("Test").Debug("Test2");
-            //Delete the current data
-            using (var objectContext = new ProductContext())
-            {
-                Context context = objectContext.Contexts.Where(ctx => ctx.ContextId == 3).SingleOrDefault();
-                Assert.IsNotNull(context);
-                foreach (ContextFeature contextFeature in context.Features)
-                {
-                    Assert.IsNotNull(contextFeature);
-                    foreach (ContextFeatureProduct ctxFeatProduct in contextFeature.AssociatedProducts)
-                    {
-                        Assert.IsNotNull(ctxFeatProduct);
-                        //Assert.IsNotNull(ctxFeatProduct.ToString());
-                        //Assert.IsNotNull(ctxFeatProduct.Product);
-                    }
-                }
-                foreach (ContextProductSequence seq in context.Products)
-                {
-                    Assert.IsNotNull(seq);
-                    Assert.IsNotNull(seq.Product);
-                }
-            }
-        }
     }
 }
