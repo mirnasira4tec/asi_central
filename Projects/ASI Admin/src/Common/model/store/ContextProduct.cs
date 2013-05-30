@@ -22,6 +22,7 @@ namespace asi.asicentral.model.store
         public decimal ApplicationCost { get; set; }
         public decimal ShippingCostUS { get; set; }
         public decimal ShippingCostOther { get; set; }
+        public bool HasTax { get; set; }
         public bool IsSubscription { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
