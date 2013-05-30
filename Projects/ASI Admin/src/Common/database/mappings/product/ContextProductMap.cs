@@ -17,6 +17,9 @@ namespace asi.asicentral.database.mappings.product
             this.Property(t => t.ProductId)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
+            this.Property(t => t.HasTax)
+                .HasColumnName("HasTaxFlag");
+
             this.Property(t => t.IsSubscription)
                 .HasColumnName("IsSubscriptionFlag");
 
