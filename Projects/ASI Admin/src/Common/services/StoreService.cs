@@ -50,7 +50,6 @@ namespace asi.asicentral.services
             LegacyOrderDetailApplication application = null;
             if (orderDetail.Order != null && orderDetail.Order.UserId != null)
             {
-
                 if(orderDetail.Order.ContextId == 1)
                     return GetDistributorApplication(orderDetail);
                 else if(orderDetail.Order.ContextId == 2)
