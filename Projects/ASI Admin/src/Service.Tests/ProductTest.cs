@@ -14,7 +14,7 @@ namespace asi.asicentral.Tests
         public void PopulateDemoData()
         {
             //Delete the current data
-            using (var objectContext = new ProductContext())
+            using (var objectContext = new StoreContext())
             {
                 IList<ContextFeatureProduct> featureProductList = objectContext.FeatureProducts.ToList();
                 foreach (ContextFeatureProduct featureProduct in featureProductList)
@@ -47,7 +47,7 @@ namespace asi.asicentral.Tests
             #region add the membership data
 
             Context distributorMembership = null;
-            using (var objectContext = new ProductContext())
+            using (var objectContext = new StoreContext())
             {
                 distributorMembership = new Context()
                 {
@@ -421,7 +421,7 @@ namespace asi.asicentral.Tests
             #region Add the supplier data
 
             Context supplierMembership = null;
-            using (var objectContext = new ProductContext())
+            using (var objectContext = new StoreContext())
             {
                 supplierMembership = new Context()
                 {
@@ -712,7 +712,7 @@ namespace asi.asicentral.Tests
         {
             int newId;
             string name = "Yann MemberShip";
-            using (var objectContext = new ProductContext())
+            using (var objectContext = new StoreContext())
             {
                 IList<Context> contextList = objectContext.Contexts.ToList();
                 Assert.IsTrue(contextList.Count >= 0);
@@ -728,7 +728,7 @@ namespace asi.asicentral.Tests
                 objectContext.SaveChanges();
                 newId = context.ContextId;
             }
-            using (var objectContext = new ProductContext())
+            using (var objectContext = new StoreContext())
             {
                 Context context = objectContext.Contexts.Where(ctxt => ctxt.ContextId == newId).SingleOrDefault();
                 Assert.IsNotNull(context);
@@ -736,7 +736,7 @@ namespace asi.asicentral.Tests
                 objectContext.Contexts.Remove(context);
                 objectContext.SaveChanges();
             }
-            using (var objectContext = new ProductContext())
+            using (var objectContext = new StoreContext())
             {
                 Context context = objectContext.Contexts.Where(ctxt => ctxt.ContextId == newId).SingleOrDefault();
                 Assert.IsNull(context);
@@ -746,7 +746,7 @@ namespace asi.asicentral.Tests
         [TestMethod]
         public void RetrieveProductStructure()
         {
-            using (var objectContext = new ProductContext())
+            using (var objectContext = new StoreContext())
             {
                 Context distributorMembership = objectContext.Contexts
                     .Include("Features.AssociatedProducts.Product")
@@ -780,7 +780,7 @@ namespace asi.asicentral.Tests
         [TestMethod]
         public void RetrieveTax()
         {
-            using (var objectContext = new ProductContext())
+            using (var objectContext = new StoreContext())
             {
                 Assert.IsTrue(objectContext.TaxRates.Count() > 0);
             }
