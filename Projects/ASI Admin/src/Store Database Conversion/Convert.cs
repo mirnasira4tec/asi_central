@@ -57,6 +57,7 @@ namespace Store_Database_Conversion
                     _databaseService.ProcessLegacyRecords(current, nextStep);
                     current = nextStep;
                     pbStatus.Value = (current * pbStatus.Maximum) / toMoveCount;
+                    this.Refresh();
                 }
             }
             catch (Exception exception)

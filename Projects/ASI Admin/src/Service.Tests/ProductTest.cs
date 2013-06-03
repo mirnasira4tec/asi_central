@@ -749,6 +749,17 @@ namespace asi.asicentral.Tests
             int newId;
             using (var objectContext = new StoreContext())
             {
+                StoreAddress address = new StoreAddress()
+                {
+                    Street1 = "Street1",
+                    City = "City",
+                    State = "NJ",
+                    Zip = "123 1234",
+                    Country = "Country",
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    UpdateSource = "Test Case",
+                };
                 StoreCompany company = new StoreCompany()
                 {
                     Name = "Company Test Case",
@@ -776,7 +787,20 @@ namespace asi.asicentral.Tests
                     IsCompleted = false,
                     CreditCard = creditCard,
                     Company = company,
+                    BillingAddress = address,
                 };
+                order.OrderDetails.Add(new StoreOrderDetail()
+                {
+                    IsSubscription = true,
+                    Quantity = 1,
+                    ShippingCost = 0.1m,
+                    TaxCost = 0.2m,
+                    ApplicationCost = 0.3m,
+                    Cost = 0.4m,
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    UpdateSource = "Test Case",
+                });
                 objectContext.StoreOrders.Add(order);
                 objectContext.SaveChanges();
                 newId = order.StoreOrderId;
@@ -784,14 +808,15 @@ namespace asi.asicentral.Tests
             using (var objectContext = new StoreContext())
             {
                 StoreOrder order = objectContext.StoreOrders
-                    .Include("CreditCard")
-                    .Include("Company")
                     .Where(ordr => ordr.StoreOrderId == newId).SingleOrDefault();
                 Assert.IsNotNull(order);
                 Assert.IsNotNull(order.CreditCard);
                 Assert.IsNotNull(order.Company);
+                Assert.IsNotNull(order.BillingAddress);
+                Assert.IsTrue(order.OrderDetails.Count > 0);
                 objectContext.StoreCreditCards.Remove(order.CreditCard);
                 objectContext.StoreCompanies.Remove(order.Company);
+                objectContext.StoreAddresses.Remove(order.BillingAddress);
                 objectContext.StoreOrders.Remove(order);
                 objectContext.SaveChanges();
             }

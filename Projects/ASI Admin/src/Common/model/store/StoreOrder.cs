@@ -15,6 +15,14 @@ namespace asi.asicentral.model.store
 
     public class StoreOrder
     {
+        public StoreOrder()
+        {
+            if (this.GetType() == typeof(StoreOrder))
+            {
+                OrderDetails = new List<StoreOrderDetail>();
+            } 
+        }
+
         public int StoreOrderId { get; set; }
         public int? LegacyId { get; set; }
         public bool IsCompleted { get; set; }
@@ -30,7 +38,9 @@ namespace asi.asicentral.model.store
         public string UpdateSource { get; set; }
         public DateTime ApprovedDate { get; set; }
         public string ApprovedBy { get; set; }
-        public StoreCompany Company { get; set; }
-        public StoreCreditCard CreditCard { get; set; }
+        public virtual StoreCompany Company { get; set; }
+        public virtual StoreCreditCard CreditCard { get; set; }
+        public virtual StoreAddress BillingAddress { get; set; }
+        public virtual IList<StoreOrderDetail> OrderDetails { get; set; }
     }
 }

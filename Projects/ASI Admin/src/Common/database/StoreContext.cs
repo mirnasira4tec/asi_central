@@ -28,6 +28,7 @@ namespace asi.asicentral.database
         public DbSet<StoreCompany> StoreCompanies { get; set; }
         public DbSet<StoreCreditCard> StoreCreditCards { get; set; }
         public DbSet<StoreOrder> StoreOrders { get; set; }
+        public DbSet<StoreOrderDetail> StoreOrderDetails { get; set; }
         public DbSet<TaxRate> TaxRates { get; set; }
 
         /// <summary>
@@ -37,6 +38,7 @@ namespace asi.asicentral.database
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            Configuration.LazyLoadingEnabled = true;
             modelBuilder.Configurations
                 .Add(new ContextMap())
                 .Add(new ContextProductMap())
@@ -47,6 +49,7 @@ namespace asi.asicentral.database
                 .Add(new StoreCompanyMap())
                 .Add(new StoreCreditCardMap())
                 .Add(new StoreOrderMap())
+                .Add(new StoreOrderDetailMap())
                 .Add(new TaxRateMap());
         }
     }

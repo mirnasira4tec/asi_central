@@ -38,6 +38,10 @@ namespace asi.asicentral.database.mappings.store
             HasOptional(order => order.Company)
                 .WithMany()
                 .Map(order => order.MapKey("CompanyId"));
+
+            HasOptional(order => order.BillingAddress)
+                .WithMany()
+                .Map(order => order.MapKey("BillingAddressId"));
         }
     }
 }

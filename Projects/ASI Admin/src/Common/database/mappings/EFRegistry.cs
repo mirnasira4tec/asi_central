@@ -125,6 +125,9 @@ namespace asi.asicentral.database.mappings
             For<IRepository<StoreOrder>>().Use<EFRepository<StoreOrder>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
+            For<IRepository<StoreOrderDetail>>().Use<EFRepository<StoreOrderDetail>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
             For<IRepository<TaxRate>>().Use<EFRepository<TaxRate>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 

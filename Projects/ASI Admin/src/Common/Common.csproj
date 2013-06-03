@@ -94,6 +94,7 @@
     <Compile Include="database\mappings\store\StoreCreditCardMap.cs" />
     <Compile Include="database\mappings\store\StoreCompanyMap.cs" />
     <Compile Include="database\mappings\store\StoreAddressMap.cs" />
+    <Compile Include="database\mappings\store\StoreOrderDetailMap.cs" />
     <Compile Include="database\mappings\store\StoreOrderMap.cs" />
     <Compile Include="database\mappings\store\TaxRateMap.cs" />
     <Compile Include="interfaces\ICreditCardService.cs" />
@@ -168,6 +169,7 @@
     <Compile Include="model\store\StoreCompany.cs" />
     <Compile Include="model\store\StoreCreditCard.cs" />
     <Compile Include="model\store\StoreOrder.cs" />
+    <Compile Include="model\store\StoreOrderDetail.cs" />
     <Compile Include="model\store\TaxRate.cs" />
     <Compile Include="model\timss\TIMSSAccountType.cs" />
     <Compile Include="model\timss\TIMSSAdditionalInfo.cs" />
