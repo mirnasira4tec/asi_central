@@ -30,8 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Convert));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.convertProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.pbStatus = new System.Windows.Forms.ToolStripProgressBar();
             this.lblAction = new System.Windows.Forms.Label();
             this.btnProceed = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
@@ -40,29 +40,30 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1,
-            this.convertProgressBar});
+            this.toolStripStatusLabel,
+            this.pbStatus});
             this.statusStrip1.Location = new System.Drawing.Point(0, 303);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(668, 22);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // toolStripStatusLabel1
+            // toolStripStatusLabel
             // 
-            this.toolStripStatusLabel1.AutoSize = false;
-            this.toolStripStatusLabel1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(250, 17);
-            this.toolStripStatusLabel1.Text = "Ready";
-            this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolStripStatusLabel.AutoSize = false;
+            this.toolStripStatusLabel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(250, 17);
+            this.toolStripStatusLabel.Text = "Ready";
+            this.toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // convertProgressBar
+            // pbStatus
             // 
-            this.convertProgressBar.AutoSize = false;
-            this.convertProgressBar.Maximum = 1000;
-            this.convertProgressBar.Name = "convertProgressBar";
-            this.convertProgressBar.Size = new System.Drawing.Size(400, 16);
+            this.pbStatus.AutoSize = false;
+            this.pbStatus.Maximum = 1000;
+            this.pbStatus.Name = "pbStatus";
+            this.pbStatus.Size = new System.Drawing.Size(400, 16);
+            this.pbStatus.Visible = false;
             // 
             // lblAction
             // 
@@ -74,12 +75,13 @@
             // 
             // btnProceed
             // 
-            this.btnProceed.Location = new System.Drawing.Point(581, 12);
+            this.btnProceed.Location = new System.Drawing.Point(581, 5);
             this.btnProceed.Name = "btnProceed";
             this.btnProceed.Size = new System.Drawing.Size(75, 23);
             this.btnProceed.TabIndex = 2;
             this.btnProceed.Text = "Proceed";
             this.btnProceed.UseVisualStyleBackColor = true;
+            this.btnProceed.Click += new System.EventHandler(this.btnProceed_Click);
             // 
             // Convert
             // 
@@ -107,8 +109,8 @@
         #endregion
 
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripProgressBar convertProgressBar;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
+        private System.Windows.Forms.ToolStripProgressBar pbStatus;
         private System.Windows.Forms.Label lblAction;
         private System.Windows.Forms.Button btnProceed;
     }

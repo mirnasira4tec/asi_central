@@ -18,14 +18,26 @@ namespace asi.asicentral.database.mappings.store
 
             //Properties
             this.Property(t => t.StoreOrderId)
-                .HasColumnName("StoreOrderId")
+                .HasColumnName("OrderId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
+            this.Property(t => t.ApprovedDate)
+                .HasColumnName("ApprovedDateUTC");
 
             this.Property(t => t.CreateDate)
                 .HasColumnName("CreateDateUTC");
 
             this.Property(t => t.UpdateDate)
                 .HasColumnName("UpdateDateUTC");
+
+            // Relationships
+            HasOptional(order => order.CreditCard)
+                .WithMany()
+                .Map(order => order.MapKey("CreditCardId"));
+
+            HasOptional(order => order.Company)
+                .WithMany()
+                .Map(order => order.MapKey("CompanyId"));
         }
     }
 }

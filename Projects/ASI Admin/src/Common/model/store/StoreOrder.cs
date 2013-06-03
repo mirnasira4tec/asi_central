@@ -30,6 +30,7 @@ namespace asi.asicentral.model.store
         public string UpdateSource { get; set; }
         public DateTime ApprovedDate { get; set; }
         public string ApprovedBy { get; set; }
+        public StoreCompany Company { get; set; }
         public StoreCreditCard CreditCard { get; set; }
     }
 }

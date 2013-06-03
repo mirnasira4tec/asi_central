@@ -714,8 +714,8 @@ namespace asi.asicentral.Tests
             string name = "Yann MemberShip";
             using (var objectContext = new StoreContext())
             {
-                IList<Context> contextList = objectContext.Contexts.ToList();
-                Assert.IsTrue(contextList.Count >= 0);
+                int recordCount = objectContext.Contexts.Count();
+                Assert.IsTrue(recordCount >= 0);
                 Context context = new Context()
                 {
                     Name = name,
@@ -740,6 +740,65 @@ namespace asi.asicentral.Tests
             {
                 Context context = objectContext.Contexts.Where(ctxt => ctxt.ContextId == newId).SingleOrDefault();
                 Assert.IsNull(context);
+            }
+        }
+
+        [TestMethod]
+        public void OrderCrud()
+        {
+            int newId;
+            using (var objectContext = new StoreContext())
+            {
+                StoreCompany company = new StoreCompany()
+                {
+                    Name = "Company Test Case",
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    UpdateSource = "Test Case",                    
+                };
+                StoreCreditCard creditCard = new StoreCreditCard()
+                {
+                    CardHolderName = "Test Case",
+                    CardNumber = "***1111",
+                    CardType = "Visa",
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    UpdateSource = "Test Case",
+                    ExpMonth = "01",
+                    ExpYear = "2016",
+                    ExternalReference = "123456789",
+                };
+                StoreOrder order = new StoreOrder()
+                {
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    UpdateSource = "Test Case",
+                    IsCompleted = false,
+                    CreditCard = creditCard,
+                    Company = company,
+                };
+                objectContext.StoreOrders.Add(order);
+                objectContext.SaveChanges();
+                newId = order.StoreOrderId;
+            }
+            using (var objectContext = new StoreContext())
+            {
+                StoreOrder order = objectContext.StoreOrders
+                    .Include("CreditCard")
+                    .Include("Company")
+                    .Where(ordr => ordr.StoreOrderId == newId).SingleOrDefault();
+                Assert.IsNotNull(order);
+                Assert.IsNotNull(order.CreditCard);
+                Assert.IsNotNull(order.Company);
+                objectContext.StoreCreditCards.Remove(order.CreditCard);
+                objectContext.StoreCompanies.Remove(order.Company);
+                objectContext.StoreOrders.Remove(order);
+                objectContext.SaveChanges();
+            }
+            using (var objectContext = new StoreContext())
+            {
+                StoreOrder order = objectContext.StoreOrders.Where(ordr => ordr.StoreOrderId == newId).SingleOrDefault();
+                Assert.IsNull(order);
             }
         }
 

@@ -46,6 +46,7 @@ namespace asi.asicentral.database
                 .Add(new StoreAddressMap())
                 .Add(new StoreCompanyMap())
                 .Add(new StoreCreditCardMap())
+                .Add(new StoreOrderMap())
                 .Add(new TaxRateMap());
         }
     }
