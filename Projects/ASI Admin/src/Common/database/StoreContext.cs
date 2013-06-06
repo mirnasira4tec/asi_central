@@ -27,6 +27,8 @@ namespace asi.asicentral.database
         public DbSet<StoreAddress> StoreAddresses { get; set; }
         public DbSet<StoreCompany> StoreCompanies { get; set; }
         public DbSet<StoreCreditCard> StoreCreditCards { get; set; }
+        public DbSet<StoreDetailDistributorMembership> StoreDetailDistributorMemberships { get; set; }
+        public DbSet<StoreIndividual> StoreIndividuals { get; set; }
         public DbSet<StoreOrder> StoreOrders { get; set; }
         public DbSet<StoreOrderDetail> StoreOrderDetails { get; set; }
         public DbSet<TaxRate> TaxRates { get; set; }
@@ -48,6 +50,8 @@ namespace asi.asicentral.database
                 .Add(new StoreAddressMap())
                 .Add(new StoreCompanyMap())
                 .Add(new StoreCreditCardMap())
+                .Add(new StoreDetailDistributorMembershipMap())
+                .Add(new StoreIndividualMap())
                 .Add(new StoreOrderMap())
                 .Add(new StoreOrderDetailMap())
                 .Add(new TaxRateMap());

@@ -55,20 +55,23 @@ namespace Store_Database_Conversion
                 if (!LegacyExists(order.Id))
                 {
                     DateTime creationDate = order.DateCreated.HasValue ? order.DateCreated.Value : DateTime.MinValue;
-                    StoreOrder newOrder = new StoreOrder();
-                    newOrder.ApprovedBy = "Unknown";
-                    newOrder.ApprovedDate = newOrder.UpdateDate;
-                    newOrder.Campaign = order.Campaign;
-                    newOrder.CompletedStep = order.CompletedStep;
-                    newOrder.ContextId = order.ContextId;
-                    newOrder.ExternalReference = order.ExternalReference;
-                    newOrder.IPAdd = order.IPAdd;
-                    newOrder.IsCompleted = order.Status.HasValue ? order.Status.Value : false;
-                    newOrder.LegacyId = order.Id;
-                    newOrder.ProcessStatus = order.ProcessStatus;
-                    newOrder.CreateDate = creationDate;
-                    newOrder.UpdateDate = newOrder.CreateDate;
-                    newOrder.UpdateSource = "Migration Process - " + DateTime.Now;
+                    StoreOrder newOrder = new StoreOrder()
+                    {
+                        ApprovedBy = "Unknown",
+                        ApprovedDate = creationDate,
+                        Campaign = order.Campaign,
+                        CompletedStep = order.CompletedStep,
+                        ContextId = order.ContextId,
+                        ExternalReference = order.ExternalReference,
+                        IPAdd = order.IPAdd,
+                        IsCompleted = order.Status.HasValue ? order.Status.Value : false,
+                        LegacyId = order.Id,
+                        ProcessStatus = order.ProcessStatus,
+                        CreateDate = creationDate,
+                        UpdateDate = creationDate,
+                        UpdateSource = "Migration Process - " + DateTime.Now,
+                    };
+                    
                     //@todo order total amount - not adjusted for subscriptions
                     //credit card information
                     if (order.CreditCard != null)
@@ -89,25 +92,29 @@ namespace Store_Database_Conversion
                         newOrder.CreditCard = newCreditCard;
                     }
                     //@todo company information
-                    //@todo billing contact information
-                    //@todo order details
+                    //order details
                     foreach (LegacyOrderDetail detail in order.OrderDetails)
                     {
                         //@todo application
-                        ContextProduct product = productReference.Where(prod => prod.ProductId == ConvertProductId(detail.ProductId)).SingleOrDefault();
+                        ContextProduct product = null;
+                        int productId = ConvertProductId(detail.ProductId);
+                        if (productId > 0) productReference.Where(prod => prod.Id == productId).SingleOrDefault();
                         StoreOrderDetail newDetail = new StoreOrderDetail()
                         {
                             Product = product,
                             LegacyProductId = detail.ProductId,
                             Quantity = detail.Quantity.HasValue ? detail.Quantity.Value : 0,
                             IsSubscription = product != null && product.IsSubscription,
+                            Cost = detail.PreTaxSubtotal.HasValue ? detail.PreTaxSubtotal.Value : 0.0m,
+                            ShippingCost = detail.Shipping.HasValue ? detail.Shipping.Value : 0.0m,
+                            TaxCost = detail.TaxSubtotal.HasValue ? detail.TaxSubtotal.Value : 0.0m,
                             CreateDate = creationDate,
                             UpdateDate = creationDate,
                             UpdateSource = "Migration Process - " + DateTime.Now,
                         };
                         newOrder.OrderDetails.Add(newDetail);
                     }
-                    newOrder.BillingAddress = GetBillingAddress(order);
+                    newOrder.BillingIndividual = GetBillingIndividual(order);
                     _storeContext.StoreOrders.Add(newOrder);
                 }
                 else
@@ -119,10 +126,11 @@ namespace Store_Database_Conversion
         }
 
         //extracts the billing address from the order
-        private static StoreAddress GetBillingAddress(LegacyOrder order)
+        private static StoreIndividual GetBillingIndividual(LegacyOrder order)
         {
             //@todo do we need to go through order detail and find out from the product item the billing address?
             StoreAddress address = null;
+            StoreIndividual individual = null;
             if (order.BillCity != null)
             {
                 address = new StoreAddress()
@@ -138,7 +146,20 @@ namespace Store_Database_Conversion
                     UpdateSource = "Migration Process - " + DateTime.Now,
                 };
             }
-            return address;
+            if (!string.IsNullOrEmpty(order.BillFirstName) || !string.IsNullOrEmpty(order.BillLastName) || address != null)
+            {
+                individual = new StoreIndividual()
+                {
+                    FirstName = order.BillFirstName,
+                    LastName = order.BillLastName,
+                    Phone = order.BillPhone,
+                    CreateDate = order.DateCreated.HasValue ? order.DateCreated.Value : DateTime.MinValue,
+                    UpdateDate = order.DateCreated.HasValue ? order.DateCreated.Value : DateTime.MinValue,
+                    UpdateSource = "Migration Process - " + DateTime.Now,
+                    Address = address,
+                };
+            }
+            return individual;
         }
 
         private int ConvertProductId(int productId)
@@ -172,6 +193,8 @@ namespace Store_Database_Conversion
                     break;
                 case 152:
                     newProductId = 4;
+                    break;
+                case 104: //supplier fees
                     break;
                 default:
                     _logService.Error("There is a product which has not been mapped yet: " + productId);

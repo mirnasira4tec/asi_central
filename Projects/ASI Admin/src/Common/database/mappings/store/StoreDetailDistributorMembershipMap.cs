@@ -1,7 +1,6 @@
 ﻿using asi.asicentral.model.store;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using System.Text;
@@ -9,17 +8,16 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings.store
 {
-    public class StoreAddressMap : EntityTypeConfiguration<StoreAddress>
+    public class StoreDetailDistributorMembershipMap : EntityTypeConfiguration<StoreDetailDistributorMembership>
     {
-        public StoreAddressMap()
+        public StoreDetailDistributorMembershipMap()
         {
-            this.ToTable("STOR_Address");
-            this.HasKey(t => t.Id);
+            this.ToTable("STOR_DistributorMembership");
+            this.HasKey(t => t.OrderDetailId);
 
             //Properties
-            this.Property(t => t.Id)
-                .HasColumnName("AddressId")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.Property(t => t.OrderDetailId)
+                .HasColumnName("OrderDetailId");
 
             this.Property(t => t.CreateDate)
                 .HasColumnName("CreateDateUTC");

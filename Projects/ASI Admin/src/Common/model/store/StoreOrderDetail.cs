@@ -8,7 +8,7 @@ namespace asi.asicentral.model.store
 {
     public class StoreOrderDetail
     {
-        public int StoreOrderDetailId { get; set; }
+        public int Id { get; set; }
         public int? LegacyProductId { get; set; }
         public int Quantity { get; set; }
         public decimal ApplicationCost { get; set; }

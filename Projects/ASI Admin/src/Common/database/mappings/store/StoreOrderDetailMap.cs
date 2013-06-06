@@ -14,10 +14,10 @@ namespace asi.asicentral.database.mappings.store
         public StoreOrderDetailMap()
         {
             this.ToTable("STOR_OrderDetail");
-            this.HasKey(t => t.StoreOrderDetailId);
+            this.HasKey(t => t.Id);
 
             //Properties
-            this.Property(t => t.StoreOrderDetailId)
+            this.Property(t => t.Id)
                 .HasColumnName("OrderDetailId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 

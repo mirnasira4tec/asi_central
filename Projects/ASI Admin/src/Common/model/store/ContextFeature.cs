@@ -17,7 +17,7 @@ namespace asi.asicentral.model.store
             }
         }
 
-        public int ContextFeatureId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public bool IsOffer { get; set; }
         public int Sequence { get; set; }
@@ -37,14 +37,14 @@ namespace asi.asicentral.model.store
         {
             string productLabel = string.Empty;
             ContextFeatureProduct featProd = this.AssociatedProducts
-                .Where(ctxFeatProd => ctxFeatProd.ProductId == product.ProductId).SingleOrDefault();
+                .Where(ctxFeatProd => ctxFeatProd.ProductId == product.Id).SingleOrDefault();
             if (featProd != null) productLabel = string.IsNullOrEmpty(featProd.Label) ? "True" : featProd.Label;
             return productLabel;
         }
 
         public override string ToString()
         {
-            return string.Format("Feature: {0} - {1}", ContextFeatureId, Name);
+            return string.Format("Feature: {0} - {1}", Id, Name);
         }
 
         public override bool Equals(object obj)
@@ -52,13 +52,13 @@ namespace asi.asicentral.model.store
             bool equals = false;
 
             ContextFeature feature = obj as ContextFeature;
-            if (feature != null) equals = (feature.ContextFeatureId == ContextFeatureId && feature.Name  == Name);
+            if (feature != null) equals = (feature.Id == Id && feature.Name  == Name);
             return equals;
         }
 
         public override int GetHashCode()
         {
-            return new { A = ContextFeatureId, B = Name }.GetHashCode();
+            return new { A = Id, B = Name }.GetHashCode();
         }
     }
 }

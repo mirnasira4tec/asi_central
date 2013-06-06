@@ -14,10 +14,10 @@ namespace asi.asicentral.database.mappings.store
         public StoreCreditCardMap()
         {
             this.ToTable("STOR_CreditCard");
-            this.HasKey(t => t.CreditCardId);
+            this.HasKey(t => t.Id);
 
             //Properties
-            this.Property(t => t.CreditCardId)
+            this.Property(t => t.Id)
                 .HasColumnName("CreditCardId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 

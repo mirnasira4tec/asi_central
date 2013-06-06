@@ -8,7 +8,7 @@ namespace asi.asicentral.model.store
 {
     public class TaxRate
     {
-        public int StateZipTaxId { get; set; }
+        public int Id { get; set; }
         public string State { get; set; }
         public int? Zip { get; set; }
         public string County { get; set; }

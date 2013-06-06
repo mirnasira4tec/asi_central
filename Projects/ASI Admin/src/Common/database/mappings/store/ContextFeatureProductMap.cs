@@ -1,6 +1,7 @@
 ﻿using asi.asicentral.model.store;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,11 @@ namespace asi.asicentral.database.mappings.product
         public ContextFeatureProductMap()
         {
             this.ToTable("PROD_ContextFeatureProduct");
-            HasKey(t => t.ContextFeatureProductId);
+            HasKey(t => t.Id);
+
+            this.Property(t => t.Id)
+                .HasColumnName("ContextFeatureProductId")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.CreateDate)
                 .HasColumnName("CreateDateUTC");

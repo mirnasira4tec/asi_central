@@ -23,7 +23,7 @@ namespace asi.asicentral.model.store
             } 
         }
 
-        public int StoreOrderId { get; set; }
+        public int Id { get; set; }
         public int? LegacyId { get; set; }
         public bool IsCompleted { get; set; }
         public OrderStatus ProcessStatus { get; set; }
@@ -40,7 +40,7 @@ namespace asi.asicentral.model.store
         public string ApprovedBy { get; set; }
         public virtual StoreCompany Company { get; set; }
         public virtual StoreCreditCard CreditCard { get; set; }
-        public virtual StoreAddress BillingAddress { get; set; }
+        public virtual StoreIndividual BillingIndividual { get; set; }
         public virtual IList<StoreOrderDetail> OrderDetails { get; set; }
     }
 }

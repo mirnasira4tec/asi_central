@@ -279,7 +279,7 @@ namespace asi.asicentral.Tests
                                 CreateDate = DateTime.UtcNow,
                                 UpdateDate = DateTime.UtcNow,
                                 Label = "",
-                                ProductId = prod.Product.ProductId,
+                                ProductId = prod.Product.Id,
                                 Product = prod.Product,
                                 UpdateSource = "ProductTest.PopulateDemoData",
                             });
@@ -325,7 +325,7 @@ namespace asi.asicentral.Tests
                                         UpdateDate = DateTime.UtcNow,
                                         Label = "",
                                         Product = prod.Product,
-                                        ProductId = prod.Product.ProductId,
+                                        ProductId = prod.Product.Id,
                                         UpdateSource = "ProductTest.PopulateDemoData",
                                     });
                                 }
@@ -364,7 +364,7 @@ namespace asi.asicentral.Tests
                                         UpdateDate = DateTime.UtcNow,
                                         Label = "",
                                         Product = prod.Product,
-                                        ProductId = prod.Product.ProductId,
+                                        ProductId = prod.Product.Id,
                                         UpdateSource = "ProductTest.PopulateDemoData",
                                     });
                                 }
@@ -380,7 +380,7 @@ namespace asi.asicentral.Tests
                             UpdateDate = DateTime.UtcNow,
                             Label = "$35",
                             Product = objectContext.Products.Where(prod => prod.Name == "Membership").SingleOrDefault(),
-                            ProductId = objectContext.Products.Where(prod => prod.Name == "Membership").SingleOrDefault().ProductId,
+                            ProductId = objectContext.Products.Where(prod => prod.Name == "Membership").SingleOrDefault().Id,
                             UpdateSource = "ProductTest.PopulateDemoData",
                         });
                         featr.AssociatedProducts.Add(new ContextFeatureProduct()
@@ -389,7 +389,7 @@ namespace asi.asicentral.Tests
                             UpdateDate = DateTime.UtcNow,
                             Label = "$35",
                             Product = objectContext.Products.Where(prod => prod.Name == "Basic").SingleOrDefault(),
-                            ProductId = objectContext.Products.Where(prod => prod.Name == "Basic").SingleOrDefault().ProductId,
+                            ProductId = objectContext.Products.Where(prod => prod.Name == "Basic").SingleOrDefault().Id,
                             UpdateSource = "ProductTest.PopulateDemoData",
                         });
                         featr.AssociatedProducts.Add(new ContextFeatureProduct()
@@ -398,7 +398,7 @@ namespace asi.asicentral.Tests
                             UpdateDate = DateTime.UtcNow,
                             Label = "$30",
                             Product = objectContext.Products.Where(prod => prod.Name == "Standard").SingleOrDefault(),
-                            ProductId = objectContext.Products.Where(prod => prod.Name == "Standard").SingleOrDefault().ProductId,
+                            ProductId = objectContext.Products.Where(prod => prod.Name == "Standard").SingleOrDefault().Id,
                             UpdateSource = "ProductTest.PopulateDemoData",
                         });
                         featr.AssociatedProducts.Add(new ContextFeatureProduct()
@@ -407,7 +407,7 @@ namespace asi.asicentral.Tests
                             UpdateDate = DateTime.UtcNow,
                             Label = "$25",
                             Product = objectContext.Products.Where(prod => prod.Name == "Executive").SingleOrDefault(),
-                            ProductId = objectContext.Products.Where(prod => prod.Name == "Executive").SingleOrDefault().ProductId,
+                            ProductId = objectContext.Products.Where(prod => prod.Name == "Executive").SingleOrDefault().Id,
                             UpdateSource = "ProductTest.PopulateDemoData",
                         });
                         objectContext.SaveChanges();
@@ -641,7 +641,7 @@ namespace asi.asicentral.Tests
                                 CreateDate = DateTime.UtcNow,
                                 UpdateDate = DateTime.UtcNow,
                                 Label = "",
-                                ProductId = prod.Product.ProductId,
+                                ProductId = prod.Product.Id,
                                 Product = prod.Product,
                                 UpdateSource = "ProductTest.PopulateDemoData",
                             });
@@ -659,7 +659,7 @@ namespace asi.asicentral.Tests
                                     CreateDate = DateTime.UtcNow,
                                     UpdateDate = DateTime.UtcNow,
                                     Label = "",
-                                    ProductId = prod.Product.ProductId,
+                                    ProductId = prod.Product.Id,
                                     Product = prod.Product,
                                     UpdateSource = "ProductTest.PopulateDemoData",
                                 });
@@ -678,7 +678,7 @@ namespace asi.asicentral.Tests
                                     CreateDate = DateTime.UtcNow,
                                     UpdateDate = DateTime.UtcNow,
                                     Label = "",
-                                    ProductId = prod.Product.ProductId,
+                                    ProductId = prod.Product.Id,
                                     Product = prod.Product,
                                     UpdateSource = "ProductTest.PopulateDemoData",
                                 });
@@ -694,7 +694,7 @@ namespace asi.asicentral.Tests
                             CreateDate = DateTime.UtcNow,
                             UpdateDate = DateTime.UtcNow,
                             Label = "",
-                            ProductId = prod.Product.ProductId,
+                            ProductId = prod.Product.Id,
                             Product = prod.Product,
                             UpdateSource = "ProductTest.PopulateDemoData",
                         });
@@ -726,11 +726,11 @@ namespace asi.asicentral.Tests
                 };
                 objectContext.Contexts.Add(context);
                 objectContext.SaveChanges();
-                newId = context.ContextId;
+                newId = context.Id;
             }
             using (var objectContext = new StoreContext())
             {
-                Context context = objectContext.Contexts.Where(ctxt => ctxt.ContextId == newId).SingleOrDefault();
+                Context context = objectContext.Contexts.Where(ctxt => ctxt.Id == newId).SingleOrDefault();
                 Assert.IsNotNull(context);
                 Assert.AreEqual(name, context.Name);
                 objectContext.Contexts.Remove(context);
@@ -738,7 +738,7 @@ namespace asi.asicentral.Tests
             }
             using (var objectContext = new StoreContext())
             {
-                Context context = objectContext.Contexts.Where(ctxt => ctxt.ContextId == newId).SingleOrDefault();
+                Context context = objectContext.Contexts.Where(ctxt => ctxt.Id == newId).SingleOrDefault();
                 Assert.IsNull(context);
             }
         }
@@ -756,6 +756,15 @@ namespace asi.asicentral.Tests
                     State = "NJ",
                     Zip = "123 1234",
                     Country = "Country",
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    UpdateSource = "Test Case",
+                };
+                StoreIndividual individual = new StoreIndividual()
+                {
+                    FirstName = "TestCase First",
+                    LastName = "TestCase Last",
+                    Address = address,
                     CreateDate = DateTime.Now,
                     UpdateDate = DateTime.Now,
                     UpdateSource = "Test Case",
@@ -787,7 +796,7 @@ namespace asi.asicentral.Tests
                     IsCompleted = false,
                     CreditCard = creditCard,
                     Company = company,
-                    BillingAddress = address,
+                    BillingIndividual = individual,
                 };
                 order.OrderDetails.Add(new StoreOrderDetail()
                 {
@@ -803,26 +812,28 @@ namespace asi.asicentral.Tests
                 });
                 objectContext.StoreOrders.Add(order);
                 objectContext.SaveChanges();
-                newId = order.StoreOrderId;
+                newId = order.Id;
             }
             using (var objectContext = new StoreContext())
             {
                 StoreOrder order = objectContext.StoreOrders
-                    .Where(ordr => ordr.StoreOrderId == newId).SingleOrDefault();
+                    .Where(ordr => ordr.Id == newId).SingleOrDefault();
                 Assert.IsNotNull(order);
                 Assert.IsNotNull(order.CreditCard);
                 Assert.IsNotNull(order.Company);
-                Assert.IsNotNull(order.BillingAddress);
+                Assert.IsNotNull(order.BillingIndividual);
+                Assert.IsNotNull(order.BillingIndividual.Address);
                 Assert.IsTrue(order.OrderDetails.Count > 0);
                 objectContext.StoreCreditCards.Remove(order.CreditCard);
                 objectContext.StoreCompanies.Remove(order.Company);
-                objectContext.StoreAddresses.Remove(order.BillingAddress);
+                objectContext.StoreAddresses.Remove(order.BillingIndividual.Address);
+                objectContext.StoreIndividuals.Remove(order.BillingIndividual);
                 objectContext.StoreOrders.Remove(order);
                 objectContext.SaveChanges();
             }
             using (var objectContext = new StoreContext())
             {
-                StoreOrder order = objectContext.StoreOrders.Where(ordr => ordr.StoreOrderId == newId).SingleOrDefault();
+                StoreOrder order = objectContext.StoreOrders.Where(ordr => ordr.Id == newId).SingleOrDefault();
                 Assert.IsNull(order);
             }
         }

@@ -11,10 +11,11 @@ namespace asi.asicentral.database.mappings.product
         public ContextMap()
         {
             this.ToTable("PROD_Context");
-            this.HasKey(t => t.ContextId);
+            this.HasKey(t => t.Id);
 
             //Properties
-            this.Property(t => t.ContextId)
+            this.Property(t => t.Id)
+                .HasColumnName("ContextId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.NotificationEmails)

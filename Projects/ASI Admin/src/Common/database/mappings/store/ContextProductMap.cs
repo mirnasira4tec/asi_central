@@ -11,10 +11,11 @@ namespace asi.asicentral.database.mappings.product
         public ContextProductMap()
         {
             this.ToTable("PROD_Product");
-            this.HasKey(t => t.ProductId);
+            this.HasKey(t => t.Id);
 
             //Properties
-            this.Property(t => t.ProductId)
+            this.Property(t => t.Id)
+                .HasColumnName("ProductId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.HasTax)

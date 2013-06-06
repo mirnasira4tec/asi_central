@@ -8,7 +8,7 @@ namespace asi.asicentral.model.store
 {
     public class StoreCreditCard
     {
-        public int CreditCardId { get; set; }
+        public int Id { get; set; }
         public string CardHolderName { get; set; }
         public string CardType { get; set; }
         public string CardNumber { get; set; }

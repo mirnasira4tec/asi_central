@@ -14,9 +14,10 @@ namespace asi.asicentral.database.mappings.product
         public ContextProductSequenceMap()
         {
             ToTable("PROD_ContextProduct");
-            HasKey(prodSequence => prodSequence.ContextProductSequenceId);
+            HasKey(prodSequence => prodSequence.Id);
 
-            this.Property(t => t.ContextProductSequenceId)
+            this.Property(t => t.Id)
+                .HasColumnName("ContextProductId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.CreateDate)

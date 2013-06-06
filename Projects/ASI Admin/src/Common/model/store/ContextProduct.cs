@@ -16,7 +16,7 @@ namespace asi.asicentral.model.store
             }
         }
 
-        public int ProductId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public decimal Cost { get; set; }
         public decimal ApplicationCost { get; set; }
@@ -32,7 +32,7 @@ namespace asi.asicentral.model.store
 
         public override string ToString()
         {
-            return string.Format("Product: {0} - {1}", ProductId, Name);
+            return string.Format("Product: {0} - {1}", Id, Name);
         }
 
         public override bool Equals(object obj)
@@ -40,13 +40,13 @@ namespace asi.asicentral.model.store
             bool equals = false;
 
             ContextProduct product = obj as ContextProduct;
-            if (product != null) equals = product.ProductId == ProductId;
+            if (product != null) equals = product.Id == Id;
             return equals;
         }
 
         public override int GetHashCode()
         {
-            return ProductId.GetHashCode();
+            return Id.GetHashCode();
         }
     }
 }
