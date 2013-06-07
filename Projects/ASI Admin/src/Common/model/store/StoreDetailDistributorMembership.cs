@@ -12,11 +12,11 @@ namespace asi.asicentral.model.store
         public int OrderDetailId { get; set; }
         public string LegacyApplicationId { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "ApplicationStatus")]
-        public int AppStatusId { get; set; }
+        public int? AppStatusId { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "NumberOfEmployee")]
-        public int NumberOfEmployee { get; set; }
+        public int? NumberOfEmployee { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "NumberOfSalesEmployee")]
-        public int NumberOfSalesEmployee { get; set; }
+        public int? NumberOfSalesEmployee { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "AnnualSalesVolume")]
         public string AnnualSalesVolume { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "AnnualSalesVolumeASP")]
@@ -24,7 +24,7 @@ namespace asi.asicentral.model.store
         [Display(ResourceType = typeof(Resource), Name = "ASIContact")]
         public string ASIContactName { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "CorporateOfficer")]
-        public bool? IsCorporateOffice { get; set; }
+        public bool? IsCorporateOfficer { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "IsMajorForResale")]
         public bool? IsMajorForResale { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "IsForProfit")]
@@ -36,15 +36,17 @@ namespace asi.asicentral.model.store
         public bool? HasRecSpecials { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "IsMajorityDistributeForResale")]
         public bool? IsMajorityDistributeForResale { get; set; }
-        public string ProductLines { get; set; }
         public string Custom1 { get; set; }
         public string Custom2 { get; set; }
         public string Custom5 { get; set; }
+        public LookDistributorAccountType BusinessRevenue { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "OtherBusinessRevenue")]
         public string OtherBusinessRevenue { get; set; }
         public Nullable<DateTime> EstablishedDate { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
+        //@todo this is a relationship
+        public string ProductLines { get; set; }
     }
 }

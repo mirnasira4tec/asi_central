@@ -749,6 +749,7 @@ namespace asi.asicentral.Tests
             int newId;
             using (var objectContext = new StoreContext())
             {
+                Assert.IsTrue(objectContext.LookDistributorAccountTypes.Count() > 0);
                 StoreAddress address = new StoreAddress()
                 {
                     Street1 = "Street1",

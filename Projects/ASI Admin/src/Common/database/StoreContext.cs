@@ -24,6 +24,7 @@ namespace asi.asicentral.database
         public DbSet<ContextFeature> Features { get; set; }
         public DbSet<ContextFeatureProduct> FeatureProducts { get; set; } 
         public DbSet<ContextProductSequence> ProductSequences { get; set; }
+        public DbSet<LookDistributorAccountType> LookDistributorAccountTypes { get; set; }
         public DbSet<StoreAddress> StoreAddresses { get; set; }
         public DbSet<StoreCompany> StoreCompanies { get; set; }
         public DbSet<StoreCreditCard> StoreCreditCards { get; set; }
@@ -47,6 +48,7 @@ namespace asi.asicentral.database
                 .Add(new ContextFeatureMap())
                 .Add(new ContextFeatureProductMap())
                 .Add(new ContextProductSequenceMap())
+                .Add(new LookDistributorAccountTypeMap())
                 .Add(new StoreAddressMap())
                 .Add(new StoreCompanyMap())
                 .Add(new StoreCreditCardMap())

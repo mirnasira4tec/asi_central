@@ -2,6 +2,7 @@
 using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
 using asi.asicentral.services;
+using Store_Database_Conversion.Products;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,14 @@ namespace Store_Database_Conversion
             return _storeContext.StoreOrders.Where(order => order.LegacyId == id).Count() > 0;
         }
 
+        private bool IsTestRecord(LegacyOrder order)
+        {
+            bool isTestRecord = false;
+            isTestRecord = isTestRecord || (order.BillCity != null && (new string[] {"trevose", "test"}).Contains(order.BillCity.ToLower()));
+            isTestRecord = isTestRecord || (order.BillLastName != null && (new string[] {"driscoll", "tucker", "fairfield"}).Contains(order.BillLastName.ToLower()));
+            return isTestRecord;
+        }
+
         /// <summary>
         /// Main method processing legacy order records
         /// </summary>
@@ -52,7 +61,7 @@ namespace Store_Database_Conversion
 
             foreach (LegacyOrder order in legacyOrders)
             {
-                if (!LegacyExists(order.Id))
+                if (!IsTestRecord(order) && !LegacyExists(order.Id))
                 {
                     DateTime creationDate = order.DateCreated.HasValue ? order.DateCreated.Value : DateTime.MinValue;
                     StoreOrder newOrder = new StoreOrder()
@@ -71,7 +80,8 @@ namespace Store_Database_Conversion
                         UpdateDate = creationDate,
                         UpdateSource = "Migration Process - " + DateTime.Now,
                     };
-                    
+                    _storeContext.StoreOrders.Add(newOrder);
+
                     //@todo order total amount - not adjusted for subscriptions
                     //credit card information
                     if (order.CreditCard != null)
@@ -113,16 +123,19 @@ namespace Store_Database_Conversion
                             UpdateSource = "Migration Process - " + DateTime.Now,
                         };
                         newOrder.OrderDetails.Add(newDetail);
+                        //need to commit the data to make sure ids are generated
+                        _storeContext.SaveChanges();
+                        IProductConvert productConvert = GetProductConvert(detail.ProductId);
+                        if (productConvert != null) productConvert.Convert(newDetail, detail, _storeContext, _asiInternetContext);
                     }
                     newOrder.BillingIndividual = GetBillingIndividual(order);
-                    _storeContext.StoreOrders.Add(newOrder);
                 }
                 else
                 {
                     _logService.Debug("Order is already present in target database: " + order.Id);
                 }
+                _storeContext.SaveChanges();
             }
-            _storeContext.SaveChanges();
         }
 
         //extracts the billing address from the order
@@ -201,6 +214,32 @@ namespace Store_Database_Conversion
                     break;
             }
             return newProductId;
+        }
+
+        private IProductConvert GetProductConvert(int productId)
+        {
+            switch (productId)
+            {
+                //Distributor
+                case 1:
+                case 103:                    
+                case 205:
+                case 206:
+                case 212:
+                    return new DistributorMembership();
+                //supplier
+                case 3:
+                case 195:
+                case 102:
+                case 152:
+                    //@todo supplier membership
+                    return null;
+                case 104: //supplier fees
+                    return null;
+                default:
+                    _logService.Error("There is a product which has not been mapped yet: " + productId);
+                    return null;
+            }
         }
 
         #region IDisposable

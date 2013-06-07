@@ -71,6 +71,9 @@
       <DependentUpon>Convert.cs</DependentUpon>
     </Compile>
     <Compile Include="DatabaseService.cs" />
+    <Compile Include="Products\BaseProductConvert.cs" />
+    <Compile Include="Products\DistributorMembership.cs" />
+    <Compile Include="Products\IProductConvert.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelectDatabase.cs">
