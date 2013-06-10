@@ -28,9 +28,27 @@ namespace asi.asicentral.database.mappings.store
                 .HasColumnName("UpdateDateUTC");
 
             //Relationships
-            HasOptional(t => t.BusinessRevenue)
+            HasOptional(t => t.PrimaryBusinessRevenue)
                 .WithMany()
                 .Map(t => t.MapKey("BusinessRevenueId"));
+
+            HasMany(t => t.AccountTypes)
+                .WithMany()
+                .Map(category =>
+                {
+                    category.MapLeftKey("OrderDetailId");
+                    category.MapRightKey("DistributorAccountTypeId");
+                    category.ToTable("STOR_DistributorMembershipAccountType");
+                });
+
+            HasMany(t => t.ProductLines)
+                .WithMany()
+                .Map(category =>
+                {
+                    category.MapLeftKey("OrderDetailId");
+                    category.MapRightKey("ProductLineId");
+                    category.ToTable("STOR_DistributorMembershipProductLine");
+                });
         }
     }
 }

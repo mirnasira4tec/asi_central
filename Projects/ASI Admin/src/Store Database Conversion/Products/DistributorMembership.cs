@@ -31,7 +31,6 @@ namespace Store_Database_Conversion.Products
                     AnnualSalesVolumeASP = application.AnnualSalesVolumeASP,
                     AppStatusId = application.ApplicationStatusId,
                     ASIContactName = application.ASIContact,
-                    //@todo BusinessRevenue
                     Custom1 = application.Custom1,
                     Custom2 = application.Custom2,
                     Custom5 = application.Custom5,
@@ -46,12 +45,43 @@ namespace Store_Database_Conversion.Products
                     NumberOfEmployee = application.NumberOfEmployee,
                     NumberOfSalesEmployee = application.NumberOfSalesEmployee,
                     OtherBusinessRevenue = application.OtherBusinessRevenue,
-                    //@todo ProductLines = application.ProductLines,
                     SolelyWorkName = application.SolelyWorkName,
                     CreateDate = newOrderDetail.CreateDate,
                     UpdateDate = newOrderDetail.UpdateDate,
                     UpdateSource = newOrderDetail.UpdateSource,
                 };
+                //update the product line - ids match between legacy records and new db ones
+                foreach (var product in application.ProductLines)
+                {
+                    LookProductLine newProduct = storeContext.LookProductLines.Where(t => t.Id == product.Id).First();
+                    newMembership.ProductLines.Add(newProduct);
+                }
+                //update the account type - ids match between legacy records and new db ones
+                foreach (var accountType in application.AccountTypes)
+                {
+                    LookDistributorAccountType account = storeContext.LookDistributorAccountTypes.Where(t => t.Id == accountType.Id).First();
+                    newMembership.AccountTypes.Add(account);
+                }
+                //update primary business revenue - ids should match
+                if (application.PrimaryBusinessRevenue != null)
+                {
+                    LookDistributorRevenueType revenue = storeContext.LookDistributorRevenueTypes.Where(t => t.Id == application.PrimaryBusinessRevenue.Id).First();
+                    newMembership.PrimaryBusinessRevenue = revenue;
+                }
+                //always create a new company for transfer
+                StoreCompany company = new StoreCompany()
+                {
+                    Name = application.Company,
+                    MemberType = "Distributor",
+                    Phone = application.Phone,
+                    WebURL = application.BillingWebUrl,
+                    CreateDate = newOrderDetail.CreateDate,
+                    UpdateDate = newOrderDetail.UpdateDate,
+                    UpdateSource = newOrderDetail.UpdateSource,                    
+                };
+                newOrderDetail.Order.Company = company;
+                //@todo we have 3 addresses, they might all be the same. We already have a billing address stored with the order through billing individual
+                //@todo need to add the contacts - avoid duplicates
                 storeContext.StoreDetailDistributorMemberships.Add(newMembership);
             }
         }

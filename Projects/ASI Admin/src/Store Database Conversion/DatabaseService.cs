@@ -123,10 +123,13 @@ namespace Store_Database_Conversion
                             UpdateSource = "Migration Process - " + DateTime.Now,
                         };
                         newOrder.OrderDetails.Add(newDetail);
-                        //need to commit the data to make sure ids are generated
-                        _storeContext.SaveChanges();
                         IProductConvert productConvert = GetProductConvert(detail.ProductId);
-                        if (productConvert != null) productConvert.Convert(newDetail, detail, _storeContext, _asiInternetContext);
+                        if (productConvert != null)
+                        {
+                            //need to commit the data to make sure ids are generated
+                            _storeContext.SaveChanges();
+                            productConvert.Convert(newDetail, detail, _storeContext, _asiInternetContext);
+                        }
                     }
                     newOrder.BillingIndividual = GetBillingIndividual(order);
                 }
@@ -134,8 +137,8 @@ namespace Store_Database_Conversion
                 {
                     _logService.Debug("Order is already present in target database: " + order.Id);
                 }
-                _storeContext.SaveChanges();
             }
+            _storeContext.SaveChanges();
         }
 
         //extracts the billing address from the order

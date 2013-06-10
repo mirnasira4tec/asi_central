@@ -9,6 +9,15 @@ namespace asi.asicentral.model.store
 {
     public class StoreDetailDistributorMembership
     {
+        public StoreDetailDistributorMembership()
+        {
+            if (this.GetType() == typeof(StoreDetailDistributorMembership))
+            {
+                ProductLines = new List<LookProductLine>();
+                AccountTypes = new List<LookDistributorAccountType>();
+            }
+        }
+
         public int OrderDetailId { get; set; }
         public string LegacyApplicationId { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "ApplicationStatus")]
@@ -39,14 +48,14 @@ namespace asi.asicentral.model.store
         public string Custom1 { get; set; }
         public string Custom2 { get; set; }
         public string Custom5 { get; set; }
-        public LookDistributorAccountType BusinessRevenue { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "OtherBusinessRevenue")]
         public string OtherBusinessRevenue { get; set; }
         public Nullable<DateTime> EstablishedDate { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
-        //@todo this is a relationship
-        public string ProductLines { get; set; }
+        public virtual LookDistributorRevenueType PrimaryBusinessRevenue { get; set; }
+        public virtual IList<LookDistributorAccountType> AccountTypes{ get; set; }
+        public virtual IList<LookProductLine> ProductLines { get; set; }
     }
 }

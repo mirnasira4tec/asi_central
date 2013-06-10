@@ -742,14 +742,24 @@ namespace asi.asicentral.Tests
                 Assert.IsNull(context);
             }
         }
+        [TestMethod]
+        public void TestLookups()
+        {
+            using (var objectContext = new StoreContext())
+            {
+                Assert.IsTrue(objectContext.LookDistributorAccountTypes.Count() > 0);
+                Assert.IsTrue(objectContext.LookProductLines.Count() > 0);
+                Assert.IsTrue(objectContext.LookDistributorRevenueTypes.Count() > 0);
+            }
+        }
 
         [TestMethod]
         public void OrderCrud()
         {
-            int newId;
+            int newOrderId;
+            int newDistId;
             using (var objectContext = new StoreContext())
             {
-                Assert.IsTrue(objectContext.LookDistributorAccountTypes.Count() > 0);
                 StoreAddress address = new StoreAddress()
                 {
                     Street1 = "Street1",
@@ -799,7 +809,8 @@ namespace asi.asicentral.Tests
                     Company = company,
                     BillingIndividual = individual,
                 };
-                order.OrderDetails.Add(new StoreOrderDetail()
+                objectContext.StoreOrders.Add(order);
+                StoreOrderDetail detail = new StoreOrderDetail()
                 {
                     IsSubscription = true,
                     Quantity = 1,
@@ -810,21 +821,42 @@ namespace asi.asicentral.Tests
                     CreateDate = DateTime.Now,
                     UpdateDate = DateTime.Now,
                     UpdateSource = "Test Case",
-                });
-                objectContext.StoreOrders.Add(order);
+                };
+                order.OrderDetails.Add(detail);
                 objectContext.SaveChanges();
-                newId = order.Id;
+                newOrderId = order.Id;
+                //creating Distributor application for first detail record
+                detail = order.OrderDetails.First();
+                newDistId = detail.Id;
+                StoreDetailDistributorMembership distributor = new StoreDetailDistributorMembership()
+                {
+                    OrderDetailId = newDistId,
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    UpdateSource = "Test Case",                    
+                };
+                distributor.ProductLines.Add(objectContext.LookProductLines.First());
+                distributor.AccountTypes.Add(objectContext.LookDistributorAccountTypes.First());
+                objectContext.StoreDetailDistributorMemberships.Add(distributor);
+                objectContext.SaveChanges();
             }
             using (var objectContext = new StoreContext())
             {
+                //check order records can be retrieved properly
                 StoreOrder order = objectContext.StoreOrders
-                    .Where(ordr => ordr.Id == newId).SingleOrDefault();
+                    .Where(ordr => ordr.Id == newOrderId).SingleOrDefault();
                 Assert.IsNotNull(order);
                 Assert.IsNotNull(order.CreditCard);
                 Assert.IsNotNull(order.Company);
                 Assert.IsNotNull(order.BillingIndividual);
                 Assert.IsNotNull(order.BillingIndividual.Address);
                 Assert.IsTrue(order.OrderDetails.Count > 0);
+                //check dostributor records can be retrieved properly
+                StoreDetailDistributorMembership distributor = objectContext.StoreDetailDistributorMemberships.Where(t => t.OrderDetailId == newDistId).FirstOrDefault();
+                Assert.IsNotNull(distributor);
+                Assert.IsTrue(distributor.ProductLines.Count > 0);
+                //remove the test records
+                objectContext.StoreDetailDistributorMemberships.Remove(distributor);
                 objectContext.StoreCreditCards.Remove(order.CreditCard);
                 objectContext.StoreCompanies.Remove(order.Company);
                 objectContext.StoreAddresses.Remove(order.BillingIndividual.Address);
@@ -834,7 +866,7 @@ namespace asi.asicentral.Tests
             }
             using (var objectContext = new StoreContext())
             {
-                StoreOrder order = objectContext.StoreOrders.Where(ordr => ordr.Id == newId).SingleOrDefault();
+                StoreOrder order = objectContext.StoreOrders.Where(ordr => ordr.Id == newOrderId).SingleOrDefault();
                 Assert.IsNull(order);
             }
         }
