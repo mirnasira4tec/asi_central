@@ -160,7 +160,7 @@ namespace asi.asicentral.util
                 (context.GetOverriddenUserAgent().IndexOf("android", StringComparison.OrdinalIgnoreCase) >= 0 && context.GetOverriddenUserAgent().IndexOf("mobile", StringComparison.OrdinalIgnoreCase) >= 0) ||
                 context.GetOverriddenBrowser().IsMobileDevice
             );
-            return isMobile;
+            return isMobile && !IsTabletDevice(context);
         }
 
         /// <summary>
