@@ -82,6 +82,7 @@ namespace Store_Database_Conversion.Products
                 newOrderDetail.Order.Company = company;
                 //@todo we have 3 addresses, they might all be the same. We already have a billing address stored with the order through billing individual
                 //@todo need to add the contacts - avoid duplicates
+                //@todo need to assign the company to the billing individual
                 storeContext.StoreDetailDistributorMemberships.Add(newMembership);
             }
         }
