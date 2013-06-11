@@ -14,9 +14,8 @@
     @Html.HiddenFor(m => m.Id) @Html.HiddenFor(m => m.UserId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
     
     <div>
-        <h3 class="order-status-header3">Order Status: </h3>
-        <div class="order-status">Approved<br>
-        </div>
+        <h3 class="order-status-header3">Order Status:</h3>
+        <div class="order-status">@Model.OrderStatus</div>
         <div class="timms-info">
             <div class="span3">
                 <label class="order-status-label" for="Timms_ID">Timms ID:</label>
