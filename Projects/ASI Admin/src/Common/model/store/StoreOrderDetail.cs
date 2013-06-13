@@ -6,41 +6,34 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.model.store
 {
-    public class ContextProduct
+    public class StoreOrderDetail
     {
-        public ContextProduct()
-        {
-            if (this.GetType() == typeof(ContextProduct))
-            {
-                Features = new List<ContextFeatureProduct>();
-            }
-        }
-
         public int Id { get; set; }
-        public string Name { get; set; }
-        public decimal Cost { get; set; }
+        public int? LegacyProductId { get; set; }
+        public int Quantity { get; set; }
         public decimal ApplicationCost { get; set; }
-        public decimal ShippingCostUS { get; set; }
-        public decimal ShippingCostOther { get; set; }
-        public bool HasTax { get; set; }
+        public decimal Cost { get; set; }
+        public decimal ShippingCost { get; set; }
+        public decimal TaxCost { get; set; }
         public bool IsSubscription { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
+        public virtual StoreOrder Order { get; set; }
+        public virtual ContextProduct Product { get; set; }
 
-        public virtual ICollection<ContextFeatureProduct> Features { get; set; }
 
         public override string ToString()
         {
-            return string.Format("Product: {0} - {1}", Id, Name);
+            return "OrderDetail (" + Id + ")";
         }
 
         public override bool Equals(object obj)
         {
             bool equals = false;
 
-            ContextProduct product = obj as ContextProduct;
-            if (product != null) equals = product.Id == Id;
+            StoreOrderDetail orderDetail = obj as StoreOrderDetail;
+            if (orderDetail != null) equals = orderDetail.Id == Id;
             return equals;
         }
 

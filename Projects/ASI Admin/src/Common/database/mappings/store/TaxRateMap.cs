@@ -13,10 +13,10 @@ namespace asi.asicentral.database.mappings.product
         public TaxRateMap()
         {
             this.ToTable("TAX_StateZipTax");
-            this.HasKey(t => t.StateZipTaxId);
+            this.HasKey(t => t.Id);
 
             // Properties
-            this.Property(t => t.StateZipTaxId)
+            this.Property(t => t.Id)
                 .HasColumnName("StateZipTaxId");
 
             this.Property(t => t.State)

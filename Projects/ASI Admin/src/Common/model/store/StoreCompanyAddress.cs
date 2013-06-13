@@ -6,36 +6,35 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.model.store
 {
-    public class ContextFeatureProduct
+    public class StoreCompanyAddress
     {
         public int Id { get; set; }
-        public int ProductId { get; set; }
-        public string Label { get; set; }
+        public int CompanyId { get; set; }
+        public bool IsShipping { get; set; }
+        public bool IsBilling { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
-        public ContextProduct Product { get; set; }
+        public virtual StoreAddress Address { get; set; }
 
         public override string ToString()
         {
-            return string.Format("Feature Product: Label({0}) - {1}", Label, Product.Name);
+            string description = Id + " - " ;
+            return description;
         }
 
         public override bool Equals(object obj)
         {
             bool equals = false;
 
-            ContextFeatureProduct featureProduct = obj as ContextFeatureProduct;
-            if (featureProduct != null) 
-                equals = (
-                    featureProduct.Id == Id &&
-                    ProductId == featureProduct.ProductId);
+            StoreCompanyAddress address = obj as StoreCompanyAddress;
+            if (address != null) equals = (address.Id == Id);
             return equals;
         }
 
         public override int GetHashCode()
         {
-            return new { ContextFeatureProductId = Id, ProductId }.GetHashCode();
+            return Id.GetHashCode();
         }
     }
 }

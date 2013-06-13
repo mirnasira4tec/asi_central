@@ -7,16 +7,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace asi.asicentral.database.mappings.product
+namespace asi.asicentral.database.mappings.store
 {
-    public class ContextProductSequenceMap : EntityTypeConfiguration<ContextProductSequence>
+    public class LookDistributorAccountTypeMap : EntityTypeConfiguration<LookDistributorAccountType>
     {
-        public ContextProductSequenceMap()
+        public LookDistributorAccountTypeMap()
         {
-            ToTable("PROD_ContextProduct");
-            HasKey(prodSequence => prodSequence.ContextProductSequenceId);
+            this.ToTable("LOOK_DistributorAccountType");
+            this.HasKey(t => t.Id);
 
-            this.Property(t => t.ContextProductSequenceId)
+            //Properties
+            this.Property(t => t.Id)
+                .HasColumnName("DistributorAccountTypeId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.CreateDate)
@@ -24,11 +26,6 @@ namespace asi.asicentral.database.mappings.product
 
             this.Property(t => t.UpdateDate)
                 .HasColumnName("UpdateDateUTC");
-
-            //Relationships
-            HasRequired(ctxProduct => ctxProduct.Product)
-                .WithMany()
-                .Map(m => m.MapKey("ProductId"));
         }
     }
 }

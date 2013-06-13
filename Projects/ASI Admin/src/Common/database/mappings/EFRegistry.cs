@@ -19,7 +19,7 @@ namespace asi.asicentral.database.mappings
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIInternetContext>().Name = "ASIInternetContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIPublicationContext>().Name = "ASIPublicationContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<InternetContext>().Name = "InternetContext";
-            For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ProductContext>().Name = "ProductContext";
+            For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<StoreContext>().Name = "StoreContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<TIMSSContext>().Name = "TIMSSContext";
 
             //for each model - get the repository class with the appropriate context 
@@ -96,27 +96,60 @@ namespace asi.asicentral.database.mappings
 
             #endregion InternetContext
 
-            #region ProductContext
+            #region StoreContext
 
             For<IRepository<Context>>().Use<EFRepository<Context>>()
-                .Ctor<IValidatedContext>().Named("ProductContext");
+                .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<ContextProduct>>().Use<EFRepository<ContextProduct>>()
-                .Ctor<IValidatedContext>().Named("ProductContext");
+                .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<ContextFeature>>().Use<EFRepository<ContextFeature>>()
-                .Ctor<IValidatedContext>().Named("ProductContext");
+                .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<ContextFeatureProduct>>().Use<EFRepository<ContextFeatureProduct>>()
-                .Ctor<IValidatedContext>().Named("ProductContext");
+                .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<ContextProductSequence>>().Use<EFRepository<ContextProductSequence>>()
-                .Ctor<IValidatedContext>().Named("ProductContext");
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<LookDistributorAccountType>>().Use<EFRepository<LookDistributorAccountType>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<LookDistributorRevenueType>>().Use<EFRepository<LookDistributorRevenueType>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+            
+            For<IRepository<LookProductLine>>().Use<EFRepository<LookProductLine>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<StoreAddress>>().Use<EFRepository<StoreAddress>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<StoreCompany>>().Use<EFRepository<StoreCompany>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<StoreCompanyAddress>>().Use<EFRepository<StoreCompanyAddress>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<StoreCreditCard>>().Use<EFRepository<StoreCreditCard>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<StoreDetailDistributorMembership>>().Use<EFRepository<StoreDetailDistributorMembership>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<StoreIndividual>>().Use<EFRepository<StoreIndividual>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<StoreOrder>>().Use<EFRepository<StoreOrder>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<StoreOrderDetail>>().Use<EFRepository<StoreOrderDetail>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<TaxRate>>().Use<EFRepository<TaxRate>>()
-                .Ctor<IValidatedContext>().Named("ProductContext");
+                .Ctor<IValidatedContext>().Named("StoreContext");
 
-            #endregion ProductContext
+            #endregion StoreContext
 
             #region TIMSS Context
 
