@@ -29,6 +29,7 @@ namespace asi.asicentral.database
         public DbSet<LookProductLine> LookProductLines { get; set; }
         public DbSet<StoreAddress> StoreAddresses { get; set; }
         public DbSet<StoreCompany> StoreCompanies { get; set; }
+        public DbSet<StoreCompanyAddress> StoreCompanyAddresses { get; set; }
         public DbSet<StoreCreditCard> StoreCreditCards { get; set; }
         public DbSet<StoreDetailDistributorMembership> StoreDetailDistributorMemberships { get; set; }
         public DbSet<StoreIndividual> StoreIndividuals { get; set; }
@@ -55,6 +56,7 @@ namespace asi.asicentral.database
                 .Add(new LookProductLineMap()) 
                 .Add(new StoreAddressMap())
                 .Add(new StoreCompanyMap())
+                .Add(new StoreCompanyAddressMap())
                 .Add(new StoreCreditCardMap())
                 .Add(new StoreDetailDistributorMembershipMap())
                 .Add(new StoreIndividualMap())

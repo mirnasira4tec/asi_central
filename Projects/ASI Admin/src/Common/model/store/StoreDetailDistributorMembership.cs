@@ -57,5 +57,27 @@ namespace asi.asicentral.model.store
         public virtual LookDistributorRevenueType PrimaryBusinessRevenue { get; set; }
         public virtual IList<LookDistributorAccountType> AccountTypes{ get; set; }
         public virtual IList<LookProductLine> ProductLines { get; set; }
+
+        public override string ToString()
+        {
+            return "Distributor Membership " + OrderDetailId;
+        }
+
+        public override bool Equals(object obj)
+        {
+            bool equals = false;
+
+            StoreDetailDistributorMembership distributor = obj as StoreDetailDistributorMembership;
+            if (distributor != null) equals = distributor.OrderDetailId == OrderDetailId;
+            return equals;
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 17;
+            hash = hash * 31 + "StoreDetailDistributorMembership".GetHashCode();
+            hash = hash * 31 + OrderDetailId.GetHashCode();
+            return hash;
+        }
     }
 }

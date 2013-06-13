@@ -21,5 +21,25 @@ namespace asi.asicentral.model.store
         public string UpdateSource { get; set; }
         public virtual StoreOrder Order { get; set; }
         public virtual ContextProduct Product { get; set; }
+
+
+        public override string ToString()
+        {
+            return "OrderDetail (" + Id + ")";
+        }
+
+        public override bool Equals(object obj)
+        {
+            bool equals = false;
+
+            StoreOrderDetail orderDetail = obj as StoreOrderDetail;
+            if (orderDetail != null) equals = orderDetail.Id == Id;
+            return equals;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
     }
 }

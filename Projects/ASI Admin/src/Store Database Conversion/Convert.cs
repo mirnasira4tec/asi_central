@@ -52,12 +52,14 @@ namespace Store_Database_Conversion
             {
                 for (int i = 0; i <= step; i++)
                 {
+                    DatabaseService databaseService = new DatabaseService(_target);
                     int nextStep = Math.Min(toMoveCount, current + COMMIT_COUNT);
                     //get the records between current and nextStep
-                    _databaseService.ProcessLegacyRecords(current, nextStep);
+                    databaseService.ProcessLegacyRecords(current, nextStep);
                     current = nextStep;
                     pbStatus.Value = (current * pbStatus.Maximum) / toMoveCount;
                     this.Refresh();
+                    databaseService.Dispose();
                 }
             }
             catch (Exception exception)

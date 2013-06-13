@@ -99,18 +99,20 @@ namespace Store_Database_Conversion
                             UpdateDate = creationDate,
                             UpdateSource = "Migration Process - " + DateTime.Now,
                         };
+                        _storeContext.StoreCreditCards.Add(newCreditCard); //keetp this here or EF is getting confused
                         newOrder.CreditCard = newCreditCard;
                     }
-                    //@todo company information
-                    //order details
+                    //add billing contact
+                    newOrder.BillingIndividual = GetBillingIndividual(order);
+                    //order detail records
                     foreach (LegacyOrderDetail detail in order.OrderDetails)
                     {
-                        //@todo application
                         ContextProduct product = null;
                         int productId = ConvertProductId(detail.ProductId);
-                        if (productId > 0) productReference.Where(prod => prod.Id == productId).SingleOrDefault();
+                        if (productId > 0) product = productReference.Where(prod => prod.Id == productId).SingleOrDefault();
                         StoreOrderDetail newDetail = new StoreOrderDetail()
                         {
+                            Order = newOrder,
                             Product = product,
                             LegacyProductId = detail.ProductId,
                             Quantity = detail.Quantity.HasValue ? detail.Quantity.Value : 0,
@@ -123,6 +125,8 @@ namespace Store_Database_Conversion
                             UpdateSource = "Migration Process - " + DateTime.Now,
                         };
                         newOrder.OrderDetails.Add(newDetail);
+                        _storeContext.StoreOrderDetails.Add(newDetail); //some records do not have a key generated unless added explicitely
+                        //processing the applications
                         IProductConvert productConvert = GetProductConvert(detail.ProductId);
                         if (productConvert != null)
                         {
@@ -131,7 +135,6 @@ namespace Store_Database_Conversion
                             productConvert.Convert(newDetail, detail, _storeContext, _asiInternetContext);
                         }
                     }
-                    newOrder.BillingIndividual = GetBillingIndividual(order);
                 }
                 else
                 {
@@ -168,6 +171,7 @@ namespace Store_Database_Conversion
                 {
                     FirstName = order.BillFirstName,
                     LastName = order.BillLastName,
+                    IsPrimary = true,
                     Phone = order.BillPhone,
                     CreateDate = order.DateCreated.HasValue ? order.DateCreated.Value : DateTime.MinValue,
                     UpdateDate = order.DateCreated.HasValue ? order.DateCreated.Value : DateTime.MinValue,

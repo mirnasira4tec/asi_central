@@ -42,5 +42,24 @@ namespace asi.asicentral.model.store
         public virtual StoreCreditCard CreditCard { get; set; }
         public virtual StoreIndividual BillingIndividual { get; set; }
         public virtual IList<StoreOrderDetail> OrderDetails { get; set; }
+
+        public override string ToString()
+        {
+            return "Order (" + Id + ")";
+        }
+
+        public override bool Equals(object obj)
+        {
+            bool equals = false;
+
+            StoreOrder order = obj as StoreOrder;
+            if (order != null) equals = (order.Id == Id && ((LegacyId.HasValue && LegacyId == order.LegacyId) || !LegacyId.HasValue));
+            return equals;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
     }
 }

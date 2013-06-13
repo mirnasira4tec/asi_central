@@ -9,6 +9,15 @@ namespace asi.asicentral.model.store
 {
     public class StoreCompany
     {
+        public StoreCompany()
+        {
+            if (this.GetType() == typeof(StoreCompany))
+            {
+                Addresses = new List<StoreCompanyAddress>();
+                Individuals = new List<StoreIndividual>();
+            }
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string MemberType { get; set; }
@@ -22,5 +31,26 @@ namespace asi.asicentral.model.store
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
+        public virtual IList<StoreCompanyAddress> Addresses { get; set; }
+        public virtual IList<StoreIndividual> Individuals { get; set; }
+
+        public override string ToString()
+        {
+            return Id + " - " + Name;
+        }
+
+        public override bool Equals(object obj)
+        {
+            bool equals = false;
+
+            StoreAddress company = obj as StoreAddress;
+            if (company != null) equals = company.Id == Id;
+            return equals;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
     }
 }

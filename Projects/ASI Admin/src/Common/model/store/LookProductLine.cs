@@ -16,5 +16,24 @@ namespace asi.asicentral.model.store
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
+
+        public override string ToString()
+        {
+            return Id + " - " + Description;
+        }
+
+        public override bool Equals(object obj)
+        {
+            bool equals = false;
+
+            LookProductLine lookup = obj as LookProductLine;
+            if (lookup != null) equals = lookup.Id == Id;
+            return equals;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
     }
 }

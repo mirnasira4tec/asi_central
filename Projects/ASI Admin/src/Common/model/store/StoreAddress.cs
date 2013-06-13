@@ -9,6 +9,10 @@ namespace asi.asicentral.model.store
 {
     public class StoreAddress
     {
+        public StoreAddress()
+        {
+            Country = "USA";
+        }
         public int Id { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "Street1")]
         public string Street1 { get; set; }
@@ -25,5 +29,48 @@ namespace asi.asicentral.model.store
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
+
+        /// <summary>
+        /// Used to try to re-use existing addresses and remove duplicate entries
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        public bool AreEquivalent(StoreAddress address)
+        {
+            bool areEquivalent = Street1 == address.Street1 && City == address.City && Zip == address.Zip && Country == address.Country;
+            return areEquivalent;
+        }
+
+        /// <summary>
+        /// Check whether this address is a valid one
+        /// </summary>
+        /// <returns></returns>
+        public bool IsValid
+        {
+            get
+            {
+                return Street1 != null && City != null;
+            }
+        }
+
+
+        public override string ToString()
+        {
+            return Id + " (" + Street1 != null ? Street1 : "no street" + City != null ? City : "no city" + Country != null ? Country : "no country)";
+        }
+
+        public override bool Equals(object obj)
+        {
+            bool equals = false;
+
+            StoreAddress address = obj as StoreAddress;
+            if (address != null) equals = address.Id == Id;
+            return equals;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
     }
 }

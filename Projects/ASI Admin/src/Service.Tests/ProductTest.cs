@@ -754,6 +754,70 @@ namespace asi.asicentral.Tests
         }
 
         [TestMethod]
+        public void CompanyTest()
+        {
+            int companyId;
+            using (var objectContext = new StoreContext())
+            {
+                StoreAddress address = new StoreAddress()
+                {
+                    Street1 = "Street1",
+                    City = "City",
+                    State = "NJ",
+                    Zip = "123 1234",
+                    Country = "Country",
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    UpdateSource = "Test Case",
+                };
+                StoreIndividual individual = new StoreIndividual()
+                {
+                    FirstName = "TestCase First",
+                    LastName = "TestCase Last",
+                    Address = address,
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    UpdateSource = "Test Case",
+                };
+                StoreCompany company = new StoreCompany()
+                {
+                    Name = "Company Test Case",
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    UpdateSource = "Test Case",
+                };
+                company.Addresses.Add(new StoreCompanyAddress()
+                {
+                    Address = address,
+                    IsBilling = false,
+                    IsShipping = true,
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    UpdateSource = "Test Case",
+                });
+                company.Individuals.Add(individual);
+                objectContext.StoreCompanies.Add(company);
+                objectContext.SaveChanges();
+                companyId = company.Id;
+            }
+            using (var objectContext = new StoreContext())
+            {
+                //check order records can be retrieved properly
+                StoreCompany company = objectContext.StoreCompanies.Where(t => t.Id == companyId).FirstOrDefault();
+                Assert.IsNotNull(company);
+                Assert.AreEqual(1, company.Individuals.Count);
+                Assert.AreEqual(1, company.Addresses.Count);
+                Assert.IsNotNull(company.Individuals[0].Address);
+                Assert.IsNotNull(company.Individuals[0].Company);
+                //cleaning up
+                objectContext.StoreAddresses.Remove(company.Individuals[0].Address);
+                objectContext.StoreIndividuals.Remove(company.Individuals[0]);
+                objectContext.StoreCompanies.Remove(company);
+                objectContext.SaveChanges();
+            }
+        }
+
+        [TestMethod]
         public void OrderCrud()
         {
             int newOrderId;
@@ -787,6 +851,17 @@ namespace asi.asicentral.Tests
                     UpdateDate = DateTime.Now,
                     UpdateSource = "Test Case",                    
                 };
+                company.Addresses.Add(new StoreCompanyAddress()
+                {
+                    Address = address,
+                    IsBilling = false,
+                    IsShipping = true,
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    UpdateSource = "Test Case",                    
+                });
+                company.Individuals.Add(individual);
+                objectContext.StoreCompanies.Add(company);
                 StoreCreditCard creditCard = new StoreCreditCard()
                 {
                     CardHolderName = "Test Case",
@@ -835,6 +910,7 @@ namespace asi.asicentral.Tests
                     UpdateDate = DateTime.Now,
                     UpdateSource = "Test Case",                    
                 };
+                distributor.PrimaryBusinessRevenue = objectContext.LookDistributorRevenueTypes.FirstOrDefault();
                 distributor.ProductLines.Add(objectContext.LookProductLines.First());
                 distributor.AccountTypes.Add(objectContext.LookDistributorAccountTypes.First());
                 objectContext.StoreDetailDistributorMemberships.Add(distributor);
