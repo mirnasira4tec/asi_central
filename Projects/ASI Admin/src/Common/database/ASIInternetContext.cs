@@ -7,16 +7,16 @@ namespace asi.asicentral.database
 {
     public class ASIInternetContext : BaseContext
     {
+        public ASIInternetContext()
+            : this("ASIInternetContext")
+        {
+        }
+
         public ASIInternetContext(string connectionName)
             : base("name=" + connectionName)
         {
             Database.SetInitializer<ASIInternetContext>(null);
             EnableTracing(typeof(ASIInternetContext));
-        }
-
-        public ASIInternetContext()
-            : this("ASIInternetContext")
-        {
         }
 
         public DbSet<ASPNetMembership> ASPNetMemberships { get; set; }

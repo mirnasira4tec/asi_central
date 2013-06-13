@@ -16,6 +16,8 @@ namespace asi.asicentral.database.mappings
         public EFRegistry()
         {
             //Use only one context across repository per http context or thread
+            SelectConstructor<ASIInternetContext>(() => new ASIInternetContext());
+            SelectConstructor<StoreContext>(() => new StoreContext());
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIInternetContext>().Name = "ASIInternetContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIPublicationContext>().Name = "ASIPublicationContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<InternetContext>().Name = "InternetContext";
