@@ -147,7 +147,7 @@ namespace Store_Database_Conversion
         //extracts the billing address from the order
         private static StoreIndividual GetBillingIndividual(LegacyOrder order)
         {
-            //@todo do we need to go through order detail and find out from the product item the billing address?
+            //go through order detail and find out from the product item the billing address
             StoreAddress address = null;
             StoreIndividual individual = null;
             if (order.BillCity != null)

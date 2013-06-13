@@ -17,7 +17,7 @@ namespace asi.asicentral.database.mappings.product
             HasKey(prodSequence => prodSequence.Id);
 
             this.Property(t => t.Id)
-                .HasColumnName("ContextProductId")
+                .HasColumnName("ContextProductSequenceId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.CreateDate)
