@@ -94,6 +94,9 @@ namespace asi.asicentral.web.model.store
             }
         }
 
+        public string ContextType { get; set; }
+    
+
         public bool ShowIcons { get; set; }
         public string CompletedStep { get; set; }
         public String Company { get; private set; }
@@ -120,6 +123,14 @@ namespace asi.asicentral.web.model.store
                     orderDetail.Order.CreditCard.ExpYear != null && orderDetail.Order.CreditCard.ExpYear.Length > 1)
 
                     order.CreditCard += " (" + orderDetail.Order.CreditCard.ExpMonth + "/" + orderDetail.Order.CreditCard.ExpYear.Substring(orderDetail.Order.CreditCard.ExpYear.Length - 2) + ")";
+            }
+
+            Context context = null;
+            if (orderDetail != null && orderDetail.Order != null && orderDetail.Order.ContextId != null)
+            {
+                context = storeService.GetAll<Context>().Where(ctx => ctx.Id == orderDetail.Order.ContextId).SingleOrDefault();
+                if (context != null && !string.IsNullOrEmpty(context.Type))
+                    order.ContextType = context.Type;
             }
 
             return order;

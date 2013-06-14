@@ -24,7 +24,8 @@ namespace asi.asicentral.services
         public virtual LegacyDistributorMembershipApplication GetDistributorApplication(model.store.LegacyOrderDetail orderDetail)
         {
             LegacyDistributorMembershipApplication application = null;
-            if (orderDetail.Order != null && orderDetail.Order.UserId != null && orderDetail.Order.ContextId == 1)    
+            //103 hardcoded value coming from the legacy application representing a distributor membership application
+            if (orderDetail.Order != null && orderDetail.Order.UserId != null && orderDetail.ProductId == LegacyOrderProduct.DISTRIBUTOR_APPLICATION)
             {
                 LegacyOrder order = orderDetail.Order;
                 IRepository<LegacyDistributorMembershipApplication> distributorRepository = GetRepository<LegacyDistributorMembershipApplication>();
@@ -36,7 +37,8 @@ namespace asi.asicentral.services
         public virtual model.store.LegacySupplierMembershipApplication GetSupplierApplication(model.store.LegacyOrderDetail orderDetail)
         {
             LegacySupplierMembershipApplication application = null;
-            if (orderDetail.Order != null && orderDetail.Order.UserId != null && orderDetail.Order.ContextId == 2)
+            //102 hardcoded value coming from the legacy application representing a supplier membership application
+            if (orderDetail.Order != null && orderDetail.Order.UserId != null && orderDetail.ProductId == LegacyOrderProduct.SUPPLIER_APPLICATION)
             {
                 LegacyOrder order = orderDetail.Order;
                 IRepository<LegacySupplierMembershipApplication> supplierRepository = GetRepository<LegacySupplierMembershipApplication>();
@@ -50,10 +52,13 @@ namespace asi.asicentral.services
             LegacyOrderDetailApplication application = null;
             if (orderDetail.Order != null && orderDetail.Order.UserId != null)
             {
-                if(orderDetail.Order.ContextId == 1)
-                    return GetDistributorApplication(orderDetail);
-                else if(orderDetail.Order.ContextId == 2)
-                    return GetSupplierApplication(orderDetail);
+                switch (orderDetail.ProductId)
+                {
+                    case LegacyOrderProduct.DISTRIBUTOR_APPLICATION:
+                        return GetDistributorApplication(orderDetail);
+                    case LegacyOrderProduct.SUPPLIER_APPLICATION:
+                        return GetSupplierApplication(orderDetail);
+                }
             }
             return application;
         }
