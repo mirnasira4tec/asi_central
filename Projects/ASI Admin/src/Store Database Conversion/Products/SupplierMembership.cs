@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace Store_Database_Conversion.Products
 {
-    class DistributorMembership : BaseProductConvert
+    class SupplierMembership : BaseProductConvert
     {
         public override void Convert(StoreOrderDetail newOrderDetail, LegacyOrderDetail detail, StoreContext storeContext, ASIInternetContext asiInternetContext)
         {
             //retrieve the current application
-            LegacyDistributorMembershipApplication application = asiInternetContext.DistributorMembershipApplications.Where(app => app.UserId == detail.Order.UserId).SingleOrDefault();
+            LegacySupplierMembershipApplication application = asiInternetContext.SupplierMembershipApplications.Where(app => app.UserId == detail.Order.UserId).SingleOrDefault();
             if (application == null && !IgnoreOrderIssues(detail))
             {
                 ILogService logService = LogService.GetLog(this.GetType());
@@ -24,51 +24,6 @@ namespace Store_Database_Conversion.Products
             else if (application != null)
             {
                 //creating a new application
-                StoreDetailDistributorMembership newMembership = new StoreDetailDistributorMembership()
-                {
-                    OrderDetailId = newOrderDetail.Id,
-                    AnnualSalesVolume = application.AnnualSalesVolume,
-                    AnnualSalesVolumeASP = application.AnnualSalesVolumeASP,
-                    AppStatusId = application.ApplicationStatusId,
-                    ASIContactName = application.ASIContact,
-                    Custom1 = application.Custom1,
-                    Custom2 = application.Custom2,
-                    Custom5 = application.Custom5,
-                    EstablishedDate = application.EstablishedDate,
-                    IsCorporateOfficer = application.CorporateOfficer,
-                    IsForProfit = application.IsForProfit,
-                    IsMajorForResale = application.IsMajorForResale,
-                    IsMajorityDistributeForResale = application.IsMajorityDistributeForResale,
-                    IsSolelyWork = application.IsSolelyWork,
-                    HasRecSpecials = application.AgreeReceivePromotionalProducts,
-                    LegacyApplicationId = application.Id.ToString(),
-                    NumberOfEmployee = application.NumberOfEmployee,
-                    NumberOfSalesEmployee = application.NumberOfSalesEmployee,
-                    OtherBusinessRevenue = application.OtherBusinessRevenue,
-                    SolelyWorkName = application.SolelyWorkName,
-                    CreateDate = newOrderDetail.CreateDate,
-                    UpdateDate = newOrderDetail.UpdateDate,
-                    UpdateSource = newOrderDetail.UpdateSource,
-                };
-                storeContext.StoreDetailDistributorMemberships.Add(newMembership);
-                //update the product line - ids match between legacy records and new db ones
-                foreach (var product in application.ProductLines)
-                {
-                    LookProductLine newProduct = storeContext.LookProductLines.Where(t => t.Id == product.Id).First();
-                    newMembership.ProductLines.Add(newProduct);
-                }
-                //update the account type - ids match between legacy records and new db ones
-                foreach (var accountType in application.AccountTypes)
-                {
-                    LookDistributorAccountType account = storeContext.LookDistributorAccountTypes.Where(t => t.Id == accountType.Id).First();
-                    newMembership.AccountTypes.Add(account);
-                }
-                //update primary business revenue - ids should match
-                if (application.PrimaryBusinessRevenue != null)
-                {
-                    LookDistributorRevenueType revenue = storeContext.LookDistributorRevenueTypes.Where(t => t.Id == application.PrimaryBusinessRevenue.Id).First();
-                    newMembership.PrimaryBusinessRevenue = revenue;
-                }
                 //always create a new company for transfer
                 StoreCompany company = new StoreCompany()
                 {

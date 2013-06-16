@@ -20,6 +20,9 @@ namespace asi.asicentral.database.mappings.product
                 .HasColumnName("ContextProductSequenceId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
+            this.Property(t => t.PageNumber)
+                .HasColumnName("PageNb");
+
             this.Property(t => t.CreateDate)
                 .HasColumnName("CreateDateUTC");
 

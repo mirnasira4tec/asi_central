@@ -26,6 +26,7 @@ namespace asi.asicentral.model.store
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
         public string NotificationEmails { get; set; }
+        public int NumberOfPages { get; set; }
         public string HeaderImage { get; set; }
         public virtual List<ContextFeature> Features { get; set; }
         public virtual List<ContextProductSequence> Products { get; set; }

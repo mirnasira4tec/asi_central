@@ -72,6 +72,7 @@
     </Compile>
     <Compile Include="DatabaseService.cs" />
     <Compile Include="Products\BaseProductConvert.cs" />
+    <Compile Include="Products\SupplierMembership.cs" />
     <Compile Include="Products\DistributorMembership.cs" />
     <Compile Include="Products\IProductConvert.cs" />
     <Compile Include="Program.cs" />

@@ -11,6 +11,7 @@ namespace asi.asicentral.model.store
         public int Id { get; set; }
         public int Sequence { get; set; }
         public string Qualifier { get; set; }
+        public int PageNumber { get; set; }
         public decimal Cost { get; set; }
         public decimal ApplicationCost { get; set; }
         public virtual ContextProduct Product { get; set; }
