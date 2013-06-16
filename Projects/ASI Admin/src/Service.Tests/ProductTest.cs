@@ -750,6 +750,7 @@ namespace asi.asicentral.Tests
                 Assert.IsTrue(objectContext.LookDistributorAccountTypes.Count() > 0);
                 Assert.IsTrue(objectContext.LookProductLines.Count() > 0);
                 Assert.IsTrue(objectContext.LookDistributorRevenueTypes.Count() > 0);
+                Assert.IsTrue(objectContext.LookSupplierDecoratingTypes.Count() > 0);
             }
         }
 

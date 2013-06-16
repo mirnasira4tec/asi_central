@@ -29,6 +29,7 @@ namespace asi.asicentral.model.store
         public OrderStatus ProcessStatus { get; set; }
         public int CompletedStep { get; set; }
         public int? ContextId { get; set; }
+        public bool IsStoreRequest { get; set; }
         public string OrderRequestType { get; set; }
         public string Campaign { get; set; }
         public string ExternalReference { get; set; }
