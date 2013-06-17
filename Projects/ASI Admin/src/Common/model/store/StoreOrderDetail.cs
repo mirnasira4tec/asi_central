@@ -22,7 +22,6 @@ namespace asi.asicentral.model.store
         public virtual StoreOrder Order { get; set; }
         public virtual ContextProduct Product { get; set; }
 
-
         public override string ToString()
         {
             return "OrderDetail (" + Id + ")";
