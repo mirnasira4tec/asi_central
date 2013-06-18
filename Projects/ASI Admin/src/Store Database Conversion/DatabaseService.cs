@@ -120,6 +120,7 @@ namespace Store_Database_Conversion
                             Cost = detail.PreTaxSubtotal.HasValue ? detail.PreTaxSubtotal.Value : 0.0m,
                             ShippingCost = detail.Shipping.HasValue ? detail.Shipping.Value : 0.0m,
                             TaxCost = detail.TaxSubtotal.HasValue ? detail.TaxSubtotal.Value : 0.0m,
+                            ApplicationCost = detail.ApplicationFee.HasValue ? detail.ApplicationFee.Value : 0.0m,
                             CreateDate = creationDate,
                             UpdateDate = creationDate,
                             UpdateSource = "Migration Process - " + DateTime.Now,

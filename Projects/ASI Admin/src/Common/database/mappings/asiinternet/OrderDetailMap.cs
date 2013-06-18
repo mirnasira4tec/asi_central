@@ -45,6 +45,9 @@ namespace asi.asicentral.database.mappings.asiinternet
             this.Property(detail => detail.Subtotal)
                 .HasColumnName("ODET_Subtotal");
 
+            this.Property(detail => detail.ApplicationFee)
+                .HasColumnName("ODET_ApplicationFee");
+
             this.Property(detail => detail.HallmarkResult)
                 .HasColumnName("ODET_HallmarkResult");
 
