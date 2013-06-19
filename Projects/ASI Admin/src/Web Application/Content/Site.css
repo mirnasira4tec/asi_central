@@ -318,6 +318,7 @@ header#site-header {
 
 /*-----------------Order Status-------------*/
 .order-status{
+    font-size: 18px;
     padding-top: 11px;
     padding-left: 3px;
 	float:left;
