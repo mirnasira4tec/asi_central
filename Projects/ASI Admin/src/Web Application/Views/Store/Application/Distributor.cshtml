@@ -14,9 +14,8 @@
     @Html.HiddenFor(m => m.Id) @Html.HiddenFor(m => m.UserId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
     
     <div>
-        <h3 class="order-status-header3">Order Status: </h3>
-        <div class="order-status">Approved<br>
-        </div>
+        <h3 class="order-status-header3">Order Status:</h3><div class="order-status">@Model.OrderStatus</div>
+        <br>
         <div class="timms-info">
             <div class="span3">
                 <label class="order-status-label" for="Timms_ID">Timms ID:</label>
@@ -210,24 +209,24 @@
 				</legend>
 				<span class="primary-business-row">
 					<label class="primary-business-radio radio">
-						@Html.RadioButtonFor(m => m.BuisnessRevenue, DistributorBusinessRevenue.BUSINESSREVENUE_PRINTING, Model.Printing ? new { @checked = "checked" } : null)
-						@DistributorBusinessRevenue.BUSINESSREVENUE_PRINTING
+						@Html.RadioButtonFor(m => m.BuisnessRevenue, LegacyDistributorBusinessRevenue.BUSINESSREVENUE_PRINTING, Model.Printing ? new { @checked = "checked" } : null)
+						@LegacyDistributorBusinessRevenue.BUSINESSREVENUE_PRINTING
 					</label>
 					<label class="primary-business-radio radio">
-						@Html.RadioButtonFor(m => m.BuisnessRevenue, DistributorBusinessRevenue.BUSINESSREVENUE_PROMOTIONALPRODUCTS, Model.PromotionalProducts ? new { @checked = "checked" } : null)
-						@DistributorBusinessRevenue.BUSINESSREVENUE_PROMOTIONALPRODUCTS
+						@Html.RadioButtonFor(m => m.BuisnessRevenue, LegacyDistributorBusinessRevenue.BUSINESSREVENUE_PROMOTIONALPRODUCTS, Model.PromotionalProducts ? new { @checked = "checked" } : null)
+						@LegacyDistributorBusinessRevenue.BUSINESSREVENUE_PROMOTIONALPRODUCTS
 					</label>
 					<label class="primary-business-radio radio">
-						@Html.RadioButtonFor(m => m.BuisnessRevenue, DistributorBusinessRevenue.BUSINESSREVENUE_SIGNS, Model.Signs ? new { @checked = "checked" } : null)
-						@DistributorBusinessRevenue.BUSINESSREVENUE_SIGNS
+						@Html.RadioButtonFor(m => m.BuisnessRevenue, LegacyDistributorBusinessRevenue.BUSINESSREVENUE_SIGNS, Model.Signs ? new { @checked = "checked" } : null)
+						@LegacyDistributorBusinessRevenue.BUSINESSREVENUE_SIGNS
 					</label>
 					<label class="primary-business-radio radio">
-						@Html.RadioButtonFor(m => m.BuisnessRevenue, DistributorBusinessRevenue.BUSINESSREVENUE_TROPHYAWARDS, Model.TrophyAwards ? new { @checked = "checked" } : null)
-						@DistributorBusinessRevenue.BUSINESSREVENUE_TROPHYAWARDS
+						@Html.RadioButtonFor(m => m.BuisnessRevenue, LegacyDistributorBusinessRevenue.BUSINESSREVENUE_TROPHYAWARDS, Model.TrophyAwards ? new { @checked = "checked" } : null)
+						@LegacyDistributorBusinessRevenue.BUSINESSREVENUE_TROPHYAWARDS
 					</label>
 					<label class="primary-business-radio radio">
-						@Html.RadioButtonFor(m => m.BuisnessRevenue, DistributorBusinessRevenue.BUSINESSREVENUE_SCREENPRINTING, Model.ScreenPrinting ? new { @checked = "checked" } : null)
-						@DistributorBusinessRevenue.BUSINESSREVENUE_SCREENPRINTING
+						@Html.RadioButtonFor(m => m.BuisnessRevenue, LegacyDistributorBusinessRevenue.BUSINESSREVENUE_SCREENPRINTING, Model.ScreenPrinting ? new { @checked = "checked" } : null)
+						@LegacyDistributorBusinessRevenue.BUSINESSREVENUE_SCREENPRINTING
 					</label>
 					<label class="primary-business-radio radio">
 						@Html.RadioButtonFor(m => m.BuisnessRevenue, "Other", Model.Other ? new { @checked = "checked" } : null)
