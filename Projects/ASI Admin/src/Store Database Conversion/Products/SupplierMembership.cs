@@ -15,7 +15,7 @@ namespace Store_Database_Conversion.Products
         public override void Convert(StoreOrderDetail newOrderDetail, LegacyOrderDetail detail, StoreContext storeContext, ASIInternetContext asiInternetContext)
         {
             //retrieve the current application
-            LegacySupplierMembershipApplication application = asiInternetContext.SupplierMembershipApplications.Where(app => app.UserId == detail.Order.UserId).SingleOrDefault();
+            LegacySupplierMembershipApplication application = asiInternetContext.SupplierMembershipApplications.Where(app => app.UserId == detail.Order.UserId).OrderByDescending(t=>t.ApplicationStatusId).FirstOrDefault();
             if (application == null && !IgnoreOrderIssues(detail))
             {
                 ILogService logService = LogService.GetLog(this.GetType());
@@ -24,11 +24,66 @@ namespace Store_Database_Conversion.Products
             else if (application != null)
             {
                 //creating a new application
+                StoreDetailSupplierMembership newMembership = new StoreDetailSupplierMembership()
+                {
+                    OrderDetailId = newOrderDetail.Id,
+                    LegacyApplicationId = application.Id.ToString(),
+                    AffiliateASINumber = application.AffiliateASINumber,
+                    AffiliateCompanyName = application.AffiliateCompanyName,
+                    AgreeASITermsAndConditions = application.AgreeASITermsAndConditions,
+                    AgreeUPSTermsAndConditions = application.AgreeUPSTermsAndConditions,
+                    AppStatusId = application.ApplicationStatusId,
+                    AuthorizeUPSNewAccount = application.AuthorizeUPSNewAccount,
+                    BusinessHours = application.BusinessHours,
+                    FedTaxId = application.FedTaxId,
+                    HasAmericanProducts = application.HasAmericanProducts,
+                    IsImporter = application.IsImporter,
+                    IsImprinterVsDecorator = application.IsImprinterVsDecorator,
+                    IsManufacturer = application.IsManufacturer,
+                    IsRetailer = application.IsRetailer,
+                    IsRushServiceAvailable = application.IsRushServiceAvailable,
+                    IsUnionMade = application.IsUnionMade,
+                    IsUPSAvailable = application.IsUPSAvailable,
+                    IsWholesaler = application.IsWholesaler,
+                    IsMinorityOwned = application.LineMinorityOwned,
+                    LineNames = application.LineNames,
+                    NumberOfEmployee = application.NumberOfEmployee,
+                    NumberOfSalesEmployee = application.NumberOfSalesEmployee,
+                    OfficeHourEnd = application.OfficeHourEnd,
+                    OfficeHourStart = application.OfficeHourStart,
+                    OtherDec = application.OtherDec,
+                    ProductionTime = application.ProductionTime,
+                    SalesVolume = application.SalesVolume,
+                    SellThruAffiliate = application.SellThruAffiliate,
+                    SellThruDirectMarketing = application.SellThruDirectMarketing,
+                    SellThruDistributors = application.SellThruDistributors,
+                    SellThruInternet = application.SellThruInternet,
+                    SellThruRetail = application.SellThruRetail,
+                    SellToEndUsers = application.SellToEndUsers,
+                    UPSAddress = application.UPSAddress,
+                    UPSCity = application.UPSCity,
+                    UPSShippingNumber = application.UPSShippingNumber,
+                    UPSState = application.UPSState,
+                    UPSZip = application.UPSZip,
+                    WomanOwned = application.WomanOwned,
+                    YearEnteredAdvertising = application.YearEnteredAdvertising,
+                    YearEstablished = application.YearEstablished,                    
+                    CreateDate = newOrderDetail.CreateDate,
+                    UpdateDate = newOrderDetail.UpdateDate,
+                    UpdateSource = newOrderDetail.UpdateSource,
+                };
+                storeContext.StoreDetailSupplierMemberships.Add(newMembership);
+                foreach (var decoratingType in application.DecoratingTypes)
+                {
+                    //ids should match
+                    LookSupplierDecoratingType newDecoratingType = storeContext.LookSupplierDecoratingTypes.Where(t => t.Id == decoratingType.Id).First();
+                    newMembership.DecoratingTypes.Add(newDecoratingType);
+                }
                 //always create a new company for transfer
                 StoreCompany company = new StoreCompany()
                 {
                     Name = application.Company,
-                    MemberType = "Distributor",
+                    MemberType = "Supplier",
                     Phone = application.Phone,
                     WebURL = application.BillingWebUrl,
                     CreateDate = newOrderDetail.CreateDate,

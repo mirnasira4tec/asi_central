@@ -91,6 +91,7 @@
     <Compile Include="database\mappings\asiinternet\DistributorAccountTypeMap.cs" />
     <Compile Include="database\mappings\asiinternet\DistributorProductLineMap.cs" />
     <Compile Include="database\mappings\asiinternet\SupplierDecoratingTypeMap.cs" />
+    <Compile Include="database\mappings\store\StoreDetailSupplierMembershipMap.cs" />
     <Compile Include="database\mappings\store\LookSupplierDecoratingTypeMap.cs" />
     <Compile Include="database\mappings\store\StoreCompanyAddressMap.cs" />
     <Compile Include="database\mappings\store\LookDistributorAccountTypeMap.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="model\store\StoreCompanyAddress.cs" />
     <Compile Include="model\store\StoreCreditCard.cs" />
     <Compile Include="model\store\StoreDetailDistributorMembership.cs" />
+    <Compile Include="model\store\StoreDetailSupplierMembership.cs" />
     <Compile Include="model\store\StoreIndividual.cs" />
     <Compile Include="model\store\StoreOrder.cs" />
     <Compile Include="model\store\StoreOrderDetail.cs" />

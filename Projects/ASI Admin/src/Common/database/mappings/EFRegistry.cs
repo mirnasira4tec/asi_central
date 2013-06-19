@@ -142,6 +142,9 @@ namespace asi.asicentral.database.mappings
             For<IRepository<StoreDetailDistributorMembership>>().Use<EFRepository<StoreDetailDistributorMembership>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
+            For<IRepository<StoreDetailSupplierMembership>>().Use<EFRepository<StoreDetailSupplierMembership>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
             For<IRepository<StoreIndividual>>().Use<EFRepository<StoreIndividual>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 

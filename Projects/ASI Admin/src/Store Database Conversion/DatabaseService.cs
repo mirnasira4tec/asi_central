@@ -240,8 +240,7 @@ namespace Store_Database_Conversion
                 case 195:
                 case 102:
                 case 152:
-                    //@todo supplier membership
-                    return null;
+                    return new SupplierMembership();
                 case 104: //supplier fees
                     return null;
                 default:
