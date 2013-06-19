@@ -131,18 +131,25 @@ namespace asi.asicentral.util
         /// </summary>
         public static void EvaluateDisplayMode()
         {
+            DisplayModeProvider.Instance.Modes.Clear();
             //set up condition for mobile devices
-            DisplayModeProvider.Instance.Modes.Insert(0, new DefaultDisplayMode("Mobile")
+            DisplayModeProvider.Instance.Modes.Add(new DefaultDisplayMode("Mobile")
             {
                 //look at user agent to figure out what the client is
                 ContextCondition = (ctx => IsMobileDevice(ctx)),
             });
 
             //set up condition for tablet devices
-            DisplayModeProvider.Instance.Modes.Insert(1, new DefaultDisplayMode("Tablet")
+            DisplayModeProvider.Instance.Modes.Add(new DefaultDisplayMode("Tablet")
             {
                 //look at user agent to figure out what the client is
                 ContextCondition = (ctx => IsTabletDevice(ctx)),
+            });
+            //default condition
+            DisplayModeProvider.Instance.Modes.Add(new DefaultDisplayMode("")
+            {
+                //default, always true
+                ContextCondition = (ctx => true),
             });
         }
 
@@ -160,6 +167,7 @@ namespace asi.asicentral.util
                 (context.GetOverriddenUserAgent().IndexOf("android", StringComparison.OrdinalIgnoreCase) >= 0 && context.GetOverriddenUserAgent().IndexOf("mobile", StringComparison.OrdinalIgnoreCase) >= 0) ||
                 context.GetOverriddenBrowser().IsMobileDevice
             );
+            isMobile = isMobile && !IsTabletDevice(context);
             return isMobile;
         }
 
