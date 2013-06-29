@@ -48,13 +48,25 @@ namespace asi.asicentral.database.mappings
 
             For<IRepository<LegacyDistributorProductLine>>().Use<EFRepository<LegacyDistributorProductLine>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
-
+            
             For<IRepository<LegacyOrder>>().Use<EFRepository<LegacyOrder>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
+            For<IRepository<LegacyOrderAddress>>().Use<EFRepository<LegacyOrderAddress>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
             For<IRepository<LegacyOrderCreditCard>>().Use<EFRepository<LegacyOrderCreditCard>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
+            For<IRepository<LegacyOrderMagazineAddress>>().Use<EFRepository<LegacyOrderMagazineAddress>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
+            For<IRepository<LegacyMagazineAddress>>().Use<EFRepository<LegacyMagazineAddress>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
+            For<IRepository<LegacyOrderDistributorAddress>>().Use<EFRepository<LegacyOrderDistributorAddress>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+            
             For<IRepository<LegacyOrderDetail>>().Use<EFRepository<LegacyOrderDetail>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
@@ -146,6 +158,9 @@ namespace asi.asicentral.database.mappings
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<StoreIndividual>>().Use<EFRepository<StoreIndividual>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<StoreMagazineSubscription>>().Use<EFRepository<StoreMagazineSubscription>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<StoreOrder>>().Use<EFRepository<StoreOrder>>()

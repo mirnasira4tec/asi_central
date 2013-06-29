@@ -26,6 +26,8 @@ namespace asi.asicentral.model.store
         public string Zip { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "Country")]
         public string Country { get; set; }
+        [Display(ResourceType = typeof(Resource), Name = "Phone")]
+        public string Phone { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }

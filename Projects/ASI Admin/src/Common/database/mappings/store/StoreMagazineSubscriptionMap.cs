@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings.store
 {
-    public class StoreOrderDetailMap : EntityTypeConfiguration<StoreOrderDetail>
+    public class StoreMagazineSubscriptionMap : EntityTypeConfiguration<StoreMagazineSubscription>
     {
-        public StoreOrderDetailMap()
+        public StoreMagazineSubscriptionMap()
         {
-            this.ToTable("STOR_OrderDetail");
+            this.ToTable("STOR_MagazineSubscription");
             this.HasKey(t => t.Id);
 
             //Properties
             this.Property(t => t.Id)
-                .HasColumnName("OrderDetailId")
+                .HasColumnName("MagazineSubscriptionId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.CreateDate)
@@ -27,20 +27,10 @@ namespace asi.asicentral.database.mappings.store
             this.Property(t => t.UpdateDate)
                 .HasColumnName("UpdateDateUTC");
 
-            //Relationships
-            this.HasRequired(detail => detail.Order)
-                .WithMany(order => order.OrderDetails)
-                .Map(detail => detail.MapKey("OrderId"))
-                .WillCascadeOnDelete();
-
-            HasOptional(detail => detail.Product)
+            //relationships
+            HasOptional(t => t.Contact)
                 .WithMany()
-                .Map(detail => detail.MapKey("ProductId"));
-
-            HasMany(t => t.MagazineSubscriptions)
-                .WithOptional()
-                .HasForeignKey(t => t.OrderDetailId)
-                .WillCascadeOnDelete();
+                .Map(t => t.MapKey("IndividualId"));
         }
     }
 }

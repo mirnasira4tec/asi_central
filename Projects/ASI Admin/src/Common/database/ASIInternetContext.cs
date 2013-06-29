@@ -30,11 +30,15 @@ namespace asi.asicentral.database
         public DbSet<LegacyOrder> Orders { get; set; }
         public DbSet<LegacyOrderCreditCard> OrderCreditCards { get; set; }
         public DbSet<LegacyOrderDetail> OrderDetails { get; set; }
+        public DbSet<LegacyMagazineAddress> LegacyMagazineAddresses { get; set; }
+        public DbSet<LegacyOrderMagazineAddress> LegacyOrderMagazineAddresses { get; set; }
         public DbSet<LegacyOrderProduct> OrderProducts { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<LegacySupplierDecoratingType> SupplierDecoratingTypes { get; set; }
         public DbSet<LegacySupplierMembershipApplication> SupplierMembershipApplications { get; set; }
         public DbSet<LegacySupplierMembershipApplicationContact> SupplierMembershipApplicationContacts { get; set; }
+        public DbSet<LegacyOrderDistributorAddress> OrderDistributorAddresses { get; set; }
+        public DbSet<LegacyOrderAddress> OrderAddresses { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -52,9 +56,13 @@ namespace asi.asicentral.database
                .Add(new DistributorMembershipApplicationMap())
                .Add(new DistributorMembershipApplicationContactMap())
                .Add(new DistributorProductLineMap())
+               .Add(new LegacyOrderAddressMap())
+               .Add(new LegacyOrderDistributorAddressMap())
                .Add(new OrderCreditCardMap())
                .Add(new OrderDetailMap())
                .Add(new OrderMap())
+               .Add(new LegacyMagazineAddressMap())
+               .Add(new LegacyOrderMagazineAddressMap())
                .Add(new ProductMap())
                .Add(new StoreProductConfiguration())
                .Add(new SupplierDecoratingTypeMap())

@@ -8,6 +8,14 @@ namespace asi.asicentral.model.store
 {
     public class StoreOrderDetail
     {
+        public StoreOrderDetail()
+        {
+            if (this.GetType() == typeof(StoreOrderDetail))
+            {
+                MagazineSubscriptions = new List<StoreMagazineSubscription>();
+            }
+        }
+
         public int Id { get; set; }
         public int? LegacyProductId { get; set; }
         public int Quantity { get; set; }
@@ -21,6 +29,7 @@ namespace asi.asicentral.model.store
         public string UpdateSource { get; set; }
         public virtual StoreOrder Order { get; set; }
         public virtual ContextProduct Product { get; set; }
+        public virtual IList<StoreMagazineSubscription> MagazineSubscriptions { get; set; }
 
         public override string ToString()
         {
