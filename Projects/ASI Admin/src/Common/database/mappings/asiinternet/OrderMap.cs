@@ -100,6 +100,24 @@ namespace asi.asicentral.database.mappings.asiinternet
             this.HasOptional(order => order.Membership)
                 .WithMany()
                 .HasForeignKey(order => order.UserId);
+
+            this.HasMany(t => t.Addresses)
+                .WithMany()
+                .Map(m =>
+                {
+                    m.ToTable("STOR_OrderAddresses_ORAD");
+                    m.MapLeftKey("ORDR_OrderID");
+                    m.MapRightKey("SPAD_AddressID");
+                });
+
+            this.HasMany(t => t.DistributorAddresses)
+                .WithMany()
+                .Map(m =>
+                    {
+                        m.ToTable("STOR_OrderSPDistAdd_ODAD");
+                        m.MapLeftKey("ORDR_OrderID");
+                        m.MapRightKey("DADD_SPDistAdd_ID");
+                    });
         }
     }
 }

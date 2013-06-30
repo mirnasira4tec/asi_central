@@ -46,6 +46,31 @@ namespace Store_Database_Conversion
             bool isTestRecord = false;
             isTestRecord = isTestRecord || (order.BillCity != null && (new string[] {"trevose", "test"}).Contains(order.BillCity.ToLower()));
             isTestRecord = isTestRecord || (order.BillLastName != null && (new string[] {"driscoll", "tucker", "fairfield"}).Contains(order.BillLastName.ToLower()));
+            if (!isTestRecord && order.Addresses.Count > 0)
+            {
+                foreach (var address in order.Addresses)
+                {
+                    isTestRecord = isTestRecord || (string.IsNullOrEmpty(address.SPAD_City) || address.SPAD_City.ToLower() == "trevose");
+                    isTestRecord = isTestRecord || (address.SPAD_Email != null && address.SPAD_Email.ToLower().Contains("asicentral.com"));
+                }
+            }
+            if (!isTestRecord && order.DistributorAddresses.Count > 0)
+            {
+                foreach (var address in order.DistributorAddresses)
+                {
+                    isTestRecord = isTestRecord || (string.IsNullOrEmpty(address.City) || address.City.ToLower() == "trevose");
+                    isTestRecord = isTestRecord || (address.WebAdd != null && address.WebAdd.ToLower().Contains("asicentral.com"));
+                }
+            }
+            if (!isTestRecord)
+            {
+                IList<LegacyOrderMagazineAddress> magAddresses = _asiInternetContext.LegacyOrderMagazineAddresses.Where(t => t.OrderID == order.Id).ToList();
+                foreach (var magAddress in magAddresses)
+                {
+                    isTestRecord = isTestRecord || (string.IsNullOrEmpty(magAddress.Address.MAGA_City) || magAddress.Address.MAGA_City.ToLower() == "trevose");
+                    isTestRecord = isTestRecord || (!string.IsNullOrEmpty(magAddress.Address.MAGA_Email) && magAddress.Address.MAGA_Email.ToLower().Contains("asicentral.com"));
+                }
+            }
             return isTestRecord;
         }
 
@@ -136,6 +161,60 @@ namespace Store_Database_Conversion
                             productConvert.Convert(newDetail, detail, _storeContext, _asiInternetContext);
                         }
                     }
+                    //@todo check addresses associated with the order
+                    //first start with company record - there is not more than one record per order in the legacy database
+                    if (order.DistributorAddresses.Count > 1)
+                    {
+                        StoreCompany company = newOrder.Company;
+                        if (company == null)
+                        {
+                            company = new StoreCompany() { Name = order.DistributorAddresses[0].Name, };
+                            _storeContext.StoreCompanies.Add(company);
+                            newOrder.Company = company;
+                        }
+                        StoreAddress address = new StoreAddress()
+                        {
+                            Street1 = order.DistributorAddresses[0].Address,
+                            City = order.DistributorAddresses[0].City,
+                            Zip = order.DistributorAddresses[0].Zip,
+                            State = order.DistributorAddresses[0].State,
+                            Phone = order.DistributorAddresses[0].Phone,
+                            CreateDate = creationDate,
+                            UpdateDate = creationDate,
+                            UpdateSource = "Migration Process - " + DateTime.Now,
+                        };
+                        company.WebURL = company.WebURL == null ? order.DistributorAddresses[0].WebAdd : company.WebURL;
+                        _storeContext.StoreAddresses.Add(address);
+                        StoreCompanyAddress companyAddressItem = new StoreCompanyAddress()
+                        {
+                            Address = address,
+                            IsBilling = false,
+                            IsShipping = true,
+                            CreateDate = creationDate,
+                            UpdateDate = creationDate,
+                            UpdateSource = "Migration Process - " + DateTime.Now,
+                        };
+                        _storeContext.StoreCompanyAddresses.Add(companyAddressItem);
+                        company.Addresses.Add(companyAddressItem);
+
+                        if (!string.IsNullOrEmpty(order.DistributorAddresses[0].Contact) && 
+                            company.Individuals.Where(t => t.FirstName + " " + t.LastName == order.DistributorAddresses[0].Contact).Count() == 0)
+                        {
+                            string[] nameParts = order.DistributorAddresses[0].Contact.Split(' ');
+                            //add the additional contact
+                            StoreIndividual contact = new StoreIndividual()
+                            {
+                                FirstName = nameParts[0].Trim(),
+                                LastName = (nameParts.Length > 0 ? nameParts[nameParts.Length - 1].Trim() : nameParts[0].Trim()),
+                                Phone = order.DistributorAddresses[0].Phone,
+                                CreateDate = creationDate,
+                                UpdateDate = creationDate,
+                                UpdateSource = "Migration Process - " + DateTime.Now,
+                            };
+                            _storeContext.StoreIndividuals.Add(contact);
+                            company.Individuals.Add(contact);
+                        }
+                    }
                 }
                 else
                 {
@@ -215,6 +294,27 @@ namespace Store_Database_Conversion
                 case 152:
                     newProductId = 4;
                     break;
+                case 7: //Counselor
+                    newProductId = 25;
+                    break;
+                case 8: //advantages
+                    newProductId = 26;
+                    break;
+                case 10: //stitches
+                    newProductId = 27;
+                    break;
+                case 11: //wearables
+                    newProductId = 28;
+                    break;
+                case 9: //Successful Promotions Magazine
+                    newProductId = 32;
+                    break;
+                case 164: //Successful Promotions Magazine Special Offer
+                    newProductId = 33;
+                    break;
+                case 166: //Successful Promotions Magazine Special Offer Dallas
+                    newProductId = 34;
+                    break;
                 case 104: //supplier fees
                     break;
                 default:
@@ -243,6 +343,14 @@ namespace Store_Database_Conversion
                     return new SupplierMembership();
                 case 104: //supplier fees
                     return null;
+                case 7: //Magazines
+                case 8:
+                case 10:
+                case 11:
+                case 9: //Successful Promotions
+                case 164:
+                case 166:
+                    return new Magazines();
                 default:
                     _logService.Error("There is a product which has not been mapped yet: " + productId);
                     return null;

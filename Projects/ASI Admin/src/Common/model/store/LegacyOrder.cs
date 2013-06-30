@@ -7,7 +7,12 @@ namespace asi.asicentral.model.store
     {
         public LegacyOrder()
         {
-            this.OrderDetails = new List<LegacyOrderDetail>();
+            if (this.GetType() == typeof(LegacyOrder))
+            {
+                this.OrderDetails = new List<LegacyOrderDetail>();
+                this.DistributorAddresses = new List<LegacyOrderDistributorAddress>();
+                this.Addresses = new List<LegacyOrderAddress>();
+            }
         }
 
         public int Id { get; set; }
@@ -35,6 +40,8 @@ namespace asi.asicentral.model.store
         public virtual LegacyOrderCreditCard CreditCard { get; set; }
         public virtual ASPNetMembership Membership { get; set; }
         public virtual ICollection<LegacyOrderDetail> OrderDetails { get; set; }
+        public virtual IList<LegacyOrderDistributorAddress> DistributorAddresses { get; set; }
+        public virtual IList<LegacyOrderAddress> Addresses { get; set; }
 
         public override string ToString()
         {
