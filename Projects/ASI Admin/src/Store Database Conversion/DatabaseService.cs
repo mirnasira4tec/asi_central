@@ -152,6 +152,22 @@ namespace Store_Database_Conversion
                         };
                         newOrder.OrderDetails.Add(newDetail);
                         _storeContext.StoreOrderDetails.Add(newDetail); //some records do not have a key generated unless added explicitely
+                        if (!string.IsNullOrEmpty(detail.Application) && detail.Application.ToLower() != "new")
+                        {
+                            //need to commit the data to make sure ids are generated
+                            _storeContext.SaveChanges();
+                            //assuming hallmark submission, add a new entry
+                            HallmarkFormRequest hallmark = new HallmarkFormRequest()
+                            {
+                                OrderDetailId = newDetail.Id,
+                                WebRequest = detail.Application.Length > 10000 ?  detail.Application.Substring(0, 10000) : detail.Application,
+                                IsSuccessful = true,
+                                CreateDate = creationDate,
+                                UpdateDate = creationDate,
+                                UpdateSource = "Migration Process - " + DateTime.Now,
+                            };
+                            _storeContext.HallmarkFormRequests.Add(hallmark);
+                        }
                         //processing the applications
                         IProductConvert productConvert = GetProductConvert(detail.ProductId);
                         if (productConvert != null)
