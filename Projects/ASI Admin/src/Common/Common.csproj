@@ -95,6 +95,7 @@
     <Compile Include="database\mappings\asiinternet\LegacyOrderAddressMap.cs" />
     <Compile Include="database\mappings\asiinternet\LegacyOrderDistributorAddressMap.cs" />
     <Compile Include="database\mappings\asiinternet\SupplierDecoratingTypeMap.cs" />
+    <Compile Include="database\mappings\store\HallmarkFormRequestMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailSupplierMembershipMap.cs" />
     <Compile Include="database\mappings\store\LookSupplierDecoratingTypeMap.cs" />
     <Compile Include="database\mappings\store\StoreCompanyAddressMap.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="database\mappings\store\TaxRateMap.cs" />
     <Compile Include="interfaces\ICreditCardService.cs" />
     <Compile Include="model\CreditCard.cs" />
+    <Compile Include="model\store\HallmarkFormRequest.cs" />
     <Compile Include="model\store\LegacyOrderDistributorAddress.cs" />
     <Compile Include="model\store\LegacyMagazineAddress.cs" />
     <Compile Include="model\store\LegacyOrderAddress.cs" />
