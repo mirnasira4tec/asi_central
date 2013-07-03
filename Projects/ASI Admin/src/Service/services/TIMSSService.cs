@@ -24,7 +24,7 @@ namespace asi.asicentral.services
             _objectService = objectService;
         }
 
-        public virtual void Process(model.store.Order order, model.store.OrderDetailApplication application)
+        public virtual void Process(model.store.LegacyOrder order, model.store.LegacyOrderDetailApplication application)
         {
             if (order == null || !order.UserId.HasValue || order.CreditCard == null || string.IsNullOrEmpty(order.CreditCard.ExternalReference)) throw new InvalidOperationException("You must pass a valid Order for this method");
             if (application == null) throw new InvalidOperationException("You must pass a valid Application for this method");
@@ -69,12 +69,12 @@ namespace asi.asicentral.services
                 DateCreated = DateTime.Now,
             };
             _objectService.Add<TIMSSCreditInfo>(credit);
-            if (application is SupplierMembershipApplication)
+            if (application is LegacySupplierMembershipApplication)
             {
                 company.CustomerClass = "Supplier";
                 //add the contacts
-                SupplierMembershipApplication supplierApplication = application as SupplierMembershipApplication;
-                foreach (SupplierMembershipApplicationContact contact in supplierApplication.Contacts)
+                LegacySupplierMembershipApplication supplierApplication = application as LegacySupplierMembershipApplication;
+                foreach (LegacySupplierMembershipApplicationContact contact in supplierApplication.Contacts)
                 {
                     TIMSSContact timssContact = new TIMSSContact()
                     {
@@ -117,49 +117,49 @@ namespace asi.asicentral.services
                 {
                     switch (decoratingAndImprinting.Name)
                     {
-                        case SupplierDecoratingType.DECORATION_ETCHING:
+                        case LegacySupplierDecoratingType.DECORATION_ETCHING:
                             additionalInformation.Etching = "Y";
                             break;
-                        case SupplierDecoratingType.DECORATION_HOTSTAMPING:
+                        case LegacySupplierDecoratingType.DECORATION_HOTSTAMPING:
                             additionalInformation.HotStamping = "Y";
                             break;
-                        case SupplierDecoratingType.DECORATION_SILKSCREEN:
+                        case LegacySupplierDecoratingType.DECORATION_SILKSCREEN:
                             additionalInformation.SilkScreen = "Y";
                             break;
-                        case SupplierDecoratingType.DECORATION_PADPRINT:
+                        case LegacySupplierDecoratingType.DECORATION_PADPRINT:
                             additionalInformation.PadPrinting = "Y";
                             break;
-                        case SupplierDecoratingType.DECORATION_DIRECTEMBROIDERY:
+                        case LegacySupplierDecoratingType.DECORATION_DIRECTEMBROIDERY:
                             additionalInformation.DirectEmbroidery = "Y";
                             break;
-                        case SupplierDecoratingType.DECORATION_FOILSTAMPING:
+                        case LegacySupplierDecoratingType.DECORATION_FOILSTAMPING:
                             additionalInformation.FoilStamping = "Y";
                             break;
-                        case SupplierDecoratingType.DECORATION_LITHOGRAPHY:
+                        case LegacySupplierDecoratingType.DECORATION_LITHOGRAPHY:
                             additionalInformation.Lithography = "Y";
                             break;
-                        case SupplierDecoratingType.DECORATION_SUBLIMINATION:
+                        case LegacySupplierDecoratingType.DECORATION_SUBLIMINATION:
                             additionalInformation.Sublimation = "Y";
                             break;
-                        case SupplierDecoratingType.DECORATION_FOURCOLOR:
+                        case LegacySupplierDecoratingType.DECORATION_FOURCOLOR:
                             additionalInformation.FourColorProcess = "Y";
                             break;
-                        case SupplierDecoratingType.DECORATION_ENGRAVING:
+                        case LegacySupplierDecoratingType.DECORATION_ENGRAVING:
                             additionalInformation.Engraving = "Y";
                             break;
-                        case SupplierDecoratingType.DECORATION_LASER:
+                        case LegacySupplierDecoratingType.DECORATION_LASER:
                             additionalInformation.Laser = "Y";
                             break;
-                        case SupplierDecoratingType.DECORATION_OFFSET:
+                        case LegacySupplierDecoratingType.DECORATION_OFFSET:
                             additionalInformation.Offset = "Y";
                             break;
-                        case SupplierDecoratingType.DECORATION_TRANSFER:
+                        case LegacySupplierDecoratingType.DECORATION_TRANSFER:
                             additionalInformation.Transfer = "Y";
                             break;
-                        case SupplierDecoratingType.DECORATION_FULLCOLOR:
+                        case LegacySupplierDecoratingType.DECORATION_FULLCOLOR:
                             additionalInformation.FullColorProcess = "Y";
                             break;
-                        case SupplierDecoratingType.DECORATION_DIESTAMP:
+                        case LegacySupplierDecoratingType.DECORATION_DIESTAMP:
                             additionalInformation.DieStamp = "Y";
                             break;
                     }
@@ -168,12 +168,12 @@ namespace asi.asicentral.services
                 }
                 _objectService.Add<TIMSSAdditionalInfo>(additionalInformation);
             }
-            else if (application is DistributorMembershipApplication)
+            else if (application is LegacyDistributorMembershipApplication)
             {
                 company.CustomerClass = "Distributor";
                 //add the contacts
-                DistributorMembershipApplication distributorApplication = application as DistributorMembershipApplication;
-                foreach (DistributorMembershipApplicationContact contact in distributorApplication.Contacts)
+                LegacyDistributorMembershipApplication distributorApplication = application as LegacyDistributorMembershipApplication;
+                foreach (LegacyDistributorMembershipApplicationContact contact in distributorApplication.Contacts)
                 {
                     TIMSSContact timssContact = new TIMSSContact()
                     {

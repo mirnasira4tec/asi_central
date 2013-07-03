@@ -24,7 +24,7 @@ namespace asi.asicentral.web.Controllers.Store
         {
             if (dateStart > dateEnd) ViewBag.Message = Resource.StoreDateErrorMessage;
 
-            IQueryable<OrderDetail> orderDetailQuery = StoreService.GetAll<OrderDetail>("Order;Order.Membership;Order.CreditCard", true);
+            IQueryable<LegacyOrderDetail> orderDetailQuery = StoreService.GetAll<LegacyOrderDetail>("Order;Order.Membership;Order.CreditCard", true);
             if (string.IsNullOrEmpty(formTab)) formTab = OrderPageModel.TAB_DATE; //setting the default tab
             if (string.IsNullOrEmpty(orderTab)) orderTab = OrderPageModel.ORDER_COMPLETED; //setting the default tab
             //
@@ -69,7 +69,7 @@ namespace asi.asicentral.web.Controllers.Store
                 orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.Status == true && detail.Order.ProcessStatus == OrderStatus.Pending);
 
             //query has been constructed - get the data
-            IList<OrderDetail> orderDetails = orderDetailQuery.OrderByDescending(detail => detail.OrderId).ToList();
+            IList<LegacyOrderDetail> orderDetails = orderDetailQuery.OrderByDescending(detail => detail.OrderId).ToList();
 
             OrderPageModel viewModel = new OrderPageModel(StoreService, encryptionService, orderDetails);
 
@@ -89,7 +89,7 @@ namespace asi.asicentral.web.Controllers.Store
         public JsonResult Reject(int id)
         {
             string error = string.Empty;
-            asi.asicentral.model.store.Order order = StoreService.GetAll<asi.asicentral.model.store.Order>().Where(ordr => ordr.Id == id).SingleOrDefault();
+            asi.asicentral.model.store.LegacyOrder order = StoreService.GetAll<asi.asicentral.model.store.LegacyOrder>().Where(ordr => ordr.Id == id).SingleOrDefault();
             if (order != null)
             {
                 if (order.ProcessStatus == OrderStatus.Pending)
@@ -117,7 +117,7 @@ namespace asi.asicentral.web.Controllers.Store
                 orderStatisticsData.EndDate = DateTime.Now;
                 return View("../Store/Admin/Statistics", orderStatisticsData);
             }
-            IQueryable<Order> ordersQuery = GetOrderBy(orderStatisticsData);
+            IQueryable<LegacyOrder> ordersQuery = GetOrderBy(orderStatisticsData);
             orderStatisticsData.Data = ordersQuery
                 .GroupBy(order => new { order.Campaign, order.CompletedStep })
                 .Select(grouped => new GroupedData() {
@@ -166,7 +166,7 @@ namespace asi.asicentral.web.Controllers.Store
 
         public ActionResult DownloadCSV(OrderStatisticData orderStatisticsData)
         {
-            IQueryable<Order> ordersQuery = GetOrderBy(orderStatisticsData);
+            IQueryable<LegacyOrder> ordersQuery = GetOrderBy(orderStatisticsData);
             if (string.IsNullOrEmpty(orderStatisticsData.Campaign))
                 ordersQuery = ordersQuery.Where(order => order.Campaign == null || order.Campaign == string.Empty);
 
@@ -175,7 +175,7 @@ namespace asi.asicentral.web.Controllers.Store
             csv.Append("Order ID" + separator + "Timss ID" + separator + "Company Name" + separator + "Contact Name" + separator + "Contact Phone" + separator + "Contact Email" + separator + "Orderstatus" + separator + "Amount" + separator + "Date");
             csv.Append(System.Environment.NewLine);
 
-            foreach (Order order in ordersQuery)
+            foreach (LegacyOrder order in ordersQuery)
             {
                 string orderid = string.Empty, timss = string.Empty, companyname = string.Empty, contactname = string.Empty, contactphone = string.Empty, contactemail = string.Empty, orderstatus = string.Empty, amount = string.Empty;
                 DateTime date = new DateTime();
@@ -187,13 +187,13 @@ namespace asi.asicentral.web.Controllers.Store
                 else amount = String.Format("{0:C}", 0m);
                 if (order.DateCreated.HasValue) date = order.DateCreated.Value;
 
-                OrderDetailApplication application = GetOrderDetailApplication(order);
+                LegacyOrderDetailApplication application = GetOrderDetailApplication(order);
                 if (application != null)
                 {
                     companyname = application.Company;
-                    if (application is SupplierMembershipApplication)
+                    if (application is LegacySupplierMembershipApplication)
                     {
-                        SupplierMembershipApplicationContact contacts = ((SupplierMembershipApplication)application).Contacts.Where(c => c.IsPrimary == true).SingleOrDefault();
+                        LegacySupplierMembershipApplicationContact contacts = ((LegacySupplierMembershipApplication)application).Contacts.Where(c => c.IsPrimary == true).SingleOrDefault();
                         if (contacts != null)
                         {
                             contactname = contacts.Name;
@@ -201,9 +201,9 @@ namespace asi.asicentral.web.Controllers.Store
                             contactemail = contacts.Email;
                         }
                     }
-                    if (application is DistributorMembershipApplication)
+                    if (application is LegacyDistributorMembershipApplication)
                     {
-                        DistributorMembershipApplicationContact contacts = ((DistributorMembershipApplication)application).Contacts.Where(c => c.IsPrimary == true).SingleOrDefault();
+                        LegacyDistributorMembershipApplicationContact contacts = ((LegacyDistributorMembershipApplication)application).Contacts.Where(c => c.IsPrimary == true).SingleOrDefault();
                         if (contacts != null)
                         {
                             contactname = contacts.Name;
@@ -218,14 +218,14 @@ namespace asi.asicentral.web.Controllers.Store
             return File(new System.Text.UTF8Encoding().GetBytes(csv.ToString()), "text/csv", "report.csv");
         }
 
-        private IQueryable<Order> GetOrderBy(OrderStatisticData orderStatisticsData)
+        private IQueryable<LegacyOrder> GetOrderBy(OrderStatisticData orderStatisticsData)
         {
             if (string.IsNullOrEmpty(orderStatisticsData.Campaign) && !orderStatisticsData.StartDate.HasValue)
                 orderStatisticsData.StartDate = DateTime.Now.AddDays(-7).Date;
             if (string.IsNullOrEmpty(orderStatisticsData.Campaign) && !orderStatisticsData.EndDate.HasValue)
                 orderStatisticsData.EndDate = DateTime.Now.Date;
             if (orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = orderStatisticsData.EndDate.Value.Date + new TimeSpan(23, 59, 59);
-            IQueryable<Order> ordersQuery = StoreService.GetAll<Order>();
+            IQueryable<LegacyOrder> ordersQuery = StoreService.GetAll<LegacyOrder>();
             if (!string.IsNullOrEmpty(orderStatisticsData.Campaign)) ordersQuery = ordersQuery.Where(order => order.Campaign == orderStatisticsData.Campaign);
             if (orderStatisticsData.StartDate.HasValue) ordersQuery = ordersQuery.Where(order => order.DateCreated >= orderStatisticsData.StartDate);
             if (orderStatisticsData.EndDate.HasValue) ordersQuery = ordersQuery.Where(order => order.DateCreated <= orderStatisticsData.EndDate);
@@ -233,13 +233,13 @@ namespace asi.asicentral.web.Controllers.Store
             return ordersQuery;
         }
 
-        private OrderDetailApplication GetOrderDetailApplication(Order order)
+        private LegacyOrderDetailApplication GetOrderDetailApplication(LegacyOrder order)
         {
             if (order != null && order.OrderDetails != null && order.OrderDetails.Count > 0)
             {
-                foreach (OrderDetail orderDetail in order.OrderDetails)
+                foreach (LegacyOrderDetail orderDetail in order.OrderDetails)
                 {
-                    OrderDetailApplication application = StoreService.GetApplication(orderDetail);
+                    LegacyOrderDetailApplication application = StoreService.GetApplication(orderDetail);
                     if (application != null) return application;
                 }
                 return null;

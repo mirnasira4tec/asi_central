@@ -18,27 +18,27 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
         public void EditSupplier()
         {
             //prepare for EditSupplier(SupplierApplicationModel application)
-            List<Order> orders = new List<Order>();
-            List<SupplierMembershipApplication> applications = new List<SupplierMembershipApplication>();
-            List<SupplierDecoratingType> decoratingtypes = new List<SupplierDecoratingType>();
-            decoratingtypes.Add(new SupplierDecoratingType() { Name = SupplierDecoratingType.DECORATION_ETCHING });
+            List<LegacyOrder> orders = new List<LegacyOrder>();
+            List<LegacySupplierMembershipApplication> applications = new List<LegacySupplierMembershipApplication>();
+            List<LegacySupplierDecoratingType> decoratingtypes = new List<LegacySupplierDecoratingType>();
+            decoratingtypes.Add(new LegacySupplierDecoratingType() { Name = LegacySupplierDecoratingType.DECORATION_ETCHING });
 
             Guid guid = Guid.NewGuid();
-            Order order = new Order() { Id = 0, BillFirstName = "FirstName", UserId = guid };
-            order.CreditCard = new OrderCreditCard() { ExternalReference = "111" };
-            Order orderRef = order;
-            SupplierMembershipApplication application = new SupplierMembershipApplication() { Id = guid, UserId = guid };
-            application.DecoratingTypes = new List<SupplierDecoratingType>();
-            application.Contacts = new List<SupplierMembershipApplicationContact>();
-            application.Contacts.Add(new SupplierMembershipApplicationContact() { Id = 0 });
-            application.Contacts.Add(new SupplierMembershipApplicationContact() { Id = 1 });
-            SupplierMembershipApplication applicationRef = application;
+            LegacyOrder order = new LegacyOrder() { Id = 0, BillFirstName = "FirstName", UserId = guid };
+            order.CreditCard = new LegacyOrderCreditCard() { ExternalReference = "111" };
+            LegacyOrder orderRef = order;
+            LegacySupplierMembershipApplication application = new LegacySupplierMembershipApplication() { Id = guid, UserId = guid };
+            application.DecoratingTypes = new List<LegacySupplierDecoratingType>();
+            application.Contacts = new List<LegacySupplierMembershipApplicationContact>();
+            application.Contacts.Add(new LegacySupplierMembershipApplicationContact() { Id = 0 });
+            application.Contacts.Add(new LegacySupplierMembershipApplicationContact() { Id = 1 });
+            LegacySupplierMembershipApplication applicationRef = application;
 
             Mock<IStoreService> mockStoreService = new Mock<IStoreService>();
             Mock<IFulfilmentService> mockFulFilService = new Mock<IFulfilmentService>();
-            mockStoreService.Setup(service => service.GetAll<Order>(false)).Returns(orders.AsQueryable());
-            mockStoreService.Setup(service => service.GetAll<SupplierDecoratingType>(false)).Returns(decoratingtypes.AsQueryable());
-            mockStoreService.Setup(service => service.GetAll<SupplierMembershipApplication>(false)).Returns(applications.AsQueryable());
+            mockStoreService.Setup(service => service.GetAll<LegacyOrder>(false)).Returns(orders.AsQueryable());
+            mockStoreService.Setup(service => service.GetAll<LegacySupplierDecoratingType>(false)).Returns(decoratingtypes.AsQueryable());
+            mockStoreService.Setup(service => service.GetAll<LegacySupplierMembershipApplication>(false)).Returns(applications.AsQueryable());
 
             ApplicationController controller = new ApplicationController();
             controller.FulfilmentService = mockFulFilService.Object;
@@ -56,7 +56,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             RedirectToRouteResult result = controller.EditSupplier(model) as RedirectToRouteResult;
             Assert.AreEqual(result.RouteValues["controller"], "Application");
             Assert.AreEqual(orderRef.ExternalReference, model.ExternalReference);
-            Assert.AreEqual(applicationRef.DecoratingTypes.ElementAt(0).Name, SupplierDecoratingType.DECORATION_ETCHING);
+            Assert.AreEqual(applicationRef.DecoratingTypes.ElementAt(0).Name, LegacySupplierDecoratingType.DECORATION_ETCHING);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(1));
 
             // user clicks reject - order should be updated to reject
@@ -73,7 +73,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             RedirectToRouteResult result3 = controller.EditSupplier(model) as RedirectToRouteResult;
             Assert.AreEqual(orderRef.ProcessStatus, OrderStatus.Approved);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(3));
-            mockFulFilService.Verify(service => service.Process(It.IsAny<Order>(), It.IsAny<OrderDetailApplication>()), Times.Exactly(1));
+            mockFulFilService.Verify(service => service.Process(It.IsAny<LegacyOrder>(), It.IsAny<LegacyOrderDetailApplication>()), Times.Exactly(1));
         }
     }
 }

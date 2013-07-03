@@ -18,11 +18,11 @@ namespace asi.asicentral.Tests
         public void SupplierOrder()
         {
             #region create the order to store
-            Order order = CreateOrder();
+            LegacyOrder order = CreateOrder();
 
             order.ExternalReference = "8939514";
             //create the supplier application
-            SupplierMembershipApplication application = new SupplierMembershipApplication()
+            LegacySupplierMembershipApplication application = new LegacySupplierMembershipApplication()
             {
                 ContactName = "First Last",
                 ContactTitle = "Contact Title",
@@ -45,7 +45,7 @@ namespace asi.asicentral.Tests
                 IsWholesaler = false,
             };
             PopulateApplication(application);
-            application.Contacts.Add(new SupplierMembershipApplicationContact()
+            application.Contacts.Add(new LegacySupplierMembershipApplicationContact()
             {
                 IsPrimary = true,
                 Name = "First Last",
@@ -53,7 +53,7 @@ namespace asi.asicentral.Tests
                 Phone = "123 123 1234",
                 Email = "Contact@asi.com",
             });
-            application.Contacts.Add(new SupplierMembershipApplicationContact()
+            application.Contacts.Add(new LegacySupplierMembershipApplicationContact()
             {
                 IsPrimary = false,
                 Name = "First2 Last2",
@@ -64,7 +64,7 @@ namespace asi.asicentral.Tests
             using (IObjectService objectService = new ObjectService(new Container(new EFRegistry())))
             {
                 //method of imprinting and decorating
-                IList<SupplierDecoratingType> decoratingTypes = objectService.GetAll<SupplierDecoratingType>().ToList();
+                IList<LegacySupplierDecoratingType> decoratingTypes = objectService.GetAll<LegacySupplierDecoratingType>().ToList();
                 Assert.IsTrue(decoratingTypes.Count > 1);
                 application.DecoratingTypes.Add(decoratingTypes[0]);
                 application.DecoratingTypes.Add(decoratingTypes[1]);
@@ -85,10 +85,10 @@ namespace asi.asicentral.Tests
         [TestMethod]
         public void DistributorOrder()
         {
-            Order order = CreateOrder();
+            LegacyOrder order = CreateOrder();
             order.ExternalReference = "8939541";
             //create the supplier application
-            DistributorMembershipApplication application = new DistributorMembershipApplication()
+            LegacyDistributorMembershipApplication application = new LegacyDistributorMembershipApplication()
             {
                 AnnualSalesVolume = "A lot more",
                 AnnualSalesVolumeASP = "A lot",
@@ -98,7 +98,7 @@ namespace asi.asicentral.Tests
                 OtherBusinessRevenue = "Checking",
             };
             PopulateApplication(application);
-            application.Contacts.Add(new DistributorMembershipApplicationContact()
+            application.Contacts.Add(new LegacyDistributorMembershipApplicationContact()
             {
                 IsPrimary = true,
                 Name = "First Last",
@@ -106,7 +106,7 @@ namespace asi.asicentral.Tests
                 Phone = "123 123 1234",
                 Email = "Contact@asi.com",
             });
-            application.Contacts.Add(new DistributorMembershipApplicationContact()
+            application.Contacts.Add(new LegacyDistributorMembershipApplicationContact()
             {
                 IsPrimary = false,
                 Name = "First2 Last2",
@@ -116,10 +116,10 @@ namespace asi.asicentral.Tests
             });
             using (IObjectService objectService = new ObjectService(new Container(new EFRegistry())))
             {
-                IList<DistributorAccountType> accountTypes = objectService.GetAll<DistributorAccountType>().ToList();
+                IList<LegacyDistributorAccountType> accountTypes = objectService.GetAll<LegacyDistributorAccountType>().ToList();
                 Assert.IsTrue(accountTypes.Count > 1);
                 for (int i = 0; i < 2; i++) application.AccountTypes.Add(accountTypes[i]);
-                IList<DistributorProductLine> productLines = objectService.GetAll<DistributorProductLine>().ToList();
+                IList<LegacyDistributorProductLine> productLines = objectService.GetAll<LegacyDistributorProductLine>().ToList();
                 Assert.IsTrue(productLines.Count > 1);
                 for (int i = 0; i < 2; i++) application.ProductLines.Add(productLines[i]);
             }
@@ -144,7 +144,7 @@ namespace asi.asicentral.Tests
         /// </summary>
         /// <param name="objectService"></param>
         /// <param name="order"></param>
-        private void GenericAsserts(IObjectService objectService, Order order)
+        private void GenericAsserts(IObjectService objectService, LegacyOrder order)
         {
             //make sure company record is created
             TIMSSCompany company = objectService.GetAll<TIMSSCompany>(true).Where(comp => comp.DAPP_UserId == order.UserId.Value).SingleOrDefault();
@@ -157,9 +157,9 @@ namespace asi.asicentral.Tests
             Assert.AreEqual(2, contacts.Count);
         }
 
-        private Order CreateOrder()
+        private LegacyOrder CreateOrder()
         {
-            Order order = new Order()
+            LegacyOrder order = new LegacyOrder()
             {
                 UserId = Guid.NewGuid(),
                 ExternalReference = "000008939544", //TIMSS ID
@@ -172,7 +172,7 @@ namespace asi.asicentral.Tests
                 BillState = "Bill State",
                 BillCountry = "Bill Country",
                 BillPhone = "123 123 1234",
-                CreditCard = new OrderCreditCard()
+                CreditCard = new LegacyOrderCreditCard()
                 {
                     Type = "VISA",
                     Number = "***1234",
@@ -183,16 +183,16 @@ namespace asi.asicentral.Tests
                     TotalAmount = 199,
                 },
             };
-            order.OrderDetails.Add(new OrderDetail()
+            order.OrderDetails.Add(new LegacyOrderDetail()
             {
                 ExternalReference = "192",
-                ProductId = OrderProduct.SUPPLIER_APPLICATION,
+                ProductId = LegacyOrderProduct.SUPPLIER_APPLICATION,
                 Quantity = 1,
             });
             return order;
         }
 
-        private void PopulateApplication(OrderDetailApplication application)
+        private void PopulateApplication(LegacyOrderDetailApplication application)
         {
             application.Company = "Company Name";
             application.Address1 = "Address1";

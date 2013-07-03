@@ -18,30 +18,30 @@ namespace asi.asicentral.Tests
             using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
             {
                 //order 10491 has one line item of type 102 (Supplier Application)
-                Order supplierOrder = storeService.GetAll<Order>().Where(theOrder => theOrder.Id == 10491).SingleOrDefault();
+                LegacyOrder supplierOrder = storeService.GetAll<LegacyOrder>().Where(theOrder => theOrder.Id == 10491).SingleOrDefault();
                 Assert.IsTrue(supplierOrder != null && supplierOrder.OrderDetails.Count > 0);
                 Assert.IsNotNull(supplierOrder.Membership);
                 Assert.AreEqual(OrderStatus.Approved, supplierOrder.ProcessStatus);
-                OrderDetail supplierOrderDetail = null;
-                foreach (OrderDetail orderDetail in supplierOrder.OrderDetails)
+                LegacyOrderDetail supplierOrderDetail = null;
+                foreach (LegacyOrderDetail orderDetail in supplierOrder.OrderDetails)
                 {
-                    if (orderDetail.ProductId == OrderProduct.SUPPLIER_APPLICATION) supplierOrderDetail = orderDetail;
+                    if (orderDetail.ProductId == LegacyOrderProduct.SUPPLIER_APPLICATION) supplierOrderDetail = orderDetail;
                 }
                 Assert.IsNotNull(supplierOrderDetail);
-                SupplierMembershipApplication supplierapplication = storeService.GetSupplierApplication(supplierOrderDetail);
+                LegacySupplierMembershipApplication supplierapplication = storeService.GetSupplierApplication(supplierOrderDetail);
                 Assert.IsNotNull(supplierapplication);
                 Assert.IsTrue(supplierapplication.Contacts.Count > 0);
 
                 //order 288 has one line item of type 103 (Distributor Application)
-                Order distributorOrder = storeService.GetAll<Order>().Where(theOrder => theOrder.Id == 288).SingleOrDefault();
+                LegacyOrder distributorOrder = storeService.GetAll<LegacyOrder>().Where(theOrder => theOrder.Id == 288).SingleOrDefault();
                 Assert.IsTrue(distributorOrder != null && distributorOrder.OrderDetails.Count > 0);
-                OrderDetail distributorOrderDetail = null;
-                foreach (OrderDetail orderDetail in distributorOrder.OrderDetails)
+                LegacyOrderDetail distributorOrderDetail = null;
+                foreach (LegacyOrderDetail orderDetail in distributorOrder.OrderDetails)
                 {
-                    if (orderDetail.ProductId == OrderProduct.DISTRIBUTOR_APPLICATION) distributorOrderDetail = orderDetail;
+                    if (orderDetail.ProductId == LegacyOrderProduct.DISTRIBUTOR_APPLICATION) distributorOrderDetail = orderDetail;
                 }
                 Assert.IsNotNull(distributorOrderDetail);
-                DistributorMembershipApplication distributorApplication = storeService.GetDistributorApplication(distributorOrderDetail);
+                LegacyDistributorMembershipApplication distributorApplication = storeService.GetDistributorApplication(distributorOrderDetail);
                 Assert.IsNotNull(distributorApplication);
 
                 Assert.IsNull(storeService.GetSupplierApplication(distributorOrderDetail));
@@ -55,8 +55,8 @@ namespace asi.asicentral.Tests
             using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
             {
                 // select product screen
-                OrderProduct orderProduct = new OrderProduct { Id = OrderProduct.SUPPLIER_APPLICATION };
-                OrderDetail orderDetail = new OrderDetail
+                LegacyOrderProduct orderProduct = new LegacyOrderProduct { Id = LegacyOrderProduct.SUPPLIER_APPLICATION };
+                LegacyOrderDetail orderDetail = new LegacyOrderDetail
                 {
                     ProductId = orderProduct.Id,
                     Quantity = 1,
@@ -64,7 +64,7 @@ namespace asi.asicentral.Tests
                 };
 
                 // company information screen
-                Order order = new Order();
+                LegacyOrder order = new LegacyOrder();
                 order.TransId = Guid.NewGuid();
                 order.UserId = order.TransId.Value;
                 order.Status = false;
@@ -75,7 +75,7 @@ namespace asi.asicentral.Tests
                 order.BillLastName = "LastName";
                 order.OrderDetails.Add(orderDetail);
 
-                SupplierMembershipApplicationContact supplierAppContact = new SupplierMembershipApplicationContact();
+                LegacySupplierMembershipApplicationContact supplierAppContact = new LegacySupplierMembershipApplicationContact();
                 supplierAppContact.Name = "First Last";
                 supplierAppContact.Title = "Title";
                 //supplierAppContact.SalesId = 1;
@@ -83,20 +83,20 @@ namespace asi.asicentral.Tests
                 supplierAppContact.Phone = "1231231234";
                 supplierAppContact.AppplicationId = order.UserId.Value;
 
-                SupplierMembershipApplication supplierApplication = new SupplierMembershipApplication();
+                LegacySupplierMembershipApplication supplierApplication = new LegacySupplierMembershipApplication();
                 supplierApplication.UserId = order.TransId.Value;
                 supplierApplication.Company = "Company";
-                supplierApplication.Contacts = new List<SupplierMembershipApplicationContact>();
+                supplierApplication.Contacts = new List<LegacySupplierMembershipApplicationContact>();
                 supplierApplication.Contacts.Add(supplierAppContact);
 
-                storeService.Add<Order>(order);
-                storeService.Add<SupplierMembershipApplication>(supplierApplication);
+                storeService.Add<LegacyOrder>(order);
+                storeService.Add<LegacySupplierMembershipApplication>(supplierApplication);
                 storeService.SaveChanges();
 
                 // billing and shipping screen
-                Order billingOrder = storeService.GetAll<Order>().Where(theOrder => theOrder.Id == order.Id).SingleOrDefault();
+                LegacyOrder billingOrder = storeService.GetAll<LegacyOrder>().Where(theOrder => theOrder.Id == order.Id).SingleOrDefault();
                 if (billingOrder == null) throw new Exception("Invalid identifier for order id " + order.Id);
-                SupplierMembershipApplication billingSupplierApplication = storeService.GetAll<SupplierMembershipApplication>()
+                LegacySupplierMembershipApplication billingSupplierApplication = storeService.GetAll<LegacySupplierMembershipApplication>()
                     .Where(application => application.UserId == billingOrder.UserId).SingleOrDefault();
 
                 if (billingSupplierApplication == null) throw new Exception("Illegal supplier application with id " + billingSupplierApplication.UserId);
@@ -108,7 +108,7 @@ namespace asi.asicentral.Tests
                 billingSupplierApplication.ShippingCity = "shipping city";
                 billingSupplierApplication.ShippingZip = "19111";
 
-                OrderCreditCard creditcard = new OrderCreditCard()
+                LegacyOrderCreditCard creditcard = new LegacyOrderCreditCard()
                 {
                     ExpMonth = "March",
                     ExpYear = "2013",
@@ -121,12 +121,12 @@ namespace asi.asicentral.Tests
                 // TODO: find out how to fix this
                 billingOrder.CreditCard = creditcard;
 
-                storeService.Update<SupplierMembershipApplication>(billingSupplierApplication);
-                storeService.Update<Order>(billingOrder);
+                storeService.Update<LegacySupplierMembershipApplication>(billingSupplierApplication);
+                storeService.Update<LegacyOrder>(billingOrder);
                 storeService.SaveChanges();
 
                 // review screen
-                Order reviewOrder = storeService.GetAll<Order>().Where(theOrder => theOrder.Id == order.Id).SingleOrDefault();
+                LegacyOrder reviewOrder = storeService.GetAll<LegacyOrder>().Where(theOrder => theOrder.Id == order.Id).SingleOrDefault();
                 if (reviewOrder == null) throw new Exception("Invalid identifier for order id " + order.Id);
 
                 ASPNetMembership membership = new ASPNetMembership();
@@ -149,12 +149,12 @@ namespace asi.asicentral.Tests
                 membership.FailedPasswordAttemptWindowStart = DateTime.Now;
 
                 reviewOrder.Status = true;
-                storeService.Update<Order>(reviewOrder);
+                storeService.Update<LegacyOrder>(reviewOrder);
                 storeService.Add<ASPNetMembership>(membership);
                 storeService.SaveChanges();
 
                 // option screen
-                SupplierMembershipApplication supplierMembershipApplication = storeService.GetAll<SupplierMembershipApplication>()
+                LegacySupplierMembershipApplication supplierMembershipApplication = storeService.GetAll<LegacySupplierMembershipApplication>()
                     .Where(application => application.UserId == reviewOrder.UserId.Value).SingleOrDefault();
 
                 supplierMembershipApplication.UserId = reviewOrder.UserId.Value;
@@ -170,7 +170,7 @@ namespace asi.asicentral.Tests
                 supplierMembershipApplication.ApplicationStatusId = 1;
                 // need data field for "is your company women owned?"
 
-                storeService.Update<SupplierMembershipApplication>(supplierMembershipApplication);
+                storeService.Update<LegacySupplierMembershipApplication>(supplierMembershipApplication);
                 storeService.SaveChanges();
             }
         }

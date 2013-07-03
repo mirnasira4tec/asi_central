@@ -16,17 +16,23 @@ namespace asi.asicentral.model.store
             }
         }
 
-        public int ProductId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
+        public decimal Cost { get; set; }
+        public decimal ApplicationCost { get; set; }
+        public decimal ShippingCostUS { get; set; }
+        public decimal ShippingCostOther { get; set; }
+        public bool HasTax { get; set; }
+        public bool IsSubscription { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
-        
+
         public virtual ICollection<ContextFeatureProduct> Features { get; set; }
 
         public override string ToString()
         {
-            return string.Format("Product: {0} - {1}", ProductId, Name);
+            return string.Format("Product: {0} - {1}", Id, Name);
         }
 
         public override bool Equals(object obj)
@@ -34,13 +40,13 @@ namespace asi.asicentral.model.store
             bool equals = false;
 
             ContextProduct product = obj as ContextProduct;
-            if (product != null) equals = product.ProductId == ProductId;
+            if (product != null) equals = product.Id == Id;
             return equals;
         }
 
         public override int GetHashCode()
         {
-            return ProductId.GetHashCode();
+            return Id.GetHashCode();
         }
     }
 }

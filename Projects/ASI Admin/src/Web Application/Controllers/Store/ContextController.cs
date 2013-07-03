@@ -32,7 +32,7 @@ namespace asi.asicentral.web.Controllers.Store
             IList<Context> contextList = StoreObjectService.GetAll<Context>().ToList();
             foreach (Context context in contexts)
             {
-                Context contextToUpdate = contextList.Where(ctx => ctx.ContextId == context.ContextId).FirstOrDefault();
+                Context contextToUpdate = contextList.Where(ctx => ctx.Id == context.Id).FirstOrDefault();
                 if (contextToUpdate != null)
                 {
                     contextToUpdate.HeaderImage = context.HeaderImage;
@@ -45,7 +45,7 @@ namespace asi.asicentral.web.Controllers.Store
 
         public ActionResult ProductComparison(int id)
         {
-            Context context = StoreObjectService.GetAll<Context>(true).Where(ctx => ctx.ContextId == id).SingleOrDefault();
+            Context context = StoreObjectService.GetAll<Context>(true).Where(ctx => ctx.Id == id).SingleOrDefault();
             if (context == null) throw new Exception("Invalid identifier for a context");
             return View("../Store/Context/ProductComparison", context);
         }

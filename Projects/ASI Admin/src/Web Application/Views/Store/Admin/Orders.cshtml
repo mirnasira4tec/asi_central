@@ -102,7 +102,15 @@
                     <a rel="tooltip" data-placement="top" title="Click here to accept the order" href="@Url.Action("Edit", "Application", new { Id = order.Application.Id, OrderId = order.OrderId })"><i data-orderid="@order.OrderId" class="icon-ok"></i></a> 
                 }
                 else { <img src="/images/transparent.gif" style="height:1px;width:33px" /> }
-                @order.OrderId</td><td>@order.Name</td><td>@order.Email</td><td><a href="#" class="productRef">@order.Item</a></td>
+                @order.OrderId</td><td>@order.Name</td><td>@order.Email</td>
+                @if(!string.IsNullOrEmpty(order.ContextType))
+                {
+                <td><a href="#" class="productRef">@order.ContextType</a></td>
+                }
+                else 
+                {
+                <td><a href="#" class="productRef">@order.Item</a></td>
+                }
                 @if (order.Application != null)
                 { <td><a href="@Url.Action("Edit", "Application", new { Id = order.Application.Id, OrderId = order.OrderId })">Application</a></td> }
                 else

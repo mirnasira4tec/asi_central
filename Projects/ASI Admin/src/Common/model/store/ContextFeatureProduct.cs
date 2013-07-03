@@ -8,7 +8,7 @@ namespace asi.asicentral.model.store
 {
     public class ContextFeatureProduct
     {
-        public int ContextFeatureProductId { get; set; }
+        public int Id { get; set; }
         public int ProductId { get; set; }
         public string Label { get; set; }
         public DateTime CreateDate { get; set; }
@@ -28,14 +28,14 @@ namespace asi.asicentral.model.store
             ContextFeatureProduct featureProduct = obj as ContextFeatureProduct;
             if (featureProduct != null) 
                 equals = (
-                    featureProduct.ContextFeatureProductId == ContextFeatureProductId &&
+                    featureProduct.Id == Id &&
                     ProductId == featureProduct.ProductId);
             return equals;
         }
 
         public override int GetHashCode()
         {
-            return new { ContextFeatureProductId, ProductId }.GetHashCode();
+            return new { ContextFeatureProductId = Id, ProductId }.GetHashCode();
         }
     }
 }

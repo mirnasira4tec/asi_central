@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings.asiinternet
 {
-    public class SupplierDecoratingTypeMap : EntityTypeConfiguration<SupplierDecoratingType>
+    public class SupplierDecoratingTypeMap : EntityTypeConfiguration<LegacySupplierDecoratingType>
     {
         public SupplierDecoratingTypeMap()
         {

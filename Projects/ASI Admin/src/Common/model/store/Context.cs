@@ -17,7 +17,7 @@ namespace asi.asicentral.model.store
             }
         }
 
-        public int ContextId { get; set; }
+        public int Id { get; set; }
         public string Type { get; set; }
         public string Name { get; set; }
         public bool Active { get; set; }
@@ -26,13 +26,14 @@ namespace asi.asicentral.model.store
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
         public string NotificationEmails { get; set; }
+        public int NumberOfPages { get; set; }
         public string HeaderImage { get; set; }
         public virtual List<ContextFeature> Features { get; set; }
         public virtual List<ContextProductSequence> Products { get; set; }
 
         public override string ToString()
         {
-            return string.Format("Context: {0} - {1}", ContextId, Name);
+            return string.Format("Context: {0} - {1}", Id, Name);
         }
 
         public override bool Equals(object obj)
@@ -40,13 +41,13 @@ namespace asi.asicentral.model.store
             bool equals = false;
 
             Context context = obj as Context;
-            if (context != null) equals = context.ContextId == ContextId;
+            if (context != null) equals = context.Id == Id;
             return equals;
         }
 
         public override int GetHashCode()
         {
-            return ContextId.GetHashCode();
+            return Id.GetHashCode();
         }
     }
 }

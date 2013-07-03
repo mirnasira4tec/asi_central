@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings.asiinternet
 {
-    internal class OrderDetailMap : EntityTypeConfiguration<OrderDetail>
+    internal class OrderDetailMap : EntityTypeConfiguration<LegacyOrderDetail>
     {
         public OrderDetailMap()
         {
@@ -44,6 +44,9 @@ namespace asi.asicentral.database.mappings.asiinternet
 
             this.Property(detail => detail.Subtotal)
                 .HasColumnName("ODET_Subtotal");
+
+            this.Property(detail => detail.ApplicationFee)
+                .HasColumnName("ODET_ApplicationFee");
 
             this.Property(detail => detail.HallmarkResult)
                 .HasColumnName("ODET_HallmarkResult");
