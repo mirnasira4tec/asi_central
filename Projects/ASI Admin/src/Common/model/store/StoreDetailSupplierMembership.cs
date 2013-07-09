@@ -162,7 +162,7 @@ namespace asi.asicentral.model.store
             return hash;
         }
 
-        public void CopyTo(StoreDetailSupplierMembership supplier)
+        public virtual void CopyTo(StoreDetailSupplierMembership supplier)
         {
             base.CopyTo(supplier);
             supplier.AffiliateASINumber = AffiliateASINumber;

@@ -11,7 +11,7 @@
 @using (Html.BeginForm("EditDistributor", "Application"))
 {
     @Html.AntiForgeryToken()
-    @Html.HiddenFor(m => m.Id) @Html.HiddenFor(m => m.UserId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
+    @Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
     
     <div>
         <h3 class="order-status-header3">Order Status:</h3>

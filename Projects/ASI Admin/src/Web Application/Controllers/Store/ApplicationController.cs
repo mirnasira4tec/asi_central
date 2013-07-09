@@ -30,7 +30,7 @@ namespace asi.asicentral.web.Controllers.Store
             if (orderDetail != null) application = StoreService.GetApplication(orderDetail);
             if (application != null)
             {
-                if (application is StoreDetailSupplierMembership) return View("../Store/Application/Supplier", new SupplierApplicationModel((StoreDetailSupplierMembership)application, orderDetail.Order));
+                if (application is StoreDetailSupplierMembership) return View("../Store/Application/Supplier", new SupplierApplicationModel((StoreDetailSupplierMembership)application, orderDetail));
                 else if (application is StoreDetailDistributorMembership) return View("../Store/Application/Distributor", new DistributorApplicationModel((StoreDetailDistributorMembership)application, orderDetail.Order));
                 else throw new Exception("Retieved an unknown type of application");
             }

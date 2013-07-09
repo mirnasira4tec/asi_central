@@ -13,7 +13,7 @@
 <div class="row-fluid">
     <div class="span4">
         @Html.AntiForgeryToken()
-        @Html.HiddenFor(m => m.Id) @Html.HiddenFor(m => m.UserId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
+        @Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
         <fieldset><legend><small>Company Information</small></legend>
         @Html.LabelFor(m => m.Company) @Html.EditorFor(m => m.Company) @Html.ValidationMessageFor(m => m.Company)
         @Html.LabelFor(m => m.Address1) @Html.EditorFor(m => m.Address1) @Html.ValidationMessageFor(m => m.Address1)
@@ -51,11 +51,11 @@
         @Html.LabelFor(m => m.UPSShippingNumber) @Html.EditorFor(m => m.UPSShippingNumber) @Html.ValidationMessageFor(m => m.UPSShippingNumber)
         </fieldset>}
         <fieldset><legend><small>Form Data</small></legend>
-        @Html.LabelFor(m => m.LineNames) @Html.EditorFor(m => m.LineNames) @Html.ValidationMessageFor(m => m.LineMinorityOwned)
+        @Html.LabelFor(m => m.LineNames) @Html.EditorFor(m => m.LineNames) @Html.ValidationMessageFor(m => m.LineNames)
         @Html.LabelFor(m => m.YearEstablished) @Html.EditorFor(m => m.YearEstablished) @Html.ValidationMessageFor(m => m.YearEstablished)
         @Html.LabelFor(m => m.YearEnteredAdvertising) @Html.EditorFor(m => m.YearEnteredAdvertising) @Html.ValidationMessageFor(m => m.YearEnteredAdvertising)
         @Html.LabelFor(m => m.WomanOwned) @Html.EditorFor(m => m.WomanOwned)
-        @Html.LabelFor(m => m.LineMinorityOwned) @Html.EditorFor(m => m.LineMinorityOwned)
+        @Html.LabelFor(m => m.IsMinorityOwned) @Html.EditorFor(m => m.IsMinorityOwned)
         @Html.LabelFor(m => m.NumberOfEmployee) @Html.EditorFor(m => m.NumberOfEmployee) @Html.ValidationMessageFor(m => m.NumberOfEmployee)
         @Html.LabelFor(m => m.HasAmericanProducts) @Html.EditorFor(m=>m.HasAmericanProducts)
         @Html.LabelFor(m => m.BusinessHours) @Html.EditorFor(m => m.BusinessHours) @Html.ValidationMessageFor(m => m.BusinessHours)
@@ -70,24 +70,17 @@
         </fieldset>
     </div>
     <div class="span4">
-        @if(Model.Contacts == null || Model.Contacts.Count == 0) {
-            <fieldset><legend><small>Application: Company Contact Person</small></legend>
-            @Html.LabelFor(m => m.ContactName) @Html.EditorFor(m => m.ContactName) @Html.ValidationMessageFor(m => m.ContactName)
-            @Html.LabelFor(m => m.ContactTitle) @Html.EditorFor(m => m.ContactTitle) @Html.ValidationMessageFor(m => m.ContactTitle)
-            @Html.LabelFor(m => m.ContactEmail) @Html.EditorFor(m => m.ContactEmail) @Html.ValidationMessageFor(m => m.ContactEmail)
-            @Html.LabelFor(m => m.ContactPhone) @Html.EditorFor(m => m.ContactPhone) @Html.ValidationMessageFor(m => m.ContactPhone)
-        </fieldset>
-        }
         @if(Model.Contacts != null && Model.Contacts.Count > 0)
         {
             for (int i = 0; i < Model.Contacts.Count; i++)
             {
                 if (Model.Contacts[i] != null)
                 {
-                <fieldset><legend><small>Contacts</small></legend>
-                @Html.HiddenFor(m => Model.Contacts[i].Id) @Html.HiddenFor(m => Model.Contacts[i].IsPrimary) @Html.HiddenFor(m => Model.Contacts[i].AppplicationId)
+                <fieldset><legend><small>Contact</small></legend>
+                @Html.HiddenFor(m => Model.Contacts[i].Id) @Html.HiddenFor(m => Model.Contacts[i].IsPrimary)
                 @(Model.Contacts[i].IsPrimary ? Html.Raw(" <strong>Primary Contact</strong>"): Html.Raw(""))
-                @Html.LabelFor(m => Model.Contacts[i].Name) @Html.EditorFor(m => Model.Contacts[i].Name) @Html.ValidationMessageFor(m => Model.Contacts[i].Name)
+                @Html.LabelFor(m => Model.Contacts[i].FirstName) @Html.EditorFor(m => Model.Contacts[i].FirstName) @Html.ValidationMessageFor(m => Model.Contacts[i].FirstName)
+                @Html.LabelFor(m => Model.Contacts[i].LastName) @Html.EditorFor(m => Model.Contacts[i].LastName) @Html.ValidationMessageFor(m => Model.Contacts[i].LastName)
                 @Html.LabelFor(m => Model.Contacts[i].Title) @Html.EditorFor(m => Model.Contacts[i].Title) @Html.ValidationMessageFor(m => Model.Contacts[i].Title)
                 @Html.LabelFor(m => Model.Contacts[i].Email) @Html.EditorFor(m => Model.Contacts[i].Email) @Html.ValidationMessageFor(m => Model.Contacts[i].Email)
                 @Html.LabelFor(m => Model.Contacts[i].Phone) @Html.EditorFor(m => Model.Contacts[i].Phone) @Html.ValidationMessageFor(m => Model.Contacts[i].Phone)

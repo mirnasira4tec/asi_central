@@ -52,5 +52,46 @@ namespace asi.asicentral.model.store
         {
             return Id.GetHashCode();
         }
+
+        /// <summary>
+        /// Gets the company address by going through all the addresses associated with the company
+        /// </summary>
+        /// <returns></returns>
+        public StoreAddress GetCompanyAddress()
+        {
+            StoreAddress address = null;
+            //find address which is neither shipping nor billing
+            StoreCompanyAddress companyAddress = Addresses.Where(add => !add.IsShipping && !add.IsBilling).FirstOrDefault();
+            if (companyAddress != null) address = companyAddress.Address;
+            if (address == null)
+            {
+                //Try to use the shipping address for the company now
+                companyAddress = Addresses.Where(add => add.IsShipping).FirstOrDefault();
+                if (companyAddress != null) address = companyAddress.Address;
+            }
+            if (address == null)
+            {
+                //Try to use the billing address for the company now
+                companyAddress = Addresses.Where(add => add.IsBilling).FirstOrDefault();
+                if (companyAddress != null) address = companyAddress.Address;
+            }
+            return address;
+        }
+
+        public bool HasBillAddress
+        {
+            get
+            {
+                return Addresses.Where(add => add.IsBilling).Count() > 0;
+            }
+        }
+
+        public bool HasShipAddress
+        {
+            get
+            {
+                return Addresses.Where(add => add.IsShipping).Count() > 0;
+            }
+        }
     }
 }

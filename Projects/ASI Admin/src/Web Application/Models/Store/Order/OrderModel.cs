@@ -140,7 +140,7 @@ namespace asi.asicentral.web.model.store
             {
                 context = storeService.GetAll<Context>().Where(ctx => ctx.Id == orderDetail.Order.ContextId).SingleOrDefault();
                 if (context != null && !string.IsNullOrEmpty(context.Type))
-                    order.ContextType = context.Type;
+                    order.ContextType = context.Name;
             }
 
             return order;

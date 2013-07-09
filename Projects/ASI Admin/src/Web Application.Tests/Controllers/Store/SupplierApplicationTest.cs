@@ -28,6 +28,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             StoreOrderDetail detail = new StoreOrderDetail { Id = 0, Order = order, };
             List<StoreOrderDetail> details = new List<StoreOrderDetail>();
             details.Add(detail);
+            detail.Order = order;
             order.CreditCard = new StoreCreditCard() { ExternalReference = "111" };
             StoreOrder orderRef = order;
             StoreCompany company = new StoreCompany()
@@ -53,7 +54,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
 
             applications.Add(application);
 
-            SupplierApplicationModel model = new SupplierApplicationModel(application, orderRef);
+            SupplierApplicationModel model = new SupplierApplicationModel(application, detail);
             model.ExternalReference = "102";
             model.ActionName = ApplicationController.COMMAND_SAVE;
             model.Etching = true;

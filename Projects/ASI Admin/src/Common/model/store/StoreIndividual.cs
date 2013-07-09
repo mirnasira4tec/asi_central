@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,10 +15,16 @@ namespace asi.asicentral.model.store
         public bool IsPrimary { get; set; }
         public string Title { get; set; }
         public string Department { get; set; }
+        [Display(ResourceType = typeof(Resource), Name = "FirstName")]
+        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public string FirstName { get; set; }
+        [Display(ResourceType = typeof(Resource), Name = "LastName")]
+        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public string LastName { get; set; }
         public string Email { get; set; }
+        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
         public string Phone { get; set; }
+        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
         public string Fax { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }

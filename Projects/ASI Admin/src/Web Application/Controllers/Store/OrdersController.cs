@@ -124,7 +124,6 @@ namespace asi.asicentral.web.Controllers.Store
                 .Select(grouped => new GroupedData() {
                     Campaign = grouped.Key.Campaign, 
                     CompletedStep = grouped.Key.CompletedStep, 
-                    StepLabel = SqlFunctions.StringConvert((double)grouped.Key.CompletedStep), 
                     Count = grouped.Count(), 
                     Amount = grouped.Sum(order => order.ContextId),  //need overall order amount
                     CountRejected = grouped.Count(order => order.ProcessStatus == OrderStatus.Rejected),
@@ -159,6 +158,9 @@ namespace asi.asicentral.web.Controllers.Store
                         break;
                     case 6:
                         data.StepLabel = "Supplier provided a product List";
+                        break;
+                    default:
+                        data.StepLabel = data.CompletedStep.ToString();
                         break;
                 }
             }
