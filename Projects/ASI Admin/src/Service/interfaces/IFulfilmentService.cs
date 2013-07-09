@@ -17,6 +17,6 @@ namespace asi.asicentral.interfaces
         /// </summary>
         /// <param name="order"></param>
         /// <param name="application"></param>
-        void Process(LegacyOrder order, LegacyOrderDetailApplication application);
+        Guid Process(StoreOrder order, StoreDetailApplication application);
     }
 }

@@ -43,7 +43,7 @@ namespace asi.asicentral.model.store
         public static string GetLastName(string name)
         {
             string firstName = GetFirstName(name);
-            return name.Substring(firstName.Length);
+            return name.Substring(firstName.Length).Trim();
         }
 
         public override string ToString()

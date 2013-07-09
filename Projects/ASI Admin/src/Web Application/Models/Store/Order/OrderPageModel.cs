@@ -27,12 +27,12 @@ namespace asi.asicentral.web.model.store
         public int? Identifier { get; set; }
         public string Name { get; set; }
 
-        public OrderPageModel(IStoreService storeService, IEncryptionService encryptionService, IList<LegacyOrderDetail> orderDetails) 
+        public OrderPageModel(IStoreService storeService, IEncryptionService encryptionService, IList<StoreOrderDetail> orderDetails) 
         {
             Orders = new List<OrderModel>();
             if (orderDetails != null && storeService != null)
             {
-                foreach (LegacyOrderDetail orderDetail in orderDetails)
+                foreach (StoreOrderDetail orderDetail in orderDetails)
                 {
                     Orders.Add(OrderModel.CreateOrder(storeService, encryptionService, orderDetail));
                 }

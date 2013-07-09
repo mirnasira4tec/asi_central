@@ -81,7 +81,7 @@ namespace Store_Database_Conversion
         /// <param name="to"></param>
         public void ProcessLegacyRecords(int from, int to)
         {
-            List<LegacyOrder> legacyOrders = _asiInternetContext.Orders.OrderBy(order => order.Id).Skip(from).Take(to - from).ToList();
+            List<LegacyOrder> legacyOrders = _asiInternetContext.Orders.OrderByDescending(order => order.Id).Skip(from).Take(to - from).ToList();
             List<ContextProduct> productReference = _storeContext.Products.ToList();
 
             foreach (LegacyOrder order in legacyOrders)
@@ -106,30 +106,10 @@ namespace Store_Database_Conversion
                         UpdateSource = "Migration Process - " + DateTime.Now,
                     };
                     _storeContext.StoreOrders.Add(newOrder);
-
-                    //@todo order total amount - not adjusted for subscriptions
-                    //credit card information
-                    if (order.CreditCard != null)
-                    {
-                        LegacyOrderCreditCard creditCard = order.CreditCard;
-                        StoreCreditCard newCreditCard = new StoreCreditCard()
-                        {
-                            CardHolderName = creditCard.Name,
-                            CardNumber = creditCard.Number,
-                            CardType = creditCard.Type,
-                            ExpMonth = creditCard.ExpMonth,
-                            ExpYear = creditCard.ExpYear,
-                            ExternalReference = creditCard.ExternalReference,
-                            CreateDate = creationDate,
-                            UpdateDate = creationDate,
-                            UpdateSource = "Migration Process - " + DateTime.Now,
-                        };
-                        _storeContext.StoreCreditCards.Add(newCreditCard); //keetp this here or EF is getting confused
-                        newOrder.CreditCard = newCreditCard;
-                    }
                     //add billing contact
                     newOrder.BillingIndividual = GetBillingIndividual(order);
                     //order detail records
+                    bool containsSubscription = false;
                     foreach (LegacyOrderDetail detail in order.OrderDetails)
                     {
                         ContextProduct product = null;
@@ -150,6 +130,7 @@ namespace Store_Database_Conversion
                             UpdateDate = creationDate,
                             UpdateSource = "Migration Process - " + DateTime.Now,
                         };
+                        containsSubscription = containsSubscription || IsSubscription(detail.ProductId);
                         newOrder.OrderDetails.Add(newDetail);
                         _storeContext.StoreOrderDetails.Add(newDetail); //some records do not have a key generated unless added explicitely
                         if (!string.IsNullOrEmpty(detail.Application) && detail.Application.ToLower() != "new")
@@ -177,7 +158,31 @@ namespace Store_Database_Conversion
                             productConvert.Convert(newDetail, detail, _storeContext, _asiInternetContext);
                         }
                     }
-                    //@todo check addresses associated with the order
+                    //credit card information
+                    if (order.CreditCard != null)
+                    {
+                        LegacyOrderCreditCard creditCard = order.CreditCard;
+                        StoreCreditCard newCreditCard = new StoreCreditCard()
+                        {
+                            CardHolderName = creditCard.Name,
+                            CardNumber = creditCard.Number,
+                            CardType = creditCard.Type,
+                            ExpMonth = creditCard.ExpMonth,
+                            ExpYear = creditCard.ExpYear,
+                            ExternalReference = creditCard.ExternalReference,
+                            CreateDate = creationDate,
+                            UpdateDate = creationDate,
+                            UpdateSource = "Migration Process - " + DateTime.Now,
+                        };
+                        if (order.CreditCard.TotalAmount.HasValue)
+                        {
+                            newOrder.Total = order.CreditCard.TotalAmount.Value;
+                            //create an annualized value if any of the order details record contain a subscription. This should be accurate for most of them.
+                            if (containsSubscription) newOrder.AnnualizedTotal = newOrder.Total * 12;
+                        }
+                        _storeContext.StoreCreditCards.Add(newCreditCard); //keetp this here or EF is getting confused
+                        newOrder.CreditCard = newCreditCard;
+                    }
                     //first start with company record - there is not more than one record per order in the legacy database
                     if (order.DistributorAddresses.Count > 1)
                     {
@@ -276,6 +281,10 @@ namespace Store_Database_Conversion
                 };
             }
             return individual;
+        }
+        private bool IsSubscription(int productId)
+        {
+            return new int[] { 1, 103, 205, 206, 212, 3, 195, 102, 152, 7, 8, 9, 10, 11, 104, 166 }.Contains(productId);
         }
 
         private int ConvertProductId(int productId)

@@ -6,7 +6,7 @@ using System.Web;
 
 namespace asi.asicentral.web.model.store
 {
-    public class DistributorApplicationModel : LegacyDistributorMembershipApplication
+    public class DistributorApplicationModel : StoreDetailDistributorMembership
     {
         public string BuisnessRevenue { set; get; }
 
@@ -84,11 +84,11 @@ namespace asi.asicentral.web.model.store
         /// </summary>
         public DistributorApplicationModel() : base()
         {
-            this.ProductLines = new List<LegacyDistributorProductLine>();
-            this.AccountTypes = new List<LegacyDistributorAccountType>();
+            this.ProductLines = new List<LookProductLine>();
+            this.AccountTypes = new List<LookDistributorAccountType>();
         }
 
-        public DistributorApplicationModel(LegacyDistributorMembershipApplication application, asi.asicentral.model.store.LegacyOrder order)
+        public DistributorApplicationModel(StoreDetailDistributorMembership application, StoreOrder order)
         {
             application.CopyTo(this);
             GetPrimaryBusinessRevenue();
@@ -98,18 +98,9 @@ namespace asi.asicentral.web.model.store
             ExternalReference = order.ExternalReference;
             OrderId = order.Id;
             OrderStatus = order.ProcessStatus;
-            Completed = order.Status.HasValue ? order.Status.HasValue : false;
-            if (order.OrderDetails.Count == 1 && order.OrderDetails.ElementAt(0).Subtotal.HasValue)
-            {
-                if (order.OrderDetails.ElementAt(0).PreTaxSubtotal.HasValue) MonthlyPrice = order.OrderDetails.ElementAt(0).PreTaxSubtotal.Value;
-                else MonthlyPrice = order.OrderDetails.ElementAt(0).Subtotal.Value;
-                Price = order.OrderDetails.ElementAt(0).Subtotal.Value;
-            }
-            else
-            {
-                MonthlyPrice = 0m;
-                Price = 0m;
-            }
+            Completed = order.IsCompleted;
+            Price = order.Total;
+            MonthlyPrice = (order.Total - order.AnnualizedTotal) / 11;
         }
 
         private void GetPrimaryBusinessRevenue()
@@ -122,25 +113,25 @@ namespace asi.asicentral.web.model.store
             Other = string.IsNullOrEmpty(this.OtherBusinessRevenue) ? false : true;
         }
 
-        private void AddType(bool selected, String codeName, IList<LegacyDistributorAccountType> accountTypes)
+        private void AddType(bool selected, String codeName, IList<LookDistributorAccountType> accountTypes)
         {
             if (selected)
             {
-                LegacyDistributorAccountType account = accountTypes.Where(type => type.SubCode == codeName).SingleOrDefault();
+                LookDistributorAccountType account = accountTypes.Where(type => type.SubCode == codeName).SingleOrDefault();
                 if (account != null) this.AccountTypes.Add(account);
             }
         }
 
-        private void AddProductLine(bool selected, String codeName, IList<LegacyDistributorProductLine> productLines)
+        private void AddProductLine(bool selected, String codeName, IList<LookProductLine> productLines)
         {
             if (selected)
             {
-                LegacyDistributorProductLine line = productLines.Where(productline => productline.SubCode == codeName).SingleOrDefault();
+                LookProductLine line = productLines.Where(productline => productline.SubCode == codeName).SingleOrDefault();
                 if (line != null) this.ProductLines.Add(line);
             }
         }
 
-        public void SyncProductLinesFrom(IList<LegacyDistributorProductLine> productLines)
+        public void SyncProductLinesFrom(IList<LookProductLine> productLines)
         {
             AddProductLine(Product1, "1", productLines);
             AddProductLine(Product2, "2", productLines);
@@ -176,7 +167,7 @@ namespace asi.asicentral.web.model.store
 
         }
 
-        public void SyncAccountTypesFrom(IList<LegacyDistributorAccountType> accountTypes)
+        public void SyncAccountTypesFrom(IList<LookDistributorAccountType> accountTypes)
         {
             AddType(Account1, "1", accountTypes);
             AddType(AccountA, "A", accountTypes);

@@ -34,6 +34,8 @@ namespace asi.asicentral.model.store
         public string Campaign { get; set; }
         public string ExternalReference { get; set; }
         public string IPAdd { get; set; }
+        public decimal Total { get; set; }
+        public decimal AnnualizedTotal { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
@@ -61,6 +63,18 @@ namespace asi.asicentral.model.store
         public override int GetHashCode()
         {
             return Id.GetHashCode();
+        }
+
+        /// <summary>
+        /// Gets the more realistic contact for the order
+        /// </summary>
+        /// <returns></returns>
+        public StoreIndividual GetContact()
+        {
+            StoreIndividual contact = null;
+            if (Company != null) contact = Company.Individuals.Where(ctct => ctct.IsPrimary).FirstOrDefault();
+            if (contact == null && BillingIndividual != null) contact = BillingIndividual;
+            return contact;
         }
     }
 }

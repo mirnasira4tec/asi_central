@@ -22,15 +22,16 @@ namespace asi.asicentral.web.Controllers.Store
         public ICreditCardService CreditCardService { get; set; }
 
         [HttpGet]
-        public virtual ActionResult Edit(Guid id, int orderId)
+        public virtual ActionResult Edit(int id)
         {
-            LegacyOrderDetailApplication application = GetApplication(id);
-            LegacyOrder order = StoreService.GetAll<LegacyOrder>(true).Where(ordr => ordr.Id == orderId).SingleOrDefault();
-            if (application != null && order != null)
+            StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>(true).Where(detail => detail.Id == id).FirstOrDefault();
+            if (orderDetail == null) throw new Exception("Invalid Order Detail Id");
+            StoreDetailApplication application = null;
+            if (orderDetail != null) application = StoreService.GetApplication(orderDetail);
+            if (application != null)
             {
-                if (application.UserId != order.UserId) throw new Exception("The order and the application do not match");
-                if (application is LegacySupplierMembershipApplication) return View("../Store/Application/Supplier", new SupplierApplicationModel((LegacySupplierMembershipApplication)application, order));
-                else if (application is LegacyDistributorMembershipApplication) return View("../Store/Application/Distributor", new DistributorApplicationModel((LegacyDistributorMembershipApplication)application, order));
+                if (application is StoreDetailSupplierMembership) return View("../Store/Application/Supplier", new SupplierApplicationModel((StoreDetailSupplierMembership)application, orderDetail.Order));
+                else if (application is StoreDetailDistributorMembership) return View("../Store/Application/Distributor", new DistributorApplicationModel((StoreDetailDistributorMembership)application, orderDetail.Order));
                 else throw new Exception("Retieved an unknown type of application");
             }
             else
@@ -46,26 +47,26 @@ namespace asi.asicentral.web.Controllers.Store
         {
             if (ModelState.IsValid)
             {
-                LegacyOrder order = StoreService.GetAll<LegacyOrder>().Where(ordr => ordr.Id == application.OrderId).SingleOrDefault();
-                LegacyDistributorMembershipApplication distributorApplication = StoreService.GetAll<LegacyDistributorMembershipApplication>().Where(app => app.Id == application.Id).SingleOrDefault();
+                StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
+                if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
+                StoreOrder order = orderDetail.Order;
+                StoreDetailDistributorMembership distributorApplication = StoreService.GetAll<StoreDetailDistributorMembership>().Where(app => app.OrderDetailId == application.OrderDetailId).SingleOrDefault();
                 if (order == null) throw new Exception("Invalid reference to an order");
                 if (distributorApplication == null) throw new Exception("Invalid reference to an application");
                 order.ExternalReference = application.ExternalReference;
 
                 //view does not contain some of the collections, copy from the ones in the database
-                application.SyncAccountTypesFrom(StoreService.GetAll<LegacyDistributorAccountType>().ToList());
-                application.SyncProductLinesFrom(StoreService.GetAll<LegacyDistributorProductLine>().ToList());
+                application.SyncAccountTypesFrom(StoreService.GetAll<LookDistributorAccountType>().ToList());
+                application.SyncProductLinesFrom(StoreService.GetAll<LookProductLine>().ToList());
 
-                LegacyDistributorBusinessRevenue PrimaryBusinessRevenue = StoreService.GetAll<LegacyDistributorBusinessRevenue>(false).Where(revenue => revenue.Name == application.BuisnessRevenue).SingleOrDefault();
+                LookDistributorRevenueType PrimaryBusinessRevenue = StoreService.GetAll<LookDistributorRevenueType>(false).Where(revenue => revenue.Name == application.BuisnessRevenue).SingleOrDefault();
                 if (PrimaryBusinessRevenue != null)
                 {
                     application.PrimaryBusinessRevenue = PrimaryBusinessRevenue;
-                    application.PrimaryBusinessRevenueId = PrimaryBusinessRevenue.Id;
                 }
                 else
                 {
                     application.PrimaryBusinessRevenue = null;
-                    application.PrimaryBusinessRevenueId = null;
                 }
                 application.CopyTo(distributorApplication);
 
@@ -74,7 +75,7 @@ namespace asi.asicentral.web.Controllers.Store
                 if (application.ActionName == ApplicationController.COMMAND_REJECT)
                     return RedirectToAction("List", "Orders");
                 else
-                    return RedirectToAction("Edit", "Application", new { id = application.Id, orderId = order.Id });
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId });
             }
             else
             {
@@ -89,20 +90,22 @@ namespace asi.asicentral.web.Controllers.Store
         {
             if (ModelState.IsValid)
             {
-                LegacyOrder order = StoreService.GetAll<LegacyOrder>(false).Where(ordr => ordr.Id == application.OrderId).SingleOrDefault();
-                LegacySupplierMembershipApplication supplierApplication = StoreService.GetAll<LegacySupplierMembershipApplication>(false).Where(app => app.Id == application.Id).SingleOrDefault();
+                StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
+                if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
+                StoreOrder order = orderDetail.Order;
+                StoreDetailSupplierMembership supplierApplication = StoreService.GetAll<StoreDetailSupplierMembership>(false).Where(app => app.OrderDetailId == application.OrderDetailId).SingleOrDefault();
                 if (order == null) throw new Exception("Invalid reference to an order");
                 if (supplierApplication == null) throw new Exception("Invalid reference to an application");
                 order.ExternalReference = application.ExternalReference;
                 //copy decorating types bool to the collections
-                application.SyncDecoratingTypes(StoreService.GetAll<LegacySupplierDecoratingType>().ToList());
+                application.SyncDecoratingTypes(StoreService.GetAll<LookSupplierDecoratingType>().ToList());
                 application.CopyTo(supplierApplication);
                 ProcessCommand(StoreService, FulfilmentService, order, supplierApplication, application.ActionName);
                 StoreService.SaveChanges();
                 if (application.ActionName == ApplicationController.COMMAND_REJECT)
                     return RedirectToAction("List", "Orders");
                 else
-                    return RedirectToAction("Edit", "Application", new { id = application.Id, orderId = order.Id });
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId });
             }
             else
             {
@@ -118,7 +121,7 @@ namespace asi.asicentral.web.Controllers.Store
         /// <param name="applicationId"></param>
         /// <param name="command"></param>
         /// <returns></returns>
-        private void ProcessCommand(IStoreService storeService, IFulfilmentService fulfilmentService, LegacyOrder order, LegacyOrderDetailApplication application, string command)
+        private void ProcessCommand(IStoreService storeService, IFulfilmentService fulfilmentService, StoreOrder order, StoreDetailApplication application, string command)
         {
             if (command == ApplicationController.COMMAND_ACCEPT)
             {
@@ -138,7 +141,7 @@ namespace asi.asicentral.web.Controllers.Store
                 order.ProcessStatus = OrderStatus.Rejected;
                 try
                 {
-                    if (order.CreditCard != null && !string.IsNullOrEmpty(order.CreditCard.ExternalReference))
+                    if (CreditCardService != null && order.CreditCard != null && !string.IsNullOrEmpty(order.CreditCard.ExternalReference))
                         CreditCardService.Delete(order.CreditCard.ExternalReference);
                 }
                 catch (Exception exception)
@@ -148,18 +151,6 @@ namespace asi.asicentral.web.Controllers.Store
                 }
                 order.CreditCard.ExternalReference = null;
             }
-        }
-
-        private LegacyOrderDetailApplication GetApplication(Guid id)
-        {
-            LegacyOrderDetailApplication application = null;
-            //we have more distributor applications than supplier ones
-            application = StoreService.GetAll<LegacyDistributorMembershipApplication>(true).Where(theApp => theApp.Id == id).SingleOrDefault();
-            if (application == null)
-            {
-                application = StoreService.GetAll<LegacySupplierMembershipApplication>(true).Where(theApp => theApp.Id == id).SingleOrDefault();
-            }
-            return application;
         }
     }
 }
