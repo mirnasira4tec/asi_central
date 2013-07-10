@@ -8,7 +8,7 @@ using asi.asicentral.interfaces;
 
 namespace asi.asicentral.web.model.store
 {
-    public class SupplierApplicationModel : StoreDetailSupplierMembership
+    public class SupplierApplicationModel : StoreDetailSupplierMembership, IMembershipModel
     {
         [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(asi.asicentral.Resource))]
         [Display(ResourceType = typeof(asi.asicentral.Resource), Name = "CompanyName")]
@@ -183,55 +183,7 @@ namespace asi.asicentral.web.model.store
             OrderStatus = order.ProcessStatus;
             Price = order.Total;
             Completed = order.IsCompleted;
-
-            //fill in company fields
-            if (order.Company != null)
-            {
-                this.Company = order.Company.Name;
-                HasShipAddress = order.Company.HasShipAddress;
-                Phone = order.Company.Phone;
-                BillingWebUrl = order.Company.WebURL;
-                StoreAddress companyAddress = order.Company.GetCompanyAddress();
-                if (companyAddress != null)
-                {
-                    Address1 = companyAddress.Street1;
-                    Address2 = companyAddress.Street2;
-                    City = companyAddress.City;
-                    Zip = companyAddress.Zip;
-                    State = companyAddress.State;
-                    Country = companyAddress.Country;
-                }
-                //set contact information
-                Contacts = order.Company.Individuals;
-            }
-            //get billing information
-            if (order.BillingIndividual != null)
-            {
-                BillingEmail = order.BillingIndividual.Email;
-                BillingFax = order.BillingIndividual.Fax;
-                BillingPhone = order.BillingIndividual.Phone;
-                if (order.BillingIndividual.Address != null)
-                {
-                    HasBillAddress = true;
-                    BillingAddress1 = order.BillingIndividual.Address.Street1;
-                    BillingAddress2 = order.BillingIndividual.Address.Street2;
-                    BillingCity = order.BillingIndividual.Address.City;
-                    BillingState = order.BillingIndividual.Address.State;
-                    BillingZip = order.BillingIndividual.Address.Zip;
-                    BillingCountry = order.BillingIndividual.Address.Country;
-                }
-            }
-            //get shipping information
-            if (HasShipAddress)
-            {
-                StoreAddress address = order.Company.Addresses.Where(add => add.IsShipping).First().Address;
-                ShippingCity = address.City;
-                ShippingCountry = address.Country;
-                ShippingState = address.State;
-                ShippingStreet1 = address.Street1;
-                ShippingStreet2 = address.Street2;
-                ShippingZip = address.Zip;
-            }
+            MembershipModelHelper.PopulateModel(this, order);
         }
 
         private void UpdateDecoratingTypesProperties()

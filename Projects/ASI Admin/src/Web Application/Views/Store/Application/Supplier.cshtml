@@ -10,145 +10,290 @@
 <p>The Membership fee ordered is for @Model.Price.ToString("C")</p>
 @using (Html.BeginForm("EditSupplier", "Application"))
 {        
-<div class="row-fluid">
-    <div class="span4">
-        @Html.AntiForgeryToken()
-        @Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
-        <fieldset><legend><small>Company Information</small></legend>
-        @Html.LabelFor(m => m.Company) @Html.EditorFor(m => m.Company) @Html.ValidationMessageFor(m => m.Company)
-        @Html.LabelFor(m => m.Address1) @Html.EditorFor(m => m.Address1) @Html.ValidationMessageFor(m => m.Address1)
-        @Html.LabelFor(m => m.Address2) @Html.EditorFor(m => m.Address2) @Html.ValidationMessageFor(m => m.Address2)
-        @Html.LabelFor(m => m.City) @Html.EditorFor(m => m.City) @Html.ValidationMessageFor(m => m.City)
-        @Html.LabelFor(m => m.State) @Html.EditorFor(m => m.State) @Html.ValidationMessageFor(m => m.State)
-        @Html.LabelFor(m => m.Zip) @Html.EditorFor(m => m.Zip) @Html.ValidationMessageFor(m => m.Zip)
-        @Html.LabelFor(m => m.Country) @Html.EditorFor(m => m.Country) @Html.ValidationMessageFor(m => m.Country)
-        @Html.LabelFor(m => m.BillingWebUrl) @Html.EditorFor(m => m.BillingWebUrl) @Html.ValidationMessageFor(m => m.BillingWebUrl)
-        </fieldset>
-        @Html.HiddenFor(m => m.HasBillAddress)
-        @if(Model.HasBillAddress){
-        <fieldset><legend><small>Billing Information</small></legend>
-        @Html.LabelFor(m => m.BillingAddress1) @Html.EditorFor(m => m.BillingAddress1) @Html.ValidationMessageFor(m => m.BillingAddress1)
-        @Html.LabelFor(m => m.BillingAddress2) @Html.EditorFor(m => m.BillingAddress2) @Html.ValidationMessageFor(m => m.BillingAddress2)
-        @Html.LabelFor(m => m.BillingCity) @Html.EditorFor(m => m.BillingCity) @Html.ValidationMessageFor(m => m.BillingCity)
-        @Html.LabelFor(m => m.BillingState) @Html.EditorFor(m => m.BillingState) @Html.ValidationMessageFor(m => m.BillingState)
-        @Html.LabelFor(m => m.BillingZip) @Html.EditorFor(m => m.BillingZip) @Html.ValidationMessageFor(m => m.BillingZip)
-        @Html.LabelFor(m => m.BillingCountry) @Html.EditorFor(m => m.BillingCountry) @Html.ValidationMessageFor(m => m.BillingCountry)
-        @Html.LabelFor(m => m.BillingPhone) @Html.EditorFor(m => m.BillingPhone) @Html.ValidationMessageFor(m => m.BillingPhone)
-        @Html.LabelFor(m => m.BillingTollFree) @Html.EditorFor(m => m.BillingTollFree) @Html.ValidationMessageFor(m => m.BillingTollFree)
-        @Html.LabelFor(m => m.BillingFax) @Html.EditorFor(m => m.BillingFax) @Html.ValidationMessageFor(m => m.BillingFax)
-        @Html.LabelFor(m => m.BillingEmail) @Html.EditorFor(m => m.BillingEmail) @Html.ValidationMessageFor(m => m.BillingEmail)
-        @Html.LabelFor(m => m.BillingWebUrl) @Html.EditorFor(m => m.BillingWebUrl) @Html.ValidationMessageFor(m => m.BillingWebUrl)
-        </fieldset>}
-        @Html.HiddenFor(m => m.HasShipAddress)
-        @if(Model.HasShipAddress){
-        <fieldset><legend><small>Shipping Information</small></legend>
-        @Html.LabelFor(m => m.ShippingStreet1) @Html.EditorFor(m => m.ShippingStreet1) @Html.ValidationMessageFor(m => m.ShippingStreet1)
-        @Html.LabelFor(m => m.ShippingStreet2) @Html.EditorFor(m => m.ShippingStreet2) @Html.ValidationMessageFor(m => m.ShippingStreet2)
-        @Html.LabelFor(m => m.ShippingCity) @Html.EditorFor(m => m.ShippingCity) @Html.ValidationMessageFor(m => m.ShippingCity)
-        @Html.LabelFor(m => m.ShippingState) @Html.EditorFor(m => m.ShippingState) @Html.ValidationMessageFor(m => m.ShippingState)
-        @Html.LabelFor(m => m.ShippingZip) @Html.EditorFor(m => m.ShippingZip) @Html.ValidationMessageFor(m => m.ShippingZip)
-        @Html.LabelFor(m => m.ShippingCountry) @Html.EditorFor(m => m.ShippingCountry) @Html.ValidationMessageFor(m => m.ShippingCountry)
-        @Html.LabelFor(m => m.UPSShippingNumber) @Html.EditorFor(m => m.UPSShippingNumber) @Html.ValidationMessageFor(m => m.UPSShippingNumber)
-        </fieldset>}
-        <fieldset><legend><small>Form Data</small></legend>
-        @Html.LabelFor(m => m.LineNames) @Html.EditorFor(m => m.LineNames) @Html.ValidationMessageFor(m => m.LineNames)
-        @Html.LabelFor(m => m.YearEstablished) @Html.EditorFor(m => m.YearEstablished) @Html.ValidationMessageFor(m => m.YearEstablished)
-        @Html.LabelFor(m => m.YearEnteredAdvertising) @Html.EditorFor(m => m.YearEnteredAdvertising) @Html.ValidationMessageFor(m => m.YearEnteredAdvertising)
-        @Html.LabelFor(m => m.WomanOwned) @Html.EditorFor(m => m.WomanOwned)
-        @Html.LabelFor(m => m.IsMinorityOwned) @Html.EditorFor(m => m.IsMinorityOwned)
-        @Html.LabelFor(m => m.NumberOfEmployee) @Html.EditorFor(m => m.NumberOfEmployee) @Html.ValidationMessageFor(m => m.NumberOfEmployee)
-        @Html.LabelFor(m => m.HasAmericanProducts) @Html.EditorFor(m=>m.HasAmericanProducts)
-        @Html.LabelFor(m => m.BusinessHours) @Html.EditorFor(m => m.BusinessHours) @Html.ValidationMessageFor(m => m.BusinessHours)
-        @Html.LabelFor(m => m.ProductionTime) @Html.EditorFor(m => m.ProductionTime) @Html.ValidationMessageFor(m => m.ProductionTime)
-        @Html.LabelFor(m => m.IsRushServiceAvailable) @Html.EditorFor(m => m.IsRushServiceAvailable)
-        @Html.LabelFor(m => m.SalesVolume) @Html.EditorFor(m => m.SalesVolume) @Html.ValidationMessageFor(m => m.SalesVolume)
-        @Html.LabelFor(m => m.OfficeHourStart) @Html.EditorFor(m => m.OfficeHourStart) @Html.ValidationMessageFor(m => m.OfficeHourStart)
-        @Html.LabelFor(m => m.AffiliateCompanyName) @Html.EditorFor(m => m.AffiliateCompanyName) @Html.ValidationMessageFor(m => m.AffiliateCompanyName)
-        @Html.LabelFor(m => m.AffiliateASINumber) @Html.EditorFor(m => m.AffiliateASINumber) @Html.ValidationMessageFor(m => m.AffiliateASINumber)
-        @Html.LabelFor(m => m.UPSAddress) @Html.EditorFor(m => m.UPSAddress) @Html.ValidationMessageFor(m => m.UPSAddress)
-        @Html.LabelFor(m => m.FedTaxId) @Html.EditorFor(m => m.FedTaxId) @Html.ValidationMessageFor(m => m.FedTaxId)
-        </fieldset>
-    </div>
-    <div class="span4">
-        @if(Model.Contacts != null && Model.Contacts.Count > 0)
-        {
-            for (int i = 0; i < Model.Contacts.Count; i++)
+@Html.AntiForgeryToken()
+@Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
+<div>
+    <h3 class="order-status-header3">Order Status:</h3>
+    <div class="order-status">@Model.OrderStatus</div>
+    <div class="timms-info">
+        <div class="span3">
+            <label class="order-status-label" for="Timms_ID">Timms ID:</label>
+            <div class="order-status-input">
+                @Html.EditorFor(m => m.ExternalReference, new { @class = "span2" })
+                <span id="timmsErrorMessage" data-type="errormessage" class="field-validation-error"></span>
+            </div>
+        </div>
+        <div class="status-btns">
+            @if (Model.Completed && Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
             {
-                if (Model.Contacts[i] != null)
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
+            }
+            @if (Model.Completed && Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
+            { 
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
+            }
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+            @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
+            { @Html.ActionLink("Close", "../Orders") }
+            else
+            { @Html.ActionLink("Cancel", "../Orders") }
+
+        </div>
+    </div>
+</div>
+<nav>
+	<ul class="nav nav-tabs" id="tabs">
+		<li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
+		<li><a href="#tabproduct" data-toggle="tab">Product Information</a></li>
+		<li><a href="#tabaccount" data-toggle="tab">Account Information</a></li>
+	</ul>
+</nav>
+<div class="tab-content">
+	<div id="tabbasic" class="basic-information tab-pane fade in active">
+		<fieldset class="company-info-form">			
+			<legend>Company Information</legend>
+				<span class="label-row">
+					@Html.LabelFor(m => m.Company) 
+					@Html.EditorFor(m => m.Company, new { @class = "long" }) @Html.ValidationMessageFor(m => m.Company)
+				</span>
+				<span class="label-row">
+					@Html.LabelFor(m => m.Address1)
+					@Html.LabelFor(m => m.Address2)
+					@Html.LabelFor(m => m.City)
+				</span>
+				<span class="label-row">
+					@Html.EditorFor(m => m.Address1) @Html.ValidationMessageFor(m => m.Address1)
+					@Html.EditorFor(m => m.Address2) @Html.ValidationMessageFor(m => m.Address2)
+					@Html.EditorFor(m => m.City) @Html.ValidationMessageFor(m => m.City)
+				</span>
+				<span class="label-row">
+					@Html.LabelFor(m => m.State, new { @class = "span3" }) 
+					@Html.LabelFor(m => m.Zip, new { @class = "span3" })
+					@Html.LabelFor(m => m.Country, new { @class = "span3" })
+                </span>
+				<span class="label-row">
+					@Html.EditorFor(m => m.State, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.State)
+					@Html.EditorFor(m => m.Zip, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.Zip)
+					@Html.EditorFor(m => m.Country, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.Country)
+				</span>
+			
+		</fieldset>
+
+		<fieldset class="contact-info-form">
+			<legend>Contacts</legend>
+
+            @if (Model.Contacts != null && Model.Contacts.Count > 0)
+            {
+                for (int i = 0; i < Model.Contacts.Count; i++)
                 {
-                <fieldset><legend><small>Contact</small></legend>
-                @Html.HiddenFor(m => Model.Contacts[i].Id) @Html.HiddenFor(m => Model.Contacts[i].IsPrimary)
-                @(Model.Contacts[i].IsPrimary ? Html.Raw(" <strong>Primary Contact</strong>"): Html.Raw(""))
-                @Html.LabelFor(m => Model.Contacts[i].FirstName) @Html.EditorFor(m => Model.Contacts[i].FirstName) @Html.ValidationMessageFor(m => Model.Contacts[i].FirstName)
-                @Html.LabelFor(m => Model.Contacts[i].LastName) @Html.EditorFor(m => Model.Contacts[i].LastName) @Html.ValidationMessageFor(m => Model.Contacts[i].LastName)
-                @Html.LabelFor(m => Model.Contacts[i].Title) @Html.EditorFor(m => Model.Contacts[i].Title) @Html.ValidationMessageFor(m => Model.Contacts[i].Title)
-                @Html.LabelFor(m => Model.Contacts[i].Email) @Html.EditorFor(m => Model.Contacts[i].Email) @Html.ValidationMessageFor(m => Model.Contacts[i].Email)
-                @Html.LabelFor(m => Model.Contacts[i].Phone) @Html.EditorFor(m => Model.Contacts[i].Phone) @Html.ValidationMessageFor(m => Model.Contacts[i].Phone)
-                @Html.LabelFor(m => Model.Contacts[i].Fax) @Html.EditorFor(m => Model.Contacts[i].Fax) @Html.ValidationMessageFor(m => Model.Contacts[i].Fax)
-                </fieldset>
+                    if (Model.Contacts[i] != null)
+                    {
+                        @Html.HiddenFor(m => Model.Contacts[i].Id) @Html.HiddenFor(m => Model.Contacts[i].IsPrimary) 
+                        <span class="row">@(Model.Contacts[i].IsPrimary ? Html.Raw("<strong>Primary Contact</strong>") : Html.Raw("<strong>Secondary Contact</strong>"))</span>
+                        <span class="label-row">
+					        @Html.LabelFor(m => Model.Contacts[i].FirstName)
+                            @Html.LabelFor(m => Model.Contacts[i].LastName)
+					        @Html.LabelFor(m => Model.Contacts[i].Email)
+				        </span>
+				        <span class="label-row">
+                            @Html.EditorFor(m => Model.Contacts[i].FirstName) @Html.ValidationMessageFor(m => Model.Contacts[i].FirstName)
+					        @Html.EditorFor(m => Model.Contacts[i].LastName) @Html.ValidationMessageFor(m => Model.Contacts[i].LastName)
+					        @Html.EditorFor(m => Model.Contacts[i].Email) @Html.ValidationMessageFor(m => Model.Contacts[i].Email)
+				        </span>
+				        <span class="label-row">
+					        @Html.LabelFor(m => Model.Contacts[i].Title)
+					        @Html.LabelFor(m => Model.Contacts[i].Phone)
+					        @Html.LabelFor(m => Model.Contacts[i].Fax)
+				        </span>
+				        <span class="label-row">
+					        @Html.EditorFor(m => Model.Contacts[i].Title) @Html.ValidationMessageFor(m => Model.Contacts[i].Title)
+					        @Html.EditorFor(m => Model.Contacts[i].Phone) @Html.ValidationMessageFor(m => Model.Contacts[i].Phone)
+					        @Html.EditorFor(m => Model.Contacts[i].Fax) @Html.ValidationMessageFor(m => Model.Contacts[i].Fax)
+				        </span>
+                    }
                 }
             }
-        }
-        <fieldset><legend><small>Business Function</small></legend>
-        <div class="form-inline">
-        @Html.CheckBox("IsImprinterVsDecorator") @Html.LabelFor(m => m.IsImprinterVsDecorator)  <br />
-        @Html.CheckBox("IsImporter") @Html.LabelFor(m => m.IsImporter) <br />
-        @Html.CheckBox("IsManufacturer") @Html.LabelFor(m => m.IsManufacturer) <br />
-        @Html.CheckBox("IsRetailer") @Html.LabelFor(m => m.IsRetailer) <br />
-        @Html.CheckBox("IsWholesaler") @Html.LabelFor(m => m.IsWholesaler)<br />
-        </div>
+		</fieldset>	
+
+        @Html.HiddenFor(m => m.HasBillAddress)
+        @if (Model.HasBillAddress)
+        {
+		<fieldset class="billing-info-form">
+			<legend>Billing Information</legend>
+
+			<span class="label-row">
+				@Html.LabelFor(m => m.BillingAddress1) 
+				@Html.LabelFor(m => m.BillingAddress2) 
+				@Html.LabelFor(m => m.BillingCity)
+			</span>
+			<span class="label-row">
+				@Html.EditorFor(m => m.BillingAddress1) @Html.ValidationMessageFor(m => m.BillingAddress1)
+				@Html.EditorFor(m => m.BillingAddress2) @Html.ValidationMessageFor(m => m.BillingAddress2)
+				@Html.EditorFor(m => m.BillingCity) @Html.ValidationMessageFor(m => m.BillingCity)
+			</span>
+				
+			<span class="label-row">
+				@Html.LabelFor(m => m.BillingState) 
+				@Html.LabelFor(m => m.BillingZip) 
+				@Html.LabelFor(m => m.BillingCountry)
+			</span>
+			<span class="label-row">
+				@Html.EditorFor(m => m.BillingState) @Html.ValidationMessageFor(m => m.BillingState)
+				@Html.EditorFor(m => m.BillingZip) @Html.ValidationMessageFor(m => m.BillingZip)
+				@Html.EditorFor(m => m.BillingCountry) @Html.ValidationMessageFor(m => m.BillingCountry)
+			</span>
+				<span class="label-row span11">
+				@Html.LabelFor(m => m.BillingPhone) 
+				@Html.LabelFor(m => m.BillingFax) 
+				@Html.LabelFor(m => m.BillingEmail)
+			</span>
+			<span class="label-row">
+				@Html.EditorFor(m => m.BillingPhone) @Html.ValidationMessageFor(m => m.BillingPhone)
+				@Html.EditorFor(m => m.BillingFax) @Html.ValidationMessageFor(m => m.BillingFax)
+				@Html.EditorFor(m => m.BillingEmail) @Html.ValidationMessageFor(m => m.BillingEmail)
+			</span>
+			<span class="label-row span11">
+				@Html.LabelFor(m => m.BillingWebUrl) 
+			</span>
+			<span class="label-row">
+				@Html.EditorFor(m => m.BillingWebUrl) @Html.ValidationMessageFor(m => m.BillingWebUrl)
+			</span>
+		</fieldset>                
+        } 
+        @Html.HiddenFor(m => m.HasShipAddress)
+        @if (Model.HasShipAddress)
+        {
+		<fieldset class="billing-info-form">
+			<legend>Shipping Information</legend>
+
+			<span class="label-row">
+				@Html.LabelFor(m => m.ShippingStreet1) 
+				@Html.LabelFor(m => m.ShippingStreet2) 
+				@Html.LabelFor(m => m.ShippingCity) 
+			</span>
+			<span class="label-row">
+				@Html.EditorFor(m => m.ShippingStreet1) @Html.ValidationMessageFor(m => m.ShippingStreet1)
+				@Html.EditorFor(m => m.ShippingStreet2) @Html.ValidationMessageFor(m => m.ShippingStreet2)
+				@Html.EditorFor(m => m.ShippingCity) @Html.ValidationMessageFor(m => m.ShippingCity)
+			</span>
+				
+			<span class="label-row">
+				@Html.LabelFor(m => m.ShippingState) 
+				@Html.LabelFor(m => m.ShippingZip) 
+				@Html.LabelFor(m => m.ShippingCountry)
+			</span>
+			<span class="label-row">
+				@Html.EditorFor(m => m.ShippingState) @Html.ValidationMessageFor(m => m.ShippingState)
+				@Html.EditorFor(m => m.ShippingZip) @Html.ValidationMessageFor(m => m.ShippingZip)
+				@Html.EditorFor(m => m.ShippingCountry) @Html.ValidationMessageFor(m => m.ShippingCountry)
+			</span>
+		</fieldset>                
+        } 
+	</div><!-- END #basic-information -->	
+    	
+	<div id="tabproduct" class="product-information tab-pane fade">
+        <fieldset class="product-lines"><legend><small>Business Function</small></legend>
+			<span class="checkbox-left">
+				<label class="account-checkbox checkbox">@Html.CheckBox("IsImprinterVsDecorator") @Html.LabelFor(m => m.IsImprinterVsDecorator)</label>
+                <label class="account-checkbox checkbox">@Html.CheckBox("IsManufacturer") @Html.LabelFor(m => m.IsManufacturer)</label>
+                <label class="account-checkbox checkbox">@Html.CheckBox("IsWholesaler") @Html.LabelFor(m => m.IsWholesaler)</label>
+            </span>
+			<span class="checkbox-right">
+				<label class="account-checkbox checkbox">@Html.CheckBox("IsImporter") @Html.LabelFor(m => m.IsImporter)</label>
+                <label class="account-checkbox checkbox">@Html.CheckBox("IsRetailer") @Html.LabelFor(m => m.IsRetailer)</label>
+            </span>
         </fieldset>
-        <fieldset><legend><small>Form Data</small></legend>
-        <div class="form-inline">
-        @Html.CheckBox("IsUnionMade") @Html.LabelFor(m => m.IsUnionMade) <br />
-        @Html.CheckBox("SellToEndUsers") @Html.LabelFor(m => m.SellToEndUsers) <br />
-        @Html.CheckBox("SellThruInternet") @Html.LabelFor(m => m.SellThruInternet) <br />
-        @Html.CheckBox("SellThruRetail") @Html.LabelFor(m => m.SellThruRetail) <br />
-        @Html.CheckBox("SellThruDirectMarketing") @Html.LabelFor(m => m.SellThruDirectMarketing) <br />
-        @Html.CheckBox("SellThruAffiliate") @Html.LabelFor(m => m.SellThruAffiliate) <br />
-        @Html.CheckBox("AuthorizeUPSNewAccount") @Html.LabelFor(m => m.AuthorizeUPSNewAccount) <br />
-        </div>
+        <fieldset><legend><small>Methods of Imprinting</small></legend>
+			<span class="checkbox-left">
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Etching)">@Html.CheckBox("Etching", Model.Etching) @Html.LabelFor(m => m.Etching)</label>
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.SilkScreen)">@Html.CheckBox("SilkScreen") @Html.LabelFor(m => m.SilkScreen)</label>
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.DirectEmbroidery)">@Html.CheckBox("DirectEmbroidery") @Html.LabelFor(m => m.DirectEmbroidery)</label>
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Lithography)">@Html.CheckBox("Lithography") @Html.LabelFor(m => m.Lithography)</label>
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.FourColourProcess)">@Html.CheckBox("FourColourProcess") @Html.LabelFor(m => m.FourColourProcess)</label>
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Laser)">@Html.CheckBox("Laser") @Html.LabelFor(m => m.Laser)</label>
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Transfer)">@Html.CheckBox("Transfer") @Html.LabelFor(m => m.Transfer)</label>
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.DieStamp)">@Html.CheckBox("DieStamp") @Html.LabelFor(m => m.DieStamp)</label> 
+            </span>
+			<span class="checkbox-right">
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.HotStamping)">@Html.CheckBox("HotStamping") @Html.LabelFor(m => m.HotStamping)</label>
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.PadPrint)">@Html.CheckBox("PadPrint") @Html.LabelFor(m => m.PadPrint)</label>
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.FoilStamping)">@Html.CheckBox("FoilStamping") @Html.LabelFor(m => m.FoilStamping)</label>
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Sublimination)">@Html.CheckBox("Sublimination") @Html.LabelFor(m => m.Sublimination)</label>
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Engraving)">@Html.CheckBox("Engraving") @Html.LabelFor(m => m.Engraving)</label> 
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Offset)">@Html.CheckBox("Offset") @Html.LabelFor(m => m.Offset)</label> 
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.FullColourProcess)">@Html.CheckBox("FullColourProcess") @Html.LabelFor(m => m.FullColourProcess)</label> 
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.OtherDecoratingMethod)">@Html.CheckBox("OtherDecoratingMethod") @Html.LabelFor(m => m.OtherDecoratingMethod) @Html.EditorFor(m => m.OtherDec) @Html.ValidationMessageFor(m => m.OtherDec)</label>
+            </span>
         </fieldset>
     </div>
-    <div class="span4">
-        <fieldset><legend><small>Order Status</small></legend>
-        <div class="well">@Model.OrderStatus<br /></div>
-        @Html.Label("Timms ID") @Html.EditorFor(m => m.ExternalReference) <br /> 
-        <span id="timmsErrorMessage" class="field-validation-error" data-type="errormessage"></span><br />
-        @if (Model.Completed && Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
-        {
-        <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
-        }
-        @if (Model.Completed && Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
-        { 
-        <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
-        }
-        <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
-        @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
-        { @Html.ActionLink("Close", "../Orders") }
-        else
-        { @Html.ActionLink("Cancel", "../Orders") }
+
+	<div id="tabaccount" class="account-information tab-pane fade">
+        <fieldset><legend><small>Account Information</small></legend>
+				<span class="label-row">
+					@Html.LabelFor(m => m.LineNames)
+					@Html.LabelFor(m => m.YearEstablished)
+					@Html.LabelFor(m => m.YearEnteredAdvertising)
+				</span>
+				<span class="label-row">
+					@Html.EditorFor(m => m.LineNames) @Html.ValidationMessageFor(m => m.LineNames)
+					@Html.EditorFor(m => m.YearEstablished) @Html.ValidationMessageFor(m => m.YearEstablished)
+					@Html.EditorFor(m => m.YearEnteredAdvertising) @Html.ValidationMessageFor(m => m.YearEnteredAdvertising)
+				</span>
+				<span class="label-row">
+                    @Html.LabelFor(m => m.NumberOfEmployee)
+                    @Html.LabelFor(m => m.BusinessHours)
+                    @Html.LabelFor(m => m.ProductionTime)
+				</span>
+				<span class="label-row">
+                    @Html.EditorFor(m => m.NumberOfEmployee) @Html.ValidationMessageFor(m => m.NumberOfEmployee)
+                    @Html.EditorFor(m => m.BusinessHours) @Html.ValidationMessageFor(m => m.BusinessHours)
+                    @Html.EditorFor(m => m.ProductionTime) @Html.ValidationMessageFor(m => m.ProductionTime)
+				</span>
+				<span class="label-row">
+                    @Html.LabelFor(m => m.SalesVolume)
+                    @Html.LabelFor(m => m.OfficeHourStart)
+                    @Html.LabelFor(m => m.AffiliateCompanyName)
+				</span>
+				<span class="label-row">
+                    @Html.EditorFor(m => m.SalesVolume) @Html.ValidationMessageFor(m => m.SalesVolume)
+                    @Html.EditorFor(m => m.OfficeHourStart) @Html.ValidationMessageFor(m => m.OfficeHourStart)
+                    @Html.EditorFor(m => m.AffiliateCompanyName) @Html.ValidationMessageFor(m => m.AffiliateCompanyName)
+				</span>
+				<span class="label-row">
+                    @Html.LabelFor(m => m.AffiliateASINumber)
+                    @Html.LabelFor(m => m.UPSAddress)
+				</span>
+				<span class="label-row">
+                    @Html.EditorFor(m => m.AffiliateASINumber) @Html.ValidationMessageFor(m => m.AffiliateASINumber)
+                    @Html.EditorFor(m => m.UPSAddress) @Html.ValidationMessageFor(m => m.UPSAddress)
+				</span>
+				<span class="label-row">
+                    @Html.LabelFor(m => m.FedTaxId)
+				</span>
+				<span class="label-row">
+                    @Html.EditorFor(m => m.FedTaxId) @Html.ValidationMessageFor(m => m.FedTaxId)
+				</span>
+			<span class="checkbox-left">
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.WomanOwned)">@Html.CheckBox("WomanOwned") @Html.LabelFor(m => m.WomanOwned)</label>
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.HasAmericanProducts)">@Html.CheckBox("HasAmericanProducts") @Html.LabelFor(m => m.SellThruInternet)</label>
+            </span>
+			<span class="checkbox-right">
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.IsMinorityOwned)">@Html.CheckBox("IsMinorityOwned") @Html.LabelFor(m => m.IsMinorityOwned)</label>
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.IsRushServiceAvailable)">@Html.CheckBox("IsRushServiceAvailable") @Html.LabelFor(m => m.IsRushServiceAvailable)</label>
+            </span>
         </fieldset>
-        <br /><br />
-        <fieldset><legend><small>Methods of Imprinting</small></legend>
-        <div class="form-inline">
-        @Html.CheckBox("Etching", Model.Etching) @Html.LabelFor(m => m.Etching) <br />
-        @Html.CheckBox("HotStamping") @Html.LabelFor(m => m.HotStamping) <br />
-        @Html.CheckBox("SilkScreen") @Html.LabelFor(m => m.SilkScreen) <br />
-        @Html.CheckBox("PadPrint") @Html.LabelFor(m => m.PadPrint) <br />
-        @Html.CheckBox("DirectEmbroidery") @Html.LabelFor(m => m.DirectEmbroidery) <br />
-        @Html.CheckBox("FoilStamping") @Html.LabelFor(m => m.FoilStamping) <br />
-        @Html.CheckBox("Lithography") @Html.LabelFor(m => m.Lithography) <br />
-        @Html.CheckBox("Sublimination") @Html.LabelFor(m => m.Sublimination) <br />
-        @Html.CheckBox("FourColourProcess") @Html.LabelFor(m => m.FourColourProcess) <br />
-        @Html.CheckBox("Engraving") @Html.LabelFor(m => m.Engraving) <br />
-        @Html.CheckBox("Laser") @Html.LabelFor(m => m.Laser) <br />
-        @Html.CheckBox("Offset") @Html.LabelFor(m => m.Offset) <br />
-        @Html.CheckBox("Transfer") @Html.LabelFor(m => m.Transfer) <br />
-        @Html.CheckBox("FullColourProcess") @Html.LabelFor(m => m.FullColourProcess) <br />
-        @Html.CheckBox("DieStamp") @Html.LabelFor(m => m.DieStamp) <br />
-        @Html.CheckBox("OtherDecoratingMethod") @Html.LabelFor(m => m.OtherDecoratingMethod) @Html.EditorFor(m => m.OtherDec) @Html.ValidationMessageFor(m => m.OtherDec)
-        </div>
+        <fieldset><legend><small>Other Options</small></legend>
+			<span class="checkbox-left">
+            <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.IsUnionMade)">@Html.CheckBox("IsUnionMade") @Html.LabelFor(m => m.IsUnionMade)</label>
+            <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.SellThruInternet)">@Html.CheckBox("SellThruInternet") @Html.LabelFor(m => m.SellThruInternet)</label>
+            <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.SellThruDirectMarketing)">@Html.CheckBox("SellThruDirectMarketing") @Html.LabelFor(m => m.SellThruDirectMarketing)</label>
+            <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.AuthorizeUPSNewAccount)">@Html.CheckBox("AuthorizeUPSNewAccount") @Html.LabelFor(m => m.AuthorizeUPSNewAccount)</label>
+            </span>
+			<span class="checkbox-right">
+            <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.SellToEndUsers)">@Html.CheckBox("SellToEndUsers") @Html.LabelFor(m => m.SellToEndUsers)</label>
+            <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.SellThruRetail)">@Html.CheckBox("SellThruRetail") @Html.LabelFor(m => m.SellThruRetail)</label>
+            <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.SellThruAffiliate)">@Html.CheckBox("SellThruAffiliate") @Html.LabelFor(m => m.SellThruAffiliate)</label>
+            </span>
         </fieldset>
     </div>
 </div>

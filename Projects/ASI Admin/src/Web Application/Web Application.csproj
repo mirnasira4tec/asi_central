@@ -212,6 +212,7 @@
     <Compile Include="Models\sgr\ViewCompany.cs" />
     <Compile Include="Models\sgr\ViewProduct.cs" />
     <Compile Include="Models\Store\Order\DistributorApplicationModel.cs" />
+    <Compile Include="Models\Store\Order\MembershipModelHelper.cs" />
     <Compile Include="Models\Store\Order\OrderModel.cs" />
     <Compile Include="Models\Store\Order\OrderPageModel.cs" />
     <Compile Include="Models\Store\Order\OrderStatisticData.cs" />
