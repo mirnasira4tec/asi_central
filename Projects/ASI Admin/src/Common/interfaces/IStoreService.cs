@@ -14,20 +14,20 @@ namespace asi.asicentral.interfaces
         /// </summary>
         /// <param name="orderDetail"></param>
         /// <returns>The application if applicable, null otherwise</returns>
-        LegacyOrderDetailApplication GetApplication(LegacyOrderDetail orderDetail);
+        StoreDetailApplication GetApplication(StoreOrderDetail orderDetail);
 
         /// <summary>
         /// Retrieves the distributor membership application associated with the order detail
         /// </summary>
         /// <param name="orderDetail"></param>
         /// <returns>The application if applicable, null otherwise</returns>
-        LegacyDistributorMembershipApplication GetDistributorApplication(LegacyOrderDetail orderDetail);
+        StoreDetailDistributorMembership GetDistributorApplication(StoreOrderDetail orderDetail);
 
         /// <summary>
         /// Retrieves the supplier membership application associated with the order detail
         /// </summary>
         /// <param name="orderDetail"></param>
         /// <returns>The application if applicable, null otherwise</returns>
-        LegacySupplierMembershipApplication GetSupplierApplication(LegacyOrderDetail orderDetail);
+        StoreDetailSupplierMembership GetSupplierApplication(StoreOrderDetail orderDetail);
     }
 }

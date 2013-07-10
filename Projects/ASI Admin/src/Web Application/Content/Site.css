@@ -358,22 +358,22 @@ header#site-header {
 	background-color:#ececec;
 }
 /*-----------------basic information-------------*/
-.lable-row {
+.label-row {
 	width:98%;
 	float:left;
 	padding-left:2%;
 }
-	.lable-row label{
+	.label-row label{
 		width:30%;
 		display:inline;
 		float:left;
 		padding-left:2%
 	}
-	.lable-row  input{
+	.label-row  input{
 		width:29%;
 		margin-left:1%;
 	}
-	.lable-row  .long{
+	.label-row  .long{
 		width:94%;
 	}
 /*-------------------product information--------------*/
@@ -412,7 +412,7 @@ header#site-header {
 
 
 @media (max-width: 600px) {
-    .lable-row input {
+    .label-row input {
         width: 27%;
     }
 

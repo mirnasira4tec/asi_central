@@ -11,7 +11,7 @@
 @using (Html.BeginForm("EditDistributor", "Application"))
 {
     @Html.AntiForgeryToken()
-    @Html.HiddenFor(m => m.Id) @Html.HiddenFor(m => m.UserId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
+    @Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
     
     <div>
         <h3 class="order-status-header3">Order Status:</h3>
@@ -52,33 +52,29 @@
 	</nav>
 
 	<div class="tab-content">
-	
 		<div id="tabbasic" class="basic-information tab-pane fade in active">
-			<fieldset class="company-info-form">
-				
-				<legend>
-					Company Information	
-				</legend>
-					<span class="lable-row">
+			<fieldset class="company-info-form">			
+				<legend>Company Information</legend>
+					<span class="label-row">
 						@Html.LabelFor(m => m.Company) 
 						@Html.EditorFor(m => m.Company, new { @class = "long" }) @Html.ValidationMessageFor(m => m.Company)
 					</span>
-					<span class="lable-row">
+					<span class="label-row">
 						@Html.LabelFor(m => m.Address1)
 						@Html.LabelFor(m => m.Address2)
 						@Html.LabelFor(m => m.City)
 					</span>
-					<span class="lable-row">
+					<span class="label-row">
 						@Html.EditorFor(m => m.Address1) @Html.ValidationMessageFor(m => m.Address1)
 						@Html.EditorFor(m => m.Address2) @Html.ValidationMessageFor(m => m.Address2)
 						@Html.EditorFor(m => m.City) @Html.ValidationMessageFor(m => m.City)
 					</span>
-					<span class="lable-row">
+					<span class="label-row">
 						@Html.LabelFor(m => m.State, new { @class = "span3" }) 
 						@Html.LabelFor(m => m.Zip, new { @class = "span3" })
 						@Html.LabelFor(m => m.Country, new { @class = "span3" })
                     </span>
-					<span class="lable-row">
+					<span class="label-row">
 						@Html.EditorFor(m => m.State, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.State)
 						@Html.EditorFor(m => m.Zip, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.Zip)
 						@Html.EditorFor(m => m.Country, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.Country)
@@ -87,9 +83,7 @@
 			</fieldset>
 
 			<fieldset class="contact-info-form">
-				<legend>
-					Contacts
-				</legend>
+				<legend>Contacts</legend>
 
                 @if (Model.Contacts != null && Model.Contacts.Count > 0)
                 {
@@ -97,23 +91,25 @@
                     {
                         if (Model.Contacts[i] != null)
                         {
-                            @Html.HiddenFor(m => Model.Contacts[i].Id) @Html.HiddenFor(m => Model.Contacts[i].IsPrimary) @Html.HiddenFor(m => Model.Contacts[i].AppplicationId)
+                            @Html.HiddenFor(m => Model.Contacts[i].Id) @Html.HiddenFor(m => Model.Contacts[i].IsPrimary) 
                             <span class="row">@(Model.Contacts[i].IsPrimary ? Html.Raw("<strong>Primary Contact</strong>") : Html.Raw("<strong>Secondary Contact</strong>"))</span>
-                            <span class="lable-row">
-					            @Html.LabelFor(m => Model.Contacts[i].Name)
-					            @Html.LabelFor(m => Model.Contacts[i].Title)
+                            <span class="label-row">
+					            @Html.LabelFor(m => Model.Contacts[i].FirstName)
+                                @Html.LabelFor(m => Model.Contacts[i].LastName)
 					            @Html.LabelFor(m => Model.Contacts[i].Email)
 				            </span>
-				            <span class="lable-row">
-					            @Html.EditorFor(m => Model.Contacts[i].Name) @Html.ValidationMessageFor(m => Model.Contacts[i].Name)
-					            @Html.EditorFor(m => Model.Contacts[i].Title) @Html.ValidationMessageFor(m => Model.Contacts[i].Title)
+				            <span class="label-row">
+                                @Html.EditorFor(m => Model.Contacts[i].FirstName) @Html.ValidationMessageFor(m => Model.Contacts[i].FirstName)
+					            @Html.EditorFor(m => Model.Contacts[i].LastName) @Html.ValidationMessageFor(m => Model.Contacts[i].LastName)
 					            @Html.EditorFor(m => Model.Contacts[i].Email) @Html.ValidationMessageFor(m => Model.Contacts[i].Email)
 				            </span>
-				            <span class="lable-row">
+				            <span class="label-row">
+					            @Html.LabelFor(m => Model.Contacts[i].Title)
 					            @Html.LabelFor(m => Model.Contacts[i].Phone)
 					            @Html.LabelFor(m => Model.Contacts[i].Fax)
 				            </span>
-				            <span class="lable-row">
+				            <span class="label-row">
+					            @Html.EditorFor(m => Model.Contacts[i].Title) @Html.ValidationMessageFor(m => Model.Contacts[i].Title)
 					            @Html.EditorFor(m => Model.Contacts[i].Phone) @Html.ValidationMessageFor(m => Model.Contacts[i].Phone)
 					            @Html.EditorFor(m => Model.Contacts[i].Fax) @Html.ValidationMessageFor(m => Model.Contacts[i].Fax)
 				            </span>
@@ -126,45 +122,43 @@
             @if (Model.HasBillAddress)
             {
 			<fieldset class="billing-info-form">
-				<legend>
-					Billing Information
-				</legend>
+				<legend>Billing Information</legend>
 
-				<span class="lable-row">
+				<span class="label-row">
 					@Html.LabelFor(m => m.BillingAddress1) 
 					@Html.LabelFor(m => m.BillingAddress2) 
 					@Html.LabelFor(m => m.BillingCity)
 				</span>
-				<span class="lable-row">
+				<span class="label-row">
 					@Html.EditorFor(m => m.BillingAddress1) @Html.ValidationMessageFor(m => m.BillingAddress1)
 					@Html.EditorFor(m => m.BillingAddress2) @Html.ValidationMessageFor(m => m.BillingAddress2)
 					@Html.EditorFor(m => m.BillingCity) @Html.ValidationMessageFor(m => m.BillingCity)
 				</span>
 				
-				<span class="lable-row">
+				<span class="label-row">
 					@Html.LabelFor(m => m.BillingState) 
 					@Html.LabelFor(m => m.BillingZip) 
 					@Html.LabelFor(m => m.BillingCountry)
 				</span>
-				<span class="lable-row">
+				<span class="label-row">
 					@Html.EditorFor(m => m.BillingState) @Html.ValidationMessageFor(m => m.BillingState)
 					@Html.EditorFor(m => m.BillingZip) @Html.ValidationMessageFor(m => m.BillingZip)
 					@Html.EditorFor(m => m.BillingCountry) @Html.ValidationMessageFor(m => m.BillingCountry)
 				</span>
-					<span class="lable-row span11">
+					<span class="label-row span11">
 					@Html.LabelFor(m => m.BillingPhone) 
 					@Html.LabelFor(m => m.BillingFax) 
 					@Html.LabelFor(m => m.BillingEmail)
 				</span>
-				<span class="lable-row">
+				<span class="label-row">
 					@Html.EditorFor(m => m.BillingPhone) @Html.ValidationMessageFor(m => m.BillingPhone)
 					@Html.EditorFor(m => m.BillingFax) @Html.ValidationMessageFor(m => m.BillingFax)
 					@Html.EditorFor(m => m.BillingEmail) @Html.ValidationMessageFor(m => m.BillingEmail)
 				</span>
-				<span class="lable-row span11">
+				<span class="label-row span11">
 					@Html.LabelFor(m => m.BillingWebUrl) 
 				</span>
-				<span class="lable-row">
+				<span class="label-row">
 					@Html.EditorFor(m => m.BillingWebUrl) @Html.ValidationMessageFor(m => m.BillingWebUrl)
 				</span>
 			</fieldset>                
@@ -173,27 +167,25 @@
             @if (Model.HasShipAddress)
             {
 			<fieldset class="billing-info-form">
-				<legend>
-					Shipping Information
-				</legend>
+				<legend>Shipping Information</legend>
 
-				<span class="lable-row">
+				<span class="label-row">
 					@Html.LabelFor(m => m.ShippingStreet1) 
 					@Html.LabelFor(m => m.ShippingStreet2) 
 					@Html.LabelFor(m => m.ShippingCity) 
 				</span>
-				<span class="lable-row">
+				<span class="label-row">
 					@Html.EditorFor(m => m.ShippingStreet1) @Html.ValidationMessageFor(m => m.ShippingStreet1)
 					@Html.EditorFor(m => m.ShippingStreet2) @Html.ValidationMessageFor(m => m.ShippingStreet2)
 					@Html.EditorFor(m => m.ShippingCity) @Html.ValidationMessageFor(m => m.ShippingCity)
 				</span>
 				
-				<span class="lable-row">
+				<span class="label-row">
 					@Html.LabelFor(m => m.ShippingState) 
 					@Html.LabelFor(m => m.ShippingZip) 
 					@Html.LabelFor(m => m.ShippingCountry)
 				</span>
-				<span class="lable-row">
+				<span class="label-row">
 					@Html.EditorFor(m => m.ShippingState) @Html.ValidationMessageFor(m => m.ShippingState)
 					@Html.EditorFor(m => m.ShippingZip) @Html.ValidationMessageFor(m => m.ShippingZip)
 					@Html.EditorFor(m => m.ShippingCountry) @Html.ValidationMessageFor(m => m.ShippingCountry)
@@ -204,9 +196,7 @@
 <!------------------------------------product-information---------------------------------->					
 		<div id="tabproduct" class="product-information tab-pane fade">
 			<fieldset class="primary-business-revenue">
-				<legend>
-					Primary Business Revenue
-				</legend>
+				<legend>Primary Business Revenue</legend>
 				<span class="primary-business-row">
 					<label class="primary-business-radio radio">
 						@Html.RadioButtonFor(m => m.BuisnessRevenue, LegacyDistributorBusinessRevenue.BUSINESSREVENUE_PRINTING, Model.Printing ? new { @checked = "checked" } : null)
@@ -232,156 +222,61 @@
 						@Html.RadioButtonFor(m => m.BuisnessRevenue, "Other", Model.Other ? new { @checked = "checked" } : null)
 						Other
 					</label>
-                    @Html.EditorFor(m => m.OtherBusinessRevenue, Model.Other ? new { @class = "input-medium" } : new { @class = "input-medium hidden" }) @Html.ValidationMessageFor(m => m.OtherBusinessRevenue)
+                    <span class="label-row">@Html.EditorFor(m => m.OtherBusinessRevenue, Model.Other ? new { @class = "input-medium" } : new { @class = "input-medium hidden" }) @Html.ValidationMessageFor(m => m.OtherBusinessRevenue)</span>
 				</span>
-				<span class="lable-row">
+				<span class="label-row">
 					@Html.LabelFor(m => m.NumberOfEmployee) 
 					@Html.LabelFor(m => m.NumberOfSalesEmployee) 
 					@Html.LabelFor(m => m.AnnualSalesVolumeASP) 
 				</span>
-				<span class="lable-row">
+				<span class="label-row">
 					@Html.EditorFor(m => m.NumberOfEmployee) @Html.ValidationMessageFor(m => m.NumberOfEmployee) 
 					@Html.EditorFor(m => m.NumberOfSalesEmployee) @Html.ValidationMessageFor(m => m.NumberOfSalesEmployee)
 					@Html.EditorFor(m => m.AnnualSalesVolumeASP) @Html.ValidationMessageFor(m => m.AnnualSalesVolumeASP)
 				</span>
-				<span class="lable-row">
+				<span class="label-row">
 					@Html.LabelFor(m => m.AnnualSalesVolume, new { @class = "span3" }) 
 				</span>
-				<span class="lable-row">
+				<span class="label-row">
 					@Html.EditorFor(m => m.AnnualSalesVolume) @Html.ValidationMessageFor(m => m.AnnualSalesVolume)	
 				</span>
 			</fieldset>
 			<fieldset class="product-lines">
-				<legend>
-					Product Lines	
-				</legend>
+				<legend>Product Lines</legend>
 				<span class="checkbox-left">
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductA)">
-						@Html.CheckBoxFor(model => model.ProductA)
-						Auto Accessories
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductB)">
-						@Html.CheckBoxFor(model => model.ProductB)
-						Awards, Trophies &amp; Plaques 
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductC)">
-						@Html.CheckBoxFor(model => model.ProductC)
-						Badges, Buttons  
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Product1)">
-						@Html.CheckBoxFor(model => model.Product1)
-						Bags (Canvas, Tote, Paper, Plastic, etc) 
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductD)">
-						@Html.CheckBoxFor(model => model.ProductD)
-						Calendars and timepieces  
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductO)">
-						@Html.CheckBoxFor(model => model.ProductO)
-						Cards (business, greeting and stationery), Signs &amp; displays  
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductY)">
-						@Html.CheckBoxFor(model => model.ProductY)
-						Cups and mugs   
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductZ)">
-						@Html.CheckBoxFor(model => model.ProductZ)
-						Decals, transfers, emblems	  
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductL)">
-						@Html.CheckBoxFor(model => model.ProductL)
-						Electronic/computer products 	  
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductG)">
-						@Html.CheckBoxFor(model => model.ProductG)
-						Emblematic jewelry	  
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductF)">
-						@Html.CheckBoxFor(model => model.ProductF)
-						Food, Edibles 	  
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductI)">
-						@Html.CheckBoxFor(model => model.ProductI)
-						Glass and ceramic products (crystal)	 	  
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductK)">
-						@Html.CheckBoxFor(model => model.ProductK)
-						Inflatables (balloons, etc)	 	  
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductV)">
-						@Html.CheckBoxFor(model => model.ProductV)
-						Health, safety and environmental products 	 	  
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductJ)">
-						@Html.CheckBoxFor(model => model.ProductJ)
-						Housewares and home products (flashlights, cutlery, etc) 	 	  
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductH)">
-						@Html.CheckBoxFor(model => model.ProductH)
-						Industrial and safety items Inflatables (balloons, etc)  	 	  
-					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductA)">@Html.CheckBoxFor(model => model.ProductA) Auto Accessories</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductB)">@Html.CheckBoxFor(model => model.ProductB) Awards, Trophies &amp; Plaques</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductC)">@Html.CheckBoxFor(model => model.ProductC) Badges, Buttons</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Product1)">@Html.CheckBoxFor(model => model.Product1) Bags (Canvas, Tote, Paper, Plastic, etc)</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductD)">@Html.CheckBoxFor(model => model.ProductD) Calendars and timepieces</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductO)">@Html.CheckBoxFor(model => model.ProductO) Cards (business, greeting and stationery), Signs &amp; displays</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductY)">@Html.CheckBoxFor(model => model.ProductY) Cups and mugs</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductZ)">@Html.CheckBoxFor(model => model.ProductZ) Decals, transfers, emblems</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductL)">@Html.CheckBoxFor(model => model.ProductL) Electronic/computer products</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductG)">@Html.CheckBoxFor(model => model.ProductG) Emblematic jewelry</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductF)">@Html.CheckBoxFor(model => model.ProductF) Food, Edibles</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductI)">@Html.CheckBoxFor(model => model.ProductI) Glass and ceramic products (crystal)</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductK)">@Html.CheckBoxFor(model => model.ProductK) Inflatables (balloons, etc)</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductV)">@Html.CheckBoxFor(model => model.ProductV) Health, safety and environmental products</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductJ)">@Html.CheckBoxFor(model => model.ProductJ) Housewares and home products (flashlights, cutlery, etc)</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductH)">@Html.CheckBoxFor(model => model.ProductH) Industrial and safety items Inflatables (balloons, etc)</label>
 				</span>
 				<span class="checkbox-right">
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductU)">
-						@Html.CheckBoxFor(model => model.ProductU)
-						Key tags
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductX)">
-						@Html.CheckBoxFor(model => model.ProductX)
-						Magnetic products
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductM)">
-						@Html.CheckBoxFor(model => model.ProductM)
-						Office and desk products
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductN)">
-						@Html.CheckBoxFor(model => model.ProductN)
-						Paper products (Pocket reminders, diaries) 
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Product3)">
-						@Html.CheckBoxFor(model => model.Product3)
-						Party Products (Balloons, Napkins, Plates, etc) 
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Product4)">
-						@Html.CheckBoxFor(model => model.Product4)
-						Personal Care, Beauty Products 
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Product5)">
-						@Html.CheckBoxFor(model => model.Product5)
-						Phone calling cards 
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductE)">
-						@Html.CheckBoxFor(model => model.ProductE)
-						Plastic (non-vinyl) 
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductP)">
-						@Html.CheckBoxFor(model => model.ProductP)
-						Sports Accessories (Bottles, coolers, equipment, golf balls, etc)
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductQ)">
-						@Html.CheckBoxFor(model => model.ProductQ)
-						Toys &amp; stuffed Animals 
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductW)">
-						@Html.CheckBoxFor(model => model.ProductW)
-						Travel products 
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Product2)">
-						@Html.CheckBoxFor(model => model.Product2)
-						Umbrellas/sunglasses 
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductR)">
-						@Html.CheckBoxFor(model => model.ProductR)
-						Vinyl (pocket, desk, home) 
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductS)">
-						@Html.CheckBoxFor(model => model.ProductS)
-                        Wearables (Caps, jackets, shirts, etc)
-					</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductT)">
-						@Html.CheckBoxFor(model => model.ProductT)
-						Writing instruments
-					</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductU)">@Html.CheckBoxFor(model => model.ProductU) Key tags</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductX)">@Html.CheckBoxFor(model => model.ProductX) Magnetic products</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductM)">@Html.CheckBoxFor(model => model.ProductM) Office and desk products</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductN)">@Html.CheckBoxFor(model => model.ProductN) Paper products (Pocket reminders, diaries)</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Product3)">@Html.CheckBoxFor(model => model.Product3) Party Products (Balloons, Napkins, Plates, etc)</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Product4)">@Html.CheckBoxFor(model => model.Product4) Personal Care, Beauty Products</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Product5)">@Html.CheckBoxFor(model => model.Product5) Phone calling cards</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductE)">@Html.CheckBoxFor(model => model.ProductE) Plastic (non-vinyl)</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductP)">@Html.CheckBoxFor(model => model.ProductP) Sports Accessories (Bottles, coolers, equipment, golf balls, etc)</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductQ)">@Html.CheckBoxFor(model => model.ProductQ) Toys &amp; stuffed Animals</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductW)">@Html.CheckBoxFor(model => model.ProductW) Travel products</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Product2)">@Html.CheckBoxFor(model => model.Product2) Umbrellas/sunglasses</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductR)">@Html.CheckBoxFor(model => model.ProductR) Vinyl (pocket, desk, home)</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductS)">@Html.CheckBoxFor(model => model.ProductS) Wearables (Caps, jackets, shirts, etc)</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductT)">@Html.CheckBoxFor(model => model.ProductT) Writing instruments</label>
 				</span>
 			</fieldset>
 		</div><!-- END #product-information -->			
@@ -391,11 +286,11 @@
 				<legend>
 					ASI Contact
 				</legend>
-				<span class="lable-row">
-					@Html.LabelFor(m => m.ASIContact) 
+				<span class="label-row">
+					@Html.LabelFor(m => m.ASIContactName) 
 				</span>
-				<span class="lable-row">
-					@Html.EditorFor(m => m.ASIContact, new { @class = "long" }) @Html.ValidationMessageFor(m => m.ASIContact) 
+				<span class="label-row">
+					@Html.EditorFor(m => m.ASIContactName, new { @class = "long" }) @Html.ValidationMessageFor(m => m.ASIContactName) 
 				</span>
 			</fieldset>
 			<fieldset class="type-account">

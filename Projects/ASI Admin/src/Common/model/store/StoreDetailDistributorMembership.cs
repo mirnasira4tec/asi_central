@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.model.store
 {
-    public class StoreDetailDistributorMembership
+    public class StoreDetailDistributorMembership : StoreDetailApplication
     {
+        public static int[] Identifiers = new int[] { 5, 6, 7, 8 };
+        
         public StoreDetailDistributorMembership()
         {
             if (this.GetType() == typeof(StoreDetailDistributorMembership))
@@ -17,11 +19,6 @@ namespace asi.asicentral.model.store
                 AccountTypes = new List<LookDistributorAccountType>();
             }
         }
-
-        public int OrderDetailId { get; set; }
-        public string LegacyApplicationId { get; set; }
-        [Display(ResourceType = typeof(Resource), Name = "ApplicationStatus")]
-        public int? AppStatusId { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "NumberOfEmployee")]
         public int? NumberOfEmployee { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "NumberOfSalesEmployee")]
@@ -51,9 +48,6 @@ namespace asi.asicentral.model.store
         [Display(ResourceType = typeof(Resource), Name = "OtherBusinessRevenue")]
         public string OtherBusinessRevenue { get; set; }
         public Nullable<DateTime> EstablishedDate { get; set; }
-        public DateTime CreateDate { get; set; }
-        public DateTime UpdateDate { get; set; }
-        public string UpdateSource { get; set; }
         public virtual LookDistributorRevenueType PrimaryBusinessRevenue { get; set; }
         public virtual IList<LookDistributorAccountType> AccountTypes{ get; set; }
         public virtual IList<LookProductLine> ProductLines { get; set; }
@@ -78,6 +72,31 @@ namespace asi.asicentral.model.store
             hash = hash * 31 + "StoreDetailDistributorMembership".GetHashCode();
             hash = hash * 31 + OrderDetailId.GetHashCode();
             return hash;
+        }
+
+        public void CopyTo(StoreDetailDistributorMembership distributor)
+        {
+            base.CopyTo(distributor);
+            distributor.AccountTypes = AccountTypes;
+            distributor.AnnualSalesVolume = AnnualSalesVolume;
+            distributor.AnnualSalesVolumeASP = AnnualSalesVolumeASP;
+            distributor.ASIContactName = ASIContactName;
+            distributor.Custom1 = Custom1;
+            distributor.Custom2 = Custom2;
+            distributor.Custom5 = Custom5;
+            distributor.EstablishedDate = EstablishedDate;
+            distributor.HasRecSpecials = HasRecSpecials;
+            distributor.IsCorporateOfficer = IsCorporateOfficer;
+            distributor.IsForProfit = IsForProfit;
+            distributor.IsMajorForResale = IsMajorForResale;
+            distributor.IsMajorityDistributeForResale = IsMajorityDistributeForResale;
+            distributor.IsSolelyWork = IsSolelyWork;
+            distributor.NumberOfEmployee = NumberOfEmployee;
+            distributor.NumberOfSalesEmployee = NumberOfSalesEmployee;
+            distributor.OtherBusinessRevenue = OtherBusinessRevenue;
+            distributor.PrimaryBusinessRevenue = PrimaryBusinessRevenue;
+            distributor.ProductLines = ProductLines;
+            distributor.SolelyWorkName = SolelyWorkName;
         }
     }
 }
