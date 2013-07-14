@@ -78,6 +78,20 @@ namespace asi.asicentral.model.store
             return address;
         }
 
+        /// <summary>
+        /// Tries to find the a shipping address assigned to the company
+        /// </summary>
+        /// <returns></returns>
+        public StoreAddress GetCompanyShippingAddress()
+        {
+            StoreAddress address = null;
+            //Try to use the shipping address for the company now
+            StoreCompanyAddress companyAddress = Addresses.Where(add => add.IsShipping).FirstOrDefault();
+            if (companyAddress != null) address = companyAddress.Address;
+            else address = GetCompanyAddress();
+            return address;
+        }
+
         public bool HasBillAddress
         {
             get
