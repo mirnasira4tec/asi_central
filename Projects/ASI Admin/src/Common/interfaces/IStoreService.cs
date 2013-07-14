@@ -10,6 +10,13 @@ namespace asi.asicentral.interfaces
     public interface IStoreService : IObjectService
     {
         /// <summary>
+        /// Creates an application based on the order detail information
+        /// </summary>
+        /// <param name="orderDetail"></param>
+        /// <returns></returns>
+        StoreDetailApplication CreateApplication(StoreOrderDetail orderDetail);
+
+        /// <summary>
         /// Retrieves the application associated with the order detail
         /// </summary>
         /// <param name="orderDetail"></param>
@@ -21,6 +28,7 @@ namespace asi.asicentral.interfaces
         /// </summary>
         /// <param name="orderDetail"></param>
         /// <returns>The application if applicable, null otherwise</returns>
+        [Obsolete]
         StoreDetailDistributorMembership GetDistributorApplication(StoreOrderDetail orderDetail);
 
         /// <summary>
@@ -28,6 +36,7 @@ namespace asi.asicentral.interfaces
         /// </summary>
         /// <param name="orderDetail"></param>
         /// <returns>The application if applicable, null otherwise</returns>
+        [Obsolete]
         StoreDetailSupplierMembership GetSupplierApplication(StoreOrderDetail orderDetail);
     }
 }

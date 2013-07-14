@@ -26,8 +26,7 @@ namespace asi.asicentral.services
             StoreDetailDistributorMembership application = null;
             if (orderDetail.Product != null && StoreDetailDistributorMembership.Identifiers.Contains(orderDetail.Product.Id))
             {
-                IRepository<StoreDetailDistributorMembership> distributorRepository = GetRepository<StoreDetailDistributorMembership>();
-                application = distributorRepository.GetAll().Where(app => app.OrderDetailId == orderDetail.Id).SingleOrDefault();
+                application = GetAll<StoreDetailDistributorMembership>().Where(app => app.OrderDetailId == orderDetail.Id).SingleOrDefault();
             }
             return application;
         }
@@ -37,12 +36,17 @@ namespace asi.asicentral.services
             StoreDetailSupplierMembership application = null;
             if (orderDetail.Product != null && StoreDetailSupplierMembership.Identifiers.Contains(orderDetail.Product.Id))
             {
-                IRepository<StoreDetailSupplierMembership> supplierRepository = GetRepository<StoreDetailSupplierMembership>();
-                application =  supplierRepository.GetAll().Where(app => app.OrderDetailId == orderDetail.Id).SingleOrDefault();
+                application = GetAll<StoreDetailSupplierMembership>().Where(app => app.OrderDetailId == orderDetail.Id).SingleOrDefault();
             }
             return application;
         }
 
+
+        /// <summary>
+        /// Retrieves the application associated with the order detail
+        /// </summary>
+        /// <param name="orderDetail"></param>
+        /// <returns>The application if applicable, null otherwise</returns>
         public StoreDetailApplication GetApplication(StoreOrderDetail orderDetail)
         {
             StoreDetailApplication application = null;
@@ -50,6 +54,56 @@ namespace asi.asicentral.services
             {
                 if (StoreDetailSupplierMembership.Identifiers.Contains(orderDetail.Product.Id)) return GetSupplierApplication(orderDetail);
                 else if (StoreDetailDistributorMembership.Identifiers.Contains(orderDetail.Product.Id)) return GetDistributorApplication(orderDetail);
+            }
+            return application;
+        }
+
+        /// <summary>
+        /// Creates an application based on the order detail information
+        /// </summary>
+        /// <param name="orderDetail"></param>
+        /// <returns></returns>
+        public StoreDetailApplication CreateApplication(StoreOrderDetail orderDetail)
+        {
+            StoreDetailApplication application = null;
+            bool added = false;
+            //make sure order detail has been saved
+            //id is needed to create the reference in the application
+            if (orderDetail.Id == 0) SaveChanges();
+
+            if (orderDetail.Product != null)
+            {
+                if (StoreDetailSupplierMembership.Identifiers.Contains(orderDetail.Product.Id))
+                {
+                    //make sure the application does not already exist
+                    StoreDetailSupplierMembership supplierApplication = GetAll<StoreDetailSupplierMembership>(true).Where(supp => supp.OrderDetailId == orderDetail.Id).FirstOrDefault();
+                    if (supplierApplication == null)
+                    {
+                        added = true;
+                        supplierApplication = new StoreDetailSupplierMembership();
+                        Add<StoreDetailSupplierMembership>(supplierApplication);
+                        application = supplierApplication;
+                    }
+                }
+                else if (StoreDetailDistributorMembership.Identifiers.Contains(orderDetail.Product.Id))
+                {
+                    //make sure the application does not already exist
+                    StoreDetailDistributorMembership distributorApplication = GetAll<StoreDetailDistributorMembership>(true).Where(supp => supp.OrderDetailId == orderDetail.Id).FirstOrDefault();
+                    if (distributorApplication == null)
+                    {
+                        added = true;
+                        distributorApplication = new StoreDetailDistributorMembership();
+                        Add<StoreDetailDistributorMembership>(distributorApplication);
+                        application = distributorApplication;
+                    }
+                }
+                if (added)
+                {
+                    application.OrderDetailId = orderDetail.Id;
+                    application.CreateDate = DateTime.UtcNow;
+                    application.UpdateDate = DateTime.UtcNow;
+                    application.UpdateSource = "StoreService - CreateApplication";
+                }
             }
             return application;
         }
