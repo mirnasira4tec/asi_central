@@ -10,7 +10,6 @@ namespace asi.asicentral.web.model.store
 {
     public class SupplierApplicationModel : StoreDetailSupplierMembership, IMembershipModel
     {
-        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(asi.asicentral.Resource))]
         [Display(ResourceType = typeof(asi.asicentral.Resource), Name = "CompanyName")]
         public string Company { get; set; }
         [Display(ResourceType = typeof(asi.asicentral.Resource), Name = "Street1")]
@@ -214,32 +213,30 @@ namespace asi.asicentral.web.model.store
         /// Apply the extra bool values from the view model to the many to many
         /// </summary>
         /// <param name="StoreService"></param>
-        public void SyncDecoratingTypes(IList<LookSupplierDecoratingType> decoratingTypes)
+        public void SyncDecoratingTypes(IList<LookSupplierDecoratingType> decoratingTypes, StoreDetailSupplierMembership application)
         {
-            AddDecoratingType(this.Etching, LookSupplierDecoratingType.DECORATION_ETCHING, decoratingTypes);
-            AddDecoratingType(this.HotStamping, LookSupplierDecoratingType.DECORATION_HOTSTAMPING, decoratingTypes);
-            AddDecoratingType(this.SilkScreen, LookSupplierDecoratingType.DECORATION_SILKSCREEN, decoratingTypes);
-            AddDecoratingType(this.PadPrint, LookSupplierDecoratingType.DECORATION_PADPRINT, decoratingTypes);
-            AddDecoratingType(this.DirectEmbroidery, LookSupplierDecoratingType.DECORATION_DIRECTEMBROIDERY, decoratingTypes);
-            AddDecoratingType(this.FoilStamping, LookSupplierDecoratingType.DECORATION_FOILSTAMPING, decoratingTypes);
-            AddDecoratingType(this.Lithography, LookSupplierDecoratingType.DECORATION_LITHOGRAPHY, decoratingTypes);
-            AddDecoratingType(this.Sublimination, LookSupplierDecoratingType.DECORATION_SUBLIMINATION, decoratingTypes);
-            AddDecoratingType(this.FourColourProcess, LookSupplierDecoratingType.DECORATION_FOURCOLOR, decoratingTypes);
-            AddDecoratingType(this.Engraving, LookSupplierDecoratingType.DECORATION_ENGRAVING, decoratingTypes);
-            AddDecoratingType(this.Laser, LookSupplierDecoratingType.DECORATION_LASER, decoratingTypes);
-            AddDecoratingType(this.Offset, LookSupplierDecoratingType.DECORATION_OFFSET, decoratingTypes);
-            AddDecoratingType(this.Transfer, LookSupplierDecoratingType.DECORATION_TRANSFER, decoratingTypes);
-            AddDecoratingType(this.FullColourProcess, LookSupplierDecoratingType.DECORATION_FULLCOLOR, decoratingTypes);
-            AddDecoratingType(this.DieStamp, LookSupplierDecoratingType.DECORATION_DIESTAMP, decoratingTypes);
+            AddDecoratingType(this.Etching, LookSupplierDecoratingType.DECORATION_ETCHING, decoratingTypes, application);
+            AddDecoratingType(this.HotStamping, LookSupplierDecoratingType.DECORATION_HOTSTAMPING, decoratingTypes, application);
+            AddDecoratingType(this.SilkScreen, LookSupplierDecoratingType.DECORATION_SILKSCREEN, decoratingTypes,application);
+            AddDecoratingType(this.PadPrint, LookSupplierDecoratingType.DECORATION_PADPRINT, decoratingTypes, application);
+            AddDecoratingType(this.DirectEmbroidery, LookSupplierDecoratingType.DECORATION_DIRECTEMBROIDERY, decoratingTypes, application);
+            AddDecoratingType(this.FoilStamping, LookSupplierDecoratingType.DECORATION_FOILSTAMPING, decoratingTypes, application);
+            AddDecoratingType(this.Lithography, LookSupplierDecoratingType.DECORATION_LITHOGRAPHY, decoratingTypes, application);
+            AddDecoratingType(this.Sublimination, LookSupplierDecoratingType.DECORATION_SUBLIMINATION, decoratingTypes, application);
+            AddDecoratingType(this.FourColourProcess, LookSupplierDecoratingType.DECORATION_FOURCOLOR, decoratingTypes, application);
+            AddDecoratingType(this.Engraving, LookSupplierDecoratingType.DECORATION_ENGRAVING, decoratingTypes, application);
+            AddDecoratingType(this.Laser, LookSupplierDecoratingType.DECORATION_LASER, decoratingTypes, application);
+            AddDecoratingType(this.Offset, LookSupplierDecoratingType.DECORATION_OFFSET, decoratingTypes, application);
+            AddDecoratingType(this.Transfer, LookSupplierDecoratingType.DECORATION_TRANSFER, decoratingTypes, application);
+            AddDecoratingType(this.FullColourProcess, LookSupplierDecoratingType.DECORATION_FULLCOLOR, decoratingTypes, application);
+            AddDecoratingType(this.DieStamp, LookSupplierDecoratingType.DECORATION_DIESTAMP, decoratingTypes, application);
         }
 
-        private void AddDecoratingType(bool selected, String typeName, IList<LookSupplierDecoratingType> decoratingTypes)
+        private void AddDecoratingType(bool selected, String typeName, IList<LookSupplierDecoratingType> decoratingTypes, StoreDetailSupplierMembership application)
         {
-            if (selected)
-            {
-                LookSupplierDecoratingType type = decoratingTypes.Where(decType => decType.Description == typeName).SingleOrDefault();
-                if (type != null) DecoratingTypes.Add(type);
-            }
+            LookSupplierDecoratingType existing = application.DecoratingTypes.Where(decType => decType.Description == typeName).SingleOrDefault();
+            if (selected && existing == null) application.DecoratingTypes.Add(decoratingTypes.Where(type => type.Description == typeName).SingleOrDefault());
+            else if (!selected && existing != null) application.DecoratingTypes.Remove(existing);
         }
     }
 }
