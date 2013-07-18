@@ -9,7 +9,6 @@ namespace asi.asicentral.web.model.store
 {
     public class DistributorApplicationModel : StoreDetailDistributorMembership, IMembershipModel
     {
-        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(asi.asicentral.Resource))]
         [Display(ResourceType = typeof(asi.asicentral.Resource), Name = "CompanyName")]
         public string Company { get; set; }
         [Display(ResourceType = typeof(asi.asicentral.Resource), Name = "Street1")]
@@ -202,89 +201,84 @@ namespace asi.asicentral.web.model.store
             Other = string.IsNullOrEmpty(this.OtherBusinessRevenue) ? false : true;
         }
 
-        private void AddType(bool selected, String codeName, IList<LookDistributorAccountType> accountTypes)
+        private void AddType(bool selected, String codeName, IList<LookDistributorAccountType> accountTypes, StoreDetailDistributorMembership application)
         {
-            if (selected)
-            {
-                LookDistributorAccountType account = accountTypes.Where(type => type.SubCode == codeName).SingleOrDefault();
-                if (account != null) this.AccountTypes.Add(account);
-            }
+            LookDistributorAccountType reference = application.AccountTypes.Where(type => type.SubCode == codeName).SingleOrDefault();
+            if (selected && reference == null) application.AccountTypes.Add(accountTypes.Where(type => type.SubCode == codeName).SingleOrDefault());
+            else if (!selected && reference != null) application.AccountTypes.Remove(reference);
         }
 
-        private void AddProductLine(bool selected, String codeName, IList<LookProductLine> productLines)
+        private void AddProductLine(bool selected, String codeName, IList<LookProductLine> productLines, StoreDetailDistributorMembership application)
         {
-            if (selected)
-            {
-                LookProductLine line = productLines.Where(productline => productline.SubCode == codeName).SingleOrDefault();
-                if (line != null) this.ProductLines.Add(line);
-            }
+            LookProductLine reference = application.ProductLines.Where(type => type.SubCode == codeName && type.MemberType == "distributor").SingleOrDefault();
+            if (selected && reference == null) application.ProductLines.Add(productLines.Where(type => type.SubCode == codeName && type.MemberType == "distributor").SingleOrDefault());
+            else if (!selected && reference != null) application.ProductLines.Remove(reference);
         }
 
-        public void SyncProductLinesFrom(IList<LookProductLine> productLines)
+        public void SyncProductLinesToApplication(IList<LookProductLine> productLines, StoreDetailDistributorMembership application)
         {
-            AddProductLine(Product1, "1", productLines);
-            AddProductLine(Product2, "2", productLines);
-            AddProductLine(Product3, "3", productLines);
-            AddProductLine(Product4, "4", productLines);
-            AddProductLine(Product5, "5", productLines);
-            AddProductLine(ProductA, "A", productLines);
-            AddProductLine(ProductB, "B", productLines);
-            AddProductLine(ProductC, "C", productLines);
-            AddProductLine(ProductD, "D", productLines);
-            AddProductLine(ProductE, "E", productLines);
-            AddProductLine(ProductF, "F", productLines);
-            AddProductLine(ProductG, "G", productLines);
-            AddProductLine(ProductH, "H", productLines);
-            AddProductLine(ProductI, "I", productLines);
-            AddProductLine(ProductJ, "J", productLines);
-            AddProductLine(ProductK, "K", productLines);
-            AddProductLine(ProductL, "L", productLines);
-            AddProductLine(ProductM, "M", productLines);
-            AddProductLine(ProductN, "N", productLines);
-            AddProductLine(ProductO, "O", productLines);
-            AddProductLine(ProductP, "P", productLines);
-            AddProductLine(ProductQ, "Q", productLines);
-            AddProductLine(ProductR, "R", productLines);
-            AddProductLine(ProductS, "S", productLines);
-            AddProductLine(ProductT, "T", productLines);
-            AddProductLine(ProductU, "U", productLines);
-            AddProductLine(ProductV, "V", productLines);
-            AddProductLine(ProductW, "W", productLines);
-            AddProductLine(ProductX, "X", productLines);
-            AddProductLine(ProductY, "Y", productLines);
-            AddProductLine(ProductZ, "Z", productLines);
-
+            AddProductLine(Product1, "1", productLines, application);
+            AddProductLine(Product2, "2", productLines, application);
+            AddProductLine(Product3, "3", productLines, application);
+            AddProductLine(Product4, "4", productLines, application);
+            AddProductLine(Product5, "5", productLines, application);
+            AddProductLine(ProductA, "A", productLines, application);
+            AddProductLine(ProductB, "B", productLines, application);
+            AddProductLine(ProductC, "C", productLines, application);
+            AddProductLine(ProductD, "D", productLines, application);
+            AddProductLine(ProductE, "E", productLines, application);
+            AddProductLine(ProductF, "F", productLines, application);
+            AddProductLine(ProductG, "G", productLines, application);
+            AddProductLine(ProductH, "H", productLines, application);
+            AddProductLine(ProductI, "I", productLines, application);
+            AddProductLine(ProductJ, "J", productLines, application);
+            AddProductLine(ProductK, "K", productLines, application);
+            AddProductLine(ProductL, "L", productLines, application);
+            AddProductLine(ProductM, "M", productLines, application);
+            AddProductLine(ProductN, "N", productLines, application);
+            AddProductLine(ProductO, "O", productLines, application);
+            AddProductLine(ProductP, "P", productLines, application);
+            AddProductLine(ProductQ, "Q", productLines, application);
+            AddProductLine(ProductR, "R", productLines, application);
+            AddProductLine(ProductS, "S", productLines, application);
+            AddProductLine(ProductT, "T", productLines, application);
+            AddProductLine(ProductU, "U", productLines, application);
+            AddProductLine(ProductV, "V", productLines, application);
+            AddProductLine(ProductW, "W", productLines, application);
+            AddProductLine(ProductX, "X", productLines, application);
+            AddProductLine(ProductY, "Y", productLines, application);
+            AddProductLine(ProductZ, "Z", productLines, application);
         }
 
-        public void SyncAccountTypesFrom(IList<LookDistributorAccountType> accountTypes)
+        public void SyncAccountTypesToApplication(IList<LookDistributorAccountType> accountTypes, StoreDetailDistributorMembership application)
         {
-            AddType(Account1, "1", accountTypes);
-            AddType(AccountA, "A", accountTypes);
-            AddType(AccountB, "B", accountTypes);
-            AddType(AccountC, "C", accountTypes);
-            AddType(AccountD, "D", accountTypes);
-            AddType(AccountE, "E", accountTypes);
-            AddType(AccountF, "F", accountTypes);
-            AddType(AccountG, "G", accountTypes);
-            AddType(AccountH, "H", accountTypes);
-            AddType(AccountI, "I", accountTypes);
-            AddType(AccountJ, "J", accountTypes);
-            AddType(AccountK, "K", accountTypes);
-            AddType(AccountL, "L", accountTypes);
-            AddType(AccountM, "M", accountTypes);
-            AddType(AccountN, "N", accountTypes);
-            AddType(AccountO, "O", accountTypes);
-            AddType(AccountP, "P", accountTypes);
-            AddType(AccountQ, "Q", accountTypes);
-            AddType(AccountR, "R", accountTypes);
-            AddType(AccountS, "S", accountTypes);
-            AddType(AccountT, "T", accountTypes);
-            AddType(AccountU, "U", accountTypes);
-            AddType(AccountV, "V", accountTypes);
-            AddType(AccountW, "W", accountTypes);
-            AddType(AccountX, "X", accountTypes);
-            AddType(AccountY, "Y", accountTypes);
-            AddType(AccountZ, "Z", accountTypes);
+            AddType(Account1, "1", accountTypes, application);
+            AddType(AccountA, "A", accountTypes, application);
+            AddType(AccountB, "B", accountTypes, application);
+            AddType(AccountC, "C", accountTypes, application);
+            AddType(AccountD, "D", accountTypes, application);
+            AddType(AccountE, "E", accountTypes, application);
+            AddType(AccountF, "F", accountTypes, application);
+            AddType(AccountG, "G", accountTypes, application);
+            AddType(AccountH, "H", accountTypes, application);
+            AddType(AccountI, "I", accountTypes, application);
+            AddType(AccountJ, "J", accountTypes, application);
+            AddType(AccountK, "K", accountTypes, application);
+            AddType(AccountL, "L", accountTypes, application);
+            AddType(AccountM, "M", accountTypes, application);
+            AddType(AccountN, "N", accountTypes, application);
+            AddType(AccountO, "O", accountTypes, application);
+            AddType(AccountP, "P", accountTypes, application);
+            AddType(AccountQ, "Q", accountTypes, application);
+            AddType(AccountR, "R", accountTypes, application);
+            AddType(AccountS, "S", accountTypes, application);
+            AddType(AccountT, "T", accountTypes, application);
+            AddType(AccountU, "U", accountTypes, application);
+            AddType(AccountV, "V", accountTypes, application);
+            AddType(AccountW, "W", accountTypes, application);
+            AddType(AccountX, "X", accountTypes, application);
+            AddType(AccountY, "Y", accountTypes, application);
+            AddType(AccountZ, "Z", accountTypes, application);
         }
 
         private void GetAccountTypes()
