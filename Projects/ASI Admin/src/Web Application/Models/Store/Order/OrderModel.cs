@@ -60,6 +60,16 @@ namespace asi.asicentral.web.model.store
             get { return (orderDetail.Product != null ? orderDetail.Product.Name : String.Empty); }
         }
 
+        public String ProductType
+        {
+            get { return (orderDetail.Product != null ? orderDetail.Product.Type : String.Empty); }
+        }
+
+        public int OrderDetailId
+        {
+            get { return orderDetail.Id; }
+        }
+
         public int Quantity
         {
             get { return orderDetail.Quantity; }
@@ -120,6 +130,7 @@ namespace asi.asicentral.web.model.store
             order.CompletedStep = orderDetail.Order.CompletedStep.ToString();
             order.Application = storeService.GetApplication(orderDetail);
             order.ShowIcons = orderDetail.Order.ProcessStatus == OrderStatus.Pending && order.Application != null && orderDetail.Order.IsCompleted == true;
+            if (!order.ShowIcons) order.ShowIcons = orderDetail.Order.ProcessStatus == OrderStatus.Pending && order.ProductType == "Magazine" && orderDetail.Order.IsCompleted == true;
             if (orderDetail.Order.Company != null)
                 order.Company = orderDetail.Order.Company.Name;
             if (orderDetail.Order.CreditCard != null && !string.IsNullOrEmpty(orderDetail.Order.CreditCard.CardNumber))

@@ -27,7 +27,17 @@ namespace asi.asicentral.services
         public virtual Guid Process(StoreOrder order, StoreDetailApplication application)
         {
             if (order == null || order.BillingIndividual == null || order.CreditCard == null || string.IsNullOrEmpty(order.CreditCard.ExternalReference)) throw new InvalidOperationException("You must pass a valid Order for this method");
-            if (application == null) throw new InvalidOperationException("You must pass a valid Application for this method");
+
+            //Added code to support magazines
+            bool isMagazineRequest = false;
+            if(order != null && order.OrderDetails != null && order.OrderDetails.Count >0)
+            {
+                StoreOrderDetail orderDetail = order.OrderDetails.ElementAt(0);
+                if(orderDetail != null && orderDetail.Product != null && orderDetail.Product.Type == "Magazine")
+                    isMagazineRequest = true;
+            }
+
+            if (application == null && !isMagazineRequest) throw new InvalidOperationException("You must pass a valid Application or Magazine details for this method");
             TIMSSCompany company = new TIMSSCompany()
             {
                 //@todo talk to gary about that column
@@ -227,6 +237,10 @@ namespace asi.asicentral.services
                     };
                     _objectService.Add<TIMSSProductType>(timssProductLine);
                 }
+            }
+            else if (isMagazineRequest)
+            {
+                //Todo: Code for Magazines
             }
             _objectService.SaveChanges();
             return company.DAPP_UserId;

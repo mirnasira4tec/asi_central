@@ -357,4 +357,7 @@
   <data name="FieldIMustBeNumber" xml:space="preserve">
     <value>Field must be a number</value>
   </data>
+  <data name="StoreTitleMagazinesApplication" xml:space="preserve">
+    <value>Magazines - {0}</value>
+  </data>
 </root>

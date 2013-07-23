@@ -197,7 +197,7 @@ namespace asi.asicentral.web.model.store
             Sublimination = HasDecorating(LookSupplierDecoratingType.DECORATION_SUBLIMINATION);
             FourColourProcess = HasDecorating(LookSupplierDecoratingType.DECORATION_FOURCOLOR);
             Engraving = HasDecorating(LookSupplierDecoratingType.DECORATION_ENGRAVING);
-            Laser = HasDecorating(LookSupplierDecoratingType.DECORATION_ENGRAVING);
+            Laser = HasDecorating(LookSupplierDecoratingType.DECORATION_LASER);
             Offset = HasDecorating(LookSupplierDecoratingType.DECORATION_OFFSET);
             Transfer = HasDecorating(LookSupplierDecoratingType.DECORATION_TRANSFER);
             FullColourProcess = HasDecorating(LookSupplierDecoratingType.DECORATION_FULLCOLOR);

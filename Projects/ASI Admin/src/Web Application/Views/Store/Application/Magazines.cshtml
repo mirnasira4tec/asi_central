@@ -1,0 +1,402 @@
+﻿@using asi.asicentral.web
+@using asi.asicentral.model.store
+@using asi.asicentral.web.Controllers.Store
+@model asi.asicentral.web.model.store.MagazinesApplicationModel
+
+@{
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+
+<h1>@string.Format(@Resource.StoreTitleMagazinesApplication, Model.ProductName) (#@Model.OrderId)</h1>
+@if (Model.Price > 0.0m)
+{
+<p>@Model.ProductName product purchase fee is @Model.Price.ToString("C")</p>
+}
+@using (Html.BeginForm("EditMagazines", "Application"))
+{        
+@Html.AntiForgeryToken()
+@Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
+<div>
+    @if (Model.Price > 0.0m)
+    {
+    <h3 class="order-status-header3">Order Status:</h3>
+    <div class="order-status">@Model.OrderStatus</div>
+    <div class="timms-info">
+        <div class="span3">
+            <label class="order-status-label" for="Timms_ID">Timms ID:</label>
+            <div class="order-status-input">
+                @Html.EditorFor(m => m.ExternalReference, new { @class = "span2" })
+                <span id="timmsErrorMessage" data-type="errormessage" class="field-validation-error"></span>
+            </div>
+        </div>
+        <div class="status-btns">
+            @if (Model.IsCompleted && Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
+            {
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
+            }
+            @if (Model.IsCompleted && Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
+            { 
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
+            }
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+            @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
+            { @Html.ActionLink("Close", "../Orders") }
+            else
+            { @Html.ActionLink("Cancel", "../Orders") }
+
+        </div>
+    </div>
+    }
+    else
+    {
+        <div class="timms-info span3 status-btns">
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+            @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
+            { @Html.ActionLink("Close", "../Orders") }
+            else
+            { @Html.ActionLink("Cancel", "../Orders") }
+
+        </div>
+    }
+</div>
+<nav>
+	<ul class="nav nav-tabs" id="tabs">
+        <li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
+		<li><a href="#tabsubscription" data-toggle="tab">Subscription Information</a></li>
+	</ul>
+</nav>
+<div class="tab-content">
+    <div id="tabbasic" class="basic-information tab-pane fade in active">
+		<fieldset class="company-info-form">			
+			<legend>Company Information</legend>
+				<span class="label-row">
+					@Html.LabelFor(m => m.Company) 
+					@Html.EditorFor(m => m.Company, new { @class = "long" }) @Html.ValidationMessageFor(m => m.Company)
+				</span>
+				<span class="label-row">
+					@Html.LabelFor(m => m.Address1)
+					@Html.LabelFor(m => m.Address2)
+					@Html.LabelFor(m => m.City)
+				</span>
+				<span class="label-row">
+                    @if (Model.IsCompanyAddressEditable)
+                    {
+					@Html.EditorFor(m => m.Address1) @Html.ValidationMessageFor(m => m.Address1)
+					@Html.EditorFor(m => m.Address2) @Html.ValidationMessageFor(m => m.Address2)
+					@Html.EditorFor(m => m.City) @Html.ValidationMessageFor(m => m.City)
+                    }
+                    else
+                    {
+                    @Html.TextBoxFor(m => m.Address1, new { @readonly = "readonly" })
+					@Html.TextBoxFor(m => m.Address2, new { @readonly = "readonly" })
+					@Html.TextBoxFor(m => m.City, new { @readonly = "readonly" })
+                    }
+				</span>
+				<span class="label-row">
+					@Html.LabelFor(m => m.State, new { @class = "span3" }) 
+					@Html.LabelFor(m => m.Zip, new { @class = "span3" })
+					@Html.LabelFor(m => m.Country, new { @class = "span3" })
+                </span>
+				<span class="label-row">
+                    @if (Model.IsCompanyAddressEditable)
+                    {
+					@Html.EditorFor(m => m.State, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.State)
+					@Html.EditorFor(m => m.Zip, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.Zip)
+					@Html.EditorFor(m => m.Country, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.Country)
+                    }
+                    else
+                    {
+                    @Html.TextBoxFor(m => m.State, new { @readonly = "readonly" })
+					@Html.TextBoxFor(m => m.Zip, new { @readonly = "readonly" })
+					@Html.TextBoxFor(m => m.Country, new { @readonly = "readonly" })
+                    }
+				</span>
+			
+		</fieldset>
+
+		<fieldset class="contact-info-form">
+			<legend>Contacts</legend>
+
+            @if (Model.Contacts != null && Model.Contacts.Count > 0)
+            {
+                for (int i = 0; i < Model.Contacts.Count; i++)
+                {
+                    if (Model.Contacts[i] != null)
+                    {
+                        @Html.HiddenFor(m => Model.Contacts[i].Id) @Html.HiddenFor(m => Model.Contacts[i].IsPrimary) 
+                        <span class="row">@(Model.Contacts[i].IsPrimary ? Html.Raw("<strong>Primary Contact</strong>") : Html.Raw("<strong>Secondary Contact</strong>"))</span>
+                        <span class="label-row">
+					        @Html.LabelFor(m => Model.Contacts[i].FirstName)
+                            @Html.LabelFor(m => Model.Contacts[i].LastName)
+					        @Html.LabelFor(m => Model.Contacts[i].Email)
+				        </span>
+				        <span class="label-row">
+                            @if ((Model.Contacts[i].IsPrimary && Model.IsPrimaryEditable) || (!Model.Contacts[i].IsPrimary && Model.IsPrimaryEditable))
+                            {
+                            @Html.EditorFor(m => Model.Contacts[i].FirstName) @Html.ValidationMessageFor(m => Model.Contacts[i].FirstName)
+					        @Html.EditorFor(m => Model.Contacts[i].LastName) @Html.ValidationMessageFor(m => Model.Contacts[i].LastName)
+					        @Html.EditorFor(m => Model.Contacts[i].Email) @Html.ValidationMessageFor(m => Model.Contacts[i].Email)
+                            }
+                            else
+                            {
+                            @Html.TextBoxFor(m => Model.Contacts[i].FirstName, new { @readonly = "readonly" })
+					        @Html.TextBoxFor(m => Model.Contacts[i].LastName, new { @readonly = "readonly" })
+					        @Html.TextBoxFor(m => Model.Contacts[i].Email, new { @readonly = "readonly" })
+                            }
+				        </span>
+				        <span class="label-row">
+					        @Html.LabelFor(m => Model.Contacts[i].Title)
+					        @Html.LabelFor(m => Model.Contacts[i].Phone)
+					        @Html.LabelFor(m => Model.Contacts[i].Fax)
+				        </span>
+				        <span class="label-row">
+                            @if ((Model.Contacts[i].IsPrimary && Model.IsPrimaryEditable) || (!Model.Contacts[i].IsPrimary && Model.IsPrimaryEditable))
+                            {
+					        @Html.EditorFor(m => Model.Contacts[i].Title) @Html.ValidationMessageFor(m => Model.Contacts[i].Title)
+					        @Html.EditorFor(m => Model.Contacts[i].Phone) @Html.ValidationMessageFor(m => Model.Contacts[i].Phone)
+					        @Html.EditorFor(m => Model.Contacts[i].Fax) @Html.ValidationMessageFor(m => Model.Contacts[i].Fax)
+                            }
+                            else
+                            {
+                            @Html.TextBoxFor(m => Model.Contacts[i].Title, new {  @readonly = "readonly" })
+					        @Html.TextBoxFor(m => Model.Contacts[i].Phone, new {  @readonly = "readonly" })
+					        @Html.TextBoxFor(m => Model.Contacts[i].Fax, new {  @readonly = "readonly" })
+                            }
+				        </span>
+                    }
+                }
+            }
+		</fieldset>	
+
+        @Html.HiddenFor(m => m.HasBillAddress)
+        @if (Model.HasBillAddress)
+        {
+		<fieldset class="billing-info-form">
+			<legend>Billing Information</legend>
+
+			<span class="label-row">
+				@Html.LabelFor(m => m.BillingAddress1) 
+				@Html.LabelFor(m => m.BillingAddress2) 
+				@Html.LabelFor(m => m.BillingCity)
+			</span>
+			<span class="label-row">
+                @if (Model.IsBillingEditable)
+                {
+				@Html.EditorFor(m => m.BillingAddress1) @Html.ValidationMessageFor(m => m.BillingAddress1)
+				@Html.EditorFor(m => m.BillingAddress2) @Html.ValidationMessageFor(m => m.BillingAddress2)
+				@Html.EditorFor(m => m.BillingCity) @Html.ValidationMessageFor(m => m.BillingCity)
+                }
+                else
+                {
+                @Html.TextBoxFor(m => m.BillingAddress1, new {  @readonly = "readonly" })
+				@Html.TextBoxFor(m => m.BillingAddress2, new {  @readonly = "readonly" })
+				@Html.TextBoxFor(m => m.BillingCity, new {  @readonly = "readonly" })
+                }
+			</span>
+				
+			<span class="label-row">
+				@Html.LabelFor(m => m.BillingState) 
+				@Html.LabelFor(m => m.BillingZip) 
+				@Html.LabelFor(m => m.BillingCountry)
+			</span>
+			<span class="label-row">
+                @if (Model.IsBillingEditable)
+                {
+				@Html.EditorFor(m => m.BillingState) @Html.ValidationMessageFor(m => m.BillingState)
+				@Html.EditorFor(m => m.BillingZip) @Html.ValidationMessageFor(m => m.BillingZip)
+				@Html.EditorFor(m => m.BillingCountry) @Html.ValidationMessageFor(m => m.BillingCountry)
+                }
+                else
+                {
+                @Html.TextBoxFor(m => m.BillingState, new {  @readonly = "readonly" })
+				@Html.TextBoxFor(m => m.BillingZip, new {  @readonly = "readonly" })
+				@Html.TextBoxFor(m => m.BillingCountry, new {  @readonly = "readonly" })
+                }
+			</span>
+				<span class="label-row span11">
+				@Html.LabelFor(m => m.BillingPhone) 
+				@Html.LabelFor(m => m.BillingFax) 
+				@Html.LabelFor(m => m.BillingEmail)
+			</span>
+			<span class="label-row">
+            @if (Model.IsBillingContactEditable)
+            {
+				@Html.EditorFor(m => m.BillingPhone) @Html.ValidationMessageFor(m => m.BillingPhone)
+				@Html.EditorFor(m => m.BillingFax) @Html.ValidationMessageFor(m => m.BillingFax)
+				@Html.EditorFor(m => m.BillingEmail) @Html.ValidationMessageFor(m => m.BillingEmail)
+            }
+            else
+            {
+                @Html.TextBoxFor(m => m.BillingPhone, new {  @readonly = "readonly" })
+				@Html.TextBoxFor(m => m.BillingFax, new {  @readonly = "readonly" })
+				@Html.TextBoxFor(m => m.BillingEmail, new {  @readonly = "readonly" })
+            }
+			</span>
+			<span class="label-row span11">
+				@Html.LabelFor(m => m.BillingWebUrl) 
+			</span>
+			<span class="label-row">
+				@Html.EditorFor(m => m.BillingWebUrl) @Html.ValidationMessageFor(m => m.BillingWebUrl)
+			</span>
+		</fieldset>                
+        } 
+        @Html.HiddenFor(m => m.HasShipAddress)
+        @if (Model.HasShipAddress)
+        {
+		<fieldset class="billing-info-form">
+			<legend>Shipping Information</legend>
+
+			<span class="label-row">
+				@Html.LabelFor(m => m.ShippingStreet1) 
+				@Html.LabelFor(m => m.ShippingStreet2) 
+				@Html.LabelFor(m => m.ShippingCity) 
+			</span>
+			<span class="label-row">
+                @if (Model.IsShippingEditable)
+                {
+				@Html.EditorFor(m => m.ShippingStreet1) @Html.ValidationMessageFor(m => m.ShippingStreet1)
+				@Html.EditorFor(m => m.ShippingStreet2) @Html.ValidationMessageFor(m => m.ShippingStreet2)
+				@Html.EditorFor(m => m.ShippingCity) @Html.ValidationMessageFor(m => m.ShippingCity)
+                }
+                else
+                {
+                @Html.TextBoxFor(m => m.ShippingStreet1, new {  @readonly = "readonly" })
+				@Html.TextBoxFor(m => m.ShippingStreet2, new {  @readonly = "readonly" })
+				@Html.TextBoxFor(m => m.ShippingCity, new {  @readonly = "readonly" })
+                }
+			</span>
+				
+			<span class="label-row">
+				@Html.LabelFor(m => m.ShippingState) 
+				@Html.LabelFor(m => m.ShippingZip) 
+				@Html.LabelFor(m => m.ShippingCountry)
+			</span>
+			<span class="label-row">
+                @if (Model.IsShippingEditable)
+                {
+				@Html.EditorFor(m => m.ShippingState) @Html.ValidationMessageFor(m => m.ShippingState)
+				@Html.EditorFor(m => m.ShippingZip) @Html.ValidationMessageFor(m => m.ShippingZip)
+				@Html.EditorFor(m => m.ShippingCountry) @Html.ValidationMessageFor(m => m.ShippingCountry)
+                }
+                else
+                {
+                @Html.TextBoxFor(m => m.ShippingState, new {  @readonly = "readonly" })
+				@Html.TextBoxFor(m => m.ShippingZip, new {  @readonly = "readonly" })
+				@Html.TextBoxFor(m => m.ShippingCountry, new {  @readonly = "readonly" })
+                }
+			</span>
+		</fieldset>                
+        } 
+	</div><!-- END #basic-information -->	
+
+	<div id="tabsubscription" class="product-information tab-pane fade">
+		<fieldset class="company-info-form">			
+            @if (Model.Subscriptions != null && Model.Subscriptions.Count > 0)
+            {
+                for (int i = 0; i < Model.Subscriptions.Count; i++)
+                {
+                    if (Model.Subscriptions[i] != null)
+                    {
+                        @Html.HiddenFor(m => Model.Subscriptions[i].Id)
+                        <legend>Subscription#@(i + 1)</legend>
+                        <span class="row">@Html.Raw("<strong>Basic Information</strong>")</span>
+                        <span class="label-row">
+					        @Html.LabelFor(m => m.Subscriptions[i].CompanyName)
+                            @Html.LabelFor(m => m.Subscriptions[i].ASINumber)
+					        @Html.LabelFor(m => m.Subscriptions[i].IsDigitalVersion)
+				        </span>
+                        <span class="label-row">
+                            @Html.EditorFor(m => m.Subscriptions[i].CompanyName) @Html.ValidationMessageFor(m => m.Subscriptions[i].CompanyName)
+				            @Html.EditorFor(m => m.Subscriptions[i].ASINumber) @Html.ValidationMessageFor(m => m.Subscriptions[i].CompanyName)
+				            @Html.EditorFor(m => m.Subscriptions[i].IsDigitalVersion) @Html.ValidationMessageFor(m => m.Subscriptions[i].CompanyName)
+			            </span>
+                        if (Model.Subscriptions[i].Contact != null)
+                        {
+                            @Html.HiddenFor(m => Model.Subscriptions[i].Contact.Id)
+                            <span class="row">@Html.Raw("<strong>Contact Information</strong>")</span>
+                            <span class="label-row">
+					            @Html.LabelFor(m => m.Subscriptions[i].Contact.FirstName)
+                                @Html.LabelFor(m => m.Subscriptions[i].Contact.LastName)
+                                @Html.LabelFor(m => m.Subscriptions[i].Contact.Email)
+				            </span>
+                            <span class="label-row">
+                                @Html.EditorFor(m => m.Subscriptions[i].Contact.FirstName) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.FirstName)
+					            @Html.EditorFor(m => m.Subscriptions[i].Contact.LastName) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.LastName)
+					            @Html.EditorFor(m => m.Subscriptions[i].Contact.Email) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Email)
+				            </span>
+                            <span class="label-row">
+					            @Html.LabelFor(m => m.Subscriptions[i].Contact.Title)
+                                @Html.LabelFor(m => m.Subscriptions[i].Contact.Phone)
+					            @Html.LabelFor(m => m.Subscriptions[i].Contact.Fax)
+				            </span>
+                             <span class="label-row">
+                                @Html.EditorFor(m => m.Subscriptions[i].Contact.Title) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Title)
+					            @Html.EditorFor(m => m.Subscriptions[i].Contact.Phone) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Phone)
+					            @Html.EditorFor(m => m.Subscriptions[i].Contact.Fax) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Fax)
+				            </span>
+                        }
+                        if (Model.Subscriptions[i].Contact.Address != null)
+                        {
+                            @Html.HiddenFor(m => Model.Subscriptions[i].Contact.Address.Id)
+                            <span class="row">@Html.Raw("<strong>Address Information</strong>")</span>
+                            <span class="label-row">
+				                @Html.LabelFor(m => m.Subscriptions[i].Contact.Address.Street1) 
+				                @Html.LabelFor(m => m.Subscriptions[i].Contact.Address.Street2) 
+				                @Html.LabelFor(m => m.Subscriptions[i].Contact.Address.City) 
+			                </span>
+			                <span class="label-row">
+				                @Html.EditorFor(m => m.Subscriptions[i].Contact.Address.Street1) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.Street1)
+				                @Html.EditorFor(m => m.Subscriptions[i].Contact.Address.Street2) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.Street2)
+				                @Html.EditorFor(m => m.Subscriptions[i].Contact.Address.City) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.City)
+			                </span>
+			                <span class="label-row">
+				                @Html.LabelFor(m => m.Subscriptions[i].Contact.Address.State) 
+				                @Html.LabelFor(m => m.Subscriptions[i].Contact.Address.Zip) 
+				                @Html.LabelFor(m => m.Subscriptions[i].Contact.Address.Country)
+			                </span>
+			                <span class="label-row">
+				                @Html.EditorFor(m => m.Subscriptions[i].Contact.Address.State) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.State)
+				                @Html.EditorFor(m => m.Subscriptions[i].Contact.Address.Zip) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.Zip)
+				                @Html.EditorFor(m => m.Subscriptions[i].Contact.Address.Country) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.Country)
+			                </span>
+                        }
+                    }
+                }
+            }
+		</fieldset>    
+	</div><!-- END #subscription-information -->	
+
+</div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/form")
+    <script src="/Scripts/asi.js"></script>
+    <script>
+        $('input.command').click(function (e) {
+            $('#ActionName').val(e.target.value);
+            if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
+                //make sure we have Timms value
+                if (!$('#ExternalReference').val()) {
+                    asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
+                    $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                    $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
+                    e.preventDefault();
+                }
+                else {
+                    var isnum = /^\d+$/.test($('#ExternalReference').val());
+                    if (!isnum) {
+                        asi.modal.confirm('Error', 'TIMMS ID must contain only numbers.', null, "#hide", "Close");
+                        $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                        $("#timmsErrorMessage").text("TIMMS ID must contain only numbers.");
+                        e.preventDefault();
+                    }
+                }
+            }
+        });
+        $('[rel*="isprimary"]').change(function () {
+            $('[rel*="isprimary"]').attr("checked", false);
+            this.checked = true;
+        });
+    </script>
+}

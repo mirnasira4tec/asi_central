@@ -212,6 +212,7 @@
     <Compile Include="Models\sgr\ViewCompany.cs" />
     <Compile Include="Models\sgr\ViewProduct.cs" />
     <Compile Include="Models\Store\Order\DistributorApplicationModel.cs" />
+    <Compile Include="Models\Store\Order\MagazinesApplicationModel.cs" />
     <Compile Include="Models\Store\Order\MembershipModelHelper.cs" />
     <Compile Include="Models\Store\Order\OrderModel.cs" />
     <Compile Include="Models\Store\Order\OrderPageModel.cs" />
@@ -312,6 +313,7 @@
     <Content Include="Views\Store\Admin\Statistics.cshtml" />
     <Content Include="Views\Home\Diagnostic.cshtml" />
     <Content Include="Views\Media\List.cshtml" />
+    <Content Include="Views\Store\Application\Magazines.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
