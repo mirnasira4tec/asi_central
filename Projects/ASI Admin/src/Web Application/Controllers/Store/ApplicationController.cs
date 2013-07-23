@@ -36,7 +36,8 @@ namespace asi.asicentral.web.Controllers.Store
             }
             else
             {
-                throw new Exception("Could not find the application or the order");
+                if (orderDetail.Product != null && orderDetail.Product.Type == "Magazine") return View("../Store/Application/Magazines", new MagazinesApplicationModel(orderDetail));
+                else throw new Exception("Retieved an unknown type of application");
             }
         }
 
@@ -122,6 +123,33 @@ namespace asi.asicentral.web.Controllers.Store
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(true)]
+        public virtual ActionResult EditMagazines(MagazinesApplicationModel application)
+        {
+            if (ModelState.IsValid)
+            {
+                StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
+                if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
+                StoreOrder order = orderDetail.Order;
+                if (order == null) throw new Exception("Invalid reference to an order");
+                order.ExternalReference = application.ExternalReference;
+                order = UpdateCompanyInformation(application, order);
+                orderDetail = UpdateMagazineSubscriptionInformation(application, orderDetail);
+                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                StoreService.SaveChanges();
+                if (application.ActionName == ApplicationController.COMMAND_REJECT)
+                    return RedirectToAction("List", "Orders");
+                else
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId });
+            }
+            else
+            {
+                return View("../Store/Application/Magazines", application);
+            }
+        }
+
         /// <summary>
         /// Common code between Edit supplier and distributor
         /// </summary>
@@ -162,6 +190,12 @@ namespace asi.asicentral.web.Controllers.Store
             }
         }
 
+        /// <summary>
+        /// UpdateCompanyInformation
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="order"></param>
+        /// <returns></returns>
         private StoreOrder UpdateCompanyInformation(IMembershipModel model, StoreOrder order)
         {
             if (order == null || model == null) return null;
@@ -257,6 +291,78 @@ namespace asi.asicentral.web.Controllers.Store
                 }
             }
             return order;
+        }
+
+        private bool CompareIndivuals(StoreIndividual individual1, StoreIndividual individual2)
+        {
+            bool isChangesInInidividuals = false;
+
+            if (individual1 == null || individual2 == null || individual1.Phone != individual2.Phone || individual1.Fax != individual2.Fax || individual1.Email != individual2.Email || individual1.Title != individual2.Title || individual1.FirstName != individual2.FirstName || individual1.LastName != individual2.LastName)
+                isChangesInInidividuals = true;
+            else
+                isChangesInInidividuals = false;
+
+            return isChangesInInidividuals;
+        }
+
+        private bool CompareAddresses(StoreAddress address1, StoreAddress address2)
+        {
+            bool isChangesInAddress = false;
+
+            if (address1 == null || address2 == null || address1.Street1 != address2.Street1 || address1.Street2 != address2.Street2 || address1.State != address2.State || address1.City != address2.City || address1.Country != address2.Country || address1.Zip != address2.Zip)
+                isChangesInAddress = true;
+            else
+                isChangesInAddress = false;
+
+            return isChangesInAddress;
+        }
+
+        private StoreOrderDetail UpdateMagazineSubscriptionInformation(MagazinesApplicationModel application, StoreOrderDetail orderDetail)
+        {
+            //copy decorating types bool to the collections
+            foreach (StoreMagazineSubscription subscription in application.Subscriptions)
+            {
+                StoreMagazineSubscription existing = orderDetail.MagazineSubscriptions.Where(item => item.Id == subscription.Id).SingleOrDefault();
+                if (subscription.Contact != null && existing != null)
+                {
+                    existing.CompanyName = subscription.CompanyName;
+                    existing.ASINumber = subscription.ASINumber;
+                    existing.IsDigitalVersion = subscription.IsDigitalVersion;
+                    existing.UpdateDate = DateTime.UtcNow;
+                    existing.UpdateSource = "ASI Admin Application - EditMagazines";
+                    StoreService.Update<StoreMagazineSubscription>(existing);
+
+                    if (subscription.Contact != null && existing.Contact != null)
+                    {
+                        existing.Contact.FirstName = subscription.Contact.FirstName;
+                        existing.Contact.LastName = subscription.Contact.LastName;
+                        existing.Contact.Email = subscription.Contact.Email;
+                        existing.Contact.Title = subscription.Contact.Title;
+                        existing.Contact.Phone = subscription.Contact.Phone;
+                        existing.Contact.Fax = subscription.Contact.Fax;
+                        existing.Contact.UpdateDate = DateTime.UtcNow;
+                        existing.Contact.UpdateSource = "ASI Admin Application - EditMagazines";
+                        StoreService.Update<StoreIndividual>(existing.Contact);
+                    }
+
+                    if (subscription.Contact.Address != null && existing.Contact.Address != null)
+                    {
+                        existing.Contact.Address.Street1 = subscription.Contact.Address.Street1;
+                        existing.Contact.Address.Street2 = subscription.Contact.Address.Street2;
+                        existing.Contact.Address.City = subscription.Contact.Address.City;
+                        existing.Contact.Address.State = subscription.Contact.Address.State;
+                        existing.Contact.Address.Zip = subscription.Contact.Address.Zip;
+                        existing.Contact.Address.Country = subscription.Contact.Address.Country;
+                        existing.Contact.Address.UpdateDate = DateTime.UtcNow;
+                        existing.Contact.Address.UpdateSource = "ASI Admin Application - EditMagazines";
+                        StoreService.Update<StoreAddress>(existing.Contact.Address);
+                    }
+                }
+            }
+            orderDetail.UpdateDate = DateTime.UtcNow;
+            orderDetail.UpdateSource = "ASI Admin Application - EditMagazines";
+            StoreService.Update<StoreOrderDetail>(orderDetail);
+            return orderDetail;
         }
     }
 }
