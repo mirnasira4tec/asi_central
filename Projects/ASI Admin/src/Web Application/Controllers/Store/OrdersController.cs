@@ -90,7 +90,7 @@ namespace asi.asicentral.web.Controllers.Store
         public JsonResult Reject(int id)
         {
             string error = string.Empty;
-            asi.asicentral.model.store.LegacyOrder order = StoreService.GetAll<asi.asicentral.model.store.LegacyOrder>().Where(ordr => ordr.Id == id).SingleOrDefault();
+            asi.asicentral.model.store.StoreOrder order = StoreService.GetAll<asi.asicentral.model.store.StoreOrder>().Where(ordr => ordr.Id == id).SingleOrDefault();
             if (order != null)
             {
                 if (order.ProcessStatus == OrderStatus.Pending)
