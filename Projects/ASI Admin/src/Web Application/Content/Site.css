@@ -350,7 +350,7 @@ header#site-header {
 }
 
 /*--------------------body--------------*/
-#tabbasic, #tabproduct, #tabaccount{
+#tabbasic, #tabproduct, #tabaccount, #tabsubscription{
 	border-bottom: 1px solid #a8a8a8;
 	border-left: 1px solid #a8a8a8;
 	border-right: 1px solid #a8a8a8;

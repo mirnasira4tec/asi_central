@@ -209,7 +209,7 @@ namespace asi.asicentral.web.Controllers.Store
                 order.UpdateSource = "ASI Admin Application - UpdateCompanyInformation";
 
                 StoreCompanyAddress companyAddress = order.Company.Addresses.Where(add => !add.IsShipping && !add.IsBilling).FirstOrDefault();
-                if (companyAddress != null)
+                if (companyAddress != null && CompareAddresses(companyAddress.Address, model.Address1, model.Address2, model.State, model.City,model.Country, model.Zip))
                 {
                     companyAddress.Address.Street1 = model.Address1;
                     companyAddress.Address.Street2 = model.Address2;
@@ -242,62 +242,71 @@ namespace asi.asicentral.web.Controllers.Store
                 //Set billing information
                 if (order.BillingIndividual != null)
                 {
-                    order.BillingIndividual.Email = model.BillingEmail;
-                    order.BillingIndividual.Fax = model.BillingFax;
-                    order.BillingIndividual.Phone = model.BillingPhone;
-                    order.BillingIndividual.UpdateDate = DateTime.UtcNow;
-                    order.BillingIndividual.UpdateSource = "ASI Admin Application - UpdateCompanyInformation";
+                    if(CompareIndividuals(order.BillingIndividual, model.BillingPhone, model.BillingFax, model.BillingEmail))
+                    {
+                        order.BillingIndividual.Email = model.BillingEmail;
+                        order.BillingIndividual.Fax = model.BillingFax;
+                        order.BillingIndividual.Phone = model.BillingPhone;
+                        order.BillingIndividual.UpdateDate = DateTime.UtcNow;
+                        order.BillingIndividual.UpdateSource = "ASI Admin Application - UpdateCompanyInformation";
+                    }
                     if (order.BillingIndividual.Address != null)
                     {
-                        if (companyAddress.Address.Id == order.BillingIndividual.Address.Id)
+                        if (CompareAddresses(order.BillingIndividual.Address, model.BillingAddress1, model.BillingAddress2, model.BillingState, model.BillingCity, model.BillingCountry, model.BillingZip))
                         {
-                            //address was not yet in use, create a new one for both individual and company
-                            order.BillingIndividual.Address = new StoreAddress()
+                            if (companyAddress.Address.Id == order.BillingIndividual.Address.Id)
                             {
-                                CreateDate = DateTime.UtcNow,
-                            };
-                            order.Company.Addresses.Add(new StoreCompanyAddress()
-                            {
-                                Address = order.BillingIndividual.Address,
-                                IsBilling = true,
-                                CreateDate = DateTime.UtcNow,
-                                UpdateDate = DateTime.UtcNow,
-                                UpdateSource = "ASI Admin Application - UpdateCompanyInformation",
-                            });
-                            StoreService.Add<StoreAddress>(order.BillingIndividual.Address);
+                                //address was not yet in use, create a new one for both individual and company
+                                order.BillingIndividual.Address = new StoreAddress()
+                                {
+                                    CreateDate = DateTime.UtcNow,
+                                };
+                                order.Company.Addresses.Add(new StoreCompanyAddress()
+                                {
+                                    Address = order.BillingIndividual.Address,
+                                    IsBilling = true,
+                                    CreateDate = DateTime.UtcNow,
+                                    UpdateDate = DateTime.UtcNow,
+                                    UpdateSource = "ASI Admin Application - UpdateCompanyInformation",
+                                });
+                                StoreService.Add<StoreAddress>(order.BillingIndividual.Address);
+                            }
+                            order.BillingIndividual.Address.Street1 = model.BillingAddress1;
+                            order.BillingIndividual.Address.Street2 = model.BillingAddress1;
+                            order.BillingIndividual.Address.City = model.BillingCity;
+                            order.BillingIndividual.Address.State = model.BillingState;
+                            order.BillingIndividual.Address.Zip = model.BillingZip;
+                            order.BillingIndividual.Address.Country = model.BillingCountry;
+                            order.BillingIndividual.Address.UpdateDate = DateTime.UtcNow;
+                            order.BillingIndividual.Address.UpdateSource = "ASI Admin Application - UpdateCompanyInformation";
                         }
-                        order.BillingIndividual.Address.Street1 = model.BillingAddress1;
-                        order.BillingIndividual.Address.Street2 = model.BillingAddress2;
-                        order.BillingIndividual.Address.City = model.BillingCity;
-                        order.BillingIndividual.Address.State = model.BillingState;
-                        order.BillingIndividual.Address.Zip = model.BillingZip;
-                        order.BillingIndividual.Address.Country = model.BillingCountry;
-                        order.BillingIndividual.Address.UpdateDate = DateTime.UtcNow;
-                        order.BillingIndividual.Address.UpdateSource = "ASI Admin Application - UpdateCompanyInformation";
                     }
                 }
                 //Set shipping information
                 if (model.HasShipAddress)
                 {
                     StoreCompanyAddress address = order.Company.Addresses.Where(add => add.IsShipping).FirstOrDefault();
-                    address.Address.Street1 = model.ShippingStreet1;
-                    address.Address.Street2 = model.ShippingStreet2;
-                    address.Address.City = model.ShippingCity;
-                    address.Address.Zip = model.ShippingZip;
-                    address.Address.State = model.ShippingState;
-                    address.Address.Country = model.ShippingCountry;
-                    address.Address.UpdateDate = DateTime.UtcNow;
-                    address.Address.UpdateSource = "ASI Admin Application - UpdateCompanyInformation";
+                    if (address != null && address.Address != null && CompareAddresses(address.Address, model.ShippingStreet1, model.ShippingStreet2, model.ShippingState, model.ShippingCity, model.ShippingCountry, model.ShippingZip))
+                    {
+                        address.Address.Street1 = model.ShippingStreet1;
+                        address.Address.Street2 = model.ShippingStreet2;
+                        address.Address.City = model.ShippingCity;
+                        address.Address.Zip = model.ShippingZip;
+                        address.Address.State = model.ShippingState;
+                        address.Address.Country = model.ShippingCountry;
+                        address.Address.UpdateDate = DateTime.UtcNow;
+                        address.Address.UpdateSource = "ASI Admin Application - UpdateCompanyInformation";
+                    }
                 }
             }
             return order;
         }
 
-        private bool CompareIndivuals(StoreIndividual individual1, StoreIndividual individual2)
+        private bool CompareIndividuals(StoreIndividual individual1, string phone, string fax, string email)
         {
             bool isChangesInInidividuals = false;
 
-            if (individual1 == null || individual2 == null || individual1.Phone != individual2.Phone || individual1.Fax != individual2.Fax || individual1.Email != individual2.Email || individual1.Title != individual2.Title || individual1.FirstName != individual2.FirstName || individual1.LastName != individual2.LastName)
+            if (individual1 == null || individual1.Phone != phone || individual1.Fax != fax || individual1.Email != email)
                 isChangesInInidividuals = true;
             else
                 isChangesInInidividuals = false;
@@ -305,11 +314,11 @@ namespace asi.asicentral.web.Controllers.Store
             return isChangesInInidividuals;
         }
 
-        private bool CompareAddresses(StoreAddress address1, StoreAddress address2)
+        private bool CompareAddresses(StoreAddress address1, string street1, string street2, string state, string city, string country, string zip)
         {
             bool isChangesInAddress = false;
 
-            if (address1 == null || address2 == null || address1.Street1 != address2.Street1 || address1.Street2 != address2.Street2 || address1.State != address2.State || address1.City != address2.City || address1.Country != address2.Country || address1.Zip != address2.Zip)
+            if (address1 == null || address1.Street1 != street1 || address1.Street2 != street2 || address1.State != state || address1.City != city || address1.Country != country || address1.Zip != zip)
                 isChangesInAddress = true;
             else
                 isChangesInAddress = false;
