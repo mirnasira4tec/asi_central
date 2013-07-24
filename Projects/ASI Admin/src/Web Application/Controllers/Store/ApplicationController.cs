@@ -352,6 +352,7 @@ namespace asi.asicentral.web.Controllers.Store
                         existing.Contact.Title = subscription.Contact.Title;
                         existing.Contact.Phone = subscription.Contact.Phone;
                         existing.Contact.Fax = subscription.Contact.Fax;
+                        existing.Contact.Department = subscription.Contact.Department;
                         existing.Contact.UpdateDate = DateTime.UtcNow;
                         existing.Contact.UpdateSource = "ASI Admin Application - EditMagazines";
                         StoreService.Update<StoreIndividual>(existing.Contact);
