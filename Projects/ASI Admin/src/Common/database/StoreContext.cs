@@ -24,7 +24,7 @@ namespace asi.asicentral.database
         public DbSet<ContextFeature> Features { get; set; }
         public DbSet<ContextFeatureProduct> FeatureProducts { get; set; } 
         public DbSet<ContextProductSequence> ProductSequences { get; set; }
-        public DbSet<HallmarkFormRequest> HallmarkFormRequests { get; set; }
+        public DbSet<StoreDetailHallmarkRequest> HallmarkFormRequests { get; set; }
         public DbSet<LookDistributorAccountType> LookDistributorAccountTypes { get; set; }
         public DbSet<LookDistributorRevenueType> LookDistributorRevenueTypes { get; set; }
         public DbSet<LookProductLine> LookProductLines { get; set; }
@@ -55,7 +55,7 @@ namespace asi.asicentral.database
                 .Add(new ContextFeatureMap())
                 .Add(new ContextFeatureProductMap())
                 .Add(new ContextProductSequenceMap())
-                .Add(new HallmarkFormRequestMap())
+                .Add(new StoreDetailHallmarkRequestMap())
                 .Add(new LookDistributorAccountTypeMap())
                 .Add(new LookDistributorRevenueTypeMap())
                 .Add(new LookProductLineMap())

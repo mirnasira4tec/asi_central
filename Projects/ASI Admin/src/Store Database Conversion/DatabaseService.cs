@@ -138,7 +138,7 @@ namespace Store_Database_Conversion
                             //need to commit the data to make sure ids are generated
                             _storeContext.SaveChanges();
                             //assuming hallmark submission, add a new entry
-                            HallmarkFormRequest hallmark = new HallmarkFormRequest()
+                            StoreDetailHallmarkRequest hallmark = new StoreDetailHallmarkRequest()
                             {
                                 OrderDetailId = newDetail.Id,
                                 WebRequest = detail.Application.Length > 10000 ?  detail.Application.Substring(0, 10000) : detail.Application,

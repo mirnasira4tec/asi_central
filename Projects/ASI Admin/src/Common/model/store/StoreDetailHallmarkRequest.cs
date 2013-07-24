@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.model.store
 {
-    public class HallmarkFormRequest
+    public class StoreDetailHallmarkRequest
     {
         public int OrderDetailId { get; set; }
         public string WebRequest { get; set; }
