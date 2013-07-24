@@ -39,7 +39,10 @@
             { 
             <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
             }
+            @if (Model.ProductName != "Stitches" && Model.ProductName != "Wearables")
+            {
             <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+            }
             @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
             { @Html.ActionLink("Close", "../Orders") }
             else
@@ -51,7 +54,10 @@
     else
     {
         <div class="timms-info span3 status-btns">
+            @if (Model.ProductName != "Stitches" && Model.ProductName != "Wearables")
+            {
             <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+            }
             @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
             { @Html.ActionLink("Close", "../Orders") }
             else

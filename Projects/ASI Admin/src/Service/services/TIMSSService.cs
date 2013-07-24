@@ -27,24 +27,13 @@ namespace asi.asicentral.services
         public virtual Guid Process(StoreOrder order, StoreDetailApplication application)
         {
             if (order == null || order.BillingIndividual == null || order.CreditCard == null || string.IsNullOrEmpty(order.CreditCard.ExternalReference)) throw new InvalidOperationException("You must pass a valid Order for this method");
-
-            //Added code to support magazines
-            bool isMagazineRequest = false;
-            if(order != null && order.OrderDetails != null && order.OrderDetails.Count >0)
-            {
-                StoreOrderDetail orderDetail = order.OrderDetails.ElementAt(0);
-                if(orderDetail != null && orderDetail.Product != null && orderDetail.Product.Type == "Magazine")
-                    isMagazineRequest = true;
-            }
-
-            if (application == null && !isMagazineRequest) throw new InvalidOperationException("You must pass a valid Application or Magazine details for this method");
+            
             TIMSSCompany company = new TIMSSCompany()
             {
                 //@todo talk to gary about that column
                 DAPP_UserId = Guid.NewGuid(),
                 Name = order.Company.Name,
                 MasterCustomerId = order.ExternalReference,
-                CustomerClass = order.OrderRequestType,
                 BillAddress1 = order.BillingIndividual.Address.Street1,
                 BillAddress2 = order.BillingIndividual.Address.Street2,
                 BillCity = order.BillingIndividual.Address.City,
@@ -106,8 +95,10 @@ namespace asi.asicentral.services
                     _objectService.Add<TIMSSContact>(timssContact);
                 }
             }
-            if (application is StoreDetailSupplierMembership)
+            if (application != null && application is StoreDetailSupplierMembership)
             {
+                company.CustomerClass = "Supplier";
+
                 //Needs to be there for FK to resolves themselves
                 _objectService.SaveChanges();
                 //add the contacts
@@ -190,8 +181,10 @@ namespace asi.asicentral.services
                 }
                 _objectService.Add<TIMSSAdditionalInfo>(additionalInformation);
             }
-            else if (application is StoreDetailDistributorMembership)
+            else if (application != null && application is StoreDetailDistributorMembership)
             {
+                company.CustomerClass = "Distributor";
+
                 //Needs to be there for FK to resolves themselves
                 _objectService.SaveChanges();
                 StoreDetailDistributorMembership distributorApplication = application as StoreDetailDistributorMembership;
@@ -209,9 +202,9 @@ namespace asi.asicentral.services
                 };
                 //try to convert different data types
                 try { additionalInformation.AnnualSalesVol = int.Parse(distributorApplication.AnnualSalesVolume); }
-                catch (Exception){}
+                catch (Exception) { }
                 try { additionalInformation.AnnualSalesVolumeASP = int.Parse(distributorApplication.AnnualSalesVolumeASP); }
-                catch (Exception){}
+                catch (Exception) { }
 
                 _objectService.Add<TIMSSAdditionalInfo>(additionalInformation);
                 //add the TIMSSAccountType description + subcode
@@ -236,6 +229,11 @@ namespace asi.asicentral.services
                     };
                     _objectService.Add<TIMSSProductType>(timssProductLine);
                 }
+            }
+            else
+            {
+                //This case is for Magazines or Catalogs
+                company.CustomerClass = order.OrderRequestType;
             }
             
             _objectService.SaveChanges();
