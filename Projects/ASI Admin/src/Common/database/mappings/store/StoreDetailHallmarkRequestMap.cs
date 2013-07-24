@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings.store
 {
-    public class HallmarkFormRequestMap : EntityTypeConfiguration<HallmarkFormRequest>
+    public class StoreDetailHallmarkRequestMap : EntityTypeConfiguration<StoreDetailHallmarkRequest>
     {
-        public HallmarkFormRequestMap()
+        public StoreDetailHallmarkRequestMap()
         {
             this.ToTable("STOR_Hallmark");
             this.HasKey(t => t.OrderDetailId);

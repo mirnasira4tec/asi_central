@@ -127,7 +127,7 @@ namespace asi.asicentral.database.mappings
             For<IRepository<ContextProductSequence>>().Use<EFRepository<ContextProductSequence>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
-            For<IRepository<HallmarkFormRequest>>().Use<EFRepository<HallmarkFormRequest>>()
+            For<IRepository<StoreDetailHallmarkRequest>>().Use<EFRepository<StoreDetailHallmarkRequest>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<LookDistributorAccountType>>().Use<EFRepository<LookDistributorAccountType>>()
