@@ -44,6 +44,7 @@ namespace asi.asicentral.services
                 DAPP_UserId = Guid.NewGuid(),
                 Name = order.Company.Name,
                 MasterCustomerId = order.ExternalReference,
+                CustomerClass = order.OrderRequestType,
                 BillAddress1 = order.BillingIndividual.Address.Street1,
                 BillAddress2 = order.BillingIndividual.Address.Street2,
                 BillCity = order.BillingIndividual.Address.City,
@@ -107,7 +108,6 @@ namespace asi.asicentral.services
             }
             if (application is StoreDetailSupplierMembership)
             {
-                company.CustomerClass = "Supplier";
                 //Needs to be there for FK to resolves themselves
                 _objectService.SaveChanges();
                 //add the contacts
@@ -192,7 +192,6 @@ namespace asi.asicentral.services
             }
             else if (application is StoreDetailDistributorMembership)
             {
-                company.CustomerClass = "Distributor";
                 //Needs to be there for FK to resolves themselves
                 _objectService.SaveChanges();
                 StoreDetailDistributorMembership distributorApplication = application as StoreDetailDistributorMembership;
@@ -238,10 +237,7 @@ namespace asi.asicentral.services
                     _objectService.Add<TIMSSProductType>(timssProductLine);
                 }
             }
-            else if (isMagazineRequest)
-            {
-                //Todo: Code for Magazines
-            }
+            
             _objectService.SaveChanges();
             return company.DAPP_UserId;
         }

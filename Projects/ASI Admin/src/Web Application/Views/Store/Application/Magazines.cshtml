@@ -15,6 +15,7 @@
 @using (Html.BeginForm("EditMagazines", "Application"))
 {        
 @Html.AntiForgeryToken()
+@Html.HiddenFor(m => m.ProductName)
 @Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
 <div>
     @if (Model.Price > 0.0m)
@@ -67,6 +68,8 @@
 </nav>
 <div class="tab-content">
     <div id="tabbasic" class="basic-information tab-pane fade in active">
+    @if (Model.ProductName != "Stitches" && Model.ProductName != "Wearables")
+    {
 		<fieldset class="company-info-form">			
 			<legend>Company Information</legend>
 				<span class="label-row">
@@ -169,7 +172,7 @@
 		</fieldset>	
 
         @Html.HiddenFor(m => m.HasBillAddress)
-        @if (Model.HasBillAddress)
+        if (Model.HasBillAddress)
         {
 		<fieldset class="billing-info-form">
 			<legend>Billing Information</legend>
@@ -241,7 +244,7 @@
 		</fieldset>                
         } 
         @Html.HiddenFor(m => m.HasShipAddress)
-        @if (Model.HasShipAddress)
+        if (Model.HasShipAddress)
         {
 		<fieldset class="billing-info-form">
 			<legend>Shipping Information</legend>
@@ -287,6 +290,7 @@
 			</span>
 		</fieldset>                
         } 
+    }
 	</div><!-- END #basic-information -->	
 
 	<div id="tabsubscription" class="product-information tab-pane fade">
@@ -302,13 +306,19 @@
                         <span class="row">@Html.Raw("<strong>Basic Information</strong>")</span>
                         <span class="label-row">
 					        @Html.LabelFor(m => m.Subscriptions[i].CompanyName)
+                            @if (Model.ProductName != "Stitches" && Model.ProductName != "Wearables")
+                            {
                             @Html.LabelFor(m => m.Subscriptions[i].ASINumber)
 					        @Html.LabelFor(m => m.Subscriptions[i].IsDigitalVersion)
+                            }
 				        </span>
                         <span class="label-row">
                             @Html.EditorFor(m => m.Subscriptions[i].CompanyName) @Html.ValidationMessageFor(m => m.Subscriptions[i].CompanyName)
+                            @if (Model.ProductName != "Stitches" && Model.ProductName != "Wearables")
+                            {
 				            @Html.EditorFor(m => m.Subscriptions[i].ASINumber) @Html.ValidationMessageFor(m => m.Subscriptions[i].CompanyName)
 				            @Html.EditorFor(m => m.Subscriptions[i].IsDigitalVersion) @Html.ValidationMessageFor(m => m.Subscriptions[i].CompanyName)
+                            }
 			            </span>
                         if (Model.Subscriptions[i].Contact != null)
                         {

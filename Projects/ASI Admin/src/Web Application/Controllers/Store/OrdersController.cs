@@ -24,7 +24,6 @@ namespace asi.asicentral.web.Controllers.Store
         {
             if (dateStart > dateEnd) ViewBag.Message = Resource.StoreDateErrorMessage;
             IQueryable<StoreOrderDetail> orderDetailQuery = StoreService.GetAll<StoreOrderDetail>(true);
-            //IQueryable<LegacyOrderDetail> orderDetailQuery = StoreService.GetAll<LegacyOrderDetail>("Order;Order.Membership;Order.CreditCard", true);
             if (string.IsNullOrEmpty(formTab)) formTab = OrderPageModel.TAB_DATE; //setting the default tab
             if (string.IsNullOrEmpty(orderTab)) orderTab = OrderPageModel.ORDER_COMPLETED; //setting the default tab
             //
