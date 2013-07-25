@@ -15,6 +15,7 @@
 @using (Html.BeginForm("EditMagazines", "Application"))
 {        
 @Html.AntiForgeryToken()
+@Html.HiddenFor(m => m.ProductName)
 @Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
 <div>
     @if (Model.Price > 0.0m)
@@ -38,7 +39,10 @@
             { 
             <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
             }
+            @if (Model.ProductName != "Stitches" && Model.ProductName != "Wearables")
+            {
             <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+            }
             @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
             { @Html.ActionLink("Close", "../Orders") }
             else
@@ -50,7 +54,10 @@
     else
     {
         <div class="timms-info span3 status-btns">
+            @if (Model.ProductName != "Stitches" && Model.ProductName != "Wearables")
+            {
             <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+            }
             @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
             { @Html.ActionLink("Close", "../Orders") }
             else
@@ -67,6 +74,8 @@
 </nav>
 <div class="tab-content">
     <div id="tabbasic" class="basic-information tab-pane fade in active">
+    @if (Model.ProductName != "Stitches" && Model.ProductName != "Wearables")
+    {
 		<fieldset class="company-info-form">			
 			<legend>Company Information</legend>
 				<span class="label-row">
@@ -158,9 +167,9 @@
                             }
                             else
                             {
-                            @Html.TextBoxFor(m => Model.Contacts[i].Title, new {  @readonly = "readonly" })
-					        @Html.TextBoxFor(m => Model.Contacts[i].Phone, new {  @readonly = "readonly" })
-					        @Html.TextBoxFor(m => Model.Contacts[i].Fax, new {  @readonly = "readonly" })
+                            @Html.TextBoxFor(m => Model.Contacts[i].Title, new { @readonly = "readonly" })
+					        @Html.TextBoxFor(m => Model.Contacts[i].Phone, new { @readonly = "readonly" })
+					        @Html.TextBoxFor(m => Model.Contacts[i].Fax, new { @readonly = "readonly" })
                             }
 				        </span>
                     }
@@ -169,8 +178,8 @@
 		</fieldset>	
 
         @Html.HiddenFor(m => m.HasBillAddress)
-        @if (Model.HasBillAddress)
-        {
+            if (Model.HasBillAddress)
+            {
 		<fieldset class="billing-info-form">
 			<legend>Billing Information</legend>
 
@@ -188,9 +197,9 @@
                 }
                 else
                 {
-                @Html.TextBoxFor(m => m.BillingAddress1, new {  @readonly = "readonly" })
-				@Html.TextBoxFor(m => m.BillingAddress2, new {  @readonly = "readonly" })
-				@Html.TextBoxFor(m => m.BillingCity, new {  @readonly = "readonly" })
+                @Html.TextBoxFor(m => m.BillingAddress1, new { @readonly = "readonly" })
+				@Html.TextBoxFor(m => m.BillingAddress2, new { @readonly = "readonly" })
+				@Html.TextBoxFor(m => m.BillingCity, new { @readonly = "readonly" })
                 }
 			</span>
 				
@@ -208,9 +217,9 @@
                 }
                 else
                 {
-                @Html.TextBoxFor(m => m.BillingState, new {  @readonly = "readonly" })
-				@Html.TextBoxFor(m => m.BillingZip, new {  @readonly = "readonly" })
-				@Html.TextBoxFor(m => m.BillingCountry, new {  @readonly = "readonly" })
+                @Html.TextBoxFor(m => m.BillingState, new { @readonly = "readonly" })
+				@Html.TextBoxFor(m => m.BillingZip, new { @readonly = "readonly" })
+				@Html.TextBoxFor(m => m.BillingCountry, new { @readonly = "readonly" })
                 }
 			</span>
 				<span class="label-row span11">
@@ -227,9 +236,9 @@
             }
             else
             {
-                @Html.TextBoxFor(m => m.BillingPhone, new {  @readonly = "readonly" })
-				@Html.TextBoxFor(m => m.BillingFax, new {  @readonly = "readonly" })
-				@Html.TextBoxFor(m => m.BillingEmail, new {  @readonly = "readonly" })
+                @Html.TextBoxFor(m => m.BillingPhone, new { @readonly = "readonly" })
+				@Html.TextBoxFor(m => m.BillingFax, new { @readonly = "readonly" })
+				@Html.TextBoxFor(m => m.BillingEmail, new { @readonly = "readonly" })
             }
 			</span>
 			<span class="label-row span11">
@@ -239,10 +248,10 @@
 				@Html.EditorFor(m => m.BillingWebUrl) @Html.ValidationMessageFor(m => m.BillingWebUrl)
 			</span>
 		</fieldset>                
-        } 
+            } 
         @Html.HiddenFor(m => m.HasShipAddress)
-        @if (Model.HasShipAddress)
-        {
+            if (Model.HasShipAddress)
+            {
 		<fieldset class="billing-info-form">
 			<legend>Shipping Information</legend>
 
@@ -260,9 +269,9 @@
                 }
                 else
                 {
-                @Html.TextBoxFor(m => m.ShippingStreet1, new {  @readonly = "readonly" })
-				@Html.TextBoxFor(m => m.ShippingStreet2, new {  @readonly = "readonly" })
-				@Html.TextBoxFor(m => m.ShippingCity, new {  @readonly = "readonly" })
+                @Html.TextBoxFor(m => m.ShippingStreet1, new { @readonly = "readonly" })
+				@Html.TextBoxFor(m => m.ShippingStreet2, new { @readonly = "readonly" })
+				@Html.TextBoxFor(m => m.ShippingCity, new { @readonly = "readonly" })
                 }
 			</span>
 				
@@ -280,13 +289,14 @@
                 }
                 else
                 {
-                @Html.TextBoxFor(m => m.ShippingState, new {  @readonly = "readonly" })
-				@Html.TextBoxFor(m => m.ShippingZip, new {  @readonly = "readonly" })
-				@Html.TextBoxFor(m => m.ShippingCountry, new {  @readonly = "readonly" })
+                @Html.TextBoxFor(m => m.ShippingState, new { @readonly = "readonly" })
+				@Html.TextBoxFor(m => m.ShippingZip, new { @readonly = "readonly" })
+				@Html.TextBoxFor(m => m.ShippingCountry, new { @readonly = "readonly" })
                 }
 			</span>
 		</fieldset>                
-        } 
+            }
+    }
 	</div><!-- END #basic-information -->	
 
 	<div id="tabsubscription" class="product-information tab-pane fade">
@@ -302,16 +312,22 @@
                         <span class="row">@Html.Raw("<strong>Basic Information</strong>")</span>
                         <span class="label-row">
 					        @Html.LabelFor(m => m.Subscriptions[i].CompanyName)
+                            @if (Model.ProductName != "Stitches" && Model.ProductName != "Wearables")
+                            {
                             @Html.LabelFor(m => m.Subscriptions[i].ASINumber)
 					        @Html.LabelFor(m => m.Subscriptions[i].IsDigitalVersion)
+                            }
 				        </span>
                         <span class="label-row">
                             @Html.EditorFor(m => m.Subscriptions[i].CompanyName) @Html.ValidationMessageFor(m => m.Subscriptions[i].CompanyName)
+                            @if (Model.ProductName != "Stitches" && Model.ProductName != "Wearables")
+                            {
 				            @Html.EditorFor(m => m.Subscriptions[i].ASINumber) @Html.ValidationMessageFor(m => m.Subscriptions[i].CompanyName)
 				            @Html.EditorFor(m => m.Subscriptions[i].IsDigitalVersion) @Html.ValidationMessageFor(m => m.Subscriptions[i].CompanyName)
+                            }
 			            </span>
-                        if (Model.Subscriptions[i].Contact != null)
-                        {
+                            if (Model.Subscriptions[i].Contact != null)
+                            {
                             @Html.HiddenFor(m => Model.Subscriptions[i].Contact.Id)
                             <span class="row">@Html.Raw("<strong>Contact Information</strong>")</span>
                             <span class="label-row">
@@ -334,9 +350,18 @@
 					            @Html.EditorFor(m => m.Subscriptions[i].Contact.Phone) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Phone)
 					            @Html.EditorFor(m => m.Subscriptions[i].Contact.Fax) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Fax)
 				            </span>
-                        }
-                        if (Model.Subscriptions[i].Contact.Address != null)
-                        {
+                                if (Model.ProductName == "Stitches" || Model.ProductName == "Wearables")
+                                {
+                                <span class="label-row">
+					            @Html.LabelFor(m => m.Subscriptions[i].Contact.Department)
+				                </span>
+                                <span class="label-row">
+                                @Html.EditorFor(m => m.Subscriptions[i].Contact.Department) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Department)
+				                </span>
+                                }
+                            }
+                            if (Model.Subscriptions[i].Contact.Address != null)
+                            {
                             @Html.HiddenFor(m => Model.Subscriptions[i].Contact.Address.Id)
                             <span class="row">@Html.Raw("<strong>Address Information</strong>")</span>
                             <span class="label-row">
@@ -359,7 +384,7 @@
 				                @Html.EditorFor(m => m.Subscriptions[i].Contact.Address.Zip) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.Zip)
 				                @Html.EditorFor(m => m.Subscriptions[i].Contact.Address.Country) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.Country)
 			                </span>
-                        }
+                            }
                     }
                 }
             }

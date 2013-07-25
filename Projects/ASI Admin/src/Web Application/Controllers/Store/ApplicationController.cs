@@ -135,7 +135,10 @@ namespace asi.asicentral.web.Controllers.Store
                 StoreOrder order = orderDetail.Order;
                 if (order == null) throw new Exception("Invalid reference to an order");
                 order.ExternalReference = application.ExternalReference;
-                order = UpdateCompanyInformation(application, order);
+                if (application.ProductName != "Stitches" && application.ProductName != "Wearables")
+                {
+                    order = UpdateCompanyInformation(application, order);
+                }
                 orderDetail = UpdateMagazineSubscriptionInformation(application, orderDetail);
                 ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
                 StoreService.SaveChanges();
@@ -349,6 +352,7 @@ namespace asi.asicentral.web.Controllers.Store
                         existing.Contact.Title = subscription.Contact.Title;
                         existing.Contact.Phone = subscription.Contact.Phone;
                         existing.Contact.Fax = subscription.Contact.Fax;
+                        existing.Contact.Department = subscription.Contact.Department;
                         existing.Contact.UpdateDate = DateTime.UtcNow;
                         existing.Contact.UpdateSource = "ASI Admin Application - EditMagazines";
                         StoreService.Update<StoreIndividual>(existing.Contact);
