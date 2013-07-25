@@ -16,6 +16,7 @@ namespace asi.asicentral.model.store
         public string CompanyName { get; set; }
         public bool IsDigitalVersion { get; set; }
         public string PrimaryBusiness { get; set; }
+        public string PrimaryBusinessOtherDesc { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
