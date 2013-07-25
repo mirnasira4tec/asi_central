@@ -501,4 +501,10 @@
   <data name="Sequence" xml:space="preserve">
     <value>Sequence</value>
   </data>
+  <data name="PrimaryBusiness" xml:space="preserve">
+    <value>Primary Business</value>
+  </data>
+  <data name="PrimaryBusinessOtherDescription" xml:space="preserve">
+    <value>Primary Business Other Description</value>
+  </data>
 </root>

@@ -39,7 +39,7 @@
             { 
             <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
             }
-            @if (Model.ProductName != "Stitches" && Model.ProductName != "Wearables")
+            @if (!Model.IsHallmarkProduct)
             {
             <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
             }
@@ -54,7 +54,7 @@
     else
     {
         <div class="timms-info span3 status-btns">
-            @if (Model.ProductName != "Stitches" && Model.ProductName != "Wearables")
+            @if (!Model.IsHallmarkProduct)
             {
             <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
             }
@@ -74,7 +74,7 @@
 </nav>
 <div class="tab-content">
     <div id="tabbasic" class="basic-information tab-pane fade in active">
-    @if (Model.ProductName != "Stitches" && Model.ProductName != "Wearables")
+    @if (!Model.IsHallmarkProduct)
     {
 		<fieldset class="company-info-form">			
 			<legend>Company Information</legend>
@@ -312,7 +312,7 @@
                         <span class="row">@Html.Raw("<strong>Basic Information</strong>")</span>
                         <span class="label-row">
 					        @Html.LabelFor(m => m.Subscriptions[i].CompanyName)
-                            @if (Model.ProductName != "Stitches" && Model.ProductName != "Wearables")
+                            @if (!Model.IsHallmarkProduct)
                             {
                             @Html.LabelFor(m => m.Subscriptions[i].ASINumber)
 					        @Html.LabelFor(m => m.Subscriptions[i].IsDigitalVersion)
@@ -320,12 +320,31 @@
 				        </span>
                         <span class="label-row">
                             @Html.EditorFor(m => m.Subscriptions[i].CompanyName) @Html.ValidationMessageFor(m => m.Subscriptions[i].CompanyName)
-                            @if (Model.ProductName != "Stitches" && Model.ProductName != "Wearables")
+                            @if (!Model.IsHallmarkProduct)
                             {
 				            @Html.EditorFor(m => m.Subscriptions[i].ASINumber) @Html.ValidationMessageFor(m => m.Subscriptions[i].CompanyName)
 				            @Html.EditorFor(m => m.Subscriptions[i].IsDigitalVersion) @Html.ValidationMessageFor(m => m.Subscriptions[i].CompanyName)
                             }
 			            </span>
+                        if (!Model.IsHallmarkProduct)
+                        {
+                        <span class="label-row">
+					        @Html.LabelFor(m => m.Subscriptions[i].PrimaryBusiness)
+                            @Html.LabelFor(m => m.Subscriptions[i].PrimaryBusinessOtherDesc)
+				        </span>
+                        <span class="label-row">
+                            @Html.EditorFor(m => m.Subscriptions[i].PrimaryBusiness) @Html.ValidationMessageFor(m => m.Subscriptions[i].PrimaryBusiness)
+				            @Html.EditorFor(m => m.Subscriptions[i].PrimaryBusinessOtherDesc) @Html.ValidationMessageFor(m => m.Subscriptions[i].PrimaryBusinessOtherDesc)
+                         </span>
+                        }
+                        <span class="label-row">
+					        @Html.LabelFor(m => m.Subscriptions[i].CompanyName)
+                            @if (!Model.IsHallmarkProduct)
+                            {
+                            @Html.LabelFor(m => m.Subscriptions[i].ASINumber)
+					        @Html.LabelFor(m => m.Subscriptions[i].IsDigitalVersion)
+                            }
+				        </span>
                             if (Model.Subscriptions[i].Contact != null)
                             {
                             @Html.HiddenFor(m => Model.Subscriptions[i].Contact.Id)
@@ -350,7 +369,7 @@
 					            @Html.EditorFor(m => m.Subscriptions[i].Contact.Phone) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Phone)
 					            @Html.EditorFor(m => m.Subscriptions[i].Contact.Fax) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Fax)
 				            </span>
-                                if (Model.ProductName == "Stitches" || Model.ProductName == "Wearables")
+                                if (Model.IsHallmarkProduct)
                                 {
                                 <span class="label-row">
 					            @Html.LabelFor(m => m.Subscriptions[i].Contact.Department)

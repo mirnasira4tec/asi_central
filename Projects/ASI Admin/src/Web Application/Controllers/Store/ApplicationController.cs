@@ -340,6 +340,8 @@ namespace asi.asicentral.web.Controllers.Store
                     existing.CompanyName = subscription.CompanyName;
                     existing.ASINumber = subscription.ASINumber;
                     existing.IsDigitalVersion = subscription.IsDigitalVersion;
+                    existing.PrimaryBusiness = subscription.PrimaryBusiness;
+                    existing.PrimaryBusinessOtherDesc = subscription.PrimaryBusinessOtherDesc;
                     existing.UpdateDate = DateTime.UtcNow;
                     existing.UpdateSource = "ASI Admin Application - EditMagazines";
                     StoreService.Update<StoreMagazineSubscription>(existing);
