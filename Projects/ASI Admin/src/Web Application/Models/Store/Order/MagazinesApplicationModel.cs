@@ -111,6 +111,7 @@ namespace asi.asicentral.web.model.store
         public bool IsSecondaryEditable { get; set; }
         public bool IsBillingContactEditable { get; set; }
         public bool IsCompanyAddressEditable { get; set; }
+        public bool IsHallmarkProduct { get; set; }
 
         public IList<StoreIndividual> Contacts { get; set; }
 
@@ -131,7 +132,14 @@ namespace asi.asicentral.web.model.store
             BillingIndividual = order.BillingIndividual;
             OrderDetailId = orderdetail.Id;
             if (orderdetail.MagazineSubscriptions != null && orderdetail.MagazineSubscriptions.Count > 0) Subscriptions = orderdetail.MagazineSubscriptions;
-            if (orderdetail.Product != null) ProductName = orderdetail.Product.Name;
+            if (orderdetail.Product != null)
+            {
+                ProductName = orderdetail.Product.Name;
+                if (ProductName == "Stitches" || ProductName == "Wearables") IsHallmarkProduct = true;
+                else IsHallmarkProduct = false;
+            }
+            
+
             
             ActionName = "Approve";
             ExternalReference = order.ExternalReference;
