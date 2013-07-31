@@ -191,6 +191,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\asicentral\CallQueueController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MediaController.cs" />
     <Compile Include="Controllers\sgr\CategoryController.cs" />
@@ -311,6 +312,7 @@
     <Content Include="Views\Store\Admin\Statistics.cshtml" />
     <Content Include="Views\Home\Diagnostic.cshtml" />
     <Content Include="Views\Media\List.cshtml" />
+    <Content Include="Views\asicentral\QueueList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
