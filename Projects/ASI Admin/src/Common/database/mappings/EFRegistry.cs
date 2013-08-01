@@ -5,6 +5,7 @@ using StructureMap.Configuration.DSL;
 using asi.asicentral.model.store;
 using asi.asicentral.model.news;
 using asi.asicentral.model.timss;
+using asi.asicentral.model.call;
 
 namespace asi.asicentral.database.mappings
 {
@@ -23,6 +24,7 @@ namespace asi.asicentral.database.mappings
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<InternetContext>().Name = "InternetContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<StoreContext>().Name = "StoreContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<TIMSSContext>().Name = "TIMSSContext";
+            For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<CallContext>().Name = "CallContext";
 
             //for each model - get the repository class with the appropriate context 
 
@@ -198,6 +200,13 @@ namespace asi.asicentral.database.mappings
                 .Ctor<IValidatedContext>().Named("TIMSSContext");
 
             #endregion TIMSS Context
+
+            #region Call Context
+
+            For<IRepository<CallQueue>>().Use<EFRepository<CallQueue>>()
+                .Ctor<IValidatedContext>().Named("CallContext");
+            
+            #endregion 
         }
     }
 }
