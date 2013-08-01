@@ -1,0 +1,17 @@
+﻿@model IList<asi.asicentral.model.call.CallQueue>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Call Queue List";
+}
+
+<h2>List of queues for Call Me feature</h2> 
+
+<p><a href="EnableAll" class="btn btn-primary">Enable All</a> <a href="DisableAll" class="btn btn-primary">Disable All</a></p>
+
+<table class="table table-bordered table-condensed">
+    <tr><th>Identifier</th><th>Name</th><th>Enabled</th></tr>
+    @foreach (asi.asicentral.model.call.CallQueue queue in Model)
+    {
+        <tr><td class="center">@queue.Id</td><td><a href="Enable/@queue.Id" title="Switch the call state">@queue.Name</a></td><td class="center"><i class="icon-@(queue.Enabled ? "ok" : "remove")"></i></td></tr>
+    }
+</table>
