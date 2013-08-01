@@ -97,7 +97,7 @@
     <Compile Include="database\mappings\asiinternet\LegacyOrderDistributorAddressMap.cs" />
     <Compile Include="database\mappings\asiinternet\SupplierDecoratingTypeMap.cs" />
     <Compile Include="database\mappings\call\CallQueueMap.cs" />
-    <Compile Include="database\mappings\store\HallmarkFormRequestMap.cs" />
+    <Compile Include="database\mappings\store\StoreDetailHallmarkRequestMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailSupplierMembershipMap.cs" />
     <Compile Include="database\mappings\store\LookSupplierDecoratingTypeMap.cs" />
     <Compile Include="database\mappings\store\StoreCompanyAddressMap.cs" />
