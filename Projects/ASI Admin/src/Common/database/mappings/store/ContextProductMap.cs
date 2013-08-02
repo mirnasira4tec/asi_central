@@ -27,6 +27,9 @@ namespace asi.asicentral.database.mappings.product
             this.Property(t => t.IsSubscription)
                 .HasColumnName("IsSubscriptionFlag");
 
+            this.Property(t => t.NotificationEmails)
+                .HasColumnName("NotificationEmails");
+
             this.Property(t => t.CreateDate)
                 .HasColumnName("CreateDateUTC");
 
