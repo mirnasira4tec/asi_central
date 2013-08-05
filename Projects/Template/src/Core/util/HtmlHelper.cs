@@ -43,7 +43,7 @@ namespace asi.asicentral.util
         /// Create a list of countries and their ISO country code for displaying in the UI
         /// </summary>
         /// <returns></returns>
-        public static IList<SelectListItem> GetCountries()
+        public static IList<SelectListItem> GetCountries( string value = null)
         {
             IList<SelectListItem> countries = new List<SelectListItem>();
 
@@ -62,7 +62,7 @@ namespace asi.asicentral.util
             countryNames.Sort();
             foreach (string countryName in countryNames)
             {
-                countries.Add(new SelectListItem { Text = countryName, Value = countriesDic[countryName] });
+                countries.Add(new SelectListItem { Text = countryName, Value = countriesDic[countryName], Selected = (countriesDic[countryName] == value) });
             }
             return countries;
         }
