@@ -68,7 +68,14 @@
 </div>
 <nav>
 	<ul class="nav nav-tabs" id="tabs">
+        @if (!Model.IsHallmarkProduct)
+        {
         <li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
+        }
+        else
+        {
+        <li class="active"><a href="#tabbasic" data-toggle="tab">Hallmark Information</a></li>
+        }
 		<li><a href="#tabsubscription" data-toggle="tab">Subscription Information</a></li>
 	</ul>
 </nav>
@@ -297,6 +304,19 @@
 		</fieldset>                
             }
     }
+    else if (Model.hallmarkInformation != null)
+    {
+        <fieldset class="company-info-form">	
+            <legend>Hallmark Information for @Model.ProductName</legend>
+        @for (int count = 0; count < Model.hallmarkInformation.Count; count++)
+        {
+            <span class="label-row">
+				@Html.Label(Model.hallmarkInformation.ElementAt(count).Key)
+				@Html.Label(Model.hallmarkInformation.ElementAt(count).Value)
+		    </span>
+        }
+        </fieldset>
+    }
 	</div><!-- END #basic-information -->	
 
 	<div id="tabsubscription" class="product-information tab-pane fade">
@@ -326,8 +346,8 @@
 				            @Html.EditorFor(m => m.Subscriptions[i].IsDigitalVersion) @Html.ValidationMessageFor(m => m.Subscriptions[i].CompanyName)
                             }
 			            </span>
-                        if (!Model.IsHallmarkProduct)
-                        {
+                            if (!Model.IsHallmarkProduct)
+                            {
                         <span class="label-row">
 					        @Html.LabelFor(m => m.Subscriptions[i].PrimaryBusiness)
                             @Html.LabelFor(m => m.Subscriptions[i].PrimaryBusinessOtherDesc)
@@ -336,7 +356,7 @@
                             @Html.EditorFor(m => m.Subscriptions[i].PrimaryBusiness) @Html.ValidationMessageFor(m => m.Subscriptions[i].PrimaryBusiness)
 				            @Html.EditorFor(m => m.Subscriptions[i].PrimaryBusinessOtherDesc) @Html.ValidationMessageFor(m => m.Subscriptions[i].PrimaryBusinessOtherDesc)
                          </span>
-                        }
+                            }
                         <span class="label-row">
 					        @Html.LabelFor(m => m.Subscriptions[i].CompanyName)
                             @if (!Model.IsHallmarkProduct)
