@@ -317,6 +317,7 @@
     <Content Include="Views\Media\List.cshtml" />
     <Content Include="Views\Store\Application\Magazines.cshtml" />
     <Content Include="Views\asicentral\QueueList.cshtml" />
+    <Content Include="Views\Store\Context\References.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

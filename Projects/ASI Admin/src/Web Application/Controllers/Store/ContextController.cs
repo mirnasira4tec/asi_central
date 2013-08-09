@@ -43,6 +43,11 @@ namespace asi.asicentral.web.Controllers.Store
             return new RedirectResult("/Store/Context/List");
         }
 
+        public ActionResult References()
+        {
+            return View("../Store/Context/References");
+        }
+
         public ActionResult ProductComparison(int id)
         {
             Context context = StoreObjectService.GetAll<Context>(true).Where(ctx => ctx.Id == id).SingleOrDefault();

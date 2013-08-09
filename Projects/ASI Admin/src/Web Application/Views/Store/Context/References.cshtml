@@ -1,0 +1,29 @@
+﻿@{
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+    string baseURL = System.Configuration.ConfigurationManager.AppSettings["BaseURL"].Contains("staging") ? "http://stage-store.asicentral.com" : "https://store.asicentral.com";
+}
+List of major Products on the store
+<ul>
+    <li>Distributor Store<ul>
+        <li><a href="@baseURL/Store/Distributor/Specials/1?campaign=QA">Distributor Membership no Fees Specials</a></li>
+        <li><a href="@baseURL/Store/Distributor/Specials/8?campaign=QA">Distributor Membership with membership Fees Specials</a></li>
+        <li><a href="@baseURL/Store/Distributor/Package/1?campaign=QA">Distributor Membership no Fees</a></li>
+        <li><a href="@baseURL/Store/Distributor/Package/8?campaign=QA">Distributor Membership with membership Fees</a></li>
+        <li><a href="@baseURL/Store/Distributor/Specials/6?campaign=QA">Counselor Specials</a></li>
+        <li><a href="@baseURL/Store/Distributor/Product/25?campaign=QA">Counselor within the Store</a></li>
+    </ul></li>
+    <li>Supplier Store<ul>
+        <li><a href="@baseURL/Store/Supplier/Specials/2?campaign=QA">Supplier Membership no Fees Specials</a></li>
+        <li><a href="@baseURL/Store/Supplier/Specials/9?campaign=QA">Supplier Membership with membership Fees Specials</a></li>
+        <li><a href="@baseURL/Store/Supplier/Package/2?campaign=QA">Supplier Membership no Fees</a></li>
+        <li><a href="@baseURL/Store/Supplier/Package/9?campaign=QA">Supplier Membership with membership Fees</a></li>
+    </ul></li>
+    <li>Supplier Store<ul>
+        <li><a href="@baseURL/Store/SGR/Membership/4?campaign=QA">SGR English and Chinese</a></li>
+        <li><a href="@baseURL/Store/SGR/Membership/5?campaign=QA">SGR English only</a></li>
+    </ul></li>
+    <li>Supplier Store<ul>
+        <li><a href="@baseURL/Store/MajorAccounts/Proforma?campaign=QA">Proforma</a></li>
+    </ul></li>
+</ul>
+<div style="padding-bottom:20px" />
