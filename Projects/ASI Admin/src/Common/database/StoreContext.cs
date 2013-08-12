@@ -25,6 +25,7 @@ namespace asi.asicentral.database
         public DbSet<ContextFeatureProduct> FeatureProducts { get; set; } 
         public DbSet<ContextProductSequence> ProductSequences { get; set; }
         public DbSet<StoreDetailHallmarkRequest> HallmarkFormRequests { get; set; }
+        public DbSet<LookCatalogOption> LookCatalogOptions { get; set; }
         public DbSet<LookDistributorAccountType> LookDistributorAccountTypes { get; set; }
         public DbSet<LookDistributorRevenueType> LookDistributorRevenueTypes { get; set; }
         public DbSet<LookProductLine> LookProductLines { get; set; }
@@ -33,6 +34,7 @@ namespace asi.asicentral.database
         public DbSet<StoreCompany> StoreCompanies { get; set; }
         public DbSet<StoreCompanyAddress> StoreCompanyAddresses { get; set; }
         public DbSet<StoreCreditCard> StoreCreditCards { get; set; }
+        public DbSet<StoreDetailCatalog> StoreDetailCatalogs { get; set; }
         public DbSet<StoreDetailDistributorMembership> StoreDetailDistributorMemberships { get; set; }
         public DbSet<StoreDetailSupplierMembership> StoreDetailSupplierMemberships { get; set; }
         public DbSet<StoreIndividual> StoreIndividuals { get; set; }
@@ -56,6 +58,7 @@ namespace asi.asicentral.database
                 .Add(new ContextFeatureProductMap())
                 .Add(new ContextProductSequenceMap())
                 .Add(new StoreDetailHallmarkRequestMap())
+                .Add(new LookCatalogOptionMap())
                 .Add(new LookDistributorAccountTypeMap())
                 .Add(new LookDistributorRevenueTypeMap())
                 .Add(new LookProductLineMap())
@@ -64,6 +67,7 @@ namespace asi.asicentral.database
                 .Add(new StoreCompanyMap())
                 .Add(new StoreCompanyAddressMap())
                 .Add(new StoreCreditCardMap())
+                .Add(new StoreDetailCatalogMap())
                 .Add(new StoreDetailDistributorMembershipMap())
                 .Add(new StoreDetailSupplierMembershipMap())
                 .Add(new StoreIndividualMap())

@@ -21,6 +21,7 @@ namespace Store_Database_Conversion
         {
             _asiInternetContext = new ASIInternetContext("ASIInternetContext" + target);
             _storeContext = new StoreContext("ProductContext" + target);
+            _storeContext.Configuration.ValidateOnSaveEnabled = false; //turn off the validation for importing legacy data
             _logService = LogService.GetLog(this.GetType());
         }
 
@@ -342,6 +343,43 @@ namespace Store_Database_Conversion
                     break;
                 case 104: //supplier fees
                     break;
+                //catalog products
+                case 140:
+                    newProductId = 42;
+                    break;
+                case 141:
+                    newProductId = 40;
+                    break;
+                case 142:
+                case 160:
+                    newProductId = 39;
+                    break;
+                case 143:
+                    newProductId = 41;
+                    break;
+                case 144:
+                case 208:
+                    newProductId = 43;
+                    break;
+                case 145:
+                case 161:
+                    newProductId = 38;
+                    break;
+                case 146:
+                case 162:
+                    newProductId = 35;
+                    break;
+                case 147:
+                    newProductId = 37;
+                    break;
+                case 163:
+                    newProductId = 44;
+                    break;
+                case 192:
+                case 209:
+                    newProductId = 36;
+                    break;
+
                 default:
                     _logService.Error("There is a product which has not been mapped yet: " + productId);
                     break;
@@ -376,6 +414,22 @@ namespace Store_Database_Conversion
                 case 164:
                 case 166:
                     return new Magazines();
+                case 140: //Catalogs
+                case 141:
+                case 142:
+                case 143:
+                case 144:
+                case 145:
+                case 146:
+                case 147:
+                case 160:
+                case 161:
+                case 162:
+                case 163:
+                case 192:
+                case 208:
+                case 209:
+                    return new Catalog();
                 default:
                     _logService.Error("There is a product which has not been mapped yet: " + productId);
                     return null;
