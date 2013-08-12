@@ -15,7 +15,7 @@ namespace Store_Database_Conversion.Products
         {
             ILogService logService = LogService.GetLog(this.GetType());
             //get catalog information
-            IList<LegacyOrderCatalogOption> options = asiInternetContext.OrderCatalogOptions.Where(option => option.COPS_OrderID == detail.OrderId && option.COPS_ProdID == detail.OrderId).ToList();
+            IList<LegacyOrderCatalogOption> options = asiInternetContext.OrderCatalogOptions.Where(option => option.COPS_OrderID == detail.OrderId && option.COPS_ProdID == detail.ProductId).ToList();
             LegacyOrderCatalog catalog = asiInternetContext.OrderCatalogs.Where(cat => cat.OrderID == detail.OrderId && cat.ProdID == detail.ProductId).FirstOrDefault();
             if (catalog != null)
             {
