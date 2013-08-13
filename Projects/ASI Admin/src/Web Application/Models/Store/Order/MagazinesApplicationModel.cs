@@ -114,6 +114,7 @@ namespace asi.asicentral.web.model.store
         public bool IsHallmarkProduct { get; set; }
 
         public IList<StoreIndividual> Contacts { get; set; }
+        public IDictionary<string, string> hallmarkInformation { get; set; }
 
         /// <summary>
         /// Required for MVC to rebuild the model
@@ -126,7 +127,7 @@ namespace asi.asicentral.web.model.store
             this.Subscriptions = new List<StoreMagazineSubscription>();
         }
 
-        public MagazinesApplicationModel(StoreOrderDetail orderdetail)
+        public MagazinesApplicationModel(StoreOrderDetail orderdetail, IStoreService storeService)
         {
             StoreOrder order = orderdetail.Order;
             BillingIndividual = order.BillingIndividual;
@@ -138,8 +139,9 @@ namespace asi.asicentral.web.model.store
                 if (ProductName == "Stitches" || ProductName == "Wearables") IsHallmarkProduct = true;
                 else IsHallmarkProduct = false;
             }
-            
 
+            if (IsHallmarkProduct && OrderDetailId != 0)
+                hallmarkInformation = GetHallmarkDetails(OrderDetailId, storeService);
             
             ActionName = "Approve";
             ExternalReference = order.ExternalReference;
@@ -149,6 +151,19 @@ namespace asi.asicentral.web.model.store
             IsCompleted = order.IsCompleted;
             MembershipModelHelper.PopulateModel(this, order);
             FillEditableItemDetails(order, Subscriptions);
+        }
+
+        private IDictionary<string, string> GetHallmarkDetails(int orderDetailId, IStoreService storeService)
+        {
+            IDictionary<string, string> hallmarkInformation = null;
+            StoreDetailHallmarkRequest hallmarkRequest = storeService.GetAll<StoreDetailHallmarkRequest>().Where(request => request.OrderDetailId == orderDetailId).SingleOrDefault();
+            if (hallmarkRequest != null && !string.IsNullOrEmpty(hallmarkRequest.WebRequest))
+            {
+                var items = hallmarkRequest.WebRequest.Split(new[] { '&' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Split(new[] { '=' }));
+                hallmarkInformation = new Dictionary<string, string>();
+                foreach (var item in items) hallmarkInformation.Add(item[0], item[1]);
+            }
+            return hallmarkInformation;
         }
 
         private void FillEditableItemDetails(StoreOrder order, IList<StoreMagazineSubscription> subscriptions)

@@ -130,7 +130,7 @@ namespace asi.asicentral.web.model.store
             order.CompletedStep = orderDetail.Order.CompletedStep.ToString();
             order.Application = storeService.GetApplication(orderDetail);
             order.ShowIcons = orderDetail.Order.ProcessStatus == OrderStatus.Pending && order.Application != null && orderDetail.Order.IsCompleted == true;
-            if (!order.ShowIcons) order.ShowIcons = orderDetail.Order.ProcessStatus == OrderStatus.Pending && order.ProductType == "Magazine" && orderDetail.Order.IsCompleted == true;
+            if (!order.ShowIcons) order.ShowIcons = orderDetail.Order.ProcessStatus == OrderStatus.Pending && order.ProductType == "Product" && orderDetail.Order.IsCompleted == true;
             if (orderDetail.Order.Company != null)
                 order.Company = orderDetail.Order.Company.Name;
             if (orderDetail.Order.CreditCard != null && !string.IsNullOrEmpty(orderDetail.Order.CreditCard.CardNumber))

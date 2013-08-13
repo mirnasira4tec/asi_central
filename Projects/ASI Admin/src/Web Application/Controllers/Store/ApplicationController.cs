@@ -36,7 +36,7 @@ namespace asi.asicentral.web.Controllers.Store
             }
             else
             {
-                if (orderDetail.Product != null && orderDetail.Product.Type == "Magazine") return View("../Store/Application/Magazines", new MagazinesApplicationModel(orderDetail));
+                if (orderDetail.Product != null && orderDetail.Product.Type == "Product" && orderDetail.MagazineSubscriptions != null && orderDetail.MagazineSubscriptions.Count > 0) return View("../Store/Application/Magazines", new MagazinesApplicationModel(orderDetail, StoreService));
                 else throw new Exception("Retieved an unknown type of application");
             }
         }

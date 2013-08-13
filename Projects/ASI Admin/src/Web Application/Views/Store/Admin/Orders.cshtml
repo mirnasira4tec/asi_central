@@ -111,7 +111,7 @@
                 {
                 <td><a href="#" class="productRef">@order.Item</a></td>
                 }
-                @if (order.Application != null || order.ProductType == "Magazine")
+                @if (order.Application != null || order.ProductType == "Product")
                 { 
                 <td><a href="@Url.Action("Edit", "Application", new { Id = order.OrderDetailId } )">Application</a></td> 
                 }
