@@ -18,7 +18,7 @@ namespace asi.asicentral.database.mappings.store
 
             //Properties
             this.Property(t => t.Id)
-                .HasColumnName("ProductLineId")
+                .HasColumnName("CatalogOptionId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.CreateDate)
