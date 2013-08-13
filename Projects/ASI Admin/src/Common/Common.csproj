@@ -95,8 +95,12 @@
     <Compile Include="database\mappings\asiinternet\LegacyMagazineAddressMap.cs" />
     <Compile Include="database\mappings\asiinternet\LegacyOrderAddressMap.cs" />
     <Compile Include="database\mappings\asiinternet\LegacyOrderDistributorAddressMap.cs" />
+    <Compile Include="database\mappings\asiinternet\LegacyOrderCatalogOptionMap.cs" />
+    <Compile Include="database\mappings\asiinternet\LegacyOrderCatalogMap.cs" />
     <Compile Include="database\mappings\asiinternet\SupplierDecoratingTypeMap.cs" />
     <Compile Include="database\mappings\call\CallQueueMap.cs" />
+    <Compile Include="database\mappings\store\LookCatalogOptionMap.cs" />
+    <Compile Include="database\mappings\store\StoreDetailCatalogMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailHallmarkRequestMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailSupplierMembershipMap.cs" />
     <Compile Include="database\mappings\store\LookSupplierDecoratingTypeMap.cs" />
@@ -116,6 +120,8 @@
     <Compile Include="interfaces\ICreditCardService.cs" />
     <Compile Include="model\call\CallQueue.cs" />
     <Compile Include="model\CreditCard.cs" />
+    <Compile Include="model\store\LookCatalogOption.cs" />
+    <Compile Include="model\store\StoreDetailCatalog.cs" />
     <Compile Include="model\store\StoreDetailHallmarkRequest.cs" />
     <Compile Include="model\store\LegacyOrderDistributorAddress.cs" />
     <Compile Include="model\store\LegacyMagazineAddress.cs" />
@@ -202,6 +208,8 @@
     <Compile Include="model\store\StoreMagazineSubscription.cs" />
     <Compile Include="model\store\StoreOrder.cs" />
     <Compile Include="model\store\StoreOrderDetail.cs" />
+    <Compile Include="model\store\LegacyOrderCatalogOption.cs" />
+    <Compile Include="model\store\LegacyOrderCatalog.cs" />
     <Compile Include="model\store\TaxRate.cs" />
     <Compile Include="model\timss\TIMSSAccountType.cs" />
     <Compile Include="model\timss\TIMSSAdditionalInfo.cs" />

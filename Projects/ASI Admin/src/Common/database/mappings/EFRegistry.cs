@@ -57,6 +57,12 @@ namespace asi.asicentral.database.mappings
             For<IRepository<LegacyOrderAddress>>().Use<EFRepository<LegacyOrderAddress>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
+            For<IRepository<LegacyOrderCatalog>>().Use<EFRepository<LegacyOrderCatalog>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
+            For<IRepository<LegacyOrderCatalogOption>>().Use<EFRepository<LegacyOrderCatalogOption>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
             For<IRepository<LegacyOrderCreditCard>>().Use<EFRepository<LegacyOrderCreditCard>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
@@ -132,6 +138,9 @@ namespace asi.asicentral.database.mappings
             For<IRepository<StoreDetailHallmarkRequest>>().Use<EFRepository<StoreDetailHallmarkRequest>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
+            For<IRepository<LookCatalogOption>>().Use<EFRepository<LookCatalogOption>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
             For<IRepository<LookDistributorAccountType>>().Use<EFRepository<LookDistributorAccountType>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
@@ -154,6 +163,9 @@ namespace asi.asicentral.database.mappings
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<StoreCreditCard>>().Use<EFRepository<StoreCreditCard>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<StoreDetailCatalog>>().Use<EFRepository<StoreDetailCatalog>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<StoreDetailDistributorMembership>>().Use<EFRepository<StoreDetailDistributorMembership>>()
