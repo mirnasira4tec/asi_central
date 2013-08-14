@@ -97,6 +97,7 @@
     <Compile Include="database\mappings\asiinternet\LegacyOrderDistributorAddressMap.cs" />
     <Compile Include="database\mappings\asiinternet\LegacyOrderCatalogOptionMap.cs" />
     <Compile Include="database\mappings\asiinternet\LegacyOrderCatalogMap.cs" />
+    <Compile Include="database\mappings\asiinternet\LegacyOrderContactMap.cs" />
     <Compile Include="database\mappings\asiinternet\SupplierDecoratingTypeMap.cs" />
     <Compile Include="database\mappings\call\CallQueueMap.cs" />
     <Compile Include="database\mappings\store\LookCatalogOptionMap.cs" />
@@ -210,6 +211,7 @@
     <Compile Include="model\store\StoreOrderDetail.cs" />
     <Compile Include="model\store\LegacyOrderCatalogOption.cs" />
     <Compile Include="model\store\LegacyOrderCatalog.cs" />
+    <Compile Include="model\store\LegacyOrderContact.cs" />
     <Compile Include="model\store\TaxRate.cs" />
     <Compile Include="model\timss\TIMSSAccountType.cs" />
     <Compile Include="model\timss\TIMSSAdditionalInfo.cs" />

@@ -63,6 +63,9 @@ namespace asi.asicentral.database.mappings
             For<IRepository<LegacyOrderCatalogOption>>().Use<EFRepository<LegacyOrderCatalogOption>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
+            For<IRepository<LegacyOrderContact>>().Use<EFRepository<LegacyOrderContact>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
             For<IRepository<LegacyOrderCreditCard>>().Use<EFRepository<LegacyOrderCreditCard>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 

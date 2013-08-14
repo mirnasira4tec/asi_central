@@ -30,6 +30,7 @@ namespace asi.asicentral.database
         public DbSet<LegacyOrder> Orders { get; set; }
         public DbSet<LegacyOrderCatalog> OrderCatalogs { get; set; }
         public DbSet<LegacyOrderCatalogOption> OrderCatalogOptions { get; set; }
+        public DbSet<LegacyOrderContact> OrderContacts { get; set; }
         public DbSet<LegacyOrderCreditCard> OrderCreditCards { get; set; }
         public DbSet<LegacyOrderDetail> OrderDetails { get; set; }
         public DbSet<LegacyMagazineAddress> LegacyMagazineAddresses { get; set; }
@@ -62,6 +63,7 @@ namespace asi.asicentral.database
                .Add(new LegacyOrderDistributorAddressMap())
                .Add(new LegacyOrderCatalogMap())
                .Add(new LegacyOrderCatalogOptionMap())
+               .Add(new LegacyOrderContactMap())
                .Add(new OrderCreditCardMap())
                .Add(new OrderDetailMap())
                .Add(new OrderMap())

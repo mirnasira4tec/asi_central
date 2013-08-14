@@ -65,6 +65,11 @@ namespace Store_Database_Conversion
             }
             if (!isTestRecord)
             {
+                LegacyOrderContact orderContact = _asiInternetContext.OrderContacts.Where(t => t.OrderId == order.Id).FirstOrDefault();
+                if (orderContact != null) isTestRecord = (orderContact.Company != null && orderContact.Company == "ASI") || (orderContact.Email != null && orderContact.Email.ToLower().Contains("asicentral.com"));
+            }
+            if (!isTestRecord)
+            {
                 IList<LegacyOrderMagazineAddress> magAddresses = _asiInternetContext.LegacyOrderMagazineAddresses.Where(t => t.OrderID == order.Id).ToList();
                 foreach (var magAddress in magAddresses)
                 {
@@ -107,6 +112,9 @@ namespace Store_Database_Conversion
                         UpdateSource = "Migration Process - " + DateTime.Now,
                     };
                     _storeContext.StoreOrders.Add(newOrder);
+                    //add logged in user information
+                    LegacyOrderContact orderContact = _asiInternetContext.OrderContacts.Where(t => t.OrderId == order.Id).FirstOrDefault();
+                    if (orderContact != null && !string.IsNullOrEmpty(orderContact.Email)) newOrder.LoggedUserEmail = orderContact.Email;
                     //add billing contact
                     newOrder.BillingIndividual = GetBillingIndividual(order);
                     //order detail records
