@@ -41,6 +41,7 @@ namespace asi.asicentral.database
         public DbSet<StoreMagazineSubscription> StoreMagazineSubscriptions { get; set; }
         public DbSet<StoreOrder> StoreOrders { get; set; }
         public DbSet<StoreOrderDetail> StoreOrderDetails { get; set; }
+        public DbSet<StoreTieredProductPricing> StoreTieredProductPricings { get; set; }
         public DbSet<TaxRate> TaxRates { get; set; }
 
         /// <summary>
@@ -74,6 +75,7 @@ namespace asi.asicentral.database
                 .Add(new StoreMagazineSubscriptionMap())
                 .Add(new StoreOrderMap())
                 .Add(new StoreOrderDetailMap())
+                .Add(new StoreTieredProductPricingMap())
                 .Add(new TaxRateMap());
         }
     }
