@@ -27,6 +27,10 @@ namespace asi.asicentral.model.store
         public bool HasShipping { get; set; }
         public bool IsSubscription { get; set; }
         public string NotificationEmails { get; set; }
+        public bool IsAvailable { get; set; }
+        public DateTime? NextAvailableDate { get; set; }
+        public decimal? Weight { get; set; }
+        public string Origin { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
