@@ -153,6 +153,9 @@ namespace asi.asicentral.database.mappings
             For<IRepository<LookProductLine>>().Use<EFRepository<LookProductLine>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
+            For<IRepository<LookProductShippingRate>>().Use<EFRepository<LookProductShippingRate>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
             For<IRepository<LookSupplierDecoratingType>>().Use<EFRepository<LookSupplierDecoratingType>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 

@@ -29,6 +29,7 @@ namespace asi.asicentral.database
         public DbSet<LookDistributorAccountType> LookDistributorAccountTypes { get; set; }
         public DbSet<LookDistributorRevenueType> LookDistributorRevenueTypes { get; set; }
         public DbSet<LookProductLine> LookProductLines { get; set; }
+        public DbSet<LookProductShippingRate> LookProductShippingRates { get; set; }
         public DbSet<LookSupplierDecoratingType> LookSupplierDecoratingTypes { get; set; }
         public DbSet<StoreAddress> StoreAddresses { get; set; }
         public DbSet<StoreCompany> StoreCompanies { get; set; }
@@ -63,6 +64,7 @@ namespace asi.asicentral.database
                 .Add(new LookDistributorAccountTypeMap())
                 .Add(new LookDistributorRevenueTypeMap())
                 .Add(new LookProductLineMap())
+                .Add(new LookProductShippingRateMap())
                 .Add(new LookSupplierDecoratingTypeMap())
                 .Add(new StoreAddressMap())
                 .Add(new StoreCompanyMap())
