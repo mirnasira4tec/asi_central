@@ -107,5 +107,38 @@ namespace asi.asicentral.services
             }
             return application;
         }
+
+        /// <summary>
+        /// Provide the Product Shipping cost
+        /// </summary>
+        /// <param name="product"></param>
+        /// <param name="quantity"></param>
+        /// <returns></returns>
+        public decimal GetShippingCost(ContextProduct product, string country, string shippingMethod = null, int quantity = 1)
+        {
+            decimal cost = 0m;
+            if (product == null || country == null) throw new Exception("Invalid call to the GetShippingCost method");
+            if (product.HasShipping)
+            {
+                if (product.Weight != null && !string.IsNullOrEmpty(product.Origin))
+                {
+                    if (shippingMethod == null) throw new Exception("You need to pass a shipping method for this product");
+                    LookProductShippingRate productShippingrate = this.GetAll<LookProductShippingRate>()
+                        .Where(rate => rate.Country == country && rate.Origin == product.Origin && rate.ShippingMethod == shippingMethod)
+                        .FirstOrDefault();
+                    if (productShippingrate == null) throw new Exception("We could not find a valid option for the GetShippingCost");
+                    cost = productShippingrate.BaseAmount + (quantity * product.Weight.Value * productShippingrate.AmountOrPercent);
+                }
+                else if (country == "USA")
+                {
+                    cost = product.ShippingCostUS * quantity;
+                }
+                else
+                {
+                    cost = product.ShippingCostOther * quantity;
+                }
+            }
+            return cost;
+        }
     }
 }
