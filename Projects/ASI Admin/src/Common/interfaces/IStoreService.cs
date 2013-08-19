@@ -24,6 +24,14 @@ namespace asi.asicentral.interfaces
         StoreDetailApplication GetApplication(StoreOrderDetail orderDetail);
 
         /// <summary>
+        /// Provide the Product Shipping cost
+        /// </summary>
+        /// <param name="product"></param>
+        /// <param name="quantity"></param>
+        /// <returns></returns>
+        decimal GetShippingCost(ContextProduct product, string country, string shippingMethod = null, int quantity = 1);
+
+        /// <summary>
         /// Retrieves the distributor membership application associated with the order detail
         /// </summary>
         /// <param name="orderDetail"></param>
