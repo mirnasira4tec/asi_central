@@ -24,8 +24,10 @@ namespace asi.asicentral.model.store
         public string BackLine2 { get; set; }
         public string BackLine3 { get; set; }
         public string BackLine4 { get; set; }
+        public string ArtworkOption { get; set; }
         public string LogoPath { get; set; }
         public bool IsArtworkToProof { get; set; }
+        public bool IsUploadImageTobeUsed { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
