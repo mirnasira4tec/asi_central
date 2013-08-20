@@ -120,7 +120,7 @@ namespace asi.asicentral.services
             if (product == null || country == null) throw new Exception("Invalid call to the GetShippingCost method");
             if (product.HasShipping)
             {
-                if (product.Weight != null && !string.IsNullOrEmpty(product.Origin))
+                if (product.Weight != null && !string.IsNullOrEmpty(product.Origin) && shippingMethod != null)
                 {
                     if (shippingMethod == null) throw new Exception("You need to pass a shipping method for this product");
                     LookProductShippingRate productShippingrate = this.GetAll<LookProductShippingRate>()
