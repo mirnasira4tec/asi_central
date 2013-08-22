@@ -34,11 +34,13 @@ namespace asi.asicentral.web.Controllers.Store
                 else if (application is StoreDetailDistributorMembership) return View("../Store/Application/Distributor", new DistributorApplicationModel((StoreDetailDistributorMembership)application, orderDetail));
                 else throw new Exception("Retieved an unknown type of application");
             }
-            else
+            else if(orderDetail.Product != null && orderDetail.Product.Type == "Product")
             {
-                if (orderDetail.Product != null && orderDetail.Product.Type == "Product" && orderDetail.MagazineSubscriptions != null && orderDetail.MagazineSubscriptions.Count > 0) return View("../Store/Application/Magazines", new MagazinesApplicationModel(orderDetail, StoreService));
-                else throw new Exception("Retieved an unknown type of application");
+                if (orderDetail.MagazineSubscriptions != null && orderDetail.MagazineSubscriptions.Count > 0) return View("../Store/Application/Magazines", new MagazinesApplicationModel(orderDetail, StoreService));
+                StoreDetailCatalog storeDetailCatalog = StoreService.GetAll<StoreDetailCatalog>().Where(catalog => catalog.OrderDetailId == orderDetail.Id).SingleOrDefault();
+                if (storeDetailCatalog != null) return View("../Store/Application/Catalogs", new CatalogsApplicationModel(orderDetail, storeDetailCatalog, StoreService));
             }
+            throw new Exception("Retieved an unknown type of application");
         }
 
         [HttpPost]
@@ -140,6 +142,56 @@ namespace asi.asicentral.web.Controllers.Store
                     order = UpdateCompanyInformation(application, order);
                 }
                 orderDetail = UpdateMagazineSubscriptionInformation(application, orderDetail);
+                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                StoreService.SaveChanges();
+                if (application.ActionName == ApplicationController.COMMAND_REJECT)
+                    return RedirectToAction("List", "Orders");
+                else
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId });
+            }
+            else
+            {
+                return View("../Store/Application/Magazines", application);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(true)]
+        public virtual ActionResult EditCatalogs(CatalogsApplicationModel application)
+        {
+            if (ModelState.IsValid)
+            {
+                StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
+                if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
+                StoreDetailCatalog storeDetailCatalog = StoreService.GetAll<StoreDetailCatalog>().Where(catalog => catalog.OrderDetailId == orderDetail.Id).SingleOrDefault();
+                if (storeDetailCatalog == null) throw new Exception("Invalid id, could not find the Catalog information record");
+                StoreOrder order = orderDetail.Order;
+                if (order == null) throw new Exception("Invalid reference to an order");
+                order.ExternalReference = application.ExternalReference;
+                order = UpdateCompanyInformation(application, order);
+               
+                //Update Catalog Information
+                if ((storeDetailCatalog.AreaId == 8 || storeDetailCatalog.AreaId == 25) && (storeDetailCatalog.ImprintId == 20 || (storeDetailCatalog.ImprintId == 21 && storeDetailCatalog.ArtworkOption == "PRINT")))
+                {
+                    storeDetailCatalog.Line1 = application.Line1;
+                    storeDetailCatalog.Line2 = application.Line2;
+                    storeDetailCatalog.Line3 = application.Line3;
+                    storeDetailCatalog.Line4 = application.Line4;
+                    storeDetailCatalog.Line5 = application.Line5;
+                    storeDetailCatalog.Line6 = application.Line6;
+                }
+
+                if ((storeDetailCatalog.AreaId == 9 || storeDetailCatalog.AreaId == 25) && (storeDetailCatalog.ImprintId == 20 || (storeDetailCatalog.ImprintId == 21 && storeDetailCatalog.ArtworkOption == "PRINT")))
+                {
+                    storeDetailCatalog.BackLine1 = application.BackLine1;
+                    storeDetailCatalog.BackLine2 = application.BackLine2;
+                    storeDetailCatalog.BackLine3 = application.BackLine3;
+                    storeDetailCatalog.BackLine4 = application.BackLine4;
+                }
+                storeDetailCatalog.UpdateDate = DateTime.UtcNow;
+                storeDetailCatalog.UpdateSource = "ApplicationController - EditCatalogs";
+
                 ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
                 StoreService.SaveChanges();
                 if (application.ActionName == ApplicationController.COMMAND_REJECT)

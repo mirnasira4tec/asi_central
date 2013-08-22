@@ -342,8 +342,8 @@
                             @Html.EditorFor(m => m.Subscriptions[i].CompanyName) @Html.ValidationMessageFor(m => m.Subscriptions[i].CompanyName)
                             @if (!Model.IsHallmarkProduct)
                             {
-				            @Html.EditorFor(m => m.Subscriptions[i].ASINumber) @Html.ValidationMessageFor(m => m.Subscriptions[i].CompanyName)
-				            @Html.EditorFor(m => m.Subscriptions[i].IsDigitalVersion) @Html.ValidationMessageFor(m => m.Subscriptions[i].CompanyName)
+				            @Html.EditorFor(m => m.Subscriptions[i].ASINumber) @Html.ValidationMessageFor(m => m.Subscriptions[i].ASINumber)
+				            @Html.CheckBoxFor(m => m.Subscriptions[i].IsDigitalVersion)
                             }
 			            </span>
                             if (!Model.IsHallmarkProduct)
@@ -357,14 +357,6 @@
 				            @Html.EditorFor(m => m.Subscriptions[i].PrimaryBusinessOtherDesc) @Html.ValidationMessageFor(m => m.Subscriptions[i].PrimaryBusinessOtherDesc)
                          </span>
                             }
-                        <span class="label-row">
-					        @Html.LabelFor(m => m.Subscriptions[i].CompanyName)
-                            @if (!Model.IsHallmarkProduct)
-                            {
-                            @Html.LabelFor(m => m.Subscriptions[i].ASINumber)
-					        @Html.LabelFor(m => m.Subscriptions[i].IsDigitalVersion)
-                            }
-				        </span>
                             if (Model.Subscriptions[i].Contact != null)
                             {
                             @Html.HiddenFor(m => Model.Subscriptions[i].Contact.Id)

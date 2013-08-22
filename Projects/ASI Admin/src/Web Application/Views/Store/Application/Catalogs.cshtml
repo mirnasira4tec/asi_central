@@ -1,0 +1,348 @@
+﻿@using asi.asicentral.web
+@using asi.asicentral.model.store
+@using asi.asicentral.web.Controllers.Store
+@model asi.asicentral.web.model.store.CatalogsApplicationModel
+
+@{
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+
+<h1>@string.Format(@Resource.StoreTitleMagazinesApplication, Model.ProductName) (#@Model.OrderId)</h1>
+@if (Model.Price > 0.0m)
+{
+<p>@Model.ProductName product purchase fee is @Model.Price.ToString("C")</p>
+}
+@using (Html.BeginForm("EditCatalogs", "Application"))
+{        
+@Html.AntiForgeryToken()
+@Html.HiddenFor(m => m.ProductName)
+@Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
+<div>
+    @if (Model.Price > 0.0m)
+    {
+    <h3 class="order-status-header3">Order Status:</h3>
+    <div class="order-status">@Model.OrderStatus</div>
+    <div class="timms-info">
+        <div class="span3">
+            <label class="order-status-label" for="Timms_ID">Timms ID:</label>
+            <div class="order-status-input">
+                @Html.EditorFor(m => m.ExternalReference, new { @class = "span2" })
+                <span id="timmsErrorMessage" data-type="errormessage" class="field-validation-error"></span>
+            </div>
+        </div>
+        <div class="status-btns">
+            @if (Model.IsCompleted && Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
+            {
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
+            }
+            @if (Model.IsCompleted && Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
+            { 
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
+            }
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+
+            @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
+            { @Html.ActionLink("Close", "../Orders") }
+            else
+            { @Html.ActionLink("Cancel", "../Orders") }
+
+        </div>
+    </div>
+    }
+    else
+    {
+        <div class="timms-info span3 status-btns">
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+            @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
+            { @Html.ActionLink("Close", "../Orders") }
+            else
+            { @Html.ActionLink("Cancel", "../Orders") }
+
+        </div>
+    }
+</div>
+<nav>
+	<ul class="nav nav-tabs" id="tabs">
+        <li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
+		<li><a href="#tabsubscription" data-toggle="tab">Catalog Information</a></li>
+	</ul>
+</nav>
+<div class="tab-content">
+    <div id="tabbasic" class="basic-information tab-pane fade in active">
+		<fieldset class="company-info-form">			
+			<legend>Company Information</legend>
+				<span class="label-row">
+					@Html.LabelFor(m => m.Company) 
+					@Html.EditorFor(m => m.Company, new { @class = "long" }) @Html.ValidationMessageFor(m => m.Company)
+				</span>
+				<span class="label-row">
+					@Html.LabelFor(m => m.Address1)
+					@Html.LabelFor(m => m.Address2)
+					@Html.LabelFor(m => m.City)
+				</span>
+				<span class="label-row">
+					@Html.EditorFor(m => m.Address1) @Html.ValidationMessageFor(m => m.Address1)
+					@Html.EditorFor(m => m.Address2) @Html.ValidationMessageFor(m => m.Address2)
+					@Html.EditorFor(m => m.City) @Html.ValidationMessageFor(m => m.City)
+				</span>
+				<span class="label-row">
+					@Html.LabelFor(m => m.State, new { @class = "span3" }) 
+					@Html.LabelFor(m => m.Zip, new { @class = "span3" })
+					@Html.LabelFor(m => m.Country, new { @class = "span3" })
+                </span>
+				<span class="label-row">
+					@Html.EditorFor(m => m.State, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.State)
+					@Html.EditorFor(m => m.Zip, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.Zip)
+					@Html.EditorFor(m => m.Country, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.Country)
+				</span>
+			
+		</fieldset>
+
+		<fieldset class="contact-info-form">
+			<legend>Contacts</legend>
+
+            @if (Model.Contacts != null && Model.Contacts.Count > 0)
+            {
+                for (int i = 0; i < Model.Contacts.Count; i++)
+                {
+                    if (Model.Contacts[i] != null)
+                    {
+                        @Html.HiddenFor(m => Model.Contacts[i].Id) @Html.HiddenFor(m => Model.Contacts[i].IsPrimary) 
+                        <span class="row">@(Model.Contacts[i].IsPrimary ? Html.Raw("<strong>Primary Contact</strong>") : Html.Raw("<strong>Secondary Contact</strong>"))</span>
+                        <span class="label-row">
+					        @Html.LabelFor(m => Model.Contacts[i].FirstName)
+                            @Html.LabelFor(m => Model.Contacts[i].LastName)
+					        @Html.LabelFor(m => Model.Contacts[i].Email)
+				        </span>
+				        <span class="label-row">
+                            @Html.EditorFor(m => Model.Contacts[i].FirstName) @Html.ValidationMessageFor(m => Model.Contacts[i].FirstName)
+					        @Html.EditorFor(m => Model.Contacts[i].LastName) @Html.ValidationMessageFor(m => Model.Contacts[i].LastName)
+					        @Html.EditorFor(m => Model.Contacts[i].Email) @Html.ValidationMessageFor(m => Model.Contacts[i].Email)
+				        </span>
+				        <span class="label-row">
+					        @Html.LabelFor(m => Model.Contacts[i].Title)
+					        @Html.LabelFor(m => Model.Contacts[i].Phone)
+					        @Html.LabelFor(m => Model.Contacts[i].Fax)
+				        </span>
+				        <span class="label-row">
+					        @Html.EditorFor(m => Model.Contacts[i].Title) @Html.ValidationMessageFor(m => Model.Contacts[i].Title)
+					        @Html.EditorFor(m => Model.Contacts[i].Phone) @Html.ValidationMessageFor(m => Model.Contacts[i].Phone)
+					        @Html.EditorFor(m => Model.Contacts[i].Fax) @Html.ValidationMessageFor(m => Model.Contacts[i].Fax)
+				        </span>
+                    }
+                }
+            }
+		</fieldset>	
+
+        @Html.HiddenFor(m => m.HasBillAddress)
+        @if (Model.HasBillAddress)
+        {
+		<fieldset class="billing-info-form">
+			<legend>Billing Information</legend>
+
+			<span class="label-row">
+				@Html.LabelFor(m => m.BillingAddress1) 
+				@Html.LabelFor(m => m.BillingAddress2) 
+				@Html.LabelFor(m => m.BillingCity)
+			</span>
+			<span class="label-row">
+				@Html.EditorFor(m => m.BillingAddress1) @Html.ValidationMessageFor(m => m.BillingAddress1)
+				@Html.EditorFor(m => m.BillingAddress2) @Html.ValidationMessageFor(m => m.BillingAddress2)
+				@Html.EditorFor(m => m.BillingCity) @Html.ValidationMessageFor(m => m.BillingCity)
+			</span>
+				
+			<span class="label-row">
+				@Html.LabelFor(m => m.BillingState) 
+				@Html.LabelFor(m => m.BillingZip) 
+				@Html.LabelFor(m => m.BillingCountry)
+			</span>
+			<span class="label-row">
+				@Html.EditorFor(m => m.BillingState) @Html.ValidationMessageFor(m => m.BillingState)
+				@Html.EditorFor(m => m.BillingZip) @Html.ValidationMessageFor(m => m.BillingZip)
+				@Html.EditorFor(m => m.BillingCountry) @Html.ValidationMessageFor(m => m.BillingCountry)
+			</span>
+			<span class="label-row span11">
+				@Html.LabelFor(m => m.BillingPhone) 
+				@Html.LabelFor(m => m.BillingFax) 
+				@Html.LabelFor(m => m.BillingEmail)
+			</span>
+			<span class="label-row">
+				@Html.EditorFor(m => m.BillingPhone) @Html.ValidationMessageFor(m => m.BillingPhone)
+				@Html.EditorFor(m => m.BillingFax) @Html.ValidationMessageFor(m => m.BillingFax)
+				@Html.EditorFor(m => m.BillingEmail) @Html.ValidationMessageFor(m => m.BillingEmail)
+			</span>
+			<span class="label-row span11">
+				@Html.LabelFor(m => m.BillingWebUrl) 
+			</span>
+			<span class="label-row">
+				@Html.EditorFor(m => m.BillingWebUrl) @Html.ValidationMessageFor(m => m.BillingWebUrl)
+			</span>
+		</fieldset>                
+        } 
+        @Html.HiddenFor(m => m.HasShipAddress)
+        @if (Model.HasShipAddress)
+        {
+		<fieldset class="billing-info-form">
+			<legend>Shipping Information</legend>
+
+			<span class="label-row">
+				@Html.LabelFor(m => m.ShippingStreet1) 
+				@Html.LabelFor(m => m.ShippingStreet2) 
+				@Html.LabelFor(m => m.ShippingCity) 
+			</span>
+			<span class="label-row">
+				@Html.EditorFor(m => m.ShippingStreet1) @Html.ValidationMessageFor(m => m.ShippingStreet1)
+				@Html.EditorFor(m => m.ShippingStreet2) @Html.ValidationMessageFor(m => m.ShippingStreet2)
+				@Html.EditorFor(m => m.ShippingCity) @Html.ValidationMessageFor(m => m.ShippingCity)
+			</span>
+				
+			<span class="label-row">
+				@Html.LabelFor(m => m.ShippingState) 
+				@Html.LabelFor(m => m.ShippingZip) 
+				@Html.LabelFor(m => m.ShippingCountry)
+			</span>
+			<span class="label-row">
+				@Html.EditorFor(m => m.ShippingState) @Html.ValidationMessageFor(m => m.ShippingState)
+				@Html.EditorFor(m => m.ShippingZip) @Html.ValidationMessageFor(m => m.ShippingZip)
+				@Html.EditorFor(m => m.ShippingCountry) @Html.ValidationMessageFor(m => m.ShippingCountry)
+			</span>
+		</fieldset>                
+        }
+	</div><!-- END #basic-information -->	
+
+	<div id="tabsubscription" class="product-information tab-pane fade">
+		<fieldset class="company-info-form">
+            <legend>Catalogs Information</legend>	
+            @if (Model.StoreDetailCatalog != null)
+            {
+            <span class="row">@Html.Raw("<strong>Basic Information</strong>")</span>
+            <span class="label-row span11">
+				@Html.LabelFor(m => m.Quanitity) 
+			</span>
+			<span class="label-row">
+				@Html.TextBoxFor(m => m.Quanitity, new { @readonly = "readonly" })
+		    </span>
+            <span class="row">@Html.Raw("<strong>Options Information</strong>")</span>
+            <span class="label-row span11">
+                @Html.LabelFor(m => m.Cover)
+				@Html.LabelFor(m => m.Area) 
+                @Html.LabelFor(m => m.Color) 
+			</span>
+			<span class="label-row">
+                @Html.TextBoxFor(m => m.Cover, new { @readonly = "readonly" })
+                @Html.TextBoxFor(m => m.Area, new { @readonly = "readonly" }) 
+				@Html.TextBoxFor(m => m.Color, new { @readonly = "readonly" }) 
+			</span>
+             <span class="label-row span11">
+				@Html.LabelFor(m => m.Imprint) 
+				@if (Model.ProductId == 39)
+                {
+				@Html.LabelFor(m => m.Supplement)
+                }
+                @if(Model.StoreDetailCatalog.ImprintId != 18)
+                {
+                 @Html.LabelFor(m => m.IsArtworkToProof) 
+                }
+			</span>
+			<span class="label-row">
+				@Html.TextBoxFor(m => m.Imprint, new { @readonly = "readonly" }) 
+			    @if (Model.ProductId == 39)
+                {
+				@Html.TextBoxFor(m => m.Supplement, new { @readonly = "readonly" })
+                }
+                 @if (Model.StoreDetailCatalog.ImprintId != 18)
+                {
+                 @Html.TextBoxFor(m => m.IsArtworkToProof, new { @readonly = "readonly" }) 
+                }
+			</span>
+            <span class="row">@Html.Raw("<strong>Logo Information</strong>")</span>
+             <span class="label-row span11">
+				@Html.LabelFor(m => m.IsUploadImageTobeUsed) 
+                @Html.LabelFor(m => m.LogoPath) 
+			</span>
+			<span class="label-row">
+				@Html.TextBoxFor(m => m.IsUploadImageTobeUsed, new { @readonly = "readonly" })
+                <a href="/Media/List?path=/Uploads">Uploaded Images</a>
+			</span>
+                 if ((Model.StoreDetailCatalog.AreaId == 8 || Model.StoreDetailCatalog.AreaId == 25) && (Model.StoreDetailCatalog.ImprintId == 20 || (Model.StoreDetailCatalog.ImprintId == 21 && Model.StoreDetailCatalog.ArtworkOption == "PRINT")))
+                 {
+            <span class="row">@Html.Raw("<strong>New Copy - Standard Type</strong>")</span>
+            <span class="label-row span11">
+				@Html.LabelFor(m => m.Line1) 
+				@Html.LabelFor(m => m.Line2) 
+				@Html.LabelFor(m => m.Line3)
+			</span>
+			<span class="label-row">
+				@Html.EditorFor(m => m.Line1) @Html.ValidationMessageFor(m => m.Line1)
+				@Html.EditorFor(m => m.Line2) @Html.ValidationMessageFor(m => m.Line2)
+				@Html.EditorFor(m => m.Line3) @Html.ValidationMessageFor(m => m.Line3)
+			</span>
+            <span class="label-row span11">
+				@Html.LabelFor(m => m.Line4) 
+				@Html.LabelFor(m => m.Line5) 
+				@Html.LabelFor(m => m.Line6)
+			</span>
+			<span class="label-row">
+				@Html.EditorFor(m => m.Line4) @Html.ValidationMessageFor(m => m.Line4)
+				@Html.EditorFor(m => m.Line5) @Html.ValidationMessageFor(m => m.Line5)
+				@Html.EditorFor(m => m.Line6) @Html.ValidationMessageFor(m => m.Line6)
+			</span>
+                 }
+                 if ((Model.StoreDetailCatalog.AreaId == 9 || Model.StoreDetailCatalog.AreaId == 25) && (Model.StoreDetailCatalog.ImprintId == 20 || (Model.StoreDetailCatalog.ImprintId == 21 && Model.StoreDetailCatalog.ArtworkOption == "PRINT")))
+                 {
+            <span class="row">@Html.Raw("<strong>Back Cover Imprint Area</strong>")</span>
+            <span class="label-row span11">
+				@Html.LabelFor(m => m.BackLine1) 
+				@Html.LabelFor(m => m.BackLine2) 
+				@Html.LabelFor(m => m.BackLine3)
+			</span>
+			<span class="label-row">
+				@Html.EditorFor(m => m.BackLine1) @Html.ValidationMessageFor(m => m.BackLine1)
+				@Html.EditorFor(m => m.BackLine2) @Html.ValidationMessageFor(m => m.BackLine2)
+				@Html.EditorFor(m => m.BackLine3) @Html.ValidationMessageFor(m => m.BackLine3)
+			</span>
+            <span class="label-row span11">
+				@Html.LabelFor(m => m.BackLine4) 
+			</span>
+			<span class="label-row">
+				@Html.EditorFor(m => m.BackLine4) @Html.ValidationMessageFor(m => m.BackLine4)
+			</span>
+                 }
+            }
+		</fieldset>    
+	</div><!-- END #subscription-information -->	
+
+</div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/form")
+    <script src="/Scripts/asi.js"></script>
+    <script>
+        $('input.command').click(function (e) {
+            $('#ActionName').val(e.target.value);
+            if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
+                //make sure we have Timms value
+                if (!$('#ExternalReference').val()) {
+                    asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
+                    $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                    $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
+                    e.preventDefault();
+                }
+                else {
+                    var isnum = /^\d+$/.test($('#ExternalReference').val());
+                    if (!isnum) {
+                        asi.modal.confirm('Error', 'TIMMS ID must contain only numbers.', null, "#hide", "Close");
+                        $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                        $("#timmsErrorMessage").text("TIMMS ID must contain only numbers.");
+                        e.preventDefault();
+                    }
+                }
+            }
+        });
+        $('[rel*="isprimary"]').change(function () {
+            $('[rel*="isprimary"]').attr("checked", false);
+            this.checked = true;
+        });
+    </script>
+}
