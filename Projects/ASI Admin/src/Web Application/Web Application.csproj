@@ -212,6 +212,7 @@
     <Compile Include="Models\sgr\ViewCategory.cs" />
     <Compile Include="Models\sgr\ViewCompany.cs" />
     <Compile Include="Models\sgr\ViewProduct.cs" />
+    <Compile Include="Models\Store\Order\CatalogsApplicationModel.cs" />
     <Compile Include="Models\Store\Order\DistributorApplicationModel.cs" />
     <Compile Include="Models\Store\Order\MagazinesApplicationModel.cs" />
     <Compile Include="Models\Store\Order\MembershipModelHelper.cs" />
@@ -318,6 +319,7 @@
     <Content Include="Views\Store\Application\Magazines.cshtml" />
     <Content Include="Views\asicentral\QueueList.cshtml" />
     <Content Include="Views\Store\Context\References.cshtml" />
+    <Content Include="Views\Store\Application\Catalogs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -88,6 +88,24 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Area.
+        /// </summary>
+        public static string Area {
+            get {
+                return ResourceManager.GetString("Area", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Artwork.
+        /// </summary>
+        public static string Artwork {
+            get {
+                return ResourceManager.GetString("Artwork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string Back {
@@ -102,6 +120,15 @@ namespace asi.asicentral.web {
         public static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color.
+        /// </summary>
+        public static string Color {
+            get {
+                return ResourceManager.GetString("Color", resourceCulture);
             }
         }
         
@@ -165,6 +192,15 @@ namespace asi.asicentral.web {
         public static string ContactName {
             get {
                 return ResourceManager.GetString("ContactName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cover.
+        /// </summary>
+        public static string Cover {
+            get {
+                return ResourceManager.GetString("Cover", resourceCulture);
             }
         }
         
@@ -241,6 +277,15 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        public static string Email {
+            get {
+                return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Engraving.
         /// </summary>
         public static string Engraving {
@@ -304,11 +349,101 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Imprint Instruction.
+        /// </summary>
+        public static string ImprintInstruction {
+            get {
+                return ResourceManager.GetString("ImprintInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Artwork to Proof.
+        /// </summary>
+        public static string IsArtworkToProof {
+            get {
+                return ResourceManager.GetString("IsArtworkToProof", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload Image to be used.
+        /// </summary>
+        public static string IsUploadImageTobeUsed {
+            get {
+                return ResourceManager.GetString("IsUploadImageTobeUsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line 1.
+        /// </summary>
+        public static string Line1 {
+            get {
+                return ResourceManager.GetString("Line1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line 2.
+        /// </summary>
+        public static string Line2 {
+            get {
+                return ResourceManager.GetString("Line2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line 3.
+        /// </summary>
+        public static string Line3 {
+            get {
+                return ResourceManager.GetString("Line3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line 4.
+        /// </summary>
+        public static string Line4 {
+            get {
+                return ResourceManager.GetString("Line4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line 5.
+        /// </summary>
+        public static string Line5 {
+            get {
+                return ResourceManager.GetString("Line5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line 6.
+        /// </summary>
+        public static string Line6 {
+            get {
+                return ResourceManager.GetString("Line6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lithography.
         /// </summary>
         public static string Lithography {
             get {
                 return ResourceManager.GetString("Lithography", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logo.
+        /// </summary>
+        public static string LogoPath {
+            get {
+                return ResourceManager.GetString("LogoPath", resourceCulture);
             }
         }
         
@@ -673,6 +808,15 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Supplement.
+        /// </summary>
+        public static string Supplement {
+            get {
+                return ResourceManager.GetString("Supplement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company Contacts.
         /// </summary>
         public static string SupplierAppCompanyContacts {
@@ -786,6 +930,15 @@ namespace asi.asicentral.web {
         public static string Transfer {
             get {
                 return ResourceManager.GetString("Transfer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Website.
+        /// </summary>
+        public static string Website {
+            get {
+                return ResourceManager.GetString("Website", resourceCulture);
             }
         }
     }
