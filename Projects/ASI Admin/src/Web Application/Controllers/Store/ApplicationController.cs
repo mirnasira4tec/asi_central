@@ -174,6 +174,11 @@ namespace asi.asicentral.web.Controllers.Store
                 //Update Catalog Information
                 orderDetail.Quantity = Convert.ToInt32(application.Quantity);
                 orderDetail.ShippingMethod = application.ShippingMethod;
+                StoreAddress address = order.Company.GetCompanyShippingAddress();
+                StoreService.UpdateTaxAndShipping(order);
+                orderDetail.UpdateDate = DateTime.UtcNow;
+                orderDetail.UpdateSource = "ApplicationController - EditCatalogs";
+
                 storeDetailCatalog.AreaId = Convert.ToInt32(application.Area);
                 storeDetailCatalog.CoverId = Convert.ToInt32(application.Cover);
                 storeDetailCatalog.ColorId = Convert.ToInt32(application.Color);

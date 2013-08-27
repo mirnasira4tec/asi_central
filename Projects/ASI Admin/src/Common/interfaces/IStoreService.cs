@@ -24,12 +24,18 @@ namespace asi.asicentral.interfaces
         StoreDetailApplication GetApplication(StoreOrderDetail orderDetail);
 
         /// <summary>
-        /// Provide the Product Shipping cost
+        /// UpdateTaxAndShipping
         /// </summary>
-        /// <param name="product"></param>
-        /// <param name="quantity"></param>
+        /// <param name="order"></param>
+        void UpdateTaxAndShipping(StoreOrder order);
+
+        /// <summary>
+        /// Calculates the taxes in case shipping to the USA
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="amount"></param>
         /// <returns></returns>
-        decimal GetShippingCost(ContextProduct product, string country, string shippingMethod = null, int quantity = 1);
+        decimal CalculateTaxes(StoreAddress address, decimal? amount);
 
         /// <summary>
         /// Retrieves the distributor membership application associated with the order detail

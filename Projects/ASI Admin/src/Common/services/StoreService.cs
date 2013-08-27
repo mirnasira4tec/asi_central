@@ -109,36 +109,61 @@ namespace asi.asicentral.services
         }
 
         /// <summary>
-        /// Provide the Product Shipping cost
+        /// UpdateTaxAndShipping
         /// </summary>
-        /// <param name="product"></param>
-        /// <param name="quantity"></param>
-        /// <returns></returns>
-        public decimal GetShippingCost(ContextProduct product, string country, string shippingMethod = null, int quantity = 1)
+        /// <param name="order"></param>
+        public void UpdateTaxAndShipping(StoreOrder order)
         {
-            decimal cost = 0m;
-            if (product == null || country == null) throw new Exception("Invalid call to the GetShippingCost method");
-            if (product.HasShipping)
+            StoreAddress address = null;
+            if (order != null && order.Company != null && order.Company.Addresses != null && order.Company.Addresses.Count > 0)
             {
-                if (product.Weight != null && !string.IsNullOrEmpty(product.Origin))
+                address = order.Company.GetCompanyShippingAddress();
+            }
+
+            if (address != null && order != null && order.OrderDetails != null && order.OrderDetails.Count > 0)
+            {
+                //finding IsSubscription is set for any OrderDetail Product
+                bool isSubscription = false;
+                order.Total = 0m;
+                order.AnnualizedTotal = 0m;
+                foreach (StoreOrderDetail orderDetail in order.OrderDetails)
                 {
-                    if (shippingMethod == null) throw new Exception("You need to pass a shipping method for this product");
-                    LookProductShippingRate productShippingrate = this.GetAll<LookProductShippingRate>()
-                        .Where(rate => rate.Country == country && rate.Origin == product.Origin && rate.ShippingMethod == shippingMethod)
-                        .FirstOrDefault();
-                    if (productShippingrate == null) throw new Exception("We could not find a valid option for the GetShippingCost");
-                    cost = productShippingrate.BaseAmount + (quantity * product.Weight.Value * productShippingrate.AmountOrPercent);
-                }
-                else if (country == "USA")
-                {
-                    cost = product.ShippingCostUS * quantity;
-                }
-                else
-                {
-                    cost = product.ShippingCostOther * quantity;
+                    if (orderDetail.Product != null && orderDetail.Product.IsSubscription)
+                        isSubscription = true;
+
+                    //look up the address information
+                    //set the default values
+                    decimal tax = 0m;
+                    orderDetail.ShippingCost = 0m;
+
+                    //Retrieve Shipping cost and HasTax values to calculate tax 
+                    //calculate the taxes
+                    if (orderDetail.Product != null)
+                    {
+                        if (orderDetail.Product.HasTax)
+                        {
+                            //tax calculated based on full amount except shipping
+                            tax = CalculateTaxes(address, (orderDetail.Cost * orderDetail.Quantity) + orderDetail.ApplicationCost);
+                        }
+                        if (string.IsNullOrEmpty(orderDetail.ShippingMethod)) orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity);
+                        else orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity, orderDetail.ShippingMethod);
+                    }
+
+                    orderDetail.TaxCost = tax;
+                    //this is the cost of what to pay now
+                    order.Total += ((orderDetail.Cost + orderDetail.TaxCost) * orderDetail.Quantity) + orderDetail.ShippingCost + orderDetail.ApplicationCost;
+                    if (isSubscription)
+                    {
+                        tax = CalculateTaxes(address, orderDetail.Cost) * 12 + CalculateTaxes(address, orderDetail.ApplicationCost);
+                        //this would be the total cost over a year for a subscription
+                        order.AnnualizedTotal += (orderDetail.Cost * orderDetail.Quantity * 12) + tax + (orderDetail.ShippingCost * 12) + orderDetail.ApplicationCost;
+                    }
+                    else
+                    {
+                        order.AnnualizedTotal += (orderDetail.Cost * orderDetail.Quantity) + orderDetail.TaxCost + orderDetail.ShippingCost + orderDetail.ApplicationCost;
+                    }
                 }
             }
-            return cost;
         }
 
         /// <summary>
@@ -175,5 +200,40 @@ namespace asi.asicentral.services
             tax = Math.Round(tax, 2);
             return tax;
         }
+
+        /// <summary>
+        /// Provide the Product Shipping cost
+        /// </summary>
+        /// <param name="product"></param>
+        /// <param name="quantity"></param>
+        /// <returns></returns>
+        private decimal GetShippingCost(ContextProduct product, string country, int quantity = 1, string shippingMethod = "UPS2Day")
+        {
+            decimal cost = 0m;
+            if (product == null || country == null) throw new Exception("Invalid call to the GetShippingCost method");
+            if (product.HasShipping)
+            {
+                if (product.Weight != null && !string.IsNullOrEmpty(product.Origin))
+                {
+                    if (shippingMethod == null) throw new Exception("You need to pass a shipping method for this product");
+                    LookProductShippingRate productShippingrate = this.GetAll<LookProductShippingRate>()
+                        .Where(rate => rate.Country == country && rate.Origin == product.Origin && rate.ShippingMethod == shippingMethod)
+                        .FirstOrDefault();
+                    if (productShippingrate == null) throw new Exception("We could not find a valid option for the GetShippingCost");
+                    cost = productShippingrate.BaseAmount + (quantity * product.Weight.Value * productShippingrate.AmountOrPercent);
+                }
+                else if (country == "USA")
+                {
+                    cost = product.ShippingCostUS * quantity;
+                }
+                else
+                {
+                    cost = product.ShippingCostOther * quantity;
+                }
+            }
+            return cost;
+        }
+
+        
     }
 }
