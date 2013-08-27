@@ -170,8 +170,17 @@ namespace asi.asicentral.web.Controllers.Store
                 if (order == null) throw new Exception("Invalid reference to an order");
                 order.ExternalReference = application.ExternalReference;
                 order = UpdateCompanyInformation(application, order);
-               
+
                 //Update Catalog Information
+                orderDetail.Quantity = Convert.ToInt32(application.Quantity);
+                storeDetailCatalog.AreaId = Convert.ToInt32(application.Area);
+                storeDetailCatalog.CoverId = Convert.ToInt32(application.Cover);
+                storeDetailCatalog.ColorId = Convert.ToInt32(application.Color);
+                storeDetailCatalog.ImprintId = Convert.ToInt32(application.Imprint);
+                if (application.ProductId == 39) storeDetailCatalog.SupplementId = Convert.ToInt32(application.Supplement);
+                if (storeDetailCatalog.ImprintId != 18) storeDetailCatalog.IsArtworkToProof = application.IsArtworkToProof;
+                storeDetailCatalog.IsUploadImageTobeUsed = application.IsUploadImageTobeUsed;
+
                 if ((storeDetailCatalog.AreaId == 8 || storeDetailCatalog.AreaId == 25) && (storeDetailCatalog.ImprintId == 20 || (storeDetailCatalog.ImprintId == 21 && storeDetailCatalog.ArtworkOption == "PRINT")))
                 {
                     storeDetailCatalog.Line1 = application.Line1;
@@ -181,6 +190,15 @@ namespace asi.asicentral.web.Controllers.Store
                     storeDetailCatalog.Line5 = application.Line5;
                     storeDetailCatalog.Line6 = application.Line6;
                 }
+                else
+                {
+                    storeDetailCatalog.Line1 = null;
+                    storeDetailCatalog.Line2 = null;
+                    storeDetailCatalog.Line3 = null;
+                    storeDetailCatalog.Line4 = null;
+                    storeDetailCatalog.Line5 = null;
+                    storeDetailCatalog.Line6 = null;
+                }
 
                 if ((storeDetailCatalog.AreaId == 9 || storeDetailCatalog.AreaId == 25) && (storeDetailCatalog.ImprintId == 20 || (storeDetailCatalog.ImprintId == 21 && storeDetailCatalog.ArtworkOption == "PRINT")))
                 {
@@ -188,6 +206,13 @@ namespace asi.asicentral.web.Controllers.Store
                     storeDetailCatalog.BackLine2 = application.BackLine2;
                     storeDetailCatalog.BackLine3 = application.BackLine3;
                     storeDetailCatalog.BackLine4 = application.BackLine4;
+                }
+                else
+                {
+                    storeDetailCatalog.BackLine1 = null;
+                    storeDetailCatalog.BackLine2 = null;
+                    storeDetailCatalog.BackLine3 = null;
+                    storeDetailCatalog.BackLine4 = null;
                 }
                 storeDetailCatalog.UpdateDate = DateTime.UtcNow;
                 storeDetailCatalog.UpdateSource = "ApplicationController - EditCatalogs";
