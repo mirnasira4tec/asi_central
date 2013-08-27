@@ -106,6 +106,24 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to I have artwork already on file with ASI.
+        /// </summary>
+        public static string ArtworkOptionforASI {
+            get {
+                return ResourceManager.GetString("ArtworkOptionforASI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I will enter text to print on catalog.
+        /// </summary>
+        public static string ArtworkOptionforPRINT {
+            get {
+                return ResourceManager.GetString("ArtworkOptionforPRINT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string Back {
@@ -498,6 +516,15 @@ namespace asi.asicentral.web {
         public static string SGRMaintenanceLink {
             get {
                 return ResourceManager.GetString("SGRMaintenanceLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shipping Method.
+        /// </summary>
+        public static string ShippingMethod {
+            get {
+                return ResourceManager.GetString("ShippingMethod", resourceCulture);
             }
         }
         
@@ -930,6 +957,42 @@ namespace asi.asicentral.web {
         public static string Transfer {
             get {
                 return ResourceManager.GetString("Transfer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uploaded Images.
+        /// </summary>
+        public static string UploadedImages {
+            get {
+                return ResourceManager.GetString("UploadedImages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPS 2nd Day.
+        /// </summary>
+        public static string UPS2Day {
+            get {
+                return ResourceManager.GetString("UPS2Day", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPS Ground.
+        /// </summary>
+        public static string UPSGround {
+            get {
+                return ResourceManager.GetString("UPSGround", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPS Overnight.
+        /// </summary>
+        public static string UPSOvernight {
+            get {
+                return ResourceManager.GetString("UPSOvernight", resourceCulture);
             }
         }
         

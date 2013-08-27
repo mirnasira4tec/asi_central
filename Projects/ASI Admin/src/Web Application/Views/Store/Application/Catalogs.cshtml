@@ -16,6 +16,7 @@
 {        
 @Html.AntiForgeryToken()
 @Html.HiddenFor(m => m.ProductName)
+@Html.HiddenFor(m => m.ProductId)
 @Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
 <div>
     @if (Model.Price > 0.0m)
@@ -217,10 +218,10 @@
             {
             <span class="row">@Html.Raw("<strong>Basic Information</strong>")</span>
             <span class="label-row span11">
-				@Html.LabelFor(m => m.Quanitity) 
+				@Html.LabelFor(m => m.Quantity) 
 			</span>
 			<span class="label-row">
-				@Html.TextBoxFor(m => m.Quanitity, new { @readonly = "readonly" })
+				@Html.EditorFor(m => m.Quantity) @Html.ValidationMessageFor(m => m.Quantity)
 		    </span>
             <span class="row">@Html.Raw("<strong>Options Information</strong>")</span>
             <span class="label-row span11">
@@ -229,9 +230,9 @@
                 @Html.LabelFor(m => m.Color) 
 			</span>
 			<span class="label-row">
-                @Html.TextBoxFor(m => m.Cover, new { @readonly = "readonly" })
-                @Html.TextBoxFor(m => m.Area, new { @readonly = "readonly" }) 
-				@Html.TextBoxFor(m => m.Color, new { @readonly = "readonly" }) 
+                @Html.DropDownListFor(model => model.Cover, Model.CoverOptions)
+                @Html.DropDownListFor(model => model.Area, Model.AreaOptions) 
+                @Html.DropDownListFor(model => model.Color, Model.ColorOptions)
 			</span>
              <span class="label-row span11">
 				@Html.LabelFor(m => m.Imprint) 
@@ -239,75 +240,84 @@
                 {
 				@Html.LabelFor(m => m.Supplement)
                 }
-                @if(Model.StoreDetailCatalog.ImprintId != 18)
-                {
-                 @Html.LabelFor(m => m.IsArtworkToProof) 
-                }
+                <span id="artworkProofLabel">
+                @Html.LabelFor(m => m.IsArtworkToProof) 
+                </span>
 			</span>
 			<span class="label-row">
-				@Html.TextBoxFor(m => m.Imprint, new { @readonly = "readonly" }) 
+				@Html.DropDownListFor(model => model.Imprint, Model.ImprintOptions)
 			    @if (Model.ProductId == 39)
                 {
-				@Html.TextBoxFor(m => m.Supplement, new { @readonly = "readonly" })
+                @Html.DropDownListFor(model => model.Supplement, Model.SupplementOptions)
                 }
-                 @if (Model.StoreDetailCatalog.ImprintId != 18)
-                {
-                 @Html.TextBoxFor(m => m.IsArtworkToProof, new { @readonly = "readonly" }) 
-                }
+                <span id="artworkProofCheckBox">
+                @Html.CheckBoxFor(m => m.IsArtworkToProof) 
+                </span>
 			</span>
+            <span class="label-row span11">
+                @Html.LabelFor(m => m.ShippingMethod)
+			</span>
+            <span class="label-row span11">
+                @Html.DropDownListFor(model => model.ShippingMethod, Model.ShippingOptions)
+			</span>
+
+            <div id="showArtworkOptions">
+                <span class="row">
+                <label>@Html.RadioButtonFor(model => model.ArtworkOption, "ASI", new { id = "ASI" }) @Html.Raw(asi.asicentral.web.Resource.ArtworkOptionforASI)</label>
+                <label>@Html.RadioButtonFor(model => model.ArtworkOption, "PRINT", new { id = "PRINT" }) @Html.Raw(asi.asicentral.web.Resource.ArtworkOptionforPRINT)</label>
+                </span>
+	        </div>
             <span class="row">@Html.Raw("<strong>Logo Information</strong>")</span>
              <span class="label-row span11">
 				@Html.LabelFor(m => m.IsUploadImageTobeUsed) 
                 @Html.LabelFor(m => m.LogoPath) 
 			</span>
 			<span class="label-row">
-				@Html.TextBoxFor(m => m.IsUploadImageTobeUsed, new { @readonly = "readonly" })
-                <a href="/Media/List?path=/Uploads">Uploaded Images</a>
+				@Html.CheckBoxFor(m => m.IsUploadImageTobeUsed)
+                <a href="/Media/List?path=/Uploads">@Html.Raw(asi.asicentral.web.Resource.UploadedImages)</a>
 			</span>
-                 if ((Model.StoreDetailCatalog.AreaId == 8 || Model.StoreDetailCatalog.AreaId == 25) && (Model.StoreDetailCatalog.ImprintId == 20 || (Model.StoreDetailCatalog.ImprintId == 21 && Model.StoreDetailCatalog.ArtworkOption == "PRINT")))
-                 {
+            <div id="frontCover">
             <span class="row">@Html.Raw("<strong>New Copy - Standard Type</strong>")</span>
-            <span class="label-row span11">
-				@Html.LabelFor(m => m.Line1) 
-				@Html.LabelFor(m => m.Line2) 
-				@Html.LabelFor(m => m.Line3)
-			</span>
-			<span class="label-row">
-				@Html.EditorFor(m => m.Line1) @Html.ValidationMessageFor(m => m.Line1)
-				@Html.EditorFor(m => m.Line2) @Html.ValidationMessageFor(m => m.Line2)
-				@Html.EditorFor(m => m.Line3) @Html.ValidationMessageFor(m => m.Line3)
-			</span>
-            <span class="label-row span11">
-				@Html.LabelFor(m => m.Line4) 
-				@Html.LabelFor(m => m.Line5) 
-				@Html.LabelFor(m => m.Line6)
-			</span>
-			<span class="label-row">
-				@Html.EditorFor(m => m.Line4) @Html.ValidationMessageFor(m => m.Line4)
-				@Html.EditorFor(m => m.Line5) @Html.ValidationMessageFor(m => m.Line5)
-				@Html.EditorFor(m => m.Line6) @Html.ValidationMessageFor(m => m.Line6)
-			</span>
-                 }
-                 if ((Model.StoreDetailCatalog.AreaId == 9 || Model.StoreDetailCatalog.AreaId == 25) && (Model.StoreDetailCatalog.ImprintId == 20 || (Model.StoreDetailCatalog.ImprintId == 21 && Model.StoreDetailCatalog.ArtworkOption == "PRINT")))
-                 {
-            <span class="row">@Html.Raw("<strong>Back Cover Imprint Area</strong>")</span>
-            <span class="label-row span11">
-				@Html.LabelFor(m => m.BackLine1) 
-				@Html.LabelFor(m => m.BackLine2) 
-				@Html.LabelFor(m => m.BackLine3)
-			</span>
-			<span class="label-row">
-				@Html.EditorFor(m => m.BackLine1) @Html.ValidationMessageFor(m => m.BackLine1)
-				@Html.EditorFor(m => m.BackLine2) @Html.ValidationMessageFor(m => m.BackLine2)
-				@Html.EditorFor(m => m.BackLine3) @Html.ValidationMessageFor(m => m.BackLine3)
-			</span>
-            <span class="label-row span11">
-				@Html.LabelFor(m => m.BackLine4) 
-			</span>
-			<span class="label-row">
-				@Html.EditorFor(m => m.BackLine4) @Html.ValidationMessageFor(m => m.BackLine4)
-			</span>
-                 }
+                <span class="label-row span11">
+				    @Html.LabelFor(m => m.Line1) 
+				    @Html.LabelFor(m => m.Line2) 
+				    @Html.LabelFor(m => m.Line3)
+			    </span>
+			    <span class="label-row">
+				    @Html.EditorFor(m => m.Line1) @Html.ValidationMessageFor(m => m.Line1)
+				    @Html.EditorFor(m => m.Line2) @Html.ValidationMessageFor(m => m.Line2)
+				    @Html.EditorFor(m => m.Line3) @Html.ValidationMessageFor(m => m.Line3)
+			    </span>
+                <span class="label-row span11">
+				    @Html.LabelFor(m => m.Line4) 
+				    @Html.LabelFor(m => m.Line5) 
+				    @Html.LabelFor(m => m.Line6)
+			    </span>
+			    <span class="label-row">
+				    @Html.EditorFor(m => m.Line4) @Html.ValidationMessageFor(m => m.Line4)
+				    @Html.EditorFor(m => m.Line5) @Html.ValidationMessageFor(m => m.Line5)
+				    @Html.EditorFor(m => m.Line6) @Html.ValidationMessageFor(m => m.Line6)
+			    </span>
+            </div>
+            <div id="backCover">
+                <span class="row">@Html.Raw("<strong>Back Cover Imprint Area</strong>")</span>
+                <span class="label-row span11">
+				    @Html.LabelFor(m => m.BackLine1) 
+				    @Html.LabelFor(m => m.BackLine2) 
+				    @Html.LabelFor(m => m.BackLine3)
+			    </span>
+			    <span class="label-row">
+				    @Html.EditorFor(m => m.BackLine1) @Html.ValidationMessageFor(m => m.BackLine1)
+				    @Html.EditorFor(m => m.BackLine2) @Html.ValidationMessageFor(m => m.BackLine2)
+				    @Html.EditorFor(m => m.BackLine3) @Html.ValidationMessageFor(m => m.BackLine3)
+			    </span>
+                <span class="label-row span11">
+				    @Html.LabelFor(m => m.BackLine4) 
+			    </span>
+			    <span class="label-row">
+				    @Html.EditorFor(m => m.BackLine4) @Html.ValidationMessageFor(m => m.BackLine4)
+			    </span>
+            </div>
             }
 		</fieldset>    
 	</div><!-- END #subscription-information -->	
@@ -344,5 +354,69 @@
             $('[rel*="isprimary"]').attr("checked", false);
             this.checked = true;
         });
+
+        $(document).ready(function () {
+
+            if ($('#OrderDetailId').val() != 0) {
+                ChangeUIOnOptionChanges();
+            }
+
+            $('#Imprint').change(function () {
+                ChangeUIOnOptionChanges();
+            });
+
+            $('#Area').change(function () {
+                ChangeUIOnOptionChanges();
+            });
+
+            $('input:radio[name=ArtworkOption]').change(function () {
+                ChangeUIOnOptionChanges();
+            });
+        });
+
+        function ChangeUIOnOptionChanges() {
+            var imprintVal = $('#Imprint').val();
+            var areaVal = $('#Area').val();
+
+            if (imprintVal == 21) {
+                $('#showArtworkOptions').show();
+            }
+            else {
+                $('#showArtworkOptions').hide();
+            }
+
+            if (imprintVal != 18) {
+                $('#artworkProofLabel').show();
+                $('#artworkProofCheckBox').show();
+            }
+            else {
+                $('#artworkProofLabel').hide();
+                $('#artworkProofCheckBox').hide();
+            }
+            ShowOrHideCovers();
+        }
+
+        function ShowOrHideCovers() {
+            var imprintVal = $('#Imprint').val();
+            var areaVal = $('#Area').val();
+            var artworkOption = $('input:radio[name=ArtworkOption]:checked').val();
+
+            if ((imprintVal == "20" || (imprintVal == "21" && artworkOption == "PRINT")) && areaVal == "8") {
+                $('#frontCover').show();
+                $('#backCover').hide();
+            }
+            else if ((imprintVal == "20" || (imprintVal == "21" && artworkOption == "PRINT")) && areaVal == "9") {
+                $('#frontCover').hide();
+                $('#backCover').show();
+            }
+            else if ((imprintVal == "20" || (imprintVal == "21" && artworkOption == "PRINT")) && areaVal == "25") {
+                $('#frontCover').show();
+                $('#backCover').show();
+            }
+            else {
+                $('#frontCover').hide();
+                $('#backCover').hide();
+            }
+        }
     </script>
 }

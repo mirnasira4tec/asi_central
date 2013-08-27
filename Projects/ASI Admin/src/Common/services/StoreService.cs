@@ -109,12 +109,105 @@ namespace asi.asicentral.services
         }
 
         /// <summary>
+        /// UpdateTaxAndShipping
+        /// </summary>
+        /// <param name="order"></param>
+        public void UpdateTaxAndShipping(StoreOrder order)
+        {
+            StoreAddress address = null;
+            if (order != null && order.Company != null && order.Company.Addresses != null && order.Company.Addresses.Count > 0)
+            {
+                address = order.Company.GetCompanyShippingAddress();
+            }
+
+            if (address != null && order != null && order.OrderDetails != null && order.OrderDetails.Count > 0)
+            {
+                //finding IsSubscription is set for any OrderDetail Product
+                bool isSubscription = false;
+                order.Total = 0m;
+                order.AnnualizedTotal = 0m;
+                foreach (StoreOrderDetail orderDetail in order.OrderDetails)
+                {
+                    if (orderDetail.Product != null && orderDetail.Product.IsSubscription)
+                        isSubscription = true;
+
+                    //look up the address information
+                    //set the default values
+                    decimal tax = 0m;
+                    orderDetail.ShippingCost = 0m;
+
+                    //Retrieve Shipping cost and HasTax values to calculate tax 
+                    //calculate the taxes
+                    if (orderDetail.Product != null)
+                    {
+                        if (orderDetail.Product.HasTax)
+                        {
+                            //tax calculated based on full amount except shipping
+                            tax = CalculateTaxes(address, (orderDetail.Cost * orderDetail.Quantity) + orderDetail.ApplicationCost);
+                        }
+                        if (string.IsNullOrEmpty(orderDetail.ShippingMethod)) orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity);
+                        else orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity, orderDetail.ShippingMethod);
+                    }
+
+                    orderDetail.TaxCost = tax;
+                    //this is the cost of what to pay now
+                    order.Total += ((orderDetail.Cost + orderDetail.TaxCost) * orderDetail.Quantity) + orderDetail.ShippingCost + orderDetail.ApplicationCost;
+                    if (isSubscription)
+                    {
+                        tax = CalculateTaxes(address, orderDetail.Cost) * 12 + CalculateTaxes(address, orderDetail.ApplicationCost);
+                        //this would be the total cost over a year for a subscription
+                        order.AnnualizedTotal += (orderDetail.Cost * orderDetail.Quantity * 12) + tax + (orderDetail.ShippingCost * 12) + orderDetail.ApplicationCost;
+                    }
+                    else
+                    {
+                        order.AnnualizedTotal += (orderDetail.Cost * orderDetail.Quantity) + orderDetail.TaxCost + orderDetail.ShippingCost + orderDetail.ApplicationCost;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Calculates the taxes in case shipping to the USA
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public decimal CalculateTaxes(StoreAddress address, decimal? amount)
+        {
+            decimal tax = 0m;
+            if (address != null && address.Country == "USA" && amount != null && amount.Value > 0)
+            {
+                decimal taxRate = 0m;
+                //look for a state record
+                TaxRate taxRateRecord = this.GetAll<TaxRate>().Where(taxRecord => taxRecord.State == address.State && taxRecord.Zip == null).SingleOrDefault();
+                if (taxRateRecord != null)
+                {
+                    taxRate = taxRateRecord.Rate;
+                }
+                else
+                {
+                    int zipCode = 0;
+                    int.TryParse(address.Zip, out zipCode);
+                    if (zipCode > 0)
+                    {
+                        //look for a state/zip record
+                        taxRateRecord = this.GetAll<TaxRate>().Where(taxRecord => taxRecord.State == address.State && taxRecord.Zip == zipCode).SingleOrDefault();
+                        if (taxRateRecord != null) taxRate = taxRateRecord.Rate;
+                    }
+                }
+                if (taxRate > 0) tax = (amount.Value * taxRate) / 100m;
+            }
+            tax = Math.Round(tax, 2);
+            return tax;
+        }
+
+        /// <summary>
         /// Provide the Product Shipping cost
         /// </summary>
         /// <param name="product"></param>
         /// <param name="quantity"></param>
         /// <returns></returns>
-        public decimal GetShippingCost(ContextProduct product, string country, string shippingMethod = null, int quantity = 1)
+        private decimal GetShippingCost(ContextProduct product, string country, int quantity = 1, string shippingMethod = "UPS2Day")
         {
             decimal cost = 0m;
             if (product == null || country == null) throw new Exception("Invalid call to the GetShippingCost method");
@@ -140,5 +233,7 @@ namespace asi.asicentral.services
             }
             return cost;
         }
+
+        
     }
 }
