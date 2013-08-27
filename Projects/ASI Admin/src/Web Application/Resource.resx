@@ -411,4 +411,13 @@
   <data name="Website" xml:space="preserve">
     <value>Website</value>
   </data>
+  <data name="ArtworkOptionforASI" xml:space="preserve">
+    <value>I have artwork already on file with ASI</value>
+  </data>
+  <data name="ArtworkOptionforPRINT" xml:space="preserve">
+    <value>I will enter text to print on catalog</value>
+  </data>
+  <data name="UploadedImages" xml:space="preserve">
+    <value>Uploaded Images</value>
+  </data>
 </root>

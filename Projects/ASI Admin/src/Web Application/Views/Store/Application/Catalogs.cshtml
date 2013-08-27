@@ -237,9 +237,9 @@
              <span class="label-row span11">
 				@Html.LabelFor(m => m.Imprint) 
 				@if (Model.ProductId == 39)
-    {
+                {
 				@Html.LabelFor(m => m.Supplement)
-    }
+                }
                 <span id="artworkProofLabel">
                 @Html.LabelFor(m => m.IsArtworkToProof) 
                 </span>
@@ -256,8 +256,8 @@
 			</span>
             <div id="showArtworkOptions">
                 <span class="row">
-                <label>@Html.RadioButtonFor(model => model.ArtworkOption, "ASI", new { id = "ASI" }) @Html.Raw("I have artwork already on file with ASI")</label>
-                <label>@Html.RadioButtonFor(model => model.ArtworkOption, "PRINT", new { id = "PRINT" }) @Html.Raw("I will enter text to print on catalog")</label>
+                <label>@Html.RadioButtonFor(model => model.ArtworkOption, "ASI", new { id = "ASI" }) @Html.Raw(asi.asicentral.web.Resource.ArtworkOptionforASI)</label>
+                <label>@Html.RadioButtonFor(model => model.ArtworkOption, "PRINT", new { id = "PRINT" }) @Html.Raw(asi.asicentral.web.Resource.ArtworkOptionforPRINT)</label>
                 </span>
 	        </div>
             <span class="row">@Html.Raw("<strong>Logo Information</strong>")</span>
@@ -267,7 +267,7 @@
 			</span>
 			<span class="label-row">
 				@Html.CheckBoxFor(m => m.IsUploadImageTobeUsed)
-                <a href="/Media/List?path=/Uploads">Uploaded Images</a>
+                <a href="/Media/List?path=/Uploads">@Html.Raw(asi.asicentral.web.Resource.UploadedImages)</a>
 			</span>
             <div id="frontCover">
             <span class="row">@Html.Raw("<strong>New Copy - Standard Type</strong>")</span>
