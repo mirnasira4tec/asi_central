@@ -417,7 +417,19 @@
   <data name="ArtworkOptionforPRINT" xml:space="preserve">
     <value>I will enter text to print on catalog</value>
   </data>
+  <data name="ShippingMethod" xml:space="preserve">
+    <value>Shipping Method</value>
+  </data>
   <data name="UploadedImages" xml:space="preserve">
     <value>Uploaded Images</value>
+  </data>
+  <data name="UPS2Day" xml:space="preserve">
+    <value>UPS 2nd Day</value>
+  </data>
+  <data name="UPSGround" xml:space="preserve">
+    <value>UPS Ground</value>
+  </data>
+  <data name="UPSOvernight" xml:space="preserve">
+    <value>UPS Overnight</value>
   </data>
 </root>

@@ -520,6 +520,15 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shipping Method.
+        /// </summary>
+        public static string ShippingMethod {
+            get {
+                return ResourceManager.GetString("ShippingMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SilkScreen.
         /// </summary>
         public static string SilkScreen {
@@ -957,6 +966,33 @@ namespace asi.asicentral.web {
         public static string UploadedImages {
             get {
                 return ResourceManager.GetString("UploadedImages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPS 2nd Day.
+        /// </summary>
+        public static string UPS2Day {
+            get {
+                return ResourceManager.GetString("UPS2Day", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPS Ground.
+        /// </summary>
+        public static string UPSGround {
+            get {
+                return ResourceManager.GetString("UPSGround", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPS Overnight.
+        /// </summary>
+        public static string UPSOvernight {
+            get {
+                return ResourceManager.GetString("UPSOvernight", resourceCulture);
             }
         }
         

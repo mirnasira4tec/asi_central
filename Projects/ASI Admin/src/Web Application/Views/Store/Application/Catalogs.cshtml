@@ -254,6 +254,13 @@
                 @Html.CheckBoxFor(m => m.IsArtworkToProof) 
                 </span>
 			</span>
+            <span class="label-row span11">
+                @Html.LabelFor(m => m.ShippingMethod)
+			</span>
+            <span class="label-row span11">
+                @Html.DropDownListFor(model => model.ShippingMethod, Model.ShippingOptions)
+			</span>
+
             <div id="showArtworkOptions">
                 <span class="row">
                 <label>@Html.RadioButtonFor(model => model.ArtworkOption, "ASI", new { id = "ASI" }) @Html.Raw(asi.asicentral.web.Resource.ArtworkOptionforASI)</label>

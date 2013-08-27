@@ -155,6 +155,9 @@ namespace asi.asicentral.web.model.store
         [Display(ResourceType = typeof(asi.asicentral.web.Resource), Name = "IsUploadImageTobeUsed")]
         public bool IsUploadImageTobeUsed { get; set; }
 
+        [Display(ResourceType = typeof(asi.asicentral.web.Resource), Name = "ShippingMethod")]
+        public string ShippingMethod { get; set; }
+
         IList<SelectListItem> coverOptions { get; set; }
         public IList<SelectListItem> CoverOptions
         {
@@ -183,6 +186,12 @@ namespace asi.asicentral.web.model.store
         public IList<SelectListItem> SupplementOptions
         {
             get { return supplementOptions; }
+        }
+
+        IList<SelectListItem> shippingOptions { get; set; }
+        public IList<SelectListItem> ShippingOptions
+        {
+            get { return shippingOptions; }
         }
 
         #endregion
@@ -232,6 +241,8 @@ namespace asi.asicentral.web.model.store
 
         public CatalogsApplicationModel (StoreOrderDetail orderdetail, StoreDetailCatalog storeDetailCatalog, IStoreService storeService): base()
         {
+            string origin = string.Empty;
+            string country = string.Empty;
             this.Contacts = new List<StoreIndividual>();
             this.StoreService = storeService;
             this.CatalogOptions = StoreService.GetAll<LookCatalogOption>(true).Where(option => option.Id != 0).ToList();
@@ -239,6 +250,7 @@ namespace asi.asicentral.web.model.store
             StoreOrder order = orderdetail.Order;
             BillingIndividual = order.BillingIndividual;
             OrderDetailId = orderdetail.Id;
+            ShippingMethod = orderdetail.ShippingMethod;
             this.Quantity = orderdetail.Quantity.ToString();
             this.StoreDetailCatalog = storeDetailCatalog;
 
@@ -273,6 +285,7 @@ namespace asi.asicentral.web.model.store
             {
                 ProductName = orderdetail.Product.Name;
                 ProductId = orderdetail.Product.Id;
+                origin = orderdetail.Product.Origin;
                 if (orderdetail.Product.Id == 39) this.Supplement = storeDetailCatalog.SupplementId.ToString();
             }
 
@@ -289,6 +302,8 @@ namespace asi.asicentral.web.model.store
             Price = order.Total;
             IsCompleted = order.IsCompleted;
             MembershipModelHelper.PopulateModel(this, order);
+            if(order.Company != null) country = order.Company.GetCompanyShippingAddress().Country;
+            this.shippingOptions = GetShippingOptions(this.StoreService, origin, country);
         }
 
         private IList<SelectListItem> GetOptionsByCategory(int categoryId)
@@ -391,6 +406,34 @@ namespace asi.asicentral.web.model.store
                 }
             }
             return selectedItems;
+        }
+
+        private IList<SelectListItem> GetShippingOptions(IStoreService storeService, string origin, string country)
+        {
+            IList<SelectListItem> dropdownOptions = new List<SelectListItem>();
+            IList<LookProductShippingRate> shippingOptions = storeService.GetAll<LookProductShippingRate>().Where(item => item.Origin == origin && item.Country == country).Distinct().ToList();
+            if (shippingOptions != null && shippingOptions.Count > 0)
+            {
+                foreach (LookProductShippingRate option in shippingOptions)
+                {
+                    string text = string.Empty;
+                    switch (option.ShippingMethod)
+                    {
+                        case "UPS2Day":
+                            text = asi.asicentral.web.Resource.UPS2Day;
+                            break;
+                        case "UPSGround":
+                            text = asi.asicentral.web.Resource.UPSGround;
+                            break;
+                        case "UPSOvernight":
+                            text = asi.asicentral.web.Resource.UPSOvernight;
+                            break;
+                    }
+                    if (!string.IsNullOrEmpty(text))
+                        dropdownOptions.Add(new SelectListItem() { Text = text, Value = option.ShippingMethod, Selected = false });
+                }
+            }
+            return dropdownOptions;
         }
     }
 }
