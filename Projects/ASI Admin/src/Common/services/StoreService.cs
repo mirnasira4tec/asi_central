@@ -140,5 +140,40 @@ namespace asi.asicentral.services
             }
             return cost;
         }
+
+        /// <summary>
+        /// Calculates the taxes in case shipping to the USA
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public decimal CalculateTaxes(StoreAddress address, decimal? amount)
+        {
+            decimal tax = 0m;
+            if (address != null && address.Country == "USA" && amount != null && amount.Value > 0)
+            {
+                decimal taxRate = 0m;
+                //look for a state record
+                TaxRate taxRateRecord = this.GetAll<TaxRate>().Where(taxRecord => taxRecord.State == address.State && taxRecord.Zip == null).SingleOrDefault();
+                if (taxRateRecord != null)
+                {
+                    taxRate = taxRateRecord.Rate;
+                }
+                else
+                {
+                    int zipCode = 0;
+                    int.TryParse(address.Zip, out zipCode);
+                    if (zipCode > 0)
+                    {
+                        //look for a state/zip record
+                        taxRateRecord = this.GetAll<TaxRate>().Where(taxRecord => taxRecord.State == address.State && taxRecord.Zip == zipCode).SingleOrDefault();
+                        if (taxRateRecord != null) taxRate = taxRateRecord.Rate;
+                    }
+                }
+                if (taxRate > 0) tax = (amount.Value * taxRate) / 100m;
+            }
+            tax = Math.Round(tax, 2);
+            return tax;
+        }
     }
 }

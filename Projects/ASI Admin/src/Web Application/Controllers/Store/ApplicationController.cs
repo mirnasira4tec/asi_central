@@ -173,6 +173,7 @@ namespace asi.asicentral.web.Controllers.Store
 
                 //Update Catalog Information
                 orderDetail.Quantity = Convert.ToInt32(application.Quantity);
+                orderDetail.ShippingMethod = application.ShippingMethod;
                 storeDetailCatalog.AreaId = Convert.ToInt32(application.Area);
                 storeDetailCatalog.CoverId = Convert.ToInt32(application.Cover);
                 storeDetailCatalog.ColorId = Convert.ToInt32(application.Color);
