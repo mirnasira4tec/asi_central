@@ -145,8 +145,19 @@ namespace asi.asicentral.services
                             //tax calculated based on full amount except shipping
                             tax = CalculateTaxes(address, (orderDetail.Cost * orderDetail.Quantity) + orderDetail.ApplicationCost);
                         }
+
                         if (string.IsNullOrEmpty(orderDetail.ShippingMethod)) orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity);
-                        else orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity, orderDetail.ShippingMethod);
+                        else
+                        {
+                            if (orderDetail.Product.Id == 39)
+                            {
+                                StoreDetailCatalog catalogDetails = this.GetAll<StoreDetailCatalog>(false).Where(detail => detail.OrderDetailId == orderDetail.Id).SingleOrDefault();
+                                if (catalogDetails != null && catalogDetails.SupplementId == 24)
+                                    orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity, orderDetail.ShippingMethod, true, 0.38m);
+                            }
+                            else
+                            orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity, orderDetail.ShippingMethod);
+                        }
                     }
 
                     orderDetail.TaxCost = tax;
@@ -207,20 +218,21 @@ namespace asi.asicentral.services
         /// <param name="product"></param>
         /// <param name="quantity"></param>
         /// <returns></returns>
-        private decimal GetShippingCost(ContextProduct product, string country, int quantity = 1, string shippingMethod = "UPS2Day")
+        private decimal GetShippingCost(ContextProduct product, string country, int quantity = 1, string shippingMethod = "UPS2Day", bool isGiftSupplement = false, decimal? weight = null)
         {
             decimal cost = 0m;
             if (product == null || country == null) throw new Exception("Invalid call to the GetShippingCost method");
             if (product.HasShipping)
             {
-                if (product.Weight != null && !string.IsNullOrEmpty(product.Origin))
+                if (!isGiftSupplement) weight = product.Weight;
+                if (weight != null && weight.HasValue && !string.IsNullOrEmpty(product.Origin))
                 {
                     if (shippingMethod == null) throw new Exception("You need to pass a shipping method for this product");
                     LookProductShippingRate productShippingrate = this.GetAll<LookProductShippingRate>()
                         .Where(rate => rate.Country == country && rate.Origin == product.Origin && rate.ShippingMethod == shippingMethod)
                         .FirstOrDefault();
                     if (productShippingrate == null) throw new Exception("We could not find a valid option for the GetShippingCost");
-                    cost = productShippingrate.BaseAmount + (quantity * product.Weight.Value * productShippingrate.AmountOrPercent);
+                    cost = productShippingrate.BaseAmount + (quantity * weight.Value * productShippingrate.AmountOrPercent);
                 }
                 else if (country == "USA")
                 {
