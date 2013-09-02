@@ -772,6 +772,15 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Catalogs - {0}.
+        /// </summary>
+        public static string StoreTitleCatalogsApplication {
+            get {
+                return ResourceManager.GetString("StoreTitleCatalogsApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Distributor Application.
         /// </summary>
         public static string StoreTitleDistributorApplication {

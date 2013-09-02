@@ -432,4 +432,7 @@
   <data name="UPSOvernight" xml:space="preserve">
     <value>UPS Overnight</value>
   </data>
+  <data name="StoreTitleCatalogsApplication" xml:space="preserve">
+    <value>Catalogs - {0}</value>
+  </data>
 </root>

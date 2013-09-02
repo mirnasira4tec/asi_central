@@ -16,6 +16,7 @@ namespace asi.asicentral.web.Controllers.Store
         public const string COMMAND_SAVE = "Save";
         public const string COMMAND_REJECT = "Reject";
         public const string COMMAND_ACCEPT = "Accept";
+        public static readonly int[] DISTRIBUTOR_ORDERDETAIL_PRODUCT_IDS = { 45, 46 };
 
         public IStoreService StoreService { get; set; }
         public IFulfilmentService FulfilmentService { get; set; }
@@ -39,6 +40,7 @@ namespace asi.asicentral.web.Controllers.Store
                 if (orderDetail.MagazineSubscriptions != null && orderDetail.MagazineSubscriptions.Count > 0) return View("../Store/Application/Magazines", new MagazinesApplicationModel(orderDetail, StoreService));
                 StoreDetailCatalog storeDetailCatalog = StoreService.GetAll<StoreDetailCatalog>().Where(catalog => catalog.OrderDetailId == orderDetail.Id).SingleOrDefault();
                 if (storeDetailCatalog != null) return View("../Store/Application/Catalogs", new CatalogsApplicationModel(orderDetail, storeDetailCatalog, StoreService));
+                if (DISTRIBUTOR_ORDERDETAIL_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/OrderDetailProduct", new OrderDetailApplicationModel(orderDetail));
             }
             throw new Exception("Retieved an unknown type of application");
         }
@@ -233,6 +235,40 @@ namespace asi.asicentral.web.Controllers.Store
             else
             {
                 return View("../Store/Application/Magazines", application);
+            }
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(true)]
+        public virtual ActionResult EditOrderDetailProduct(OrderDetailApplicationModel application)
+        {
+            if (ModelState.IsValid)
+            {
+                StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
+                if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
+                StoreOrder order = orderDetail.Order;
+                if (order == null) throw new Exception("Invalid reference to an order");
+                order.ExternalReference = application.ExternalReference;
+                order = UpdateCompanyInformation(application, order);
+
+                //Update Catalog Information
+                orderDetail.Quantity = Convert.ToInt32(application.Quantity);
+                StoreAddress address = order.Company.GetCompanyShippingAddress();
+                StoreService.UpdateTaxAndShipping(order);
+                orderDetail.UpdateDate = DateTime.UtcNow;
+                orderDetail.UpdateSource = "ApplicationController - EditCatalogs";
+
+                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                StoreService.SaveChanges();
+                if (application.ActionName == ApplicationController.COMMAND_REJECT)
+                    return RedirectToAction("List", "Orders");
+                else
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId });
+            }
+            else
+            {
+                return View("../Store/Application/OrderDetailProduct", application);
             }
         }
 
