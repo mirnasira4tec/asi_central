@@ -133,6 +133,15 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Basic.
+        /// </summary>
+        public static string Basic {
+            get {
+                return ResourceManager.GetString("Basic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
@@ -219,6 +228,15 @@ namespace asi.asicentral.web {
         public static string Cover {
             get {
                 return ResourceManager.GetString("Cover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current membership package.
+        /// </summary>
+        public static string CurrentMembershipPackage {
+            get {
+                return ResourceManager.GetString("CurrentMembershipPackage", resourceCulture);
             }
         }
         
@@ -318,6 +336,15 @@ namespace asi.asicentral.web {
         public static string Etching {
             get {
                 return ResourceManager.GetString("Etching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Executive.
+        /// </summary>
+        public static string Executive {
+            get {
+                return ResourceManager.GetString("Executive", resourceCulture);
             }
         }
         
@@ -466,6 +493,15 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to N/A.
+        /// </summary>
+        public static string NA {
+            get {
+                return ResourceManager.GetString("NA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Offset.
         /// </summary>
         public static string Offset {
@@ -502,6 +538,15 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Professional.
+        /// </summary>
+        public static string Professional {
+            get {
+                return ResourceManager.GetString("Professional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string Save {
@@ -534,6 +579,15 @@ namespace asi.asicentral.web {
         public static string SilkScreen {
             get {
                 return ResourceManager.GetString("SilkScreen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Standard.
+        /// </summary>
+        public static string Standard {
+            get {
+                return ResourceManager.GetString("Standard", resourceCulture);
             }
         }
         

@@ -432,7 +432,25 @@
   <data name="UPSOvernight" xml:space="preserve">
     <value>UPS Overnight</value>
   </data>
+  <data name="Basic" xml:space="preserve">
+    <value>Basic</value>
+  </data>
+  <data name="Executive" xml:space="preserve">
+    <value>Executive</value>
+  </data>
+  <data name="NA" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+  <data name="Professional" xml:space="preserve">
+    <value>Professional</value>
+  </data>
+  <data name="Standard" xml:space="preserve">
+    <value>Standard</value>
+  </data>
   <data name="StoreTitleCatalogsApplication" xml:space="preserve">
     <value>Catalogs - {0}</value>
+  </data>
+  <data name="CurrentMembershipPackage" xml:space="preserve">
+    <value>Current membership package</value>
   </data>
 </root>

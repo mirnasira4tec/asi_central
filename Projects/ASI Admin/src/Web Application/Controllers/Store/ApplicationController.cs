@@ -254,6 +254,7 @@ namespace asi.asicentral.web.Controllers.Store
 
                 //Update Catalog Information
                 orderDetail.Quantity = Convert.ToInt32(application.Quantity);
+                orderDetail.Cost = application.Cost;
                 StoreAddress address = order.Company.GetCompanyShippingAddress();
                 StoreService.UpdateTaxAndShipping(order);
                 orderDetail.UpdateDate = DateTime.UtcNow;
