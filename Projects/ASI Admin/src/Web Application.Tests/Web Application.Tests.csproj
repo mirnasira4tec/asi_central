@@ -110,6 +110,9 @@
     <Compile Include="Controllers\sgr\CompanyControllerTest.cs" />
     <Compile Include="Controllers\Store\StoreControllerTest.cs" />
     <Compile Include="Controllers\Store\SupplierApplicationTest.cs" />
+    <Compile Include="Controllers\Store\MagazinesApplicationTest.cs" />
+    <Compile Include="Controllers\Store\CatalogsApplicationTest.cs" />
+    <Compile Include="Controllers\Store\OrderDetailProductTest.cs" />
     <Compile Include="Controllers\TemplateControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
