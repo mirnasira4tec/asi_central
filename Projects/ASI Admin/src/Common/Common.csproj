@@ -236,6 +236,8 @@
     </Compile>
     <Compile Include="services\CreditCardService.cs" />
     <Compile Include="services\StoreService.cs" />
+    <Compile Include="util\store\asismartsales\ASISmartSalesHelper.cs" />
+    <Compile Include="util\store\catalogs\CatalogsHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

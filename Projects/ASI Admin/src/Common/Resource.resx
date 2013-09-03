@@ -507,4 +507,28 @@
   <data name="PrimaryBusinessOtherDescription" xml:space="preserve">
     <value>Primary Business Other Description</value>
   </data>
+  <data name="Basic" xml:space="preserve">
+    <value>Basic</value>
+  </data>
+  <data name="Executive" xml:space="preserve">
+    <value>Executive</value>
+  </data>
+  <data name="NA" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+  <data name="Professional" xml:space="preserve">
+    <value>Professional</value>
+  </data>
+  <data name="Standard" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="UPS2Day" xml:space="preserve">
+    <value>UPS 2nd Day</value>
+  </data>
+  <data name="UPSGround" xml:space="preserve">
+    <value>UPS Ground</value>
+  </data>
+  <data name="UPSOvernight" xml:space="preserve">
+    <value>UPS Overnight</value>
+  </data>
 </root>

@@ -133,15 +133,6 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Basic.
-        /// </summary>
-        public static string Basic {
-            get {
-                return ResourceManager.GetString("Basic", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
@@ -340,15 +331,6 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Executive.
-        /// </summary>
-        public static string Executive {
-            get {
-                return ResourceManager.GetString("Executive", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Field must be a number.
         /// </summary>
         public static string FieldIMustBeNumber {
@@ -493,15 +475,6 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to N/A.
-        /// </summary>
-        public static string NA {
-            get {
-                return ResourceManager.GetString("NA", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Offset.
         /// </summary>
         public static string Offset {
@@ -538,15 +511,6 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Professional.
-        /// </summary>
-        public static string Professional {
-            get {
-                return ResourceManager.GetString("Professional", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string Save {
@@ -579,15 +543,6 @@ namespace asi.asicentral.web {
         public static string SilkScreen {
             get {
                 return ResourceManager.GetString("SilkScreen", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Standard.
-        /// </summary>
-        public static string Standard {
-            get {
-                return ResourceManager.GetString("Standard", resourceCulture);
             }
         }
         
@@ -1029,33 +984,6 @@ namespace asi.asicentral.web {
         public static string UploadedImages {
             get {
                 return ResourceManager.GetString("UploadedImages", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to UPS 2nd Day.
-        /// </summary>
-        public static string UPS2Day {
-            get {
-                return ResourceManager.GetString("UPS2Day", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to UPS Ground.
-        /// </summary>
-        public static string UPSGround {
-            get {
-                return ResourceManager.GetString("UPSGround", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to UPS Overnight.
-        /// </summary>
-        public static string UPSOvernight {
-            get {
-                return ResourceManager.GetString("UPSOvernight", resourceCulture);
             }
         }
         

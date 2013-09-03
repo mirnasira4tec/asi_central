@@ -187,6 +187,15 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Basic.
+        /// </summary>
+        public static string Basic {
+            get {
+                return ResourceManager.GetString("Basic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Billing Address.
         /// </summary>
         public static string BillingAddress {
@@ -484,6 +493,15 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Executive.
+        /// </summary>
+        public static string Executive {
+            get {
+                return ResourceManager.GetString("Executive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fax Number.
         /// </summary>
         public static string Fax {
@@ -745,6 +763,15 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to N/A.
+        /// </summary>
+        public static string NA {
+            get {
+                return ResourceManager.GetString("NA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Number of Employee.
         /// </summary>
         public static string NumberOfEmployee {
@@ -952,6 +979,15 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Professional.
+        /// </summary>
+        public static string Professional {
+            get {
+                return ResourceManager.GetString("Professional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to I agree that upon request, I will provide the number of invoicesand other information ASI requests in order to demonstrate that I am a re-sellerof advertising specialties or related items, such as printed promotional items,trophies, awards, imprinted apparel, screen-printed or embroidered items, signsand other related items consistent with membership requirements. I under stand thata failure to do so may result in the de-listing of the company as an ASI member..
         /// </summary>
         public static string ProvideInvoiceOnDemand {
@@ -1096,6 +1132,15 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Standard.
+        /// </summary>
+        public static string Standard {
+            get {
+                return ResourceManager.GetString("Standard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to State.
         /// </summary>
         public static string State {
@@ -1141,6 +1186,15 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to UPS 2nd Day.
+        /// </summary>
+        public static string UPS2Day {
+            get {
+                return ResourceManager.GetString("UPS2Day", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to UPS Address.
         /// </summary>
         public static string UPSAddress {
@@ -1155,6 +1209,24 @@ namespace asi.asicentral {
         public static string UPSCity {
             get {
                 return ResourceManager.GetString("UPSCity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPS Ground.
+        /// </summary>
+        public static string UPSGround {
+            get {
+                return ResourceManager.GetString("UPSGround", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPS Overnight.
+        /// </summary>
+        public static string UPSOvernight {
+            get {
+                return ResourceManager.GetString("UPSOvernight", resourceCulture);
             }
         }
         
