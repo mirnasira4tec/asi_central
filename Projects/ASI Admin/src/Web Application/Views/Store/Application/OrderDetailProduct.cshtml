@@ -214,15 +214,13 @@
 	<div id="tabsubscription" class="product-information tab-pane fade">
 		<fieldset class="company-info-form">
             <legend>@Model.ProductName Information</legend>	
-            <span class="row">@Html.Raw("<strong>Basic Information</strong>")</span>
-
             @if (Model.IsStoreRequest && Model.ProductId == 46)
             {
 		    <span class="label-row span11">
 			    <label class="control-label" for="Cost">@asi.asicentral.web.Resource.CurrentMembershipPackage</label>
             </span>
             <span class="label-row">
-			    @Html.DropDownListFor(model => model.Cost, asi.asicentral.web.model.store.OrderDetailApplicationModel.GetCurrentMembershipOptions(), new { @class = "tab1" }) @Html.ValidationMessageFor(model => model.Cost)
+			    @Html.DropDownListFor(model => model.Cost, asi.asicentral.util.store.ASISmartSalesHelper.GetCurrentMembershipOptions(), new { @class = "tab1" }) @Html.ValidationMessageFor(model => model.Cost)
 		    </span>
             }
             else
