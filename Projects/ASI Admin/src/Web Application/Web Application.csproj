@@ -200,6 +200,7 @@
     <Compile Include="Controllers\Store\ApplicationController.cs" />
     <Compile Include="Controllers\Store\ContextController.cs" />
     <Compile Include="Controllers\Store\OrdersController.cs" />
+    <Compile Include="Controllers\Store\ProductsController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyResolver.cs" />
@@ -322,6 +323,7 @@
     <Content Include="Views\Store\Context\References.cshtml" />
     <Content Include="Views\Store\Application\Catalogs.cshtml" />
     <Content Include="Views\Store\Application\OrderDetailProduct.cshtml" />
+    <Content Include="Views\Store\Products\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

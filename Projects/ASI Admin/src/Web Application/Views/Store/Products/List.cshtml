@@ -1,0 +1,55 @@
+﻿@model IList<asi.asicentral.model.store.ContextProduct>
+
+@{
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+
+<h1>Product List</h1>
+<p>Used to show the list of available products for the user to choose from</p>
+@using (Html.BeginForm()) {
+@Html.AntiForgeryToken()
+<table class="table table-bordered table-condensed">
+    <thead><tr><th>Name</th><th>Is Available</th><th>Next Available Date</th></tr></thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <tr>
+                <td>@Html.HiddenFor(m => Model[i].Id) 
+                    @Html.TextBoxFor(m => Model[i].Name, new { @readonly = "readonly" })
+                </td>
+                <td>@Html.CheckBoxFor(model => Model[i].IsAvailable) </td>
+                <td> 
+                    <div class="input-append">
+                        <input type="date" value = "@Model[i].NextAvailableDate" Id="NextAvaliableDate_@i"  data-format="dd/MM/yyyy" />
+                        <input type="hidden" value = "@Model[i].NextAvailableDate" Id="hidden_NextAvaliableDate_@i"  />
+                        @*@Html.EditorFor(m => Model[i].NextAvailableDate, new { @id = "nextDate_" + i} )*@
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<input type="submit" class="btn btn-primary" />
+}
+<div style="padding-bottom:20px" />
+
+@section scripts { 
+     @Scripts.Render("~/bundles/form")
+    <script>
+    $(document).ready(function () {
+        //$("input[id^='NextAvaliableDate']").datepicker();
+
+        //$("input[id^='NextAvaliableDate']").datepicker().on('changeDate', function (ev) {
+        //    debugger;
+        //    var x = ev.date.valueOf()
+        //    $("#hidden_NextAvaliableDate_0").val($(this)[0].value)
+        //  });
+
+        //$("input[id^='NextAvaliableDate']").blur( function(e) {
+            
+
+        //});
+
+    });
+    </script>
+}
