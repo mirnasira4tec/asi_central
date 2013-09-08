@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,8 @@ namespace asi.asicentral.model.store
         public bool IsSubscription { get; set; }
         public string NotificationEmails { get; set; }
         public bool IsAvailable { get; set; }
+
+        [DataType(DataType.Date)]
         public DateTime? NextAvailableDate { get; set; }
         public decimal? Weight { get; set; }
         public string Origin { get; set; }
