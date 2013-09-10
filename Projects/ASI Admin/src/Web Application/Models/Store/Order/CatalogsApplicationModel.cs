@@ -290,7 +290,11 @@ namespace asi.asicentral.web.model.store
             Price = order.Total;
             IsCompleted = order.IsCompleted;
             MembershipModelHelper.PopulateModel(this, order);
-            if(order.Company != null) country = order.Company.GetCompanyShippingAddress().Country;
+            if (order.Company != null)
+            {
+                StoreAddress address = order.Company.GetCompanyShippingAddress();
+                if (address != null) country = address.Country;
+            }
             this.shippingOptions = catalogsHelper.GetShippingOptions(origin, country);
         }
     }

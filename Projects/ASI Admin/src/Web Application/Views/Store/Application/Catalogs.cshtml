@@ -263,10 +263,12 @@
 
             <div id="showArtworkOptions">
                 <span class="row">
-                <label>@Html.RadioButtonFor(model => model.ArtworkOption, "ASI", new { id = "ASI" }) @Html.Raw(asi.asicentral.web.Resource.ArtworkOptionforASI)</label>
-                <label>@Html.RadioButtonFor(model => model.ArtworkOption, "PRINT", new { id = "PRINT" }) @Html.Raw(asi.asicentral.web.Resource.ArtworkOptionforPRINT)</label>
+                <label>@Html.RadioButtonFor(model => model.ArtworkOption, "UPLOAD", new { id = "UPLOAD" }) @Html.Raw(asi.asicentral.web.Resource.ArtworkOptionforUPLOAD)</label>
+                <label>@Html.RadioButtonFor(model => model.ArtworkOption, "EMAIL", new { id = "EMAIL" }) @Html.Raw(asi.asicentral.web.Resource.ArtworkOptionforEMAIL)</label>
                 </span>
 	        </div>
+            if(Model.LogoPath != null)
+            {
             <span class="row">@Html.Raw("<strong>Logo Information</strong>")</span>
              <span class="label-row span11">
 				@Html.LabelFor(m => m.IsUploadImageTobeUsed) 
@@ -274,8 +276,9 @@
 			</span>
 			<span class="label-row">
 				@Html.CheckBoxFor(m => m.IsUploadImageTobeUsed)
-                <a href="/Media/List?path=/Uploads">@Html.Raw(asi.asicentral.web.Resource.UploadedImages)</a>
+                <a href="/Media/Download?file=/uploads/catalogs/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a>
 			</span>
+            }
             <div id="frontCover">
             <span class="row">@Html.Raw("<strong>New Copy - Standard Type</strong>")</span>
                 <span class="label-row span11">
@@ -401,15 +404,15 @@
             var areaVal = $('#Area').val();
             var artworkOption = $('input:radio[name=ArtworkOption]:checked').val();
 
-            if ((imprintVal == "20" || (imprintVal == "21" && artworkOption == "PRINT")) && areaVal == "8") {
+            if ((imprintVal == "20" || imprintVal == "21") && areaVal == "8") {
                 $('#frontCover').show();
                 $('#backCover').hide();
             }
-            else if ((imprintVal == "20" || (imprintVal == "21" && artworkOption == "PRINT")) && areaVal == "9") {
+            else if ((imprintVal == "20" || imprintVal == "21") && areaVal == "9") {
                 $('#frontCover').hide();
                 $('#backCover').show();
             }
-            else if ((imprintVal == "20" || (imprintVal == "21" && artworkOption == "PRINT")) && areaVal == "25") {
+            else if ((imprintVal == "20" || imprintVal == "21") && areaVal == "25") {
                 $('#frontCover').show();
                 $('#backCover').show();
             }

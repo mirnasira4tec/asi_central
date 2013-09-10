@@ -106,20 +106,20 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to I have artwork already on file with ASI.
+        ///   Looks up a localized string similar to I would like to EMAIL Camera Ready Artwork to &lt;a href=&quot;mailto:catalogart@asicentral.com&quot;&gt;catalogart@asicentral.com&lt;/a&gt;.
         /// </summary>
-        public static string ArtworkOptionforASI {
+        public static string ArtworkOptionforEMAIL {
             get {
-                return ResourceManager.GetString("ArtworkOptionforASI", resourceCulture);
+                return ResourceManager.GetString("ArtworkOptionforEMAIL", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to I will enter text to print on catalog.
+        ///   Looks up a localized string similar to I would like to UPLOAD Camera Ready Artwork.
         /// </summary>
-        public static string ArtworkOptionforPRINT {
+        public static string ArtworkOptionforUPLOAD {
             get {
-                return ResourceManager.GetString("ArtworkOptionforPRINT", resourceCulture);
+                return ResourceManager.GetString("ArtworkOptionforUPLOAD", resourceCulture);
             }
         }
         
@@ -979,11 +979,11 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uploaded Images.
+        ///   Looks up a localized string similar to Uploaded Image.
         /// </summary>
-        public static string UploadedImages {
+        public static string UploadedImage {
             get {
-                return ResourceManager.GetString("UploadedImages", resourceCulture);
+                return ResourceManager.GetString("UploadedImage", resourceCulture);
             }
         }
         
