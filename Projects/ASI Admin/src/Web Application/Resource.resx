@@ -411,17 +411,17 @@
   <data name="Website" xml:space="preserve">
     <value>Website</value>
   </data>
-  <data name="ArtworkOptionforASI" xml:space="preserve">
-    <value>I have artwork already on file with ASI</value>
+  <data name="ArtworkOptionforUPLOAD" xml:space="preserve">
+    <value>I would like to UPLOAD Camera Ready Artwork</value>
   </data>
-  <data name="ArtworkOptionforPRINT" xml:space="preserve">
-    <value>I will enter text to print on catalog</value>
+  <data name="ArtworkOptionforEMAIL" xml:space="preserve">
+    <value>I would like to EMAIL Camera Ready Artwork to &lt;a href="mailto:catalogart@asicentral.com"&gt;catalogart@asicentral.com&lt;/a&gt;</value>
   </data>
   <data name="ShippingMethod" xml:space="preserve">
     <value>Shipping Method</value>
   </data>
-  <data name="UploadedImages" xml:space="preserve">
-    <value>Uploaded Images</value>
+  <data name="UploadedImage" xml:space="preserve">
+    <value>Uploaded Image</value>
   </data>
   <data name="StoreTitleCatalogsApplication" xml:space="preserve">
     <value>Catalogs - {0}</value>
