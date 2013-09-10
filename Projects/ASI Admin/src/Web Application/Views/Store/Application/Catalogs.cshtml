@@ -267,15 +267,19 @@
                 <label>@Html.RadioButtonFor(model => model.ArtworkOption, "EMAIL", new { id = "EMAIL" }) @Html.Raw(asi.asicentral.web.Resource.ArtworkOptionforEMAIL)</label>
                 </span>
 	        </div>
+            if(Model.LogoPath != null)
+            {
             <span class="row">@Html.Raw("<strong>Logo Information</strong>")</span>
              <span class="label-row span11">
 				@Html.LabelFor(m => m.IsUploadImageTobeUsed) 
                 @Html.LabelFor(m => m.LogoPath) 
+                }
 			</span>
 			<span class="label-row">
 				@Html.CheckBoxFor(m => m.IsUploadImageTobeUsed)
                 <a href="/Media/Download?file=/uploads/catalogs/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a>
 			</span>
+            }
             <div id="frontCover">
             <span class="row">@Html.Raw("<strong>New Copy - Standard Type</strong>")</span>
                 <span class="label-row span11">
