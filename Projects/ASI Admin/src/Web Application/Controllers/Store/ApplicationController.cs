@@ -187,8 +187,7 @@ namespace asi.asicentral.web.Controllers.Store
                 storeDetailCatalog.ImprintId = Convert.ToInt32(application.Imprint);
                 if (application.ProductId == 39) storeDetailCatalog.SupplementId = Convert.ToInt32(application.Supplement);
                 if (storeDetailCatalog.ImprintId != 18) storeDetailCatalog.IsArtworkToProof = application.IsArtworkToProof;
-                storeDetailCatalog.IsUploadImageTobeUsed = application.IsUploadImageTobeUsed;
-
+                
                 if ((storeDetailCatalog.AreaId == 8 || storeDetailCatalog.AreaId == 25) && (storeDetailCatalog.ImprintId == 20 || (storeDetailCatalog.ImprintId == 21 && storeDetailCatalog.ArtworkOption == "PRINT")))
                 {
                     storeDetailCatalog.Line1 = application.Line1;

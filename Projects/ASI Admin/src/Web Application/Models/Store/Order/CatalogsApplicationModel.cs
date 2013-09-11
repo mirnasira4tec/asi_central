@@ -153,9 +153,6 @@ namespace asi.asicentral.web.model.store
         [Display(ResourceType = typeof(asi.asicentral.web.Resource), Name = "IsArtworkToProof")]
         public bool IsArtworkToProof { get; set; }
 
-        [Display(ResourceType = typeof(asi.asicentral.web.Resource), Name = "IsUploadImageTobeUsed")]
-        public bool IsUploadImageTobeUsed { get; set; }
-
         [Display(ResourceType = typeof(asi.asicentral.web.Resource), Name = "ShippingMethod")]
         public string ShippingMethod { get; set; }
 
@@ -265,7 +262,6 @@ namespace asi.asicentral.web.model.store
                 this.BackLine3 = storeDetailCatalog.BackLine3;
                 this.BackLine4 = storeDetailCatalog.BackLine4;
             }
-            this.IsUploadImageTobeUsed = storeDetailCatalog.IsUploadImageTobeUsed;
             this.LogoPath = storeDetailCatalog.LogoPath;
 
             if (orderdetail.Product != null)

@@ -80,7 +80,6 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             catalogDetail.ImprintId = 21;
             catalogDetail.ColorId = 26;
             catalogDetail.IsArtworkToProof = true;
-            catalogDetail.IsUploadImageTobeUsed = true;
             catalogDetail.ArtworkOption = "PRINT";
             catalogDetail.Line1 = "Line1";
             catalogDetail.Line2 = "Line2";
@@ -121,7 +120,6 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             model.Imprint = "21";
             model.Color = "11";
             model.IsArtworkToProof = false;
-            model.IsUploadImageTobeUsed = false;
             model.Line1 = "Line11";
             model.Line2 = "Line21";
             model.Line3 = "Line31";
@@ -160,7 +158,6 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Assert.AreEqual(catalogDetail.SupplementId.ToString(), model.Supplement);
             Assert.AreEqual(catalogDetail.ImprintId.ToString(), model.Imprint);
             Assert.AreEqual(catalogDetail.IsArtworkToProof, model.IsArtworkToProof);
-            Assert.AreEqual(catalogDetail.IsUploadImageTobeUsed, model.IsUploadImageTobeUsed);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(1));
 
             // user clicks reject - order should be updated to reject

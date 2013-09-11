@@ -394,15 +394,6 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload Image to be used.
-        /// </summary>
-        public static string IsUploadImageTobeUsed {
-            get {
-                return ResourceManager.GetString("IsUploadImageTobeUsed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Line 1.
         /// </summary>
         public static string Line1 {

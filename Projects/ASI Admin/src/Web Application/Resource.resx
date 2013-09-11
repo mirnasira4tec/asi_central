@@ -381,9 +381,6 @@
   <data name="IsArtworkToProof" xml:space="preserve">
     <value>Artwork to Proof</value>
   </data>
-  <data name="IsUploadImageTobeUsed" xml:space="preserve">
-    <value>Upload Image to be used</value>
-  </data>
   <data name="Line1" xml:space="preserve">
     <value>Line 1</value>
   </data>
