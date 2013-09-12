@@ -16,8 +16,7 @@ namespace asi.asicentral.util.store
         public static readonly int[] CATALOG_COVER_PRODUCT_35 = { 1, 6 };
         public static readonly int[] CATALOG_COVER_PRODUCT_36_38 = { 1 };
         public static readonly int[] CATALOG_COVER_PRODUCT_37 = { 1, 7 };
-        public static readonly int[] CATALOG_COVER_PRODUCT_39 = { 1, 2 };
-        public static readonly int[] CATALOG_COVER_PRODUCT_40 = { 1, 2, 3, 4 ,5 };
+        public static readonly int[] CATALOG_COVER_PRODUCT_39_40 = { 1, 2, 3, 4 ,5 };
         //Area options
         public static readonly int[] CATALOG_AREA_PRODUCT_35_37_38 = { 8 };
         public static readonly int[] CATALOG_AREA_PRODUCT_36_39_40 = { 8, 9, 25 };
@@ -99,11 +98,11 @@ namespace asi.asicentral.util.store
                                         selectedItems.Add(new SelectListItem() { Text = option.Name, Value = option.Id.ToString(), Selected = false });
                                     break;
                                 case 39:
-                                    if (CATALOG_COVER_PRODUCT_39.Contains(option.Id))
+                                    if (CATALOG_COVER_PRODUCT_39_40.Contains(option.Id))
                                         selectedItems.Add(new SelectListItem() { Text = option.Name, Value = option.Id.ToString(), Selected = false });
                                     break;
                                 case 40:
-                                    if (CATALOG_COVER_PRODUCT_40.Contains(option.Id))
+                                    if (CATALOG_COVER_PRODUCT_39_40.Contains(option.Id))
                                         selectedItems.Add(new SelectListItem() { Text = option.Name, Value = option.Id.ToString(), Selected = false });
                                     break;
                             }
