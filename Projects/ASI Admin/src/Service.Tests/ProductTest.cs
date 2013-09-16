@@ -742,6 +742,39 @@ namespace asi.asicentral.Tests
                 Assert.IsNull(context);
             }
         }
+
+        [TestMethod]
+        public void ESPAdvertisingCrud()
+        {
+            int newId = 1;
+            using (var objectContext = new StoreContext())
+            {
+                int recordCount = objectContext.StoreDetailESPAdvertisings.Count();
+                Assert.IsTrue(recordCount == 0);
+                StoreDetailESPAdvertising advert = new StoreDetailESPAdvertising()
+                {
+                    OrderDetailId = newId,
+                    CreateDate = DateTime.UtcNow,
+                    UpdateDate = DateTime.UtcNow,
+                    UpdateSource = "Test Case",
+                };
+                objectContext.StoreDetailESPAdvertisings.Add(advert);
+                objectContext.SaveChanges();
+            }
+            using (var objectContext = new StoreContext())
+            {
+                StoreDetailESPAdvertising advert = objectContext.StoreDetailESPAdvertisings.Where(ctxt => ctxt.OrderDetailId == newId).SingleOrDefault();
+                Assert.IsNotNull(advert);
+                objectContext.StoreDetailESPAdvertisings.Remove(advert);
+                objectContext.SaveChanges();
+            }
+            using (var objectContext = new StoreContext())
+            {
+                StoreDetailESPAdvertising advert = objectContext.StoreDetailESPAdvertisings.Where(ctxt => ctxt.OrderDetailId == newId).SingleOrDefault();
+                Assert.IsNull(advert);
+            }
+        }
+
         [TestMethod]
         public void TestLookups()
         {
