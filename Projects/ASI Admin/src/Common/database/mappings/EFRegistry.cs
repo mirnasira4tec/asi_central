@@ -192,6 +192,9 @@ namespace asi.asicentral.database.mappings
             For<IRepository<StoreOrderDetail>>().Use<EFRepository<StoreOrderDetail>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
+            For<IRepository<StoreDetailESPAdvertising>>().Use<EFRepository<StoreDetailESPAdvertising>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
             For<IRepository<StoreTieredProductPricing>>().Use<EFRepository<StoreTieredProductPricing>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
