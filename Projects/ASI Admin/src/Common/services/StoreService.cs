@@ -149,14 +149,16 @@ namespace asi.asicentral.services
                         if (string.IsNullOrEmpty(orderDetail.ShippingMethod)) orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity);
                         else
                         {
+                            bool isGiftSupplement = false;
                             if (orderDetail.Product.Id == 39)
                             {
                                 StoreDetailCatalog catalogDetails = this.GetAll<StoreDetailCatalog>(false).Where(detail => detail.OrderDetailId == orderDetail.Id).SingleOrDefault();
                                 if (catalogDetails != null && catalogDetails.SupplementId == 24)
-                                    orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity, orderDetail.ShippingMethod, true, 0.38m);
+                                    isGiftSupplement = true;
                             }
-                            else
-                            orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity, orderDetail.ShippingMethod);
+
+                            if(!isGiftSupplement) orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity, orderDetail.ShippingMethod);
+                            else orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity, orderDetail.ShippingMethod, true, 0.06m);
                         }
                     }
 
@@ -224,7 +226,12 @@ namespace asi.asicentral.services
             if (product == null || country == null) throw new Exception("Invalid call to the GetShippingCost method");
             if (product.HasShipping)
             {
-                if (!isGiftSupplement) weight = product.Weight;
+                if (product.Weight != null)
+                {
+                    if (!isGiftSupplement) weight = product.Weight;
+                    else if (weight != null) weight += product.Weight;
+                }
+
                 if (weight != null && weight.HasValue && !string.IsNullOrEmpty(product.Origin))
                 {
                     if (shippingMethod == null) throw new Exception("You need to pass a shipping method for this product");
