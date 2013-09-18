@@ -149,14 +149,16 @@ namespace asi.asicentral.services
                         if (string.IsNullOrEmpty(orderDetail.ShippingMethod)) orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity);
                         else
                         {
+                            bool isGiftSupplement = false;
                             if (orderDetail.Product.Id == 39)
                             {
                                 StoreDetailCatalog catalogDetails = this.GetAll<StoreDetailCatalog>(false).Where(detail => detail.OrderDetailId == orderDetail.Id).SingleOrDefault();
                                 if (catalogDetails != null && catalogDetails.SupplementId == 24)
-                                    orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity, orderDetail.ShippingMethod, true, 0.38m);
+                                    isGiftSupplement = true;
                             }
-                            else
-                            orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity, orderDetail.ShippingMethod);
+
+                            if(!isGiftSupplement) orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity, orderDetail.ShippingMethod);
+                            else orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity, orderDetail.ShippingMethod, true, 0.38m);
                         }
                     }
 
