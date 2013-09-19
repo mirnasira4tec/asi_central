@@ -28,6 +28,8 @@ namespace asi.asicentral.model.store
         public string Fax { get; set; }
         public string Email { get; set; }
         public string WebURL { get; set; }
+        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
+        public string ASINumber { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
