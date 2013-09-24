@@ -531,4 +531,34 @@
   <data name="UPSOvernight" xml:space="preserve">
     <value>UPS Overnight</value>
   </data>
+  <data name="BannerAd" xml:space="preserve">
+    <value>Banner Ad</value>
+  </data>
+  <data name="Cost_1995_50_Products_PerYear" xml:space="preserve">
+    <value>$1,995/year for 50 products</value>
+  </data>
+  <data name="Cost_300_5_Products_PerMonth" xml:space="preserve">
+    <value>$300/month for 5 products</value>
+  </data>
+  <data name="Cost_400_5_Products_PerMonth" xml:space="preserve">
+    <value>$400/month for 5 products</value>
+  </data>
+  <data name="SelectNumberOfProducts" xml:space="preserve">
+    <value>Select number of products</value>
+  </data>
+  <data name="TitleAd" xml:space="preserve">
+    <value>Title Ad</value>
+  </data>
+  <data name="TowerTuesdayAd" xml:space="preserve">
+    <value>Tower Tuesday Ad</value>
+  </data>
+  <data name="BuddyList_199" xml:space="preserve">
+    <value>Buddy List $199/mo.</value>
+  </data>
+  <data name="InstantMessenger_450" xml:space="preserve">
+    <value>Instant Messenger $450/mo.</value>
+  </data>
+  <data name="MainChatRoom_750" xml:space="preserve">
+    <value>Main Chat Room $750/mo.</value>
+  </data>
 </root>

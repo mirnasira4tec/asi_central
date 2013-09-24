@@ -187,6 +187,15 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Banner Ad.
+        /// </summary>
+        public static string BannerAd {
+            get {
+                return ResourceManager.GetString("BannerAd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Basic.
         /// </summary>
         public static string Basic {
@@ -273,6 +282,15 @@ namespace asi.asicentral {
         public static string BillingZip {
             get {
                 return ResourceManager.GetString("BillingZip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Buddy List $199/mo..
+        /// </summary>
+        public static string BuddyList_199 {
+            get {
+                return ResourceManager.GetString("BuddyList_199", resourceCulture);
             }
         }
         
@@ -466,6 +484,33 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to $1,995/year for 50 products.
+        /// </summary>
+        public static string Cost_1995_50_Products_PerYear {
+            get {
+                return ResourceManager.GetString("Cost_1995_50_Products_PerYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $300/month for 5 products.
+        /// </summary>
+        public static string Cost_300_5_Products_PerMonth {
+            get {
+                return ResourceManager.GetString("Cost_300_5_Products_PerMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $400/month for 5 products.
+        /// </summary>
+        public static string Cost_400_5_Products_PerMonth {
+            get {
+                return ResourceManager.GetString("Cost_400_5_Products_PerMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Country.
         /// </summary>
         public static string Country {
@@ -610,6 +655,15 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Instant Messenger $450/mo..
+        /// </summary>
+        public static string InstantMessenger_450 {
+            get {
+                return ResourceManager.GetString("InstantMessenger_450", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to IP Address.
         /// </summary>
         public static string IPAddress {
@@ -750,6 +804,15 @@ namespace asi.asicentral {
         public static string LineNames {
             get {
                 return ResourceManager.GetString("LineNames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Main Chat Room $750/mo..
+        /// </summary>
+        public static string MainChatRoom_750 {
+            get {
+                return ResourceManager.GetString("MainChatRoom_750", resourceCulture);
             }
         }
         
@@ -1006,6 +1069,15 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select number of products.
+        /// </summary>
+        public static string SelectNumberOfProducts {
+            get {
+                return ResourceManager.GetString("SelectNumberOfProducts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sell Through Affiliate.
         /// </summary>
         public static string SellThruAffiliate {
@@ -1173,6 +1245,24 @@ namespace asi.asicentral {
         public static string Summary {
             get {
                 return ResourceManager.GetString("Summary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title Ad.
+        /// </summary>
+        public static string TitleAd {
+            get {
+                return ResourceManager.GetString("TitleAd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tower Tuesday Ad.
+        /// </summary>
+        public static string TowerTuesdayAd {
+            get {
+                return ResourceManager.GetString("TowerTuesdayAd", resourceCulture);
             }
         }
         
