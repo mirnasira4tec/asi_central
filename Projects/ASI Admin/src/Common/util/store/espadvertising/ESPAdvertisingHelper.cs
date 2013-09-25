@@ -9,6 +9,9 @@ namespace asi.asicentral.util.store
 {
     public class ESPAdvertisingHelper
     {
+        public static readonly string[] ESPAdvertising_BANNER_TILE_TOWER_COST = { "750","450","1500"};
+        public static readonly string[] ESPAdvertising_PROMO_CAFE_COST = { "750", "199", "450" };
+
         public static IList<SelectListItem> GetAdTypeOptions(string value = null)
         {
             IList<SelectListItem> adTypeOptions = new List<SelectListItem>();
