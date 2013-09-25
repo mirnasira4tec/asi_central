@@ -16,8 +16,10 @@ namespace asi.asicentral.web.Controllers.Store
         public const string COMMAND_SAVE = "Save";
         public const string COMMAND_REJECT = "Reject";
         public const string COMMAND_ACCEPT = "Accept";
-        public static readonly int[] DISTRIBUTOR_ORDERDETAIL_PRODUCT_IDS = { 45, 46 };
-
+        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 45, 46 };
+        public static readonly int[] DISTRIBUTOR_CATALOG_PRODUCT_IDS = { 35, 36, 37, 38, 39, 40, 41 };
+        public static readonly int[] SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS = { 47, 48, 49, 50, 51, 52, 53, 54 };
+        
         public IStoreService StoreService { get; set; }
         public IFulfilmentService FulfilmentService { get; set; }
         public ICreditCardService CreditCardService { get; set; }
@@ -38,9 +40,17 @@ namespace asi.asicentral.web.Controllers.Store
             else if(orderDetail.Product != null && orderDetail.Product.Type == "Product")
             {
                 if (orderDetail.MagazineSubscriptions != null && orderDetail.MagazineSubscriptions.Count > 0) return View("../Store/Application/Magazines", new MagazinesApplicationModel(orderDetail, StoreService));
-                StoreDetailCatalog storeDetailCatalog = StoreService.GetAll<StoreDetailCatalog>().Where(catalog => catalog.OrderDetailId == orderDetail.Id).SingleOrDefault();
-                if (storeDetailCatalog != null) return View("../Store/Application/Catalogs", new CatalogsApplicationModel(orderDetail, storeDetailCatalog, StoreService));
-                if (DISTRIBUTOR_ORDERDETAIL_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/OrderDetailProduct", new OrderDetailApplicationModel(orderDetail));
+                else if (DISTRIBUTOR_CATALOG_PRODUCT_IDS.Contains(orderDetail.Product.Id))
+                {
+                    StoreDetailCatalog storeDetailCatalog = StoreService.GetAll<StoreDetailCatalog>().Where(catalog => catalog.OrderDetailId == orderDetail.Id).SingleOrDefault();
+                    if (storeDetailCatalog != null) return View("../Store/Application/Catalogs", new CatalogsApplicationModel(orderDetail, storeDetailCatalog, StoreService));
+                }
+                else if (SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
+                {
+                    StoreDetailESPAdvertising detailESPAdvertising = StoreService.GetAll<StoreDetailESPAdvertising>().Where(espadvertising => espadvertising.OrderDetailId == orderDetail.Id).SingleOrDefault();
+                    if (detailESPAdvertising != null) return View("../Store/Application/ESPAdvertising", new ESPAdvertisingModel(orderDetail, detailESPAdvertising));
+                }
+                else if(ORDERDETAIL_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/OrderDetailProduct", new OrderDetailApplicationModel(orderDetail));
             }
             throw new Exception("Retieved an unknown type of application");
         }

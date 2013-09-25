@@ -426,4 +426,16 @@
   <data name="CurrentMembershipPackage" xml:space="preserve">
     <value>Current membership package</value>
   </data>
+  <data name="NumberOfItems" xml:space="preserve">
+    <value>Item Numbers</value>
+  </data>
+  <data name="AdSelectDate" xml:space="preserve">
+    <value>Select Date</value>
+  </data>
+  <data name="AdType" xml:space="preserve">
+    <value>Ad Type</value>
+  </data>
+  <data name="NumberOfProducts" xml:space="preserve">
+    <value>Number of Products</value>
+  </data>
 </root>

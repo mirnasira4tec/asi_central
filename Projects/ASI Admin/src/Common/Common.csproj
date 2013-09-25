@@ -240,6 +240,7 @@
     <Compile Include="services\StoreService.cs" />
     <Compile Include="util\store\asismartsales\ASISmartSalesHelper.cs" />
     <Compile Include="util\store\catalogs\CatalogsHelper.cs" />
+    <Compile Include="util\store\espadvertising\ESPAdvertisingHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

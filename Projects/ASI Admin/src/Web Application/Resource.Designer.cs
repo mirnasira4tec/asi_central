@@ -88,6 +88,24 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select Date.
+        /// </summary>
+        public static string AdSelectDate {
+            get {
+                return ResourceManager.GetString("AdSelectDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ad Type.
+        /// </summary>
+        public static string AdType {
+            get {
+                return ResourceManager.GetString("AdType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Area.
         /// </summary>
         public static string Area {
@@ -462,6 +480,24 @@ namespace asi.asicentral.web {
         public static string LogoPath {
             get {
                 return ResourceManager.GetString("LogoPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Numbers.
+        /// </summary>
+        public static string NumberOfItems {
+            get {
+                return ResourceManager.GetString("NumberOfItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of Products.
+        /// </summary>
+        public static string NumberOfProducts {
+            get {
+                return ResourceManager.GetString("NumberOfProducts", resourceCulture);
             }
         }
         
