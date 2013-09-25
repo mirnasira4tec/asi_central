@@ -26,6 +26,12 @@ namespace asi.asicentral.database.mappings.store
 
             this.Property(t => t.UpdateDate)
                 .HasColumnName("UpdateDateUTC");
+
+           //Relationship
+            HasMany(t => t.ESPAdvertisingItems)
+                .WithOptional()
+                .HasForeignKey(t => t.OrderDetailId)
+                .WillCascadeOnDelete();
         }
     }
 }

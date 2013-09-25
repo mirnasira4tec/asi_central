@@ -112,6 +112,7 @@
     <Compile Include="database\mappings\store\LookProductLineMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailDistributorMembershipMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailESPAdvertisingMap.cs" />
+    <Compile Include="database\mappings\store\StoreESPAdvertisingItemMap.cs" />
     <Compile Include="database\mappings\store\StoreIndividualMap.cs" />
     <Compile Include="database\mappings\store\StoreCreditCardMap.cs" />
     <Compile Include="database\mappings\store\StoreCompanyMap.cs" />
@@ -210,6 +211,7 @@
     <Compile Include="model\store\StoreDetailApplication.cs" />
     <Compile Include="model\store\StoreDetailSupplierMembership.cs" />
     <Compile Include="model\store\StoreDetailESPAdvertising.cs" />
+    <Compile Include="model\store\StoreESPAdvertisingItem.cs" />
     <Compile Include="model\store\StoreIndividual.cs" />
     <Compile Include="model\store\StoreMagazineSubscription.cs" />
     <Compile Include="model\store\StoreOrder.cs" />
