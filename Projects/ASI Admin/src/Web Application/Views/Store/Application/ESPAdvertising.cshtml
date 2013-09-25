@@ -12,7 +12,7 @@
 {
 <p>@Model.ProductName product purchase fee is @Model.Price.ToString("C")</p>
 }
-@using (Html.BeginForm("EditOrderDetailProduct", "Application"))
+@using (Html.BeginForm("EditESPAdvertising", "Application"))
 {        
 @Html.AntiForgeryToken()
 @Html.HiddenFor(m => m.ProductName)
@@ -219,11 +219,11 @@
                 case 48:
                     <span class="label-row">
 				        @Html.Label(asi.asicentral.web.Resource.AdType) 
-                        @Html.LabelFor(m => m.LogoPath) 
+                        @if(Model.LogoPath != string.Empty) { @Html.LabelFor(m => m.LogoPath) }
 			        </span>
 			        <span class="label-row">
-				         @Html.DropDownListFor(model => model.Products_OptionId_First, asi.asicentral.util.store.ESPAdvertisingHelper.GetAdTypeOptions())
-                        <a href="/Media/Download?file=/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a>
+				        @Html.DropDownListFor(model => model.Products_OptionId_First, asi.asicentral.util.store.ESPAdvertisingHelper.GetAdTypeOptions())
+                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
 			        </span>
                     break;
                 case 49:
@@ -255,58 +255,53 @@
 			        </span>
                     <span class="row">Html.Raw("<strong>Rush Section:</strong>")</span>
                     <span class="label-row">
-				        
+				         @Html.LabelFor(m => m.NumberOfItems_Third) 
                         @Html.LabelFor(m => m.Products_OptionId_Third) 
 			        </span>
 			        <span class="label-row">
-				        @Html.DropDownListFor(model => model.Products_OptionId_First, asi.asicentral.util.store.ESPAdvertisingHelper.GetNumberOfProducts_Clearance())
+				        @Html.EditorFor(m => m.NumberOfItems_Third) @Html.ValidationMessageFor(m => m.NumberOfItems_Third)
                         @Html.DropDownListFor(model => model.Products_OptionId_Third, asi.asicentral.util.store.ESPAdvertisingHelper.GetNumberOfProducts_Rush())
 			        </span>
-                    //NumberOfItems_First = espAdvertising.FirstItemList;
-                    //Products_OptionId_First = espAdvertising.FirstOptionId;
-                    //NumberOfItems_Second = espAdvertising.SecondItemList;
-                    //Products_OptionId_Second = espAdvertising.SecondOptionId;
-                    //NumberOfItems_Third = espAdvertising.ThirdItemList;
-                    //Products_OptionId_Third = espAdvertising.ThirdOptionId;
                     break;
                 case 51:
                     <span class="label-row">
-                        @Html.LabelFor(m => m.LogoPath) 
+                        @if(Model.LogoPath != string.Empty) { @Html.LabelFor(m => m.LogoPath) }
 			        </span>
 			        <span class="label-row">
-                        <a href="/Media/Download?file=/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a>
+                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
 			        </span>
                     break;
                 case 52:
-                    //AdSelectedDate = espAdvertising.AdSelectedDate;
-                    //LogoPath = espAdvertising.LogoPath;
+                    <span class="label-row">
+                        @Html.LabelFor(m => m.AdSelectedDate) 
+                        @if(Model.LogoPath != string.Empty) { @Html.LabelFor(m => m.LogoPath) }
+			        </span>
+			        <span class="label-row">
+                        @Html.EditorFor(m => m.AdSelectedDate, new { @class = "dateField" }) @Html.ValidationMessageFor(m => m.AdSelectedDate) <i class="icon-remove date-clear" id="@Model.AdSelectedDate"></i>
+                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
+			        </span>
                     break;
                 case 53:
                     <span class="label-row">
 				        @Html.LabelFor(m => m.Products_OptionId_First) 
                         @Html.LabelFor(m => m.NumberOfItems_First) 
-                        @Html.LabelFor(m => m.LogoPath) 
+                        @if(Model.LogoPath != string.Empty) { @Html.LabelFor(m => m.LogoPath) }
 			        </span>
 			        <span class="label-row">
                         @Html.DropDownListFor(model => model.Products_OptionId_First, asi.asicentral.util.store.ESPAdvertisingHelper.GetNumberOfProducts_Clearance())
                         @Html.EditorFor(m => m.NumberOfItems_First) @Html.ValidationMessageFor(m => m.NumberOfItems_First)
-                        <a href="/Media/Download?file=/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a>
+                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
 			        </span>
-                    //Products_OptionId_First = espAdvertising.FirstOptionId;
-                    //NumberOfItems_First = espAdvertising.FirstItemList;
-                    //LogoPath = espAdvertising.LogoPath;
                     break;
                 case 54:
                     <span class="label-row">
 				        @Html.LabelFor(m => m.Products_OptionId_First) 
-                        @Html.LabelFor(m => m.LogoPath) 
+                        @if(Model.LogoPath != string.Empty) { @Html.LabelFor(m => m.LogoPath) }
 			        </span>
 			        <span class="label-row">
 				         @Html.DropDownListFor(model => model.Products_OptionId_First, asi.asicentral.util.store.ESPAdvertisingHelper.GetESPOnlineOptions())
-                        <a href="/Media/Download?file=/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a>
+                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
 			        </span>
-                    //Products_OptionId_First = espAdvertising.FirstOptionId;
-                    //LogoPath = espAdvertising.LogoPath;
                     break;
             }
 		</fieldset>    
@@ -319,6 +314,12 @@
     @Scripts.Render("~/bundles/form")
     <script src="/Scripts/asi.js"></script>
     <script>
+      
+        $('.dateField').datepicker()
+        $('.date-clear').click(function () {
+            $("input[name='" + this.id + "']").val('');
+        });
+    
         $('input.command').click(function (e) {
             $('#ActionName').val(e.target.value);
             if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {

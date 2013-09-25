@@ -282,6 +282,81 @@ namespace asi.asicentral.web.Controllers.Store
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(true)]
+        public virtual ActionResult EditESPAdvertising(ESPAdvertisingModel application)
+        {
+            if (ModelState.IsValid)
+            {
+                StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
+                if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
+                StoreOrder order = orderDetail.Order;
+                if (order == null) throw new Exception("Invalid reference to an order");
+                order.ExternalReference = application.ExternalReference;
+                order = UpdateCompanyInformation(application, order);
+
+                #region Update ESP Advertising information
+                StoreDetailESPAdvertising espAdvertising = StoreService.GetAll<StoreDetailESPAdvertising>().Where(product => product.OrderDetailId == orderDetail.Id).SingleOrDefault();
+                if (espAdvertising == null) throw new Exception("Invalid id, could not find the Catalog information record");
+
+                if (orderDetail.Product != null)
+                {
+                    switch (orderDetail.Product.Id)
+                    {
+                        case 48:
+                            //espAdvertising.FirstOptionId = application.Products_OptionId_First;
+                            orderDetail.Cost = application.Products_OptionId_First;
+                            break;
+                        case 49:
+                            espAdvertising.FirstItemList = application.NumberOfItems_First;
+                            break;
+                        case 50:
+                            espAdvertising.FirstItemList = application.NumberOfItems_First;
+                            //espAdvertising.FirstOptionId = application.Products_OptionId_First;
+                            espAdvertising.SecondItemList = application.NumberOfItems_Second;
+                            //espAdvertising.SecondOptionId = application.Products_OptionId_Second;
+                            espAdvertising.ThirdItemList = application.NumberOfItems_Third;
+                            //espAdvertising.ThirdOptionId = application.Products_OptionId_Third;
+                            orderDetail.Cost = application.Products_OptionId_First + application.Products_OptionId_Second + application.Products_OptionId_Third;
+                            break;
+                        case 52:
+                            espAdvertising.AdSelectedDate = application.AdSelectedDate;
+                            break;
+                        case 53:
+                            //espAdvertising.FirstOptionId = application.Products_OptionId_First;
+                            espAdvertising.FirstItemList = application.NumberOfItems_First;
+                            orderDetail.Cost = application.Products_OptionId_First;
+                            break;
+                        case 54:
+                            //espAdvertising.FirstOptionId = application.Products_OptionId_First;
+                            orderDetail.Cost = application.Products_OptionId_First;
+                            break;
+                    }
+                    espAdvertising.UpdateDate = DateTime.UtcNow;
+                    espAdvertising.UpdateSource = "ApplicationController - EditESPAdvertising";
+                }
+                #endregion
+
+                //Update ESP Advertising Information
+                StoreAddress address = order.Company.GetCompanyShippingAddress();
+                StoreService.UpdateTaxAndShipping(order);
+                orderDetail.UpdateDate = DateTime.UtcNow;
+                orderDetail.UpdateSource = "ApplicationController - EditESPAdvertising";
+
+                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                StoreService.SaveChanges();
+                if (application.ActionName == ApplicationController.COMMAND_REJECT)
+                    return RedirectToAction("List", "Orders");
+                else
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId });
+            }
+            else
+            {
+                return View("../Store/Application/OrderDetailProduct", application);
+            }
+        }
+
         /// <summary>
         /// Common code between Edit supplier and distributor
         /// </summary>
