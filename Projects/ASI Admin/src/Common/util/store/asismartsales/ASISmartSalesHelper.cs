@@ -9,7 +9,7 @@ namespace asi.asicentral.util.store
 {
     public class ASISmartSalesHelper
     {
-        public static readonly decimal[] DISTRIBUTOR_MAGAZINE_PRODUCT_IDS = { 35, 35, 30, 25, 35 };
+        public static readonly decimal[] ASISmartSales_Costs = { 35, 35, 30, 25, 35 };
 
         public static IList<SelectListItem> GetCurrentMembershipOptions(string value = null)
         {
@@ -24,7 +24,7 @@ namespace asi.asicentral.util.store
 
         public static decimal GetCost(int optionId)
         {
-            return DISTRIBUTOR_MAGAZINE_PRODUCT_IDS[optionId];
+            return ASISmartSales_Costs[optionId];
          }
     }
 }
