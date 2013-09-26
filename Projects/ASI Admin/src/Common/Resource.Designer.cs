@@ -817,6 +817,15 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Membership.
+        /// </summary>
+        public static string Membership {
+            get {
+                return ResourceManager.GetString("Membership", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Line Minority Owned.
         /// </summary>
         public static string MinorityOwned {
@@ -1038,15 +1047,6 @@ namespace asi.asicentral {
         public static string ProductSmallImg {
             get {
                 return ResourceManager.GetString("ProductSmallImg", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Professional.
-        /// </summary>
-        public static string Professional {
-            get {
-                return ResourceManager.GetString("Professional", resourceCulture);
             }
         }
         
