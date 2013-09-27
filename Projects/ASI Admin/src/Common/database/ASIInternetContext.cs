@@ -22,6 +22,7 @@ namespace asi.asicentral.database
         public DbSet<ASPNetMembership> ASPNetMemberships { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Company> Companies { get; set; }
+        public DbSet<LegacyCENTUserProfilesPROF> UserProfileDetails { get; set; }
         public DbSet<LegacyDistributorAccountType> DistributorAccountTypes { get; set; }
         public DbSet<LegacyDistributorBusinessRevenue> DistributorBusinessRevenues { get; set; }
         public DbSet<LegacyDistributorMembershipApplication> DistributorMembershipApplications { get; set; }
@@ -59,6 +60,7 @@ namespace asi.asicentral.database
                .Add(new DistributorMembershipApplicationMap())
                .Add(new DistributorMembershipApplicationContactMap())
                .Add(new DistributorProductLineMap())
+               .Add(new LegacyCENTUserProfilesPROFMap())
                .Add(new LegacyOrderAddressMap())
                .Add(new LegacyOrderDistributorAddressMap())
                .Add(new LegacyOrderCatalogMap())
