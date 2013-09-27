@@ -104,13 +104,13 @@ namespace asi.asicentral.web.model.store
         public string NumberOfItems_Third { get; set; }
 
         [Display(ResourceType = typeof(asi.asicentral.web.Resource), Name = "NumberOfProducts")]
-        public decimal Products_OptionId_First { get; set; }
+        public int Products_OptionId_First { get; set; }
 
         [Display(ResourceType = typeof(asi.asicentral.web.Resource), Name = "NumberOfProducts")]
-        public decimal Products_OptionId_Second { get; set; }
+        public int Products_OptionId_Second { get; set; }
 
         [Display(ResourceType = typeof(asi.asicentral.web.Resource), Name = "NumberOfProducts")]
-        public decimal Products_OptionId_Third { get; set; }
+        public int Products_OptionId_Third { get; set; }
 
         [Display(ResourceType = typeof(asi.asicentral.web.Resource), Name = "LogoPath")]
         public string LogoPath { get; set; }
