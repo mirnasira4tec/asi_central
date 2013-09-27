@@ -11,6 +11,10 @@ namespace asi.asicentral.util.store
     {
         public static readonly string[] ESPAdvertising_BANNER_TILE_TOWER_COST = { "750","450","1500"};
         public static readonly string[] ESPAdvertising_PROMO_CAFE_COST = { "750", "199", "450" };
+        public static readonly string[] ESPAdvertising_CLEARANCE_COST = { "300", "1995" };
+        public static readonly string[] ESPAdvertising_NEW_COST = { "300", "1995" };
+        public static readonly string[] ESPAdvertising_RUSH_COST = { "400", "1995" };
+        public static readonly string[] ESPAdvertising_Video_COST = { "499", "79" };
 
         public static IList<SelectListItem> GetAdTypeOptions(string value = null)
         {
