@@ -7,6 +7,7 @@ using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
 using asi.asicentral.web.model.store;
 using asi.asicentral.services;
+using asi.asicentral.util.store;
 
 namespace asi.asicentral.web.Controllers.Store
 {
@@ -305,32 +306,35 @@ namespace asi.asicentral.web.Controllers.Store
                     switch (orderDetail.Product.Id)
                     {
                         case 48:
-                            //espAdvertising.FirstOptionId = application.Products_OptionId_First;
-                            orderDetail.Cost = application.Products_OptionId_First;
+                            espAdvertising.FirstOptionId = application.Products_OptionId_First;
+                            //orderDetail.Cost = Convert.ToDecimal(ESPAdvertisingHelper.ESPAdvertising_BANNER_TILE_TOWER_COST[application.Products_OptionId_First]);
                             break;
                         case 49:
                             espAdvertising.FirstItemList = application.NumberOfItems_First;
                             break;
                         case 50:
                             espAdvertising.FirstItemList = application.NumberOfItems_First;
-                            //espAdvertising.FirstOptionId = application.Products_OptionId_First;
+                            espAdvertising.FirstOptionId = application.Products_OptionId_First;
+                            //orderDetail.Cost = Convert.ToDecimal(ESPAdvertisingHelper.ESPAdvertising_CLEARANCE_COST[application.Products_OptionId_First]);
+
                             espAdvertising.SecondItemList = application.NumberOfItems_Second;
-                            //espAdvertising.SecondOptionId = application.Products_OptionId_Second;
+                            espAdvertising.SecondOptionId = application.Products_OptionId_Second;
+                            //orderDetail.Cost += Convert.ToDecimal(ESPAdvertisingHelper.ESPAdvertising_NEW_COST[application.Products_OptionId_Second]);
+
                             espAdvertising.ThirdItemList = application.NumberOfItems_Third;
-                            //espAdvertising.ThirdOptionId = application.Products_OptionId_Third;
-                            orderDetail.Cost = application.Products_OptionId_First + application.Products_OptionId_Second + application.Products_OptionId_Third;
+                            espAdvertising.ThirdOptionId = application.Products_OptionId_Third;
+                            //orderDetail.Cost += Convert.ToDecimal(ESPAdvertisingHelper.ESPAdvertising_RUSH_COST[application.Products_OptionId_Third]);
                             break;
                         case 52:
                             espAdvertising.AdSelectedDate = application.AdSelectedDate;
                             break;
                         case 53:
-                            //espAdvertising.FirstOptionId = application.Products_OptionId_First;
+                            espAdvertising.FirstOptionId = application.Products_OptionId_First;
                             espAdvertising.FirstItemList = application.NumberOfItems_First;
-                            orderDetail.Cost = application.Products_OptionId_First;
                             break;
                         case 54:
-                            //espAdvertising.FirstOptionId = application.Products_OptionId_First;
-                            orderDetail.Cost = application.Products_OptionId_First;
+                            espAdvertising.FirstOptionId = application.Products_OptionId_First;
+                            //orderDetail.Cost = Convert.ToDecimal(ESPAdvertisingHelper.ESPAdvertising_PROMO_CAFE_COST[application.Products_OptionId_First]);
                             break;
                     }
                     espAdvertising.UpdateDate = DateTime.UtcNow;
