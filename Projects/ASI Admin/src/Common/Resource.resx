@@ -561,4 +561,10 @@
   <data name="MainChatRoom_750" xml:space="preserve">
     <value>Main Chat Room $750/mo.</value>
   </data>
+  <data name="BuyAdditionalVideo" xml:space="preserve">
+    <value>Buy additional videos (to be shown across different product categories) $79/year</value>
+  </data>
+  <data name="BuyOneVideo" xml:space="preserve">
+    <value>Buy one video (to be shown with all of your products) $499/year</value>
+  </data>
 </root>
