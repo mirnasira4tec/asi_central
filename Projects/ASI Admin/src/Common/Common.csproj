@@ -89,7 +89,7 @@
     <Compile Include="database\ASIInternetContext.cs" />
     <Compile Include="database\ASIPublicationContext.cs" />
     <Compile Include="database\CallContext.cs" />
-    <Compile Include="database\mappings\asiinternet\LegacyCENTUserProfilesPROFMap.cs" />
+    <Compile Include="database\mappings\asiinternet\CENTUserProfilesPROFMap.cs" />
     <Compile Include="database\mappings\asiinternet\DistributorAccountTypeMap.cs" />
     <Compile Include="database\mappings\asiinternet\DistributorProductLineMap.cs" />
     <Compile Include="database\mappings\asiinternet\LegacyOrderMagazineAddressMap.cs" />
@@ -126,7 +126,7 @@
     <Compile Include="interfaces\ICreditCardService.cs" />
     <Compile Include="model\call\CallQueue.cs" />
     <Compile Include="model\CreditCard.cs" />
-    <Compile Include="model\store\LegacyCENTUserProfilesPROF.cs" />
+    <Compile Include="model\store\CENTUserProfilesPROF.cs" />
     <Compile Include="model\store\LookCatalogOption.cs" />
     <Compile Include="model\store\LookProductShippingRate.cs" />
     <Compile Include="model\store\StoreDetailCatalog.cs" />
