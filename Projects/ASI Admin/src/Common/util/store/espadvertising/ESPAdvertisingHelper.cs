@@ -10,11 +10,11 @@ namespace asi.asicentral.util.store
     public class ESPAdvertisingHelper
     {
         public static readonly string[] ESPAdvertising_BANNER_TILE_TOWER_COST = { "750","450","1500"};
+        public static readonly decimal[] ESPAdvertising_CLEARANCE_COST = { 0.00M, 300.00M, 166.25M };
+        public static readonly decimal[] ESPAdvertising_NEW_COST = { 0.00M, 300.00M, 166.25M };
+        public static readonly decimal[] ESPAdvertising_RUSH_COST = { 0.00M, 400.00M, 166.25M };
+        public static readonly decimal[] ESPAdvertising_Video_COST = { 41.58M, 6.58M };
         public static readonly string[] ESPAdvertising_PROMO_CAFE_COST = { "750", "199", "450" };
-        public static readonly string[] ESPAdvertising_CLEARANCE_COST = { "300", "1995" };
-        public static readonly string[] ESPAdvertising_NEW_COST = { "300", "1995" };
-        public static readonly string[] ESPAdvertising_RUSH_COST = { "400", "1995" };
-        public static readonly string[] ESPAdvertising_Video_COST = { "499", "79" };
 
         public static IList<SelectListItem> GetAdTypeOptions(string value = null)
         {
@@ -28,27 +28,27 @@ namespace asi.asicentral.util.store
         public static IList<SelectListItem> GetNumberOfProducts_Clearance(string value = null)
         {
             IList<SelectListItem> clearanceOptions = new List<SelectListItem>();
-            clearanceOptions.Add(new SelectListItem() { Text = Resource.SelectNumberOfProducts, Value = "1", Selected = ("1" == value) });
-            clearanceOptions.Add(new SelectListItem() { Text = Resource.Cost_300_5_Products_PerMonth, Value = "2", Selected = ("2" == value) });
-            clearanceOptions.Add(new SelectListItem() { Text = Resource.Cost_1995_50_Products_PerYear, Value = "3", Selected = ("3" == value) });
+            clearanceOptions.Add(new SelectListItem() { Text = Resource.SelectNumberOfProducts, Value = "0", Selected = ("0" == value) });
+            clearanceOptions.Add(new SelectListItem() { Text = Resource.Cost_300_5_Products_PerMonth, Value = "1", Selected = ("1" == value) });
+            clearanceOptions.Add(new SelectListItem() { Text = Resource.Cost_1995_50_Products_PerYear, Value = "2", Selected = ("2" == value) });
             return clearanceOptions;
         }
 
         public static IList<SelectListItem> GetNumberOfProducts_New(string value = null)
         {
             IList<SelectListItem> clearanceOptions = new List<SelectListItem>();
-            clearanceOptions.Add(new SelectListItem() { Text = Resource.SelectNumberOfProducts, Value = "1", Selected = ("1" == value) });
-            clearanceOptions.Add(new SelectListItem() { Text = Resource.Cost_300_5_Products_PerMonth, Value = "2", Selected = ("2" == value) });
-            clearanceOptions.Add(new SelectListItem() { Text = Resource.Cost_1995_50_Products_PerYear, Value = "3", Selected = ("3" == value) });
+            clearanceOptions.Add(new SelectListItem() { Text = Resource.SelectNumberOfProducts, Value = "0", Selected = ("0" == value) });
+            clearanceOptions.Add(new SelectListItem() { Text = Resource.Cost_300_5_Products_PerMonth, Value = "1", Selected = ("1" == value) });
+            clearanceOptions.Add(new SelectListItem() { Text = Resource.Cost_1995_50_Products_PerYear, Value = "2", Selected = ("2" == value) });
             return clearanceOptions;
         }
 
         public static IList<SelectListItem> GetNumberOfProducts_Rush(string value = null)
         {
             IList<SelectListItem> clearanceOptions = new List<SelectListItem>();
-            clearanceOptions.Add(new SelectListItem() { Text = Resource.SelectNumberOfProducts, Value = "1", Selected = ("1" == value) });
-            clearanceOptions.Add(new SelectListItem() { Text = Resource.Cost_400_5_Products_PerMonth, Value = "2", Selected = ("2" == value) });
-            clearanceOptions.Add(new SelectListItem() { Text = Resource.Cost_1995_50_Products_PerYear, Value = "3", Selected = ("3" == value) });
+            clearanceOptions.Add(new SelectListItem() { Text = Resource.SelectNumberOfProducts, Value = "0", Selected = ("0" == value) });
+            clearanceOptions.Add(new SelectListItem() { Text = Resource.Cost_400_5_Products_PerMonth, Value = "1", Selected = ("1" == value) });
+            clearanceOptions.Add(new SelectListItem() { Text = Resource.Cost_1995_50_Products_PerYear, Value = "2", Selected = ("2" == value) });
             return clearanceOptions;
         }
 
