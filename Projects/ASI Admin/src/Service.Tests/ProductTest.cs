@@ -750,7 +750,7 @@ namespace asi.asicentral.Tests
             using (var objectContext = new StoreContext())
             {
                 int recordCount = objectContext.StoreDetailESPAdvertisings.Count();
-                Assert.IsTrue(recordCount == 0);
+                Assert.IsTrue(recordCount >= 0);
                 StoreDetailESPAdvertising advert = new StoreDetailESPAdvertising()
                 {
                     OrderDetailId = newId,
