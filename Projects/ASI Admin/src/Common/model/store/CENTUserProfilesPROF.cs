@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.model.store
 {
-    public class LegacyCENTUserProfilesPROF
+    public class CENTUserProfilesPROF
     {
         public Guid PROF_UserID { get; set; }
         public string PROF_ASINo { get; set; }

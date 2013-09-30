@@ -93,7 +93,7 @@ namespace asi.asicentral.database.mappings
             For<IRepository<LegacySupplierMembershipApplication>>().Use<EFRepository<LegacySupplierMembershipApplication>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
-            For<IRepository<LegacyCENTUserProfilesPROF>>().Use<EFRepository<LegacyCENTUserProfilesPROF>>()
+            For<IRepository<CENTUserProfilesPROF>>().Use<EFRepository<CENTUserProfilesPROF>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
             #endregion ASIInternetContext

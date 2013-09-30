@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings.asiinternet
 {
-    public class LegacyCENTUserProfilesPROFMap : EntityTypeConfiguration<LegacyCENTUserProfilesPROF>
+    public class CENTUserProfilesPROFMap : EntityTypeConfiguration<CENTUserProfilesPROF>
     {
-        public LegacyCENTUserProfilesPROFMap()
+        public CENTUserProfilesPROFMap()
         {
             ToTable("CENT_UserProfiles_PROF");
             HasKey(prof => prof.PROF_UserID);
