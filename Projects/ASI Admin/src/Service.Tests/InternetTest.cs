@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace asi.asicentral.Tests
 {
-    [TestClass]
+    [Ignore]
     public class InternetTest
     {
         [TestMethod]
