@@ -58,7 +58,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="interfaces\IFulfilmentService.cs" />
+    <Compile Include="interfaces\IROI.cs" />
+    <Compile Include="model\ROI\Category.cs" />
+    <Compile Include="model\ROI\Company.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="services\ROIService.cs" />
     <Compile Include="services\TIMSSService.cs" />
   </ItemGroup>
   <ItemGroup>
