@@ -124,8 +124,11 @@
     <Compile Include="database\mappings\store\StoreTieredProductPricingMap.cs" />
     <Compile Include="database\mappings\store\TaxRateMap.cs" />
     <Compile Include="interfaces\ICreditCardService.cs" />
+    <Compile Include="interfaces\IROI.cs" />
     <Compile Include="model\call\CallQueue.cs" />
     <Compile Include="model\CreditCard.cs" />
+    <Compile Include="model\ROI\Category.cs" />
+    <Compile Include="model\ROI\Company.cs" />
     <Compile Include="model\store\CENTUserProfilesPROF.cs" />
     <Compile Include="model\store\LookCatalogOption.cs" />
     <Compile Include="model\store\LookProductShippingRate.cs" />
@@ -241,6 +244,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="services\CreditCardService.cs" />
+    <Compile Include="services\ROIService.cs" />
     <Compile Include="services\StoreService.cs" />
     <Compile Include="util\store\asismartsales\ASISmartSalesHelper.cs" />
     <Compile Include="util\store\catalogs\CatalogsHelper.cs" />
