@@ -60,5 +60,17 @@ namespace asi.asicentral.util.store
             espOnlineOptions.Add(new SelectListItem() { Text = Resource.InstantMessenger_450, Value = "2", Selected = ("2" == value) });
             return espOnlineOptions;
         }
+    
+
+        public static IList<SelectListItem> GetCPMOptions(string value = null)
+        {
+            IList<SelectListItem> cpmOptions = new List<SelectListItem>();
+            cpmOptions.Add(new SelectListItem() { Text = "1", Value = "1", Selected = ("1" == value) });
+            cpmOptions.Add(new SelectListItem() { Text = "2", Value = "2", Selected = ("2" == value) });
+            cpmOptions.Add(new SelectListItem() { Text = "3", Value = "3", Selected = ("3" == value) });
+            cpmOptions.Add(new SelectListItem() { Text = "4", Value = "4", Selected = ("4" == value) });
+            cpmOptions.Add(new SelectListItem() { Text = "5", Value = "5", Selected = ("5" == value) });
+            return cpmOptions;
+        }
     }
 }

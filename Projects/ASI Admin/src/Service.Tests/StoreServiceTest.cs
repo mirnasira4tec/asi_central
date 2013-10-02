@@ -12,7 +12,7 @@ namespace asi.asicentral.Tests
     [TestClass]
     public class StoreServiceTest
     {
-        [TestMethod]
+        [Ignore]
         public void OrderApplicationRetrieveTest()
         {
             using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
