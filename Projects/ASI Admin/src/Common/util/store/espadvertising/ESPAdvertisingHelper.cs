@@ -19,9 +19,9 @@ namespace asi.asicentral.util.store
         public static IList<SelectListItem> GetAdTypeOptions(string value = null)
         {
             IList<SelectListItem> adTypeOptions = new List<SelectListItem>();
-            adTypeOptions.Add(new SelectListItem() { Text = Resource.BannerAd, Value = "0", Selected = ("0" == value) });
-            adTypeOptions.Add(new SelectListItem() { Text = Resource.TitleAd, Value = "1", Selected = ("1" == value) });
-            adTypeOptions.Add(new SelectListItem() { Text = Resource.TowerTuesdayAd, Value = "2", Selected = ("2" == value) });
+            adTypeOptions.Add(new SelectListItem() { Text = Resource.BannerAd, Value = "1", Selected = ("1" == value) });
+            adTypeOptions.Add(new SelectListItem() { Text = Resource.TitleAd, Value = "2", Selected = ("2" == value) });
+            adTypeOptions.Add(new SelectListItem() { Text = Resource.TowerTuesdayAd, Value = "3", Selected = ("3" == value) });
             return adTypeOptions;
         }
 
