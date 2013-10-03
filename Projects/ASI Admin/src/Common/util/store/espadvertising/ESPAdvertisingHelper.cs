@@ -15,6 +15,7 @@ namespace asi.asicentral.util.store
         public static readonly decimal[] ESPAdvertising_RUSH_COST = { 0.00M, 400.00M, 166.25M };
         public static readonly decimal[] ESPAdvertising_Video_COST = { 41.58M, 6.58M };
         public static readonly string[] ESPAdvertising_PROMO_CAFE_COST = { "750", "199", "450" };
+        public static readonly decimal[] ESPAdvertising_PFP_COST = { 295.00M, 275.00M, 260.00M, 240.00M, 230.00M, 220.00M, 210.00M };
 
         public static IList<SelectListItem> GetAdTypeOptions(string value = null)
         {
@@ -65,11 +66,13 @@ namespace asi.asicentral.util.store
         public static IList<SelectListItem> GetCPMOptions(string value = null)
         {
             IList<SelectListItem> cpmOptions = new List<SelectListItem>();
-            cpmOptions.Add(new SelectListItem() { Text = "1", Value = "1", Selected = ("1" == value) });
-            cpmOptions.Add(new SelectListItem() { Text = "2", Value = "2", Selected = ("2" == value) });
-            cpmOptions.Add(new SelectListItem() { Text = "3", Value = "3", Selected = ("3" == value) });
-            cpmOptions.Add(new SelectListItem() { Text = "4", Value = "4", Selected = ("4" == value) });
-            cpmOptions.Add(new SelectListItem() { Text = "5", Value = "5", Selected = ("5" == value) });
+            cpmOptions.Add(new SelectListItem() { Text = "1st - $295", Value = "0", Selected = ("0" == value) });
+            cpmOptions.Add(new SelectListItem() { Text = "2nd - $275", Value = "1", Selected = ("1" == value) });
+            cpmOptions.Add(new SelectListItem() { Text = "3rd - $260", Value = "2", Selected = ("2" == value) });
+            cpmOptions.Add(new SelectListItem() { Text = "4th - $240", Value = "3", Selected = ("3" == value) });
+            cpmOptions.Add(new SelectListItem() { Text = "5th - $230", Value = "4", Selected = ("4" == value) });
+            cpmOptions.Add(new SelectListItem() { Text = "6th - $220", Value = "5", Selected = ("5" == value) });
+            cpmOptions.Add(new SelectListItem() { Text = "7th - $210", Value = "6", Selected = ("6" == value) });
             return cpmOptions;
         }
     }
