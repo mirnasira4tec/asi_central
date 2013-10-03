@@ -105,6 +105,7 @@
     <Compile Include="database\mappings\store\LookProductShippingRateMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailCatalogMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailHallmarkRequestMap.cs" />
+    <Compile Include="database\mappings\store\StoreDetailPayForPlacementMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailSupplierMembershipMap.cs" />
     <Compile Include="database\mappings\store\LookSupplierDecoratingTypeMap.cs" />
     <Compile Include="database\mappings\store\StoreCompanyAddressMap.cs" />
@@ -214,6 +215,7 @@
     <Compile Include="model\store\StoreCreditCard.cs" />
     <Compile Include="model\store\StoreDetailDistributorMembership.cs" />
     <Compile Include="model\store\StoreDetailApplication.cs" />
+    <Compile Include="model\store\StoreDetailPayForPlacement.cs" />
     <Compile Include="model\store\StoreDetailSupplierMembership.cs" />
     <Compile Include="model\store\StoreDetailESPAdvertising.cs" />
     <Compile Include="model\store\StoreESPAdvertisingItem.cs" />
