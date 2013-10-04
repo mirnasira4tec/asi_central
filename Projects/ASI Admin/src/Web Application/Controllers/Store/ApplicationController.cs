@@ -333,7 +333,7 @@ namespace asi.asicentral.web.Controllers.Store
                             espAdvertising.FirstItemList = application.NumberOfItems_First;
                             break;
                         case 54:
-                            espAdvertising.FirstOptionId = application.Products_OptionId_First;
+                            espAdvertising.FirstOptionId = application.Products_OptionId_First + 1;
                             orderDetail.Cost = Convert.ToDecimal(ESPAdvertisingHelper.ESPAdvertising_PROMO_CAFE_COST[application.Products_OptionId_First]);
                             break;
                     }
