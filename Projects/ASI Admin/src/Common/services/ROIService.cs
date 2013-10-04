@@ -52,10 +52,10 @@ namespace asi.asicentral.services
             categories[0].Results[0] = new Company() { IsRequestor = false, Impressions = 1143, Rank = 1 };
             categories[0].Results[1] = new Company() { IsRequestor = false, Impressions = 1143, Rank = 1 };
             categories[0].Results[2] = new Company() { IsRequestor = false, Impressions = 1026, Rank = 3 };
-            categories[0].Results[3] = new Company() { IsRequestor = false, Impressions = 846, Rank = 4 };
+            categories[0].Results[3] = new Company() { IsRequestor = true, Impressions = 846, Rank = 4 };
             categories[0].Results[4] = new Company() { IsRequestor = false, Impressions = 829, Rank = 5 };
             categories[0].Results[5] = new Company() { IsRequestor = false, Impressions = 700, Rank = 6 };
-            categories[0].Results[6] = new Company() { IsRequestor = true, Impressions = 35, Rank = 81 };
+            categories[0].Results[6] = new Company() { IsRequestor = false, Impressions = 35, Rank = 81 };
             categories[0].Requestor = categories[0].Results[6];
 
             categories[1] = new Category() { Name = "BASEBALL CAPS - DEMO", SupplierCount = 357 };
@@ -71,13 +71,13 @@ namespace asi.asicentral.services
 
             categories[2] = new Category() { Name = "GOLF/POLO SHIRTS - DEMO", SupplierCount = 262 };
             categories[2].Results = new Company[7];
-            categories[2].Results[0] = new Company() { IsRequestor = false, Impressions = 33218, Rank = 1 };
+            categories[2].Results[0] = new Company() { IsRequestor = true, Impressions = 33218, Rank = 1 };
             categories[2].Results[1] = new Company() { IsRequestor = false, Impressions = 8981, Rank = 2 };
             categories[2].Results[2] = new Company() { IsRequestor = false, Impressions = 5127, Rank = 3 };
             categories[2].Results[3] = new Company() { IsRequestor = false, Impressions = 4109, Rank = 4 };
             categories[2].Results[4] = new Company() { IsRequestor = false, Impressions = 4055, Rank = 5 };
             categories[2].Results[5] = new Company() { IsRequestor = false, Impressions = 3943, Rank = 6 };
-            categories[2].Results[6] = new Company() { IsRequestor = true, Impressions = 919, Rank = 31 };
+            categories[2].Results[6] = new Company() { IsRequestor = false, Impressions = 919, Rank = 31 };
             categories[2].Requestor = categories[2].Results[6];
             return categories;
         }
