@@ -282,14 +282,20 @@
 			        </span>
                     break;
                 case 53:
+                    if(Model.Videos != null && Model.Videos.Count > 0)
+                    {
+                        for (int count = 0; count < Model.Videos.Count; count++)
+                        {
                     <span class="label-row">
                         @Html.LabelFor(m => m.NumberOfItems_First) 
                         @if(Model.LogoPath != string.Empty) { @Html.LabelFor(m => m.LogoPath) }
 			        </span>
 			        <span class="label-row">
-                        @Html.EditorFor(m => m.NumberOfItems_First) @Html.ValidationMessageFor(m => m.NumberOfItems_First)
-                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
+                        @Html.TextBoxFor(m => m.Videos[count].ItemList, new { @readonly = "readonly" }) @Html.ValidationMessageFor(m => m.Videos[count].ItemList)
+                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/uploads/espadvertisement/@Model.Videos[count].LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
 			        </span>
+                        }
+                    }
                     break;
                 case 54:
                     <span class="label-row">

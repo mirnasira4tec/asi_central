@@ -131,6 +131,7 @@ namespace asi.asicentral.web.model.store
         public string ProductName { get; set; }
         public int ProductId { get; set; }
         public decimal Price { get; set; }
+        public IList<StoreDetailESPAdvertisingItem> Videos{ get; set; }
         public IList<StoreIndividual> Contacts { get; set; }
 
         /// <summary>
@@ -163,7 +164,7 @@ namespace asi.asicentral.web.model.store
             switch (ProductId)
             {
                 case 48:
-                    Products_OptionId_First = espAdvertising.FirstOptionId;
+                    Products_OptionId_First = espAdvertising.FirstOptionId - 1;
                     LogoPath = espAdvertising.LogoPath;
                     break;
                 case 49:
@@ -185,12 +186,20 @@ namespace asi.asicentral.web.model.store
                     LogoPath = espAdvertising.LogoPath;
                     break;
                 case 53:
-                    Products_OptionId_First = espAdvertising.FirstOptionId;
-                    NumberOfItems_First = espAdvertising.FirstItemList;
-                    LogoPath = espAdvertising.LogoPath;
+                    if (espAdvertising.ESPAdvertisingItems != null && espAdvertising.ESPAdvertisingItems.Count > 0)
+                    {
+                        Videos = new List<StoreDetailESPAdvertisingItem>();
+                        foreach (StoreDetailESPAdvertisingItem item in espAdvertising.ESPAdvertisingItems)
+                        {
+                            Videos.Add(item);
+                        }
+                    }
+                    //Products_OptionId_First = espAdvertising.FirstOptionId;
+                    //NumberOfItems_First = espAdvertising.FirstItemList;
+                    //LogoPath = espAdvertising.LogoPath;
                     break;
                 case 54:
-                    Products_OptionId_First = espAdvertising.FirstOptionId;
+                    Products_OptionId_First = espAdvertising.FirstOptionId - 1;
                     LogoPath = espAdvertising.LogoPath;
                     break;
             }
