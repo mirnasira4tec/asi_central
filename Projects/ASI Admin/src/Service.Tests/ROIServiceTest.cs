@@ -2,6 +2,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.interfaces;
 using asi.asicentral.services;
+using System.Collections;
+using asi.asicentral.model.ROI;
+using System.Collections.Generic;
 
 namespace asi.asicentral.Tests
 {
@@ -12,7 +15,13 @@ namespace asi.asicentral.Tests
         public void GetImpressionsPerCategory()
         {
             IROIService roiService = new ROIService();
-            Assert.IsTrue(roiService.GetImpressionsPerCategory(12345).Length > 0);
+            int count = 0;
+            IEnumerable<Category> categories = roiService.GetImpressionsPerCategory(76575);
+            foreach (Category cat in categories) 
+            {
+                count++;
+            }
+            Assert.IsTrue(count > 0);
         }
     }
 }
