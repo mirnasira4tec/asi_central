@@ -9,6 +9,6 @@ namespace asi.asicentral.interfaces
 {
     public interface IROIService
     {
-        Category[] GetImpressionsPerCategory(int asiNumber);
+        IEnumerable<Category> GetImpressionsPerCategory(int asiNumber);
     }
 }
