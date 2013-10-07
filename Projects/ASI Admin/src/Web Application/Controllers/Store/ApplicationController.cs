@@ -49,7 +49,9 @@ namespace asi.asicentral.web.Controllers.Store
                 else if (SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
                 {
                     StoreDetailESPAdvertising detailESPAdvertising = StoreService.GetAll<StoreDetailESPAdvertising>().Where(espadvertising => espadvertising.OrderDetailId == orderDetail.Id).SingleOrDefault();
-                    if (detailESPAdvertising != null) return View("../Store/Application/ESPAdvertising", new ESPAdvertisingModel(orderDetail, detailESPAdvertising));
+                    if (detailESPAdvertising != null && orderDetail.Product.Id != 47) return View("../Store/Application/ESPAdvertising", new ESPAdvertisingModel(orderDetail, detailESPAdvertising));
+                    else if (orderDetail.Product.Id == 47) return View("../Store/Application/PayForPlacement", new ESPPayForPlacementModel(orderDetail, detailESPAdvertising, StoreService));
+
                 }
                 else if(ORDERDETAIL_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/OrderDetailProduct", new OrderDetailApplicationModel(orderDetail));
             }
@@ -339,6 +341,83 @@ namespace asi.asicentral.web.Controllers.Store
                     }
                     espAdvertising.UpdateDate = DateTime.UtcNow;
                     espAdvertising.UpdateSource = "ApplicationController - EditESPAdvertising";
+                }
+                #endregion
+
+                //Update ESP Advertising Information
+                StoreAddress address = order.Company.GetCompanyShippingAddress();
+                StoreService.UpdateTaxAndShipping(order);
+                orderDetail.UpdateDate = DateTime.UtcNow;
+                orderDetail.UpdateSource = "ApplicationController - EditESPAdvertising";
+
+                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                StoreService.SaveChanges();
+                if (application.ActionName == ApplicationController.COMMAND_REJECT)
+                    return RedirectToAction("List", "Orders");
+                else
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId });
+            }
+            else
+            {
+                return View("../Store/Application/OrderDetailProduct", application);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(true)]
+        public virtual ActionResult EditPayForPlacement(ESPPayForPlacementModel application)
+        {
+            if (ModelState.IsValid)
+            {
+                StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
+                if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
+                StoreOrder order = orderDetail.Order;
+                if (order == null) throw new Exception("Invalid reference to an order");
+                order.ExternalReference = application.ExternalReference;
+                order = UpdateCompanyInformation(application, order);
+
+                #region Update ESP Advertising information
+                IList<StoreDetailPayForPlacement> espPayForPlacements = StoreService.GetAll<StoreDetailPayForPlacement>().Where(product => product.OrderDetailId == orderDetail.Id).ToList();
+                if (espPayForPlacements == null) throw new Exception("Invalid id, could not find the Catalog information record");
+
+                if (orderDetail.Product != null && application.Categries != null && application.Categries.Count > 0)
+                {
+                    
+                    orderDetail.Cost = 0.0m;
+                    foreach (PFPCategory detail in application.Categries)
+                    {
+                        StoreDetailPayForPlacement detailPayForPlacement = espPayForPlacements.Where(placement => placement.CategoryName == detail.CategoryName).SingleOrDefault();
+                        if (detail.IsSelected)
+                        {
+                            if (detailPayForPlacement == null)
+                            {
+                                detailPayForPlacement = new StoreDetailPayForPlacement();
+                                detailPayForPlacement.CreateDate = DateTime.UtcNow;
+                                StoreService.Add<StoreDetailPayForPlacement>(detailPayForPlacement);
+                            }
+                            detailPayForPlacement.CategoryName = detail.CategoryName;
+                            detailPayForPlacement.CPMOption = detail.CPMOption;
+                            detailPayForPlacement.PaymentType = detail.PaymentOption;
+                            decimal totalCost = 0.0m;
+                            if (detail.PaymentOption == "FB" && !string.IsNullOrEmpty(detail.PaymentAmount))
+                            {
+                                detailPayForPlacement.Cost = Convert.ToDecimal(detail.PaymentAmount);
+                                totalCost = Convert.ToDecimal(detail.PaymentAmount);
+                            }
+                            else if (detail.PaymentOption == "IPM" && !string.IsNullOrEmpty(detail.Impressions))
+                            {
+                                int impressionsCount = Convert.ToInt32(detail.Impressions);
+                                detailPayForPlacement.ImpressionsRequested = impressionsCount;
+                                totalCost = (Convert.ToDecimal(impressionsCount) / 1000) * ESPAdvertisingHelper.ESPAdvertising_PFP_COST[detail.CPMOption];
+                            }
+                            orderDetail.Cost += totalCost;
+                            detailPayForPlacement.OrderDetailId = orderDetail.Id;
+                            detailPayForPlacement.UpdateDate = DateTime.UtcNow;
+                            detailPayForPlacement.UpdateSource = "ApplicationController - EditPayForPlacement";
+                        }
+                        else if(detailPayForPlacement != null) StoreService.Delete<StoreDetailPayForPlacement>(detailPayForPlacement);
+                    }
                 }
                 #endregion
 

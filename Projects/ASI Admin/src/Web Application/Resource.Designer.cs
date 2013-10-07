@@ -160,6 +160,15 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Category Name.
+        /// </summary>
+        public static string CategoryName {
+            get {
+                return ResourceManager.GetString("CategoryName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Color.
         /// </summary>
         public static string Color {
@@ -237,6 +246,15 @@ namespace asi.asicentral.web {
         public static string Cover {
             get {
                 return ResourceManager.GetString("Cover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CPM Option.
+        /// </summary>
+        public static string CPMOption {
+            get {
+                return ResourceManager.GetString("CPMOption", resourceCulture);
             }
         }
         
@@ -394,6 +412,15 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Impressions.
+        /// </summary>
+        public static string Impressions {
+            get {
+                return ResourceManager.GetString("Impressions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Imprint Instruction.
         /// </summary>
         public static string ImprintInstruction {
@@ -534,6 +561,24 @@ namespace asi.asicentral.web {
         public static string PadPrint {
             get {
                 return ResourceManager.GetString("PadPrint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fixed Cost.
+        /// </summary>
+        public static string PaymentAmount {
+            get {
+                return ResourceManager.GetString("PaymentAmount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Payment Option.
+        /// </summary>
+        public static string PaymentOption {
+            get {
+                return ResourceManager.GetString("PaymentOption", resourceCulture);
             }
         }
         

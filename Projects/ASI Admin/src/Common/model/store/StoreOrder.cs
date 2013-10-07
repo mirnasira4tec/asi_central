@@ -25,6 +25,7 @@ namespace asi.asicentral.model.store
 
         public int Id { get; set; }
         public int? LegacyId { get; set; }
+        public string UserId { get; set; }
         public bool IsCompleted { get; set; }
         public OrderStatus ProcessStatus { get; set; }
         public int CompletedStep { get; set; }

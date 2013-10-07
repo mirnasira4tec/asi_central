@@ -75,5 +75,13 @@ namespace asi.asicentral.util.store
             cpmOptions.Add(new SelectListItem() { Text = "7th - $210", Value = "6", Selected = ("6" == value) });
             return cpmOptions;
         }
+
+        public static IList<SelectListItem> GetPaymentOptions(string value = null)
+        {
+            IList<SelectListItem> paymentOptions = new List<SelectListItem>();
+            paymentOptions.Add(new SelectListItem() { Text = "Fixed Cost", Value = "FB", Selected = ("FB" == value) });
+            paymentOptions.Add(new SelectListItem() { Text = "Impressions", Value = "IPM", Selected = ("IPM" == value) });
+            return paymentOptions;
+        }
     }
 }
