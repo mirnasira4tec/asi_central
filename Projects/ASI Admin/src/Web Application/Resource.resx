@@ -438,4 +438,19 @@
   <data name="NumberOfProducts" xml:space="preserve">
     <value>Number of Products</value>
   </data>
+  <data name="CategoryName" xml:space="preserve">
+    <value>Category Name</value>
+  </data>
+  <data name="CPMOption" xml:space="preserve">
+    <value>CPM Option</value>
+  </data>
+  <data name="Impressions" xml:space="preserve">
+    <value>Impressions</value>
+  </data>
+  <data name="PaymentAmount" xml:space="preserve">
+    <value>Fixed Cost</value>
+  </data>
+  <data name="PaymentOption" xml:space="preserve">
+    <value>Payment Option</value>
+  </data>
 </root>

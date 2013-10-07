@@ -216,12 +216,14 @@
     <Compile Include="Models\Store\Order\CatalogsApplicationModel.cs" />
     <Compile Include="Models\Store\Order\DistributorApplicationModel.cs" />
     <Compile Include="Models\Store\Order\ESPAdvertisingModel.cs" />
+    <Compile Include="Models\Store\Order\ESPPayForPlacementModel.cs" />
     <Compile Include="Models\Store\Order\MagazinesApplicationModel.cs" />
     <Compile Include="Models\Store\Order\MembershipModelHelper.cs" />
     <Compile Include="Models\Store\Order\OrderDetailApplicationModel.cs" />
     <Compile Include="Models\Store\Order\OrderModel.cs" />
     <Compile Include="Models\Store\Order\OrderPageModel.cs" />
     <Compile Include="Models\Store\Order\OrderStatisticData.cs" />
+    <Compile Include="Models\Store\Order\PFPCategory.cs" />
     <Compile Include="Models\Store\Order\SupplierApplicationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
@@ -326,6 +328,7 @@
     <Content Include="Views\Store\Application\OrderDetailProduct.cshtml" />
     <Content Include="Views\Store\Products\List.cshtml" />
     <Content Include="Views\Store\Application\ESPAdvertising.cshtml" />
+    <Content Include="Views\Store\Application\PayForPlacement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
