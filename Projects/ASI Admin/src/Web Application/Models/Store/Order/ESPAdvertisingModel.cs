@@ -164,7 +164,7 @@ namespace asi.asicentral.web.model.store
             switch (ProductId)
             {
                 case 48:
-                    Products_OptionId_First = espAdvertising.FirstOptionId - 1;
+                    Products_OptionId_First = espAdvertising.FirstOptionId;
                     LogoPath = espAdvertising.LogoPath;
                     break;
                 case 49:
@@ -194,9 +194,6 @@ namespace asi.asicentral.web.model.store
                             Videos.Add(item);
                         }
                     }
-                    //Products_OptionId_First = espAdvertising.FirstOptionId;
-                    //NumberOfItems_First = espAdvertising.FirstItemList;
-                    //LogoPath = espAdvertising.LogoPath;
                     break;
                 case 54:
                     Products_OptionId_First = espAdvertising.FirstOptionId - 1;

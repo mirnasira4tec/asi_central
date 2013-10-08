@@ -48,9 +48,12 @@ namespace asi.asicentral.web.Controllers.Store
                 }
                 else if (SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
                 {
-                    StoreDetailESPAdvertising detailESPAdvertising = StoreService.GetAll<StoreDetailESPAdvertising>().Where(espadvertising => espadvertising.OrderDetailId == orderDetail.Id).SingleOrDefault();
-                    if (detailESPAdvertising != null && orderDetail.Product.Id != 47) return View("../Store/Application/ESPAdvertising", new ESPAdvertisingModel(orderDetail, detailESPAdvertising));
-                    else if (orderDetail.Product.Id == 47) return View("../Store/Application/PayForPlacement", new ESPPayForPlacementModel(orderDetail, detailESPAdvertising, StoreService));
+                    if (orderDetail.Product.Id != 47)
+                    {
+                     StoreDetailESPAdvertising detailESPAdvertising = StoreService.GetAll<StoreDetailESPAdvertising>().Where(espadvertising => espadvertising.OrderDetailId == orderDetail.Id).SingleOrDefault();
+                     if (detailESPAdvertising != null) return View("../Store/Application/ESPAdvertising", new ESPAdvertisingModel(orderDetail, detailESPAdvertising));
+                    }
+                    else if (orderDetail.Product.Id == 47) return View("../Store/Application/PayForPlacement", new ESPPayForPlacementModel(orderDetail, StoreService));
 
                 }
                 else if(ORDERDETAIL_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/OrderDetailProduct", new OrderDetailApplicationModel(orderDetail));
@@ -330,10 +333,6 @@ namespace asi.asicentral.web.Controllers.Store
                         case 52:
                             espAdvertising.AdSelectedDate = application.AdSelectedDate;
                             break;
-                        case 53:
-                            espAdvertising.FirstOptionId = application.Products_OptionId_First;
-                            espAdvertising.FirstItemList = application.NumberOfItems_First;
-                            break;
                         case 54:
                             espAdvertising.FirstOptionId = application.Products_OptionId_First + 1;
                             orderDetail.Cost = Convert.ToDecimal(ESPAdvertisingHelper.ESPAdvertising_PROMO_CAFE_COST[application.Products_OptionId_First]);
@@ -383,7 +382,6 @@ namespace asi.asicentral.web.Controllers.Store
 
                 if (orderDetail.Product != null && application.Categries != null && application.Categries.Count > 0)
                 {
-                    
                     orderDetail.Cost = 0.0m;
                     foreach (PFPCategory detail in application.Categries)
                     {

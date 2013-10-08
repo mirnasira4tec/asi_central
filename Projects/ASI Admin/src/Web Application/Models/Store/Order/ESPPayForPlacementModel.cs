@@ -122,7 +122,7 @@ namespace asi.asicentral.web.model.store
             this.Contacts = new List<StoreIndividual>();
         }
 
-        public ESPPayForPlacementModel(StoreOrderDetail orderdetail, StoreDetailESPAdvertising espAdvertising, IStoreService storeService)
+        public ESPPayForPlacementModel(StoreOrderDetail orderdetail, IStoreService storeService)
             : base()
         {
             this.Contacts = new List<StoreIndividual>();
