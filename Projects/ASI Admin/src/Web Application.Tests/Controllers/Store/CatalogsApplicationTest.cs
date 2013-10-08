@@ -55,7 +55,6 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
         [TestMethod]
         public void EditCatalogs()
         {
-            Guid guid = Guid.NewGuid();
             StoreIndividual individual = new StoreIndividual() { LastName = "Last", FirstName = "First" };
             StoreOrder order = new StoreOrder() { Id = 0, BillingIndividual = individual };
             StoreOrderDetail detail = new StoreOrderDetail { Id = 5, Order = order, };
