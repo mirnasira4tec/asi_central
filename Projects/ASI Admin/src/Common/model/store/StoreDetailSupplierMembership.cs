@@ -12,7 +12,7 @@ namespace asi.asicentral.model.store
         //In the below list of product id's 1 to 4 are supplier products and 9 to 24 are SGR products
         //Among them 9 to 16 are Chinese SGR products
         //17 to 24 are Chinese English products
-        //56 to 60 are Credit Connect products
+        //56 to 60 are Connect products
         public static int[] Identifiers = new int[] { 1, 2, 3, 4, 9, 10, 11, 12 ,13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 56, 57, 58, 59, 60};
 
         public StoreDetailSupplierMembership()
