@@ -14,6 +14,7 @@ namespace asi.asicentral.model.store
         public string ItemList { get; set; }
         public string LogoPath { get; set; }
         public int Sequence { get; set; }
+        public DateTime AdSelectedDate { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
