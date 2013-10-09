@@ -207,6 +207,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\asicentral\CallVolume.cs" />
     <Compile Include="Models\CreditCardModel.cs" />
     <Compile Include="Models\MediaFolderModel.cs" />
     <Compile Include="Models\sgr\ViewCategory.cs" />
@@ -314,6 +315,8 @@
     <Content Include="Views\Home\Diagnostic.cshtml" />
     <Content Include="Views\Media\List.cshtml" />
     <Content Include="Views\asicentral\QueueList.cshtml" />
+    <Content Include="Views\Shared\_CentralLayout.cshtml" />
+    <Content Include="Views\asicentral\Volume.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -15,9 +15,11 @@ namespace asi.asicentral.database
             : base("name=CallContext")
         {
             Database.SetInitializer<CallContext>(null);
+            EnableTracing(typeof(CallContext));
         }
 
         public DbSet<CallQueue> Queues { get; set; }
+        public DbSet<CallRequest> Requests { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -27,7 +29,8 @@ namespace asi.asicentral.database
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Configurations
-               .Add(new CallQueueMap());
+               .Add(new CallQueueMap())
+               .Add(new CallRequestsMap());
         }
     }
 }

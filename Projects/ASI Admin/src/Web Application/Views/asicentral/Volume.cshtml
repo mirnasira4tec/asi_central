@@ -1,0 +1,37 @@
+﻿@model asi.asicentral.web.Models.asicentral.CallVolume
+
+@{
+    ViewBag.Title = "Volume of Calls per Queue";
+    Layout = "~/Views/Shared/_CentralLayout.cshtml";
+}
+@section css {
+    @Styles.Render("~/Content/form")
+}
+
+<h2>Volume of Calls per Queue</h2>
+
+<br />
+<strong>Search Call volume by Date:</strong>
+@using (Html.BeginForm("List", "../CallQueue/Volume", FormMethod.Post, new { @class = "form-inline" }))
+{                
+    <div class="formField"><label for="startDate">Start Date</label> @Html.EditorFor(model => model.StartDate)
+    &nbsp;&nbsp;<label for="endDate">End Date</label> @Html.EditorFor(model => model.EndDate)
+    <input type="submit" value="Search" class="btn" /></div>
+}
+<br />
+@if (Model.Data.Count > 0)
+{
+    <table class="table table-bordered table-condensed">
+        <tr><th>Queue Name</th><th>Volume</th></tr>
+        @foreach(asi.asicentral.web.Models.asicentral.Volume vol in Model.Data) {
+        <tr><td>@vol.QueueName</td><td>@vol.Amount</td></tr>
+        }
+    </table>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/form")
+    <script>
+        $('#StartDate').datepicker();
+        $('#EndDate').datepicker();
+    </script>    
+}
