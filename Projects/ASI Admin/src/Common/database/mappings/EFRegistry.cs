@@ -238,6 +238,9 @@ namespace asi.asicentral.database.mappings
 
             For<IRepository<CallQueue>>().Use<EFRepository<CallQueue>>()
                 .Ctor<IValidatedContext>().Named("CallContext");
+
+            For<IRepository<CallRequest>>().Use<EFRepository<CallRequest>>()
+                .Ctor<IValidatedContext>().Named("CallContext");
             
             #endregion 
         }
