@@ -1,5 +1,6 @@
 ﻿using asi.asicentral.interfaces;
 using asi.asicentral.model.call;
+using asi.asicentral.web.Models.asicentral;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace asi.asicentral.web.Controllers.asicentral
 
         public ActionResult Index()
         {
-            return List();
+            return Volume(null);
         }
 
         public virtual ActionResult List()
@@ -33,6 +34,41 @@ namespace asi.asicentral.web.Controllers.asicentral
                 ObjectService.SaveChanges();
             }
             return new RedirectResult("../../CallQueue/List");
+        }
+
+        public virtual ActionResult Volume(CallVolume callVolume)
+        {
+            if (callVolume == null || callVolume.StartDate == DateTime.MinValue)
+            {
+                DateTime now = DateTime.Now;
+                callVolume = new CallVolume();
+                callVolume.StartDate = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
+                callVolume.EndDate = now;
+            }
+            else
+            {
+                callVolume.StartDate = new DateTime(callVolume.StartDate.Year, callVolume.StartDate.Month, callVolume.StartDate.Day, 0, 0, 0);
+                callVolume.EndDate = new DateTime(callVolume.EndDate.Year, callVolume.EndDate.Month, callVolume.EndDate.Day, 23, 59, 59);
+            }
+            IList<Volume> volumes = ObjectService.GetAll<CallRequest>(true)
+                .Where(req => req.CreateDate >= callVolume.StartDate && req.CreateDate <= callVolume.EndDate)
+                .GroupBy(req => new { req.Req_Queue } )
+                .Select( grouped => new Volume() {
+                    QueueIdentifier = grouped.Key.Req_Queue,
+                    Amount = grouped.Count() })
+                .ToList();
+            if (volumes.Count > 0)
+            {
+                //translate the queue ids
+                IList<CallQueue> queues = ObjectService.GetAll<CallQueue>(true).ToList();
+                foreach (Volume vol in volumes)
+                {
+                    CallQueue queue = queues.Where(q => q.Id == vol.QueueIdentifier).FirstOrDefault();
+                    if (queue != null) vol.QueueName = queue.Name;
+                }
+            }
+            callVolume.Data = volumes;
+            return View("../asicentral/Volume", callVolume);
         }
 
         public virtual ActionResult EnableAll()
