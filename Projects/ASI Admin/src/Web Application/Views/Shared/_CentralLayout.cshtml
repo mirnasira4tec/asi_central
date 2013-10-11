@@ -1,0 +1,15 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "ASI Central";
+}
+@section css { @RenderSection("css", required: false)}
+@RenderBody()
+@section navigation { 
+    <nav id="admin-subnavigation">
+    <ul class="clearfix">
+	    <li><a href="../CallQueue/Volume">Call Volume</a></li>
+	    <li><a href="../CallQueue/List">Queues</a></li>
+    </ul>
+    </nav>    
+}
+@section scripts { @RenderSection("scripts", required: false)}
