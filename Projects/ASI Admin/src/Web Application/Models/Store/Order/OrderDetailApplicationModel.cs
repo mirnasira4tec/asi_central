@@ -101,6 +101,7 @@ namespace asi.asicentral.web.model.store
         [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(asi.asicentral.Resource))]
         public string Quantity { get; set; }
         public string ActionName { get; set; }
+        public string AcceptedByName { get; set; }
         public StoreIndividual BillingIndividual { get; set; }
         public string ExternalReference { get; set; }
         public bool IsCompleted { get; set; }
@@ -128,6 +129,7 @@ namespace asi.asicentral.web.model.store
             BillingIndividual = order.BillingIndividual;
             OrderDetailId = orderdetail.Id;
             this.Quantity = orderdetail.Quantity.ToString();
+            this.AcceptedByName = orderdetail.AcceptedByName;
            
             if (orderdetail.Product != null)
             {
