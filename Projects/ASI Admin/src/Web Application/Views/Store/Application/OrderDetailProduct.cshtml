@@ -227,12 +227,26 @@
             {
                  @Html.HiddenFor(m => m.Cost)
             }
-            <span class="label-row span11">
-				@Html.LabelFor(m => m.Quantity) 
-			</span>
-			<span class="label-row">
-				@Html.EditorFor(m => m.Quantity) @Html.ValidationMessageFor(m => m.Quantity)
-		    </span>
+
+            @switch (Model.ProductId)
+            {
+                case 62:
+                <span class="label-row span11">
+			        @Html.Label("Accepted by Name") 
+		        </span>
+		        <span class="label-row">
+			        @Html.EditorFor(m => m.AcceptedByName) @Html.ValidationMessageFor(m => m.AcceptedByName)
+		        </span>
+                    break;
+                default:
+                <span class="label-row span11">
+			        @Html.LabelFor(m => m.Quantity) 
+		        </span>
+		        <span class="label-row">
+			        @Html.EditorFor(m => m.Quantity) @Html.ValidationMessageFor(m => m.Quantity)
+		        </span>
+                    break;
+            }
 		</fieldset>    
 	</div><!-- END #orderdetail-information -->	
 

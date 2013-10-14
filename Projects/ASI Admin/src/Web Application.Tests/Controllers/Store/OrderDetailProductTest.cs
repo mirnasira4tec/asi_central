@@ -33,6 +33,8 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             StoreIndividual individual = new StoreIndividual() { LastName = "Last", FirstName = "First" };
             StoreOrder order = new StoreOrder() { Id = 0, BillingIndividual = individual };
             StoreOrderDetail detail = new StoreOrderDetail { Id = 5, Order = order, };
+            ContextProduct product = CreateProduct(1);
+            detail.Product = product;
             List<StoreOrderDetail> details = new List<StoreOrderDetail>();
             details.Add(detail);
             detail.Order = order;
@@ -61,7 +63,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             model.ExternalReference = "102";
             model.ActionName = ApplicationController.COMMAND_SAVE;
 
-            // user selects imprinting methods and clicks save - order should be updated wih externalreference, imprinting methods should be saved.
+            //Verification for Quantity is saving as intended
             RedirectToRouteResult result = controller.EditOrderDetailProduct(model) as RedirectToRouteResult;
             Assert.AreEqual(result.RouteValues["controller"], "Application");
             Assert.AreEqual(orderRef.ExternalReference, model.ExternalReference);
@@ -82,6 +84,33 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Assert.AreEqual(orderRef.ProcessStatus, OrderStatus.Approved);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(3));
             mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(1));
+
+            model = new OrderDetailApplicationModel(detail);
+            model.AcceptedByName = "Test User";
+            product.Id = 62;
+
+            //Verification for AcceptedByName is saving as intended
+            result = controller.EditOrderDetailProduct(model) as RedirectToRouteResult;
+            Assert.AreEqual(result.RouteValues["controller"], "Application");
+            Assert.AreEqual(orderRef.ExternalReference, model.ExternalReference);
+            Assert.IsNotNull(detail);
+            Assert.AreEqual(detail.Quantity.ToString(), model.Quantity);
+            Assert.AreEqual(detail.AcceptedByName, model.AcceptedByName);
+            mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(4));
+            
+            // user clicks reject - order should be updated to reject
+            model.ActionName = ApplicationController.COMMAND_REJECT;
+            result2 = controller.EditOrderDetailProduct(model) as RedirectToRouteResult;
+            Assert.AreEqual(result2.RouteValues["controller"], "Orders");
+            Assert.AreEqual(orderRef.ProcessStatus, OrderStatus.Rejected);
+            mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(5));
+
+            // user clicks approve with reference id
+            model.ActionName = ApplicationController.COMMAND_ACCEPT;
+            result3 = controller.EditOrderDetailProduct(model) as RedirectToRouteResult;
+            Assert.AreEqual(orderRef.ProcessStatus, OrderStatus.Approved);
+            mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(6));
+            mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(2));
         }
     }
 }

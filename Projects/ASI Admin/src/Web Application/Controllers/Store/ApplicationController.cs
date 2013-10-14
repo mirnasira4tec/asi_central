@@ -17,7 +17,7 @@ namespace asi.asicentral.web.Controllers.Store
         public const string COMMAND_SAVE = "Save";
         public const string COMMAND_REJECT = "Reject";
         public const string COMMAND_ACCEPT = "Accept";
-        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 45, 46, 55 };
+        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 45, 46, 55, 62 };
         public static readonly int[] DISTRIBUTOR_CATALOG_PRODUCT_IDS = { 35, 36, 37, 38, 39, 40, 41 };
         public static readonly int[] SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS = { 47, 48, 49, 50, 51, 52, 53, 54 };
         
@@ -268,7 +268,18 @@ namespace asi.asicentral.web.Controllers.Store
                 order = UpdateCompanyInformation(application, order);
 
                 //Update Catalog Information
-                orderDetail.Quantity = Convert.ToInt32(application.Quantity);
+                if(orderDetail.Product != null)
+                {
+                    switch(orderDetail.Product.Id)
+                    {
+                        case 62:
+                            orderDetail.AcceptedByName = application.AcceptedByName;
+                            break;
+                        default:
+                            orderDetail.Quantity = Convert.ToInt32(application.Quantity);
+                            break;
+                    }
+                }
                 orderDetail.Cost = application.Cost;
                 StoreAddress address = order.Company.GetCompanyShippingAddress();
                 StoreService.UpdateTaxAndShipping(order);
