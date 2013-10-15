@@ -219,7 +219,10 @@
                 <fieldset class="billing-info-form">
                 <legend><label for="@Html.NameFor(m => m.Categries[count].IsSelected)">@Html.CheckBoxFor(model => model.Categries[count].IsSelected, new { id = string.Format("categoryCheck_{0}", count) }) @Model.Categries[count].CategoryName</label></legend>	
                 <div class="label-row">
+                    @if(Model.ProductId == 47)
+                    {
 				    @Html.Label(asi.asicentral.web.Resource.CPMOption) 
+                    }
                     @Html.Label(asi.asicentral.web.Resource.PaymentOption) 
                     <span id="paymentAmountLabel_@count" hidden>
                     @Html.Label(asi.asicentral.web.Resource.PaymentAmount) 
@@ -229,7 +232,10 @@
                     </span>
                 </div>
                 <div class="label-row">
+                    @if(Model.ProductId == 47)
+                    {
                     @Html.DropDownListFor(model => model.Categries[count].CPMOption, new SelectList(asi.asicentral.util.store.ESPAdvertisingHelper.GetCPMOptions(), "Value", "Text", Model.Categries[count].CPMOption))
+                    }
                     @Html.DropDownListFor(model => model.Categries[count].PaymentOption, new SelectList(asi.asicentral.util.store.ESPAdvertisingHelper.GetPaymentOptions(), "Value", "Text", Model.Categries[count].PaymentOption), new {@class = "PaymentOption" })
                     <span id="paymentAmountEditor_@count" hidden>
                         @Html.EditorFor(model => model.Categries[count].PaymentAmount, new SelectList(asi.asicentral.util.store.ESPAdvertisingHelper.GetCPMOptions(), "Value", "Text", Model.Categries[count].PaymentAmount))

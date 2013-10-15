@@ -19,7 +19,8 @@ namespace asi.asicentral.web.Controllers.Store
         public const string COMMAND_ACCEPT = "Accept";
         public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 45, 46, 55, 62 };
         public static readonly int[] DISTRIBUTOR_CATALOG_PRODUCT_IDS = { 35, 36, 37, 38, 39, 40, 41 };
-        public static readonly int[] SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS = { 47, 48, 49, 50, 51, 52, 53, 54 };
+        public static readonly int[] SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS = { 48, 49, 50, 51, 52, 53, 54 };
+        public static readonly int[] SUPPLIER_ESP_PAYFORPLACEMENT_PRODUCT_IDS = { 47, 63 };
         
         public IStoreService StoreService { get; set; }
         public IFulfilmentService FulfilmentService { get; set; }
@@ -48,14 +49,10 @@ namespace asi.asicentral.web.Controllers.Store
                 }
                 else if (SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
                 {
-                    if (orderDetail.Product.Id != 47)
-                    {
                      StoreDetailESPAdvertising detailESPAdvertising = StoreService.GetAll<StoreDetailESPAdvertising>().Where(espadvertising => espadvertising.OrderDetailId == orderDetail.Id).SingleOrDefault();
                      if (detailESPAdvertising != null) return View("../Store/Application/ESPAdvertising", new ESPAdvertisingModel(orderDetail, detailESPAdvertising));
-                    }
-                    else if (orderDetail.Product.Id == 47) return View("../Store/Application/PayForPlacement", new ESPPayForPlacementModel(orderDetail, StoreService));
-
                 }
+                else if (SUPPLIER_ESP_PAYFORPLACEMENT_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/PayForPlacement", new ESPPayForPlacementModel(orderDetail, StoreService));
                 else if(ORDERDETAIL_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/OrderDetailProduct", new OrderDetailApplicationModel(orderDetail));
             }
             throw new Exception("Retieved an unknown type of application");
@@ -406,7 +403,7 @@ namespace asi.asicentral.web.Controllers.Store
                                 StoreService.Add<StoreDetailPayForPlacement>(detailPayForPlacement);
                             }
                             detailPayForPlacement.CategoryName = detail.CategoryName;
-                            detailPayForPlacement.CPMOption = detail.CPMOption;
+                            if(application.ProductId == 47) detailPayForPlacement.CPMOption = detail.CPMOption;
                             detailPayForPlacement.PaymentType = detail.PaymentOption;
                             decimal totalCost = 0.0m;
                             if (detail.PaymentOption == "FB" && !string.IsNullOrEmpty(detail.PaymentAmount))
@@ -418,7 +415,13 @@ namespace asi.asicentral.web.Controllers.Store
                             {
                                 int impressionsCount = Convert.ToInt32(detail.Impressions);
                                 detailPayForPlacement.ImpressionsRequested = impressionsCount;
-                                totalCost = (Convert.ToDecimal(impressionsCount) / 1000) * ESPAdvertisingHelper.ESPAdvertising_PFP_COST[detail.CPMOption];
+                                if (application.ProductId == 47) totalCost = (Convert.ToDecimal(impressionsCount) / 1000) * ESPAdvertisingHelper.ESPAdvertising_PFP_COST[detail.CPMOption];
+                                else if (application.ProductId == 63 && order.IsStoreRequest && orderDetail.Product != null) totalCost = (Convert.ToDecimal(impressionsCount) / 1000) * orderDetail.Product.Cost;
+                                else if(application.ProductId == 63 && !order.IsStoreRequest && orderDetail.Product != null)
+                                {
+                                    decimal specialCost = StoreService.GetAll<ContextProductSequence>(true).Where(prod => prod.Product.Id == application.ProductId).Select(item => item.Cost).SingleOrDefault();
+                                    totalCost = (Convert.ToDecimal(impressionsCount) / 1000) * specialCost;
+                                }
                             }
                             orderDetail.Cost += totalCost;
                             detailPayForPlacement.OrderDetailId = orderDetail.Id;
