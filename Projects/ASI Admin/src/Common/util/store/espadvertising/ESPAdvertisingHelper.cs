@@ -16,6 +16,7 @@ namespace asi.asicentral.util.store
         public static readonly decimal[] ESPAdvertising_Video_COST = { 41.58M, 6.58M };
         public static readonly string[] ESPAdvertising_PROMO_CAFE_COST = { "750", "199", "450" };
         public static readonly decimal[] ESPAdvertising_PFP_COST = { 295.00M, 275.00M, 260.00M, 240.00M, 230.00M, 220.00M, 210.00M };
+        public static readonly decimal ESPAdvertising_LoginScreen_COST = 250M;
 
         public static IList<SelectListItem> GetAdTypeOptions(string value = null)
         {
