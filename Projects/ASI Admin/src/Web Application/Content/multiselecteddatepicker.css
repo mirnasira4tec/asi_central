@@ -30,7 +30,7 @@
 
     .ui-datepicker .ui-datepicker-prev {
         text-indent: -9999px; 
-        background-image: url("../img/glyphicons-halflings.png");
+        background-image: url("images/glyphicons-halflings.png");
         background-position: -240px -72px;
         top: 8px;
         left: 2px;
@@ -38,7 +38,7 @@
 
     .ui-datepicker .ui-datepicker-next {
         text-indent: -9999px; 
-        background-image: url("../img/glyphicons-halflings.png");
+        background-image: url("images/glyphicons-halflings.png");
         background-position: -336px -72px;
         top: 8px;
         right: 2px;
