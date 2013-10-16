@@ -367,6 +367,24 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid cost.
+        /// </summary>
+        public static string FieldCost {
+            get {
+                return ResourceManager.GetString("FieldCost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid number of impressions.
+        /// </summary>
+        public static string FieldImpressions {
+            get {
+                return ResourceManager.GetString("FieldImpressions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Field must be a number.
         /// </summary>
         public static string FieldIMustBeNumber {

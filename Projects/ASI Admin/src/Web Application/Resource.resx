@@ -453,4 +453,10 @@
   <data name="PaymentOption" xml:space="preserve">
     <value>Payment Option</value>
   </data>
+  <data name="FieldCost" xml:space="preserve">
+    <value>Invalid cost</value>
+  </data>
+  <data name="FieldImpressions" xml:space="preserve">
+    <value>Invalid number of impressions</value>
+  </data>
 </root>

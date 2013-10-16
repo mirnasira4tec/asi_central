@@ -12,9 +12,9 @@ namespace asi.asicentral.web.model.store
         public string CategoryName { get; set; }
         public int CPMOption { get; set; }
         public string PaymentOption { get; set; }
-        [RegularExpression(@"^[1-9]\d*(\.\d+)?$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(asi.asicentral.Resource))]
+        [RegularExpression(@"^[1-9]\d*(\.\d+)?$", ErrorMessageResourceName = "FieldCost", ErrorMessageResourceType = typeof(asi.asicentral.web.Resource))]
         public string PaymentAmount { get; set; }
-        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(asi.asicentral.Resource))]
+        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldImpressions", ErrorMessageResourceType = typeof(asi.asicentral.web.Resource))]
         public string Impressions { get; set; }
     }
 }
