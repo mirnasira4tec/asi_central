@@ -21,6 +21,11 @@ namespace asi.asicentral.web
                         "~/Scripts/bootstrap-datepicker.js",
                         "~/Scripts/bootstrap-datetimepicker.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/MultiSelectedDatePicker").Include(
+                  "~/Scripts/jquery.ui.core.js",
+                  "~/Scripts/jquery.ui.datepicker.js",
+                  "~/Scripts/jquery-ui.multidatespicker.js"));
+
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
@@ -34,6 +39,11 @@ namespace asi.asicentral.web
             bundles.Add(new StyleBundle("~/Content/form").Include(
                         "~/Content/datepicker.css",
                         "~/Content/bootstrap-datetimepicker.css"));
+
+            bundles.Add(new StyleBundle("~/Content/MultiSelectedDatePicker").Include(
+                    "~/Content/multiselecteddatepicker.css"));
+
+
         }
     }
 }

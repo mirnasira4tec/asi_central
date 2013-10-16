@@ -2,6 +2,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "ASI Store";
 }
+@RenderSection("Content", required: false)
 @RenderBody()
 @section navigation { 
     <nav id="admin-subnavigation">
@@ -15,3 +16,4 @@
     </nav>    
 }
 @section scripts { @RenderSection("scripts", required: false)}
+

@@ -1,4 +1,5 @@
-﻿using asi.asicentral.model.store;
+﻿using asi.asicentral.interfaces;
+using asi.asicentral.model.store;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -115,9 +116,7 @@ namespace asi.asicentral.web.model.store
         [Display(ResourceType = typeof(asi.asicentral.web.Resource), Name = "LogoPath")]
         public string LogoPath { get; set; }
 
-        [DataType(DataType.Date)]
-        [Display(ResourceType = typeof(asi.asicentral.web.Resource), Name = "AdSelectDate")]
-        public DateTime? AdSelectedDate { get; set; }
+        public string LoginScreen_Dates { get; set; }
 
         #endregion ESP Advertising information
 
@@ -144,7 +143,7 @@ namespace asi.asicentral.web.model.store
             this.Contacts = new List<StoreIndividual>();
         }
 
-        public ESPAdvertisingModel(StoreOrderDetail orderdetail, StoreDetailESPAdvertising espAdvertising)
+        public ESPAdvertisingModel(StoreOrderDetail orderdetail, StoreDetailESPAdvertising espAdvertising, IStoreService storeService)
             : base()
         {
             this.Contacts = new List<StoreIndividual>();
@@ -182,8 +181,12 @@ namespace asi.asicentral.web.model.store
                     LogoPath = espAdvertising.LogoPath;
                     break;
                 case 52:
-                    AdSelectedDate = espAdvertising.AdSelectedDate;
-                    LogoPath = espAdvertising.LogoPath;
+                        string LoginScreen_Dates = string.Empty;
+                        List<StoreDetailESPAdvertisingItem> items = storeService.GetAll<StoreDetailESPAdvertisingItem>().Where(model => model.OrderDetailId == OrderDetailId).OrderBy(model => model.Sequence).ToList();
+                        foreach (var dateitem in items)
+                            LoginScreen_Dates += dateitem.AdSelectedDate.Date.ToString("dd-MM-yyyy") + "\r\n";
+                     this.LoginScreen_Dates = LoginScreen_Dates;
+                     this.LogoPath = espAdvertising.LogoPath;
                     break;
                 case 53:
                     if (espAdvertising.ESPAdvertisingItems != null && espAdvertising.ESPAdvertisingItems.Count > 0)

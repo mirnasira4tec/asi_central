@@ -50,7 +50,7 @@ namespace asi.asicentral.web.Controllers.Store
                 else if (SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
                 {
                      StoreDetailESPAdvertising detailESPAdvertising = StoreService.GetAll<StoreDetailESPAdvertising>().Where(espadvertising => espadvertising.OrderDetailId == orderDetail.Id).SingleOrDefault();
-                     if (detailESPAdvertising != null) return View("../Store/Application/ESPAdvertising", new ESPAdvertisingModel(orderDetail, detailESPAdvertising));
+                     if (detailESPAdvertising != null) return View("../Store/Application/ESPAdvertising", new ESPAdvertisingModel(orderDetail, detailESPAdvertising, StoreService));
                 }
                 else if (SUPPLIER_ESP_PAYFORPLACEMENT_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/PayForPlacement", new ESPPayForPlacementModel(orderDetail, StoreService));
                 else if(ORDERDETAIL_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/OrderDetailProduct", new OrderDetailApplicationModel(orderDetail));
@@ -339,7 +339,51 @@ namespace asi.asicentral.web.Controllers.Store
                             orderDetail.Cost += ESPAdvertisingHelper.ESPAdvertising_RUSH_COST[application.Products_OptionId_Third];
                             break;
                         case 52:
-                            espAdvertising.AdSelectedDate = application.AdSelectedDate;
+                            List<string> LoginScreen_Dates = new List<string>();
+                            List<DateTime> updatedDateList = new List<DateTime>();
+                            LoginScreen_Dates = System.Text.RegularExpressions.Regex.Split(string.IsNullOrEmpty(application.LoginScreen_Dates) ? string.Empty : application.LoginScreen_Dates, "\r\n").ToList();
+                            LoginScreen_Dates = LoginScreen_Dates.Where(u => u.ToString() != string.Empty).ToList();
+                            List<StoreDetailESPAdvertisingItem> loginScreen_previousItems = StoreService.GetAll<StoreDetailESPAdvertisingItem>().Where(details => details.OrderDetailId == application.OrderDetailId).ToList();
+                            //Adding or updating exisitng records
+                            if (LoginScreen_Dates != null && LoginScreen_Dates.Count > 0)
+                            {
+                                int count = 1;
+                                foreach (string slecteddate in LoginScreen_Dates)
+                                {
+                                    string[] dateString = slecteddate.Split('-');
+                                    DateTime date = new DateTime(int.Parse(dateString[2]), int.Parse(dateString[1]), int.Parse(dateString[0]));
+                                    StoreDetailESPAdvertisingItem existingItem = loginScreen_previousItems.Where(item => item.AdSelectedDate == date).SingleOrDefault();
+                                    if (existingItem != null)
+                                    {
+                                        existingItem.Sequence = count++;
+                                        existingItem.UpdateDate = DateTime.UtcNow;
+                                        existingItem.UpdateSource = "ApplicationController - EditESPAdvertising";
+                                        StoreService.Update<StoreDetailESPAdvertisingItem>(existingItem);
+                                    }
+                                    else
+                                    {
+                                        StoreDetailESPAdvertisingItem newitem = new StoreDetailESPAdvertisingItem();
+                                        newitem.AdSelectedDate = date;
+                                        newitem.Sequence = count++;
+                                        newitem.OrderDetailId = application.OrderDetailId;
+                                        newitem.CreateDate = DateTime.UtcNow;
+                                        newitem.UpdateDate = DateTime.UtcNow;
+                                        newitem.UpdateSource = "ApplicationController - EditESPAdvertising";
+                                        StoreService.Add<StoreDetailESPAdvertisingItem>(newitem);
+                                    }
+                                    updatedDateList.Add(date);
+                                }
+                            }
+                            //Deleting extra if any extra dates added in earlier submit.
+                            if (updatedDateList != null && updatedDateList.Count > 0 && loginScreen_previousItems != null && loginScreen_previousItems.Count > 0 && loginScreen_previousItems.Count != updatedDateList.Count)
+                            {
+                                foreach (StoreDetailESPAdvertisingItem item in loginScreen_previousItems)
+                                {
+                                    if(updatedDateList.Where(date => date == item.AdSelectedDate).SingleOrDefault() == DateTime.MinValue)
+                                        StoreService.Delete<StoreDetailESPAdvertisingItem>(item);
+                                }
+                            }
+                            orderDetail.Cost = Math.Round(LoginScreen_Dates.Count * ESPAdvertisingHelper.ESPAdvertising_LoginScreen_COST, 2);
                             break;
                         case 54:
                             espAdvertising.FirstOptionId = application.Products_OptionId_First + 1;
