@@ -378,7 +378,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
         }
 
         [TestMethod]
-        public void EditLogoLineOrVideo()
+        public void EditFeaturedProductsOrVideo()
         {
             StoreIndividual individual = new StoreIndividual() { LastName = "Last", FirstName = "First" };
             StoreOrder order = new StoreOrder() { Id = 0, BillingIndividual = individual };
@@ -417,7 +417,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             model.ActionName = ApplicationController.COMMAND_SAVE;
             model.ExternalReference = "102";
 
-            // LogoLine - 51
+            // Featured Products - 51
             RedirectToRouteResult result = controller.EditESPAdvertising(model) as RedirectToRouteResult;
             Assert.AreEqual(result.RouteValues["controller"], "Application");
             Assert.AreEqual(orderRef.ExternalReference, model.ExternalReference);
@@ -520,7 +520,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Assert.AreEqual(result.RouteValues["controller"], "Application");
             Assert.AreEqual(orderRef.ExternalReference, model.ExternalReference);
             Assert.IsNotNull(detail);
-            Assert.AreEqual(detail.Quantity, 1);
+            Assert.AreEqual(detail.Quantity, 6);
             Assert.IsNotNull(espAdvertisingDetail);
             Assert.IsNotNull(dateItem);
             Assert.AreEqual(dateItem.AdSelectedDate, new DateTime(2013,11,15));
@@ -539,6 +539,19 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Assert.AreEqual(orderRef.ProcessStatus, OrderStatus.Approved);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(3));
             mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(1));
+
+            model.LoginScreen_Dates = "17-10-2013\r\n18-10-2013\r\n19-10-2013\r\n20-10-2013\r\n14-11-2013\r\n11-11-2013\r\n15-12-2013\r\n";
+            // LoginScreen - 52
+            result = controller.EditESPAdvertising(model) as RedirectToRouteResult;
+            Assert.AreEqual(result.RouteValues["controller"], "Application");
+            Assert.AreEqual(orderRef.ExternalReference, model.ExternalReference);
+            Assert.IsNotNull(detail);
+            Assert.AreEqual(detail.Quantity, 7);
+            Assert.IsNotNull(espAdvertisingDetail);
+            Assert.IsNotNull(dateItem);
+            Assert.AreEqual(dateItem.AdSelectedDate, new DateTime(2013, 12, 15));
+            mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(4));
+            mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(2));
         }
 
         [TestMethod]
