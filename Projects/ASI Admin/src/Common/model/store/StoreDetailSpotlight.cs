@@ -11,7 +11,6 @@ namespace asi.asicentral.model.store
         public int Id { get; set; }
         public int OrderDetailId { get; set; }
         public string ItemNumber { get; set; }
-        public int NumberofMonths { get; set; }
         public string SmallImagePath { get; set; }
         public string TextUnderImage { get; set; }
         public string LargeImagePath { get; set; }
