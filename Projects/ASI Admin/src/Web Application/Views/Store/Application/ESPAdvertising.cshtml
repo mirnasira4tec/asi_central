@@ -2,11 +2,12 @@
 @using asi.asicentral.model.store
 @using asi.asicentral.web.Controllers.Store
 @model asi.asicentral.web.model.store.ESPAdvertisingModel
-
 @{
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
 }
-
+@section Content {
+    @Styles.Render("~/Content/MultiSelectedDatePicker")
+}
 <h1>@string.Format(Model.ProductName) (#@Model.OrderId)</h1>
 @if (Model.Price > 0.0m)
 {
@@ -273,13 +274,23 @@
                     break;
                 case 52:
                     <span class="label-row">
-                        @Html.LabelFor(m => m.AdSelectedDate) 
                         @if(Model.LogoPath != string.Empty) { @Html.LabelFor(m => m.LogoPath) }
-			        </span>
-			        <span class="label-row">
-                        @Html.EditorFor(m => m.AdSelectedDate, new { @class = "dateField" }) @Html.ValidationMessageFor(m => m.AdSelectedDate)
                         @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
 			        </span>
+                    <div></div>
+			        <div class="label-row">
+                        @Html.HiddenFor(model => model.LoginScreen_Dates)
+                        <div>
+                            <div>
+                                <div><p><strong>Select Dates:</strong></p></div>
+                                <div id="dates" class="box"></div>
+                            </div>
+                            <div>
+                                <div><p><strong>You have selected below date(s):</strong></p></div>
+                                <div><textarea id="txtSelectedDates" rows="4" readonly="readonly"></textarea></div>
+                            </div>
+                        </div>
+			        </div>
                     break;
                 case 53:
                     if(Model.Videos != null && Model.Videos.Count > 0)
@@ -316,9 +327,9 @@
     
 @section Scripts {
     @Scripts.Render("~/bundles/form")
+    @Scripts.Render("~/bundles/MultiSelectedDatePicker")
     <script src="/Scripts/asi.js"></script>
     <script>
-      
         $('.dateField').datepicker()
         $('.date-clear').click(function () {
             $("input[name='" + this.id + "']").val('');
@@ -349,5 +360,39 @@
             $('[rel*="isprimary"]').attr("checked", false);
             this.checked = true;
         });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#dates').multiDatesPicker({
+            dateFormat: "dd-mm-yy",
+            minDate: 0,
+            setDate: ""
+               , onSelect: function (dateText, inst) {
+                   $("#LoginScreen_Dates").val("");
+                   var date_String = "";
+                   var dates = $('#dates').multiDatesPicker('getDates');
+                   if (dates.length > 0) {
+                       $.each(dates, function (index, value) {
+                           date_String += value + "\n";
+                       });
+                   }
+                   $("#txtSelectedDates").html(date_String);
+                   $("#LoginScreen_Dates").val(date_String);
+                }
+        });
+        SetDates();
+        var dates = $('#dates').multiDatesPicker('getDates');
+     });
+
+        function SetDates() {
+        $("#txtSelectedDates").html($("#LoginScreen_Dates").val());
+        var dates = $("#LoginScreen_Dates").val().split("\n");
+        if (dates.length > 0) {
+            $.each(dates, function (index, value) {
+                if (value != "")
+                    $('#dates').multiDatesPicker('addDates', value);
+            });
+        }
+    }
     </script>
 }

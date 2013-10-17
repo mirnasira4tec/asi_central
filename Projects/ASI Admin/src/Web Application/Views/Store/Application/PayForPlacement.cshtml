@@ -238,10 +238,10 @@
                     }
                     @Html.DropDownListFor(model => model.Categries[count].PaymentOption, new SelectList(asi.asicentral.util.store.ESPAdvertisingHelper.GetPaymentOptions(), "Value", "Text", Model.Categries[count].PaymentOption), new {@class = "PaymentOption" })
                     <span id="paymentAmountEditor_@count" hidden>
-                        @Html.EditorFor(model => model.Categries[count].PaymentAmount, new SelectList(asi.asicentral.util.store.ESPAdvertisingHelper.GetCPMOptions(), "Value", "Text", Model.Categries[count].PaymentAmount))
+                        @Html.EditorFor(model => model.Categries[count].PaymentAmount)@Html.ValidationMessageFor(model => model.Categries[count].PaymentAmount)
                     </span>
                     <span id="impressionsEditor_@count" hidden>
-				        @Html.EditorFor(model => model.Categries[count].Impressions, new SelectList(asi.asicentral.util.store.ESPAdvertisingHelper.GetPaymentOptions(), "Value", "Text", Model.Categries[count].Impressions))
+				        @Html.EditorFor(model => model.Categries[count].Impressions) @Html.ValidationMessageFor(model => model.Categries[count].Impressions)
                     </span>
                 </div>
                 </fieldset>

@@ -54,44 +54,6 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             return companywithAddress;
         }
 
-        public Category[] GetImpressionsPerCategoryTemplate()
-        {
-            Category[] categories = new Category[3];
-            categories[0] = new Category() { Name = "BABY ITEMS - DEMO", SupplierCount = 217 };
-            categories[0].Results = new Company[7];
-            categories[0].Results[0] = new Company() { IsRequestor = false, Impressions = 1143, Rank = 1 };
-            categories[0].Results[1] = new Company() { IsRequestor = false, Impressions = 1143, Rank = 1 };
-            categories[0].Results[2] = new Company() { IsRequestor = false, Impressions = 1026, Rank = 3 };
-            categories[0].Results[3] = new Company() { IsRequestor = true, Impressions = 846, Rank = 4 };
-            categories[0].Results[4] = new Company() { IsRequestor = false, Impressions = 829, Rank = 5 };
-            categories[0].Results[5] = new Company() { IsRequestor = false, Impressions = 700, Rank = 6 };
-            categories[0].Results[6] = new Company() { IsRequestor = false, Impressions = 35, Rank = 81 };
-            categories[0].Requestor = categories[0].Results[6];
-
-            categories[1] = new Category() { Name = "BASEBALL CAPS - DEMO", SupplierCount = 357 };
-            categories[1].Results = new Company[7];
-            categories[1].Results[0] = new Company() { IsRequestor = false, Impressions = 8207, Rank = 1 };
-            categories[1].Results[1] = new Company() { IsRequestor = false, Impressions = 7497, Rank = 2 };
-            categories[1].Results[2] = new Company() { IsRequestor = false, Impressions = 6015, Rank = 3 };
-            categories[1].Results[3] = new Company() { IsRequestor = false, Impressions = 5580, Rank = 4 };
-            categories[1].Results[4] = new Company() { IsRequestor = false, Impressions = 5429, Rank = 5 };
-            categories[1].Results[5] = new Company() { IsRequestor = false, Impressions = 4326, Rank = 6 };
-            categories[1].Results[6] = new Company() { IsRequestor = true, Impressions = 272, Rank = 66 };
-            categories[1].Requestor = categories[1].Results[6];
-
-            categories[2] = new Category() { Name = "GOLF/POLO SHIRTS - DEMO", SupplierCount = 262 };
-            categories[2].Results = new Company[7];
-            categories[2].Results[0] = new Company() { IsRequestor = true, Impressions = 33218, Rank = 1 };
-            categories[2].Results[1] = new Company() { IsRequestor = false, Impressions = 8981, Rank = 2 };
-            categories[2].Results[2] = new Company() { IsRequestor = false, Impressions = 5127, Rank = 3 };
-            categories[2].Results[3] = new Company() { IsRequestor = false, Impressions = 4109, Rank = 4 };
-            categories[2].Results[4] = new Company() { IsRequestor = false, Impressions = 4055, Rank = 5 };
-            categories[2].Results[5] = new Company() { IsRequestor = false, Impressions = 3943, Rank = 6 };
-            categories[2].Results[6] = new Company() { IsRequestor = false, Impressions = 919, Rank = 31 };
-            categories[2].Requestor = categories[2].Results[6];
-            return categories;
-        }
-
         [TestMethod]
         public void EditPayForPlacement()
         {
@@ -515,6 +477,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             StoreIndividual individual = new StoreIndividual() { LastName = "Last", FirstName = "First" };
             StoreOrder order = new StoreOrder() { Id = 0, BillingIndividual = individual };
             StoreOrderDetail detail = new StoreOrderDetail { Id = 5, Order = order, };
+            StoreDetailESPAdvertisingItem dateItem = null;
             List<StoreOrderDetail> details = new List<StoreOrderDetail>();
             List<StoreDetailESPAdvertising> advertisings = new List<StoreDetailESPAdvertising>();
             details.Add(detail);
@@ -539,6 +502,8 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Mock<IFulfilmentService> mockFulFilService = new Mock<IFulfilmentService>();
             mockStoreService.Setup(service => service.GetAll<StoreOrderDetail>(false)).Returns(details.AsQueryable());
             mockStoreService.Setup(service => service.GetAll<StoreDetailESPAdvertising>(false)).Returns(advertisings.AsQueryable());
+            mockStoreService.Setup(objectService => objectService.Add<StoreDetailESPAdvertisingItem>(It.IsAny<StoreDetailESPAdvertisingItem>()))
+                            .Callback<StoreDetailESPAdvertisingItem>((theLoginDate) => dateItem = theLoginDate);
 
             ApplicationController controller = new ApplicationController();
             controller.FulfilmentService = mockFulFilService.Object;
@@ -546,9 +511,9 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
 
             ESPAdvertisingModel model = new ESPAdvertisingModel();
             model.OrderDetailId = 5;
-            model.AdSelectedDate = new DateTime(2013, 12, 18);
             model.ActionName = ApplicationController.COMMAND_SAVE;
             model.ExternalReference = "102";
+            model.LoginScreen_Dates = "17-10-2013\r\n18-10-2013\r\n19-10-2013\r\n20-10-2013\r\n14-11-2013\r\n15-11-2013\r\n";
 
             // LoginScreen - 52
             RedirectToRouteResult result = controller.EditESPAdvertising(model) as RedirectToRouteResult;
@@ -557,7 +522,8 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Assert.IsNotNull(detail);
             Assert.AreEqual(detail.Quantity, 1);
             Assert.IsNotNull(espAdvertisingDetail);
-            Assert.AreEqual(espAdvertisingDetail.AdSelectedDate, model.AdSelectedDate);
+            Assert.IsNotNull(dateItem);
+            Assert.AreEqual(dateItem.AdSelectedDate, new DateTime(2013,11,15));
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(1));
 
             // user clicks reject - order should be updated to reject
