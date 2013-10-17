@@ -383,7 +383,7 @@ namespace asi.asicentral.web.Controllers.Store
                                         StoreService.Delete<StoreDetailESPAdvertisingItem>(item);
                                 }
                             }
-                            orderDetail.Cost = Math.Round(LoginScreen_Dates.Count * ESPAdvertisingHelper.ESPAdvertising_LoginScreen_COST, 2);
+                            if (updatedDateList != null) orderDetail.Quantity = updatedDateList.Count;
                             break;
                         case 54:
                             espAdvertising.FirstOptionId = application.Products_OptionId_First + 1;
