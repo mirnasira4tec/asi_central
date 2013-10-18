@@ -227,7 +227,7 @@
 			        </span>
 			        <span class="label-row">
 				        @Html.DropDownListFor(model => model.Products_OptionId_First, asi.asicentral.util.store.ESPAdvertisingHelper.GetAdTypeOptions())
-                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
+                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
 			        </span>
                     break;
                 case 49:
@@ -272,13 +272,13 @@
                         @if(Model.LogoPath != string.Empty) { @Html.LabelFor(m => m.LogoPath) }
 			        </span>
 			        <span class="label-row">
-                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
+                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
 			        </span>
                     break;
                 case 52:
                     <div class="label-row">
                         @if(Model.LogoPath != string.Empty) { @Html.LabelFor(m => m.LogoPath) }
-                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
+                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
 			        </div>
                     <br /> <br />
                     <div class="label-row">
@@ -306,7 +306,7 @@
 			        </span>
 			        <span class="label-row">
                         @Html.TextBoxFor(m => m.Videos[count].ItemList, new { @readonly = "readonly" }) @Html.ValidationMessageFor(m => m.Videos[count].ItemList)
-                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/uploads/espadvertisement/@Model.Videos[count].LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
+                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.Videos[count].LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
 			        </span>
                         }
                     }
@@ -318,7 +318,7 @@
 			        </span>
 			        <span class="label-row">
 				         @Html.DropDownListFor(model => model.Products_OptionId_First, asi.asicentral.util.store.ESPAdvertisingHelper.GetESPOnlineOptions())
-                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
+                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
 			        </span>
                     break;
             }
