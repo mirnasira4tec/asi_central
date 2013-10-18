@@ -459,4 +459,13 @@
   <data name="FieldImpressions" xml:space="preserve">
     <value>Invalid number of impressions</value>
   </data>
+  <data name="LargeImagePath" xml:space="preserve">
+    <value>LargeImagePath</value>
+  </data>
+  <data name="SmallImagePath" xml:space="preserve">
+    <value>SmallImagePath</value>
+  </data>
+  <data name="TextUnderImage" xml:space="preserve">
+    <value>TextUnderImage</value>
+  </data>
 </root>
