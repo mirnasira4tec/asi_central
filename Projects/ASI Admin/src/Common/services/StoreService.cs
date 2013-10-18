@@ -41,6 +41,16 @@ namespace asi.asicentral.services
             return application;
         }
 
+        public virtual model.store.StoreDetailDecoratorMembership GetDecoratorApplication(model.store.StoreOrderDetail orderDetail)
+        {
+            StoreDetailDecoratorMembership application = null;
+            if (orderDetail.Product != null && StoreDetailDecoratorMembership.Identifiers.Contains(orderDetail.Product.Id))
+            {
+                application = GetAll<StoreDetailDecoratorMembership>().Where(app => app.OrderDetailId == orderDetail.Id).SingleOrDefault();
+            }
+            return application;
+        }
+
 
         /// <summary>
         /// Retrieves the application associated with the order detail
@@ -54,6 +64,7 @@ namespace asi.asicentral.services
             {
                 if (StoreDetailSupplierMembership.Identifiers.Contains(orderDetail.Product.Id)) return GetSupplierApplication(orderDetail);
                 else if (StoreDetailDistributorMembership.Identifiers.Contains(orderDetail.Product.Id)) return GetDistributorApplication(orderDetail);
+                else if (StoreDetailDecoratorMembership.Identifiers.Contains(orderDetail.Product.Id)) return GetDecoratorApplication(orderDetail);
             }
             return application;
         }
@@ -76,7 +87,7 @@ namespace asi.asicentral.services
                 if (StoreDetailSupplierMembership.Identifiers.Contains(orderDetail.Product.Id))
                 {
                     //make sure the application does not already exist
-                    StoreDetailSupplierMembership supplierApplication = GetAll<StoreDetailSupplierMembership>(true).Where(supp => supp.OrderDetailId == orderDetail.Id).FirstOrDefault();
+                    StoreDetailSupplierMembership supplierApplication = GetAll<StoreDetailSupplierMembership>(true).Where(supplier => supplier.OrderDetailId == orderDetail.Id).FirstOrDefault();
                     if (supplierApplication == null)
                     {
                         added = true;
@@ -88,13 +99,25 @@ namespace asi.asicentral.services
                 else if (StoreDetailDistributorMembership.Identifiers.Contains(orderDetail.Product.Id))
                 {
                     //make sure the application does not already exist
-                    StoreDetailDistributorMembership distributorApplication = GetAll<StoreDetailDistributorMembership>(true).Where(supp => supp.OrderDetailId == orderDetail.Id).FirstOrDefault();
+                    StoreDetailDistributorMembership distributorApplication = GetAll<StoreDetailDistributorMembership>(true).Where(distributor => distributor.OrderDetailId == orderDetail.Id).FirstOrDefault();
                     if (distributorApplication == null)
                     {
                         added = true;
                         distributorApplication = new StoreDetailDistributorMembership();
                         Add<StoreDetailDistributorMembership>(distributorApplication);
                         application = distributorApplication;
+                    }
+                }
+                else if (StoreDetailDecoratorMembership.Identifiers.Contains(orderDetail.Product.Id))
+                {
+                    //make sure the application does not already exist
+                    StoreDetailDecoratorMembership decoratorApplication = GetAll<StoreDetailDecoratorMembership>(true).Where(decorator => decorator.OrderDetailId == orderDetail.Id).FirstOrDefault();
+                    if (decoratorApplication == null)
+                    {
+                        added = true;
+                        decoratorApplication = new StoreDetailDecoratorMembership();
+                        Add<StoreDetailDecoratorMembership>(decoratorApplication);
+                        application = decoratorApplication;
                     }
                 }
                 if (added)
