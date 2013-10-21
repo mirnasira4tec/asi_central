@@ -12,6 +12,7 @@ namespace asi.asicentral.model.store
         public int OrderDetailId { get; set; }
         public int OptionId { get; set; }
         public string LogoPath { get; set; }
+        public string Categories { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
