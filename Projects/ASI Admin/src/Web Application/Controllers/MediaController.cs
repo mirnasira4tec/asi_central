@@ -71,7 +71,7 @@ namespace asi.asicentral.web.Controllers
                 SaveFileName = string.Format("{0}.zip", basePath);
             else
                 SaveFileName = string.Format("{0}\\{1}.zip", basePath, file.Substring(1));
-
+            string devDirString = DirString.Replace("/Store", string.Empty);
             if (System.IO.Directory.Exists(DirString))
             {
                 using (ZipFile zip = new ZipFile())
@@ -85,11 +85,8 @@ namespace asi.asicentral.web.Controllers
                     if (System.IO.File.Exists(SaveFileName))
                         System.IO.File.Delete(SaveFileName);
                 }
-            }
-            else if (System.IO.File.Exists(DirString))
-            {
-                FileOrDirectorySave(DirString);
-            }
+            } else if (System.IO.File.Exists(DirString)) { FileOrDirectorySave(DirString); }
+            else if (System.IO.File.Exists(devDirString)) { FileOrDirectorySave(devDirString); }
         }
 
         [HttpPost]

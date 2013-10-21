@@ -116,6 +116,9 @@
     <Compile Include="database\mappings\asiinternet\SupplierDecoratingTypeMap.cs" />
     <Compile Include="database\mappings\call\CallQueueMap.cs" />
     <Compile Include="database\mappings\call\CallRequestsMap.cs" />
+    <Compile Include="database\mappings\store\LookDecoratorImprintingTypeMap.cs" />
+    <Compile Include="database\mappings\store\StoreDetailDecoratorMembershipMap.cs" />
+    <Compile Include="database\mappings\store\StoreDetailEspTowerAdMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailSpotlightMap.cs" />
     <Compile Include="database\mappings\store\LookCatalogOptionMap.cs" />
     <Compile Include="database\mappings\store\LookProductShippingRateMap.cs" />
@@ -148,6 +151,8 @@
     <Compile Include="model\ROI\Category.cs" />
     <Compile Include="model\ROI\Company.cs" />
     <Compile Include="model\store\CENTUserProfilesPROF.cs" />
+    <Compile Include="model\store\LookDecoratorImprintingType.cs" />
+    <Compile Include="model\store\StoreDetailDecoratorMembership.cs" />
     <Compile Include="model\store\StoreDetailSpotlight.cs" />
     <Compile Include="model\store\LookCatalogOption.cs" />
     <Compile Include="model\store\LookProductShippingRate.cs" />
@@ -237,6 +242,7 @@
     <Compile Include="model\store\StoreDetailSupplierMembership.cs" />
     <Compile Include="model\store\StoreDetailESPAdvertising.cs" />
     <Compile Include="model\store\StoreESPAdvertisingItem.cs" />
+    <Compile Include="model\store\StoreDetailEspTowerAd.cs" />
     <Compile Include="model\store\StoreIndividual.cs" />
     <Compile Include="model\store\StoreMagazineSubscription.cs" />
     <Compile Include="model\store\StoreOrder.cs" />

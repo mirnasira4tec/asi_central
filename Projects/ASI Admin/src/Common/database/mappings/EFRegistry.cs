@@ -147,6 +147,9 @@ namespace asi.asicentral.database.mappings
             For<IRepository<LookCatalogOption>>().Use<EFRepository<LookCatalogOption>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
+            For<IRepository<LookDecoratorImprintingType>>().Use<EFRepository<LookDecoratorImprintingType>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
             For<IRepository<LookDistributorAccountType>>().Use<EFRepository<LookDistributorAccountType>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
@@ -177,7 +180,13 @@ namespace asi.asicentral.database.mappings
             For<IRepository<StoreDetailCatalog>>().Use<EFRepository<StoreDetailCatalog>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
+            For<IRepository<StoreDetailDecoratorMembership>>().Use<EFRepository<StoreDetailDecoratorMembership>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
             For<IRepository<StoreDetailDistributorMembership>>().Use<EFRepository<StoreDetailDistributorMembership>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<StoreDetailEspTowerAd>>().Use<EFRepository<StoreDetailEspTowerAd>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<StoreDetailSupplierMembership>>().Use<EFRepository<StoreDetailSupplierMembership>>()

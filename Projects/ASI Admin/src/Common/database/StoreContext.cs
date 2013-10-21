@@ -26,6 +26,7 @@ namespace asi.asicentral.database
         public DbSet<ContextProductSequence> ProductSequences { get; set; }
         public DbSet<StoreDetailHallmarkRequest> HallmarkFormRequests { get; set; }
         public DbSet<LookCatalogOption> LookCatalogOptions { get; set; }
+        public DbSet<LookDecoratorImprintingType> LookDecoratorImprintingTypes { get; set; }
         public DbSet<LookDistributorAccountType> LookDistributorAccountTypes { get; set; }
         public DbSet<LookDistributorRevenueType> LookDistributorRevenueTypes { get; set; }
         public DbSet<LookProductLine> LookProductLines { get; set; }
@@ -36,8 +37,10 @@ namespace asi.asicentral.database
         public DbSet<StoreCompanyAddress> StoreCompanyAddresses { get; set; }
         public DbSet<StoreCreditCard> StoreCreditCards { get; set; }
         public DbSet<StoreDetailCatalog> StoreDetailCatalogs { get; set; }
+        public DbSet<StoreDetailDecoratorMembership> StoreDetailDecoratorMemberships { get; set; }
         public DbSet<StoreDetailDistributorMembership> StoreDetailDistributorMemberships { get; set; }
         public DbSet<StoreDetailESPAdvertising> StoreDetailESPAdvertisings { get; set; }
+        public DbSet<StoreDetailEspTowerAd> StoreDetailEspTowerAds { get; set; }
         public DbSet<StoreDetailESPAdvertisingItem> StoreDetailESPAdvertisingItems { get; set; }
         public DbSet<StoreDetailPayForPlacement> StoreDetailPayForPlacements { get; set; }
         public DbSet<StoreDetailSpotlight> StoreDetailSpotlights { get; set; }
@@ -65,6 +68,7 @@ namespace asi.asicentral.database
                 .Add(new ContextProductSequenceMap())
                 .Add(new StoreDetailHallmarkRequestMap())
                 .Add(new LookCatalogOptionMap())
+                .Add(new LookDecoratorImprintingTypeMap())
                 .Add(new LookDistributorAccountTypeMap())
                 .Add(new LookDistributorRevenueTypeMap())
                 .Add(new LookProductLineMap())
@@ -75,8 +79,10 @@ namespace asi.asicentral.database
                 .Add(new StoreCompanyAddressMap())
                 .Add(new StoreCreditCardMap())
                 .Add(new StoreDetailCatalogMap())
+                .Add(new StoreDetailDecoratorMembershipMap())
                 .Add(new StoreDetailDistributorMembershipMap())
                 .Add(new StoreDetailESPAdvertisingMap())
+                .Add(new StoreDetailEspTowerAdMap())
                 .Add(new StoreDetailESPAdvertisingItemMap())
                 .Add(new StoreDetailPayForPlacementMap())
                 .Add(new StoreDetailSpotlightMap())
