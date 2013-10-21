@@ -40,6 +40,7 @@ namespace asi.asicentral.database
         public DbSet<StoreDetailDecoratorMembership> StoreDetailDecoratorMemberships { get; set; }
         public DbSet<StoreDetailDistributorMembership> StoreDetailDistributorMemberships { get; set; }
         public DbSet<StoreDetailESPAdvertising> StoreDetailESPAdvertisings { get; set; }
+        public DbSet<StoreDetailEspTowerAd> StoreDetailEspTowerAds { get; set; }
         public DbSet<StoreDetailESPAdvertisingItem> StoreDetailESPAdvertisingItems { get; set; }
         public DbSet<StoreDetailPayForPlacement> StoreDetailPayForPlacements { get; set; }
         public DbSet<StoreDetailSpotlight> StoreDetailSpotlights { get; set; }
@@ -81,6 +82,7 @@ namespace asi.asicentral.database
                 .Add(new StoreDetailDecoratorMembershipMap())
                 .Add(new StoreDetailDistributorMembershipMap())
                 .Add(new StoreDetailESPAdvertisingMap())
+                .Add(new StoreDetailEspTowerAdMap())
                 .Add(new StoreDetailESPAdvertisingItemMap())
                 .Add(new StoreDetailPayForPlacementMap())
                 .Add(new StoreDetailSpotlightMap())
