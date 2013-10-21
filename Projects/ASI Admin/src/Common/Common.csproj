@@ -119,7 +119,6 @@
     <Compile Include="database\mappings\store\LookDecoratorImprintingTypeMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailDecoratorMembershipMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailEspTowerAdMap.cs" />
-    <Compile Include="database\mappings\store\StoreDetailSpotlightMap.cs" />
     <Compile Include="database\mappings\store\LookCatalogOptionMap.cs" />
     <Compile Include="database\mappings\store\LookProductShippingRateMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailCatalogMap.cs" />
@@ -153,7 +152,6 @@
     <Compile Include="model\store\CENTUserProfilesPROF.cs" />
     <Compile Include="model\store\LookDecoratorImprintingType.cs" />
     <Compile Include="model\store\StoreDetailDecoratorMembership.cs" />
-    <Compile Include="model\store\StoreDetailSpotlight.cs" />
     <Compile Include="model\store\LookCatalogOption.cs" />
     <Compile Include="model\store\LookProductShippingRate.cs" />
     <Compile Include="model\store\StoreDetailCatalog.cs" />

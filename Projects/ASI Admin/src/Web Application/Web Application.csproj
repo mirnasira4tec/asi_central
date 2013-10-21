@@ -215,7 +215,6 @@
     <Compile Include="Models\sgr\ViewCompany.cs" />
     <Compile Include="Models\sgr\ViewProduct.cs" />
     <Compile Include="Models\Store\Order\CatalogsApplicationModel.cs" />
-    <Compile Include="Models\Store\Order\SpotlightModel.cs" />
     <Compile Include="Models\Store\Order\DistributorApplicationModel.cs" />
     <Compile Include="Models\Store\Order\ESPAdvertisingModel.cs" />
     <Compile Include="Models\Store\Order\ESPPayForPlacementModel.cs" />
