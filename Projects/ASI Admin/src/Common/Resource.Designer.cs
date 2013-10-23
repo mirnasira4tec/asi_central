@@ -556,6 +556,78 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please choose at least one date.
+        /// </summary>
+        public static string EmailExpress_Error_Date {
+            get {
+                return ResourceManager.GetString("EmailExpress_Error_Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select one of the Email Express Option to proceed.
+        /// </summary>
+        public static string EmailExpress_Error_ItemType {
+            get {
+                return ResourceManager.GetString("EmailExpress_Error_ItemType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please accept the Terms&amp;Conditions to proceed.
+        /// </summary>
+        public static string EmailExpress_Error_Terms {
+            get {
+                return ResourceManager.GetString("EmailExpress_Error_Terms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EmailExpress Platinum.
+        /// </summary>
+        public static string EmailExpress_Platinum {
+            get {
+                return ResourceManager.GetString("EmailExpress_Platinum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Regular EmailExpress.
+        /// </summary>
+        public static string EmailExpress_Regular {
+            get {
+                return ResourceManager.GetString("EmailExpress_Regular", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have selected {x} date(s):.
+        /// </summary>
+        public static string EmailExpress_Selected_Dates_Count {
+            get {
+                return ResourceManager.GetString("EmailExpress_Selected_Dates_Count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special Request.
+        /// </summary>
+        public static string EmailExpress_Special {
+            get {
+                return ResourceManager.GetString("EmailExpress_Special", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EmailExpress Targeted List.
+        /// </summary>
+        public static string EmailExpress_TargetedList {
+            get {
+                return ResourceManager.GetString("EmailExpress_TargetedList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Executive.
         /// </summary>
         public static string Executive {
