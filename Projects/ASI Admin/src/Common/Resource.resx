@@ -534,14 +534,8 @@
   <data name="BannerAd" xml:space="preserve">
     <value>Banner Ad</value>
   </data>
-  <data name="Cost_1995_50_Products_PerYear" xml:space="preserve">
-    <value>$1,995/year for 50 products</value>
-  </data>
   <data name="Cost_300_5_Products_PerMonth" xml:space="preserve">
-    <value>$300/month for 5 products</value>
-  </data>
-  <data name="Cost_400_5_Products_PerMonth" xml:space="preserve">
-    <value>$400/month for 5 products</value>
+    <value>$125/month for 3 products</value>
   </data>
   <data name="SelectNumberOfProducts" xml:space="preserve">
     <value>Select number of products</value>
