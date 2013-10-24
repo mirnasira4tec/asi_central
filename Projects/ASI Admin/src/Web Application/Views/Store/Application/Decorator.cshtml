@@ -1,0 +1,288 @@
+﻿@using asi.asicentral.web
+@using asi.asicentral.model.store
+@using asi.asicentral.web.Controllers.Store;
+@model asi.asicentral.web.model.store.DecoratorApplicationModel
+@{
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+
+<h1>@Resource.StoreTitleDistributorApplication (#@Model.OrderId)</h1>
+<p>The Membership product purchase fee is @Model.Price.ToString("C")</p>
+@using (Html.BeginForm("EditDecorator", "Application"))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
+    
+    <div>
+        <h3 class="order-status-header3">Order Status:</h3>
+        <div class="order-status">@Model.OrderStatus</div>
+        <div class="timms-info">
+            <div class="span3">
+                <label class="order-status-label" for="Timms_ID">Timms ID:</label>
+                <div class="order-status-input">
+                    @Html.EditorFor(m => m.ExternalReference, new { @class = "span2" })
+                    <span id="timmsErrorMessage" data-type="errormessage" class="field-validation-error"></span>
+                </div>
+            </div>
+            <div class="status-btns">
+                @if (Model.Completed && Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
+                {
+                <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
+                }
+                @if (Model.Completed && Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
+                { 
+                <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
+                }
+                <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+                @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
+                { @Html.ActionLink("Close", "../Orders") }
+                else
+                { @Html.ActionLink("Cancel", "../Orders") }
+
+            </div>
+        </div>
+    </div>
+
+	<nav>
+		<ul class="nav nav-tabs" id="tabs">
+			<li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
+			<li><a href="#tabproduct" data-toggle="tab">Product Information</a></li>
+		</ul>
+	</nav>
+
+	<div class="tab-content">
+		<div id="tabbasic" class="basic-information tab-pane fade in active">
+			<fieldset class="company-info-form">			
+				<legend>Company Information</legend>
+					<span class="label-row">
+						@Html.LabelFor(m => m.Company) 
+						@Html.EditorFor(m => m.Company, new { @class = "long" }) @Html.ValidationMessageFor(m => m.Company)
+					</span>
+					<span class="label-row">
+						@Html.LabelFor(m => m.Address1)
+						@Html.LabelFor(m => m.Address2)
+						@Html.LabelFor(m => m.City)
+					</span>
+					<span class="label-row">
+						@Html.EditorFor(m => m.Address1) @Html.ValidationMessageFor(m => m.Address1)
+						@Html.EditorFor(m => m.Address2) @Html.ValidationMessageFor(m => m.Address2)
+						@Html.EditorFor(m => m.City) @Html.ValidationMessageFor(m => m.City)
+					</span>
+					<span class="label-row">
+						@Html.LabelFor(m => m.State, new { @class = "span3" }) 
+						@Html.LabelFor(m => m.Zip, new { @class = "span3" })
+						@Html.LabelFor(m => m.Country, new { @class = "span3" })
+                    </span>
+					<span class="label-row">
+						@Html.EditorFor(m => m.State, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.State)
+						@Html.EditorFor(m => m.Zip, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.Zip)
+						@Html.EditorFor(m => m.Country, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.Country)
+					</span>
+			
+			</fieldset>
+
+			<fieldset class="contact-info-form">
+				<legend>Contacts</legend>
+
+                @if (Model.Contacts != null && Model.Contacts.Count > 0)
+                {
+                    for (int i = 0; i < Model.Contacts.Count; i++)
+                    {
+                        if (Model.Contacts[i] != null)
+                        {
+                            @Html.HiddenFor(m => Model.Contacts[i].Id) @Html.HiddenFor(m => Model.Contacts[i].IsPrimary) 
+                            <span class="row">@(Model.Contacts[i].IsPrimary ? Html.Raw("<strong>Primary Contact</strong>") : Html.Raw("<strong>Secondary Contact</strong>"))</span>
+                            <span class="label-row">
+					            @Html.LabelFor(m => Model.Contacts[i].FirstName)
+                                @Html.LabelFor(m => Model.Contacts[i].LastName)
+					            @Html.LabelFor(m => Model.Contacts[i].Email)
+				            </span>
+				            <span class="label-row">
+                                @Html.EditorFor(m => Model.Contacts[i].FirstName) @Html.ValidationMessageFor(m => Model.Contacts[i].FirstName)
+					            @Html.EditorFor(m => Model.Contacts[i].LastName) @Html.ValidationMessageFor(m => Model.Contacts[i].LastName)
+					            @Html.EditorFor(m => Model.Contacts[i].Email) @Html.ValidationMessageFor(m => Model.Contacts[i].Email)
+				            </span>
+				            <span class="label-row">
+					            @Html.LabelFor(m => Model.Contacts[i].Title)
+					            @Html.LabelFor(m => Model.Contacts[i].Phone)
+					            @Html.LabelFor(m => Model.Contacts[i].Fax)
+				            </span>
+				            <span class="label-row">
+					            @Html.EditorFor(m => Model.Contacts[i].Title) @Html.ValidationMessageFor(m => Model.Contacts[i].Title)
+					            @Html.EditorFor(m => Model.Contacts[i].Phone) @Html.ValidationMessageFor(m => Model.Contacts[i].Phone)
+					            @Html.EditorFor(m => Model.Contacts[i].Fax) @Html.ValidationMessageFor(m => Model.Contacts[i].Fax)
+				            </span>
+                        }
+                    }
+                }
+			</fieldset>	
+
+            @Html.HiddenFor(m => m.HasBillAddress)
+            @if (Model.HasBillAddress)
+            {
+			<fieldset class="billing-info-form">
+				<legend>Billing Information</legend>
+
+				<span class="label-row">
+					@Html.LabelFor(m => m.BillingAddress1) 
+					@Html.LabelFor(m => m.BillingAddress2) 
+					@Html.LabelFor(m => m.BillingCity)
+				</span>
+				<span class="label-row">
+					@Html.EditorFor(m => m.BillingAddress1) @Html.ValidationMessageFor(m => m.BillingAddress1)
+					@Html.EditorFor(m => m.BillingAddress2) @Html.ValidationMessageFor(m => m.BillingAddress2)
+					@Html.EditorFor(m => m.BillingCity) @Html.ValidationMessageFor(m => m.BillingCity)
+				</span>
+				
+				<span class="label-row">
+					@Html.LabelFor(m => m.BillingState) 
+					@Html.LabelFor(m => m.BillingZip) 
+					@Html.LabelFor(m => m.BillingCountry)
+				</span>
+				<span class="label-row">
+					@Html.EditorFor(m => m.BillingState) @Html.ValidationMessageFor(m => m.BillingState)
+					@Html.EditorFor(m => m.BillingZip) @Html.ValidationMessageFor(m => m.BillingZip)
+					@Html.EditorFor(m => m.BillingCountry) @Html.ValidationMessageFor(m => m.BillingCountry)
+				</span>
+					<span class="label-row span11">
+					@Html.LabelFor(m => m.BillingPhone) 
+					@Html.LabelFor(m => m.BillingFax) 
+					@Html.LabelFor(m => m.BillingEmail)
+				</span>
+				<span class="label-row">
+					@Html.EditorFor(m => m.BillingPhone) @Html.ValidationMessageFor(m => m.BillingPhone)
+					@Html.EditorFor(m => m.BillingFax) @Html.ValidationMessageFor(m => m.BillingFax)
+					@Html.EditorFor(m => m.BillingEmail) @Html.ValidationMessageFor(m => m.BillingEmail)
+				</span>
+				<span class="label-row span11">
+					@Html.LabelFor(m => m.BillingWebUrl) 
+				</span>
+				<span class="label-row">
+					@Html.EditorFor(m => m.BillingWebUrl) @Html.ValidationMessageFor(m => m.BillingWebUrl)
+				</span>
+			</fieldset>                
+            } 
+            @Html.HiddenFor(m => m.HasShipAddress)
+            @if (Model.HasShipAddress)
+            {
+			<fieldset class="billing-info-form">
+				<legend>Shipping Information</legend>
+
+				<span class="label-row">
+					@Html.LabelFor(m => m.ShippingStreet1) 
+					@Html.LabelFor(m => m.ShippingStreet2) 
+					@Html.LabelFor(m => m.ShippingCity) 
+				</span>
+				<span class="label-row">
+					@Html.EditorFor(m => m.ShippingStreet1) @Html.ValidationMessageFor(m => m.ShippingStreet1)
+					@Html.EditorFor(m => m.ShippingStreet2) @Html.ValidationMessageFor(m => m.ShippingStreet2)
+					@Html.EditorFor(m => m.ShippingCity) @Html.ValidationMessageFor(m => m.ShippingCity)
+				</span>
+				
+				<span class="label-row">
+					@Html.LabelFor(m => m.ShippingState) 
+					@Html.LabelFor(m => m.ShippingZip) 
+					@Html.LabelFor(m => m.ShippingCountry)
+				</span>
+				<span class="label-row">
+					@Html.EditorFor(m => m.ShippingState) @Html.ValidationMessageFor(m => m.ShippingState)
+					@Html.EditorFor(m => m.ShippingZip) @Html.ValidationMessageFor(m => m.ShippingZip)
+					@Html.EditorFor(m => m.ShippingCountry) @Html.ValidationMessageFor(m => m.ShippingCountry)
+				</span>
+			</fieldset>                
+            } 
+		</div><!-- END #basic-information -->		
+<!------------------------------------product-information---------------------------------->					
+		<div id="tabproduct" class="product-information tab-pane fade">
+			<fieldset class="primary-business-revenue">
+				<legend>Product Information</legend>
+                <span class="label-row">
+                     @Html.Label("1. Which best describes your company?")
+                </span>
+				<span class="primary-business-row">
+					<label class="primary-business-radio radio">
+						@Html.RadioButtonFor(m => m.BestDescribesOption, "0")
+						@Html.Raw("Corporation")
+					</label>
+					<label class="primary-business-radio radio">
+						@Html.RadioButtonFor(m => m.BestDescribesOption, "1")
+						@Html.Raw("Partnership")
+					</label>
+					<label class="primary-business-radio radio">
+						@Html.RadioButtonFor(m => m.BestDescribesOption, "2")
+						@Html.Raw("Individual")
+					</label>
+					<label class="primary-business-radio radio">
+						@Html.RadioButtonFor(m => m.BestDescribesOption, "3")
+						@Html.Raw("LLC Proprietorship")
+					</label>
+                    @*<span class="label-row">@Html.EditorFor(m => m.OtherBusinessRevenue, Model.Other ? new { @class = "input-medium" } : new { @class = "input-medium hidden" }) @Html.ValidationMessageFor(m => m.OtherBusinessRevenue)</span>*@
+				</span>
+				<span class="label-row">
+					 @Html.Label("2. Is your company a union member?")
+				</span>
+				<span class="primary-business-row">
+                    <label class="primary-business-radio radio">
+					@Html.RadioButtonFor(m => m.IsUnionMember, true)
+			        @Html.Raw("Yes")
+                    @Html.RadioButtonFor(m => m.IsUnionMember, false)
+			        @Html.Raw("No")
+                    </label>
+				</span>
+                <span class="label-row">
+					 @Html.Label("3. Which method(s) of imprinting do you offer?")
+				</span>
+				<span class="checkbox-left">
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Embroidery)">@Html.CheckBoxFor(model => model.Embroidery) Embroidery</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ScreenPrinting)">@Html.CheckBoxFor(model => model.ScreenPrinting) Screen Printing</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.HeatTransfer)">@Html.CheckBoxFor(model => model.HeatTransfer) Heat Transfer</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Digitziing)">@Html.CheckBoxFor(model => model.Digitziing) Digitziing</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Engraving)">@Html.CheckBoxFor(model => model.Engraving) Engraving</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Sublimation)">@Html.CheckBoxFor(model => model.Sublimation) Sublimation</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Monogramming)">@Html.CheckBoxFor(model => model.Monogramming) Monogramming</label>
+					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Other)">@Html.CheckBoxFor(model => model.Other) Other</label>
+                    @Html.EditorFor(m => m.BestDescribesOtherDesc, Model.Other ? new { @class = "input-medium" } : new { @class = "input-medium hidden" }) @Html.ValidationMessageFor(m => m.BestDescribesOtherDesc)
+				</span>
+			</fieldset>
+		</div><!-- END #product-information -->			
+	</div><!-- END .tab-content -->    
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/form")
+    <script src="/Scripts/asi.js"></script>
+    <script>
+        $('input.command').click(function (e) {
+            $('#ActionName').val(e.target.value);
+            if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
+                //make sure we have Timms value
+                if (!$('#ExternalReference').val()) {
+                    asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
+                    $("#ExternalReference").attr("class", "text-box single-line input-validation-error span2");
+                    $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
+                    e.preventDefault();
+                }
+                else {
+                    var isnum = /^\d+$/.test($('#ExternalReference').val());
+                    if (!isnum) {
+                        asi.modal.confirm('Error', 'TIMMS ID must contain only numbers.', null, "#hide", "Close");
+                        $("#ExternalReference").attr("class", "text-box single-line input-validation-error span2");
+                        $("#timmsErrorMessage").text("TIMMS ID must contain only numbers.");
+                        e.preventDefault();
+                    }
+                }
+            }
+        });
+        $('[rel*="isprimary"]').change(function () {
+            $('[rel*="isprimary"]').attr("checked", false);
+            this.checked = true;
+        });
+        $(".radio").change(function (evt) {
+            if ($(evt.target).val() == "Other") $("#OtherBusinessRevenue").attr("class", "input-medium");
+            else {
+                $("#OtherBusinessRevenue").attr("class", "input-medium hidden");
+                $("#OtherBusinessRevenue").val("");
+            }
+        });
+    </script>
+}

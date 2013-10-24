@@ -23,5 +23,36 @@ namespace asi.asicentral.model.store
         public string BestDescribesOtherDesc { get; set; }
         public bool IsUnionMember { get; set; }
         public virtual IList<LookDecoratorImprintingType> ImprintTypes { get; set; }
+
+        public override string ToString()
+        {
+            return "Decorator Membership " + OrderDetailId;
+        }
+
+        public override bool Equals(object obj)
+        {
+            bool equals = false;
+
+            StoreDetailDecoratorMembership decorator = obj as StoreDetailDecoratorMembership;
+            if (decorator != null) equals = decorator.OrderDetailId == OrderDetailId;
+            return equals;
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 17;
+            hash = hash * 31 + "StoreDetailDecoratorMembership".GetHashCode();
+            hash = hash * 31 + OrderDetailId.GetHashCode();
+            return hash;
+        }
+
+        public void CopyTo(StoreDetailDecoratorMembership decorator)
+        {
+            base.CopyTo(decorator);
+            decorator.IsUnionMember = IsUnionMember;
+            decorator.BestDescribesOption = BestDescribesOption;
+            decorator.BestDescribesOtherDesc = BestDescribesOtherDesc;
+            decorator.ImprintTypes = ImprintTypes;
+        }
     }
 }
