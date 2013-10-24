@@ -38,6 +38,7 @@ namespace asi.asicentral.web.Controllers.Store
             {
                 if (application is StoreDetailSupplierMembership) return View("../Store/Application/Supplier", new SupplierApplicationModel((StoreDetailSupplierMembership)application, orderDetail));
                 else if (application is StoreDetailDistributorMembership) return View("../Store/Application/Distributor", new DistributorApplicationModel((StoreDetailDistributorMembership)application, orderDetail));
+                else if (application is StoreDetailDecoratorMembership) return View("../Store/Application/Decorator", new DecoratorApplicationModel((StoreDetailDecoratorMembership)application, orderDetail));
                 else throw new Exception("Retieved an unknown type of application");
             }
             else if(orderDetail.Product != null && orderDetail.Product.Type == "Product")
@@ -138,6 +139,40 @@ namespace asi.asicentral.web.Controllers.Store
             else
             {
                 return View("../Store/Application/Supplier", application);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(true)]
+        public virtual ActionResult EditDecorator(DecoratorApplicationModel application)
+        {
+            if (ModelState.IsValid)
+            {
+                StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
+                if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
+                StoreOrder order = orderDetail.Order;
+                StoreDetailDecoratorMembership decoratorApplication = StoreService.GetAll<StoreDetailDecoratorMembership>(false).Where(app => app.OrderDetailId == application.OrderDetailId).SingleOrDefault();
+                if (order == null) throw new Exception("Invalid reference to an order");
+                if (decoratorApplication == null) throw new Exception("Invalid reference to an application");
+                order.ExternalReference = application.ExternalReference;
+                //copy imprinting types bool to the collections
+                application.SyncImprintingTypesToApplication(StoreService.GetAll<LookDecoratorImprintingType>().ToList(), decoratorApplication);
+                application.ImprintTypes = decoratorApplication.ImprintTypes;
+                order = UpdateCompanyInformation(application, order);
+                application.CopyTo(decoratorApplication);
+                decoratorApplication.UpdateDate = DateTime.UtcNow;
+                decoratorApplication.UpdateSource = "ASI Admin Application - EditDecorator";
+                ProcessCommand(StoreService, FulfilmentService, order, decoratorApplication, application.ActionName);
+                StoreService.SaveChanges();
+                if (application.ActionName == ApplicationController.COMMAND_REJECT)
+                    return RedirectToAction("List", "Orders");
+                else
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId });
+            }
+            else
+            {
+                return View("../Store/Application/Decorator", application);
             }
         }
 

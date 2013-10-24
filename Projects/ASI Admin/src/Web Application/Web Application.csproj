@@ -215,6 +215,7 @@
     <Compile Include="Models\sgr\ViewCompany.cs" />
     <Compile Include="Models\sgr\ViewProduct.cs" />
     <Compile Include="Models\Store\Order\CatalogsApplicationModel.cs" />
+    <Compile Include="Models\Store\Order\DecoratorApplicationModel.cs" />
     <Compile Include="Models\Store\Order\DistributorApplicationModel.cs" />
     <Compile Include="Models\Store\Order\ESPAdvertisingModel.cs" />
     <Compile Include="Models\Store\Order\ESPPayForPlacementModel.cs" />
@@ -337,6 +338,7 @@
     <Content Include="Views\Store\Products\List.cshtml" />
     <Content Include="Views\Store\Application\ESPAdvertising.cshtml" />
     <Content Include="Views\Store\Application\PayForPlacement.cshtml" />
+    <Content Include="Views\Store\Application\Decorator.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
