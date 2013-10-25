@@ -267,7 +267,7 @@
                 <label>@Html.RadioButtonFor(model => model.ArtworkOption, "EMAIL", new { id = "EMAIL" }) @Html.Raw(asi.asicentral.web.Resource.ArtworkOptionforEMAIL)</label>
                 </span>
 	        </div>
-            if(Model.LogoPath != null)
+            if(!string.IsNullOrEmpty(Model.LogoPath))
             {
             <span class="row">@Html.Raw("<strong>Logo Information</strong>")</span>
              <span class="label-row span11">
