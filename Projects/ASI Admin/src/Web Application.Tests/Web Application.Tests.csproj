@@ -114,6 +114,7 @@
     <Compile Include="Controllers\Store\CatalogsApplicationTest.cs" />
     <Compile Include="Controllers\Store\OrderDetailProductTest.cs" />
     <Compile Include="Controllers\Store\ESPAdvertisingApplicationTest.cs" />
+    <Compile Include="Controllers\Store\DecoratorApplicationTest.cs" />
     <Compile Include="Controllers\TemplateControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
