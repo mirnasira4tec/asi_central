@@ -13,7 +13,7 @@ namespace asi.asicentral.services
 {
     public class ROIService : IROIService
     {
-        public IEnumerable<Category> GetImpressionsPerCategory(int asiNumber)
+        public virtual IEnumerable<Category> GetImpressionsPerCategory(int asiNumber)
         {
             ILogService log = LogService.GetLog(this.GetType());
             string webAPIUrl = ConfigurationManager.AppSettings["ROIUrl"];
