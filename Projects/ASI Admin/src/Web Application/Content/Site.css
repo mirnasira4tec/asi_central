@@ -427,3 +427,17 @@ header#site-header {
         padding-right: 5px;
     }
 }
+
+.FloatLeft{
+	float:left;
+    width:50%;
+}
+
+.FloatRight{
+	float:left;
+    width:50%;
+}
+
+.ClearBoth {
+    clear:both;
+}

@@ -60,6 +60,17 @@ namespace asi.asicentral.util.store
             }
             return Cost;
         }
+
+        public static List<SelectListItem> GetItemTypeOptions()
+        {
+            List<SelectListItem> dropdownOptions = new List<SelectListItem>();
+            if (EMAILEXPRESS_ITEM_TYPE_IDS.Length > 0 && EMAILEXPRESS_ITEM_TYPE_NAMES.Length > 0)
+            {
+                for (int i = 0;i<EMAILEXPRESS_ITEM_TYPE_IDS.Length;i++)
+                    dropdownOptions.Add(new SelectListItem() { Text = EMAILEXPRESS_ITEM_TYPE_NAMES[i], Value = EMAILEXPRESS_ITEM_TYPE_IDS[i].ToString(), Selected = false });
+            }
+            return dropdownOptions;
+        }
     }
 }
 
