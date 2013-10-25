@@ -125,7 +125,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Assert.AreEqual(espPayForPlacement.PaymentType, "IPM");
             Assert.AreEqual(espPayForPlacement.Cost, 0.00M);
             Assert.AreEqual(espPayForPlacement.ImpressionsRequested, 5000);
-            Assert.AreEqual(detail.Cost, 1200.00M);
+            Assert.AreEqual(detail.Cost, 1225.00M);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(1));
             mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(0));
             espPayForPlacement = null;
@@ -149,7 +149,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Assert.AreEqual(espPayForPlacement.PaymentType, "FB");
             Assert.AreEqual(espPayForPlacement.Cost, 1000.00M);
             Assert.AreEqual(espPayForPlacement.ImpressionsRequested, 0);
-            Assert.AreEqual(detail.Cost, 2200.00M);
+            Assert.AreEqual(detail.Cost, 2225.00M);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(2));
 
             // user clicks reject - order should be updated to reject
@@ -342,7 +342,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             model.NumberOfItems_Second = "345;456;789";
             model.Products_OptionId_Second = 1;
             model.NumberOfItems_Third = "678;456;789";
-            model.Products_OptionId_Third = 2;
+            model.Products_OptionId_Third = 1;
             model.ActionName = ApplicationController.COMMAND_SAVE;
             model.ExternalReference = "102";
 
@@ -359,7 +359,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Assert.AreEqual(espAdvertisingDetail.FirstItemList, model.NumberOfItems_First);
             Assert.AreEqual(espAdvertisingDetail.ThirdOptionId, model.Products_OptionId_Third);
             Assert.AreEqual(espAdvertisingDetail.FirstItemList, model.NumberOfItems_First);
-            Assert.AreEqual(detail.Cost, 466.25M);
+            Assert.AreEqual(detail.Cost, 250.00M);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(1));
 
             // user clicks reject - order should be updated to reject
