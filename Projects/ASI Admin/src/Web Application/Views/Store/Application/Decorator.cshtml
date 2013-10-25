@@ -234,14 +234,14 @@
 					 @Html.Raw("<b>3. Which method(s) of imprinting do you offer?</b>")
 				</span>
 				<div class="checkbox-left">
-					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.Embroidery)">@Html.CheckBoxFor(model => model.Embroidery) Embroidery</label>
-					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.ScreenPrinting)">@Html.CheckBoxFor(model => model.ScreenPrinting) Screen Printing</label>
-					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.HeatTransfer)">@Html.CheckBoxFor(model => model.HeatTransfer) Heat Transfer</label>
-					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.Digitziing)">@Html.CheckBoxFor(model => model.Digitziing) Digitziing</label>
-					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.Engraving)">@Html.CheckBoxFor(model => model.Engraving) Engraving</label>
-					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.Sublimation)">@Html.CheckBoxFor(model => model.Sublimation) Sublimation</label>
-					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.Monogramming)">@Html.CheckBoxFor(model => model.Monogramming) Monogramming</label>
-					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.Other)">@Html.CheckBoxFor(model => model.Other) Other</label>
+					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.Embroidery)">@Html.CheckBoxFor(model => model.Embroidery) @LookDecoratorImprintingType.IMPRINT_EMBROIDERY</label>
+					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.ScreenPrinting)">@Html.CheckBoxFor(model => model.ScreenPrinting) @LookDecoratorImprintingType.IMPRINT_SCREENPRINTING</label>
+					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.HeatTransfer)">@Html.CheckBoxFor(model => model.HeatTransfer) @LookDecoratorImprintingType.IMPRINT_HEATTRANSFER</label>
+					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.Digitziing)">@Html.CheckBoxFor(model => model.Digitziing) @LookDecoratorImprintingType.IMPRINT_DIGITIZING</label>
+					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.Engraving)">@Html.CheckBoxFor(model => model.Engraving) @LookDecoratorImprintingType.IMPRINT_ENGRAVING</label>
+					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.Sublimation)">@Html.CheckBoxFor(model => model.Sublimation) @LookDecoratorImprintingType.IMPRINT_SUBLIMINATION</label>
+					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.Monogramming)">@Html.CheckBoxFor(model => model.Monogramming) @LookDecoratorImprintingType.IMPRINT_MONOGRAMMING</label>
+					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.Other)">@Html.CheckBoxFor(model => model.Other) @LookDecoratorImprintingType.IMPRINT_OTHER</label>
                     <div class="account-checkbox" id="description">@Html.EditorFor(m => m.BestDescribesOtherDesc) @Html.ValidationMessageFor(m => m.BestDescribesOtherDesc)</div>
 				</div>
 			</fieldset>
