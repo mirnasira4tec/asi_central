@@ -197,7 +197,7 @@
 			<fieldset class="primary-business-revenue">
 				<legend>Product Information</legend>
                 <span class="label-row">
-                     @Html.Label("1. Which best describes your company?")
+                     @Html.Raw("<b>1. Which best describes your company?</b>")
                 </span>
 				<span class="primary-business-row">
 					<label class="primary-business-radio radio">
@@ -216,33 +216,34 @@
 						@Html.RadioButtonFor(m => m.BestDescribesOption, "3")
 						@Html.Raw("LLC Proprietorship")
 					</label>
-                    @*<span class="label-row">@Html.EditorFor(m => m.OtherBusinessRevenue, Model.Other ? new { @class = "input-medium" } : new { @class = "input-medium hidden" }) @Html.ValidationMessageFor(m => m.OtherBusinessRevenue)</span>*@
 				</span>
 				<span class="label-row">
-					 @Html.Label("2. Is your company a union member?")
+					 @Html.Raw("<b>2. Is your company a union member?</b>")
 				</span>
 				<span class="primary-business-row">
                     <label class="primary-business-radio radio">
 					@Html.RadioButtonFor(m => m.IsUnionMember, true)
 			        @Html.Raw("Yes")
+                    </label>
+                    <label class="primary-business-radio radio">
                     @Html.RadioButtonFor(m => m.IsUnionMember, false)
 			        @Html.Raw("No")
                     </label>
 				</span>
                 <span class="label-row">
-					 @Html.Label("3. Which method(s) of imprinting do you offer?")
+					 @Html.Raw("<b>3. Which method(s) of imprinting do you offer?</b>")
 				</span>
-				<span class="checkbox-left">
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Embroidery)">@Html.CheckBoxFor(model => model.Embroidery) Embroidery</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ScreenPrinting)">@Html.CheckBoxFor(model => model.ScreenPrinting) Screen Printing</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.HeatTransfer)">@Html.CheckBoxFor(model => model.HeatTransfer) Heat Transfer</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Digitziing)">@Html.CheckBoxFor(model => model.Digitziing) Digitziing</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Engraving)">@Html.CheckBoxFor(model => model.Engraving) Engraving</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Sublimation)">@Html.CheckBoxFor(model => model.Sublimation) Sublimation</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Monogramming)">@Html.CheckBoxFor(model => model.Monogramming) Monogramming</label>
-					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Other)">@Html.CheckBoxFor(model => model.Other) Other</label>
-                    @Html.EditorFor(m => m.BestDescribesOtherDesc, Model.Other ? new { @class = "input-medium" } : new { @class = "input-medium hidden" }) @Html.ValidationMessageFor(m => m.BestDescribesOtherDesc)
-				</span>
+				<div class="checkbox-left">
+					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.Embroidery)">@Html.CheckBoxFor(model => model.Embroidery) Embroidery</label>
+					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.ScreenPrinting)">@Html.CheckBoxFor(model => model.ScreenPrinting) Screen Printing</label>
+					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.HeatTransfer)">@Html.CheckBoxFor(model => model.HeatTransfer) Heat Transfer</label>
+					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.Digitziing)">@Html.CheckBoxFor(model => model.Digitziing) Digitziing</label>
+					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.Engraving)">@Html.CheckBoxFor(model => model.Engraving) Engraving</label>
+					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.Sublimation)">@Html.CheckBoxFor(model => model.Sublimation) Sublimation</label>
+					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.Monogramming)">@Html.CheckBoxFor(model => model.Monogramming) Monogramming</label>
+					<label class="account-checkbox imprinttype checkbox" for="@Html.NameFor(model => model.Other)">@Html.CheckBoxFor(model => model.Other) Other</label>
+                    <div class="account-checkbox" id="description">@Html.EditorFor(m => m.BestDescribesOtherDesc) @Html.ValidationMessageFor(m => m.BestDescribesOtherDesc)</div>
+				</div>
 			</fieldset>
 		</div><!-- END #product-information -->			
 	</div><!-- END .tab-content -->    
@@ -252,6 +253,12 @@
     @Scripts.Render("~/bundles/form")
     <script src="/Scripts/asi.js"></script>
     <script>
+        $(document).ready(function () {
+            ShowOrHideDesc()
+            $("#Other").change(function (evt) {
+                ShowOrHideDesc()
+            });
+        });
         $('input.command').click(function (e) {
             $('#ActionName').val(e.target.value);
             if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
@@ -277,12 +284,11 @@
             $('[rel*="isprimary"]').attr("checked", false);
             this.checked = true;
         });
-        $(".radio").change(function (evt) {
-            if ($(evt.target).val() == "Other") $("#OtherBusinessRevenue").attr("class", "input-medium");
-            else {
-                $("#OtherBusinessRevenue").attr("class", "input-medium hidden");
-                $("#OtherBusinessRevenue").val("");
-            }
-        });
+
+        function ShowOrHideDesc() {
+            if ($('.imprinttype input[name=Other]').is(':checked'))
+            { $("#description").show(); }
+            else { $("#description").hide(); $("#BestDescribesOtherDesc").val(""); }
+        }
     </script>
 }

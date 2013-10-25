@@ -152,7 +152,7 @@ namespace asi.asicentral.web.Controllers.Store
                 StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
                 if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
                 StoreOrder order = orderDetail.Order;
-                StoreDetailDecoratorMembership decoratorApplication = StoreService.GetAll<StoreDetailDecoratorMembership>(false).Where(app => app.OrderDetailId == application.OrderDetailId).SingleOrDefault();
+                StoreDetailDecoratorMembership decoratorApplication = StoreService.GetAll<StoreDetailDecoratorMembership>().Where(app => app.OrderDetailId == application.OrderDetailId).SingleOrDefault();
                 if (order == null) throw new Exception("Invalid reference to an order");
                 if (decoratorApplication == null) throw new Exception("Invalid reference to an application");
                 order.ExternalReference = application.ExternalReference;

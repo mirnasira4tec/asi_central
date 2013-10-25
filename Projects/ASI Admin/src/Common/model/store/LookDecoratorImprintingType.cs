@@ -25,7 +25,7 @@ namespace asi.asicentral.model.store
         {
             bool equals = false;
 
-            LookProductLine lookup = obj as LookProductLine;
+            LookDecoratorImprintingType lookup = obj as LookDecoratorImprintingType;
             if (lookup != null) equals = lookup.Id == Id;
             return equals;
         }
