@@ -28,6 +28,7 @@ namespace asi.asicentral.model.store
         public string NotificationEmails { get; set; }
         public int NumberOfPages { get; set; }
         public string HeaderImage { get; set; }
+        public string ChatSettings { get; set; }
         public virtual List<ContextFeature> Features { get; set; }
         public virtual List<ContextProductSequence> Products { get; set; }
 
