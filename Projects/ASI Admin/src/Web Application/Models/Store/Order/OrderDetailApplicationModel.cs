@@ -108,6 +108,7 @@ namespace asi.asicentral.web.model.store
         public OrderStatus OrderStatus { get; set; }
         public string ProductName { get; set; }
         public int ProductId { get; set; }
+        public int? OptionId { get; set; }
         public decimal Price { get; set; }
         public IList<StoreIndividual> Contacts { get; set; }
         
@@ -128,6 +129,8 @@ namespace asi.asicentral.web.model.store
             StoreOrder order = orderdetail.Order;
             BillingIndividual = order.BillingIndividual;
             OrderDetailId = orderdetail.Id;
+            this.AcceptedByName = orderdetail.AcceptedByName;
+            if (orderdetail.OptionId.HasValue) this.OptionId = orderdetail.OptionId;
             this.Quantity = orderdetail.Quantity.ToString();
             this.AcceptedByName = orderdetail.AcceptedByName;
            
