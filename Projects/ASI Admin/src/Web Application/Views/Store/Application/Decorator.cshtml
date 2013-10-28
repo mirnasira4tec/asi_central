@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
 }
 
-<h1>@Resource.StoreTitleDistributorApplication (#@Model.OrderId)</h1>
+<h1>@Resource.StoreTitleDecoratorApplication (#@Model.OrderId)</h1>
 <p>The Membership product purchase fee is @Model.Price.ToString("C")</p>
 @using (Html.BeginForm("EditDecorator", "Application"))
 {
