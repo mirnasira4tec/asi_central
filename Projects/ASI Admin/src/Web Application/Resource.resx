@@ -468,4 +468,7 @@
   <data name="TextUnderImage" xml:space="preserve">
     <value>TextUnderImage</value>
   </data>
+  <data name="StoreTitleDecoratorApplication" xml:space="preserve">
+    <value>Decorator Application</value>
+  </data>
 </root>

@@ -305,12 +305,20 @@ namespace asi.asicentral.web.Controllers.Store
                 if (order == null) throw new Exception("Invalid reference to an order");
                 order.ExternalReference = application.ExternalReference;
                 order = UpdateCompanyInformation(application, order);
-
+                    
                 //Update Catalog Information
                 if(orderDetail.Product != null)
                 {
                     switch(orderDetail.Product.Id)
                     {
+                        case 46:
+                            if (application.OptionId.HasValue)
+                            {
+                                orderDetail.OptionId = application.OptionId;
+                                orderDetail.Cost = ASISmartSalesHelper.GetCost(application.OptionId.Value);
+                            }
+                            orderDetail.Quantity = Convert.ToInt32(application.Quantity);
+                            break;
                         case 62:
                             orderDetail.AcceptedByName = application.AcceptedByName;
                             break;
@@ -319,7 +327,6 @@ namespace asi.asicentral.web.Controllers.Store
                             break;
                     }
                 }
-                orderDetail.Cost = application.Cost;
                 StoreAddress address = order.Company.GetCompanyShippingAddress();
                 StoreService.UpdateTaxAndShipping(order);
                 orderDetail.UpdateDate = DateTime.UtcNow;
