@@ -219,6 +219,12 @@ namespace asi.asicentral.database.mappings
             For<IRepository<TaxRate>>().Use<EFRepository<TaxRate>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
+            For<IRepository<StoreDetailEmailExpress>>().Use<EFRepository<StoreDetailEmailExpress>>()
+    .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<StoreDetailEmailExpressItem>>().Use<EFRepository<StoreDetailEmailExpressItem>>()
+               .Ctor<IValidatedContext>().Named("StoreContext");
+
             #endregion StoreContext
 
             #region TIMSS Context

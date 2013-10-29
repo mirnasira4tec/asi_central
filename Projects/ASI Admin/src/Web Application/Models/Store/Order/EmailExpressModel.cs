@@ -1,14 +1,14 @@
-﻿using asi.asicentral.model.store;
+﻿using asi.asicentral.interfaces;
+using asi.asicentral.model.store;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
 
 namespace asi.asicentral.web.model.store
 {
-    public class OrderDetailApplicationModel : IMembershipModel
+    public class EmailExpressModel : IMembershipModel
     {
         [Display(ResourceType = typeof(asi.asicentral.Resource), Name = "CompanyName")]
         public string Company { get; set; }
@@ -94,60 +94,73 @@ namespace asi.asicentral.web.model.store
 
         #endregion shipping information
 
+        #region Email Express information
+
+        public int ItemTypeId { get; set; }
+        public string Dates { get; set; }
+        public decimal TotalCost { get; set; }
+        public List<System.Web.Mvc.SelectListItem> ItemTypes { get { return asi.asicentral.util.store.EmailExpressHelper.GetItemTypeOptions(); } }
+        
+        #endregion Email Express information
+
         public int OrderId { get; set; }
         public int OrderDetailId { get; set; }
-        public decimal Cost { get; set; }
-        public bool IsStoreRequest { get; set; }
-        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(asi.asicentral.Resource))]
-        public string Quantity { get; set; }
-        public string ActionName { get; set; }
-        public string AcceptedByName { get; set; }
         public StoreIndividual BillingIndividual { get; set; }
+        public string ActionName { get; set; }
         public string ExternalReference { get; set; }
         public bool IsCompleted { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public string ProductName { get; set; }
         public int ProductId { get; set; }
-        public int? OptionId { get; set; }
         public decimal Price { get; set; }
+        public IList<StoreDetailEmailExpressItem> Videos { get; set; }
         public IList<StoreIndividual> Contacts { get; set; }
-        
+
         /// <summary>
         /// Required for MVC to rebuild the model
         /// </summary>
         /// 
-        public OrderDetailApplicationModel()
+        public EmailExpressModel()
             : base()
         {
             this.Contacts = new List<StoreIndividual>();
         }
 
-        public OrderDetailApplicationModel(StoreOrderDetail orderdetail)
+        public EmailExpressModel(StoreOrderDetail orderdetail, StoreDetailEmailExpress emailepxress, IStoreService storeService)
             : base()
         {
             this.Contacts = new List<StoreIndividual>();
             StoreOrder order = orderdetail.Order;
             BillingIndividual = order.BillingIndividual;
             OrderDetailId = orderdetail.Id;
-            this.AcceptedByName = orderdetail.AcceptedByName;
-            if (orderdetail.OptionId.HasValue) this.OptionId = orderdetail.OptionId;
-            this.Quantity = orderdetail.Quantity.ToString();
-            this.AcceptedByName = orderdetail.AcceptedByName;
-           
+
+            ActionName = "Approve";
+            ExternalReference = order.ExternalReference;
             if (orderdetail.Product != null)
             {
                 ProductName = orderdetail.Product.Name;
                 ProductId = orderdetail.Product.Id;
-                Cost = orderdetail.Cost;
             }
 
-            ActionName = "Approve";
-            ExternalReference = order.ExternalReference;
+            #region Fill Email Express data
+
+            StoreDetailEmailExpress item = storeService.GetAll<StoreDetailEmailExpress>().Where(model => model.OrderDetailId == OrderDetailId).SingleOrDefault();
+            if (item != null)
+            {
+                this.ItemTypeId = item.ItemTypeId;
+                this.TotalCost = orderdetail.Quantity * orderdetail.Cost;
+                string Dates = string.Empty;
+                List<StoreDetailEmailExpressItem> items = storeService.GetAll<StoreDetailEmailExpressItem>().Where(model => model.OrderDetailId == OrderDetailId).OrderBy(model => model.Sequence).ToList();
+                foreach (var dateitem in items)
+                    Dates += dateitem.AdSelectedDate.Date.ToString("ddd, dd MMM yy") + "\r\n";
+                this.Dates = Dates;
+            }
+            #endregion
+
             OrderId = order.Id;
-            OrderStatus = order.ProcessStatus;
             Price = order.Total;
+            OrderStatus = order.ProcessStatus;
             IsCompleted = order.IsCompleted;
-            IsStoreRequest = order.IsStoreRequest;
             MembershipModelHelper.PopulateModel(this, order);
         }
     }

@@ -214,22 +214,25 @@
 	<div id="tabsubscription" class="product-information tab-pane fade">
 		<fieldset class="company-info-form">
             <legend>@Model.ProductName Information</legend>	
-            @if (Model.IsStoreRequest && Model.ProductId == 46)
-            {
-		    <span class="label-row span11">
-			    <label class="control-label" for="Cost">@asi.asicentral.web.Resource.CurrentMembershipPackage</label>
-            </span>
-            <span class="label-row">
-			    @Html.DropDownListFor(model => model.Cost, asi.asicentral.util.store.ASISmartSalesHelper.GetCurrentMembershipOptions(), new { @class = "tab1" }) @Html.ValidationMessageFor(model => model.Cost)
-		    </span>
-            }
-            else
-            {
-                 @Html.HiddenFor(m => m.Cost)
-            }
-
             @switch (Model.ProductId)
             {
+                case 46:
+                    if(Model.IsStoreRequest)
+                    {
+                    <span class="label-row span11">
+			            <label class="control-label" for="Cost">@asi.asicentral.web.Resource.CurrentMembershipPackage</label>
+                    </span>
+                    <span class="label-row">
+			            @Html.DropDownListFor(model => model.OptionId, asi.asicentral.util.store.ASISmartSalesHelper.GetCurrentMembershipOptions(), new { @class = "tab1" }) @Html.ValidationMessageFor(model => model.OptionId)
+		            </span>
+                    }
+                    <span class="label-row span11">
+			            @Html.LabelFor(m => m.Quantity) 
+		            </span>
+		            <span class="label-row">
+			            @Html.EditorFor(m => m.Quantity) @Html.ValidationMessageFor(m => m.Quantity)
+		            </span>
+                    break;
                 case 62:
                 <span class="label-row span11">
 			        @Html.Label("Accepted by Name") 

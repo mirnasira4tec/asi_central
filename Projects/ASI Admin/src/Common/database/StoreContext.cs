@@ -22,7 +22,7 @@ namespace asi.asicentral.database
         public DbSet<Context> Contexts { get; set; }
         public DbSet<ContextProduct> Products { get; set; }
         public DbSet<ContextFeature> Features { get; set; }
-        public DbSet<ContextFeatureProduct> FeatureProducts { get; set; } 
+        public DbSet<ContextFeatureProduct> FeatureProducts { get; set; }
         public DbSet<ContextProductSequence> ProductSequences { get; set; }
         public DbSet<StoreDetailHallmarkRequest> HallmarkFormRequests { get; set; }
         public DbSet<LookCatalogOption> LookCatalogOptions { get; set; }
@@ -50,6 +50,8 @@ namespace asi.asicentral.database
         public DbSet<StoreOrderDetail> StoreOrderDetails { get; set; }
         public DbSet<StoreTieredProductPricing> StoreTieredProductPricings { get; set; }
         public DbSet<TaxRate> TaxRates { get; set; }
+        public DbSet<StoreDetailEmailExpress> StoreDetailEmailExpresss { get; set; }
+        public DbSet<StoreDetailEmailExpressItem> StoreDetailEmailExpressItems { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -90,7 +92,9 @@ namespace asi.asicentral.database
                 .Add(new StoreOrderMap())
                 .Add(new StoreOrderDetailMap())
                 .Add(new StoreTieredProductPricingMap())
-                .Add(new TaxRateMap());
+                .Add(new TaxRateMap())
+                .Add(new StoreDetailEmailExpressMap())
+                .Add(new StoreDetailEmailExpressItemMap());
         }
     }
 }

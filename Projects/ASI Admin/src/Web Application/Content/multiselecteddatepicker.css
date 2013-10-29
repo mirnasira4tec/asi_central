@@ -8,8 +8,8 @@
  * http://jqueryui.com/datepicker/
  */
 .ui-datepicker {
-    width: 17em;
-    padding: .2em .2em 0;
+    width: 15em;
+    padding: 0;
     display: none;
 }
 
@@ -33,7 +33,7 @@
         background-image: url("images/glyphicons-halflings.png");
         background-position: -240px -72px;
         top: 8px;
-        left: 2px;
+        left: 8px;
     }
 
     .ui-datepicker .ui-datepicker-next {
@@ -41,7 +41,7 @@
         background-image: url("images/glyphicons-halflings.png");
         background-position: -336px -72px;
         top: 8px;
-        right: 2px;
+        right: -4px;
     }
 
     .ui-datepicker .ui-datepicker-prev-hover { /*left:1px;*/

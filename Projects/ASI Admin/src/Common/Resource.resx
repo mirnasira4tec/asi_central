@@ -534,14 +534,8 @@
   <data name="BannerAd" xml:space="preserve">
     <value>Banner Ad</value>
   </data>
-  <data name="Cost_1995_50_Products_PerYear" xml:space="preserve">
-    <value>$1,995/year for 50 products</value>
-  </data>
   <data name="Cost_300_5_Products_PerMonth" xml:space="preserve">
-    <value>$300/month for 5 products</value>
-  </data>
-  <data name="Cost_400_5_Products_PerMonth" xml:space="preserve">
-    <value>$400/month for 5 products</value>
+    <value>$125/month for 3 products</value>
   </data>
   <data name="SelectNumberOfProducts" xml:space="preserve">
     <value>Select number of products</value>
@@ -566,5 +560,29 @@
   </data>
   <data name="BuyOneVideo" xml:space="preserve">
     <value>Buy one video (to be shown with all of your products) $499/year</value>
+  </data>
+  <data name="EmailExpress_Platinum" xml:space="preserve">
+    <value>EmailExpress Platinum</value>
+  </data>
+  <data name="EmailExpress_Regular" xml:space="preserve">
+    <value>Regular EmailExpress</value>
+  </data>
+  <data name="EmailExpress_Special" xml:space="preserve">
+    <value>Special Request</value>
+  </data>
+  <data name="EmailExpress_TargetedList" xml:space="preserve">
+    <value>EmailExpress Targeted List</value>
+  </data>
+  <data name="EmailExpress_Selected_Dates_Count" xml:space="preserve">
+    <value>You have selected {x} date(s):</value>
+  </data>
+  <data name="EmailExpress_Error_Date" xml:space="preserve">
+    <value>Please choose at least one date</value>
+  </data>
+  <data name="EmailExpress_Error_ItemType" xml:space="preserve">
+    <value>Please select one of the Email Express Option to proceed</value>
+  </data>
+  <data name="EmailExpress_Error_Terms" xml:space="preserve">
+    <value>Please accept the Terms&amp;Conditions to proceed</value>
   </data>
 </root>

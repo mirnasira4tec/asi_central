@@ -21,6 +21,7 @@ namespace asi.asicentral.web.Controllers.Store
         public static readonly int[] DISTRIBUTOR_CATALOG_PRODUCT_IDS = { 35, 36, 37, 38, 39, 40, 41 };
         public static readonly int[] SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS = { 48, 49, 50, 51, 52, 53, 54 };
         public static readonly int[] SUPPLIER_ESP_PAYFORPLACEMENT_PRODUCT_IDS = { 47, 63 };
+        public static readonly int SUPPLIER_Email_Express_PRODUCT_ID = 61;
        
         
         public IStoreService StoreService { get; set; }
@@ -38,6 +39,7 @@ namespace asi.asicentral.web.Controllers.Store
             {
                 if (application is StoreDetailSupplierMembership) return View("../Store/Application/Supplier", new SupplierApplicationModel((StoreDetailSupplierMembership)application, orderDetail));
                 else if (application is StoreDetailDistributorMembership) return View("../Store/Application/Distributor", new DistributorApplicationModel((StoreDetailDistributorMembership)application, orderDetail));
+                else if (application is StoreDetailDecoratorMembership) return View("../Store/Application/Decorator", new DecoratorApplicationModel((StoreDetailDecoratorMembership)application, orderDetail));
                 else throw new Exception("Retieved an unknown type of application");
             }
             else if(orderDetail.Product != null && orderDetail.Product.Type == "Product")
@@ -54,6 +56,11 @@ namespace asi.asicentral.web.Controllers.Store
                      if (detailESPAdvertising != null) return View("../Store/Application/ESPAdvertising", new ESPAdvertisingModel(orderDetail, detailESPAdvertising, StoreService));
                 }
                 else if (SUPPLIER_ESP_PAYFORPLACEMENT_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/PayForPlacement", new ESPPayForPlacementModel(orderDetail, StoreService));
+                else if (SUPPLIER_Email_Express_PRODUCT_ID == orderDetail.Product.Id) 
+                {
+                    StoreDetailEmailExpress detailEmailExpress = StoreService.GetAll<StoreDetailEmailExpress>().Where(emailexpress => emailexpress.OrderDetailId == orderDetail.Id).SingleOrDefault();
+                    return View("../Store/Application/EmailExpress", new EmailExpressModel(orderDetail, detailEmailExpress,StoreService));
+                }
                 else if(ORDERDETAIL_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/OrderDetailProduct", new OrderDetailApplicationModel(orderDetail));
             }
             throw new Exception("Retieved an unknown type of application");
@@ -138,6 +145,40 @@ namespace asi.asicentral.web.Controllers.Store
             else
             {
                 return View("../Store/Application/Supplier", application);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(true)]
+        public virtual ActionResult EditDecorator(DecoratorApplicationModel application)
+        {
+            if (ModelState.IsValid)
+            {
+                StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
+                if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
+                StoreOrder order = orderDetail.Order;
+                StoreDetailDecoratorMembership decoratorApplication = StoreService.GetAll<StoreDetailDecoratorMembership>().Where(app => app.OrderDetailId == application.OrderDetailId).SingleOrDefault();
+                if (order == null) throw new Exception("Invalid reference to an order");
+                if (decoratorApplication == null) throw new Exception("Invalid reference to an application");
+                order.ExternalReference = application.ExternalReference;
+                //copy imprinting types bool to the collections
+                application.SyncImprintingTypesToApplication(StoreService.GetAll<LookDecoratorImprintingType>().ToList(), decoratorApplication);
+                application.ImprintTypes = decoratorApplication.ImprintTypes;
+                order = UpdateCompanyInformation(application, order);
+                application.CopyTo(decoratorApplication);
+                decoratorApplication.UpdateDate = DateTime.UtcNow;
+                decoratorApplication.UpdateSource = "ASI Admin Application - EditDecorator";
+                ProcessCommand(StoreService, FulfilmentService, order, decoratorApplication, application.ActionName);
+                StoreService.SaveChanges();
+                if (application.ActionName == ApplicationController.COMMAND_REJECT)
+                    return RedirectToAction("List", "Orders");
+                else
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId });
+            }
+            else
+            {
+                return View("../Store/Application/Decorator", application);
             }
         }
 
@@ -264,12 +305,20 @@ namespace asi.asicentral.web.Controllers.Store
                 if (order == null) throw new Exception("Invalid reference to an order");
                 order.ExternalReference = application.ExternalReference;
                 order = UpdateCompanyInformation(application, order);
-
+                    
                 //Update Catalog Information
                 if(orderDetail.Product != null)
                 {
                     switch(orderDetail.Product.Id)
                     {
+                        case 46:
+                            if (application.OptionId.HasValue)
+                            {
+                                orderDetail.OptionId = application.OptionId;
+                                orderDetail.Cost = ASISmartSalesHelper.GetCost(application.OptionId.Value);
+                            }
+                            orderDetail.Quantity = Convert.ToInt32(application.Quantity);
+                            break;
                         case 62:
                             orderDetail.AcceptedByName = application.AcceptedByName;
                             break;
@@ -278,7 +327,6 @@ namespace asi.asicentral.web.Controllers.Store
                             break;
                     }
                 }
-                orderDetail.Cost = application.Cost;
                 StoreAddress address = order.Company.GetCompanyShippingAddress();
                 StoreService.UpdateTaxAndShipping(order);
                 orderDetail.UpdateDate = DateTime.UtcNow;
@@ -483,6 +531,118 @@ namespace asi.asicentral.web.Controllers.Store
                 StoreService.UpdateTaxAndShipping(order);
                 orderDetail.UpdateDate = DateTime.UtcNow;
                 orderDetail.UpdateSource = "ApplicationController - EditESPAdvertising";
+
+                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                StoreService.SaveChanges();
+                if (application.ActionName == ApplicationController.COMMAND_REJECT)
+                    return RedirectToAction("List", "Orders");
+                else
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId });
+            }
+            else
+            {
+                return View("../Store/Application/OrderDetailProduct", application);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(true)]
+        public virtual ActionResult EditEmailExpress(EmailExpressModel application)
+        {
+            if (ModelState.IsValid)
+            {
+                StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
+                if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
+                StoreOrder order = orderDetail.Order;
+                if (order == null) throw new Exception("Invalid reference to an order");
+                order.ExternalReference = application.ExternalReference;
+                order = UpdateCompanyInformation(application, order);
+
+                #region Update Email Express information
+                StoreDetailEmailExpress emailexpress = StoreService.GetAll<StoreDetailEmailExpress>().Where(product => product.OrderDetailId == orderDetail.Id).SingleOrDefault();
+                if (emailexpress == null) throw new Exception("Invalid id, could not find the Catalog information record");
+
+                if (orderDetail.Product != null)
+                {
+                    List<string> Dates = new List<string>();
+                    List<DateTime> updatedDateList = new List<DateTime>();
+                    Dates = System.Text.RegularExpressions.Regex.Split(string.IsNullOrEmpty(application.Dates) ? string.Empty : application.Dates, "\r\n").ToList();
+                    Dates = Dates.Where(u => u.ToString() != string.Empty).ToList();
+                    List<StoreDetailEmailExpressItem> loginScreen_previousItems = StoreService.GetAll<StoreDetailEmailExpressItem>().Where(details => details.OrderDetailId == application.OrderDetailId).ToList();
+                    if (application.ItemTypeId == 3 || application.ItemTypeId == 4)
+                    {
+                        foreach (StoreDetailEmailExpressItem item in loginScreen_previousItems)
+                        {
+                            StoreService.Delete<StoreDetailEmailExpressItem>(item);
+                        }
+                    }
+                    else
+                    {
+                        //Adding or updating exisitng records
+                        if (Dates != null && Dates.Count > 0)
+                        {
+                            int count = 1;
+                            foreach (string slecteddate in Dates)
+                            {
+                                DateTime date = DateTime.Parse(slecteddate);
+                                StoreDetailEmailExpressItem existingItem = loginScreen_previousItems.Where(item => item.AdSelectedDate == date).SingleOrDefault();
+                                if (existingItem != null)
+                                {
+                                    existingItem.Sequence = count++;
+                                    existingItem.UpdateDate = DateTime.UtcNow;
+                                    existingItem.UpdateSource = "ApplicationController - EditEmailExpress";
+                                    StoreService.Update<StoreDetailEmailExpressItem>(existingItem);
+                                }
+                                else
+                                {
+                                    StoreDetailEmailExpressItem newitem = new StoreDetailEmailExpressItem();
+                                    newitem.AdSelectedDate = date;
+                                    newitem.Sequence = count++;
+                                    newitem.OrderDetailId = application.OrderDetailId;
+                                    newitem.CreateDate = DateTime.UtcNow;
+                                    newitem.UpdateDate = DateTime.UtcNow;
+                                    newitem.UpdateSource = "ApplicationController - EditEmailExpress";
+                                    StoreService.Add<StoreDetailEmailExpressItem>(newitem);
+                                }
+                                updatedDateList.Add(date);
+                            }
+                        }
+                        //Deleting extra if any extra dates added in earlier submit.
+                        if (updatedDateList != null && updatedDateList.Count > 0 && loginScreen_previousItems != null && loginScreen_previousItems.Count > 0 && loginScreen_previousItems.Count != updatedDateList.Count)
+                        {
+                            foreach (StoreDetailEmailExpressItem item in loginScreen_previousItems)
+                            {
+                                if (updatedDateList.Where(date => date == item.AdSelectedDate).SingleOrDefault() == DateTime.MinValue)
+                                    StoreService.Delete<StoreDetailEmailExpressItem>(item);
+                            }
+                        }
+                    }
+                    emailexpress.ItemTypeId = application.ItemTypeId;
+                    if (application.ItemTypeId == 3 || application.ItemTypeId == 4)
+                    {
+                        orderDetail.Quantity = 1;
+                        emailexpress.NumberOfDates = 0;
+                    }
+                    else
+                    {
+                        if (updatedDateList != null) orderDetail.Quantity = updatedDateList.Count;
+                        emailexpress.NumberOfDates = updatedDateList.Count;
+                    }
+                    orderDetail.Cost = EmailExpressHelper.GetCost(application.ItemTypeId, updatedDateList.Count);
+                    emailexpress.UpdateDate = DateTime.UtcNow;
+                    emailexpress.UpdateSource = "ApplicationController - EditEmailExpress";
+                }
+                #endregion
+
+                //Update Email Express Information
+                if (order.Company != null)
+                {
+                    StoreAddress address = order.Company.GetCompanyShippingAddress();
+                    StoreService.UpdateTaxAndShipping(order);
+                    orderDetail.UpdateDate = DateTime.UtcNow;
+                    orderDetail.UpdateSource = "ApplicationController - EditEmailExpress";
+                }
 
                 ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
                 StoreService.SaveChanges();

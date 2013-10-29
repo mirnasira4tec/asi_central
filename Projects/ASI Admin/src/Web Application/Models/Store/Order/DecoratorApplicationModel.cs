@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
 
 namespace asi.asicentral.web.model.store
 {
-    public class OrderDetailApplicationModel : IMembershipModel
+    public class DecoratorApplicationModel : StoreDetailDecoratorMembership, IMembershipModel
     {
         [Display(ResourceType = typeof(asi.asicentral.Resource), Name = "CompanyName")]
         public string Company { get; set; }
@@ -94,61 +93,84 @@ namespace asi.asicentral.web.model.store
 
         #endregion shipping information
 
-        public int OrderId { get; set; }
-        public int OrderDetailId { get; set; }
-        public decimal Cost { get; set; }
-        public bool IsStoreRequest { get; set; }
-        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(asi.asicentral.Resource))]
-        public string Quantity { get; set; }
-        public string ActionName { get; set; }
-        public string AcceptedByName { get; set; }
-        public StoreIndividual BillingIndividual { get; set; }
-        public string ExternalReference { get; set; }
-        public bool IsCompleted { get; set; }
-        public OrderStatus OrderStatus { get; set; }
-        public string ProductName { get; set; }
-        public int ProductId { get; set; }
-        public int? OptionId { get; set; }
-        public decimal Price { get; set; }
         public IList<StoreIndividual> Contacts { get; set; }
-        
+        public decimal MonthlyPrice { get; set; }
+        public decimal Price { get; set; }
+       
+        public bool Embroidery { get; set; }
+        public bool ScreenPrinting { get; set; }
+        public bool HeatTransfer { get; set; }
+        public bool Digitziing { get; set; }
+        public bool Engraving { get; set; }
+        public bool Sublimation { get; set; }
+        public bool Monogramming { get; set; }
+        public bool Other { get; set; }
+
         /// <summary>
         /// Required for MVC to rebuild the model
         /// </summary>
-        /// 
-        public OrderDetailApplicationModel()
+        public DecoratorApplicationModel()
             : base()
         {
             this.Contacts = new List<StoreIndividual>();
+            this.ImprintTypes = new List<LookDecoratorImprintingType>();
         }
 
-        public OrderDetailApplicationModel(StoreOrderDetail orderdetail)
-            : base()
+        public DecoratorApplicationModel(StoreDetailDecoratorMembership application, StoreOrderDetail orderDetail)
         {
-            this.Contacts = new List<StoreIndividual>();
-            StoreOrder order = orderdetail.Order;
-            BillingIndividual = order.BillingIndividual;
-            OrderDetailId = orderdetail.Id;
-            this.AcceptedByName = orderdetail.AcceptedByName;
-            if (orderdetail.OptionId.HasValue) this.OptionId = orderdetail.OptionId;
-            this.Quantity = orderdetail.Quantity.ToString();
-            this.AcceptedByName = orderdetail.AcceptedByName;
-           
-            if (orderdetail.Product != null)
-            {
-                ProductName = orderdetail.Product.Name;
-                ProductId = orderdetail.Product.Id;
-                Cost = orderdetail.Cost;
-            }
-
+            StoreOrder order = orderDetail.Order;
+            application.CopyTo(this);
+            GetImprintTypes();
             ActionName = "Approve";
             ExternalReference = order.ExternalReference;
             OrderId = order.Id;
             OrderStatus = order.ProcessStatus;
+            Completed = order.IsCompleted;
             Price = order.Total;
-            IsCompleted = order.IsCompleted;
-            IsStoreRequest = order.IsStoreRequest;
+            MonthlyPrice = (order.Total - order.AnnualizedTotal) / 11;
             MembershipModelHelper.PopulateModel(this, order);
         }
+
+        public void SyncImprintingTypesToApplication(IList<LookDecoratorImprintingType> imprintingType, StoreDetailDecoratorMembership application)
+        {
+            AddImprintingType(Embroidery, "A", imprintingType, application);
+            AddImprintingType(ScreenPrinting, "B", imprintingType, application);
+            AddImprintingType(HeatTransfer, "C", imprintingType, application);
+            AddImprintingType(Digitziing, "D", imprintingType, application);
+            AddImprintingType(Engraving, "E", imprintingType, application);
+            AddImprintingType(Sublimation, "F", imprintingType, application);
+            AddImprintingType(Monogramming, "G", imprintingType, application);
+            AddImprintingType(Other, "H", imprintingType, application);
+        }
+
+        private void GetImprintTypes()
+        {
+            Embroidery = HasImprintingType("A");
+            ScreenPrinting = HasImprintingType("B");
+            HeatTransfer = HasImprintingType("C");
+            Digitziing = HasImprintingType("D");
+            Engraving = HasImprintingType("E");
+            Sublimation = HasImprintingType("F");
+            Monogramming = HasImprintingType("G");
+            Other = HasImprintingType("H");
+        }
+
+        private bool HasImprintingType(string code)
+        {
+            return (this.ImprintTypes.Where(imprintingTypes => imprintingTypes.SubCode == code).Count() == 1);
+        }
+
+        private void AddImprintingType(bool selected, String codeName, IList<LookDecoratorImprintingType> imprintingTypes, StoreDetailDecoratorMembership application)
+        {
+            LookDecoratorImprintingType reference = application.ImprintTypes.Where(type => type.SubCode == codeName).SingleOrDefault();
+            if (selected && reference == null) application.ImprintTypes.Add(imprintingTypes.Where(type => type.SubCode == codeName).SingleOrDefault());
+            else if (!selected && reference != null) application.ImprintTypes.Remove(reference);
+        }
+
+        public int OrderId { get; set; }
+        public string ActionName { get; set; }
+        public string ExternalReference { get; set; }
+        public OrderStatus OrderStatus { get; set; }
+        public bool Completed { get; set; }
     }
 }
