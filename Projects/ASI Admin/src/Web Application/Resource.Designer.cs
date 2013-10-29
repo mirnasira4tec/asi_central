@@ -97,7 +97,7 @@ namespace asi.asicentral.web {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ad Type.
+        ///   Looks up a localized string similar to Ad Type&apos;s.
         /// </summary>
         public static string AdType {
             get {
@@ -156,6 +156,15 @@ namespace asi.asicentral.web {
         public static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categories.
+        /// </summary>
+        public static string Categories {
+            get {
+                return ResourceManager.GetString("Categories", resourceCulture);
             }
         }
         
@@ -534,6 +543,15 @@ namespace asi.asicentral.web {
         public static string LogoPath {
             get {
                 return ResourceManager.GetString("LogoPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logo&apos;s.
+        /// </summary>
+        public static string Logos {
+            get {
+                return ResourceManager.GetString("Logos", resourceCulture);
             }
         }
         

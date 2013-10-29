@@ -81,14 +81,23 @@
             @switch (Model.ProductId)
             {
                 case 48:
+                    if(Model.ESPTowerAds != null && Model.ESPTowerAds.Count > 0)
+                    {
                     <span class="label-row">
 				        @Html.Label(asi.asicentral.web.Resource.AdType) 
-                        @if(Model.LogoPath != string.Empty) { @Html.LabelFor(m => m.LogoPath) }
+                        @Html.Label(asi.asicentral.web.Resource.Categories) 
+                        @Html.Label(asi.asicentral.web.Resource.Logos) 
 			        </span>
+                        foreach(StoreDetailEspTowerAd ad in Model.ESPTowerAds )
+                        {
 			        <span class="label-row">
-				        @Html.DropDownListFor(model => model.Products_OptionId_First, asi.asicentral.util.store.ESPAdvertisingHelper.GetAdTypeOptions())
-                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
+				        @Html.Label(asi.asicentral.util.store.ESPAdvertisingHelper.GetBannerTileTowerOption(ad.OptionId))
+                        @if (!string.IsNullOrEmpty(ad.Categories)) { @Html.Label(ad.Categories) }
+                        else {@Html.Label("          ")}
+                        @if (!string.IsNullOrEmpty(ad.LogoPath)) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@ad.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
 			        </span>
+                        }
+                    }
                     break;
                 case 49:
                     <span class="label-row">

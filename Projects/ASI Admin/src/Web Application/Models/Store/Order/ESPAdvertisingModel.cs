@@ -134,6 +134,7 @@ namespace asi.asicentral.web.model.store
         public int ProductId { get; set; }
         public decimal Price { get; set; }
         public IList<StoreDetailESPAdvertisingItem> Videos{ get; set; }
+        public IList<StoreDetailEspTowerAd> ESPTowerAds { get; set; }
         public IList<StoreIndividual> Contacts { get; set; }
 
         /// <summary>
@@ -166,8 +167,7 @@ namespace asi.asicentral.web.model.store
             switch (ProductId)
             {
                 case 48:
-                    Products_OptionId_First = espAdvertising.FirstOptionId;
-                    LogoPath = espAdvertising.LogoPath;
+                    ESPTowerAds = storeService.GetAll<StoreDetailEspTowerAd>(true).Where(towerAd => towerAd.OrderDetailId == OrderDetailId).ToList();
                     break;
                 case 49:
                     NumberOfItems_First = espAdvertising.FirstItemList;
