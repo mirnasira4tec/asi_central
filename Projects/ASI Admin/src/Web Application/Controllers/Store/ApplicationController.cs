@@ -367,10 +367,6 @@ namespace asi.asicentral.web.Controllers.Store
                 {
                     switch (orderDetail.Product.Id)
                     {
-                        case 48:
-                            espAdvertising.FirstOptionId = application.Products_OptionId_First;
-                            orderDetail.Cost = Convert.ToDecimal(ESPAdvertisingHelper.ESPAdvertising_BANNER_TILE_TOWER_COST[application.Products_OptionId_First-1]);
-                            break;
                         case 49:
                             espAdvertising.FirstItemList = application.NumberOfItems_First;
                             break;
