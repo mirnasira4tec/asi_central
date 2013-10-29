@@ -31,6 +31,9 @@ namespace asi.asicentral.web.model.store
         [Display(ResourceType = typeof(asi.asicentral.Resource), Name = "Phone")]
         public string Phone { get; set; }
         public string InternationalPhone { get; set; }
+        [RegularExpression(@"^[1-9][0-9]{3,5}$", ErrorMessageResourceName = "FieldInvalidASINumber", ErrorMessageResourceType = typeof(asi.asicentral.Resource))]
+        [StringLength(6, ErrorMessageResourceType = typeof(asi.asicentral.Resource), ErrorMessageResourceName = "FieldLength")]
+        public string ASINumber { get; set; }
         public bool HasShipAddress { get; set; }
         public bool HasBillAddress { get; set; }
 

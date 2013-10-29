@@ -433,7 +433,7 @@
     <value>Select Date</value>
   </data>
   <data name="AdType" xml:space="preserve">
-    <value>Ad Type</value>
+    <value>Ad Type's</value>
   </data>
   <data name="NumberOfProducts" xml:space="preserve">
     <value>Number of Products</value>
@@ -470,5 +470,11 @@
   </data>
   <data name="StoreTitleDecoratorApplication" xml:space="preserve">
     <value>Decorator Application</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="Logos" xml:space="preserve">
+    <value>Logo's</value>
   </data>
 </root>

@@ -73,147 +73,7 @@
 	</ul>
 </nav>
 <div class="tab-content">
-    <div id="tabbasic" class="basic-information tab-pane fade in active">
-		<fieldset class="company-info-form">			
-			<legend>Company Information</legend>
-				<span class="label-row">
-					@Html.LabelFor(m => m.Company) 
-					@Html.EditorFor(m => m.Company, new { @class = "long" }) @Html.ValidationMessageFor(m => m.Company)
-				</span>
-				<span class="label-row">
-					@Html.LabelFor(m => m.Address1)
-					@Html.LabelFor(m => m.Address2)
-					@Html.LabelFor(m => m.City)
-				</span>
-				<span class="label-row">
-					@Html.EditorFor(m => m.Address1) @Html.ValidationMessageFor(m => m.Address1)
-					@Html.EditorFor(m => m.Address2) @Html.ValidationMessageFor(m => m.Address2)
-					@Html.EditorFor(m => m.City) @Html.ValidationMessageFor(m => m.City)
-				</span>
-				<span class="label-row">
-					@Html.LabelFor(m => m.State, new { @class = "span3" }) 
-					@Html.LabelFor(m => m.Zip, new { @class = "span3" })
-					@Html.LabelFor(m => m.Country, new { @class = "span3" })
-                </span>
-				<span class="label-row">
-					@Html.EditorFor(m => m.State, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.State)
-					@Html.EditorFor(m => m.Zip, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.Zip)
-					@Html.EditorFor(m => m.Country, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.Country)
-				</span>
-			
-		</fieldset>
-
-		<fieldset class="contact-info-form">
-			<legend>Contacts</legend>
-
-            @if (Model.Contacts != null && Model.Contacts.Count > 0)
-            {
-                for (int i = 0; i < Model.Contacts.Count; i++)
-                {
-                    if (Model.Contacts[i] != null)
-                    {
-                        @Html.HiddenFor(m => Model.Contacts[i].Id) @Html.HiddenFor(m => Model.Contacts[i].IsPrimary) 
-                        <span class="row">@(Model.Contacts[i].IsPrimary ? Html.Raw("<strong>Primary Contact</strong>") : Html.Raw("<strong>Secondary Contact</strong>"))</span>
-                        <span class="label-row">
-					        @Html.LabelFor(m => Model.Contacts[i].FirstName)
-                            @Html.LabelFor(m => Model.Contacts[i].LastName)
-					        @Html.LabelFor(m => Model.Contacts[i].Email)
-				        </span>
-				        <span class="label-row">
-                            @Html.EditorFor(m => Model.Contacts[i].FirstName) @Html.ValidationMessageFor(m => Model.Contacts[i].FirstName)
-					        @Html.EditorFor(m => Model.Contacts[i].LastName) @Html.ValidationMessageFor(m => Model.Contacts[i].LastName)
-					        @Html.EditorFor(m => Model.Contacts[i].Email) @Html.ValidationMessageFor(m => Model.Contacts[i].Email)
-				        </span>
-				        <span class="label-row">
-					        @Html.LabelFor(m => Model.Contacts[i].Title)
-					        @Html.LabelFor(m => Model.Contacts[i].Phone)
-					        @Html.LabelFor(m => Model.Contacts[i].Fax)
-				        </span>
-				        <span class="label-row">
-					        @Html.EditorFor(m => Model.Contacts[i].Title) @Html.ValidationMessageFor(m => Model.Contacts[i].Title)
-					        @Html.EditorFor(m => Model.Contacts[i].Phone) @Html.ValidationMessageFor(m => Model.Contacts[i].Phone)
-					        @Html.EditorFor(m => Model.Contacts[i].Fax) @Html.ValidationMessageFor(m => Model.Contacts[i].Fax)
-				        </span>
-                    }
-                }
-            }
-		</fieldset>	
-
-        @Html.HiddenFor(m => m.HasBillAddress)
-        @if (Model.HasBillAddress)
-        {
-		<fieldset class="billing-info-form">
-			<legend>Billing Information</legend>
-
-			<span class="label-row">
-				@Html.LabelFor(m => m.BillingAddress1) 
-				@Html.LabelFor(m => m.BillingAddress2) 
-				@Html.LabelFor(m => m.BillingCity)
-			</span>
-			<span class="label-row">
-				@Html.EditorFor(m => m.BillingAddress1) @Html.ValidationMessageFor(m => m.BillingAddress1)
-				@Html.EditorFor(m => m.BillingAddress2) @Html.ValidationMessageFor(m => m.BillingAddress2)
-				@Html.EditorFor(m => m.BillingCity) @Html.ValidationMessageFor(m => m.BillingCity)
-			</span>
-				
-			<span class="label-row">
-				@Html.LabelFor(m => m.BillingState) 
-				@Html.LabelFor(m => m.BillingZip) 
-				@Html.LabelFor(m => m.BillingCountry)
-			</span>
-			<span class="label-row">
-				@Html.EditorFor(m => m.BillingState) @Html.ValidationMessageFor(m => m.BillingState)
-				@Html.EditorFor(m => m.BillingZip) @Html.ValidationMessageFor(m => m.BillingZip)
-				@Html.EditorFor(m => m.BillingCountry) @Html.ValidationMessageFor(m => m.BillingCountry)
-			</span>
-			<span class="label-row span11">
-				@Html.LabelFor(m => m.BillingPhone) 
-				@Html.LabelFor(m => m.BillingFax) 
-				@Html.LabelFor(m => m.BillingEmail)
-			</span>
-			<span class="label-row">
-				@Html.EditorFor(m => m.BillingPhone) @Html.ValidationMessageFor(m => m.BillingPhone)
-				@Html.EditorFor(m => m.BillingFax) @Html.ValidationMessageFor(m => m.BillingFax)
-				@Html.EditorFor(m => m.BillingEmail) @Html.ValidationMessageFor(m => m.BillingEmail)
-			</span>
-			<span class="label-row span11">
-				@Html.LabelFor(m => m.BillingWebUrl) 
-			</span>
-			<span class="label-row">
-				@Html.EditorFor(m => m.BillingWebUrl) @Html.ValidationMessageFor(m => m.BillingWebUrl)
-			</span>
-		</fieldset>                
-        } 
-        @Html.HiddenFor(m => m.HasShipAddress)
-        @if (Model.HasShipAddress)
-        {
-		<fieldset class="billing-info-form">
-			<legend>Shipping Information</legend>
-
-			<span class="label-row">
-				@Html.LabelFor(m => m.ShippingStreet1) 
-				@Html.LabelFor(m => m.ShippingStreet2) 
-				@Html.LabelFor(m => m.ShippingCity) 
-			</span>
-			<span class="label-row">
-				@Html.EditorFor(m => m.ShippingStreet1) @Html.ValidationMessageFor(m => m.ShippingStreet1)
-				@Html.EditorFor(m => m.ShippingStreet2) @Html.ValidationMessageFor(m => m.ShippingStreet2)
-				@Html.EditorFor(m => m.ShippingCity) @Html.ValidationMessageFor(m => m.ShippingCity)
-			</span>
-				
-			<span class="label-row">
-				@Html.LabelFor(m => m.ShippingState) 
-				@Html.LabelFor(m => m.ShippingZip) 
-				@Html.LabelFor(m => m.ShippingCountry)
-			</span>
-			<span class="label-row">
-				@Html.EditorFor(m => m.ShippingState) @Html.ValidationMessageFor(m => m.ShippingState)
-				@Html.EditorFor(m => m.ShippingZip) @Html.ValidationMessageFor(m => m.ShippingZip)
-				@Html.EditorFor(m => m.ShippingCountry) @Html.ValidationMessageFor(m => m.ShippingCountry)
-			</span>
-		</fieldset>                
-        }
-	</div><!-- END #basic-information -->	
+    @Html.Partial("../Store/Application/Shared/CompanyInformation", Model)
 
 	<div id="tabsubscription" class="product-information tab-pane fade">
 		<fieldset class="company-info-form">
@@ -221,14 +81,23 @@
             @switch (Model.ProductId)
             {
                 case 48:
+                    if(Model.ESPTowerAds != null && Model.ESPTowerAds.Count > 0)
+                    {
                     <span class="label-row">
 				        @Html.Label(asi.asicentral.web.Resource.AdType) 
-                        @if(Model.LogoPath != string.Empty) { @Html.LabelFor(m => m.LogoPath) }
+                        @Html.Label(asi.asicentral.web.Resource.Categories) 
+                        @Html.Label(asi.asicentral.web.Resource.Logos) 
 			        </span>
+                        foreach(StoreDetailEspTowerAd ad in Model.ESPTowerAds )
+                        {
 			        <span class="label-row">
-				        @Html.DropDownListFor(model => model.Products_OptionId_First, asi.asicentral.util.store.ESPAdvertisingHelper.GetAdTypeOptions())
-                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
+				        @Html.Label(asi.asicentral.util.store.ESPAdvertisingHelper.GetBannerTileTowerOption(ad.OptionId))
+                        @if (!string.IsNullOrEmpty(ad.Categories)) { @Html.Label(ad.Categories) }
+                        else {@Html.Label("          ")}
+                        @if (!string.IsNullOrEmpty(ad.LogoPath)) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@ad.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
 			        </span>
+                        }
+                    }
                     break;
                 case 49:
                     <span class="label-row">
