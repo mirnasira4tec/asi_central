@@ -10,6 +10,13 @@ namespace asi.asicentral.interfaces
     public interface ICreditCardService
     {
         /// <summary>
+        /// Validates a credit card
+        /// </summary>
+        /// <param name="creditCard"></param>
+        /// <returns></returns>
+        bool Validate(CreditCard creditCard);
+
+        /// <summary>
         /// Store a credit card in the volt
         /// </summary>
         /// <param name="creditCard"></param>
