@@ -288,7 +288,7 @@ namespace asi.asicentral.web.Controllers.Store
             }
             else
             {
-                return View("../Store/Application/Magazines", application);
+                return View("../Store/Application/Catalogs", application);
             }
         }
         
@@ -367,10 +367,6 @@ namespace asi.asicentral.web.Controllers.Store
                 {
                     switch (orderDetail.Product.Id)
                     {
-                        case 48:
-                            espAdvertising.FirstOptionId = application.Products_OptionId_First;
-                            orderDetail.Cost = Convert.ToDecimal(ESPAdvertisingHelper.ESPAdvertising_BANNER_TILE_TOWER_COST[application.Products_OptionId_First-1]);
-                            break;
                         case 49:
                             espAdvertising.FirstItemList = application.NumberOfItems_First;
                             break;
@@ -459,7 +455,7 @@ namespace asi.asicentral.web.Controllers.Store
             }
             else
             {
-                return View("../Store/Application/OrderDetailProduct", application);
+                return View("../Store/Application/ESPAdvertising", application);
             }
         }
 
@@ -541,7 +537,7 @@ namespace asi.asicentral.web.Controllers.Store
             }
             else
             {
-                return View("../Store/Application/OrderDetailProduct", application);
+                return View("../Store/Application/PayForPlacement", application);
             }
         }
 
@@ -653,7 +649,7 @@ namespace asi.asicentral.web.Controllers.Store
             }
             else
             {
-                return View("../Store/Application/OrderDetailProduct", application);
+                return View("../Store/Application/EmailExpress", application);
             }
         }
 
@@ -712,6 +708,7 @@ namespace asi.asicentral.web.Controllers.Store
                 order.Company.Name = model.Company;
                 order.Company.Phone =model.Phone;
                 order.Company.WebURL = model.BillingWebUrl;
+                order.Company.ASINumber = model.ASINumber;
                 order.UpdateDate = DateTime.UtcNow;
                 order.UpdateSource = "ASI Admin Application - UpdateCompanyInformation";
 

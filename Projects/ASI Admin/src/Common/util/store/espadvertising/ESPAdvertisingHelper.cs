@@ -18,6 +18,14 @@ namespace asi.asicentral.util.store
         public static readonly decimal[] ESPAdvertising_PFP_COST = { 295.00M, 280.00M, 265.00M, 245.00M, 235.00M, 225.00M, 215.00M, 210.00M };
         public static readonly decimal ESPAdvertising_LoginScreen_COST = 250M;
 
+        //BANNER_TILE_TOWER_Options
+        public static readonly string[] ESPAdvertising_BANNER_TILE_TOWER_Options = { "", "Search Page - Banner Ad", "Search Page - Tile Ad", "Search Page - Tower Ad Tuesday Ad", "Result Page - Banner Ad", "Result Page - Tile Ad", "Result Page - Tower Ad Tuesday Ad" };
+
+        public static string GetBannerTileTowerOption(int option)
+        {
+            return ESPAdvertising_BANNER_TILE_TOWER_Options[option];
+        }
+
         public static IList<SelectListItem> GetAdTypeOptions(string value = null)
         {
             IList<SelectListItem> adTypeOptions = new List<SelectListItem>();
