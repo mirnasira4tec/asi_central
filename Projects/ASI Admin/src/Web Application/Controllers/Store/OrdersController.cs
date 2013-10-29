@@ -138,7 +138,7 @@ namespace asi.asicentral.web.Controllers.Store
                 switch (data.CompletedStep)
                 {
                     case 0:
-                        data.StepLabel = "Clicked on the link";
+                        data.StepLabel = "Clicked on the link Only";
                         break;
                     case 1:
                         data.StepLabel = "Selected a product";
