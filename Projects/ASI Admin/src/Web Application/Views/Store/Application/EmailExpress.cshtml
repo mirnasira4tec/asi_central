@@ -243,6 +243,27 @@
             GetNumberOfItems();
             GetCostPlatinum();
             GetCostRegular();
+            $('input.command').click(function (e) {
+                $('#ActionName').val(e.target.value);
+                if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
+                    //make sure we have Timms value
+                    if (!$('#ExternalReference').val()) {
+                        asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
+                        $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                        $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
+                        e.preventDefault();
+                    }
+                    else {
+                        var isnum = /^\d+$/.test($('#ExternalReference').val());
+                        if (!isnum) {
+                            asi.modal.confirm('Error', 'TIMMS ID must contain only numbers.', null, "#hide", "Close");
+                            $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                            $("#timmsErrorMessage").text("TIMMS ID must contain only numbers.");
+                            e.preventDefault();
+                        }
+                    }
+                }
+            });
             $("#dates").multiDatesPicker({
                 dateFormat: "D, d M y",
                 minDate: 0,
