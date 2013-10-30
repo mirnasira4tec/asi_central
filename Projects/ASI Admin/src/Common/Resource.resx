@@ -585,4 +585,10 @@
   <data name="EmailExpress_Error_Terms" xml:space="preserve">
     <value>Please accept the Terms&amp;Conditions to proceed</value>
   </data>
+  <data name="FieldLength" xml:space="preserve">
+    <value>This field is too long.</value>
+  </data>
+  <data name="FieldInvalidASINumber" xml:space="preserve">
+    <value>Please enter a valid ASI #.</value>
+  </data>
 </root>

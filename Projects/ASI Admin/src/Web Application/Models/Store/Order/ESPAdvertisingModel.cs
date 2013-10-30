@@ -28,6 +28,9 @@ namespace asi.asicentral.web.model.store
         [Display(ResourceType = typeof(asi.asicentral.Resource), Name = "Phone")]
         public string Phone { get; set; }
         public string InternationalPhone { get; set; }
+        [RegularExpression(@"^[1-9][0-9]{3,5}$", ErrorMessageResourceName = "FieldInvalidASINumber", ErrorMessageResourceType = typeof(asi.asicentral.Resource))]
+        [StringLength(6, ErrorMessageResourceType = typeof(asi.asicentral.Resource), ErrorMessageResourceName = "FieldLength")]
+        public string ASINumber { get; set; }
         public bool HasShipAddress { get; set; }
         public bool HasBillAddress { get; set; }
 
@@ -131,6 +134,7 @@ namespace asi.asicentral.web.model.store
         public int ProductId { get; set; }
         public decimal Price { get; set; }
         public IList<StoreDetailESPAdvertisingItem> Videos{ get; set; }
+        public IList<StoreDetailEspTowerAd> ESPTowerAds { get; set; }
         public IList<StoreIndividual> Contacts { get; set; }
 
         /// <summary>
@@ -163,8 +167,7 @@ namespace asi.asicentral.web.model.store
             switch (ProductId)
             {
                 case 48:
-                    Products_OptionId_First = espAdvertising.FirstOptionId;
-                    LogoPath = espAdvertising.LogoPath;
+                    ESPTowerAds = storeService.GetAll<StoreDetailEspTowerAd>(true).Where(towerAd => towerAd.OrderDetailId == OrderDetailId).ToList();
                     break;
                 case 49:
                     NumberOfItems_First = espAdvertising.FirstItemList;

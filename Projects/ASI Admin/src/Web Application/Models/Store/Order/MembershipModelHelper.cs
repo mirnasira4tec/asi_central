@@ -17,6 +17,7 @@ namespace asi.asicentral.web.model.store
         string Country { get; set; }
         string Phone { get; set; }
         string InternationalPhone { get; set; }
+        string ASINumber { get; set; }
         bool HasShipAddress { get; set; }
         bool HasBillAddress { get; set; }
         IList<StoreIndividual> Contacts { get; set; }
@@ -63,6 +64,7 @@ namespace asi.asicentral.web.model.store
                 model.HasShipAddress = order.Company.HasShipAddress;
                 model.Phone = order.Company.Phone;
                 model.BillingWebUrl = order.Company.WebURL;
+                model.ASINumber = order.Company.ASINumber;
                 StoreAddress companyAddress = order.Company.GetCompanyAddress();
                 if (companyAddress != null)
                 {

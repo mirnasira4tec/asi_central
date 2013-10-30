@@ -664,6 +664,15 @@ namespace asi.asicentral {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter a valid ASI #..
+        /// </summary>
+        public static string FieldInvalidASINumber {
+            get {
+                return ResourceManager.GetString("FieldInvalidASINumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please enter a valid email address..
         /// </summary>
         public static string FieldInvalidEmail {
@@ -678,6 +687,15 @@ namespace asi.asicentral {
         public static string FieldInvalidNumber {
             get {
                 return ResourceManager.GetString("FieldInvalidNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This field is too long..
+        /// </summary>
+        public static string FieldLength {
+            get {
+                return ResourceManager.GetString("FieldLength", resourceCulture);
             }
         }
         

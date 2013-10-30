@@ -204,7 +204,6 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
 
             ESPAdvertisingModel model = new ESPAdvertisingModel();
             model.OrderDetailId = 5;
-            model.Products_OptionId_First = 1;
             model.ActionName = ApplicationController.COMMAND_SAVE;
             model.ExternalReference = "102";
             
@@ -214,9 +213,6 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Assert.AreEqual(orderRef.ExternalReference, model.ExternalReference);
             Assert.IsNotNull(detail);
             Assert.AreEqual(detail.Quantity, 1);
-            Assert.IsNotNull(espAdvertisingDetail);
-            Assert.AreEqual(espAdvertisingDetail.FirstOptionId, model.Products_OptionId_First);
-            Assert.AreEqual(detail.Cost, Convert.ToDecimal(ESPAdvertisingHelper.ESPAdvertising_BANNER_TILE_TOWER_COST[0]));
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(1));
 
             // user clicks reject - order should be updated to reject
