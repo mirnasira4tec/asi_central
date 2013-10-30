@@ -556,7 +556,7 @@ namespace asi.asicentral {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please accept the Terms&amp;Conditions to proceed.
+        ///   Looks up a localized string similar to Please accept the Terms &amp; Conditions to proceed.
         /// </summary>
         public static string EmailExpress_Error_Terms {
             get {
