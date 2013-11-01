@@ -32,6 +32,7 @@ namespace asi.asicentral.model.store
         public string SubscriptionFrequency { get; set; }
         public bool IsASINumberFlag { get; set; }
         public bool IsAvailable { get; set; }
+        public string ChatSettings { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime? NextAvailableDate { get; set; }
