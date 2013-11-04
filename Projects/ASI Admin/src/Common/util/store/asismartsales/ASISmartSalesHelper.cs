@@ -11,6 +11,8 @@ namespace asi.asicentral.util.store
     {
         public static readonly decimal[] ASISmartSales_Costs = { 35, 35, 30, 25, 35 };
 
+        public static readonly string[] ASISmartSales_Options = { Resource.Membership, Resource.Basic, Resource.Standard, Resource.Executive, Resource.NA };
+
         public static IList<SelectListItem> GetCurrentMembershipOptions(string value = null)
         {
             IList<SelectListItem> membershipOptions = new List<SelectListItem>();
