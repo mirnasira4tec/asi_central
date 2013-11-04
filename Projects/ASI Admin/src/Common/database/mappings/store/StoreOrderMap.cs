@@ -42,6 +42,10 @@ namespace asi.asicentral.database.mappings.store
             HasOptional(order => order.BillingIndividual)
                 .WithMany()
                 .Map(order => order.MapKey("BillingIndividualId"));
+
+            HasOptional(order => order.Context)
+                .WithMany()
+                .HasForeignKey(order => order.ContextId);
         }
     }
 }

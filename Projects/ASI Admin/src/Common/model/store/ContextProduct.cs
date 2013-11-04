@@ -20,6 +20,7 @@ namespace asi.asicentral.model.store
         public int Id { get; set; }
         public string Type { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public decimal Cost { get; set; }
         public decimal ApplicationCost { get; set; }
         public decimal ShippingCostUS { get; set; }
@@ -31,6 +32,7 @@ namespace asi.asicentral.model.store
         public string SubscriptionFrequency { get; set; }
         public bool IsASINumberFlag { get; set; }
         public bool IsAvailable { get; set; }
+        public string ChatSettings { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime? NextAvailableDate { get; set; }

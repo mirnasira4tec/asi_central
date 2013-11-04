@@ -47,7 +47,16 @@ namespace asi.asicentral.model.store
         public virtual StoreCreditCard CreditCard { get; set; }
         public virtual StoreIndividual BillingIndividual { get; set; }
         public virtual IList<StoreOrderDetail> OrderDetails { get; set; }
-
+        public virtual Context Context { get; set; }
+        public string ProductName
+        {
+            get
+            {
+                if (Context != null) return Context.Name;
+                else if (OrderDetails != null && OrderDetails.Where(detail => detail.Product != null).FirstOrDefault() != null) return OrderDetails.Where(detail => detail.Product != null).FirstOrDefault().Product.Name;
+                else return "(Unknown)";
+            }
+        }
         public override string ToString()
         {
             return "Order (" + Id + ")";
