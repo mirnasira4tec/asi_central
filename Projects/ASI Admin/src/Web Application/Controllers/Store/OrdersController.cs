@@ -35,10 +35,15 @@ namespace asi.asicentral.web.Controllers.Store
                 if (dateStart == null) dateStart = DateTime.Now.AddDays(-7);
                 if (dateEnd == null) dateEnd = DateTime.Now;
                 else dateEnd = dateEnd.Value.Date + new TimeSpan(23, 59, 59);
-                orderDetailQuery = orderDetailQuery.Where(detail => detail.CreateDate >= dateStart && detail.CreateDate <= dateEnd);
+                //create new value converted to UTC time to make sure getting the right database records
+                DateTime dateStartParam = dateStart.Value.ToUniversalTime();
+                DateTime dateEndParam = dateEnd.Value.ToUniversalTime();
+                orderDetailQuery = orderDetailQuery.Where(detail => detail.CreateDate >= dateStartParam && detail.CreateDate <= dateEndParam);
             }
             if (formTab == OrderPageModel.TAB_PRODUCT && !string.IsNullOrEmpty(product))
-                orderDetailQuery = orderDetailQuery.Where(detail => detail.Product != null && detail.Product.Name != null && detail.Product.Name.Contains(product.ToLower()));
+                orderDetailQuery = orderDetailQuery.Where(detail => 
+                    (detail.Product != null && detail.Product.Name != null && detail.Product.Name == product)
+                    || (detail.Order.Context != null && detail.Order.Context.Name == product) );
 
             if (formTab == OrderPageModel.TAB_ORDER && id.HasValue)
                 orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.Id == id.Value);

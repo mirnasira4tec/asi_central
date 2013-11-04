@@ -47,6 +47,7 @@ namespace asi.asicentral.model.store
         public virtual StoreCreditCard CreditCard { get; set; }
         public virtual StoreIndividual BillingIndividual { get; set; }
         public virtual IList<StoreOrderDetail> OrderDetails { get; set; }
+        public virtual Context Context { get; set; }
 
         public override string ToString()
         {
