@@ -18,7 +18,7 @@ namespace asi.asicentral.web.model.store.order
 
     public class GroupedData
     {
-        public string Campaign { get; set; }
+        public string GroupName { get; set; }
         public string StepLabel { get; set; }
         public int CompletedStep { get; set; }
         public int Count { get; set; }

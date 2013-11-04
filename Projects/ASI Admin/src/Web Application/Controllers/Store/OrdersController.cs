@@ -113,6 +113,11 @@ namespace asi.asicentral.web.Controllers.Store
             };
         }
 
+        /// <summary>
+        /// Statistical data for the campaigns
+        /// </summary>
+        /// <param name="orderStatisticsData"></param>
+        /// <returns></returns>
         public virtual ActionResult Statistics(OrderStatisticData orderStatisticsData)
         {
             if (orderStatisticsData.StartDate > orderStatisticsData.EndDate)
@@ -126,7 +131,7 @@ namespace asi.asicentral.web.Controllers.Store
             orderStatisticsData.Data = ordersQuery
                 .GroupBy(order => new { order.Campaign, order.CompletedStep })
                 .Select(grouped => new GroupedData() {
-                    Campaign = grouped.Key.Campaign, 
+                    GroupName = grouped.Key.Campaign, 
                     CompletedStep = grouped.Key.CompletedStep, 
                     Count = grouped.Count(), 
                     Amount = grouped.Sum(order => order.ContextId),  //need overall order amount
@@ -135,10 +140,69 @@ namespace asi.asicentral.web.Controllers.Store
                     AmountRejected = grouped.Where(order => order.ProcessStatus == OrderStatus.Rejected).Sum(order => order.ContextId), //need overall order amount 
                     AmountApproved = grouped.Where(order => order.ProcessStatus == OrderStatus.Approved).Sum(order => order.ContextId),  //need overall order amount
                 })
-                .OrderBy(data => new { data.Campaign, data.CompletedStep })
+                .OrderBy(data => new { Campaign = data.GroupName, data.CompletedStep })
                 .ToList();
+            PopulateStepData(orderStatisticsData.Data);
+            return View("../Store/Admin/Statistics", orderStatisticsData);
+        }
+
+        /// <summary>
+        /// Statistical data for the campaigns
+        /// </summary>
+        /// <param name="orderStatisticsData"></param>
+        /// <returns></returns>
+        public virtual ActionResult Products(OrderStatisticData orderStatisticsData)
+        {
+            if (orderStatisticsData.StartDate > orderStatisticsData.EndDate)
+            {
+                orderStatisticsData.Message = Resource.StoreDateErrorMessage;
+                orderStatisticsData.StartDate = DateTime.Now.AddDays(-7).Date;
+                orderStatisticsData.EndDate = DateTime.Now;
+                return View("../Store/Admin/ProductStatistics", orderStatisticsData);
+            }
+            IQueryable<StoreOrder> ordersQuery = StoreService.GetAll<StoreOrder>();
+            if (!orderStatisticsData.StartDate.HasValue) orderStatisticsData.StartDate = DateTime.Now.AddDays(-7).Date;
+            if (!orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = DateTime.Now.Date;
+            if (orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = orderStatisticsData.EndDate.Value.Date + new TimeSpan(23, 59, 59);
+            if (orderStatisticsData.StartDate.HasValue)
+            {
+                DateTime dateParam = orderStatisticsData.StartDate.Value.ToUniversalTime();
+                ordersQuery = ordersQuery.Where(order => order.CreateDate >= dateParam);
+            }
+            if (orderStatisticsData.EndDate.HasValue)
+            {
+                DateTime dateParam = orderStatisticsData.EndDate.Value.ToUniversalTime();
+                ordersQuery = ordersQuery.Where(order => order.CreateDate <= dateParam);
+            }
+            IList<StoreOrder> orders = ordersQuery.ToList();
+            IList<GroupedData> dataList = orders
+                .GroupBy(order => new { Name = order.ProductName, order.CompletedStep })
+                .Select(grouped => new GroupedData()
+                {
+                    GroupName = grouped.Key.Name,
+                    CompletedStep = grouped.Key.CompletedStep,
+                    Count = grouped.Count(),
+                    Amount = grouped.Sum(order => order.ContextId),  //need overall order amount
+                    CountRejected = grouped.Count(order => order.ProcessStatus == OrderStatus.Rejected),
+                    CountApproved = grouped.Count(order => order.ProcessStatus == OrderStatus.Approved),
+                })
+                .OrderBy(data => data.GroupName)
+                .OrderBy(data => data.CompletedStep)
+                .ToList();
+
+            orderStatisticsData.Data = dataList;
+            PopulateStepData(orderStatisticsData.Data);
+            return View("../Store/Admin/ProductStatistics", orderStatisticsData);
+        }
+
+        /// <summary>
+        /// Changes the step from position to name of the steps
+        /// </summary>
+        /// <param name="dataList"></param>
+        private void PopulateStepData(IList<GroupedData> dataList)
+        {
             //change completed steps with more meaningful title
-            foreach (GroupedData data in orderStatisticsData.Data)
+            foreach (GroupedData data in dataList)
             {
                 switch (data.CompletedStep)
                 {
@@ -168,9 +232,13 @@ namespace asi.asicentral.web.Controllers.Store
                         break;
                 }
             }
-            return View("../Store/Admin/Statistics", orderStatisticsData);
         }
 
+        /// <summary>
+        /// Download the product data
+        /// </summary>
+        /// <param name="orderStatisticsData"></param>
+        /// <returns></returns>
         public ActionResult DownloadCSV(OrderStatisticData orderStatisticsData)
         {
             IQueryable<StoreOrder> ordersQuery = GetOrderBy(orderStatisticsData);
@@ -218,8 +286,16 @@ namespace asi.asicentral.web.Controllers.Store
             if (orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = orderStatisticsData.EndDate.Value.Date + new TimeSpan(23, 59, 59);
             IQueryable<StoreOrder> ordersQuery = StoreService.GetAll<StoreOrder>();
             if (!string.IsNullOrEmpty(orderStatisticsData.Campaign)) ordersQuery = ordersQuery.Where(order => order.Campaign == orderStatisticsData.Campaign);
-            if (orderStatisticsData.StartDate.HasValue) ordersQuery = ordersQuery.Where(order => order.CreateDate >= orderStatisticsData.StartDate);
-            if (orderStatisticsData.EndDate.HasValue) ordersQuery = ordersQuery.Where(order => order.CreateDate <= orderStatisticsData.EndDate);
+            if (orderStatisticsData.StartDate.HasValue)
+            {
+                DateTime dateParam = orderStatisticsData.StartDate.Value.ToUniversalTime();
+                ordersQuery = ordersQuery.Where(order => order.CreateDate >= dateParam);
+            }
+            if (orderStatisticsData.EndDate.HasValue)
+            {
+                DateTime dateParam = orderStatisticsData.EndDate.Value.ToUniversalTime();
+                ordersQuery = ordersQuery.Where(order => order.CreateDate <= dateParam);
+            }
 
             return ordersQuery;
         }

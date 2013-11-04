@@ -342,6 +342,7 @@
     <Content Include="Views\Store\Application\Decorator.cshtml" />
     <Content Include="Views\Store\Application\EmailExpress.cshtml" />
     <Content Include="Views\Store\Application\Shared\CompanyInformation.cshtml" />
+    <Content Include="Views\Store\Admin\ProductStatistics.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

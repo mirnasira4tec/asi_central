@@ -46,7 +46,7 @@
 
     foreach (asi.asicentral.web.model.store.order.GroupedData data in Model.Data)
     {
-        currentGroupName = string.IsNullOrEmpty(data.Campaign) ? "(Unknown)" : data.Campaign;
+        currentGroupName = string.IsNullOrEmpty(data.GroupName) ? "(Unknown)" : data.GroupName;
         if (currentGroupName.ToLower() != oldGroupName.ToLower() && oldGroupName != string.Empty)
         {
             //new group, not the first one
