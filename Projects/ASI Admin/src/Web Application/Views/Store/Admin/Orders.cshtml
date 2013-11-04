@@ -103,7 +103,7 @@
                 }
                 else { <img src="/images/transparent.gif" style="height:1px;width:33px" /> }
                 @order.OrderId</td><td>@order.Name</td><td>@order.Email</td>
-                @if(!string.IsNullOrEmpty(order.ContextType))
+                @if (!string.IsNullOrEmpty(order.ContextType) && !order.IsProduct)
                 {
                 <td><a href="#" class="productRef">@order.ContextType</a></td>
                 }
