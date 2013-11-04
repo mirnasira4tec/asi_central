@@ -225,6 +225,12 @@ namespace asi.asicentral.database.mappings
             For<IRepository<StoreDetailEmailExpressItem>>().Use<EFRepository<StoreDetailEmailExpressItem>>()
                .Ctor<IValidatedContext>().Named("StoreContext");
 
+            For<IRepository<StoreDetailProductCollection>>().Use<EFRepository<StoreDetailProductCollection>>()
+    .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<StoreDetailProductCollectionItem>>().Use<EFRepository<StoreDetailProductCollectionItem>>()
+               .Ctor<IValidatedContext>().Named("StoreContext");
+
             #endregion StoreContext
 
             #region TIMSS Context

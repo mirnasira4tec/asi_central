@@ -116,6 +116,8 @@
     <Compile Include="database\mappings\asiinternet\SupplierDecoratingTypeMap.cs" />
     <Compile Include="database\mappings\call\CallQueueMap.cs" />
     <Compile Include="database\mappings\call\CallRequestsMap.cs" />
+    <Compile Include="database\mappings\store\StoreDetailProductCollectionsItemMap.cs" />
+    <Compile Include="database\mappings\store\StoreDetailProductCollectionsMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailEmailExpressMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailEmailExpressItemMap.cs" />
     <Compile Include="database\mappings\store\LookDecoratorImprintingTypeMap.cs" />
@@ -152,6 +154,8 @@
     <Compile Include="model\ROI\Category.cs" />
     <Compile Include="model\ROI\Company.cs" />
     <Compile Include="model\store\CENTUserProfilesPROF.cs" />
+    <Compile Include="model\store\StoreDetailStoreDetailProductCollections.cs" />
+    <Compile Include="model\store\StoreDetailStoreDetailProductCollectionsItem.cs" />
     <Compile Include="model\store\StoreDetailEmailExpress.cs" />
     <Compile Include="model\store\StoreDetailEmailExpressItem.cs" />
     <Compile Include="model\store\LookDecoratorImprintingType.cs" />
