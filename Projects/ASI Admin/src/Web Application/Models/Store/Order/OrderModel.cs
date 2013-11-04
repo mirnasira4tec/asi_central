@@ -115,6 +115,7 @@ namespace asi.asicentral.web.model.store
         }
 
         public string ContextType { get; set; }
+        public bool IsProduct { get; set; }
     
 
         public bool ShowIcons { get; set; }
@@ -151,7 +152,10 @@ namespace asi.asicentral.web.model.store
             {
                 context = storeService.GetAll<Context>().Where(ctx => ctx.Id == orderDetail.Order.ContextId).SingleOrDefault();
                 if (context != null && !string.IsNullOrEmpty(context.Type))
+                {
                     order.ContextType = context.Name;
+                    if (context.Type == "Product") order.IsProduct = true; else order.IsProduct = false;
+                }
             }
 
             return order;
