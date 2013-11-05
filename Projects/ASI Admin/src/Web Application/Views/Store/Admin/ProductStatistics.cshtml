@@ -1,4 +1,4 @@
-﻿@model asi.asicentral.web.model.store.order.OrderStatisticData
+﻿@model asi.asicentral.web.model.store.order.ProductStatisticData
 
 @{
     ViewBag.Title = "Statistics";
@@ -30,13 +30,44 @@
 </form>
 @if (Model.Data != null && Model.Data.Count > 0)
 {
-    string oldGroupName = string.Empty;
-    string currentGroupName = oldGroupName;
-    foreach (asi.asicentral.web.model.store.order.GroupedData data in Model.Data)
+    decimal total = 0;
+    decimal annualized = 0;
+    foreach (asi.asicentral.web.model.store.order.Group group in Model.Data)
     {
-        currentGroupName = string.IsNullOrEmpty(data.GroupName) ? "(Unknown)" : data.GroupName;
-        <text>@currentGroupName;@data.StepLabel;@data.Count<br /></text>
+        <div class="row-fluid">
+            <div class="span5"><b>@group.Name</b></div>
+            <div class="span4"><a rel="download" data-campaign="" href="#">Download data</a></div>
+            <div class="span3">&nbsp;</div>
+        </div>
+        foreach(asi.asicentral.web.model.store.order.GroupData data in group.Data) {
+            if (data.Name == "Total") {
+            <div class="row-fluid">
+                <div class="span1">&nbsp;</div>
+                <div class="span4"><b>@data.Name</b></div>
+                <div class="span1"><b>@data.Count</b></div>
+                <div class="span1"><b>@data.Amount.ToString("C")</b></div>
+                <div class="span5"><b>@data.AnnualizedAmount.ToString("C")</b> <small>Annualized amount</small></div>
+            </div>
+                total += data.Amount;
+                annualized += data.AnnualizedAmount;
+            }
+            else {
+            <div class="row-fluid">
+                <div class="span1">&nbsp;</div>
+                <div class="span4">@data.Name</div>
+                <div class="span1">@data.Count</div>
+                <div class="span1">@(data.Amount > 0 ? data.Amount.ToString("C") : "")</div>
+                <div class="span5">&nbsp;</div>
+            </div>
+            }
+        }
     }
+    <br />
+    <div class="row-fluid">
+        <div class="span5"><b>Total Processed</b></div>
+        <div class="span2"><b>@total.ToString("C")</b></div>
+        <div class="span5"><b>@annualized.ToString("C")</b> <small>Annualized amount</small></div>
+    </div>
 }
 @section scripts {
     @Scripts.Render("~/bundles/form")
