@@ -13,6 +13,7 @@ namespace asi.asicentral.model.store
         public int OrderDetailId { get; set; }
         public string ItemList { get; set; }
         public string LogoPath { get; set; }
+        public string FileName { get; set; }
         public int Sequence { get; set; }
         public DateTime AdSelectedDate { get; set; }
         public DateTime CreateDate { get; set; }
