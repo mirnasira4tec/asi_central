@@ -50,7 +50,7 @@ namespace asi.asicentral.database.mappings
 
             For<IRepository<LegacyDistributorProductLine>>().Use<EFRepository<LegacyDistributorProductLine>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
-            
+
             For<IRepository<LegacyOrder>>().Use<EFRepository<LegacyOrder>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
@@ -77,7 +77,7 @@ namespace asi.asicentral.database.mappings
 
             For<IRepository<LegacyOrderDistributorAddress>>().Use<EFRepository<LegacyOrderDistributorAddress>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
-            
+
             For<IRepository<LegacyOrderDetail>>().Use<EFRepository<LegacyOrderDetail>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
@@ -155,7 +155,7 @@ namespace asi.asicentral.database.mappings
 
             For<IRepository<LookDistributorRevenueType>>().Use<EFRepository<LookDistributorRevenueType>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
-            
+
             For<IRepository<LookProductLine>>().Use<EFRepository<LookProductLine>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
@@ -231,6 +231,9 @@ namespace asi.asicentral.database.mappings
             For<IRepository<StoreDetailProductCollectionItem>>().Use<EFRepository<StoreDetailProductCollectionItem>>()
                .Ctor<IValidatedContext>().Named("StoreContext");
 
+            For<IRepository<LookProductCollections>>().Use<EFRepository<LookProductCollections>>()
+              .Ctor<IValidatedContext>().Named("StoreContext");
+
             #endregion StoreContext
 
             #region TIMSS Context
@@ -262,8 +265,8 @@ namespace asi.asicentral.database.mappings
 
             For<IRepository<CallRequest>>().Use<EFRepository<CallRequest>>()
                 .Ctor<IValidatedContext>().Named("CallContext");
-            
-            #endregion 
+
+            #endregion
         }
     }
 }
