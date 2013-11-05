@@ -52,7 +52,18 @@ namespace asi.asicentral.model.store
         {
             get
             {
-                if (Context != null) return Context.Name;
+                if (Context != null)
+                {
+                    if (Context.Type != "Product")
+                    {
+                        if (Context.Type.StartsWith("SGR")) return "SGR Membership";
+                        else return Context.Type + " Membership";
+                    }
+                    else
+                    {
+                        return Context.Name;
+                    }
+                }
                 else if (OrderDetails != null && OrderDetails.Where(detail => detail.Product != null).FirstOrDefault() != null) return OrderDetails.Where(detail => detail.Product != null).FirstOrDefault().Product.Name;
                 else return "(Unknown)";
             }

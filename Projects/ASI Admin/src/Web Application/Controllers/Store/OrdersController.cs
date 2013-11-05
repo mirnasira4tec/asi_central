@@ -151,7 +151,7 @@ namespace asi.asicentral.web.Controllers.Store
         /// </summary>
         /// <param name="orderStatisticsData"></param>
         /// <returns></returns>
-        public virtual ActionResult Products(OrderStatisticData orderStatisticsData)
+        public virtual ActionResult Products(ProductStatisticData orderStatisticsData)
         {
             if (orderStatisticsData.StartDate > orderStatisticsData.EndDate)
             {
@@ -175,23 +175,51 @@ namespace asi.asicentral.web.Controllers.Store
                 ordersQuery = ordersQuery.Where(order => order.CreateDate <= dateParam);
             }
             IList<StoreOrder> orders = ordersQuery.ToList();
-            IList<GroupedData> dataList = orders
-                .GroupBy(order => new { Name = order.ProductName, order.CompletedStep })
-                .Select(grouped => new GroupedData()
+            IList<Group> groups = new List<Group>();
+            //get list of products
+            foreach (string product in orders.Select(order => order.ProductName).Distinct().OrderBy(name => name))
+            {
+                //for each product create section and populate with data already there
+                var productdata = orders.Where(order => order.ProductName == product)
+                    .GroupBy(order => new { order.CompletedStep })
+                    .Select(grouped => new
+                    {
+                        CompletedStep = grouped.Key.CompletedStep,
+                        Count = grouped.Count(),
+                        Amount = grouped.Sum(order => order.Total),
+                    })
+                    .OrderBy(data => data.CompletedStep)
+                    .ToList();
+                Group group = new Group() { Name = product };
+                foreach (var item in productdata)
                 {
-                    GroupName = grouped.Key.Name,
-                    CompletedStep = grouped.Key.CompletedStep,
-                    Count = grouped.Count(),
-                    Amount = grouped.Sum(order => order.ContextId),  //need overall order amount
-                    CountRejected = grouped.Count(order => order.ProcessStatus == OrderStatus.Rejected),
-                    CountApproved = grouped.Count(order => order.ProcessStatus == OrderStatus.Approved),
-                })
-                .OrderBy(data => data.GroupName)
-                .OrderBy(data => data.CompletedStep)
-                .ToList();
-
-            orderStatisticsData.Data = dataList;
-            PopulateStepData(orderStatisticsData.Data);
+                    group.Data[item.CompletedStep].Count = item.Count;
+                    group.Data[item.CompletedStep].Amount = item.Amount;
+                }
+                //combine the total
+                for (int i = 3; i >= 0; i--) group.Data[i].Count += group.Data[i + 1].Count;
+                //check rejected
+                group.Data[5].Count = orders.Where(order => order.ProductName == product && order.ProcessStatus == OrderStatus.Rejected).Count();
+                group.Data[5].Amount = orders.Where(order => order.ProductName == product && order.ProcessStatus == OrderStatus.Rejected).Sum(order => order.Total);
+                //check pending approval
+                group.Data[6].Count = orders.Where(order => order.ProductName == product && order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Count();
+                group.Data[6].Amount = orders.Where(order => order.ProductName == product && order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Sum(order => order.Total);
+                //check approved
+                group.Data[7].Count = orders.Where(order => order.ProductName == product && order.ProcessStatus == OrderStatus.Approved).Count();
+                group.Data[7].Amount = orders.Where(order => order.ProductName == product && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.Total);
+                group.Data[7].AnnualizedAmount = group.Data[7].Amount;
+                if (group.Data[7].Amount > 0)
+                {
+                    StoreOrder ordr = orders.Where(order => order.ProductName == product && order.ProcessStatus == OrderStatus.Approved).FirstOrDefault();
+                    if (ordr != null && ordr.OrderDetails.Count > 0) {
+                        ContextProduct contextProduct = ordr.OrderDetails[0].Product;
+                        if (contextProduct.IsSubscription && contextProduct.SubscriptionFrequency == "M") 
+                            group.Data[7].AnnualizedAmount = group.Data[7].Amount * 12;
+                    }
+                }
+                groups.Add(group);
+            }
+            orderStatisticsData.Data = groups;
             return View("../Store/Admin/ProductStatistics", orderStatisticsData);
         }
 
