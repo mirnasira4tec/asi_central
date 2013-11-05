@@ -54,6 +54,7 @@ namespace asi.asicentral.database
         public DbSet<StoreDetailEmailExpressItem> StoreDetailEmailExpressItems { get; set; }
         public DbSet<StoreDetailProductCollection> StoreDetailProductCollection { get; set; }
         public DbSet<StoreDetailProductCollectionItem> StoreDetailProductCollectionItems { get; set; }
+        public DbSet<LookProductCollections> LookProductCollections { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -98,7 +99,8 @@ namespace asi.asicentral.database
                 .Add(new StoreDetailEmailExpressMap())
                 .Add(new StoreDetailEmailExpressItemMap())
             .Add(new StoreDetailProductCollectionMap())
-                .Add(new StoreDetailProductCollectionItemMap());
+                .Add(new StoreDetailProductCollectionItemMap())
+                .Add(new LookProductCollectionsMap());
         }
     }
 }
