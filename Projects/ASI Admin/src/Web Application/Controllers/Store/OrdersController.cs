@@ -127,7 +127,7 @@ namespace asi.asicentral.web.Controllers.Store
                 orderStatisticsData.EndDate = DateTime.Now;
                 return View("../Store/Admin/Statistics", orderStatisticsData);
             }
-            IQueryable<StoreOrder> ordersQuery = GetOrderBy(orderStatisticsData);
+            IQueryable<StoreOrder> ordersQuery = GetCampainQuery(orderStatisticsData);
             orderStatisticsData.Data = ordersQuery
                 .GroupBy(order => new { order.Campaign, order.CompletedStep })
                 .Select(grouped => new GroupedData() {
@@ -193,8 +193,10 @@ namespace asi.asicentral.web.Controllers.Store
                 Group group = new Group() { Name = product };
                 foreach (var item in productdata)
                 {
-                    group.Data[item.CompletedStep].Count = item.Count;
-                    group.Data[item.CompletedStep].Amount = item.Amount;
+                    int index = item.CompletedStep >= 4 ? 4 : item.CompletedStep;
+                    //anything after Place order counts as place order
+                    group.Data[index].Count = item.Count;
+                    group.Data[index].Amount = item.Amount;
                 }
                 //combine the total
                 for (int i = 3; i >= 0; i--) group.Data[i].Count += group.Data[i + 1].Count;
@@ -205,15 +207,15 @@ namespace asi.asicentral.web.Controllers.Store
                 group.Data[6].Count = orders.Where(order => order.ProductName == product && order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Count();
                 group.Data[6].Amount = orders.Where(order => order.ProductName == product && order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Sum(order => order.Total);
                 //check approved
-                group.Data[7].Count = orders.Where(order => order.ProductName == product && order.ProcessStatus == OrderStatus.Approved).Count();
-                group.Data[7].Amount = orders.Where(order => order.ProductName == product && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.Total);
+                group.Data[7].Count = orders.Where(order => order.ProductName == product && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Count();
+                group.Data[7].Amount = orders.Where(order => order.ProductName == product && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.Total);
                 group.Data[7].AnnualizedAmount = group.Data[7].Amount;
                 if (group.Data[7].Amount > 0)
                 {
                     StoreOrder ordr = orders.Where(order => order.ProductName == product && order.ProcessStatus == OrderStatus.Approved).FirstOrDefault();
                     if (ordr != null && ordr.OrderDetails.Count > 0) {
                         ContextProduct contextProduct = ordr.OrderDetails[0].Product;
-                        if (contextProduct.IsSubscription && contextProduct.SubscriptionFrequency == "M") 
+                        if (contextProduct != null && contextProduct.IsSubscription && contextProduct.SubscriptionFrequency == "M") 
                             group.Data[7].AnnualizedAmount = group.Data[7].Amount * 12;
                     }
                 }
@@ -269,7 +271,7 @@ namespace asi.asicentral.web.Controllers.Store
         /// <returns></returns>
         public ActionResult DownloadCSV(OrderStatisticData orderStatisticsData)
         {
-            IQueryable<StoreOrder> ordersQuery = GetOrderBy(orderStatisticsData);
+            IQueryable<StoreOrder> ordersQuery = GetCampainQuery(orderStatisticsData);
             if (string.IsNullOrEmpty(orderStatisticsData.Campaign))
                 ordersQuery = ordersQuery.Where(order => order.Campaign == null || order.Campaign == string.Empty);
 
@@ -305,7 +307,7 @@ namespace asi.asicentral.web.Controllers.Store
             return File(new System.Text.UTF8Encoding().GetBytes(csv.ToString()), "text/csv", "report.csv");
         }
 
-        private IQueryable<StoreOrder> GetOrderBy(OrderStatisticData orderStatisticsData)
+        private IQueryable<StoreOrder> GetCampainQuery(OrderStatisticData orderStatisticsData)
         {
             if (string.IsNullOrEmpty(orderStatisticsData.Campaign) && !orderStatisticsData.StartDate.HasValue)
                 orderStatisticsData.StartDate = DateTime.Now.AddDays(-7).Date;
@@ -313,7 +315,9 @@ namespace asi.asicentral.web.Controllers.Store
                 orderStatisticsData.EndDate = DateTime.Now.Date;
             if (orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = orderStatisticsData.EndDate.Value.Date + new TimeSpan(23, 59, 59);
             IQueryable<StoreOrder> ordersQuery = StoreService.GetAll<StoreOrder>();
+            //make sure we only get specials
             if (!string.IsNullOrEmpty(orderStatisticsData.Campaign)) ordersQuery = ordersQuery.Where(order => order.Campaign == orderStatisticsData.Campaign);
+            else ordersQuery = ordersQuery.Where(order => !order.IsStoreRequest);
             if (orderStatisticsData.StartDate.HasValue)
             {
                 DateTime dateParam = orderStatisticsData.StartDate.Value.ToUniversalTime();
