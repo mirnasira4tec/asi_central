@@ -46,7 +46,8 @@
                 <div class="span4"><b>@data.Name</b></div>
                 <div class="span1"><b>@data.Count</b></div>
                 <div class="span1"><b>@data.Amount.ToString("C")</b></div>
-                <div class="span5"><b>@data.AnnualizedAmount.ToString("C")</b> <small>Annualized amount</small></div>
+                <div class="span1">&nbsp;</div>
+                <div class="span4"><b>@data.AnnualizedAmount.ToString("C")</b> <small>Annualized amount</small></div>
             </div>
                 total += data.Amount;
                 annualized += data.AnnualizedAmount;
@@ -66,7 +67,8 @@
     <div class="row-fluid">
         <div class="span5"><b>Total Processed</b></div>
         <div class="span2"><b>@total.ToString("C")</b></div>
-        <div class="span5"><b>@annualized.ToString("C")</b> <small>Annualized amount</small></div>
+        <div class="span1">&nbsp;</div>
+        <div class="span4"><b>@annualized.ToString("C")</b> <small>Annualized amount</small></div>
     </div>
 }
 @section scripts {

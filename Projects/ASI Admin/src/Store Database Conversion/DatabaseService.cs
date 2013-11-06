@@ -123,7 +123,11 @@ namespace Store_Database_Conversion
                     {
                         ContextProduct product = null;
                         int productId = ConvertProductId(detail.ProductId);
-                        if (productId > 0) product = productReference.Where(prod => prod.Id == productId).SingleOrDefault();
+                        if (productId > 0)
+                        {
+                            product = productReference.Where(prod => prod.Id == productId).SingleOrDefault();
+                            if (!newOrder.ContextId.HasValue) newOrder.ContextId = ConvertContextId(detail.ProductId);
+                        }
                         StoreOrderDetail newDetail = new StoreOrderDetail()
                         {
                             Order = newOrder,
@@ -245,6 +249,20 @@ namespace Store_Database_Conversion
                             company.Individuals.Add(contact);
                         }
                     }
+                    //populate some of the new columns based on legacy data
+                    newOrder.IsStoreRequest = true;
+                    newOrder.CompletedStep = 1;
+                    if (order.OrderDetails != null && order.OrderDetails.Count > 0 && newOrder.CompletedStep < 1) newOrder.CompletedStep = 1; 
+                    if (newOrder.Company != null && newOrder.CompletedStep < 2) newOrder.CompletedStep = 2;
+                    if (newOrder.CreditCard != null && newOrder.CompletedStep < 3) newOrder.CompletedStep = 3;
+                    if (order.Status.HasValue && order.Status.Value)
+                    {
+                        newOrder.CompletedStep = 4;
+                        newOrder.IsCompleted = true;
+                        newOrder.ProcessStatus = OrderStatus.Approved;
+                    }
+                    //catch all
+                    if (!newOrder.IsCompleted && newOrder.CompletedStep < 4) newOrder.ProcessStatus = OrderStatus.Pending;
                 }
                 else
                 {
@@ -294,6 +312,40 @@ namespace Store_Database_Conversion
         private bool IsSubscription(int productId)
         {
             return new int[] { 1, 103, 205, 206, 212, 3, 195, 102, 152, 7, 8, 9, 10, 11, 104, 166 }.Contains(productId);
+        }
+
+        /// <summary>
+        /// Try to associate a context for the products requiring one in new database
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        private int? ConvertContextId(int productId)
+        {
+            int? contextId = null;
+            switch (productId)
+            {
+                //Distributor
+                case 1:
+                case 103:
+                case 205:
+                case 206:
+                case 212:
+                    contextId = 1;
+                    break;
+                //supplier
+                case 3:
+                case 195:
+                case 102:
+                case 152:
+                case 104: //supplier fees
+                    contextId = 2;
+                    break;
+                //decorator membership
+                case 2:
+                    contextId = 6;
+                    break;
+            }
+            return contextId;
         }
 
         private int ConvertProductId(int productId)
@@ -387,7 +439,10 @@ namespace Store_Database_Conversion
                 case 209:
                     newProductId = 36;
                     break;
-
+                //decorator membership
+                case 2:
+                    newProductId = 67;
+                    break;
                 default:
                     _logService.Error("There is a product which has not been mapped yet: " + productId);
                     break;
