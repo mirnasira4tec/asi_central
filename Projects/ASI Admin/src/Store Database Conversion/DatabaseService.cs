@@ -47,6 +47,7 @@ namespace Store_Database_Conversion
             bool isTestRecord = false;
             isTestRecord = isTestRecord || (order.BillCity != null && (new string[] {"trevose", "test"}).Contains(order.BillCity.ToLower()));
             isTestRecord = isTestRecord || (order.BillLastName != null && (new string[] {"driscoll", "tucker", "fairfield"}).Contains(order.BillLastName.ToLower()));
+            isTestRecord = isTestRecord || (order.BillFirstName != null && order.BillFirstName.ToLower().StartsWith("First")) || (order.BillLastName != null && order.BillLastName.ToLower().StartsWith("Last"));
             if (!isTestRecord && order.Addresses.Count > 0)
             {
                 foreach (var address in order.Addresses)
