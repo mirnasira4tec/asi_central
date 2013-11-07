@@ -171,11 +171,11 @@
                         {
                     <span class="label-row">
                         @Html.LabelFor(m => m.NumberOfItems_First) 
-                        @if(Model.LogoPath != string.Empty) { @Html.LabelFor(m => m.LogoPath) }
+                        @if(Model.LogoPath != string.Empty) { @Html.LabelFor(m => m.Video) }
 			        </span>
 			        <span class="label-row">
                         @Html.TextBoxFor(m => m.Videos[count].ItemList, new { @readonly = "readonly" }) @Html.ValidationMessageFor(m => m.Videos[count].ItemList)
-                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.Videos[count].LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
+                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.Videos[count].LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedVideo)</a> }
 			        </span>
                         }
                     }

@@ -477,4 +477,7 @@
   <data name="Logos" xml:space="preserve">
     <value>Logo's</value>
   </data>
+  <data name="UploadedVideo" xml:space="preserve">
+    <value>Uploaded Video</value>
+  </data>
 </root>
