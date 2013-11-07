@@ -187,6 +187,7 @@ namespace asi.asicentral.web.Controllers.Store
                         CompletedStep = grouped.Key.CompletedStep,
                         Count = grouped.Count(),
                         Amount = grouped.Sum(order => order.Total),
+                        AnnualizedAmout = grouped.Sum(order => order.AnnualizedTotal),
                     })
                     .OrderBy(data => data.CompletedStep)
                     .ToList();
@@ -209,16 +210,7 @@ namespace asi.asicentral.web.Controllers.Store
                 //check approved
                 group.Data[7].Count = orders.Where(order => order.ProductName == product && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Count();
                 group.Data[7].Amount = orders.Where(order => order.ProductName == product && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.Total);
-                group.Data[7].AnnualizedAmount = group.Data[7].Amount;
-                if (group.Data[7].Amount > 0)
-                {
-                    StoreOrder ordr = orders.Where(order => order.ProductName == product && order.ProcessStatus == OrderStatus.Approved).FirstOrDefault();
-                    if (ordr != null && ordr.OrderDetails.Count > 0) {
-                        ContextProduct contextProduct = ordr.OrderDetails[0].Product;
-                        if (contextProduct != null && contextProduct.IsSubscription && contextProduct.SubscriptionFrequency == "M") 
-                            group.Data[7].AnnualizedAmount = group.Data[7].Amount * 12;
-                    }
-                }
+                group.Data[7].AnnualizedAmount = orders.Where(order => order.ProductName == product && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.AnnualizedTotal);
                 groups.Add(group);
             }
             orderStatisticsData.Data = groups;

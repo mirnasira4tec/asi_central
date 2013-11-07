@@ -45,29 +45,45 @@ namespace Store_Database_Conversion
         private bool IsTestRecord(LegacyOrder order)
         {
             bool isTestRecord = false;
-            isTestRecord = isTestRecord || (order.BillCity != null && (new string[] {"trevose", "test"}).Contains(order.BillCity.ToLower()));
-            isTestRecord = isTestRecord || (order.BillLastName != null && (new string[] {"driscoll", "tucker", "fairfield"}).Contains(order.BillLastName.ToLower()));
-            isTestRecord = isTestRecord || (order.BillFirstName != null && order.BillFirstName.ToLower().StartsWith("First")) || (order.BillLastName != null && order.BillLastName.ToLower().StartsWith("Last"));
+            bool hasData = false;
+            isTestRecord = isTestRecord || (order.BillCity != null && (new string[] { "trevose", "test" }).Contains(order.BillCity.ToLower()));
+            isTestRecord = isTestRecord || (order.BillLastName != null && (new string[] { "driscoll", "tucker", "fairfield" }).Contains(order.BillLastName.ToLower()));
+            isTestRecord = isTestRecord || (order.BillFirstName != null && order.BillLastName != null && order.BillFirstName.ToLower().Contains("first") && order.BillLastName.ToLower().Contains("last"));
             if (!isTestRecord && order.Addresses.Count > 0)
             {
                 foreach (var address in order.Addresses)
                 {
-                    isTestRecord = isTestRecord || (string.IsNullOrEmpty(address.SPAD_City) || address.SPAD_City.ToLower() == "trevose");
-                    isTestRecord = isTestRecord || (address.SPAD_Email != null && address.SPAD_Email.ToLower().Contains("asicentral.com"));
+                    if ((string.IsNullOrEmpty(address.SPAD_City) || address.SPAD_City.ToLower() == "trevose") || (address.SPAD_Email != null && address.SPAD_Email.ToLower().Contains("asicentral.com")))
+                    {
+                        isTestRecord = true;
+                    }
+                    else
+                    {
+                        hasData = true;
+                    }
                 }
+                if (isTestRecord) Console.WriteLine("Order was ignored, Test address: " + order.Id);
             }
+            //for data records with not much data
             if (!isTestRecord && order.DistributorAddresses.Count > 0)
             {
                 foreach (var address in order.DistributorAddresses)
                 {
-                    isTestRecord = isTestRecord || (string.IsNullOrEmpty(address.City) || address.City.ToLower() == "trevose");
-                    isTestRecord = isTestRecord || (address.WebAdd != null && address.WebAdd.ToLower().Contains("asicentral.com"));
+                    if ((string.IsNullOrEmpty(address.City) || address.City.ToLower() == "trevose") || (address.WebAdd != null && address.WebAdd.ToLower().Contains("asicentral.com")))
+                    {
+                        isTestRecord = true;
+                    }
+                    else
+                    {
+                        hasData = true;
+                    }
                 }
             }
             if (!isTestRecord)
             {
                 LegacyOrderContact orderContact = _asiInternetContext.OrderContacts.Where(t => t.OrderId == order.Id).FirstOrDefault();
                 if (orderContact != null) isTestRecord = (orderContact.Company != null && orderContact.Company == "ASI") || (orderContact.Email != null && orderContact.Email.ToLower().Contains("asicentral.com"));
+                if (orderContact != null && !isTestRecord) hasData = true;
             }
             if (!isTestRecord)
             {
@@ -78,6 +94,13 @@ namespace Store_Database_Conversion
                     isTestRecord = isTestRecord || (!string.IsNullOrEmpty(magAddress.Address.MAGA_Email) && magAddress.Address.MAGA_Email.ToLower().Contains("asicentral.com"));
                 }
             }
+            if (!hasData) 
+                hasData = order.OrderDetails.Count > 0;
+            if (!isTestRecord && !hasData)
+            {
+                isTestRecord = (order.BillFirstName == null && order.BillLastName == null && (order.CreditCard == null || order.CreditCard.TotalAmount == 0) && order.BillCity == null);
+            }
+            if (isTestRecord) Console.WriteLine("Ingoring order: " + order.Id);
             return isTestRecord;
         }
 
@@ -120,56 +143,78 @@ namespace Store_Database_Conversion
                     newOrder.BillingIndividual = GetBillingIndividual(order);
                     //order detail records
                     bool containsSubscription = false;
+                    decimal applicationFeeTotal = 0;
+                    decimal pendingFeeTotal = 0;
                     foreach (LegacyOrderDetail detail in order.OrderDetails)
                     {
                         ContextProduct product = null;
                         int productId = ConvertProductId(detail.ProductId);
-                        if (productId > 0)
+                        if (detail.ProductId == 100 || detail.ProductId == 101 || detail.ProductId == 104 || detail.ProductId == 194)
                         {
-                            product = productReference.Where(prod => prod.Id == productId).SingleOrDefault();
-                            if (!newOrder.ContextId.HasValue) newOrder.ContextId = ConvertContextId(detail.ProductId);
+                            pendingFeeTotal += detail.Subtotal.HasValue ? detail.Subtotal.Value : 0.0m;
                         }
-                        StoreOrderDetail newDetail = new StoreOrderDetail()
+                        else
                         {
-                            Order = newOrder,
-                            Product = product,
-                            LegacyProductId = detail.ProductId,
-                            Quantity = detail.Quantity.HasValue ? detail.Quantity.Value : 0,
-                            IsSubscription = product != null && product.IsSubscription,
-                            Cost = detail.PreTaxSubtotal.HasValue ? detail.PreTaxSubtotal.Value : 0.0m,
-                            ShippingCost = detail.Shipping.HasValue ? detail.Shipping.Value : 0.0m,
-                            TaxCost = detail.TaxSubtotal.HasValue ? detail.TaxSubtotal.Value : 0.0m,
-                            ApplicationCost = detail.ApplicationFee.HasValue ? detail.ApplicationFee.Value : 0.0m,
-                            CreateDate = creationDate,
-                            UpdateDate = creationDate,
-                            UpdateSource = "Migration Process - " + DateTime.Now,
-                        };
-                        containsSubscription = containsSubscription || IsSubscription(detail.ProductId);
-                        newOrder.OrderDetails.Add(newDetail);
-                        _storeContext.StoreOrderDetails.Add(newDetail); //some records do not have a key generated unless added explicitely
-                        if (!string.IsNullOrEmpty(detail.Application) && detail.Application.ToLower() != "new")
-                        {
-                            //need to commit the data to make sure ids are generated
-                            _storeContext.SaveChanges();
-                            //assuming hallmark submission, add a new entry
-                            StoreDetailHallmarkRequest hallmark = new StoreDetailHallmarkRequest()
+                            if (productId > 0)
                             {
-                                OrderDetailId = newDetail.Id,
-                                WebRequest = detail.Application.Length > 10000 ?  detail.Application.Substring(0, 10000) : detail.Application,
-                                IsSuccessful = true,
+                                product = productReference.Where(prod => prod.Id == productId).SingleOrDefault();
+                                if (!newOrder.ContextId.HasValue) newOrder.ContextId = ConvertContextId(detail.ProductId);
+                            }
+                            StoreOrderDetail newDetail = new StoreOrderDetail()
+                            {
+                                Order = newOrder,
+                                Product = product,
+                                LegacyProductId = detail.ProductId,
+                                Quantity = detail.Quantity.HasValue ? detail.Quantity.Value : 0,
+                                IsSubscription = product != null && product.IsSubscription,
+                                Cost = detail.PreTaxSubtotal.HasValue ? detail.PreTaxSubtotal.Value : (detail.Subtotal.HasValue ? detail.Subtotal.Value : 0.0m),
+                                ShippingCost = detail.Shipping.HasValue ? detail.Shipping.Value : 0.0m,
+                                TaxCost = detail.TaxSubtotal.HasValue ? detail.TaxSubtotal.Value : 0.0m,
+                                ApplicationCost = detail.ApplicationFee.HasValue ? detail.ApplicationFee.Value : 0.0m,
                                 CreateDate = creationDate,
                                 UpdateDate = creationDate,
                                 UpdateSource = "Migration Process - " + DateTime.Now,
                             };
-                            _storeContext.HallmarkFormRequests.Add(hallmark);
+                            applicationFeeTotal += newDetail.ApplicationCost;
+                            newOrder.OrderDetails.Add(newDetail);
+                            _storeContext.StoreOrderDetails.Add(newDetail); //some records do not have a key generated unless added explicitely
+                            if (!string.IsNullOrEmpty(detail.Application) && detail.Application.ToLower() != "new")
+                            {
+                                //need to commit the data to make sure ids are generated
+                                _storeContext.SaveChanges();
+                                //assuming hallmark submission, add a new entry
+                                StoreDetailHallmarkRequest hallmark = new StoreDetailHallmarkRequest()
+                                {
+                                    OrderDetailId = newDetail.Id,
+                                    WebRequest = detail.Application.Length > 10000 ? detail.Application.Substring(0, 10000) : detail.Application,
+                                    IsSuccessful = true,
+                                    CreateDate = creationDate,
+                                    UpdateDate = creationDate,
+                                    UpdateSource = "Migration Process - " + DateTime.Now,
+                                };
+                                _storeContext.HallmarkFormRequests.Add(hallmark);
+                            }
+                            //processing the applications
+                            IProductConvert productConvert = GetProductConvert(detail.ProductId);
+                            if (productConvert != null)
+                            {
+                                //need to commit the data to make sure ids are generated
+                                _storeContext.SaveChanges();
+                                productConvert.Convert(newDetail, detail, _storeContext, _asiInternetContext);
+                            }
                         }
-                        //processing the applications
-                        IProductConvert productConvert = GetProductConvert(detail.ProductId);
-                        if (productConvert != null)
+                        containsSubscription = containsSubscription 
+                            || (product != null && product.IsSubscription && product.SubscriptionFrequency == "M")
+                            || IsSubscription(detail.ProductId);
+                        if (pendingFeeTotal > 0)
                         {
-                            //need to commit the data to make sure ids are generated
-                            _storeContext.SaveChanges();
-                            productConvert.Convert(newDetail, detail, _storeContext, _asiInternetContext);
+                            //find a detail record and add to the application fee
+                            StoreOrderDetail tempDetail = newOrder.OrderDetails.FirstOrDefault();
+                            if (tempDetail != null) 
+                            {
+                                tempDetail.ApplicationCost += pendingFeeTotal;
+                                applicationFeeTotal += pendingFeeTotal;
+                            }
                         }
                     }
                     //credit card information
@@ -192,10 +237,25 @@ namespace Store_Database_Conversion
                         {
                             newOrder.Total = order.CreditCard.TotalAmount.Value;
                             //create an annualized value if any of the order details record contain a subscription. This should be accurate for most of them.
-                            if (containsSubscription) newOrder.AnnualizedTotal = newOrder.Total * 12;
+                            if (containsSubscription) newOrder.AnnualizedTotal = (newOrder.Total - applicationFeeTotal) * 12;
                         }
-                        _storeContext.StoreCreditCards.Add(newCreditCard); //keetp this here or EF is getting confused
+                        _storeContext.StoreCreditCards.Add(newCreditCard); //keep this here or EF is getting confused
                         newOrder.CreditCard = newCreditCard;
+                    }
+                    else
+                    {
+                        //try to estimate cost based on details instead
+                        foreach (StoreOrderDetail detail in newOrder.OrderDetails)
+                        {
+                            newOrder.Total += detail.Cost + detail.TaxCost + detail.ShippingCost + detail.ApplicationCost;
+                            newOrder.AnnualizedTotal += detail.Cost + detail.TaxCost + detail.ShippingCost;
+                        }
+                        //default annualized
+                        if (containsSubscription && newOrder.AnnualizedTotal < 1000000) //special data error
+                        {
+                            decimal AnnualizedTotal = newOrder.AnnualizedTotal * 12 + (newOrder.Total - newOrder.AnnualizedTotal);
+                            newOrder.AnnualizedTotal = AnnualizedTotal;
+                        }
                     }
                     //first start with company record - there is not more than one record per order in the legacy database
                     if (order.DistributorAddresses.Count > 1)
@@ -232,7 +292,7 @@ namespace Store_Database_Conversion
                         _storeContext.StoreCompanyAddresses.Add(companyAddressItem);
                         company.Addresses.Add(companyAddressItem);
 
-                        if (!string.IsNullOrEmpty(order.DistributorAddresses[0].Contact) && 
+                        if (!string.IsNullOrEmpty(order.DistributorAddresses[0].Contact) &&
                             company.Individuals.Where(t => t.FirstName + " " + t.LastName == order.DistributorAddresses[0].Contact).Count() == 0)
                         {
                             string[] nameParts = order.DistributorAddresses[0].Contact.Split(' ');
@@ -253,7 +313,7 @@ namespace Store_Database_Conversion
                     //populate some of the new columns based on legacy data
                     newOrder.IsStoreRequest = true;
                     newOrder.CompletedStep = 1;
-                    if (order.OrderDetails != null && order.OrderDetails.Count > 0 && newOrder.CompletedStep < 1) newOrder.CompletedStep = 1; 
+                    if (order.OrderDetails != null && order.OrderDetails.Count > 0 && newOrder.CompletedStep < 1) newOrder.CompletedStep = 1;
                     if (newOrder.Company != null && newOrder.CompletedStep < 2) newOrder.CompletedStep = 2;
                     if (newOrder.CreditCard != null && newOrder.CompletedStep < 3) newOrder.CompletedStep = 3;
                     if (order.Status.HasValue && order.Status.Value)
@@ -312,7 +372,7 @@ namespace Store_Database_Conversion
         }
         private bool IsSubscription(int productId)
         {
-            return new int[] { 1, 103, 205, 206, 212, 3, 195, 102, 152, 7, 8, 9, 10, 11, 104, 166 }.Contains(productId);
+            return new int[] { 1, 103, 205, 206, 212, 3, 195, 102, 152, 7, 8, 9, 10, 11, 166 }.Contains(productId);
         }
 
         /// <summary>
@@ -364,6 +424,9 @@ namespace Store_Database_Conversion
                     break;
                 case 206:
                     newProductId = 7;
+                    break;
+                case 207:
+                    newProductId = 8;
                     break;
                 case 212:
                     newProductId = 8;
@@ -444,8 +507,22 @@ namespace Store_Database_Conversion
                 case 2:
                     newProductId = 67;
                     break;
+                case 4:
+                    newProductId = 45;
+                    break;
+                case 193:
+                    newProductId = 55;
+                    break;
+                case 196:
+                    newProductId = 46;
+                    break;
+                case 213:
+                case 214:
+                case 215:
+                    newProductId = 9;
+                    break;
                 default:
-                    _logService.Error("There is a product which has not been mapped yet: " + productId);
+                    _logService.Error("There is a product which has not been converted yet: " + productId);
                     break;
             }
             return newProductId;
@@ -457,7 +534,7 @@ namespace Store_Database_Conversion
             {
                 //Distributor
                 case 1:
-                case 103:                    
+                case 103:
                 case 205:
                 case 206:
                 case 212:
@@ -495,7 +572,7 @@ namespace Store_Database_Conversion
                 case 209:
                     return new Catalog();
                 default:
-                    _logService.Error("There is a product which has not been mapped yet: " + productId);
+                    _logService.Debug("There is a product which has not been mapped yet: " + productId);
                     return null;
             }
         }
