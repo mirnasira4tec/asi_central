@@ -119,6 +119,8 @@ namespace asi.asicentral.web.model.store
         [Display(ResourceType = typeof(asi.asicentral.web.Resource), Name = "LogoPath")]
         public string LogoPath { get; set; }
 
+        public string Video { get; set; }
+        
         public string LoginScreen_Dates { get; set; }
 
         #endregion ESP Advertising information
