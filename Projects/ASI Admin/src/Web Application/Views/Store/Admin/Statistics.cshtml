@@ -34,155 +34,46 @@
 </form>
 @if (Model.Data != null && Model.Data.Count > 0)
 {
-    string oldGroupName = string.Empty;
-    string currentGroupName = oldGroupName;
-    int count = 0;
-    decimal? total = 0;
-
-    int countrejected = 0;
-    decimal? totalrejected = 0;
-    int countapproved = 0;
-    decimal? totalapproved = 0;
-
-    foreach (asi.asicentral.web.model.store.order.GroupedData data in Model.Data)
+    decimal total = 0;
+    decimal annualized = 0;
+    foreach (asi.asicentral.web.model.store.order.Group group in Model.Data)
     {
-        currentGroupName = string.IsNullOrEmpty(data.GroupName) ? "(Unknown)" : data.GroupName;
-        if (currentGroupName.ToLower() != oldGroupName.ToLower() && oldGroupName != string.Empty)
-        {
-            //new group, not the first one
-    <div class="row-fluid">
-        <div class="span1">&nbsp;</div>
-        <div class="span4"><strong>Total Clicks</strong></div>
-        <div class="span1"><strong>@count</strong></div>
-        <div class="span1"><strong>@total.Value.ToString("C")</strong></div>
-        <div class="span5">&nbsp;</div>
-    </div>
-            if (countrejected > 0)
-            {
-    <div class="row-fluid">
-        <div class="span1">&nbsp;</div>
-        <div class="span4">Total Rejected</div>
-        <div class="span1">@countrejected</div>
-        <div class="span1">@totalrejected.Value.ToString("C")</div>
-        <div class="span5">&nbsp;</div>
-    </div>
+        <div class="row-fluid">
+            <div class="span5"><b>@group.Name</b></div>
+            <div class="span4"><a rel="download" data-campaign="" href="#">Download data</a></div>
+            <div class="span3">&nbsp;</div>
+        </div>
+        foreach(asi.asicentral.web.model.store.order.GroupData data in group.Data) {
+            if (data.Name == "Total") {
+            <div class="row-fluid">
+                <div class="span1">&nbsp;</div>
+                <div class="span4"><b>@data.Name</b></div>
+                <div class="span1"><b>@data.Count</b></div>
+                <div class="span1"><b>@data.Amount.ToString("C")</b></div>
+                <div class="span1">&nbsp;</div>
+                <div class="span4"><b>@data.AnnualizedAmount.ToString("C")</b> <small>Annualized amount</small></div>
+            </div>
+                total += data.Amount;
+                annualized += data.AnnualizedAmount;
             }
-            if ((count - countrejected - countapproved) > 0)
-            {
-    <div class="row-fluid">
-        <div class="span1">&nbsp;</div>
-        <div class="span4">Total Pending</div>
-        <div class="span1">@(count - countrejected - countapproved)</div>
-        <div class="span1">@((total - totalrejected - totalapproved).Value.ToString("C"))</div>
-        <div class="span5">&nbsp;</div>
-    </div>
+            else {
+            <div class="row-fluid">
+                <div class="span1">&nbsp;</div>
+                <div class="span4">@data.Name</div>
+                <div class="span1">@data.Count</div>
+                <div class="span1">@(data.Amount > 0 ? data.Amount.ToString("C") : "")</div>
+                <div class="span5">&nbsp;</div>
+            </div>
             }
-    <div class="row-fluid">
-        <div class="span1">&nbsp;</div>
-        <div class="span4">
-            <h3>Total Approved</h3>
-        </div>
-        <div class="span1">
-            <h3>@countapproved</h3>
-        </div>
-        <div class="span1">
-            <h3>@totalapproved.Value.ToString("C")</h3>
-        </div>
-        <div class="span1">&nbsp;</div>
-        <div class="span4">
-            <h3>@((totalapproved.Value * 12).ToString("C"))<span class="helper-text"> Annualized amount</span></h3>
-        </div>
-    </div>      
-    <div class="row-fluid">
-        <div class="span12">&nbsp;</div>
-    </div>
-            count = 0;
-            total = 0;
-            countrejected = 0;
-            totalrejected = 0;
-            countapproved = 0;
-            totalapproved = 0;
         }
-        if (currentGroupName != oldGroupName)
-        {
-    <div class="row-fluid">
-        <div class="span3">
-            <h2>@currentGroupName</h2>
-        </div>
-        <div class="span4"><a rel="download" data-campaign="@data.GroupName" href="#">Download data</a></div>
-        <div class="span5">&nbsp;</div>
-    </div>
-            oldGroupName = currentGroupName;
-        }
-        count += data.Count;
-        countrejected += data.CountRejected;
-        countapproved += data.CountApproved;
-
-        if (data.CompletedStep > 3 && data.Amount.HasValue)
-        {
-            total += data.Amount;
-        }
-
-        if (data.CompletedStep > 3 && data.AmountRejected.HasValue)
-        {
-            totalrejected += data.AmountRejected;
-        }
-
-        if (data.CompletedStep > 3 && data.AmountApproved.HasValue)
-        {
-            totalapproved += data.AmountApproved;
-        }
-    <div class="row-fluid">
-        <div class="span1">&nbsp;</div>
-        <div class="span4">@data.StepLabel</div>
-        <div class="span1">@data.Count</div>
-        <div class="span1">@(data.CompletedStep > 3 ? data.Amount.Value.ToString("C") : "")</div>
-        <div class="span5">&nbsp;</div>
-    </div>
     }
+    <br />
     <div class="row-fluid">
+        <div class="span5"><b>Total Processed</b></div>
+        <div class="span2"><b>@total.ToString("C")</b></div>
         <div class="span1">&nbsp;</div>
-        <div class="span4"><strong>Total Clicks</strong></div>
-        <div class="span1"><strong>@count</strong></div>
-        <div class="span1"><strong>@total.Value.ToString("C")</strong></div>
-        <div class="span5">&nbsp;</div>
+        <div class="span4"><b>@annualized.ToString("C")</b> <small>Annualized amount</small></div>
     </div>
-    if (countrejected > 0)
-    {
-    <div class="row-fluid">
-        <div class="span1">&nbsp;</div>
-        <div class="span4">Total Rejected</div>
-        <div class="span1">@countrejected</div>
-        <div class="span1">@totalrejected.Value.ToString("C")</div>
-        <div class="span5">&nbsp;</div>
-    </div>
-    }
-    if ((count - countrejected - countapproved) > 0)
-    {
-    <div class="row-fluid">
-        <div class="span1">&nbsp;</div>
-        <div class="span4">Total Pending</div>
-        <div class="span1">@(count - countrejected - countapproved)</div>
-        <div class="span1">@((total - totalrejected - totalapproved).Value.ToString("C"))</div>
-        <div class="span5">&nbsp;</div>
-    </div>
-    }
-    <div class="row-fluid">
-        <div class="span1">&nbsp;</div>
-        <div class="span4">
-            <h3>Total Approved</h3>
-        </div>
-        <div class="span1">
-            <h3>@countapproved</h3>
-        </div>
-        <div class="span1">
-            <h3>@totalapproved.Value.ToString("C")</h3>
-        </div>
-        <div class="span1">&nbsp;</div>
-        <div class="span4">
-            <h3>@((totalapproved.Value * 12).ToString("C"))<span class="helper-text"> Annualized amount</span></h3>
-        </div>
-    </div>      
 }
 @section scripts {
     @Scripts.Render("~/bundles/form")

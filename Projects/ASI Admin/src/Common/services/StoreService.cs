@@ -146,13 +146,13 @@ namespace asi.asicentral.services
             if (address != null && order != null && order.OrderDetails != null && order.OrderDetails.Count > 0)
             {
                 //finding IsSubscription is set for any OrderDetail Product
-                bool isSubscription = false;
+                bool shouldBeAnnualized = false;
                 order.Total = 0m;
                 order.AnnualizedTotal = 0m;
                 foreach (StoreOrderDetail orderDetail in order.OrderDetails)
                 {
-                    if (orderDetail.Product != null && orderDetail.Product.IsSubscription)
-                        isSubscription = true;
+                    if (orderDetail.Product != null && orderDetail.Product.IsSubscription && orderDetail.Product.SubscriptionFrequency == "M")
+                        shouldBeAnnualized = true;
 
                     //look up the address information
                     //set the default values
@@ -188,9 +188,12 @@ namespace asi.asicentral.services
                     orderDetail.TaxCost = tax;
                     //this is the cost of what to pay now
                     order.Total += ((orderDetail.Cost + orderDetail.TaxCost) * orderDetail.Quantity) + orderDetail.ShippingCost + orderDetail.ApplicationCost;
-                    if (isSubscription)
+                    if (shouldBeAnnualized)
                     {
-                        tax = CalculateTaxes(address, orderDetail.Cost) * 12 + CalculateTaxes(address, orderDetail.ApplicationCost);
+                        if (orderDetail.Product.HasTax)
+                            tax = CalculateTaxes(address, orderDetail.Cost) * 12 + CalculateTaxes(address, orderDetail.ApplicationCost);
+                        else
+                            tax = 0;
                         //this would be the total cost over a year for a subscription
                         order.AnnualizedTotal += (orderDetail.Cost * orderDetail.Quantity * 12) + tax + (orderDetail.ShippingCost * 12) + orderDetail.ApplicationCost;
                     }
