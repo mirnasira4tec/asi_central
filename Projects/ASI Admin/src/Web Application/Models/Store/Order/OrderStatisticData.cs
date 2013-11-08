@@ -11,7 +11,7 @@ namespace asi.asicentral.web.model.store.order
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string Campaign { get; set; }
-        public IList<GroupedData> Data { get; set; }
+        public IList<Group> Data { get; set; }
         public decimal TotalAmount { get; set; }
         public string Message { set; get; }
     }

@@ -41,9 +41,9 @@ namespace asi.asicentral.web.Controllers.Store
                 orderDetailQuery = orderDetailQuery.Where(detail => detail.CreateDate >= dateStartParam && detail.CreateDate <= dateEndParam);
             }
             if (formTab == OrderPageModel.TAB_PRODUCT && !string.IsNullOrEmpty(product))
-                orderDetailQuery = orderDetailQuery.Where(detail => 
+                orderDetailQuery = orderDetailQuery.Where(detail =>
                     (detail.Product != null && detail.Product.Name != null && detail.Product.Name == product)
-                    || (detail.Order.Context != null && detail.Order.Context.Name == product) );
+                    || (detail.Order.Context != null && detail.Order.Context.Name == product));
 
             if (formTab == OrderPageModel.TAB_ORDER && id.HasValue)
                 orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.Id == id.Value);
@@ -125,24 +125,64 @@ namespace asi.asicentral.web.Controllers.Store
                 orderStatisticsData.Message = Resource.StoreDateErrorMessage;
                 orderStatisticsData.StartDate = DateTime.Now.AddDays(-7).Date;
                 orderStatisticsData.EndDate = DateTime.Now;
-                return View("../Store/Admin/Statistics", orderStatisticsData);
+                return View("../Store/Admin/ProductStatistics", orderStatisticsData);
             }
-            IQueryable<StoreOrder> ordersQuery = GetCampainQuery(orderStatisticsData);
-            orderStatisticsData.Data = ordersQuery
-                .GroupBy(order => new { order.Campaign, order.CompletedStep })
-                .Select(grouped => new GroupedData() {
-                    GroupName = grouped.Key.Campaign, 
-                    CompletedStep = grouped.Key.CompletedStep, 
-                    Count = grouped.Count(), 
-                    Amount = grouped.Sum(order => order.ContextId),  //need overall order amount
-                    CountRejected = grouped.Count(order => order.ProcessStatus == OrderStatus.Rejected),
-                    CountApproved = grouped.Count(order => order.ProcessStatus == OrderStatus.Approved),
-                    AmountRejected = grouped.Where(order => order.ProcessStatus == OrderStatus.Rejected).Sum(order => order.ContextId), //need overall order amount 
-                    AmountApproved = grouped.Where(order => order.ProcessStatus == OrderStatus.Approved).Sum(order => order.ContextId),  //need overall order amount
-                })
-                .OrderBy(data => new { Campaign = data.GroupName, data.CompletedStep })
-                .ToList();
-            PopulateStepData(orderStatisticsData.Data);
+            IQueryable<StoreOrder> ordersQuery = StoreService.GetAll<StoreOrder>();
+            if (orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = orderStatisticsData.EndDate.Value.Date + new TimeSpan(23, 59, 59);
+            if (orderStatisticsData.StartDate.HasValue)
+            {
+                DateTime dateParam = orderStatisticsData.StartDate.Value.ToUniversalTime();
+                ordersQuery = ordersQuery.Where(order => order.CreateDate >= dateParam);
+            }
+            if (orderStatisticsData.EndDate.HasValue)
+            {
+                DateTime dateParam = orderStatisticsData.EndDate.Value.ToUniversalTime();
+                ordersQuery = ordersQuery.Where(order => order.CreateDate <= dateParam);
+            }
+            if (orderStatisticsData.Campaign != null)
+            {
+                ordersQuery = ordersQuery.Where(order => order.Campaign == orderStatisticsData.Campaign);
+            }
+            IList<StoreOrder> orders = ordersQuery.ToList();
+            IList<Group> groups = new List<Group>();
+            //get list of products
+            foreach (string campaign in orders.Select(order => order.Campaign).Distinct().OrderBy(name => name))
+            {
+                //for each product create section and populate with data already there
+                var productdata = orders.Where(order => order.Campaign == campaign)
+                    .GroupBy(order => new { order.CompletedStep })
+                    .Select(grouped => new
+                    {
+                        CompletedStep = grouped.Key.CompletedStep,
+                        Count = grouped.Count(),
+                        Amount = grouped.Sum(order => order.Total),
+                        AnnualizedAmout = grouped.Sum(order => order.AnnualizedTotal),
+                    })
+                    .OrderBy(data => data.CompletedStep)
+                    .ToList();
+                Group group = new Group() { Name = string.IsNullOrEmpty(campaign) ? "(Unknown)" : campaign };
+                foreach (var item in productdata)
+                {
+                    int index = item.CompletedStep >= 4 ? 4 : item.CompletedStep;
+                    //anything after Place order counts as place order
+                    group.Data[index].Count += item.Count;
+                    group.Data[index].Amount += item.Amount;
+                }
+                //combine the total
+                for (int i = 3; i >= 0; i--) group.Data[i].Count += group.Data[i + 1].Count;
+                //check rejected
+                group.Data[5].Count = orders.Where(order => order.Campaign == campaign && order.ProcessStatus == OrderStatus.Rejected).Count();
+                group.Data[5].Amount = orders.Where(order => order.Campaign == campaign && order.ProcessStatus == OrderStatus.Rejected).Sum(order => order.Total);
+                //check pending approval
+                group.Data[6].Count = orders.Where(order => order.Campaign == campaign && order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Count();
+                group.Data[6].Amount = orders.Where(order => order.Campaign == campaign && order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Sum(order => order.Total);
+                //check approved
+                group.Data[7].Count = orders.Where(order => order.Campaign == campaign && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Count();
+                group.Data[7].Amount = orders.Where(order => order.Campaign == campaign && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.Total);
+                group.Data[7].AnnualizedAmount = orders.Where(order => order.Campaign == campaign && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.AnnualizedTotal);
+                groups.Add(group);
+            }
+            orderStatisticsData.Data = groups;
             return View("../Store/Admin/Statistics", orderStatisticsData);
         }
 
@@ -158,7 +198,7 @@ namespace asi.asicentral.web.Controllers.Store
                 orderStatisticsData.Message = Resource.StoreDateErrorMessage;
                 orderStatisticsData.StartDate = DateTime.Now.AddDays(-7).Date;
                 orderStatisticsData.EndDate = DateTime.Now;
-                return View("../Store/Admin/ProductStatistics", orderStatisticsData);
+                return View("../Store/Admin/Statistics", orderStatisticsData);
             }
             IQueryable<StoreOrder> ordersQuery = StoreService.GetAll<StoreOrder>();
             if (!orderStatisticsData.StartDate.HasValue) orderStatisticsData.StartDate = DateTime.Now.AddDays(-7).Date;
@@ -187,6 +227,7 @@ namespace asi.asicentral.web.Controllers.Store
                         CompletedStep = grouped.Key.CompletedStep,
                         Count = grouped.Count(),
                         Amount = grouped.Sum(order => order.Total),
+                        AnnualizedAmout = grouped.Sum(order => order.AnnualizedTotal),
                     })
                     .OrderBy(data => data.CompletedStep)
                     .ToList();
@@ -195,8 +236,8 @@ namespace asi.asicentral.web.Controllers.Store
                 {
                     int index = item.CompletedStep >= 4 ? 4 : item.CompletedStep;
                     //anything after Place order counts as place order
-                    group.Data[index].Count = item.Count;
-                    group.Data[index].Amount = item.Amount;
+                    group.Data[index].Count += item.Count;
+                    group.Data[index].Amount += item.Amount;
                 }
                 //combine the total
                 for (int i = 3; i >= 0; i--) group.Data[i].Count += group.Data[i + 1].Count;
@@ -209,16 +250,7 @@ namespace asi.asicentral.web.Controllers.Store
                 //check approved
                 group.Data[7].Count = orders.Where(order => order.ProductName == product && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Count();
                 group.Data[7].Amount = orders.Where(order => order.ProductName == product && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.Total);
-                group.Data[7].AnnualizedAmount = group.Data[7].Amount;
-                if (group.Data[7].Amount > 0)
-                {
-                    StoreOrder ordr = orders.Where(order => order.ProductName == product && order.ProcessStatus == OrderStatus.Approved).FirstOrDefault();
-                    if (ordr != null && ordr.OrderDetails.Count > 0) {
-                        ContextProduct contextProduct = ordr.OrderDetails[0].Product;
-                        if (contextProduct != null && contextProduct.IsSubscription && contextProduct.SubscriptionFrequency == "M") 
-                            group.Data[7].AnnualizedAmount = group.Data[7].Amount * 12;
-                    }
-                }
+                group.Data[7].AnnualizedAmount = orders.Where(order => order.ProductName == product && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.AnnualizedTotal);
                 groups.Add(group);
             }
             orderStatisticsData.Data = groups;
