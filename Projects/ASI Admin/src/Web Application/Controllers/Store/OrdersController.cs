@@ -127,22 +127,7 @@ namespace asi.asicentral.web.Controllers.Store
                 orderStatisticsData.EndDate = DateTime.Now;
                 return View("../Store/Admin/ProductStatistics", orderStatisticsData);
             }
-            IQueryable<StoreOrder> ordersQuery = StoreService.GetAll<StoreOrder>();
-            if (orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = orderStatisticsData.EndDate.Value.Date + new TimeSpan(23, 59, 59);
-            if (orderStatisticsData.StartDate.HasValue)
-            {
-                DateTime dateParam = orderStatisticsData.StartDate.Value.ToUniversalTime();
-                ordersQuery = ordersQuery.Where(order => order.CreateDate >= dateParam);
-            }
-            if (orderStatisticsData.EndDate.HasValue)
-            {
-                DateTime dateParam = orderStatisticsData.EndDate.Value.ToUniversalTime();
-                ordersQuery = ordersQuery.Where(order => order.CreateDate <= dateParam);
-            }
-            if (orderStatisticsData.Campaign != null)
-            {
-                ordersQuery = ordersQuery.Where(order => order.Campaign == orderStatisticsData.Campaign);
-            }
+            IQueryable<StoreOrder> ordersQuery = GetCampainQuery(orderStatisticsData);
             IList<StoreOrder> orders = ordersQuery.ToList();
             IList<Group> groups = new List<Group>();
             //get list of products
@@ -200,20 +185,7 @@ namespace asi.asicentral.web.Controllers.Store
                 orderStatisticsData.EndDate = DateTime.Now;
                 return View("../Store/Admin/Statistics", orderStatisticsData);
             }
-            IQueryable<StoreOrder> ordersQuery = StoreService.GetAll<StoreOrder>();
-            if (!orderStatisticsData.StartDate.HasValue) orderStatisticsData.StartDate = DateTime.Now.AddDays(-7).Date;
-            if (!orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = DateTime.Now.Date;
-            if (orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = orderStatisticsData.EndDate.Value.Date + new TimeSpan(23, 59, 59);
-            if (orderStatisticsData.StartDate.HasValue)
-            {
-                DateTime dateParam = orderStatisticsData.StartDate.Value.ToUniversalTime();
-                ordersQuery = ordersQuery.Where(order => order.CreateDate >= dateParam);
-            }
-            if (orderStatisticsData.EndDate.HasValue)
-            {
-                DateTime dateParam = orderStatisticsData.EndDate.Value.ToUniversalTime();
-                ordersQuery = ordersQuery.Where(order => order.CreateDate <= dateParam);
-            }
+            IQueryable<StoreOrder> ordersQuery = GetProductQuery(orderStatisticsData);
             IList<StoreOrder> orders = ordersQuery.ToList();
             IList<Group> groups = new List<Group>();
             //get list of products
@@ -258,42 +230,16 @@ namespace asi.asicentral.web.Controllers.Store
         }
 
         /// <summary>
-        /// Changes the step from position to name of the steps
+        /// Download the product data
         /// </summary>
-        /// <param name="dataList"></param>
-        private void PopulateStepData(IList<GroupedData> dataList)
+        /// <param name="orderStatisticsData"></param>
+        /// <returns></returns>
+        public ActionResult DownloadCampaignCSV(OrderStatisticData orderStatisticsData)
         {
-            //change completed steps with more meaningful title
-            foreach (GroupedData data in dataList)
-            {
-                switch (data.CompletedStep)
-                {
-                    case 0:
-                        data.StepLabel = "Clicked on the link Only";
-                        break;
-                    case 1:
-                        data.StepLabel = "Selected a product";
-                        break;
-                    case 2:
-                        data.StepLabel = "Entered Company information";
-                        break;
-                    case 3:
-                        data.StepLabel = "Entered billing/shipping information";
-                        break;
-                    case 4:
-                        data.StepLabel = "Confirmed the order";
-                        break;
-                    case 5:
-                        data.StepLabel = "Entered optional information";
-                        break;
-                    case 6:
-                        data.StepLabel = "Supplier provided a product List";
-                        break;
-                    default:
-                        data.StepLabel = data.CompletedStep.ToString();
-                        break;
-                }
-            }
+            IQueryable<StoreOrder> ordersQuery = GetCampainQuery(orderStatisticsData);
+            if (string.IsNullOrEmpty(orderStatisticsData.Campaign))
+                ordersQuery = ordersQuery.Where(order => order.Campaign == null || order.Campaign == string.Empty);
+            return Download(ordersQuery);
         }
 
         /// <summary>
@@ -301,12 +247,23 @@ namespace asi.asicentral.web.Controllers.Store
         /// </summary>
         /// <param name="orderStatisticsData"></param>
         /// <returns></returns>
-        public ActionResult DownloadCSV(OrderStatisticData orderStatisticsData)
+        public ActionResult DownloadProductCSV(ProductStatisticData orderStatisticsData)
         {
-            IQueryable<StoreOrder> ordersQuery = GetCampainQuery(orderStatisticsData);
-            if (string.IsNullOrEmpty(orderStatisticsData.Campaign))
-                ordersQuery = ordersQuery.Where(order => order.Campaign == null || order.Campaign == string.Empty);
+            IQueryable<StoreOrder> ordersQuery = GetProductQuery(orderStatisticsData);
+            if (orderStatisticsData.Product != null) {
+                //product name not available as query
+                ordersQuery = ordersQuery.ToList().Where(order => order.ProductName == orderStatisticsData.Product).AsQueryable();
+            }
+            return Download(ordersQuery);
+        }
 
+        /// <summary>
+        /// Creates csv for the order query
+        /// </summary>
+        /// <param name="ordersQuery"></param>
+        /// <returns></returns>
+        private ActionResult Download(IQueryable<StoreOrder> ordersQuery)
+        {
             StringBuilder csv = new StringBuilder();
             string separator = ",";
             csv.Append("Order ID" + separator + "Timss ID" + separator + "Company Name" + separator + "Contact Name" + separator + "Contact Phone" + separator + "Contact Email" + separator + "Orderstatus" + separator + "Amount" + separator + "Date");
@@ -341,15 +298,32 @@ namespace asi.asicentral.web.Controllers.Store
 
         private IQueryable<StoreOrder> GetCampainQuery(OrderStatisticData orderStatisticsData)
         {
-            if (string.IsNullOrEmpty(orderStatisticsData.Campaign) && !orderStatisticsData.StartDate.HasValue)
-                orderStatisticsData.StartDate = DateTime.Now.AddDays(-7).Date;
-            if (string.IsNullOrEmpty(orderStatisticsData.Campaign) && !orderStatisticsData.EndDate.HasValue)
-                orderStatisticsData.EndDate = DateTime.Now.Date;
+            IQueryable<StoreOrder> ordersQuery = StoreService.GetAll<StoreOrder>("Company;Company.Individuals;BillingIndividual", true);
             if (orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = orderStatisticsData.EndDate.Value.Date + new TimeSpan(23, 59, 59);
-            IQueryable<StoreOrder> ordersQuery = StoreService.GetAll<StoreOrder>();
-            //make sure we only get specials
-            if (!string.IsNullOrEmpty(orderStatisticsData.Campaign)) ordersQuery = ordersQuery.Where(order => order.Campaign == orderStatisticsData.Campaign);
-            else ordersQuery = ordersQuery.Where(order => !order.IsStoreRequest);
+            if (orderStatisticsData.StartDate.HasValue)
+            {
+                DateTime dateParam = orderStatisticsData.StartDate.Value.ToUniversalTime();
+                ordersQuery = ordersQuery.Where(order => order.CreateDate >= dateParam);
+            }
+            if (orderStatisticsData.EndDate.HasValue)
+            {
+                DateTime dateParam = orderStatisticsData.EndDate.Value.ToUniversalTime();
+                ordersQuery = ordersQuery.Where(order => order.CreateDate <= dateParam);
+            }
+            if (orderStatisticsData.Campaign != null)
+            {
+                ordersQuery = ordersQuery.Where(order => order.Campaign == orderStatisticsData.Campaign);
+            }
+
+            return ordersQuery;
+        }
+
+        private IQueryable<StoreOrder> GetProductQuery(ProductStatisticData orderStatisticsData)
+        {
+            IQueryable<StoreOrder> ordersQuery = StoreService.GetAll<StoreOrder>("Company;Company.Individuals;BillingIndividual", true);
+            if (!orderStatisticsData.StartDate.HasValue) orderStatisticsData.StartDate = DateTime.Now.AddDays(-7).Date;
+            if (!orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = DateTime.Now.Date;
+            if (orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = orderStatisticsData.EndDate.Value.Date + new TimeSpan(23, 59, 59);
             if (orderStatisticsData.StartDate.HasValue)
             {
                 DateTime dateParam = orderStatisticsData.StartDate.Value.ToUniversalTime();

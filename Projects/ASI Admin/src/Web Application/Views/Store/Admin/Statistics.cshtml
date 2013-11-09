@@ -40,7 +40,7 @@
     {
         <div class="row-fluid">
             <div class="span5"><b>@group.Name</b></div>
-            <div class="span4"><a rel="download" data-campaign="" href="#">Download data</a></div>
+            <div class="span4"><a rel="download" data-campaign="@group.Name" href="#">Download data</a></div>
             <div class="span3">&nbsp;</div>
         </div>
         foreach(asi.asicentral.web.model.store.order.GroupData data in group.Data) {
@@ -93,7 +93,7 @@
             var campaign = $(this).data("campaign");
             var startdate = '@Model.StartDate';
             var enddate = '@Model.EndDate';
-            var location = "@Url.Action("DownloadCSV", "Orders", null)/" + "?Campaign=" + campaign + "&StartDate=" + startdate + "&EndDate=" + enddate;
+            var location = "@Url.Action("DownloadCampaignCSV", "Orders", null)/" + "?Campaign=" + campaign + "&StartDate=" + startdate + "&EndDate=" + enddate;
             document.location = location;
         });
     </script>
