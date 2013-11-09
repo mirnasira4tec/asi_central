@@ -13,7 +13,7 @@ namespace asi.asicentral.database.mappings.store
     {
         public StoreDetailProductCollectionItemMap()
         {
-            this.ToTable("stor_productcollectionitems");
+            this.ToTable("STOR_ProductCollectionItems");
             this.HasKey(t => t.ItemId);
 
             //Properties

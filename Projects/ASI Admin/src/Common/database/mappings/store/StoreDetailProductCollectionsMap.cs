@@ -13,7 +13,7 @@ namespace asi.asicentral.database.mappings.store
     {
         public StoreDetailProductCollectionMap()
         {
-            this.ToTable("stor_productcollectionmonths");
+            this.ToTable("STOR_ProductCollectionMonths");
             this.HasKey(t => t.ItemMonthId);
 
             //Properties
