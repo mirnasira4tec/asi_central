@@ -11,7 +11,6 @@ namespace asi.asicentral.model.store
     {
         public int ItemId { get; set; }
         public int ItemMonthId { get; set; }
-        public int OrderDetailId { get; set; }
         public int Sequence { get; set; }
         public string Collection { get; set; }
         public string ItemNumbers { get; set; }
