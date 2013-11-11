@@ -11,15 +11,16 @@
 <input type="submit" class="btn btn-primary" value="Save"/><br /><br />
     
 <table class="table table-bordered table-condensed">
-    <thead><tr><th>Name</th><th>Is Available</th><th>Next Available Date</th></tr></thead>
+    <thead><tr><th>Name</th><th>Notification</th><th>Is Available</th><th>Next Available Date</th></tr></thead>
     <tbody>
         @for (int i = 0; i < Model.Count; i++)
         {
             <tr>
                 <td>@Html.HiddenFor(m => Model[i].Id) @Html.TextBoxFor(m => Model[i].Name, new { @readonly = "readonly" })</td>
+                <td>@Html.EditorFor(model => Model[i].NotificationEmails)</td>
                 <td>@Html.CheckBoxFor(model => Model[i].IsAvailable)</td>
                 <td> 
-                        @Html.EditorFor(model => model[i].NextAvailableDate, new { @class = "dateField" }) @Html.ValidationMessageFor(model => model[i].NextAvailableDate) <i class="icon-remove date-clear" id="[@i].NextAvailableDate"></i>
+                    @Html.EditorFor(model => model[i].NextAvailableDate, new { @class = "dateField" }) @Html.ValidationMessageFor(model => model[i].NextAvailableDate) <i class="icon-remove date-clear" id="[@i].NextAvailableDate"></i>
                 </td>
             </tr>
         }
