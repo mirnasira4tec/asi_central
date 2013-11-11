@@ -43,6 +43,7 @@ namespace asi.asicentral.web.Controllers.Store
                 {
                     productToUpdate.NextAvailableDate = product.NextAvailableDate;
                     productToUpdate.IsAvailable = product.IsAvailable;
+                    productToUpdate.NotificationEmails = product.NotificationEmails;
                 }
             }
             StoreService.SaveChanges();
