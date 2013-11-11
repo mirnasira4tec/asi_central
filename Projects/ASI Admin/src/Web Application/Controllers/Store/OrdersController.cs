@@ -127,6 +127,15 @@ namespace asi.asicentral.web.Controllers.Store
                 orderStatisticsData.EndDate = DateTime.Now;
                 return View("../Store/Admin/ProductStatistics", orderStatisticsData);
             }
+            if (orderStatisticsData.Campaign == null && (orderStatisticsData.StartDate == null || orderStatisticsData.EndDate == null)) 
+            {
+                DateTime now = DateTime.Now;
+                //make sure we do not retrieve everything
+                if (orderStatisticsData.StartDate == null) orderStatisticsData.StartDate = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0).AddDays(-7);
+                else orderStatisticsData.StartDate = new DateTime(orderStatisticsData.StartDate.Value.Year, orderStatisticsData.StartDate.Value.Month, orderStatisticsData.StartDate.Value.Day, 0, 0, 0);
+                if (orderStatisticsData.EndDate == null) orderStatisticsData.EndDate = now;
+                else orderStatisticsData.EndDate = new DateTime(orderStatisticsData.EndDate.Value.Year, orderStatisticsData.EndDate.Value.Month, orderStatisticsData.EndDate.Value.Day, 23, 59, 59);
+            }
             IQueryable<StoreOrder> ordersQuery = GetCampainQuery(orderStatisticsData);
             IList<StoreOrder> orders = ordersQuery.ToList();
             IList<Group> groups = new List<Group>();
@@ -185,6 +194,9 @@ namespace asi.asicentral.web.Controllers.Store
                 orderStatisticsData.EndDate = DateTime.Now;
                 return View("../Store/Admin/Statistics", orderStatisticsData);
             }
+            if (orderStatisticsData.StartDate.HasValue) orderStatisticsData.StartDate = new DateTime(orderStatisticsData.StartDate.Value.Year, orderStatisticsData.StartDate.Value.Month, orderStatisticsData.StartDate.Value.Day, 0, 0, 0);
+            if (orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = new DateTime(orderStatisticsData.EndDate.Value.Year, orderStatisticsData.EndDate.Value.Month, orderStatisticsData.EndDate.Value.Day, 23, 59, 59);
+
             IQueryable<StoreOrder> ordersQuery = GetProductQuery(orderStatisticsData);
             IList<StoreOrder> orders = ordersQuery.ToList();
             IList<Group> groups = new List<Group>();
