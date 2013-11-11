@@ -37,6 +37,7 @@ namespace asi.asicentral.web.Controllers.Store
                 {
                     contextToUpdate.HeaderImage = context.HeaderImage;
                     contextToUpdate.NotificationEmails = context.NotificationEmails;
+                    contextToUpdate.Active = context.Active;
                 }
             }
             StoreObjectService.SaveChanges();
