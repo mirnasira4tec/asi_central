@@ -35,7 +35,7 @@
     foreach (asi.asicentral.web.model.store.order.Group group in Model.Data)
     {
         <div class="row-fluid">
-            <div class="span5"><b>@group.Name</b></div>
+            <div class="span5"><b>@Html.Raw(group.Name)</b></div>
             <div class="span4"><a rel="download" data-product="@group.Name" href="#">Download data</a></div>
             <div class="span3">&nbsp;</div>
         </div>
@@ -65,7 +65,8 @@
     }
     <br />
     <div class="row-fluid">
-        <div class="span5"><b>Total Processed</b></div>
+        <div class="span3"><b>Total Processed</b></div>
+        <div class="span2"><a rel="download" data-product="" href="#">Download data</a></div>
         <div class="span2"><b>@total.ToString("C")</b></div>
         <div class="span1">&nbsp;</div>
         <div class="span4"><b>@annualized.ToString("C")</b> <small>Annualized amount</small></div>
@@ -83,7 +84,8 @@
             var product = $(this).data("product");
             var startdate = '@Model.StartDate';
             var enddate = '@Model.EndDate';
-            var location = "@Url.Action("DownloadProductCSV", "Orders", null)/" + "?Product=" + product + "&StartDate=@Model.StartDate&EndDate=@Model.EndDate";
+            var location = "@Url.Action("DownloadProductCSV", "Orders", null)/" + "?StartDate=@Model.StartDate&EndDate=@Model.EndDate";
+            if (product) location += "&Product=" + product;
             document.location = location;
         });
     </script>

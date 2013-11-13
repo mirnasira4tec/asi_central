@@ -236,6 +236,7 @@ namespace Store_Database_Conversion
                         if (order.CreditCard.TotalAmount.HasValue)
                         {
                             newOrder.Total = order.CreditCard.TotalAmount.Value;
+                            newOrder.AnnualizedTotal = order.CreditCard.TotalAmount.Value;
                             //create an annualized value if any of the order details record contain a subscription. This should be accurate for most of them.
                             if (containsSubscription) newOrder.AnnualizedTotal = (newOrder.Total - applicationFeeTotal) * 12;
                         }
