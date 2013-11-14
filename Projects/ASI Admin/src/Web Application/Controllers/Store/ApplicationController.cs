@@ -22,6 +22,7 @@ namespace asi.asicentral.web.Controllers.Store
         public static readonly int[] SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS = { 48, 49, 50, 51, 52, 53, 54 };
         public static readonly int[] SUPPLIER_ESP_PAYFORPLACEMENT_PRODUCT_IDS = { 47, 63 };
         public static readonly int SUPPLIER_Email_Express_PRODUCT_ID = 61;
+        public static readonly int SUPPLIER_ESP_WEBSITES_PRODUCT_COLLECTIONS_ID = 64;
        
         
         public IStoreService StoreService { get; set; }
@@ -62,6 +63,7 @@ namespace asi.asicentral.web.Controllers.Store
                     return View("../Store/Application/EmailExpress", new EmailExpressModel(orderDetail, detailEmailExpress,StoreService));
                 }
                 else if(ORDERDETAIL_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/OrderDetailProduct", new OrderDetailApplicationModel(orderDetail));
+                else if (SUPPLIER_ESP_WEBSITES_PRODUCT_COLLECTIONS_ID == orderDetail.Product.Id)  return View("../Store/Application/ProductCollections", new ProductCollectionsModel(orderDetail,  StoreService));
             }
             throw new Exception("Retieved an unknown type of application");
         }
@@ -111,6 +113,66 @@ namespace asi.asicentral.web.Controllers.Store
             else
             {
                 return View("../Store/Application/Distributor", application);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(true)]
+        public virtual ActionResult EditProductCollections(ProductCollectionsModel application)
+        {
+            if (ModelState.IsValid)
+            {
+                StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
+                if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
+                StoreOrder order = orderDetail.Order;
+                if (order == null) throw new Exception("Invalid reference to an order");
+                order.ExternalReference = application.ExternalReference;
+                order = UpdateCompanyInformation(application, order);
+                    
+                //Update Product Collections Information
+                if(orderDetail.Product != null)
+                {
+                    switch(orderDetail.Product.Id)
+                    {
+                        case 64:
+                            if (application.productCollections != null && application.productCollections.Count > 0)
+                            {
+                                foreach (StoreDetailProductCollection collection in application.productCollections)
+                                {
+                                    if(collection != null && collection.ProductCollectionItems != null && collection.ProductCollectionItems.Count > 0)
+                                    {
+                                        foreach(StoreDetailProductCollectionItem newCollectionItem in collection.ProductCollectionItems)
+                                        {
+                                            StoreDetailProductCollectionItem oldCollectionItem = StoreService.GetAll<StoreDetailProductCollectionItem>().Where(details => details.ItemId == newCollectionItem.ItemId).SingleOrDefault();
+                                            if (oldCollectionItem != null)
+                                            {
+                                                oldCollectionItem.ItemNumbers = newCollectionItem.ItemNumbers;
+                                                oldCollectionItem.Collection = newCollectionItem.Collection;
+                                                StoreService.Update<StoreDetailProductCollectionItem>(oldCollectionItem);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
+                StoreAddress address = order.Company.GetCompanyShippingAddress();
+                StoreService.UpdateTaxAndShipping(order);
+                orderDetail.UpdateDate = DateTime.UtcNow;
+                orderDetail.UpdateSource = "ApplicationController - EditProductCollections";
+
+                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                StoreService.SaveChanges();
+                if (application.ActionName == ApplicationController.COMMAND_REJECT)
+                    return RedirectToAction("List", "Orders");
+                else
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId });
+            }
+            else
+            {
+                return View("../Store/Application/ProductCollections", application);
             }
         }
 
