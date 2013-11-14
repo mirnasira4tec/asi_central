@@ -145,9 +145,12 @@ namespace asi.asicentral.web.Controllers.Store
                                         foreach(StoreDetailProductCollectionItem newCollectionItem in collection.ProductCollectionItems)
                                         {
                                             StoreDetailProductCollectionItem oldCollectionItem = StoreService.GetAll<StoreDetailProductCollectionItem>().Where(details => details.ItemId == newCollectionItem.ItemId).SingleOrDefault();
-                                            oldCollectionItem.ItemNumbers = newCollectionItem.ItemNumbers;
-                                            oldCollectionItem.Collection = newCollectionItem.Collection;
-                                            StoreService.Update<StoreDetailProductCollectionItem>(oldCollectionItem);
+                                            if (oldCollectionItem != null)
+                                            {
+                                                oldCollectionItem.ItemNumbers = newCollectionItem.ItemNumbers;
+                                                oldCollectionItem.Collection = newCollectionItem.Collection;
+                                                StoreService.Update<StoreDetailProductCollectionItem>(oldCollectionItem);
+                                            }
                                         }
                                     }
                                 }
