@@ -94,6 +94,15 @@ namespace asi.asicentral.model.store
             return address;
         }
 
+        public StoreIndividual GetCompanyContact()
+        {
+            StoreIndividual individual = null;
+            //Try to use the primary individual for the company now
+            individual = Individuals.Where(add => add.IsPrimary).FirstOrDefault();
+            if (individual == null) individual = Individuals.FirstOrDefault();
+            return individual;
+        }
+
         public bool HasBillAddress
         {
             get
