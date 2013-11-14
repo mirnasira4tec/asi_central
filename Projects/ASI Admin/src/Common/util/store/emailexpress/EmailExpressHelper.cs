@@ -10,7 +10,7 @@ namespace asi.asicentral.util.store
     public class EmailExpressHelper
     {
         public static readonly int[] EMAILEXPRESS_NUMBER_OF_ITEMS = { 1, 3, 6, 12, 26, 52, 120 };
-        public static readonly decimal[] EMAILEXPRESS_PLATINUM = { 809M, 764M, 742M, 719M, 697M, 674M, 629M };
+        public static readonly decimal[] EMAILEXPRESS_PLATINUM = { 899M, 849M, 825M, 799M, 775M, 749M, 699M };
         public static readonly decimal[] EMAILEXPRESS_REGULAR = { 799M, 749M, 725M, 699M, 675M, 649M, 599M };
         public static readonly decimal EMAILEXPRESS_TARGETED = 349M;
         public static readonly int[] EMAILEXPRESS_ITEM_TYPE_IDS = { 1, 2, 3, 4 };
