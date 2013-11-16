@@ -105,11 +105,11 @@
                 @order.OrderId</td><td>@order.Name</td><td>@order.Email</td>
                 @if (!string.IsNullOrEmpty(order.ContextType) && !order.IsProduct)
                 {
-                <td><a href="#" class="productRef">@order.ContextType</a></td>
+                <td><a href="#" class="productRef" data-id="@Server.HtmlEncode(order.ContextType)">@order.ContextType</a></td>
                 }
                 else 
                 {
-                <td><a href="#" class="productRef">@order.Item</a></td>
+                <td><a href="#" class="productRef" data-id="@Server.HtmlEncode(order.Item)">@Html.Raw(order.Item)</a></td>
                 }
                 @if (order.Application != null || order.ProductType == "Product")
                 { 
@@ -155,7 +155,8 @@
         });
         $('a.productRef').click(function (e) {
             e.preventDefault();
-            $('form[id="form-@OrderPageModel.TAB_PRODUCT"] input[name=product]').val(e.target.textContent);
+            $('form[id="form-@OrderPageModel.TAB_PRODUCT"] input[name=product]').val($(e.target).data("id"));
+            alert($(e.target).data("id"));
             $('form[id="form-@OrderPageModel.TAB_PRODUCT"]').submit();
         });
 
