@@ -33,6 +33,9 @@ namespace asi.asicentral.database.mappings
             For<IRepository<ASPNetMembership>>().Use<EFRepository<ASPNetMembership>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
+            For<IRepository<ASPNetUser>>().Use<EFRepository<ASPNetUser>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
             For<IRepository<Category>>().Use<EFRepository<Category>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 

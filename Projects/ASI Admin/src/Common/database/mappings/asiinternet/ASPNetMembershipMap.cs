@@ -15,6 +15,9 @@ namespace asi.asicentral.database.mappings.asiinternet
             ToTable("aspnet_Membership");
             HasKey(memb => memb.UserId);
 
+            // Relationships
+            this.HasRequired(t => t.Users)
+                .WithOptional(t => t.Membership);
         }
     }
 }

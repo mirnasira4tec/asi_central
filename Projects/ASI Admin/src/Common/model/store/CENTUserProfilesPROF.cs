@@ -25,5 +25,6 @@ namespace asi.asicentral.model.store
         public string PROF_CountryID { get; set; }
         public DateTime PROF_LastUpdatedDate { get; set; }
         int PROF_ProfileVersion { get; set; }
+        public virtual ASPNetUser Users { get; set; }
     }
 }

@@ -103,6 +103,7 @@
     <Compile Include="database\ASIInternetContext.cs" />
     <Compile Include="database\ASIPublicationContext.cs" />
     <Compile Include="database\CallContext.cs" />
+    <Compile Include="database\mappings\asiinternet\ASPNetUsersMap.cs" />
     <Compile Include="database\mappings\asiinternet\CENTUserProfilesPROFMap.cs" />
     <Compile Include="database\mappings\asiinternet\DistributorAccountTypeMap.cs" />
     <Compile Include="database\mappings\asiinternet\DistributorProductLineMap.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="model\CreditCard.cs" />
     <Compile Include="model\ROI\Category.cs" />
     <Compile Include="model\ROI\Company.cs" />
+    <Compile Include="model\store\ASPNetUsers.cs" />
     <Compile Include="model\store\CENTUserProfilesPROF.cs" />
     <Compile Include="model\store\LookProductCollections.cs" />
     <Compile Include="model\store\StoreDetailStoreDetailProductCollections.cs" />

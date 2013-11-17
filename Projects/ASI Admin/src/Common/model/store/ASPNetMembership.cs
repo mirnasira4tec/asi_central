@@ -29,5 +29,6 @@ namespace asi.asicentral.model.store
         public int FailedPasswordAnswerAttemptCount { get; set; }
         public Nullable<DateTime> FailedPasswordAnswerAttemptWindowStart { get; set; }
         public string Comment { get; set; }
+        public virtual ASPNetUser Users { get; set; }
     }
 }
