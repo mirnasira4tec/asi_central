@@ -41,10 +41,12 @@ namespace asi.asicentral.web.Controllers.Store
                 orderDetailQuery = orderDetailQuery.Where(detail => detail.CreateDate >= dateStartParam && detail.CreateDate <= dateEndParam);
             }
             if (formTab == OrderPageModel.TAB_PRODUCT && !string.IsNullOrEmpty(product))
+            {
+                product = Server.HtmlDecode(product);
                 orderDetailQuery = orderDetailQuery.Where(detail =>
                     (detail.Product != null && detail.Product.Name != null && detail.Product.Name == product)
                     || (detail.Order.Context != null && detail.Order.Context.Name == product));
-
+            }
             if (formTab == OrderPageModel.TAB_ORDER && id.HasValue)
                 orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.Id == id.Value);
 

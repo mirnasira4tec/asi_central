@@ -20,6 +20,7 @@ namespace asi.asicentral.database
         }
 
         public DbSet<ASPNetMembership> ASPNetMemberships { get; set; }
+        public DbSet<ASPNetUser> ASPNetUsers { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<CENTUserProfilesPROF> UserProfileDetails { get; set; }
@@ -53,6 +54,7 @@ namespace asi.asicentral.database
             base.OnModelCreating(modelBuilder);
             modelBuilder.Configurations
                .Add(new ASPNetMembershipMap())
+               .Add(new ASPNetUserMap())
                .Add(new CategoryMap())
                .Add(new CompanyMap())
                .Add(new DistributorAccountTypeMap())

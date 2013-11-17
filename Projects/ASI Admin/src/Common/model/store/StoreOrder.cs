@@ -69,6 +69,10 @@ namespace asi.asicentral.model.store
                 else return "(Unknown)";
             }
         }
+        public string ConfirmationNumber
+        {
+            get { return string.Format("{0:#00000}", Id); }
+        }
         public override string ToString()
         {
             return "Order (" + Id + ")";

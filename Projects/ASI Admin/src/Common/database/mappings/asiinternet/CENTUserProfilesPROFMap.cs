@@ -14,6 +14,10 @@ namespace asi.asicentral.database.mappings.asiinternet
         {
             ToTable("CENT_UserProfiles_PROF");
             HasKey(prof => prof.PROF_UserID);
+            
+            // Relationships
+            this.HasRequired(t => t.Users)
+                .WithOptional(t => t.CENT_UserProfiles_PROF);
         }
     }
 }
