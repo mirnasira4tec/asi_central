@@ -916,6 +916,7 @@ namespace asi.asicentral.Tests
                     UpdateDate = DateTime.Now,
                     UpdateSource = "Test Case",
                     IsCompleted = false,
+                    UserReference = new Guid().ToString(),
                     CreditCard = creditCard,
                     Company = company,
                     BillingIndividual = individual,
