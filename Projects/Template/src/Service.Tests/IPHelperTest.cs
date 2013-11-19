@@ -16,7 +16,7 @@ namespace asi.asicentral.Tests
             session.SetupGet(x => x["IpCountry"]).Returns(string.Empty);
             string country = IPHelper.GetCountry(session.Object, "98.221.206.30");
             Assert.AreEqual("UNITED STATES", country);
-            Assert.IsFalse(IPHelper.IsFromAsia(session.Object, "98.221.206.30");
+            Assert.IsFalse(IPHelper.IsFromAsia(session.Object, "98.221.206.30"));
         }
     }
 }

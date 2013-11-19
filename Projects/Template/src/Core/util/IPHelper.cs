@@ -73,7 +73,7 @@ namespace asi.asicentral.util
                 result = dataResults[4].ToString() == "-" ? DEFAULTCOUNTRY : dataResults[4].ToString();
                 return result;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return DEFAULTCOUNTRY;
             }

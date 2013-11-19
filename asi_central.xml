@@ -2,24 +2,17 @@
 	
 	<Import Project="$(MSBuildExtensionsPath)\ExtensionPack\MSBuild.ExtensionPack.tasks" Condition="Exists('$(MSBuildExtensionsPath)\ExtensionPack\MSBuild.ExtensionPack.tasks')" />	
 	<Import Project="$(ExtensionTasksPath)MSBuild.ExtensionPack.tasks" Condition="Exists('$(ExtensionTasksPath)MSBuild.ExtensionPack.tasks') And !Exists('$(MSBuildExtensionsPath)\ExtensionPack\MSBuild.ExtensionPack.tasks')" />
+
 	<PropertyGroup>
-		<NuGetExe Condition="$(NuGetExe) == ''">.\.nuget\nuget.exe</NuGetExe>
-		<ProjectRoot Condition="$(Local) == 'true'">\Projects\asi_central\Projects</ProjectRoot>
-		<ProjectRoot Condition="$(Local) == ''">\asi_central\Projects</ProjectRoot>
+		<ProjectRoot Condition="$(Local) == 'true'">\Projects\asicentral.com\Projects</ProjectRoot>
+		<ProjectRoot Condition="$(Local) == ''">\asicentral.com\Projects</ProjectRoot>
 	</PropertyGroup>
 	
-	<Target Name="NuGet">
-		<ItemGroup>
-			<NuGetPackageConfigs Include="**\**\packages.config" />
-		</ItemGroup>
-		<Exec Command='$(NuGetExe) install "%(NuGetPackageConfigs.Identity)" -o packages' />
-	</Target>
-	
-	<Target Name="Compile ASI Admin" DependsOnTargets="NuGet">
+	<Target Name="Compile ASI Admin">
 		<MSBuild Projects=".\Projects\ASI Admin\src\Admin Tool.sln" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU"/>
 	</Target>
 	
-	<Target Name="Compile Template" DependsOnTargets="NuGet">
+	<Target Name="Compile Template">
 		<MSBuild Projects=".\Projects\Template\src\Template.sln" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU"/>
 	</Target>
 	
