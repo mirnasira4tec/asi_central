@@ -421,7 +421,7 @@
     <value>Uploaded Image</value>
   </data>
   <data name="StoreTitleCatalogsApplication" xml:space="preserve">
-    <value>Catalogs - {0}</value>
+    <value>Catalogs</value>
   </data>
   <data name="CurrentMembershipPackage" xml:space="preserve">
     <value>Current membership package</value>

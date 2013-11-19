@@ -435,15 +435,15 @@ namespace asi.asicentral.web.Controllers.Store
                         case 50:
                             espAdvertising.FirstItemList = application.NumberOfItems_First;
                             espAdvertising.FirstOptionId = application.Products_OptionId_First;
-                            orderDetail.Cost = ESPAdvertisingHelper.ESPAdvertising_CLEARANCE_COST[application.Products_OptionId_First];
+                            if (!string.IsNullOrEmpty(espAdvertising.FirstItemList)) orderDetail.Cost = ESPAdvertisingHelper.ESPAdvertising_CLEARANCE_COST[1];
 
                             espAdvertising.SecondItemList = application.NumberOfItems_Second;
                             espAdvertising.SecondOptionId = application.Products_OptionId_Second;
-                            orderDetail.Cost += ESPAdvertisingHelper.ESPAdvertising_NEW_COST[application.Products_OptionId_Second];
+                            if (!string.IsNullOrEmpty(espAdvertising.SecondItemList)) orderDetail.Cost += ESPAdvertisingHelper.ESPAdvertising_NEW_COST[1];
 
                             espAdvertising.ThirdItemList = application.NumberOfItems_Third;
                             espAdvertising.ThirdOptionId = application.Products_OptionId_Third;
-                            orderDetail.Cost += ESPAdvertisingHelper.ESPAdvertising_RUSH_COST[application.Products_OptionId_Third];
+                            if(!string.IsNullOrEmpty(espAdvertising.ThirdItemList)) orderDetail.Cost += ESPAdvertisingHelper.ESPAdvertising_RUSH_COST[1];
                             break;
                         case 52:
                             List<string> LoginScreen_Dates = new List<string>();
@@ -455,6 +455,7 @@ namespace asi.asicentral.web.Controllers.Store
                             if (LoginScreen_Dates != null && LoginScreen_Dates.Count > 0)
                             {
                                 int count = 1;
+                                orderDetail.Cost = 0;
                                 foreach (string slecteddate in LoginScreen_Dates)
                                 {
                                     string[] dateString = slecteddate.Split('-');
@@ -465,6 +466,7 @@ namespace asi.asicentral.web.Controllers.Store
                                         existingItem.Sequence = count++;
                                         existingItem.UpdateDate = DateTime.UtcNow;
                                         existingItem.UpdateSource = "ApplicationController - EditESPAdvertising";
+                                        orderDetail.Cost += GetCostBasedOnday(existingItem.AdSelectedDate);
                                         StoreService.Update<StoreDetailESPAdvertisingItem>(existingItem);
                                     }
                                     else
@@ -475,6 +477,7 @@ namespace asi.asicentral.web.Controllers.Store
                                         newitem.OrderDetailId = application.OrderDetailId;
                                         newitem.CreateDate = DateTime.UtcNow;
                                         newitem.UpdateDate = DateTime.UtcNow;
+                                        orderDetail.Cost += GetCostBasedOnday(newitem.AdSelectedDate);
                                         newitem.UpdateSource = "ApplicationController - EditESPAdvertising";
                                         StoreService.Add<StoreDetailESPAdvertisingItem>(newitem);
                                     }
@@ -490,7 +493,6 @@ namespace asi.asicentral.web.Controllers.Store
                                         StoreService.Delete<StoreDetailESPAdvertisingItem>(item);
                                 }
                             }
-                            if (updatedDateList != null) orderDetail.Quantity = updatedDateList.Count;
                             break;
                         case 54:
                             espAdvertising.FirstOptionId = application.Products_OptionId_First + 1;
@@ -519,6 +521,18 @@ namespace asi.asicentral.web.Controllers.Store
             {
                 return View("../Store/Application/ESPAdvertising", application);
             }
+        }
+
+        private int GetCostBasedOnday(DateTime dt)
+        {
+            int cost = 0;
+            if (dt != null)
+            {
+                int day = Convert.ToInt32(dt.DayOfWeek);
+                if (day == 0 || day == 6) return @ESPAdvertisingHelper.LoginScreenWeekendPrice;
+                else return @ESPAdvertisingHelper.LoginScreenWeekDayPrice;
+            }
+            return cost;
         }
 
         [HttpPost]
