@@ -11,6 +11,7 @@ namespace asi.asicentral.model.store
     {
         public int Id { get; set; }
         public int OrderDetailId { get; set; }
+        public string Signature { get; set; }
         public string LegacyTableId { get; set; }
         public string LegacyId { get; set; }
         public int ASINumber { get; set; }
