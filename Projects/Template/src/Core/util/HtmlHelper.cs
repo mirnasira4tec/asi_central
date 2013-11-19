@@ -16,6 +16,10 @@ namespace asi.asicentral.util
 {
     public class HtmlHelper
     {
+        private static string[] countryNotSupportedByTIMSS = new string[] { "029", "AFG", "ARE", "FRO", "IRN", "LAO", "LBY", "LKA", "MAR", "MCO", "MDV", "MLT", "MNE", "MNG", "MYS", "NGA", "NIC", "NOR", "NPL", "NZL",
+            "OMN", "PAK", "PAN", "PER", "PHL", "POL", "PRI", "PRY", "QAT", "ROU", "RUS", "RWA", "SAU", "SCG", "SEN", "SGP", "SRB", "SVK", "SVN", "SWE", "SYR", "TAJ", "THA", "TKM", "TUN", "TUR", "TWN", "UKR", "URY", 
+            "UZB", "VEN", "VNM", "YEM", "ZAF", "ZWE" };
+
         /// <summary>
         /// Get a list of attributes for the EditorTemplates
         /// </summary>
@@ -43,7 +47,7 @@ namespace asi.asicentral.util
         /// Create a list of countries and their ISO country code for displaying in the UI
         /// </summary>
         /// <returns></returns>
-        public static IList<SelectListItem> GetCountries( string value = null)
+        public static IList<SelectListItem> GetCountries( string value = null, bool includeAll = true)
         {
             IList<SelectListItem> countries = new List<SelectListItem>();
 
@@ -62,9 +66,15 @@ namespace asi.asicentral.util
             countryNames.Sort();
             foreach (string countryName in countryNames)
             {
-                countries.Add(new SelectListItem { Text = countryName, Value = countriesDic[countryName], Selected = (countriesDic[countryName] == value) });
+                if (includeAll || !countryNotSupportedByTIMSS.Contains(countriesDic[countryName]))
+                    countries.Add(new SelectListItem { Text = countryName, Value = countriesDic[countryName], Selected = (countriesDic[countryName] == value) });
             }
             return countries;
+        }
+
+        public static string[] CountriesNotSupportedByTIMSS()
+        {
+            return countryNotSupportedByTIMSS;
         }
 
         /// <summary>

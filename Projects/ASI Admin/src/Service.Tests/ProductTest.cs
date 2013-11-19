@@ -742,6 +742,39 @@ namespace asi.asicentral.Tests
                 Assert.IsNull(context);
             }
         }
+
+        [TestMethod]
+        public void ESPAdvertisingCrud()
+        {
+            int newId = 1;
+            using (var objectContext = new StoreContext())
+            {
+                int recordCount = objectContext.StoreDetailESPAdvertisings.Count();
+                Assert.IsTrue(recordCount >= 0);
+                StoreDetailESPAdvertising advert = new StoreDetailESPAdvertising()
+                {
+                    OrderDetailId = newId,
+                    CreateDate = DateTime.UtcNow,
+                    UpdateDate = DateTime.UtcNow,
+                    UpdateSource = "Test Case",
+                };
+                objectContext.StoreDetailESPAdvertisings.Add(advert);
+                objectContext.SaveChanges();
+            }
+            using (var objectContext = new StoreContext())
+            {
+                StoreDetailESPAdvertising advert = objectContext.StoreDetailESPAdvertisings.Where(ctxt => ctxt.OrderDetailId == newId).SingleOrDefault();
+                Assert.IsNotNull(advert);
+                objectContext.StoreDetailESPAdvertisings.Remove(advert);
+                objectContext.SaveChanges();
+            }
+            using (var objectContext = new StoreContext())
+            {
+                StoreDetailESPAdvertising advert = objectContext.StoreDetailESPAdvertisings.Where(ctxt => ctxt.OrderDetailId == newId).SingleOrDefault();
+                Assert.IsNull(advert);
+            }
+        }
+
         [TestMethod]
         public void TestLookups()
         {
@@ -751,6 +784,8 @@ namespace asi.asicentral.Tests
                 Assert.IsTrue(objectContext.LookProductLines.Count() > 0);
                 Assert.IsTrue(objectContext.LookDistributorRevenueTypes.Count() > 0);
                 Assert.IsTrue(objectContext.LookSupplierDecoratingTypes.Count() > 0);
+                Assert.IsTrue(objectContext.StoreTieredProductPricings.Count() > 0);
+                Assert.IsTrue(objectContext.LookProductShippingRates.Count() > 0);
             }
         }
 
@@ -881,6 +916,7 @@ namespace asi.asicentral.Tests
                     UpdateDate = DateTime.Now,
                     UpdateSource = "Test Case",
                     IsCompleted = false,
+                    UserReference = new Guid().ToString(),
                     CreditCard = creditCard,
                     Company = company,
                     BillingIndividual = individual,

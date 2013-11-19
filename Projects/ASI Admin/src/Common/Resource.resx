@@ -501,4 +501,94 @@
   <data name="Sequence" xml:space="preserve">
     <value>Sequence</value>
   </data>
+  <data name="PrimaryBusiness" xml:space="preserve">
+    <value>Primary Business</value>
+  </data>
+  <data name="PrimaryBusinessOtherDescription" xml:space="preserve">
+    <value>Primary Business Other Description</value>
+  </data>
+  <data name="Basic" xml:space="preserve">
+    <value>Basic</value>
+  </data>
+  <data name="Executive" xml:space="preserve">
+    <value>Executive</value>
+  </data>
+  <data name="NA" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+  <data name="Membership" xml:space="preserve">
+    <value>Membership</value>
+  </data>
+  <data name="Standard" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="UPS2Day" xml:space="preserve">
+    <value>UPS 2nd Day</value>
+  </data>
+  <data name="UPSGround" xml:space="preserve">
+    <value>UPS Ground</value>
+  </data>
+  <data name="UPSOvernight" xml:space="preserve">
+    <value>UPS Overnight</value>
+  </data>
+  <data name="BannerAd" xml:space="preserve">
+    <value>Banner Ad</value>
+  </data>
+  <data name="Cost_300_5_Products_PerMonth" xml:space="preserve">
+    <value>$125/month for 3 products</value>
+  </data>
+  <data name="SelectNumberOfProducts" xml:space="preserve">
+    <value>Select number of products</value>
+  </data>
+  <data name="TitleAd" xml:space="preserve">
+    <value>Title Ad</value>
+  </data>
+  <data name="TowerTuesdayAd" xml:space="preserve">
+    <value>Tower Tuesday Ad</value>
+  </data>
+  <data name="BuddyList_199" xml:space="preserve">
+    <value>Buddy List $199/mo.</value>
+  </data>
+  <data name="InstantMessenger_450" xml:space="preserve">
+    <value>Instant Messenger $450/mo.</value>
+  </data>
+  <data name="MainChatRoom_750" xml:space="preserve">
+    <value>Main Chat Room $750/mo.</value>
+  </data>
+  <data name="BuyAdditionalVideo" xml:space="preserve">
+    <value>Buy additional videos (to be shown across different product categories) $79/year</value>
+  </data>
+  <data name="BuyOneVideo" xml:space="preserve">
+    <value>Buy one video (to be shown with all of your products) $499/year</value>
+  </data>
+  <data name="EmailExpress_Platinum" xml:space="preserve">
+    <value>EmailExpress Platinum</value>
+  </data>
+  <data name="EmailExpress_Regular" xml:space="preserve">
+    <value>Regular EmailExpress</value>
+  </data>
+  <data name="EmailExpress_Special" xml:space="preserve">
+    <value>Special Request</value>
+  </data>
+  <data name="EmailExpress_TargetedList" xml:space="preserve">
+    <value>EmailExpress Targeted List</value>
+  </data>
+  <data name="EmailExpress_Selected_Dates_Count" xml:space="preserve">
+    <value>You have selected {x} date(s):</value>
+  </data>
+  <data name="EmailExpress_Error_Date" xml:space="preserve">
+    <value>Please choose at least one date</value>
+  </data>
+  <data name="EmailExpress_Error_ItemType" xml:space="preserve">
+    <value>Please select one of the Email Express Option to proceed</value>
+  </data>
+  <data name="EmailExpress_Error_Terms" xml:space="preserve">
+    <value>Please accept the Terms &amp; Conditions to proceed</value>
+  </data>
+  <data name="FieldLength" xml:space="preserve">
+    <value>This field is too long.</value>
+  </data>
+  <data name="FieldInvalidASINumber" xml:space="preserve">
+    <value>Please enter a valid ASI #.</value>
+  </data>
 </root>

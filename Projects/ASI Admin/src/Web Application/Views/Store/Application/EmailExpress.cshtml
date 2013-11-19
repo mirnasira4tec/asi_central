@@ -1,0 +1,288 @@
+﻿@using asi.asicentral.web
+@using asi.asicentral.model.store
+@using asi.asicentral.web.Controllers.Store
+@using asi.asicentral.util.store;
+@model asi.asicentral.web.model.store.EmailExpressModel
+@{
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+@section Content {
+    @Styles.Render("~/Content/form")
+    @Styles.Render("~/Content/MultiSelectedDatePicker")
+}
+<h1>@string.Format(Model.ProductName) (#@Model.OrderId)</h1>
+@if (Model.Price > 0.0m)
+{
+    <p>@Model.ProductName product purchase fee is @Model.Price.ToString("C")</p>
+}
+@using (Html.BeginForm("EditEmailExpress", "Application"))
+{        
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.ProductName)
+    @Html.HiddenFor(m => m.ProductId)
+    @Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
+    <div>
+        @if (Model.Price > 0.0m)
+        {
+            <h3 class="order-status-header3">Order Status:</h3>
+            <div class="order-status">@Model.OrderStatus</div>
+            <div class="timms-info">
+                <div class="span3">
+                    <label class="order-status-label" for="Timms_ID">Timms ID:</label>
+                    <div class="order-status-input">
+                        @Html.EditorFor(m => m.ExternalReference, new { @class = "span2" })
+                        <span id="timmsErrorMessage" data-type="errormessage" class="field-validation-error"></span>
+                    </div>
+                </div>
+                <div class="status-btns">
+                    @if (Model.IsCompleted && Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
+                    {
+                        <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
+                    }
+                    @if (Model.IsCompleted && Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
+                    { 
+                        <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
+                    }
+                    <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+
+                    @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
+                    { @Html.ActionLink("Close", "../Orders") }
+                    else
+                    { @Html.ActionLink("Cancel", "../Orders") }
+
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="timms-info span3 status-btns">
+                <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+                @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
+                { @Html.ActionLink("Close", "../Orders") }
+                else
+                { @Html.ActionLink("Cancel", "../Orders") }
+
+            </div>
+        }
+    </div>
+    <nav>
+        <ul class="nav nav-tabs" id="tabs">
+            <li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
+            <li><a href="#tabsubscription" data-toggle="tab">@Model.ProductName Information</a></li>
+        </ul>
+    </nav>
+    <div class="tab-content">
+        @Html.Partial("../Store/Application/Shared/CompanyInformation", Model)
+
+        <div id="tabsubscription" class="product-information tab-pane fade">
+            <fieldset class="company-info-form">
+                <legend>@string.Format("{0} {1}", Html.Raw(Model.ProductName), "Information")</legend>
+                @Html.HiddenFor(model => model.Dates)
+                @Html.HiddenFor(model => model.TotalCost)
+                <div class="label-row">
+                    <strong>Select Option:</strong>
+                    @Html.DropDownListFor(model => model.ItemTypeId, Model.ItemTypes, new { @onchange = "SelectOption();" })
+                </div>
+                <div class="label-row" id="divDate">
+                    <div>
+                        <strong>Select Dates:</strong>
+                    </div>
+                    <div class="FloatLeft">
+                        <div id="dates" class="box"></div>
+                    </div>
+                    <div class="FloatRight">
+                        <div>
+                            <p><strong>You have selected below date(s):</strong></p>
+                        </div>
+                        <div>
+                            <textarea id="txtSelectedDates" rows="4" readonly="readonly"></textarea>
+                        </div>
+                    </div>
+                    <div class="ClearBoth"></div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <p><strong id="lblTotal">Total: $@String.Format("{0:N}", Model.TotalCost)</strong></p>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <!-- END #orderdetail-information -->
+
+    </div> <!-- END #content -->
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/MultiSelectedDatePicker")
+    <script type="text/javascript">
+        var productId = '@(Model.ProductId)';
+        var message = '@(asi.asicentral.Resource.EmailExpress_Selected_Dates_Count)';
+        var arrayNumberOfItems = [];
+        var arrayCostPlatinum = [];
+        var arrayCostRegular = [];
+        var CostTargeted = '@(EmailExpressHelper.EMAILEXPRESS_TARGETED)';
+        function GetNumberOfItems() {
+            arrayNumberOfItems = [];
+            arrayNumberOfItems = '@Html.Raw(
+                        Json.Encode(
+                        (EmailExpressHelper.EMAILEXPRESS_NUMBER_OF_ITEMS.Select(item => new
+                        {
+                            value = item
+                        })
+                    )))';
+            if (arrayNumberOfItems.length > 0)
+                arrayNumberOfItems = JSON.parse(arrayNumberOfItems);
+        }
+        function GetCostPlatinum() {
+            arrayCostPlatinum = [];
+            arrayCostPlatinum = '@Html.Raw(
+                        Json.Encode(
+                        (EmailExpressHelper.EMAILEXPRESS_PLATINUM.Select(item => new
+                        {
+                            value = item
+                        })
+                    )))';
+            if (arrayCostPlatinum.length > 0)
+                arrayCostPlatinum = JSON.parse(arrayCostPlatinum);
+        }
+        function GetCostRegular() {
+            arrayCostRegular = [];
+            arrayCostRegular = '@Html.Raw(
+                        Json.Encode(
+                        (EmailExpressHelper.EMAILEXPRESS_REGULAR.Select(item => new
+                        {
+                            value = item
+                        })
+                    )))';
+            if (arrayCostRegular.length > 0)
+                arrayCostRegular = JSON.parse(arrayCostRegular);
+        }
+        function GetCost(ItemTypeId, NumberOfItems) {
+            var Cost = 0.0;
+            if (NumberOfItems == 0) return Cost;
+            switch (ItemTypeId) {
+                case "1":
+                    if (NumberOfItems < arrayNumberOfItems[1].value)
+                        Cost = arrayCostPlatinum[0].value;
+                    else if (NumberOfItems >= arrayNumberOfItems[1].value && NumberOfItems < arrayNumberOfItems[2].value)
+                        Cost = arrayCostPlatinum[1].value;
+                    else if (NumberOfItems >= arrayNumberOfItems[2].value && NumberOfItems < arrayNumberOfItems[3].value)
+                        Cost = arrayCostPlatinum[2].value;
+                    else if (NumberOfItems >= arrayNumberOfItems[3].value && NumberOfItems < arrayNumberOfItems[4].value)
+                        Cost = arrayCostPlatinum[3].value;
+                    else if (NumberOfItems >= arrayNumberOfItems[4].value && NumberOfItems < arrayNumberOfItems[5].value)
+                        Cost = arrayCostPlatinum[4].value;
+                    else if (NumberOfItems >= arrayNumberOfItems[5].value && NumberOfItems < arrayNumberOfItems[6].value)
+                        Cost = arrayCostPlatinum[5].value;
+                    else
+                        Cost = arrayCostPlatinum[6].value;
+                    break;
+                case "2":
+                    if (NumberOfItems < arrayNumberOfItems[1].value)
+                        Cost = arrayCostRegular[0].value;
+                    else if (NumberOfItems >= arrayNumberOfItems[1].value && NumberOfItems < arrayNumberOfItems[2].value)
+                        Cost = arrayCostRegular[1].value;
+                    else if (NumberOfItems >= arrayNumberOfItems[2].value && NumberOfItems < arrayNumberOfItems[3].value)
+                        Cost = arrayCostRegular[2].value;
+                    else if (NumberOfItems >= arrayNumberOfItems[3].value && NumberOfItems < arrayNumberOfItems[4].value)
+                        Cost = arrayCostRegular[3].value;
+                    else if (NumberOfItems >= arrayNumberOfItems[4].value && NumberOfItems < arrayNumberOfItems[5].value)
+                        Cost = arrayCostRegular[4].value;
+                    else if (NumberOfItems >= arrayNumberOfItems[5].value && NumberOfItems < arrayNumberOfItems[6].value)
+                        Cost = arrayCostRegular[5].value;
+                    else
+                        Cost = arrayCostRegular[6].value;
+                    break;
+                case "3":
+                    Cost = CostTargeted;
+                    break;
+            }
+            return Cost;
+        }
+        function CalculateTotal() {
+            var dates = $("#dates").multiDatesPicker('getDates');
+            var total = 0;
+            var quantity = 0;
+            if ($("#ItemTypeId").val() == 1 || $("#ItemTypeId").val() == 2)
+                quantity = dates.length;
+            else
+                quantity = 1;
+            var cost = GetCost($("#ItemTypeId").val(), quantity);
+            total = quantity * cost;
+            total = total.toFixed(2);
+            $("#lblTotal").html("Total: $" + total);
+            $('#TotalCost').val(total);
+        }
+        function SelectOption() {
+            if ($("#ItemTypeId").val() == 1 || $("#ItemTypeId").val() == 2)
+                $("#divDate").css("display", "");
+            else
+                $("#divDate").css("display", "none");
+            CalculateTotal();
+        }
+        function LoadData() {
+            $("#txtSelectedDates").html($("#Dates").val());
+            var dates = $("#Dates").val().split("\n");
+            if (dates.length > 0) {
+                $.each(dates, function (index, value) {
+                    if (value != "")
+                        $("#dates").multiDatesPicker('addDates', value);
+                });
+            }
+            if ($("#ItemTypeId").val() == 1 || $("#ItemTypeId").val() == 2)
+                $("#divDate").css("display", "");
+            else
+                $("#divDate").css("display", "none");
+        }
+        $(document).ready(function () {
+            GetNumberOfItems();
+            GetCostPlatinum();
+            GetCostRegular();
+            $('input.command').click(function (e) {
+                $('#ActionName').val(e.target.value);
+                if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
+                    //make sure we have Timms value
+                    if (!$('#ExternalReference').val()) {
+                        asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
+                        $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                        $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
+                        e.preventDefault();
+                    }
+                    else {
+                        var isnum = /^\d+$/.test($('#ExternalReference').val());
+                        if (!isnum) {
+                            asi.modal.confirm('Error', 'TIMMS ID must contain only numbers.', null, "#hide", "Close");
+                            $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                            $("#timmsErrorMessage").text("TIMMS ID must contain only numbers.");
+                            e.preventDefault();
+                        }
+                    }
+                }
+            });
+            $("#dates").multiDatesPicker({
+                dateFormat: "D, d M y",
+                minDate: 0,
+                setDate: ""
+                , onSelect: function (dateText, inst) {
+                    $("#Dates").val("");
+                    var date_String = "";
+                    var dates = $("#dates").multiDatesPicker('getDates');
+                    if (dates.length > 0) {
+                        $.each(dates, function (index, value) {
+                            date_String += value + "\n";
+                        });
+                    }
+                    $("#txtSelectedDates").html(date_String);
+                    $("#Dates").val(date_String);
+                    CalculateTotal();
+                }
+            });
+            LoadData();
+        });
+    </script>
+}

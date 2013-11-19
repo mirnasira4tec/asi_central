@@ -94,6 +94,17 @@ namespace asi.asicentral.Tests
         }
 
         [TestMethod]
+        public void CENTUserProfilesPROF()
+        {
+            int count = 0;
+            using (var context = new ASIInternetContext())
+            {
+                count = context.UserProfileDetails.Count();
+                Assert.IsTrue(count > 0);
+            }
+        }
+
+        [TestMethod]
         public void Order()
         {
             int count = 0;

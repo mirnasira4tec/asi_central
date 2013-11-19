@@ -28,6 +28,8 @@ namespace asi.asicentral.model.store
         public string Fax { get; set; }
         public string Email { get; set; }
         public string WebURL { get; set; }
+        [RegularExpression(@"^[1-9][0-9]{3,5}$", ErrorMessageResourceName = "FieldInvalidASINumber", ErrorMessageResourceType = typeof(Resource))]
+        public string ASINumber { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
@@ -51,6 +53,70 @@ namespace asi.asicentral.model.store
         public override int GetHashCode()
         {
             return Id.GetHashCode();
+        }
+
+        /// <summary>
+        /// Gets the company address by going through all the addresses associated with the company
+        /// </summary>
+        /// <returns></returns>
+        public StoreAddress GetCompanyAddress()
+        {
+            StoreAddress address = null;
+            //find address which is neither shipping nor billing
+            StoreCompanyAddress companyAddress = Addresses.Where(add => !add.IsShipping && !add.IsBilling).FirstOrDefault();
+            if (companyAddress != null) address = companyAddress.Address;
+            if (address == null)
+            {
+                //Try to use the shipping address for the company now
+                companyAddress = Addresses.Where(add => add.IsShipping).FirstOrDefault();
+                if (companyAddress != null) address = companyAddress.Address;
+            }
+            if (address == null)
+            {
+                //Try to use the billing address for the company now
+                companyAddress = Addresses.Where(add => add.IsBilling).FirstOrDefault();
+                if (companyAddress != null) address = companyAddress.Address;
+            }
+            return address;
+        }
+
+        /// <summary>
+        /// Tries to find the a shipping address assigned to the company
+        /// </summary>
+        /// <returns></returns>
+        public StoreAddress GetCompanyShippingAddress()
+        {
+            StoreAddress address = null;
+            //Try to use the shipping address for the company now
+            StoreCompanyAddress companyAddress = Addresses.Where(add => add.IsShipping).FirstOrDefault();
+            if (companyAddress != null) address = companyAddress.Address;
+            else address = GetCompanyAddress();
+            return address;
+        }
+
+        public StoreIndividual GetCompanyContact()
+        {
+            StoreIndividual individual = null;
+            //Try to use the primary individual for the company now
+            individual = Individuals.Where(add => add.IsPrimary).FirstOrDefault();
+            if (individual == null) individual = Individuals.FirstOrDefault();
+            return individual;
+        }
+
+        public bool HasBillAddress
+        {
+            get
+            {
+                return Addresses.Where(add => add.IsBilling).Count() > 0;
+            }
+        }
+
+        public bool HasShipAddress
+        {
+            get
+            {
+                return Addresses.Where(add => add.IsShipping).Count() > 0;
+            }
         }
     }
 }

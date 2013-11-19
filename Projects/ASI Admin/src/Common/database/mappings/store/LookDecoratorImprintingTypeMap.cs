@@ -9,17 +9,17 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings.store
 {
-    public class HallmarkFormRequestMap : EntityTypeConfiguration<HallmarkFormRequest>
+    public class LookDecoratorImprintingTypeMap : EntityTypeConfiguration<LookDecoratorImprintingType>
     {
-        public HallmarkFormRequestMap()
+        public LookDecoratorImprintingTypeMap()
         {
-            this.ToTable("STOR_Hallmark");
-            this.HasKey(t => t.OrderDetailId);
+            this.ToTable("LOOK_DecoratorImprintingType");
+            this.HasKey(t => t.Id);
 
             //Properties
-            this.Property(t => t.OrderDetailId)
-                .HasColumnName("OrderDetailId")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+            this.Property(t => t.Id)
+                .HasColumnName("ImprintingId")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.CreateDate)
                 .HasColumnName("CreateDateUTC");

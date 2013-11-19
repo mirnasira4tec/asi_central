@@ -65,6 +65,11 @@ namespace asi.asicentral.web.DependencyResolution
                         .EnrichWith(timssService => proxyGenerator.CreateClassProxyWithTarget(timssService.GetType(), timssService, new object[] { null }, new IInterceptor[] { new LogInterceptor(timssService.GetType()) }))
                         .Ctor<IObjectService>();
 
+                    x.For<IROIService>()
+                        .HttpContextScoped()
+                        .Use<ROIService>()
+                        .EnrichWith(roiService => proxyGenerator.CreateClassProxyWithTarget(roiService.GetType(), roiService, new object[] { null }, new IInterceptor[] { new LogInterceptor(roiService.GetType()) }));
+
                     x.For<ICreditCardService>()
                         .Use<asi.asicentral.services.CreditCardService>()
                         .EnrichWith(cardService => proxyGenerator.CreateClassProxyWithTarget(cardService.GetType(), cardService, new IInterceptor[] { new LogInterceptor(cardService.GetType()) }));

@@ -21,8 +21,17 @@ namespace asi.asicentral.database.mappings.product
             this.Property(t => t.HasTax)
                 .HasColumnName("HasTaxFlag");
 
+            this.Property(t => t.HasShipping)
+                .HasColumnName("HasShippingFlag");
+
             this.Property(t => t.IsSubscription)
                 .HasColumnName("IsSubscriptionFlag");
+
+            this.Property(t => t.IsAvailable)
+                .HasColumnName("IsAvailableFlag");
+
+            this.Property(t => t.NotificationEmails)
+                .HasColumnName("NotificationEmails");
 
             this.Property(t => t.CreateDate)
                 .HasColumnName("CreateDateUTC");

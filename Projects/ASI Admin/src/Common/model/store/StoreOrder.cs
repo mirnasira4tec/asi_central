@@ -25,6 +25,7 @@ namespace asi.asicentral.model.store
 
         public int Id { get; set; }
         public int? LegacyId { get; set; }
+        public string UserId { get; set; }
         public bool IsCompleted { get; set; }
         public OrderStatus ProcessStatus { get; set; }
         public int CompletedStep { get; set; }
@@ -33,7 +34,11 @@ namespace asi.asicentral.model.store
         public string OrderRequestType { get; set; }
         public string Campaign { get; set; }
         public string ExternalReference { get; set; }
+        public string UserReference { get; set; }
+        public string LoggedUserEmail { get; set; }
         public string IPAdd { get; set; }
+        public decimal Total { get; set; }
+        public decimal AnnualizedTotal { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
@@ -43,7 +48,31 @@ namespace asi.asicentral.model.store
         public virtual StoreCreditCard CreditCard { get; set; }
         public virtual StoreIndividual BillingIndividual { get; set; }
         public virtual IList<StoreOrderDetail> OrderDetails { get; set; }
-
+        public virtual Context Context { get; set; }
+        public string ProductName
+        {
+            get
+            {
+                if (Context != null)
+                {
+                    if (Context.Type != "Product")
+                    {
+                        if (Context.Type.StartsWith("SGR")) return "SGR Membership";
+                        else return Context.Type + " Membership";
+                    }
+                    else
+                    {
+                        return Context.Name;
+                    }
+                }
+                else if (OrderDetails != null && OrderDetails.Where(detail => detail.Product != null).FirstOrDefault() != null) return OrderDetails.Where(detail => detail.Product != null).FirstOrDefault().Product.Name;
+                else return "(Unknown)";
+            }
+        }
+        public string ConfirmationNumber
+        {
+            get { return string.Format("{0:#00000}", Id); }
+        }
         public override string ToString()
         {
             return "Order (" + Id + ")";
@@ -61,6 +90,18 @@ namespace asi.asicentral.model.store
         public override int GetHashCode()
         {
             return Id.GetHashCode();
+        }
+
+        /// <summary>
+        /// Gets the more realistic contact for the order
+        /// </summary>
+        /// <returns></returns>
+        public StoreIndividual GetContact()
+        {
+            StoreIndividual contact = null;
+            if (Company != null) contact = Company.Individuals.Where(ctct => ctct.IsPrimary).FirstOrDefault();
+            if (contact == null && BillingIndividual != null) contact = BillingIndividual;
+            return contact;
         }
     }
 }

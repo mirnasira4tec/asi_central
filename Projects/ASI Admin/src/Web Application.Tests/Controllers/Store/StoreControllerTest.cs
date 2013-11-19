@@ -19,65 +19,57 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
         {
             // arrange            
             OrdersController controller = new OrdersController();
-            IList<LegacyOrderDetail> orderDetails = new List<LegacyOrderDetail>();
+            IList<StoreOrderDetail> orderDetails = new List<StoreOrderDetail>();
 
-            Guid userid = Guid.NewGuid();
-
-            ASPNetMembership membership = new ASPNetMembership()
+            StoreIndividual billingIndividual = new StoreIndividual()
             {
-                ApplicationId = new Guid("71792474-3BB3-4108-9C88-E26179DB443A"),
-                UserId = userid,
-                CreateDate = DateTime.Now.AddDays(-6),
+                FirstName = "Billing Name",
+                LastName = "Billing Last",
             };
 
-            LegacyOrder order = new LegacyOrder()
-            {
-                Id = 0,
-                BillFirstName = "Billing Name",
-                BillLastName = "Billing Last",
-                Status = true,
-                ProcessStatus = OrderStatus.Pending,
-                DateCreated = DateTime.Now.AddDays(-3),
-                UserId = userid,
-                TransId = Guid.NewGuid(),
-                Membership = membership
-            };
-
-            LegacyOrderProduct orderProduct = new LegacyOrderProduct()
-            {
-                Id = 102,
-                Description = "Supplier Membership",
-                Summary = "Supplier"
-            };
-
-            LegacyOrderDetail orderDetail = new LegacyOrderDetail()
-            {
-                Added = DateTime.Now.AddDays(-3),
-                Order = order,
-                OrderId = order.Id,
-                Product = orderProduct,
-                ProductId = orderProduct.Id,
-                Quantity = 1,
-                Subtotal = 500,
-            };
-
-            LegacyOrderCreditCard orderCreditCard = new LegacyOrderCreditCard()
+            StoreCreditCard orderCreditCard = new StoreCreditCard()
             {
                 ExpMonth = "May",
                 ExpYear = "2015",
                 ExternalReference = new Guid().ToString(),
-                Name = "First Last",
-                Number = "5442254242555033",
-                Order = order,
-                TotalAmount = orderDetail.Subtotal,
-                Type = "Mastercard"
+                CardNumber = "5442254242555033",
+                CardType = "Mastercard"
             };
 
+            ContextProduct orderProduct = new ContextProduct()
+            {
+                Id = 102,
+                Name = "Supplier Membership",
+                IsSubscription = true,
+            };
+
+            StoreOrder order = new StoreOrder()
+            {
+                Id = 0,
+                IsCompleted = true,
+                ProcessStatus = OrderStatus.Pending,
+                CreateDate = DateTime.Now.AddDays(-3),
+                CreditCard = orderCreditCard,
+            };
+
+            StoreOrderDetail orderDetail = new StoreOrderDetail()
+            {
+                CreateDate = DateTime.Now.AddDays(-3),
+                Order = order,
+                Product = orderProduct,
+                Quantity = 1,
+                Cost = 500,
+            };
+
+            order.OrderDetails.Add(orderDetail);
             orderDetails.Add(orderDetail);
 
             Mock<IStoreService> mockObjectService = new Mock<IStoreService>();
-            mockObjectService.Setup(objectService => objectService.GetAll<LegacyOrderDetail>("Order;Order.Membership;Order.CreditCard", true)).Returns(orderDetails.AsQueryable());
+            mockObjectService.Setup(objectService => objectService.GetAll<StoreOrderDetail>(true)).Returns(orderDetails.AsQueryable());
             controller.StoreService = mockObjectService.Object;
+            Mock<IEncryptionService> mockEncryptionService = new Mock<IEncryptionService>();
+            mockEncryptionService.Setup(encryptionSrvc => encryptionSrvc.LegacyDecrypt("mk8$3njkl", orderCreditCard.CardNumber)).Returns(orderCreditCard.CardNumber);
+            controller.EncryptionService = mockEncryptionService.Object;
 
             // act - getting results from the last 6 days
             ViewResult result = (ViewResult)controller.List(DateTime.Now.AddDays(-6), DateTime.Now, "", null, "", "", "");

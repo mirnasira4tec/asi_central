@@ -357,4 +357,127 @@
   <data name="FieldIMustBeNumber" xml:space="preserve">
     <value>Field must be a number</value>
   </data>
+  <data name="StoreTitleMagazinesApplication" xml:space="preserve">
+    <value>Magazines - {0}</value>
+  </data>
+  <data name="Area" xml:space="preserve">
+    <value>Area</value>
+  </data>
+  <data name="Artwork" xml:space="preserve">
+    <value>Artwork</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="Cover" xml:space="preserve">
+    <value>Cover</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="ImprintInstruction" xml:space="preserve">
+    <value>Imprint Instruction</value>
+  </data>
+  <data name="IsArtworkToProof" xml:space="preserve">
+    <value>Artwork to Proof</value>
+  </data>
+  <data name="Line1" xml:space="preserve">
+    <value>Line 1</value>
+  </data>
+  <data name="Line2" xml:space="preserve">
+    <value>Line 2</value>
+  </data>
+  <data name="Line3" xml:space="preserve">
+    <value>Line 3</value>
+  </data>
+  <data name="Line4" xml:space="preserve">
+    <value>Line 4</value>
+  </data>
+  <data name="Line5" xml:space="preserve">
+    <value>Line 5</value>
+  </data>
+  <data name="Line6" xml:space="preserve">
+    <value>Line 6</value>
+  </data>
+  <data name="LogoPath" xml:space="preserve">
+    <value>Logo</value>
+  </data>
+  <data name="Supplement" xml:space="preserve">
+    <value>Supplement</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="ArtworkOptionforUPLOAD" xml:space="preserve">
+    <value>I would like to UPLOAD Camera Ready Artwork</value>
+  </data>
+  <data name="ArtworkOptionforEMAIL" xml:space="preserve">
+    <value>I would like to EMAIL Camera Ready Artwork to &lt;a href="mailto:catalogart@asicentral.com"&gt;catalogart@asicentral.com&lt;/a&gt;</value>
+  </data>
+  <data name="ShippingMethod" xml:space="preserve">
+    <value>Shipping Method</value>
+  </data>
+  <data name="UploadedImage" xml:space="preserve">
+    <value>Uploaded Image</value>
+  </data>
+  <data name="StoreTitleCatalogsApplication" xml:space="preserve">
+    <value>Catalogs</value>
+  </data>
+  <data name="CurrentMembershipPackage" xml:space="preserve">
+    <value>Current membership package</value>
+  </data>
+  <data name="NumberOfItems" xml:space="preserve">
+    <value>Item Numbers</value>
+  </data>
+  <data name="AdSelectDate" xml:space="preserve">
+    <value>Select Date</value>
+  </data>
+  <data name="AdType" xml:space="preserve">
+    <value>Ad Type's</value>
+  </data>
+  <data name="NumberOfProducts" xml:space="preserve">
+    <value>Number of Products</value>
+  </data>
+  <data name="CategoryName" xml:space="preserve">
+    <value>Category Name</value>
+  </data>
+  <data name="CPMOption" xml:space="preserve">
+    <value>CPM Option</value>
+  </data>
+  <data name="Impressions" xml:space="preserve">
+    <value>Impressions</value>
+  </data>
+  <data name="PaymentAmount" xml:space="preserve">
+    <value>Fixed Cost</value>
+  </data>
+  <data name="PaymentOption" xml:space="preserve">
+    <value>Payment Option</value>
+  </data>
+  <data name="FieldCost" xml:space="preserve">
+    <value>Invalid cost</value>
+  </data>
+  <data name="FieldImpressions" xml:space="preserve">
+    <value>Invalid number of impressions</value>
+  </data>
+  <data name="LargeImagePath" xml:space="preserve">
+    <value>LargeImagePath</value>
+  </data>
+  <data name="SmallImagePath" xml:space="preserve">
+    <value>SmallImagePath</value>
+  </data>
+  <data name="TextUnderImage" xml:space="preserve">
+    <value>TextUnderImage</value>
+  </data>
+  <data name="StoreTitleDecoratorApplication" xml:space="preserve">
+    <value>Decorator Application</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="Logos" xml:space="preserve">
+    <value>Logo's</value>
+  </data>
+  <data name="UploadedVideo" xml:space="preserve">
+    <value>Uploaded Video</value>
+  </data>
 </root>

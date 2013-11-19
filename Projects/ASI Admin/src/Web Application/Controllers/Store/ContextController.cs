@@ -37,10 +37,16 @@ namespace asi.asicentral.web.Controllers.Store
                 {
                     contextToUpdate.HeaderImage = context.HeaderImage;
                     contextToUpdate.NotificationEmails = context.NotificationEmails;
+                    contextToUpdate.Active = context.Active;
                 }
             }
             StoreObjectService.SaveChanges();
             return new RedirectResult("/Store/Context/List");
+        }
+
+        public ActionResult References()
+        {
+            return View("../Store/Context/References");
         }
 
         public ActionResult ProductComparison(int id)

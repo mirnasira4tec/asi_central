@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.model.store
 {
-    public class StoreDetailSupplierMembership
+    public class StoreDetailSupplierMembership : StoreDetailApplication
     {
+        //In the below list of product id's 1 to 4 are supplier products and 9 to 24 are SGR products
+        //Among them 9 to 16 are Chinese SGR products
+        //17 to 24 are Chinese English products
+        //56 to 60 are Connect products
+        public static int[] Identifiers = new int[] { 1, 2, 3, 4, 9, 10, 11, 12 ,13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 56, 57, 58, 59, 60};
+
         public StoreDetailSupplierMembership()
         {
             if (this.GetType() == typeof(StoreDetailSupplierMembership))
@@ -16,12 +22,6 @@ namespace asi.asicentral.model.store
                 DecoratingTypes = new List<LookSupplierDecoratingType>();
             }
         }
-
-        public int OrderDetailId { get; set; }
-        public string LegacyApplicationId { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "ApplicationStatus")]
-        public Nullable<int> AppStatusId { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "LineNames")]
         public string LineNames { get; set; }
@@ -142,10 +142,6 @@ namespace asi.asicentral.model.store
         [Display(ResourceType = typeof(Resource), Name = "BusinessHours")]
         public string BusinessHours { get; set; }
 
-        public DateTime CreateDate { get; set; }
-        public DateTime UpdateDate { get; set; }
-        public string UpdateSource { get; set; }
-
         public virtual IList<LookSupplierDecoratingType> DecoratingTypes { get; set; }
 
         public override string ToString()
@@ -168,6 +164,51 @@ namespace asi.asicentral.model.store
             hash = hash * 31 + "StoreDetailSupplierMembership".GetHashCode();
             hash = hash * 31 + OrderDetailId.GetHashCode();
             return hash;
+        }
+
+        public virtual void CopyTo(StoreDetailSupplierMembership supplier)
+        {
+            base.CopyTo(supplier);
+            supplier.AffiliateASINumber = AffiliateASINumber;
+            supplier.AffiliateCompanyName = AffiliateCompanyName;
+            supplier.AgreeASITermsAndConditions = AgreeASITermsAndConditions;
+            supplier.AgreeUPSTermsAndConditions = AgreeUPSTermsAndConditions;
+            supplier.AuthorizeUPSNewAccount = AuthorizeUPSNewAccount;
+            supplier.BusinessHours = BusinessHours;
+            supplier.DecoratingTypes = DecoratingTypes;
+            supplier.FedTaxId = FedTaxId;
+            supplier.HasAmericanProducts = HasAmericanProducts;
+            supplier.IsImporter = IsImporter;
+            supplier.IsImprinterVsDecorator = IsImprinterVsDecorator;
+            supplier.IsManufacturer = IsManufacturer;
+            supplier.IsMinorityOwned = IsMinorityOwned;
+            supplier.IsRetailer = IsRetailer;
+            supplier.IsRushServiceAvailable = IsRushServiceAvailable;
+            supplier.IsUnionMade = IsUnionMade;
+            supplier.IsUPSAvailable = IsUPSAvailable;
+            supplier.IsWholesaler = IsWholesaler;
+            supplier.LineNames = LineNames;
+            supplier.NumberOfEmployee = NumberOfEmployee;
+            supplier.NumberOfSalesEmployee = NumberOfSalesEmployee;
+            supplier.OfficeHourEnd = OfficeHourEnd;
+            supplier.OfficeHourStart = OfficeHourStart;
+            supplier.OtherDec = OtherDec;
+            supplier.ProductionTime = ProductionTime;
+            supplier.SalesVolume = SalesVolume;
+            supplier.SellThruAffiliate = SellThruAffiliate;
+            supplier.SellThruDirectMarketing = SellThruDirectMarketing;
+            supplier.SellThruDistributors = SellThruDistributors;
+            supplier.SellThruInternet = SellThruInternet;
+            supplier.SellThruRetail = SellThruRetail;
+            supplier.SellToEndUsers = SellToEndUsers;
+            supplier.UPSAddress = UPSAddress;
+            supplier.UPSCity = UPSCity;
+            supplier.UPSShippingNumber = UPSShippingNumber;
+            supplier.UPSState = UPSState;
+            supplier.UPSZip = UPSZip;
+            supplier.WomanOwned = WomanOwned;
+            supplier.YearEnteredAdvertising = YearEnteredAdvertising;
+            supplier.YearEstablished = YearEstablished;
         }
     }
 }

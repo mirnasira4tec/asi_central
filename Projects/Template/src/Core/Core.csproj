@@ -96,6 +96,7 @@
     <Compile Include="services\EncryptionService.cs" />
     <Compile Include="util\FileSystemHelper.cs" />
     <Compile Include="util\HtmlHelper.cs" />
+    <Compile Include="util\IPHelper.cs" />
     <Compile Include="util\LogInterceptor.cs" />
     <Compile Include="util\MvcHelper.cs" />
   </ItemGroup>

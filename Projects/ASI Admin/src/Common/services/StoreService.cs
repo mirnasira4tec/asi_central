@@ -21,46 +21,264 @@ namespace asi.asicentral.services
             return base.GetAll<T>(readOnly);
         }
 
-        public virtual LegacyDistributorMembershipApplication GetDistributorApplication(model.store.LegacyOrderDetail orderDetail)
+        public virtual StoreDetailDistributorMembership GetDistributorApplication(model.store.StoreOrderDetail orderDetail)
         {
-            LegacyDistributorMembershipApplication application = null;
-            //103 hardcoded value coming from the legacy application representing a distributor membership application
-            if (orderDetail.Order != null && orderDetail.Order.UserId != null && orderDetail.ProductId == LegacyOrderProduct.DISTRIBUTOR_APPLICATION)
+            StoreDetailDistributorMembership application = null;
+            if (orderDetail.Product != null && StoreDetailDistributorMembership.Identifiers.Contains(orderDetail.Product.Id))
             {
-                LegacyOrder order = orderDetail.Order;
-                IRepository<LegacyDistributorMembershipApplication> distributorRepository = GetRepository<LegacyDistributorMembershipApplication>();
-                application = distributorRepository.GetAll().Where(app => app.UserId == order.UserId).SingleOrDefault();
+                application = GetAll<StoreDetailDistributorMembership>().Where(app => app.OrderDetailId == orderDetail.Id).SingleOrDefault();
             }
             return application;
         }
 
-        public virtual model.store.LegacySupplierMembershipApplication GetSupplierApplication(model.store.LegacyOrderDetail orderDetail)
+        public virtual model.store.StoreDetailSupplierMembership GetSupplierApplication(model.store.StoreOrderDetail orderDetail)
         {
-            LegacySupplierMembershipApplication application = null;
-            //102 hardcoded value coming from the legacy application representing a supplier membership application
-            if (orderDetail.Order != null && orderDetail.Order.UserId != null && orderDetail.ProductId == LegacyOrderProduct.SUPPLIER_APPLICATION)
+            StoreDetailSupplierMembership application = null;
+            if (orderDetail.Product != null && StoreDetailSupplierMembership.Identifiers.Contains(orderDetail.Product.Id))
             {
-                LegacyOrder order = orderDetail.Order;
-                IRepository<LegacySupplierMembershipApplication> supplierRepository = GetRepository<LegacySupplierMembershipApplication>();
-                application = supplierRepository.GetAll().Where(app => app.UserId == order.UserId).SingleOrDefault();
+                application = GetAll<StoreDetailSupplierMembership>().Where(app => app.OrderDetailId == orderDetail.Id).SingleOrDefault();
             }
             return application;
         }
 
-        public LegacyOrderDetailApplication GetApplication(LegacyOrderDetail orderDetail)
+        public virtual model.store.StoreDetailDecoratorMembership GetDecoratorApplication(model.store.StoreOrderDetail orderDetail)
         {
-            LegacyOrderDetailApplication application = null;
-            if (orderDetail.Order != null && orderDetail.Order.UserId != null)
+            StoreDetailDecoratorMembership application = null;
+            if (orderDetail.Product != null && StoreDetailDecoratorMembership.Identifiers.Contains(orderDetail.Product.Id))
             {
-                switch (orderDetail.ProductId)
+                application = GetAll<StoreDetailDecoratorMembership>().Where(app => app.OrderDetailId == orderDetail.Id).SingleOrDefault();
+            }
+            return application;
+        }
+
+
+        /// <summary>
+        /// Retrieves the application associated with the order detail
+        /// </summary>
+        /// <param name="orderDetail"></param>
+        /// <returns>The application if applicable, null otherwise</returns>
+        public StoreDetailApplication GetApplication(StoreOrderDetail orderDetail)
+        {
+            StoreDetailApplication application = null;
+            if (orderDetail.Product != null)
+            {
+                if (StoreDetailSupplierMembership.Identifiers.Contains(orderDetail.Product.Id)) return GetSupplierApplication(orderDetail);
+                else if (StoreDetailDistributorMembership.Identifiers.Contains(orderDetail.Product.Id)) return GetDistributorApplication(orderDetail);
+                else if (StoreDetailDecoratorMembership.Identifiers.Contains(orderDetail.Product.Id)) return GetDecoratorApplication(orderDetail);
+            }
+            return application;
+        }
+
+        /// <summary>
+        /// Creates an application based on the order detail information
+        /// </summary>
+        /// <param name="orderDetail"></param>
+        /// <returns></returns>
+        public StoreDetailApplication CreateApplication(StoreOrderDetail orderDetail)
+        {
+            StoreDetailApplication application = null;
+            bool added = false;
+            //make sure order detail has been saved
+            //id is needed to create the reference in the application
+            if (orderDetail.Id == 0) SaveChanges();
+
+            if (orderDetail.Product != null)
+            {
+                if (StoreDetailSupplierMembership.Identifiers.Contains(orderDetail.Product.Id))
                 {
-                    case LegacyOrderProduct.DISTRIBUTOR_APPLICATION:
-                        return GetDistributorApplication(orderDetail);
-                    case LegacyOrderProduct.SUPPLIER_APPLICATION:
-                        return GetSupplierApplication(orderDetail);
+                    //make sure the application does not already exist
+                    StoreDetailSupplierMembership supplierApplication = GetAll<StoreDetailSupplierMembership>(true).Where(supplier => supplier.OrderDetailId == orderDetail.Id).FirstOrDefault();
+                    if (supplierApplication == null)
+                    {
+                        added = true;
+                        supplierApplication = new StoreDetailSupplierMembership();
+                        Add<StoreDetailSupplierMembership>(supplierApplication);
+                        application = supplierApplication;
+                    }
+                }
+                else if (StoreDetailDistributorMembership.Identifiers.Contains(orderDetail.Product.Id))
+                {
+                    //make sure the application does not already exist
+                    StoreDetailDistributorMembership distributorApplication = GetAll<StoreDetailDistributorMembership>(true).Where(distributor => distributor.OrderDetailId == orderDetail.Id).FirstOrDefault();
+                    if (distributorApplication == null)
+                    {
+                        added = true;
+                        distributorApplication = new StoreDetailDistributorMembership();
+                        Add<StoreDetailDistributorMembership>(distributorApplication);
+                        application = distributorApplication;
+                    }
+                }
+                else if (StoreDetailDecoratorMembership.Identifiers.Contains(orderDetail.Product.Id))
+                {
+                    //make sure the application does not already exist
+                    StoreDetailDecoratorMembership decoratorApplication = GetAll<StoreDetailDecoratorMembership>(true).Where(decorator => decorator.OrderDetailId == orderDetail.Id).FirstOrDefault();
+                    if (decoratorApplication == null)
+                    {
+                        added = true;
+                        decoratorApplication = new StoreDetailDecoratorMembership();
+                        Add<StoreDetailDecoratorMembership>(decoratorApplication);
+                        application = decoratorApplication;
+                    }
+                }
+                if (added)
+                {
+                    application.OrderDetailId = orderDetail.Id;
+                    application.CreateDate = DateTime.UtcNow;
+                    application.UpdateDate = DateTime.UtcNow;
+                    application.UpdateSource = "StoreService - CreateApplication";
                 }
             }
             return application;
         }
+
+        /// <summary>
+        /// UpdateTaxAndShipping
+        /// </summary>
+        /// <param name="order"></param>
+        public void UpdateTaxAndShipping(StoreOrder order)
+        {
+            StoreAddress address = null;
+            if (order != null && order.Company != null && order.Company.Addresses != null && order.Company.Addresses.Count > 0)
+            {
+                address = order.Company.GetCompanyShippingAddress();
+            }
+
+            if (address != null && order != null && order.OrderDetails != null && order.OrderDetails.Count > 0)
+            {
+                //finding IsSubscription is set for any OrderDetail Product
+                bool shouldBeAnnualized = false;
+                order.Total = 0m;
+                order.AnnualizedTotal = 0m;
+                foreach (StoreOrderDetail orderDetail in order.OrderDetails)
+                {
+                    if (orderDetail.Product != null && orderDetail.Product.IsSubscription && orderDetail.Product.SubscriptionFrequency == "M")
+                        shouldBeAnnualized = true;
+
+                    //look up the address information
+                    //set the default values
+                    decimal tax = 0m;
+                    orderDetail.ShippingCost = 0m;
+
+                    //Retrieve Shipping cost and HasTax values to calculate tax 
+                    //calculate the taxes
+                    if (orderDetail.Product != null)
+                    {
+                        if (orderDetail.Product.HasTax)
+                        {
+                            //tax calculated based on full amount except shipping
+                            tax = CalculateTaxes(address, (orderDetail.Cost * orderDetail.Quantity) + orderDetail.ApplicationCost);
+                        }
+
+                        if (string.IsNullOrEmpty(orderDetail.ShippingMethod)) orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity);
+                        else
+                        {
+                            bool isGiftSupplement = false;
+                            if (orderDetail.Product.Id == 39)
+                            {
+                                StoreDetailCatalog catalogDetails = this.GetAll<StoreDetailCatalog>(false).Where(detail => detail.OrderDetailId == orderDetail.Id).SingleOrDefault();
+                                if (catalogDetails != null && catalogDetails.SupplementId == 24)
+                                    isGiftSupplement = true;
+                            }
+
+                            if(!isGiftSupplement) orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity, orderDetail.ShippingMethod);
+                            else orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity, orderDetail.ShippingMethod, true, 0.06m);
+                        }
+                    }
+
+                    orderDetail.TaxCost = tax;
+                    //this is the cost of what to pay now
+                    order.Total += ((orderDetail.Cost + orderDetail.TaxCost) * orderDetail.Quantity) + orderDetail.ShippingCost + orderDetail.ApplicationCost;
+                    if (shouldBeAnnualized)
+                    {
+                        if (orderDetail.Product.HasTax)
+                            tax = CalculateTaxes(address, orderDetail.Cost) * 12 + CalculateTaxes(address, orderDetail.ApplicationCost);
+                        else
+                            tax = 0;
+                        //this would be the total cost over a year for a subscription
+                        order.AnnualizedTotal += (orderDetail.Cost * orderDetail.Quantity * 12) + tax + (orderDetail.ShippingCost * 12) + orderDetail.ApplicationCost;
+                    }
+                    else
+                    {
+                        order.AnnualizedTotal += (orderDetail.Cost * orderDetail.Quantity) + orderDetail.TaxCost + orderDetail.ShippingCost + orderDetail.ApplicationCost;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Calculates the taxes in case shipping to the USA
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public decimal CalculateTaxes(StoreAddress address, decimal? amount)
+        {
+            decimal tax = 0m;
+            if (address != null && address.Country == "USA" && amount != null && amount.Value > 0)
+            {
+                decimal taxRate = 0m;
+                //look for a state record
+                TaxRate taxRateRecord = this.GetAll<TaxRate>().Where(taxRecord => taxRecord.State == address.State && taxRecord.Zip == null).SingleOrDefault();
+                if (taxRateRecord != null)
+                {
+                    taxRate = taxRateRecord.Rate;
+                }
+                else
+                {
+                    int zipCode = 0;
+                    int.TryParse(address.Zip, out zipCode);
+                    if (zipCode > 0)
+                    {
+                        //look for a state/zip record
+                        taxRateRecord = this.GetAll<TaxRate>().Where(taxRecord => taxRecord.State == address.State && taxRecord.Zip == zipCode).SingleOrDefault();
+                        if (taxRateRecord != null) taxRate = taxRateRecord.Rate;
+                    }
+                }
+                if (taxRate > 0) tax = (amount.Value * taxRate) / 100m;
+            }
+            tax = Math.Round(tax, 2);
+            return tax;
+        }
+
+        /// <summary>
+        /// Provide the Product Shipping cost
+        /// </summary>
+        /// <param name="product"></param>
+        /// <param name="quantity"></param>
+        /// <returns></returns>
+        private decimal GetShippingCost(ContextProduct product, string country, int quantity = 1, string shippingMethod = "UPS2Day", bool isGiftSupplement = false, decimal? weight = null)
+        {
+            decimal cost = 0m;
+            if (product == null || country == null) throw new Exception("Invalid call to the GetShippingCost method");
+            if (product.HasShipping)
+            {
+                if (product.Weight != null)
+                {
+                    if (!isGiftSupplement) weight = product.Weight;
+                    else if (weight != null) weight += product.Weight;
+                }
+
+                if (weight != null && weight.HasValue && !string.IsNullOrEmpty(product.Origin))
+                {
+                    if (shippingMethod == null) throw new Exception("You need to pass a shipping method for this product");
+                    LookProductShippingRate productShippingrate = this.GetAll<LookProductShippingRate>()
+                        .Where(rate => rate.Country == country && rate.Origin == product.Origin && rate.ShippingMethod == shippingMethod)
+                        .FirstOrDefault();
+                    if (productShippingrate == null) throw new Exception("We could not find a valid option for the GetShippingCost");
+                    cost = productShippingrate.BaseAmount + (quantity * weight.Value * productShippingrate.AmountOrPercent);
+                }
+                else if (country == "USA")
+                {
+                    cost = product.ShippingCostUS * quantity;
+                }
+                else
+                {
+                    cost = product.ShippingCostOther * quantity;
+                }
+            }
+            return cost;
+        }
+
+        
     }
 }

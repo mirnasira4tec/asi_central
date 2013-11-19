@@ -24,63 +24,69 @@ namespace asi.asicentral.services
             _objectService = objectService;
         }
 
-        public virtual void Process(model.store.LegacyOrder order, model.store.LegacyOrderDetailApplication application)
+        public virtual Guid Process(StoreOrder order, StoreDetailApplication application)
         {
-            if (order == null || !order.UserId.HasValue || order.CreditCard == null || string.IsNullOrEmpty(order.CreditCard.ExternalReference)) throw new InvalidOperationException("You must pass a valid Order for this method");
-            if (application == null) throw new InvalidOperationException("You must pass a valid Application for this method");
+            if (order == null || order.BillingIndividual == null || order.CreditCard == null || string.IsNullOrEmpty(order.CreditCard.ExternalReference)) throw new InvalidOperationException("You must pass a valid Order for this method");
+            
             TIMSSCompany company = new TIMSSCompany()
             {
-                DAPP_UserId = order.UserId.Value,
-                Name = application.Company,
+                //@todo talk to gary about that column
+                DAPP_UserId = Guid.NewGuid(),
+                Name = order.Company.Name,
                 MasterCustomerId = order.ExternalReference,
-                BillAddress1 = application.BillingAddress1,
-                BillAddress2 = application.BillingAddress2,
-                BillCity = application.BillingCity,
-                BillPostalCode = application.BillingZip,
-                BillState = application.BillingState,
-                BillCountryCode = application.BillingCountry,
-                ShipAddress1 = application.ShippingStreet1,
-                ShipAddress2 = application.ShippingStreet2,
-                ShipCity = application.ShippingCity,
-                ShipPostalCode = application.ShippingZip,
-                ShipCountryCode = application.ShippingCountry,
-                ShipState = application.ShippingState,
-                Url = application.BillingWebUrl,
-                PhoneNumber = application.Phone,
+                BillAddress1 = order.BillingIndividual.Address.Street1,
+                BillAddress2 = order.BillingIndividual.Address.Street2,
+                BillCity = order.BillingIndividual.Address.City,
+                BillPostalCode = order.BillingIndividual.Address.Zip,
+                BillState = order.BillingIndividual.Address.State,
+                BillCountryCode = order.BillingIndividual.Address.Country,
+                Url = order.Company.WebURL,
+                PhoneNumber = order.BillingIndividual.Phone,
             };
+            //find the shipping information if we have it
+            if (order.Company != null) {
+                StoreCompanyAddress shippingCompanyAddress = order.Company.Addresses.Where(add => add.IsShipping).FirstOrDefault();
+                if (shippingCompanyAddress != null)
+                {
+                    company.ShipAddress1 = shippingCompanyAddress.Address.Street1;
+                    company.ShipAddress2 = shippingCompanyAddress.Address.Street2;
+                    company.ShipCity = shippingCompanyAddress.Address.City;
+                    company.ShipPostalCode = shippingCompanyAddress.Address.Zip;
+                    company.ShipCountryCode = shippingCompanyAddress.Address.Country;
+                    company.ShipState = shippingCompanyAddress.Address.State;
+                }
+            }
             _objectService.Add<TIMSSCompany>(company);
             TIMSSCreditInfo credit = new TIMSSCreditInfo()
             {
-                DAPP_UserId = order.UserId.Value,
-                Name = order.CreditCard.Name,
-                FirstName = GetNamePart(order.CreditCard.Name, true),
-                LastName = GetNamePart(order.CreditCard.Name, false),
+                DAPP_UserId = company.DAPP_UserId,
+                Name = order.CreditCard.CardHolderName,
+                FirstName = GetNamePart(order.CreditCard.CardHolderName, true),
+                LastName = GetNamePart(order.CreditCard.CardHolderName, false),
                 ExpirationMonth = order.CreditCard.ExpMonth,
                 ExpirationYear = order.CreditCard.ExpYear,
-                Type = order.CreditCard.Type,
+                Type = order.CreditCard.CardType,
                 Number = order.CreditCard.ExternalReference,
-                Street1 = application.BillingAddress1,
-                Street2 = application.BillingAddress2,
-                Zip = application.BillingZip,
-                City = application.BillingCountry,
-                State = application.BillingState,
-                Country = application.BillingCountry,
+                Street1 = order.BillingIndividual.Address.Street1,
+                Street2 = order.BillingIndividual.Address.Street2,
+                Zip = order.BillingIndividual.Address.Zip,
+                City = order.BillingIndividual.Address.City,
+                State = order.BillingIndividual.Address.State,
+                Country = order.BillingIndividual.Address.Country,
                 ExternalReference = new Guid(order.CreditCard.ExternalReference),
                 DateCreated = DateTime.Now,
             };
             _objectService.Add<TIMSSCreditInfo>(credit);
-            if (application is LegacySupplierMembershipApplication)
+            //add the contacts
+            if (order.Company != null && order.Company.Individuals.Count > 0)
             {
-                company.CustomerClass = "Supplier";
-                //add the contacts
-                LegacySupplierMembershipApplication supplierApplication = application as LegacySupplierMembershipApplication;
-                foreach (LegacySupplierMembershipApplicationContact contact in supplierApplication.Contacts)
+                foreach (StoreIndividual contact in order.Company.Individuals)
                 {
                     TIMSSContact timssContact = new TIMSSContact()
                     {
-                        DAPP_UserId = order.UserId.Value,
-                        FirstName = GetNamePart(contact.Name, true),
-                        LastName = GetNamePart(contact.Name, false),
+                        DAPP_UserId = company.DAPP_UserId,
+                        FirstName = contact.FirstName,
+                        LastName = contact.LastName,
                         PhoneNumber = contact.Phone,
                         Title = contact.Title,
                         Email = contact.Email,
@@ -88,15 +94,22 @@ namespace asi.asicentral.services
                     };
                     _objectService.Add<TIMSSContact>(timssContact);
                 }
-                //need to commit the data so far or the database will fail FK for Additional Information
+            }
+            if (application != null && application is StoreDetailSupplierMembership)
+            {
+                company.CustomerClass = "Supplier";
+
+                //Needs to be there for FK to resolves themselves
                 _objectService.SaveChanges();
+                //add the contacts
+                StoreDetailSupplierMembership supplierApplication = application as StoreDetailSupplierMembership;
                 TIMSSAdditionalInfo additionalInformation = new TIMSSAdditionalInfo()
                 {
-                    DAPP_UserId = order.UserId.Value,
+                    DAPP_UserId = company.DAPP_UserId,
                     YearEstablished = supplierApplication.YearEstablished.HasValue ? supplierApplication.YearEstablished.Value : (int?)null,
                     YearEstablishedAsAdSpecialist = supplierApplication.YearEnteredAdvertising.HasValue ? supplierApplication.YearEnteredAdvertising.Value : (int?)null,
                     WomanOwned = supplierApplication.WomanOwned.HasValue ? (supplierApplication.WomanOwned.Value ? "Y" : "N") : null,
-                    MinorityOwned = supplierApplication.LineMinorityOwned.HasValue ? (supplierApplication.LineMinorityOwned.Value ? "Y" : "N") : null,
+                    MinorityOwned = supplierApplication.IsMinorityOwned.HasValue ? (supplierApplication.IsMinorityOwned.Value ? "Y" : "N") : null,
                     NumberOfEmployees = supplierApplication.NumberOfEmployee,
                     HasAmericanProducts = supplierApplication.HasAmericanProducts.HasValue ? (supplierApplication.HasAmericanProducts.Value ? "Y" : "N") : null,
                     BusinessHours = supplierApplication.BusinessHours,
@@ -115,7 +128,7 @@ namespace asi.asicentral.services
                 //need to store the decorating type - probably a switch all properties are in this class
                 foreach (var decoratingAndImprinting in supplierApplication.DecoratingTypes)
                 {
-                    switch (decoratingAndImprinting.Name)
+                    switch (decoratingAndImprinting.Description)
                     {
                         case LegacySupplierDecoratingType.DECORATION_ETCHING:
                             additionalInformation.Etching = "Y";
@@ -168,31 +181,19 @@ namespace asi.asicentral.services
                 }
                 _objectService.Add<TIMSSAdditionalInfo>(additionalInformation);
             }
-            else if (application is LegacyDistributorMembershipApplication)
+            else if (application != null && application is StoreDetailDistributorMembership)
             {
                 company.CustomerClass = "Distributor";
-                //add the contacts
-                LegacyDistributorMembershipApplication distributorApplication = application as LegacyDistributorMembershipApplication;
-                foreach (LegacyDistributorMembershipApplicationContact contact in distributorApplication.Contacts)
-                {
-                    TIMSSContact timssContact = new TIMSSContact()
-                    {
-                        DAPP_UserId = order.UserId.Value,
-                        FirstName = GetNamePart(contact.Name, true),
-                        LastName = GetNamePart(contact.Name, false),
-                        PhoneNumber = contact.Phone,
-                        Title = contact.Title,
-                        Email = contact.Email,
-                        PrimaryFlag = contact.IsPrimary ? "Y" : "N",
-                    };
-                    _objectService.Add<TIMSSContact>(timssContact);
-                }
+
+                //Needs to be there for FK to resolves themselves
+                _objectService.SaveChanges();
+                StoreDetailDistributorMembership distributorApplication = application as StoreDetailDistributorMembership;
                 //need to commit the data so far or the database will fail FK for Additional Information
                 _objectService.SaveChanges();
                 //create the Additional Information records
                 TIMSSAdditionalInfo additionalInformation = new TIMSSAdditionalInfo()
                 {
-                    DAPP_UserId = order.UserId.Value,
+                    DAPP_UserId = company.DAPP_UserId,
                     NumberOfEmployees = distributorApplication.NumberOfEmployee.HasValue ? distributorApplication.NumberOfEmployee.Value.ToString() : null,
                     NumberOfSalesPeople = distributorApplication.NumberOfSalesEmployee,
                     YearEstablished = distributorApplication.EstablishedDate.HasValue ? distributorApplication.EstablishedDate.Value.Year : (int?)null,
@@ -201,9 +202,9 @@ namespace asi.asicentral.services
                 };
                 //try to convert different data types
                 try { additionalInformation.AnnualSalesVol = int.Parse(distributorApplication.AnnualSalesVolume); }
-                catch (Exception){}
+                catch (Exception) { }
                 try { additionalInformation.AnnualSalesVolumeASP = int.Parse(distributorApplication.AnnualSalesVolumeASP); }
-                catch (Exception){}
+                catch (Exception) { }
 
                 _objectService.Add<TIMSSAdditionalInfo>(additionalInformation);
                 //add the TIMSSAccountType description + subcode
@@ -211,7 +212,7 @@ namespace asi.asicentral.services
                 {
                     TIMSSAccountType timssAccountType = new TIMSSAccountType()
                     {
-                        DAPP_UserId = order.UserId.Value,
+                        DAPP_UserId = company.DAPP_UserId,
                         SubCode = accountType.SubCode,
                         Description = accountType.Description,
                     };
@@ -222,14 +223,21 @@ namespace asi.asicentral.services
                 {
                     TIMSSProductType timssProductLine = new TIMSSProductType()
                     {
-                        DAPP_UserId = order.UserId.Value,
+                        DAPP_UserId = company.DAPP_UserId,
                         SubCode = productLine.SubCode,
                         Description = productLine.Description,
                     };
                     _objectService.Add<TIMSSProductType>(timssProductLine);
                 }
             }
+            else
+            {
+                //This case is for Magazines or Catalogs
+                company.CustomerClass = order.OrderRequestType;
+            }
+            
             _objectService.SaveChanges();
+            return company.DAPP_UserId;
         }
 
         private string GetNamePart(string name, bool first)

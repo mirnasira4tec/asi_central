@@ -1,0 +1,283 @@
+﻿@using asi.asicentral.web
+@using asi.asicentral.model.store
+@using asi.asicentral.web.Controllers.Store
+@model asi.asicentral.web.model.store.CatalogsApplicationModel
+
+@{
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+
+<h1>@Resource.StoreTitleCatalogsApplication - @Html.Raw(Model.ProductName) (#@Model.OrderId)</h1>
+@if (Model.Price > 0.0m)
+{
+<p>@Html.Raw(Model.ProductName) product purchase fee is @Model.Price.ToString("C")</p>
+}
+@using (Html.BeginForm("EditCatalogs", "Application"))
+{        
+@Html.AntiForgeryToken()
+@Html.HiddenFor(m => m.ProductName)
+@Html.HiddenFor(m => m.ProductId)
+@Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
+<div>
+    @if (Model.Price > 0.0m)
+    {
+    <h3 class="order-status-header3">Order Status:</h3>
+    <div class="order-status">@Model.OrderStatus</div>
+    <div class="timms-info">
+        <div class="span3">
+            <label class="order-status-label" for="Timms_ID">Timms ID:</label>
+            <div class="order-status-input">
+                @Html.EditorFor(m => m.ExternalReference, new { @class = "span2" })
+                <span id="timmsErrorMessage" data-type="errormessage" class="field-validation-error"></span>
+            </div>
+        </div>
+        <div class="status-btns">
+            @if (Model.IsCompleted && Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
+            {
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
+            }
+            @if (Model.IsCompleted && Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
+            { 
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
+            }
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+
+            @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
+            { @Html.ActionLink("Close", "../Orders") }
+            else
+            { @Html.ActionLink("Cancel", "../Orders") }
+
+        </div>
+    </div>
+    }
+    else
+    {
+        <div class="timms-info span3 status-btns">
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+            @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
+            { @Html.ActionLink("Close", "../Orders") }
+            else
+            { @Html.ActionLink("Cancel", "../Orders") }
+
+        </div>
+    }
+</div>
+<nav>
+	<ul class="nav nav-tabs" id="tabs">
+        <li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
+		<li><a href="#tabsubscription" data-toggle="tab">Catalogs Information</a></li>
+	</ul>
+</nav>
+<div class="tab-content">
+    @Html.Partial("../Store/Application/Shared/CompanyInformation", Model)
+
+	<div id="tabsubscription" class="product-information tab-pane fade">
+		<fieldset class="company-info-form">
+            <legend>Catalogs Information</legend>	
+            @if (Model.StoreDetailCatalog != null)
+            {
+            <span class="row">@Html.Raw("<strong>Basic Information</strong>")</span>
+            <span class="label-row span11">
+				@Html.LabelFor(m => m.Quantity) 
+			</span>
+			<span class="label-row">
+				@Html.EditorFor(m => m.Quantity) @Html.ValidationMessageFor(m => m.Quantity)
+		    </span>
+            <span class="row">@Html.Raw("<strong>Options Information</strong>")</span>
+            <span class="label-row span11">
+                @Html.LabelFor(m => m.Cover)
+				@Html.LabelFor(m => m.Area) 
+                @Html.LabelFor(m => m.Color) 
+			</span>
+			<span class="label-row">
+                @Html.DropDownListFor(model => model.Cover, Model.CoverOptions)
+                @Html.DropDownListFor(model => model.Area, Model.AreaOptions) 
+                @Html.DropDownListFor(model => model.Color, Model.ColorOptions)
+			</span>
+             <span class="label-row span11">
+				@Html.LabelFor(m => m.Imprint) 
+				@if (Model.ProductId == 39)
+                {
+				@Html.LabelFor(m => m.Supplement)
+                }
+                <span id="artworkProofLabel">
+                @Html.LabelFor(m => m.IsArtworkToProof) 
+                </span>
+			</span>
+			<span class="label-row">
+				@Html.DropDownListFor(model => model.Imprint, Model.ImprintOptions)
+			    @if (Model.ProductId == 39)
+                {
+                @Html.DropDownListFor(model => model.Supplement, Model.SupplementOptions)
+                }
+                <span id="artworkProofCheckBox">
+                @Html.CheckBoxFor(m => m.IsArtworkToProof) 
+                </span>
+			</span>
+            <span class="label-row span11">
+                @Html.LabelFor(m => m.ShippingMethod)
+			</span>
+            <span class="label-row span11">
+                @Html.DropDownListFor(model => model.ShippingMethod, Model.ShippingOptions)
+			</span>
+
+            <div id="showArtworkOptions">
+                <span class="row">
+                <label>@Html.RadioButtonFor(model => model.ArtworkOption, "UPLOAD", new { id = "UPLOAD" }) @Html.Raw(asi.asicentral.web.Resource.ArtworkOptionforUPLOAD)</label>
+                <label>@Html.RadioButtonFor(model => model.ArtworkOption, "EMAIL", new { id = "EMAIL" }) @Html.Raw(asi.asicentral.web.Resource.ArtworkOptionforEMAIL)</label>
+                </span>
+	        </div>
+            if(!string.IsNullOrEmpty(Model.LogoPath))
+            {
+            <span class="row">@Html.Raw("<strong>Logo Information</strong>")</span>
+             <span class="label-row span11">
+                @Html.LabelFor(m => m.LogoPath) 
+			</span>
+			<span class="label-row">
+				<a href="/Media/Download?file=/Store/uploads/catalogs/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a>
+			</span>
+            }
+            <div id="frontCover">
+            <span class="row">@Html.Raw("<strong>New Copy - Standard Type</strong>")</span>
+                <span class="label-row span11">
+				    @Html.LabelFor(m => m.Line1) 
+				    @Html.LabelFor(m => m.Line2) 
+				    @Html.LabelFor(m => m.Line3)
+			    </span>
+			    <span class="label-row">
+				    @Html.EditorFor(m => m.Line1) @Html.ValidationMessageFor(m => m.Line1)
+				    @Html.EditorFor(m => m.Line2) @Html.ValidationMessageFor(m => m.Line2)
+				    @Html.EditorFor(m => m.Line3) @Html.ValidationMessageFor(m => m.Line3)
+			    </span>
+                <span class="label-row span11">
+				    @Html.LabelFor(m => m.Line4) 
+				    @Html.LabelFor(m => m.Line5) 
+				    @Html.LabelFor(m => m.Line6)
+			    </span>
+			    <span class="label-row">
+				    @Html.EditorFor(m => m.Line4) @Html.ValidationMessageFor(m => m.Line4)
+				    @Html.EditorFor(m => m.Line5) @Html.ValidationMessageFor(m => m.Line5)
+				    @Html.EditorFor(m => m.Line6) @Html.ValidationMessageFor(m => m.Line6)
+			    </span>
+            </div>
+            <div id="backCover">
+                <span class="row">@Html.Raw("<strong>Back Cover Imprint Area</strong>")</span>
+                <span class="label-row span11">
+				    @Html.LabelFor(m => m.BackLine1) 
+				    @Html.LabelFor(m => m.BackLine2) 
+				    @Html.LabelFor(m => m.BackLine3)
+			    </span>
+			    <span class="label-row">
+				    @Html.EditorFor(m => m.BackLine1) @Html.ValidationMessageFor(m => m.BackLine1)
+				    @Html.EditorFor(m => m.BackLine2) @Html.ValidationMessageFor(m => m.BackLine2)
+				    @Html.EditorFor(m => m.BackLine3) @Html.ValidationMessageFor(m => m.BackLine3)
+			    </span>
+                <span class="label-row span11">
+				    @Html.LabelFor(m => m.BackLine4) 
+			    </span>
+			    <span class="label-row">
+				    @Html.EditorFor(m => m.BackLine4) @Html.ValidationMessageFor(m => m.BackLine4)
+			    </span>
+            </div>
+            }
+		</fieldset>    
+	</div><!-- END #Catalogs-information -->	
+
+</div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/form")
+    <script src="/Scripts/asi.js"></script>
+    <script>
+        $('input.command').click(function (e) {
+            $('#ActionName').val(e.target.value);
+            if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
+                //make sure we have Timms value
+                if (!$('#ExternalReference').val()) {
+                    asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
+                    $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                    $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
+                    e.preventDefault();
+                }
+                else {
+                    var isnum = /^\d+$/.test($('#ExternalReference').val());
+                    if (!isnum) {
+                        asi.modal.confirm('Error', 'TIMMS ID must contain only numbers.', null, "#hide", "Close");
+                        $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                        $("#timmsErrorMessage").text("TIMMS ID must contain only numbers.");
+                        e.preventDefault();
+                    }
+                }
+            }
+        });
+        $('[rel*="isprimary"]').change(function () {
+            $('[rel*="isprimary"]').attr("checked", false);
+            this.checked = true;
+        });
+
+        $(document).ready(function () {
+
+            if ($('#OrderDetailId').val() != 0) {
+                ChangeUIOnOptionChanges();
+            }
+
+            $('#Imprint').change(function () {
+                ChangeUIOnOptionChanges();
+            });
+
+            $('#Area').change(function () {
+                ChangeUIOnOptionChanges();
+            });
+
+            $('input:radio[name=ArtworkOption]').change(function () {
+                ChangeUIOnOptionChanges();
+            });
+        });
+
+        function ChangeUIOnOptionChanges() {
+            var imprintVal = $('#Imprint').val();
+            var areaVal = $('#Area').val();
+
+            if (imprintVal == 21) {
+                $('#showArtworkOptions').show();
+            }
+            else {
+                $('#showArtworkOptions').hide();
+            }
+
+            if (imprintVal != 18) {
+                $('#artworkProofLabel').show();
+                $('#artworkProofCheckBox').show();
+            }
+            else {
+                $('#artworkProofLabel').hide();
+                $('#artworkProofCheckBox').hide();
+            }
+            ShowOrHideCovers();
+        }
+
+        function ShowOrHideCovers() {
+            var imprintVal = $('#Imprint').val();
+            var areaVal = $('#Area').val();
+            var artworkOption = $('input:radio[name=ArtworkOption]:checked').val();
+
+            if ((imprintVal == "20" || imprintVal == "21") && areaVal == "8") {
+                $('#frontCover').show();
+                $('#backCover').hide();
+            }
+            else if ((imprintVal == "20" || imprintVal == "21") && areaVal == "9") {
+                $('#frontCover').hide();
+                $('#backCover').show();
+            }
+            else if ((imprintVal == "20" || imprintVal == "21") && areaVal == "25") {
+                $('#frontCover').show();
+                $('#backCover').show();
+            }
+            else {
+                $('#frontCover').hide();
+                $('#backCover').hide();
+            }
+        }
+    </script>
+}

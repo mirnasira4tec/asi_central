@@ -1,0 +1,92 @@
+﻿@model asi.asicentral.web.model.store.order.ProductStatisticData
+
+@{
+    ViewBag.Title = "Statistics";
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+
+<h1>Store Product Statistics</h1>
+<form method="post">
+    <div class="row-fluid well">
+        <div class="span1">&nbsp;</div>
+        <div class="span3">
+            <label for="StartDate">Start Date:</label>
+            <div class="input-append">
+                <input class="input-medium" type="text" data-type="date" name="StartDate" value="@(Model.StartDate.HasValue ? Model.StartDate.Value.ToString("MM/dd/yyyy") : "")" /><span class="add-on"><i class="icon-remove" data-name="StartDate"></i></span></div>
+        </div>
+        <div class="span3">
+            <label for="StartDate">End Date:</label>
+            <div class="input-append">
+                <input class="input-medium" type="text" data-type="date" name="EndDate" value="@(Model.EndDate.HasValue ? Model.EndDate.Value.ToString("MM/dd/yyyy") : "")" /><span class="add-on"><i class="icon-remove" data-name="EndDate"></i></span></div>
+        </div>
+        <div class="span2">
+            <br />
+            <input class="btn btn-primary" type="submit" value="Refresh" /></div>
+    </div>
+
+    @if (Model.Message != null || Model.Message == "")
+    {   <div class="alert">@Model.Message</div>   }
+
+</form>
+@if (Model.Data != null && Model.Data.Count > 0)
+{
+    decimal total = 0;
+    decimal annualized = 0;
+    foreach (asi.asicentral.web.model.store.order.Group group in Model.Data)
+    {
+        <div class="row-fluid">
+            <div class="span5"><b>@Html.Raw(group.Name)</b></div>
+            <div class="span4"><a rel="download" data-product="@group.Name" href="#">Download data</a></div>
+            <div class="span3">&nbsp;</div>
+        </div>
+        foreach(asi.asicentral.web.model.store.order.GroupData data in group.Data) {
+            if (data.Name == "Total") {
+            <div class="row-fluid">
+                <div class="span1">&nbsp;</div>
+                <div class="span4"><b>@data.Name</b></div>
+                <div class="span1"><b>@data.Count</b></div>
+                <div class="span1"><b>@data.Amount.ToString("C")</b></div>
+                <div class="span1">&nbsp;</div>
+                <div class="span4"><b>@data.AnnualizedAmount.ToString("C")</b> <small>Annualized amount</small></div>
+            </div>
+                total += data.Amount;
+                annualized += data.AnnualizedAmount;
+            }
+            else {
+            <div class="row-fluid">
+                <div class="span1">&nbsp;</div>
+                <div class="span4">@data.Name</div>
+                <div class="span1">@data.Count</div>
+                <div class="span1">@(data.Amount > 0 ? data.Amount.ToString("C") : "")</div>
+                <div class="span5">&nbsp;</div>
+            </div>
+            }
+        }
+    }
+    <br />
+    <div class="row-fluid">
+        <div class="span3"><b>Total Processed</b></div>
+        <div class="span2"><a rel="download" data-product="" href="#">Download data</a></div>
+        <div class="span2"><b>@total.ToString("C")</b></div>
+        <div class="span1">&nbsp;</div>
+        <div class="span4"><b>@annualized.ToString("C")</b> <small>Annualized amount</small></div>
+    </div>
+}
+@section scripts {
+    @Scripts.Render("~/bundles/form")
+    <script>
+        $('input[data-type*="date"]').datepicker();
+        $('.icon-remove').click(function (e) {
+            $('input[name="' + $(e.target).data("name") + '"]').val("");
+        });
+
+        $('a[rel="download"]').click(function (e) {
+            var product = $(this).data("product");
+            var startdate = '@Model.StartDate';
+            var enddate = '@Model.EndDate';
+            var location = "@Url.Action("DownloadProductCSV", "Orders", null)/" + "?StartDate=@Model.StartDate&EndDate=@Model.EndDate";
+            if (product) location += "&Product=" + product;
+            document.location = location;
+        });
+    </script>
+}

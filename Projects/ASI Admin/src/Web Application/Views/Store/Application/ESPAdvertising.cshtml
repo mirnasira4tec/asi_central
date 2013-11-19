@@ -1,0 +1,273 @@
+﻿@using asi.asicentral.web
+@using asi.asicentral.model.store
+@using asi.asicentral.web.Controllers.Store
+@model asi.asicentral.web.model.store.ESPAdvertisingModel
+@{
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+@if(Model.ProductId == 52)
+{
+    @section Content {
+        @Styles.Render("~/Content/MultiSelectedDatePicker")
+}
+}
+<h1>@string.Format(Model.ProductName) (#@Model.OrderId)</h1>
+@if (Model.Price > 0.0m)
+{
+<p>@Model.ProductName product purchase fee is @Model.Price.ToString("C")</p>
+}
+@using (Html.BeginForm("EditESPAdvertising", "Application"))
+{        
+@Html.AntiForgeryToken()
+@Html.HiddenFor(m => m.ProductName)
+@Html.HiddenFor(m => m.ProductId)
+@Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
+<div>
+    @if (Model.Price > 0.0m)
+    {
+    <h3 class="order-status-header3">Order Status:</h3>
+    <div class="order-status">@Model.OrderStatus</div>
+    <div class="timms-info">
+        <div class="span3">
+            <label class="order-status-label" for="Timms_ID">Timms ID:</label>
+            <div class="order-status-input">
+                @Html.EditorFor(m => m.ExternalReference, new { @class = "span2" })
+                <span id="timmsErrorMessage" data-type="errormessage" class="field-validation-error"></span>
+            </div>
+        </div>
+        <div class="status-btns">
+            @if (Model.IsCompleted && Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
+            {
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
+            }
+            @if (Model.IsCompleted && Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
+            { 
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
+            }
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+
+            @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
+            { @Html.ActionLink("Close", "../Orders") }
+            else
+            { @Html.ActionLink("Cancel", "../Orders") }
+
+        </div>
+    </div>
+    }
+    else
+    {
+        <div class="timms-info span3 status-btns">
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+            @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
+            { @Html.ActionLink("Close", "../Orders") }
+            else
+            { @Html.ActionLink("Cancel", "../Orders") }
+
+        </div>
+    }
+</div>
+<nav>
+	<ul class="nav nav-tabs" id="tabs">
+        <li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
+		<li><a href="#tabsubscription" data-toggle="tab">@Model.ProductName Information</a></li>
+	</ul>
+</nav>
+<div class="tab-content">
+    @Html.Partial("../Store/Application/Shared/CompanyInformation", Model)
+
+	<div id="tabsubscription" class="product-information tab-pane fade">
+		<fieldset class="company-info-form">
+            <legend>@string.Format("{0} {1}", Html.Raw(Model.ProductName), "Information")</legend>	
+            @switch (Model.ProductId)
+            {
+                case 48:
+                    if(Model.ESPTowerAds != null && Model.ESPTowerAds.Count > 0)
+                    {
+                    <span class="label-row">
+				        @Html.Label(asi.asicentral.web.Resource.AdType) 
+                        @Html.Label(asi.asicentral.web.Resource.Categories) 
+                        @Html.Label(asi.asicentral.web.Resource.Logos) 
+			        </span>
+                        foreach(StoreDetailEspTowerAd ad in Model.ESPTowerAds )
+                        {
+			        <span class="label-row">
+				        @Html.Label(asi.asicentral.util.store.ESPAdvertisingHelper.GetBannerTileTowerOption(ad.OptionId))
+                        @if (!string.IsNullOrEmpty(ad.Categories)) { @Html.Label(ad.Categories) }
+                        else {@Html.Label("          ")}
+                        @if (!string.IsNullOrEmpty(ad.LogoPath)) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@ad.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
+			        </span>
+                        }
+                    }
+                    break;
+                case 49:
+                    <span class="label-row">
+                        @Html.LabelFor(m => m.NumberOfItems_First) 
+			        </span>
+			        <span class="label-row">
+				         @Html.EditorFor(m => m.NumberOfItems_First) @Html.ValidationMessageFor(m => m.NumberOfItems_First)
+			        </span>
+                    break;
+                case 50:
+                    <span class="row">@Html.Raw("<strong>Clearance Section:</strong>")</span>
+                    <span class="label-row">
+				        @Html.LabelFor(m => m.NumberOfItems_First) 
+                        @Html.LabelFor(m => m.Products_OptionId_First) 
+			        </span>
+			        <span class="label-row">
+				        @Html.EditorFor(m => m.NumberOfItems_First) @Html.ValidationMessageFor(m => m.NumberOfItems_First)
+                        @Html.DropDownListFor(model => model.Products_OptionId_First, asi.asicentral.util.store.ESPAdvertisingHelper.GetNumberOfProducts_Clearance(), new { @disabled = "disabled" })
+			        </span>
+                    <span class="row">@Html.Raw("<strong>New Section:</strong>")</span>
+                    <span class="label-row">
+				        @Html.LabelFor(m => m.NumberOfItems_Second) 
+                        @Html.LabelFor(m => m.Products_OptionId_Second) 
+			        </span>
+			        <span class="label-row">
+				        @Html.EditorFor(m => m.NumberOfItems_Second) @Html.ValidationMessageFor(m => m.NumberOfItems_Second)
+                        @Html.DropDownListFor(model => model.Products_OptionId_Second, asi.asicentral.util.store.ESPAdvertisingHelper.GetNumberOfProducts_New(), new { @disabled = "disabled" })
+			        </span>
+                    <span class="row">@Html.Raw("<strong>Rush Section:</strong>")</span>
+                    <span class="label-row">
+				         @Html.LabelFor(m => m.NumberOfItems_Third) 
+                        @Html.LabelFor(m => m.Products_OptionId_Third) 
+			        </span>
+			        <span class="label-row">
+				        @Html.EditorFor(m => m.NumberOfItems_Third) @Html.ValidationMessageFor(m => m.NumberOfItems_Third)
+                        @Html.DropDownListFor(model => model.Products_OptionId_Third, asi.asicentral.util.store.ESPAdvertisingHelper.GetNumberOfProducts_Rush(), new { @disabled = "disabled" })
+			        </span>
+                    break;
+                case 51:
+                    <span class="label-row">
+                        @if(Model.LogoPath != string.Empty) { @Html.LabelFor(m => m.LogoPath) }
+			        </span>
+			        <span class="label-row">
+                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
+			        </span>
+                    break;
+                case 52:
+                    <div class="label-row">
+                        @if(Model.LogoPath != string.Empty) { @Html.LabelFor(m => m.LogoPath) }
+                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
+			        </div>
+                    <br /> <br />
+                    <div class="label-row">
+                        @Html.HiddenFor(model => model.LoginScreen_Dates)
+                        <div>
+                            <div>
+                                <div><p><strong>Select Dates:</strong></p></div>
+                                <div id="dates" class="box"></div>
+                            </div>
+                            <div>
+                                <div><p><strong>You have selected below date(s):</strong></p></div>
+                                <div><textarea id="txtSelectedDates" rows="4" readonly="readonly"></textarea></div>
+                            </div>
+                        </div>
+			        </div>
+                    break;
+                case 53:
+                    if(Model.Videos != null && Model.Videos.Count > 0)
+                    {
+                        for (int count = 0; count < Model.Videos.Count; count++)
+                        {
+                    <span class="label-row">
+                        @Html.LabelFor(m => m.NumberOfItems_First) 
+                        @if(Model.LogoPath != string.Empty) { @Html.LabelFor(m => m.Video) }
+			        </span>
+			        <span class="label-row">
+                        @Html.TextBoxFor(m => m.Videos[count].ItemList, new { @readonly = "readonly" }) @Html.ValidationMessageFor(m => m.Videos[count].ItemList)
+                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.Videos[count].LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedVideo)</a> }
+			        </span>
+                        }
+                    }
+                    break;
+                case 54:
+                    <span class="label-row">
+				        @Html.LabelFor(m => m.Products_OptionId_First) 
+                        @if(Model.LogoPath != string.Empty) { @Html.LabelFor(m => m.LogoPath) }
+			        </span>
+			        <span class="label-row">
+				         @Html.DropDownListFor(model => model.Products_OptionId_First, asi.asicentral.util.store.ESPAdvertisingHelper.GetESPOnlineOptions())
+                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
+			        </span>
+                    break;
+            }
+		</fieldset>    
+	</div><!-- END #orderdetail-information -->	
+
+ </div> <!-- END #content -->
+}
+    
+@section Scripts {
+    @Scripts.Render("~/bundles/form")
+    @Scripts.Render("~/bundles/MultiSelectedDatePicker")
+    <script src="/Scripts/asi.js"></script>
+    <script>
+        $('.dateField').datepicker()
+        $('.date-clear').click(function () {
+            $("input[name='" + this.id + "']").val('');
+        });
+    
+        $('input.command').click(function (e) {
+            $('#ActionName').val(e.target.value);
+            if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
+                //make sure we have Timms value
+                if (!$('#ExternalReference').val()) {
+                    asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
+                    $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                    $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
+                    e.preventDefault();
+                }
+                else {
+                    var isnum = /^\d+$/.test($('#ExternalReference').val());
+                    if (!isnum) {
+                        asi.modal.confirm('Error', 'TIMMS ID must contain only numbers.', null, "#hide", "Close");
+                        $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                        $("#timmsErrorMessage").text("TIMMS ID must contain only numbers.");
+                        e.preventDefault();
+                    }
+                }
+            }
+        });
+        $('[rel*="isprimary"]').change(function () {
+            $('[rel*="isprimary"]').attr("checked", false);
+            this.checked = true;
+        });
+    </script>
+    @if(Model.ProductId == 52)
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#dates').multiDatesPicker({
+                dateFormat: "dd-mm-yy",
+                minDate: 0,
+                setDate: ""
+                   , onSelect: function (dateText, inst) {
+                       $("#LoginScreen_Dates").val("");
+                       var date_String = "";
+                       var dates = $('#dates').multiDatesPicker('getDates');
+                       if (dates.length > 0) {
+                           $.each(dates, function (index, value) {
+                               date_String += value + "\n";
+                           });
+                       }
+                       $("#txtSelectedDates").html(date_String);
+                       $("#LoginScreen_Dates").val(date_String);
+                    }
+            });
+            SetDates();
+            var dates = $('#dates').multiDatesPicker('getDates');
+         });
+
+            function SetDates() {
+            $("#txtSelectedDates").html($("#LoginScreen_Dates").val());
+            var dates = $("#LoginScreen_Dates").val().split("\n");
+            if (dates.length > 0) {
+                $.each(dates, function (index, value) {
+                    if (value != "")
+                        $('#dates').multiDatesPicker('addDates', value);
+                });
+            }
+        }
+        </script>
+    }
+}

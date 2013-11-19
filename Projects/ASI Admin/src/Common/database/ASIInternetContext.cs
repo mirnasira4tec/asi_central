@@ -20,14 +20,19 @@ namespace asi.asicentral.database
         }
 
         public DbSet<ASPNetMembership> ASPNetMemberships { get; set; }
+        public DbSet<ASPNetUser> ASPNetUsers { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Company> Companies { get; set; }
+        public DbSet<CENTUserProfilesPROF> UserProfileDetails { get; set; }
         public DbSet<LegacyDistributorAccountType> DistributorAccountTypes { get; set; }
         public DbSet<LegacyDistributorBusinessRevenue> DistributorBusinessRevenues { get; set; }
         public DbSet<LegacyDistributorMembershipApplication> DistributorMembershipApplications { get; set; }
         public DbSet<LegacyDistributorMembershipApplicationContact> DistributorMembershipApplicationContacts { get; set; }
         public DbSet<LegacyDistributorProductLine> DistributorProductLines { get; set; }
         public DbSet<LegacyOrder> Orders { get; set; }
+        public DbSet<LegacyOrderCatalog> OrderCatalogs { get; set; }
+        public DbSet<LegacyOrderCatalogOption> OrderCatalogOptions { get; set; }
+        public DbSet<LegacyOrderContact> OrderContacts { get; set; }
         public DbSet<LegacyOrderCreditCard> OrderCreditCards { get; set; }
         public DbSet<LegacyOrderDetail> OrderDetails { get; set; }
         public DbSet<LegacyMagazineAddress> LegacyMagazineAddresses { get; set; }
@@ -49,6 +54,7 @@ namespace asi.asicentral.database
             base.OnModelCreating(modelBuilder);
             modelBuilder.Configurations
                .Add(new ASPNetMembershipMap())
+               .Add(new ASPNetUserMap())
                .Add(new CategoryMap())
                .Add(new CompanyMap())
                .Add(new DistributorAccountTypeMap())
@@ -56,8 +62,12 @@ namespace asi.asicentral.database
                .Add(new DistributorMembershipApplicationMap())
                .Add(new DistributorMembershipApplicationContactMap())
                .Add(new DistributorProductLineMap())
+               .Add(new CENTUserProfilesPROFMap())
                .Add(new LegacyOrderAddressMap())
                .Add(new LegacyOrderDistributorAddressMap())
+               .Add(new LegacyOrderCatalogMap())
+               .Add(new LegacyOrderCatalogOptionMap())
+               .Add(new LegacyOrderContactMap())
                .Add(new OrderCreditCardMap())
                .Add(new OrderDetailMap())
                .Add(new OrderMap())

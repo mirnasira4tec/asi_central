@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,13 +18,26 @@ namespace asi.asicentral.model.store
         }
 
         public int Id { get; set; }
+        public string Type { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public decimal Cost { get; set; }
         public decimal ApplicationCost { get; set; }
         public decimal ShippingCostUS { get; set; }
         public decimal ShippingCostOther { get; set; }
         public bool HasTax { get; set; }
+        public bool HasShipping { get; set; }
         public bool IsSubscription { get; set; }
+        public string NotificationEmails { get; set; }
+        public string SubscriptionFrequency { get; set; }
+        public bool IsASINumberFlag { get; set; }
+        public bool IsAvailable { get; set; }
+        public string ChatSettings { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime? NextAvailableDate { get; set; }
+        public decimal? Weight { get; set; }
+        public string Origin { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }

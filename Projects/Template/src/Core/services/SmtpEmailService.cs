@@ -68,9 +68,14 @@ namespace asi.asicentral.services
                     throw new Exception("The SmtpEmailService was not initialized properly");
                 }
             }
+            
             SmtpClient SmtpServer = new SmtpClient(smtpAddress);
             SmtpServer.Port = port;
             SmtpServer.EnableSsl = ssl;
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["smtpUserName"]) && !string.IsNullOrEmpty(ConfigurationManager.AppSettings["smtpPassword"]))
+            {
+                SmtpServer.Credentials = new System.Net.NetworkCredential(ConfigurationManager.AppSettings["smtpUserName"], ConfigurationManager.AppSettings["smtpPassword"]);
+            }
             if (mail.From == null) mail.From = new MailAddress(from);
             SmtpServer.Send(mail);
         }

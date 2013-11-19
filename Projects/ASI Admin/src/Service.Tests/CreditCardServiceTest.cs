@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.services;
 using asi.asicentral.interfaces;
 using asi.asicentral.model;
+using System.Configuration;
 
 namespace asi.asicentral.Tests
 {
@@ -25,6 +26,19 @@ namespace asi.asicentral.Tests
             ICreditCardService cardService = new CreditCardService();
             string cardIdentifier = cardService.Store(card);
             cardService.Delete(cardIdentifier);
+        }
+
+        [TestMethod]
+        public void ValidateCreditCard()
+        {
+            string webAPIUrl = ConfigurationManager.AppSettings["ConnectUrl"];
+            if (!string.IsNullOrEmpty(webAPIUrl)) {
+                CreditCard card = GetVisaCC();
+                ICreditCardService cardService = new CreditCardService();
+                Assert.IsTrue(cardService.Validate(card));
+                card.Number = "4123456789012345";
+                Assert.IsFalse(cardService.Validate(card));
+            }
         }
 
         private CreditCard GetVisaCC()

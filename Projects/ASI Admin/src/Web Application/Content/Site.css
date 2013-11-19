@@ -356,7 +356,7 @@ header#site-header {
 }
 
 /*--------------------body--------------*/
-#tabbasic, #tabproduct, #tabaccount{
+#tabbasic, #tabproduct, #tabaccount, #tabsubscription{
 	border-bottom: 1px solid #a8a8a8;
 	border-left: 1px solid #a8a8a8;
 	border-right: 1px solid #a8a8a8;
@@ -364,22 +364,22 @@ header#site-header {
 	background-color:#ececec;
 }
 /*-----------------basic information-------------*/
-.lable-row {
+.label-row {
 	width:98%;
 	float:left;
 	padding-left:2%;
 }
-	.lable-row label{
+	.label-row label{
 		width:30%;
 		display:inline;
 		float:left;
 		padding-left:2%
 	}
-	.lable-row  input{
+	.label-row  input{
 		width:29%;
 		margin-left:1%;
 	}
-	.lable-row  .long{
+	.label-row  .long{
 		width:94%;
 	}
 /*-------------------product information--------------*/
@@ -418,7 +418,7 @@ header#site-header {
 
 
 @media (max-width: 600px) {
-    .lable-row input {
+    .label-row input {
         width: 27%;
     }
 
@@ -426,4 +426,18 @@ header#site-header {
         padding-left: 5px;
         padding-right: 5px;
     }
+}
+
+.FloatLeft{
+	float:left;
+    width:50%;
+}
+
+.FloatRight{
+	float:left;
+    width:50%;
+}
+
+.ClearBoth {
+    clear:both;
 }

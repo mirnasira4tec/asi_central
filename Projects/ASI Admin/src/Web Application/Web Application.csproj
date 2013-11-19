@@ -200,6 +200,7 @@
     <Compile Include="Controllers\Store\ApplicationController.cs" />
     <Compile Include="Controllers\Store\ContextController.cs" />
     <Compile Include="Controllers\Store\OrdersController.cs" />
+    <Compile Include="Controllers\Store\ProductsController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyResolver.cs" />
@@ -213,10 +214,20 @@
     <Compile Include="Models\sgr\ViewCategory.cs" />
     <Compile Include="Models\sgr\ViewCompany.cs" />
     <Compile Include="Models\sgr\ViewProduct.cs" />
+    <Compile Include="Models\Store\Order\CatalogsApplicationModel.cs" />
+    <Compile Include="Models\Store\Order\DecoratorApplicationModel.cs" />
+    <Compile Include="Models\Store\Order\EmailExpressModel.cs" />
     <Compile Include="Models\Store\Order\DistributorApplicationModel.cs" />
+    <Compile Include="Models\Store\Order\ESPAdvertisingModel.cs" />
+    <Compile Include="Models\Store\Order\ESPPayForPlacementModel.cs" />
+    <Compile Include="Models\Store\Order\MagazinesApplicationModel.cs" />
+    <Compile Include="Models\Store\Order\MembershipModelHelper.cs" />
+    <Compile Include="Models\Store\Order\OrderDetailApplicationModel.cs" />
     <Compile Include="Models\Store\Order\OrderModel.cs" />
     <Compile Include="Models\Store\Order\OrderPageModel.cs" />
     <Compile Include="Models\Store\Order\OrderStatisticData.cs" />
+    <Compile Include="Models\Store\Order\PFPCategory.cs" />
+    <Compile Include="Models\Store\Order\ProductCollectionsModel.cs" />
     <Compile Include="Models\Store\Order\SupplierApplicationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
@@ -235,11 +246,11 @@
     <Content Include="Content\datepicker.css" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Content\multiselecteddatepicker.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <None Include="Properties\PublishProfiles\Local File.pubxml" />
     <None Include="Properties\PublishProfiles\Web App Deploy.pubxml" />
-    <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Images\admin-asi-creditcard.gif" />
     <Content Include="Images\admin-asi-store.gif" />
     <Content Include="Images\admin-media-links.gif" />
@@ -265,9 +276,14 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\html5.js" />
-    <Content Include="Scripts\jquery-1.7.1.js" />
-    <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\jquery-1.9.1.js" />
+    <Content Include="Scripts\jquery-1.9.1.min.js" />
+    <Content Include="Scripts\jquery-1.9.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui.multidatespicker.js" />
+    <Content Include="Scripts\jquery.ui.core.js" />
+    <Content Include="Scripts\jquery.ui.datepicker.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -314,9 +330,21 @@
     <Content Include="Views\Store\Admin\Statistics.cshtml" />
     <Content Include="Views\Home\Diagnostic.cshtml" />
     <Content Include="Views\Media\List.cshtml" />
+    <Content Include="Views\Store\Application\Magazines.cshtml" />
+    <Content Include="Views\asicentral\QueueList.cshtml" />
     <Content Include="Views\asicentral\QueueList.cshtml" />
     <Content Include="Views\Shared\_CentralLayout.cshtml" />
-    <Content Include="Views\asicentral\Volume.cshtml" />
+    <Content Include="Views\Store\Context\References.cshtml" />
+    <Content Include="Views\Store\Application\Catalogs.cshtml" />
+    <Content Include="Views\Store\Application\OrderDetailProduct.cshtml" />
+    <Content Include="Views\Store\Products\List.cshtml" />
+    <Content Include="Views\Store\Application\ESPAdvertising.cshtml" />
+    <Content Include="Views\Store\Application\PayForPlacement.cshtml" />
+    <Content Include="Views\Store\Application\Decorator.cshtml" />
+    <Content Include="Views\Store\Application\EmailExpress.cshtml" />
+    <Content Include="Views\Store\Application\Shared\CompanyInformation.cshtml" />
+    <Content Include="Views\Store\Admin\ProductStatistics.cshtml" />
+    <Content Include="Views\Store\Application\ProductCollections.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -343,6 +371,7 @@
     <EmbeddedResource Include="Resource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -364,7 +393,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>10348</DevelopmentServerPort>
+          <DevelopmentServerPort>4577</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:1918/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

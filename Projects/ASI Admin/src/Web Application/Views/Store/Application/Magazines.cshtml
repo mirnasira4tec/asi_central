@@ -1,0 +1,242 @@
+﻿@using asi.asicentral.web
+@using asi.asicentral.model.store
+@using asi.asicentral.web.Controllers.Store
+@model asi.asicentral.web.model.store.MagazinesApplicationModel
+
+@{
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+
+<h1>@string.Format(@Resource.StoreTitleMagazinesApplication, Model.ProductName) (#@Model.OrderId)</h1>
+@if (Model.Price > 0.0m)
+{
+<p>@Model.ProductName product purchase fee is @Model.Price.ToString("C")</p>
+}
+@using (Html.BeginForm("EditMagazines", "Application"))
+{        
+@Html.AntiForgeryToken()
+@Html.HiddenFor(m => m.ProductName)
+@Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
+<div>
+    @if (Model.Price > 0.0m)
+    {
+    <h3 class="order-status-header3">Order Status:</h3>
+    <div class="order-status">@Model.OrderStatus</div>
+    <div class="timms-info">
+        <div class="span3">
+            <label class="order-status-label" for="Timms_ID">Timms ID:</label>
+            <div class="order-status-input">
+                @Html.EditorFor(m => m.ExternalReference, new { @class = "span2" })
+                <span id="timmsErrorMessage" data-type="errormessage" class="field-validation-error"></span>
+            </div>
+        </div>
+        <div class="status-btns">
+            @if (Model.IsCompleted && Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
+            {
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
+            }
+            @if (Model.IsCompleted && Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
+            { 
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
+            }
+            @if (!Model.IsHallmarkProduct)
+            {
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+            }
+            @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
+            { @Html.ActionLink("Close", "../Orders") }
+            else
+            { @Html.ActionLink("Cancel", "../Orders") }
+
+        </div>
+    </div>
+    }
+    else
+    {
+        <div class="timms-info span3 status-btns">
+            @if (!Model.IsHallmarkProduct)
+            {
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+            }
+            @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
+            { @Html.ActionLink("Close", "../Orders") }
+            else
+            { @Html.ActionLink("Cancel", "../Orders") }
+
+        </div>
+    }
+</div>
+<nav>
+	<ul class="nav nav-tabs" id="tabs">
+        @if (!Model.IsHallmarkProduct)
+        {
+        <li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
+        }
+        else
+        {
+        <li class="active"><a href="#tabbasic" data-toggle="tab">Hallmark Information</a></li>
+        }
+		<li><a href="#tabsubscription" data-toggle="tab">Subscription Information</a></li>
+	</ul>
+</nav>
+<div class="tab-content">
+    
+    @if (!Model.IsHallmarkProduct)
+    {
+		@Html.Partial("../Store/Application/Shared/CompanyInformation", Model)
+    }
+    else if (Model.hallmarkInformation != null)
+    {
+        <div id="tabbasic" class="basic-information tab-pane fade in active">
+
+        <fieldset class="company-info-form">	
+            <legend>Hallmark Information for @Model.ProductName</legend>
+        @for (int count = 0; count < Model.hallmarkInformation.Count; count++)
+        {
+            <span class="label-row">
+				@Html.Label(Model.hallmarkInformation.ElementAt(count).Key)
+				@Html.Label(Model.hallmarkInformation.ElementAt(count).Value)
+		    </span>
+        }
+        </fieldset>
+        
+        </div><!-- END #basic-information -->	
+    }
+
+	<div id="tabsubscription" class="product-information tab-pane fade">
+		<fieldset class="company-info-form">			
+            @if (Model.Subscriptions != null && Model.Subscriptions.Count > 0)
+            {
+                for (int i = 0; i < Model.Subscriptions.Count; i++)
+                {
+                    if (Model.Subscriptions[i] != null)
+                    {
+                        @Html.HiddenFor(m => Model.Subscriptions[i].Id)
+                        <legend>Subscription#@(i + 1)</legend>
+                        <span class="row">@Html.Raw("<strong>Basic Information</strong>")</span>
+                        <span class="label-row">
+					        @Html.LabelFor(m => m.Subscriptions[i].CompanyName)
+                            @if (!Model.IsHallmarkProduct)
+                            {
+                            @Html.LabelFor(m => m.Subscriptions[i].ASINumber)
+					        @Html.LabelFor(m => m.Subscriptions[i].IsDigitalVersion)
+                            }
+				        </span>
+                        <span class="label-row">
+                            @Html.EditorFor(m => m.Subscriptions[i].CompanyName) @Html.ValidationMessageFor(m => m.Subscriptions[i].CompanyName)
+                            @if (!Model.IsHallmarkProduct)
+                            {
+				            @Html.EditorFor(m => m.Subscriptions[i].ASINumber) @Html.ValidationMessageFor(m => m.Subscriptions[i].ASINumber)
+				            @Html.CheckBoxFor(m => m.Subscriptions[i].IsDigitalVersion)
+                            }
+			            </span>
+                            if (!Model.IsHallmarkProduct)
+                            {
+                        <span class="label-row">
+					        @Html.LabelFor(m => m.Subscriptions[i].PrimaryBusiness)
+                            @Html.LabelFor(m => m.Subscriptions[i].PrimaryBusinessOtherDesc)
+				        </span>
+                        <span class="label-row">
+                            @Html.EditorFor(m => m.Subscriptions[i].PrimaryBusiness) @Html.ValidationMessageFor(m => m.Subscriptions[i].PrimaryBusiness)
+				            @Html.EditorFor(m => m.Subscriptions[i].PrimaryBusinessOtherDesc) @Html.ValidationMessageFor(m => m.Subscriptions[i].PrimaryBusinessOtherDesc)
+                         </span>
+                            }
+                            if (Model.Subscriptions[i].Contact != null)
+                            {
+                            @Html.HiddenFor(m => Model.Subscriptions[i].Contact.Id)
+                            <span class="row">@Html.Raw("<strong>Contact Information</strong>")</span>
+                            <span class="label-row">
+					            @Html.LabelFor(m => m.Subscriptions[i].Contact.FirstName)
+                                @Html.LabelFor(m => m.Subscriptions[i].Contact.LastName)
+                                @Html.LabelFor(m => m.Subscriptions[i].Contact.Email)
+				            </span>
+                            <span class="label-row">
+                                @Html.EditorFor(m => m.Subscriptions[i].Contact.FirstName) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.FirstName)
+					            @Html.EditorFor(m => m.Subscriptions[i].Contact.LastName) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.LastName)
+					            @Html.EditorFor(m => m.Subscriptions[i].Contact.Email) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Email)
+				            </span>
+                            <span class="label-row">
+					            @Html.LabelFor(m => m.Subscriptions[i].Contact.Title)
+                                @Html.LabelFor(m => m.Subscriptions[i].Contact.Phone)
+					            @Html.LabelFor(m => m.Subscriptions[i].Contact.Fax)
+				            </span>
+                             <span class="label-row">
+                                @Html.EditorFor(m => m.Subscriptions[i].Contact.Title) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Title)
+					            @Html.EditorFor(m => m.Subscriptions[i].Contact.Phone) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Phone)
+					            @Html.EditorFor(m => m.Subscriptions[i].Contact.Fax) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Fax)
+				            </span>
+                                if (Model.IsHallmarkProduct)
+                                {
+                                <span class="label-row">
+					            @Html.LabelFor(m => m.Subscriptions[i].Contact.Department)
+				                </span>
+                                <span class="label-row">
+                                @Html.EditorFor(m => m.Subscriptions[i].Contact.Department) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Department)
+				                </span>
+                                }
+                            }
+                            if (Model.Subscriptions[i].Contact.Address != null)
+                            {
+                            @Html.HiddenFor(m => Model.Subscriptions[i].Contact.Address.Id)
+                            <span class="row">@Html.Raw("<strong>Address Information</strong>")</span>
+                            <span class="label-row">
+				                @Html.LabelFor(m => m.Subscriptions[i].Contact.Address.Street1) 
+				                @Html.LabelFor(m => m.Subscriptions[i].Contact.Address.Street2) 
+				                @Html.LabelFor(m => m.Subscriptions[i].Contact.Address.City) 
+			                </span>
+			                <span class="label-row">
+				                @Html.EditorFor(m => m.Subscriptions[i].Contact.Address.Street1) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.Street1)
+				                @Html.EditorFor(m => m.Subscriptions[i].Contact.Address.Street2) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.Street2)
+				                @Html.EditorFor(m => m.Subscriptions[i].Contact.Address.City) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.City)
+			                </span>
+			                <span class="label-row">
+				                @Html.LabelFor(m => m.Subscriptions[i].Contact.Address.State) 
+				                @Html.LabelFor(m => m.Subscriptions[i].Contact.Address.Zip) 
+				                @Html.LabelFor(m => m.Subscriptions[i].Contact.Address.Country)
+			                </span>
+			                <span class="label-row">
+				                @Html.EditorFor(m => m.Subscriptions[i].Contact.Address.State) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.State)
+				                @Html.EditorFor(m => m.Subscriptions[i].Contact.Address.Zip) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.Zip)
+				                @Html.EditorFor(m => m.Subscriptions[i].Contact.Address.Country) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.Country)
+			                </span>
+                            }
+                    }
+                }
+            }
+		</fieldset>    
+	</div><!-- END #subscription-information -->	
+
+</div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/form")
+    <script src="/Scripts/asi.js"></script>
+    <script>
+        $('input.command').click(function (e) {
+            $('#ActionName').val(e.target.value);
+            if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
+                //make sure we have Timms value
+                if (!$('#ExternalReference').val()) {
+                    asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
+                    $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                    $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
+                    e.preventDefault();
+                }
+                else {
+                    var isnum = /^\d+$/.test($('#ExternalReference').val());
+                    if (!isnum) {
+                        asi.modal.confirm('Error', 'TIMMS ID must contain only numbers.', null, "#hide", "Close");
+                        $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                        $("#timmsErrorMessage").text("TIMMS ID must contain only numbers.");
+                        e.preventDefault();
+                    }
+                }
+            }
+        });
+        $('[rel*="isprimary"]').change(function () {
+            $('[rel*="isprimary"]').attr("checked", false);
+            this.checked = true;
+        });
+    </script>
+}

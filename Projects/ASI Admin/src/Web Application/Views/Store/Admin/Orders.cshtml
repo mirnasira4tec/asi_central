@@ -99,20 +99,22 @@
             {
                 <tr><td width="80px">@if (order.ShowIcons) { 
                     <a id="@order.OrderId" rel="tooltip" data-placement="top" data-type="reject" title="Click here to reject the order" href="#"><i class="icon-remove"></i></a>
-                    <a rel="tooltip" data-placement="top" title="Click here to accept the order" href="@Url.Action("Edit", "Application", new { Id = order.Application.Id, OrderId = order.OrderId })"><i data-orderid="@order.OrderId" class="icon-ok"></i></a> 
+                    <a rel="tooltip" data-placement="top" title="Click here to accept the order" href="@Url.Action("Edit", "Application", new { Id = order.OrderDetailId })"><i data-orderid="@order.OrderId" class="icon-ok"></i></a> 
                 }
                 else { <img src="/images/transparent.gif" style="height:1px;width:33px" /> }
                 @order.OrderId</td><td>@order.Name</td><td>@order.Email</td>
-                @if(!string.IsNullOrEmpty(order.ContextType))
+                @if (!string.IsNullOrEmpty(order.ContextType) && !order.IsProduct)
                 {
-                <td><a href="#" class="productRef">@order.ContextType</a></td>
+                <td><a href="#" class="productRef" data-id="@Server.HtmlEncode(order.ContextType)">@order.ContextType</a></td>
                 }
                 else 
                 {
-                <td><a href="#" class="productRef">@order.Item</a></td>
+                <td><a href="#" class="productRef" data-id="@Server.HtmlEncode(order.Item)">@Html.Raw(order.Item)</a></td>
                 }
-                @if (order.Application != null)
-                { <td><a href="@Url.Action("Edit", "Application", new { Id = order.Application.Id, OrderId = order.OrderId })">Application</a></td> }
+                @if (order.Application != null || order.ProductType == "Product")
+                { 
+                <td><a href="@Url.Action("Edit", "Application", new { Id = order.OrderDetailId } )">Application</a></td> 
+                }
                 else
                 { <td>&nbsp</td> }
                 <td>@order.CompletedStep</td><td>@order.Quantity</td><td>$@order.Price</td><td>@order.Billing</td><td>@order.CreditCard</td><td>@order.DateOrderCreated.ToString("MM/dd/yy")</td></tr>
@@ -153,7 +155,8 @@
         });
         $('a.productRef').click(function (e) {
             e.preventDefault();
-            $('form[id="form-@OrderPageModel.TAB_PRODUCT"] input[name=product]').val(e.target.textContent);
+            $('form[id="form-@OrderPageModel.TAB_PRODUCT"] input[name=product]').val($(e.target).data("id"));
+            alert($(e.target).data("id"));
             $('form[id="form-@OrderPageModel.TAB_PRODUCT"]').submit();
         });
 

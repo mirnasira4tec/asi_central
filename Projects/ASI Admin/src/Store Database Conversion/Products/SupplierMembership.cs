@@ -72,6 +72,8 @@ namespace Store_Database_Conversion.Products
                     UpdateDate = newOrderDetail.UpdateDate,
                     UpdateSource = newOrderDetail.UpdateSource,
                 };
+                if (newMembership.YearEnteredAdvertising.HasValue && newMembership.YearEnteredAdvertising.Value < 1700) newMembership.YearEnteredAdvertising = null;
+                if (newMembership.YearEstablished.HasValue && newMembership.YearEstablished.Value < 1700) newMembership.YearEstablished = null;
                 storeContext.StoreDetailSupplierMemberships.Add(newMembership);
                 foreach (var decoratingType in application.DecoratingTypes)
                 {
