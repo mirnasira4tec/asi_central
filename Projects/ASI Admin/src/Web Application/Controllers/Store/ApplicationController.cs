@@ -485,7 +485,7 @@ namespace asi.asicentral.web.Controllers.Store
                                 }
                             }
                             //Deleting extra if any extra dates added in earlier submit.
-                            if (updatedDateList != null && updatedDateList.Count > 0 && loginScreen_previousItems != null && loginScreen_previousItems.Count > 0 && loginScreen_previousItems.Count != updatedDateList.Count)
+                            if (updatedDateList != null && updatedDateList.Count > 0 && loginScreen_previousItems != null && loginScreen_previousItems.Count > 0)
                             {
                                 foreach (StoreDetailESPAdvertisingItem item in loginScreen_previousItems)
                                 {
@@ -681,7 +681,7 @@ namespace asi.asicentral.web.Controllers.Store
                             }
                         }
                         //Deleting extra if any extra dates added in earlier submit.
-                        if (updatedDateList != null && updatedDateList.Count > 0 && loginScreen_previousItems != null && loginScreen_previousItems.Count > 0 && loginScreen_previousItems.Count != updatedDateList.Count)
+                        if (updatedDateList != null && updatedDateList.Count > 0 && loginScreen_previousItems != null && loginScreen_previousItems.Count > 0)
                         {
                             foreach (StoreDetailEmailExpressItem item in loginScreen_previousItems)
                             {
