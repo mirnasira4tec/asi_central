@@ -20,7 +20,7 @@
                 <td>@Html.EditorFor(model => Model[i].NotificationEmails) </td>
                 <td>@Html.EditorFor(model => Model[i].HeaderImage) </td>
                 <td>@Html.CheckBoxFor(model => model[i].Active)</td>
-                <td>@Model[i].ExpiryDate.ToString()</td>
+                <td>@Html.Raw(Model[i].ExpiryDate.HasValue ? Model[i].ExpiryDate.Value.ToString("MM/dd/yyyy") : "&nbsp;")</td>
                 <td>@Model[i].Products.Count()</td>
                 <td>@Model[i].Features.Count()</td>
             </tr>
