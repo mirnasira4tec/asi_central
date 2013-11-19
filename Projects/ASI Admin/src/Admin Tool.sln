@@ -3,19 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web Application", "Web Application\Web Application.csproj", "{F91A81D1-69FF-4C32-8BD7-5E0169A235AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web Application.Tests", "Web Application.Tests\Web Application.Tests.csproj", "{0A5A68FD-710B-436E-AFA4-C8485FA2B34C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Tests", "Service.Tests\Service.Tests.csproj", "{EE6DF0C2-ACEB-4108-8F43-5D5138C5A3EB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGRImport", "SGRImport\SGRImport.csproj", "{C1151AAC-4FAF-4D40-893E-9722FE51154D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{B74B2258-2B47-435C-A0EA-6A0C1FFE18DE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{CEC7F727-F96B-484C-8687-E9426DEB76A2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{065163BE-937C-4826-99BF-FE7FB575593A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store Database Conversion", "Store Database Conversion\Store Database Conversion.csproj", "{8999ECB8-A296-4AEB-8BE8-8066E2628155}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGRImport", "SGRImport\SGRImport.csproj", "{C1151AAC-4FAF-4D40-893E-9722FE51154D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Tests", "Service.Tests\Service.Tests.csproj", "{EE6DF0C2-ACEB-4108-8F43-5D5138C5A3EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web Application.Tests", "Web Application.Tests\Web Application.Tests.csproj", "{0A5A68FD-710B-436E-AFA4-C8485FA2B34C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B3946CEE-56E0-4469-A61A-C57B8D7CAF3E}"
 	ProjectSection(SolutionItems) = preProject
