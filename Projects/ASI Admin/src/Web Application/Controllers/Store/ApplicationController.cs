@@ -435,15 +435,15 @@ namespace asi.asicentral.web.Controllers.Store
                         case 50:
                             espAdvertising.FirstItemList = application.NumberOfItems_First;
                             espAdvertising.FirstOptionId = application.Products_OptionId_First;
-                            orderDetail.Cost = ESPAdvertisingHelper.ESPAdvertising_CLEARANCE_COST[application.Products_OptionId_First];
+                            if (!string.IsNullOrEmpty(espAdvertising.FirstItemList)) orderDetail.Cost = ESPAdvertisingHelper.ESPAdvertising_CLEARANCE_COST[1];
 
                             espAdvertising.SecondItemList = application.NumberOfItems_Second;
                             espAdvertising.SecondOptionId = application.Products_OptionId_Second;
-                            orderDetail.Cost += ESPAdvertisingHelper.ESPAdvertising_NEW_COST[application.Products_OptionId_Second];
+                            if (!string.IsNullOrEmpty(espAdvertising.SecondItemList)) orderDetail.Cost += ESPAdvertisingHelper.ESPAdvertising_NEW_COST[1];
 
                             espAdvertising.ThirdItemList = application.NumberOfItems_Third;
                             espAdvertising.ThirdOptionId = application.Products_OptionId_Third;
-                            orderDetail.Cost += ESPAdvertisingHelper.ESPAdvertising_RUSH_COST[application.Products_OptionId_Third];
+                            if(!string.IsNullOrEmpty(espAdvertising.ThirdItemList)) orderDetail.Cost += ESPAdvertisingHelper.ESPAdvertising_RUSH_COST[1];
                             break;
                         case 52:
                             List<string> LoginScreen_Dates = new List<string>();
