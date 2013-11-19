@@ -176,11 +176,11 @@ namespace asi.asicentral.web.model.store
                     break;
                 case 50:
                     NumberOfItems_First = espAdvertising.FirstItemList;
-                    Products_OptionId_First = espAdvertising.FirstOptionId;
+                    Products_OptionId_First = 1;
                     NumberOfItems_Second = espAdvertising.SecondItemList;
-                    Products_OptionId_Second = espAdvertising.SecondOptionId;
+                    Products_OptionId_Second = 1;
                     NumberOfItems_Third = espAdvertising.ThirdItemList;
-                    Products_OptionId_Third = espAdvertising.ThirdOptionId;
+                    Products_OptionId_Third = 1;
                     break;
                 case 51:
                     LogoPath = espAdvertising.LogoPath;
