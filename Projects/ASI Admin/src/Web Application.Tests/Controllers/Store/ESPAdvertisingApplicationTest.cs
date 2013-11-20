@@ -355,7 +355,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Assert.AreEqual(espAdvertisingDetail.FirstItemList, model.NumberOfItems_First);
             Assert.AreEqual(espAdvertisingDetail.ThirdOptionId, model.Products_OptionId_Third);
             Assert.AreEqual(espAdvertisingDetail.FirstItemList, model.NumberOfItems_First);
-            Assert.AreEqual(detail.Cost, 250.00M);
+            Assert.AreEqual(detail.Cost, 375.00M);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(1));
 
             // user clicks reject - order should be updated to reject
@@ -516,7 +516,8 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Assert.AreEqual(result.RouteValues["controller"], "Application");
             Assert.AreEqual(orderRef.ExternalReference, model.ExternalReference);
             Assert.IsNotNull(detail);
-            Assert.AreEqual(detail.Quantity, 6);
+            Assert.AreEqual(detail.Quantity, 1);
+            Assert.AreEqual(detail.Cost, 4700.00M);
             Assert.IsNotNull(espAdvertisingDetail);
             Assert.IsNotNull(dateItem);
             Assert.AreEqual(dateItem.AdSelectedDate, new DateTime(2013,11,15));
@@ -542,7 +543,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Assert.AreEqual(result.RouteValues["controller"], "Application");
             Assert.AreEqual(orderRef.ExternalReference, model.ExternalReference);
             Assert.IsNotNull(detail);
-            Assert.AreEqual(detail.Quantity, 7);
+            Assert.AreEqual(detail.Quantity, 1);
             Assert.IsNotNull(espAdvertisingDetail);
             Assert.IsNotNull(dateItem);
             Assert.AreEqual(dateItem.AdSelectedDate, new DateTime(2013, 12, 15));
