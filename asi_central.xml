@@ -5,7 +5,7 @@
 
 	<PropertyGroup>
 		<ProjectRoot Condition="$(Local) == 'true'">\Projects\asicentral.com\Projects</ProjectRoot>
-		<ProjectRoot Condition="$(Local) == ''">\asicentral.com\Projects</ProjectRoot>
+		<ProjectRoot Condition="$(Local) == ''">\asi_central2\Projects</ProjectRoot>
 	</PropertyGroup>
 	
 	<Target Name="Compile ASI Admin">
