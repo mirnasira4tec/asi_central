@@ -122,6 +122,7 @@ namespace Store_Database_Conversion
                     StoreOrder newOrder = new StoreOrder()
                     {
                         ApprovedBy = "Unknown",
+                        UserReference = Guid.NewGuid().ToString(),
                         ApprovedDate = creationDate,
                         Campaign = order.Campaign,
                         CompletedStep = order.CompletedStep,
