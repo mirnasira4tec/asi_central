@@ -156,7 +156,6 @@
         $('a.productRef').click(function (e) {
             e.preventDefault();
             $('form[id="form-@OrderPageModel.TAB_PRODUCT"] input[name=product]').val($(e.target).data("id"));
-            alert($(e.target).data("id"));
             $('form[id="form-@OrderPageModel.TAB_PRODUCT"]').submit();
         });
 
