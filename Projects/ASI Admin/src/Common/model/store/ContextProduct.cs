@@ -33,6 +33,7 @@ namespace asi.asicentral.model.store
         public bool IsASINumberFlag { get; set; }
         public bool IsAvailable { get; set; }
         public string ChatSettings { get; set; }
+        public int? CouponId { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime? NextAvailableDate { get; set; }
@@ -41,6 +42,7 @@ namespace asi.asicentral.model.store
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
+        public virtual Coupon Coupon { get; set; }
 
         public virtual ICollection<ContextFeatureProduct> Features { get; set; }
 

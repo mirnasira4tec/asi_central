@@ -38,6 +38,11 @@ namespace asi.asicentral.database.mappings.product
 
             this.Property(t => t.UpdateDate)
                 .HasColumnName("UpdateDateUTC");
+
+            // Relationships
+            HasOptional(product => product.Coupon)
+                .WithMany()
+                .HasForeignKey(product => product.CouponId);
         }
     }
 }

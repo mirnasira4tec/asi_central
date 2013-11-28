@@ -144,6 +144,9 @@ namespace asi.asicentral.database.mappings
             For<IRepository<ContextProductSequence>>().Use<EFRepository<ContextProductSequence>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
+            For<IRepository<Coupon>>().Use<EFRepository<Coupon>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
             For<IRepository<StoreDetailHallmarkRequest>>().Use<EFRepository<StoreDetailHallmarkRequest>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
@@ -223,13 +226,13 @@ namespace asi.asicentral.database.mappings
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<StoreDetailEmailExpress>>().Use<EFRepository<StoreDetailEmailExpress>>()
-    .Ctor<IValidatedContext>().Named("StoreContext");
+                .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<StoreDetailEmailExpressItem>>().Use<EFRepository<StoreDetailEmailExpressItem>>()
                .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<StoreDetailProductCollection>>().Use<EFRepository<StoreDetailProductCollection>>()
-    .Ctor<IValidatedContext>().Named("StoreContext");
+                .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<StoreDetailProductCollectionItem>>().Use<EFRepository<StoreDetailProductCollectionItem>>()
                .Ctor<IValidatedContext>().Named("StoreContext");
