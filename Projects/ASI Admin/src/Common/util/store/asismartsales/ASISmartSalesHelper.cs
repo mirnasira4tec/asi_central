@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-
 namespace asi.asicentral.util.store
 {
     public class ASISmartSalesHelper

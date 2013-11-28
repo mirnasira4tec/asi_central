@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Error_Collections" xml:space="preserve">
+    <value>Enter collection</value>
+  </data>
+  <data name="Error_Items" xml:space="preserve">
+    <value>Enter up to 9 items separated using ';'</value>
+  </data>
+  <data name="FeaturedProductsDesc" xml:space="preserve">
+    <value>Themed Product Niche Catalogs will promote the products you’d like to feature on ESP Website’s home page.</value>
+  </data>
+  <data name="FileFormat_1" xml:space="preserve">
+    <value>Only following formats are allowed. [pdf, ai, eps, jpg,pjpeg]</value>
+  </data>
+  <data name="FileFormat_2" xml:space="preserve">
+    <value>Only following formats are allowed. [gif, jpeg, mpeg, x-shockwave-flash]</value>
+  </data>
+  <data name="IntroductoryOfferDesc" xml:space="preserve">
+    <value>The ESP Websites Network delivers your product details to millions of end-buyers and thousands of distributors.</value>
+  </data>
+  <data name="ItemNumber" xml:space="preserve">
+    <value>ItemNumber</value>
+  </data>
+  <data name="LargeImage" xml:space="preserve">
+    <value>LargeImage</value>
+  </data>
+  <data name="LargeImageErr" xml:space="preserve">
+    <value>Please upload a large image.</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NumberofMonths" xml:space="preserve">
+    <value>Number of Months</value>
+  </data>
+  <data name="Option_Corporation" xml:space="preserve">
+    <value>corporation</value>
+  </data>
+  <data name="Option_Digitziing" xml:space="preserve">
+    <value>Digitizing</value>
+  </data>
+  <data name="Option_Embroidery" xml:space="preserve">
+    <value>Embroidery</value>
+  </data>
+  <data name="Option_Engraving" xml:space="preserve">
+    <value>Engraving</value>
+  </data>
+  <data name="Option_HeatTransfer" xml:space="preserve">
+    <value>Heat Transfer</value>
+  </data>
+  <data name="Option_Individual" xml:space="preserve">
+    <value>individual</value>
+  </data>
+  <data name="Option_LLCProprietorship" xml:space="preserve">
+    <value>LLC proprietorship</value>
+  </data>
+  <data name="Option_Monogramming" xml:space="preserve">
+    <value>Monogramming</value>
+  </data>
+  <data name="Option_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Option_Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="Option_Partnership" xml:space="preserve">
+    <value>partnership</value>
+  </data>
+  <data name="Option_ScreenPrinting" xml:space="preserve">
+    <value>Screen Printing</value>
+  </data>
+  <data name="Option_Sublimation" xml:space="preserve">
+    <value>Sublimation</value>
+  </data>
+  <data name="Option_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="PayForPlacementDesc" xml:space="preserve">
+    <value>Most major search engines carry paid placement listings guaranteeing advertisers a high ranking, usually in relation to desired words.</value>
+  </data>
+  <data name="ProductCollections_Cost" xml:space="preserve">
+    <value>349</value>
+  </data>
+  <data name="ProductCollections_DiscountedCost" xml:space="preserve">
+    <value>999</value>
+  </data>
+  <data name="ProductSpotlightDesc" xml:space="preserve">
+    <value>PromoMart.com and SuccessfulPromotions.com Product Spotlights help promote your hottest products with a unique advertisement on the home page.</value>
+  </data>
+  <data name="Question_BestCompany" xml:space="preserve">
+    <value>Which best describes your company?</value>
+  </data>
+  <data name="Question_MethodsOfImpringting" xml:space="preserve">
+    <value>Which method(s) of imprinting do you offer?</value>
+  </data>
+  <data name="Question_UnionMember" xml:space="preserve">
+    <value>Is your company a union member?</value>
+  </data>
+  <data name="SmallImage" xml:space="preserve">
+    <value>SmallImage</value>
+  </data>
+  <data name="SmallImageErr" xml:space="preserve">
+    <value>Please upload a small image.</value>
+  </data>
+  <data name="TextAroundImage" xml:space="preserve">
+    <value>Text Around Image</value>
+  </data>
+  <data name="TextUnderImage" xml:space="preserve">
+    <value>TextUnderImage</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="UploadLargeImage" xml:space="preserve">
+    <value>Upload Large Image</value>
+  </data>
+  <data name="UploadSmallImage" xml:space="preserve">
+    <value>Upload Small Image</value>
+  </data>
+</root>
