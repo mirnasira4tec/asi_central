@@ -31,12 +31,14 @@ namespace asi.asicentral.model.store
         public int CompletedStep { get; set; }
         public int? ContextId { get; set; }
         public bool IsStoreRequest { get; set; }
+        public int? CouponId { get; set; }
         public string OrderRequestType { get; set; }
         public string Campaign { get; set; }
         public string ExternalReference { get; set; }
         public string UserReference { get; set; }
         public string LoggedUserEmail { get; set; }
         public string IPAdd { get; set; }
+        public decimal DiscountAmount { get; set; }
         public decimal Total { get; set; }
         public decimal AnnualizedTotal { get; set; }
         public DateTime CreateDate { get; set; }
@@ -49,6 +51,7 @@ namespace asi.asicentral.model.store
         public virtual StoreIndividual BillingIndividual { get; set; }
         public virtual IList<StoreOrderDetail> OrderDetails { get; set; }
         public virtual Context Context { get; set; }
+        public virtual Coupon Coupon { get; set; }
         public string ProductName
         {
             get

@@ -41,6 +41,10 @@ namespace asi.asicentral.database.mappings.product
             HasMany(ctxt => ctxt.Products)
                 .WithOptional()
                 .Map(m => m.MapKey("ContextId"));
+
+            HasOptional(ctxt => ctxt.Coupon)
+                .WithMany()
+                .HasForeignKey(ctxt => ctxt.CouponId);
         }
     }
 }
