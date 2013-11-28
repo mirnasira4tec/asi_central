@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4C576691-FDF4-45ED-9BE8-23D6A9428643}</ProjectGuid>
+    <ProjectGuid>{04D943E2-6C0D-4FD5-B3BC-1860C962C977}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>asi.asicentral</RootNamespace>
@@ -60,25 +60,40 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Magazines.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\ProductDescriptions.Designer.cs">
+    <Compile Include="Resources\ProductDescription.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ProductDescriptions.resx</DependentUpon>
+      <DependentUpon>ProductDescription.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\Resource.Designer.cs">
-      <DependentUpon>Resource.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Catalogs.resx" />
-    <EmbeddedResource Include="Resources\ESPAdvertising.resx" />
-    <EmbeddedResource Include="Resources\ESPWebsites.resx" />
-    <EmbeddedResource Include="Resources\Magazines.resx" />
-    <EmbeddedResource Include="Resources\ProductDescriptions.resx" />
+    <EmbeddedResource Include="Resources\Catalogs.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Catalogs.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ESPAdvertising.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ESPAdvertising.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ESPWebsites.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ESPWebsites.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Magazines.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Magazines.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ProductDescription.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductDescription.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Resource.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

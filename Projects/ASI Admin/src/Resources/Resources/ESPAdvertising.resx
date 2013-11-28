@@ -117,26 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Question1" xml:space="preserve">
-    <value>1. Choose where you want to appear in search results:</value>
-  </data>
-  <data name="Question2" xml:space="preserve">
-    <value>2. Choose the way you would like to pay:</value>
-  </data>
-  <data name="PromoCafe_Size2" xml:space="preserve">
-    <value>234px x 60px</value>
-  </data>
-  <data name="PromoCafe_Size1" xml:space="preserve">
-    <value>468px x 60px</value>
-  </data>
-  <data name="Categories_Val" xml:space="preserve">
-    <value>All categories should be separated by (;)</value>
-  </data>
-  <data name="Categories_Error" xml:space="preserve">
-    <value>At least one category should be entered</value>
+  <data name="BannerTileTowerDesc" xml:space="preserve">
+    <value>ESP Online Search Screen Advertising Call attention to your latest or best selling product.</value>
   </data>
   <data name="Banner_Ad" xml:space="preserve">
     <value>Banner Ad</value>
+  </data>
+  <data name="Buddy_Error" xml:space="preserve">
+    <value>Please upload image for Buddy List</value>
   </data>
   <data name="Buddy_List" xml:space="preserve">
     <value>Buddy List $199/mo.</value>
@@ -147,29 +135,56 @@
   <data name="Categories_Ad" xml:space="preserve">
     <value>Categories</value>
   </data>
-  <data name="PayforPlacementDesc" xml:space="preserve">
-    <value>Choose to target your advertising only to distributors searching on a particular category.</value>
+  <data name="Categories_Error" xml:space="preserve">
+    <value>At least one category should be entered</value>
+  </data>
+  <data name="Categories_Val" xml:space="preserve">
+    <value>All categories should be separated by (;)</value>
+  </data>
+  <data name="ClearanceNewRush_Error" xml:space="preserve">
+    <value>Please select at least one product.</value>
+  </data>
+  <data name="ClearanceNewSpecialsDesc" xml:space="preserve">
+    <value>Make a massive impression on all distributors searching ESP Online™.</value>
   </data>
   <data name="Dollars" xml:space="preserve">
     <value>dollars</value>
   </data>
-  <data name="ItemNumbers_Multiple" xml:space="preserve">
-    <value>Enter multiple item numbers, seperated with ;</value>
+  <data name="Error_ResultBannerPath" xml:space="preserve">
+    <value>Please upload Banner Ad for result page</value>
   </data>
-  <data name="ItemNumbers_3" xml:space="preserve">
-    <value>Enter up to 3 Item numbers, seperated with ;</value>
+  <data name="Error_ResultTilePath" xml:space="preserve">
+    <value>Please upload Tile Ad for result page</value>
   </data>
-  <data name="BannerTileTowerDesc" xml:space="preserve">
-    <value>ESP Online Search Screen Advertising Call attention to your latest or best selling product.</value>
+  <data name="Error_ResultTowerPath" xml:space="preserve">
+    <value>Please upload Tower Ad for result page</value>
+  </data>
+  <data name="Error_SearchBannerPath" xml:space="preserve">
+    <value>Please upload Banner Ad for search page</value>
+  </data>
+  <data name="Error_SearchTilePath" xml:space="preserve">
+    <value>Please upload Tile Ad for search page</value>
+  </data>
+  <data name="Error_SearchTowerPath" xml:space="preserve">
+    <value>Please upload Tower Ad for search page</value>
+  </data>
+  <data name="EventPlannerDesc" xml:space="preserve">
+    <value>The Event Planner offers one-stop shopping for distributors looking for event merchandise.</value>
+  </data>
+  <data name="FileFormat_1" xml:space="preserve">
+    <value>Supported file formats (pdf, ai, eps, jpg,pjpeg)</value>
+  </data>
+  <data name="FileFormat_2" xml:space="preserve">
+    <value>Supported file formats (gif, jpef, mpeg, x-shockwave-flash)</value>
+  </data>
+  <data name="FileFormat_3" xml:space="preserve">
+    <value>Supported file formats (mpg, mpeg, mov, wmv,avi)</value>
   </data>
   <data name="Fixed" xml:space="preserve">
     <value>Fixed</value>
   </data>
   <data name="Impressions" xml:space="preserve">
     <value>impressions</value>
-  </data>
-  <data name="PromoCafeDesc" xml:space="preserve">
-    <value>Instant Messaging and Webchat are some of the most popular ways to communicate online.</value>
   </data>
   <data name="Instant_Messanger" xml:space="preserve">
     <value>Instant Messenger $450/mo.</value>
@@ -180,17 +195,41 @@
   <data name="ItemNumbersNeeded" xml:space="preserve">
     <value>Item numbers needed.</value>
   </data>
+  <data name="ItemNumbers_3" xml:space="preserve">
+    <value>Enter up to 3 Item numbers, seperated with ;</value>
+  </data>
+  <data name="ItemNumbers_Multiple" xml:space="preserve">
+    <value>Enter multiple item numbers, seperated with ;</value>
+  </data>
+  <data name="LoginScreenDesc" xml:space="preserve">
+    <value>Make the first impression on all distributors logging into ESP Online by placing your advertisement on the login screen.</value>
+  </data>
+  <data name="LoginScreen_Date" xml:space="preserve">
+    <value>Select Date</value>
+  </data>
+  <data name="LoginScreen_Dates_Requried" xml:space="preserve">
+    <value>Please choose at least one date</value>
+  </data>
+  <data name="LoginScreen_Selected_Dates_Count" xml:space="preserve">
+    <value>You have selected {x} date(s):</value>
+  </data>
+  <data name="LogoLineDesc" xml:space="preserve">
+    <value>This powerful branding tool displays your logo every time your products are scrolled over in ESP search results.</value>
+  </data>
+  <data name="LogoLine_Error" xml:space="preserve">
+    <value>Upload Logo Required</value>
+  </data>
   <data name="LogoPath" xml:space="preserve">
     <value>LogoPath</value>
+  </data>
+  <data name="MainChat_Error" xml:space="preserve">
+    <value>Please upload image for Main Chat Room</value>
   </data>
   <data name="Main_Chat_Room" xml:space="preserve">
     <value>Main Chat Room $750/mo.</value>
   </data>
-  <data name="ClearanceNewSpecialsDesc" xml:space="preserve">
-    <value>Make a massive impression on all distributors searching ESP Online™.</value>
-  </data>
-  <data name="LoginScreenDesc" xml:space="preserve">
-    <value>Make the first impression on all distributors logging into ESP Online by placing your advertisement on the login screen.</value>
+  <data name="Messenger_Error" xml:space="preserve">
+    <value>Please upload image for Instant Messenger</value>
   </data>
   <data name="Numberof" xml:space="preserve">
     <value>Number of</value>
@@ -198,41 +237,41 @@
   <data name="NumberOfProducts" xml:space="preserve">
     <value>Number of Products</value>
   </data>
-  <data name="VideoDesc" xml:space="preserve">
-    <value>People remember only 10% of what they see, and only 20% of what they hear, but 50% of what they see AND hear.</value>
+  <data name="NumOfCompetitorsString" xml:space="preserve">
+    <value>You are competing with &lt;strong&gt;{0} suppliers &lt;/strong&gt;in this category</value>
   </data>
-  <data name="PerMonth" xml:space="preserve">
-    <value>per month</value>
-  </data>
-  <data name="LoginScreen_Dates_Requried" xml:space="preserve">
-    <value>Please choose at least one date</value>
+  <data name="PayforPlacementDesc" xml:space="preserve">
+    <value>Choose to target your advertising only to distributors searching on a particular category.</value>
   </data>
   <data name="PayForPlacement_Error" xml:space="preserve">
     <value>Please select at least one category.</value>
   </data>
-  <data name="ClearanceNewRush_Error" xml:space="preserve">
-    <value>Please select at least one product.</value>
+  <data name="PerMonth" xml:space="preserve">
+    <value>per month</value>
   </data>
-  <data name="Error_ResultBannerPath" xml:space="preserve">
-    <value>Please upload Banner Ad for result page</value>
+  <data name="PromoCafeDesc" xml:space="preserve">
+    <value>Instant Messaging and Webchat are some of the most popular ways to communicate online.</value>
   </data>
-  <data name="Error_SearchBannerPath" xml:space="preserve">
-    <value>Please upload Banner Ad for search page</value>
+  <data name="PromoCafe_Size1" xml:space="preserve">
+    <value>468px x 60px</value>
   </data>
-  <data name="Buddy_Error" xml:space="preserve">
-    <value>Please upload image for Buddy List</value>
+  <data name="PromoCafe_Size2" xml:space="preserve">
+    <value>234px x 60px</value>
   </data>
-  <data name="Messenger_Error" xml:space="preserve">
-    <value>Please upload image for Instant Messenger</value>
+  <data name="Question1" xml:space="preserve">
+    <value>1. Choose where you want to appear in search results:</value>
   </data>
-  <data name="MainChat_Error" xml:space="preserve">
-    <value>Please upload image for Main Chat Room</value>
+  <data name="Question2" xml:space="preserve">
+    <value>2. Choose the way you would like to pay:</value>
   </data>
   <data name="ResultBanner_Error" xml:space="preserve">
     <value>Please upload image for Result Banner Ad</value>
   </data>
   <data name="ResultTile_Error" xml:space="preserve">
     <value>Please upload image for Result Tile Ad</value>
+  </data>
+  <data name="ResultTowerAd" xml:space="preserve">
+    <value>Tower Ad</value>
   </data>
   <data name="ResultTower_Error" xml:space="preserve">
     <value>Please upload image for Result Tower Ad</value>
@@ -246,56 +285,17 @@
   <data name="SearchTower_Error" xml:space="preserve">
     <value>Please upload image for Search Tower Ad</value>
   </data>
-  <data name="Error_ResultTilePath" xml:space="preserve">
-    <value>Please upload Tile Ad for result page</value>
-  </data>
-  <data name="Error_SearchTilePath" xml:space="preserve">
-    <value>Please upload Tile Ad for search page</value>
-  </data>
-  <data name="Error_ResultTowerPath" xml:space="preserve">
-    <value>Please upload Tower Ad for result page</value>
-  </data>
-  <data name="Error_SearchTowerPath" xml:space="preserve">
-    <value>Please upload Tower Ad for search page</value>
-  </data>
-  <data name="LoginScreen_Date" xml:space="preserve">
-    <value>Select Date</value>
-  </data>
-  <data name="FileFormat_2" xml:space="preserve">
-    <value>Supported file formats (gif, jpef, mpeg, x-shockwave-flash)</value>
-  </data>
-  <data name="FileFormat_3" xml:space="preserve">
-    <value>Supported file formats (mpg, mpeg, mov, wmv,avi)</value>
-  </data>
-  <data name="FileFormat_1" xml:space="preserve">
-    <value>Supported file formats (pdf, ai, eps, jpg,pjpeg)</value>
-  </data>
-  <data name="EventPlannerDesc" xml:space="preserve">
-    <value>The Event Planner offers one-stop shopping for distributors looking for event merchandise.</value>
-  </data>
-  <data name="LogoLineDesc" xml:space="preserve">
-    <value>This powerful branding tool displays your logo every time your products are scrolled over in ESP search results.</value>
-  </data>
   <data name="Title_Ad" xml:space="preserve">
     <value>Tile Ad</value>
-  </data>
-  <data name="ResultTowerAd" xml:space="preserve">
-    <value>Tower Ad</value>
   </data>
   <data name="Tower_Ad" xml:space="preserve">
     <value>Tower Ad Tuesday Ad</value>
   </data>
-  <data name="LogoLine_Error" xml:space="preserve">
-    <value>Upload Logo Required</value>
+  <data name="VideoDesc" xml:space="preserve">
+    <value>People remember only 10% of what they see, and only 20% of what they hear, but 50% of what they see AND hear.</value>
   </data>
   <data name="WhatisCPM" xml:space="preserve">
     <value>What is CPM?</value>
-  </data>
-  <data name="NumOfCompetitorsString" xml:space="preserve">
-    <value>You are competing with &lt;strong&gt;{0} suppliers &lt;/strong&gt;in this category</value>
-  </data>
-  <data name="LoginScreen_Selected_Dates_Count" xml:space="preserve">
-    <value>You have selected {x} date(s):</value>
   </data>
   <data name="YourESPRankings" xml:space="preserve">
     <value>Your ESP Rankings</value>

@@ -168,10 +168,10 @@
   <data name="Green" xml:space="preserve">
     <value>Green</value>
   </data>
-  <data name="IdeaShowcaseSchoolsDescription" xml:space="preserve">
+  <data name="IdeaShowcaseDescription" xml:space="preserve">
     <value>Create sales with this compact catalog that’s perfect for leave-behinds and mailers.</value>
   </data>
-  <data name="IdeaShowcaseDescription" xml:space="preserve">
+  <data name="IdeaShowcaseSchoolsDescription" xml:space="preserve">
     <value>Create sales with this compact catalog that’s perfect for leave-behinds and mailers.</value>
   </data>
   <data name="ImprintInstructions" xml:space="preserve">
