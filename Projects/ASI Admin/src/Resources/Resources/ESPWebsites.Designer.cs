@@ -22,7 +22,7 @@ namespace asi.asicentral.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ESPWebsites {
+    public class ESPWebsites {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace asi.asicentral.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("asi.asicentral.Resources.ESPWebsites", typeof(ESPWebsites).Assembly);
@@ -51,7 +51,7 @@ namespace asi.asicentral.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enter collection.
         /// </summary>
-        internal static string Error_Collections {
+        public static string Error_Collections {
             get {
                 return ResourceManager.GetString("Error_Collections", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enter up to 9 items separated using &apos;;&apos;.
         /// </summary>
-        internal static string Error_Items {
+        public static string Error_Items {
             get {
                 return ResourceManager.GetString("Error_Items", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Themed Product Niche Catalogs will promote the products you’d like to feature on ESP Website’s home page..
         /// </summary>
-        internal static string FeaturedProductsDesc {
+        public static string FeaturedProductsDesc {
             get {
                 return ResourceManager.GetString("FeaturedProductsDesc", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Only following formats are allowed. [pdf, ai, eps, jpg,pjpeg].
         /// </summary>
-        internal static string FileFormat_1 {
+        public static string FileFormat_1 {
             get {
                 return ResourceManager.GetString("FileFormat_1", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Only following formats are allowed. [gif, jpeg, mpeg, x-shockwave-flash].
         /// </summary>
-        internal static string FileFormat_2 {
+        public static string FileFormat_2 {
             get {
                 return ResourceManager.GetString("FileFormat_2", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The ESP Websites Network delivers your product details to millions of end-buyers and thousands of distributors..
         /// </summary>
-        internal static string IntroductoryOfferDesc {
+        public static string IntroductoryOfferDesc {
             get {
                 return ResourceManager.GetString("IntroductoryOfferDesc", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to ItemNumber.
         /// </summary>
-        internal static string ItemNumber {
+        public static string ItemNumber {
             get {
                 return ResourceManager.GetString("ItemNumber", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to LargeImage.
         /// </summary>
-        internal static string LargeImage {
+        public static string LargeImage {
             get {
                 return ResourceManager.GetString("LargeImage", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Please upload a large image..
         /// </summary>
-        internal static string LargeImageErr {
+        public static string LargeImageErr {
             get {
                 return ResourceManager.GetString("LargeImageErr", resourceCulture);
             }
@@ -144,16 +144,16 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
-        internal static string Name {
+        public static string Names {
             get {
-                return ResourceManager.GetString("Name", resourceCulture);
+                return ResourceManager.GetString("Names", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Number of Months.
         /// </summary>
-        internal static string NumberofMonths {
+        public static string NumberofMonths {
             get {
                 return ResourceManager.GetString("NumberofMonths", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to corporation.
         /// </summary>
-        internal static string Option_Corporation {
+        public static string Option_Corporation {
             get {
                 return ResourceManager.GetString("Option_Corporation", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Digitizing.
         /// </summary>
-        internal static string Option_Digitziing {
+        public static string Option_Digitziing {
             get {
                 return ResourceManager.GetString("Option_Digitziing", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Embroidery.
         /// </summary>
-        internal static string Option_Embroidery {
+        public static string Option_Embroidery {
             get {
                 return ResourceManager.GetString("Option_Embroidery", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Engraving.
         /// </summary>
-        internal static string Option_Engraving {
+        public static string Option_Engraving {
             get {
                 return ResourceManager.GetString("Option_Engraving", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Heat Transfer.
         /// </summary>
-        internal static string Option_HeatTransfer {
+        public static string Option_HeatTransfer {
             get {
                 return ResourceManager.GetString("Option_HeatTransfer", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to individual.
         /// </summary>
-        internal static string Option_Individual {
+        public static string Option_Individual {
             get {
                 return ResourceManager.GetString("Option_Individual", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to LLC proprietorship.
         /// </summary>
-        internal static string Option_LLCProprietorship {
+        public static string Option_LLCProprietorship {
             get {
                 return ResourceManager.GetString("Option_LLCProprietorship", resourceCulture);
             }
@@ -225,7 +225,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Monogramming.
         /// </summary>
-        internal static string Option_Monogramming {
+        public static string Option_Monogramming {
             get {
                 return ResourceManager.GetString("Option_Monogramming", resourceCulture);
             }
@@ -234,7 +234,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
-        internal static string Option_No {
+        public static string Option_No {
             get {
                 return ResourceManager.GetString("Option_No", resourceCulture);
             }
@@ -243,7 +243,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Other.
         /// </summary>
-        internal static string Option_Other {
+        public static string Option_Other {
             get {
                 return ResourceManager.GetString("Option_Other", resourceCulture);
             }
@@ -252,7 +252,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to partnership.
         /// </summary>
-        internal static string Option_Partnership {
+        public static string Option_Partnership {
             get {
                 return ResourceManager.GetString("Option_Partnership", resourceCulture);
             }
@@ -261,7 +261,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Screen Printing.
         /// </summary>
-        internal static string Option_ScreenPrinting {
+        public static string Option_ScreenPrinting {
             get {
                 return ResourceManager.GetString("Option_ScreenPrinting", resourceCulture);
             }
@@ -270,7 +270,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Sublimation.
         /// </summary>
-        internal static string Option_Sublimation {
+        public static string Option_Sublimation {
             get {
                 return ResourceManager.GetString("Option_Sublimation", resourceCulture);
             }
@@ -279,7 +279,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
-        internal static string Option_Yes {
+        public static string Option_Yes {
             get {
                 return ResourceManager.GetString("Option_Yes", resourceCulture);
             }
@@ -288,7 +288,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Most major search engines carry paid placement listings guaranteeing advertisers a high ranking, usually in relation to desired words..
         /// </summary>
-        internal static string PayForPlacementDesc {
+        public static string PayForPlacementDesc {
             get {
                 return ResourceManager.GetString("PayForPlacementDesc", resourceCulture);
             }
@@ -297,7 +297,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to 349.
         /// </summary>
-        internal static string ProductCollections_Cost {
+        public static string ProductCollections_Cost {
             get {
                 return ResourceManager.GetString("ProductCollections_Cost", resourceCulture);
             }
@@ -306,7 +306,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to 999.
         /// </summary>
-        internal static string ProductCollections_DiscountedCost {
+        public static string ProductCollections_DiscountedCost {
             get {
                 return ResourceManager.GetString("ProductCollections_DiscountedCost", resourceCulture);
             }
@@ -315,7 +315,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to PromoMart.com and SuccessfulPromotions.com Product Spotlights help promote your hottest products with a unique advertisement on the home page..
         /// </summary>
-        internal static string ProductSpotlightDesc {
+        public static string ProductSpotlightDesc {
             get {
                 return ResourceManager.GetString("ProductSpotlightDesc", resourceCulture);
             }
@@ -324,7 +324,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Which best describes your company?.
         /// </summary>
-        internal static string Question_BestCompany {
+        public static string Question_BestCompany {
             get {
                 return ResourceManager.GetString("Question_BestCompany", resourceCulture);
             }
@@ -333,7 +333,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Which method(s) of imprinting do you offer?.
         /// </summary>
-        internal static string Question_MethodsOfImpringting {
+        public static string Question_MethodsOfImpringting {
             get {
                 return ResourceManager.GetString("Question_MethodsOfImpringting", resourceCulture);
             }
@@ -342,7 +342,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Is your company a union member?.
         /// </summary>
-        internal static string Question_UnionMember {
+        public static string Question_UnionMember {
             get {
                 return ResourceManager.GetString("Question_UnionMember", resourceCulture);
             }
@@ -351,7 +351,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to SmallImage.
         /// </summary>
-        internal static string SmallImage {
+        public static string SmallImage {
             get {
                 return ResourceManager.GetString("SmallImage", resourceCulture);
             }
@@ -360,7 +360,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Please upload a small image..
         /// </summary>
-        internal static string SmallImageErr {
+        public static string SmallImageErr {
             get {
                 return ResourceManager.GetString("SmallImageErr", resourceCulture);
             }
@@ -369,7 +369,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Text Around Image.
         /// </summary>
-        internal static string TextAroundImage {
+        public static string TextAroundImage {
             get {
                 return ResourceManager.GetString("TextAroundImage", resourceCulture);
             }
@@ -378,7 +378,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to TextUnderImage.
         /// </summary>
-        internal static string TextUnderImage {
+        public static string TextUnderImage {
             get {
                 return ResourceManager.GetString("TextUnderImage", resourceCulture);
             }
@@ -387,7 +387,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Total.
         /// </summary>
-        internal static string Total {
+        public static string Total {
             get {
                 return ResourceManager.GetString("Total", resourceCulture);
             }
@@ -396,7 +396,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Upload Large Image.
         /// </summary>
-        internal static string UploadLargeImage {
+        public static string UploadLargeImage {
             get {
                 return ResourceManager.GetString("UploadLargeImage", resourceCulture);
             }
@@ -405,7 +405,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Upload Small Image.
         /// </summary>
-        internal static string UploadSmallImage {
+        public static string UploadSmallImage {
             get {
                 return ResourceManager.GetString("UploadSmallImage", resourceCulture);
             }

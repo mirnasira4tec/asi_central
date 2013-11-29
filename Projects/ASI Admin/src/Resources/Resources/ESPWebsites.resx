@@ -144,7 +144,7 @@
   <data name="LargeImageErr" xml:space="preserve">
     <value>Please upload a large image.</value>
   </data>
-  <data name="Name" xml:space="preserve">
+  <data name="Names" xml:space="preserve">
     <value>Name</value>
   </data>
   <data name="NumberofMonths" xml:space="preserve">
