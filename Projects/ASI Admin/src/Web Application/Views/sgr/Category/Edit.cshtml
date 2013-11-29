@@ -16,7 +16,7 @@
     @Html.LabelFor(category => category.Name) @Html.EditorFor(category => category.Name) @Html.ValidationMessageFor(category => category.Name)
     
     <input type="submit" value="Save" class="btn" />
-    @Html.ActionLink(Resource.Cancel, "List", "Product", new ViewCompany { Id = Model.CompanyID, CategoryID = Category.CATEGORY_ALL }, null)
+    @Html.ActionLink(asi.asicentral.Resources.Resource.Cancel, "List", "Product", new ViewCompany { Id = Model.CompanyID, CategoryID = Category.CATEGORY_ALL }, null)
 }
 </div>
 

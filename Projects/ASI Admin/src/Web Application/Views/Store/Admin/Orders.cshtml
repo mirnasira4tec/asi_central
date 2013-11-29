@@ -1,6 +1,7 @@
 ﻿@using asi.asicentral.web
 @using asi.asicentral.model.store
 @using asi.asicentral.web.model.store
+@using asi.asicentral.Resources
 @model OrderPageModel
 
 @{
@@ -93,7 +94,7 @@
         <div id="@Model.OrderTab" class="tab-pane active">
         @if (Model.Orders != null && Model.Orders.Count > 0) {
         <table class="table table-bordered table-condensed table-striped">
-            <thead><tr><th>@Resource.StoreOrderID</th><th>Name</th><th>Email</th><th>Item</th><th>Application</th><th>Step</th><th>Quantity</th><th>Price</th><th>Billing Information</th><th>CreditCard</th><th>@Resource.StoreDateOrderCreated</th></tr></thead>
+            <thead><tr><th>@Resource.StoreOrderID</th><th>Name</th><th>Email</th><th>Item</th><th>Application</th><th>Step</th><th>Quantity</th><th>Price</th><th>Billing Information</th><th>CreditCard</th><th>@asi.asicentral.Resources.Resource.StoreDateOrderCreated</th></tr></thead>
             <tbody>            
             @foreach (OrderModel order in Model.Orders)
             {

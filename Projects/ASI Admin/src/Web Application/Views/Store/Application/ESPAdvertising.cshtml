@@ -1,6 +1,7 @@
 ﻿@using asi.asicentral.web
 @using asi.asicentral.model.store
 @using asi.asicentral.web.Controllers.Store
+@using asi.asicentral.Resources
 @model asi.asicentral.web.model.store.ESPAdvertisingModel
 @{
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
@@ -84,9 +85,9 @@
                     if(Model.ESPTowerAds != null && Model.ESPTowerAds.Count > 0)
                     {
                     <span class="label-row">
-				        @Html.Label(asi.asicentral.web.Resource.AdType) 
-                        @Html.Label(asi.asicentral.web.Resource.Categories) 
-                        @Html.Label(asi.asicentral.web.Resource.Logos) 
+				        @Html.Label(Resource.AdType) 
+                        @Html.Label(Resource.Categories) 
+                        @Html.Label(Resource.Logos) 
 			        </span>
                         foreach(StoreDetailEspTowerAd ad in Model.ESPTowerAds )
                         {
@@ -94,7 +95,7 @@
 				        @Html.Label(asi.asicentral.util.store.ESPAdvertisingHelper.GetBannerTileTowerOption(ad.OptionId))
                         @if (!string.IsNullOrEmpty(ad.Categories)) { @Html.Label(ad.Categories) }
                         else {@Html.Label("          ")}
-                        @if (!string.IsNullOrEmpty(ad.LogoPath)) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@ad.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
+                        @if (!string.IsNullOrEmpty(ad.LogoPath)) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@ad.LogoPath">@Html.Raw(Resource.UploadedImage)</a> }
 			        </span>
                         }
                     }
@@ -141,13 +142,13 @@
                         @if(Model.LogoPath != string.Empty) { @Html.LabelFor(m => m.LogoPath) }
 			        </span>
 			        <span class="label-row">
-                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
+                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(Resource.UploadedImage)</a> }
 			        </span>
                     break;
                 case 52:
                     <div class="label-row">
                         @if(Model.LogoPath != string.Empty) { @Html.LabelFor(m => m.LogoPath) }
-                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
+                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(Resource.UploadedImage)</a> }
 			        </div>
                     <br /> <br />
                     <div class="label-row">
@@ -175,7 +176,7 @@
 			        </span>
 			        <span class="label-row">
                         @Html.TextBoxFor(m => m.Videos[count].ItemList, new { @readonly = "readonly" }) @Html.ValidationMessageFor(m => m.Videos[count].ItemList)
-                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.Videos[count].LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedVideo)</a> }
+                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.Videos[count].LogoPath">@Html.Raw(Resource.UploadedVideo)</a> }
 			        </span>
                         }
                     }
@@ -187,7 +188,7 @@
 			        </span>
 			        <span class="label-row">
 				         @Html.DropDownListFor(model => model.Products_OptionId_First, asi.asicentral.util.store.ESPAdvertisingHelper.GetESPOnlineOptions())
-                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a> }
+                        @if(Model.LogoPath != string.Empty) { <a href="/Media/Download?file=/Store/uploads/espadvertisement/@Model.LogoPath">@Html.Raw(Resource.UploadedImage)</a> }
 			        </span>
                     break;
             }

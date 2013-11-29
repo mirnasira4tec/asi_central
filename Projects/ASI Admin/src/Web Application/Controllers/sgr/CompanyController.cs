@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security.AntiXss;
+using asi.asicentral.Resources;
 
 namespace asi.asicentral.web.Controllers.sgr
 {

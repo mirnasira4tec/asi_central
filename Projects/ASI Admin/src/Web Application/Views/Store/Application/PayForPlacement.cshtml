@@ -2,6 +2,7 @@
 @using asi.asicentral.model.store
 @using asi.asicentral.web.Controllers.Store
 @using asi.asicentral.web.model.store
+@using asi.asicentral.Resources
 @model asi.asicentral.web.model.store.ESPPayForPlacementModel
 
 @{
@@ -83,14 +84,14 @@
                 <div class="label-row">
                     @if(Model.ProductId == 47)
                     {
-				    @Html.Label(asi.asicentral.web.Resource.CPMOption) 
+				    @Html.Label(Resource.CPMOption) 
                     }
-                    @Html.Label(asi.asicentral.web.Resource.PaymentOption) 
+                    @Html.Label(Resource.PaymentOption) 
                     <span id="paymentAmountLabel_@count" hidden>
-                    @Html.Label(asi.asicentral.web.Resource.PaymentAmount) 
+                    @Html.Label(Resource.PaymentAmount) 
                     </span>
                     <span id="impressionsLabel_@count" hidden>
-                    @Html.Label(asi.asicentral.web.Resource.Impressions) 
+                    @Html.Label(Resource.Impressions) 
                     </span>
                 </div>
                 <div class="label-row">

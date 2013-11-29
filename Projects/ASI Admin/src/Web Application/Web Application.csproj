@@ -44,6 +44,9 @@
     <Reference Include="asi.asicentral.Core">
       <HintPath>..\..\library\asi.asicentral.Core.dll</HintPath>
     </Reference>
+    <Reference Include="asi.asicentral.Resources">
+      <HintPath>..\..\library\asi.asicentral.Resources.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core">
       <HintPath>..\packages\Castle.Core.3.1.0\lib\net40-client\Castle.Core.dll</HintPath>
     </Reference>
@@ -230,11 +233,6 @@
     <Compile Include="Models\Store\Order\ProductCollectionsModel.cs" />
     <Compile Include="Models\Store\Order\SupplierApplicationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resource.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resource.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-datetimepicker.css" />
@@ -366,13 +364,6 @@
       <Project>{cec7f727-f96b-484c-8687-e9426deb76a2}</Project>
       <Name>Service</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resource.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
