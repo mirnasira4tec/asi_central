@@ -18,12 +18,14 @@ namespace asi.asicentral.model.store
 
         public int Id { get; set; }
         public int? LegacyProductId { get; set; }
+        public int? CouponId { get; set; }
         public int Quantity { get; set; }
         public decimal ApplicationCost { get; set; }
         public decimal Cost { get; set; }
         public decimal ShippingCost { get; set; }
         public string ShippingMethod { get; set; }
         public decimal TaxCost { get; set; }
+        public decimal DiscountAmount { get; set; }
         public bool IsSubscription { get; set; }
         public string AcceptedByName { get; set; }
         public int? OptionId { get; set; }
@@ -32,6 +34,7 @@ namespace asi.asicentral.model.store
         public string UpdateSource { get; set; }
         public virtual StoreOrder Order { get; set; }
         public virtual ContextProduct Product { get; set; }
+        public virtual Coupon Coupon { get; set; }
         public virtual IList<StoreMagazineSubscription> MagazineSubscriptions { get; set; }
 
         public override string ToString()
