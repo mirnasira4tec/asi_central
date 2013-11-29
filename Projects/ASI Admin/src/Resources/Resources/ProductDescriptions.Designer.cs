@@ -22,24 +22,24 @@ namespace asi.asicentral.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ProductDescription {
+    public class ProductDescriptions {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ProductDescription() {
+        internal ProductDescriptions() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("asi.asicentral.Resources.ProductDescription", typeof(ProductDescription).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("asi.asicentral.Resources.ProductDescriptions", typeof(ProductDescriptions).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace asi.asicentral.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Advantages magazine is written especially for the promotional products sales professional. Advantages can help you sell more..
         /// </summary>
-        internal static string ProductAdvantages {
+        public static string ProductAdvantages {
             get {
                 return ResourceManager.GetString("ProductAdvantages", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to ASI SalesPro&lt;sup&gt;&amp;trade;&lt;/sup&gt; powered by Oracle&lt;sup&gt;&amp;reg;&lt;/sup&gt; is the best sales database solution to power your sales team. Now in seconds you can implement a simple strategy for managing your company’s interactions with customers, clients and sales prospects. Store all of your notes and customer contact information, set appointments and follow-ups, send emails with personalized data and track who opened them..
         /// </summary>
-        internal static string ProductASISalesPro {
+        public static string ProductASISalesPro {
             get {
                 return ResourceManager.GetString("ProductASISalesPro", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Powered by Oracle and customized by ASI just for the promotional products industry, ASI SmartSales will give you more customer insights than you’ve ever had before. Plus, you’ll be able to develop strategies and tactics that will strengthen your relationships and better penetrate your accounts..
         /// </summary>
-        internal static string ProductASISmartSales {
+        public static string ProductASISmartSales {
             get {
                 return ResourceManager.GetString("ProductASISmartSales", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to ESP Online Search Screen Advertising Call attention to your latest or best selling product..
         /// </summary>
-        internal static string ProductBannerTileTower {
+        public static string ProductBannerTileTower {
             get {
                 return ResourceManager.GetString("ProductBannerTileTower", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Make a massive impression on all distributors searching ESP Online&lt;sup&gt;&amp;trade;&lt;/sup&gt;..
         /// </summary>
-        internal static string ProductClearanceNewRush {
+        public static string ProductClearanceNewRush {
             get {
                 return ResourceManager.GetString("ProductClearanceNewRush", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Counselor&apos;s &quot;State of the Industry&quot; statistics are the industry&apos;s benchmark..
         /// </summary>
-        internal static string ProductCounselor {
+        public static string ProductCounselor {
             get {
                 return ResourceManager.GetString("ProductCounselor", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Send your latest products, specials, closeouts and more to 60,000 ASI members and non-members with ASI’s direct email advertising service, EmailExpress. Our email service allows distributors to request catalogs, samples and allows you to forward a distributor EmailExpress version to end-buyers. EmailExpress features informative ROI reports, which give you real-time data on delivery, clicks, forwards and buyer friendly requests in an easy-to-read format..
         /// </summary>
-        internal static string ProductEmailExpress {
+        public static string ProductEmailExpress {
             get {
                 return ResourceManager.GetString("ProductEmailExpress", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to ESP Websites are everything that a website should be – functional, user friendly, attractive and revenue generating. Powered by ESP, the websites create a realistic retail experience for your customers, motivating them to stay, enjoy and shop. And with secure online payment, you get paid faster than ever..
         /// </summary>
-        internal static string ProductESPWebsites {
+        public static string ProductESPWebsites {
             get {
                 return ResourceManager.GetString("ProductESPWebsites", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to This powerful branding tool displays your logo every time your products are scrolled over in ESP&lt;sup&gt;&amp;reg;&lt;/sup&gt; search results..
         /// </summary>
-        internal static string ProductFeaturedBrands {
+        public static string ProductFeaturedBrands {
             get {
                 return ResourceManager.GetString("ProductFeaturedBrands", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Create sales with this compact catalog that’s perfect for leave-behinds and mailers. This is one of the most popular catalogs with end-buyers because it showcases a cross section of products, from standard items like pens and stress balls to unique products like rally hair and glowing ice cubes..
         /// </summary>
-        internal static string ProductIdeaShowcase {
+        public static string ProductIdeaShowcase {
             get {
                 return ResourceManager.GetString("ProductIdeaShowcase", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Create sales with this compact catalog that’s perfect for leave-behinds and mailers. This is one of the most popular catalogs with end-buyers because it showcases a cross section of products, from standard items like pens and stress balls to unique products like rally hair and glowing ice cubes..
         /// </summary>
-        internal static string ProductIdeaShowcaseSchools {
+        public static string ProductIdeaShowcaseSchools {
             get {
                 return ResourceManager.GetString("ProductIdeaShowcaseSchools", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The ESP Websites&lt;sup&gt;&amp;trade;&lt;/sup&gt; Network delivers your product details to millions of end-buyers and thousands of distributors..
         /// </summary>
-        internal static string ProductIntroductoryOffer {
+        public static string ProductIntroductoryOffer {
             get {
                 return ResourceManager.GetString("ProductIntroductoryOffer", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Make the first impression on all distributors logging into ESP Online&lt;sup&gt;&amp;trade;&lt;/sup&gt; by placing your advertisement on the login screen. This valuable ad space can be filled with a static or animated gif..
         /// </summary>
-        internal static string ProductLoginScreenAd {
+        public static string ProductLoginScreenAd {
             get {
                 return ResourceManager.GetString("ProductLoginScreenAd", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to For decades, the highly regarded Media File has been used by distributors as their single most powerful sales tool. It is depended on and used throughout the year for researching and generating ideas, but most importantly, to close sales. With hundreds of pages and thousands of products, &lt;em&gt;Media File&lt;/em&gt; is the market standard..
         /// </summary>
-        internal static string ProductMediaFile {
+        public static string ProductMediaFile {
             get {
                 return ResourceManager.GetString("ProductMediaFile", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Choose to target your advertising only to distributors searching on a particular category.  ESP is pleased to offer Pay for Placement on eight of the top spots in any of the product search categories. Obtain higher placement in ESP, leading to more sales! Act now before your spot is taken..
         /// </summary>
-        internal static string ProductPayforPlacement {
+        public static string ProductPayforPlacement {
             get {
                 return ResourceManager.GetString("ProductPayforPlacement", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Most major search engines carry paid placement listings guaranteeing advertisers a high ranking, usually in relation to desired words. .
         /// </summary>
-        internal static string ProductPayForPlacement1 {
+        public static string ProductPayForPlacement1 {
             get {
                 return ResourceManager.GetString("ProductPayForPlacement1", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Themed Product Niche Catalogs will promote the products you’d like to feature on ESP Website’s home page. .
         /// </summary>
-        internal static string ProductProductCollections {
+        public static string ProductProductCollections {
             get {
                 return ResourceManager.GetString("ProductProductCollections", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Instant Messaging and Webchat are some of the most popular ways to communicate online.  These communication media are less intrusive than a phone call and take less time than an email. Webchat offers distributors and suppliers a fast and easy way to keep in touch on a platform they already use everyday. ESP Online&lt;sup&gt;&amp;trade;&lt;/sup&gt; is pleased to offer three advertising spots within PromoCafé Webchat..
         /// </summary>
-        internal static string ProductPromoCafeWebchat {
+        public static string ProductPromoCafeWebchat {
             get {
                 return ResourceManager.GetString("ProductPromoCafeWebchat", resourceCulture);
             }
@@ -225,7 +225,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Catalogs product - Select.
         /// </summary>
-        internal static string ProductSelect {
+        public static string ProductSelect {
             get {
                 return ResourceManager.GetString("ProductSelect", resourceCulture);
             }
@@ -234,7 +234,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to &lt;em&gt;Spectrum&lt;/em&gt; is your most indispensable and versatile selling tool. The wide range of products included in this convenient, digest-size catalog will give you the ability to satisfy a variety of your customers’ needs..
         /// </summary>
-        internal static string ProductSpectrum {
+        public static string ProductSpectrum {
             get {
                 return ResourceManager.GetString("ProductSpectrum", resourceCulture);
             }
@@ -243,7 +243,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to &lt;strong&gt;Introducing Spectrum Celebration!&lt;/strong&gt; Our best-selling end-buyer catalog is now available in a summer/fall edition. It includes a special SELECT section featuring the top rated 4 star and up suppliers as well as a customer favorites section too..
         /// </summary>
-        internal static string ProductSpectrumCelebration {
+        public static string ProductSpectrumCelebration {
             get {
                 return ResourceManager.GetString("ProductSpectrumCelebration", resourceCulture);
             }
@@ -252,7 +252,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Stitches is the ultimate resource for commercial embroiderers and apparel decorators..
         /// </summary>
-        internal static string ProductStitches {
+        public static string ProductStitches {
             get {
                 return ResourceManager.GetString("ProductStitches", resourceCulture);
             }
@@ -261,7 +261,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Magazines product - Promotions.
         /// </summary>
-        internal static string ProductSuccessfulPromotionsMagazine {
+        public static string ProductSuccessfulPromotionsMagazine {
             get {
                 return ResourceManager.GetString("ProductSuccessfulPromotionsMagazine", resourceCulture);
             }
@@ -270,7 +270,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Magazines product - Promotions Special Offer.
         /// </summary>
-        internal static string ProductSuccessfulPromotionsMagazineSpecialOffer {
+        public static string ProductSuccessfulPromotionsMagazineSpecialOffer {
             get {
                 return ResourceManager.GetString("ProductSuccessfulPromotionsMagazineSpecialOffer", resourceCulture);
             }
@@ -279,7 +279,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Magazines product - Promotions Special Offer Dallas.
         /// </summary>
-        internal static string ProductSuccessfulPromotionsMagazineSpecialOfferDallas {
+        public static string ProductSuccessfulPromotionsMagazineSpecialOfferDallas {
             get {
                 return ResourceManager.GetString("ProductSuccessfulPromotionsMagazineSpecialOfferDallas", resourceCulture);
             }
@@ -288,7 +288,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The Event Planner offers one-stop shopping for distributors looking for event merchandise.  All events are listed on the ESP™ homepage providing instant accessibility, homepage visibility, and unlimited views. This new feature fully integrates the event concept and incorporates selling themed products within a pricing tier. Never before has it been so easy to sell a full package of products within a selected price range..
         /// </summary>
-        internal static string ProductTheEventPlanner {
+        public static string ProductTheEventPlanner {
             get {
                 return ResourceManager.GetString("ProductTheEventPlanner", resourceCulture);
             }
@@ -297,7 +297,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Catalogs product - The Gift Book.
         /// </summary>
-        internal static string ProductTheGiftBook {
+        public static string ProductTheGiftBook {
             get {
                 return ResourceManager.GetString("ProductTheGiftBook", resourceCulture);
             }
@@ -306,7 +306,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Our most upscale, elegant catalog containing an impressive collection of timeless gifts All items are carefully and beautifully displayed to appeal to even the most sophisticated buyers..
         /// </summary>
-        internal static string ProductTheGiftBook2 {
+        public static string ProductTheGiftBook2 {
             get {
                 return ResourceManager.GetString("ProductTheGiftBook2", resourceCulture);
             }
@@ -315,7 +315,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Catalogs product - The Green Catalog.
         /// </summary>
-        internal static string ProductTheGreenCatalog {
+        public static string ProductTheGreenCatalog {
             get {
                 return ResourceManager.GetString("ProductTheGreenCatalog", resourceCulture);
             }
@@ -324,7 +324,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to &lt;em&gt;The Professional Buyer&apos;s Guide&lt;/em&gt; is your go-to catalogue for the Canadian marketplace. This catalogue contains only the most preferred and best suppliers in the Canadian market, offering a wide variety of products with no duplication..
         /// </summary>
-        internal static string ProductTheProfessionalBuyersGuide {
+        public static string ProductTheProfessionalBuyersGuide {
             get {
                 return ResourceManager.GetString("ProductTheProfessionalBuyersGuide", resourceCulture);
             }
@@ -333,7 +333,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to By presenting your products in both mediums with an ESP video, a much stronger and memorable message will be delivered to your potential or existing customer base..
         /// </summary>
-        internal static string ProductVideo {
+        public static string ProductVideo {
             get {
                 return ResourceManager.GetString("ProductVideo", resourceCulture);
             }
@@ -342,7 +342,7 @@ namespace asi.asicentral.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Wearables is designed for today&apos;s busy apparel business owner..
         /// </summary>
-        internal static string ProductWearables {
+        public static string ProductWearables {
             get {
                 return ResourceManager.GetString("ProductWearables", resourceCulture);
             }

@@ -60,10 +60,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Magazines.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\ProductDescription.Designer.cs">
+    <Compile Include="Resources\ProductDescriptions.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ProductDescription.resx</DependentUpon>
+      <DependentUpon>ProductDescriptions.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -88,9 +88,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Magazines.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ProductDescription.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ProductDescription.Designer.cs</LastGenOutput>
+    <EmbeddedResource Include="Resources\ProductDescriptions.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductDescriptions.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
