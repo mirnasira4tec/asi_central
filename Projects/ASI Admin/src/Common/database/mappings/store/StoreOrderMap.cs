@@ -46,10 +46,6 @@ namespace asi.asicentral.database.mappings.store
             HasOptional(order => order.Context)
                 .WithMany()
                 .HasForeignKey(order => order.ContextId);
-
-            HasOptional(order => order.Coupon)
-                .WithMany()
-                .HasForeignKey(order => order.CouponId);
         }
     }
 }
