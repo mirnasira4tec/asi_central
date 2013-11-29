@@ -7,7 +7,7 @@
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
 }
 
-<h1>@Resource.StoreTitleCatalogsApplication - @Html.Raw(Model.ProductName) (#@Model.OrderId)</h1>
+<h1>@asi.asicentral.Resources.Resource.StoreTitleCatalogsApplication - @Html.Raw(Model.ProductName) (#@Model.OrderId)</h1>
 @if (Model.Price > 0.0m)
 {
 <p>@Html.Raw(Model.ProductName) product purchase fee is @Model.Price.ToString("C")</p>

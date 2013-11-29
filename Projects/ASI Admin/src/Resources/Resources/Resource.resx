@@ -1365,4 +1365,376 @@
   <data name="ZSK" xml:space="preserve">
     <value>ZSK</value>
   </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="AddCategory" xml:space="preserve">
+    <value>Add Category</value>
+  </data>
+  <data name="AddCompany" xml:space="preserve">
+    <value>Add Comapny</value>
+  </data>
+  <data name="AdSelectDate" xml:space="preserve">
+    <value>Select Date</value>
+  </data>
+  <data name="AdType" xml:space="preserve">
+    <value>Ad Type's</value>
+  </data>
+  <data name="Area" xml:space="preserve">
+    <value>Area</value>
+  </data>
+  <data name="Artwork" xml:space="preserve">
+    <value>Artwork</value>
+  </data>
+  <data name="ArtworkOptionforEMAIL" xml:space="preserve">
+    <value>I would like to EMAIL Camera Ready Artwork to &lt;a href="mailto:catalogart@asicentral.com"&gt;catalogart@asicentral.com&lt;/a&gt;</value>
+  </data>
+  <data name="ArtworkOptionforUPLOAD" xml:space="preserve">
+    <value>I would like to UPLOAD Camera Ready Artwork</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="CategoryName1" xml:space="preserve">
+    <value>Category Name</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="ColumnIsInactive" xml:space="preserve">
+    <value>Is Inactive?</value>
+  </data>
+  <data name="ColumnLargeImage" xml:space="preserve">
+    <value>Large Image</value>
+  </data>
+  <data name="ColumnProductName" xml:space="preserve">
+    <value>Product Name</value>
+  </data>
+  <data name="ColumnSmallImage" xml:space="preserve">
+    <value>Small Image</value>
+  </data>
+  <data name="ConfirmDeleteMessage1" xml:space="preserve">
+    <value>Are you sure you want to delete this item?</value>
+  </data>
+  <data name="ConfirmDeleteTitle1" xml:space="preserve">
+    <value>Confirm Delete</value>
+  </data>
+  <data name="ContactName1" xml:space="preserve">
+    <value>Contact Name</value>
+  </data>
+  <data name="Cover" xml:space="preserve">
+    <value>Cover</value>
+  </data>
+  <data name="CPMOption" xml:space="preserve">
+    <value>CPM Option</value>
+  </data>
+  <data name="CurrentMembershipPackage1" xml:space="preserve">
+    <value>Current membership package</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DeleteTooltip1" xml:space="preserve">
+    <value>Click to delete the item</value>
+  </data>
+  <data name="DieStamp1" xml:space="preserve">
+    <value>Die Stamp</value>
+  </data>
+  <data name="DirectEmbroidery1" xml:space="preserve">
+    <value>Direct Embroidery</value>
+  </data>
+  <data name="DistributorAgreements" xml:space="preserve">
+    <value>Agreements</value>
+  </data>
+  <data name="DistributorAppProductLines" xml:space="preserve">
+    <value>Product Lines</value>
+  </data>
+  <data name="DistributorAppTypesOfAccount" xml:space="preserve">
+    <value>Types of Accounts</value>
+  </data>
+  <data name="EditToolTip" xml:space="preserve">
+    <value>Click to edit the item</value>
+  </data>
+  <data name="Email2" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Engraving1" xml:space="preserve">
+    <value>Engraving</value>
+  </data>
+  <data name="Etching1" xml:space="preserve">
+    <value>Etching</value>
+  </data>
+  <data name="FieldCost" xml:space="preserve">
+    <value>Invalid cost</value>
+  </data>
+  <data name="FieldImpressions" xml:space="preserve">
+    <value>Invalid number of impressions</value>
+  </data>
+  <data name="FieldIMustBeNumber" xml:space="preserve">
+    <value>Field must be a number</value>
+  </data>
+  <data name="FoilStamping1" xml:space="preserve">
+    <value>Foil Stamping</value>
+  </data>
+  <data name="FourColourProcess1" xml:space="preserve">
+    <value>Four Color Process</value>
+  </data>
+  <data name="FullColourProcess1" xml:space="preserve">
+    <value>Full Colour Process</value>
+  </data>
+  <data name="HotStamping1" xml:space="preserve">
+    <value>Hot Stamping</value>
+  </data>
+  <data name="Impressions" xml:space="preserve">
+    <value>Impressions</value>
+  </data>
+  <data name="ImprintInstruction" xml:space="preserve">
+    <value>Imprint Instruction</value>
+  </data>
+  <data name="IsArtworkToProof" xml:space="preserve">
+    <value>Artwork to Proof</value>
+  </data>
+  <data name="LargeImagePath" xml:space="preserve">
+    <value>LargeImagePath</value>
+  </data>
+  <data name="Line1" xml:space="preserve">
+    <value>Line 1</value>
+  </data>
+  <data name="Line2" xml:space="preserve">
+    <value>Line 2</value>
+  </data>
+  <data name="Line3" xml:space="preserve">
+    <value>Line 3</value>
+  </data>
+  <data name="Line4" xml:space="preserve">
+    <value>Line 4</value>
+  </data>
+  <data name="Line5" xml:space="preserve">
+    <value>Line 5</value>
+  </data>
+  <data name="Line6" xml:space="preserve">
+    <value>Line 6</value>
+  </data>
+  <data name="Lithography1" xml:space="preserve">
+    <value>Lithography</value>
+  </data>
+  <data name="LogoPath" xml:space="preserve">
+    <value>Logo</value>
+  </data>
+  <data name="Logos" xml:space="preserve">
+    <value>Logo's</value>
+  </data>
+  <data name="NumberOfItems" xml:space="preserve">
+    <value>Item Numbers</value>
+  </data>
+  <data name="NumberOfProducts" xml:space="preserve">
+    <value>Number of Products</value>
+  </data>
+  <data name="Offset1" xml:space="preserve">
+    <value>Offset</value>
+  </data>
+  <data name="OtherDecoratingMethod1" xml:space="preserve">
+    <value>Other Decorating Method</value>
+  </data>
+  <data name="OtherDecoratingMethodName1" xml:space="preserve">
+    <value>Other Decorating Method Name</value>
+  </data>
+  <data name="PadPrint1" xml:space="preserve">
+    <value>Pad Print</value>
+  </data>
+  <data name="PaymentAmount" xml:space="preserve">
+    <value>Fixed Cost</value>
+  </data>
+  <data name="PaymentOption" xml:space="preserve">
+    <value>Payment Option</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SGRMaintenanceLink" xml:space="preserve">
+    <value>SGR Maintenance</value>
+  </data>
+  <data name="ShippingMethod" xml:space="preserve">
+    <value>Shipping Method</value>
+  </data>
+  <data name="SilkScreen1" xml:space="preserve">
+    <value>SilkScreen</value>
+  </data>
+  <data name="SmallImagePath" xml:space="preserve">
+    <value>SmallImagePath</value>
+  </data>
+  <data name="StoreAdminLink" xml:space="preserve">
+    <value>ASI Store Admin</value>
+  </data>
+  <data name="StoreAdminOrders" xml:space="preserve">
+    <value>Orders processed through the store</value>
+  </data>
+  <data name="StoreAdminProducts" xml:space="preserve">
+    <value>List of Products driving the store</value>
+  </data>
+  <data name="StoreApplication" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="StoreASINumber" xml:space="preserve">
+    <value>ASI#</value>
+  </data>
+  <data name="StoreBillingAddress" xml:space="preserve">
+    <value>Billing Address</value>
+  </data>
+  <data name="StoreClosedDate" xml:space="preserve">
+    <value>Closed Date</value>
+  </data>
+  <data name="StoreCompany" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="StoreCompanyName" xml:space="preserve">
+    <value>Company Name</value>
+  </data>
+  <data name="StoreDateErrorMessage" xml:space="preserve">
+    <value>Start date must not be after end date</value>
+  </data>
+  <data name="StoreDateErrorMessage1" xml:space="preserve">
+    <value>Start date must not be after end date</value>
+  </data>
+  <data name="StoreDateOrderCreated" xml:space="preserve">
+    <value>Date Created</value>
+  </data>
+  <data name="StoreEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="StoreItem" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="StoreName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="StoreOrderAmount" xml:space="preserve">
+    <value>Billing Amount</value>
+  </data>
+  <data name="StoreOrderClosedDate" xml:space="preserve">
+    <value>Order Closed Date</value>
+  </data>
+  <data name="StoreOrderDate" xml:space="preserve">
+    <value>Order Date</value>
+  </data>
+  <data name="StoreOrderID" xml:space="preserve">
+    <value>Order Id</value>
+  </data>
+  <data name="StorePhone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="StoreProduct" xml:space="preserve">
+    <value>Product</value>
+  </data>
+  <data name="StoreQuantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="StoreSearchButton" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="StoreSearchMessage" xml:space="preserve">
+    <value>Enter a date range to search:</value>
+  </data>
+  <data name="StoreStatus" xml:space="preserve">
+    <value>Order Status</value>
+  </data>
+  <data name="StoreStatusClosed" xml:space="preserve">
+    <value>Closed</value>
+  </data>
+  <data name="StoreStatusOpened" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="StoreTitleCatalogsApplication" xml:space="preserve">
+    <value>Catalogs</value>
+  </data>
+  <data name="StoreTitleDecoratorApplication" xml:space="preserve">
+    <value>Decorator Application</value>
+  </data>
+  <data name="StoreTitleDistributorApplication" xml:space="preserve">
+    <value>Distributor Application</value>
+  </data>
+  <data name="StoreTitleMagazinesApplication" xml:space="preserve">
+    <value>Magazines - {0}</value>
+  </data>
+  <data name="StoreTitleOpenCarts" xml:space="preserve">
+    <value>Open Carts</value>
+  </data>
+  <data name="StoreTitleOrders" xml:space="preserve">
+    <value>Orders</value>
+  </data>
+  <data name="StoreTitleSupplierApplication" xml:space="preserve">
+    <value>Supplier Application</value>
+  </data>
+  <data name="StoreTotalAnnualSalesVolume" xml:space="preserve">
+    <value>Total Annual Sales Volume</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Sublimination1" xml:space="preserve">
+    <value>Sublimination</value>
+  </data>
+  <data name="Supplement" xml:space="preserve">
+    <value>Supplement</value>
+  </data>
+  <data name="SupplierAppCompanyContacts" xml:space="preserve">
+    <value>Company Contacts</value>
+  </data>
+  <data name="SupplierAppMethodsOfImprinting" xml:space="preserve">
+    <value>Methods of Imprinting</value>
+  </data>
+  <data name="SupplierAppSalesForce" xml:space="preserve">
+    <value>Sales Force</value>
+  </data>
+  <data name="TextUnderImage" xml:space="preserve">
+    <value>TextUnderImage</value>
+  </data>
+  <data name="TitleAddCategory" xml:space="preserve">
+    <value>Add Category</value>
+  </data>
+  <data name="TitleAddCategory1" xml:space="preserve">
+    <value>Add Category</value>
+  </data>
+  <data name="TitleAddCompany" xml:space="preserve">
+    <value>Add a Company</value>
+  </data>
+  <data name="TitleAddProduct" xml:space="preserve">
+    <value>Add Product</value>
+  </data>
+  <data name="TitleASIStoreAdmin" xml:space="preserve">
+    <value>ASI Store Admin</value>
+  </data>
+  <data name="TitleCategories" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="TitleEditCategory" xml:space="preserve">
+    <value>Edit Category</value>
+  </data>
+  <data name="TitleEditCompany" xml:space="preserve">
+    <value>Edit Company</value>
+  </data>
+  <data name="TitleEditProduct" xml:space="preserve">
+    <value>Edit Product</value>
+  </data>
+  <data name="TitleListCompanies" xml:space="preserve">
+    <value>List of Companies</value>
+  </data>
+  <data name="Transfer1" xml:space="preserve">
+    <value>Transfer</value>
+  </data>
+  <data name="UploadedImage" xml:space="preserve">
+    <value>Uploaded Image</value>
+  </data>
+  <data name="UploadedVideo" xml:space="preserve">
+    <value>Uploaded Video</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>Website</value>
+  </data>
 </root>

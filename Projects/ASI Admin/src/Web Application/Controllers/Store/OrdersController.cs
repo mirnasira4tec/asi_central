@@ -9,6 +9,7 @@ using asi.asicentral.web.model.store;
 using System.Text;
 using asi.asicentral.web.model.store.order;
 using System.Data.Objects.SqlClient;
+using asi.asicentral.Resources;
 
 namespace asi.asicentral.web.Controllers.Store
 {
@@ -22,6 +23,7 @@ namespace asi.asicentral.web.Controllers.Store
         [HttpGet]
         public virtual ActionResult List(Nullable<DateTime> dateStart, Nullable<DateTime> dateEnd, string product, Nullable<int> id, string name, String formTab, String orderTab)
         {
+          
             if (dateStart > dateEnd) ViewBag.Message = Resource.StoreDateErrorMessage;
             IQueryable<StoreOrderDetail> orderDetailQuery = StoreService.GetAll<StoreOrderDetail>(true);
             if (string.IsNullOrEmpty(formTab)) formTab = OrderPageModel.TAB_DATE; //setting the default tab

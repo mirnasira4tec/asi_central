@@ -80,7 +80,7 @@
                     if(Model.IsStoreRequest)
                     {
                     <span class="label-row span11">
-			            <label class="control-label" for="Cost">@asi.asicentral.web.Resource.CurrentMembershipPackage</label>
+			            <label class="control-label" for="Cost">@asi.asicentral.Resources.Resource.CurrentMembershipPackage</label>
                     </span>
                     <span class="label-row">
 			            @Html.DropDownListFor(model => model.OptionId, asi.asicentral.util.store.ASISmartSalesHelper.GetCurrentMembershipOptions(), new { @class = "tab1" }) @Html.ValidationMessageFor(model => model.OptionId)
