@@ -7,6 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web Application", "Web Appl
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{B74B2258-2B47-435C-A0EA-6A0C1FFE18DE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{04D943E2-6C0D-4FD5-B3BC-1860C962C977} = {04D943E2-6C0D-4FD5-B3BC-1860C962C977}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{CEC7F727-F96B-484C-8687-E9426DEB76A2}"
 EndProject

@@ -1737,4 +1737,10 @@
   <data name="Website" xml:space="preserve">
     <value>Website</value>
   </data>
+  <data name="InvalidCouponCode" xml:space="preserve">
+    <value>This is not a current promotional code.</value>
+  </data>
+  <data name="PromotionalCode" xml:space="preserve">
+    <value>Promotional Code</value>
+  </data>
 </root>
