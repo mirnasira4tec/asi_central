@@ -163,12 +163,23 @@ namespace asi.asicentral.services
                     //calculate the taxes
                     if (orderDetail.Product != null)
                     {
-                        if (orderDetail.Product.HasTax)
+                        decimal costForTax = (orderDetail.Cost * orderDetail.Quantity);
+                        if (orderDetail.Coupon != null)
                         {
-                            //tax calculated based on full amount except shipping
-                            tax = CalculateTaxes(address, (orderDetail.Cost * orderDetail.Quantity) + orderDetail.ApplicationCost);
+                            decimal discountAmount = 0.0M;
+                            if (orderDetail.Coupon.IsFixedAmount && orderDetail.Coupon.DiscountAmount > 0.0M)
+                                discountAmount = orderDetail.Coupon.DiscountAmount;
+                            else if (!orderDetail.Coupon.IsFixedAmount && orderDetail.Coupon.DiscountPercentage > 0)
+                                discountAmount = ((costForTax * orderDetail.Coupon.DiscountPercentage) / 100);
+
+                            costForTax = costForTax - discountAmount;
+                            orderDetail.DiscountAmount = discountAmount;
                         }
 
+                        //tax calculated based on full amount except shipping
+                        if (orderDetail.Product.HasTax)
+                            tax = CalculateTaxes(address,  costForTax + orderDetail.ApplicationCost);
+                        
                         if (string.IsNullOrEmpty(orderDetail.ShippingMethod)) orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity);
                         else
                         {
@@ -187,19 +198,19 @@ namespace asi.asicentral.services
 
                     orderDetail.TaxCost = tax;
                     //this is the cost of what to pay now
-                    order.Total += ((orderDetail.Cost + orderDetail.TaxCost) * orderDetail.Quantity) + orderDetail.ShippingCost + orderDetail.ApplicationCost;
+                    order.Total += (((orderDetail.Cost + orderDetail.TaxCost) * orderDetail.Quantity) - orderDetail.DiscountAmount) + orderDetail.ShippingCost + orderDetail.ApplicationCost;
                     if (shouldBeAnnualized)
                     {
                         if (orderDetail.Product.HasTax)
-                            tax = CalculateTaxes(address, orderDetail.Cost) * 12 + CalculateTaxes(address, orderDetail.ApplicationCost);
+                            tax = CalculateTaxes(address, (orderDetail.Cost - orderDetail.DiscountAmount)) * 12 + CalculateTaxes(address, orderDetail.ApplicationCost);
                         else
                             tax = 0;
                         //this would be the total cost over a year for a subscription
-                        order.AnnualizedTotal += (orderDetail.Cost * orderDetail.Quantity * 12) + tax + (orderDetail.ShippingCost * 12) + orderDetail.ApplicationCost;
+                        order.AnnualizedTotal += (((orderDetail.Cost * orderDetail.Quantity) * 12) - orderDetail.DiscountAmount) + tax + (orderDetail.ShippingCost * 12) + orderDetail.ApplicationCost;
                     }
                     else
                     {
-                        order.AnnualizedTotal += (orderDetail.Cost * orderDetail.Quantity) + orderDetail.TaxCost + orderDetail.ShippingCost + orderDetail.ApplicationCost;
+                        order.AnnualizedTotal += (((orderDetail.Cost * orderDetail.Quantity)) - orderDetail.DiscountAmount) + orderDetail.TaxCost + orderDetail.ShippingCost + orderDetail.ApplicationCost;
                     }
                 }
             }
