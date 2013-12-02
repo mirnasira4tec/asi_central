@@ -18,6 +18,7 @@
         <li class="@(Model.FormTab == OrderPageModel.TAB_PRODUCT ? "active" : string.Empty)"><a href="#@OrderPageModel.TAB_PRODUCT">Product</a></li>
         <li class="@(Model.FormTab == OrderPageModel.TAB_NAME ? "active" : string.Empty)"><a href="#@OrderPageModel.TAB_NAME">Name</a></li>
         <li class="@(Model.FormTab == OrderPageModel.TAB_TIMMS ? "active" : string.Empty)"><a href="#@OrderPageModel.TAB_TIMMS">Timms</a></li>
+        <li class="@(Model.FormTab == OrderPageModel.COMPANY_NAME ? "active" : string.Empty)"><a href="#@OrderPageModel.COMPANY_NAME">Company Name</a></li>
     </ul>
     <div class="tab-content" id="formtab-content">
         <div class="tab-pane @(Model.FormTab == OrderPageModel.TAB_DATE ? "active" : string.Empty)" id="@OrderPageModel.TAB_DATE">
@@ -32,6 +33,7 @@
             }
             </div>
         </div>
+
         <div class="tab-pane @(Model.FormTab == OrderPageModel.TAB_ORDER ? "active" : string.Empty)" id="@OrderPageModel.TAB_ORDER">
             <div class="well">
             @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class="form-inline", @id="form-" + @OrderPageModel.TAB_ORDER }))
@@ -80,6 +82,17 @@
                 </div>
             }
         </div>
+        <div class="tab-pane @(Model.FormTab == OrderPageModel.COMPANY_NAME ? "active" : string.Empty)" id="@OrderPageModel.COMPANY_NAME">
+            @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @OrderPageModel.COMPANY_NAME }))
+            {
+                <div class="well">
+                <div class="formField"><label for="timmsid">Company Name</label> <input id="companyname" name="CompanyName" type="text" value="@Model.CompanyName" />
+                <input type="hidden" value="@OrderPageModel.COMPANY_NAME" name="formtab" />
+                <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
+                <input type="submit" value="Search" class="btn" /></div>
+                </div>
+            }
+        </div>
     </div>
 </div>
 @if (ViewBag.Message != null || ViewBag.Message == "")
@@ -94,7 +107,7 @@
         <div id="@Model.OrderTab" class="tab-pane active">
         @if (Model.Orders != null && Model.Orders.Count > 0) {
         <table class="table table-bordered table-condensed table-striped">
-            <thead><tr><th>@Resource.StoreOrderID</th><th>Name</th><th>Email</th><th>Item</th><th>Application</th><th>Step</th><th>Quantity</th><th>Price</th><th>Billing Information</th><th>CreditCard</th><th>@asi.asicentral.Resources.Resource.StoreDateOrderCreated</th></tr></thead>
+            <thead><tr><th>@Resource.StoreOrderID</th><th>Name</th><th>Email</th><th>Item</th><th>Application</th><th>Step</th><th>Quantity</th><th>Price</th><th>Billing Information</th><th>CreditCard</th><th>@asi.asicentral.Resources.Resource.StoreDateOrderCreated</th><th>Company</th></tr></thead>
             <tbody>            
             @foreach (OrderModel order in Model.Orders)
             {
@@ -118,7 +131,7 @@
                 }
                 else
                 { <td>&nbsp</td> }
-                <td>@order.CompletedStep</td><td>@order.Quantity</td><td>$@order.Price</td><td>@order.Billing</td><td>@order.CreditCard</td><td>@order.DateOrderCreated.ToString("MM/dd/yy")</td></tr>
+                <td>@order.CompletedStep</td><td>@order.Quantity</td><td>$@order.Price</td><td>@order.Billing</td><td>@order.CreditCard</td><td>@order.DateOrderCreated.ToString("MM/dd/yy")</td><td>@order.Company</td></tr>
             }
             </tbody>
         </table>

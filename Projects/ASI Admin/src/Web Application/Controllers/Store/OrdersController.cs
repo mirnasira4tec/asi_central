@@ -21,7 +21,7 @@ namespace asi.asicentral.web.Controllers.Store
         public IEncryptionService EncryptionService { get; set; }
 
         [HttpGet]
-        public virtual ActionResult List(Nullable<DateTime> dateStart, Nullable<DateTime> dateEnd, string product, Nullable<int> id, string name, String formTab, String orderTab)
+        public virtual ActionResult List(Nullable<DateTime> dateStart, Nullable<DateTime> dateEnd, string product, Nullable<int> id, string name, String formTab, String orderTab, string CompanyName)
         {
           
             if (dateStart > dateEnd) ViewBag.Message = Resource.StoreDateErrorMessage;
@@ -61,6 +61,11 @@ namespace asi.asicentral.web.Controllers.Store
                     (detail.Order.CreditCard != null && detail.Order.CreditCard.CardHolderName.Contains(nameCondition)) ||
                     detail.Order.BillingIndividual.Email.Contains(nameCondition)));
             }
+            if (formTab == OrderPageModel.COMPANY_NAME && !string.IsNullOrEmpty(CompanyName))
+            {
+                orderDetailQuery = orderDetailQuery
+                    .Where(detail => detail.Order.Company.Name != null && (detail.Order.Company.Name.Contains(CompanyName)));
+            }
             if (formTab == OrderPageModel.TAB_TIMMS && id.HasValue)
             {
                 string timssIdentifier = id.Value.ToString().Trim();
@@ -90,7 +95,7 @@ namespace asi.asicentral.web.Controllers.Store
             viewModel.Product = product;
             viewModel.FormTab = formTab;
             viewModel.OrderTab = orderTab;
-
+            viewModel.CompanyName = CompanyName;
             return View("../Store/Admin/Orders", viewModel);
         }
 

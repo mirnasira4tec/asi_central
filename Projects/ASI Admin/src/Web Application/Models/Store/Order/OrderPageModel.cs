@@ -17,6 +17,7 @@ namespace asi.asicentral.web.model.store
         public const String ORDER_COMPLETED = "completedorders";
         public const String ORDER_INCOMPLETE = "incompleteorders";
         public const String ORDER_PENDING = "pendingorders";
+        public const String COMPANY_NAME = "companyname";
 
         public IList<OrderModel> Orders { set; get; }
         public String FormTab { get; set; }
@@ -26,6 +27,7 @@ namespace asi.asicentral.web.model.store
         public string Product { get; set; }
         public int? Identifier { get; set; }
         public string Name { get; set; }
+        public string CompanyName { get; set; }
 
         public OrderPageModel(IStoreService storeService, IEncryptionService encryptionService, IList<StoreOrderDetail> orderDetails) 
         {
