@@ -101,6 +101,17 @@ namespace asi.asicentral.web.model.store
 
         #endregion shipping information
 
+        #region Cost information
+        public decimal ItemsCost { get; set; }
+        public decimal TaxCost { get; set; }
+        public decimal ApplicationFeeCost { get; set; }
+        public decimal ShippingCost { get; set; }
+        public decimal TotalCost { get; set; }
+        public decimal SubscriptionCost { get; set; }
+        public string SubscriptionFrequency { get; set; }
+        public decimal PromotionalDiscount { get; set; }
+        #endregion
+
         #region Catalog information
 
         [Display(ResourceType = typeof(Resource), Name = "Cover")]
@@ -201,7 +212,7 @@ namespace asi.asicentral.web.model.store
         public int OrderId { get; set; }
         public int OrderDetailId { get; set; }
         [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
-        public string Quantity { get; set; }
+        public int Quantity { get; set; }
         public StoreDetailCatalog StoreDetailCatalog { get; set; }
         public StoreIndividual BillingIndividual { get; set; }
         public string ActionName { get; set; }
@@ -239,7 +250,7 @@ namespace asi.asicentral.web.model.store
             BillingIndividual = order.BillingIndividual;
             OrderDetailId = orderdetail.Id;
             ShippingMethod = orderdetail.ShippingMethod;
-            this.Quantity = orderdetail.Quantity.ToString();
+            this.Quantity = orderdetail.Quantity;
             this.StoreDetailCatalog = storeDetailCatalog;
 
             this.Cover = this.StoreDetailCatalog.CoverId.ToString();
@@ -289,7 +300,7 @@ namespace asi.asicentral.web.model.store
             OrderStatus = order.ProcessStatus;
             Price = order.Total;
             IsCompleted = order.IsCompleted;
-            MembershipModelHelper.PopulateModel(this, order);
+            MembershipModelHelper.PopulateModel(this, orderdetail);
             if (order.Company != null)
             {
                 StoreAddress address = order.Company.GetCompanyShippingAddress();

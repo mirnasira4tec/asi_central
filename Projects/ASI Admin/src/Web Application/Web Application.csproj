@@ -340,6 +340,7 @@
     <Content Include="Views\Store\Application\Shared\CompanyInformation.cshtml" />
     <Content Include="Views\Store\Admin\ProductStatistics.cshtml" />
     <Content Include="Views\Store\Application\ProductCollections.cshtml" />
+    <Content Include="Views\Store\Application\Shared\OrderSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -385,7 +386,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>4577</DevelopmentServerPort>
+          <DevelopmentServerPort>13793</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:1918/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

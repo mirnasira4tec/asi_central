@@ -98,6 +98,18 @@ namespace asi.asicentral.web.model.store
 
         #endregion shipping information
 
+        #region Cost information
+        public decimal ItemsCost { get; set; }
+        public decimal TaxCost { get; set; }
+        public decimal ApplicationFeeCost { get; set; }
+        public decimal ShippingCost { get; set; }
+        public decimal TotalCost { get; set; }
+        public decimal SubscriptionCost { get; set; }
+        public string SubscriptionFrequency { get; set; }
+        public int Quantity { get; set; }
+        public decimal PromotionalDiscount { get; set; }
+        #endregion
+
         #region ESP Advertising information
         [Display(ResourceType = typeof(Resource), Name = "NumberOfItems")]
         public string NumberOfItems_First { get; set; }
@@ -215,7 +227,7 @@ namespace asi.asicentral.web.model.store
             Price = order.Total;
             OrderStatus = order.ProcessStatus;
             IsCompleted = order.IsCompleted;
-            MembershipModelHelper.PopulateModel(this, order);
+            MembershipModelHelper.PopulateModel(this, orderdetail);
         }
     }
 }

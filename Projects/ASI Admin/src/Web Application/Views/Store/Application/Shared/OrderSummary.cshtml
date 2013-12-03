@@ -1,0 +1,59 @@
+﻿@model asi.asicentral.web.model.store.IMembershipModel
+<table>
+    <tr>
+        <td>Cost:</td>
+        <td/>
+        <td>$@Model.ItemsCost.ToString("F")</td>
+    </tr>
+    <tr>
+        <td>Quantity:</td>
+        <td/>
+        <td>@Model.Quantity.ToString()</td>
+    </tr>
+    @if (Model.ApplicationFeeCost > 0)
+    {
+    <tr>
+        <td>Application Fee:</td>
+        <td/>
+        <td>$@Model.ApplicationFeeCost.ToString("F")</td>
+    </tr>
+    }
+    @if (Model.PromotionalDiscount > 0)
+    {
+    <tr>
+        <td> Promotional Discount:</td>
+        <td>-</td> 
+        <td> $@Model.PromotionalDiscount.ToString("F")</td>
+    </tr>
+    }
+    @if (Model.TaxCost > 0)
+    {
+    <tr>
+        <td>Tax:</td>
+        <td/>
+        <td>$@Model.TaxCost.ToString("F")</td>
+    </tr>
+    }
+    @if (Model.ShippingCost > 0)
+    {
+    <tr>
+        <td>Shipping &amp; Handling:</td>
+        <td/>
+        <td>$@Model.ShippingCost.ToString("F")</td>
+    </tr>
+    }
+    <tr>
+        <td colspan="3" />
+    </tr>
+    <tr>
+        <td class="order-total"><b>Order Total:</b></td>
+        <td/>
+        <td class="order-total"><b>$@Model.TotalCost.ToString("F")</b></td>
+    </tr>
+    @if (Model.SubscriptionCost > 0)
+    {
+    <tr >
+        <td colspan="3"><small>The @Model.SubscriptionFrequency subscription will be billed at $@Model.SubscriptionCost.ToString("F")</small></td>
+    </tr>
+    }
+</table>
