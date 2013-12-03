@@ -29,11 +29,9 @@ namespace asi.asicentral.model.store
         public int NumberOfPages { get; set; }
         public string HeaderImage { get; set; }
         public string ChatSettings { get; set; }
-        public int? CouponId { get; set; }
         public virtual List<ContextFeature> Features { get; set; }
         public virtual List<ContextProductSequence> Products { get; set; }
-        public virtual Coupon Coupon { get; set; }
-
+      
         public override string ToString()
         {
             return string.Format("Context: {0} - {1}", Id, Name);

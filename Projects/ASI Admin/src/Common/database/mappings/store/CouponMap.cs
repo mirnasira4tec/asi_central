@@ -13,7 +13,7 @@ namespace asi.asicentral.database.mappings.product
     {
         public CouponMap()
         {
-            this.ToTable("STOR_Coupon");
+            this.ToTable("PROD_Coupon");
             this.HasKey(t => t.Id);
 
             //Properties
@@ -26,6 +26,15 @@ namespace asi.asicentral.database.mappings.product
 
             this.Property(t => t.UpdateDate)
                 .HasColumnName("UpdateDateUTC");
+
+            //Relationships
+            HasOptional(coupon => coupon.Context)
+                .WithMany()
+                .HasForeignKey(coupon => coupon.ContextId);
+
+            HasOptional(coupon => coupon.Product)
+               .WithMany()
+               .HasForeignKey(coupon => coupon.ProductId);
         }
     }
 }
