@@ -213,7 +213,6 @@
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Scripts\asi-chat.js" />
     <Content Include="Scripts\asi-file.js" />
-    <Content Include="Scripts\asi-membership-company.js" />
     <Content Include="Scripts\asi.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
