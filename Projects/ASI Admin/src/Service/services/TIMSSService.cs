@@ -198,7 +198,7 @@ namespace asi.asicentral.services
                     NumberOfSalesPeople = distributorApplication.NumberOfSalesEmployee,
                     YearEstablished = distributorApplication.EstablishedDate.HasValue ? distributorApplication.EstablishedDate.Value.Year : (int?)null,
                     BusinessRevenue = distributorApplication.PrimaryBusinessRevenue != null ? distributorApplication.PrimaryBusinessRevenue.Name : null,
-                    BusinessRevenueOther = distributorApplication.OtherBusinessRevenue,
+                    BusinessRevenueOther = distributorApplication.OtherBusinessRevenue.Length > 50 ? distributorApplication.OtherBusinessRevenue.Substring(0,46) + "...." : distributorApplication.OtherBusinessRevenue,
                 };
                 //try to convert different data types
                 try { additionalInformation.AnnualSalesVol = int.Parse(distributorApplication.AnnualSalesVolume); }

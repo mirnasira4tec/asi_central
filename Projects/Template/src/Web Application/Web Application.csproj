@@ -211,6 +211,9 @@
     <Content Include="Global.asax" />
     <None Include="Properties\PublishProfiles\Web App Deploy.pubxml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="Scripts\asi-chat.js" />
+    <Content Include="Scripts\asi-file.js" />
+    <Content Include="Scripts\asi-membership-company.js" />
     <Content Include="Scripts\asi.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
@@ -231,6 +234,7 @@
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
     <Content Include="Views\Shared\EditorTemplates\Int32.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Decimal.cshtml" />
     <None Include="Views\Template\Dialog.cshtml" />
     <None Include="Views\Template\Form.cshtml" />
     <Content Include="Web.config">

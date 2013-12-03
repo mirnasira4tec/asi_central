@@ -47,6 +47,7 @@ namespace asi.asicentral.model.store
         public string Custom1 { get; set; }
         public string Custom2 { get; set; }
         public string Custom5 { get; set; }
+        [StringLength(250, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength250")]
         [Display(ResourceType = typeof(Resource), Name = "OtherBusinessRevenue")]
         public string OtherBusinessRevenue { get; set; }
         public Nullable<DateTime> EstablishedDate { get; set; }
