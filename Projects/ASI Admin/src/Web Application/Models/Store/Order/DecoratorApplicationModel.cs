@@ -97,6 +97,18 @@ namespace asi.asicentral.web.model.store
 
         #endregion shipping information
 
+        #region Cost information
+        public decimal ItemsCost { get; set; }
+        public decimal TaxCost { get; set; }
+        public decimal ApplicationFeeCost { get; set; }
+        public decimal ShippingCost { get; set; }
+        public decimal TotalCost { get; set; }
+        public decimal SubscriptionCost { get; set; }
+        public string SubscriptionFrequency { get; set; }
+        public int Quantity { get; set; }
+        public decimal PromotionalDiscount { get; set; }
+        #endregion
+
         public IList<StoreIndividual> Contacts { get; set; }
         public decimal MonthlyPrice { get; set; }
         public decimal Price { get; set; }
@@ -132,7 +144,7 @@ namespace asi.asicentral.web.model.store
             Completed = order.IsCompleted;
             Price = order.Total;
             MonthlyPrice = (order.Total - order.AnnualizedTotal) / 11;
-            MembershipModelHelper.PopulateModel(this, order);
+            MembershipModelHelper.PopulateModel(this, orderDetail);
         }
 
         public void SyncImprintingTypesToApplication(IList<LookDecoratorImprintingType> imprintingType, StoreDetailDecoratorMembership application)

@@ -276,7 +276,7 @@ namespace asi.asicentral.web.Controllers.Store
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ValidateInput(true)]
+        [ValidateInput(false)]
         public virtual ActionResult EditCatalogs(CatalogsApplicationModel application)
         {
             if (ModelState.IsValid)
