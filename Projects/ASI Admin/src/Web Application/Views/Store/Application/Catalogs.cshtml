@@ -123,8 +123,8 @@
 
             <div id="showArtworkOptions">
                 <span class="row">
-                <label>@Html.RadioButtonFor(model => model.ArtworkOption, "UPLOAD", new { id = "UPLOAD" }) @Html.Raw(asi.asicentral.web.Resource.ArtworkOptionforUPLOAD)</label>
-                <label>@Html.RadioButtonFor(model => model.ArtworkOption, "EMAIL", new { id = "EMAIL" }) @Html.Raw(asi.asicentral.web.Resource.ArtworkOptionforEMAIL)</label>
+                <label>@Html.RadioButtonFor(model => model.ArtworkOption, "UPLOAD", new { id = "UPLOAD" }) @Html.Raw(asi.asicentral.Resources.Resource.ArtworkOptionforUPLOAD)</label>
+                <label>@Html.RadioButtonFor(model => model.ArtworkOption, "EMAIL", new { id = "EMAIL" }) @Html.Raw(asi.asicentral.Resources.Resource.ArtworkOptionforEMAIL)</label>
                 </span>
 	        </div>
             if(!string.IsNullOrEmpty(Model.LogoPath))
@@ -134,7 +134,7 @@
                 @Html.LabelFor(m => m.LogoPath) 
 			</span>
 			<span class="label-row">
-				<a href="/Media/Download?file=/Store/uploads/catalogs/@Model.LogoPath">@Html.Raw(asi.asicentral.web.Resource.UploadedImage)</a>
+				<a href="/Media/Download?file=/Store/uploads/catalogs/@Model.LogoPath">@Html.Raw(asi.asicentral.Resources.Resource.UploadedImage)</a>
 			</span>
             }
             <div id="frontCover">
