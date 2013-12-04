@@ -9,6 +9,7 @@
 
 <h1>@Resource.StoreTitleSupplierApplication (#@Model.OrderId)</h1>
 <p>The Membership product purchase fee is @Model.Price.ToString("C")</p>
+@Html.Partial("../Store/Application/Shared/OrderSummary", Model)
 @using (Html.BeginForm("EditSupplier", "Application"))
 {        
 @Html.AntiForgeryToken()

@@ -1,4 +1,4 @@
-﻿@using asi.asicentral.web
+﻿@using asi.asicentral.Resources
 @using asi.asicentral.model.store
 @using asi.asicentral.web.Controllers.Store;
 @model asi.asicentral.web.model.store.DecoratorApplicationModel
@@ -8,6 +8,7 @@
 
 <h1>@Resource.StoreTitleDecoratorApplication (#@Model.OrderId)</h1>
 <p>The Membership product purchase fee is @Model.Price.ToString("C")</p>
+@Html.Partial("../Store/Application/Shared/OrderSummary", Model)
 @using (Html.BeginForm("EditDecorator", "Application"))
 {
     @Html.AntiForgeryToken()
