@@ -129,7 +129,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             model.BackLine2 = "Back line21";
             model.BackLine3 = "Back line31";
             model.BackLine4 = "Back line41";
-            model.Quantity = "40";
+            model.Quantity = 40;
             model.ExternalReference = "102";
             model.ActionName = ApplicationController.COMMAND_SAVE;
 
@@ -138,7 +138,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Assert.AreEqual(result.RouteValues["controller"], "Application");
             Assert.AreEqual(orderRef.ExternalReference, model.ExternalReference);
             Assert.IsNotNull(detail);
-            Assert.AreEqual(detail.Quantity.ToString(), model.Quantity);
+            Assert.AreEqual(detail.Quantity, model.Quantity);
             Assert.AreEqual(detail.ShippingMethod, model.ShippingMethod);
             Assert.IsNotNull(catalogDetail);
             Assert.AreEqual(catalogDetail.Line1, model.Line1);

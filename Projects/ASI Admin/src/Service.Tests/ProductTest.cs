@@ -995,7 +995,7 @@ namespace asi.asicentral.Tests
                 Assert.IsNotNull(distributorMembership);
                 IList<ContextFeature> features = distributorMembership.Features.OrderBy(ctxFeature => ctxFeature.Sequence).ToList();
                 Assert.IsTrue(features.Count > 0);
-                ContextFeature feature = features.Where(feat => feat.Name == "<dfn>ESP</dfn>® Licenses").SingleOrDefault();
+                ContextFeature feature = features.Where(feat => feat.Name == "<dfn>ESP</dfn><sup>®</sup> Licenses").SingleOrDefault();
                 Assert.IsNotNull(feature);
                 Assert.IsNotNull(feature.ChildFeatures);
                 Assert.IsTrue(feature.ChildFeatures.Count > 0);

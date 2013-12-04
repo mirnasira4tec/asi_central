@@ -2095,6 +2095,24 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This field cannot be more than 250 characters..
+        /// </summary>
+        public static string FieldLength250 {
+            get {
+                return ResourceManager.GetString("FieldLength250", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This field cannot be more than 50 characters..
+        /// </summary>
+        public static string FieldLength50 {
+            get {
+                return ResourceManager.GetString("FieldLength50", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only numbers will be accepted..
         /// </summary>
         public static string FieldNumber {
@@ -2361,6 +2379,15 @@ namespace asi.asicentral.Resources {
         public static string InternationalState {
             get {
                 return ResourceManager.GetString("InternationalState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is not a current promotional code..
+        /// </summary>
+        public static string InvalidCouponCode {
+            get {
+                return ResourceManager.GetString("InvalidCouponCode", resourceCulture);
             }
         }
         
@@ -3504,6 +3531,15 @@ namespace asi.asicentral.Resources {
         public static string Professional {
             get {
                 return ResourceManager.GetString("Professional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Promotional Code.
+        /// </summary>
+        public static string PromotionalCode {
+            get {
+                return ResourceManager.GetString("PromotionalCode", resourceCulture);
             }
         }
         

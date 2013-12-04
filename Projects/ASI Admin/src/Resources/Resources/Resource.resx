@@ -1737,4 +1737,16 @@
   <data name="Website" xml:space="preserve">
     <value>Website</value>
   </data>
+  <data name="InvalidCouponCode" xml:space="preserve">
+    <value>This is not a current promotional code.</value>
+  </data>
+  <data name="PromotionalCode" xml:space="preserve">
+    <value>Promotional Code</value>
+  </data>
+  <data name="FieldLength250" xml:space="preserve">
+    <value>This field cannot be more than 250 characters.</value>
+  </data>
+  <data name="FieldLength50" xml:space="preserve">
+    <value>This field cannot be more than 50 characters.</value>
+  </data>
 </root>

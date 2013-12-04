@@ -98,12 +98,24 @@ namespace asi.asicentral.web.model.store
 
         #endregion shipping information
 
+        #region Cost information
+        public decimal ItemsCost { get; set; }
+        public decimal TaxCost { get; set; }
+        public decimal ApplicationFeeCost { get; set; }
+        public decimal ShippingCost { get; set; }
+        public decimal TotalCost { get; set; }
+        public decimal SubscriptionCost { get; set; }
+        public string SubscriptionFrequency { get; set; }
+        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
+        public int Quantity { get; set; }
+        public decimal PromotionalDiscount { get; set; }
+        #endregion
+
         public int OrderId { get; set; }
         public int OrderDetailId { get; set; }
         public decimal Cost { get; set; }
         public bool IsStoreRequest { get; set; }
-        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
-        public string Quantity { get; set; }
+        
         public string ActionName { get; set; }
         public string AcceptedByName { get; set; }
         public StoreIndividual BillingIndividual { get; set; }
@@ -135,7 +147,7 @@ namespace asi.asicentral.web.model.store
             OrderDetailId = orderdetail.Id;
             this.AcceptedByName = orderdetail.AcceptedByName;
             if (orderdetail.OptionId.HasValue) this.OptionId = orderdetail.OptionId;
-            this.Quantity = orderdetail.Quantity.ToString();
+            this.Quantity = orderdetail.Quantity;
             this.AcceptedByName = orderdetail.AcceptedByName;
            
             if (orderdetail.Product != null)
@@ -152,7 +164,7 @@ namespace asi.asicentral.web.model.store
             Price = order.Total;
             IsCompleted = order.IsCompleted;
             IsStoreRequest = order.IsStoreRequest;
-            MembershipModelHelper.PopulateModel(this, order);
+            MembershipModelHelper.PopulateModel(this, orderdetail);
         }
     }
 }
