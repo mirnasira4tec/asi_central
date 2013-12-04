@@ -44,9 +44,6 @@
     <Reference Include="asi.asicentral.Core">
       <HintPath>..\..\library\asi.asicentral.Core.dll</HintPath>
     </Reference>
-    <Reference Include="asi.asicentral.Resources">
-      <HintPath>..\..\library\asi.asicentral.Resources.dll</HintPath>
-    </Reference>
     <Reference Include="Castle.Core">
       <HintPath>..\packages\Castle.Core.3.1.0\lib\net40-client\Castle.Core.dll</HintPath>
     </Reference>
@@ -355,6 +352,10 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{b74b2258-2b47-435c-a0ea-6a0c1ffe18de}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Resources\Resources.csproj">
+      <Project>{04d943e2-6c0d-4fd5-b3bc-1860c962c977}</Project>
+      <Name>Resources</Name>
     </ProjectReference>
     <ProjectReference Include="..\Service.Tests\Service.Tests.csproj">
       <Project>{ee6df0c2-aceb-4108-8f43-5d5138c5a3eb}</Project>
