@@ -72,7 +72,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             controller.EncryptionService = mockEncryptionService.Object;
 
             // act - getting results from the last 6 days
-            ViewResult result = (ViewResult)controller.List(DateTime.Now.AddDays(-6), DateTime.Now, "", null, "", "", "", "");
+           ViewResult result = (ViewResult)controller.List(DateTime.Now.AddDays(-6), DateTime.Now, "", null, "", "", "", "",true);
             OrderPageModel pageModel = (OrderPageModel)result.Model;
             Assert.IsNotNull(pageModel);
 

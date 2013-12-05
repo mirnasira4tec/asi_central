@@ -21,7 +21,7 @@ namespace asi.asicentral.web.Controllers.Store
         public IEncryptionService EncryptionService { get; set; }
 
         [HttpGet]
-        public virtual ActionResult List(Nullable<DateTime> dateStart, Nullable<DateTime> dateEnd, string product, Nullable<int> id, string name, String formTab, String orderTab, string CompanyName)
+        public virtual ActionResult List(Nullable<DateTime> dateStart, Nullable<DateTime> dateEnd, string product, Nullable<int> id, string name, String formTab, String orderTab, string CompanyName,bool HasAddres = true)
         {
           
             if (dateStart > dateEnd) ViewBag.Message = Resource.StoreDateErrorMessage;
@@ -77,7 +77,13 @@ namespace asi.asicentral.web.Controllers.Store
             if (orderTab == OrderPageModel.ORDER_COMPLETED)
                 orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == true);
             else if (orderTab == OrderPageModel.ORDER_INCOMPLETE)
-                orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false);
+            {
+
+                if(HasAddres)
+                orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false && detail.Order.BillingIndividual.Address != null);
+                else
+                orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false); 
+            }
             else if (orderTab == OrderPageModel.ORDER_PENDING)
                 orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == true && detail.Order.ProcessStatus == OrderStatus.Pending);
 
@@ -96,6 +102,7 @@ namespace asi.asicentral.web.Controllers.Store
             viewModel.FormTab = formTab;
             viewModel.OrderTab = orderTab;
             viewModel.CompanyName = CompanyName;
+            //viewModel.HasAddress = HasAddres;
             return View("../Store/Admin/Orders", viewModel);
         }
 

@@ -52,6 +52,7 @@
                 <div class="formField"><label for="productid">Product Name</label> <input name="product" type="text" value="@Model.Product"/></div>
                 <div class="formField"><label for="startDate">Start Date</label> <input data-type="date" name="DateStart" type="text" value="@Model.StartDate" />
                 <label for="endDate">End Date</label> <input data-type="date" name="DateEnd" type="text" value="@Model.EndDate" />
+              <label for="HasAddres">Has Billing Info</label> <input name="HasAddres" type="checkbox" value="@Model.HasAddress"  />
                 <input type="hidden" value="@OrderPageModel.TAB_PRODUCT" name="formtab" />
                 <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
                 <input type="submit" value="Search" class="btn" /></div>
