@@ -163,7 +163,7 @@
 					            @Html.LabelFor(m => m.Subscriptions[i].Contact.Fax)
 				            </span>
                              <span class="label-row">
-                                @Html.EditorFor(m => m.Subscriptions[i].Contact.Title) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Title)
+                                @Html.DropDownListFor(m => m.Subscriptions[i].Contact.Title, new SelectList(asi.asicentral.util.store.Helper.GetTitles(), "Value", "Text", Model.Subscriptions[i].Contact.Title)) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Title)
 					            @Html.EditorFor(m => m.Subscriptions[i].Contact.Phone) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Phone)
 					            @Html.EditorFor(m => m.Subscriptions[i].Contact.Fax) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Fax)
 				            </span>
@@ -197,9 +197,9 @@
 				                @Html.LabelFor(m => m.Subscriptions[i].Contact.Address.Country)
 			                </span>
 			                <span class="label-row">
-				                @Html.EditorFor(m => m.Subscriptions[i].Contact.Address.State) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.State)
+				                @Html.DropDownListFor(m => m.Subscriptions[i].Contact.Address.State, new SelectList(asi.asicentral.util.HtmlHelper.GetStates(), "Value", "Text", Model.Subscriptions[i].Contact.Address.State)) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.State)
 				                @Html.EditorFor(m => m.Subscriptions[i].Contact.Address.Zip) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.Zip)
-				                @Html.EditorFor(m => m.Subscriptions[i].Contact.Address.Country) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.Country)
+				                @Html.DropDownListFor(m => m.Subscriptions[i].Contact.Address.Country, new SelectList(asi.asicentral.util.HtmlHelper.GetCountries(), "Value", "Text", Model.Subscriptions[i].Contact.Address.Country)) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.Country)
 			                </span>
                             }
                     }
