@@ -24,7 +24,8 @@ namespace asi.asicentral.web.model.store
         public String OrderTab { get; set; }
         public string StartDate { get; set; }
         public string EndDate { get; set; }
-        public bool HasAddress { get; set; }
+        public bool chkHasAddress { get; set; }
+        public string HasAddress { get; set; }
         public string Product { get; set; }
         public int? Identifier { get; set; }
         public string Name { get; set; }

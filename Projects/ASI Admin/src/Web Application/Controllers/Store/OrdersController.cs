@@ -21,7 +21,7 @@ namespace asi.asicentral.web.Controllers.Store
         public IEncryptionService EncryptionService { get; set; }
 
         [HttpGet]
-        public virtual ActionResult List(Nullable<DateTime> dateStart, Nullable<DateTime> dateEnd, string product, Nullable<int> id, string name, String formTab, String orderTab, string CompanyName,bool HasAddres = true)
+        public virtual ActionResult List(Nullable<DateTime> dateStart, Nullable<DateTime> dateEnd, string product, Nullable<int> id, string name, String formTab, String orderTab, string CompanyName,Nullable<Boolean> HasAddress )
         {
           
             if (dateStart > dateEnd) ViewBag.Message = Resource.StoreDateErrorMessage;
@@ -36,6 +36,7 @@ namespace asi.asicentral.web.Controllers.Store
                 //form uses date filter
                 if (dateStart == null) dateStart = DateTime.Now.AddDays(-7);
                 if (dateEnd == null) dateEnd = DateTime.Now;
+                if (HasAddress == null) HasAddress = true;
                 else dateEnd = dateEnd.Value.Date + new TimeSpan(23, 59, 59);
                 //create new value converted to UTC time to make sure getting the right database records
                 DateTime dateStartParam = dateStart.Value.ToUniversalTime();
@@ -78,11 +79,16 @@ namespace asi.asicentral.web.Controllers.Store
                 orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == true);
             else if (orderTab == OrderPageModel.ORDER_INCOMPLETE)
             {
-
-                if(HasAddres)
-                orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false && detail.Order.BillingIndividual.Address != null);
+                if (HasAddress != null)
+                {
+                    if (HasAddress.Value)
+                        orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false && detail.Order.CompletedStep > 1);
+                    else
+                        orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false);
+                }
                 else
-                orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false); 
+                    orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false && detail.Order.CompletedStep > 1);
+                
             }
             else if (orderTab == OrderPageModel.ORDER_PENDING)
                 orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == true && detail.Order.ProcessStatus == OrderStatus.Pending);
@@ -102,7 +108,15 @@ namespace asi.asicentral.web.Controllers.Store
             viewModel.FormTab = formTab;
             viewModel.OrderTab = orderTab;
             viewModel.CompanyName = CompanyName;
-            //viewModel.HasAddress = HasAddres;
+            if (HasAddress.HasValue)
+            {
+                viewModel.HasAddress = HasAddress.Value.ToString();
+                viewModel.chkHasAddress = HasAddress.Value;
+            }
+            else
+            {
+                viewModel.chkHasAddress = true;
+            }
             return View("../Store/Admin/Orders", viewModel);
         }
 

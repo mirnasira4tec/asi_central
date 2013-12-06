@@ -23,63 +23,82 @@
     <div class="tab-content" id="formtab-content">
         <div class="tab-pane @(Model.FormTab == OrderPageModel.TAB_DATE ? "active" : string.Empty)" id="@OrderPageModel.TAB_DATE">
             <div class="well">
-            @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class="form-inline", @id="form-" + @OrderPageModel.TAB_DATE }))
-            {                
-                <div class="formField"><label for="startDate">Start Date</label> <input data-type="date" name="DateStart" type="text" value="@Model.StartDate" />
-                <label for="endDate">End Date</label> <input data-type="date" name="DateEnd" type="text" value="@Model.EndDate" />
-                <input type="hidden" value="@OrderPageModel.TAB_DATE" name="formtab" />
-                <input type="hidden" value="@Model.OrderTab" name="ordertab" />                
-                <input type="submit" value="Search" class="btn" /></div>
-            }
+                @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @OrderPageModel.TAB_DATE }))
+                {                
+                    <div class="formField">
+                        @Html.Partial("../Store/Admin/Shared/SearchDates", Model)
+                        <input type="hidden" value="@OrderPageModel.TAB_DATE" name="formtab" />
+                        <input type="hidden" value="@Model.OrderTab" name="ordertab" />
+                         @Html.Partial("../Store/Admin/Shared/SearchHasContactInfo", Model)
+                        <input type="submit" value="Search" class="btn" />
+                    </div>
+                }
             </div>
         </div>
 
         <div class="tab-pane @(Model.FormTab == OrderPageModel.TAB_ORDER ? "active" : string.Empty)" id="@OrderPageModel.TAB_ORDER">
             <div class="well">
-            @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class="form-inline", @id="form-" + @OrderPageModel.TAB_ORDER }))
-            {
-                <div class="formField"><label for="orderid">Order Id</label> <input name="id" type="text" value="@Model.Identifier" />
-                <input type="hidden" value="@OrderPageModel.TAB_ORDER" name="formtab" />
-                <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
-                <input type="submit" value="Search" class="btn" /></div>
-            }
+                @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @OrderPageModel.TAB_ORDER }))
+                {
+                    <div class="formField">
+                        <label for="orderid">Order Id</label>
+                        <input name="id" type="text" value="@Model.Identifier" />
+                        <input type="hidden" value="@OrderPageModel.TAB_ORDER" name="formtab" />
+                         @Html.Partial("../Store/Admin/Shared/SearchHasContactInfo", Model)
+                        <input type="hidden" value="@Model.OrderTab" name="ordertab" />
+                        <input type="submit" value="Search" class="btn" />
+                    </div>
+                }
             </div>
         </div>
         <div class="tab-pane @(Model.FormTab == OrderPageModel.TAB_PRODUCT ? "active" : string.Empty)" id="@OrderPageModel.TAB_PRODUCT">
             <div class="well">
-            @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class="form-inline", @id="form-" + @OrderPageModel.TAB_PRODUCT }))
-            {
-                <div class="formField"><label for="productid">Product Name</label> <input name="product" type="text" value="@Model.Product"/></div>
-                <div class="formField"><label for="startDate">Start Date</label> <input data-type="date" name="DateStart" type="text" value="@Model.StartDate" />
-                <label for="endDate">End Date</label> <input data-type="date" name="DateEnd" type="text" value="@Model.EndDate" />
-              <label for="HasAddres">Has Billing Info</label> <input name="HasAddres" type="checkbox" value="@Model.HasAddress"  />
-                <input type="hidden" value="@OrderPageModel.TAB_PRODUCT" name="formtab" />
-                <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
-                <input type="submit" value="Search" class="btn" /></div>
-            }
+                @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @OrderPageModel.TAB_PRODUCT }))
+                {
+                    <div class="formField">
+                        <label for="productid">Product Name</label>
+                        <input name="product" type="text" value="@Model.Product"/>
+                    </div>
+                    <div class="formField">
+                        @Html.Partial("../Store/Admin/Shared/SearchDates", Model)
+                        @Html.Partial("../Store/Admin/Shared/SearchHasContactInfo", Model)
+                        <input type="hidden" value="@OrderPageModel.TAB_PRODUCT" name="formtab" />
+                        <input type="hidden" value="@Model.OrderTab" name="ordertab" />
+                        <input type="submit" value="Search" class="btn" />
+                    </div>
+                }
             </div>
         </div>
         <div class="tab-pane @(Model.FormTab == OrderPageModel.TAB_NAME ? "active" : string.Empty)" id="@OrderPageModel.TAB_NAME">
             <div class="well">
-            @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class="form-inline", @id ="form-" + @OrderPageModel.TAB_NAME }))
-            {
-                <div class="formField"><label for="firstname">First or last name</label> <input name="name" type="text" value="@Model.Name" /></div>
-                <div class="formField"><label for="startDate">Start Date</label> <input data-type="date" name="DateStart" type="text" value="@Model.StartDate" />
-                <label for="endDate">End Date</label> <input data-type="date" name="DateEnd" type="text" value="@Model.EndDate" />
-                <input type="hidden" value="@OrderPageModel.TAB_NAME" name="formtab" />
-                <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
-                <input type="submit" value="Search" class="btn" /></div>
-            }
+                @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @OrderPageModel.TAB_NAME }))
+                {
+                    <div class="formField">
+                        <label for="firstname">First or last name</label>
+                        <input name="name" type="text" value="@Model.Name" />
+                    </div>
+                    <div class="formField">
+                        @Html.Partial("../Store/Admin/Shared/SearchDates", Model)
+                         @Html.Partial("../Store/Admin/Shared/SearchHasContactInfo", Model)
+                        <input type="hidden" value="@OrderPageModel.TAB_NAME" name="formtab" />
+                        <input type="hidden" value="@Model.OrderTab" name="ordertab" />
+                        <input type="submit" value="Search" class="btn" />
+                    </div>
+                }
             </div>
         </div>
         <div class="tab-pane @(Model.FormTab == OrderPageModel.TAB_TIMMS ? "active" : string.Empty)" id="@OrderPageModel.TAB_TIMMS">
-            @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class="form-inline", @id="form-" + @OrderPageModel.TAB_TIMMS }))
+            @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @OrderPageModel.TAB_TIMMS }))
             {
                 <div class="well">
-                <div class="formField"><label for="timmsid">TIMMS ID</label> <input id="timmsid" name="id" type="text" value="@Model.Identifier" />
-                <input type="hidden" value="@OrderPageModel.TAB_TIMMS" name="formtab" />
-                <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
-                <input type="submit" value="Search" class="btn" /></div>
+                    <div class="formField">
+                        <label for="timmsid">TIMMS ID</label>
+                        <input id="timmsid" name="id" type="text" value="@Model.Identifier" />
+                        @Html.Partial("../Store/Admin/Shared/SearchHasContactInfo", Model)
+                        <input type="hidden" value="@OrderPageModel.TAB_TIMMS" name="formtab" />
+                        <input type="hidden" value="@Model.OrderTab" name="ordertab" />
+                        <input type="submit" value="Search" class="btn" />
+                    </div>
                 </div>
             }
         </div>
@@ -87,10 +106,14 @@
             @using (Html.BeginForm("List", "../store/Orders", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @OrderPageModel.COMPANY_NAME }))
             {
                 <div class="well">
-                <div class="formField"><label for="timmsid">Company Name</label> <input id="companyname" name="CompanyName" type="text" value="@Model.CompanyName" />
-                <input type="hidden" value="@OrderPageModel.COMPANY_NAME" name="formtab" />
-                <input type="hidden" value="@Model.OrderTab" name="ordertab" />  
-                <input type="submit" value="Search" class="btn" /></div>
+                    <div class="formField">
+                        <label for="timmsid">Company Name</label>
+                        <input id="companyname" name="CompanyName" type="text" value="@Model.CompanyName" />
+                         @Html.Partial("../Store/Admin/Shared/SearchHasContactInfo", Model)
+                        <input type="hidden" value="@OrderPageModel.COMPANY_NAME" name="formtab" />
+                        <input type="hidden" value="@Model.OrderTab" name="ordertab" />
+                        <input type="submit" value="Search" class="btn" />
+                    </div>
                 </div>
             }
         </div>
@@ -106,40 +129,69 @@
     </ul>
     <div class="tab-content">
         <div id="@Model.OrderTab" class="tab-pane active">
-        @if (Model.Orders != null && Model.Orders.Count > 0) {
-        <table class="table table-bordered table-condensed table-striped">
-            <thead><tr><th>@Resource.StoreOrderID</th><th>Name</th><th>Email</th><th>Item</th><th>Application</th><th>Step</th><th>Quantity</th><th>Price</th><th>Billing Information</th><th>CreditCard</th><th>@asi.asicentral.Resources.Resource.StoreDateOrderCreated</th><th>Company</th></tr></thead>
-            <tbody>            
-            @foreach (OrderModel order in Model.Orders)
+            @if (Model.Orders != null && Model.Orders.Count > 0)
             {
-                <tr><td width="80px">@if (order.ShowIcons) { 
-                    <a id="@order.OrderId" rel="tooltip" data-placement="top" data-type="reject" title="Click here to reject the order" href="#"><i class="icon-remove"></i></a>
-                    <a rel="tooltip" data-placement="top" title="Click here to accept the order" href="@Url.Action("Edit", "Application", new { Id = order.OrderDetailId })"><i data-orderid="@order.OrderId" class="icon-ok"></i></a> 
-                }
-                else { <img src="/images/transparent.gif" style="height:1px;width:33px" /> }
-                @order.OrderId</td><td>@order.Name</td><td>@order.Email</td>
-                @if (!string.IsNullOrEmpty(order.ContextType) && !order.IsProduct)
-                {
-                <td><a href="#" class="productRef" data-id="@Server.HtmlEncode(order.ContextType)">@order.ContextType</a></td>
-                }
-                else 
-                {
-                <td><a href="#" class="productRef" data-id="@Server.HtmlEncode(order.Item)">@Html.Raw(order.Item)</a></td>
-                }
-                @if (order.Application != null || order.ProductType == "Product")
-                { 
-                <td><a href="@Url.Action("Edit", "Application", new { Id = order.OrderDetailId } )">Application</a></td> 
-                }
-                else
-                { <td>&nbsp</td> }
-                <td>@order.CompletedStep</td><td>@order.Quantity</td><td>$@order.Price</td><td>@order.Billing</td><td>@order.CreditCard</td><td>@order.DateOrderCreated.ToString("MM/dd/yy")</td><td>@order.Company</td></tr>
+                <table class="table table-bordered table-condensed table-striped">
+                    <thead>
+                        <tr>
+                            <th>@Resource.StoreOrderID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Item</th>
+                            <th>Application</th>
+                            <th>Step</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Billing Information</th>
+                            <th>CreditCard</th>
+                            <th>@asi.asicentral.Resources.Resource.StoreDateOrderCreated</th>
+                            <th>Company</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (OrderModel order in Model.Orders)
+                        {
+                            <tr>
+                                <td width="80px">@if (order.ShowIcons)
+                                                 { 
+                                    <a id="@order.OrderId" rel="tooltip" data-placement="top" data-type="reject" title="Click here to reject the order" href="#"><i class="icon-remove"></i></a>
+                                    <a rel="tooltip" data-placement="top" title="Click here to accept the order" href="@Url.Action("Edit", "Application", new { Id = order.OrderDetailId })"><i data-orderid="@order.OrderId" class="icon-ok"></i></a> 
+                                                 }
+                                                 else
+                                                 { <img src="/images/transparent.gif" style="height: 1px; width: 33px" /> }
+                                    @order.OrderId</td>
+                                <td>@order.Name</td>
+                                <td>@order.Email</td>
+                                @if (!string.IsNullOrEmpty(order.ContextType) && !order.IsProduct)
+                                {
+                                    <td><a href="#" class="productRef" data-id="@Server.HtmlEncode(order.ContextType)">@order.ContextType</a></td>
+                                }
+                                else
+                                {
+                                    <td><a href="#" class="productRef" data-id="@Server.HtmlEncode(order.Item)">@Html.Raw(order.Item)</a></td>
+                                }
+                                @if (order.Application != null || order.ProductType == "Product")
+                                { 
+                                    <td><a href="@Url.Action("Edit", "Application", new { Id = order.OrderDetailId })">Application</a></td> 
+                                }
+                                else
+                                { <td>&nbsp</td> }
+                                <td>@order.CompletedStep</td>
+                                <td>@order.Quantity</td>
+                                <td>$@order.Price</td>
+                                <td>@order.Billing</td>
+                                <td>@order.CreditCard</td>
+                                <td>@order.DateOrderCreated.ToString("MM/dd/yy")</td>
+                                <td>@order.Company</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             }
-            </tbody>
-        </table>
-        }
-        else {
-            <p>Sorry, there is no data matching your criteria.</p>
-        }
+            else
+            {
+                <p>Sorry, there is no data matching your criteria.</p>
+            }
         </div>
     </div>
 </div>
@@ -156,6 +208,14 @@
             tabname = tabname.substr(tabname.indexOf("#") + 1);
             $('input[name*="formtab"]').val(tabname);
             $(this).tab('show');
+        });
+
+        $('input[name*="chkHasAddress"]').change(function (e) {
+            e.preventDefault();
+            if ($(e.target)[0].checked)
+                $('input[name*="HasAddress"]').val("true");
+            else
+                $('input[name*="HasAddress"]').val("false");
         });
 
         $('ul[id*="ordertab"] a').click(function (e) {
@@ -194,6 +254,6 @@
                 };
             });
         });
-   </script>
+    </script>
 }
 
