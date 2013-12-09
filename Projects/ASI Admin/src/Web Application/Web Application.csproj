@@ -216,6 +216,7 @@
     <Compile Include="Models\sgr\ViewCompany.cs" />
     <Compile Include="Models\sgr\ViewProduct.cs" />
     <Compile Include="Models\Store\Order\CatalogsApplicationModel.cs" />
+    <Compile Include="Models\Store\Order\CouponModel.cs" />
     <Compile Include="Models\Store\Order\DecoratorApplicationModel.cs" />
     <Compile Include="Models\Store\Order\EmailExpressModel.cs" />
     <Compile Include="Models\Store\Order\DistributorApplicationModel.cs" />
@@ -345,6 +346,7 @@
     <Content Include="Views\Store\Admin\Shared\SearchDates.cshtml" />
     <Content Include="Views\Store\Admin\Shared\SearchHasContactInfo.cshtml" />
     <Content Include="Views\Store\Coupon\CouponList.cshtml" />
+    <Content Include="Views\Store\Coupon\CouponDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

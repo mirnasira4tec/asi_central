@@ -1,0 +1,93 @@
+﻿@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+
+@model  asi.asicentral.model.store.CouponModel
+
+<h2>Edit/Add Coupons</h2>
+
+@using (Html.BeginForm("SaveCouponDetails", "Coupon", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    
+    
+    <table class="table table-bordered table-condensed table-striped">
+
+        <tbody>
+            <tr>
+                @Html.HiddenFor(model => model.Id)
+                <td>Coupon Code</td>
+                <td>@Html.EditorFor(model => model.CouponCode)</td>
+            </tr>
+            <tr>
+                <td>Is Fixed Amount</td>
+                <td>@Html.CheckBoxFor(model => model.IsFixedAmount)</td>
+            </tr>
+            <tr id="DiscountAmount">
+                <td>Discounted Amount</td>
+                <td>@Html.EditorFor(model => model.DiscountAmount)</td>
+            </tr>
+
+            <tr id="DiscountPercentage">
+                <td>Discounted Percentage</td>
+                <td>@Html.EditorFor(model => model.DiscountPercentage)</td>
+            </tr>
+            <tr>
+                <td>Valid From</td>
+                <td>@Html.EditorFor(model => model.ValidFrom, new { @class = "dateField" }) <i class="icon-remove date-clear" id="ValidFrom"></i></td>
+            </tr>
+            <tr>
+                <td>Valid To</td>
+                <td>@Html.EditorFor(model => model.ValidUpto, new { @class = "dateField" })  <i class="icon-remove date-clear" id="ValidUpto"></i></td>
+            </tr>
+            <tr>
+                <td>Is Subscription</td>
+                <td>@Html.CheckBoxFor(model => model.IsSubscription)</td>
+            </tr>
+
+
+        </tbody>
+    </table>
+    
+    <input type="submit" class="btn btn-primary" value="Save" />
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/form")
+    <script>
+        $('.dateField').datepicker();
+        $('.date-clear').click(function () {
+            $("input[name='" + this.id + "']").val('');
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if ($("#IsFixedAmount").checked) {
+
+                $("#DiscountAmount").show();
+                $("#DiscountPercentage").hide();
+            }
+            else {
+                $("#DiscountPercentage").show();
+                $("#DiscountAmount").hide();
+            }
+        });
+
+        $("#IsFixedAmount").change(function () {
+
+            if ($("#IsFixedAmount").checked) {
+
+                $("#DiscountAmount").show();
+                $("#DiscountPercentage").hide();
+            }
+            else {
+                $("#DiscountPercentage").show();
+                $("#DiscountAmount").hide();
+            }
+        });
+
+
+    </script>
+
+}

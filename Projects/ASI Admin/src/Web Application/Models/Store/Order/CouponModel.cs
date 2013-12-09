@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.model.store
 {
-    public class Coupon
+    public class CouponModel
     {
         public int Id { get; set; }
         public int? ProductId { get; set; }
