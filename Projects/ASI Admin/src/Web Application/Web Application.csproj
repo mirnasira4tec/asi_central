@@ -345,6 +345,7 @@
     <Content Include="Views\Store\Application\Shared\OrderSummary.cshtml" />
     <Content Include="Views\Store\Admin\Shared\SearchDates.cshtml" />
     <Content Include="Views\Store\Admin\Shared\SearchHasContactInfo.cshtml" />
+    <Content Include="Views\Store\Application\Shared\AcceptSaveCancelButtons.cshtml" />
     <Content Include="Views\Store\Coupon\CouponList.cshtml" />
     <Content Include="Views\Store\Coupon\CouponDetails.cshtml" />
   </ItemGroup>
