@@ -117,6 +117,7 @@
     <Compile Include="database\mappings\asiinternet\SupplierDecoratingTypeMap.cs" />
     <Compile Include="database\mappings\call\CallQueueMap.cs" />
     <Compile Include="database\mappings\call\CallRequestsMap.cs" />
+    <Compile Include="database\mappings\store\ClosedCampaignDateMap.cs" />
     <Compile Include="database\mappings\store\CouponMap.cs" />
     <Compile Include="database\mappings\store\LookProductCollectionsMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailProductCollectionsItemMap.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="model\ROI\Company.cs" />
     <Compile Include="model\store\ASPNetUsers.cs" />
     <Compile Include="model\store\CENTUserProfilesPROF.cs" />
+    <Compile Include="model\store\ClosedCampaignDate.cs" />
     <Compile Include="model\store\Coupon.cs" />
     <Compile Include="model\store\LookProductCollections.cs" />
     <Compile Include="model\store\StoreDetailStoreDetailProductCollections.cs" />

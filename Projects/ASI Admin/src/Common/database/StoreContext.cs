@@ -19,6 +19,7 @@ namespace asi.asicentral.database
         {
         }
 
+        public DbSet<ClosedCampaignDate> ClosedCampaignDates { get; set; }
         public DbSet<Context> Contexts { get; set; }
         public DbSet<ContextProduct> Products { get; set; }
         public DbSet<ContextFeature> Features { get; set; }
@@ -66,6 +67,7 @@ namespace asi.asicentral.database
             base.OnModelCreating(modelBuilder);
             Configuration.LazyLoadingEnabled = true;
             modelBuilder.Configurations
+                .Add(new ClosedCampaignDateMap())
                 .Add(new ContextMap())
                 .Add(new ContextProductMap())
                 .Add(new ContextFeatureMap())
