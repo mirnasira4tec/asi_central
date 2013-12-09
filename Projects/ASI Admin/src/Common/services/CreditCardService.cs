@@ -46,7 +46,7 @@ namespace asi.asicentral.services
                     response = client.GetAsync("api/Payflow/GetProcessedAuthTransaction?" + parameters).Result;  // Blocking call!
                     dynamic validationResponse = Json.Decode(response.Content.ReadAsStringAsync().Result);
                     string verified = validationResponse.RespMsg;
-                    valid = (!string.IsNullOrEmpty(verified) && verified == "Verified");
+                    valid = (!string.IsNullOrEmpty(verified) && verified == "Approved");
                 }
                 else
                 {
