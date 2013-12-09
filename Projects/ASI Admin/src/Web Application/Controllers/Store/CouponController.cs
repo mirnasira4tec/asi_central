@@ -1,4 +1,7 @@
-﻿using System;
+﻿using asi.asicentral.interfaces;
+using asi.asicentral.model.store;
+using asi.asicentral.services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,6 +11,7 @@ namespace asi.asicentral.web.Controllers.Store
 {
     public class CouponController : Controller
     {
+        public IStoreService StoreService { get; set; }
         //
         // GET: /Coupon/
 
@@ -18,7 +22,8 @@ namespace asi.asicentral.web.Controllers.Store
 
         public ActionResult List()
         {
-            return View("../Store/Admin/Coupon");
+            IList<Coupon> couponList = StoreService.GetAll<Coupon>(true).ToList();
+            return View("../Store/Coupon/CouponList",couponList);
         }
 
     }

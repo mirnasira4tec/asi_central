@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "Coupons";
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+@model  IList<asi.asicentral.model.store.Coupon>
+
+<h2>Coupon</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <input type="submit" class="btn btn-primary" value="Add" /><br />
+    <br />
+    
+    <table class="table table-bordered table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>Coupon Code</th>
+                <th>Is Fixed</th>
+                <th>Valid From Date</th>
+                <th>Valid To Date</th>
+                <th>Is Subscription Product</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+           
+
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    
+                    <td>@Model[i].CouponCode</td>
+                    <td>@Model[i].IsFixedAmount</td>
+                    <td>@Model[i].ValidFrom.ToString("MM/dd/yy")</td>
+                    <td>@Model[i].ValidUpto.ToString("MM/dd/yy")</td>
+                    <td>@Model[i].IsSubscription</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    
+}
