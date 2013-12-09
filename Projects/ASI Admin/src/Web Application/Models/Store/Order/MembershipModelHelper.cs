@@ -60,6 +60,14 @@ namespace asi.asicentral.web.model.store
         int Quantity { get; set; }
         decimal PromotionalDiscount { get; set; } 
         #endregion
+
+        #region OrderInformation
+        int OrderId { get; set; }
+        string ActionName { get; set; }
+        string ExternalReference { get; set; }
+        OrderStatus OrderStatus { get; set; }
+        bool IsCompleted { get; set; }
+        #endregion
     }
 
     /// <summary>
