@@ -1,12 +1,12 @@
 ﻿@using asi.asicentral.web.Controllers.Store
 @model asi.asicentral.web.model.store.IMembershipModel
 <div>
-    @if (Model.TotalCost > 0.0m)
-    {
-    if(!string.IsNullOrEmpty(Model.ASINumber))
+    @if(!string.IsNullOrEmpty(Model.ASINumber))
     {
     <h3>ASI #: @Model.ASINumber</h3>
     }
+    @if (Model.TotalCost > 0.0m)
+    {
     <h3 class="order-status-header3">Order Status:</h3>
     <div class="order-status">@Model.OrderStatus</div>
     <div class="timms-info">
