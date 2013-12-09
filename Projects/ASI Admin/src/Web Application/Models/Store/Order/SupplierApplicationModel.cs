@@ -164,7 +164,7 @@ namespace asi.asicentral.web.model.store
         public int OrderId { get; set; }
         public string ActionName { get; set; }
         public string ExternalReference { get; set; }
-        public bool Completed { get; set; }
+        public bool IsCompleted { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public decimal Price { get; set; }
 
@@ -197,7 +197,7 @@ namespace asi.asicentral.web.model.store
             OrderId = order.Id;
             OrderStatus = order.ProcessStatus;
             Price = order.Total;
-            Completed = order.IsCompleted;
+            IsCompleted = order.IsCompleted;
             MembershipModelHelper.PopulateModel(this, orderdetail);
         }
 
