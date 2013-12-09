@@ -4,6 +4,8 @@
 @if (Model.OrderTab == asi.asicentral.web.model.store.OrderPageModel.ORDER_INCOMPLETE)
 {
     <input data-type="boolean" name="HasAddress" type="hidden" value="@Model.HasAddress" />
-    <label for="HasAddress">Has Contact information</label> <input name="chkHasAddress" type="checkbox"  checked="@Model.chkHasAddress" />
+    <input name="chkHasAddress" type="checkbox"  checked="@Model.chkHasAddress" />
+     <label for="HasAddress">Has Contact information</label> 
+       
                             
 }

@@ -1,0 +1,57 @@
+﻿@{
+    ViewBag.Title = "Coupons";
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+@model  IList<asi.asicentral.model.store.Coupon>
+
+<h2>Coupons</h2>
+
+@using (Html.BeginForm())
+{
+   
+    <a href="/store/Coupon/Edit?id=0" class="btn btn-primary">Add </a>
+    <br />
+    <br />
+    
+    <table class="table table-bordered table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>Coupon Code</th>
+                <th>Is Fixed</th>
+                <th>Valid From Date</th>
+                <th>Valid To Date</th>
+                <th>Is Subscription Product</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+
+                    <td>@Model[i].CouponCode</td>
+                    <td>@Model[i].IsFixedAmount</td>
+                    <td>@Model[i].ValidFrom.ToString("MM/dd/yy")</td>
+                    <td>@Model[i].ValidUpto.ToString("MM/dd/yy")</td>
+                    <td>@Model[i].IsSubscription</td>
+                    <td><a href="/store/Coupon/Edit?id=@Model[i].Id" >Edit </a></td>
+                    <td><a href="/store/Coupon/Delete?id=@Model[i].Id" id="delete" >Delete </a></td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+    
+}
+
+
+<script type="text/javascript">
+    $('a[id*="delete"]').click(function () {
+
+        alert("Are you sure you want to delete?");
+    });
+
+</script>
