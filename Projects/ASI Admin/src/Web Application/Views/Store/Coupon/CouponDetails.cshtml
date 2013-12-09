@@ -51,6 +51,7 @@
     </table>
     
     <input type="submit" class="btn btn-primary" value="Save" />
+    <a class="btn btn-primary" href="/Store/Coupon/List"> Cancel</a>
 }
 
 @section scripts {
@@ -63,7 +64,7 @@
     </script>
     <script type="text/javascript">
         $(document).ready(function () {
-            if ($("#IsFixedAmount").checked) {
+            if ($("#IsFixedAmount")[0].checked) {
 
                 $("#DiscountAmount").show();
                 $("#DiscountPercentage").hide();
@@ -75,13 +76,14 @@
         });
 
         $("#IsFixedAmount").change(function () {
-
-            if ($("#IsFixedAmount").checked) {
-
+            
+            if ($("#IsFixedAmount")[0].checked) {
+                
                 $("#DiscountAmount").show();
                 $("#DiscountPercentage").hide();
             }
             else {
+                
                 $("#DiscountPercentage").show();
                 $("#DiscountAmount").hide();
             }

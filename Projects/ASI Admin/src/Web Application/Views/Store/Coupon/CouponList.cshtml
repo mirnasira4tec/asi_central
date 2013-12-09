@@ -21,7 +21,8 @@
                 <th>Valid From Date</th>
                 <th>Valid To Date</th>
                 <th>Is Subscription Product</th>
-
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -36,13 +37,21 @@
                     <td>@Model[i].ValidFrom.ToString("MM/dd/yy")</td>
                     <td>@Model[i].ValidUpto.ToString("MM/dd/yy")</td>
                     <td>@Model[i].IsSubscription</td>
-                    <td><a href="/store/Coupon/Edit?id=@Model[i].Id" >Edit </a>
-                       
-                    </td>
-                    
+                    <td><a href="/store/Coupon/Edit?id=@Model[i].Id" >Edit </a></td>
+                    <td><a href="/store/Coupon/Delete?id=@Model[i].Id" id="delete" >Delete </a></td>
+
                 </tr>
             }
         </tbody>
     </table>
     
 }
+
+
+<script type="text/javascript">
+    $('a[id*="delete"]').click(function () {
+
+        alert("Are you sure you want to delete?");
+    });
+
+</script>

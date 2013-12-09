@@ -103,6 +103,20 @@ namespace asi.asicentral.web.Controllers.Store
             return View("../Store/Coupon/CouponList", couponList);
         }
 
+        public ActionResult Delete(int id)
+        {
+            Coupon coupon = StoreService.GetAll<Coupon>().Where(item => item.Id == id).FirstOrDefault();
+            if (coupon != null)
+            {
+                StoreService.Delete<Coupon>(coupon);
+                StoreService.SaveChanges();
+            }
+                
+            IList<Coupon> couponList = StoreService.GetAll<Coupon>(true).ToList();
+            return View("../Store/Coupon/CouponList", couponList);
+            
+        }
+
 
     }
 }
