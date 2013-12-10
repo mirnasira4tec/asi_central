@@ -85,12 +85,12 @@ namespace asi.asicentral.web.Controllers.Store
                 coupon.IsFixedAmount = couponModel.IsFixedAmount;
                 if (coupon.IsFixedAmount)
                 {
-                    coupon.DiscountAmount = 22.0M;
+                    coupon.DiscountAmount =couponModel.DiscountAmount;
                     coupon.DiscountPercentage = 0;
                 }
                 else
                 {
-                    coupon.DiscountPercentage = 20;
+                    coupon.DiscountPercentage = couponModel.DiscountPercentage;
                     coupon.DiscountAmount = 0;
                 }
                 coupon.UpdateDate = DateTime.UtcNow;
