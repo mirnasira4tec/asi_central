@@ -3,6 +3,7 @@
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
 }
 
+@using  asi.asicentral.util;
 @model  asi.asicentral.model.store.CouponModel
 
 <h2>Edit/Add Coupons</h2>
@@ -16,6 +17,7 @@
 
         <tbody>
             <tr>
+             
                 @Html.HiddenFor(model => model.Id)
                 <td>Coupon Code</td>
                 <td>@Html.EditorFor(model => model.CouponCode)</td>
@@ -32,6 +34,29 @@
             <tr id="DiscountPercentage">
                 <td>Discounted Percentage</td>
                 <td>@Html.EditorFor(model => model.DiscountPercentage)</td>
+            </tr>
+             <tr>
+                <td>Is Product
+                @Html.RadioButtonFor(model => model.IsProduct, true)</td>
+                 <td>Is Context
+                @Html.RadioButtonFor(model=>model.IsProduct,false)</td>
+            </tr>
+            <tr id="Product">
+                <td >
+                    Products
+                </td>
+                <td>
+                   @Html.DropDownListFor(model=>model.ProductId, Model.Products)
+                </td>
+            </tr>
+            
+            <tr id="Context">
+                <td>
+                    Context
+                </td>
+                <td>
+                   @Html.DropDownListFor(model=>model.ContextId, Model.Contexts)
+                </td>
             </tr>
             <tr>
                 <td>Valid From</td>
@@ -63,9 +88,20 @@
         });
     </script>
     <script type="text/javascript">
-        $(document).ready(function () {
-            if ($("#IsFixedAmount")[0].checked) {
 
+        function RadioChange() {
+            if ($("#IsProduct")[0].checked) {
+                $("#Context").hide();
+                $("#Product").show();
+            }
+            else {
+                $("#Context").show();
+                $("#Product").hide();
+            }
+        }
+
+        function CheckChange() {
+            if ($("#IsFixedAmount")[0].checked) {
                 $("#DiscountAmount").show();
                 $("#DiscountPercentage").hide();
             }
@@ -73,23 +109,20 @@
                 $("#DiscountPercentage").show();
                 $("#DiscountAmount").hide();
             }
+        }
+
+        $(document).ready(function () {
+            RadioChange();
+            CheckChange();
         });
 
         $("#IsFixedAmount").change(function () {
-            
-            if ($("#IsFixedAmount")[0].checked) {
-                
-                $("#DiscountAmount").show();
-                $("#DiscountPercentage").hide();
-            }
-            else {
-                
-                $("#DiscountPercentage").show();
-                $("#DiscountAmount").hide();
-            }
+            CheckChange();
         });
 
-
+        $('input[type=radio]').change(function () {
+            RadioChange();
+        });
     </script>
 
 }

@@ -30,9 +30,13 @@ namespace asi.asicentral.web.Controllers.Store
         [HttpGet]
         public ActionResult Edit(int id)
         {
+            CouponModel productToUpdate = new CouponModel();
+            IList<ContextProduct> productList = StoreService.GetAll<ContextProduct>(true).ToList();
+            productToUpdate.Products =  GetSelectedProductList(productList);
+            IList<Context> contextList = StoreService.GetAll<Context>(true).ToList();
+            productToUpdate.Contexts = GetSelectedContextList(contextList);
             if (id != 0)
             {
-                CouponModel productToUpdate = new CouponModel();
                 Coupon couponModel = StoreService.GetAll<Coupon>().Where(item => item.Id == id).FirstOrDefault();
                 if (productToUpdate != null)
                 {
@@ -40,6 +44,8 @@ namespace asi.asicentral.web.Controllers.Store
                     productToUpdate.IsSubscription = couponModel.IsSubscription;
                     productToUpdate.ValidFrom = couponModel.ValidFrom;
                     productToUpdate.ValidUpto = couponModel.ValidUpto;
+                    productToUpdate.ProductId = couponModel.ProductId;
+                    productToUpdate.ContextId = couponModel.ContextId;
                     productToUpdate.IsFixedAmount = couponModel.IsFixedAmount;
                     if (productToUpdate.IsFixedAmount)
                     {
@@ -51,17 +57,45 @@ namespace asi.asicentral.web.Controllers.Store
                         productToUpdate.DiscountPercentage = couponModel.DiscountPercentage;
                         productToUpdate.DiscountAmount = 0;
                     }
-
-
-
+                    if (couponModel.ProductId != null)
+                        productToUpdate.IsProduct = true;
+                    else
+                        productToUpdate.IsProduct = false;
                 }
+            }
+            return View("../Store/Coupon/CouponDetails", productToUpdate);
+        }
 
-                return View("../Store/Coupon/CouponDetails", productToUpdate);
-            }
-            else
+        private IList<SelectListItem>  GetSelectedContextList(IList<Context> contexts)
+        {
+            IList<SelectListItem> productList = null;
+            if (contexts != null && contexts.Count > 0)
             {
-                return View("../Store/Coupon/CouponDetails");
+                productList = new List<SelectListItem>();
+                string text = string.Empty;
+                foreach (Context product in contexts)
+                {
+                    text = product.Id.ToString() + "-" + product.Name;
+                    productList.Add(new SelectListItem() { Text = text, Value = product.Id.ToString(), Selected = false });
+                }
             }
+            return productList;
+        }
+
+        private IList<SelectListItem> GetSelectedProductList(IList<ContextProduct> products)
+        {
+            IList<SelectListItem> productList = null;
+            if (products != null && products.Count > 0)
+            {
+                productList = new List<SelectListItem>();
+                string text = string.Empty;
+                foreach (ContextProduct product in products)
+                {
+                    text = product.Id.ToString() + "-" + product.Name;
+                    productList.Add(new SelectListItem() { Text = text, Value = product.Id.ToString(), Selected = false });
+                }
+            }
+            return productList;
         }
 
 
@@ -82,6 +116,10 @@ namespace asi.asicentral.web.Controllers.Store
                 coupon.IsSubscription = couponModel.IsSubscription;
                 coupon.ValidFrom = couponModel.ValidFrom;
                 coupon.ValidUpto = couponModel.ValidUpto;
+                if (couponModel.IsProduct)
+                    coupon.ProductId = couponModel.ProductId;
+                else
+                    coupon.ContextId = couponModel.ContextId;
                 coupon.IsFixedAmount = couponModel.IsFixedAmount;
                 if (coupon.IsFixedAmount)
                 {
