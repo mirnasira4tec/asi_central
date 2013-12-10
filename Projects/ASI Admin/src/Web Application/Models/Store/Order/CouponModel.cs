@@ -1,4 +1,5 @@
 ﻿using asi.asicentral.interfaces;
+using asi.asicentral.Resources;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -15,7 +16,10 @@ namespace asi.asicentral.model.store
         public bool IsProduct { get; set; }
         public int? ProductId { get; set; }
         public int? ContextId { get; set; }
+        
+        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public string CouponCode { get; set; }
+
         public bool IsSubscription { get; set; }
         public bool IsFixedAmount { get; set; }
         public decimal DiscountAmount { get; set; }
@@ -31,5 +35,6 @@ namespace asi.asicentral.model.store
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
+        public string ActionName { get; set; }
     }
 }

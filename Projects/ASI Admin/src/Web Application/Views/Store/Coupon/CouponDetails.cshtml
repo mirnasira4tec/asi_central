@@ -8,8 +8,9 @@
 
 <h2>Edit/Add Coupons</h2>
 
-@using (Html.BeginForm("SaveCouponDetails", "Coupon", FormMethod.Post))
+@using (Html.BeginForm("SaveCouponDetails", "Coupon", FormMethod.Post, new {id="couponform" }))
 {
+    @Html.HiddenFor(model => model.ActionName)
     @Html.AntiForgeryToken()
     
     
@@ -20,7 +21,7 @@
              
                 @Html.HiddenFor(model => model.Id)
                 <td>Coupon Code</td>
-                <td>@Html.EditorFor(model => model.CouponCode)</td>
+                <td>@Html.EditorFor(model => model.CouponCode)@Html.ValidationMessageFor(model => model.CouponCode)</td>
             </tr>
             <tr>
                 <td>Is Fixed Amount</td>
@@ -39,14 +40,14 @@
                 <td>Is Product
                 @Html.RadioButtonFor(model => model.IsProduct, true)</td>
                  <td>Is Context
-                @Html.RadioButtonFor(model=>model.IsProduct,false)</td>
+                @Html.RadioButtonFor(model => model.IsProduct, false)</td>
             </tr>
             <tr id="Product">
                 <td >
                     Products
                 </td>
                 <td>
-                   @Html.DropDownListFor(model=>model.ProductId, Model.Products)
+                   @Html.DropDownListFor(model => model.ProductId, Model.Products)
                 </td>
             </tr>
             
@@ -55,7 +56,7 @@
                     Context
                 </td>
                 <td>
-                   @Html.DropDownListFor(model=>model.ContextId, Model.Contexts)
+                   @Html.DropDownListFor(model => model.ContextId, Model.Contexts)
                 </td>
             </tr>
             <tr>
@@ -70,24 +71,35 @@
                 <td>Is Subscription</td>
                 <td>@Html.CheckBoxFor(model => model.IsSubscription)</td>
             </tr>
-
+            <tr>
+                <td>
+                    <span id="span_Error_LogoPath" class="field-validation-error" style="display: none;">This field is required </span>
+                </td>
+            </tr>
 
         </tbody>
     </table>
     
-    <input type="submit" class="btn btn-primary" value="Save" />
-    <a class="btn btn-primary" href="/Store/Coupon/List"> Cancel</a>
+    <input type="submit" class="command btn btn-primary" value="Save" />
+    <input type="submit" class="command btn btn-primary"  value="Cancel"/> 
 }
 
 @section scripts {
     @Scripts.Render("~/bundles/form")
+    <script src="/Scripts/asi.js"></script>
     <script>
         $('.dateField').datepicker();
         $('.date-clear').click(function () {
             $("input[name='" + this.id + "']").val('');
         });
+        
     </script>
     <script type="text/javascript">
+        $(function () {
+            $('input.command').click(function (e) {
+                $('#ActionName').val(e.target.value)
+            });
+        });
 
         function RadioChange() {
             if ($("#IsProduct")[0].checked) {
@@ -109,6 +121,9 @@
                 $("#DiscountPercentage").show();
                 $("#DiscountAmount").hide();
             }
+        }
+
+        function CheckValidation() {
         }
 
         $(document).ready(function () {
