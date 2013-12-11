@@ -16,7 +16,11 @@
 </div>
 
 <table class="table table-condensed table-stripped">
-    <tr><th>&nbsp;</th><th>Name</th><th>Created</th><th>Modified</th></tr>
+    <tr><th>&nbsp;</th>
+        <th><a href="../Media/List?path=@(string.IsNullOrEmpty(Model.Path) ? "" : Model.Path)&&filterBy=Name">Name</a></th>
+        <th><a href="../Media/List?path=@(string.IsNullOrEmpty(Model.Path) ? "" : Model.Path)&&filterBy=Created">Created</a></th>
+        <th><a href="../Media/List?path=@(string.IsNullOrEmpty(Model.Path) ? "" : Model.Path)&&filterBy=Modified">Modified</a></th>
+    </tr>
     @foreach (asi.asicentral.model.FileModel fileItem in Model.Children)
     {
         <tr>

@@ -20,7 +20,7 @@ namespace asi.asicentral.web.Controllers
             return List();
         }
 
-        public ActionResult List(string path = null)
+        public ActionResult List(string path = null, string filterBy = "Name")
         {
             LogService log = LogService.GetLog(this.GetType());
             try
@@ -29,7 +29,10 @@ namespace asi.asicentral.web.Controllers
                 model.Path = string.IsNullOrEmpty(path) ? string.Empty : path;
                 model.URL = string.IsNullOrEmpty(path) ? model.BaseURL : model.BaseURL + path.Replace("\\", "/");
                 log.Debug(string.Format("Accessing file system '{0}' using base folder '{1}'", model.BasePath + model.Path, model.Path));
-                model.Children = FileSystemHelper.GetFiles(model.BasePath + model.Path, model.BasePath);
+                if (filterBy == "Name") model.Children = FileSystemHelper.GetFiles(model.BasePath + model.Path, model.BasePath).OrderBy(x => x.Name).ToList();
+                else if (filterBy == "Created") model.Children = FileSystemHelper.GetFiles(model.BasePath + model.Path, model.BasePath).OrderByDescending(x => x.Created).ToList();
+                else if (filterBy == "Modified") model.Children = FileSystemHelper.GetFiles(model.BasePath + model.Path, model.BasePath).OrderByDescending(x => x.Modified).ToList();
+                else model.Children = FileSystemHelper.GetFiles(model.BasePath + model.Path, model.BasePath);
                 return View("List", model);
             }
             catch (Exception e)
