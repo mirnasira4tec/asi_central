@@ -17,7 +17,7 @@ namespace asi.asicentral.model.store
         public int? ProductId { get; set; }
         public int? ContextId { get; set; }
         
-        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
+        
         public string CouponCode { get; set; }
 
         public bool IsSubscription { get; set; }

@@ -21,7 +21,8 @@
 
                 @Html.HiddenFor(model => model.Id)
                 <td>Coupon Code</td>
-                <td>@Html.EditorFor(model => model.CouponCode)@Html.ValidationMessageFor(model => model.CouponCode)</td>
+                <td>@Html.EditorFor(model => model.CouponCode)<span id="span_Error_CouponCode" class="field-validation-error" style="display: none;">This field is required </span></td>
+
             </tr>
             <tr>
                 <td>Is Fixed Amount</td>
@@ -32,7 +33,7 @@
                 <td>@Html.EditorFor(model => model.DiscountAmount)
                     <span id="span_Error_DiscountAmount" class="field-validation-error" style="display: none;">This field is required </span>
                 </td>
-                
+
             </tr>
 
             <tr id="trDiscountPercentage">
@@ -40,19 +41,28 @@
                 <td>@Html.EditorFor(model => model.DiscountPercentage)
                     <span id="span_Error_DiscountPercentage" class="field-validation-error" style="display: none;">This field is required </span>
                 </td>
-                
+
             </tr>
             <tr>
-                <td>Is Product
-                @Html.RadioButtonFor(model => model.IsProduct, true)</td>
-                <td>Is Context
-                @Html.RadioButtonFor(model => model.IsProduct, false)</td>
+                <td colspan="2">
+                    <label class="radio pull-left dropdown-radio-btn1">
+                        @Html.RadioButtonFor(model => model.IsProduct, true)
+                        Product &nbsp;
+                    </label>
+                    @*</td>
+                <td>*@
+                    <label class="radio pull-left dropdown-radio-btn1">
+                        @Html.RadioButtonFor(model => model.IsProduct, false)
+                        Context
+                    </label>
+                </td>
             </tr>
             <tr id="Product">
                 <td>Products
                 </td>
                 <td>
-                    @Html.DropDownListFor(model => model.ProductId, Model.Products,"Select")
+                    @Html.DropDownListFor(model => model.ProductId, Model.Products, "Select")
+                    <span id="span_Error_DDlProducts" class="field-validation-error" style="display: none;">Please select a value </span>
                 </td>
             </tr>
 
@@ -60,16 +70,20 @@
                 <td>Context
                 </td>
                 <td>
-                    @Html.DropDownListFor(model => model.ContextId, Model.Contexts,"Select")
+                    @Html.DropDownListFor(model => model.ContextId, Model.Contexts, "Select")
+                    <span id="span_Error_DDlContexts" class="field-validation-error" style="display: none;">Please select a value </span>
                 </td>
             </tr>
             <tr>
                 <td>Valid From</td>
-                <td>@Html.EditorFor(model => model.ValidFrom, new { @class = "dateField" }) <i class="icon-remove date-clear" id="ValidFrom"></i></td>
+                <td>@Html.EditorFor(model => model.ValidFrom, new { @class = "dateField" }) <i class="icon-remove date-clear" id="ValidFrom"></i>
+                    <span id="span_Error_CurrDate" class="field-validation-error" style="display: none;">Valid from date should be greater than current date</span>
+                </td>
             </tr>
             <tr>
                 <td>Valid To</td>
-                <td>@Html.EditorFor(model => model.ValidUpto, new { @class = "dateField" })  <i class="icon-remove date-clear" id="ValidUpto"></i></td>
+                <td>@Html.EditorFor(model => model.ValidUpto, new { @class = "dateField" })  <i class="icon-remove date-clear" id="ValidUpto"></i><span id="span_Error_ValidDate" class="field-validation-error" style="display: none;">Begin date should be less than end date.</span></td>
+                
             </tr>
             <tr>
                 <td>Is Subscription</td>
@@ -89,7 +103,19 @@
     @Scripts.Render("~/bundles/form")
     <script src="/Scripts/asi.js"></script>
     <script>
-        $('.dateField').datepicker();
+        var date = new Date();
+        date.setDate(date.getDate() - 1);
+        var validfrom;
+        $("#ValidFrom").datepicker({
+            startDate: date
+        }).on('changeDate', function () {
+            validfrom = new Date($("#ValidFrom").val()).getDate();
+            $("#ValidUpto").datepicker({
+                startDate: validfrom
+            });
+        });
+        
+       
         $('.date-clear').click(function () {
             $("input[name='" + this.id + "']").val('');
         });
@@ -98,13 +124,14 @@
     <script type="text/javascript">
         $(function () {
             $('input.command').click(function (e) {
-                if (e.target.value == "Save") 
-                   return CheckValidation();
+                if (e.target.value == "Save") {
+                    return CheckValidation();
+                }
                 $('#ActionName').val(e.target.value);
             });
         });
 
-
+      
         function RadioChange() {
             if ($("#IsProduct")[0].checked) {
                 $("#Context").hide();
@@ -128,26 +155,66 @@
         }
 
         function CheckValidation() {
-           
-            if ($("#IsFixedAmount")[0].checked) {
-                if ($("#DiscountAmount").val() == "" || $("#DiscountAmount").val() == 0) {
-                    $("#span_Error_DiscountAmount").show();
+            var begDT = new Date($('#ValidFrom').val()).getTime();
+            var endDT = new Date($('#ValidUpto').val()).getTime();
+
+            if ($("#CouponCode").val() == "") {
+                $("#span_Error_CouponCode").show();
+                $("#span_Error_DiscountAmount").hide();
+                $("#span_Error_DiscountPercentage").hide();
+                return false;
+            }
+            else {
+                if ($("#IsFixedAmount")[0].checked) {
+                    if ($("#DiscountAmount").val() == "" || $("#DiscountAmount").val() == 0) {
+                        $("#span_Error_DiscountAmount").show();
+                        $("#span_Error_CouponCode").hide();
+                        return false;
+                    }
+                }
+                else {
+                    if ($("#DiscountPercentage").val() == "" || $("#DiscountPercentage").val() == 0) {
+                        $("#span_Error_DiscountPercentage").show();
+                        $("#span_Error_CouponCode").hide();
+                        return false;
+                    }
+                }
+                if ($("#IsProduct")[0].checked) {
+                    if ($('#ProductId option:selected').text() == "Select") {
+                        $("#span_Error_DDlProducts").show();
+                        $("#span_Error_CouponCode").hide();
+                        $("#span_Error_DiscountAmount").hide();
+                        $("#span_Error_DiscountPercentage").hide();
+                        return false;
+                    }
+
+                }
+                else {
+                    if ($('#ContextId option:selected').text() == "Select") {
+                        $("#span_Error_DDlContexts").show();
+                        $("#span_Error_CouponCode").hide();
+                        $("#span_Error_DiscountAmount").hide();
+                        $("#span_Error_DiscountPercentage").hide();
+                        return false;
+                    }
+                }
+                
+                if (begDT > endDT) {
+                    $("#span_Error_ValidDate").show();
                     return false;
                 }
+                
             }
-            else if (!$("#IsFixedAmount")[0].checked) {
-                if ($("#DiscountPercentage").val() == "" || $("#DiscountPercentage").val() == 0) {
-                    $("#span_Error_DiscountPercentage").show();
-                    return false;
-                }
-            }
-            else
+
             return true;
         }
+
+        
 
         $(document).ready(function () {
             RadioChange();
             CheckChange();
+            
         });
 
         $("#IsFixedAmount").change(function () {
