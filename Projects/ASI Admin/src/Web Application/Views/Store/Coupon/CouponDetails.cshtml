@@ -3,12 +3,12 @@
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
 }
 
-@using  asi.asicentral.util;
+@using asi.asicentral.util;
 @model  asi.asicentral.model.store.CouponModel
 
 <h2>Edit/Add Coupons</h2>
 
-@using (Html.BeginForm("SaveCouponDetails", "Coupon", FormMethod.Post, new {id="couponform" }))
+@using (Html.BeginForm("SaveCouponDetails", "Coupon", FormMethod.Post, new { id = "couponform" }))
 {
     @Html.HiddenFor(model => model.ActionName)
     @Html.AntiForgeryToken()
@@ -18,7 +18,7 @@
 
         <tbody>
             <tr>
-             
+
                 @Html.HiddenFor(model => model.Id)
                 <td>Coupon Code</td>
                 <td>@Html.EditorFor(model => model.CouponCode)@Html.ValidationMessageFor(model => model.CouponCode)</td>
@@ -27,36 +27,40 @@
                 <td>Is Fixed Amount</td>
                 <td>@Html.CheckBoxFor(model => model.IsFixedAmount)</td>
             </tr>
-            <tr id="DiscountAmount">
+            <tr id="trDiscountAmount">
                 <td>Discounted Amount</td>
-                <td>@Html.EditorFor(model => model.DiscountAmount)</td>
+                <td>@Html.EditorFor(model => model.DiscountAmount)
+                    <span id="span_Error_DiscountAmount" class="field-validation-error" style="display: none;">This field is required </span>
+                </td>
+                
             </tr>
 
-            <tr id="DiscountPercentage">
+            <tr id="trDiscountPercentage">
                 <td>Discounted Percentage</td>
-                <td>@Html.EditorFor(model => model.DiscountPercentage)</td>
+                <td>@Html.EditorFor(model => model.DiscountPercentage)
+                    <span id="span_Error_DiscountPercentage" class="field-validation-error" style="display: none;">This field is required </span>
+                </td>
+                
             </tr>
-             <tr>
+            <tr>
                 <td>Is Product
                 @Html.RadioButtonFor(model => model.IsProduct, true)</td>
-                 <td>Is Context
+                <td>Is Context
                 @Html.RadioButtonFor(model => model.IsProduct, false)</td>
             </tr>
             <tr id="Product">
-                <td >
-                    Products
+                <td>Products
                 </td>
                 <td>
-                   @Html.DropDownListFor(model => model.ProductId, Model.Products)
+                    @Html.DropDownListFor(model => model.ProductId, Model.Products,"Select")
                 </td>
             </tr>
-            
+
             <tr id="Context">
-                <td>
-                    Context
+                <td>Context
                 </td>
                 <td>
-                   @Html.DropDownListFor(model => model.ContextId, Model.Contexts)
+                    @Html.DropDownListFor(model => model.ContextId, Model.Contexts,"Select")
                 </td>
             </tr>
             <tr>
@@ -72,16 +76,13 @@
                 <td>@Html.CheckBoxFor(model => model.IsSubscription)</td>
             </tr>
             <tr>
-                <td>
-                    <span id="span_Error_LogoPath" class="field-validation-error" style="display: none;">This field is required </span>
-                </td>
             </tr>
 
         </tbody>
     </table>
     
     <input type="submit" class="command btn btn-primary" value="Save" />
-    <input type="submit" class="command btn btn-primary"  value="Cancel"/> 
+    <input type="submit" class="command btn btn-primary" value="Cancel" /> 
 }
 
 @section scripts {
@@ -92,14 +93,17 @@
         $('.date-clear').click(function () {
             $("input[name='" + this.id + "']").val('');
         });
-        
+
     </script>
     <script type="text/javascript">
         $(function () {
             $('input.command').click(function (e) {
-                $('#ActionName').val(e.target.value)
+                if (e.target.value == "Save") 
+                   return CheckValidation();
+                $('#ActionName').val(e.target.value);
             });
         });
+
 
         function RadioChange() {
             if ($("#IsProduct")[0].checked) {
@@ -114,16 +118,31 @@
 
         function CheckChange() {
             if ($("#IsFixedAmount")[0].checked) {
-                $("#DiscountAmount").show();
-                $("#DiscountPercentage").hide();
+                $("#trDiscountAmount").show();
+                $("#trDiscountPercentage").hide();
             }
             else {
-                $("#DiscountPercentage").show();
-                $("#DiscountAmount").hide();
+                $("#trDiscountPercentage").show();
+                $("#trDiscountAmount").hide();
             }
         }
 
         function CheckValidation() {
+           
+            if ($("#IsFixedAmount")[0].checked) {
+                if ($("#DiscountAmount").val() == "" || $("#DiscountAmount").val() == 0) {
+                    $("#span_Error_DiscountAmount").show();
+                    return false;
+                }
+            }
+            else if (!$("#IsFixedAmount")[0].checked) {
+                if ($("#DiscountPercentage").val() == "" || $("#DiscountPercentage").val() == 0) {
+                    $("#span_Error_DiscountPercentage").show();
+                    return false;
+                }
+            }
+            else
+            return true;
         }
 
         $(document).ready(function () {

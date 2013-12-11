@@ -62,6 +62,11 @@ namespace asi.asicentral.web.Controllers.Store
                         productToUpdate.IsProduct = false;
                 }
             }
+            else
+            {
+                productToUpdate.ValidFrom = DateTime.UtcNow;
+                productToUpdate.ValidUpto = DateTime.UtcNow;
+            }
             return View("../Store/Coupon/CouponDetails", productToUpdate);
         }
 
