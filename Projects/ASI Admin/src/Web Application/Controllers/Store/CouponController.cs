@@ -48,13 +48,13 @@ namespace asi.asicentral.web.Controllers.Store
                     productToUpdate.IsFixedAmount = couponModel.IsFixedAmount;
                     if (productToUpdate.IsFixedAmount)
                     {
-                        productToUpdate.DiscountAmount = couponModel.DiscountAmount;
-                        productToUpdate.DiscountPercentage = 0;
+                        productToUpdate.DiscountAmount = couponModel.DiscountAmount.ToString();
+                        productToUpdate.DiscountPercentage = "0";
                     }
                     else
                     {
-                        productToUpdate.DiscountPercentage = couponModel.DiscountPercentage;
-                        productToUpdate.DiscountAmount = 0;
+                        productToUpdate.DiscountPercentage = couponModel.DiscountPercentage.ToString();
+                        productToUpdate.DiscountAmount = "0.0";
                     }
                     if (couponModel.ProductId != null)
                         productToUpdate.IsProduct = true;
@@ -131,13 +131,13 @@ namespace asi.asicentral.web.Controllers.Store
                 coupon.IsFixedAmount = couponModel.IsFixedAmount;
                 if (coupon.IsFixedAmount)
                 {
-                    coupon.DiscountAmount = couponModel.DiscountAmount;
+                    coupon.DiscountAmount = Convert.ToDecimal(couponModel.DiscountAmount);
                     coupon.DiscountPercentage = 0;
                 }
                 else
                 {
-                    coupon.DiscountPercentage = couponModel.DiscountPercentage;
-                    coupon.DiscountAmount = 0;
+                    coupon.DiscountPercentage =Convert.ToInt32(couponModel.DiscountPercentage);
+                    coupon.DiscountAmount = 0.0M;
                 }
                 coupon.UpdateDate = DateTime.UtcNow;
                 coupon.UpdateSource = "CouponController - SaveCouponDetails";

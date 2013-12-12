@@ -28,9 +28,9 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             //For Coupons
             CouponModel information = new CouponModel();
             information.CouponCode = "testCaseCoupon";
-            information.DiscountPercentage = 0;
+            information.DiscountPercentage = "0";
             information.IsFixedAmount = true;
-            information.DiscountAmount = 20;
+            information.DiscountAmount = "20";
             information.IsSubscription = true;
 
 
