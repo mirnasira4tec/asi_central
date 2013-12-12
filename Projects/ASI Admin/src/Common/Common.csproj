@@ -118,6 +118,7 @@
     <Compile Include="database\mappings\call\CallQueueMap.cs" />
     <Compile Include="database\mappings\call\CallRequestsMap.cs" />
     <Compile Include="database\mappings\store\CouponMap.cs" />
+    <Compile Include="database\mappings\store\LookEventMerchandiseProductMap.cs" />
     <Compile Include="database\mappings\store\LookProductCollectionsMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailProductCollectionsItemMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailProductCollectionsMap.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="model\store\ASPNetUsers.cs" />
     <Compile Include="model\store\CENTUserProfilesPROF.cs" />
     <Compile Include="model\store\Coupon.cs" />
+    <Compile Include="model\store\LookEventMerchandiseProduct.cs" />
     <Compile Include="model\store\LookProductCollections.cs" />
     <Compile Include="model\store\StoreDetailStoreDetailProductCollections.cs" />
     <Compile Include="model\store\StoreDetailStoreDetailProductCollectionsItem.cs" />
