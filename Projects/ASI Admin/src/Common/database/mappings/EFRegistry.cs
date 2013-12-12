@@ -162,6 +162,12 @@ namespace asi.asicentral.database.mappings
             For<IRepository<LookDistributorRevenueType>>().Use<EFRepository<LookDistributorRevenueType>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
+            For<IRepository<LookEventMerchandiseProduct>>().Use<EFRepository<LookEventMerchandiseProduct>>()
+                .Ctor<IValidatedContext>().Named("StoreContext"); 
+
+            For<IRepository<LookProductCollections>>().Use<EFRepository<LookProductCollections>>()
+              .Ctor<IValidatedContext>().Named("StoreContext");
+
             For<IRepository<LookProductLine>>().Use<EFRepository<LookProductLine>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
@@ -236,9 +242,6 @@ namespace asi.asicentral.database.mappings
 
             For<IRepository<StoreDetailProductCollectionItem>>().Use<EFRepository<StoreDetailProductCollectionItem>>()
                .Ctor<IValidatedContext>().Named("StoreContext");
-
-            For<IRepository<LookProductCollections>>().Use<EFRepository<LookProductCollections>>()
-              .Ctor<IValidatedContext>().Named("StoreContext");
 
             #endregion StoreContext
 
