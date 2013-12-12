@@ -82,7 +82,7 @@
             </tr>
             <tr>
                 <td>Valid To</td>
-                <td>@Html.EditorFor(model => model.ValidUpto, new { @class = "dateField" })  <i class="icon-remove date-clear" id="ValidUpto"></i><span id="span_Error_ValidDate" class="field-validation-error" style="display: none;">Begin date should be less than end date.</span></td>
+                <td>@Html.EditorFor(model => model.ValidUpto, new { @class = "dateField" })  <i class="icon-remove date-clear" id="ValidUpto"></i><span id="span_Error_ValidDate" class="field-validation-error" style="display: none;">Valid From date should be less than Valid to date.</span></td>
                 
             </tr>
             <tr>
@@ -105,14 +105,9 @@
     <script>
         var date = new Date();
         date.setDate(date.getDate() - 1);
-        var validfrom;
-        $("#ValidFrom").datepicker({
+      
+        $('.dateField').datepicker({
             startDate: date
-        }).on('changeDate', function () {
-            validfrom = new Date($("#ValidFrom").val()).getDate();
-            $("#ValidUpto").datepicker({
-                startDate: validfrom
-            });
         });
         
        
@@ -201,6 +196,11 @@
                 
                 if (begDT > endDT) {
                     $("#span_Error_ValidDate").show();
+                    $("#span_Error_DDlContexts").hide();
+                    $("#span_Error_DDlProducts").hide();
+                    $("#span_Error_CouponCode").hide();
+                    $("#span_Error_DiscountAmount").hide();
+                    $("#span_Error_DiscountPercentage").hide();
                     return false;
                 }
                 
