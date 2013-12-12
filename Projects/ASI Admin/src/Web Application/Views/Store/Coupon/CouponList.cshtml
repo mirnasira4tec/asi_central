@@ -17,10 +17,10 @@
         <thead>
             <tr>
                 <th>Coupon Code</th>
-                <th>Is Fixed</th>
-                <th>Valid From Date</th>
-                <th>Valid To Date</th>
-                <th>Is Subscription Product</th>
+                <th>Is Fixed Amount</th>
+                <th>Valid From</th>
+                <th>Valid To</th>
+                <th>Is Subscription</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -38,7 +38,7 @@
                     <td>@Model[i].ValidUpto.ToString("MM/dd/yy")</td>
                     <td>@Model[i].IsSubscription</td>
                     <td><a href="/store/Coupon/Edit?id=@Model[i].Id" >Edit </a></td>
-                    <td><a href="/store/Coupon/Delete?id=@Model[i].Id" id="delete" >Delete </a></td>
+                    <td><a class="delete" id="@Model[i].CouponCode"  href="/store/Coupon/Delete?id=@Model[i].Id">Delete </a></td>
 
                 </tr>
             }
@@ -48,10 +48,11 @@
 }
 
 
-<script type="text/javascript">
-    $('a[id*="delete"]').click(function () {
+@section scripts {
 
-        alert("Are you sure you want to delete?");
-    });
-
+    <script type="text/javascript">
+        $('a.delete').click(function (e) {
+            alert("Are you sure you want to delete "+e.target.id);
+        });
 </script>
+}
