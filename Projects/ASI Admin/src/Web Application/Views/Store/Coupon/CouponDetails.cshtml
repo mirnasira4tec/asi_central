@@ -105,12 +105,15 @@
     <script>
         var date = new Date();
         date.setDate(date.getDate() - 1);
-      
-        $('.dateField').datepicker({
+
+        $("#ValidFrom").datepicker({
             startDate: date
+        }).on('changeDate', function (selected) {
+            startDate = new Date(selected.date.valueOf());
+            startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
+            $("#ValidUpto").datepicker('setStartDate', startDate);
         });
-        
-       
+
         $('.date-clear').click(function () {
             $("input[name='" + this.id + "']").val('');
         });
@@ -126,7 +129,6 @@
             });
         });
 
-      
         function RadioChange() {
             if ($("#IsProduct")[0].checked) {
                 $("#Context").hide();
@@ -193,28 +195,17 @@
                         return false;
                     }
                 }
-                
-                if (begDT > endDT) {
-                    $("#span_Error_ValidDate").show();
-                    $("#span_Error_DDlContexts").hide();
-                    $("#span_Error_DDlProducts").hide();
-                    $("#span_Error_CouponCode").hide();
-                    $("#span_Error_DiscountAmount").hide();
-                    $("#span_Error_DiscountPercentage").hide();
-                    return false;
-                }
-                
             }
 
             return true;
         }
 
-        
-
         $(document).ready(function () {
             RadioChange();
             CheckChange();
-            
+            startDate =new Date($('#ValidFrom').val());
+            startDate.setDate(startDate.getDate(new Date($('#ValidFrom').val())));
+            $("#ValidUpto").datepicker('setStartDate', startDate);
         });
 
         $("#IsFixedAmount").change(function () {
