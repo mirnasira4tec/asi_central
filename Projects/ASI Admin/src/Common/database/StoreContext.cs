@@ -19,6 +19,7 @@ namespace asi.asicentral.database
         {
         }
 
+        public DbSet<ClosedCampaignDate> ClosedCampaignDates { get; set; }
         public DbSet<Context> Contexts { get; set; }
         public DbSet<ContextProduct> Products { get; set; }
         public DbSet<ContextFeature> Features { get; set; }
