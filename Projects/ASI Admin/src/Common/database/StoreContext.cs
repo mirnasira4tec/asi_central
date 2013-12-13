@@ -31,6 +31,8 @@ namespace asi.asicentral.database
         public DbSet<LookDecoratorImprintingType> LookDecoratorImprintingTypes { get; set; }
         public DbSet<LookDistributorAccountType> LookDistributorAccountTypes { get; set; }
         public DbSet<LookDistributorRevenueType> LookDistributorRevenueTypes { get; set; }
+        public DbSet<LookEventMerchandiseProduct> LookEventMerchandiseProducts { get; set; }
+        public DbSet<LookProductCollections> LookProductCollections { get; set; }
         public DbSet<LookProductLine> LookProductLines { get; set; }
         public DbSet<LookProductShippingRate> LookProductShippingRates { get; set; }
         public DbSet<LookSupplierDecoratingType> LookSupplierDecoratingTypes { get; set; }
@@ -56,8 +58,7 @@ namespace asi.asicentral.database
         public DbSet<StoreDetailEmailExpressItem> StoreDetailEmailExpressItems { get; set; }
         public DbSet<StoreDetailProductCollection> StoreDetailProductCollection { get; set; }
         public DbSet<StoreDetailProductCollectionItem> StoreDetailProductCollectionItems { get; set; }
-        public DbSet<LookProductCollections> LookProductCollections { get; set; }
-
+        
         /// <summary>
         /// Use to enhance the default mapping for the model
         /// </summary>
@@ -78,6 +79,8 @@ namespace asi.asicentral.database
                 .Add(new LookDecoratorImprintingTypeMap())
                 .Add(new LookDistributorAccountTypeMap())
                 .Add(new LookDistributorRevenueTypeMap())
+                .Add(new LookEventMerchandiseProductMap())
+                .Add(new LookProductCollectionsMap())
                 .Add(new LookProductLineMap())
                 .Add(new LookProductShippingRateMap())
                 .Add(new LookSupplierDecoratingTypeMap())
@@ -101,9 +104,8 @@ namespace asi.asicentral.database
                 .Add(new TaxRateMap())
                 .Add(new StoreDetailEmailExpressMap())
                 .Add(new StoreDetailEmailExpressItemMap())
-            .Add(new StoreDetailProductCollectionMap())
-                .Add(new StoreDetailProductCollectionItemMap())
-                .Add(new LookProductCollectionsMap());
+                .Add(new StoreDetailProductCollectionMap())
+                .Add(new StoreDetailProductCollectionItemMap());
         }
     }
 }

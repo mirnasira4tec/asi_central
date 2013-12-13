@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,12 +17,13 @@ namespace asi.asicentral.model.store
         public bool IsFixedAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         public int DiscountPercentage { get; set; }
+        [DataType(DataType.Date)]
         public DateTime ValidFrom { get; set; }
+        [DataType(DataType.Date)]
         public DateTime ValidUpto { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
-
         public virtual Context Context { get; set; }
         public virtual ContextProduct Product { get; set; }
     }

@@ -1,0 +1,190 @@
+﻿@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+
+@using asi.asicentral.util;
+@model  asi.asicentral.model.store.CouponModel
+
+<h2>Edit/Add Coupons</h2>
+
+@using (Html.BeginForm("SaveCouponDetails", "Coupon", FormMethod.Post, new { id = "couponform" }))
+{
+    @Html.HiddenFor(model => model.ActionName)
+    @Html.AntiForgeryToken()
+    
+    
+    <table class="table table-bordered table-condensed table-striped">
+        <tbody>
+            <tr>
+                @Html.HiddenFor(model => model.Id)
+                <td>Coupon Code</td>
+                <td>@Html.EditorFor(model => model.CouponCode)@Html.ValidationMessageFor(model => model.CouponCode) </td>
+            </tr>
+            <tr>
+                <td>Is Fixed Amount</td>
+                <td>@Html.CheckBoxFor(model => model.IsFixedAmount)</td>
+            </tr>
+            <tr id="trDiscountAmount">
+                <td>Discounted Amount</td>
+                <td>@Html.EditorFor(model => model.DiscountAmount)@Html.ValidationMessageFor(model => model.DiscountAmount)
+                </td>
+
+            </tr>
+
+            <tr id="trDiscountPercentage">
+                <td>Discounted Percentage</td>
+                <td>@Html.EditorFor(model => model.DiscountPercentage)@Html.ValidationMessageFor(model => model.DiscountPercentage)
+                </td>
+
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <label class="radio pull-left dropdown-radio-btn1">
+                        @Html.RadioButtonFor(model => model.IsProduct, true)
+                        Product &nbsp;
+                    </label>
+                    <label class="radio pull-left dropdown-radio-btn1">
+                        @Html.RadioButtonFor(model => model.IsProduct, false)
+                        Context
+                    </label>
+                </td>
+            </tr>
+            <tr id="Product">
+                <td>Products
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.ProductId, Model.Products, "Select")@Html.ValidationMessageFor(model => model.ProductId)
+                </td>
+            </tr>
+            <tr id="Context">
+                <td>Context
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.ContextId, Model.Contexts, "Select")@Html.ValidationMessageFor(model => model.ContextId)
+                </td>
+            </tr>
+            <tr>
+                <td>Valid From</td>
+                <td>@Html.EditorFor(model => model.ValidFrom, new { @class = "dateField" }) <i class="icon-remove date-clear" id="ValidFrom"></i>
+                    <span id="span_Error_CurrDate" class="field-validation-error" style="display: none;">Valid from date should be greater than current date</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Valid To</td>
+                <td>@Html.EditorFor(model => model.ValidUpto, new { @class = "dateField" })  <i class="icon-remove date-clear" id="ValidUpto"></i><span id="span_Error_ValidDate" class="field-validation-error" style="display: none;">Valid From date should be less than Valid to date.</span></td>
+            </tr>
+            <tr>
+                <td>Is Subscription</td>
+                <td>@Html.CheckBoxFor(model => model.IsSubscription)</td>
+            </tr>
+            <tr>
+            </tr>
+
+        </tbody>
+
+    </table>
+   
+    <footer id="page-completion-navigation">
+        <nav>
+            <p class="navigate-back"><a href="/store/Coupon/List">Back to Coupon list</a></p>
+            <p class="next-step-button">
+                <input type="submit" class="command btn btn-primary" value="Save" />
+        </nav>
+    </footer>
+
+}
+
+
+@section scripts {
+    @Scripts.Render("~/bundles/form")
+    <script>
+        var date = new Date();
+        date.setDate(date.getDate() - 1);
+
+        $("#ValidFrom").datepicker({
+            startDate: date
+        }).on('changeDate', function (selected) {
+            startDate = new Date(selected.date.valueOf());
+            startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
+            $("#ValidUpto").datepicker('setStartDate', startDate);
+        });
+
+        $('.date-clear').click(function () {
+            $("input[name='" + this.id + "']").val('');
+        });
+
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $('input.command').click(function (e) {
+                if (e.target.value == "Cancel")
+                    window.location.href = "/store/Coupon/List";
+                $('#ActionName').val(e.target.value);
+            });
+        });
+
+        function RadioChange() {
+            if ($("#IsProduct")[0].checked) {
+                $("#Context").hide();
+                $("#Product").show();
+                $("#ProductId").rules("add", {
+                    required: true,
+                    messages: { required: '@Html.Raw(asi.asicentral.Resources.Resource.FieldRequired)' }
+                })
+
+                $("#ContextId").rules("remove");
+            }
+            else {
+                $("#Context").show();
+                $("#Product").hide();
+                $("#ContextId").rules("add", {
+                    required: true,
+                    messages: { required: '@Html.Raw(asi.asicentral.Resources.Resource.FieldRequired)' }
+                })
+
+                $("#ProductId").rules("remove");
+            }
+        }
+
+        function CheckChange() {
+            if ($("#IsFixedAmount")[0].checked) {
+                $("#trDiscountAmount").show();
+                $("#trDiscountPercentage").hide();
+                $("#DiscountAmount").rules("add", {
+                    required: true,
+                    messages: { required: '@Html.Raw(asi.asicentral.Resources.Resource.FieldRequired)' }
+                })
+
+                $("#DiscountPercentage").rules("remove");
+            }
+            else {
+                $("#trDiscountPercentage").show();
+                $("#trDiscountAmount").hide();
+                $("#DiscountPercentage").rules("add", {
+                    required: true,
+                    messages: { required: '@Html.Raw(asi.asicentral.Resources.Resource.FieldRequired)' }
+                })
+                $("#DiscountAmount").rules("remove");
+            }
+        }
+
+
+        $(document).ready(function () {
+            RadioChange();
+            CheckChange();
+            startDate = new Date($('#ValidFrom').val());
+            startDate.setDate(startDate.getDate(new Date($('#ValidFrom').val())));
+            $("#ValidUpto").datepicker('setStartDate', startDate);
+        });
+
+        $("#IsFixedAmount").change(function () {
+            CheckChange();
+        });
+
+        $('input[type=radio]').change(function () {
+            RadioChange();
+        });
+    </script>
+
+}
