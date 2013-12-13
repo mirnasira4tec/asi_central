@@ -19,12 +19,15 @@ namespace asi.asicentral.database.mappings
             //Use only one context across repository per http context or thread
             SelectConstructor<ASIInternetContext>(() => new ASIInternetContext());
             SelectConstructor<StoreContext>(() => new StoreContext());
+            SelectConstructor<ASIEmailBlastContext>(() => new ASIEmailBlastContext());
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIInternetContext>().Name = "ASIInternetContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIPublicationContext>().Name = "ASIPublicationContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<InternetContext>().Name = "InternetContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<StoreContext>().Name = "StoreContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<TIMSSContext>().Name = "TIMSSContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<CallContext>().Name = "CallContext";
+            For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIEmailBlastContext>().Name = "ASIEmailBlastContext";
+
 
             //for each model - get the repository class with the appropriate context 
 
@@ -276,6 +279,13 @@ namespace asi.asicentral.database.mappings
                 .Ctor<IValidatedContext>().Named("CallContext");
 
             #endregion
+
+            #region ASIEmailBlastContext
+
+            For<IRepository<ClosedCampaignDate>>().Use<EFRepository<ClosedCampaignDate>>()
+                .Ctor<IValidatedContext>().Named("ASIEmailBlastContext");
+
+            #endregion ASIEmailBlastContext
         }
     }
 }

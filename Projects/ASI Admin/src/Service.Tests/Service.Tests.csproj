@@ -84,6 +84,7 @@
     <Compile Include="ProductTest.cs" />
     <Compile Include="FulfilmentServiceTest.cs" />
     <Compile Include="ROIServiceTest.cs" />
+    <Compile Include="ASIEmailBlastContextTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
