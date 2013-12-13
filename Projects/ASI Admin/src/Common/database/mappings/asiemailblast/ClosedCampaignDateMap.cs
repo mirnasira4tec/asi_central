@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using asi.asicentral.model.store;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace asi.asicentral.database.mappings.store
+namespace asi.asicentral.database.mappings.asiemailblast
 {
 
     public class ClosedCampaignDateMap : EntityTypeConfiguration<ClosedCampaignDate>
@@ -19,6 +19,8 @@ namespace asi.asicentral.database.mappings.store
             Property(t => t.ID)
                 .HasColumnName("CCDS_ID")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            Property(t => t.Reactivated).IsRequired();
+
             Property(t => t.Date)
                 .HasColumnName("CCDS_Date");
             Property(t => t.Reactivated)

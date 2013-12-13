@@ -100,9 +100,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="database\ASIEmailBlastContext.cs" />
     <Compile Include="database\ASIInternetContext.cs" />
     <Compile Include="database\ASIPublicationContext.cs" />
     <Compile Include="database\CallContext.cs" />
+    <Compile Include="database\mappings\asiemailblast\ClosedCampaignDateMap.cs" />
     <Compile Include="database\mappings\asiinternet\ASPNetUsersMap.cs" />
     <Compile Include="database\mappings\asiinternet\CENTUserProfilesPROFMap.cs" />
     <Compile Include="database\mappings\asiinternet\DistributorAccountTypeMap.cs" />
@@ -117,7 +119,6 @@
     <Compile Include="database\mappings\asiinternet\SupplierDecoratingTypeMap.cs" />
     <Compile Include="database\mappings\call\CallQueueMap.cs" />
     <Compile Include="database\mappings\call\CallRequestsMap.cs" />
-    <Compile Include="database\mappings\store\ClosedCampaignDateMap.cs" />
     <Compile Include="database\mappings\store\CouponMap.cs" />
     <Compile Include="database\mappings\store\LookProductCollectionsMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailProductCollectionsItemMap.cs" />

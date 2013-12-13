@@ -67,7 +67,6 @@ namespace asi.asicentral.database
             base.OnModelCreating(modelBuilder);
             Configuration.LazyLoadingEnabled = true;
             modelBuilder.Configurations
-                .Add(new ClosedCampaignDateMap())
                 .Add(new ContextMap())
                 .Add(new ContextProductMap())
                 .Add(new ContextFeatureMap())
