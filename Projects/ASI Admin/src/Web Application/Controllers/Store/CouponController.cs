@@ -25,6 +25,7 @@ namespace asi.asicentral.web.Controllers.Store
         public ActionResult List()
         {
             IList<Coupon> couponList = StoreService.GetAll<Coupon>(true).ToList();
+
             return View("../Store/Coupon/CouponList", couponList);
         }
 
