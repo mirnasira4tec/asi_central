@@ -85,6 +85,51 @@ namespace asi.asicentral.web.Controllers
         }
 
         [HttpGet]
+        public virtual ActionResult MCEdit(int id)
+        {
+            Publication publication = _objectService.GetAll<Publication>(true).Where(pub => pub.PublicationId == id).FirstOrDefault();
+            if (publication != null)
+            {
+                ViewBag.Title = String.Format(Resource.PublicationEditTitle, publication.Name);
+                ViewBag.Message = Resource.PublicationEditDescription;
+                PublicationView viewModel = PublicationView.CreateFromPublication(publication);
+
+                IList<SelectListItem> colors = new List<SelectListItem>();
+                colors.Add(new SelectListItem() { Text = "Blue", Value = "1", Selected = false });
+                colors.Add(new SelectListItem() { Text = "Green", Value = "2", Selected = false });
+                ViewBag.ColorList = new SelectList(colors, "Value", "Text");
+
+                return View("MasterChildEdit", viewModel);
+            }
+            else
+                throw new Exception("Invalid identifier for a publication: " + id);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public virtual ActionResult MCEdit(PublicationView publicationView)
+        {
+            var request = Request;
+            if (ModelState.IsValid)
+            {
+                Publication publication = _objectService.GetAll<Publication>().Where(pub => pub.PublicationId == publicationView.PublicationId).FirstOrDefault();
+                //copy to trasfers publication and issues data
+                publicationView.CopyTo(publication);
+                _objectService.SaveChanges();
+                return RedirectToAction("List");
+            }
+            else
+            {
+                //because we do not store the many-many in the input fields, the publication object is incomplete
+                Publication original = _objectService.GetAll<Publication>(true).Where(pub => pub.PublicationId == publicationView.PublicationId).FirstOrDefault();
+                if (original != null) publicationView.Issues = original.Issues;
+            }
+            ViewBag.Title = "Publication - " + publicationView.Name;
+            ViewBag.Message = "Viewing the detailed information of a specific publication";
+            return View("MasterChildEdit", publicationView);
+        }
+
+        [HttpGet]
         /// <summary>
         /// Use this one to define default values. Could re-use edit but an Add could have specific reduced amount of fields from edit.
         /// </summary>

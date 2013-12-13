@@ -21,7 +21,7 @@
     @foreach (asi.asicentral.model.Publication publication in Model)
     {
         <tr>
-            <td><a rel="tooltip" data-placement="left" title="@Html.Encode(asi.asicentral.web.Resource.DeleteTooltip)" class="remove" href="#"><i data-id="@publication.PublicationId" class="icon-remove-circle"></i></a>&nbsp;&nbsp;@Html.ActionLink(publication.Name, "Edit", "Publication", new { id = publication.PublicationId }, null)</td>
+            <td><a rel="tooltip" data-placement="left" title="@Html.Encode(asi.asicentral.web.Resource.DeleteTooltip)" class="remove" href="#"><i data-id="@publication.PublicationId" class="icon-remove-circle"></i></a>&nbsp;&nbsp;@Html.ActionLink(publication.Name, "Edit", "Publication", new { id = publication.PublicationId }, null) @Html.ActionLink("MC-Edit", "MCEdit", "Publication", new { id = publication.PublicationId }, null)</td>
             <td>@publication.Description</td>
             <td>@publication.StartDate</td>
         </tr>
