@@ -25,7 +25,18 @@ namespace asi.asicentral.web.Controllers.Store
         public ActionResult List()
         {
             IList<Coupon> couponList = StoreService.GetAll<Coupon>(true).ToList();
+
             return View("../Store/Coupon/CouponList", couponList);
+        }
+
+        public ActionResult Add()
+        {
+            CouponModel productToUpdate = new CouponModel();
+            productToUpdate.Products = GetSelectedProductList();
+            productToUpdate.Contexts = GetSelectedContextList();
+            productToUpdate.ValidFrom = DateTime.UtcNow;
+            productToUpdate.ValidUpto = DateTime.UtcNow;
+            return View("../Store/Coupon/CouponDetails", productToUpdate);
         }
 
         [HttpGet]

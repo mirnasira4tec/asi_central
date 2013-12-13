@@ -2,6 +2,9 @@
     ViewBag.Title = "Coupons";
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
 }
+@using asi.asicentral.model.store;
+@using asi.asicentral.services;
+@using asi.asicentral.interfaces;
 @model  IList<asi.asicentral.model.store.Coupon>
 
 <h2>Coupons</h2>
@@ -9,50 +12,112 @@
 @using (Html.BeginForm())
 {
    
-    <a href="/store/Coupon/Edit?id=0" class="btn btn-primary">Add </a>
+    <a href="/store/Coupon/Add" class="btn btn-primary">Add </a>
     <br />
     <br />
     
     <table class="table table-bordered table-condensed table-striped">
         <thead>
             <tr>
-                <th>Coupon Code</th>
-                <th>Is Fixed Amount</th>
+                <th></th>
+                <th></th>
+                <th>Code</th>
+                <th>Type</th>
+                <th>Product/Context</th>
+                <th>Discount</th>
                 <th>Valid From</th>
                 <th>Valid To</th>
                 <th>Is Subscription</th>
-                <th></th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
-
-
             @for (int i = 0; i < Model.Count; i++)
             {
                 <tr>
-
+                    <td><a href="/store/Coupon/Edit?id=@Model[i].Id"  ><i class="icon-edit"></i></a></td>
+                    <td><a class="delete" id="@Model[i].CouponCode" href="/store/Coupon/Delete?id=@Model[i].Id"><i class="icon-trash"></i></a></td>
                     <td>@Model[i].CouponCode</td>
-                    <td>@Model[i].IsFixedAmount</td>
+                    <td>
+                        @if (Model[i].ContextId != null)
+                        {
+                            <span>Context</span>
+
+                        }
+
+                        else if (Model[i].ProductId != null)
+                        {
+                            <span>Product</span>
+                        }
+                    </td>
+                    <td>
+                        @if (Model[i].ContextId != null)
+                        {
+                            @GetContextName(Model[i].ContextId);
+
+                        }
+
+                        else if (Model[i].ProductId != null)
+                        {
+                            @GetProductName(Model[i].ProductId);
+                        }
+                    </td>
+                    <td>
+                        @if (Model[i].IsFixedAmount)
+                        {
+                            @Model[i].DiscountAmount<span>($)</span>
+                        }
+                        else
+                        {
+                            @Model[i].DiscountPercentage<span>(%)</span>
+                        }
+
+                    </td>
                     <td>@Model[i].ValidFrom.ToString("MM/dd/yy")</td>
                     <td>@Model[i].ValidUpto.ToString("MM/dd/yy")</td>
-                    <td>@Model[i].IsSubscription</td>
-                    <td><a href="/store/Coupon/Edit?id=@Model[i].Id" >Edit </a></td>
-                    <td><a class="delete" id="@Model[i].CouponCode"  href="/store/Coupon/Delete?id=@Model[i].Id">Delete </a></td>
+                    <td>
+                        @if (Model[i].IsSubscription)
+                        {
+                            <i class="icon-ok"></i>
+                        }
+
+                    </td>
 
                 </tr>
             }
         </tbody>
     </table>
     
+    @functions{
+  
+        public IStoreService StoreService { get; set; }
+        public string GetProductName(int? id)
+        {
+            if (id != null)
+            {
+                ContextProduct product = StoreService.GetAll<ContextProduct>(true).Where(detail => detail.Id == id).FirstOrDefault();
+                return product.Name;
+            }
+            return null;
+        }
+
+        public string GetContextName(int? id)
+        {
+            if (id != null)
+            {
+                Context context = StoreService.GetAll<Context>(true).Where(detail => detail.Id == id).FirstOrDefault();
+                return context.Name;
+            }
+            return null;
+        }
+  }
 }
 
 
 @section scripts {
 
     <script type="text/javascript">
-        $('a.delete').click(function (e) {
-            alert("Are you sure you want to delete "+e.target.id);
+        $('a.delete').click(function () {
+            alert("Are you sure you want to delete ");
         });
-</script>
+    </script>
 }

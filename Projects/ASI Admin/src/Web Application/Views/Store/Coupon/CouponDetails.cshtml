@@ -15,12 +15,11 @@
     
     
     <table class="table table-bordered table-condensed table-striped">
-
         <tbody>
             <tr>
                 @Html.HiddenFor(model => model.Id)
                 <td>Coupon Code</td>
-                <td> @Html.EditorFor(model => model.CouponCode)@Html.ValidationMessageFor(model => model.CouponCode)</div> </td>
+                <td>@Html.EditorFor(model => model.CouponCode)@Html.ValidationMessageFor(model => model.CouponCode) </td>
             </tr>
             <tr>
                 <td>Is Fixed Amount</td>
@@ -83,11 +82,19 @@
             </tr>
 
         </tbody>
+
     </table>
-    
-    <input type="submit" class="command btn btn-primary" value="Save" />
-    <input type="submit" class="command btn btn-primary" value="Cancel" /> 
+   
+    <footer id="page-completion-navigation">
+        <nav>
+            <p class="navigate-back"><a href="/store/Coupon/List">Back to Coupon list</a></p>
+            <p class="next-step-button">
+                <input type="submit" class="command btn btn-primary" value="Save" />
+        </nav>
+    </footer>
+
 }
+
 
 @section scripts {
     @Scripts.Render("~/bundles/form")
@@ -124,7 +131,7 @@
                 $("#ProductId").rules("add", {
                     required: true,
                     messages: { required: '@Html.Raw(asi.asicentral.Resources.Resource.FieldRequired)' }
-                  })
+                })
 
                 $("#ContextId").rules("remove");
             }
@@ -134,7 +141,7 @@
                 $("#ContextId").rules("add", {
                     required: true,
                     messages: { required: '@Html.Raw(asi.asicentral.Resources.Resource.FieldRequired)' }
-                 })
+                })
 
                 $("#ProductId").rules("remove");
             }
@@ -166,7 +173,7 @@
         $(document).ready(function () {
             RadioChange();
             CheckChange();
-            startDate =new Date($('#ValidFrom').val());
+            startDate = new Date($('#ValidFrom').val());
             startDate.setDate(startDate.getDate(new Date($('#ValidFrom').val())));
             $("#ValidUpto").datepicker('setStartDate', startDate);
         });

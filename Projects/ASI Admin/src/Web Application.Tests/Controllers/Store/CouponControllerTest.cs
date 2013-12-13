@@ -32,7 +32,8 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             information.IsFixedAmount = true;
             information.DiscountAmount = "20";
             information.IsSubscription = true;
-
+            information.IsProduct = true;
+            information.ProductId = 3;
 
             CouponController controller = new CouponController();
             controller.StoreService = mockObjectService.Object;
@@ -45,14 +46,16 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Assert.IsNotNull(product.DiscountPercentage);
             Assert.IsNotNull(product.DiscountAmount);
             Assert.IsNotNull(product.IsSubscription);
+            Assert.IsNotNull(product.ProductId);
 
 
           
             Assert.AreEqual(product.CouponCode, information.CouponCode);
-            Assert.AreEqual(product.DiscountPercentage, information.DiscountPercentage);
-            Assert.AreEqual(product.DiscountAmount, information.DiscountAmount);
+            Assert.AreEqual(product.DiscountPercentage, Convert.ToInt32(information.DiscountPercentage));
+            Assert.AreEqual(product.DiscountAmount,Convert.ToDecimal(information.DiscountAmount));
             Assert.AreEqual(product.IsFixedAmount, information.IsFixedAmount);
             Assert.AreEqual(product.IsSubscription, information.IsSubscription);
+            Assert.AreEqual(product.ProductId, information.ProductId);
 
             mockObjectService.Verify(objectService => objectService.SaveChanges(), Times.Exactly(1));
 
