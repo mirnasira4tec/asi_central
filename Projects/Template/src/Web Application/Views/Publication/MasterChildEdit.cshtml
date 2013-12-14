@@ -1,0 +1,54 @@
+﻿@inherits System.Web.Mvc.WebViewPage<asi.asicentral.web.Models.PublicationView>
+@section css {
+    @Styles.Render("~/Content/form")
+}
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title.</h1>
+                <h2>@ViewBag.Message</h2>
+            </hgroup>
+            <p>
+                This Web page shows how to view/edit a specific database item. All other strings are from a Resource file.
+            </p>
+        </div>
+    </section>
+}
+@using (Html.BeginForm())
+{
+@Html.AntiForgeryToken()
+<h3>@Html.Encode(asi.asicentral.web.Resource.PublicationEditFieldsTitle)</h3>  <input type="submit" value="Save" /> @Html.ActionLink("Cancel", "Index");
+@Html.HiddenFor(model=>model.PublicationId)
+<div class="form-group">
+    @Html.LabelFor(model => model.Name) @Html.EditorFor(model => model.Name) @Html.ValidationMessageFor(model => model.Name)
+    @Html.LabelFor(model => model.Description) @Html.EditorFor(model => model.Description) @Html.ValidationMessageFor(model => model.Description)
+    <label class="checkbox" for="IsPublic">@Html.EditorFor(model => model.IsPublic) @Html.DisplayNameFor(model => model.IsPublic)</label>
+    @Html.LabelFor(model => model.StartDate) @Html.EditorFor(model => model.StartDate) @Html.ValidationMessageFor(model => model.StartDate)
+    @Html.LabelFor(model => model.EndDate) @Html.EditorFor(model => model.EndDate) @Html.ValidationMessageFor(model => model.EndDate)
+    @Html.LabelFor(model => model.Color) @Html.DropDownListFor(model => model.Color, Model.ColorList) @Html.ValidationMessageFor(model => model.Color)
+    @Html.LabelFor(model => model.Number) @Html.EditorFor(model => model.Number) @Html.ValidationMessageFor(model => model.Number)
+
+@if (Model.Issues == null || Model.Issues.Count == 0)
+{
+    <label>@Html.Encode(asi.asicentral.web.Resource.PublicationEditFieldsNoSchedule)</label>
+}
+else {
+<table class="table">
+    <tr><th width="50%">@Html.Encode(asi.asicentral.web.Resource.PublicationEditFieldsSchedule)</th></tr>
+    @for (int i = 0; i < Model.Issues.Count; i++ )
+    {
+        <tr><td> @Html.HiddenFor(model => model.Issues[i].PublicationIssueId) @Html.LabelFor(model => model.Issues[i].Name) @Html.EditorFor(model => model.Issues[i].Name) </td></tr>
+    }
+</table>
+}
+</div>
+}
+@section scripts {
+    @Scripts.Render("~/bundles/form")
+<script>
+    $('#EndDate').datepicker();
+    $('#datetimepicker1').datetimepicker();
+    $('#StartDatePicker').datetimepicker();
+</script>
+}
