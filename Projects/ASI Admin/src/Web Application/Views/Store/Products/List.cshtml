@@ -18,7 +18,7 @@
             <tr>
                 <td>@Html.HiddenFor(m => Model[i].Id) @Html.TextBoxFor(m => Model[i].Name, new { @readonly = "readonly" })</td>
                 <td>@Html.EditorFor(model => Model[i].NotificationEmails)</td>
-                <td>@Html.CheckBoxFor(model => Model[i].IsAvailable)</td>
+                <td class="center">@Html.CheckBoxFor(model => Model[i].IsAvailable)</td>
                 <td> 
                     @Html.EditorFor(model => model[i].NextAvailableDate, new { @class = "dateField" }) @Html.ValidationMessageFor(model => model[i].NextAvailableDate) <i class="icon-remove date-clear" id="[@i].NextAvailableDate"></i>
                 </td>
