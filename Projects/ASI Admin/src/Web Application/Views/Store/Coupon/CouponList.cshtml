@@ -101,7 +101,11 @@
 @section scripts {
     <script type="text/javascript">
         $('a.delete').click(function () {
-            alert("Are you sure you want to delete the coupon?");
+           var confirms = confirm("Are you sure you want to delete the coupon?");
+           if (confirms) 
+                return true
+            else
+                return false
         });
     </script>
 }
