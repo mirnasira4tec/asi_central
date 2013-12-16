@@ -237,7 +237,9 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             StoreOrder order = new StoreOrder() { Id = 0, BillingIndividual = individual };
             StoreOrderDetail detail = new StoreOrderDetail { Id = 5, Order = order, };
             List<StoreOrderDetail> details = new List<StoreOrderDetail>();
+            IList<LookEventMerchandiseProduct> lookupEvents = new List<LookEventMerchandiseProduct>();
             List<StoreDetailESPAdvertising> advertisings = new List<StoreDetailESPAdvertising>();
+            List<StoreDetailESPAdvertisingItem> advertisingItems = new List<StoreDetailESPAdvertisingItem>();
             details.Add(detail);
             detail.Product = CreateProduct(49);
             detail.Quantity = 1;
@@ -245,6 +247,33 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             StoreDetailESPAdvertising espAdvertisingDetail = new StoreDetailESPAdvertising();
             espAdvertisingDetail.OrderDetailId = 5;
             advertisings.Add(espAdvertisingDetail);
+
+            StoreDetailESPAdvertisingItem item1 = new StoreDetailESPAdvertisingItem();
+            item1.OrderDetailId = 5;
+            item1.OptionID = 1;
+            item1.ItemList = "123";
+            item1.Sequence = 1;
+            advertisingItems.Add(item1);
+
+            StoreDetailESPAdvertisingItem item2 = new StoreDetailESPAdvertisingItem();
+            item2.OrderDetailId = 5;
+            item2.OptionID = 2;
+            item2.ItemList = "234";
+            item2.Sequence = 2;
+            advertisingItems.Add(item2);
+            
+
+            LookEventMerchandiseProduct lookupEvent = new LookEventMerchandiseProduct();
+            lookupEvent.Id = 1;
+            lookupEvent.Name = "Test1";
+            lookupEvent.Sequence = 1;
+            lookupEvents.Add(lookupEvent);
+
+            LookEventMerchandiseProduct lookupEvent1 = new LookEventMerchandiseProduct();
+            lookupEvent1.Id = 2;
+            lookupEvent1.Name = "Test2";
+            lookupEvent1.Sequence = 2;
+            lookupEvents.Add(lookupEvent1);
 
             order.CreditCard = new StoreCreditCard() { ExternalReference = "111" };
             StoreOrder orderRef = order;
@@ -259,6 +288,8 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Mock<IStoreService> mockStoreService = new Mock<IStoreService>();
             Mock<IFulfilmentService> mockFulFilService = new Mock<IFulfilmentService>();
             mockStoreService.Setup(service => service.GetAll<StoreOrderDetail>(false)).Returns(details.AsQueryable());
+            mockStoreService.Setup(objectService => objectService.GetAll<LookEventMerchandiseProduct>(false)).Returns(lookupEvents.AsQueryable());
+            mockStoreService.Setup(objectService => objectService.GetAll<StoreDetailESPAdvertisingItem>(false)).Returns(advertisingItems.AsQueryable());
             mockStoreService.Setup(service => service.GetAll<StoreDetailESPAdvertising>(false)).Returns(advertisings.AsQueryable());
 
             ApplicationController controller = new ApplicationController();
@@ -267,7 +298,9 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
 
             ESPAdvertisingModel model = new ESPAdvertisingModel();
             model.OrderDetailId = 5;
-            model.NumberOfItems_First = "123;456;789";
+            model.Events = new List<EventDetailsModel>();
+            model.Events.Add(new EventDetailsModel { OptionId = 1, ItemNumbers = "1bc" });
+            model.Events.Add(new EventDetailsModel { OptionId = 2, ItemNumbers = "2bc" });
             model.ActionName = ApplicationController.COMMAND_SAVE;
             model.ExternalReference = "102";
 
@@ -278,7 +311,12 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Assert.IsNotNull(detail);
             Assert.AreEqual(detail.Quantity, 1);
             Assert.IsNotNull(espAdvertisingDetail);
-            Assert.AreEqual(espAdvertisingDetail.FirstItemList, model.NumberOfItems_First);
+            Assert.IsNotNull(advertisingItems);
+            Assert.AreEqual(advertisingItems.ElementAt(0).ItemList, model.Events.ElementAt(0).ItemNumbers);
+            Assert.AreEqual(advertisingItems.ElementAt(0).OptionID, model.Events.ElementAt(0).OptionId);
+            Assert.AreEqual(advertisingItems.ElementAt(1).ItemList, model.Events.ElementAt(1).ItemNumbers);
+            Assert.AreEqual(advertisingItems.ElementAt(1).OptionID, model.Events.ElementAt(1).OptionId);
+            
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(1));
 
             // user clicks reject - order should be updated to reject

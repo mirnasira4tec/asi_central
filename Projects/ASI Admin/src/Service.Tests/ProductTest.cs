@@ -746,7 +746,7 @@ namespace asi.asicentral.Tests
         [TestMethod]
         public void ESPAdvertisingCrud()
         {
-            int newId = 1;
+            int newId = 25000;
             using (var objectContext = new StoreContext())
             {
                 int recordCount = objectContext.StoreDetailESPAdvertisings.Count();

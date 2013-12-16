@@ -432,7 +432,19 @@ namespace asi.asicentral.web.Controllers.Store
                     switch (orderDetail.Product.Id)
                     {
                         case 49:
-                            espAdvertising.FirstItemList = application.NumberOfItems_First;
+                            if (application != null && application.Events != null && application.Events.Count > 0)
+                            {
+                                IList<StoreDetailESPAdvertisingItem> dbEvents = StoreService.GetAll<StoreDetailESPAdvertisingItem>().Where(model => model.OrderDetailId == application.OrderDetailId).OrderBy(model => model.Sequence).ToList();
+                                StoreDetailESPAdvertisingItem dbEvent = null;
+                                if (dbEvents != null && dbEvents.Count > 0)
+                                {
+                                    foreach (EventDetailsModel detail in application.Events)
+                                    {
+                                        dbEvent = dbEvents.Where(item => item.OptionID == detail.OptionId).SingleOrDefault();
+                                        if (dbEvent != null) dbEvent.ItemList = detail.ItemNumbers;
+                                    }
+                                }
+                            }
                             break;
                         case 50:
                             espAdvertising.FirstItemList = application.NumberOfItems_First;
