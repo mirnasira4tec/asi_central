@@ -222,6 +222,7 @@
     <Compile Include="Models\Store\Order\DistributorApplicationModel.cs" />
     <Compile Include="Models\Store\Order\ESPAdvertisingModel.cs" />
     <Compile Include="Models\Store\Order\ESPPayForPlacementModel.cs" />
+    <Compile Include="Models\Store\Order\EventDetailsModel.cs" />
     <Compile Include="Models\Store\Order\MagazinesApplicationModel.cs" />
     <Compile Include="Models\Store\Order\MembershipModelHelper.cs" />
     <Compile Include="Models\Store\Order\OrderDetailApplicationModel.cs" />
