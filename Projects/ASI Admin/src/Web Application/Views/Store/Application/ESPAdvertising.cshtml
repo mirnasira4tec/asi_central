@@ -58,12 +58,20 @@
                     }
                     break;
                 case 49:
+                    if(Model != null && Model.Events != null && Model.Events.Count > 0)
+                    {
+                        for (int count = 0; count < Model.Events.Count; count++ )
+                        {  
+                    <span class="label-row">
+				         @Html.Raw(string.Format("<b>{0}</b>", Model.Events[count].EventName))
+			        </span>
                     <span class="label-row">
                         @Html.LabelFor(m => m.NumberOfItems_First) 
+                        @Html.HiddenFor(m => Model.Events[count].OptionId) 
+                        @Html.EditorFor(m => Model.Events[count].ItemNumbers)
 			        </span>
-			        <span class="label-row">
-				         @Html.EditorFor(m => m.NumberOfItems_First) @Html.ValidationMessageFor(m => m.NumberOfItems_First)
-			        </span>
+                        }
+                    }
                     break;
                 case 50:
                     <span class="row">@Html.Raw("<strong>Clearance Section:</strong>")</span>

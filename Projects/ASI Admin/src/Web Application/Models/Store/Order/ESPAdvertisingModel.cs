@@ -135,6 +135,7 @@ namespace asi.asicentral.web.model.store
         public string Video { get; set; }
         
         public string LoginScreen_Dates { get; set; }
+        public IList<EventDetailsModel> Events { get; set; }
 
         #endregion ESP Advertising information
 
@@ -185,7 +186,22 @@ namespace asi.asicentral.web.model.store
                     ESPTowerAds = storeService.GetAll<StoreDetailEspTowerAd>(true).Where(towerAd => towerAd.OrderDetailId == OrderDetailId).ToList();
                     break;
                 case 49:
-                    NumberOfItems_First = espAdvertising.FirstItemList;
+                    List<StoreDetailESPAdvertisingItem> dbEvents = storeService.GetAll<StoreDetailESPAdvertisingItem>().Where(model => model.OrderDetailId == OrderDetailId).OrderBy(model => model.Sequence).ToList();
+                    if (dbEvents != null && dbEvents.Count > 0)
+                    {
+                        List<LookEventMerchandiseProduct> dbAllEvents = storeService.GetAll<LookEventMerchandiseProduct>().Where(model => !model.Deleted).OrderBy(model => model.Sequence).ToList();
+                        Events = new List<EventDetailsModel>();
+                        LookEventMerchandiseProduct eventProduct = null;
+                        foreach (StoreDetailESPAdvertisingItem item in dbEvents)
+                        {
+                            EventDetailsModel modelEvent = new EventDetailsModel();
+                            modelEvent.OptionId = item.OptionID;
+                            modelEvent.ItemNumbers = item.ItemList;
+                            eventProduct = dbAllEvents.Where(dbEvent => dbEvent.Id == item.OptionID).SingleOrDefault();
+                            if (eventProduct != null) modelEvent.EventName = eventProduct.Name;
+                            Events.Add(modelEvent);
+                        }
+                    }
                     break;
                 case 50:
                     NumberOfItems_First = espAdvertising.FirstItemList;
