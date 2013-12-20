@@ -11,6 +11,18 @@ namespace asi.asicentral.util.store
     public class CommonStoreHelper
     {
         public static readonly decimal[] CommonStore_Cost = {29,99} ;
-        
+
+        public static IList<SelectListItem> GetQuantityOptions()
+        {
+            IList<SelectListItem> quantityOptions = new List<SelectListItem>();
+            quantityOptions.Add(new SelectListItem() { Text = "1", Value = "1" });
+            quantityOptions.Add(new SelectListItem() { Text = "10", Value = "2" });
+            return quantityOptions;
+        }
+
+        public static decimal GetCost(int optionId)
+        {
+            return CommonStore_Cost[optionId-1];
+        }
     }
 }

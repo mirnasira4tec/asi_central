@@ -17,7 +17,7 @@ namespace asi.asicentral.web.Controllers.Store
         public const string COMMAND_SAVE = "Save";
         public const string COMMAND_REJECT = "Reject";
         public const string COMMAND_ACCEPT = "Accept";
-        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 45, 46, 55, 62, 70 };
+        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 45, 46, 55, 62, 70,71 };
         public static readonly int[] DISTRIBUTOR_CATALOG_PRODUCT_IDS = { 35, 36, 37, 38, 39, 40, 41 };
         public static readonly int[] SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS = { 48, 49, 50, 51, 52, 53, 54 };
         public static readonly int[] SUPPLIER_ESP_PAYFORPLACEMENT_PRODUCT_IDS = { 47, 63 };
@@ -383,6 +383,10 @@ namespace asi.asicentral.web.Controllers.Store
                             break;
                         case 62:
                             orderDetail.AcceptedByName = application.AcceptedByName;
+                            break;
+                        case 71:
+                            orderDetail.OptionId = application.OptionId;
+                            orderDetail.Cost = CommonStoreHelper.GetCost(application.OptionId.Value);
                             break;
                         default:
                             int quantity = orderDetail.Quantity;
