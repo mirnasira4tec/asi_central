@@ -286,7 +286,7 @@
     <Compile Include="services\StoreService.cs" />
     <Compile Include="util\store\asismartsales\ASISmartSalesHelper.cs" />
     <Compile Include="util\store\catalogs\CatalogsHelper.cs" />
-    <Compile Include="util\store\commonstore\CommonStoreHelper.cs" />
+    <Compile Include="util\store\companystore\CompanyStoreHelper.cs" />
     <Compile Include="util\store\emailexpress\EmailExpressHelper.cs" />
     <Compile Include="util\store\espadvertising\ESPAdvertisingHelper.cs" />
     <Compile Include="util\store\Helper.cs" />

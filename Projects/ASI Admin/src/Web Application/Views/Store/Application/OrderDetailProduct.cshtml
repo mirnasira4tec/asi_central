@@ -67,7 +67,7 @@
 			        @Html.LabelFor(m => m.Quantity) 
 		        </span>
 		        <span class="label-row">
-			        @Html.DropDownListFor(model => model.OptionId, asi.asicentral.util.store.CommonStoreHelper.GetQuantityOptions(), new { @class = "tab1" }) @Html.ValidationMessageFor(model => model.OptionId)
+			        @Html.DropDownListFor(model => model.OptionId, asi.asicentral.util.store.CompanyStoreHelper.GetQuantityOptions(), new { @class = "tab1" }) @Html.ValidationMessageFor(model => model.OptionId)
 		        </span>
                     break;
                 default:

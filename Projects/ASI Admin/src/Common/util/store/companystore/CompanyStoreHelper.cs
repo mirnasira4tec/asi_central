@@ -8,21 +8,21 @@ using asi.asicentral.Resources;
 
 namespace asi.asicentral.util.store
 {
-    public class CommonStoreHelper
+    public class CompanyStoreHelper
     {
-        public static readonly decimal[] CommonStore_Cost = {29,99} ;
+        public static readonly decimal[] CompanyStore_Cost = {29,99} ;
 
         public static IList<SelectListItem> GetQuantityOptions()
         {
             IList<SelectListItem> quantityOptions = new List<SelectListItem>();
-            quantityOptions.Add(new SelectListItem() { Text = "1", Value = "1" });
-            quantityOptions.Add(new SelectListItem() { Text = "10", Value = "2" });
+            quantityOptions.Add(new SelectListItem() { Text = "1", Value = "0" });
+            quantityOptions.Add(new SelectListItem() { Text = "10", Value = "1" });
             return quantityOptions;
         }
 
         public static decimal GetCost(int optionId)
         {
-            return CommonStore_Cost[optionId-1];
+            return CompanyStore_Cost[optionId];
         }
     }
 }

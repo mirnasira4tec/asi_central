@@ -386,7 +386,7 @@ namespace asi.asicentral.web.Controllers.Store
                             break;
                         case 71:
                             orderDetail.OptionId = application.OptionId;
-                            orderDetail.Cost = CommonStoreHelper.GetCost(application.OptionId.Value);
+                            orderDetail.Cost = CompanyStoreHelper.GetCost(application.OptionId.Value);
                             break;
                         default:
                             int quantity = orderDetail.Quantity;
