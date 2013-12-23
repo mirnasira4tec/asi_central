@@ -766,9 +766,10 @@ namespace asi.asicentral.web.Controllers.Store
                 int num;
                 bool success = int.TryParse(order.ExternalReference, out num);
                 if (!success) throw new Exception("Timms id must be numbers only.");
-                
+               
                 fulfilmentService.Process(order, application);
                 order.ProcessStatus = OrderStatus.Approved;
+                order.ApprovedDate = DateTime.UtcNow;
             }
             else if (command == ApplicationController.COMMAND_REJECT)
             {
