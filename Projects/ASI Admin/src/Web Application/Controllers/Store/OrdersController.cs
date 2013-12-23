@@ -292,7 +292,8 @@ namespace asi.asicentral.web.Controllers.Store
         public ActionResult DownloadProductCSV(ProductStatisticData orderStatisticsData)
         {
             IQueryable<StoreOrder> ordersQuery = GetProductQuery(orderStatisticsData);
-            if (orderStatisticsData.Product != null) {
+            if (orderStatisticsData.Product != null)
+            {
                 //product name not available as query
                 ordersQuery = ordersQuery.ToList().Where(order => order.ProductName == orderStatisticsData.Product).AsQueryable();
             }
@@ -311,21 +312,23 @@ namespace asi.asicentral.web.Controllers.Store
             csv.Append("Order ID" + separator + "Timss ID" + separator + "Company Name" + separator + "Contact Name" + separator + "Contact Phone" + separator + "Contact Email" + separator + "Orderstatus" + separator + "Amount" + separator + "Created Date" + separator + "Product Name"+ separator + "Approved Date" + separator + "Annualized Amount");
             csv.Append(System.Environment.NewLine);
 
-            foreach (StoreOrder order in ordersQuery)
+            IList<StoreOrder> orders = ordersQuery.ToList();
+
+            foreach (StoreOrder order in orders)
             {
-                string orderid = string.Empty, timss = string.Empty, companyname = string.Empty, contactname = string.Empty, contactphone = string.Empty, contactemail = string.Empty, orderstatus = string.Empty, amount = string.Empty, annualizedamount = string.Empty, productname = string.Empty, approveddate = string.Empty;
-                DateTime date = new DateTime();
+                string orderid = string.Empty, timss = string.Empty, companyname = string.Empty, contactname = string.Empty, contactphone = string.Empty, contactemail = string.Empty, orderstatus = string.Empty, amount = string.Empty, annualizedamount = string.Empty, productname = string.Empty, approveddate = string.Empty,date = string.Empty;
+               
                 
                 orderid = order.Id.ToString();
                 timss = order.ExternalReference;
                 orderstatus = order.ProcessStatus == OrderStatus.Approved ? "True" : "False";
                 amount = order.Total.ToString("C");
-                date = order.CreateDate;
+                date = order.CreateDate.ToString().Replace(",", "");
                 annualizedamount = order.AnnualizedTotal.ToString("C");
-                approveddate = (order.ApprovedDate==DateTime.MinValue)?string.Empty:order.ApprovedDate.ToString();
-                if (order.OrderDetails != null && order.OrderDetails.Count > 0 && order.OrderDetails.ElementAt(0) != null && order.OrderDetails.ElementAt(0).Product!=null)
+                approveddate = (order.ApprovedDate == DateTime.MinValue) ? string.Empty : order.ApprovedDate.ToString().Replace(",", "");
+                if (order.OrderDetails != null && order.OrderDetails.Count > 0 && order.OrderDetails.ElementAt(0) != null && order.OrderDetails.ElementAt(0).Product != null)
                 {
-                    productname = order.OrderDetails.ElementAt(0).Product.Name.Replace(",","");
+                    productname = order.OrderDetails.ElementAt(0).Product.Name.Replace(",", "");
                 }
                 if (order.Company != null)
                 {
@@ -368,7 +371,7 @@ namespace asi.asicentral.web.Controllers.Store
 
         private IQueryable<StoreOrder> GetProductQuery(ProductStatisticData orderStatisticsData)
         {
-            IQueryable<StoreOrder> ordersQuery = StoreService.GetAll<StoreOrder>("Company;Company.Individuals;BillingIndividual", true);
+            IQueryable<StoreOrder> ordersQuery = StoreService.GetAll<StoreOrder>("Company;Company.Individuals;BillingIndividual;OrderDetails", true);
             if (!orderStatisticsData.StartDate.HasValue) orderStatisticsData.StartDate = DateTime.Now.AddDays(-7).Date;
             if (!orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = DateTime.Now.Date;
             if (orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = orderStatisticsData.EndDate.Value.Date + new TimeSpan(23, 59, 59);
