@@ -250,6 +250,7 @@ namespace asi.asicentral.web.Controllers.Store
         /// <returns></returns>
         public ActionResult DownloadCampaignCSV(OrderStatisticData orderStatisticsData)
         {
+            if (orderStatisticsData.Campaign == "(Unknown)") orderStatisticsData.Campaign = null;
             IQueryable<StoreOrder> ordersQuery = GetCampainQuery(orderStatisticsData);
             if (string.IsNullOrEmpty(orderStatisticsData.Campaign))
                 ordersQuery = ordersQuery.Where(order => order.Campaign == null || order.Campaign == string.Empty);
@@ -280,7 +281,7 @@ namespace asi.asicentral.web.Controllers.Store
         {
             StringBuilder csv = new StringBuilder();
             string separator = ",";
-            csv.Append("Order ID" + separator + "Timss ID" + separator + "Company Name" + separator + "Contact Name" + separator + "Contact Phone" + separator + "Contact Email" + separator + "Orderstatus" + separator + "Amount" + separator + "Date" + separator + "Product Name" + separator + "Approved Date" + separator + "Annualized Amount");
+            csv.Append("Order ID" + separator + "Timss ID" + separator + "Company Name" + separator + "Contact Name" + separator + "Contact Phone" + separator + "Contact Email" + separator + "Orderstatus" + separator + "Amount" + separator + "Created Date" + separator + "Product Name" + separator + "Approved Date" + separator + "Annualized Amount");
             csv.Append(System.Environment.NewLine);
 
             IList<StoreOrder> orders = ordersQuery.ToList();
