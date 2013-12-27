@@ -250,6 +250,7 @@ namespace asi.asicentral.web.Controllers.Store
         /// <returns></returns>
         public ActionResult DownloadCampaignCSV(OrderStatisticData orderStatisticsData)
         {
+            if (orderStatisticsData.Campaign == "(Unknown)") orderStatisticsData.Campaign = null;
             IQueryable<StoreOrder> ordersQuery = GetCampainQuery(orderStatisticsData);
             if (string.IsNullOrEmpty(orderStatisticsData.Campaign))
                 ordersQuery = ordersQuery.Where(order => order.Campaign == null || order.Campaign == string.Empty);
@@ -280,36 +281,42 @@ namespace asi.asicentral.web.Controllers.Store
         {
             StringBuilder csv = new StringBuilder();
             string separator = ",";
-            csv.Append("Order ID" + separator + "Timss ID" + separator + "Company Name" + separator + "Contact Name" + separator + "Contact Phone" + separator + "Contact Email" + separator + "Orderstatus" + separator + "Amount" + separator + "Date");
+            csv.Append("Order ID" + separator + "Timss ID" + separator + "Company Name" + separator + "Contact Name" + separator + "Contact Phone" + separator + "Contact Email" + separator + "Orderstatus" + separator + "Amount" + separator + "Created Date" + separator + "Product Name" + separator + "Approved Date" + separator + "Annualized Amount");
             csv.Append(System.Environment.NewLine);
 
-            foreach (StoreOrder order in ordersQuery)
+            IList<StoreOrder> orders = ordersQuery.ToList();
+
+            foreach (StoreOrder order in orders)
             {
-                string orderid = string.Empty, timss = string.Empty, companyname = string.Empty, contactname = string.Empty, contactphone = string.Empty, contactemail = string.Empty, orderstatus = string.Empty, amount = string.Empty;
-                DateTime date = new DateTime();
+                string orderid = string.Empty, timss = string.Empty, companyname = string.Empty, contactname = string.Empty, contactphone = string.Empty, contactemail = string.Empty, orderstatus = string.Empty, amount = string.Empty, annualizedamount = string.Empty, productname = string.Empty, approveddate = string.Empty, date = string.Empty;
 
                 orderid = order.Id.ToString();
                 timss = order.ExternalReference;
                 orderstatus = order.ProcessStatus == OrderStatus.Approved ? "True" : "False";
                 amount = order.Total.ToString("C");
-                date = order.CreateDate;
+                date = order.CreateDate.ToString().Replace(",", "");
+                annualizedamount = order.AnnualizedTotal.ToString("C");
+                approveddate = (order.ApprovedDate == DateTime.MinValue) ? string.Empty : order.ApprovedDate.ToString().Replace(",", "");
+                if (order.OrderDetails != null && order.OrderDetails.Count > 0 && order.OrderDetails.ElementAt(0) != null && order.OrderDetails.ElementAt(0).Product != null)
+                {
+                    productname = order.OrderDetails.ElementAt(0).Product.Name.Replace(",", "");
+                }
                 if (order.Company != null)
                 {
-                    companyname = order.Company.Name;
+                    companyname = order.Company.Name.Replace(",", "");
                     StoreIndividual primaryContact = order.GetContact();
                     if (primaryContact != null)
                     {
-                        contactname = primaryContact.FirstName + " " + primaryContact.LastName;
+                        contactname = (primaryContact.FirstName + " " + primaryContact.LastName).Replace(",", "");
                         contactphone = primaryContact.Phone;
                         contactemail = primaryContact.Email;
                     }
                 }
-                csv.Append(orderid + separator + timss + separator + companyname + separator + contactname + separator + contactphone + separator + contactemail + separator + orderstatus + separator + amount + separator + date.ToString());
+                csv.Append(orderid + separator + timss + separator + companyname + separator + contactname + separator + contactphone + separator + contactemail + separator + orderstatus + separator + amount + separator + date.ToString() + separator + productname + separator + approveddate + separator + annualizedamount);
                 csv.Append(System.Environment.NewLine);
             }
             return File(new System.Text.UTF8Encoding().GetBytes(csv.ToString()), "text/csv", "report.csv");
         }
-
         private IQueryable<StoreOrder> GetCampainQuery(OrderStatisticData orderStatisticsData)
         {
             IQueryable<StoreOrder> ordersQuery = StoreService.GetAll<StoreOrder>("Company;Company.Individuals;BillingIndividual", true);

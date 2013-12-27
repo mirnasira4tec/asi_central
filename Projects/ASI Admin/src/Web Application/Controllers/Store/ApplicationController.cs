@@ -751,6 +751,7 @@ namespace asi.asicentral.web.Controllers.Store
                 
                 fulfilmentService.Process(order, application);
                 order.ProcessStatus = OrderStatus.Approved;
+                order.ApprovedDate = DateTime.UtcNow;
             }
             else if (command == ApplicationController.COMMAND_REJECT)
             {
