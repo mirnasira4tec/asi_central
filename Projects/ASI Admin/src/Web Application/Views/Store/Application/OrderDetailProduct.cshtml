@@ -62,6 +62,14 @@
 			        @Html.EditorFor(m => m.AcceptedByName) @Html.ValidationMessageFor(m => m.AcceptedByName)
 		        </span>
                     break;
+                 case 71:
+                <span class="label-row span11">
+			        @Html.LabelFor(m => m.Quantity) 
+		        </span>
+		        <span class="label-row">
+			        @Html.DropDownListFor(model => model.OptionId, asi.asicentral.util.store.CompanyStoreHelper.GetQuantityOptions(), new { @class = "tab1" }) @Html.ValidationMessageFor(model => model.OptionId)
+		        </span>
+                    break;
                 default:
                 <span class="label-row span11">
 			        @Html.LabelFor(m => m.Quantity) 

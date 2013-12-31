@@ -1,4 +1,6 @@
 ﻿using asi.asicentral.model.store;
+using asi.asicentral.services;
+using asi.asicentral.util.store;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -137,8 +139,13 @@ namespace asi.asicentral.web.model.store
             model.ShippingCost = orderDetail.ShippingCost;
             model.PromotionalDiscount = orderDetail.DiscountAmount;
             model.TotalCost = order.Total;
-            if (orderDetail.Product != null && orderDetail.Product.IsSubscription) model.SubscriptionCost = (orderDetail.Cost * orderDetail.Quantity) + orderDetail.TaxCost + orderDetail.ShippingCost;
-            if (orderDetail.Product != null) model.SubscriptionFrequency = (!string.IsNullOrEmpty(orderDetail.Product.SubscriptionFrequency) ? (orderDetail.Product.SubscriptionFrequency == "M" ? "monthly" : "yearly") : string.Empty);
+
+            decimal cost = orderDetail.Cost;
+            int quantity = orderDetail.Quantity;
+           
+            if (orderDetail.Product.IsSubscription && orderDetail.Coupon != null && orderDetail.Coupon.IsSubscription) model.SubscriptionCost += (cost * quantity) + orderDetail.TaxCost + orderDetail.ShippingCost - orderDetail.DiscountAmount;
+            else if (orderDetail.Product.IsSubscription) model.SubscriptionCost += (cost * quantity) + orderDetail.TaxCost + orderDetail.ShippingCost;
+            model.SubscriptionFrequency = (!string.IsNullOrEmpty(orderDetail.Product.SubscriptionFrequency) ? (orderDetail.Product.SubscriptionFrequency == "M" ? "monthly" : "yearly") : string.Empty);
         }
     }
 }
