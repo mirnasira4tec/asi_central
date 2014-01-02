@@ -15,7 +15,6 @@
 @using (Html.BeginForm("EditMagazines", "Application"))
 {        
 @Html.AntiForgeryToken()
-@Html.HiddenFor(m => m.ProductName)
 @Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
 <div>
     @if (Model.Price > 0.0m)
