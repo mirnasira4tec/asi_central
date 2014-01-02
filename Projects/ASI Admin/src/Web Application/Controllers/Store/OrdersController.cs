@@ -278,6 +278,7 @@ namespace asi.asicentral.web.Controllers.Store
         /// <returns></returns>
         public ActionResult DownloadCampaignCSV(OrderStatisticData orderStatisticsData)
         {
+            if (orderStatisticsData.Campaign == "(Unknown)") orderStatisticsData.Campaign = null;
             IQueryable<StoreOrder> ordersQuery = GetCampainQuery(orderStatisticsData);
             if (string.IsNullOrEmpty(orderStatisticsData.Campaign))
                 ordersQuery = ordersQuery.Where(order => order.Campaign == null || order.Campaign == string.Empty);
@@ -346,7 +347,6 @@ namespace asi.asicentral.web.Controllers.Store
             }
             return File(new System.Text.UTF8Encoding().GetBytes(csv.ToString()), "text/csv", "report.csv");
         }
-
         private IQueryable<StoreOrder> GetCampainQuery(OrderStatisticData orderStatisticsData)
         {
             IQueryable<StoreOrder> ordersQuery = StoreService.GetAll<StoreOrder>("Company;Company.Individuals;BillingIndividual", true);
