@@ -3895,7 +3895,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How many siblings (0-31) do you have?.
+        ///   Looks up a localized string similar to What is your favorite hobby?.
         /// </summary>
         public static string SignForVerification {
             get {
