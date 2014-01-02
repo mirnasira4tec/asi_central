@@ -16,7 +16,6 @@
 @using (Html.BeginForm("EditPayForPlacement", "Application"))
 {        
 @Html.AntiForgeryToken()
-@Html.HiddenFor(m => m.ProductName)
 @Html.HiddenFor(m => m.ProductId)
 @Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
 <div>
