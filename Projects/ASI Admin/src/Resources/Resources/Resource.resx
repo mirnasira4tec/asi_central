@@ -1186,7 +1186,7 @@
     <value>Approved Signatures</value>
   </data>
   <data name="SignForVerification" xml:space="preserve">
-    <value>How many siblings (0-31) do you have?</value>
+    <value>What is your favorite hobby?</value>
   </data>
   <data name="SignsAndPrinters" xml:space="preserve">
     <value>Signs and Printers</value>
