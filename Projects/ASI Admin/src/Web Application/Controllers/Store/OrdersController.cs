@@ -293,9 +293,9 @@ namespace asi.asicentral.web.Controllers.Store
                 orderid = order.Id.ToString();
                 timss = order.ExternalReference;
                 orderstatus = order.ProcessStatus == OrderStatus.Approved ? "True" : "False";
-                amount = order.Total.ToString("C");
+                amount = order.Total.ToString("C").Replace(",", "");
                 date = order.CreateDate.ToString().Replace(",", "");
-                annualizedamount = order.AnnualizedTotal.ToString("C");
+                annualizedamount = order.AnnualizedTotal.ToString("C").Replace(",", "");
                 approveddate = (order.ApprovedDate == DateTime.MinValue) ? string.Empty : order.ApprovedDate.ToString().Replace(",", "");
                 if (order.OrderDetails != null && order.OrderDetails.Count > 0 && order.OrderDetails.ElementAt(0) != null && order.OrderDetails.ElementAt(0).Product != null)
                 {
