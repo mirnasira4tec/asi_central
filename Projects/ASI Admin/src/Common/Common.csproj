@@ -122,6 +122,7 @@
     <Compile Include="database\mappings\store\CouponMap.cs" />
     <Compile Include="database\mappings\store\LookEventMerchandiseProductMap.cs" />
     <Compile Include="database\mappings\store\LookProductCollectionsMap.cs" />
+    <Compile Include="database\mappings\store\StoreDetailMagazineAdvertisingMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailProductCollectionsItemMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailProductCollectionsMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailEmailExpressMap.cs" />
@@ -165,6 +166,7 @@
     <Compile Include="model\store\Coupon.cs" />
     <Compile Include="model\store\LookEventMerchandiseProduct.cs" />
     <Compile Include="model\store\LookProductCollections.cs" />
+    <Compile Include="model\store\StoreDetailMagazineAdvertising.cs" />
     <Compile Include="model\store\StoreDetailStoreDetailProductCollections.cs" />
     <Compile Include="model\store\StoreDetailStoreDetailProductCollectionsItem.cs" />
     <Compile Include="model\store\StoreDetailEmailExpress.cs" />
