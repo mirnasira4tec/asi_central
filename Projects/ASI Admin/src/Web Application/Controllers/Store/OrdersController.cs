@@ -314,8 +314,11 @@ namespace asi.asicentral.web.Controllers.Store
                 }
                 csv.Append(orderid + separator + timss + separator + companyname + separator + contactname + separator + contactphone + separator + contactemail + separator + orderstatus + separator + amount + separator + date.ToString() + separator + productname + separator + approveddate + separator + annualizedamount);
                 csv.Append(System.Environment.NewLine);
+                 
             }
-            return File(new System.Text.UTF8Encoding().GetBytes(csv.ToString()), "text/csv", "report.csv");
+            byte[] data = Encoding.UTF8.GetBytes(csv.ToString());
+            byte[] result = Encoding.UTF8.GetPreamble().Concat(data).ToArray();
+            return File(result, "text/csv", "report.csv");
         }
         private IQueryable<StoreOrder> GetCampainQuery(OrderStatisticData orderStatisticsData)
         {
