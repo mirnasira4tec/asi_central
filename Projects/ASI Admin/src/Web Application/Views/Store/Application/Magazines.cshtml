@@ -17,7 +17,6 @@
 @using (Html.BeginForm("EditMagazines", "Application"))
 {        
 @Html.AntiForgeryToken()
-@Html.HiddenFor(m => m.ProductName)
 @Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
 @Html.Partial("../Store/Application/Shared/AcceptSaveCancelButtons", Model)
 <nav>

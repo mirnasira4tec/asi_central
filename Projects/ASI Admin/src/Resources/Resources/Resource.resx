@@ -1200,8 +1200,13 @@
   <data name="EmailExpress_Error_ItemType" xml:space="preserve">
     <value>Please select one of the Email Express Option to proceed</value>
   </data>
+<<<<<<< HEAD
   <data name="EmailExpress_Error_Date" xml:space="preserve">
     <value>Please choose at least one date</value>
+=======
+  <data name="SignForVerification" xml:space="preserve">
+    <value>What is your favorite hobby?</value>
+>>>>>>> 00f08a8303f5594d22ef3fd0a9d645221b27d051
   </data>
   <data name="Email2" xml:space="preserve">
     <value>Email</value>
