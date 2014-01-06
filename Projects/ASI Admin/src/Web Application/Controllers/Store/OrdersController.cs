@@ -293,9 +293,9 @@ namespace asi.asicentral.web.Controllers.Store
                 orderid = order.Id.ToString();
                 timss = order.ExternalReference;
                 orderstatus = order.ProcessStatus == OrderStatus.Approved ? "True" : "False";
-                amount = order.Total.ToString("C");
+                amount = order.Total.ToString("C").Replace(",", "");
                 date = order.CreateDate.ToString().Replace(",", "");
-                annualizedamount = order.AnnualizedTotal.ToString("C");
+                annualizedamount = order.AnnualizedTotal.ToString("C").Replace(",", "");
                 approveddate = (order.ApprovedDate == DateTime.MinValue) ? string.Empty : order.ApprovedDate.ToString().Replace(",", "");
                 if (order.OrderDetails != null && order.OrderDetails.Count > 0 && order.OrderDetails.ElementAt(0) != null && order.OrderDetails.ElementAt(0).Product != null)
                 {
@@ -314,8 +314,11 @@ namespace asi.asicentral.web.Controllers.Store
                 }
                 csv.Append(orderid + separator + timss + separator + companyname + separator + contactname + separator + contactphone + separator + contactemail + separator + orderstatus + separator + amount + separator + date.ToString() + separator + productname + separator + approveddate + separator + annualizedamount);
                 csv.Append(System.Environment.NewLine);
+                 
             }
-            return File(new System.Text.UTF8Encoding().GetBytes(csv.ToString()), "text/csv", "report.csv");
+            byte[] data = Encoding.UTF8.GetBytes(csv.ToString());
+            byte[] result = Encoding.UTF8.GetPreamble().Concat(data).ToArray();
+            return File(result, "text/csv", "report.csv");
         }
         private IQueryable<StoreOrder> GetCampainQuery(OrderStatisticData orderStatisticsData)
         {
