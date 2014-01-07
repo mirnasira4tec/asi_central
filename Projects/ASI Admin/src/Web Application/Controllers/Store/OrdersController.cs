@@ -292,7 +292,7 @@ namespace asi.asicentral.web.Controllers.Store
 
                 orderid = order.Id.ToString();
                 timss = order.ExternalReference;
-                orderstatus = order.ProcessStatus == OrderStatus.Approved ? "True" : "False";
+                orderstatus = order.ProcessStatus == OrderStatus.Approved ? "Approved" : "Not Approved";
                 amount = order.Total.ToString("C").Replace(",", "");
                 date = order.CreateDate.ToString().Replace(",", "");
                 annualizedamount = order.AnnualizedTotal.ToString("C").Replace(",", "");
