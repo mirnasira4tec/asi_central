@@ -666,10 +666,10 @@
   <data name="FieldInvalidEmail" xml:space="preserve">
     <value>Please enter a valid email address.</value>
   </data>
-  <data name="FieldInvalidNumber" xml:space="preserve">
+  <data name="FieldInvalidPhoneNumber" xml:space="preserve">
     <value>Please enter a valid phone number.</value>
   </data>
-  <data name="FieldInvalidNumber1" xml:space="preserve">
+  <data name="FieldInvalidNumber" xml:space="preserve">
     <value>Enter a valid number.</value>
   </data>
   <data name="FieldLength" xml:space="preserve">
@@ -1748,5 +1748,8 @@
   </data>
   <data name="FieldLength50" xml:space="preserve">
     <value>This field cannot be more than 50 characters.</value>
+  </data>
+  <data name="MinNumber" xml:space="preserve">
+    <value>Atleast </value>
   </data>
 </root>
