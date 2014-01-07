@@ -28,7 +28,7 @@ namespace asi.asicentral.model.store
 
         public int Id { get; set; }
 
-        public Magazine MagazineNameEnum { get; set; }
+        public MagazineType Magazine { get; set; }
 
         public DateTime Issue { get; set; }
 
@@ -55,7 +55,7 @@ namespace asi.asicentral.model.store
         public string Code { get; set; }
     }
 
-    public enum Magazine: short
+    public enum MagazineType: short
     {
 
         Counselor = 71,

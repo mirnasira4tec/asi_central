@@ -246,6 +246,18 @@ namespace asi.asicentral.database.mappings
             For<IRepository<StoreDetailProductCollectionItem>>().Use<EFRepository<StoreDetailProductCollectionItem>>()
                .Ctor<IValidatedContext>().Named("StoreContext");
 
+            For<IRepository<StoreMagazineAdvertisingItem>>().Use<EFRepository<StoreMagazineAdvertisingItem>>()
+               .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<MagazineIssue>>().Use<EFRepository<MagazineIssue>>()
+               .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<AdPosition>>().Use<EFRepository<AdPosition>>()
+               .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<AdSize>>().Use<EFRepository<AdSize>>()
+               .Ctor<IValidatedContext>().Named("StoreContext");
+
             #endregion StoreContext
 
             #region TIMSS Context

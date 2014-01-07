@@ -25,7 +25,7 @@ namespace asi.asicentral.database.mappings.store
             //Relationships
             HasRequired(t => t.Issue)
                 .WithMany()
-                .Map(m => m.MapKey("MagazineId"));
+                .Map(m => m.MapKey("MagazineIssueId"));
             HasRequired(t => t.Position)
                .WithMany()
                .Map(m => m.MapKey("PositionId"));
@@ -62,7 +62,7 @@ namespace asi.asicentral.database.mappings.store
             //Relationships
             HasRequired(t => t.Issue)
                 .WithMany()
-                .Map(m => m.MapKey("MagazineId"));
+                .Map(m => m.MapKey("MagazineIssueId"));
         }
     }
 
@@ -71,7 +71,7 @@ namespace asi.asicentral.database.mappings.store
 
         public AdSizeMap()
         {
-            this.ToTable("STOR_MagazineAdSize");
+            this.ToTable("STOR_MagazineAdvertisingAdSize");
             this.HasKey(t => t.Id);
             Property(t => t.Id)
                 .HasColumnName("MagazineAdSizeId")
@@ -80,7 +80,7 @@ namespace asi.asicentral.database.mappings.store
             //Relationships
             HasRequired(t => t.Issue)
                 .WithMany()
-                .Map(m => m.MapKey("MagazineId"));
+                .Map(m => m.MapKey("MagazineIssueId"));
         }
     }
 }

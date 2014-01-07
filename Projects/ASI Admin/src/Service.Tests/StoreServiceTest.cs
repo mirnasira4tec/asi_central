@@ -175,5 +175,22 @@ namespace asi.asicentral.Tests
                 storeService.SaveChanges();
             }
         }
+
+        [TestMethod]
+        public void StoreDetailMagazineAdvertisingTest()
+        {
+            using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
+            {
+                var storeMagazineAdvertisingItems = storeService.GetAll<StoreMagazineAdvertisingItem>().ToList<StoreMagazineAdvertisingItem>();
+                var magazines = storeService.GetAll<MagazineIssue>().ToList<MagazineIssue>();
+                var adPositions = storeService.GetAll<AdPosition>().ToList<AdPosition>();
+                var adSizes = storeService.GetAll<AdSize>().ToList<AdSize>();
+
+                Assert.IsTrue(storeMagazineAdvertisingItems.Count() > 0);
+                Assert.IsTrue(magazines.Count() > 0);
+                Assert.IsNotNull(adPositions.Count() > 0);
+                Assert.IsNotNull(adSizes.Count() > 0);
+            }
+        }
     }
 }
