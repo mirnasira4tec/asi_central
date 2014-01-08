@@ -57,7 +57,6 @@ namespace asi.asicentral.database
         public DbSet<StoreDetailEmailExpressItem> StoreDetailEmailExpressItems { get; set; }
         public DbSet<StoreDetailProductCollection> StoreDetailProductCollection { get; set; }
         public DbSet<StoreDetailProductCollectionItem> StoreDetailProductCollectionItems { get; set; }
-
         public DbSet<StoreMagazineAdvertisingItem> StoreMagazineAdvertisingItems { get; set; }
         public DbSet<MagazineIssue> MagazineIssues { get; set; }
         public DbSet<AdPosition> AdPositions { get; set; }
