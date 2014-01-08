@@ -766,11 +766,12 @@ namespace asi.asicentral.web.Controllers.Store
                 int num;
                 bool success = int.TryParse(order.ExternalReference, out num);
                 if (!success) throw new Exception("Timms id must be numbers only.");
-               
+
                 fulfilmentService.Process(order, application);
                 order.ProcessStatus = OrderStatus.Approved;
                 order.ApprovedDate = DateTime.UtcNow;
-                order.ApprovedBy = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
+                if (!string.IsNullOrEmpty(((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name))
+                 order.ApprovedBy = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;  
             }
             else if (command == ApplicationController.COMMAND_REJECT)
             {
