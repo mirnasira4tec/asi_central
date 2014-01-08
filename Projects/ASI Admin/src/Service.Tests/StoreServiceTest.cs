@@ -177,7 +177,7 @@ namespace asi.asicentral.Tests
         }
 
         [TestMethod]
-        public void StoreDetailMagazineAdvertisingTest()
+        public void StoreDetailMagazineAdvertisingDbTest()
         {
             using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
             {
@@ -186,10 +186,10 @@ namespace asi.asicentral.Tests
                 var adPositions = storeService.GetAll<AdPosition>().ToList<AdPosition>();
                 var adSizes = storeService.GetAll<AdSize>().ToList<AdSize>();
 
-                Assert.IsTrue(storeMagazineAdvertisingItems.Count() > 0);
-                Assert.IsTrue(magazines.Count() > 0);
-                Assert.IsNotNull(adPositions.Count() > 0);
-                Assert.IsNotNull(adSizes.Count() > 0);
+                Assert.IsTrue(storeMagazineAdvertisingItems.Count() >= 0);
+                Assert.IsTrue(magazines.Count() >= 0);
+                Assert.IsNotNull(adPositions.Count() >= 0);
+                Assert.IsNotNull(adSizes.Count() >= 0);
             }
         }
     }
