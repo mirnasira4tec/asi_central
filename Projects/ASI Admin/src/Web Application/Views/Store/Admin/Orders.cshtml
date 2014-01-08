@@ -167,9 +167,6 @@
                         type: "POST",
                         url: '@Url.Action("Reject")',
                         data: { 'id': e.target.parentElement.id },
-                        error: function (error) {
-                            alert(error.responseText);
-                        }
                         
                     }).done(function (status) {
                         if (status.Success) {
