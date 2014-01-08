@@ -57,10 +57,10 @@ namespace asi.asicentral.database
         public DbSet<StoreDetailEmailExpressItem> StoreDetailEmailExpressItems { get; set; }
         public DbSet<StoreDetailProductCollection> StoreDetailProductCollection { get; set; }
         public DbSet<StoreDetailProductCollectionItem> StoreDetailProductCollectionItems { get; set; }
-        public DbSet<StoreMagazineAdvertisingItem> StoreMagazineAdvertisingItems { get; set; }
-        public DbSet<MagazineIssue> MagazineIssues { get; set; }
-        public DbSet<AdPosition> AdPositions { get; set; }
-        public DbSet<AdSize> AdSizes { get; set; }
+        public DbSet<StoreDetailMagazineAdvertisingItem> StoreMagazineAdvertisingItems { get; set; }
+        public DbSet<LookMagazineIssue> MagazineIssues { get; set; }
+        public DbSet<LookAdPosition> AdPositions { get; set; }
+        public DbSet<LookAdSize> AdSizes { get; set; }
         
         
         /// <summary>
@@ -110,10 +110,10 @@ namespace asi.asicentral.database
                 .Add(new StoreDetailEmailExpressItemMap())
                 .Add(new StoreDetailProductCollectionMap())
                 .Add(new StoreDetailProductCollectionItemMap())
-                .Add(new StoreMagazineAdvertisingItemMap())
-                .Add(new MagazineIssueMap())
-                .Add(new AdPositionMap())
-                .Add(new AdSizeMap());
+                .Add(new StoreDetailMagazineAdvertisingItemMap())
+                .Add(new LookMagazineIssueMap())
+                .Add(new LookAdPositionMap())
+                .Add(new LookAdSizeMap());
         }
     }
 }
