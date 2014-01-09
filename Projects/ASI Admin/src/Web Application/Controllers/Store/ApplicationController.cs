@@ -770,10 +770,12 @@ namespace asi.asicentral.web.Controllers.Store
                 fulfilmentService.Process(order, application);
                 order.ProcessStatus = OrderStatus.Approved;
                 order.ApprovedDate = DateTime.UtcNow;
+                order.ApprovedBy = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
             }
             else if (command == ApplicationController.COMMAND_REJECT)
             {
                 order.ProcessStatus = OrderStatus.Rejected;
+                order.ApprovedDate = DateTime.MinValue;
                 try
                 {
                     if (CreditCardService != null && order.CreditCard != null && !string.IsNullOrEmpty(order.CreditCard.ExternalReference))

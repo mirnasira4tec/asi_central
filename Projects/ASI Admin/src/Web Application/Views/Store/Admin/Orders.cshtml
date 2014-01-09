@@ -240,7 +240,9 @@
                 if (result) {
                     $.ajax({
                         type: "POST",
-                        url: "Orders/Reject/" + e.target.parentElement.id,
+                        url: '@Url.Action("Reject")',
+                        data: { 'id': e.target.parentElement.id },
+                        
                     }).done(function (status) {
                         if (status.Success) {
                             //refresh the page
