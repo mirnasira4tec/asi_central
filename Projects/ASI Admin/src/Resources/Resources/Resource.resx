@@ -1752,4 +1752,19 @@
   <data name="MinNumber" xml:space="preserve">
     <value>Atleast </value>
   </data>
+  <data name="MagazineAdvertisingWearablesURL" xml:space="preserve">
+    <value>https://mydigitalpublication.com/reports/getCover.php?m=7893</value>
+  </data>
+  <data name="MagazineAdvertisingStitchesURL" xml:space="preserve">
+    <value>https://mydigitalpublication.com/reports/getCover.php?m=14879</value>
+  </data>
+  <data name="MagazineAdvertisingSGRURL" xml:space="preserve">
+    <value>https://mydigitalpublication.com/reports/getCover.php?m=21148</value>
+  </data>
+  <data name="MagazineAdvertisingCounselorURL" xml:space="preserve">
+    <value>https://mydigitalpublication.com/reports/getCover.php?m=21148</value>
+  </data>
+  <data name="MagazineAdvertisingAdvantagesURL" xml:space="preserve">
+    <value>https://mydigitalpublication.com/reports/getCover.php?m=21147</value>
+  </data>
 </root>

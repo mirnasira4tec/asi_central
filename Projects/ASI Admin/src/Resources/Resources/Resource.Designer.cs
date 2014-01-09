@@ -2752,6 +2752,51 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://mydigitalpublication.com/reports/getCover.php?m=21147.
+        /// </summary>
+        public static string MagazineAdvertisingAdvantagesURL {
+            get {
+                return ResourceManager.GetString("MagazineAdvertisingAdvantagesURL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://mydigitalpublication.com/reports/getCover.php?m=21148.
+        /// </summary>
+        public static string MagazineAdvertisingCounselorURL {
+            get {
+                return ResourceManager.GetString("MagazineAdvertisingCounselorURL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://mydigitalpublication.com/reports/getCover.php?m=21148.
+        /// </summary>
+        public static string MagazineAdvertisingSGRURL {
+            get {
+                return ResourceManager.GetString("MagazineAdvertisingSGRURL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://mydigitalpublication.com/reports/getCover.php?m=14879.
+        /// </summary>
+        public static string MagazineAdvertisingStitchesURL {
+            get {
+                return ResourceManager.GetString("MagazineAdvertisingStitchesURL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://mydigitalpublication.com/reports/getCover.php?m=7893.
+        /// </summary>
+        public static string MagazineAdvertisingWearablesURL {
+            get {
+                return ResourceManager.GetString("MagazineAdvertisingWearablesURL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Counselor&apos;s &quot;State of the Industry&quot; statistics are the industry&apos;s benchmark..
         /// </summary>
         public static string MagazineCounselorDescription {
