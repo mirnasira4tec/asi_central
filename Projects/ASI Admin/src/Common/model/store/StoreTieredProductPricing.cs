@@ -12,6 +12,7 @@ namespace asi.asicentral.model.store
         public int ProductId { get; set; }
         public int Min { get; set; }
         public int Max { get; set; }
+        public int AdSizeId { get; set; }
         public decimal Cost { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }

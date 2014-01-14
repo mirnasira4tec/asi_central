@@ -12,7 +12,7 @@ namespace asi.asicentral.model.store
 
         public int Id { get; set; }
 
-        public LookMagazineIssue Issue { get; set; }
+        public MagazineType MagazineId { get; set; }
 
         public string Description { get; set; }
 

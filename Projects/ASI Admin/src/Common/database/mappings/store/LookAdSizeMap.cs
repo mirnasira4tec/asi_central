@@ -21,10 +21,7 @@ namespace asi.asicentral.database.mappings.store
                 .HasColumnName("MagazineAdSizeId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            //Relationships
-            HasRequired(t => t.Issue)
-                .WithMany()
-                .Map(m => m.MapKey("MagazineIssueId"));
+         
         }
     }
 }
