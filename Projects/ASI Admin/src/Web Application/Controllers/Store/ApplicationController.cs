@@ -769,14 +769,14 @@ namespace asi.asicentral.web.Controllers.Store
 
                 fulfilmentService.Process(order, application);
                 order.ProcessStatus = OrderStatus.Approved;
-                order.ApprovedDate = DateTime.UtcNow;
+                order.ApprovedDate = null;
                 if (System.Web.HttpContext.Current.User.Identity as System.Security.Principal.WindowsIdentity !=null)
                  order.ApprovedBy = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;  
             }
             else if (command == ApplicationController.COMMAND_REJECT)
             {
                 order.ProcessStatus = OrderStatus.Rejected;
-                order.ApprovedDate = DateTime.MinValue;
+                order.ApprovedDate = null;
                 try
                 {
                     if (CreditCardService != null && order.CreditCard != null && !string.IsNullOrEmpty(order.CreditCard.ExternalReference))

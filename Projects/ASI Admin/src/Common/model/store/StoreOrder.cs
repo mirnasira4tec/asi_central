@@ -42,7 +42,7 @@ namespace asi.asicentral.model.store
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
-        public DateTime ApprovedDate { get; set; }
+        public DateTime? ApprovedDate { get; set; }
         public string ApprovedBy { get; set; }
         public virtual StoreCompany Company { get; set; }
         public virtual StoreCreditCard CreditCard { get; set; }
