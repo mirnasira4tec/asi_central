@@ -130,7 +130,7 @@ namespace asi.asicentral.web.Controllers.Store
                 if (order.ProcessStatus == OrderStatus.Pending)
                 {
                     order.ProcessStatus = OrderStatus.Rejected;
-                    order.ApprovedDate = null;
+                   
                     StoreService.SaveChanges();
                 }
             }

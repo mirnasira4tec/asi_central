@@ -21,6 +21,10 @@ namespace asi.asicentral.model.store
 
         public string ArtWork { get; set; }
 
+        public int Sequence { get; set; }
+
+        
+
     }
 
     public enum MagazineType: short

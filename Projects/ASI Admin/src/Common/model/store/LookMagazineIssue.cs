@@ -16,5 +16,7 @@ namespace asi.asicentral.model.store
 
         public DateTime Issue { get; set; }
 
+        public bool IsChecked { get; set; }
+
     }
 }
