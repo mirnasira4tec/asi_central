@@ -776,7 +776,6 @@ namespace asi.asicentral.web.Controllers.Store
             else if (command == ApplicationController.COMMAND_REJECT)
             {
                 order.ProcessStatus = OrderStatus.Rejected;
-                order.ApprovedDate = DateTime.MinValue;
                 try
                 {
                     if (CreditCardService != null && order.CreditCard != null && !string.IsNullOrEmpty(order.CreditCard.ExternalReference))

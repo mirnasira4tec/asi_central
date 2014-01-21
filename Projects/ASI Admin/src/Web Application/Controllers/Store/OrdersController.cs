@@ -130,7 +130,7 @@ namespace asi.asicentral.web.Controllers.Store
                 if (order.ProcessStatus == OrderStatus.Pending)
                 {
                     order.ProcessStatus = OrderStatus.Rejected;
-                    order.ApprovedDate = DateTime.MinValue;
+                   
                     StoreService.SaveChanges();
                 }
             }
@@ -327,7 +327,7 @@ namespace asi.asicentral.web.Controllers.Store
                 amount = order.Total.ToString("C").Replace(",", "");
                 date = order.CreateDate.ToString().Replace(",", "");
                 annualizedamount = order.AnnualizedTotal.ToString("C").Replace(",", "");
-                approveddate = (order.ApprovedDate == DateTime.MinValue) ? string.Empty : order.ApprovedDate.ToString().Replace(",", "");
+                approveddate = (order.ApprovedDate == null) ? string.Empty : order.ApprovedDate.ToString().Replace(",", "");
                 if (order.OrderDetails != null && order.OrderDetails.Count > 0 && order.OrderDetails.ElementAt(0) != null && order.OrderDetails.ElementAt(0).Product != null)
                 {
                     productname = order.OrderDetails.ElementAt(0).Product.Name.Replace(",", "");

@@ -12,9 +12,11 @@ namespace asi.asicentral.model.store
 
         public int Id { get; set; }
 
-        public MagazineType Magazine { get; set; }
+        public MagazineType MagazineId { get; set; }
 
         public DateTime Issue { get; set; }
+
+        public bool IsChecked { get; set; }
 
     }
 }
