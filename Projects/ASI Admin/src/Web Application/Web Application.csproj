@@ -349,9 +349,6 @@
     <Content Include="Views\Store\Application\Shared\AcceptSaveCancelButtons.cshtml" />
     <Content Include="Views\Store\Coupon\CouponList.cshtml" />
     <Content Include="Views\Store\Coupon\CouponDetails.cshtml" />
-    <None Include="Web.Dev.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
     <None Include="Web.Prod.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
