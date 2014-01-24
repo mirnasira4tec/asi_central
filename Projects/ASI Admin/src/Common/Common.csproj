@@ -134,6 +134,8 @@
     <Compile Include="database\mappings\store\LookEventMerchandiseProductMap.cs" />
     <Compile Include="database\mappings\store\LookMagazineIssueMap.cs" />
     <Compile Include="database\mappings\store\LookProductCollectionsMap.cs" />
+    <Compile Include="database\mappings\store\LookSendMyAdAdSpecMap.cs" />
+    <Compile Include="database\mappings\store\LookSendMyAdPublicationMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailMagazineAdvertisingItemMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailProductCollectionsItemMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailProductCollectionsMap.cs" />
@@ -181,6 +183,8 @@
     <Compile Include="model\store\LookEventMerchandiseProduct.cs" />
     <Compile Include="model\store\LookProductCollections.cs" />
     <Compile Include="model\store\LookMagazineIssue.cs" />
+    <Compile Include="model\store\LookSendMyAdAdSpec.cs" />
+    <Compile Include="model\store\LookSendMyAdPublication.cs" />
     <Compile Include="model\store\StoreDetailMagazineAdvertisingItem.cs" />
     <Compile Include="model\store\StoreDetailStoreDetailProductCollections.cs" />
     <Compile Include="model\store\StoreDetailStoreDetailProductCollectionsItem.cs" />

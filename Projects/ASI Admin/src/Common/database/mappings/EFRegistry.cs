@@ -258,6 +258,12 @@ namespace asi.asicentral.database.mappings
             For<IRepository<LookAdSize>>().Use<EFRepository<LookAdSize>>()
                .Ctor<IValidatedContext>().Named("StoreContext");
 
+            For<IRepository<LookSendMyAdPublication>>().Use<EFRepository<LookSendMyAdPublication>>()
+           .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<LookSendMyAdAdSpec>>().Use<EFRepository<LookSendMyAdAdSpec>>()
+               .Ctor<IValidatedContext>().Named("StoreContext");
+
             #endregion StoreContext
 
             #region TIMSS Context

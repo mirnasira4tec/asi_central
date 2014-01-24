@@ -60,7 +60,9 @@ namespace asi.asicentral.database
         public DbSet<StoreDetailMagazineAdvertisingItem> StoreMagazineAdvertisingItems { get; set; }
         public DbSet<LookMagazineIssue> MagazineIssues { get; set; }
         public DbSet<LookAdPosition> AdPositions { get; set; }
-        public DbSet<LookAdSize> AdSizes { get; set; }   
+        public DbSet<LookAdSize> AdSizes { get; set; }
+        public DbSet<LookSendMyAdPublication> LookSendMyAdPublications { get; set; }
+        public DbSet<LookSendMyAdAdSpec> LookSendMyAdAdSpecs { get; set; }   
         
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -112,7 +114,9 @@ namespace asi.asicentral.database
                 .Add(new StoreDetailMagazineAdvertisingItemMap())
                 .Add(new LookMagazineIssueMap())
                 .Add(new LookAdPositionMap())
-                .Add(new LookAdSizeMap());
+                .Add(new LookAdSizeMap())
+                .Add(new LookSendMyAdPublicationMap())
+                .Add(new LookSendMyAdAdSpecMap());
         }
     }
 }
