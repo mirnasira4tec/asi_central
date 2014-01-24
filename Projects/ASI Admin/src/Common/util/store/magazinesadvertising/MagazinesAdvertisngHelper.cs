@@ -13,7 +13,7 @@ namespace asi.asicentral.util.store
     {
        
         //Art Work
-        public readonly string[] MAGAZINESADVERTISING_ARTWORK = { "Upload Now", "Upload Later (Save 15%)", "Far Forward", "Left Hand", "Right Hand" };
+        public readonly string[] MAGAZINESADVERTISING_ARTWORK = {  "Upload Later (Save 15%)","Have us create your Ad" };
 
         
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using asi.asicentral.interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,7 +9,7 @@ namespace asi.asicentral.model.store
 
     public class StoreDetailMagazineAdvertisingItem
     {
-
+        
         public int Id { get; set; }
 
         public int OrderDetailId { get; set; }
@@ -19,7 +20,7 @@ namespace asi.asicentral.model.store
 
         public LookAdPosition Position { get; set; }
 
-        public string ArtWork { get; set; }
+        public bool ArtWork { get; set; }
 
         public int Sequence { get; set; }
 
