@@ -1767,4 +1767,13 @@
   <data name="MagazineAdvertisingAdvantagesURL" xml:space="preserve">
     <value>https://mydigitalpublication.com/reports/getCover.php?m=21147</value>
   </data>
+  <data name="Issue" xml:space="preserve">
+    <value>Issue</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value> Position</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value> Size</value>
+  </data>
 </root>

@@ -2527,6 +2527,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Issue.
+        /// </summary>
+        public static string Issue {
+            get {
+                return ResourceManager.GetString("Issue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is Union Made.
         /// </summary>
         public static string IsUnionMade {
@@ -3400,6 +3409,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  Position.
+        /// </summary>
+        public static string Position {
+            get {
+                return ResourceManager.GetString("Position", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Postal Code.
         /// </summary>
         public static string PostalCode {
@@ -3999,6 +4017,15 @@ namespace asi.asicentral.Resources {
         public static string SixMonthsToOneYear {
             get {
                 return ResourceManager.GetString("SixMonthsToOneYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  Size.
+        /// </summary>
+        public static string Size {
+            get {
+                return ResourceManager.GetString("Size", resourceCulture);
             }
         }
         
