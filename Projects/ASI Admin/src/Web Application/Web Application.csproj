@@ -216,6 +216,8 @@
     <Compile Include="Models\sgr\ViewCompany.cs" />
     <Compile Include="Models\sgr\ViewProduct.cs" />
     <Compile Include="Models\Store\Order\CatalogsApplicationModel.cs" />
+    <Compile Include="Models\Store\Order\MagazineAdItem.cs" />
+    <Compile Include="Models\Store\Order\MagaznesAdvertisingApplicationModel.cs" />
     <Compile Include="Models\Store\Order\CouponModel.cs" />
     <Compile Include="Models\Store\Order\DecoratorApplicationModel.cs" />
     <Compile Include="Models\Store\Order\EmailExpressModel.cs" />
@@ -349,6 +351,7 @@
     <Content Include="Views\Store\Application\Shared\AcceptSaveCancelButtons.cshtml" />
     <Content Include="Views\Store\Coupon\CouponList.cshtml" />
     <Content Include="Views\Store\Coupon\CouponDetails.cshtml" />
+    <Content Include="Views\Store\Application\MagzineAdvertising.cshtml" />
     <None Include="Web.Prod.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
