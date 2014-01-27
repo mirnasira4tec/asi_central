@@ -2383,7 +2383,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is not a valid or current promotional code..
+        ///   Looks up a localized string similar to This is not a valid code..
         /// </summary>
         public static string InvalidCouponCode {
             get {
