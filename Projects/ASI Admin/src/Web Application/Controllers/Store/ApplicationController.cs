@@ -61,7 +61,7 @@ namespace asi.asicentral.web.Controllers.Store
                 {
                     IList<StoreDetailMagazineAdvertisingItem> detailMagazineAdvertising = StoreService.GetAll<StoreDetailMagazineAdvertisingItem>().Where(espadvertising => espadvertising.OrderDetailId == orderDetail.Id).ToList();
 
-                    return View("../Store/Application/MagzineAdvertising", new MagaznesAdvertisingApplicationModel(orderDetail, detailMagazineAdvertising, StoreService));
+                    return View("../Store/Application/MagzineAdvertising", new MagazinesAdvertisingApplicationModel(orderDetail, detailMagazineAdvertising, StoreService));
 
                 }
                 else if (SUPPLIER_ESP_PAYFORPLACEMENT_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/PayForPlacement", new ESPPayForPlacementModel(orderDetail, StoreService));
@@ -552,7 +552,7 @@ namespace asi.asicentral.web.Controllers.Store
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(true)]
-        public virtual ActionResult EditMagazineAdvertising(MagaznesAdvertisingApplicationModel application)
+        public virtual ActionResult EditMagazineAdvertising(MagazinesAdvertisingApplicationModel application)
         {
             if (ModelState.IsValid)
             {

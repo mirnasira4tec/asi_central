@@ -10,7 +10,7 @@ using System.Web;
 
 namespace asi.asicentral.web.model.store
 {
-    public class MagaznesAdvertisingApplicationModel : IMembershipModel
+    public class MagazinesAdvertisingApplicationModel : IMembershipModel
     {
         [Display(ResourceType = typeof(Resource), Name = "CompanyName")]
         public string Company { get; set; }
@@ -139,13 +139,13 @@ namespace asi.asicentral.web.model.store
         /// Required for MVC to rebuild the model
         /// </summary>
         /// 
-        public MagaznesAdvertisingApplicationModel()
+        public MagazinesAdvertisingApplicationModel()
             : base()
         {
             this.Contacts = new List<StoreIndividual>();
         }
 
-        public MagaznesAdvertisingApplicationModel(StoreOrderDetail orderdetail, IList<StoreDetailMagazineAdvertisingItem> magazineAdvertising, IStoreService storeService)
+        public MagazinesAdvertisingApplicationModel(StoreOrderDetail orderdetail, IList<StoreDetailMagazineAdvertisingItem> magazineAdvertising, IStoreService storeService)
             : base()
         {
             this.Contacts = new List<StoreIndividual>();
