@@ -28,6 +28,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             //For Coupons
             CouponModel information = new CouponModel();
             information.CouponCode = "testCaseCoupon";
+            information.Description = "testDescription";
             information.DiscountPercentage = "0";
             information.IsFixedAmount = true;
             information.DiscountAmount = "20";
@@ -42,6 +43,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
 
             Assert.IsNotNull(product);
             Assert.IsNotNull(product.CouponCode);
+            Assert.IsNotNull(product.Description);
             Assert.IsNotNull(product.IsFixedAmount);
             Assert.IsNotNull(product.DiscountPercentage);
             Assert.IsNotNull(product.DiscountAmount);
@@ -51,6 +53,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
 
           
             Assert.AreEqual(product.CouponCode, information.CouponCode);
+            Assert.AreEqual(product.Description, information.Description);
             Assert.AreEqual(product.DiscountPercentage, Convert.ToInt32(information.DiscountPercentage));
             Assert.AreEqual(product.DiscountAmount,Convert.ToDecimal(information.DiscountAmount));
             Assert.AreEqual(product.IsFixedAmount, information.IsFixedAmount);
