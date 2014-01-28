@@ -19,6 +19,8 @@ namespace asi.asicentral.model.store
 
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public string CouponCode { get; set; }
+        [StringLength(1000, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
+        public string Description { get; set; }
 
         public bool IsSubscription { get; set; }
         public bool IsFixedAmount { get; set; }

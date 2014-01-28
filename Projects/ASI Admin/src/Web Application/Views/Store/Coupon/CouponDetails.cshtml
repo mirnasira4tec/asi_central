@@ -24,9 +24,12 @@
                 @Html.EditorFor(model => model.CouponCode)@Html.ValidationMessageFor(model => model.CouponCode)
             </span>
             <span class="label-row">
+                @Html.Label("Description")
+                @Html.TextAreaFor(model => model.Description) @Html.ValidationMessageFor(model => model.Description)
+            </span>
+            <span class="label-row">
                 @Html.Label("Is Subscription")
                 @Html.CheckBoxFor(model => model.IsSubscription)
-
             </span>
             <span class="label-row">
                 @Html.Label("Is Fixed Amount")

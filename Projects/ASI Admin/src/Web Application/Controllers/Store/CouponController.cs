@@ -51,6 +51,7 @@ namespace asi.asicentral.web.Controllers.Store
                 if (productToUpdate != null)
                 {
                     productToUpdate.CouponCode = couponModel.CouponCode;
+                    productToUpdate.Description = couponModel.Description;
                     productToUpdate.IsSubscription = couponModel.IsSubscription;
                     productToUpdate.ValidFrom = couponModel.ValidFrom;
                     productToUpdate.ValidUpto = couponModel.ValidUpto;
@@ -132,6 +133,7 @@ namespace asi.asicentral.web.Controllers.Store
 
 
                 coupon.CouponCode = couponModel.CouponCode;
+                coupon.Description = couponModel.Description;
                 coupon.IsSubscription = couponModel.IsSubscription;
                 coupon.ValidFrom = couponModel.ValidFrom;
                 coupon.ValidUpto = couponModel.ValidUpto;
