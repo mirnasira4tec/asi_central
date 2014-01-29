@@ -21,8 +21,8 @@ namespace asi.asicentral.database.mappings.store
             
 
             //Relationships
-            HasRequired(t => t.AdSize)
-                .WithRequiredDependent()
+            HasRequired(t => t.Size)
+                .WithMany()
                 .Map(m => m.MapKey("AdSizeId"));
         }
     }

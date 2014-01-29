@@ -18,5 +18,43 @@ namespace asi.asicentral.model.store
 
         public bool IsChecked { get; set; }
 
+        public bool Equals(LookMagazineIssue o)
+        {
+            bool result = false;
+            if ((object)o != null)
+            {
+                result = ProductId == o.ProductId && Issue.ToShortDateString() == o.Issue.ToShortDateString();
+            }
+            return result;
+        }
+
+        public override bool Equals(object o)
+        {
+            bool result = false;
+            if ((object)o != null && o is LookMagazineIssue)
+            {
+                result = Equals(o as LookMagazineIssue);
+            }
+            return false;
+        }
+
+        public static bool operator == (LookMagazineIssue a, LookMagazineIssue b)
+        {
+            bool result = false;
+            if (!object.ReferenceEquals(a, b)) result = true;
+            if ((object)a == null || (object)b == null) result = false;
+            result = a.Equals(b);
+            return result;
+        }
+
+        public static bool operator !=(LookMagazineIssue a, LookMagazineIssue b)
+        {
+            return !(a == b);
+        }
+
+        public override int GetHashCode()
+        {
+            return ProductId.GetHashCode() ^ Issue.GetHashCode();
+        }
     }
 }

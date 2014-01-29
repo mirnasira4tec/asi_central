@@ -181,14 +181,14 @@ namespace asi.asicentral.Tests
         {
             using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
             {
-                //var storeMagazineAdvertisingItems = storeService.GetAll<StoreDetailMagazineAdvertisingItem>().ToList<StoreDetailMagazineAdvertisingItem>();
+                var storeMagazineAdvertisingItems = storeService.GetAll<StoreDetailMagazineAdvertisingItem>().ToList<StoreDetailMagazineAdvertisingItem>();
                 var magazines = storeService.GetAll<LookMagazineIssue>().ToList<LookMagazineIssue>();
-                //var adPositions = storeService.GetAll<LookAdPosition>().ToList<LookAdPosition>();
+                var adPositions = storeService.GetAll<LookAdPosition>().ToList<LookAdPosition>();
                 var adSizes = storeService.GetAll<LookAdSize>().ToList<LookAdSize>();
 
-                //Assert.IsTrue(storeMagazineAdvertisingItems.Count() >= 0);
+                Assert.IsTrue(storeMagazineAdvertisingItems.Count() >= 0);
                 Assert.IsTrue(magazines.Count() >= 0);
-                //Assert.IsNotNull(adPositions.Count() >= 0);
+                Assert.IsNotNull(adPositions.Count() >= 0);
                 Assert.IsNotNull(adSizes.Count() >= 0);
             }
         }
