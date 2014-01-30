@@ -13,6 +13,7 @@ namespace asi.asicentral.model.store
         public int? ProductId { get; set; }
         public int? ContextId { get; set; }
         public string CouponCode { get; set; }
+        public string Description { get; set; }
         public bool IsSubscription { get; set; }
         public bool IsFixedAmount { get; set; }
         public decimal DiscountAmount { get; set; }
