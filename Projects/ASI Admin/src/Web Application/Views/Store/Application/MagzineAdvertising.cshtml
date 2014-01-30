@@ -1,0 +1,159 @@
+﻿@using asi.asicentral.web
+@using asi.asicentral.model.store
+@using asi.asicentral.web.Controllers.Store
+@using asi.asicentral.Resources
+@model asi.asicentral.web.model.store.MagaznesAdvertisingApplicationModel
+@{
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+@if (Model.ProductId == 52)
+{
+    @section Content {
+        @Styles.Render("~/Content/MultiSelectedDatePicker")
+    }
+}
+<h1>@string.Format(Model.ProductName) (#@Model.OrderId)</h1>
+@if (Model.Price > 0.0m)
+{
+    <p>@Model.ProductName product purchase fee is @Model.Price.ToString("C")</p>
+}
+@Html.Partial("../Store/Application/Shared/OrderSummary", Model)
+@using (Html.BeginForm("EditMagazineAdvertising", "Application"))
+{        
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.ProductId)
+    @Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
+    @Html.Partial("../Store/Application/Shared/AcceptSaveCancelButtons", Model)
+    <nav>
+        <ul class="nav nav-tabs" id="tabs">
+            <li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
+            <li><a href="#tabsubscription" data-toggle="tab">@Model.ProductName Information</a></li>
+        </ul>
+    </nav>
+    <div class="tab-content">
+        @Html.Partial("../Store/Application/Shared/CompanyInformation", Model)
+
+        <div id="tabsubscription" class="product-information tab-pane fade">
+            <fieldset class="company-info-form">
+                <legend>@string.Format("{0} {1}", Html.Raw(Model.ProductName), "Information")</legend>
+                @switch (Model.ProductId)
+                {
+
+                    case 72:
+                    <span class="label-row">
+                        @Html.Label("Issues")
+                        @Html.Label("Positions")
+                    </span>
+                
+                        for (int i = 0; i < Model.MagAdItem.Count; i++)
+                        {
+                           
+                    
+                    <span class="label-row">
+                        <input type="text" readonly="true" value="@Model.MagAdItem[i].Issue.Issue.ToString("MM/dd/yyyy")" />
+                        <input type="text" readonly="true" value="@Model.MagAdItem[i].Position.Description" />
+
+                    </span> 
+                            
+                        }
+                            
+                    <span class="label-row">
+                        @Html.Label("Sizes")
+                        @Html.Label("Artworks")
+                    </span>
+                        for (int i = 0; i < Model.MagAdItem.Count; i++)
+                        {
+                           
+                    
+                    <span class="label-row">
+                        <input type="text" readonly="true" value="@Model.MagAdItem[i].Size.Description" />
+                        <input type="text" readonly="true" value="@Model.MagAdItem[i].ArtWork" />
+
+
+
+                    </span> 
+                            
+                        }
+                        break;
+                }
+            </fieldset>
+        </div>
+        <!-- END #orderdetail-information -->
+
+    </div> <!-- END #content -->
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/form")
+    @Scripts.Render("~/bundles/MultiSelectedDatePicker")
+    <script src="/Scripts/asi.js"></script>
+    <script>
+        $('.dateField').datepicker()
+        $('.date-clear').click(function () {
+            $("input[name='" + this.id + "']").val('');
+        });
+
+        $('input.command').click(function (e) {
+            $('#ActionName').val(e.target.value);
+            if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
+                //make sure we have Timms value
+                if (!$('#ExternalReference').val()) {
+                    asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
+                    $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                    $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
+                    e.preventDefault();
+                }
+                else {
+                    var isnum = /^\d+$/.test($('#ExternalReference').val());
+                    if (!isnum) {
+                        asi.modal.confirm('Error', 'TIMMS ID must contain only numbers.', null, "#hide", "Close");
+                        $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                        $("#timmsErrorMessage").text("TIMMS ID must contain only numbers.");
+                        e.preventDefault();
+                    }
+                }
+            }
+        });
+        $('[rel*="isprimary"]').change(function () {
+            $('[rel*="isprimary"]').attr("checked", false);
+            this.checked = true;
+        });
+    </script>
+    @if (Model.ProductId == 52)
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#dates').multiDatesPicker({
+                    dateFormat: "dd-mm-yy",
+                    minDate: 0,
+                    setDate: ""
+                   , onSelect: function (dateText, inst) {
+                       $("#LoginScreen_Dates").val("");
+                       var date_String = "";
+                       var dates = $('#dates').multiDatesPicker('getDates');
+                       if (dates.length > 0) {
+                           $.each(dates, function (index, value) {
+                               date_String += value + "\n";
+                           });
+                       }
+                       $("#txtSelectedDates").html(date_String);
+                       $("#LoginScreen_Dates").val(date_String);
+                   }
+                });
+                SetDates();
+                var dates = $('#dates').multiDatesPicker('getDates');
+            });
+
+            function SetDates() {
+                $("#txtSelectedDates").html($("#LoginScreen_Dates").val());
+                var dates = $("#LoginScreen_Dates").val().split("\n");
+                if (dates.length > 0) {
+                    $.each(dates, function (index, value) {
+                        if (value != "")
+                            $('#dates').multiDatesPicker('addDates', value);
+                    });
+                }
+            }
+        </script>
+    }
+}

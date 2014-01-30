@@ -19,12 +19,14 @@ namespace asi.asicentral.model.store
 
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public string CouponCode { get; set; }
+        [StringLength(1000, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
+        public string Description { get; set; }
 
         public bool IsSubscription { get; set; }
         public bool IsFixedAmount { get; set; }
-        [RegularExpression(@"^[0-9]\d*(\.\d+)?$", ErrorMessageResourceName = "FieldInvalidNumber1", ErrorMessageResourceType = typeof(Resource))]
+        [RegularExpression(@"^[0-9]\d*(\.\d+)?$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
         public string DiscountAmount { get; set; }
-        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber1", ErrorMessageResourceType = typeof(Resource))]
+        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
         public string DiscountPercentage { get; set; }
         [DataType(DataType.Date)]
         public DateTime ValidFrom { get; set; }
