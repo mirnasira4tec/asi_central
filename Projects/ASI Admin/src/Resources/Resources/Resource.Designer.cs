@@ -2770,7 +2770,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://d27vj430nutdmd.cloudfront.net/5503/191988/iphonejpg/320/bcb72b1264b19d47deb9478b7d5b81cd5fd1b827.jpg.
+        ///   Looks up a localized string similar to https://mydigitalpublication.com/reports/getCover.php?m=21148.
         /// </summary>
         public static string MagazineAdvertisingCounselorURL {
             get {
