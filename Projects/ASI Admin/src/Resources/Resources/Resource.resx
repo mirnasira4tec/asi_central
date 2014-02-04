@@ -1776,4 +1776,7 @@
   <data name="Size" xml:space="preserve">
     <value> Size</value>
   </data>
+  <data name="IssuesRequired" xml:space="preserve">
+    <value>Please select an Issue</value>
+  </data>
 </root>
