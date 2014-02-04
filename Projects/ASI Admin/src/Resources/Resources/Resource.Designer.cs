@@ -2536,6 +2536,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select an Issue.
+        /// </summary>
+        public static string IssuesRequired {
+            get {
+                return ResourceManager.GetString("IssuesRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is Union Made.
         /// </summary>
         public static string IsUnionMade {
