@@ -11,10 +11,7 @@ namespace asi.asicentral.util.store
 {
     public class MagazinesAdvertisngHelper
     {
-       
         //Art Work
-        public readonly string[] MAGAZINESADVERTISING_ARTWORK = {  "Upload Later (Save 15%)","Have us create your Ad" };
-
-        
+        public readonly string[] MAGAZINESADVERTISING_ARTWORK = { "Supply Your Ad (Save 15%)", "Have us create your Ad" };
     }
 }

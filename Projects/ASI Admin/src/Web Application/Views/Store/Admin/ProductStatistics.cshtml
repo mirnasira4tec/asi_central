@@ -85,9 +85,7 @@
             var startdate = '@Model.StartDate';
             var enddate = '@Model.EndDate';
             var location = "@Url.Action("DownloadProductCSV", "Orders", null)/" + "?StartDate=@Model.StartDate&EndDate=@Model.EndDate";
-            if (product.contains("&"))
-                product = product.replace("&","%26");
-            if (product) location += "&Product=" + product;
+            if (product) location += "&Product=" + encodeURI(product);
             document.location = location;
         });
     </script>

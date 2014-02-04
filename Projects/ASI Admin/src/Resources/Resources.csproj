@@ -64,16 +64,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ESPWebsites.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\MagazineAdvertising.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MagazineAdvertising.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\Magazines.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Magazines.resx</DependentUpon>
-    </Compile>
     <Compile Include="Resources\ProductDescriptions.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -97,14 +87,6 @@
     <EmbeddedResource Include="Resources\ESPWebsites.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ESPWebsites.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\MagazineAdvertising.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>MagazineAdvertising.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Magazines.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Magazines.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ProductDescriptions.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
