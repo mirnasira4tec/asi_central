@@ -9,10 +9,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace asi.asicentral.database.mappings.store
 {
-
     class StoreDetailMagazineAdvertisingItemMap : EntityTypeConfiguration<StoreDetailMagazineAdvertisingItem>
     {
-
         public StoreDetailMagazineAdvertisingItemMap()
         {
             this.ToTable("STOR_MagazineAdvertisingItem");
@@ -26,12 +24,20 @@ namespace asi.asicentral.database.mappings.store
             HasRequired(t => t.Issue)
                 .WithMany()
                 .Map(m => m.MapKey("MagazineIssueId"));
+
             HasRequired(t => t.Position)
                .WithMany()
                .Map(m => m.MapKey("PositionId"));
+
             HasRequired(t => t.Size)
                 .WithMany()
                 .Map(m => m.MapKey("SizeId"));
+
+            this.Property(t => t.CreateDate)
+                .HasColumnName("CreateDateUTC");
+
+            this.Property(t => t.UpdateDate)
+                .HasColumnName("UpdateDateUTC");
         }
     }   
 }

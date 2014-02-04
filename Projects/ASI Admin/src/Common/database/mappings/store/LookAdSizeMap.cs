@@ -17,10 +17,16 @@ namespace asi.asicentral.database.mappings.store
         {
             this.ToTable("LOOK_MagazineAdvertisingAdSize");
             this.HasKey(t => t.Id);
+
             Property(t => t.Id)
                 .HasColumnName("MagazineAdSizeId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
+            this.Property(t => t.CreateDate)
+                            .HasColumnName("CreateDateUTC");
+
+            this.Property(t => t.UpdateDate)
+                .HasColumnName("UpdateDateUTC");
          
         }
     }
