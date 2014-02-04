@@ -20,8 +20,6 @@ namespace asi.asicentral.database.mappings.store
             Property(t => t.Id)
                 .HasColumnName("MagazineAdSizeId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-
-         
         }
     }
 }

@@ -200,9 +200,11 @@ namespace asi.asicentral.Tests
             {
                 var lookSendMyAdPublications = storeService.GetAll<LookSendMyAdPublication>().ToList<LookSendMyAdPublication>();
                 var lookSendMyAdAdSpecs = storeService.GetAll<LookSendMyAdAdSpec>().ToList<LookSendMyAdAdSpec>();
+                var lookSendMyAdCountryCodes = storeService.GetAll<LookSendMyAdCountryCode>().ToList<LookSendMyAdCountryCode>();
 
                 Assert.IsTrue(lookSendMyAdPublications.Count() >= 0);
                 Assert.IsTrue(lookSendMyAdAdSpecs.Count() >= 0);
+                Assert.IsTrue(lookSendMyAdCountryCodes.Count() >= 0);
             }
         }
     }

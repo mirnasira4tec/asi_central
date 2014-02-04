@@ -126,4 +126,7 @@
   <data name="Size" xml:space="preserve">
     <value>Ad Size</value>
   </data>
+  <data name="SendMyAdMessage" xml:space="preserve">
+    <value>Please Login to the website to upload your ad.</value>
+  </data>
 </root>

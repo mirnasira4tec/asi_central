@@ -264,6 +264,9 @@ namespace asi.asicentral.database.mappings
             For<IRepository<LookSendMyAdAdSpec>>().Use<EFRepository<LookSendMyAdAdSpec>>()
                .Ctor<IValidatedContext>().Named("StoreContext");
 
+            For<IRepository<LookSendMyAdCountryCode>>().Use<EFRepository<LookSendMyAdCountryCode>>()
+              .Ctor<IValidatedContext>().Named("StoreContext");
+
             #endregion StoreContext
 
             #region TIMSS Context
