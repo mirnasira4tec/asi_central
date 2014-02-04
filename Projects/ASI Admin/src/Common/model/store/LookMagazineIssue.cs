@@ -18,8 +18,8 @@ namespace asi.asicentral.model.store
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
-        
-         public bool Equals(LookAdSize o)
+
+        public bool Equals(LookMagazineIssue o)
         {
             bool result = false;
             if ((object)o != null)
