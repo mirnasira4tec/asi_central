@@ -236,16 +236,17 @@
     <value>Company Stores™ - powered by ESP Websites™ - are the unique eCommerce solution designed as a stand-alone online shop for special events, niche markets, holidays or your top customers – the possibilities are virtually endless!</value>
   </data>
   <data name="ProductWearablesAdvertising" xml:space="preserve">
-    <value>Wearable is published 10x a year, with a circulation of 15,000 Wearables is read by screen-printers and distributors.</value>
+    <value>Wearables
+Wearable is published 10x a year, with a circulation of 15,000. Wearables is read by screen-printers and distributors.</value>
   </data>
   <data name="ProductStitchesAdvertising" xml:space="preserve">
     <value>Stitches is published 10x a year, with a circulation of 21,250.</value>
   </data>
   <data name="ProductSGRAdvertising" xml:space="preserve">
-    <value>SGR is delivered to all 8,000 ASI suppliers, SGR helps promotional products suppliers run their enterprise more efficiently.</value>
+    <value>SGR is delivered to 8,000 ASI suppliers. SGR helps promotional products suppliers run their enterprises more efficiently.</value>
   </data>
   <data name="ProductCounselorAdvertising" xml:space="preserve">
-    <value>Counselor has a paid circulation of 14,500. This monthly magazine reaches C-level distributors and is often referred to as the “Bible of the promotional products industry." All the Top 40 ASI Distributors receive copies of Counselor</value>
+    <value>Counselor is a paid circulation of 14,500. This monthly magazine reaches C-level distributors.</value>
   </data>
   <data name="ProductAdvantagesAdvertising" xml:space="preserve">
     <value>Advantages magazine is written especially for the promotional products sales professional.</value>
