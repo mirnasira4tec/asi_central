@@ -133,7 +133,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Counselor has a paid circulation of 14,500. This monthly magazine reaches C-level distributors and is often referred to as the “Bible of the promotional products industry.&quot; All the Top 40 ASI Distributors receive copies of Counselor.
+        ///   Looks up a localized string similar to Counselor is a paid circulation of 14,500. This monthly magazine reaches C-level distributors..
         /// </summary>
         public static string ProductCounselorAdvertising {
             get {
@@ -268,7 +268,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SGR is delivered to all 8,000 ASI suppliers, SGR helps promotional products suppliers run their enterprise more efficiently..
+        ///   Looks up a localized string similar to SGR is delivered to 8,000 ASI suppliers. SGR helps promotional products suppliers run their enterprises more efficiently..
         /// </summary>
         public static string ProductSGRAdvertising {
             get {
@@ -403,7 +403,8 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wearable is published 10x a year, with a circulation of 15,000 Wearables is read by screen-printers and distributors..
+        ///   Looks up a localized string similar to Wearables
+        ///Wearable is published 10x a year, with a circulation of 15,000. Wearables is read by screen-printers and distributors..
         /// </summary>
         public static string ProductWearablesAdvertising {
             get {
