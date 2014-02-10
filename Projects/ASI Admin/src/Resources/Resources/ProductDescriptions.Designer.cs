@@ -403,8 +403,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wearables
-        ///Wearable is published 10x a year, with a circulation of 15,000. Wearables is read by screen-printers and distributors..
+        ///   Looks up a localized string similar to Wearables is published 10x a year, with a circulation of 15,000. Wearables is read by screen-printers and distributors..
         /// </summary>
         public static string ProductWearablesAdvertising {
             get {
