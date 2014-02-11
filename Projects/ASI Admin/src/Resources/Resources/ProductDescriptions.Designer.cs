@@ -115,7 +115,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Company Stores™ - powered by ESP Websites™ - are the unique eCommerce solution designed as a stand-alone online shop for special events, niche markets, holidays or your top customers – the possibilities are virtually endless!.
+        ///   Looks up a localized string similar to Company Stores™ - powered by ESP Websites™ - is the unique eCommerce solution designed as a stand-alone online shop for special events, niche markets, holidays or your top customers – the possibilities are virtually endless!.
         /// </summary>
         public static string ProductCompanyStore {
             get {
@@ -133,7 +133,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Counselor is a paid circulation of 14,500. This monthly magazine reaches C-level distributors..
+        ///   Looks up a localized string similar to Counselor has a paid circulation of 14,500. This monthly magazine reaches C-level distributors and is often referred to as the “Bible of the promotional products industry.&quot; All the Top 40 ASI Counselor has a paid circulation of 14,500. This monthly magazine reaches C-level distributors and is often referred to as the “Bible of the promotional products industry.&quot; All the Top 40 ASI Distributors receive copies of Counselor..
         /// </summary>
         public static string ProductCounselorAdvertising {
             get {
@@ -403,8 +403,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wearables
-        ///Wearable is published 10x a year, with a circulation of 15,000. Wearables is read by screen-printers and distributors..
+        ///   Looks up a localized string similar to Wearables is published 10x a year, with a circulation of 15,000. Wearables is read by screen-printers and distributors..
         /// </summary>
         public static string ProductWearablesAdvertising {
             get {

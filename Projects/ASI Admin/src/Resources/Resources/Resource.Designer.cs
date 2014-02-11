@@ -1708,6 +1708,101 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;div id=&quot;editorial-calendar&quot; class=&quot;modal hide fade&quot;&gt;
+        ///            &lt;div class=&quot;modal-header&quot;&gt;
+        ///                &lt;button type=&quot;button&quot; class=&quot;close&quot; data-dismiss=&quot;modal&quot; aria-hidden=&quot;true&quot;&gt;&amp;times;&lt;/button&gt;
+        ///                &lt;h3&gt;Editorial Calendar:&lt;/h3&gt;
+        ///            &lt;/div&gt;
+        ///            &lt;div class=&quot;modal-body&quot;&gt;
+        ///                &lt;table class=&quot;table table-bordered mag-ad-tables&quot;&gt;
+        ///                    &lt;thead&gt;
+        ///                        &lt;tr&gt;
+        ///                            &lt;td class=&quot;left-side-table&quot;&gt;Issue&lt;/td&gt;
+        ///         [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string EditorialAdvantages {
+            get {
+                return ResourceManager.GetString("EditorialAdvantages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div id=&quot;editorial-calendar&quot; class=&quot;modal hide fade&quot;&gt;
+        ///            &lt;div class=&quot;modal-header&quot;&gt;
+        ///                &lt;button type=&quot;button&quot; class=&quot;close&quot; data-dismiss=&quot;modal&quot; aria-hidden=&quot;true&quot;&gt;&amp;times;&lt;/button&gt;
+        ///                &lt;h3&gt;Editorial Calendar:&lt;/h3&gt;
+        ///            &lt;/div&gt;
+        ///            &lt;div class=&quot;modal-body&quot;&gt;
+        ///                &lt;table class=&quot;table table-bordered mag-ad-tables&quot;&gt;
+        ///                    &lt;thead&gt;
+        ///                        &lt;tr&gt;
+        ///                            &lt;td class=&quot;left-side-table&quot;&gt;Issue&lt;/td&gt;
+        ///         [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string EditorialCounselor {
+            get {
+                return ResourceManager.GetString("EditorialCounselor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div id=&quot;editorial-calendar&quot; class=&quot;modal hide fade&quot;&gt;
+        ///            &lt;div class=&quot;modal-header&quot;&gt;
+        ///                &lt;button type=&quot;button&quot; class=&quot;close&quot; data-dismiss=&quot;modal&quot; aria-hidden=&quot;true&quot;&gt;&amp;times;&lt;/button&gt;
+        ///                &lt;h3&gt;Editorial Calendar:&lt;/h3&gt;
+        ///            &lt;/div&gt;
+        ///            &lt;div class=&quot;modal-body&quot;&gt;
+        ///                &lt;table class=&quot;table table-bordered mag-ad-tables&quot;&gt;
+        ///                    &lt;thead&gt;
+        ///                        &lt;tr&gt;
+        ///                            &lt;td class=&quot;left-side-table&quot;&gt;Issue&lt;/td&gt;
+        ///         [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string EditorialSGR {
+            get {
+                return ResourceManager.GetString("EditorialSGR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div id=&quot;editorial-calendar&quot; class=&quot;modal hide fade&quot;&gt;
+        ///            &lt;div class=&quot;modal-header&quot;&gt;
+        ///                &lt;button type=&quot;button&quot; class=&quot;close&quot; data-dismiss=&quot;modal&quot; aria-hidden=&quot;true&quot;&gt;&amp;times;&lt;/button&gt;
+        ///                &lt;h3&gt;Editorial Calendar:&lt;/h3&gt;
+        ///            &lt;/div&gt;
+        ///            &lt;div class=&quot;modal-body&quot;&gt;
+        ///                &lt;table class=&quot;table table-bordered mag-ad-tables&quot;&gt;
+        ///                    &lt;thead&gt;
+        ///                        &lt;tr&gt;
+        ///                            &lt;td class=&quot;left-side-table&quot;&gt;Issue&lt;/td&gt;
+        ///         [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string EditorialStitches {
+            get {
+                return ResourceManager.GetString("EditorialStitches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div id=&quot;editorial-calendar&quot; class=&quot;modal hide fade&quot;&gt;
+        ///            &lt;div class=&quot;modal-header&quot;&gt;
+        ///                &lt;button type=&quot;button&quot; class=&quot;close&quot; data-dismiss=&quot;modal&quot; aria-hidden=&quot;true&quot;&gt;&amp;times;&lt;/button&gt;
+        ///                &lt;h3&gt;Editorial Calendar:&lt;/h3&gt;
+        ///            &lt;/div&gt;
+        ///            &lt;div class=&quot;modal-body&quot;&gt;
+        ///                &lt;table class=&quot;table table-bordered mag-ad-tables&quot;&gt;
+        ///                    &lt;thead&gt;
+        ///                        &lt;tr&gt;
+        ///                            &lt;td class=&quot;left-side-table&quot;&gt;Issue&lt;/td&gt;
+        ///         [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string EditorialWearables {
+            get {
+                return ResourceManager.GetString("EditorialWearables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Click to edit the item.
         /// </summary>
         public static string EditToolTip {
@@ -2788,7 +2883,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://mydigitalpublication.com/reports/getCover.php?m=21148.
+        ///   Looks up a localized string similar to https://mydigitalpublication.com/reports/getCover.php?m=21604.
         /// </summary>
         public static string MagazineAdvertisingSGRURL {
             get {
@@ -3099,6 +3194,15 @@ namespace asi.asicentral.Resources {
         public static string NumberofLicenses {
             get {
                 return ResourceManager.GetString("NumberofLicenses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package.
+        /// </summary>
+        public static string NumberOfLicensesInPackage {
+            get {
+                return ResourceManager.GetString("NumberOfLicensesInPackage", resourceCulture);
             }
         }
         
