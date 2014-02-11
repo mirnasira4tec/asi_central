@@ -3103,6 +3103,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Licenses in Package.
+        /// </summary>
+        public static string NumberOfLicensesInPackage {
+            get {
+                return ResourceManager.GetString("NumberOfLicensesInPackage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Number of Products.
         /// </summary>
         public static string NumberOfProducts {
