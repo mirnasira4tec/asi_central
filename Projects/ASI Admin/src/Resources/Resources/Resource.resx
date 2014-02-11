@@ -1779,4 +1779,7 @@
   <data name="IssuesRequired" xml:space="preserve">
     <value>Please select an Issue</value>
   </data>
+  <data name="SendMyAdMessage" xml:space="preserve">
+    <value>Please Login to the website to upload your ad.</value>
+  </data>
 </root>

@@ -207,5 +207,33 @@ namespace asi.asicentral.Tests
                 Assert.IsTrue(lookSendMyAdCountryCodes.Count() >= 0);
             }
         }
+
+        [TestMethod]
+        public void StoreDetailMagazineAdvertisingItemTest()
+        {
+
+            IContainer container = new Container(new EFRegistry());
+
+            using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
+            {
+                IList<StoreDetailMagazineAdvertisingItem> dbMagazineAdItems = 
+                    storeService.GetAll<StoreDetailMagazineAdvertisingItem>().Where(item => item.OrderDetailId == 4).ToList();
+                if (dbMagazineAdItems != null && dbMagazineAdItems.Count > 0)
+                {
+                    var sizes = dbMagazineAdItems.Select(item => item.Size).Distinct();
+                    foreach (var size in sizes)
+                    {
+                        var dbMagazineAdItems2 = dbMagazineAdItems.Where(item1 => item1.Size == size);
+                        foreach (var item2 in dbMagazineAdItems2)
+                        {
+                            item2.ProcessId = "12345";
+                        }
+                    }
+                }
+                int c = storeService.SaveChanges();
+
+                Assert.IsTrue(dbMagazineAdItems.Count() >= 0);
+            }
+        }
     }
 }

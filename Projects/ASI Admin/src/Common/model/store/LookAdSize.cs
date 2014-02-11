@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace asi.asicentral.model.store
 {
 
-    public class LookAdSize
+    public class LookAdSize : IEquatable<LookAdSize>
     {
         public int Id { get; set; }
         public MagazineType MagazineId { get; set; }
@@ -40,7 +40,7 @@ namespace asi.asicentral.model.store
         public static bool operator == (LookAdSize a, LookAdSize b)
         {
             bool result = false;
-            if (!object.ReferenceEquals(a, b)) result = true;
+            if (object.ReferenceEquals(a, b)) result = true;
             if ((object)a == null || (object)b == null) result = false;
             result = a.Equals(b);
             return result;

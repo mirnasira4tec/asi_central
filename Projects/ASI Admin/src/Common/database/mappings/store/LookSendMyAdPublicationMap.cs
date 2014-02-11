@@ -23,7 +23,6 @@ namespace asi.asicentral.database.mappings.store
             HasRequired(t => t.MagazineIssue)
                 .WithMany()
                 .Map(m => m.MapKey("MagazineIssueId"));
-               
         }
     }
 }

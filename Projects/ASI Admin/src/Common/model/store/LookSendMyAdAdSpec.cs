@@ -14,6 +14,6 @@ namespace asi.asicentral.model.store
 
         public virtual LookAdSize Size { get; set; }
         
-        public int? AdSpecId { get; set; }
+        public int AdSpecId { get; set; }
     }
 }

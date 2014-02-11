@@ -14,7 +14,7 @@ namespace asi.asicentral.model.store
 
         public virtual LookMagazineIssue MagazineIssue { get; set; }
 
-        public int? PublicationId { get; set; }
+        public int PublicationId { get; set; }
 
         public string IssueCode { get; set; }
     }

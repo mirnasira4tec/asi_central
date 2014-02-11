@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.model.store
 {
-    public class LookMagazineIssue
+    public class LookMagazineIssue : IEquatable<LookMagazineIssue>
     {
         public int Id { get; set; }
         public MagazineType ProductId { get; set; }
@@ -42,7 +42,7 @@ namespace asi.asicentral.model.store
         public static bool operator == (LookMagazineIssue a, LookMagazineIssue b)
         {
             bool result = false;
-            if (!object.ReferenceEquals(a, b)) result = true;
+            if (object.ReferenceEquals(a, b)) result = true;
             if ((object)a == null || (object)b == null) result = false;
             result = a.Equals(b);
             return result;
@@ -56,6 +56,15 @@ namespace asi.asicentral.model.store
         public override int GetHashCode()
         {
             return ProductId.GetHashCode() ^ Issue.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            string optionText = "Issue: ";
+            if (Issue.Day == 16) optionText += "Mid-";
+            optionText += string.Format("{0} {1}, ", System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Issue.Month), Issue.Year.ToString());
+            optionText += string.Format("Material Deadline: {0}, {1}", ReservationDeadline.DayOfWeek.ToString().Substring(0, 3), ReservationDeadline.ToString("d MMM yyyy"));
+            return optionText;
         }
     }
 }
