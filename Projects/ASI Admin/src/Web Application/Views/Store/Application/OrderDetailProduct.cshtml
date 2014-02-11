@@ -48,7 +48,7 @@
 		            </span>
                     }
                     <span class="label-row span11">
-			            @Html.LabelFor(m => m.Quantity) 
+                        @Html.LabelFor(m => m.Quantity)
 		            </span>
 		            <span class="label-row">
 			            @Html.EditorFor(m => m.Quantity) @Html.ValidationMessageFor(m => m.Quantity)
@@ -64,8 +64,8 @@
                     break;
                  case 71:
                 <span class="label-row span11">
-			        @Html.LabelFor(m => m.Quantity) 
-		        </span>
+			        @Html.Label(asi.asicentral.Resources.Resource.NumberOfLicensesInPackage)
+                </span>
 		        <span class="label-row">
 			        @Html.DropDownListFor(model => model.OptionId, asi.asicentral.util.store.CompanyStoreHelper.GetQuantityOptions(), new { @class = "tab1" }) @Html.ValidationMessageFor(model => model.OptionId)
 		        </span>

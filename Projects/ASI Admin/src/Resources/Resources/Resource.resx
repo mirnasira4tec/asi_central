@@ -1779,4 +1779,7 @@
   <data name="IssuesRequired" xml:space="preserve">
     <value>Please select an Issue</value>
   </data>
+  <data name="NumberOfLicensesInPackage" xml:space="preserve">
+    <value>Licenses in Package</value>
+  </data>
 </root>
