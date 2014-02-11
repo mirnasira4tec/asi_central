@@ -115,7 +115,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Company Stores™ - powered by ESP Websites™ - are the unique eCommerce solution designed as a stand-alone online shop for special events, niche markets, holidays or your top customers – the possibilities are virtually endless!.
+        ///   Looks up a localized string similar to Company Stores™ - powered by ESP Websites™ - is the unique eCommerce solution designed as a stand-alone online shop for special events, niche markets, holidays or your top customers – the possibilities are virtually endless!.
         /// </summary>
         public static string ProductCompanyStore {
             get {
