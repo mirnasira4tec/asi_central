@@ -44,6 +44,10 @@ namespace asi.asicentral.model.store
                     string url = System.Configuration.ConfigurationManager.AppSettings["SendMyAdBaseAddress"] + "/index.php?action=drawAd&processId=";
                     result = string.Format("{0}<br/><a href=\"{1}{2}\">{3}</a>", result, url, ProcessId, Issue.ToString());
                 }
+                else
+                {
+                    result = string.Format("{0}<br/>{1}", result, Issue.ToString());
+                }
             }
             return result;
         }
