@@ -15,8 +15,8 @@ namespace asi.asicentral.util.store
         public static IList<SelectListItem> GetQuantityOptions()
         {
             IList<SelectListItem> quantityOptions = new List<SelectListItem>();
-            quantityOptions.Add(new SelectListItem() { Text = "1", Value = "0" });
-            quantityOptions.Add(new SelectListItem() { Text = "10", Value = "1" });
+            quantityOptions.Add(new SelectListItem() { Text = "1 License", Value = "0" });
+            quantityOptions.Add(new SelectListItem() { Text = "10 Licenses", Value = "1" });
             return quantityOptions;
         }
 
