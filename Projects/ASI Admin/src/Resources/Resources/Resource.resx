@@ -2276,4 +2276,19 @@
 
         &lt;/div&gt;</value>
   </data>
+  <data name="MagazineAdvertisingAdvantagesDescription" xml:space="preserve">
+    <value>Advantages magazine is written especially for the promotional products sales professional.</value>
+  </data>
+  <data name="MagazineAdvertisingCounselorDescription" xml:space="preserve">
+    <value>Counselor has a paid circulation of 14,500</value>
+  </data>
+  <data name="MagazineAdvertisingSGRDescription" xml:space="preserve">
+    <value>SGR is delivered to 8,000 ASI suppliers. SGR helps promotional products suppliers run their enterprises more efficiently.</value>
+  </data>
+  <data name="MagazineAdvertisingStitchesDescription" xml:space="preserve">
+    <value>Stitches is published 10x a year, with a circulation of 21,250.</value>
+  </data>
+  <data name="MagazineAdvertisingWearablesDescription" xml:space="preserve">
+    <value>Wearables is published 10x a year, with a circulation of 15,000. Wearables is read by screen-printers and distributors.</value>
+  </data>
 </root>

@@ -2865,11 +2865,29 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Advantages magazine is written especially for the promotional products sales professional..
+        /// </summary>
+        public static string MagazineAdvertisingAdvantagesDescription {
+            get {
+                return ResourceManager.GetString("MagazineAdvertisingAdvantagesDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://mydigitalpublication.com/reports/getCover.php?m=21147.
         /// </summary>
         public static string MagazineAdvertisingAdvantagesURL {
             get {
                 return ResourceManager.GetString("MagazineAdvertisingAdvantagesURL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Counselor has a paid circulation of 14,500.
+        /// </summary>
+        public static string MagazineAdvertisingCounselorDescription {
+            get {
+                return ResourceManager.GetString("MagazineAdvertisingCounselorDescription", resourceCulture);
             }
         }
         
@@ -2883,6 +2901,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SGR is delivered to 8,000 ASI suppliers. SGR helps promotional products suppliers run their enterprises more efficiently..
+        /// </summary>
+        public static string MagazineAdvertisingSGRDescription {
+            get {
+                return ResourceManager.GetString("MagazineAdvertisingSGRDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://mydigitalpublication.com/reports/getCover.php?m=21604.
         /// </summary>
         public static string MagazineAdvertisingSGRURL {
@@ -2892,11 +2919,29 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Stitches is published 10x a year, with a circulation of 21,250..
+        /// </summary>
+        public static string MagazineAdvertisingStitchesDescription {
+            get {
+                return ResourceManager.GetString("MagazineAdvertisingStitchesDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://mydigitalpublication.com/reports/getCover.php?m=14879.
         /// </summary>
         public static string MagazineAdvertisingStitchesURL {
             get {
                 return ResourceManager.GetString("MagazineAdvertisingStitchesURL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wearables is published 10x a year, with a circulation of 15,000. Wearables is read by screen-printers and distributors..
+        /// </summary>
+        public static string MagazineAdvertisingWearablesDescription {
+            get {
+                return ResourceManager.GetString("MagazineAdvertisingWearablesDescription", resourceCulture);
             }
         }
         
