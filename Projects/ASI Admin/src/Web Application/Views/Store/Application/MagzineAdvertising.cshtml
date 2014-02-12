@@ -2,7 +2,7 @@
 @using asi.asicentral.model.store
 @using asi.asicentral.web.Controllers.Store
 @using asi.asicentral.Resources
-@model asi.asicentral.web.model.store.MagaznesAdvertisingApplicationModel
+@model asi.asicentral.web.model.store.MagazinesAdvertisingApplicationModel
 @{
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
 }
@@ -38,41 +38,39 @@
                 <legend>@string.Format("{0} {1}", Html.Raw(Model.ProductName), "Information")</legend>
                 @switch (Model.ProductId)
                 {
-
                     case 72:
-                    <span class="label-row">
-                        @Html.Label("Issues")
-                        @Html.Label("Positions")
-                    </span>
-                
-                        for (int i = 0; i < Model.MagAdItem.Count; i++)
+                    case 73:
+                    case 74:
+                    case 75:
+                    case 76:
                         {
-                           
-                    
+                            int seq = 1;
+                            for (int i = 0; i < Model.MagAdItem.Count; i++)
+                            {
+                                if (seq == Model.MagAdItem[i].Sequence)
+                                {
                     <span class="label-row">
-                        <input type="text" readonly="true" value="@Model.MagAdItem[i].Issue.Issue.ToString("MM/dd/yyyy")" />
-                        <input type="text" readonly="true" value="@Model.MagAdItem[i].Position.Description" />
-
-                    </span> 
-                            
-                        }
-                            
-                    <span class="label-row">
-                        @Html.Label("Sizes")
-                        @Html.Label("Artworks")
+                        @Html.Raw("Ad Item#" + seq.ToString())
                     </span>
-                        for (int i = 0; i < Model.MagAdItem.Count; i++)
-                        {
-                           
-                    
+                    <span class="label-row">
+                        @Html.Label("Size")
+                        @Html.Label("Position")
+                        @Html.Label("Artwork")
+                    </span>
                     <span class="label-row">
                         <input type="text" readonly="true" value="@Model.MagAdItem[i].Size.Description" />
+                        <input type="text" readonly="true" value="@Model.MagAdItem[i].Position.Description" />
                         <input type="text" readonly="true" value="@Model.MagAdItem[i].ArtWork" />
-
-
-
                     </span> 
-                            
+                    <span class="label-row">
+                        @Html.Label("Issue/Issues")
+                    </span>
+                                    seq++;
+                                }
+                    <span class="label-row">
+                        <input type="text" readonly="true" value="@Model.MagAdItem[i].Issue.Issue.ToString("MM/dd/yyyy")" />
+                    </span> 
+                            }
                         }
                         break;
                 }
