@@ -381,6 +381,8 @@ header#site-header {
 	}
 	.label-row  .long{
 		width:94%;
+        margin-left:1%;
+        width:31%;
 	}
 /*-------------------product information--------------*/
 .primary-business-row{
