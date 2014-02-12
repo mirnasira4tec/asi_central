@@ -36,7 +36,7 @@ namespace asi.asicentral.model.store
         public override string ToString()
         {
             string result = string.Empty;
-            if (Id != 0)
+            if (Id > 0)
             {
                 if (!string.IsNullOrWhiteSpace(GetAdSpec())) result += GetAdSpec();
                 if (ProcessId != null)
