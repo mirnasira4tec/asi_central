@@ -170,14 +170,11 @@ namespace asi.asicentral.web.model.store
                     for (int i = 0; i < magazineAdvertising.Count; i++)
                     {
                         MagazineAdvertisingItem magAdItem = new MagazineAdvertisingItem();
-                        int id = magazineAdvertising[i].Id;
-                        LookAdPosition pos = storeService.GetAll<StoreDetailMagazineAdvertisingItem>().Where(item => item.Id == id).Select(item => item.Position).FirstOrDefault();
-                        LookAdSize siz = storeService.GetAll<StoreDetailMagazineAdvertisingItem>().Where(item => item.Id == id).Select(item => item.Size).FirstOrDefault();
-                        LookMagazineIssue issue = storeService.GetAll<StoreDetailMagazineAdvertisingItem>().Where(item => item.Id == id).Select(item => item.Issue).FirstOrDefault();
-                        magAdItem.Position = pos;
-                        magAdItem.Size = siz;
-                        magAdItem.Issue = issue;
-                        magAdItem.id = id;
+                        magAdItem.Position = magazineAdvertising[i].Position;
+                        magAdItem.Size = magazineAdvertising[i].Size;
+                        magAdItem.Issue = magazineAdvertising[i].Issue;
+                        magAdItem.id = magazineAdvertising[i].Id;
+                        magAdItem.Sequence = magazineAdvertising[i].Sequence;
                         MagazinesAdvertisngHelper magazinesAdvertisingHelper = new MagazinesAdvertisngHelper();
                         if (magazineAdvertising[i].ArtWork)
                             magAdItem.ArtWork = magazinesAdvertisingHelper.MAGAZINESADVERTISING_ARTWORK[0];
@@ -212,5 +209,7 @@ namespace asi.asicentral.web.model.store
         public string ArtWork { get; set; }
 
         public int id { get; set; }
+
+        public int Sequence { get; set; }
     }
 }

@@ -216,7 +216,6 @@
     <Compile Include="Models\sgr\ViewCompany.cs" />
     <Compile Include="Models\sgr\ViewProduct.cs" />
     <Compile Include="Models\Store\Order\CatalogsApplicationModel.cs" />
-    <Compile Include="Models\Store\Order\MagazineAdItem.cs" />
     <Compile Include="Models\Store\Order\MagazinesAdvertisingApplicationModel.cs" />
     <Compile Include="Models\Store\Order\CouponModel.cs" />
     <Compile Include="Models\Store\Order\DecoratorApplicationModel.cs" />
