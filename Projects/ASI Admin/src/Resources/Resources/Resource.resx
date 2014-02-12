@@ -1780,7 +1780,7 @@
     <value>Please select an Issue</value>
   </data>
   <data name="NumberOfLicensesInPackage" xml:space="preserve">
-    <value>Licenses in Package</value>
+    <value>Package</value>
   </data>
   <data name="EditorialAdvantages" xml:space="preserve">
     <value>&lt;div id="editorial-calendar" class="modal hide fade"&gt;
