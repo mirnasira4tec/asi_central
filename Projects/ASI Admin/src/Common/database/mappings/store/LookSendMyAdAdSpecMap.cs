@@ -19,7 +19,6 @@ namespace asi.asicentral.database.mappings.store
             this.HasKey(t => t.Id);
             Property(t => t.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             
-
             //Relationships
             HasRequired(t => t.Size)
                 .WithMany()

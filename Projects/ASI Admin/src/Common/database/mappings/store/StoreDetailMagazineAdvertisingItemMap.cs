@@ -38,8 +38,6 @@ namespace asi.asicentral.database.mappings.store
 
             this.Property(t => t.UpdateDate)
                 .HasColumnName("UpdateDateUTC");
-
-            //Ignore(t => t.AdSpec);
         }
     }   
 }

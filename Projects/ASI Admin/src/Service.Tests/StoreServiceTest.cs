@@ -230,6 +230,7 @@ namespace asi.asicentral.Tests
                         }
                     }
                 }
+
                 int c = storeService.SaveChanges();
 
                 Assert.IsTrue(dbMagazineAdItems.Count() >= 0);

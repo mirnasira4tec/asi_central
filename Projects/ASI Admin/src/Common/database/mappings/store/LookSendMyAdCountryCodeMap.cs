@@ -13,6 +13,7 @@ namespace asi.asicentral.database.mappings.store
 
     public class LookSendMyAdCountryCodeMap : EntityTypeConfiguration<LookSendMyAdCountryCode>
     {
+
         public LookSendMyAdCountryCodeMap()
         {
             this.ToTable("Look_SendMyAdCountryCode");
