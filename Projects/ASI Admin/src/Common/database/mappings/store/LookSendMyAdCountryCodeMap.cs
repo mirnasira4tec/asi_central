@@ -16,10 +16,10 @@ namespace asi.asicentral.database.mappings.store
 
         public LookSendMyAdCountryCodeMap()
         {
-            this.ToTable("Look_SendMyAdCountryCode");
+            this.ToTable("LOOK_SendMyAdCountryCode");
             this.HasKey(t => t.Id);
             Property(t => t.Id)
-                .HasColumnName("Id")
+                .HasColumnName("SendMyAdCountryCodeId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
     }
