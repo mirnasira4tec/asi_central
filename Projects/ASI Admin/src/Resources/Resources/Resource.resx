@@ -1800,4 +1800,7 @@
   <data name="Add" xml:space="preserve">
     <value>Add</value>
   </data>
+  <data name="TermsConditionsError" xml:space="preserve">
+    <value>Please check that you agree to the terms and conditions</value>
+  </data>
 </root>

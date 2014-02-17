@@ -4624,6 +4624,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please check that you agree to the terms and conditions.
+        /// </summary>
+        public static string TermsConditionsError {
+            get {
+                return ResourceManager.GetString("TermsConditionsError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Textile Screenprinting.
         /// </summary>
         public static string TextileScreenprinting {
