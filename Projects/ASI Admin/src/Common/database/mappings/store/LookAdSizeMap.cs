@@ -26,7 +26,7 @@ namespace asi.asicentral.database.mappings.store
                             .HasColumnName("CreateDateUTC");
 
             this.Property(t => t.UpdateDate)
-                .HasColumnName("UpdateDateUTC");
+                .HasColumnName("UpdateDateUTC");    
          
         }
     }
