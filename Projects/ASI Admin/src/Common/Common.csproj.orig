@@ -31,6 +31,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Dev|AnyCPU'">
+    <OutputPath>bin\Dev\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Prod|AnyCPU'">
+    <OutputPath>bin\Prod\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Stage|AnyCPU'">
+    <OutputPath>bin\Stage\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="asi.asicentral.Core">
       <HintPath>..\..\library\asi.asicentral.Core.dll</HintPath>
@@ -100,9 +109,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="database\ASIEmailBlastContext.cs" />
     <Compile Include="database\ASIInternetContext.cs" />
     <Compile Include="database\ASIPublicationContext.cs" />
     <Compile Include="database\CallContext.cs" />
+    <Compile Include="database\mappings\asiemailblast\ClosedCampaignDateMap.cs" />
     <Compile Include="database\mappings\asiinternet\ASPNetUsersMap.cs" />
     <Compile Include="database\mappings\asiinternet\CENTUserProfilesPROFMap.cs" />
     <Compile Include="database\mappings\asiinternet\DistributorAccountTypeMap.cs" />
@@ -118,7 +129,15 @@
     <Compile Include="database\mappings\call\CallQueueMap.cs" />
     <Compile Include="database\mappings\call\CallRequestsMap.cs" />
     <Compile Include="database\mappings\store\CouponMap.cs" />
+    <Compile Include="database\mappings\store\LookAdPositionMap.cs" />
+    <Compile Include="database\mappings\store\LookAdSizeMap.cs" />
+    <Compile Include="database\mappings\store\LookEventMerchandiseProductMap.cs" />
+    <Compile Include="database\mappings\store\LookMagazineIssueMap.cs" />
     <Compile Include="database\mappings\store\LookProductCollectionsMap.cs" />
+    <Compile Include="database\mappings\store\LookSendMyAdAdSpecMap.cs" />
+    <Compile Include="database\mappings\store\LookSendMyAdPublicationMap.cs" />
+    <Compile Include="database\mappings\store\LookSendMyAdCountryCodeMap.cs" />
+    <Compile Include="database\mappings\store\StoreDetailMagazineAdvertisingItemMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailProductCollectionsItemMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailProductCollectionsMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailEmailExpressMap.cs" />
@@ -150,16 +169,26 @@
     <Compile Include="database\mappings\store\StoreTieredProductPricingMap.cs" />
     <Compile Include="database\mappings\store\TaxRateMap.cs" />
     <Compile Include="interfaces\ICreditCardService.cs" />
+    <Compile Include="interfaces\IDateUTCAndSource.cs" />
     <Compile Include="interfaces\IROI.cs" />
     <Compile Include="model\call\CallQueue.cs" />
     <Compile Include="model\call\CallRequests.cs" />
     <Compile Include="model\CreditCard.cs" />
     <Compile Include="model\ROI\Category.cs" />
     <Compile Include="model\ROI\Company.cs" />
+    <Compile Include="model\store\LookAdPosition.cs" />
+    <Compile Include="model\store\LookAdSize.cs" />
     <Compile Include="model\store\ASPNetUsers.cs" />
     <Compile Include="model\store\CENTUserProfilesPROF.cs" />
+    <Compile Include="model\store\ClosedCampaignDate.cs" />
     <Compile Include="model\store\Coupon.cs" />
+    <Compile Include="model\store\LookEventMerchandiseProduct.cs" />
     <Compile Include="model\store\LookProductCollections.cs" />
+    <Compile Include="model\store\LookMagazineIssue.cs" />
+    <Compile Include="model\store\LookSendMyAdAdSpec.cs" />
+    <Compile Include="model\store\LookSendMyAdCountryCode.cs" />
+    <Compile Include="model\store\LookSendMyAdPublication.cs" />
+    <Compile Include="model\store\StoreDetailMagazineAdvertisingItem.cs" />
     <Compile Include="model\store\StoreDetailStoreDetailProductCollections.cs" />
     <Compile Include="model\store\StoreDetailStoreDetailProductCollectionsItem.cs" />
     <Compile Include="model\store\StoreDetailEmailExpress.cs" />
@@ -271,11 +300,6 @@
     <Compile Include="model\timss\TIMSSCreditInfo.cs" />
     <Compile Include="model\timss\TIMSSProductType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resource.Designer.cs">
-      <DependentUpon>Resource.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="Service References\web.CreditCardService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -286,8 +310,16 @@
     <Compile Include="services\StoreService.cs" />
     <Compile Include="util\store\asismartsales\ASISmartSalesHelper.cs" />
     <Compile Include="util\store\catalogs\CatalogsHelper.cs" />
+    <Compile Include="util\store\companystore\CompanyStoreHelper.cs" />
     <Compile Include="util\store\emailexpress\EmailExpressHelper.cs" />
     <Compile Include="util\store\espadvertising\ESPAdvertisingHelper.cs" />
+    <Compile Include="util\store\Helper.cs" />
+<<<<<<< HEAD
+    <Compile Include="util\store\magazinesadvertising\MagazinesAdvertisngHelper.cs" />
+    <Compile Include="util\store\magazinesadvertising\UpdateDateAndSource.cs" />
+=======
+    <Compile Include="util\store\magazinesadvertising\MagazinesAdvertisingHelper.cs" />
+>>>>>>> ef6384b7ebb756f6366fb9d8cf6fd55c32f38077
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -327,10 +359,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resource.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <ProjectReference Include="..\Resources\Resources.csproj">
+      <Project>{04d943e2-6c0d-4fd5-b3bc-1860c962c977}</Project>
+      <Name>Resources</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
