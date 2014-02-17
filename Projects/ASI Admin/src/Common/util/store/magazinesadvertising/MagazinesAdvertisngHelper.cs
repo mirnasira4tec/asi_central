@@ -13,5 +13,7 @@ namespace asi.asicentral.util.store
     {
         //Art Work
         public readonly string[] MAGAZINESADVERTISING_ARTWORK = { "Supply Your Ad (Save 15%)", "Have us create your Ad" };
+        //Color
+        public readonly string[] MAGAZINESADVERTISING_COLOR = { "4-Color", "Black and White" };
     }
 }
