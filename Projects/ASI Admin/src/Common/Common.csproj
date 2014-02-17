@@ -169,7 +169,7 @@
     <Compile Include="database\mappings\store\StoreTieredProductPricingMap.cs" />
     <Compile Include="database\mappings\store\TaxRateMap.cs" />
     <Compile Include="interfaces\ICreditCardService.cs" />
-    <Compile Include="interfaces\IDateUTCAndSource.cs" />
+    <Compile Include="model\IDateUTCAndSource.cs" />
     <Compile Include="interfaces\IROI.cs" />
     <Compile Include="model\call\CallQueue.cs" />
     <Compile Include="model\call\CallRequests.cs" />

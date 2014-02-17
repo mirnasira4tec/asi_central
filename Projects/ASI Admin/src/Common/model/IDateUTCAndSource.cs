@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace asi.asicentral.interfaces
+namespace asi.asicentral.model
 {
     public interface IDateUTCAndSource
     {
 
-        DateTime CreateDateUTC { get; set; }
+        DateTime CreateDate { get; set; }
 
-        DateTime UpdateDateUTC { get; set; }
+        DateTime UpdateDate { get; set; }
 
         string UpdateSource { get; set; }
     }

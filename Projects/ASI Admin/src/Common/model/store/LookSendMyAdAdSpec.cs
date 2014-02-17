@@ -17,9 +17,9 @@ namespace asi.asicentral.model.store
         
         public int AdSpecId { get; set; }
 
-        public DateTime CreateDateUTC { get; set; }
+        public DateTime CreateDate { get; set; }
 
-        public DateTime UpdateDateUTC { get; set; }
+        public DateTime UpdateDate { get; set; }
 
         public string UpdateSource { get; set; }
     }

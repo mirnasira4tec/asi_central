@@ -21,6 +21,12 @@ namespace asi.asicentral.database.mappings.store
                 .HasColumnName("SendMyAdPublicationId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
+            this.Property(t => t.CreateDate)
+                .HasColumnName("CreateDateUTC");
+
+            this.Property(t => t.UpdateDate)
+                .HasColumnName("UpdateDateUTC");
+
             //Relationships
             HasRequired(t => t.MagazineIssue)
                 .WithMany()
