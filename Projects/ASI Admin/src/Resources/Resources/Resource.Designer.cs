@@ -2770,7 +2770,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Advantages magazine is written especially for the promotional products sales professional..
+        ///   Looks up a localized string similar to Advantages is published 12x a year, with a circulation of 40,000..
         /// </summary>
         public static string MagazineAdvertisingAdvantagesDescription {
             get {
