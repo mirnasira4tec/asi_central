@@ -279,6 +279,9 @@
   <data name="TextileScreenprinting" xml:space="preserve">
     <value>Textile Screenprinting</value>
   </data>
+  <data name="TermsConditionsError" xml:space="preserve">
+    <value>Please check that you agree to the terms and conditions</value>
+  </data>
   <data name="Telephone" xml:space="preserve">
     <value>Telephone</value>
   </data>
@@ -500,9 +503,6 @@
   </data>
   <data name="Sequence" xml:space="preserve">
     <value>Sequence</value>
-  </data>
-  <data name="MagazineAdvertisingSendMyAdMessage" xml:space="preserve">
-    <value>Please Login to the website to upload your ad.</value>
   </data>
   <data name="SellToEndUsers" xml:space="preserve">
     <value>Sell to End Users</value>
@@ -884,6 +884,9 @@
   </data>
   <data name="MagazineAdvertisingSGRDescription" xml:space="preserve">
     <value>SGR is delivered to 8,000 ASI suppliers. SGR helps promotional products suppliers run their enterprises more efficiently.</value>
+  </data>
+  <data name="MagazineAdvertisingSendMyAdMessage" xml:space="preserve">
+    <value>Please Login to the website to upload your ad.</value>
   </data>
   <data name="MagazineAdvertisingCounselorURL" xml:space="preserve">
     <value>https://mydigitalpublication.com/reports/getCover.php?m=21148</value>
@@ -1800,7 +1803,7 @@
   <data name="Add" xml:space="preserve">
     <value>Add</value>
   </data>
-  <data name="TermsConditionsError" xml:space="preserve">
-    <value>Please check that you agree to the terms and conditions</value>
+  <data name="SendMyAdMessage" xml:space="preserve">
+    <value>Please Login to the website to upload your ad.</value>
   </data>
 </root>
