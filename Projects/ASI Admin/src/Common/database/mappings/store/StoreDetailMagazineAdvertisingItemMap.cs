@@ -32,12 +32,6 @@ namespace asi.asicentral.database.mappings.store
             HasRequired(t => t.Size)
                 .WithMany()
                 .Map(m => m.MapKey("SizeId"));
-
-            this.Property(t => t.CreateDate)
-                .HasColumnName("CreateDateUTC");
-
-            this.Property(t => t.UpdateDate)
-                .HasColumnName("UpdateDateUTC");
         }
     }   
 }

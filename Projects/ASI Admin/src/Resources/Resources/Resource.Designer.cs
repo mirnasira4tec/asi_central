@@ -3958,6 +3958,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please Login to the website to upload your ad..
+        /// </summary>
+        public static string SendMyAdMessage {
+            get {
+                return ResourceManager.GetString("SendMyAdMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sequence.
         /// </summary>
         public static string Sequence {
