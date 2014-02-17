@@ -17,7 +17,15 @@ namespace asi.asicentral.database.mappings.store
         {
             this.ToTable("LOOK_SendMyAdPublication");
             this.HasKey(t => t.Id);
-            Property(t => t.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            Property(t => t.Id)
+                .HasColumnName("SendMyAdPublicationId")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
+            this.Property(t => t.CreateDate)
+                .HasColumnName("CreateDateUTC");
+
+            this.Property(t => t.UpdateDate)
+                .HasColumnName("UpdateDateUTC");
 
             //Relationships
             HasRequired(t => t.MagazineIssue)
