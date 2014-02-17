@@ -175,7 +175,7 @@ namespace asi.asicentral.web.model.store
                         magAdItem.Issue = magazineAdvertising[i].Issue;
                         magAdItem.id = magazineAdvertising[i].Id;
                         magAdItem.Sequence = magazineAdvertising[i].Sequence;
-                        MagazinesAdvertisngHelper magazinesAdvertisingHelper = new MagazinesAdvertisngHelper();
+                        MagazinesAdvertisingHelper magazinesAdvertisingHelper = new MagazinesAdvertisingHelper();
                         if (magazineAdvertising[i].ArtWork)
                             magAdItem.ArtWork = magazinesAdvertisingHelper.MAGAZINESADVERTISING_ARTWORK[0];
                         else

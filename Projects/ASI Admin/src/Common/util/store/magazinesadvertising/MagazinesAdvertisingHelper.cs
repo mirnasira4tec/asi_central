@@ -9,11 +9,11 @@ using asi.asicentral.Resources;
 
 namespace asi.asicentral.util.store
 {
-    public class MagazinesAdvertisngHelper
+    public class MagazinesAdvertisingHelper
     {
         //Art Work
         public readonly string[] MAGAZINESADVERTISING_ARTWORK = { "Supply Your Ad (Save 15%)", "Have us create your Ad" };
         //Color
-        public readonly string[] MAGAZINESADVERTISING_COLOR = { "4-Color", "Black and White" };
+        public readonly string[] MAGAZINESADVERTISING_COLOR = { "4-Color", "Black & White" };
     }
 }

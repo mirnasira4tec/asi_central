@@ -314,7 +314,7 @@
     <Compile Include="util\store\emailexpress\EmailExpressHelper.cs" />
     <Compile Include="util\store\espadvertising\ESPAdvertisingHelper.cs" />
     <Compile Include="util\store\Helper.cs" />
-    <Compile Include="util\store\magazinesadvertising\MagazinesAdvertisngHelper.cs" />
+    <Compile Include="util\store\magazinesadvertising\MagazinesAdvertisingHelper.cs" />
     <Compile Include="util\store\magazinesadvertising\UpdateDateAndSource.cs" />
   </ItemGroup>
   <ItemGroup>
