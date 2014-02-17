@@ -15,7 +15,7 @@ namespace asi.asicentral.database.mappings.store
 
         public LookSendMyAdPublicationMap()
         {
-            this.ToTable("Look_SendMyAdPublication");
+            this.ToTable("LOOK_SendMyAdPublication");
             this.HasKey(t => t.Id);
             Property(t => t.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
