@@ -22,7 +22,7 @@ namespace asi.asicentral.model.store
             bool result = false;
             if ((object)o != null)
             {
-                result = MagazineId == o.MagazineId && Description == o.Description;
+                result = MagazineId == o.MagazineId && Description == o.Description && Color == o.Color;
             }
             return result;
         }
@@ -53,7 +53,16 @@ namespace asi.asicentral.model.store
 
         public override int GetHashCode()
         {
-            return MagazineId.GetHashCode() ^ Description.GetHashCode();
+            int code = MagazineId.GetHashCode() ^ Description.GetHashCode();
+            code = Color == null ? code : code ^ Color.GetHashCode();
+            return code;
+        }
+
+        public override string ToString()
+        {
+            string size = string.Format("Ad Size: {0}", Description);
+            if(!string.IsNullOrWhiteSpace(Color)) size = string.Format("{0}, Ad Color: {1}", size, Color);
+            return size;
         }
     }
 }

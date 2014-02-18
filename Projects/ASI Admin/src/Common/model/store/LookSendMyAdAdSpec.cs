@@ -17,6 +17,8 @@ namespace asi.asicentral.model.store
         
         public int AdSpecId { get; set; }
 
+        public int ColorProfileId { get; set; }
+
         public DateTime CreateDate { get; set; }
 
         public DateTime UpdateDate { get; set; }

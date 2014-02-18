@@ -31,7 +31,7 @@ namespace asi.asicentral.model.store
                 string adSpec = string.Empty;
                 if (Size != null && Position != null)
                 {
-                    adSpec += string.Format("Ad Size: {0}, Ad Position: {1}", Size.Description, Position.Description);
+                    adSpec += string.Format("{0}, {1}", Size.ToString(), Position.ToString());
                 }
                 if (!string.IsNullOrWhiteSpace(adSpec))
                 {

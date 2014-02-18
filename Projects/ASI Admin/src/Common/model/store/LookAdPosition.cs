@@ -15,5 +15,10 @@ namespace asi.asicentral.model.store
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("Ad Position: {0}", Description);
+        }
     }
 }

@@ -15,8 +15,8 @@ namespace asi.asicentral.util.store.magazinesadvertising
 
         public static void UpdateDateUTCAndSource<T>(this T o, [CallerMemberName] string source = "") where T : IDateUTCAndSource
         {
-            if (o.CreateDate == null) o.CreateDate = DateTime.Now.ToUniversalTime();
-            o.UpdateDate = DateTime.Now.ToUniversalTime();
+            if (o.CreateDate == null) o.CreateDate = DateTime.UtcNow;
+            o.UpdateDate = DateTime.UtcNow;
             o.UpdateSource = string.Format("{0} - {1}", typeof(T).ToString(), source);
         }
     }
