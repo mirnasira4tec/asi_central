@@ -568,6 +568,10 @@ namespace asi.asicentral.web.Controllers.Store
                     switch (orderDetail.Product.Id)
                     {
                         case 72:
+                        case 73:
+                        case 74:
+                        case 75:
+                        case 76:
                             int quantity = orderDetail.Quantity;
                             orderDetail.Quantity = Convert.ToInt32(application.Quantity);
                             if (orderDetail.Quantity == 0) orderDetail.Quantity = quantity;

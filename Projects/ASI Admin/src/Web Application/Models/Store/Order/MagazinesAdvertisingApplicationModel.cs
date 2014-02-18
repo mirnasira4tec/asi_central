@@ -166,6 +166,10 @@ namespace asi.asicentral.web.model.store
             {
                
                 case 72:
+                case 73:
+                case 74:
+                case 75:
+                case 76:
                     MagAdItem = new List<MagazineAdvertisingItem>();
                     for (int i = 0; i < magazineAdvertising.Count; i++)
                     {
