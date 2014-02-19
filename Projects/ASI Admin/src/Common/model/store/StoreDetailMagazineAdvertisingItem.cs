@@ -39,7 +39,7 @@ namespace asi.asicentral.model.store
                     if (!string.IsNullOrWhiteSpace(ProcessId))
                     {
                         string url = System.Configuration.ConfigurationManager.AppSettings["SendMyAdBaseAddress"] + "/index.php?action=drawAd&processId=";
-                        result = string.Format("{0}<br/><a href=\"{1}{2}\">{3}</a>", result, url, ProcessId, Issue.ToString());
+                        result = string.Format("{0}<br/><a href=\"{1}{2}\" target=\"_blank\">{3}</a>", result, url, ProcessId, Issue.ToString());
                     }
                     else
                     {

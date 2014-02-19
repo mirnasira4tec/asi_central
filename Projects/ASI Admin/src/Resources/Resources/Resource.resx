@@ -117,1693 +117,1690 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ZSK" xml:space="preserve">
-    <value>ZSK</value>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
   </data>
-  <data name="Zipcode" xml:space="preserve">
-    <value>Zipcode</value>
-  </data>
-  <data name="Zip" xml:space="preserve">
-    <value>Zip Code</value>
-  </data>
-  <data name="YearStartSelling" xml:space="preserve">
-    <value>Year</value>
-  </data>
-  <data name="YearEstablished" xml:space="preserve">
-    <value>Year Established</value>
-  </data>
-  <data name="YearEst1" xml:space="preserve">
-    <value>Year</value>
-  </data>
-  <data name="YearEst" xml:space="preserve">
-    <value>Year Established</value>
-  </data>
-  <data name="YearEnteredAdvertising" xml:space="preserve">
-    <value>Year Entered Advertising Specialty Industry</value>
-  </data>
-  <data name="WithinNextSixMonths" xml:space="preserve">
-    <value>Within Next Six Months</value>
-  </data>
-  <data name="WholeSaler" xml:space="preserve">
-    <value>WholeSaler</value>
-  </data>
-  <data name="WebUrl" xml:space="preserve">
-    <value>Web Address</value>
-  </data>
-  <data name="Website" xml:space="preserve">
-    <value>Website</value>
-  </data>
-  <data name="WearablesBusinessStyle" xml:space="preserve">
-    <value>Wearables Style</value>
-  </data>
-  <data name="VikingOrHusqvarna" xml:space="preserve">
-    <value>Viking/Husqvarna</value>
-  </data>
-  <data name="VicePresident" xml:space="preserve">
-    <value>Vice President</value>
-  </data>
-  <data name="USA" xml:space="preserve">
-    <value>United States</value>
-  </data>
-  <data name="Upto9999" xml:space="preserve">
-    <value>Up to $9,999</value>
-  </data>
-  <data name="Upto49999" xml:space="preserve">
-    <value>Up to $49,999</value>
-  </data>
-  <data name="UPSZip" xml:space="preserve">
-    <value>UPS Zip</value>
-  </data>
-  <data name="UPSState" xml:space="preserve">
-    <value>UPS State</value>
-  </data>
-  <data name="UPSShippingNumber" xml:space="preserve">
-    <value>UPS Shipping Number</value>
-  </data>
-  <data name="UPSOvernight" xml:space="preserve">
-    <value>UPS Overnight</value>
-  </data>
-  <data name="UPSGround" xml:space="preserve">
-    <value>UPS Ground</value>
-  </data>
-  <data name="UPSCity" xml:space="preserve">
-    <value>UPS City</value>
-  </data>
-  <data name="UPSAddress" xml:space="preserve">
-    <value>UPS Address</value>
-  </data>
-  <data name="UPS2Day" xml:space="preserve">
-    <value>UPS 2nd Day</value>
-  </data>
-  <data name="UploadedVideo" xml:space="preserve">
-    <value>Uploaded Video</value>
-  </data>
-  <data name="UploadedImage" xml:space="preserve">
-    <value>Uploaded Image</value>
-  </data>
-  <data name="Under5" xml:space="preserve">
-    <value>Under 5</value>
-  </data>
-  <data name="Undecided" xml:space="preserve">
-    <value>Undecided</value>
-  </data>
-  <data name="Ultramatic" xml:space="preserve">
-    <value>Ultramatic</value>
-  </data>
-  <data name="TrueAnswers" xml:space="preserve">
-    <value>I certify that the answers I have provided above and in the ASI MembershipApplication are true and accurate. If ASI determines otherwise, I understand thatASI, in it sole discretion, may de-list my company as an ASI member.</value>
-  </data>
-  <data name="TrophiesAwardsAndMedals" xml:space="preserve">
-    <value>Trophies, Awards and Medals</value>
-  </data>
-  <data name="Transfer1" xml:space="preserve">
-    <value>Transfer</value>
-  </data>
-  <data name="Transfer" xml:space="preserve">
-    <value>Transfer</value>
-  </data>
-  <data name="Toyota" xml:space="preserve">
-    <value>Toyota</value>
-  </data>
-  <data name="TowerTuesdayAd" xml:space="preserve">
-    <value>Tower Tuesday Ad</value>
-  </data>
-  <data name="TotalSalesVolume" xml:space="preserve">
-    <value>What is your company's total annual sales volume?</value>
-  </data>
-  <data name="TitleListCompanies" xml:space="preserve">
-    <value>List of Companies</value>
-  </data>
-  <data name="TitleEditProduct" xml:space="preserve">
-    <value>Edit Product</value>
-  </data>
-  <data name="TitleEditCompany" xml:space="preserve">
-    <value>Edit Company</value>
-  </data>
-  <data name="TitleEditCategory" xml:space="preserve">
-    <value>Edit Category</value>
-  </data>
-  <data name="TitleCategories" xml:space="preserve">
-    <value>Categories</value>
-  </data>
-  <data name="TitleASIStoreAdmin" xml:space="preserve">
-    <value>ASI Store Admin</value>
-  </data>
-  <data name="TitleAddProduct" xml:space="preserve">
-    <value>Add Product</value>
-  </data>
-  <data name="TitleAddCompany" xml:space="preserve">
-    <value>Add a Company</value>
-  </data>
-  <data name="TitleAddCategory1" xml:space="preserve">
+  <data name="AddCategory" xml:space="preserve">
     <value>Add Category</value>
   </data>
-  <data name="TitleAddCategory" xml:space="preserve">
-    <value>Add Category</value>
+  <data name="AddCompany" xml:space="preserve">
+    <value>Add Comapny</value>
   </data>
-  <data name="TitleAd" xml:space="preserve">
-    <value>Title Ad</value>
+  <data name="Address1" xml:space="preserve">
+    <value>Street Address 1</value>
   </data>
-  <data name="Title" xml:space="preserve">
-    <value>Title</value>
+  <data name="Address2" xml:space="preserve">
+    <value>Street Address 2</value>
   </data>
-  <data name="TextUnderImage" xml:space="preserve">
-    <value>TextUnderImage</value>
+  <data name="Administrative" xml:space="preserve">
+    <value>Administrative</value>
   </data>
-  <data name="TextileScreenprintingOffersInHouse" xml:space="preserve">
-    <value>Textile Screenprinting (also offers embroidery/monogramming in-house or via subcontracting)</value>
+  <data name="AdSelectDate" xml:space="preserve">
+    <value>Select Date</value>
   </data>
-  <data name="TextileScreenprintingNotOffersInHouse" xml:space="preserve">
-    <value>Textile Screenprinting (does not offer embroidery/monogramming in-house or via subcontracting)</value>
+  <data name="AdSpecialty" xml:space="preserve">
+    <value>Ad Specialty</value>
   </data>
-  <data name="TextileScreenprinting" xml:space="preserve">
-    <value>Textile Screenprinting</value>
+  <data name="AdType" xml:space="preserve">
+    <value>Ad Type's</value>
   </data>
-  <data name="TermsConditionsError" xml:space="preserve">
-    <value>Please check that you agree to the terms and conditions</value>
+  <data name="AdvertisingSpecialtyInstitute" xml:space="preserve">
+    <value>Advertising Specialty Institute ASI</value>
   </data>
-  <data name="Telephone" xml:space="preserve">
-    <value>Telephone</value>
+  <data name="AdvertisingSpecialtyOrPromotional" xml:space="preserve">
+    <value>Advertising Specialty/Promotional Products</value>
   </data>
-  <data name="Tajima" xml:space="preserve">
-    <value>Tajima</value>
+  <data name="Aemco" xml:space="preserve">
+    <value>Aemco</value>
   </data>
-  <data name="SWF" xml:space="preserve">
-    <value>SWF</value>
+  <data name="AffiliateASINumber" xml:space="preserve">
+    <value>Affiliate ASI Number</value>
   </data>
-  <data name="SupplierAppSalesForce" xml:space="preserve">
-    <value>Sales Force</value>
+  <data name="AffiliateCompanyName" xml:space="preserve">
+    <value>Affiliate Company Name</value>
   </data>
-  <data name="SupplierAppMethodsOfImprinting" xml:space="preserve">
-    <value>Methods of Imprinting</value>
+  <data name="AgreeASITermsAndConditions" xml:space="preserve">
+    <value>I agree to the terms and conditions</value>
   </data>
-  <data name="SupplierAppCompanyContacts" xml:space="preserve">
-    <value>Company Contacts</value>
+  <data name="AgreeReceivePromotionalProducts" xml:space="preserve">
+    <value>Agreed to recieve promotion products?</value>
   </data>
-  <data name="Supplement" xml:space="preserve">
-    <value>Supplement</value>
+  <data name="AgreeTermsAndConditions" xml:space="preserve">
+    <value>Agree to the terms and condition?</value>
   </data>
-  <data name="Summary" xml:space="preserve">
-    <value>Summary</value>
+  <data name="AgreeUPSTermsAndConditions" xml:space="preserve">
+    <value>I hereby request and authorize ASI to open a UPS® account for my company to take advantage of the ASI shipping program incentives. I understand the shipping incentives will begin 10 working days after I receive my ASI number and there are no other incentives available to my existing UPS® account number.</value>
   </data>
-  <data name="Sublimination1" xml:space="preserve">
-    <value>Sublimination</value>
+  <data name="AnnualSalesVolume" xml:space="preserve">
+    <value>Annual Sales Volume</value>
   </data>
-  <data name="Sublimination" xml:space="preserve">
-    <value>Sublimination</value>
+  <data name="AnnualSalesVolumeASP" xml:space="preserve">
+    <value>Annual Sales Volume ASP</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value />
+  <data name="ApplicantEmail" xml:space="preserve">
+    <value>Applicant Email address</value>
   </data>
-  <data name="Street2" xml:space="preserve">
-    <value>Secondary Street Address</value>
+  <data name="ApplicantName" xml:space="preserve">
+    <value>Individual’s Name (filling out the online form):</value>
   </data>
-  <data name="Street1" xml:space="preserve">
-    <value>Street Address </value>
+  <data name="ApplicationStatus" xml:space="preserve">
+    <value>Application Status</value>
   </data>
-  <data name="StoreTotalAnnualSalesVolume" xml:space="preserve">
-    <value>Total Annual Sales Volume</value>
+  <data name="Area" xml:space="preserve">
+    <value>Area</value>
   </data>
-  <data name="StoreTitleSupplierApplication" xml:space="preserve">
-    <value>Supplier Application</value>
+  <data name="ArtistOrDesigner" xml:space="preserve">
+    <value>Artist/Designer</value>
   </data>
-  <data name="StoreTitleOrders" xml:space="preserve">
-    <value>Orders</value>
+  <data name="ArtOrDesignFirm" xml:space="preserve">
+    <value>Art/Design Firm</value>
   </data>
-  <data name="StoreTitleOpenCarts" xml:space="preserve">
-    <value>Open Carts</value>
+  <data name="Artwork" xml:space="preserve">
+    <value>Artwork</value>
   </data>
-  <data name="StoreTitleMagazinesApplication" xml:space="preserve">
-    <value>Magazines - {0}</value>
+  <data name="ArtworkOptionforEMAIL" xml:space="preserve">
+    <value>I would like to EMAIL Camera Ready Artwork to &lt;a href="mailto:catalogart@asicentral.com"&gt;catalogart@asicentral.com&lt;/a&gt;</value>
   </data>
-  <data name="StoreTitleDistributorApplication" xml:space="preserve">
-    <value>Distributor Application</value>
+  <data name="ArtworkOptionforUPLOAD" xml:space="preserve">
+    <value>I would like to UPLOAD Camera Ready Artwork</value>
   </data>
-  <data name="StoreTitleDecoratorApplication" xml:space="preserve">
-    <value>Decorator Application</value>
+  <data name="ASIContact" xml:space="preserve">
+    <value>ASI Contact</value>
   </data>
-  <data name="StoreTitleCatalogsApplication" xml:space="preserve">
-    <value>Catalogs</value>
+  <data name="ASIContact1" xml:space="preserve">
+    <value>ASI Contact Name</value>
   </data>
-  <data name="StoreStatusOpened" xml:space="preserve">
-    <value>Open</value>
+  <data name="ASINumber" xml:space="preserve">
+    <value>ASI Number</value>
   </data>
-  <data name="StoreStatusClosed" xml:space="preserve">
-    <value>Closed</value>
+  <data name="ASINumber1" xml:space="preserve">
+    <value>ASI #</value>
   </data>
-  <data name="StoreStatus" xml:space="preserve">
-    <value>Order Status</value>
+  <data name="AuthorizeUPSNewAccount" xml:space="preserve">
+    <value>Authorize UPS New Account</value>
   </data>
-  <data name="StoreSearchMessage" xml:space="preserve">
-    <value>Enter a date range to search:</value>
+  <data name="Babylock" xml:space="preserve">
+    <value>Babylock</value>
   </data>
-  <data name="StoreSearchButton" xml:space="preserve">
-    <value>Search</value>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
   </data>
-  <data name="StoreQuantity" xml:space="preserve">
-    <value>Quantity</value>
+  <data name="BannerAd" xml:space="preserve">
+    <value>Banner Ad</value>
   </data>
-  <data name="StoreProduct" xml:space="preserve">
-    <value>Product</value>
+  <data name="Barudan" xml:space="preserve">
+    <value>Barudan</value>
   </data>
-  <data name="StorePhone" xml:space="preserve">
-    <value>Phone</value>
+  <data name="Basic" xml:space="preserve">
+    <value>Basic</value>
   </data>
-  <data name="StoreOrderID" xml:space="preserve">
-    <value>Order Id</value>
+  <data name="Basic1" xml:space="preserve">
+    <value>Basic</value>
   </data>
-  <data name="StoreOrderDate" xml:space="preserve">
-    <value>Order Date</value>
+  <data name="Bernina" xml:space="preserve">
+    <value>Bernina</value>
   </data>
-  <data name="StoreOrderClosedDate" xml:space="preserve">
-    <value>Order Closed Date</value>
+  <data name="BestDescribesYourTitle" xml:space="preserve">
+    <value>Which of the following best describes your title? (Check only ONE)</value>
   </data>
-  <data name="StoreOrderAmount" xml:space="preserve">
-    <value>Billing Amount</value>
+  <data name="Between1000000And2999999" xml:space="preserve">
+    <value>$1,000,000 to $2,999,999</value>
   </data>
-  <data name="StoreName" xml:space="preserve">
-    <value>Name</value>
+  <data name="Between1000000And4999999" xml:space="preserve">
+    <value>$1,000,000 - $4,999,999</value>
   </data>
-  <data name="StoreItem" xml:space="preserve">
-    <value>Item</value>
+  <data name="Between100000And249999" xml:space="preserve">
+    <value>$100,000 - $249,999</value>
   </data>
-  <data name="StoreEmail" xml:space="preserve">
-    <value>Email</value>
+  <data name="Between100000And299999" xml:space="preserve">
+    <value>$100,000 to $299,999</value>
   </data>
-  <data name="StoreDateOrderCreated" xml:space="preserve">
-    <value>Date Created</value>
+  <data name="Between10000And99000" xml:space="preserve">
+    <value>$10,000 to $99,000</value>
   </data>
-  <data name="StoreDateErrorMessage1" xml:space="preserve">
-    <value>Start date must not be after end date</value>
+  <data name="Between100And199" xml:space="preserve">
+    <value>100 - 199</value>
   </data>
-  <data name="StoreDateErrorMessage" xml:space="preserve">
-    <value>Start date must not be after end date</value>
+  <data name="Between11And15" xml:space="preserve">
+    <value>11 - 15</value>
   </data>
-  <data name="StoreCompanyName" xml:space="preserve">
-    <value>Company Name</value>
+  <data name="Between11And25" xml:space="preserve">
+    <value>11-25</value>
   </data>
-  <data name="StoreCompany" xml:space="preserve">
-    <value>Company</value>
+  <data name="Between16And20" xml:space="preserve">
+    <value>16 - 20</value>
   </data>
-  <data name="StoreClosedDate" xml:space="preserve">
-    <value>Closed Date</value>
+  <data name="Between200And500" xml:space="preserve">
+    <value>200 - 500</value>
   </data>
-  <data name="StoreBillingAddress" xml:space="preserve">
+  <data name="Between21And29" xml:space="preserve">
+    <value>21 - 29</value>
+  </data>
+  <data name="Between250000And499999" xml:space="preserve">
+    <value>$250,000 - $499,999</value>
+  </data>
+  <data name="Between26And50" xml:space="preserve">
+    <value>26-50</value>
+  </data>
+  <data name="Between2And5" xml:space="preserve">
+    <value>2 - 5</value>
+  </data>
+  <data name="Between3000000And4999999" xml:space="preserve">
+    <value>$3,000,000 to $4,999,999</value>
+  </data>
+  <data name="Between300000And499999" xml:space="preserve">
+    <value>$300,000 to $499,999</value>
+  </data>
+  <data name="Between30And49" xml:space="preserve">
+    <value>30 - 49</value>
+  </data>
+  <data name="Between500000And999999" xml:space="preserve">
+    <value>$500,000 to $999,999</value>
+  </data>
+  <data name="Between50000And99999" xml:space="preserve">
+    <value>$50,000 - $99,999</value>
+  </data>
+  <data name="Between50And99" xml:space="preserve">
+    <value>50 - 99</value>
+  </data>
+  <data name="Between51And75" xml:space="preserve">
+    <value>51 - 75</value>
+  </data>
+  <data name="Between5And10" xml:space="preserve">
+    <value>5-10</value>
+  </data>
+  <data name="Between6And10" xml:space="preserve">
+    <value>6 - 10</value>
+  </data>
+  <data name="BillingAddress" xml:space="preserve">
     <value>Billing Address</value>
   </data>
-  <data name="StoreASINumber" xml:space="preserve">
-    <value>ASI#</value>
+  <data name="BillingCity" xml:space="preserve">
+    <value>Billing City</value>
   </data>
-  <data name="StoreApplication" xml:space="preserve">
-    <value>Application</value>
+  <data name="BillingEmail" xml:space="preserve">
+    <value>Billing Email</value>
   </data>
-  <data name="StoreAdminProducts" xml:space="preserve">
-    <value>List of Products driving the store</value>
+  <data name="BillingFax" xml:space="preserve">
+    <value>Billing Fax Number</value>
   </data>
-  <data name="StoreAdminOrders" xml:space="preserve">
-    <value>Orders processed through the store</value>
+  <data name="BillingPhone" xml:space="preserve">
+    <value>Billing Phone Number</value>
   </data>
-  <data name="StoreAdminLink" xml:space="preserve">
-    <value>ASI Store Admin</value>
+  <data name="BillingState" xml:space="preserve">
+    <value>Billing State</value>
   </data>
-  <data name="StitchesSmallBusiness" xml:space="preserve">
-    <value>Stitches Small Business</value>
+  <data name="BillingTollPhone" xml:space="preserve">
+    <value>Billing Toll Free Phone</value>
   </data>
-  <data name="StitchesNumberOfEmployees" xml:space="preserve">
-    <value>How many total employees do you have at all of your locations?</value>
+  <data name="BillingWebUrl" xml:space="preserve">
+    <value>Billing Web URL</value>
   </data>
-  <data name="State1" xml:space="preserve">
-    <value>State</value>
+  <data name="BillingZip" xml:space="preserve">
+    <value>Billing Zipcode</value>
   </data>
-  <data name="State" xml:space="preserve">
-    <value>State</value>
+  <data name="BrandOfEmbroideryMachine" xml:space="preserve">
+    <value>What brand of embroidery machine are you currently using? (Check ALL that apply)</value>
   </data>
-  <data name="StartEmbroideryBusiness" xml:space="preserve">
-    <value>If you plan to start an embroidery business, please estimate when you will launch your business:</value>
+  <data name="Brother" xml:space="preserve">
+    <value>Brother</value>
   </data>
-  <data name="Standard1" xml:space="preserve">
-    <value>Standard</value>
+  <data name="BuddyList_199" xml:space="preserve">
+    <value>Buddy List $199/mo.</value>
   </data>
-  <data name="Standard" xml:space="preserve">
-    <value>Standard</value>
+  <data name="BusinessHours" xml:space="preserve">
+    <value>Business Hours</value>
   </data>
-  <data name="SpecialtyOrPromotional" xml:space="preserve">
-    <value>Advertising Specialty/Promotional Products Distributor</value>
+  <data name="BuyAdditionalVideo" xml:space="preserve">
+    <value>Buy additional videos (to be shown across different product categories) $79/year</value>
   </data>
-  <data name="SolelyWorkName" xml:space="preserve">
-    <value>If the answer to Question No. 5 is "no" what is the name ofthe other company you work for?</value>
+  <data name="Buyer" xml:space="preserve">
+    <value>Buyer</value>
   </data>
-  <data name="SmallImagePath" xml:space="preserve">
-    <value>SmallImagePath</value>
+  <data name="BuyerOrPurchasing" xml:space="preserve">
+    <value>Buyer/Purchasing</value>
   </data>
-  <data name="Size" xml:space="preserve">
-    <value> Size</value>
+  <data name="BuyOneVideo" xml:space="preserve">
+    <value>Buy one video (to be shown with all of your products) $499/year</value>
   </data>
-  <data name="SixMonthsToOneYear" xml:space="preserve">
-    <value>Six Months to One Year</value>
+  <data name="Canada" xml:space="preserve">
+    <value>Canada</value>
   </data>
-  <data name="Singer" xml:space="preserve">
-    <value>Singer</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
   </data>
-  <data name="SilkScreen1" xml:space="preserve">
-    <value>SilkScreen</value>
+  <data name="CardNumber" xml:space="preserve">
+    <value>Card Number</value>
   </data>
-  <data name="SilkScreen" xml:space="preserve">
-    <value>SilkScreen</value>
+  <data name="CardType" xml:space="preserve">
+    <value>Card Type</value>
   </data>
-  <data name="SignsAndPrinters" xml:space="preserve">
-    <value>Signs and Printers</value>
+  <data name="Categories" xml:space="preserve">
+    <value>Categories</value>
   </data>
-  <data name="SignForVerification" xml:space="preserve">
-    <value>What is your favorite hobby?</value>
+  <data name="CategoryID" xml:space="preserve">
+    <value>Category Id</value>
   </data>
-  <data name="SignatureType" xml:space="preserve">
-    <value>Approved Signatures</value>
+  <data name="CategoryName" xml:space="preserve">
+    <value>Category Name</value>
   </data>
-  <data name="ShippingZip" xml:space="preserve">
-    <value>Shipping Zipcode</value>
+  <data name="CategoryName1" xml:space="preserve">
+    <value>Category Name</value>
   </data>
-  <data name="ShippingState" xml:space="preserve">
-    <value>Shipping State</value>
+  <data name="ChangeOfAddress" xml:space="preserve">
+    <value>Change of Address</value>
   </data>
-  <data name="ShippingMethod" xml:space="preserve">
-    <value>Shipping Method</value>
+  <data name="CheckTheFollowing" xml:space="preserve">
+    <value>Check one of the following</value>
   </data>
-  <data name="ShippingCity" xml:space="preserve">
-    <value>Shipping City</value>
+  <data name="City" xml:space="preserve">
+    <value>City</value>
   </data>
-  <data name="ShippingAddress2" xml:space="preserve">
-    <value>Seconday Shipping Address</value>
+  <data name="City1" xml:space="preserve">
+    <value>City</value>
   </data>
-  <data name="ShippingAddress" xml:space="preserve">
-    <value>Shipping Address</value>
+  <data name="Color" xml:space="preserve">
+    <value>Color</value>
   </data>
-  <data name="SGRMaintenanceLink" xml:space="preserve">
-    <value>SGR Maintenance</value>
-  </data>
-  <data name="Sequence" xml:space="preserve">
-    <value>Sequence</value>
-  </data>
-  <data name="SellToEndUsers" xml:space="preserve">
-    <value>Sell to End Users</value>
-  </data>
-  <data name="SellThruRetail" xml:space="preserve">
-    <value>Sell Through Retail</value>
-  </data>
-  <data name="SellThruInternet" xml:space="preserve">
-    <value>Sell Through Internet</value>
-  </data>
-  <data name="SellThruDistributors" xml:space="preserve">
-    <value>Sell Through Distributors</value>
-  </data>
-  <data name="SellThruDirectMarketing" xml:space="preserve">
-    <value>Sell Through Direct Marketing</value>
-  </data>
-  <data name="SellThruAffiliate" xml:space="preserve">
-    <value>Sell Through Affiliate</value>
-  </data>
-  <data name="SelectNumberOfProducts" xml:space="preserve">
-    <value>Select number of products</value>
-  </data>
-  <data name="SelectBusiness" xml:space="preserve">
-    <value>- Select a Business --</value>
-  </data>
-  <data name="SelectATitle" xml:space="preserve">
-    <value>- Select a title -</value>
-  </data>
-  <data name="SecondaryBusiness" xml:space="preserve">
-    <value>What is your company's secondary business? (Check ALL that apply)</value>
-  </data>
-  <data name="Screenprinting" xml:space="preserve">
-    <value>Screenprinting</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="SalesVolume" xml:space="preserve">
-    <value>Sales Volume</value>
-  </data>
-  <data name="SalesOrMarketing" xml:space="preserve">
-    <value>Sales/Marketing</value>
-  </data>
-  <data name="RetypeEmail" xml:space="preserve">
-    <value>Re-Type Email</value>
-  </data>
-  <data name="Retailer" xml:space="preserve">
-    <value>Retailer</value>
-  </data>
-  <data name="RenewalSubscription" xml:space="preserve">
-    <value>Renewal Subscription</value>
-  </data>
-  <data name="ReceiveNewsLetters" xml:space="preserve">
-    <value>By providing your email address, you are opting in to receive our e-newsletters.&lt;br /&gt; If you do not wish to receive, please uncheck here.</value>
-  </data>
-  <data name="QuickPrinters" xml:space="preserve">
-    <value>Quick Printers</value>
-  </data>
-  <data name="PunchingOrDigitizing" xml:space="preserve">
-    <value>Punching/Digitizing</value>
-  </data>
-  <data name="PublicationEditTitle" xml:space="preserve">
-    <value>Publication - {0}</value>
-  </data>
-  <data name="PublicationEditFieldsTitle" xml:space="preserve">
-    <value>Edit Publication</value>
-  </data>
-  <data name="PublicationEditFieldsSchedule" xml:space="preserve">
-    <value>Assigned Schedules</value>
-  </data>
-  <data name="PublicationEditFieldsNoSchedule" xml:space="preserve">
-    <value>This Publication has no schedule assigned</value>
-  </data>
-  <data name="PublicationEditDescription" xml:space="preserve">
-    <value>Viewing the detailed information of a specific publication</value>
-  </data>
-  <data name="PublicationAddTitle" xml:space="preserve">
-    <value>Add Publication</value>
-  </data>
-  <data name="PublicationAddDescription" xml:space="preserve">
-    <value>This page allows the user to add a new Publication</value>
-  </data>
-  <data name="ProvideInvoiceOnDemand" xml:space="preserve">
-    <value>I agree that upon request, I will provide the number of invoicesand other information ASI requests in order to demonstrate that I am a re-sellerof advertising specialties or related items, such as printed promotional items,trophies, awards, imprinted apparel, screen-printed or embroidered items, signsand other related items consistent with membership requirements. I under stand thata failure to do so may result in the de-listing of the company as an ASI member.</value>
-  </data>
-  <data name="PromotionalProductsAssociation" xml:space="preserve">
-    <value>Promotional Products Association Intl.</value>
-  </data>
-  <data name="PromotionalOrMarketing" xml:space="preserve">
-    <value>Promotional/Marketing Company and/or Agency</value>
-  </data>
-  <data name="PromotionalCode" xml:space="preserve">
-    <value>Promotional Code</value>
-  </data>
-  <data name="Professional" xml:space="preserve">
-    <value>Professional</value>
-  </data>
-  <data name="ProductSmallImg" xml:space="preserve">
-    <value>Small Image</value>
-  </data>
-  <data name="ProductPriceCeiling" xml:space="preserve">
-    <value>Price Ceiling</value>
-  </data>
-  <data name="ProductPrice" xml:space="preserve">
-    <value>Price</value>
-  </data>
-  <data name="ProductPaymentTerms" xml:space="preserve">
-    <value>Payment Terms</value>
-  </data>
-  <data name="ProductName" xml:space="preserve">
-    <value>Product Name</value>
-  </data>
-  <data name="ProductModelNumber" xml:space="preserve">
-    <value>Model Number</value>
-  </data>
-  <data name="ProductMinOrderQuantity" xml:space="preserve">
-    <value>Minimum Order Quanity</value>
-  </data>
-  <data name="ProductLargeImg" xml:space="preserve">
-    <value>Large Image</value>
-  </data>
-  <data name="ProductKeySpecifications" xml:space="preserve">
-    <value>Key Specifications</value>
-  </data>
-  <data name="ProductIsActive" xml:space="preserve">
+  <data name="ColumnIsInactive" xml:space="preserve">
     <value>Is Inactive?</value>
   </data>
-  <data name="ProductionTime" xml:space="preserve">
+  <data name="ColumnLargeImage" xml:space="preserve">
+    <value>Large Image</value>
+  </data>
+  <data name="ColumnProductName" xml:space="preserve">
+    <value>Product Name</value>
+  </data>
+  <data name="ColumnSmallImage" xml:space="preserve">
+    <value>Small Image</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="CompanyAddress" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="CompanyAnnualSalesTurnover" xml:space="preserve">
+    <value>Annual Sales Turnover</value>
+  </data>
+  <data name="CompanyBusinessType" xml:space="preserve">
+    <value>Buisness Type</value>
+  </data>
+  <data name="CompanyContactEmail" xml:space="preserve">
+    <value>Contact Email</value>
+  </data>
+  <data name="CompanyContactName" xml:space="preserve">
+    <value>Contact Name</value>
+  </data>
+  <data name="CompanyID" xml:space="preserve">
+    <value>Company Id</value>
+  </data>
+  <data name="CompanyIsInactive" xml:space="preserve">
+    <value>Is inactive?</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Company Name</value>
+  </data>
+  <data name="CompanyName1" xml:space="preserve">
+    <value>Company Name</value>
+  </data>
+  <data name="CompanyNumOfEmployees" xml:space="preserve">
+    <value>Number Of Employees</value>
+  </data>
+  <data name="CompanyProductionTime" xml:space="preserve">
     <value>Production Time</value>
   </data>
-  <data name="ProductID" xml:space="preserve">
-    <value>Product Id</value>
+  <data name="CompanySummary" xml:space="preserve">
+    <value>Company Summary</value>
   </data>
-  <data name="Prodigi" xml:space="preserve">
-    <value>Prodigi</value>
+  <data name="CompanyURL" xml:space="preserve">
+    <value>Company Url</value>
   </data>
-  <data name="PrimaryBussinessOptions" xml:space="preserve">
-    <value>What is your company's primary business? (Check only ONE)</value>
+  <data name="CompanyURL1" xml:space="preserve">
+    <value>Company Website</value>
   </data>
-  <data name="PrimaryBusinessOtherDescription" xml:space="preserve">
-    <value>Primary Business Other Description</value>
+  <data name="CompanyURLPrompt" xml:space="preserve">
+    <value>i.e. http://www.asicentral.com</value>
   </data>
-  <data name="PrimaryBusiness1" xml:space="preserve">
-    <value>Primary Business</value>
+  <data name="ConfirmationASIMember" xml:space="preserve">
+    <value>ASI {0} Member!</value>
   </data>
-  <data name="PrimaryBusiness" xml:space="preserve">
-    <value>Primary Business</value>
+  <data name="ConfirmationBeforeYouLeave" xml:space="preserve">
+    <value>Before you leave:</value>
   </data>
-  <data name="PresidentOrVPOrOtherOfficer" xml:space="preserve">
-    <value>President/VP or other officer</value>
+  <data name="ConfirmationCallusMessage" xml:space="preserve">
+    <value>Call 800-546-1350 (select option 3) to check the status of your application.</value>
   </data>
-  <data name="PresidentOrCEO" xml:space="preserve">
-    <value>President/CEO</value>
+  <data name="ConfirmationCallusProformaMessage" xml:space="preserve">
+    <value>Call us at 800-546-1350 x318 to speak with an ASI representative to check the status of your application.</value>
   </data>
-  <data name="PostalCode" xml:space="preserve">
-    <value>Postal Code</value>
+  <data name="ConfirmationConfirmationMessage" xml:space="preserve">
+    <value>Your order confirmation number (this is not your ASI Number) is</value>
   </data>
-  <data name="Position" xml:space="preserve">
-    <value> Position</value>
+  <data name="ConfirmationDistributorsCantFind" xml:space="preserve">
+    <value>Distributors can't find your products</value>
   </data>
-  <data name="PhoneExt" xml:space="preserve">
-    <value>Phone Extension</value>
+  <data name="ConfirmationIfYouDont" xml:space="preserve">
+    <value>if you don't list them with ASI.</value>
   </data>
-  <data name="PhoneAreaCode" xml:space="preserve">
-    <value>Phone Area Code</value>
+  <data name="ConfirmationListMyProductsNow" xml:space="preserve">
+    <value>List my products now.</value>
   </data>
-  <data name="Phone1" xml:space="preserve">
-    <value>Phone</value>
+  <data name="ConfirmationListYourProducts" xml:space="preserve">
+    <value>List your products!</value>
   </data>
-  <data name="Phone" xml:space="preserve">
-    <value>Phone Number</value>
+  <data name="ConfirmationMethodsOfPrinting" xml:space="preserve">
+    <value>What methods of imprinting and decorating do you offer?</value>
   </data>
-  <data name="Pfaff" xml:space="preserve">
-    <value>Pfaff</value>
+  <data name="ConfirmationOrganizationFunctions" xml:space="preserve">
+    <value>What business functions apply to your organization?</value>
   </data>
-  <data name="PaymentOption" xml:space="preserve">
-    <value>Payment Option</value>
+  <data name="ConfirmationProductSafety" xml:space="preserve">
+    <value>Helps professionals within the ASI to understand product safty measures taken.</value>
   </data>
-  <data name="PaymentAmount" xml:space="preserve">
-    <value>Fixed Cost</value>
+  <data name="ConfirmationProvideYearEntered" xml:space="preserve">
+    <value>Provide the year you entered the promotional products industry.</value>
   </data>
-  <data name="PadPrint1" xml:space="preserve">
-    <value>Pad Print</value>
+  <data name="ConfirmationProvideYearEnteredInAdvertisingspeciality" xml:space="preserve">
+    <value>Provide the year you entered the advertising speciality market.</value>
   </data>
-  <data name="PadPrint" xml:space="preserve">
-    <value>Pad Print</value>
+  <data name="ConfirmationSendInformation" xml:space="preserve">
+    <value>Send ASI my information</value>
   </data>
-  <data name="PackagingServices" xml:space="preserve">
-    <value>Packaging Services</value>
+  <data name="ConfirmationTabTitle" xml:space="preserve">
+    <value>Want to be included in ASI's publications? Just answer these few questions.</value>
   </data>
-  <data name="OwnerOrPartner" xml:space="preserve">
-    <value>Owner/Partner</value>
+  <data name="ConfirmationThankYou" xml:space="preserve">
+    <value>Thank you for becoming an</value>
   </data>
-  <data name="Over75" xml:space="preserve">
-    <value>Over 75</value>
+  <data name="ConfirmationToolTipAmericanMadeProducts" xml:space="preserve">
+    <value>Helps professionals within the ASI network looking to source American-made products.</value>
   </data>
-  <data name="Over5000000" xml:space="preserve">
-    <value>Over $5,000,000</value>
+  <data name="ConfirmationToolTipBusinessHours" xml:space="preserve">
+    <value>Standard hours during which you can be contacted.</value>
   </data>
-  <data name="Over500" xml:space="preserve">
-    <value>Over 500</value>
+  <data name="ConfirmationToolTipMinorityOwned" xml:space="preserve">
+    <value>Helps professionals within the ASI network looking to work with minority-owned businesses or niche markets.</value>
   </data>
-  <data name="OtherDescriptionText" xml:space="preserve">
-    <value>If "Other" please specify:</value>
+  <data name="ConfirmationToolTipNumberOfEmployees" xml:space="preserve">
+    <value>ASI uses this valuable demographic information to report on the promotional products industry.</value>
   </data>
-  <data name="OtherDescription" xml:space="preserve">
-    <value>If "Other" please specify</value>
+  <data name="ConfirmationToolTipProductionTime" xml:space="preserve">
+    <value>The minimum time required to produce a standard order.</value>
   </data>
-  <data name="OtherDecoratingMethodName1" xml:space="preserve">
-    <value>Other Decorating Method Name</value>
+  <data name="ConfirmationToolTipProductLineNames" xml:space="preserve">
+    <value>Customers searching by your other product line names are able to locate your products.</value>
   </data>
-  <data name="OtherDecoratingMethodName" xml:space="preserve">
-    <value>Other Decorating MethodName</value>
+  <data name="ConfirmationToolTipProvideYear" xml:space="preserve">
+    <value>Provide the year in which your company started</value>
   </data>
-  <data name="OtherDecoratingMethod1" xml:space="preserve">
-    <value>Other Decorating Method</value>
+  <data name="ConfirmationToolTipRushServices" xml:space="preserve">
+    <value>Quick turnaround on a product where an additional fee may be associated.</value>
   </data>
-  <data name="OtherDecoratingMethod" xml:space="preserve">
-    <value>Other</value>
+  <data name="ConfirmationToolTipWomenOwned" xml:space="preserve">
+    <value>Helps professionals within the ASI network looking to work with woman-owned businesses or niche markets.</value>
   </data>
-  <data name="OtherDec" xml:space="preserve">
-    <value>Other Decorator</value>
+  <data name="ConfirmDeleteMessage" xml:space="preserve">
+    <value>Are you sure you want to delete this item?</value>
   </data>
-  <data name="OtherBusinessRevenue" xml:space="preserve">
-    <value>Other Business Revenue</value>
+  <data name="ConfirmDeleteMessage1" xml:space="preserve">
+    <value>Are you sure you want to delete this item?</value>
   </data>
-  <data name="Other" xml:space="preserve">
-    <value>Other</value>
+  <data name="ConfirmDeleteTitle" xml:space="preserve">
+    <value>Confirm Delete</value>
   </data>
-  <data name="OnlyOne" xml:space="preserve">
-    <value>1</value>
+  <data name="ConfirmDeleteTitle1" xml:space="preserve">
+    <value>Confirm Delete</value>
   </data>
-  <data name="OneToTwoYears" xml:space="preserve">
-    <value>One to Two Years</value>
+  <data name="Consew" xml:space="preserve">
+    <value>Consew</value>
   </data>
-  <data name="Offset1" xml:space="preserve">
-    <value>Offset</value>
+  <data name="ContactEmail" xml:space="preserve">
+    <value>Email</value>
   </data>
-  <data name="Offset" xml:space="preserve">
-    <value>Offset</value>
-  </data>
-  <data name="OfficeSupplies" xml:space="preserve">
-    <value>Office Supplies</value>
-  </data>
-  <data name="Officer" xml:space="preserve">
-    <value>Officer</value>
-  </data>
-  <data name="OfficeHourEnd" xml:space="preserve">
-    <value> Office Hour End</value>
-  </data>
-  <data name="OfficeHour" xml:space="preserve">
-    <value>Office Hours</value>
-  </data>
-  <data name="NumberOfSalesPeople" xml:space="preserve">
-    <value>How many salespeople (including employees and independent sales representatives) does your company utilize?</value>
-  </data>
-  <data name="NumberOfSalesEmployees" xml:space="preserve">
-    <value># Sales Employees</value>
-  </data>
-  <data name="NumberOfSalesEmployee" xml:space="preserve">
-    <value>Number of Sales Employee</value>
-  </data>
-  <data name="NumberOfProducts" xml:space="preserve">
-    <value>Number of Products</value>
-  </data>
-  <data name="NumberOfLicensesInPackage" xml:space="preserve">
-    <value>Package</value>
-  </data>
-  <data name="NumberofLicenses" xml:space="preserve">
-    <value>Number of licenses</value>
-  </data>
-  <data name="NumberOfItems" xml:space="preserve">
-    <value>Item Numbers</value>
-  </data>
-  <data name="NumberOfEmployees" xml:space="preserve">
-    <value># of Employees</value>
-  </data>
-  <data name="NumberOfEmployee" xml:space="preserve">
-    <value>Number of Employee</value>
-  </data>
-  <data name="None" xml:space="preserve">
-    <value>None</value>
-  </data>
-  <data name="NewSubscription" xml:space="preserve">
-    <value>New subscription/Renewing without account information</value>
-  </data>
-  <data name="Name" xml:space="preserve">
+  <data name="ContactName" xml:space="preserve">
     <value>Name</value>
   </data>
-  <data name="NA1" xml:space="preserve">
-    <value>N/A</value>
+  <data name="ContactName1" xml:space="preserve">
+    <value>Contact Name</value>
   </data>
-  <data name="NA" xml:space="preserve">
-    <value>N/A</value>
+  <data name="ContactPhone" xml:space="preserve">
+    <value>Phone</value>
   </data>
-  <data name="MoreThanTwoYears" xml:space="preserve">
-    <value>More than Two Years</value>
+  <data name="ContactTitle" xml:space="preserve">
+    <value>Title</value>
   </data>
-  <data name="MoreThan50" xml:space="preserve">
-    <value>More than 50</value>
+  <data name="CorporateOfficer" xml:space="preserve">
+    <value>I am a corporate officer, partner, or owner of the company submitting the ASI memberapplication, and am authorized to do so.</value>
   </data>
-  <data name="MoreOrEqual5000000" xml:space="preserve">
-    <value>$5,000,000 or more</value>
+  <data name="Cost_300_5_Products_PerMonth" xml:space="preserve">
+    <value>$125/month for 3 products</value>
   </data>
-  <data name="MinorityOwned" xml:space="preserve">
-    <value>Line Minority Owned</value>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
   </data>
-  <data name="MinNumberOfMonths" xml:space="preserve">
-    <value>Atleast one month should be entered.</value>
+  <data name="Country1" xml:space="preserve">
+    <value>Country</value>
   </data>
-  <data name="MinNumber" xml:space="preserve">
-    <value>Atleast </value>
+  <data name="CountryCode" xml:space="preserve">
+    <value>Country Code</value>
   </data>
-  <data name="MinLicenses" xml:space="preserve">
-    <value>Atlease 1 license should be entered</value>
+  <data name="Cover" xml:space="preserve">
+    <value>Cover</value>
   </data>
-  <data name="Membership1" xml:space="preserve">
-    <value>{0} Membership</value>
+  <data name="CPMOption" xml:space="preserve">
+    <value>CPM Option</value>
   </data>
-  <data name="Membership" xml:space="preserve">
-    <value>Membership</value>
+  <data name="CurrentMembershipPackage" xml:space="preserve">
+    <value>Current membership package</value>
   </data>
-  <data name="MemberOfOrganization" xml:space="preserve">
-    <value>Are you a member of any of the following organizations? (Check ALL that apply)</value>
+  <data name="CurrentMembershipPackage1" xml:space="preserve">
+    <value>Current membership package</value>
   </data>
-  <data name="Melco" xml:space="preserve">
-    <value>Melco</value>
+  <data name="Daimei" xml:space="preserve">
+    <value>Daimei</value>
   </data>
-  <data name="MarketingCompanyOrAdvertisingAgency" xml:space="preserve">
-    <value>Marketing Company or Advertising Agency</value>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
   </data>
-  <data name="ManufacturerOrSupplier" xml:space="preserve">
-    <value>Manufacturer/Supplier</value>
+  <data name="DeleteTooltip" xml:space="preserve">
+    <value>Click to delete the item</value>
   </data>
-  <data name="Manufacturer" xml:space="preserve">
-    <value>Manufacturer</value>
+  <data name="DeleteTooltip1" xml:space="preserve">
+    <value>Click to delete the item</value>
   </data>
-  <data name="Manager" xml:space="preserve">
-    <value>Manager</value>
+  <data name="DeptOrMailStop" xml:space="preserve">
+    <value>Dept/Mail Stop</value>
   </data>
-  <data name="MainPhone" xml:space="preserve">
-    <value>Main Phone #</value>
+  <data name="DieStamp" xml:space="preserve">
+    <value>Die Stamp</value>
   </data>
-  <data name="MainChatRoom_750" xml:space="preserve">
-    <value>Main Chat Room $750/mo.</value>
+  <data name="DieStamp1" xml:space="preserve">
+    <value>Die Stamp</value>
   </data>
-  <data name="MagazineWearablesURL" xml:space="preserve">
-    <value>https://mydigitalpublication.com/reports/getCover.php?m=7893</value>
+  <data name="Digitizer" xml:space="preserve">
+    <value>Digitizer</value>
   </data>
-  <data name="MagazineWearablesDescription" xml:space="preserve">
-    <value>Wearables is designed for today's busy apparel business owner.</value>
+  <data name="DirectEmbroidery" xml:space="preserve">
+    <value>Direct Embroidery</value>
   </data>
-  <data name="MagazineStitchesURL" xml:space="preserve">
-    <value>https://mydigitalpublication.com/reports/getCover.php?m=14879</value>
+  <data name="DirectEmbroidery1" xml:space="preserve">
+    <value>Direct Embroidery</value>
   </data>
-  <data name="MagazineStitchesDescription" xml:space="preserve">
-    <value>Stitches is the ultimate resource for commercial embroiderers and apparel decorators.</value>
+  <data name="DirectorOrManager" xml:space="preserve">
+    <value>Director/Manager</value>
   </data>
-  <data name="MagazineCounselorURL" xml:space="preserve">
-    <value>https://mydigitalpublication.com/reports/getCover.php?m=21148</value>
+  <data name="DirectorOrManagerAndTheirAssistants" xml:space="preserve">
+    <value>Director/Manager/and their assistants</value>
   </data>
-  <data name="MagazineCounselorDescription" xml:space="preserve">
-    <value>Counselor's "State of the Industry" statistics are the industry's benchmark.</value>
+  <data name="DistAnnualSalesVolume" xml:space="preserve">
+    <value>What is your total Annual Sales Volume?</value>
   </data>
-  <data name="MagazineAdvertisingWearablesURL" xml:space="preserve">
-    <value>https://mydigitalpublication.com/reports/getCover.php?m=7893</value>
+  <data name="DistAnnualSalesVolumeASP" xml:space="preserve">
+    <value>What is your Annual Sales Volume &lt;br /&gt;(Ad Specialty Products Only)?</value>
   </data>
-  <data name="MagazineAdvertisingWearablesDescription" xml:space="preserve">
-    <value>Wearables is published 10x a year, with a circulation of 15,000. Wearables is read by screen-printers and distributors.</value>
+  <data name="DistNumberOfEmployees" xml:space="preserve">
+    <value>How many employees do you have?</value>
   </data>
-  <data name="MagazineAdvertisingStitchesURL" xml:space="preserve">
-    <value>https://mydigitalpublication.com/reports/getCover.php?m=14879</value>
+  <data name="DistNumberOfSalesEmployees" xml:space="preserve">
+    <value>How many salespeople do you have?</value>
   </data>
-  <data name="MagazineAdvertisingStitchesDescription" xml:space="preserve">
-    <value>Stitches is published 10x a year, with a circulation of 21,250.</value>
+  <data name="DistOtherBusiness" xml:space="preserve">
+    <value>Other</value>
   </data>
-  <data name="MagazineAdvertisingSGRURL" xml:space="preserve">
-    <value>https://mydigitalpublication.com/reports/getCover.php?m=21604</value>
+  <data name="DistPrimaryBusiness" xml:space="preserve">
+    <value>Where does your primary business revenue come from?</value>
   </data>
-  <data name="MagazineAdvertisingSGRDescription" xml:space="preserve">
-    <value>SGR is delivered to 8,000 ASI suppliers. SGR helps promotional products suppliers run their enterprises more efficiently.</value>
+  <data name="Distributor" xml:space="preserve">
+    <value>Distributor</value>
   </data>
-  <data name="MagazineAdvertisingSendMyAdMessage" xml:space="preserve">
-    <value>Please Login to the website to upload your ad.</value>
+  <data name="DistributorAgreements" xml:space="preserve">
+    <value>Agreements</value>
   </data>
-  <data name="MagazineAdvertisingCounselorURL" xml:space="preserve">
-    <value>https://mydigitalpublication.com/reports/getCover.php?m=21148</value>
+  <data name="DistributorAppProductLines" xml:space="preserve">
+    <value>Product Lines</value>
   </data>
-  <data name="MagazineAdvertisingCounselorDescription" xml:space="preserve">
-    <value>Counselor has a paid circulation of 14,500</value>
+  <data name="DistributorAppTypesOfAccount" xml:space="preserve">
+    <value>Types of Accounts</value>
   </data>
-  <data name="MagazineAdvertisingAdvantagesURL" xml:space="preserve">
-    <value>https://mydigitalpublication.com/reports/getCover.php?m=21147</value>
+  <data name="DistYearEst" xml:space="preserve">
+    <value>In what year was your company established?</value>
   </data>
-  <data name="MagazineAdvertisingAdvantagesDescription" xml:space="preserve">
-    <value>Advantages is published 12x a year, with a circulation of 40,000.</value>
+  <data name="EditToolTip" xml:space="preserve">
+    <value>Click to edit the item</value>
   </data>
-  <data name="MagazineAdvantagesURL" xml:space="preserve">
-    <value>https://mydigitalpublication.com/reports/getCover.php?m=21147</value>
-  </data>
-  <data name="MagazineAdvantagesDescription" xml:space="preserve">
-    <value>Advantages magazine is written especially for the promotional products sales professional.</value>
-  </data>
-  <data name="MachineOperator" xml:space="preserve">
-    <value>Machine Operator</value>
-  </data>
-  <data name="Logos" xml:space="preserve">
-    <value>Logo's</value>
-  </data>
-  <data name="LogoPath" xml:space="preserve">
-    <value>Logo</value>
-  </data>
-  <data name="LocalOrRegionalPromotionalProductsAssociation" xml:space="preserve">
-    <value>Local/Regional Promotional Products Association</value>
-  </data>
-  <data name="Lithography1" xml:space="preserve">
-    <value>Lithography</value>
-  </data>
-  <data name="Lithography" xml:space="preserve">
-    <value>Lithography</value>
-  </data>
-  <data name="LineNames" xml:space="preserve">
-    <value>Line Names</value>
-  </data>
-  <data name="Line6" xml:space="preserve">
-    <value>Line 6</value>
-  </data>
-  <data name="Line5" xml:space="preserve">
-    <value>Line 5</value>
-  </data>
-  <data name="Line4" xml:space="preserve">
-    <value>Line 4</value>
-  </data>
-  <data name="Line3" xml:space="preserve">
-    <value>Line 3</value>
-  </data>
-  <data name="Line2" xml:space="preserve">
-    <value>Line 2</value>
-  </data>
-  <data name="Line1" xml:space="preserve">
-    <value>Line 1</value>
-  </data>
-  <data name="LastName1" xml:space="preserve">
-    <value>Last Name</value>
-  </data>
-  <data name="LastName" xml:space="preserve">
-    <value>Last Name</value>
-  </data>
-  <data name="Laser" xml:space="preserve">
-    <value>Laser</value>
-  </data>
-  <data name="LargeImagePath" xml:space="preserve">
-    <value>LargeImagePath</value>
-  </data>
-  <data name="Janome" xml:space="preserve">
-    <value>Janome</value>
-  </data>
-  <data name="ItemNumbers" xml:space="preserve">
-    <value>Invalid Input</value>
-  </data>
-  <data name="IsWomanOwned" xml:space="preserve">
-    <value>Is Woman Owned</value>
-  </data>
-  <data name="IsWholesaler" xml:space="preserve">
-    <value>Is Wholesaler</value>
-  </data>
-  <data name="IsUPSAvailable" xml:space="preserve">
-    <value>Is UPS Available</value>
-  </data>
-  <data name="IsUnionMade" xml:space="preserve">
-    <value>Is Union Made</value>
-  </data>
-  <data name="IssuesRequired" xml:space="preserve">
-    <value>Please select an Issue</value>
-  </data>
-  <data name="Issue" xml:space="preserve">
-    <value>Issue</value>
-  </data>
-  <data name="IsSolelyWork" xml:space="preserve">
-    <value>I work solely for the company applying for membership.</value>
-  </data>
-  <data name="IsRushServiceAvailable" xml:space="preserve">
-    <value>Is Rush Service Available</value>
-  </data>
-  <data name="IsRetailer" xml:space="preserve">
-    <value>Is Retailer</value>
-  </data>
-  <data name="IsNonUSAddress" xml:space="preserve">
-    <value>My company is located &lt;strong&gt;&lt;em&gt;outside&lt;/em&gt; of the United States&lt;/strong&gt;</value>
-  </data>
-  <data name="IsManufacturer" xml:space="preserve">
-    <value>Is Manufacturer</value>
-  </data>
-  <data name="IsMajorityDistributeForResale" xml:space="preserve">
-    <value>My company is a distributor/reseller of ad specialties or related business and isa for profit entity under U.S. state or federal law. The majority of ad specialtieswe distribute or will distribute are for re-sale to customers that are not owned,operated, controlled, franchised, affiliated, or connected to our company.</value>
-  </data>
-  <data name="IsMajorForResale" xml:space="preserve">
-    <value>The majority (51%) of the advertising specialties the company plans to buy are forre-sale and not for my company nor for any person or a company affiliated with mycompany (other than as a paying customer).</value>
-  </data>
-  <data name="IsImprinterVsDecorator" xml:space="preserve">
-    <value>Is Imprinter/Decorator</value>
-  </data>
-  <data name="IsImporter" xml:space="preserve">
-    <value>Is Importer</value>
-  </data>
-  <data name="IsForProfit" xml:space="preserve">
-    <value>My company is a for-profit re-seller of advertising specialties,or related items, such as printed promotional items, trophies, awards, imprintedapparel, screen-printed or embroidered items, signs and other related items.</value>
-  </data>
-  <data name="IsArtworkToProof" xml:space="preserve">
-    <value>Artwork to Proof</value>
-  </data>
-  <data name="IPAddress" xml:space="preserve">
-    <value>IP Address</value>
-  </data>
-  <data name="InvalidPasswordMessage" xml:space="preserve">
-    <value>Invalid Password, please try again.</value>
-  </data>
-  <data name="InvalidEmailOrPasswordMessage" xml:space="preserve">
-    <value>Invalid Email Or Password, please try again.</value>
-  </data>
-  <data name="InvalidCreditCard" xml:space="preserve">
-    <value>The Credit Card information is invalid</value>
-  </data>
-  <data name="InvalidCouponCode" xml:space="preserve">
-    <value>This is not a valid code.</value>
-  </data>
-  <data name="InternationalState" xml:space="preserve">
-    <value>Province/Territory</value>
-  </data>
-  <data name="InstantMessenger_450" xml:space="preserve">
-    <value>Instant Messenger $450/mo.</value>
-  </data>
-  <data name="InformASIOfChange" xml:space="preserve">
-    <value>If the above conditions should change, I will inform ASI ofthe change.</value>
-  </data>
-  <data name="ImprintInstruction" xml:space="preserve">
-    <value>Imprint Instruction</value>
-  </data>
-  <data name="ImprinterVsDecorator" xml:space="preserve">
-    <value>Imprinter/Decorator</value>
-  </data>
-  <data name="Impressions" xml:space="preserve">
-    <value>Impressions</value>
-  </data>
-  <data name="Importer" xml:space="preserve">
-    <value>Importer</value>
-  </data>
-  <data name="HotStamping1" xml:space="preserve">
-    <value>Hot Stamping</value>
-  </data>
-  <data name="HotStamping" xml:space="preserve">
-    <value>Hot Stamping</value>
-  </data>
-  <data name="HasAmericanProducts" xml:space="preserve">
-    <value>Has American Products</value>
-  </data>
-  <data name="Happy" xml:space="preserve">
-    <value>Happy</value>
-  </data>
-  <data name="GiftsAndGiftBaskets" xml:space="preserve">
-    <value>Gifts and Gift Baskets</value>
-  </data>
-  <data name="Generation" xml:space="preserve">
-    <value>Generation</value>
-  </data>
-  <data name="FullColourProcess1" xml:space="preserve">
-    <value>Full Colour Process</value>
-  </data>
-  <data name="FullColourProcess" xml:space="preserve">
-    <value>Full Color Process</value>
-  </data>
-  <data name="FourColourProcess1" xml:space="preserve">
-    <value>Four Color Process</value>
-  </data>
-  <data name="FourColourProcess" xml:space="preserve">
-    <value>Four Color Process</value>
-  </data>
-  <data name="FoilStamping1" xml:space="preserve">
-    <value>Foil Stamping</value>
-  </data>
-  <data name="FoilStamping" xml:space="preserve">
-    <value>Foil Stamping</value>
-  </data>
-  <data name="FirstName1" xml:space="preserve">
-    <value>First Name</value>
-  </data>
-  <data name="FirstName" xml:space="preserve">
-    <value>First Name</value>
-  </data>
-  <data name="FileTooBig" xml:space="preserve">
-    <value>Your file selection is too big for this server, consider other means to send us your product list.</value>
-  </data>
-  <data name="FieldYearRange" xml:space="preserve">
-    <value>Please enter a year between 1700 and 2050.</value>
-  </data>
-  <data name="FieldYear" xml:space="preserve">
-    <value>Pick a year starting at 1700.</value>
-  </data>
-  <data name="FieldValidName" xml:space="preserve">
-    <value>Provide a valid name (i.e. firstname lastname)</value>
-  </data>
-  <data name="FieldValidCreditCard" xml:space="preserve">
-    <value>The Credit Card number is not valid.</value>
-  </data>
-  <data name="FieldURL" xml:space="preserve">
-    <value>Provide a valid URL (i.e. http://asicentral.com)</value>
-  </data>
-  <data name="FieldRequired1" xml:space="preserve">
-    <value>This field is required.</value>
-  </data>
-  <data name="FieldRequired" xml:space="preserve">
-    <value>Field Required</value>
-  </data>
-  <data name="FieldNumber" xml:space="preserve">
-    <value>Only numbers will be accepted.</value>
-  </data>
-  <data name="FieldLength50" xml:space="preserve">
-    <value>This field cannot be more than 50 characters.</value>
-  </data>
-  <data name="FieldLength250" xml:space="preserve">
-    <value>This field cannot be more than 250 characters.</value>
-  </data>
-  <data name="FieldLength100" xml:space="preserve">
-    <value>This field cannot be more than 100 characters.</value>
-  </data>
-  <data name="FieldLength1" xml:space="preserve">
-    <value>This field is too long.</value>
-  </data>
-  <data name="FieldLength" xml:space="preserve">
-    <value>This field is too long.</value>
-  </data>
-  <data name="FieldInvalidPhoneNumber" xml:space="preserve">
-    <value>Please enter a valid phone number.</value>
-  </data>
-  <data name="FieldInvalidNumber" xml:space="preserve">
-    <value>Enter a valid number.</value>
-  </data>
-  <data name="FieldInvalidEmail" xml:space="preserve">
-    <value>Please enter a valid email address.</value>
-  </data>
-  <data name="FieldInvalidASINumber" xml:space="preserve">
-    <value>Please enter a valid ASI #.</value>
-  </data>
-  <data name="FieldIMustBeNumber" xml:space="preserve">
-    <value>Field must be a number</value>
-  </data>
-  <data name="FieldImpressions" xml:space="preserve">
-    <value>Invalid number of impressions</value>
-  </data>
-  <data name="FieldCost" xml:space="preserve">
-    <value>Invalid cost</value>
-  </data>
-  <data name="FedTaxId" xml:space="preserve">
-    <value>Federal Tax ID</value>
-  </data>
-  <data name="FaxExt" xml:space="preserve">
-    <value>Fax Extension</value>
-  </data>
-  <data name="FaxCountryCode" xml:space="preserve">
-    <value>Fax Country Code</value>
-  </data>
-  <data name="FaxAreaCode" xml:space="preserve">
-    <value>Fax Area Code</value>
-  </data>
-  <data name="Fax1" xml:space="preserve">
-    <value>Fax</value>
-  </data>
-  <data name="Fax" xml:space="preserve">
-    <value>Fax Number</value>
-  </data>
-  <data name="ExpirationDate" xml:space="preserve">
-    <value>Expiration Date</value>
-  </data>
-  <data name="Executive1" xml:space="preserve">
-    <value>Executive</value>
-  </data>
-  <data name="Executive" xml:space="preserve">
-    <value>Executive</value>
-  </data>
-  <data name="EventPlanners" xml:space="preserve">
-    <value>Event Planners</value>
-  </data>
-  <data name="Etching1" xml:space="preserve">
-    <value>Etching</value>
-  </data>
-  <data name="Etching" xml:space="preserve">
-    <value>Etching</value>
-  </data>
-  <data name="Engraving1" xml:space="preserve">
-    <value>Engraving</value>
-  </data>
-  <data name="Engraving" xml:space="preserve">
-    <value>Engraving</value>
-  </data>
-  <data name="EmbroideryOrMonogrammingOffersInHouse" xml:space="preserve">
-    <value>Embroidery/Monogramming (also offers screenprinting in-house or via subcontracting)</value>
-  </data>
-  <data name="EmbroideryOrMonogrammingNotOffersInHouse" xml:space="preserve">
-    <value>Embroidery/Monogramming (does not offer screenprinting in-house or via subcontracting)</value>
-  </data>
-  <data name="EmbroideryOrMonogramming" xml:space="preserve">
-    <value>Embroidery/Monogramming</value>
-  </data>
-  <data name="EmbroideryHeadsYouHave" xml:space="preserve">
-    <value>How many embroidery heads do you have in your entire operation?</value>
-  </data>
-  <data name="EmbroideryBusinessInsights" xml:space="preserve">
-    <value>Embroidery Business Insights</value>
-  </data>
-  <data name="EmbroideredApparelRetail" xml:space="preserve">
-    <value>Embroidered Apparel Retail</value>
-  </data>
-  <data name="EmailMismatch" xml:space="preserve">
-    <value>Emails do not match.</value>
-  </data>
-  <data name="EmailExpress_TargetedList" xml:space="preserve">
-    <value>EmailExpress Targeted List</value>
-  </data>
-  <data name="EmailExpress_Special" xml:space="preserve">
-    <value>Special Request</value>
-  </data>
-  <data name="EmailExpress_Selected_Dates_Count" xml:space="preserve">
-    <value>You have selected {x} date(s):</value>
-  </data>
-  <data name="EmailExpress_Regular" xml:space="preserve">
-    <value>Regular EmailExpress</value>
-  </data>
-  <data name="EmailExpress_Platinum" xml:space="preserve">
-    <value>EmailExpress Platinum</value>
-  </data>
-  <data name="EmailExpress_Error_Terms" xml:space="preserve">
-    <value>Please accept the Terms &amp; Conditions to proceed</value>
-  </data>
-  <data name="EmailExpress_Error_ItemType" xml:space="preserve">
-    <value>Please select one of the Email Express Option to proceed</value>
-  </data>
-  <data name="EmailExpress_Error_Date" xml:space="preserve">
-    <value>Please choose at least one date</value>
-  </data>
-  <data name="Email2" xml:space="preserve">
+  <data name="Email" xml:space="preserve">
     <value>Email</value>
   </data>
   <data name="Email1" xml:space="preserve">
     <value>Email</value>
   </data>
-  <data name="Email" xml:space="preserve">
+  <data name="Email2" xml:space="preserve">
     <value>Email</value>
   </data>
-  <data name="EditToolTip" xml:space="preserve">
-    <value>Click to edit the item</value>
+  <data name="EmailExpress_Error_Date" xml:space="preserve">
+    <value>Please choose at least one date</value>
   </data>
-  <data name="DistYearEst" xml:space="preserve">
-    <value>In what year was your company established?</value>
+  <data name="EmailExpress_Error_ItemType" xml:space="preserve">
+    <value>Please select one of the Email Express Option to proceed</value>
   </data>
-  <data name="DistributorAppTypesOfAccount" xml:space="preserve">
-    <value>Types of Accounts</value>
+  <data name="EmailExpress_Error_Terms" xml:space="preserve">
+    <value>Please accept the Terms &amp; Conditions to proceed</value>
   </data>
-  <data name="DistributorAppProductLines" xml:space="preserve">
-    <value>Product Lines</value>
+  <data name="EmailExpress_Platinum" xml:space="preserve">
+    <value>EmailExpress Platinum</value>
   </data>
-  <data name="DistributorAgreements" xml:space="preserve">
-    <value>Agreements</value>
+  <data name="EmailExpress_Regular" xml:space="preserve">
+    <value>Regular EmailExpress</value>
   </data>
-  <data name="Distributor" xml:space="preserve">
-    <value>Distributor</value>
+  <data name="EmailExpress_Selected_Dates_Count" xml:space="preserve">
+    <value>You have selected {x} date(s):</value>
   </data>
-  <data name="DistPrimaryBusiness" xml:space="preserve">
-    <value>Where does your primary business revenue come from?</value>
+  <data name="EmailExpress_Special" xml:space="preserve">
+    <value>Special Request</value>
   </data>
-  <data name="DistOtherBusiness" xml:space="preserve">
-    <value>Other</value>
+  <data name="EmailExpress_TargetedList" xml:space="preserve">
+    <value>EmailExpress Targeted List</value>
   </data>
-  <data name="DistNumberOfSalesEmployees" xml:space="preserve">
-    <value>How many salespeople do you have?</value>
+  <data name="EmailMismatch" xml:space="preserve">
+    <value>Emails do not match.</value>
   </data>
-  <data name="DistNumberOfEmployees" xml:space="preserve">
-    <value>How many employees do you have?</value>
+  <data name="EmbroideredApparelRetail" xml:space="preserve">
+    <value>Embroidered Apparel Retail</value>
   </data>
-  <data name="DistAnnualSalesVolumeASP" xml:space="preserve">
-    <value>What is your Annual Sales Volume &lt;br /&gt;(Ad Specialty Products Only)?</value>
+  <data name="EmbroideryBusinessInsights" xml:space="preserve">
+    <value>Embroidery Business Insights</value>
   </data>
-  <data name="DistAnnualSalesVolume" xml:space="preserve">
-    <value>What is your total Annual Sales Volume?</value>
+  <data name="EmbroideryHeadsYouHave" xml:space="preserve">
+    <value>How many embroidery heads do you have in your entire operation?</value>
   </data>
-  <data name="DirectorOrManagerAndTheirAssistants" xml:space="preserve">
-    <value>Director/Manager/and their assistants</value>
+  <data name="EmbroideryOrMonogramming" xml:space="preserve">
+    <value>Embroidery/Monogramming</value>
   </data>
-  <data name="DirectorOrManager" xml:space="preserve">
-    <value>Director/Manager</value>
+  <data name="EmbroideryOrMonogrammingNotOffersInHouse" xml:space="preserve">
+    <value>Embroidery/Monogramming (does not offer screenprinting in-house or via subcontracting)</value>
   </data>
-  <data name="DirectEmbroidery1" xml:space="preserve">
-    <value>Direct Embroidery</value>
+  <data name="EmbroideryOrMonogrammingOffersInHouse" xml:space="preserve">
+    <value>Embroidery/Monogramming (also offers screenprinting in-house or via subcontracting)</value>
   </data>
-  <data name="DirectEmbroidery" xml:space="preserve">
-    <value>Direct Embroidery</value>
+  <data name="Engraving" xml:space="preserve">
+    <value>Engraving</value>
   </data>
-  <data name="Digitizer" xml:space="preserve">
-    <value>Digitizer</value>
+  <data name="Engraving1" xml:space="preserve">
+    <value>Engraving</value>
   </data>
-  <data name="DieStamp1" xml:space="preserve">
-    <value>Die Stamp</value>
+  <data name="Etching" xml:space="preserve">
+    <value>Etching</value>
   </data>
-  <data name="DieStamp" xml:space="preserve">
-    <value>Die Stamp</value>
+  <data name="Etching1" xml:space="preserve">
+    <value>Etching</value>
   </data>
-  <data name="DeptOrMailStop" xml:space="preserve">
-    <value>Dept/Mail Stop</value>
+  <data name="EventPlanners" xml:space="preserve">
+    <value>Event Planners</value>
   </data>
-  <data name="DeleteTooltip1" xml:space="preserve">
-    <value>Click to delete the item</value>
+  <data name="Executive" xml:space="preserve">
+    <value>Executive</value>
   </data>
-  <data name="DeleteTooltip" xml:space="preserve">
-    <value>Click to delete the item</value>
+  <data name="Executive1" xml:space="preserve">
+    <value>Executive</value>
   </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+  <data name="ExpirationDate" xml:space="preserve">
+    <value>Expiration Date</value>
   </data>
-  <data name="Daimei" xml:space="preserve">
-    <value>Daimei</value>
+  <data name="Fax" xml:space="preserve">
+    <value>Fax Number</value>
   </data>
-  <data name="CurrentMembershipPackage1" xml:space="preserve">
-    <value>Current membership package</value>
+  <data name="Fax1" xml:space="preserve">
+    <value>Fax</value>
   </data>
-  <data name="CurrentMembershipPackage" xml:space="preserve">
-    <value>Current membership package</value>
+  <data name="FaxAreaCode" xml:space="preserve">
+    <value>Fax Area Code</value>
   </data>
-  <data name="CPMOption" xml:space="preserve">
-    <value>CPM Option</value>
+  <data name="FaxCountryCode" xml:space="preserve">
+    <value>Fax Country Code</value>
   </data>
-  <data name="Cover" xml:space="preserve">
-    <value>Cover</value>
+  <data name="FaxExt" xml:space="preserve">
+    <value>Fax Extension</value>
   </data>
-  <data name="CountryCode" xml:space="preserve">
-    <value>Country Code</value>
+  <data name="FedTaxId" xml:space="preserve">
+    <value>Federal Tax ID</value>
   </data>
-  <data name="Country1" xml:space="preserve">
-    <value>Country</value>
+  <data name="FieldCost" xml:space="preserve">
+    <value>Invalid cost</value>
   </data>
-  <data name="Country" xml:space="preserve">
-    <value>Country</value>
+  <data name="FieldImpressions" xml:space="preserve">
+    <value>Invalid number of impressions</value>
   </data>
-  <data name="Cost_300_5_Products_PerMonth" xml:space="preserve">
-    <value>$125/month for 3 products</value>
+  <data name="FieldIMustBeNumber" xml:space="preserve">
+    <value>Field must be a number</value>
   </data>
-  <data name="CorporateOfficer" xml:space="preserve">
-    <value>I am a corporate officer, partner, or owner of the company submitting the ASI memberapplication, and am authorized to do so.</value>
+  <data name="FieldInvalidASINumber" xml:space="preserve">
+    <value>Please enter a valid ASI #.</value>
   </data>
-  <data name="ContactTitle" xml:space="preserve">
-    <value>Title</value>
+  <data name="FieldInvalidEmail" xml:space="preserve">
+    <value>Please enter a valid email address.</value>
   </data>
-  <data name="ContactPhone" xml:space="preserve">
-    <value>Phone</value>
+  <data name="FieldInvalidNumber" xml:space="preserve">
+    <value>Enter a valid number.</value>
   </data>
-  <data name="ContactName1" xml:space="preserve">
-    <value>Contact Name</value>
+  <data name="FieldInvalidPhoneNumber" xml:space="preserve">
+    <value>Please enter a valid phone number.</value>
   </data>
-  <data name="ContactName" xml:space="preserve">
+  <data name="FieldLength" xml:space="preserve">
+    <value>This field is too long.</value>
+  </data>
+  <data name="FieldLength1" xml:space="preserve">
+    <value>This field is too long.</value>
+  </data>
+  <data name="FieldLength100" xml:space="preserve">
+    <value>This field cannot be more than 100 characters.</value>
+  </data>
+  <data name="FieldLength250" xml:space="preserve">
+    <value>This field cannot be more than 250 characters.</value>
+  </data>
+  <data name="FieldLength50" xml:space="preserve">
+    <value>This field cannot be more than 50 characters.</value>
+  </data>
+  <data name="FieldNumber" xml:space="preserve">
+    <value>Only numbers will be accepted.</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Field Required</value>
+  </data>
+  <data name="FieldRequired1" xml:space="preserve">
+    <value>This field is required.</value>
+  </data>
+  <data name="FieldURL" xml:space="preserve">
+    <value>Provide a valid URL (i.e. http://asicentral.com)</value>
+  </data>
+  <data name="FieldValidCreditCard" xml:space="preserve">
+    <value>The Credit Card number is not valid.</value>
+  </data>
+  <data name="FieldValidName" xml:space="preserve">
+    <value>Provide a valid name (i.e. firstname lastname)</value>
+  </data>
+  <data name="FieldYear" xml:space="preserve">
+    <value>Pick a year starting at 1700.</value>
+  </data>
+  <data name="FieldYearRange" xml:space="preserve">
+    <value>Please enter a year between 1700 and 2050.</value>
+  </data>
+  <data name="FileTooBig" xml:space="preserve">
+    <value>Your file selection is too big for this server, consider other means to send us your product list.</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="FirstName1" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="FoilStamping" xml:space="preserve">
+    <value>Foil Stamping</value>
+  </data>
+  <data name="FoilStamping1" xml:space="preserve">
+    <value>Foil Stamping</value>
+  </data>
+  <data name="FourColourProcess" xml:space="preserve">
+    <value>Four Color Process</value>
+  </data>
+  <data name="FourColourProcess1" xml:space="preserve">
+    <value>Four Color Process</value>
+  </data>
+  <data name="FullColourProcess" xml:space="preserve">
+    <value>Full Color Process</value>
+  </data>
+  <data name="FullColourProcess1" xml:space="preserve">
+    <value>Full Colour Process</value>
+  </data>
+  <data name="Generation" xml:space="preserve">
+    <value>Generation</value>
+  </data>
+  <data name="GiftsAndGiftBaskets" xml:space="preserve">
+    <value>Gifts and Gift Baskets</value>
+  </data>
+  <data name="Happy" xml:space="preserve">
+    <value>Happy</value>
+  </data>
+  <data name="HasAmericanProducts" xml:space="preserve">
+    <value>Has American Products</value>
+  </data>
+  <data name="HotStamping" xml:space="preserve">
+    <value>Hot Stamping</value>
+  </data>
+  <data name="HotStamping1" xml:space="preserve">
+    <value>Hot Stamping</value>
+  </data>
+  <data name="Importer" xml:space="preserve">
+    <value>Importer</value>
+  </data>
+  <data name="Impressions" xml:space="preserve">
+    <value>Impressions</value>
+  </data>
+  <data name="ImprinterVsDecorator" xml:space="preserve">
+    <value>Imprinter/Decorator</value>
+  </data>
+  <data name="ImprintInstruction" xml:space="preserve">
+    <value>Imprint Instruction</value>
+  </data>
+  <data name="InformASIOfChange" xml:space="preserve">
+    <value>If the above conditions should change, I will inform ASI ofthe change.</value>
+  </data>
+  <data name="InstantMessenger_450" xml:space="preserve">
+    <value>Instant Messenger $450/mo.</value>
+  </data>
+  <data name="InternationalState" xml:space="preserve">
+    <value>Province/Territory</value>
+  </data>
+  <data name="InvalidCouponCode" xml:space="preserve">
+    <value>This is not a valid code.</value>
+  </data>
+  <data name="InvalidCreditCard" xml:space="preserve">
+    <value>The Credit Card information is invalid</value>
+  </data>
+  <data name="InvalidEmailOrPasswordMessage" xml:space="preserve">
+    <value>Invalid Email Or Password, please try again.</value>
+  </data>
+  <data name="InvalidPasswordMessage" xml:space="preserve">
+    <value>Invalid Password, please try again.</value>
+  </data>
+  <data name="IPAddress" xml:space="preserve">
+    <value>IP Address</value>
+  </data>
+  <data name="IsArtworkToProof" xml:space="preserve">
+    <value>Artwork to Proof</value>
+  </data>
+  <data name="IsForProfit" xml:space="preserve">
+    <value>My company is a for-profit re-seller of advertising specialties,or related items, such as printed promotional items, trophies, awards, imprintedapparel, screen-printed or embroidered items, signs and other related items.</value>
+  </data>
+  <data name="IsImporter" xml:space="preserve">
+    <value>Is Importer</value>
+  </data>
+  <data name="IsImprinterVsDecorator" xml:space="preserve">
+    <value>Is Imprinter/Decorator</value>
+  </data>
+  <data name="IsMajorForResale" xml:space="preserve">
+    <value>The majority (51%) of the advertising specialties the company plans to buy are forre-sale and not for my company nor for any person or a company affiliated with mycompany (other than as a paying customer).</value>
+  </data>
+  <data name="IsMajorityDistributeForResale" xml:space="preserve">
+    <value>My company is a distributor/reseller of ad specialties or related business and isa for profit entity under U.S. state or federal law. The majority of ad specialtieswe distribute or will distribute are for re-sale to customers that are not owned,operated, controlled, franchised, affiliated, or connected to our company.</value>
+  </data>
+  <data name="IsManufacturer" xml:space="preserve">
+    <value>Is Manufacturer</value>
+  </data>
+  <data name="IsNonUSAddress" xml:space="preserve">
+    <value>My company is located &lt;strong&gt;&lt;em&gt;outside&lt;/em&gt; of the United States&lt;/strong&gt;</value>
+  </data>
+  <data name="IsRetailer" xml:space="preserve">
+    <value>Is Retailer</value>
+  </data>
+  <data name="IsRushServiceAvailable" xml:space="preserve">
+    <value>Is Rush Service Available</value>
+  </data>
+  <data name="IsSolelyWork" xml:space="preserve">
+    <value>I work solely for the company applying for membership.</value>
+  </data>
+  <data name="Issue" xml:space="preserve">
+    <value>Issue</value>
+  </data>
+  <data name="IssuesRequired" xml:space="preserve">
+    <value>Please select an Issue</value>
+  </data>
+  <data name="IsUnionMade" xml:space="preserve">
+    <value>Is Union Made</value>
+  </data>
+  <data name="IsUPSAvailable" xml:space="preserve">
+    <value>Is UPS Available</value>
+  </data>
+  <data name="IsWholesaler" xml:space="preserve">
+    <value>Is Wholesaler</value>
+  </data>
+  <data name="IsWomanOwned" xml:space="preserve">
+    <value>Is Woman Owned</value>
+  </data>
+  <data name="ItemNumbers" xml:space="preserve">
+    <value>Invalid Input</value>
+  </data>
+  <data name="Janome" xml:space="preserve">
+    <value>Janome</value>
+  </data>
+  <data name="LargeImagePath" xml:space="preserve">
+    <value>LargeImagePath</value>
+  </data>
+  <data name="Laser" xml:space="preserve">
+    <value>Laser</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="LastName1" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="Line1" xml:space="preserve">
+    <value>Line 1</value>
+  </data>
+  <data name="Line2" xml:space="preserve">
+    <value>Line 2</value>
+  </data>
+  <data name="Line3" xml:space="preserve">
+    <value>Line 3</value>
+  </data>
+  <data name="Line4" xml:space="preserve">
+    <value>Line 4</value>
+  </data>
+  <data name="Line5" xml:space="preserve">
+    <value>Line 5</value>
+  </data>
+  <data name="Line6" xml:space="preserve">
+    <value>Line 6</value>
+  </data>
+  <data name="LineNames" xml:space="preserve">
+    <value>Line Names</value>
+  </data>
+  <data name="Lithography" xml:space="preserve">
+    <value>Lithography</value>
+  </data>
+  <data name="Lithography1" xml:space="preserve">
+    <value>Lithography</value>
+  </data>
+  <data name="LocalOrRegionalPromotionalProductsAssociation" xml:space="preserve">
+    <value>Local/Regional Promotional Products Association</value>
+  </data>
+  <data name="LogoPath" xml:space="preserve">
+    <value>Logo</value>
+  </data>
+  <data name="Logos" xml:space="preserve">
+    <value>Logo's</value>
+  </data>
+  <data name="MachineOperator" xml:space="preserve">
+    <value>Machine Operator</value>
+  </data>
+  <data name="MagazineAdvantagesDescription" xml:space="preserve">
+    <value>Advantages magazine is written especially for the promotional products sales professional.</value>
+  </data>
+  <data name="MagazineAdvantagesURL" xml:space="preserve">
+    <value>https://mydigitalpublication.com/reports/getCover.php?m=21147</value>
+  </data>
+  <data name="MagazineAdvertisingAdvantagesDescription" xml:space="preserve">
+    <value>Advantages is published 12x a year, with a circulation of 40,000.</value>
+  </data>
+  <data name="MagazineAdvertisingAdvantagesURL" xml:space="preserve">
+    <value>https://mydigitalpublication.com/reports/getCover.php?m=21147</value>
+  </data>
+  <data name="MagazineAdvertisingCounselorDescription" xml:space="preserve">
+    <value>Counselor has a paid circulation of 14,500</value>
+  </data>
+  <data name="MagazineAdvertisingCounselorURL" xml:space="preserve">
+    <value>https://mydigitalpublication.com/reports/getCover.php?m=21148</value>
+  </data>
+  <data name="MagazineAdvertisingSendMyAdMessage" xml:space="preserve">
+    <value>You’ve chosen to save 15% by supplying your own ASI magazine ad. Please click the following link and upload your ad now.</value>
+  </data>
+  <data name="MagazineAdvertisingSGRDescription" xml:space="preserve">
+    <value>SGR is delivered to 8,000 ASI suppliers. SGR helps promotional products suppliers run their enterprises more efficiently.</value>
+  </data>
+  <data name="MagazineAdvertisingSGRURL" xml:space="preserve">
+    <value>https://mydigitalpublication.com/reports/getCover.php?m=21604</value>
+  </data>
+  <data name="MagazineAdvertisingStitchesDescription" xml:space="preserve">
+    <value>Stitches is published 10x a year, with a circulation of 21,250.</value>
+  </data>
+  <data name="MagazineAdvertisingStitchesURL" xml:space="preserve">
+    <value>https://mydigitalpublication.com/reports/getCover.php?m=14879</value>
+  </data>
+  <data name="MagazineAdvertisingWearablesDescription" xml:space="preserve">
+    <value>Wearables is published 10x a year, with a circulation of 15,000. Wearables is read by screen-printers and distributors.</value>
+  </data>
+  <data name="MagazineAdvertisingWearablesURL" xml:space="preserve">
+    <value>https://mydigitalpublication.com/reports/getCover.php?m=7893</value>
+  </data>
+  <data name="MagazineCounselorDescription" xml:space="preserve">
+    <value>Counselor's "State of the Industry" statistics are the industry's benchmark.</value>
+  </data>
+  <data name="MagazineCounselorURL" xml:space="preserve">
+    <value>https://mydigitalpublication.com/reports/getCover.php?m=21148</value>
+  </data>
+  <data name="MagazineStitchesDescription" xml:space="preserve">
+    <value>Stitches is the ultimate resource for commercial embroiderers and apparel decorators.</value>
+  </data>
+  <data name="MagazineStitchesURL" xml:space="preserve">
+    <value>https://mydigitalpublication.com/reports/getCover.php?m=14879</value>
+  </data>
+  <data name="MagazineWearablesDescription" xml:space="preserve">
+    <value>Wearables is designed for today's busy apparel business owner.</value>
+  </data>
+  <data name="MagazineWearablesURL" xml:space="preserve">
+    <value>https://mydigitalpublication.com/reports/getCover.php?m=7893</value>
+  </data>
+  <data name="MainChatRoom_750" xml:space="preserve">
+    <value>Main Chat Room $750/mo.</value>
+  </data>
+  <data name="MainPhone" xml:space="preserve">
+    <value>Main Phone #</value>
+  </data>
+  <data name="Manager" xml:space="preserve">
+    <value>Manager</value>
+  </data>
+  <data name="Manufacturer" xml:space="preserve">
+    <value>Manufacturer</value>
+  </data>
+  <data name="ManufacturerOrSupplier" xml:space="preserve">
+    <value>Manufacturer/Supplier</value>
+  </data>
+  <data name="MarketingCompanyOrAdvertisingAgency" xml:space="preserve">
+    <value>Marketing Company or Advertising Agency</value>
+  </data>
+  <data name="Melco" xml:space="preserve">
+    <value>Melco</value>
+  </data>
+  <data name="MemberOfOrganization" xml:space="preserve">
+    <value>Are you a member of any of the following organizations? (Check ALL that apply)</value>
+  </data>
+  <data name="Membership" xml:space="preserve">
+    <value>Membership</value>
+  </data>
+  <data name="Membership1" xml:space="preserve">
+    <value>{0} Membership</value>
+  </data>
+  <data name="MinLicenses" xml:space="preserve">
+    <value>Atlease 1 license should be entered</value>
+  </data>
+  <data name="MinNumber" xml:space="preserve">
+    <value>Atleast </value>
+  </data>
+  <data name="MinNumberOfMonths" xml:space="preserve">
+    <value>Atleast one month should be entered.</value>
+  </data>
+  <data name="MinorityOwned" xml:space="preserve">
+    <value>Line Minority Owned</value>
+  </data>
+  <data name="MoreOrEqual5000000" xml:space="preserve">
+    <value>$5,000,000 or more</value>
+  </data>
+  <data name="MoreThan50" xml:space="preserve">
+    <value>More than 50</value>
+  </data>
+  <data name="MoreThanTwoYears" xml:space="preserve">
+    <value>More than Two Years</value>
+  </data>
+  <data name="NA" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+  <data name="NA1" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+  <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
-  <data name="ContactEmail" xml:space="preserve">
-    <value>Email</value>
+  <data name="NewSubscription" xml:space="preserve">
+    <value>New subscription/Renewing without account information</value>
   </data>
-  <data name="Consew" xml:space="preserve">
-    <value>Consew</value>
+  <data name="None" xml:space="preserve">
+    <value>None</value>
   </data>
-  <data name="ConfirmDeleteTitle1" xml:space="preserve">
-    <value>Confirm Delete</value>
+  <data name="NumberOfEmployee" xml:space="preserve">
+    <value>Number of Employee</value>
   </data>
-  <data name="ConfirmDeleteTitle" xml:space="preserve">
-    <value>Confirm Delete</value>
+  <data name="NumberOfEmployees" xml:space="preserve">
+    <value># of Employees</value>
   </data>
-  <data name="ConfirmDeleteMessage1" xml:space="preserve">
-    <value>Are you sure you want to delete this item?</value>
+  <data name="NumberOfItems" xml:space="preserve">
+    <value>Item Numbers</value>
   </data>
-  <data name="ConfirmDeleteMessage" xml:space="preserve">
-    <value>Are you sure you want to delete this item?</value>
+  <data name="NumberofLicenses" xml:space="preserve">
+    <value>Number of licenses</value>
   </data>
-  <data name="ConfirmationToolTipWomenOwned" xml:space="preserve">
-    <value>Helps professionals within the ASI network looking to work with woman-owned businesses or niche markets.</value>
+  <data name="NumberOfLicensesInPackage" xml:space="preserve">
+    <value>Package</value>
   </data>
-  <data name="ConfirmationToolTipRushServices" xml:space="preserve">
-    <value>Quick turnaround on a product where an additional fee may be associated.</value>
+  <data name="NumberOfProducts" xml:space="preserve">
+    <value>Number of Products</value>
   </data>
-  <data name="ConfirmationToolTipProvideYear" xml:space="preserve">
-    <value>Provide the year in which your company started</value>
+  <data name="NumberOfSalesEmployee" xml:space="preserve">
+    <value>Number of Sales Employee</value>
   </data>
-  <data name="ConfirmationToolTipProductLineNames" xml:space="preserve">
-    <value>Customers searching by your other product line names are able to locate your products.</value>
+  <data name="NumberOfSalesEmployees" xml:space="preserve">
+    <value># Sales Employees</value>
   </data>
-  <data name="ConfirmationToolTipProductionTime" xml:space="preserve">
-    <value>The minimum time required to produce a standard order.</value>
+  <data name="NumberOfSalesPeople" xml:space="preserve">
+    <value>How many salespeople (including employees and independent sales representatives) does your company utilize?</value>
   </data>
-  <data name="ConfirmationToolTipNumberOfEmployees" xml:space="preserve">
-    <value>ASI uses this valuable demographic information to report on the promotional products industry.</value>
+  <data name="OfficeHour" xml:space="preserve">
+    <value>Office Hours</value>
   </data>
-  <data name="ConfirmationToolTipMinorityOwned" xml:space="preserve">
-    <value>Helps professionals within the ASI network looking to work with minority-owned businesses or niche markets.</value>
+  <data name="OfficeHourEnd" xml:space="preserve">
+    <value> Office Hour End</value>
   </data>
-  <data name="ConfirmationToolTipBusinessHours" xml:space="preserve">
-    <value>Standard hours during which you can be contacted.</value>
+  <data name="Officer" xml:space="preserve">
+    <value>Officer</value>
   </data>
-  <data name="ConfirmationToolTipAmericanMadeProducts" xml:space="preserve">
-    <value>Helps professionals within the ASI network looking to source American-made products.</value>
+  <data name="OfficeSupplies" xml:space="preserve">
+    <value>Office Supplies</value>
   </data>
-  <data name="ConfirmationThankYou" xml:space="preserve">
-    <value>Thank you for becoming an</value>
+  <data name="Offset" xml:space="preserve">
+    <value>Offset</value>
   </data>
-  <data name="ConfirmationTabTitle" xml:space="preserve">
-    <value>Want to be included in ASI's publications? Just answer these few questions.</value>
+  <data name="Offset1" xml:space="preserve">
+    <value>Offset</value>
   </data>
-  <data name="ConfirmationSendInformation" xml:space="preserve">
-    <value>Send ASI my information</value>
+  <data name="OneToTwoYears" xml:space="preserve">
+    <value>One to Two Years</value>
   </data>
-  <data name="ConfirmationProvideYearEnteredInAdvertisingspeciality" xml:space="preserve">
-    <value>Provide the year you entered the advertising speciality market.</value>
+  <data name="OnlyOne" xml:space="preserve">
+    <value>1</value>
   </data>
-  <data name="ConfirmationProvideYearEntered" xml:space="preserve">
-    <value>Provide the year you entered the promotional products industry.</value>
+  <data name="Other" xml:space="preserve">
+    <value>Other</value>
   </data>
-  <data name="ConfirmationProductSafety" xml:space="preserve">
-    <value>Helps professionals within the ASI to understand product safty measures taken.</value>
+  <data name="OtherBusinessRevenue" xml:space="preserve">
+    <value>Other Business Revenue</value>
   </data>
-  <data name="ConfirmationOrganizationFunctions" xml:space="preserve">
-    <value>What business functions apply to your organization?</value>
+  <data name="OtherDec" xml:space="preserve">
+    <value>Other Decorator</value>
   </data>
-  <data name="ConfirmationMethodsOfPrinting" xml:space="preserve">
-    <value>What methods of imprinting and decorating do you offer?</value>
+  <data name="OtherDecoratingMethod" xml:space="preserve">
+    <value>Other</value>
   </data>
-  <data name="ConfirmationListYourProducts" xml:space="preserve">
-    <value>List your products!</value>
+  <data name="OtherDecoratingMethod1" xml:space="preserve">
+    <value>Other Decorating Method</value>
   </data>
-  <data name="ConfirmationListMyProductsNow" xml:space="preserve">
-    <value>List my products now.</value>
+  <data name="OtherDecoratingMethodName" xml:space="preserve">
+    <value>Other Decorating MethodName</value>
   </data>
-  <data name="ConfirmationIfYouDont" xml:space="preserve">
-    <value>if you don't list them with ASI.</value>
+  <data name="OtherDecoratingMethodName1" xml:space="preserve">
+    <value>Other Decorating Method Name</value>
   </data>
-  <data name="ConfirmationDistributorsCantFind" xml:space="preserve">
-    <value>Distributors can't find your products</value>
+  <data name="OtherDescription" xml:space="preserve">
+    <value>If "Other" please specify</value>
   </data>
-  <data name="ConfirmationConfirmationMessage" xml:space="preserve">
-    <value>Your order confirmation number (this is not your ASI Number) is</value>
+  <data name="OtherDescriptionText" xml:space="preserve">
+    <value>If "Other" please specify:</value>
   </data>
-  <data name="ConfirmationCallusProformaMessage" xml:space="preserve">
-    <value>Call us at 800-546-1350 x318 to speak with an ASI representative to check the status of your application.</value>
+  <data name="Over500" xml:space="preserve">
+    <value>Over 500</value>
   </data>
-  <data name="ConfirmationCallusMessage" xml:space="preserve">
-    <value>Call 800-546-1350 (select option 3) to check the status of your application.</value>
+  <data name="Over5000000" xml:space="preserve">
+    <value>Over $5,000,000</value>
   </data>
-  <data name="ConfirmationBeforeYouLeave" xml:space="preserve">
-    <value>Before you leave:</value>
+  <data name="Over75" xml:space="preserve">
+    <value>Over 75</value>
   </data>
-  <data name="ConfirmationASIMember" xml:space="preserve">
-    <value>ASI {0} Member!</value>
+  <data name="OwnerOrPartner" xml:space="preserve">
+    <value>Owner/Partner</value>
   </data>
-  <data name="CompanyURLPrompt" xml:space="preserve">
-    <value>i.e. http://www.asicentral.com</value>
+  <data name="PackagingServices" xml:space="preserve">
+    <value>Packaging Services</value>
   </data>
-  <data name="CompanyURL1" xml:space="preserve">
-    <value>Company Website</value>
+  <data name="PadPrint" xml:space="preserve">
+    <value>Pad Print</value>
   </data>
-  <data name="CompanyURL" xml:space="preserve">
-    <value>Company Url</value>
+  <data name="PadPrint1" xml:space="preserve">
+    <value>Pad Print</value>
   </data>
-  <data name="CompanySummary" xml:space="preserve">
-    <value>Company Summary</value>
+  <data name="PaymentAmount" xml:space="preserve">
+    <value>Fixed Cost</value>
   </data>
-  <data name="CompanyProductionTime" xml:space="preserve">
+  <data name="PaymentOption" xml:space="preserve">
+    <value>Payment Option</value>
+  </data>
+  <data name="Pfaff" xml:space="preserve">
+    <value>Pfaff</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
+  <data name="Phone1" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="PhoneAreaCode" xml:space="preserve">
+    <value>Phone Area Code</value>
+  </data>
+  <data name="PhoneExt" xml:space="preserve">
+    <value>Phone Extension</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value> Position</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>Postal Code</value>
+  </data>
+  <data name="PresidentOrCEO" xml:space="preserve">
+    <value>President/CEO</value>
+  </data>
+  <data name="PresidentOrVPOrOtherOfficer" xml:space="preserve">
+    <value>President/VP or other officer</value>
+  </data>
+  <data name="PrimaryBusiness" xml:space="preserve">
+    <value>Primary Business</value>
+  </data>
+  <data name="PrimaryBusiness1" xml:space="preserve">
+    <value>Primary Business</value>
+  </data>
+  <data name="PrimaryBusinessOtherDescription" xml:space="preserve">
+    <value>Primary Business Other Description</value>
+  </data>
+  <data name="PrimaryBussinessOptions" xml:space="preserve">
+    <value>What is your company's primary business? (Check only ONE)</value>
+  </data>
+  <data name="Prodigi" xml:space="preserve">
+    <value>Prodigi</value>
+  </data>
+  <data name="ProductID" xml:space="preserve">
+    <value>Product Id</value>
+  </data>
+  <data name="ProductionTime" xml:space="preserve">
     <value>Production Time</value>
   </data>
-  <data name="CompanyNumOfEmployees" xml:space="preserve">
-    <value>Number Of Employees</value>
-  </data>
-  <data name="CompanyName1" xml:space="preserve">
-    <value>Company Name</value>
-  </data>
-  <data name="CompanyName" xml:space="preserve">
-    <value>Company Name</value>
-  </data>
-  <data name="CompanyIsInactive" xml:space="preserve">
-    <value>Is inactive?</value>
-  </data>
-  <data name="CompanyID" xml:space="preserve">
-    <value>Company Id</value>
-  </data>
-  <data name="CompanyContactName" xml:space="preserve">
-    <value>Contact Name</value>
-  </data>
-  <data name="CompanyContactEmail" xml:space="preserve">
-    <value>Contact Email</value>
-  </data>
-  <data name="CompanyBusinessType" xml:space="preserve">
-    <value>Buisness Type</value>
-  </data>
-  <data name="CompanyAnnualSalesTurnover" xml:space="preserve">
-    <value>Annual Sales Turnover</value>
-  </data>
-  <data name="CompanyAddress" xml:space="preserve">
-    <value>Address</value>
-  </data>
-  <data name="Company" xml:space="preserve">
-    <value>Company</value>
-  </data>
-  <data name="ColumnSmallImage" xml:space="preserve">
-    <value>Small Image</value>
-  </data>
-  <data name="ColumnProductName" xml:space="preserve">
-    <value>Product Name</value>
-  </data>
-  <data name="ColumnLargeImage" xml:space="preserve">
-    <value>Large Image</value>
-  </data>
-  <data name="ColumnIsInactive" xml:space="preserve">
+  <data name="ProductIsActive" xml:space="preserve">
     <value>Is Inactive?</value>
   </data>
-  <data name="Color" xml:space="preserve">
-    <value>Color</value>
+  <data name="ProductKeySpecifications" xml:space="preserve">
+    <value>Key Specifications</value>
   </data>
-  <data name="City1" xml:space="preserve">
-    <value>City</value>
+  <data name="ProductLargeImg" xml:space="preserve">
+    <value>Large Image</value>
   </data>
-  <data name="City" xml:space="preserve">
-    <value>City</value>
+  <data name="ProductMinOrderQuantity" xml:space="preserve">
+    <value>Minimum Order Quanity</value>
   </data>
-  <data name="CheckTheFollowing" xml:space="preserve">
-    <value>Check one of the following</value>
+  <data name="ProductModelNumber" xml:space="preserve">
+    <value>Model Number</value>
   </data>
-  <data name="ChangeOfAddress" xml:space="preserve">
-    <value>Change of Address</value>
+  <data name="ProductName" xml:space="preserve">
+    <value>Product Name</value>
   </data>
-  <data name="CategoryName1" xml:space="preserve">
-    <value>Category Name</value>
+  <data name="ProductPaymentTerms" xml:space="preserve">
+    <value>Payment Terms</value>
   </data>
-  <data name="CategoryName" xml:space="preserve">
-    <value>Category Name</value>
+  <data name="ProductPrice" xml:space="preserve">
+    <value>Price</value>
   </data>
-  <data name="CategoryID" xml:space="preserve">
-    <value>Category Id</value>
+  <data name="ProductPriceCeiling" xml:space="preserve">
+    <value>Price Ceiling</value>
   </data>
-  <data name="Categories" xml:space="preserve">
-    <value>Categories</value>
+  <data name="ProductSmallImg" xml:space="preserve">
+    <value>Small Image</value>
   </data>
-  <data name="CardType" xml:space="preserve">
-    <value>Card Type</value>
+  <data name="Professional" xml:space="preserve">
+    <value>Professional</value>
   </data>
-  <data name="CardNumber" xml:space="preserve">
-    <value>Card Number</value>
+  <data name="PromotionalCode" xml:space="preserve">
+    <value>Promotional Code</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+  <data name="PromotionalOrMarketing" xml:space="preserve">
+    <value>Promotional/Marketing Company and/or Agency</value>
   </data>
-  <data name="Canada" xml:space="preserve">
-    <value>Canada</value>
+  <data name="PromotionalProductsAssociation" xml:space="preserve">
+    <value>Promotional Products Association Intl.</value>
   </data>
-  <data name="BuyOneVideo" xml:space="preserve">
-    <value>Buy one video (to be shown with all of your products) $499/year</value>
+  <data name="ProvideInvoiceOnDemand" xml:space="preserve">
+    <value>I agree that upon request, I will provide the number of invoicesand other information ASI requests in order to demonstrate that I am a re-sellerof advertising specialties or related items, such as printed promotional items,trophies, awards, imprinted apparel, screen-printed or embroidered items, signsand other related items consistent with membership requirements. I under stand thata failure to do so may result in the de-listing of the company as an ASI member.</value>
   </data>
-  <data name="BuyerOrPurchasing" xml:space="preserve">
-    <value>Buyer/Purchasing</value>
+  <data name="PublicationAddDescription" xml:space="preserve">
+    <value>This page allows the user to add a new Publication</value>
   </data>
-  <data name="Buyer" xml:space="preserve">
-    <value>Buyer</value>
+  <data name="PublicationAddTitle" xml:space="preserve">
+    <value>Add Publication</value>
   </data>
-  <data name="BuyAdditionalVideo" xml:space="preserve">
-    <value>Buy additional videos (to be shown across different product categories) $79/year</value>
+  <data name="PublicationEditDescription" xml:space="preserve">
+    <value>Viewing the detailed information of a specific publication</value>
   </data>
-  <data name="BusinessHours" xml:space="preserve">
-    <value>Business Hours</value>
+  <data name="PublicationEditFieldsNoSchedule" xml:space="preserve">
+    <value>This Publication has no schedule assigned</value>
   </data>
-  <data name="BuddyList_199" xml:space="preserve">
-    <value>Buddy List $199/mo.</value>
+  <data name="PublicationEditFieldsSchedule" xml:space="preserve">
+    <value>Assigned Schedules</value>
   </data>
-  <data name="Brother" xml:space="preserve">
-    <value>Brother</value>
+  <data name="PublicationEditFieldsTitle" xml:space="preserve">
+    <value>Edit Publication</value>
   </data>
-  <data name="BrandOfEmbroideryMachine" xml:space="preserve">
-    <value>What brand of embroidery machine are you currently using? (Check ALL that apply)</value>
+  <data name="PublicationEditTitle" xml:space="preserve">
+    <value>Publication - {0}</value>
   </data>
-  <data name="BillingZip" xml:space="preserve">
-    <value>Billing Zipcode</value>
+  <data name="PunchingOrDigitizing" xml:space="preserve">
+    <value>Punching/Digitizing</value>
   </data>
-  <data name="BillingWebUrl" xml:space="preserve">
-    <value>Billing Web URL</value>
+  <data name="QuickPrinters" xml:space="preserve">
+    <value>Quick Printers</value>
   </data>
-  <data name="BillingTollPhone" xml:space="preserve">
-    <value>Billing Toll Free Phone</value>
+  <data name="ReceiveNewsLetters" xml:space="preserve">
+    <value>By providing your email address, you are opting in to receive our e-newsletters.&lt;br /&gt; If you do not wish to receive, please uncheck here.</value>
   </data>
-  <data name="BillingState" xml:space="preserve">
-    <value>Billing State</value>
+  <data name="RenewalSubscription" xml:space="preserve">
+    <value>Renewal Subscription</value>
   </data>
-  <data name="BillingPhone" xml:space="preserve">
-    <value>Billing Phone Number</value>
+  <data name="Retailer" xml:space="preserve">
+    <value>Retailer</value>
   </data>
-  <data name="BillingFax" xml:space="preserve">
-    <value>Billing Fax Number</value>
+  <data name="RetypeEmail" xml:space="preserve">
+    <value>Re-Type Email</value>
   </data>
-  <data name="BillingEmail" xml:space="preserve">
-    <value>Billing Email</value>
+  <data name="SalesOrMarketing" xml:space="preserve">
+    <value>Sales/Marketing</value>
   </data>
-  <data name="BillingCity" xml:space="preserve">
-    <value>Billing City</value>
+  <data name="SalesVolume" xml:space="preserve">
+    <value>Sales Volume</value>
   </data>
-  <data name="BillingAddress" xml:space="preserve">
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Screenprinting" xml:space="preserve">
+    <value>Screenprinting</value>
+  </data>
+  <data name="SecondaryBusiness" xml:space="preserve">
+    <value>What is your company's secondary business? (Check ALL that apply)</value>
+  </data>
+  <data name="SelectATitle" xml:space="preserve">
+    <value>- Select a title -</value>
+  </data>
+  <data name="SelectBusiness" xml:space="preserve">
+    <value>- Select a Business --</value>
+  </data>
+  <data name="SelectNumberOfProducts" xml:space="preserve">
+    <value>Select number of products</value>
+  </data>
+  <data name="SellThruAffiliate" xml:space="preserve">
+    <value>Sell Through Affiliate</value>
+  </data>
+  <data name="SellThruDirectMarketing" xml:space="preserve">
+    <value>Sell Through Direct Marketing</value>
+  </data>
+  <data name="SellThruDistributors" xml:space="preserve">
+    <value>Sell Through Distributors</value>
+  </data>
+  <data name="SellThruInternet" xml:space="preserve">
+    <value>Sell Through Internet</value>
+  </data>
+  <data name="SellThruRetail" xml:space="preserve">
+    <value>Sell Through Retail</value>
+  </data>
+  <data name="SellToEndUsers" xml:space="preserve">
+    <value>Sell to End Users</value>
+  </data>
+  <data name="Sequence" xml:space="preserve">
+    <value>Sequence</value>
+  </data>
+  <data name="SGRMaintenanceLink" xml:space="preserve">
+    <value>SGR Maintenance</value>
+  </data>
+  <data name="ShippingAddress" xml:space="preserve">
+    <value>Shipping Address</value>
+  </data>
+  <data name="ShippingAddress2" xml:space="preserve">
+    <value>Seconday Shipping Address</value>
+  </data>
+  <data name="ShippingCity" xml:space="preserve">
+    <value>Shipping City</value>
+  </data>
+  <data name="ShippingMethod" xml:space="preserve">
+    <value>Shipping Method</value>
+  </data>
+  <data name="ShippingState" xml:space="preserve">
+    <value>Shipping State</value>
+  </data>
+  <data name="ShippingZip" xml:space="preserve">
+    <value>Shipping Zipcode</value>
+  </data>
+  <data name="SignatureType" xml:space="preserve">
+    <value>Approved Signatures</value>
+  </data>
+  <data name="SignForVerification" xml:space="preserve">
+    <value>What is your favorite hobby?</value>
+  </data>
+  <data name="SignsAndPrinters" xml:space="preserve">
+    <value>Signs and Printers</value>
+  </data>
+  <data name="SilkScreen" xml:space="preserve">
+    <value>SilkScreen</value>
+  </data>
+  <data name="SilkScreen1" xml:space="preserve">
+    <value>SilkScreen</value>
+  </data>
+  <data name="Singer" xml:space="preserve">
+    <value>Singer</value>
+  </data>
+  <data name="SixMonthsToOneYear" xml:space="preserve">
+    <value>Six Months to One Year</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value> Size</value>
+  </data>
+  <data name="SmallImagePath" xml:space="preserve">
+    <value>SmallImagePath</value>
+  </data>
+  <data name="SolelyWorkName" xml:space="preserve">
+    <value>If the answer to Question No. 5 is "no" what is the name ofthe other company you work for?</value>
+  </data>
+  <data name="SpecialtyOrPromotional" xml:space="preserve">
+    <value>Advertising Specialty/Promotional Products Distributor</value>
+  </data>
+  <data name="Standard" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="Standard1" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="StartEmbroideryBusiness" xml:space="preserve">
+    <value>If you plan to start an embroidery business, please estimate when you will launch your business:</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="State1" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="StitchesNumberOfEmployees" xml:space="preserve">
+    <value>How many total employees do you have at all of your locations?</value>
+  </data>
+  <data name="StitchesSmallBusiness" xml:space="preserve">
+    <value>Stitches Small Business</value>
+  </data>
+  <data name="StoreAdminLink" xml:space="preserve">
+    <value>ASI Store Admin</value>
+  </data>
+  <data name="StoreAdminOrders" xml:space="preserve">
+    <value>Orders processed through the store</value>
+  </data>
+  <data name="StoreAdminProducts" xml:space="preserve">
+    <value>List of Products driving the store</value>
+  </data>
+  <data name="StoreApplication" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="StoreASINumber" xml:space="preserve">
+    <value>ASI#</value>
+  </data>
+  <data name="StoreBillingAddress" xml:space="preserve">
     <value>Billing Address</value>
   </data>
-  <data name="Between6And10" xml:space="preserve">
-    <value>6 - 10</value>
+  <data name="StoreClosedDate" xml:space="preserve">
+    <value>Closed Date</value>
   </data>
-  <data name="Between5And10" xml:space="preserve">
-    <value>5-10</value>
+  <data name="StoreCompany" xml:space="preserve">
+    <value>Company</value>
   </data>
-  <data name="Between51And75" xml:space="preserve">
-    <value>51 - 75</value>
+  <data name="StoreCompanyName" xml:space="preserve">
+    <value>Company Name</value>
   </data>
-  <data name="Between50And99" xml:space="preserve">
-    <value>50 - 99</value>
+  <data name="StoreDateErrorMessage" xml:space="preserve">
+    <value>Start date must not be after end date</value>
   </data>
-  <data name="Between50000And99999" xml:space="preserve">
-    <value>$50,000 - $99,999</value>
+  <data name="StoreDateErrorMessage1" xml:space="preserve">
+    <value>Start date must not be after end date</value>
   </data>
-  <data name="Between500000And999999" xml:space="preserve">
-    <value>$500,000 to $999,999</value>
+  <data name="StoreDateOrderCreated" xml:space="preserve">
+    <value>Date Created</value>
   </data>
-  <data name="Between30And49" xml:space="preserve">
-    <value>30 - 49</value>
+  <data name="StoreEmail" xml:space="preserve">
+    <value>Email</value>
   </data>
-  <data name="Between300000And499999" xml:space="preserve">
-    <value>$300,000 to $499,999</value>
+  <data name="StoreItem" xml:space="preserve">
+    <value>Item</value>
   </data>
-  <data name="Between3000000And4999999" xml:space="preserve">
-    <value>$3,000,000 to $4,999,999</value>
+  <data name="StoreName" xml:space="preserve">
+    <value>Name</value>
   </data>
-  <data name="Between2And5" xml:space="preserve">
-    <value>2 - 5</value>
+  <data name="StoreOrderAmount" xml:space="preserve">
+    <value>Billing Amount</value>
   </data>
-  <data name="Between26And50" xml:space="preserve">
-    <value>26-50</value>
+  <data name="StoreOrderClosedDate" xml:space="preserve">
+    <value>Order Closed Date</value>
   </data>
-  <data name="Between250000And499999" xml:space="preserve">
-    <value>$250,000 - $499,999</value>
+  <data name="StoreOrderDate" xml:space="preserve">
+    <value>Order Date</value>
   </data>
-  <data name="Between21And29" xml:space="preserve">
-    <value>21 - 29</value>
+  <data name="StoreOrderID" xml:space="preserve">
+    <value>Order Id</value>
   </data>
-  <data name="Between200And500" xml:space="preserve">
-    <value>200 - 500</value>
+  <data name="StorePhone" xml:space="preserve">
+    <value>Phone</value>
   </data>
-  <data name="Between16And20" xml:space="preserve">
-    <value>16 - 20</value>
+  <data name="StoreProduct" xml:space="preserve">
+    <value>Product</value>
   </data>
-  <data name="Between11And25" xml:space="preserve">
-    <value>11-25</value>
+  <data name="StoreQuantity" xml:space="preserve">
+    <value>Quantity</value>
   </data>
-  <data name="Between11And15" xml:space="preserve">
-    <value>11 - 15</value>
+  <data name="StoreSearchButton" xml:space="preserve">
+    <value>Search</value>
   </data>
-  <data name="Between100And199" xml:space="preserve">
-    <value>100 - 199</value>
+  <data name="StoreSearchMessage" xml:space="preserve">
+    <value>Enter a date range to search:</value>
   </data>
-  <data name="Between10000And99000" xml:space="preserve">
-    <value>$10,000 to $99,000</value>
+  <data name="StoreStatus" xml:space="preserve">
+    <value>Order Status</value>
   </data>
-  <data name="Between100000And299999" xml:space="preserve">
-    <value>$100,000 to $299,999</value>
+  <data name="StoreStatusClosed" xml:space="preserve">
+    <value>Closed</value>
   </data>
-  <data name="Between100000And249999" xml:space="preserve">
-    <value>$100,000 - $249,999</value>
+  <data name="StoreStatusOpened" xml:space="preserve">
+    <value>Open</value>
   </data>
-  <data name="Between1000000And4999999" xml:space="preserve">
-    <value>$1,000,000 - $4,999,999</value>
+  <data name="StoreTitleCatalogsApplication" xml:space="preserve">
+    <value>Catalogs</value>
   </data>
-  <data name="Between1000000And2999999" xml:space="preserve">
-    <value>$1,000,000 to $2,999,999</value>
+  <data name="StoreTitleDecoratorApplication" xml:space="preserve">
+    <value>Decorator Application</value>
   </data>
-  <data name="BestDescribesYourTitle" xml:space="preserve">
-    <value>Which of the following best describes your title? (Check only ONE)</value>
+  <data name="StoreTitleDistributorApplication" xml:space="preserve">
+    <value>Distributor Application</value>
   </data>
-  <data name="Bernina" xml:space="preserve">
-    <value>Bernina</value>
+  <data name="StoreTitleMagazinesApplication" xml:space="preserve">
+    <value>Magazines - {0}</value>
   </data>
-  <data name="Basic1" xml:space="preserve">
-    <value>Basic</value>
+  <data name="StoreTitleOpenCarts" xml:space="preserve">
+    <value>Open Carts</value>
   </data>
-  <data name="Basic" xml:space="preserve">
-    <value>Basic</value>
+  <data name="StoreTitleOrders" xml:space="preserve">
+    <value>Orders</value>
   </data>
-  <data name="Barudan" xml:space="preserve">
-    <value>Barudan</value>
+  <data name="StoreTitleSupplierApplication" xml:space="preserve">
+    <value>Supplier Application</value>
   </data>
-  <data name="BannerAd" xml:space="preserve">
-    <value>Banner Ad</value>
+  <data name="StoreTotalAnnualSalesVolume" xml:space="preserve">
+    <value>Total Annual Sales Volume</value>
   </data>
-  <data name="Back" xml:space="preserve">
-    <value>Back</value>
+  <data name="Street1" xml:space="preserve">
+    <value>Street Address </value>
   </data>
-  <data name="Babylock" xml:space="preserve">
-    <value>Babylock</value>
+  <data name="Street2" xml:space="preserve">
+    <value>Secondary Street Address</value>
   </data>
-  <data name="AuthorizeUPSNewAccount" xml:space="preserve">
-    <value>Authorize UPS New Account</value>
+  <data name="String1" xml:space="preserve">
+    <value />
   </data>
-  <data name="ASINumber1" xml:space="preserve">
-    <value>ASI #</value>
+  <data name="Sublimination" xml:space="preserve">
+    <value>Sublimination</value>
   </data>
-  <data name="ASINumber" xml:space="preserve">
-    <value>ASI Number</value>
+  <data name="Sublimination1" xml:space="preserve">
+    <value>Sublimination</value>
   </data>
-  <data name="ASIContact1" xml:space="preserve">
-    <value>ASI Contact Name</value>
+  <data name="Summary" xml:space="preserve">
+    <value>Summary</value>
   </data>
-  <data name="ASIContact" xml:space="preserve">
-    <value>ASI Contact</value>
+  <data name="Supplement" xml:space="preserve">
+    <value>Supplement</value>
   </data>
-  <data name="ArtworkOptionforUPLOAD" xml:space="preserve">
-    <value>I would like to UPLOAD Camera Ready Artwork</value>
+  <data name="SupplierAppCompanyContacts" xml:space="preserve">
+    <value>Company Contacts</value>
   </data>
-  <data name="ArtworkOptionforEMAIL" xml:space="preserve">
-    <value>I would like to EMAIL Camera Ready Artwork to &lt;a href="mailto:catalogart@asicentral.com"&gt;catalogart@asicentral.com&lt;/a&gt;</value>
+  <data name="SupplierAppMethodsOfImprinting" xml:space="preserve">
+    <value>Methods of Imprinting</value>
   </data>
-  <data name="Artwork" xml:space="preserve">
-    <value>Artwork</value>
+  <data name="SupplierAppSalesForce" xml:space="preserve">
+    <value>Sales Force</value>
   </data>
-  <data name="ArtOrDesignFirm" xml:space="preserve">
-    <value>Art/Design Firm</value>
+  <data name="SWF" xml:space="preserve">
+    <value>SWF</value>
   </data>
-  <data name="ArtistOrDesigner" xml:space="preserve">
-    <value>Artist/Designer</value>
+  <data name="Tajima" xml:space="preserve">
+    <value>Tajima</value>
   </data>
-  <data name="Area" xml:space="preserve">
-    <value>Area</value>
+  <data name="Telephone" xml:space="preserve">
+    <value>Telephone</value>
   </data>
-  <data name="ApplicationStatus" xml:space="preserve">
-    <value>Application Status</value>
+  <data name="TermsConditionsError" xml:space="preserve">
+    <value>Please check that you agree to the terms and conditions</value>
   </data>
-  <data name="ApplicantName" xml:space="preserve">
-    <value>Individual’s Name (filling out the online form):</value>
+  <data name="TextileScreenprinting" xml:space="preserve">
+    <value>Textile Screenprinting</value>
   </data>
-  <data name="ApplicantEmail" xml:space="preserve">
-    <value>Applicant Email address</value>
+  <data name="TextileScreenprintingNotOffersInHouse" xml:space="preserve">
+    <value>Textile Screenprinting (does not offer embroidery/monogramming in-house or via subcontracting)</value>
   </data>
-  <data name="AnnualSalesVolumeASP" xml:space="preserve">
-    <value>Annual Sales Volume ASP</value>
+  <data name="TextileScreenprintingOffersInHouse" xml:space="preserve">
+    <value>Textile Screenprinting (also offers embroidery/monogramming in-house or via subcontracting)</value>
   </data>
-  <data name="AnnualSalesVolume" xml:space="preserve">
-    <value>Annual Sales Volume</value>
+  <data name="TextUnderImage" xml:space="preserve">
+    <value>TextUnderImage</value>
   </data>
-  <data name="AgreeUPSTermsAndConditions" xml:space="preserve">
-    <value>I hereby request and authorize ASI to open a UPS® account for my company to take advantage of the ASI shipping program incentives. I understand the shipping incentives will begin 10 working days after I receive my ASI number and there are no other incentives available to my existing UPS® account number.</value>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
   </data>
-  <data name="AgreeTermsAndConditions" xml:space="preserve">
-    <value>Agree to the terms and condition?</value>
+  <data name="TitleAd" xml:space="preserve">
+    <value>Title Ad</value>
   </data>
-  <data name="AgreeReceivePromotionalProducts" xml:space="preserve">
-    <value>Agreed to recieve promotion products?</value>
-  </data>
-  <data name="AgreeASITermsAndConditions" xml:space="preserve">
-    <value>I agree to the terms and conditions</value>
-  </data>
-  <data name="AffiliateCompanyName" xml:space="preserve">
-    <value>Affiliate Company Name</value>
-  </data>
-  <data name="AffiliateASINumber" xml:space="preserve">
-    <value>Affiliate ASI Number</value>
-  </data>
-  <data name="Aemco" xml:space="preserve">
-    <value>Aemco</value>
-  </data>
-  <data name="AdvertisingSpecialtyOrPromotional" xml:space="preserve">
-    <value>Advertising Specialty/Promotional Products</value>
-  </data>
-  <data name="AdvertisingSpecialtyInstitute" xml:space="preserve">
-    <value>Advertising Specialty Institute ASI</value>
-  </data>
-  <data name="AdType" xml:space="preserve">
-    <value>Ad Type's</value>
-  </data>
-  <data name="AdSpecialty" xml:space="preserve">
-    <value>Ad Specialty</value>
-  </data>
-  <data name="AdSelectDate" xml:space="preserve">
-    <value>Select Date</value>
-  </data>
-  <data name="Administrative" xml:space="preserve">
-    <value>Administrative</value>
-  </data>
-  <data name="Address2" xml:space="preserve">
-    <value>Street Address 2</value>
-  </data>
-  <data name="Address1" xml:space="preserve">
-    <value>Street Address 1</value>
-  </data>
-  <data name="AddCompany" xml:space="preserve">
-    <value>Add Comapny</value>
-  </data>
-  <data name="AddCategory" xml:space="preserve">
+  <data name="TitleAddCategory" xml:space="preserve">
     <value>Add Category</value>
   </data>
-  <data name="Add" xml:space="preserve">
-    <value>Add</value>
+  <data name="TitleAddCategory1" xml:space="preserve">
+    <value>Add Category</value>
   </data>
-  <data name="SendMyAdMessage" xml:space="preserve">
-    <value>Please Login to the website to upload your ad.</value>
+  <data name="TitleAddCompany" xml:space="preserve">
+    <value>Add a Company</value>
+  </data>
+  <data name="TitleAddProduct" xml:space="preserve">
+    <value>Add Product</value>
+  </data>
+  <data name="TitleASIStoreAdmin" xml:space="preserve">
+    <value>ASI Store Admin</value>
+  </data>
+  <data name="TitleCategories" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="TitleEditCategory" xml:space="preserve">
+    <value>Edit Category</value>
+  </data>
+  <data name="TitleEditCompany" xml:space="preserve">
+    <value>Edit Company</value>
+  </data>
+  <data name="TitleEditProduct" xml:space="preserve">
+    <value>Edit Product</value>
+  </data>
+  <data name="TitleListCompanies" xml:space="preserve">
+    <value>List of Companies</value>
+  </data>
+  <data name="TotalSalesVolume" xml:space="preserve">
+    <value>What is your company's total annual sales volume?</value>
+  </data>
+  <data name="TowerTuesdayAd" xml:space="preserve">
+    <value>Tower Tuesday Ad</value>
+  </data>
+  <data name="Toyota" xml:space="preserve">
+    <value>Toyota</value>
+  </data>
+  <data name="Transfer" xml:space="preserve">
+    <value>Transfer</value>
+  </data>
+  <data name="Transfer1" xml:space="preserve">
+    <value>Transfer</value>
+  </data>
+  <data name="TrophiesAwardsAndMedals" xml:space="preserve">
+    <value>Trophies, Awards and Medals</value>
+  </data>
+  <data name="TrueAnswers" xml:space="preserve">
+    <value>I certify that the answers I have provided above and in the ASI MembershipApplication are true and accurate. If ASI determines otherwise, I understand thatASI, in it sole discretion, may de-list my company as an ASI member.</value>
+  </data>
+  <data name="Ultramatic" xml:space="preserve">
+    <value>Ultramatic</value>
+  </data>
+  <data name="Undecided" xml:space="preserve">
+    <value>Undecided</value>
+  </data>
+  <data name="Under5" xml:space="preserve">
+    <value>Under 5</value>
+  </data>
+  <data name="UploadedImage" xml:space="preserve">
+    <value>Uploaded Image</value>
+  </data>
+  <data name="UploadedVideo" xml:space="preserve">
+    <value>Uploaded Video</value>
+  </data>
+  <data name="UPS2Day" xml:space="preserve">
+    <value>UPS 2nd Day</value>
+  </data>
+  <data name="UPSAddress" xml:space="preserve">
+    <value>UPS Address</value>
+  </data>
+  <data name="UPSCity" xml:space="preserve">
+    <value>UPS City</value>
+  </data>
+  <data name="UPSGround" xml:space="preserve">
+    <value>UPS Ground</value>
+  </data>
+  <data name="UPSOvernight" xml:space="preserve">
+    <value>UPS Overnight</value>
+  </data>
+  <data name="UPSShippingNumber" xml:space="preserve">
+    <value>UPS Shipping Number</value>
+  </data>
+  <data name="UPSState" xml:space="preserve">
+    <value>UPS State</value>
+  </data>
+  <data name="UPSZip" xml:space="preserve">
+    <value>UPS Zip</value>
+  </data>
+  <data name="Upto49999" xml:space="preserve">
+    <value>Up to $49,999</value>
+  </data>
+  <data name="Upto9999" xml:space="preserve">
+    <value>Up to $9,999</value>
+  </data>
+  <data name="USA" xml:space="preserve">
+    <value>United States</value>
+  </data>
+  <data name="VicePresident" xml:space="preserve">
+    <value>Vice President</value>
+  </data>
+  <data name="VikingOrHusqvarna" xml:space="preserve">
+    <value>Viking/Husqvarna</value>
+  </data>
+  <data name="WearablesBusinessStyle" xml:space="preserve">
+    <value>Wearables Style</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="WebUrl" xml:space="preserve">
+    <value>Web Address</value>
+  </data>
+  <data name="WholeSaler" xml:space="preserve">
+    <value>WholeSaler</value>
+  </data>
+  <data name="WithinNextSixMonths" xml:space="preserve">
+    <value>Within Next Six Months</value>
+  </data>
+  <data name="YearEnteredAdvertising" xml:space="preserve">
+    <value>Year Entered Advertising Specialty Industry</value>
+  </data>
+  <data name="YearEst" xml:space="preserve">
+    <value>Year Established</value>
+  </data>
+  <data name="YearEst1" xml:space="preserve">
+    <value>Year</value>
+  </data>
+  <data name="YearEstablished" xml:space="preserve">
+    <value>Year Established</value>
+  </data>
+  <data name="YearStartSelling" xml:space="preserve">
+    <value>Year</value>
+  </data>
+  <data name="Zip" xml:space="preserve">
+    <value>Zip Code</value>
+  </data>
+  <data name="Zipcode" xml:space="preserve">
+    <value>Zipcode</value>
+  </data>
+  <data name="ZSK" xml:space="preserve">
+    <value>ZSK</value>
   </data>
 </root>
