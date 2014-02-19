@@ -28,7 +28,9 @@
 				@Html.EditorFor(m => m.City) @Html.ValidationMessageFor(m => m.City)
 			</span>
 			<span class="label-row">
-				@Html.LabelFor(m => m.State, new { @class = "span3" }) 
+                @if(Model.Country == "USA")
+                {	@Html.LabelFor(m => m.State, new { @class = "span3" }) }
+                else { @Html.Label(asi.asicentral.Resources.Resource.InternationalState) }
 				@Html.LabelFor(m => m.Zip, new { @class = "span3" })
 				@Html.LabelFor(m => m.Country, new { @class = "span3" })
             </span>
@@ -97,7 +99,9 @@
 		</span>
 				
 		<span class="label-row">
-			@Html.LabelFor(m => m.BillingState) 
+			@if (Model.BillingCountry == "USA")
+            { @Html.LabelFor(m => m.BillingState) } 
+            else { @Html.Label(asi.asicentral.Resources.Resource.InternationalState) }
 			@Html.LabelFor(m => m.BillingZip) 
 			@Html.LabelFor(m => m.BillingCountry)
 		</span>
@@ -149,7 +153,9 @@
 		</span>
 				
 		<span class="label-row">
-			@Html.LabelFor(m => m.ShippingState) 
+            @if (Model.ShippingCountry == "USA")
+            { @Html.LabelFor(m => m.ShippingState) }
+            else { @Html.Label(asi.asicentral.Resources.Resource.InternationalState) }
 			@Html.LabelFor(m => m.ShippingZip) 
 			@Html.LabelFor(m => m.ShippingCountry)
 		</span>
