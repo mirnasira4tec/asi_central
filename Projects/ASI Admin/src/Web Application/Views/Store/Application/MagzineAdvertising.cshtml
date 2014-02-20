@@ -68,7 +68,7 @@
                                     seq++;
                                 }
                     <span class="label-row">
-                        <input type="text" readonly="true" value="@Model.MagAdItem[i].Issue.Issue.ToString("MM/dd/yyyy")" />
+                        <input type="text" readonly="true" value="@Model.MagAdItem[i].Issue.Issue.ToString("MMMM") @Model.MagAdItem[i].Issue.Issue.ToString("yy")" />
                     </span> 
                             }
                         }
