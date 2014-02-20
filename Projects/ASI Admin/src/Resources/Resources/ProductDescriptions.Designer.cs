@@ -133,7 +133,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;Counselor has a paid circulation of 14,500 this monthly magazine reaches C-level distributors and is often referred to as the “bible of the promotional products industry”. All the top 40 ASI distributors receive copies of Counselor.
+        ///   Looks up a localized string similar to Counselor has a paid circulation of 14,500. This monthly magazine reaches C-level distributors and is often referred to as the “Bible of the promotional products industry.&quot; All the Top 40 ASI Distributors receive copies of Counselor..
         /// </summary>
         public static string ProductCounselorAdvertising {
             get {
