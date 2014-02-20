@@ -170,6 +170,7 @@ namespace asi.asicentral.web.model.store
                 case 74:
                 case 75:
                 case 76:
+                    magazineAdvertising = magazineAdvertising.OrderBy(item => item.Sequence).OrderBy(item => item.Issue.Id).ToList();
                     MagAdItem = new List<MagazineAdvertisingItem>();
                     for (int i = 0; i < magazineAdvertising.Count; i++)
                     {
@@ -183,7 +184,7 @@ namespace asi.asicentral.web.model.store
                         if (magazineAdvertising[i].ArtWork)
                             magAdItem.ArtWork = magazinesAdvertisingHelper.MAGAZINESADVERTISING_ARTWORK[0];
                         else
-                            magAdItem.ArtWork = magazinesAdvertisingHelper.MAGAZINESADVERTISING_ARTWORK[0];
+                            magAdItem.ArtWork = magazinesAdvertisingHelper.MAGAZINESADVERTISING_ARTWORK[1];
                         MagAdItem.Add(magAdItem);
                        
                     }
