@@ -2806,6 +2806,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You will receive an email with uploading instructions shortly..
+        /// </summary>
+        public static string MagazineAdvertisingSendMyAdEmail {
+            get {
+                return ResourceManager.GetString("MagazineAdvertisingSendMyAdEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You’ve chosen to save 15% by supplying your own ASI magazine ad. Please click the following link and upload your ad now..
         /// </summary>
         public static string MagazineAdvertisingSendMyAdMessage {
