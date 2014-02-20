@@ -170,7 +170,7 @@ namespace asi.asicentral.web.model.store
                 case 74:
                 case 75:
                 case 76:
-                    magazineAdvertising = magazineAdvertising.OrderBy(item => item.Sequence).ToList();
+                    magazineAdvertising = magazineAdvertising.OrderBy(item => item.Sequence).OrderBy(item => item.Issue.Id).ToList();
                     MagAdItem = new List<MagazineAdvertisingItem>();
                     for (int i = 0; i < magazineAdvertising.Count; i++)
                     {
