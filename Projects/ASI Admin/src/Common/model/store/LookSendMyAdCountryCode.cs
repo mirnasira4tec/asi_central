@@ -26,5 +26,18 @@ namespace asi.asicentral.model.store
         public DateTime UpdateDate { get; set; }
 
         public string UpdateSource { get; set; }
+
+        public bool CountryCodeExist(string country)
+        {
+            bool result = false;
+            if(country != null &&
+               (this.CountryName.ToLower() == country.ToLower()
+               || this.Alpha3 == country.ToLower()
+               || this.Alpha2 == country.ToLower()))
+            {
+                result = true;
+            }
+            return result;
+        }
     }
 }
