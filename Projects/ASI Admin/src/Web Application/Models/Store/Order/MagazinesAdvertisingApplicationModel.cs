@@ -132,6 +132,8 @@ namespace asi.asicentral.web.model.store
         public string ProductName { get; set; }
         public int ProductId { get; set; }
         public decimal Price { get; set; }
+
+       public IList<int> ids { get; set; }
         
         public IList<StoreIndividual> Contacts { get; set; }
 
@@ -160,7 +162,20 @@ namespace asi.asicentral.web.model.store
                 ProductName = orderdetail.Product.Name;
                 ProductId = orderdetail.Product.Id;
             }
-
+            
+            MagazineType magType = (MagazineType)ProductId;
+            var issue = storeService.GetAll<LookMagazineIssue>(true).Where(item => item.ProductId == magType).GroupBy(iss => new { iss.MaterialDeadline, iss.MailingDate, iss.ReservationDeadline }).ToList();
+            ids = new List<int>();
+            foreach (var item in issue)
+            {
+                foreach (var subitem in item)
+                {
+                    if (item.Count() == 2)
+                    {
+                        ids.Add(subitem.Id);
+                    }
+                }
+            }
             #region Fill Magazine Advertising details based on product
             switch (ProductId)
             {
@@ -171,7 +186,7 @@ namespace asi.asicentral.web.model.store
                 case 75:
                 case 76:
                     magazineAdvertising = magazineAdvertising.OrderBy(item => item.Sequence).ThenBy(item => item.Issue.Id).ToList();
-                    
+                 
                     MagAdItem = new List<MagazineAdvertisingItem>();
                     for (int i = 0; i < magazineAdvertising.Count; i++)
                     {
