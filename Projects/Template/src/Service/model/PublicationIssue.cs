@@ -39,6 +39,15 @@ namespace asi.asicentral.model
             return equals;
         }
 
+        public void CopyTo(PublicationIssue issue)
+        {
+            if (issue != null)
+            {
+                issue.Name = this.Name;
+                issue.PublicationIssueId = this.PublicationIssueId;
+            }
+        }
+
         public override int GetHashCode()
         {
             return PublicationIssueId.GetHashCode();

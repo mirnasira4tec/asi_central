@@ -41,6 +41,10 @@ namespace asi.asicentral.database.mappings.store
                 .WithOptional()
                 .HasForeignKey(t => t.OrderDetailId)
                 .WillCascadeOnDelete();
+
+            HasOptional(t => t.Coupon)
+               .WithMany()
+               .HasForeignKey(t => t.CouponId);
         }
     }
 }

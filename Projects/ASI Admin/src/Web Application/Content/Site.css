@@ -381,7 +381,21 @@ header#site-header {
 	}
 	.label-row  .long{
 		width:94%;
+        margin-left:1%;
+        width:31%;
 	}
+    .label-row textarea{
+	margin-left:1%;
+	width:29%;
+    }
+    .checkbox-row{
+	    margin-left:35%;
+    }
+    .checkbox-row label{
+	    width:50%;
+    }
+
+
 /*-------------------product information--------------*/
 .primary-business-row{
 	float:left;

@@ -45,7 +45,7 @@ namespace asi.asicentral.model
         [Display(ResourceType = typeof(Resource), Name = "Number")]
         public int? Number { get; set; }
 
-        public virtual ICollection<PublicationIssue> Issues { get; set; }
+        public virtual IList<PublicationIssue> Issues { get; set; }
 
         public override string ToString()
         {
@@ -63,7 +63,19 @@ namespace asi.asicentral.model
             publication.Name = Name;
             publication.StartDate = StartDate;
             //might need to make copies of issues. Not required for now
-            publication.Issues = Issues;
+            foreach (PublicationIssue issue in this.Issues)
+            {
+                PublicationIssue original = publication.Issues.Where(iss => iss.PublicationIssueId == issue.PublicationIssueId).FirstOrDefault();
+                if (original != null) issue.CopyTo(original);
+                else publication.Issues.Add(issue);
+            }
+            for (int i = publication.Issues.Count - 1; i > -0; i--)
+            {
+                PublicationIssue original = publication.Issues.ElementAt(i);
+                PublicationIssue newOne = this.Issues.Where(iss => iss.PublicationIssueId == original.PublicationIssueId).FirstOrDefault();
+                if (newOne == null) publication.Issues.Remove(original);
+            }
+
         }
 
         public override bool Equals(object obj)

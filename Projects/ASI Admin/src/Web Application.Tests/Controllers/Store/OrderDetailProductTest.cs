@@ -59,7 +59,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             controller.StoreService = mockStoreService.Object;
 
             OrderDetailApplicationModel model = new OrderDetailApplicationModel(detail);
-            model.Quantity = "40";
+            model.Quantity = 40;
             model.ExternalReference = "102";
             model.ActionName = ApplicationController.COMMAND_SAVE;
 
@@ -68,7 +68,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Assert.AreEqual(result.RouteValues["controller"], "Application");
             Assert.AreEqual(orderRef.ExternalReference, model.ExternalReference);
             Assert.IsNotNull(detail);
-            Assert.AreEqual(detail.Quantity.ToString(), model.Quantity);
+            Assert.AreEqual(detail.Quantity, model.Quantity);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(1));
 
             // user clicks reject - order should be updated to reject
@@ -94,7 +94,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Assert.AreEqual(result.RouteValues["controller"], "Application");
             Assert.AreEqual(orderRef.ExternalReference, model.ExternalReference);
             Assert.IsNotNull(detail);
-            Assert.AreEqual(detail.Quantity.ToString(), model.Quantity);
+            Assert.AreEqual(detail.Quantity, model.Quantity);
             Assert.AreEqual(detail.AcceptedByName, model.AcceptedByName);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(4));
             

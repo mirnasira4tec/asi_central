@@ -175,5 +175,66 @@ namespace asi.asicentral.Tests
                 storeService.SaveChanges();
             }
         }
+
+        [TestMethod]
+        public void StoreDetailMagazineAdvertisingDbTest()
+        {
+            using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
+            {
+                var storeMagazineAdvertisingItems = storeService.GetAll<StoreDetailMagazineAdvertisingItem>().ToList<StoreDetailMagazineAdvertisingItem>();
+                var magazines = storeService.GetAll<LookMagazineIssue>().ToList<LookMagazineIssue>();
+                var adPositions = storeService.GetAll<LookAdPosition>().ToList<LookAdPosition>();
+                var adSizes = storeService.GetAll<LookAdSize>().ToList<LookAdSize>();
+
+                Assert.IsTrue(storeMagazineAdvertisingItems.Count() >= 0);
+                Assert.IsTrue(magazines.Count() >= 0);
+                Assert.IsNotNull(adPositions.Count() >= 0);
+                Assert.IsNotNull(adSizes.Count() >= 0);
+            }
+        }
+
+        [TestMethod]
+        public void LookSendMyAdDbTest()
+        {
+            using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
+            {
+                var lookSendMyAdPublications = storeService.GetAll<LookSendMyAdPublication>().ToList<LookSendMyAdPublication>();
+                var lookSendMyAdAdSpecs = storeService.GetAll<LookSendMyAdAdSpec>().ToList<LookSendMyAdAdSpec>();
+                var lookSendMyAdCountryCodes = storeService.GetAll<LookSendMyAdCountryCode>().ToList<LookSendMyAdCountryCode>();
+
+                Assert.IsTrue(lookSendMyAdPublications.Count() >= 0);
+                Assert.IsTrue(lookSendMyAdAdSpecs.Count() >= 0);
+                Assert.IsTrue(lookSendMyAdCountryCodes.Count() >= 0);
+            }
+        }
+
+        [TestMethod]
+        public void StoreDetailMagazineAdvertisingItemTest()
+        {
+
+            IContainer container = new Container(new EFRegistry());
+
+            using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
+            {
+                IList<StoreDetailMagazineAdvertisingItem> dbMagazineAdItems = 
+                    storeService.GetAll<StoreDetailMagazineAdvertisingItem>().Where(item => item.OrderDetailId == 4).ToList();
+                if (dbMagazineAdItems != null && dbMagazineAdItems.Count > 0)
+                {
+                    var sizes = dbMagazineAdItems.Select(item => item.Size).Distinct();
+                    foreach (var size in sizes)
+                    {
+                        var dbMagazineAdItems2 = dbMagazineAdItems.Where(item1 => item1.Size == size);
+                        foreach (var item2 in dbMagazineAdItems2)
+                        {
+                            item2.ProcessId = "12345";
+                        }
+                    }
+                }
+
+                int c = storeService.SaveChanges();
+
+                Assert.IsTrue(dbMagazineAdItems.Count() >= 0);
+            }
+        }
     }
 }

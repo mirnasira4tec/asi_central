@@ -31,7 +31,7 @@ namespace asi.asicentral.model.store
         public string ChatSettings { get; set; }
         public virtual List<ContextFeature> Features { get; set; }
         public virtual List<ContextProductSequence> Products { get; set; }
-
+      
         public override string ToString()
         {
             return string.Format("Context: {0} - {1}", Id, Name);

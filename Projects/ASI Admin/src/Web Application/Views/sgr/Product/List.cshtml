@@ -1,6 +1,7 @@
 ﻿@using asi.asicentral.web;
 @using asi.asicentral.model.sgr
 @using asi.asicentral.web.Models.sgr
+@using asi.asicentral.Resources
 @model ViewCompany
 
 @{
@@ -25,9 +26,9 @@
             {
                <tr>
                <td>   
-                   <a rel="tooltip" data-placement="right" title="@Html.Encode(asi.asicentral.web.Resource.EditToolTip)" class="icon-pencil" 
+                   <a rel="tooltip" data-placement="right" title="@Html.Encode(asi.asicentral.Resources.Resource.EditToolTip)" class="icon-pencil" 
                         href="@Url.Action("Edit", "../sgr/Category", new ViewCategory { Id = category.Id, CompanyID = Model.Id })"></a>
-                   <a class="RemoveCategory" rel="tooltip" data-placement="right" title="@Html.Encode(asi.asicentral.web.Resource.DeleteTooltip)" href="#">
+                   <a class="RemoveCategory" rel="tooltip" data-placement="right" title="@Html.Encode(asi.asicentral.Resources.Resource.DeleteTooltip)" href="#">
                        <i data-id="@category.Id" data-companyid="@Model.Id" class="icon-remove-circle"></i></a>
                    @Html.ActionLink(@category.Name, "List", "Product", new ViewCompany { Id = Model.Id, CategoryID = category.Id }, null)
                </td>
@@ -46,7 +47,7 @@
                 {
                    <tr>
                        <td>
-                           <a class="RemoveProduct" rel="tooltip" data-placement="right" title="@Html.Encode(asi.asicentral.web.Resource.DeleteTooltip)" href="#">
+                           <a class="RemoveProduct" rel="tooltip" data-placement="right" title="@Html.Encode(asi.asicentral.Resources.Resource.DeleteTooltip)" href="#">
                            <i data-id="@product.Id" data-categoryid="@Model.CategoryID" class="icon-remove-circle"></i></a>                           
                            @Html.ActionLink(@product.Name, "Edit", "Product", new { productId = product.Id, categoryId = Model.CategoryID }, null)
                        </td>
@@ -67,13 +68,13 @@
     <script src="/Scripts/asi.js"></script>
     <script>
     $(".RemoveCategory").click(function (e) {
-            asi.modal.confirm("@Html.Encode(asi.asicentral.web.Resource.ConfirmDeleteTitle)", "@Html.Encode(asi.asicentral.web.Resource.ConfirmDeleteMessage)", function (result) {
+            asi.modal.confirm("@Html.Encode(asi.asicentral.Resources.Resource.ConfirmDeleteTitle)", "@Html.Encode(asi.asicentral.Resources.Resource.ConfirmDeleteMessage)", function (result) {
                 if (result) asi.util.submit('@Url.Action("../Category/Delete")', [{ Name: 'id', Value: $(e.target).data("id") }, { Name: 'companyid', Value: $(e.target).data("companyid") }]);
         });
     });
 
     $(".RemoveProduct").click(function (e) {
-        asi.modal.confirm("@Html.Encode(asi.asicentral.web.Resource.ConfirmDeleteTitle)", "@Html.Encode(asi.asicentral.web.Resource.ConfirmDeleteMessage)", function (result) {
+        asi.modal.confirm("@Html.Encode(asi.asicentral.Resources.Resource.ConfirmDeleteTitle)", "@Html.Encode(asi.asicentral.Resources.Resource.ConfirmDeleteMessage)", function (result) {
             if (result) asi.util.submit('@Url.Action("../Product/Delete")', [{ Name: 'id', Value: $(e.target).data("id") }, { Name: 'categoryid', Value: $(e.target).data("categoryid") }]);
         });
     });

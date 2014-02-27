@@ -19,12 +19,15 @@ namespace asi.asicentral.database.mappings
             //Use only one context across repository per http context or thread
             SelectConstructor<ASIInternetContext>(() => new ASIInternetContext());
             SelectConstructor<StoreContext>(() => new StoreContext());
+            SelectConstructor<ASIEmailBlastContext>(() => new ASIEmailBlastContext());
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIInternetContext>().Name = "ASIInternetContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIPublicationContext>().Name = "ASIPublicationContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<InternetContext>().Name = "InternetContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<StoreContext>().Name = "StoreContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<TIMSSContext>().Name = "TIMSSContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<CallContext>().Name = "CallContext";
+            For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIEmailBlastContext>().Name = "ASIEmailBlastContext";
+
 
             //for each model - get the repository class with the appropriate context 
 
@@ -144,6 +147,9 @@ namespace asi.asicentral.database.mappings
             For<IRepository<ContextProductSequence>>().Use<EFRepository<ContextProductSequence>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
+            For<IRepository<Coupon>>().Use<EFRepository<Coupon>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
             For<IRepository<StoreDetailHallmarkRequest>>().Use<EFRepository<StoreDetailHallmarkRequest>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
@@ -158,6 +164,12 @@ namespace asi.asicentral.database.mappings
 
             For<IRepository<LookDistributorRevenueType>>().Use<EFRepository<LookDistributorRevenueType>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<LookEventMerchandiseProduct>>().Use<EFRepository<LookEventMerchandiseProduct>>()
+                .Ctor<IValidatedContext>().Named("StoreContext"); 
+
+            For<IRepository<LookProductCollections>>().Use<EFRepository<LookProductCollections>>()
+              .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<LookProductLine>>().Use<EFRepository<LookProductLine>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
@@ -223,18 +235,36 @@ namespace asi.asicentral.database.mappings
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<StoreDetailEmailExpress>>().Use<EFRepository<StoreDetailEmailExpress>>()
-    .Ctor<IValidatedContext>().Named("StoreContext");
+                .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<StoreDetailEmailExpressItem>>().Use<EFRepository<StoreDetailEmailExpressItem>>()
                .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<StoreDetailProductCollection>>().Use<EFRepository<StoreDetailProductCollection>>()
-    .Ctor<IValidatedContext>().Named("StoreContext");
+                .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<StoreDetailProductCollectionItem>>().Use<EFRepository<StoreDetailProductCollectionItem>>()
                .Ctor<IValidatedContext>().Named("StoreContext");
 
-            For<IRepository<LookProductCollections>>().Use<EFRepository<LookProductCollections>>()
+            For<IRepository<StoreDetailMagazineAdvertisingItem>>().Use<EFRepository<StoreDetailMagazineAdvertisingItem>>()
+               .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<LookMagazineIssue>>().Use<EFRepository<LookMagazineIssue>>()
+               .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<LookAdPosition>>().Use<EFRepository<LookAdPosition>>()
+               .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<LookAdSize>>().Use<EFRepository<LookAdSize>>()
+               .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<LookSendMyAdPublication>>().Use<EFRepository<LookSendMyAdPublication>>()
+           .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<LookSendMyAdAdSpec>>().Use<EFRepository<LookSendMyAdAdSpec>>()
+               .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<LookSendMyAdCountryCode>>().Use<EFRepository<LookSendMyAdCountryCode>>()
               .Ctor<IValidatedContext>().Named("StoreContext");
 
             #endregion StoreContext
@@ -270,6 +300,13 @@ namespace asi.asicentral.database.mappings
                 .Ctor<IValidatedContext>().Named("CallContext");
 
             #endregion
+
+            #region ASIEmailBlastContext
+
+            For<IRepository<ClosedCampaignDate>>().Use<EFRepository<ClosedCampaignDate>>()
+                .Ctor<IValidatedContext>().Named("ASIEmailBlastContext");
+
+            #endregion ASIEmailBlastContext
         }
     }
 }

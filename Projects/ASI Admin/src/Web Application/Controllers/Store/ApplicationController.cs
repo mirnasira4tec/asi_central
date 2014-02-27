@@ -17,14 +17,15 @@ namespace asi.asicentral.web.Controllers.Store
         public const string COMMAND_SAVE = "Save";
         public const string COMMAND_REJECT = "Reject";
         public const string COMMAND_ACCEPT = "Accept";
-        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 45, 46, 55, 62 };
+        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 45, 46, 55, 62, 70, 71 };
         public static readonly int[] DISTRIBUTOR_CATALOG_PRODUCT_IDS = { 35, 36, 37, 38, 39, 40, 41 };
         public static readonly int[] SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS = { 48, 49, 50, 51, 52, 53, 54 };
         public static readonly int[] SUPPLIER_ESP_PAYFORPLACEMENT_PRODUCT_IDS = { 47, 63 };
+        public static readonly int[] SUPPLIER_MAGAZINEADVERTISING_PRODUCT_IDS = { 72, 73, 74, 75, 76 };
         public static readonly int SUPPLIER_Email_Express_PRODUCT_ID = 61;
         public static readonly int SUPPLIER_ESP_WEBSITES_PRODUCT_COLLECTIONS_ID = 64;
-       
-        
+
+
         public IStoreService StoreService { get; set; }
         public IFulfilmentService FulfilmentService { get; set; }
         public ICreditCardService CreditCardService { get; set; }
@@ -43,7 +44,7 @@ namespace asi.asicentral.web.Controllers.Store
                 else if (application is StoreDetailDecoratorMembership) return View("../Store/Application/Decorator", new DecoratorApplicationModel((StoreDetailDecoratorMembership)application, orderDetail));
                 else throw new Exception("Retieved an unknown type of application");
             }
-            else if(orderDetail.Product != null && orderDetail.Product.Type == "Product")
+            else if (orderDetail.Product != null && orderDetail.Product.Type == "Product")
             {
                 if (orderDetail.MagazineSubscriptions != null && orderDetail.MagazineSubscriptions.Count > 0) return View("../Store/Application/Magazines", new MagazinesApplicationModel(orderDetail, StoreService));
                 else if (DISTRIBUTOR_CATALOG_PRODUCT_IDS.Contains(orderDetail.Product.Id))
@@ -53,17 +54,24 @@ namespace asi.asicentral.web.Controllers.Store
                 }
                 else if (SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
                 {
-                     StoreDetailESPAdvertising detailESPAdvertising = StoreService.GetAll<StoreDetailESPAdvertising>().Where(espadvertising => espadvertising.OrderDetailId == orderDetail.Id).SingleOrDefault();
-                     if (detailESPAdvertising != null) return View("../Store/Application/ESPAdvertising", new ESPAdvertisingModel(orderDetail, detailESPAdvertising, StoreService));
+                    StoreDetailESPAdvertising detailESPAdvertising = StoreService.GetAll<StoreDetailESPAdvertising>().Where(espadvertising => espadvertising.OrderDetailId == orderDetail.Id).SingleOrDefault();
+                    if (detailESPAdvertising != null) return View("../Store/Application/ESPAdvertising", new ESPAdvertisingModel(orderDetail, detailESPAdvertising, StoreService));
+                }
+                else if (SUPPLIER_MAGAZINEADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
+                {
+                    IList<StoreDetailMagazineAdvertisingItem> detailMagazineAdvertising = StoreService.GetAll<StoreDetailMagazineAdvertisingItem>().Where(espadvertising => espadvertising.OrderDetailId == orderDetail.Id).ToList();
+
+                    return View("../Store/Application/MagzineAdvertising", new MagazinesAdvertisingApplicationModel(orderDetail, detailMagazineAdvertising, StoreService));
+
                 }
                 else if (SUPPLIER_ESP_PAYFORPLACEMENT_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/PayForPlacement", new ESPPayForPlacementModel(orderDetail, StoreService));
-                else if (SUPPLIER_Email_Express_PRODUCT_ID == orderDetail.Product.Id) 
+                else if (SUPPLIER_Email_Express_PRODUCT_ID == orderDetail.Product.Id)
                 {
                     StoreDetailEmailExpress detailEmailExpress = StoreService.GetAll<StoreDetailEmailExpress>().Where(emailexpress => emailexpress.OrderDetailId == orderDetail.Id).SingleOrDefault();
-                    return View("../Store/Application/EmailExpress", new EmailExpressModel(orderDetail, detailEmailExpress,StoreService));
+                    return View("../Store/Application/EmailExpress", new EmailExpressModel(orderDetail, detailEmailExpress, StoreService));
                 }
-                else if(ORDERDETAIL_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/OrderDetailProduct", new OrderDetailApplicationModel(orderDetail));
-                else if (SUPPLIER_ESP_WEBSITES_PRODUCT_COLLECTIONS_ID == orderDetail.Product.Id)  return View("../Store/Application/ProductCollections", new ProductCollectionsModel(orderDetail,  StoreService));
+                else if (ORDERDETAIL_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/OrderDetailProduct", new OrderDetailApplicationModel(orderDetail));
+                else if (SUPPLIER_ESP_WEBSITES_PRODUCT_COLLECTIONS_ID == orderDetail.Product.Id) return View("../Store/Application/ProductCollections", new ProductCollectionsModel(orderDetail, StoreService));
             }
             throw new Exception("Retieved an unknown type of application");
         }
@@ -129,20 +137,20 @@ namespace asi.asicentral.web.Controllers.Store
                 if (order == null) throw new Exception("Invalid reference to an order");
                 order.ExternalReference = application.ExternalReference;
                 order = UpdateCompanyInformation(application, order);
-                    
+
                 //Update Product Collections Information
-                if(orderDetail.Product != null)
+                if (orderDetail.Product != null)
                 {
-                    switch(orderDetail.Product.Id)
+                    switch (orderDetail.Product.Id)
                     {
                         case 64:
                             if (application.productCollections != null && application.productCollections.Count > 0)
                             {
                                 foreach (StoreDetailProductCollection collection in application.productCollections)
                                 {
-                                    if(collection != null && collection.ProductCollectionItems != null && collection.ProductCollectionItems.Count > 0)
+                                    if (collection != null && collection.ProductCollectionItems != null && collection.ProductCollectionItems.Count > 0)
                                     {
-                                        foreach(StoreDetailProductCollectionItem newCollectionItem in collection.ProductCollectionItems)
+                                        foreach (StoreDetailProductCollectionItem newCollectionItem in collection.ProductCollectionItems)
                                         {
                                             StoreDetailProductCollectionItem oldCollectionItem = StoreService.GetAll<StoreDetailProductCollectionItem>().Where(details => details.ItemId == newCollectionItem.ItemId).SingleOrDefault();
                                             if (oldCollectionItem != null)
@@ -304,7 +312,7 @@ namespace asi.asicentral.web.Controllers.Store
                 storeDetailCatalog.ImprintId = Convert.ToInt32(application.Imprint);
                 if (application.ProductId == 39) storeDetailCatalog.SupplementId = Convert.ToInt32(application.Supplement);
                 if (storeDetailCatalog.ImprintId != 18) storeDetailCatalog.IsArtworkToProof = application.IsArtworkToProof;
-                
+
                 if ((storeDetailCatalog.AreaId == 8 || storeDetailCatalog.AreaId == 25) && (storeDetailCatalog.ImprintId == 20 || (storeDetailCatalog.ImprintId == 21 && storeDetailCatalog.ArtworkOption == "PRINT")))
                 {
                     storeDetailCatalog.Line1 = application.Line1;
@@ -353,7 +361,7 @@ namespace asi.asicentral.web.Controllers.Store
                 return View("../Store/Application/Catalogs", application);
             }
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(true)]
@@ -367,11 +375,11 @@ namespace asi.asicentral.web.Controllers.Store
                 if (order == null) throw new Exception("Invalid reference to an order");
                 order.ExternalReference = application.ExternalReference;
                 order = UpdateCompanyInformation(application, order);
-                    
+
                 //Update Catalog Information
-                if(orderDetail.Product != null)
+                if (orderDetail.Product != null)
                 {
-                    switch(orderDetail.Product.Id)
+                    switch (orderDetail.Product.Id)
                     {
                         case 46:
                             if (application.OptionId.HasValue)
@@ -384,8 +392,14 @@ namespace asi.asicentral.web.Controllers.Store
                         case 62:
                             orderDetail.AcceptedByName = application.AcceptedByName;
                             break;
+                        case 71:
+                            orderDetail.OptionId = application.OptionId;
+                            orderDetail.Cost = CompanyStoreHelper.GetCost(application.OptionId.Value);
+                            break;
                         default:
+                            int quantity = orderDetail.Quantity;
                             orderDetail.Quantity = Convert.ToInt32(application.Quantity);
+                            if (orderDetail.Quantity == 0) orderDetail.Quantity = quantity;
                             break;
                     }
                 }
@@ -430,7 +444,19 @@ namespace asi.asicentral.web.Controllers.Store
                     switch (orderDetail.Product.Id)
                     {
                         case 49:
-                            espAdvertising.FirstItemList = application.NumberOfItems_First;
+                            if (application != null && application.Events != null && application.Events.Count > 0)
+                            {
+                                IList<StoreDetailESPAdvertisingItem> dbEvents = StoreService.GetAll<StoreDetailESPAdvertisingItem>().Where(model => model.OrderDetailId == application.OrderDetailId).OrderBy(model => model.Sequence).ToList();
+                                StoreDetailESPAdvertisingItem dbEvent = null;
+                                if (dbEvents != null && dbEvents.Count > 0)
+                                {
+                                    foreach (EventDetailsModel detail in application.Events)
+                                    {
+                                        dbEvent = dbEvents.Where(item => item.OptionID == detail.OptionId).SingleOrDefault();
+                                        if (dbEvent != null) dbEvent.ItemList = detail.ItemNumbers;
+                                    }
+                                }
+                            }
                             break;
                         case 50:
                             espAdvertising.FirstItemList = application.NumberOfItems_First;
@@ -443,7 +469,7 @@ namespace asi.asicentral.web.Controllers.Store
 
                             espAdvertising.ThirdItemList = application.NumberOfItems_Third;
                             espAdvertising.ThirdOptionId = application.Products_OptionId_Third;
-                            if(!string.IsNullOrEmpty(espAdvertising.ThirdItemList)) orderDetail.Cost += ESPAdvertisingHelper.ESPAdvertising_RUSH_COST[1];
+                            if (!string.IsNullOrEmpty(espAdvertising.ThirdItemList)) orderDetail.Cost += ESPAdvertisingHelper.ESPAdvertising_RUSH_COST[1];
                             break;
                         case 52:
                             List<string> LoginScreen_Dates = new List<string>();
@@ -489,7 +515,7 @@ namespace asi.asicentral.web.Controllers.Store
                             {
                                 foreach (StoreDetailESPAdvertisingItem item in loginScreen_previousItems)
                                 {
-                                    if(updatedDateList.Where(date => date == item.AdSelectedDate).SingleOrDefault() == DateTime.MinValue)
+                                    if (updatedDateList.Where(date => date == item.AdSelectedDate).SingleOrDefault() == DateTime.MinValue)
                                         StoreService.Delete<StoreDetailESPAdvertisingItem>(item);
                                 }
                             }
@@ -520,6 +546,58 @@ namespace asi.asicentral.web.Controllers.Store
             else
             {
                 return View("../Store/Application/ESPAdvertising", application);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(true)]
+        public virtual ActionResult EditMagazineAdvertising(MagazinesAdvertisingApplicationModel application)
+        {
+            if (ModelState.IsValid)
+            {
+                StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
+                if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
+                StoreOrder order = orderDetail.Order;
+                if (order == null) throw new Exception("Invalid reference to an order");
+                order.ExternalReference = application.ExternalReference;
+                order = UpdateCompanyInformation(application, order);
+
+                if (orderDetail.Product != null)
+                {
+                    switch (orderDetail.Product.Id)
+                    {
+                        case 72:
+                        case 73:
+                        case 74:
+                        case 75:
+                        case 76:
+                            int quantity = orderDetail.Quantity;
+                            orderDetail.Quantity = Convert.ToInt32(application.Quantity);
+                            if (orderDetail.Quantity == 0) orderDetail.Quantity = quantity;
+                            break;
+                            
+                    }
+                    
+                }
+                
+
+                //Update ESP Advertising Information
+                StoreAddress address = order.Company.GetCompanyShippingAddress();
+                StoreService.UpdateTaxAndShipping(order);
+                orderDetail.UpdateDate = DateTime.UtcNow;
+                orderDetail.UpdateSource = "ApplicationController - EditMagazineAdvertising";
+
+                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                StoreService.SaveChanges();
+                if (application.ActionName == ApplicationController.COMMAND_REJECT)
+                    return RedirectToAction("List", "Orders");
+                else
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId });
+            }
+            else
+            {
+                return View("../Store/Application/MagazineAdvertising", application);
             }
         }
 
@@ -568,7 +646,7 @@ namespace asi.asicentral.web.Controllers.Store
                                 StoreService.Add<StoreDetailPayForPlacement>(detailPayForPlacement);
                             }
                             detailPayForPlacement.CategoryName = detail.CategoryName;
-                            if(application.ProductId == 47) detailPayForPlacement.CPMOption = detail.CPMOption;
+                            if (application.ProductId == 47) detailPayForPlacement.CPMOption = detail.CPMOption;
                             detailPayForPlacement.PaymentType = detail.PaymentOption;
                             decimal totalCost = 0.0m;
                             if (detail.PaymentOption == "FB" && !string.IsNullOrEmpty(detail.PaymentAmount))
@@ -582,7 +660,7 @@ namespace asi.asicentral.web.Controllers.Store
                                 detailPayForPlacement.ImpressionsRequested = impressionsCount;
                                 if (application.ProductId == 47) totalCost = (Convert.ToDecimal(impressionsCount) / 1000) * ESPAdvertisingHelper.ESPAdvertising_PFP_COST[detail.CPMOption];
                                 else if (application.ProductId == 63 && order.IsStoreRequest && orderDetail.Product != null) totalCost = (Convert.ToDecimal(impressionsCount) / 1000) * orderDetail.Product.Cost;
-                                else if(application.ProductId == 63 && !order.IsStoreRequest && orderDetail.Product != null)
+                                else if (application.ProductId == 63 && !order.IsStoreRequest && orderDetail.Product != null)
                                 {
                                     decimal specialCost = StoreService.GetAll<ContextProductSequence>(true).Where(prod => prod.Product.Id == application.ProductId).Select(item => item.Cost).SingleOrDefault();
                                     totalCost = (Convert.ToDecimal(impressionsCount) / 1000) * specialCost;
@@ -593,7 +671,7 @@ namespace asi.asicentral.web.Controllers.Store
                             detailPayForPlacement.UpdateDate = DateTime.UtcNow;
                             detailPayForPlacement.UpdateSource = "ApplicationController - EditPayForPlacement";
                         }
-                        else if(detailPayForPlacement != null) StoreService.Delete<StoreDetailPayForPlacement>(detailPayForPlacement);
+                        else if (detailPayForPlacement != null) StoreService.Delete<StoreDetailPayForPlacement>(detailPayForPlacement);
                     }
                 }
                 #endregion
@@ -748,10 +826,15 @@ namespace asi.asicentral.web.Controllers.Store
                 int num;
                 bool success = int.TryParse(order.ExternalReference, out num);
                 if (!success) throw new Exception("Timms id must be numbers only.");
-                
+
                 fulfilmentService.Process(order, application);
                 order.ProcessStatus = OrderStatus.Approved;
                 order.ApprovedDate = DateTime.UtcNow;
+                if (System.Web.HttpContext.Current != null)
+                {
+                    if (System.Web.HttpContext.Current.User.Identity as System.Security.Principal.WindowsIdentity != null)
+                        order.ApprovedBy = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
+                }
             }
             else if (command == ApplicationController.COMMAND_REJECT)
             {
@@ -783,14 +866,14 @@ namespace asi.asicentral.web.Controllers.Store
             if (model.Company != null && order.Company != null)
             {
                 order.Company.Name = model.Company;
-                order.Company.Phone =model.Phone;
+                order.Company.Phone = model.Phone;
                 order.Company.WebURL = model.BillingWebUrl;
                 order.Company.ASINumber = model.ASINumber;
                 order.UpdateDate = DateTime.UtcNow;
                 order.UpdateSource = "ASI Admin Application - UpdateCompanyInformation";
 
                 StoreCompanyAddress companyAddress = order.Company.Addresses.Where(add => !add.IsShipping && !add.IsBilling).FirstOrDefault();
-                if (companyAddress != null && CompareAddresses(companyAddress.Address, model.Address1, model.Address2, model.State, model.City,model.Country, model.Zip))
+                if (companyAddress != null && CompareAddresses(companyAddress.Address, model.Address1, model.Address2, model.State, model.City, model.Country, model.Zip))
                 {
                     companyAddress.Address.Street1 = model.Address1;
                     companyAddress.Address.Street2 = model.Address2;
@@ -805,7 +888,7 @@ namespace asi.asicentral.web.Controllers.Store
                 if (model.Contacts != null)
                 {
                     int i = 0;
-                    foreach(StoreIndividual individual in model.Contacts)
+                    foreach (StoreIndividual individual in model.Contacts)
                     {
                         order.Company.Individuals.ElementAt(i).IsPrimary = individual.IsPrimary;
                         order.Company.Individuals.ElementAt(i).FirstName = individual.FirstName;
@@ -819,11 +902,11 @@ namespace asi.asicentral.web.Controllers.Store
                         i++;
                     }
                 }
-            
+
                 //Set billing information
                 if (order.BillingIndividual != null)
                 {
-                    if(CompareIndividuals(order.BillingIndividual, model.BillingPhone, model.BillingFax, model.BillingEmail))
+                    if (CompareIndividuals(order.BillingIndividual, model.BillingPhone, model.BillingFax, model.BillingEmail))
                     {
                         order.BillingIndividual.Email = model.BillingEmail;
                         order.BillingIndividual.Fax = model.BillingFax;

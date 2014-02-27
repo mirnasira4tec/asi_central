@@ -12,7 +12,7 @@ namespace asi.asicentral.web.Models
     /// </summary>
     public class PublicationView : Publication
     {
-        public PublicationView()
+        public PublicationView() : base()
         {
         }
 
@@ -31,6 +31,7 @@ namespace asi.asicentral.web.Models
         public static PublicationView CreateFromPublication(Publication publication)
         {
             PublicationView view = new PublicationView();
+            view.Issues = new List<PublicationIssue>();
             publication.CopyTo(view);
             return view;
         }

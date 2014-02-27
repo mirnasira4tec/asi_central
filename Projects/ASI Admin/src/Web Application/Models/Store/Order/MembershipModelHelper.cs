@@ -1,4 +1,6 @@
 ﻿using asi.asicentral.model.store;
+using asi.asicentral.services;
+using asi.asicentral.util.store;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,6 +50,26 @@ namespace asi.asicentral.web.model.store
         string ShippingCountry { get; set; }
 
         #endregion shipping information
+
+        #region Cost information
+        decimal ItemsCost { get; set; }
+        decimal TaxCost { get; set; }
+        decimal ApplicationFeeCost { get; set; }
+        decimal ShippingCost { get; set; }
+        decimal TotalCost { get; set; }
+        decimal SubscriptionCost { get; set; }
+        string SubscriptionFrequency { get; set; }
+        int Quantity { get; set; }
+        decimal PromotionalDiscount { get; set; } 
+        #endregion
+
+        #region OrderInformation
+        int OrderId { get; set; }
+        string ActionName { get; set; }
+        string ExternalReference { get; set; }
+        OrderStatus OrderStatus { get; set; }
+        bool IsCompleted { get; set; }
+        #endregion
     }
 
     /// <summary>
@@ -55,8 +77,10 @@ namespace asi.asicentral.web.model.store
     /// </summary>
     public class MembershipModelHelper
     {
-        public static void PopulateModel(IMembershipModel model, StoreOrder order)
+        public static void PopulateModel(IMembershipModel model, StoreOrderDetail orderDetail)
         {
+            if (orderDetail == null || orderDetail.Order == null) return;
+            StoreOrder order = orderDetail.Order;
             //fill in company fields
             if (order.Company != null)
             {
@@ -106,6 +130,22 @@ namespace asi.asicentral.web.model.store
                 model.ShippingStreet2 = address.Street2;
                 model.ShippingZip = address.Zip;
             }
+
+            //get cost information
+            model.ItemsCost = orderDetail.Cost;
+            model.Quantity = orderDetail.Quantity;
+            model.ApplicationFeeCost = orderDetail.ApplicationCost;
+            model.TaxCost = orderDetail.TaxCost;
+            model.ShippingCost = orderDetail.ShippingCost;
+            model.PromotionalDiscount = orderDetail.DiscountAmount;
+            model.TotalCost = order.Total;
+
+            decimal cost = orderDetail.Cost;
+            int quantity = orderDetail.Quantity;
+           
+            if (orderDetail.Product.IsSubscription && orderDetail.Coupon != null && orderDetail.Coupon.IsSubscription) model.SubscriptionCost += (cost * quantity) + orderDetail.TaxCost + orderDetail.ShippingCost - orderDetail.DiscountAmount;
+            else if (orderDetail.Product.IsSubscription) model.SubscriptionCost += (cost * quantity) + orderDetail.TaxCost + orderDetail.ShippingCost;
+            model.SubscriptionFrequency = (!string.IsNullOrEmpty(orderDetail.Product.SubscriptionFrequency) ? (orderDetail.Product.SubscriptionFrequency == "M" ? "monthly" : "yearly") : string.Empty);
         }
     }
 }

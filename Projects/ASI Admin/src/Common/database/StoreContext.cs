@@ -24,11 +24,14 @@ namespace asi.asicentral.database
         public DbSet<ContextFeature> Features { get; set; }
         public DbSet<ContextFeatureProduct> FeatureProducts { get; set; }
         public DbSet<ContextProductSequence> ProductSequences { get; set; }
+        public DbSet<Coupon> Coupons { get; set; }
         public DbSet<StoreDetailHallmarkRequest> HallmarkFormRequests { get; set; }
         public DbSet<LookCatalogOption> LookCatalogOptions { get; set; }
         public DbSet<LookDecoratorImprintingType> LookDecoratorImprintingTypes { get; set; }
         public DbSet<LookDistributorAccountType> LookDistributorAccountTypes { get; set; }
         public DbSet<LookDistributorRevenueType> LookDistributorRevenueTypes { get; set; }
+        public DbSet<LookEventMerchandiseProduct> LookEventMerchandiseProducts { get; set; }
+        public DbSet<LookProductCollections> LookProductCollections { get; set; }
         public DbSet<LookProductLine> LookProductLines { get; set; }
         public DbSet<LookProductShippingRate> LookProductShippingRates { get; set; }
         public DbSet<LookSupplierDecoratingType> LookSupplierDecoratingTypes { get; set; }
@@ -54,7 +57,13 @@ namespace asi.asicentral.database
         public DbSet<StoreDetailEmailExpressItem> StoreDetailEmailExpressItems { get; set; }
         public DbSet<StoreDetailProductCollection> StoreDetailProductCollection { get; set; }
         public DbSet<StoreDetailProductCollectionItem> StoreDetailProductCollectionItems { get; set; }
-        public DbSet<LookProductCollections> LookProductCollections { get; set; }
+        public DbSet<StoreDetailMagazineAdvertisingItem> StoreMagazineAdvertisingItems { get; set; }
+        public DbSet<LookMagazineIssue> MagazineIssues { get; set; }
+        public DbSet<LookAdPosition> AdPositions { get; set; }
+        public DbSet<LookAdSize> AdSizes { get; set; }
+        public DbSet<LookSendMyAdPublication> LookSendMyAdPublications { get; set; }
+        public DbSet<LookSendMyAdAdSpec> LookSendMyAdAdSpecs { get; set; }
+        public DbSet<LookSendMyAdCountryCode> LookSendMyAdCountryCodes { get; set; }   
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -70,11 +79,14 @@ namespace asi.asicentral.database
                 .Add(new ContextFeatureMap())
                 .Add(new ContextFeatureProductMap())
                 .Add(new ContextProductSequenceMap())
+                .Add(new CouponMap())
                 .Add(new StoreDetailHallmarkRequestMap())
                 .Add(new LookCatalogOptionMap())
                 .Add(new LookDecoratorImprintingTypeMap())
                 .Add(new LookDistributorAccountTypeMap())
                 .Add(new LookDistributorRevenueTypeMap())
+                .Add(new LookEventMerchandiseProductMap())
+                .Add(new LookProductCollectionsMap())
                 .Add(new LookProductLineMap())
                 .Add(new LookProductShippingRateMap())
                 .Add(new LookSupplierDecoratingTypeMap())
@@ -98,9 +110,15 @@ namespace asi.asicentral.database
                 .Add(new TaxRateMap())
                 .Add(new StoreDetailEmailExpressMap())
                 .Add(new StoreDetailEmailExpressItemMap())
-            .Add(new StoreDetailProductCollectionMap())
+                .Add(new StoreDetailProductCollectionMap())
                 .Add(new StoreDetailProductCollectionItemMap())
-                .Add(new LookProductCollectionsMap());
+                .Add(new StoreDetailMagazineAdvertisingItemMap())
+                .Add(new LookMagazineIssueMap())
+                .Add(new LookAdPositionMap())
+                .Add(new LookAdSizeMap())
+                .Add(new LookSendMyAdPublicationMap())
+                .Add(new LookSendMyAdAdSpecMap())
+                .Add(new LookSendMyAdCountryCodeMap());
         }
     }
 }

@@ -9,6 +9,7 @@ using asi.asicentral.web.model.store;
 using System.Text;
 using asi.asicentral.web.model.store.order;
 using System.Data.Objects.SqlClient;
+using asi.asicentral.Resources;
 
 namespace asi.asicentral.web.Controllers.Store
 {
@@ -20,8 +21,9 @@ namespace asi.asicentral.web.Controllers.Store
         public IEncryptionService EncryptionService { get; set; }
 
         [HttpGet]
-        public virtual ActionResult List(Nullable<DateTime> dateStart, Nullable<DateTime> dateEnd, string product, Nullable<int> id, string name, String formTab, String orderTab)
+        public virtual ActionResult List(Nullable<DateTime> dateStart, Nullable<DateTime> dateEnd, string product, Nullable<int> id, string name, String formTab, String orderTab, string CompanyName,Nullable<Boolean> HasAddress )
         {
+          
             if (dateStart > dateEnd) ViewBag.Message = Resource.StoreDateErrorMessage;
             IQueryable<StoreOrderDetail> orderDetailQuery = StoreService.GetAll<StoreOrderDetail>(true);
             if (string.IsNullOrEmpty(formTab)) formTab = OrderPageModel.TAB_DATE; //setting the default tab
@@ -34,6 +36,7 @@ namespace asi.asicentral.web.Controllers.Store
                 //form uses date filter
                 if (dateStart == null) dateStart = DateTime.Now.AddDays(-7);
                 if (dateEnd == null) dateEnd = DateTime.Now;
+                if (HasAddress == null) HasAddress = true;
                 else dateEnd = dateEnd.Value.Date + new TimeSpan(23, 59, 59);
                 //create new value converted to UTC time to make sure getting the right database records
                 DateTime dateStartParam = dateStart.Value.ToUniversalTime();
@@ -59,6 +62,11 @@ namespace asi.asicentral.web.Controllers.Store
                     (detail.Order.CreditCard != null && detail.Order.CreditCard.CardHolderName.Contains(nameCondition)) ||
                     detail.Order.BillingIndividual.Email.Contains(nameCondition)));
             }
+            if (formTab == OrderPageModel.COMPANY_NAME && !string.IsNullOrEmpty(CompanyName))
+            {
+                orderDetailQuery = orderDetailQuery
+                    .Where(detail => detail.Order.Company.Name != null && (detail.Order.Company.Name.Contains(CompanyName)));
+            }
             if (formTab == OrderPageModel.TAB_TIMMS && id.HasValue)
             {
                 string timssIdentifier = id.Value.ToString().Trim();
@@ -70,7 +78,18 @@ namespace asi.asicentral.web.Controllers.Store
             if (orderTab == OrderPageModel.ORDER_COMPLETED)
                 orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == true);
             else if (orderTab == OrderPageModel.ORDER_INCOMPLETE)
-                orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false);
+            {
+                if (HasAddress != null)
+                {
+                    if (HasAddress.Value)
+                        orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false && detail.Order.CompletedStep > 1);
+                    else
+                        orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false);
+                }
+                else
+                    orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false && detail.Order.CompletedStep > 1);
+                
+            }
             else if (orderTab == OrderPageModel.ORDER_PENDING)
                 orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == true && detail.Order.ProcessStatus == OrderStatus.Pending);
 
@@ -88,7 +107,16 @@ namespace asi.asicentral.web.Controllers.Store
             viewModel.Product = product;
             viewModel.FormTab = formTab;
             viewModel.OrderTab = orderTab;
-
+            viewModel.CompanyName = CompanyName;
+            if (HasAddress.HasValue)
+            {
+                viewModel.HasAddress = HasAddress.Value.ToString();
+                viewModel.chkHasAddress = HasAddress.Value;
+            }
+            else
+            {
+                viewModel.chkHasAddress = true;
+            }
             return View("../Store/Admin/Orders", viewModel);
         }
 
@@ -102,6 +130,7 @@ namespace asi.asicentral.web.Controllers.Store
                 if (order.ProcessStatus == OrderStatus.Pending)
                 {
                     order.ProcessStatus = OrderStatus.Rejected;
+                   
                     StoreService.SaveChanges();
                 }
             }
@@ -265,7 +294,8 @@ namespace asi.asicentral.web.Controllers.Store
         public ActionResult DownloadProductCSV(ProductStatisticData orderStatisticsData)
         {
             IQueryable<StoreOrder> ordersQuery = GetProductQuery(orderStatisticsData);
-            if (orderStatisticsData.Product != null) {
+            if (orderStatisticsData.Product != null)
+            {
                 //product name not available as query
                 ordersQuery = ordersQuery.ToList().Where(order => order.ProductName == orderStatisticsData.Product).AsQueryable();
             }
@@ -281,22 +311,23 @@ namespace asi.asicentral.web.Controllers.Store
         {
             StringBuilder csv = new StringBuilder();
             string separator = ",";
-            csv.Append("Order ID" + separator + "Timss ID" + separator + "Company Name" + separator + "Contact Name" + separator + "Contact Phone" + separator + "Contact Email" + separator + "Orderstatus" + separator + "Amount" + separator + "Created Date" + separator + "Product Name" + separator + "Approved Date" + separator + "Annualized Amount");
+            csv.Append("Order ID" + separator + "Timss ID" + separator + "Company Name" + separator + "Contact Name" + separator + "Contact Phone" + separator + "Contact Email" + separator + "Orderstatus" + separator + "Amount" + separator + "Created Date" + separator + "Product Name"+ separator + "Approved Date" + separator + "Annualized Amount");
             csv.Append(System.Environment.NewLine);
 
             IList<StoreOrder> orders = ordersQuery.ToList();
 
             foreach (StoreOrder order in orders)
             {
-                string orderid = string.Empty, timss = string.Empty, companyname = string.Empty, contactname = string.Empty, contactphone = string.Empty, contactemail = string.Empty, orderstatus = string.Empty, amount = string.Empty, annualizedamount = string.Empty, productname = string.Empty, approveddate = string.Empty, date = string.Empty;
-
+                string orderid = string.Empty, timss = string.Empty, companyname = string.Empty, contactname = string.Empty, contactphone = string.Empty, contactemail = string.Empty, orderstatus = string.Empty, amount = string.Empty, annualizedamount = string.Empty, productname = string.Empty, approveddate = string.Empty,date = string.Empty;
+               
+                
                 orderid = order.Id.ToString();
                 timss = order.ExternalReference;
                 orderstatus = order.ProcessStatus == OrderStatus.Approved ? "Approved" :order.ProcessStatus == OrderStatus.Rejected ? "Rejected" : "";
                 amount = order.Total.ToString("C").Replace(",", "");
                 date = order.CreateDate.ToString().Replace(",", "");
                 annualizedamount = order.AnnualizedTotal.ToString("C").Replace(",", "");
-                approveddate = (order.ApprovedDate == DateTime.MinValue) ? string.Empty : order.ApprovedDate.ToString().Replace(",", "");
+                approveddate = (order.ApprovedDate == null) ? string.Empty : order.ApprovedDate.ToString().Replace(",", "");
                 if (order.OrderDetails != null && order.OrderDetails.Count > 0 && order.OrderDetails.ElementAt(0) != null && order.OrderDetails.ElementAt(0).Product != null)
                 {
                     productname = order.OrderDetails.ElementAt(0).Product.Name.Replace(",", "");
@@ -344,7 +375,7 @@ namespace asi.asicentral.web.Controllers.Store
 
         private IQueryable<StoreOrder> GetProductQuery(ProductStatisticData orderStatisticsData)
         {
-            IQueryable<StoreOrder> ordersQuery = StoreService.GetAll<StoreOrder>("Company;Company.Individuals;BillingIndividual", true);
+            IQueryable<StoreOrder> ordersQuery = StoreService.GetAll<StoreOrder>("Company;Company.Individuals;BillingIndividual;OrderDetails", true);
             if (!orderStatisticsData.StartDate.HasValue) orderStatisticsData.StartDate = DateTime.Now.AddDays(-7).Date;
             if (!orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = DateTime.Now.Date;
             if (orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = orderStatisticsData.EndDate.Value.Date + new TimeSpan(23, 59, 59);

@@ -1,5 +1,6 @@
 ﻿using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
+using asi.asicentral.util.store;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,9 @@ namespace asi.asicentral.services
         {
             //nothing to do right now
         }
+
+       
+
 
         public override IQueryable<T> GetAll<T>(bool readOnly = false)
         {
@@ -138,6 +142,8 @@ namespace asi.asicentral.services
         public void UpdateTaxAndShipping(StoreOrder order)
         {
             StoreAddress address = null;
+             
+             
             if (order != null && order.Company != null && order.Company.Addresses != null && order.Company.Addresses.Count > 0)
             {
                 address = order.Company.GetCompanyShippingAddress();
@@ -149,6 +155,7 @@ namespace asi.asicentral.services
                 bool shouldBeAnnualized = false;
                 order.Total = 0m;
                 order.AnnualizedTotal = 0m;
+                decimal tax= 0m;
                 foreach (StoreOrderDetail orderDetail in order.OrderDetails)
                 {
                     if (orderDetail.Product != null && orderDetail.Product.IsSubscription && orderDetail.Product.SubscriptionFrequency == "M")
@@ -156,18 +163,30 @@ namespace asi.asicentral.services
 
                     //look up the address information
                     //set the default values
-                    decimal tax = 0m;
+                    tax = 0m;
                     orderDetail.ShippingCost = 0m;
-
+                   
                     //Retrieve Shipping cost and HasTax values to calculate tax 
                     //calculate the taxes
                     if (orderDetail.Product != null)
                     {
-                        if (orderDetail.Product.HasTax)
+                        Helper.SetCostQuantity(orderDetail);
+                        decimal costForTax = (Helper.cost * Helper.quantity);
+                        if (orderDetail.Coupon != null)
                         {
-                            //tax calculated based on full amount except shipping
-                            tax = CalculateTaxes(address, (orderDetail.Cost * orderDetail.Quantity) + orderDetail.ApplicationCost);
+                            decimal discountAmount = 0.0M;
+                            if (orderDetail.Coupon.IsFixedAmount && orderDetail.Coupon.DiscountAmount > 0.0M)
+                                discountAmount = orderDetail.Coupon.DiscountAmount;
+                            else if (!orderDetail.Coupon.IsFixedAmount && orderDetail.Coupon.DiscountPercentage > 0)
+                                discountAmount = ((costForTax * orderDetail.Coupon.DiscountPercentage) / 100);
+
+                            costForTax = costForTax - discountAmount;
+                            orderDetail.DiscountAmount = discountAmount;
                         }
+
+                        //tax calculated based on full amount except shipping
+                        if (orderDetail.Product.HasTax)
+                            tax = CalculateTaxes(address, costForTax + orderDetail.ApplicationCost);
 
                         if (string.IsNullOrEmpty(orderDetail.ShippingMethod)) orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity);
                         else
@@ -180,30 +199,40 @@ namespace asi.asicentral.services
                                     isGiftSupplement = true;
                             }
 
-                            if(!isGiftSupplement) orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity, orderDetail.ShippingMethod);
-                            else orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity, orderDetail.ShippingMethod, true, 0.06m);
+                            if (!isGiftSupplement) orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, Helper.quantity, orderDetail.ShippingMethod);
+                            else orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, Helper.quantity, orderDetail.ShippingMethod, true, 0.06m);
                         }
                     }
 
                     orderDetail.TaxCost = tax;
                     //this is the cost of what to pay now
-                    order.Total += ((orderDetail.Cost + orderDetail.TaxCost) * orderDetail.Quantity) + orderDetail.ShippingCost + orderDetail.ApplicationCost;
+                    order.Total += (((Helper.cost + orderDetail.TaxCost) * Helper.quantity) - orderDetail.DiscountAmount) + orderDetail.ShippingCost + orderDetail.ApplicationCost;
+
+                    //This is to calculate annualized cost
                     if (shouldBeAnnualized)
                     {
+                        tax = 0;
                         if (orderDetail.Product.HasTax)
-                            tax = CalculateTaxes(address, orderDetail.Cost) * 12 + CalculateTaxes(address, orderDetail.ApplicationCost);
-                        else
-                            tax = 0;
+                        {
+                            if (orderDetail.Coupon != null && orderDetail.Coupon.IsSubscription)
+                                tax = CalculateTaxes(address, (Helper.cost - orderDetail.DiscountAmount)) * 12 + CalculateTaxes(address, orderDetail.ApplicationCost);
+                            else
+                                tax = CalculateTaxes(address, (Helper.cost - orderDetail.DiscountAmount)) + (CalculateTaxes(address, Helper.cost) * 11) + CalculateTaxes(address, orderDetail.ApplicationCost);
+                        }
+
                         //this would be the total cost over a year for a subscription
-                        order.AnnualizedTotal += (orderDetail.Cost * orderDetail.Quantity * 12) + tax + (orderDetail.ShippingCost * 12) + orderDetail.ApplicationCost;
+                        if (orderDetail.Coupon != null && orderDetail.Coupon.IsSubscription)
+                            order.AnnualizedTotal += (((Helper.cost * Helper.quantity) - orderDetail.DiscountAmount) * 12) + tax + (orderDetail.ShippingCost * 12) + orderDetail.ApplicationCost;
+                        else
+                            order.AnnualizedTotal += (Helper.cost * Helper.quantity * 12) + tax + (orderDetail.ShippingCost * 12) + orderDetail.ApplicationCost - orderDetail.DiscountAmount;
                     }
-                    else
-                    {
-                        order.AnnualizedTotal += (orderDetail.Cost * orderDetail.Quantity) + orderDetail.TaxCost + orderDetail.ShippingCost + orderDetail.ApplicationCost;
-                    }
+                    else order.AnnualizedTotal += (Helper.cost * Helper.quantity) - orderDetail.DiscountAmount + orderDetail.TaxCost + orderDetail.ShippingCost + orderDetail.ApplicationCost;
                 }
             }
         }
+
+       
+       
 
         /// <summary>
         /// Calculates the taxes in case shipping to the USA
