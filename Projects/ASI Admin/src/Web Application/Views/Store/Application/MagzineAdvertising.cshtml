@@ -47,6 +47,7 @@
                             int seq = 1;
                             for (int i = 0; i < Model.MagAdItem.Count; i++)
                             {
+
                                 if (seq == Model.MagAdItem[i].Sequence)
                                 {
                     <span class="label-row">
@@ -69,15 +70,26 @@
                                 }
                     <span class="label-row">
                         @{
-                            DateTime startDate = new DateTime(Model.MagAdItem[i].Issue.Issue.Year, Model.MagAdItem[i].Issue.Issue.Month, 1); // getting first date
-                            DateTime endDate = startDate.AddMonths(1).AddDays(-1); // getting last date
-                            DateTime middleDate = startDate.AddDays((endDate.Day) / 2); // getting middle date
-                            string month = string.Empty;
-                            if (Model.MagAdItem[i].Issue.Issue.Date == middleDate.Date)
-                            {
-                                month = "Mid-";
-                            }
-                        <input type="text" readonly="true" value="@month@Model.MagAdItem[i].Issue.Issue.ToString("MMMM") '@Model.MagAdItem[i].Issue.Issue.ToString("yy")" />
+                                DateTime startDate = new DateTime(Model.MagAdItem[i].Issue.Issue.Year, Model.MagAdItem[i].Issue.Issue.Month, 1); // getting first date
+                                DateTime endDate = startDate.AddMonths(1).AddDays(-1); // getting last date
+                                DateTime middleDate = startDate.AddDays((endDate.Day) / 2); // getting middle date
+                                string month = string.Empty;
+                                if (Model.MagAdItem[i].Issue.Issue.Date != middleDate.Date)
+                                {
+                                    if (Model.ids.Contains(Model.MagAdItem[i].Issue.Id))
+                                    {
+                                        month = @Model.MagAdItem[i].Issue.Issue.AddMonths(-1).ToString("MMMM") + "/" + @Model.MagAdItem[i].Issue.Issue.ToString("MMMM") + " '" + @Model.MagAdItem[i].Issue.Issue.ToString("yy");
+                                    }
+                                    else
+                                    {
+                                        month = @Model.MagAdItem[i].Issue.Issue.ToString("MMMM") + " '" + @Model.MagAdItem[i].Issue.Issue.ToString("yy");
+                                    }
+                                }
+                                else
+                                {
+                                    month = "Mid-" + @Model.MagAdItem[i].Issue.Issue.ToString("MMMM") + " '" + @Model.MagAdItem[i].Issue.Issue.ToString("yy");
+                                }
+                            <input type="text" readonly="true" value="@month" />
                         }
                     </span> 
                             }
