@@ -2788,7 +2788,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Counselor is a paid circulation of 14,500. This monthly magazine reaches C-level distributors..
+        ///   Looks up a localized string similar to Counselor has a paid circulation of 14,500. This monthly magazine reaches C-level distributors..
         /// </summary>
         public static string MagazineAdvertisingCounselorDescription {
             get {
