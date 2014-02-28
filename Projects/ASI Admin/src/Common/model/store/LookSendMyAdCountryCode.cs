@@ -32,8 +32,8 @@ namespace asi.asicentral.model.store
             bool result = false;
             if(country != null &&
                (this.CountryName.ToLower() == country.ToLower()
-               || this.Alpha3 == country.ToLower()
-               || this.Alpha2 == country.ToLower()))
+               || this.Alpha3.ToLower() == country.ToLower()
+               || this.Alpha2.ToLower() == country.ToLower()))
             {
                 result = true;
             }
