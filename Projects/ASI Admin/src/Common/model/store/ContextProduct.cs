@@ -33,7 +33,7 @@ namespace asi.asicentral.model.store
         public bool IsASINumberFlag { get; set; }
         public bool IsAvailable { get; set; }
         public string ChatSettings { get; set; }
-        
+        public string ConversionSettings { get; set; }
         [DataType(DataType.Date)]
         public DateTime? NextAvailableDate { get; set; }
         public decimal? Weight { get; set; }
