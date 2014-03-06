@@ -207,6 +207,7 @@ namespace asi.asicentral.services
                     orderDetail.TaxCost = tax;
                     //this is the cost of what to pay now
                     order.Total += (((Helper.cost + orderDetail.TaxCost) * Helper.quantity) - orderDetail.DiscountAmount) + orderDetail.ShippingCost + orderDetail.ApplicationCost;
+                    if (order.Total < 0.0m) order.Total = 0;
 
                     //This is to calculate annualized cost
                     if (shouldBeAnnualized)
@@ -227,6 +228,7 @@ namespace asi.asicentral.services
                             order.AnnualizedTotal += (Helper.cost * Helper.quantity * 12) + tax + (orderDetail.ShippingCost * 12) + orderDetail.ApplicationCost - orderDetail.DiscountAmount;
                     }
                     else order.AnnualizedTotal += (Helper.cost * Helper.quantity) - orderDetail.DiscountAmount + orderDetail.TaxCost + orderDetail.ShippingCost + orderDetail.ApplicationCost;
+                    if (order.AnnualizedTotal < 0.0m) order.AnnualizedTotal = 0;
                 }
             }
         }
