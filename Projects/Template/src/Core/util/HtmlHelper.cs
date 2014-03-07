@@ -6,6 +6,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -47,7 +49,7 @@ namespace asi.asicentral.util
         /// Create a list of countries and their ISO country code for displaying in the UI
         /// </summary>
         /// <returns></returns>
-        public static IList<SelectListItem> GetCountries( string value = null, bool includeAll = true)
+        public static IList<SelectListItem> GetCountries(string value = null, bool includeAll = true)
         {
             IList<SelectListItem> countries = new List<SelectListItem>();
 
@@ -214,80 +216,84 @@ namespace asi.asicentral.util
         {
             StringBuilder resultContent = new StringBuilder();
             ILogService logService = LogService.GetLog(typeof(HtmlHelper));
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.Method = (post ? "POST" : "GET");
-            request.Timeout = 120000; //2 minutes timeout
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.168 Safari/535.19";
-            request.Accept = "text/html,text/xml,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-            //process the header values passed in
-            if (headerParam != null)
+            using (HttpClient client = new HttpClient(new HttpClientHandler { ClientCertificateOptions = ClientCertificateOption.Automatic }))
+            using (HttpRequestMessage request = new HttpRequestMessage())
             {
-                foreach (string key in headerParam.Keys)
+                request.RequestUri = new Uri(url);
+                request.Method = new HttpMethod(post ? "POST" : "GET");
+                client.Timeout = new TimeSpan(0, 2, 0); //2 minutes timeout
+                //set the content into the request if available
+                if (!string.IsNullOrEmpty(content))
                 {
-                    switch (key.ToLower())
-                    {
-                        case "useragent":
-                            request.UserAgent = headerParam[key];
-                            break;
-                        case "accept":
-                            request.Accept = headerParam[key];
-                            break;
-                        case "contenttype":
-                            request.ContentType = headerParam[key];
-                            break;
-                        case "expect":
-                            request.Expect = headerParam[key];
-                            break;
-                    }
+                    string contentEncoded = HttpUtility.UrlEncode(content);
+                    UTF8Encoding encoding = new UTF8Encoding();
+                    byte[] postBytes = encoding.GetBytes(contentEncoded);
+                    request.Content = new StreamContent(new MemoryStream(postBytes));
+                    request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
                 }
-            }
-            //set the content into the request if available
-            if (!string.IsNullOrEmpty(content))
-            {
-                //writting the content into the request stream
-                UTF8Encoding encoding = new UTF8Encoding();
-                byte[] postBytes = encoding.GetBytes(content);
-                request.ContentLength = postBytes.Length;
-
-                //set query into the request
-                using (Stream postStream = request.GetRequestStream())
+                request.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.168 Safari/535.19");
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml", 0.9));
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/html", 0.8));
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/xml", 0.8));
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xhtml+xml", 0.8));
+                if (headerParam != null)
                 {
-                    postStream.Write(postBytes, 0, postBytes.Length);
-                }
-            }
-            // Execute the request
-            if (System.Net.ServicePointManager.Expect100Continue) System.Net.ServicePointManager.Expect100Continue = false;
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-            {
-                logService.Debug("Submit Form - Checking return: " + response.StatusCode);
-                if (response.StatusCode != HttpStatusCode.OK) throw new Exception("The web request was not successfully completed: (code " + response.StatusCode + ")");
-                if (returnContent)
-                {
-                    //read the return value
-                    using (StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
+                    foreach (string key in headerParam.Keys)
                     {
-                        // used on each read operation
-                        char[] buf = new char[256];
-                        int count = 0;
-                        do
+                        switch (key.ToLower())
                         {
-                            // fill the buffer with data
-                            count = sr.Read(buf, 0, buf.Length);
-                            // make sure we read some data
-                            if (count != 0)
-                            {
-                                // translate from bytes to ASCII text
-                                string tempString = new String(buf, 0, count);
-                                // continue building the string
-                                resultContent.Append(tempString);
-                            }
+                            case "useragent":
+                                request.Headers.Add("User-Agent", headerParam[key]);
+                                break;
+                            case "accept":
+                                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(headerParam[key]));
+                                break;
+                            case "contenttype":
+                                if (request.Content != null)
+                                {
+                                    request.Content.Headers.ContentType = new MediaTypeHeaderValue(headerParam[key]);
+                                }
+                                break;
+                            case "expect":
+                                request.Headers.ExpectContinue = Convert.ToBoolean(headerParam[key]);
+                                break;
                         }
-                        while (count > 0); // any more data to read?
-                        logService.Debug("Submit Form - Read return content: " + resultContent);
                     }
                 }
-                return resultContent.ToString();
+
+                // Execute the request
+                if (System.Net.ServicePointManager.Expect100Continue) System.Net.ServicePointManager.Expect100Continue = false;
+                using (HttpResponseMessage response = client.SendAsync(request).Result)
+                {
+                    response.EnsureSuccessStatusCode();
+                    logService.Debug("Submit Form - Checking return: " + response.StatusCode);
+                    if (response.StatusCode != HttpStatusCode.OK) throw new Exception(string.Format("The web request was not successfully completed: (code {0})", response.StatusCode));
+                    if (returnContent)
+                    {
+                        using (StreamReader sr = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8))
+                        {
+                            // used on each read operation
+                            char[] buf = new char[256];
+                            int count = 0;
+                            do
+                            {
+                                // fill the buffer with data
+                                count = sr.Read(buf, 0, buf.Length);
+                                // make sure we read some data
+                                if (count != 0)
+                                {
+                                    // translate from bytes to ASCII text
+                                    string tempString = new String(buf, 0, count);
+                                    // continue building the string
+                                    resultContent.Append(tempString);
+                                }
+                            }
+                            while (count > 0); // any more data to read?
+                            logService.Debug("Submit Form - Read return content: " + resultContent);
+                        }
+                    }
+                    return resultContent.ToString();
+                }
             }
         }
 
