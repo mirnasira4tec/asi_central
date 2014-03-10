@@ -13,12 +13,22 @@ namespace asi.asicentral.util.Tests
     {
 
         [TestMethod()]
-        public void SubmitWebRequestTest()
+        public void SubmitWebRequest_Post_Test()
         {
-            string url = "http://stage-store.asicentral.com/";
-            string content = "test";
+            string url = "http://stage-store.asicentral.com/Store/Supplier/Package/9";
+            string content = "Become an ASI Supplier Member Today";
    
             string result = HtmlHelper.SubmitWebRequest(url, null, content, true);
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod()]
+        public void SubmitWebRequest_Get_Test()
+        {
+            string url = "http://stage-store.asicentral.com/Store/Supplier/Package/9";
+      
+            string result = HtmlHelper.SubmitWebRequest(url, null, null, false);
 
             Assert.IsNotNull(result);
         }
