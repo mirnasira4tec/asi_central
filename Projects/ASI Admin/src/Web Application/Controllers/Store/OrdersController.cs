@@ -143,7 +143,17 @@ namespace asi.asicentral.web.Controllers.Store
                 Data = new { Success = (error.Length == 0), Error = error }
             };
         }
+        public virtual ActionResult LoadFormCampaignTab(OrderStatisticData orderStatisticsData)
+        {
+           
 
+            return View("../Store/Admin/Statistics", orderStatisticsData);
+        }
+        public virtual ActionResult LoadFormProductsTab(OrderStatisticData orderStatisticsData)
+        {
+            orderStatisticsData.FormTab = "ProductTab";
+            return View("../Store/Admin/Statistics", orderStatisticsData);
+        }
         /// <summary>
         /// Statistical data for the campaigns
         /// </summary>
@@ -151,6 +161,8 @@ namespace asi.asicentral.web.Controllers.Store
         /// <returns></returns>
         public virtual ActionResult Statistics(OrderStatisticData orderStatisticsData)
         {
+            orderStatisticsData.FormTab = "CampaignTab";
+            orderStatisticsData.Name = "Campaign";
             if (orderStatisticsData.StartDate > orderStatisticsData.EndDate)
             {
                 orderStatisticsData.Message = Resource.StoreDateErrorMessage;
@@ -216,8 +228,10 @@ namespace asi.asicentral.web.Controllers.Store
         /// </summary>
         /// <param name="orderStatisticsData"></param>
         /// <returns></returns>
-        public virtual ActionResult Products(ProductStatisticData orderStatisticsData)
+        public virtual ActionResult Products(OrderStatisticData orderStatisticsData)
         {
+            orderStatisticsData.FormTab = "ProductTab";
+            orderStatisticsData.Name = "Product";
             if (orderStatisticsData.StartDate > orderStatisticsData.EndDate)
             {
                 orderStatisticsData.Message = Resource.StoreDateErrorMessage;
@@ -269,7 +283,85 @@ namespace asi.asicentral.web.Controllers.Store
                 groups.Add(group);
             }
             orderStatisticsData.Data = groups;
-            return View("../Store/Admin/ProductStatistics", orderStatisticsData);
+            return View("../Store/Admin/Statistics", orderStatisticsData);
+        }
+
+        /// <summary>
+        /// Statistical data for the campaigns
+        /// </summary>
+        /// <param name="orderStatisticsData"></param>
+        /// <returns></returns>
+        public virtual ActionResult CouponStatistics(OrderStatisticData orderStatisticsData)
+        {
+            orderStatisticsData.FormTab = "CouponTab";
+            orderStatisticsData.Name = "Coupon";
+            if (orderStatisticsData.StartDate > orderStatisticsData.EndDate)
+            {
+                orderStatisticsData.Message = Resource.StoreDateErrorMessage;
+                orderStatisticsData.StartDate = DateTime.Now.AddDays(-7).Date;
+                orderStatisticsData.EndDate = DateTime.Now;
+                return View("../Store/Admin/Statistics", orderStatisticsData);
+            }
+            if (orderStatisticsData.Coupon == null && (orderStatisticsData.StartDate == null || orderStatisticsData.EndDate == null))
+            {
+                DateTime now = DateTime.Now;
+                //make sure we do not retrieve everything
+                if (orderStatisticsData.StartDate == null) orderStatisticsData.StartDate = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0).AddDays(-7);
+                else orderStatisticsData.StartDate = new DateTime(orderStatisticsData.StartDate.Value.Year, orderStatisticsData.StartDate.Value.Month, orderStatisticsData.StartDate.Value.Day, 0, 0, 0);
+                if (orderStatisticsData.EndDate == null) orderStatisticsData.EndDate = now;
+                else orderStatisticsData.EndDate = new DateTime(orderStatisticsData.EndDate.Value.Year, orderStatisticsData.EndDate.Value.Month, orderStatisticsData.EndDate.Value.Day, 23, 59, 59);
+            }
+            IQueryable<StoreOrder> ordersQuery = GetCouponQuery(orderStatisticsData);
+            IList<StoreOrder> orders = ordersQuery.ToList();
+            IList<Group> groups = new List<Group>();
+            //get list of products
+
+            foreach (string coupon in orders.Select(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId.ToString()).Distinct().OrderBy(name => name))
+                {
+                    //for each product create section and populate with data already there
+                    string couponCode = "";
+                    if (!string.IsNullOrEmpty(coupon))
+                    {
+                        int couponid = Convert.ToInt32(coupon);
+                        couponCode = StoreService.GetAll<Coupon>(true).Where(item => item.Id == couponid).Select(item => item.CouponCode).FirstOrDefault();
+                    }
+                    var productdata = orders.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId.ToString() == coupon)
+                        .GroupBy(order => new { order.CompletedStep })
+                        .Select(grouped => new
+                        {
+                            CompletedStep = grouped.Key.CompletedStep,
+                            Count = grouped.Count(),
+                            Amount = grouped.Sum(order => order.Total),
+                            AnnualizedAmout = grouped.Sum(order => order.AnnualizedTotal),
+                        })
+                        .OrderBy(data => data.CompletedStep)
+                        .ToList();
+                    Group group = new Group() { Name = string.IsNullOrEmpty(coupon.ToString()) ? "(Unknown)" : couponCode };
+                    foreach (var item in productdata)
+                    {
+                        int index = item.CompletedStep >= 4 ? 4 : item.CompletedStep;
+                        //anything after Place order counts as place order
+                        group.Data[index].Count += item.Count;
+                        group.Data[index].Amount += item.Amount;
+                    }
+                    //combine the total
+                    for (int i = 3; i >= 0; i--) group.Data[i].Count += group.Data[i + 1].Count;
+                    //check rejected
+
+                    group.Data[5].Count = orders.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId.ToString() == coupon && order.ProcessStatus == OrderStatus.Rejected).Count();
+                    group.Data[5].Amount = orders.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId.ToString() == coupon && order.ProcessStatus == OrderStatus.Rejected).Sum(order => order.Total);
+                    //check pending approval
+                    group.Data[6].Count = orders.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId.ToString() == coupon && order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Count();
+                    group.Data[6].Amount = orders.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId.ToString() == coupon && order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Sum(order => order.Total);
+                    //check approved
+                    group.Data[7].Count = orders.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId.ToString() == coupon && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Count();
+                    group.Data[7].Amount = orders.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId.ToString() == coupon && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.Total);
+                    group.Data[7].AnnualizedAmount = orders.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId.ToString() == coupon && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.AnnualizedTotal);
+                    groups.Add(group);
+                }
+            
+            orderStatisticsData.Data = groups;
+            return View("../Store/Admin/Statistics", orderStatisticsData);
         }
 
         /// <summary>
@@ -291,7 +383,21 @@ namespace asi.asicentral.web.Controllers.Store
         /// </summary>
         /// <param name="orderStatisticsData"></param>
         /// <returns></returns>
-        public ActionResult DownloadProductCSV(ProductStatisticData orderStatisticsData)
+        public ActionResult DownloadCouponCSV(OrderStatisticData orderStatisticsData)
+        {
+            if (orderStatisticsData.Coupon == "(Unknown)") orderStatisticsData.Coupon = null;
+            IQueryable<StoreOrder> ordersQuery = GetCouponQuery(orderStatisticsData);
+            if (string.IsNullOrEmpty(orderStatisticsData.Coupon))
+                ordersQuery = ordersQuery.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId == null);
+            return Download(ordersQuery);
+        }
+
+        /// <summary>
+        /// Download the product data
+        /// </summary>
+        /// <param name="orderStatisticsData"></param>
+        /// <returns></returns>
+        public ActionResult DownloadProductCSV(OrderStatisticData orderStatisticsData)
         {
             IQueryable<StoreOrder> ordersQuery = GetProductQuery(orderStatisticsData);
             if (orderStatisticsData.Product != null)
@@ -373,7 +479,31 @@ namespace asi.asicentral.web.Controllers.Store
             return ordersQuery;
         }
 
-        private IQueryable<StoreOrder> GetProductQuery(ProductStatisticData orderStatisticsData)
+        private IQueryable<StoreOrder> GetCouponQuery(OrderStatisticData orderStatisticsData)
+        {
+            IQueryable<StoreOrder> ordersQuery = StoreService.GetAll<StoreOrder>("Company;Company.Individuals;BillingIndividual;OrderDetails", true);
+            if (orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = orderStatisticsData.EndDate.Value.Date + new TimeSpan(23, 59, 59);
+            if (orderStatisticsData.StartDate.HasValue)
+            {
+                DateTime dateParam = orderStatisticsData.StartDate.Value.ToUniversalTime();
+                ordersQuery = ordersQuery.Where(order => order.CreateDate >= dateParam);
+            }
+            if (orderStatisticsData.EndDate.HasValue)
+            {
+                DateTime dateParam = orderStatisticsData.EndDate.Value.ToUniversalTime();
+                ordersQuery = ordersQuery.Where(order => order.CreateDate <= dateParam);
+            }
+            if (orderStatisticsData.Coupon != null)
+            {
+                int couponid = StoreService.GetAll<Coupon>(true).Where(item => item.CouponCode == orderStatisticsData.Coupon).Select(item => item.Id).FirstOrDefault();
+                ordersQuery = ordersQuery.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId == couponid);
+            }
+
+            return ordersQuery;
+        }
+
+
+        private IQueryable<StoreOrder> GetProductQuery(OrderStatisticData orderStatisticsData)
         {
             IQueryable<StoreOrder> ordersQuery = StoreService.GetAll<StoreOrder>("Company;Company.Individuals;BillingIndividual;OrderDetails", true);
             if (!orderStatisticsData.StartDate.HasValue) orderStatisticsData.StartDate = DateTime.Now.AddDays(-7).Date;

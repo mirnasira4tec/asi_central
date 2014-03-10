@@ -29,6 +29,7 @@ namespace asi.asicentral.model.store
         public int NumberOfPages { get; set; }
         public string HeaderImage { get; set; }
         public string ChatSettings { get; set; }
+        public string ConversionSettings { get; set; }
         public virtual List<ContextFeature> Features { get; set; }
         public virtual List<ContextProductSequence> Products { get; set; }
       
