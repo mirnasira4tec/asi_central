@@ -11,6 +11,10 @@ namespace asi.asicentral.web.model.store.order
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string Campaign { get; set; }
+        public string Product { get; set; }
+        public string Coupon { get; set; }
+        public string FormTab { get; set; }
+        public string Name { get; set; }
         public IList<Group> Data { get; set; }
         public decimal TotalAmount { get; set; }
         public string Message { set; get; }
