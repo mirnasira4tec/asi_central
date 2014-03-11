@@ -1,4 +1,5 @@
-﻿@model asi.asicentral.web.model.store.order.OrderStatisticData
+﻿@using asi.asicentral.web.model.store.order;
+@model asi.asicentral.web.model.store.order.OrderStatisticData
 
 @{
     ViewBag.Title = "Statistics";
@@ -6,16 +7,17 @@
 }
 
 @Html.HiddenFor(m => m.FormTab)
+@Html.HiddenFor(m => m.Name)
 <h1>@Model.Name Statistics</h1>
 <div class="tabbable tabs-below small">
     <ul id="formtab" class="nav nav-tabs">
-        <li id="CampaignTab" class="@(Model.Name=="Campaign"?"active":"")"><a href="/store/Orders/Statistics">Campaign Statistics</a></li>
-        <li id="ProductTab"  class="@(Model.Name=="Product"?"active":"")"><a href="/store/Orders/Products">Product Statistics</a></li>
-        <li id="CouponTab"  class="@(Model.Name=="Coupon"?"active":"")"><a href="/store/Orders/CouponStatistics">Coupon Statistics</a></li>
+        <li id="CampaignTab" class="@(Model.Name == OrderStatisticData.Statistics_Campaign ? "active" : "")"><a href="/store/Orders/Statistics?stats=@OrderStatisticData.Statistics_Campaign">Campaign Statistics</a></li>
+        <li id="ProductTab"  class="@(Model.Name == OrderStatisticData.Statistics_Product ? "active" : "")"><a href="/store/Orders/Statistics?stats=@OrderStatisticData.Statistics_Product">Product Statistics</a></li>
+        <li id="CouponTab"  class="@(Model.Name == OrderStatisticData.Statistics_Coupon? "active" : "")"><a href="/store/Orders/Statistics?stats=@OrderStatisticData.Statistics_Coupon">Coupon Statistics</a></li>
     </ul>
 </div>
 
- 
+
 
 <form method="post">
     <div class="row-fluid well">
@@ -27,16 +29,19 @@
         <div class="span3">
             <label for="StartDate">Start Date:</label>
             <div class="input-append">
-                <input class="input-medium" type="text" data-type="date" name="StartDate" value="@(Model.StartDate.HasValue ? Model.StartDate.Value.ToString("MM/dd/yyyy") : "")" /><span class="add-on"><i class="icon-remove" data-name="StartDate"></i></span></div>
+                <input class="input-medium" type="text" data-type="date" name="StartDate" value="@(Model.StartDate.HasValue ? Model.StartDate.Value.ToString("MM/dd/yyyy") : "")" /><span class="add-on"><i class="icon-remove" data-name="StartDate"></i></span>
+            </div>
         </div>
         <div class="span3">
             <label for="StartDate">End Date:</label>
             <div class="input-append">
-                <input class="input-medium" type="text" data-type="date" name="EndDate" value="@(Model.EndDate.HasValue ? Model.EndDate.Value.ToString("MM/dd/yyyy") : "")" /><span class="add-on"><i class="icon-remove" data-name="EndDate"></i></span></div>
+                <input class="input-medium" type="text" data-type="date" name="EndDate" value="@(Model.EndDate.HasValue ? Model.EndDate.Value.ToString("MM/dd/yyyy") : "")" /><span class="add-on"><i class="icon-remove" data-name="EndDate"></i></span>
+            </div>
         </div>
         <div class="span2">
             <br />
-            <input class="btn btn-primary" type="submit" value="Refresh" /></div>
+            <input class="btn btn-primary" type="submit" value="Refresh" />
+        </div>
     </div>
 
     @if (Model.Message != null || Model.Message == "")
@@ -49,32 +54,35 @@
     decimal annualized = 0;
     foreach (asi.asicentral.web.model.store.order.Group group in Model.Data)
     {
-        <div class="row-fluid">
-            <div class="span5"><b>@group.Name</b></div>
-            <div class="span4"><a rel="download" data-statistics="@group.Name" href="#">Download data</a></div>
-            <div class="span3">&nbsp;</div>
-        </div>
-        foreach(asi.asicentral.web.model.store.order.GroupData data in group.Data) {
-            if (data.Name == "Total") {
-            <div class="row-fluid">
-                <div class="span1">&nbsp;</div>
-                <div class="span4"><b>@data.Name</b></div>
-                <div class="span1"><b>@data.Count</b></div>
-                <div class="span1"><b>@data.Amount.ToString("C")</b></div>
-                <div class="span1">&nbsp;</div>
-                <div class="span4"><b>@data.AnnualizedAmount.ToString("C")</b> <small>Annualized amount</small></div>
-            </div>
+    <div class="row-fluid">
+        <div class="span5"><b>@group.Name</b></div>
+        <div class="span4"><a rel="download" data-statistics="@group.Name" href="#">Download data</a></div>
+        <div class="span3">&nbsp;</div>
+    </div>
+        foreach (asi.asicentral.web.model.store.order.GroupData data in group.Data)
+        {
+            if (data.Name == "Total")
+            {
+    <div class="row-fluid">
+        <div class="span1">&nbsp;</div>
+        <div class="span4"><b>@data.Name</b></div>
+        <div class="span1"><b>@data.Count</b></div>
+        <div class="span1"><b>@data.Amount.ToString("C")</b></div>
+        <div class="span1">&nbsp;</div>
+        <div class="span4"><b>@data.AnnualizedAmount.ToString("C")</b> <small>Annualized amount</small></div>
+    </div>
                 total += data.Amount;
                 annualized += data.AnnualizedAmount;
             }
-            else {
-            <div class="row-fluid">
-                <div class="span1">&nbsp;</div>
-                <div class="span4">@data.Name</div>
-                <div class="span1">@data.Count</div>
-                <div class="span1">@(data.Amount > 0 ? data.Amount.ToString("C") : "")</div>
-                <div class="span5">&nbsp;</div>
-            </div>
+            else
+            {
+    <div class="row-fluid">
+        <div class="span1">&nbsp;</div>
+        <div class="span4">@data.Name</div>
+        <div class="span1">@data.Count</div>
+        <div class="span1">@(data.Amount > 0 ? data.Amount.ToString("C") : "")</div>
+        <div class="span5">&nbsp;</div>
+    </div>
             }
         }
     }
@@ -111,7 +119,8 @@
             var campaign = $(this).data("statistics");
             var startdate = '@Model.StartDate';
             var enddate = '@Model.EndDate';
-            var location = "@Url.Action("DownloadCampaignCSV", "Orders", null)/" + "?Campaign=" + campaign + "&StartDate=" + startdate + "&EndDate=" + enddate;
+            var name = '@OrderStatisticData.Statistics_Campaign';
+            var location = "@Url.Action("DownloadCSV", "Orders", null)/" + "?Name="+ name +"&Campaign=" + campaign + "&StartDate=" + startdate + "&EndDate=" + enddate;
             document.location = location;
         });
 
@@ -129,14 +138,15 @@
             var product = $(this).data("statistics");
             var startdate = '@Model.StartDate';
             var enddate = '@Model.EndDate';
-            var location = "@Url.Action("DownloadProductCSV", "Orders", null)/" + "?StartDate=@Model.StartDate&EndDate=@Model.EndDate";
+            var name = '@OrderStatisticData.Statistics_Product';
+            var location = "@Url.Action("DownloadCSV", "Orders", null)/" + "?Name=" + name + "&StartDate=@Model.StartDate&EndDate=@Model.EndDate";
             if (product) location += "&Product=" + encodeURI(product);
             document.location = location;
         });
             </text>
         }
         else if (Model.FormTab == "CouponTab")
-             {
+        {
             <text>
         $('input[data-type*="date"]').datepicker();
         $('.icon-remove').click(function (e) {
@@ -153,12 +163,13 @@
             var coupon = $(this).data("statistics");
             var startdate = '@Model.StartDate';
             var enddate = '@Model.EndDate';
-            var location = "@Url.Action("DownloadCouponCSV", "Orders", null)/" + "?Coupon=" + coupon + "&StartDate=" + startdate + "&EndDate=" + enddate;
+            var name = '@OrderStatisticData.Statistics_Coupon';
+            var location = "@Url.Action("DownloadCSV", "Orders", null)/" + "?Name=" + name + "&Coupon=" + coupon + "&StartDate=" + startdate + "&EndDate=" + enddate;
             document.location = location;
         });
 
         </text>
-             }
+        }
         
 
 
