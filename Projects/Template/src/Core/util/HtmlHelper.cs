@@ -225,9 +225,8 @@ namespace asi.asicentral.util
                 //set the content into the request if available
                 if (!string.IsNullOrEmpty(content))
                 {
-                    string contentEncoded = HttpUtility.UrlEncode(content);
                     UTF8Encoding encoding = new UTF8Encoding();
-                    byte[] postBytes = encoding.GetBytes(contentEncoded);
+                    byte[] postBytes = encoding.GetBytes(content);
                     request.Content = new StreamContent(new MemoryStream(postBytes));
                     request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
                 }

@@ -12,13 +12,26 @@ namespace asi.asicentral.util.Tests
     public class HtmlHelperTests
     {
 
+        private string url = "http://stage-store.asicentral.com/Store/Supplier/Package/9";
+
         [TestMethod()]
-        public void SubmitWebRequestTest()
+        public void SubmitWebRequest_Get_Test()
         {
-            string url = "http://stage-store.asicentral.com/";
-            string content = "test";
-   
-            string result = HtmlHelper.SubmitWebRequest(url, null, content, true);
+            string result = HtmlHelper.SubmitWebRequest(url, null, null, false);
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod()]
+        public void SubmitWebRequest_Post_Test()
+        {
+            var data = new Dictionary<string, string>
+            {
+                {"orderId", "2"},
+                {"pageNumber", "2"}
+            };
+
+            string result = HtmlHelper.SubmitForm(url, data, true, true);
 
             Assert.IsNotNull(result);
         }
