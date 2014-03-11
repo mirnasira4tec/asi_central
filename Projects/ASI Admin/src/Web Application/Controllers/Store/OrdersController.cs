@@ -9,7 +9,6 @@ using asi.asicentral.web.model.store;
 using System.Text;
 using asi.asicentral.web.model.store.order;
 using System.Data.Objects.SqlClient;
-using System.Data.Entity;
 using asi.asicentral.Resources;
 
 namespace asi.asicentral.web.Controllers.Store
@@ -144,17 +143,7 @@ namespace asi.asicentral.web.Controllers.Store
                 Data = new { Success = (error.Length == 0), Error = error }
             };
         }
-        public virtual ActionResult LoadFormCampaignTab(OrderStatisticData orderStatisticsData)
-        {
-
-
-            return View("../Store/Admin/Statistics", orderStatisticsData);
-        }
-        public virtual ActionResult LoadFormProductsTab(OrderStatisticData orderStatisticsData)
-        {
-            orderStatisticsData.FormTab = "ProductTab";
-            return View("../Store/Admin/Statistics", orderStatisticsData);
-        }
+      
         /// <summary>
         /// Statistical data for the campaigns
         /// </summary>
