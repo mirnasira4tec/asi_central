@@ -11,9 +11,9 @@
 <h1>@Model.Name Statistics</h1>
 <div class="tabbable tabs-below small">
     <ul id="formtab" class="nav nav-tabs">
-        <li id="CampaignTab" class="@(Model.Name == OrderStatisticData.Statistics_Campaign ? "active" : "")"><a href="/store/Orders/Statistics?stats=@OrderStatisticData.Statistics_Campaign">Campaign Statistics</a></li>
-        <li id="ProductTab"  class="@(Model.Name == OrderStatisticData.Statistics_Product ? "active" : "")"><a href="/store/Orders/Statistics?stats=@OrderStatisticData.Statistics_Product">Product Statistics</a></li>
-        <li id="CouponTab"  class="@(Model.Name == OrderStatisticData.Statistics_Coupon? "active" : "")"><a href="/store/Orders/Statistics?stats=@OrderStatisticData.Statistics_Coupon">Coupon Statistics</a></li>
+        <li id="CampaignTab" class="@(Model.Name == OrderStatisticData.Statistics_Campaign ? "active" : "")"><a href="/store/Orders/Statistics?statistics=@OrderStatisticData.Statistics_Campaign">Campaign Statistics</a></li>
+        <li id="ProductTab"  class="@(Model.Name == OrderStatisticData.Statistics_Product ? "active" : "")"><a href="/store/Orders/Statistics?statistics=@OrderStatisticData.Statistics_Product">Product Statistics</a></li>
+        <li id="CouponTab"  class="@(Model.Name == OrderStatisticData.Statistics_Coupon? "active" : "")"><a href="/store/Orders/Statistics?statistics=@OrderStatisticData.Statistics_Coupon">Coupon Statistics</a></li>
     </ul>
 </div>
 
