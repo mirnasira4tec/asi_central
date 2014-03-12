@@ -13,7 +13,7 @@
     <ul id="formtab" class="nav nav-tabs">
         <li id="CampaignTab" class="@(Model.Name == OrderStatisticData.Statistics_Campaign ? "active" : "")"><a href="/store/Orders/Statistics?statistics=@OrderStatisticData.Statistics_Campaign">Campaign Statistics</a></li>
         <li id="ProductTab"  class="@(Model.Name == OrderStatisticData.Statistics_Product ? "active" : "")"><a href="/store/Orders/Statistics?statistics=@OrderStatisticData.Statistics_Product">Product Statistics</a></li>
-        <li id="CouponTab"  class="@(Model.Name == OrderStatisticData.Statistics_Coupon? "active" : "")"><a href="/store/Orders/Statistics?statistics=@OrderStatisticData.Statistics_Coupon">Coupon Statistics</a></li>
+        <li id="CouponTab"  class="@(Model.Name == OrderStatisticData.Statistics_Coupon ? "active" : "")"><a href="/store/Orders/Statistics?statistics=@OrderStatisticData.Statistics_Coupon">Coupon Statistics</a></li>
     </ul>
 </div>
 
@@ -23,8 +23,8 @@
     <div class="row-fluid well">
         <div class="span1">&nbsp;</div>
         <div class="span3">
-            <label for="@Model.Name">@Model.Name:</label>
-            <input class="input-medium" type="text" name="@Model.Name" value="" />
+            <label for="StatisticsValue">@Model.Name:</label>
+            <input class="input-medium" type="text" name="StatisticsValue" value="" />
         </div>
         <div class="span3">
             <label for="StartDate">Start Date:</label>
@@ -100,10 +100,6 @@
 @section scripts {
     @Scripts.Render("~/bundles/form")
     <script>
-       
-        @if (Model.FormTab == "CampaignTab")
-        {
-            <text>
         $('input[data-type*="date"]').datepicker();
         $('.icon-remove').click(function (e) {
             $('input[name="' + $(e.target).data("name") + '"]').val("");
@@ -114,62 +110,33 @@
                 $('input[name="EndDate"]').val("");
             }
         });
-
         $('a[rel="download"]').click(function (e) {
-            var campaign = $(this).data("statistics");
+            var statisticsValue = $(this).data("statistics");
             var startdate = '@Model.StartDate';
             var enddate = '@Model.EndDate';
-            var name = '@OrderStatisticData.Statistics_Campaign';
-            var location = "@Url.Action("DownloadCSV", "Orders", null)/" + "?Name="+ name +"&Campaign=" + campaign + "&StartDate=" + startdate + "&EndDate=" + enddate;
-            document.location = location;
-        });
-
-        </text>
-        }
-        else if (Model.FormTab == "ProductTab")
-        {
-            <text>
-        $('input[data-type*="date"]').datepicker();
-        $('.icon-remove').click(function (e) {
-            $('input[name="' + $(e.target).data("name") + '"]').val("");
-        });
-
-        $('a[rel="download"]').click(function (e) {
-            var product = $(this).data("statistics");
-            var startdate = '@Model.StartDate';
-            var enddate = '@Model.EndDate';
-            var name = '@OrderStatisticData.Statistics_Product';
-            var location = "@Url.Action("DownloadCSV", "Orders", null)/" + "?Name=" + name + "&StartDate=@Model.StartDate&EndDate=@Model.EndDate";
-            if (product) location += "&Product=" + encodeURI(product);
-            document.location = location;
-        });
+            var name = "";
+            @if (Model.FormTab == "CampaignTab")
+            {
+                <text>
+            name = '@OrderStatisticData.Statistics_Campaign';
             </text>
-        }
-        else if (Model.FormTab == "CouponTab")
-        {
-            <text>
-        $('input[data-type*="date"]').datepicker();
-        $('.icon-remove').click(function (e) {
-            $('input[name="' + $(e.target).data("name") + '"]').val("");
-        });
-        $('input[name="Coupon"]').change(function (e) {
-            if ($(e.target).val()) {
-                $('input[name="StartDate"]').val("");
-                $('input[name="EndDate"]').val("");
             }
-        });
-
-        $('a[rel="download"]').click(function (e) {
-            var coupon = $(this).data("statistics");
-            var startdate = '@Model.StartDate';
-            var enddate = '@Model.EndDate';
-            var name = '@OrderStatisticData.Statistics_Coupon';
-            var location = "@Url.Action("DownloadCSV", "Orders", null)/" + "?Name=" + name + "&Coupon=" + coupon + "&StartDate=" + startdate + "&EndDate=" + enddate;
+            else if (Model.FormTab == "ProductTab")
+            {
+                  <text>
+            name = '@OrderStatisticData.Statistics_Product';
+            statisticsValue = encodeURI(statisticsValue);
+            </text>
+            }
+            else if (Model.FormTab == "CouponTab")
+            {
+                   <text>
+            name = '@OrderStatisticData.Statistics_Coupon';
+            </text>
+            }
+            var location = "@Url.Action("DownloadCSV", "Orders", null)/" + "?Name=" + name + "&StatisticsValue=" + statisticsValue + "&StartDate=" + startdate + "&EndDate=" + enddate;
             document.location = location;
         });
-
-        </text>
-        }
         
 
 

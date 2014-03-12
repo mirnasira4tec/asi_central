@@ -160,7 +160,7 @@ namespace asi.asicentral.web.Controllers.Store
                 orderStatisticsData.EndDate = DateTime.Now;
                 return View("../Store/Admin/Statistics", orderStatisticsData);
             }
-            if (orderStatisticsData.Campaign == null && (orderStatisticsData.StartDate == null || orderStatisticsData.EndDate == null))
+            if (orderStatisticsData.StatisticsValue == null && (orderStatisticsData.StartDate == null || orderStatisticsData.EndDate == null))
             {
                 DateTime now = DateTime.Now;
                 //make sure we do not retrieve everything
@@ -315,18 +315,7 @@ namespace asi.asicentral.web.Controllers.Store
         /// <returns></returns>
         public ActionResult DownloadCSV(OrderStatisticData orderStatisticsData)
         {
-            switch (orderStatisticsData.Name)
-            {
-                case "Campaign":
-                    if (orderStatisticsData.Campaign == "(Unknown)") orderStatisticsData.Campaign = null;
-                    break;
-                case "Product":
-                    if (orderStatisticsData.Product == "(Unknown)") orderStatisticsData.Product = null;
-                    break;
-                case "Coupon":
-                    if (orderStatisticsData.Coupon == "(Unknown)") orderStatisticsData.Coupon = null;
-                    break;
-            }
+            if (orderStatisticsData.StatisticsValue == "(Unknown)") orderStatisticsData.StatisticsValue = null;
             IQueryable<StoreOrder> ordersQuery = GetQuery(orderStatisticsData);
             return Download(ordersQuery);
         }
@@ -348,8 +337,6 @@ namespace asi.asicentral.web.Controllers.Store
             foreach (StoreOrder order in orders)
             {
                 string orderid = string.Empty, timss = string.Empty, companyname = string.Empty, contactname = string.Empty, contactphone = string.Empty, contactemail = string.Empty, orderstatus = string.Empty, amount = string.Empty, annualizedamount = string.Empty, productname = string.Empty, approveddate = string.Empty, date = string.Empty;
-
-
                 orderid = order.Id.ToString();
                 timss = order.ExternalReference;
                 orderstatus = order.ProcessStatus == OrderStatus.Approved ? "Approved" : order.ProcessStatus == OrderStatus.Rejected ? "Rejected" : "";
@@ -398,29 +385,23 @@ namespace asi.asicentral.web.Controllers.Store
                 DateTime dateParam = orderStatisticsData.EndDate.Value.ToUniversalTime();
                 ordersQuery = ordersQuery.Where(order => order.CreateDate <= dateParam);
             }
-            switch (orderStatisticsData.Name)
+            if (orderStatisticsData.StatisticsValue != null)
             {
-                case "Campaign":
-                    if (orderStatisticsData.Campaign != null)
-                    {
-                        ordersQuery = ordersQuery.Where(order => order.Campaign == orderStatisticsData.Campaign);
-                    }
-                    break;
-                case "Product":
-                    if (orderStatisticsData.Product != null)
-                    {
-                        ordersQuery = ordersQuery.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().Product.Name == orderStatisticsData.Product);
-                    }
-                    break;
-                case "Coupon":
-                    if (orderStatisticsData.Coupon != null)
-                    {
-                        int couponid = StoreService.GetAll<Coupon>(true).Where(item => item.CouponCode == orderStatisticsData.Coupon).Select(item => item.Id).FirstOrDefault();
+                switch (orderStatisticsData.Name)
+                {
+                    case "Campaign":
+                        ordersQuery = ordersQuery.Where(order => order.Campaign == orderStatisticsData.StatisticsValue);
+                        break;
+                    case "Product":
+                        ordersQuery = ordersQuery.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().Product.Name == orderStatisticsData.StatisticsValue);
+                        break;
+                    case "Coupon":
+                        int couponid = StoreService.GetAll<Coupon>(true).Where(item => item.CouponCode == orderStatisticsData.StatisticsValue).Select(item => item.Id).FirstOrDefault();
                         ordersQuery = ordersQuery.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId == couponid);
-                    }
-                    break;
-                default:
-                    break;
+                        break;
+                    default:
+                        break;
+                }
             }
             return ordersQuery;
         }
