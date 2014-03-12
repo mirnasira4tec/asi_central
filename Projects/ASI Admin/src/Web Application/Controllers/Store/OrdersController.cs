@@ -149,10 +149,10 @@ namespace asi.asicentral.web.Controllers.Store
         /// </summary>
         /// <param name="orderStatisticsData"></param>
         /// <returns></returns>
-        public virtual ActionResult Statistics(OrderStatisticData orderStatisticsData, string stats)
+        public virtual ActionResult Statistics(OrderStatisticData orderStatisticsData, string statistics)
         {
-            orderStatisticsData.FormTab = stats + "Tab";
-            orderStatisticsData.Name = stats;
+            orderStatisticsData.FormTab = statistics + "Tab";
+            orderStatisticsData.Name = statistics;
             if (orderStatisticsData.StartDate > orderStatisticsData.EndDate)
             {
                 orderStatisticsData.Message = Resource.StoreDateErrorMessage;
