@@ -11,7 +11,7 @@
 @using (Html.BeginForm())
 {
     <input type="submit" value="Save" class="btn btn-primary" />
-    @Html.ActionLink(Resource.Cancel, "List")
+    @Html.ActionLink(asi.asicentral.Resources.Resource.Cancel, "List")
     <br /><br />
     @Html.AntiForgeryToken()
     @Html.HiddenFor(company => company.Id)
