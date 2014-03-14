@@ -126,6 +126,7 @@ namespace asi.asicentral.util
             states.Add(new SelectListItem() { Text = "Oklahoma", Value = "OK" });
             states.Add(new SelectListItem() { Text = "Oregon", Value = "OR" });
             states.Add(new SelectListItem() { Text = "Pennsylvania", Value = "PA" });
+            states.Add(new SelectListItem() { Text = "Puerto Rico", Value = "PR" });
             states.Add(new SelectListItem() { Text = "Rhode Island", Value = "RI" });
             states.Add(new SelectListItem() { Text = "South Carolina", Value = "SC" });
             states.Add(new SelectListItem() { Text = "South Dakota", Value = "SD" });
