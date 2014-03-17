@@ -8,12 +8,19 @@ namespace asi.asicentral.web.model.store.order
 {
     public class OrderStatisticData
     {
+        public const String Statistics_Campaign = "Campaign";
+        public const String Statistics_Product = "Product";
+        public const String Statistics_Coupon = "Coupon";
+
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public string Campaign { get; set; }
+        public string StatisticsValue { get; set; }
+        public string FormTab { get; set; }
+        public string Name { get; set; }
         public IList<Group> Data { get; set; }
         public decimal TotalAmount { get; set; }
         public string Message { set; get; }
+
     }
     public class GroupedData
     {
@@ -28,14 +35,7 @@ namespace asi.asicentral.web.model.store.order
         public int CountApproved { get; set; }
         public decimal? AmountApproved { set; get; }
     }
-    public class ProductStatisticData
-    {
-        public string Product { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
-        public IList<Group> Data { get; set; }
-        public string Message { set; get; }
-    }
+    
     public class Group
     {
         public Group()
@@ -60,4 +60,5 @@ namespace asi.asicentral.web.model.store.order
         public decimal Amount { get; set; }
         public decimal AnnualizedAmount { get; set; }
     }
+    
 }

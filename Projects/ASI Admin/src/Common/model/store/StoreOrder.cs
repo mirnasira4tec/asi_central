@@ -69,6 +69,14 @@ namespace asi.asicentral.model.store
                 else return "(Unknown)";
             }
         }
+        public string CouponCode
+        {
+            get
+            {
+                if (OrderDetails != null && OrderDetails.Where(detail => detail.Coupon != null).FirstOrDefault() != null) return OrderDetails.Where(detail => detail.Coupon != null).FirstOrDefault().Coupon.CouponCode;
+                else return "(Unknown)";
+            }
+        }
         public string ConfirmationNumber
         {
             get { return string.Format("{0:#00000}", Id); }
