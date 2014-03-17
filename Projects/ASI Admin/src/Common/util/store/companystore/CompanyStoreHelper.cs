@@ -10,13 +10,13 @@ namespace asi.asicentral.util.store
 {
     public class CompanyStoreHelper
     {
-        public static readonly decimal[] CompanyStore_Cost = {29,99} ;
+        public static readonly decimal[] CompanyStore_Cost = {49,99} ;
 
         public static IList<SelectListItem> GetQuantityOptions()
         {
             IList<SelectListItem> quantityOptions = new List<SelectListItem>();
             quantityOptions.Add(new SelectListItem() { Text = "1 License", Value = "0" });
-            quantityOptions.Add(new SelectListItem() { Text = "10 Licenses", Value = "1" });
+            quantityOptions.Add(new SelectListItem() { Text = "5 Licenses", Value = "1" });
             return quantityOptions;
         }
 
