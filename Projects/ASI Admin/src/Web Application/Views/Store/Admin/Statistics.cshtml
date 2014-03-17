@@ -24,7 +24,7 @@
         <div class="span1">&nbsp;</div>
         <div class="span3">
             <label for="StatisticsValue">@Model.Name:</label>
-            <input class="input-medium" type="text" name="StatisticsValue" value="" />
+            <input class="input-medium" type="text" name="StatisticsValue" value="@Model.StatisticsValue" />
         </div>
         <div class="span3">
             <label for="StartDate">Start Date:</label>
@@ -104,7 +104,7 @@
         $('.icon-remove').click(function (e) {
             $('input[name="' + $(e.target).data("name") + '"]').val("");
         });
-        $('input[name="Campaign"]').change(function (e) {
+        $('input[name="StatisticsValue"]').change(function (e) {
             if ($(e.target).val()) {
                 $('input[name="StartDate"]').val("");
                 $('input[name="EndDate"]').val("");
