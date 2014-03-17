@@ -254,16 +254,10 @@ namespace asi.asicentral.web.Controllers.Store
                     break;
                 case "Coupon":
                     //get list of products
-                    foreach (string coupon in orders.Select(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId.ToString()).Distinct().OrderBy(name => name))
+                    foreach (string coupon in orders.Select(order => order.CouponCode).Distinct().OrderBy(name => name))
                     {
                         //for each product create section and populate with data already there
-                        string couponCode = "";
-                        if (!string.IsNullOrEmpty(coupon))
-                        {
-                            int couponid = Convert.ToInt32(coupon);
-                            couponCode = StoreService.GetAll<Coupon>(true).Where(item => item.Id == couponid).Select(item => item.CouponCode).FirstOrDefault();
-                        }
-                        var productdata = orders.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId.ToString() == coupon)
+                        var productdata = orders.Where(order => order.CouponCode == coupon)
                             .GroupBy(order => new { order.CompletedStep })
                             .Select(grouped => new
                             {
@@ -274,7 +268,7 @@ namespace asi.asicentral.web.Controllers.Store
                             })
                             .OrderBy(data => data.CompletedStep)
                             .ToList();
-                        Group group = new Group() { Name = string.IsNullOrEmpty(coupon.ToString()) ? "(Unknown)" : couponCode };
+                        Group group = new Group() { Name = string.IsNullOrEmpty(coupon.ToString()) ? "(Unknown)" : coupon };
                         foreach (var item in productdata)
                         {
                             int index = item.CompletedStep >= 4 ? 4 : item.CompletedStep;
@@ -286,15 +280,15 @@ namespace asi.asicentral.web.Controllers.Store
                         for (int i = 3; i >= 0; i--) group.Data[i].Count += group.Data[i + 1].Count;
                         //check rejected
 
-                        group.Data[5].Count = orders.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId.ToString() == coupon && order.ProcessStatus == OrderStatus.Rejected).Count();
-                        group.Data[5].Amount = orders.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId.ToString() == coupon && order.ProcessStatus == OrderStatus.Rejected).Sum(order => order.Total);
+                        group.Data[5].Count = orders.Where(order => order.CouponCode == coupon && order.ProcessStatus == OrderStatus.Rejected).Count();
+                        group.Data[5].Amount = orders.Where(order => order.CouponCode == coupon && order.ProcessStatus == OrderStatus.Rejected).Sum(order => order.Total);
                         //check pending approval
-                        group.Data[6].Count = orders.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId.ToString() == coupon && order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Count();
-                        group.Data[6].Amount = orders.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId.ToString() == coupon && order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Sum(order => order.Total);
+                        group.Data[6].Count = orders.Where(order => order.CouponCode == coupon && order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Count();
+                        group.Data[6].Amount = orders.Where(order => order.CouponCode == coupon && order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Sum(order => order.Total);
                         //check approved
-                        group.Data[7].Count = orders.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId.ToString() == coupon && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Count();
-                        group.Data[7].Amount = orders.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId.ToString() == coupon && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.Total);
-                        group.Data[7].AnnualizedAmount = orders.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId.ToString() == coupon && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.AnnualizedTotal);
+                        group.Data[7].Count = orders.Where(order => order.CouponCode == coupon && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Count();
+                        group.Data[7].Amount = orders.Where(order => order.CouponCode == coupon && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.Total);
+                        group.Data[7].AnnualizedAmount = orders.Where(order => order.CouponCode == coupon && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.AnnualizedTotal);
                         groups.Add(group);
                     }
 
@@ -372,7 +366,7 @@ namespace asi.asicentral.web.Controllers.Store
         {
             string query = "Company;Company.Individuals;BillingIndividual";
             if (orderStatisticsData.Name == "Coupon") query = query + ";OrderDetails";
-            else if (orderStatisticsData.Name == "Product") query = query + ";OrderDetails.Product";
+            else if (orderStatisticsData.Name == "Product") query = query + ";OrderDetails";
             IQueryable<StoreOrder> ordersQuery = StoreService.GetAll<StoreOrder>(query, true);
             if (orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = orderStatisticsData.EndDate.Value.Date + new TimeSpan(23, 59, 59);
             if (orderStatisticsData.StartDate.HasValue)
@@ -393,11 +387,10 @@ namespace asi.asicentral.web.Controllers.Store
                         ordersQuery = ordersQuery.Where(order => order.Campaign == orderStatisticsData.StatisticsValue);
                         break;
                     case "Product":
-                        ordersQuery = ordersQuery.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().Product.Name == orderStatisticsData.StatisticsValue);
+                        ordersQuery = ordersQuery.Where(order => order.OrderDetails.Count(det => det.Product.Name == orderStatisticsData.StatisticsValue) > 0);
                         break;
                     case "Coupon":
-                        int couponid = StoreService.GetAll<Coupon>(true).Where(item => item.CouponCode == orderStatisticsData.StatisticsValue).Select(item => item.Id).FirstOrDefault();
-                        ordersQuery = ordersQuery.Where(order => order.OrderDetails.AsEnumerable().FirstOrDefault().CouponId == couponid);
+                        ordersQuery = ordersQuery.Where(order => order.OrderDetails.Count(det => det.Coupon != null && det.Coupon.CouponCode == orderStatisticsData.StatisticsValue) > 0);
                         break;
                     default:
                         break;

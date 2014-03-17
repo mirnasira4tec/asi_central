@@ -17,8 +17,6 @@
     </ul>
 </div>
 
-
-
 <form method="post">
     <div class="row-fluid well">
         <div class="span1">&nbsp;</div>
@@ -95,8 +93,6 @@
     </div>
 }
 
-
-
 @section scripts {
     @Scripts.Render("~/bundles/form")
     <script>
@@ -104,12 +100,17 @@
         $('.icon-remove').click(function (e) {
             $('input[name="' + $(e.target).data("name") + '"]').val("");
         });
+        @if (Model.FormTab != "ProductTab") 
+        {
+        <text>
         $('input[name="StatisticsValue"]').change(function (e) {
             if ($(e.target).val()) {
                 $('input[name="StartDate"]').val("");
                 $('input[name="EndDate"]').val("");
             }
         });
+        </text>
+        }
         $('a[rel="download"]').click(function (e) {
             var statisticsValue = $(this).data("statistics");
             var startdate = '@Model.StartDate';
@@ -117,13 +118,13 @@
             var name = "";
             @if (Model.FormTab == "CampaignTab")
             {
-                <text>
+            <text>
             name = '@OrderStatisticData.Statistics_Campaign';
             </text>
             }
             else if (Model.FormTab == "ProductTab")
             {
-                  <text>
+            <text>
             name = '@OrderStatisticData.Statistics_Product';
             statisticsValue = encodeURIComponent(statisticsValue);
            
@@ -131,16 +132,12 @@
             }
             else if (Model.FormTab == "CouponTab")
             {
-                   <text>
+            <text>
             name = '@OrderStatisticData.Statistics_Coupon';
             </text>
             }
             var location = "@Url.Action("DownloadCSV", "Orders", null)/" + "?Name=" + name + "&StatisticsValue=" + statisticsValue + "&StartDate=" + startdate + "&EndDate=" + enddate;
-            alert(location);
             document.location = location;
         });
-        
-
-
     </script>
 }
