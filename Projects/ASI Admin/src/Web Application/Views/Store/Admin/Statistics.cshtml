@@ -125,7 +125,8 @@
             {
                   <text>
             name = '@OrderStatisticData.Statistics_Product';
-            statisticsValue = encodeURI(statisticsValue);
+            statisticsValue = encodeURIComponent(statisticsValue);
+           
             </text>
             }
             else if (Model.FormTab == "CouponTab")
@@ -135,6 +136,7 @@
             </text>
             }
             var location = "@Url.Action("DownloadCSV", "Orders", null)/" + "?Name=" + name + "&StatisticsValue=" + statisticsValue + "&StartDate=" + startdate + "&EndDate=" + enddate;
+            alert(location);
             document.location = location;
         });
         
