@@ -21,7 +21,6 @@ namespace asi.asicentral.web.Controllers.Store
         public static readonly int[] DISTRIBUTOR_CATALOG_PRODUCT_IDS = { 35, 36, 37, 38, 39, 40, 41 };
         public static readonly int[] SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS = { 48, 49, 50, 51, 52, 53, 54 };
         public static readonly int[] SUPPLIER_ESP_PAYFORPLACEMENT_PRODUCT_IDS = { 47, 63 };
-        public static readonly int[] SUPPLIER_MAGAZINEADVERTISING_PRODUCT_IDS = { 72, 73, 74, 75, 76 };
         public static readonly int SUPPLIER_Email_Express_PRODUCT_ID = 61;
         public static readonly int SUPPLIER_ESP_WEBSITES_PRODUCT_COLLECTIONS_ID = 64;
 
@@ -57,7 +56,7 @@ namespace asi.asicentral.web.Controllers.Store
                     StoreDetailESPAdvertising detailESPAdvertising = StoreService.GetAll<StoreDetailESPAdvertising>().Where(espadvertising => espadvertising.OrderDetailId == orderDetail.Id).SingleOrDefault();
                     if (detailESPAdvertising != null) return View("../Store/Application/ESPAdvertising", new ESPAdvertisingModel(orderDetail, detailESPAdvertising, StoreService));
                 }
-                else if (SUPPLIER_MAGAZINEADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
+                else if (MagazinesAdvertisingHelper.SUPPLIER_MAGAZINEADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
                 {
                     IList<StoreDetailMagazineAdvertisingItem> detailMagazineAdvertising = StoreService.GetAll<StoreDetailMagazineAdvertisingItem>().Where(espadvertising => espadvertising.OrderDetailId == orderDetail.Id).ToList();
 
