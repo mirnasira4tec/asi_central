@@ -342,7 +342,6 @@
     <Content Include="Views\Store\Application\Decorator.cshtml" />
     <Content Include="Views\Store\Application\EmailExpress.cshtml" />
     <Content Include="Views\Store\Application\Shared\CompanyInformation.cshtml" />
-    <Content Include="Views\Store\Admin\ProductStatistics.cshtml" />
     <Content Include="Views\Store\Application\ProductCollections.cshtml" />
     <Content Include="Views\Store\Application\Shared\OrderSummary.cshtml" />
     <Content Include="Views\Store\Admin\Shared\SearchDates.cshtml" />
