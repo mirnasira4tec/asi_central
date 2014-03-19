@@ -20,7 +20,7 @@ namespace asi.asicentral.model.store
             if (this.GetType() == typeof(StoreOrder))
             {
                 OrderDetails = new List<StoreOrderDetail>();
-            } 
+            }
         }
 
         public int Id { get; set; }
@@ -53,16 +53,18 @@ namespace asi.asicentral.model.store
         {
             get
             {
-                if (Context != null)
+                if (OrderDetails != null && OrderDetails.FirstOrDefault().Order != null && OrderDetails.FirstOrDefault().Order.ContextId != null && OrderDetails.FirstOrDefault().Order.Context != null)
                 {
-                    if (Context.Type != "Product")
+
+                    if (OrderDetails.FirstOrDefault().Order.Context.Type != "Product")
                     {
-                        if (Context.Type.StartsWith("SGR")) return "SGR Membership";
-                        else return Context.Type + " Membership";
+                        return OrderDetails.FirstOrDefault().Order.Context.Name;
+
                     }
                     else
                     {
-                        return Context.Name;
+                        if (Context.Type.StartsWith("SGR")) return "SGR Membership";
+                        else return Context.Type + " Membership";
                     }
                 }
                 else if (OrderDetails != null && OrderDetails.Where(detail => detail.Product != null).FirstOrDefault() != null) return OrderDetails.Where(detail => detail.Product != null).FirstOrDefault().Product.Name;
