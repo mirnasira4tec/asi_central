@@ -125,6 +125,7 @@
     <Compile Include="interfaces\ITemplateService.cs" />
     <Compile Include="model\FileModel.cs" />
     <Compile Include="model\Mail.cs" />
+    <Compile Include="model\User.cs" />
     <Compile Include="OAuth\ASIOAuthClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="services\AssemblyFileService.cs" />
