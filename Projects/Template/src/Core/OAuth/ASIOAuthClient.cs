@@ -11,6 +11,13 @@ namespace asi.asicentral.oauth
 {
     public class ASIOAuthClient : AspNetClient
     {
+        private static string _clientIdentifier;
+        private static string _clientSecret;
+
+        private static Uri _authorizationEndpoint;
+        private static Uri _tokenEndpoint;
+        private static Uri _apiEndpoint;
+
         private static Jade.UserManagement.User _juser { get; set; }
         private static Jade.UserManagement.User JUser
         {
@@ -24,10 +31,15 @@ namespace asi.asicentral.oauth
                 else { return _juser; }
             }
         }
+
         public ASIOAuthClient(string clientIdentifier, string clientSecret, System.Uri authorizationEndpoint, System.Uri tokenEndpoint, System.Uri apiEndpoint)
             : base(clientIdentifier, clientSecret, authorizationEndpoint, tokenEndpoint, apiEndpoint)
         {
-            
+            _clientIdentifier = clientIdentifier;
+            _clientSecret = clientSecret;
+            _authorizationEndpoint = authorizationEndpoint;
+            _tokenEndpoint = tokenEndpoint;
+            _apiEndpoint = apiEndpoint;
         }
 
         public static asi.asicentral.model.User GetUser(int sso)
@@ -81,6 +93,20 @@ namespace asi.asicentral.oauth
             }
             catch { }
             return user;
+        }
+
+        public static bool VerifyUserCredentials(string asiNumber, string userName, string password)
+        {
+            IDictionary<string, string> tokens = null;
+            bool isValidUser = false;
+            Jade.OAuth2.Clients.WebServerClient webServerClient = new WebServerClient(_clientIdentifier, _clientSecret, _authorizationEndpoint, _tokenEndpoint, _apiEndpoint);
+            try
+            {
+                tokens = webServerClient.Login(asiNumber, userName, password);
+                isValidUser = true;
+            }
+            catch { isValidUser = false; }
+            return isValidUser;
         }
     }
 }
