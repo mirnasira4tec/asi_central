@@ -1,6 +1,6 @@
 ﻿using DotNetOpenAuth.AspNet;
-using Jade.OAuth2.Clients;
-using Jade.UserManagement;
+using ASI.Jade.OAuth2;
+using ASI.Jade.UserManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,14 +18,14 @@ namespace asi.asicentral.oauth
         private static Uri _tokenEndpoint;
         private static Uri _apiEndpoint;
 
-        private static Jade.UserManagement.User _juser { get; set; }
-        private static Jade.UserManagement.User JUser
+        private static ASI.Jade.UserManagement.User _juser { get; set; }
+        private static ASI.Jade.UserManagement.User JUser
         {
             get
             {
                 if (_juser == null)
                 {
-                    _juser = new Jade.UserManagement.User();
+                    _juser = new ASI.Jade.UserManagement.User();
                     return _juser;
                 }
                 else { return _juser; }
@@ -47,7 +47,7 @@ namespace asi.asicentral.oauth
             model.User user = null;
             try
             {
-                Jade.UserManagement.DataObjects.User jadeuser = JUser.Get(sso);
+                ASI.Jade.UserManagement.DataObjects.User jadeuser = JUser.Get(sso);
                 if (jadeuser != null)
                 {
                     user = new model.User();
@@ -99,7 +99,7 @@ namespace asi.asicentral.oauth
         {
             IDictionary<string, string> tokens = null;
             bool isValidUser = false;
-            Jade.OAuth2.Clients.WebServerClient webServerClient = new WebServerClient(_clientIdentifier, _clientSecret, _authorizationEndpoint, _tokenEndpoint, _apiEndpoint);
+            ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(_clientIdentifier, _clientSecret, _authorizationEndpoint, _tokenEndpoint, _apiEndpoint);
             try
             {
                 tokens = webServerClient.Login(asiNumber, userName, password);
