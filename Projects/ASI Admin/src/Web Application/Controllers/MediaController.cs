@@ -71,7 +71,7 @@ namespace asi.asicentral.web.Controllers
             string DirString = basePath + file;
             string SaveFileName = string.Empty;
             if(file == string.Empty)
-                SaveFileName = string.Format("{0}.zip", basePath);
+                SaveFileName = string.Format("{0}\\.zip", basePath);
             else
                 SaveFileName = string.Format("{0}\\{1}.zip", basePath, file.Substring(1));
             string devDirString = DirString.Replace("/Store", string.Empty);
