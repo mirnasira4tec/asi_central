@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace asi.asicentral.oauth
 {
@@ -17,6 +18,7 @@ namespace asi.asicentral.oauth
         private static Uri _authorizationEndpoint;
         private static Uri _tokenEndpoint;
         private static Uri _apiEndpoint;
+        private static ASIOAuthClient _asiOAuthClient;
 
         private static ASI.Jade.UserManagement.User _juser { get; set; }
         private static ASI.Jade.UserManagement.User JUser
@@ -40,6 +42,16 @@ namespace asi.asicentral.oauth
             _authorizationEndpoint = authorizationEndpoint;
             _tokenEndpoint = tokenEndpoint;
             _apiEndpoint = apiEndpoint;
+            _asiOAuthClient = this;
+        }
+
+        public delegate ASIOAuthClient GetProviderDelegate();
+
+        public static ASIOAuthClient GetProvider()
+        {
+            if (_asiOAuthClient != null)
+                return _asiOAuthClient;
+            return null;
         }
 
         public static asi.asicentral.model.User GetUser(int sso)
