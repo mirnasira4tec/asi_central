@@ -678,8 +678,8 @@
   <data name="Email2" xml:space="preserve">
     <value>Email</value>
   </data>
-  <data name="EmailExpress_Error_Date" xml:space="preserve">
-    <value>Please choose at least one date</value>
+  <data name="EmailExpress_Error_Campaign" xml:space="preserve">
+    <value>Please enter campaign.</value>
   </data>
   <data name="EmailExpress_Error_ItemType" xml:space="preserve">
     <value>Please select one of the Email Express Option to proceed</value>

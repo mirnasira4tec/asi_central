@@ -1744,11 +1744,11 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please choose at least one date.
+        ///   Looks up a localized string similar to Please enter campaign..
         /// </summary>
-        public static string EmailExpress_Error_Date {
+        public static string EmailExpress_Error_Campaign {
             get {
-                return ResourceManager.GetString("EmailExpress_Error_Date", resourceCulture);
+                return ResourceManager.GetString("EmailExpress_Error_Campaign", resourceCulture);
             }
         }
         
