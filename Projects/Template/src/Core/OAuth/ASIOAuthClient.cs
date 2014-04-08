@@ -19,9 +19,7 @@ namespace asi.asicentral.oauth
         private static Uri _tokenEndpoint;
         private static Uri _apiEndpoint;
         private static ASIOAuthClient _asiOAuthClient;
-        private static int _sso;
-        private static int _companyId;
-
+        
         private static ASI.Jade.UserManagement.User _juser { get; set; }
         private static ASI.Jade.UserManagement.User JUser
         {
@@ -54,24 +52,6 @@ namespace asi.asicentral.oauth
             if (_asiOAuthClient != null)
                 return _asiOAuthClient;
             return null;
-        }
-
-        public static void SetIds(int sso, int companyId)
-        {
-            _sso = sso;
-            _companyId = companyId;
-        }
-
-        public static int GetId(bool isCompany)
-        {
-            if (isCompany) return _sso;
-            else return _companyId;
-        }
-
-        public static asi.asicentral.model.User GetUser()
-        {
-            if (_sso != 0) return GetUser(_sso);
-            else return null;
         }
 
         public static asi.asicentral.model.User GetUser(int sso)
