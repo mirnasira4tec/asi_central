@@ -678,8 +678,8 @@
   <data name="Email2" xml:space="preserve">
     <value>Email</value>
   </data>
-  <data name="EmailExpress_Error_Campaign" xml:space="preserve">
-    <value>Please enter campaign.</value>
+  <data name="EmailExpress_Error_Sends" xml:space="preserve">
+    <value>Please enter sends.</value>
   </data>
   <data name="EmailExpress_Error_ItemType" xml:space="preserve">
     <value>Please select one of the Email Express Option to proceed</value>
@@ -1805,5 +1805,8 @@
   </data>
   <data name="MagazineAdvertisingSendMyAdEmail" xml:space="preserve">
     <value>You will receive an email with uploading instructions shortly.</value>
+  </data>
+  <data name="EmailExpress_Quantity" xml:space="preserve">
+    <value>Sends</value>
   </data>
 </root>

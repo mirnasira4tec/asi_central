@@ -1744,20 +1744,20 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please enter campaign..
-        /// </summary>
-        public static string EmailExpress_Error_Campaign {
-            get {
-                return ResourceManager.GetString("EmailExpress_Error_Campaign", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Please select one of the Email Express Option to proceed.
         /// </summary>
         public static string EmailExpress_Error_ItemType {
             get {
                 return ResourceManager.GetString("EmailExpress_Error_ItemType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter sends..
+        /// </summary>
+        public static string EmailExpress_Error_Sends {
+            get {
+                return ResourceManager.GetString("EmailExpress_Error_Sends", resourceCulture);
             }
         }
         
@@ -1776,6 +1776,15 @@ namespace asi.asicentral.Resources {
         public static string EmailExpress_Platinum {
             get {
                 return ResourceManager.GetString("EmailExpress_Platinum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sends.
+        /// </summary>
+        public static string EmailExpress_Quantity {
+            get {
+                return ResourceManager.GetString("EmailExpress_Quantity", resourceCulture);
             }
         }
         
