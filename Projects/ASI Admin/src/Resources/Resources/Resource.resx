@@ -1809,4 +1809,7 @@
   <data name="EmailExpress_Quantity" xml:space="preserve">
     <value>Sends</value>
   </data>
+  <data name="EmailExpress_Surcharge" xml:space="preserve">
+    <value>$50 surcharge for Tuesday and Wednesday sends</value>
+  </data>
 </root>

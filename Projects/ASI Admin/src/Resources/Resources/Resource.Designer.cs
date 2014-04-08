@@ -1816,6 +1816,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to $50 surcharge for Tuesday and Wednesday sends.
+        /// </summary>
+        public static string EmailExpress_Surcharge {
+            get {
+                return ResourceManager.GetString("EmailExpress_Surcharge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to EmailExpress Targeted List.
         /// </summary>
         public static string EmailExpress_TargetedList {
