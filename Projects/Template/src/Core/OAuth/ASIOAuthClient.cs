@@ -19,7 +19,7 @@ namespace asi.asicentral.oauth
         private static Uri _tokenEndpoint;
         private static Uri _apiEndpoint;
         private static ASIOAuthClient _asiOAuthClient;
-
+        
         private static ASI.Jade.UserManagement.User _juser { get; set; }
         private static ASI.Jade.UserManagement.User JUser
         {
