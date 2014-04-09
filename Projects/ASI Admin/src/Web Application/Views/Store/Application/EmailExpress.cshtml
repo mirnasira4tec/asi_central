@@ -36,27 +36,18 @@
                 <legend>@string.Format("{0} {1}", Html.Raw(Model.ProductName), "Information")</legend>
                 @Html.HiddenFor(model => model.Dates)
                 @Html.HiddenFor(model => model.TotalCost)
-                <div class="label-row">
+                 <span class="label-row span11">
                     <strong>Select Option:</strong>
+                       </span>
+                <span class="label-row">
                     @Html.DropDownListFor(model => model.ItemTypeId, Model.ItemTypes, new { @onchange = "SelectOption();" })
-                </div>
-                <div class="label-row" id="divDate">
-                    <div>
-                        <strong>Select Dates:</strong>
-                    </div>
-                    <div class="FloatLeft">
-                        <div id="dates" class="box"></div>
-                    </div>
-                    <div class="FloatRight">
-                        <div>
-                            <p><strong>You have selected below date(s):</strong></p>
-                        </div>
-                        <div>
-                            <textarea id="txtSelectedDates" rows="4" readonly="readonly"></textarea>
-                        </div>
-                    </div>
-                    <div class="ClearBoth"></div>
-                </div>
+             </span>
+                <span class="label-row span11" id="divDate">
+                        <strong>Select @asi.asicentral.Resources.Resource.EmailExpress_Quantity:</strong>
+                </span>
+                  <span class="label-row">
+                       @Html.TextBoxFor(m=>m.Sends)
+                      </span>
                 <div class="control-group">
                     <div class="controls">
                     </div>
@@ -166,7 +157,7 @@
             var total = 0;
             var quantity = 0;
             if ($("#ItemTypeId").val() == 1 || $("#ItemTypeId").val() == 2)
-                quantity = dates.length;
+                quantity = $("#Sends").val();
             else
                 quantity = 1;
             var cost = GetCost($("#ItemTypeId").val(), quantity);
@@ -183,19 +174,12 @@
             CalculateTotal();
         }
         function LoadData() {
-            $("#txtSelectedDates").html($("#Dates").val());
-            var dates = $("#Dates").val().split("\n");
-            if (dates.length > 0) {
-                $.each(dates, function (index, value) {
-                    if (value != "")
-                        $("#dates").multiDatesPicker('addDates', value);
-                });
-            }
             if ($("#ItemTypeId").val() == 1 || $("#ItemTypeId").val() == 2)
                 $("#divDate").css("display", "");
             else
                 $("#divDate").css("display", "none");
         }
+        
         $(document).ready(function () {
             GetNumberOfItems();
             GetCostPlatinum();
@@ -221,23 +205,8 @@
                     }
                 }
             });
-            $("#dates").multiDatesPicker({
-                dateFormat: "D, d M y",
-                minDate: 0,
-                setDate: ""
-                , onSelect: function (dateText, inst) {
-                    $("#Dates").val("");
-                    var date_String = "";
-                    var dates = $("#dates").multiDatesPicker('getDates');
-                    if (dates.length > 0) {
-                        $.each(dates, function (index, value) {
-                            date_String += value + "\n";
-                        });
-                    }
-                    $("#txtSelectedDates").html(date_String);
-                    $("#Dates").val(date_String);
-                    CalculateTotal();
-                }
+            $("#Sends").change(function () {
+                CalculateTotal();
             });
             LoadData();
         });

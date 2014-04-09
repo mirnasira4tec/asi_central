@@ -678,8 +678,8 @@
   <data name="Email2" xml:space="preserve">
     <value>Email</value>
   </data>
-  <data name="EmailExpress_Error_Date" xml:space="preserve">
-    <value>Please choose at least one date</value>
+  <data name="EmailExpress_Error_Sends" xml:space="preserve">
+    <value>Please enter sends.</value>
   </data>
   <data name="EmailExpress_Error_ItemType" xml:space="preserve">
     <value>Please select one of the Email Express Option to proceed</value>
@@ -691,7 +691,7 @@
     <value>EmailExpress Platinum</value>
   </data>
   <data name="EmailExpress_Regular" xml:space="preserve">
-    <value>Regular EmailExpress</value>
+    <value>Email Express Basic</value>
   </data>
   <data name="EmailExpress_Selected_Dates_Count" xml:space="preserve">
     <value>You have selected {x} date(s):</value>
@@ -1805,5 +1805,11 @@
   </data>
   <data name="MagazineAdvertisingSendMyAdEmail" xml:space="preserve">
     <value>You will receive an email with uploading instructions shortly.</value>
+  </data>
+  <data name="EmailExpress_Quantity" xml:space="preserve">
+    <value>Sends</value>
+  </data>
+  <data name="EmailExpress_Surcharge" xml:space="preserve">
+    <value>$50 surcharge for Tuesday and Wednesday sends</value>
   </data>
 </root>
