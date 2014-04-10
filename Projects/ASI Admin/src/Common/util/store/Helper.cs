@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace asi.asicentral.util.store
 {
-    public class Helper
+    public static class Helper
     {
         public static IList<SelectListItem> GetTitles()
         {
@@ -37,18 +37,5 @@ namespace asi.asicentral.util.store
             titles.Add(new SelectListItem() { Text = "3rd Party Consultant", Value = "Consulting" });
             return titles;
         }
-
-       
-        public static decimal cost = 0;
-        public static int quantity = 0;
-
-        public static void SetCostQuantity(StoreOrderDetail orderDetail)
-        {
-                cost = orderDetail.Cost;
-                quantity = orderDetail.Quantity;
-        }
-
-        
-
     }
 }
