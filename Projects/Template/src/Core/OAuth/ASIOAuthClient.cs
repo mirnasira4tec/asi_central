@@ -7,18 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Configuration;
+using ASI.Jade.Utilities;
+using ASI.Jade.UserManagement.DataObjects;
 
 namespace asi.asicentral.oauth
 {
     public class ASIOAuthClient : AspNetClient
     {
-        private static string _clientIdentifier;
-        private static string _clientSecret;
-
-        private static Uri _authorizationEndpoint;
-        private static Uri _tokenEndpoint;
-        private static Uri _apiEndpoint;
-        private static ASIOAuthClient _asiOAuthClient;
+        private ASIOAuthClient _asiOAuthClient;
         
         private static ASI.Jade.UserManagement.User _juser { get; set; }
         private static ASI.Jade.UserManagement.User JUser
@@ -37,21 +34,49 @@ namespace asi.asicentral.oauth
         public ASIOAuthClient(string clientIdentifier, string clientSecret, System.Uri authorizationEndpoint, System.Uri tokenEndpoint, System.Uri apiEndpoint)
             : base(clientIdentifier, clientSecret, authorizationEndpoint, tokenEndpoint, apiEndpoint)
         {
-            _clientIdentifier = clientIdentifier;
-            _clientSecret = clientSecret;
-            _authorizationEndpoint = authorizationEndpoint;
-            _tokenEndpoint = tokenEndpoint;
-            _apiEndpoint = apiEndpoint;
             _asiOAuthClient = this;
         }
 
         public delegate ASIOAuthClient GetProviderDelegate();
 
-        public static ASIOAuthClient GetProvider()
+        public ASIOAuthClient GetProvider()
         {
             if (_asiOAuthClient != null)
                 return _asiOAuthClient;
             return null;
+        }
+
+        public static asi.asicentral.model.User GetUser(string token)
+        {
+            asi.asicentral.model.User user = null;
+            try
+            {
+                ASI.Jade.Utilities.CrossApplication.RedirectParams redirectParams = CrossApplication.ParseTokenUrl(token);
+                IDictionary<string, string> userDetails = null;
+                var oAuthEndpoint = ConfigurationManager.AppSettings["AsiOAuthEndpoint"];
+                if (!string.IsNullOrEmpty(oAuthEndpoint))
+                {
+                    string _clientIdentifier = ConfigurationManager.AppSettings["AsiOAuthClientId"];
+                    string _clientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
+                    ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(_clientIdentifier, _clientSecret,
+                            new Uri(oAuthEndpoint + "/oauth/authorize"),
+                            new Uri(oAuthEndpoint + "/oauth/token"),
+                            new Uri(oAuthEndpoint + "/api/users"));
+
+
+                    userDetails = webServerClient.GetUserDetails(redirectParams.AccessToken);
+                }
+                if (userDetails != null && userDetails.Count > 0)
+                {
+                    int SSOId = Convert.ToInt32(userDetails["sign_in_id"]);
+                    user = GetUser(SSOId);
+                }
+            }
+            catch 
+            {
+                return null;
+            }
+            return user;
         }
 
         public static asi.asicentral.model.User GetUser(int sso)
@@ -101,6 +126,32 @@ namespace asi.asicentral.oauth
                     user.Phone = jadeuser.Phone;
                     user.Cell = jadeuser.Cell;
                     user.Fax = jadeuser.Fax;
+
+                    //if (jadeuser.CompanyId != 0)
+                    //{
+                    //    ASI.EntityModel.Company jadeCompany = ASI.Jade.Company.Retriever.Get(jadeuser.CompanyId);
+                    //    if(jadeCompany != null)
+                    //    {
+                    //        if(jadeCompany.Contacts != null && jadeCompany.Contacts.Count > 0)
+                    //        {
+                    //            ASI.EntityModel.Contact contact = jadeCompany.Contacts.ElementAt(0);
+                    //            user.Title = contact.Title;
+                    //            user.Suffix = contact.Suffix;
+                    //            if (jadeCompany.Contacts.ElementAt(0).Addresses != null &&
+                    //               jadeCompany.Contacts.ElementAt(0).Addresses.Count > 0)
+                    //            {
+                    //                ASI.EntityModel.Address address = jadeCompany.Contacts.ElementAt(0).Addresses.ElementAt(0);
+                    //                user.Street1 = address.AddressLine1 + " " + address.AddressLine2;
+                    //                user.Street2 = address.AddressLine3 + " " + address.AddressLine4;
+                    //                user.State = address.State;
+                    //                user.CountryCode = address.CountryCode;
+                    //                user.Country = address.County;
+                    //                user.Zip = address.ZipCode;
+                    //                user.City = address.City;
+                    //            }
+                    //        }
+                    //    }
+                    //}
                 }
             }
             catch { }
@@ -111,13 +162,22 @@ namespace asi.asicentral.oauth
         {
             IDictionary<string, string> tokens = null;
             bool isValidUser = false;
-            ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(_clientIdentifier, _clientSecret, _authorizationEndpoint, _tokenEndpoint, _apiEndpoint);
-            try
+            var oAuthEndpoint = ConfigurationManager.AppSettings["AsiOAuthEndpoint"];
+            if (!string.IsNullOrEmpty(oAuthEndpoint))
             {
-                tokens = webServerClient.Login(asiNumber, userName, password);
-                isValidUser = true;
+                string _clientIdentifier = ConfigurationManager.AppSettings["AsiOAuthClientId"];
+                string _clientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
+                ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(_clientIdentifier, _clientSecret, 
+                        new Uri(oAuthEndpoint + "/oauth/authorize"),
+                        new Uri(oAuthEndpoint + "/oauth/token"),
+                        new Uri(oAuthEndpoint + "/api/users"));
+                try
+                {
+                    tokens = webServerClient.Login(asiNumber, userName, password);
+                    isValidUser = true;
+                }
+                catch { isValidUser = false; }
             }
-            catch { isValidUser = false; }
             return isValidUser;
         }
     }
