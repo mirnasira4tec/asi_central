@@ -52,24 +52,24 @@ namespace asi.asicentral.oauth
             try
             {
                 ASI.Jade.Utilities.CrossApplication.RedirectParams redirectParams = CrossApplication.ParseTokenUrl(token);
-                var client = new ASI.Jade.OAuth2.WebServerClient();
-                IDictionary<string, string> userDetails = client.GetUserDetails(redirectParams.AccessToken);
-                if (userDetails != null)
+                IDictionary<string, string> userDetails = null;
+                var oAuthEndpoint = ConfigurationManager.AppSettings["AsiOAuthEndpoint"];
+                if (!string.IsNullOrEmpty(oAuthEndpoint))
                 {
-                    var loggedInUser = new TokenizedUser();
-                    loggedInUser = new TokenizedUser()
-                    {
-                        SSOId = Convert.ToInt32(userDetails["sign_in_id"]),
-                        FirstName = userDetails["first_name"],
-                        LastName = userDetails["last_name"],
-                        Email = userDetails["email"],
-                        CompanyId = Convert.ToInt32(userDetails["company_id"]),
-                        Token = new UserToken() { AccessToken = redirectParams.AccessToken, RefreshToken = redirectParams.RefreshToken, TokenExpirationTime = redirectParams.TokenExpirationTime },
-                        AsiNumber = userDetails["asi_number"],
-                        CompanyName = userDetails["company_name"],
-                        MemberTypeCode = userDetails["MemberType_CD"],
-                    };
-                    GetUser(loggedInUser.SSOId);
+                    string _clientIdentifier = ConfigurationManager.AppSettings["AsiOAuthClientId"];
+                    string _clientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
+                    ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(_clientIdentifier, _clientSecret,
+                            new Uri(oAuthEndpoint + "/oauth/authorize"),
+                            new Uri(oAuthEndpoint + "/oauth/token"),
+                            new Uri(oAuthEndpoint + "/api/users"));
+
+
+                    userDetails = webServerClient.GetUserDetails(redirectParams.AccessToken);
+                }
+                if (userDetails != null && userDetails.Count > 0)
+                {
+                    int SSOId = Convert.ToInt32(userDetails["sign_in_id"]);
+                    user = GetUser(SSOId);
                 }
             }
             catch 
@@ -162,7 +162,7 @@ namespace asi.asicentral.oauth
         {
             IDictionary<string, string> tokens = null;
             bool isValidUser = false;
-            var oAuthEndpoint = ConfigurationManager.AppSettings["AuthorizationEndPoint"];
+            var oAuthEndpoint = ConfigurationManager.AppSettings["AsiOAuthEndpoint"];
             if (!string.IsNullOrEmpty(oAuthEndpoint))
             {
                 string _clientIdentifier = ConfigurationManager.AppSettings["AsiOAuthClientId"];
