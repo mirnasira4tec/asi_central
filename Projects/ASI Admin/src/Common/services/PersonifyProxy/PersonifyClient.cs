@@ -1,54 +1,47 @@
-﻿using asi.asicentral.interfaces;
-using asi.asicentral.model.store;
-using asi.asicentral.services;
+﻿using asi.asicentral.model.store;
 using System;
 using System.Collections.Generic;
 using System.Data.Services.Client;
 using System.Linq;
-using System.Web;
 using asi.asicentral.util.store.companystore;
 using System.Threading.Tasks;
-using System.Text.RegularExpressions;
-using asi.asicentral.web.CreditCardService;
-using asi.asicentral.services.PersonifyProxy;
+using asi.asicentral.model;
 using asi.asicentral.PersonifyDataASI;
 
-namespace asi.asicentral.web.Services.PersonifyProxy
+namespace asi.asicentral.services.PersonifyProxy
 {
 
-    public static class PersonifyClient
+    public class PersonifyClient
     {
 
-        private const string AddressAddedOrModifiedBy = "ASI_Store";
+        private const string ADDRESS_ADDED_OR_MODIFIED_BY = "ASI_Store";
 
-        private const string CommunicationInputPhone = "PHONE";
+        private const string COMMUNICATION_INPUT_PHONE = "PHONE";
 
-        private const string CommunicationInputFax = "FAX";
+        private const string COMMUNICATION_INPUT_FAX = "FAX";
 
-        private const string CommunicationInputWeb = "WEB";
+        private const string COMMUNICATION_INPUT_WEB = "WEB";
 
-        private const string CommunicationInputEmail = "EMAIL";
+        private const string COMMUNICATION_INPUT_EMAIL = "EMAIL";
 
-        private const string CommunicationLocationCodeCorporate = "CORPORATE";
+        private const string COMMUNICATION_LOCATION_CODE_CORPORATE = "CORPORATE";
 
-        private const string CommunicationLocationCodeWork = "WORK";
+        private const string COMMUNICATION_LOCATION_CODE_WORK = "WORK";
 
-        private const string CommunicationLocationCodeUnv = "UNV";
+        private const string COMMUNICATION_LOCATION_CODE_UNV = "UNV";
 
-        private const string CustomerClassIndiv = "INDIV";
+        private const string CUSTOMER_CLASS_INDIV = "INDIV";
 
-        private const string RecordTypeIndividual = "I";
+        private const string RECORD_TYPE_INDIVIDUAL = "I";
 
-        private const string RecordTypeCorporate = "C";
+        private const string RECORD_TYPE_CORPORATE = "C";
 
-        private const int PhoneNumberLength = 10;
-
-        private static IList<LookSendMyAdCountryCode> CountryCodes = null;
+        private const int PHONE_NUMBER_LENGTH = 10;
 
         private static readonly Dictionary<string, string> CreditCardType =
             new Dictionary<string, string>(4) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
 
-        public static bool ValidateCreditCard(CreditCard info)
+        public bool ValidateCreditCard(CreditCard info)
         {
             var aSIValidateCreditCardInput = new ASIValidateCreditCardInput()
             {
@@ -59,18 +52,14 @@ namespace asi.asicentral.web.Services.PersonifyProxy
             return resp.IsValid ?? false;
         }
 
-        public static bool SaveCreditCard(CreditCard info, string orderId, IStoreService storeService)
+        public bool SaveCreditCard(CreditCard info, StoreOrder storeOrder)
         {
-            StoreOrder storeOrder = GetOrder(orderId, storeService);
-            CustomerInfo companyInfo = PersonifyClient.GetCompanyInfo(storeOrder.Company.Name);
-            IList<LookSendMyAdCountryCode> countryCodes = GetCountryCodes(storeService);
-            StoreAddress companyAddress = storeOrder.Company.GetCompanyAddress();
-            string countryCode = countryCodes.Alpha3Code(companyAddress.Country);
+            CustomerInfo companyInfo = GetCompanyInfo(storeOrder.Company.Name);
             var customerCreditCardInput = new CustomerCreditCardInput()
             {
                 MasterCustomerId = companyInfo.MasterCustomerId,
                 SubCustomerId = companyInfo.SubCustomerId,
-                ReceiptType = CreditCardType[info.Type],
+                ReceiptType = CreditCardType[info.Type.ToUpper()],
                 CreditCardNumber = info.Number,
                 ExpirationMonth = (short)info.ExpirationDate.Month,
                 ExpirationYear = (short)info.ExpirationDate.Year,
@@ -79,27 +68,26 @@ namespace asi.asicentral.web.Services.PersonifyProxy
                 BillingAddressCity = info.City,
                 BillingAddressState = info.State,
                 BillingAddressPostalCode = info.PostalCode,
-                BillingAddressCountryCode = countryCode,
+                BillingAddressCountryCode = info.CountryCode,
                 DefaultFlag = true,
                 CompanyNumber = "1",
-                AddedOrModifiedBy = AddressAddedOrModifiedBy
+                AddedOrModifiedBy = ADDRESS_ADDED_OR_MODIFIED_BY
             };
             CustomerCreditCardOutput resp = SvcClient.Post<CustomerCreditCardOutput>("AddCustomerCreditCard", customerCreditCardInput);
             return resp.Success ?? false;
         }
 
-        public static IEnumerable<ASICustomerCreditCard> GetCreditCardInfos(string orderId, IStoreService storeService)
+        public IEnumerable<ASICustomerCreditCard> GetCreditCardInfos(StoreOrder storeOrder)
         {
-            StoreOrder storeOrder = GetOrder(orderId, storeService);
-            CustomerInfo companyInfo = PersonifyClient.GetCompanyInfo(storeOrder.Company.Name);
+            CustomerInfo companyInfo = GetCompanyInfo(storeOrder.Company.Name);
             IEnumerable<ASICustomerCreditCard> oCreditCards = GetCreditCardInfos(companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
             return oCreditCards;
         }
 
-        public static CustomerInfo AddCompanyInfo(StoreOrderDetail storeOrderDetail, IStoreService storeService)
+        public CustomerInfo AddCompanyInfo(StoreOrder storeOrder, IList<LookSendMyAdCountryCode> countryCodes)
         {
             CustomerInfo companyInfo = null;
-            StoreCompany storeCompany = storeOrderDetail.Order.Company;
+            StoreCompany storeCompany = storeOrder.Company;
             if (storeCompany == null || string.IsNullOrWhiteSpace(storeCompany.Name))
             {
                 throw new Exception("Store company is not valid.");
@@ -107,16 +95,15 @@ namespace asi.asicentral.web.Services.PersonifyProxy
             companyInfo = GetCompanyInfo(storeCompany.Name);
             if (companyInfo == null)
             {
-                IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
                 StoreAddress companyAddress = storeCompany.GetCompanyAddress();
-                bool isUSAAddress = countryCodes.IsUSAAddress(companyAddress.Country);
+                bool isUsaAddress = countryCodes.IsUSAAddress(companyAddress.Country);
                 string countryCode = countryCodes.Alpha3Code(companyAddress.Country);
-                var saveCustomerInput = CreateCompanyCustomerInfoInput(storeOrderDetail, storeCompany)
-                    .AddCompanyAddresses(storeCompany, countryCodes)
-                    .AddCusCommunicationInput(CommunicationInputPhone, storeCompany.Phone, CommunicationLocationCodeCorporate, countryCode, isUSAAddress)
-                    .AddCusCommunicationInput(CommunicationInputFax, storeCompany.Fax, CommunicationLocationCodeCorporate, countryCode, isUSAAddress)
-                    .AddCusCommunicationInput(CommunicationInputEmail, storeCompany.Email, CommunicationLocationCodeCorporate)
-                    .AddCusCommunicationInput(CommunicationInputWeb, storeCompany.WebURL, CommunicationLocationCodeCorporate);
+                var saveCustomerInput = CreateCompanyCustomerInfoInput(storeOrder);
+                AddCompanyAddresses(saveCustomerInput, storeCompany, countryCodes);
+                AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_PHONE, storeCompany.Phone, COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode, isUsaAddress);
+                AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_FAX, storeCompany.Fax, COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode, isUsaAddress);
+                AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_EMAIL, storeCompany.Email, COMMUNICATION_LOCATION_CODE_CORPORATE);
+                AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_WEB, storeCompany.WebURL, COMMUNICATION_LOCATION_CODE_CORPORATE);
                 SaveCustomerOutput Rslts = SvcClient.Post<SaveCustomerOutput>("CreateCompany", saveCustomerInput);
                 if (string.IsNullOrWhiteSpace(Rslts.WarningMessage))
                 {
@@ -126,19 +113,19 @@ namespace asi.asicentral.web.Services.PersonifyProxy
             return companyInfo;
         }
 
-        public static CustomerInfo GetCompanyInfo(string companyName)
+        public CustomerInfo GetCompanyInfo(string companyName)
         {
             CustomerInfo customerInfo = null;
             if (companyName != null)
             {
                 List<CustomerInfo> oCusInfo = SvcClient.Ctxt.CustomerInfos.Where(
-                    a => a.LabelName == companyName && a.RecordType == RecordTypeCorporate).ToList();
+                    a => a.LabelName == companyName && a.RecordType == RECORD_TYPE_CORPORATE).ToList();
                 customerInfo = oCusInfo.Count == 0 ? null : oCusInfo.FirstOrDefault();
             }
             return customerInfo;
         }
 
-        public static IEnumerable<CustomerInfo> AddIndividualInfos(StoreOrder storeOrder, IStoreService storeService)
+        public IEnumerable<CustomerInfo> AddIndividualInfos(StoreOrder storeOrder, IList<LookSendMyAdCountryCode> countryCodes)
         {
             if (storeOrder == null || storeOrder.Company == null)
             {
@@ -147,10 +134,9 @@ namespace asi.asicentral.web.Services.PersonifyProxy
             IEnumerable<CustomerInfo> customerInfos = null;
             try
             {
-                IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
                 StoreCompany storeCompany = storeOrder.Company;
                 StoreAddress companyAddress = storeCompany.GetCompanyAddress();
-                bool isUSAAddress = countryCodes.IsUSAAddress(companyAddress.Country);
+                bool isUsaAddress = countryCodes.IsUSAAddress(companyAddress.Country);
                 string countryCode = countryCodes.Alpha3Code(companyAddress.Country);
 
                 IEnumerable<Task<CustomerInfo>> storeIndividualTasks = storeCompany.Individuals.Select(
@@ -166,10 +152,13 @@ namespace asi.asicentral.web.Services.PersonifyProxy
                     .Select<StoreIndividual, SaveCustomerInput>(
                         storeIndividual
                             =>
-                        CreateIndividualCustomerInfoInput(storeIndividual)
-                        .AddIndividualAddress(storeIndividual, storeCompany)
-                        .AddCusCommunicationInput(CommunicationInputPhone, storeIndividual.Phone, CommunicationLocationCodeWork, countryCode, isUSAAddress)
-                        .AddCusCommunicationInput(CommunicationInputEmail, storeIndividual.Email, CommunicationLocationCodeWork)
+                        {
+                            SaveCustomerInput customerInfo = CreateIndividualCustomerInfoInput(storeIndividual);
+                            AddIndividualAddress(customerInfo, storeIndividual, storeCompany);
+                            AddCusCommunicationInput(customerInfo, COMMUNICATION_INPUT_PHONE, storeIndividual.Phone, COMMUNICATION_LOCATION_CODE_WORK, countryCode, isUsaAddress);
+                            AddCusCommunicationInput(customerInfo, COMMUNICATION_INPUT_EMAIL, storeIndividual.Email, COMMUNICATION_LOCATION_CODE_WORK);
+                            return customerInfo;
+                        }
                     )
                     .Select(
                         saveCustomerInput
@@ -188,15 +177,19 @@ namespace asi.asicentral.web.Services.PersonifyProxy
             return customerInfos;
         }
 
-        public static CustomerInfo GetIndividualInfo(string firstName = null, string lastName = null)
+        public CustomerInfo GetIndividualInfo(string firstName, string lastName)
         {
-            List<CustomerInfo> oCusInfo = SvcClient.Ctxt.CustomerInfos.Where(
-                a => a.FirstName == firstName && a.LastName == lastName && a.RecordType == RecordTypeIndividual).ToList();
-            if (oCusInfo.Count == 0)
+            CustomerInfo customerInfo = null;
+            if (!string.IsNullOrWhiteSpace(firstName) && !string.IsNullOrWhiteSpace(lastName))
             {
-                return null;
+                List<CustomerInfo> oCusInfo = SvcClient.Ctxt.CustomerInfos.Where(
+                    a => a.FirstName == firstName && a.LastName == lastName && a.RecordType == RECORD_TYPE_INDIVIDUAL).ToList();
+                if (oCusInfo.Count != 0)
+                {
+                    customerInfo = oCusInfo.FirstOrDefault();
+                }
             }
-            return oCusInfo.FirstOrDefault();
+            return customerInfo;
         }
 
         private static IEnumerable<ASICustomerCreditCard> GetCreditCardInfos(string masterCustomerId, int subCustomerId)
@@ -210,18 +203,18 @@ namespace asi.asicentral.web.Services.PersonifyProxy
             return oCreditCards;
         }
 
-        private static SaveCustomerInput CreateIndividualCustomerInfoInput(StoreIndividual storeIndividual)
+        private SaveCustomerInput CreateIndividualCustomerInfoInput(StoreIndividual storeIndividual)
         {
             var customerInfo = new SaveCustomerInput
             {
                 FirstName = storeIndividual.FirstName,
                 LastName = storeIndividual.LastName,
-                CustomerClassCode = CustomerClassIndiv
+                CustomerClassCode = CUSTOMER_CLASS_INDIV
             };
             return customerInfo;
         }
 
-        private static SaveCustomerInput AddIndividualAddress(this SaveCustomerInput customerInfo, StoreIndividual storeIndividual, StoreCompany storeCompany)
+        private SaveCustomerInput AddIndividualAddress(SaveCustomerInput customerInfo, StoreIndividual storeIndividual, StoreCompany storeCompany)
         {
             CustomerInfo companyInfo = GetCompanyInfo(storeCompany.Name);
             if (companyInfo == null)
@@ -243,13 +236,13 @@ namespace asi.asicentral.web.Services.PersonifyProxy
             var customerAddressInput = new DataServiceCollection<SaveAddressInput>(null, TrackingMode.None);
             var saveAddressInput = new SaveAddressInput()
             {
-                AddressTypeCode = CommunicationLocationCodeCorporate,
+                AddressTypeCode = COMMUNICATION_LOCATION_CODE_CORPORATE,
                 JobTitle = storeIndividual.Title,
                 OwnerMasterCustomer = companyInfo.MasterCustomerId,
                 OwnerSubCustomer = companyInfo.SubCustomerId,
                 LinkToOwnersAddress = true,
-                OwnerAddressStatusCode = companyAddressInfo.AddressStatusCode,//companyInfo.Addresses.FirstOrDefault().AddressStatusCode,
-                OwnerAddressId = companyAddressInfo.CustomerAddressId,//companyInfo.Addresses.FirstOrDefault().CustomerAddressId,
+                OwnerAddressStatusCode = companyAddressInfo.AddressStatusCode,
+                OwnerAddressId = companyAddressInfo.CustomerAddressId,
                 OwnerRecordType = companyInfo.RecordType,
                 OwnerCompanyName = companyInfo.LastName,
                 OverrideAddressValidation = true,
@@ -258,7 +251,7 @@ namespace asi.asicentral.web.Services.PersonifyProxy
                 SetRelationshipAsPrimary = false,
                 EndOldPrimaryRelationship = false,
                 WebMobileDirectory = false,
-                AddedOrModifiedBy = AddressAddedOrModifiedBy
+                AddedOrModifiedBy = ADDRESS_ADDED_OR_MODIFIED_BY
             };
             var addresses = new DataServiceCollection<SaveAddressInput>(null, TrackingMode.None);
             addresses.Add(saveAddressInput);
@@ -266,17 +259,17 @@ namespace asi.asicentral.web.Services.PersonifyProxy
             return customerInfo;
         }
 
-        private static SaveCustomerInput CreateCompanyCustomerInfoInput(StoreOrderDetail storeOrderDetail, StoreCompany storeCompany)
+        private static SaveCustomerInput CreateCompanyCustomerInfoInput(StoreOrder storeOrder)
         {
             var customerInfo = new SaveCustomerInput
             {
-                LastName = storeCompany.Name,
-                CustomerClassCode = storeOrderDetail.Order.OrderRequestType.ToUpper() // DISTRIBUTOR, DECORRATOR, SUPPLIER
+                LastName = storeOrder.Company.Name,
+                CustomerClassCode = storeOrder.OrderRequestType.ToUpper()
             };
             return customerInfo;
         }
 
-        private static SaveCustomerInput AddCompanyAddresses(this SaveCustomerInput customerInfo, StoreCompany storeCompany, IList<LookSendMyAdCountryCode> countryCodes)
+        private static SaveCustomerInput AddCompanyAddresses(SaveCustomerInput customerInfo, StoreCompany storeCompany, IList<LookSendMyAdCountryCode> countryCodes)
         {
             if (customerInfo.Addresses == null)
             {
@@ -288,7 +281,7 @@ namespace asi.asicentral.web.Services.PersonifyProxy
             {
                 string code = countryCodes.Alpha3Code(address.Address.Country);
                 bool shipToFlag = shippingAddress.Equals(address.Address);
-                long prioritySeq = address.Equals(address.Address) ? 1 : 0;
+                long prioritySeq = companyAddress.Equals(address.Address) ? 0 : 1;
                 var saveAddressInput = new SaveAddressInput
                 {
                     LinkToOwnersAddress = false,
@@ -298,7 +291,7 @@ namespace asi.asicentral.web.Services.PersonifyProxy
                     SetRelationshipAsPrimary = false,
                     EndOldPrimaryRelationship = false,
                     WebMobileDirectory = false,
-                    AddressTypeCode = CommunicationLocationCodeCorporate,
+                    AddressTypeCode = COMMUNICATION_LOCATION_CODE_CORPORATE,
                     Address1 = address.Address.Street1,
                     Address2 = address.Address.Street2,
                     City = address.Address.City,
@@ -310,7 +303,7 @@ namespace asi.asicentral.web.Services.PersonifyProxy
                     ShipToFlag = shipToFlag,
                     DirectoryFlag = false,
                     CompanyName = storeCompany.Name,
-                    AddedOrModifiedBy = AddressAddedOrModifiedBy,
+                    AddedOrModifiedBy = ADDRESS_ADDED_OR_MODIFIED_BY,
                     PrioritySeq = prioritySeq
                 };
                 if (customerInfo.Addresses == null)
@@ -323,15 +316,15 @@ namespace asi.asicentral.web.Services.PersonifyProxy
         }
 
         private static SaveCustomerInput AddCusCommunicationInput(
-         this SaveCustomerInput customerInfo, string key, string value, string communitionLocationCode, string countryCode = null, bool isUSA = true)
+         SaveCustomerInput customerInfo, string key, string value, string communitionLocationCode, string countryCode = null, bool isUSA = true)
         {
             if (!string.IsNullOrWhiteSpace(key) && !string.IsNullOrWhiteSpace(value))
             {
-                if ((key == CommunicationInputPhone || key == CommunicationInputFax) && countryCode != null)
+                if ((key == COMMUNICATION_INPUT_PHONE || key == COMMUNICATION_INPUT_FAX) && countryCode != null)
                 {
                     value = new string(value.Where(c => Char.IsDigit(c)).ToArray());
-                    value = value.Substring(0, Math.Min(value.Substring(0).Length, PhoneNumberLength));
-                    if (value.Length == PhoneNumberLength && isUSA)
+                    value = value.Substring(0, Math.Min(value.Substring(0).Length, PHONE_NUMBER_LENGTH));
+                    if (value.Length == PHONE_NUMBER_LENGTH && isUSA)
                     {
                         customerInfo.Communication.Add(new CusCommunicationInput
                         {
@@ -344,7 +337,7 @@ namespace asi.asicentral.web.Services.PersonifyProxy
                         });
                     }
                 }
-                if ((key != CommunicationInputPhone || key != CommunicationInputFax) && countryCode == null)
+                if ((key != COMMUNICATION_INPUT_PHONE || key != COMMUNICATION_INPUT_FAX) && countryCode == null)
                 {
                     customerInfo.Communication.Add(new CusCommunicationInput
                     {
@@ -369,12 +362,6 @@ namespace asi.asicentral.web.Services.PersonifyProxy
             return oCusInfo.FirstOrDefault();
         }
 
-        private static IList<LookSendMyAdCountryCode> GetCountryCodes(IStoreService storeService)
-        {
-            if (CountryCodes == null) CountryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
-            return CountryCodes;
-        }
-
         private static bool Validate(string receiptType, string creditCardNum)
         {
             var aSIValidateCreditCardInput = new ASIValidateCreditCardInput()
@@ -384,17 +371,6 @@ namespace asi.asicentral.web.Services.PersonifyProxy
             };
             ASIValidateCreditCardOutput resp = SvcClient.Post<ASIValidateCreditCardOutput>("ASIValidateCreditCard", aSIValidateCreditCardInput);
             return resp.IsValid ?? false;
-        }
-
-        private static StoreOrder GetOrder(string orderId, IStoreService storeService)
-        {
-            StoreOrder storeOrder = null;
-            if (orderId != null)
-            {
-                storeOrder = storeService.GetAll<StoreOrder>(true).Where(order => order.UserReference == orderId).SingleOrDefault();
-                if (storeOrder != null && storeOrder.ProcessStatus != OrderStatus.Pending) storeOrder = null;
-            }
-            return storeOrder;
         }
     }
 }

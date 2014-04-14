@@ -95,6 +95,16 @@ namespace asi.asicentral.model.store
             return address;
         }
 
+        public StoreAddress GetCompanyBillingAddress()
+        {
+            StoreAddress address = null;
+            //Try to use the shipping address for the company now
+            StoreCompanyAddress companyAddress = Addresses.Where(add => add.IsBilling).FirstOrDefault();
+            if (companyAddress != null) address = companyAddress.Address;
+            else address = GetCompanyAddress();
+            return address;
+        }
+
         public StoreIndividual GetCompanyContact()
         {
             StoreIndividual individual = null;
