@@ -333,9 +333,10 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="services\CreditCardService.cs" />
+    <Compile Include="services\IBackendService.cs" />
     <Compile Include="services\PersonifyProxy\PersonifyClient.cs" />
     <Compile Include="services\PersonifyProxy\SvcClient.cs" />
-    <Compile Include="services\PersonifyService.cs" />
+    <Compile Include="services\BackendService.cs" />
     <Compile Include="services\ROIService.cs" />
     <Compile Include="services\StoreService.cs" />
     <Compile Include="util\store\asismartsales\ASISmartSalesHelper.cs" />
