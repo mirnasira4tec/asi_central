@@ -340,12 +340,8 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;h3&gt;Launch targeted email marketing to Distributors within an hour of viewing your products on ESP&lt;/h3&gt;
-        ///    &lt;ul&gt;&lt;li&gt; &lt;span&gt;Automated custom email  campaign targeting Distributors searching ESP&lt;/span&gt;&lt;/li&gt;
-        ///&lt;li&gt;&lt;span&gt; Two email package options for reaching the right audience with your product message or special offer&lt;/span&gt; &lt;/li&gt;
-        ///&lt;li&gt;&lt;span&gt;Immediate contact to targeted audience helps to increase open rates&lt;/span&gt; &lt;/li&gt;
-        ///&lt;li&gt;&lt;span&gt; UNLIMITED custom emails with each  subscription&lt;/span&gt;  &lt;/li&gt;
-        ///&lt;li&gt;&lt;span&gt; Tr [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Launch targeted email marketing to Distributors within an hour of viewing your products on ESP
+        ///   .
         /// </summary>
         public static string ProductSupplierSpecials {
             get {
