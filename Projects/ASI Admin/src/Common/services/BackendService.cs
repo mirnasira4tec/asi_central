@@ -16,44 +16,27 @@ namespace asi.asicentral.services
 
         private PersonifyClient m_personifyClient = new PersonifyClient();
 
-        public bool ValidateCreditCard(CreditCard info)
-        {
-            return m_personifyClient.ValidateCreditCard(info);
-        }
-
+     
         public bool SaveCreditCard(CreditCard info, StoreOrder storeOrder)
         {
             return m_personifyClient.SaveCreditCard(info, storeOrder);
         }
 
-        public IEnumerable<ASICustomerCreditCard> GetCreditCardInfos(StoreOrder storeOrder)
+        public bool PlaceOrder(StoreOrder storeOrder, IList<LookSendMyAdCountryCode> countryCodes)
         {
-            return m_personifyClient.GetCreditCardInfos(storeOrder);
-        }
-
-        public CustomerInfo AddCompanyInfo(StoreOrder storeOrder, IList<LookSendMyAdCountryCode> countryCodes)
-        {
-            return m_personifyClient.AddCompanyInfo(storeOrder, countryCodes);
-        }
-
-        public CustomerInfo GetCompanyInfo(string companyName)
-        {
-            return m_personifyClient.GetCompanyInfo(companyName);
-        }
-
-        public IEnumerable<CustomerInfo> AddIndividualInfos(StoreOrder storeOrder, IList<LookSendMyAdCountryCode> countryCodes)
-        {
-            return m_personifyClient.AddIndividualInfos(storeOrder, countryCodes);
-        }
-
-        public CustomerInfo GetIndividualInfo(string firstName, string lastName)
-        {
-            return m_personifyClient.GetIndividualInfo(firstName, lastName);
-        }
-
-        public bool PlaceOrder(StoreOrder storeOrder)
-        {
-            return true;
+            bool result = false;
+            try
+            {
+                StoreCompany storeCompany = storeOrder.Company;
+                CustomerInfo companyInfo = m_personifyClient.AddCompanyInfo(storeOrder, countryCodes);
+                IEnumerable<CustomerInfo> CustomerInfos = m_personifyClient.AddIndividualInfos(storeOrder, countryCodes);
+                result = true;
+            }
+            catch
+            {
+                result = false;
+            }
+            return result;
         }
     }
 }
