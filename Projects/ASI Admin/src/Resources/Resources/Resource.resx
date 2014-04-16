@@ -1812,4 +1812,7 @@
   <data name="EmailExpress_Surcharge" xml:space="preserve">
     <value>$50 surcharge for Tuesday and Wednesday sends</value>
   </data>
+  <data name="EmailExpressDescription" xml:space="preserve">
+    <value>Send your latest products, specials, closeouts and more to 60,000 ASI members and non-members with ASI’s direct email advertising service, EmailExpress</value>
+  </data>
 </root>
