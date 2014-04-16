@@ -31,8 +31,8 @@ namespace asi.asicentral.oauth
             }
         }
 
-        public ASIOAuthClient(string clientIdentifier, string clientSecret, System.Uri authorizationEndpoint, System.Uri tokenEndpoint, System.Uri apiEndpoint)
-            : base(clientIdentifier, clientSecret, authorizationEndpoint, tokenEndpoint, apiEndpoint)
+        public ASIOAuthClient(string clientIdentifier, string clientSecret)
+            : base(clientIdentifier, clientSecret)
         {
             _asiOAuthClient = this;
         }
@@ -53,17 +53,11 @@ namespace asi.asicentral.oauth
             {
                 ASI.Jade.Utilities.CrossApplication.RedirectParams redirectParams = CrossApplication.ParseTokenUrl(token);
                 IDictionary<string, string> userDetails = null;
-                var oAuthEndpoint = ConfigurationManager.AppSettings["AsiOAuthEndpoint"];
-                if (!string.IsNullOrEmpty(oAuthEndpoint))
+                var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
+                var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
+                if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
                 {
-                    string _clientIdentifier = ConfigurationManager.AppSettings["AsiOAuthClientId"];
-                    string _clientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
-                    ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(_clientIdentifier, _clientSecret,
-                            new Uri(oAuthEndpoint + "/oauth/authorize"),
-                            new Uri(oAuthEndpoint + "/oauth/token"),
-                            new Uri(oAuthEndpoint + "/api/users"));
-
-
+                    ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
                     userDetails = webServerClient.GetUserDetails(redirectParams.AccessToken);
                 }
                 if (userDetails != null && userDetails.Count > 0)
@@ -158,22 +152,18 @@ namespace asi.asicentral.oauth
             return user;
         }
 
-        public static bool VerifyUserCredentials(string asiNumber, string userName, string password)
+        public static bool VerifyUserCredentials(string userName, string password)
         {
             IDictionary<string, string> tokens = null;
             bool isValidUser = false;
-            var oAuthEndpoint = ConfigurationManager.AppSettings["AsiOAuthEndpoint"];
-            if (!string.IsNullOrEmpty(oAuthEndpoint))
+            var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
+            var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
+            if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
             {
-                string _clientIdentifier = ConfigurationManager.AppSettings["AsiOAuthClientId"];
-                string _clientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
-                ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(_clientIdentifier, _clientSecret, 
-                        new Uri(oAuthEndpoint + "/oauth/authorize"),
-                        new Uri(oAuthEndpoint + "/oauth/token"),
-                        new Uri(oAuthEndpoint + "/api/users"));
+                ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
                 try
                 {
-                    tokens = webServerClient.Login(asiNumber, userName, password);
+                    tokens = webServerClient.Login(userName, password);
                     isValidUser = true;
                 }
                 catch { isValidUser = false; }
