@@ -223,6 +223,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Supplier Specials – The All Products Package.
+        /// </summary>
+        public static string AllProducts {
+            get {
+                return ResourceManager.GetString("AllProducts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Annual Sales Volume.
         /// </summary>
         public static string AnnualSalesVolume {
@@ -5007,6 +5016,15 @@ namespace asi.asicentral.Resources {
         public static string Upto9999 {
             get {
                 return ResourceManager.GetString("Upto9999", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supplier Specials – The Target Ten Products Package.
+        /// </summary>
+        public static string UptoTen {
+            get {
+                return ResourceManager.GetString("UptoTen", resourceCulture);
             }
         }
         
