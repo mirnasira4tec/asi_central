@@ -11,8 +11,6 @@ namespace asi.asicentral.services
     interface IBackendService
     {
 
-        bool SaveCreditCard(CreditCard info, StoreOrder storeOrder);
-
         bool PlaceOrder(StoreOrder storeOrder, IList<LookSendMyAdCountryCode> countryCodes);
     }
 }

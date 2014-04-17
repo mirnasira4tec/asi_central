@@ -11,7 +11,7 @@ namespace asi.asicentral.util.store.companystore
     public static class CountryCodeHelper
     {
 
-        public static string NumberCode(this IList<LookSendMyAdCountryCode> source, string countryName)
+        public static string NumberCode(this IEnumerable<LookSendMyAdCountryCode> source, string countryName)
         {
             string code = null;
             if (!string.IsNullOrWhiteSpace(countryName))
@@ -23,7 +23,7 @@ namespace asi.asicentral.util.store.companystore
             return code;
         }
 
-        public static string Alpha3Code(this IList<LookSendMyAdCountryCode> source, string countryName)
+        public static string Alpha3Code(this IEnumerable<LookSendMyAdCountryCode> source, string countryName)
         {
             string code = null;
             if (!string.IsNullOrWhiteSpace(countryName))
@@ -35,7 +35,7 @@ namespace asi.asicentral.util.store.companystore
             return code;
         }
 
-        public static bool IsUSAAddress(this IList<LookSendMyAdCountryCode> source, string countryName)
+        public static bool IsUSAAddress(this IEnumerable<LookSendMyAdCountryCode> source, string countryName)
         {
             bool result = false;
             try
@@ -43,8 +43,8 @@ namespace asi.asicentral.util.store.companystore
                 if (!string.IsNullOrWhiteSpace(countryName))
                 {
                     LookSendMyAdCountryCode code = source
-                        .Where(item => item.CountryCodeExist(countryName)).FirstOrDefault();
-                    result = code.Alpha3.ToUpper() == "USA";
+                        .FirstOrDefault(item => item.CountryCodeExist(countryName));
+                    if (code != null) result = code.Alpha3.ToUpper() == "USA";
                 }
             }
             catch

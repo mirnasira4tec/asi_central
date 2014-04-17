@@ -45,34 +45,34 @@ namespace asi.asicentral.services.PersonifyProxy
         {
             var aSIValidateCreditCardInput = new ASIValidateCreditCardInput()
             {
-                ReceiptType = info.Type,
+                ReceiptType = CreditCardType[info.Type.ToUpper()],
                 CreditCardNumber = info.Number
             };
             ASIValidateCreditCardOutput resp = SvcClient.Post<ASIValidateCreditCardOutput>("ASIValidateCreditCard", aSIValidateCreditCardInput);
             return resp.IsValid ?? false;
         }
 
-        public bool SaveCreditCard(CreditCard info, StoreOrder storeOrder)
+        public bool SaveCreditCard(CreditCard info, StoreOrder storeOrder, IList<LookSendMyAdCountryCode> countryCodes)
         {
-            CustomerInfo companyInfo = GetCompanyInfo(storeOrder.Company.Name);
+            CustomerInfo companyInfo = AddCompanyInfo(storeOrder, countryCodes);
             var customerCreditCardInput = new CustomerCreditCardInput()
-            {
-                MasterCustomerId = companyInfo.MasterCustomerId,
-                SubCustomerId = companyInfo.SubCustomerId,
-                ReceiptType = CreditCardType[info.Type.ToUpper()],
-                CreditCardNumber = info.Number,
-                ExpirationMonth = (short)info.ExpirationDate.Month,
-                ExpirationYear = (short)info.ExpirationDate.Year,
-                NameOnCard = info.CardHolderName,
-                BillingAddressStreet = info.Address,
-                BillingAddressCity = info.City,
-                BillingAddressState = info.State,
-                BillingAddressPostalCode = info.PostalCode,
-                BillingAddressCountryCode = info.CountryCode,
-                DefaultFlag = true,
-                CompanyNumber = "1",
-                AddedOrModifiedBy = ADDRESS_ADDED_OR_MODIFIED_BY
-            };
+                {
+                    MasterCustomerId = companyInfo.MasterCustomerId,
+                    SubCustomerId = companyInfo.SubCustomerId,
+                    ReceiptType = CreditCardType[info.Type.ToUpper()],
+                    CreditCardNumber = info.Number,
+                    ExpirationMonth = (short)info.ExpirationDate.Month,
+                    ExpirationYear = (short)info.ExpirationDate.Year,
+                    NameOnCard = info.CardHolderName,
+                    BillingAddressStreet = info.Address,
+                    BillingAddressCity = info.City,
+                    BillingAddressState = info.State,
+                    BillingAddressPostalCode = info.PostalCode,
+                    BillingAddressCountryCode = info.CountryCode,
+                    DefaultFlag = true,
+                    CompanyNumber = "1",
+                    AddedOrModifiedBy = ADDRESS_ADDED_OR_MODIFIED_BY
+                };
             CustomerCreditCardOutput resp = SvcClient.Post<CustomerCreditCardOutput>("AddCustomerCreditCard", customerCreditCardInput);
             return resp.Success ?? false;
         }
@@ -132,48 +132,41 @@ namespace asi.asicentral.services.PersonifyProxy
                 throw new Exception("Order or company can't be null.");
             }
             IEnumerable<CustomerInfo> customerInfos = null;
-            try
-            {
-                StoreCompany storeCompany = storeOrder.Company;
-                StoreAddress companyAddress = storeCompany.GetCompanyAddress();
-                bool isUsaAddress = countryCodes.IsUSAAddress(companyAddress.Country);
-                string countryCode = countryCodes.Alpha3Code(companyAddress.Country);
+            StoreCompany storeCompany = storeOrder.Company;
+            StoreAddress companyAddress = storeCompany.GetCompanyAddress();
+            bool isUsaAddress = countryCodes.IsUSAAddress(companyAddress.Country);
+            string countryCode = countryCodes.Alpha3Code(companyAddress.Country);
 
-                IEnumerable<Task<CustomerInfo>> storeIndividualTasks = storeCompany.Individuals.Select(
-                    storeIndividual => Task.Run<CustomerInfo>(() => GetIndividualInfo(storeIndividual.FirstName, storeIndividual.LastName)));
-                Task<CustomerInfo[]> result1 = Task.WhenAll(storeIndividualTasks);
-                IEnumerable<CustomerInfo> storeInfos = result1.Result.Where(storeInfo => storeInfo != null);
-                IEnumerable<StoreIndividual> storeIndividuals =
-                    storeCompany.Individuals.Where(
-                    storeIndividual => !storeInfos.Any(
-                        storeInfo => string.Equals(storeInfo.FirstName, storeIndividual.FirstName, StringComparison.InvariantCultureIgnoreCase)
-                                  && string.Equals(storeInfo.LastName, storeIndividual.LastName, StringComparison.InvariantCultureIgnoreCase)));
-                IEnumerable<Task<CustomerInfo>> saveCustomerOutputs = storeIndividuals
-                    .Select<StoreIndividual, SaveCustomerInput>(
-                        storeIndividual
-                            =>
-                        {
-                            SaveCustomerInput customerInfo = CreateIndividualCustomerInfoInput(storeIndividual);
-                            AddIndividualAddress(customerInfo, storeIndividual, storeCompany);
-                            AddCusCommunicationInput(customerInfo, COMMUNICATION_INPUT_PHONE, storeIndividual.Phone, COMMUNICATION_LOCATION_CODE_WORK, countryCode, isUsaAddress);
-                            AddCusCommunicationInput(customerInfo, COMMUNICATION_INPUT_EMAIL, storeIndividual.Email, COMMUNICATION_LOCATION_CODE_WORK);
-                            return customerInfo;
-                        }
-                    )
-                    .Select(
-                        saveCustomerInput
-                            =>
-                        Task<SaveCustomerOutput>.Run(() => SvcClient.Post<SaveCustomerOutput>("CreateIndividual", saveCustomerInput))
-                        .ContinueWith<CustomerInfo>(saveCustomerOutput => GetIndividualInfo(saveCustomerOutput.Result.MasterCustomerId)
-                    )
-                );
-                Task<CustomerInfo[]> result2 = Task.WhenAll(saveCustomerOutputs);
-                customerInfos = result2.Result;
-            }
-            catch
-            {
-                customerInfos = null;
-            }
+            IEnumerable<Task<CustomerInfo>> storeIndividualTasks = storeCompany.Individuals.Select(
+                storeIndividual => Task.Run<CustomerInfo>(() => GetIndividualInfo(storeIndividual.FirstName, storeIndividual.LastName)));
+            Task<CustomerInfo[]> result1 = Task.WhenAll(storeIndividualTasks);
+            IEnumerable<CustomerInfo> storeInfos = result1.Result.Where(storeInfo => storeInfo != null);
+            IEnumerable<StoreIndividual> storeIndividuals =
+                storeCompany.Individuals.Where(
+                storeIndividual => !storeInfos.Any(
+                    storeInfo => string.Equals(storeInfo.FirstName, storeIndividual.FirstName, StringComparison.InvariantCultureIgnoreCase)
+                              && string.Equals(storeInfo.LastName, storeIndividual.LastName, StringComparison.InvariantCultureIgnoreCase)));
+            IEnumerable<Task<CustomerInfo>> saveCustomerOutputs = storeIndividuals
+                .Select<StoreIndividual, SaveCustomerInput>(
+                    storeIndividual
+                        =>
+                    {
+                        SaveCustomerInput customerInfo = CreateIndividualCustomerInfoInput(storeIndividual);
+                        AddIndividualAddress(customerInfo, storeIndividual, storeCompany);
+                        AddCusCommunicationInput(customerInfo, COMMUNICATION_INPUT_PHONE, storeIndividual.Phone, COMMUNICATION_LOCATION_CODE_WORK, countryCode, isUsaAddress);
+                        AddCusCommunicationInput(customerInfo, COMMUNICATION_INPUT_EMAIL, storeIndividual.Email, COMMUNICATION_LOCATION_CODE_WORK);
+                        return customerInfo;
+                    }
+                )
+                .Select(
+                    saveCustomerInput
+                        =>
+                    Task<SaveCustomerOutput>.Run(() => SvcClient.Post<SaveCustomerOutput>("CreateIndividual", saveCustomerInput))
+                    .ContinueWith<CustomerInfo>(saveCustomerOutput => GetIndividualInfo(saveCustomerOutput.Result.MasterCustomerId)
+                )
+            );
+            Task<CustomerInfo[]> result2 = Task.WhenAll(saveCustomerOutputs);
+            customerInfos = result2.Result;
             return customerInfos;
         }
 
@@ -196,7 +189,7 @@ namespace asi.asicentral.services.PersonifyProxy
         {
             IEnumerable<ASICustomerCreditCard> oCreditCards = SvcClient.Ctxt.ASICustomerCreditCards
                 .Where(c => c.MasterCustomerId == masterCustomerId && c.SubCustomerId == subCustomerId);
-            if (oCreditCards.Count() == 0)
+            if (!oCreditCards.Any())
             {
                 oCreditCards = null;
             }
@@ -322,7 +315,7 @@ namespace asi.asicentral.services.PersonifyProxy
             {
                 if ((key == COMMUNICATION_INPUT_PHONE || key == COMMUNICATION_INPUT_FAX) && countryCode != null)
                 {
-                    value = new string(value.Where(c => Char.IsDigit(c)).ToArray());
+                    value = new string(value.Where(Char.IsDigit).ToArray());
                     value = value.Substring(0, Math.Min(value.Substring(0).Length, PHONE_NUMBER_LENGTH));
                     if (value.Length == PHONE_NUMBER_LENGTH && isUSA)
                     {

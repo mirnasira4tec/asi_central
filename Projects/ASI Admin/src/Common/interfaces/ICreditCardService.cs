@@ -1,4 +1,5 @@
 ﻿using asi.asicentral.model;
+using asi.asicentral.model.store;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,13 +21,9 @@ namespace asi.asicentral.interfaces
         /// Store a credit card in the volt
         /// </summary>
         /// <param name="creditCard"></param>
+        /// <param name="storeOrder"></param>
+        /// <param name="countryCodes"></param>
         /// <returns></returns>
-        string Store(CreditCard creditCard);
-
-        /// <summary>
-        /// Permanently removes a credit card
-        /// </summary>
-        /// <param name="id"></param>
-        void Delete(string id);
+        string Store(CreditCard creditCard, StoreOrder storeOrder, IList<LookSendMyAdCountryCode> countryCodes);
     }
 }

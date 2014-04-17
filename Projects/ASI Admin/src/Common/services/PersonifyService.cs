@@ -1,52 +1,66 @@
-﻿using asi.asicentral.interfaces;
-using asi.asicentral.model.store;
+﻿using asi.asicentral.model.store;
 using asi.asicentral.PersonifyDataASI;
-using asi.asicentral.web.CreditCardService;
-using asi.asicentral.web.Services.PersonifyProxy;
+using asi.asicentral.model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using asi.asicentral.services.PersonifyProxy;
 
 namespace asi.asicentral.services
 {
 
-    public class PersonifyService
+    public class PersonifyService : asi.asicentral.services.IBackendService, IDisposable
     {
 
-        public static bool ValidateCreditCard(CreditCard info)
+        private PersonifyClient m_personifyClient = new PersonifyClient();
+
+        private LogService m_log = null;
+
+        private bool m_disposed = false;
+
+        public PersonifyService()
         {
-            return PersonifyClient.ValidateCreditCard(info);
+            m_log = LogService.GetLog(this.GetType());
         }
 
-        public static bool SaveCreditCard(CreditCard info, string orderId, IStoreService storeService)
+        public bool PlaceOrder(StoreOrder storeOrder, IList<LookSendMyAdCountryCode> countryCodes)
         {
-            return PersonifyClient.SaveCreditCard(info, orderId, storeService);
+            bool result = false;
+            try
+            {
+                StoreCompany storeCompany = storeOrder.Company;
+                CustomerInfo companyInfo = m_personifyClient.AddCompanyInfo(storeOrder, countryCodes);
+                m_personifyClient.AddIndividualInfos(storeOrder, countryCodes);
+                result = true;
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                m_log.Error(string.Format("Error in adding order to personify: {0}", ex.Message));
+            }
+            return result;
         }
 
-        public static IEnumerable<ASICustomerCreditCard> GetCreditCardInfos(string orderId, IStoreService storeService)
+        public void Dispose()
         {
-            return PersonifyClient.GetCreditCardInfos(orderId, storeService);
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
-        public static CustomerInfo AddCompanyInfo(StoreOrderDetail storeOrderDetail, IStoreService storeService)
+        private void Dispose(bool disposing)
         {
-            return PersonifyClient.AddCompanyInfo(storeOrderDetail, storeService);
+            if (!m_disposed)
+            {
+                if (disposing)
+                {
+                    m_log.Dispose();
+                }
+            }
+            m_disposed = true;
         }
 
-        public static CustomerInfo GetCompanyInfo(string companyName)
+        ~PersonifyService()
         {
-            return PersonifyClient.GetCompanyInfo(companyName);
-        }
-
-        public static IEnumerable<CustomerInfo> AddIndividualInfos(StoreOrder storeOrder, IStoreService storeService)
-        {
-            return PersonifyClient.AddIndividualInfos(storeOrder, storeService);
-        }
-
-        public static CustomerInfo GetIndividualInfo(string firstName, string lastName)
-        {
-            return PersonifyClient.GetIndividualInfo(firstName, lastName);
+            Dispose(false);
         }
     }
 }
