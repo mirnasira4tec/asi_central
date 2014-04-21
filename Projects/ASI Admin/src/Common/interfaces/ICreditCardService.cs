@@ -21,9 +21,7 @@ namespace asi.asicentral.interfaces
         /// Store a credit card in the volt
         /// </summary>
         /// <param name="creditCard"></param>
-        /// <param name="storeOrder"></param>
-        /// <param name="countryCodes"></param>
         /// <returns></returns>
-        string Store(CreditCard creditCard, StoreOrder storeOrder, IList<LookSendMyAdCountryCode> countryCodes);
+        string Store(CreditCard creditCard);
     }
 }

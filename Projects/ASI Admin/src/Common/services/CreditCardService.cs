@@ -18,8 +18,6 @@ namespace asi.asicentral.services
     public class CreditCardService : ICreditCardService
     {
 
-        private PersonifyClient m_personifyClient = new PersonifyClient();
-
         public CreditCardService()
         {
             //nothing to do at this point
@@ -32,7 +30,7 @@ namespace asi.asicentral.services
             try
             {
                 log = LogService.GetLog(this.GetType());
-                valid = m_personifyClient.ValidateCreditCard(creditCard);
+                valid = PersonifyClient.ValidateCreditCard(creditCard);
             }
             catch (Exception ex)
             {
@@ -42,17 +40,14 @@ namespace asi.asicentral.services
             return valid;
         }
 
-        public virtual string Store(CreditCard creditCard, StoreOrder storeOrder, IList<LookSendMyAdCountryCode> countryCodes)
+        public virtual string Store(CreditCard creditCard)
         {
             string result = null;
             ILogService log = null;
             try
             {
                 log = LogService.GetLog(this.GetType());
-                if (m_personifyClient.SaveCreditCard(creditCard, storeOrder, countryCodes))
-                {
-                    result = "profile id";
-                }
+                result = PersonifyClient.SaveCreditCard(creditCard);
             }
             catch (Exception ex)
             {

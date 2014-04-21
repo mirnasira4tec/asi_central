@@ -1,4 +1,6 @@
-﻿using asi.asicentral.model.store;
+﻿using System.Configuration;
+using System.Web.Mvc;
+using asi.asicentral.model.store;
 using System;
 using System.Collections.Generic;
 using System.Data.Services.Client;
@@ -11,54 +13,43 @@ using asi.asicentral.PersonifyDataASI;
 namespace asi.asicentral.services.PersonifyProxy
 {
 
-    public class PersonifyClient
+    public static class PersonifyClient
     {
 
         private const string ADDRESS_ADDED_OR_MODIFIED_BY = "ASI_Store";
-
         private const string COMMUNICATION_INPUT_PHONE = "PHONE";
-
         private const string COMMUNICATION_INPUT_FAX = "FAX";
-
         private const string COMMUNICATION_INPUT_WEB = "WEB";
-
         private const string COMMUNICATION_INPUT_EMAIL = "EMAIL";
-
         private const string COMMUNICATION_LOCATION_CODE_CORPORATE = "CORPORATE";
-
         private const string COMMUNICATION_LOCATION_CODE_WORK = "WORK";
-
         private const string COMMUNICATION_LOCATION_CODE_UNV = "UNV";
-
         private const string CUSTOMER_CLASS_INDIV = "INDIV";
-
         private const string RECORD_TYPE_INDIVIDUAL = "I";
-
         private const string RECORD_TYPE_CORPORATE = "C";
-
         private const int PHONE_NUMBER_LENGTH = 10;
 
         private static readonly Dictionary<string, string> CreditCardType =
             new Dictionary<string, string>(4) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
 
-        public bool ValidateCreditCard(CreditCard info)
+        public static bool ValidateCreditCard(CreditCard info)
         {
-            var aSIValidateCreditCardInput = new ASIValidateCreditCardInput()
+            var asiValidateCreditCardInput = new ASIValidateCreditCardInput()
             {
                 ReceiptType = CreditCardType[info.Type.ToUpper()],
                 CreditCardNumber = info.Number
             };
-            ASIValidateCreditCardOutput resp = SvcClient.Post<ASIValidateCreditCardOutput>("ASIValidateCreditCard", aSIValidateCreditCardInput);
+            ASIValidateCreditCardOutput resp = SvcClient.Post<ASIValidateCreditCardOutput>("ASIValidateCreditCard", asiValidateCreditCardInput);
             return resp.IsValid ?? false;
         }
 
-        public bool SaveCreditCard(CreditCard info, StoreOrder storeOrder, IList<LookSendMyAdCountryCode> countryCodes)
+        public static string SaveCreditCard(CreditCard info)
         {
-            CustomerInfo companyInfo = AddCompanyInfo(storeOrder, countryCodes);
+            Dictionary<string, string> companyInfo = GetPersonifyCreditCardCompany();
             var customerCreditCardInput = new CustomerCreditCardInput()
                 {
-                    MasterCustomerId = companyInfo.MasterCustomerId,
-                    SubCustomerId = companyInfo.SubCustomerId,
+                    MasterCustomerId = companyInfo["MasterCustomerId"],
+                    SubCustomerId = Convert.ToInt32(companyInfo["SubCustomerId"]),
                     ReceiptType = CreditCardType[info.Type.ToUpper()],
                     CreditCardNumber = info.Number,
                     ExpirationMonth = (short)info.ExpirationDate.Month,
@@ -74,17 +65,17 @@ namespace asi.asicentral.services.PersonifyProxy
                     AddedOrModifiedBy = ADDRESS_ADDED_OR_MODIFIED_BY
                 };
             CustomerCreditCardOutput resp = SvcClient.Post<CustomerCreditCardOutput>("AddCustomerCreditCard", customerCreditCardInput);
-            return resp.Success ?? false;
+            return resp.Success ?? false ? "profileid" : null;
         }
 
-        public IEnumerable<ASICustomerCreditCard> GetCreditCardInfos(StoreOrder storeOrder)
+        public static IEnumerable<ASICustomerCreditCard> GetCreditCardInfos(StoreOrder storeOrder)
         {
             CustomerInfo companyInfo = GetCompanyInfo(storeOrder.Company.Name);
             IEnumerable<ASICustomerCreditCard> oCreditCards = GetCreditCardInfos(companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
             return oCreditCards;
         }
 
-        public CustomerInfo AddCompanyInfo(StoreOrder storeOrder, IList<LookSendMyAdCountryCode> countryCodes)
+        public static CustomerInfo AddCompanyInfo(StoreOrder storeOrder, IList<LookSendMyAdCountryCode> countryCodes)
         {
             CustomerInfo companyInfo = null;
             StoreCompany storeCompany = storeOrder.Company;
@@ -104,8 +95,8 @@ namespace asi.asicentral.services.PersonifyProxy
                 AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_FAX, storeCompany.Fax, COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode, isUsaAddress);
                 AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_EMAIL, storeCompany.Email, COMMUNICATION_LOCATION_CODE_CORPORATE);
                 AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_WEB, storeCompany.WebURL, COMMUNICATION_LOCATION_CODE_CORPORATE);
-                SaveCustomerOutput Rslts = SvcClient.Post<SaveCustomerOutput>("CreateCompany", saveCustomerInput);
-                if (string.IsNullOrWhiteSpace(Rslts.WarningMessage))
+                SaveCustomerOutput result = SvcClient.Post<SaveCustomerOutput>("CreateCompany", saveCustomerInput);
+                if (result != null && string.IsNullOrWhiteSpace(result.WarningMessage))
                 {
                     companyInfo = GetCompanyInfo(storeCompany.Name);
                 }
@@ -113,7 +104,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return companyInfo;
         }
 
-        public CustomerInfo GetCompanyInfo(string companyName)
+        public static CustomerInfo GetCompanyInfo(string companyName)
         {
             CustomerInfo customerInfo = null;
             if (companyName != null)
@@ -125,7 +116,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return customerInfo;
         }
 
-        public IEnumerable<CustomerInfo> AddIndividualInfos(StoreOrder storeOrder, IList<LookSendMyAdCountryCode> countryCodes)
+        public static IEnumerable<CustomerInfo> AddIndividualInfos(StoreOrder storeOrder, IList<LookSendMyAdCountryCode> countryCodes)
         {
             if (storeOrder == null || storeOrder.Company == null)
             {
@@ -170,7 +161,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return customerInfos;
         }
 
-        public CustomerInfo GetIndividualInfo(string firstName, string lastName)
+        public static CustomerInfo GetIndividualInfo(string firstName, string lastName)
         {
             CustomerInfo customerInfo = null;
             if (!string.IsNullOrWhiteSpace(firstName) && !string.IsNullOrWhiteSpace(lastName))
@@ -185,6 +176,18 @@ namespace asi.asicentral.services.PersonifyProxy
             return customerInfo;
         }
 
+        public static Dictionary<string, string> GetPersonifyCreditCardCompany()
+        {
+            Dictionary<string, string> result = null;
+            string personifyCreditCardCompany = ConfigurationManager.AppSettings["PersonifyCreditCardCompany"];
+            if (personifyCreditCardCompany != null)
+            {
+                string[] companyInfos = personifyCreditCardCompany.Split(new char[] { ';' });
+                result = companyInfos.ToDictionary(item => item.Substring(0, item.IndexOf('=')), item => item.Substring(item.IndexOf('=') + 1));
+            }
+            return result;
+        }
+
         private static IEnumerable<ASICustomerCreditCard> GetCreditCardInfos(string masterCustomerId, int subCustomerId)
         {
             IEnumerable<ASICustomerCreditCard> oCreditCards = SvcClient.Ctxt.ASICustomerCreditCards
@@ -196,7 +199,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return oCreditCards;
         }
 
-        private SaveCustomerInput CreateIndividualCustomerInfoInput(StoreIndividual storeIndividual)
+        private static SaveCustomerInput CreateIndividualCustomerInfoInput(StoreIndividual storeIndividual)
         {
             var customerInfo = new SaveCustomerInput
             {
@@ -207,7 +210,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return customerInfo;
         }
 
-        private SaveCustomerInput AddIndividualAddress(SaveCustomerInput customerInfo, StoreIndividual storeIndividual, StoreCompany storeCompany)
+        private static SaveCustomerInput AddIndividualAddress(SaveCustomerInput customerInfo, StoreIndividual storeIndividual, StoreCompany storeCompany)
         {
             CustomerInfo companyInfo = GetCompanyInfo(storeCompany.Name);
             if (companyInfo == null)
@@ -357,12 +360,12 @@ namespace asi.asicentral.services.PersonifyProxy
 
         private static bool Validate(string receiptType, string creditCardNum)
         {
-            var aSIValidateCreditCardInput = new ASIValidateCreditCardInput()
+            var asiValidateCreditCardInput = new ASIValidateCreditCardInput()
             {
                 ReceiptType = receiptType,
                 CreditCardNumber = creditCardNum
             };
-            ASIValidateCreditCardOutput resp = SvcClient.Post<ASIValidateCreditCardOutput>("ASIValidateCreditCard", aSIValidateCreditCardInput);
+            ASIValidateCreditCardOutput resp = SvcClient.Post<ASIValidateCreditCardOutput>("ASIValidateCreditCard", asiValidateCreditCardInput);
             return resp.IsValid ?? false;
         }
     }
