@@ -272,7 +272,7 @@
                 var total = 0;
                 if (arrayCost.length == 0) GetCosts();
                 total = arrayCost[$("#OptionId:checked").val()].Cost;
-            
+                total = total.toFixed(2);
                 $("#TotalCost").val(total);
             $("#lblTotal").html("Total: $" + total + "/mo.");
         }
