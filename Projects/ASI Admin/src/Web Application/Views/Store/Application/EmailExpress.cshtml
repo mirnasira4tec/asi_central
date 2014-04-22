@@ -34,24 +34,49 @@
         <div id="tabsubscription" class="product-information tab-pane fade">
             <fieldset class="company-info-form">
                 <legend>@string.Format("{0} {1}", Html.Raw(Model.ProductName), "Information")</legend>
-                @Html.HiddenFor(model => model.Dates)
-                @Html.HiddenFor(model => model.TotalCost)
-                 <span class="label-row span11">
-                    <strong>Select Option:</strong>
-                       </span>
-                <span class="label-row">
-                    @Html.DropDownListFor(model => model.ItemTypeId, Model.ItemTypes, new { @onchange = "SelectOption();" })
-             </span>
-                <span class="label-row span11" id="divDate">
+                @switch (Model.ProductId)
+                {
+                    case 61:
+                    @Html.HiddenFor(model => model.Dates)
+                    @Html.HiddenFor(model => model.TotalCost)
+                    <span class="label-row span11">
+                        <strong>Select Option:</strong>
+                    </span>
+                    <span class="label-row">
+                        @Html.DropDownListFor(model => model.ItemTypeId, Model.ItemTypes, new { @onchange = "SelectOption();" })
+                    </span>
+                    <span class="label-row span11" id="divDate">
                         <strong>Select @asi.asicentral.Resources.Resource.EmailExpress_Quantity:</strong>
-                </span>
-                  <span class="label-row">
-                       @Html.TextBoxFor(m=>m.Sends)
-                      </span>
-                <div class="control-group">
-                    <div class="controls">
+                    </span>
+                    <span class="label-row">
+                        @Html.TextBoxFor(m => m.Sends)
+                    </span>
+                    <div class="control-group">
+                        <div class="controls">
+                        </div>
                     </div>
-                </div>
+                    
+                        break;
+                    case 77:
+                        
+                     @Html.HiddenFor(model => model.TotalCost)
+                    <div class="control-group">
+                        <label class="control-label" for="Cost">Select a package</label>
+
+                        <div class="controls">
+                            @foreach (var option in Model.Options)
+                            {
+                                <label class="radio">@Html.RadioButtonFor(model => model.OptionId, option.Value, new { onclick = "CalculateTotal();" }) @option.Text </label>
+                            }
+                        </div>
+
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                        </div>
+                    </div>
+                            break;
+                }
                 <div class="control-group">
                     <div class="controls">
                         <p><strong id="lblTotal">Total: $@String.Format("{0:N}", Model.TotalCost)</strong></p>
@@ -66,17 +91,20 @@
 }
 
 @section Scripts {
-    @Scripts.Render("~/bundles/MultiSelectedDatePicker")
-    <script type="text/javascript">
-        var productId = '@(Model.ProductId)';
-        var message = '@(asi.asicentral.Resources.Resource.EmailExpress_Selected_Dates_Count)';
-        var arrayNumberOfItems = [];
-        var arrayCostPlatinum = [];
-        var arrayCostRegular = [];
-        var CostTargeted = '@(EmailExpressHelper.EMAILEXPRESS_TARGETED)';
-        function GetNumberOfItems() {
-            arrayNumberOfItems = [];
-            arrayNumberOfItems = '@Html.Raw(
+    @Scripts.Render("~/bundles/form")
+   <script src="/Scripts/asi.js"></script>
+    @if (Model.ProductId == 61)
+    {
+        <script type="text/javascript">
+            var productId = '@(Model.ProductId)';
+            var message = '@(asi.asicentral.Resources.Resource.EmailExpress_Selected_Dates_Count)';
+            var arrayNumberOfItems = [];
+            var arrayCostPlatinum = [];
+            var arrayCostRegular = [];
+            var CostTargeted = '@(EmailExpressHelper.EMAILEXPRESS_TARGETED)';
+            function GetNumberOfItems() {
+                arrayNumberOfItems = [];
+                arrayNumberOfItems = '@Html.Raw(
                         Json.Encode(
                         (EmailExpressHelper.EMAILEXPRESS_NUMBER_OF_ITEMS.Select(item => new
                         {
@@ -153,7 +181,6 @@
             return Cost;
         }
         function CalculateTotal() {
-            var dates = $("#dates").multiDatesPicker('getDates');
             var total = 0;
             var quantity = 0;
             if ($("#ItemTypeId").val() == 1 || $("#ItemTypeId").val() == 2)
@@ -179,12 +206,13 @@
             else
                 $("#divDate").css("display", "none");
         }
-        
+
         $(document).ready(function () {
             GetNumberOfItems();
             GetCostPlatinum();
             GetCostRegular();
             $('input.command').click(function (e) {
+               
                 $('#ActionName').val(e.target.value);
                 if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
                     //make sure we have Timms value
@@ -210,5 +238,57 @@
             });
             LoadData();
         });
+        </script>
+    }
+    else if(Model.ProductId==77)
+    {
+        <script type="text/javascript">
+            var arrayCost = [];
+            $(document).ready(function () {
+                CalculateTotal();
+                GetCosts();
+                $('input.command').click(function (e) {
+                    $('#ActionName').val(e.target.value);
+                    if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
+                    //make sure we have Timms value
+                    if (!$('#ExternalReference').val()) {
+                        asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
+                        $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                        $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
+                        e.preventDefault();
+                    }
+                    else {
+                        var isnum = /^\d+$/.test($('#ExternalReference').val());
+                        if (!isnum) {
+                            asi.modal.confirm('Error', 'TIMMS ID must contain only numbers.', null, "#hide", "Close");
+                            $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                            $("#timmsErrorMessage").text("TIMMS ID must contain only numbers.");
+                            e.preventDefault();
+                        }
+                    }
+                }
+                });
+            });
+            function CalculateTotal() {
+                var total = 0;
+                if (arrayCost.length == 0) GetCosts();
+                total = arrayCost[$("#OptionId:checked").val()].Cost;
+                total = asi.util.formatAmount(total);
+                $("#TotalCost").val(total);
+            $("#lblTotal").html("Total: $" + total + "/mo.");
+        }
+        function GetCosts() {
+            arrayCost = '@Html.Raw(Json.Encode(
+            SupplierSpecialsHelper.SupplierSpecials_Cost.Select(item => new
+            {
+                Cost = item
+            })
+        ))';
+            if (arrayCost.length > 0)
+                arrayCost = JSON.parse(arrayCost);
+        }
+
     </script>
+    }
+
 }
