@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ASI.EntityModel, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ASI.EntityModel.1.0.1\lib\ASI.EntityModel.dll</HintPath>
+    </Reference>
     <Reference Include="ASI.Jade, Version=1.2.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ASI.Jade.1.2.3\lib\ASI.Jade.dll</HintPath>

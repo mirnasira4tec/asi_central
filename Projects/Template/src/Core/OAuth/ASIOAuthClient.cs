@@ -121,31 +121,31 @@ namespace asi.asicentral.oauth
                     user.Cell = jadeuser.Cell;
                     user.Fax = jadeuser.Fax;
 
-                    //if (jadeuser.CompanyId != 0)
-                    //{
-                    //    ASI.EntityModel.Company jadeCompany = ASI.Jade.Company.Retriever.Get(jadeuser.CompanyId);
-                    //    if(jadeCompany != null)
-                    //    {
-                    //        if(jadeCompany.Contacts != null && jadeCompany.Contacts.Count > 0)
-                    //        {
-                    //            ASI.EntityModel.Contact contact = jadeCompany.Contacts.ElementAt(0);
-                    //            user.Title = contact.Title;
-                    //            user.Suffix = contact.Suffix;
-                    //            if (jadeCompany.Contacts.ElementAt(0).Addresses != null &&
-                    //               jadeCompany.Contacts.ElementAt(0).Addresses.Count > 0)
-                    //            {
-                    //                ASI.EntityModel.Address address = jadeCompany.Contacts.ElementAt(0).Addresses.ElementAt(0);
-                    //                user.Street1 = address.AddressLine1 + " " + address.AddressLine2;
-                    //                user.Street2 = address.AddressLine3 + " " + address.AddressLine4;
-                    //                user.State = address.State;
-                    //                user.CountryCode = address.CountryCode;
-                    //                user.Country = address.County;
-                    //                user.Zip = address.ZipCode;
-                    //                user.City = address.City;
-                    //            }
-                    //        }
-                    //    }
-                    //}
+                    if (jadeuser.CompanyId != 0)
+                    {
+                        ASI.EntityModel.Company jadeCompany = ASI.Jade.Company.Retriever.Get(jadeuser.CompanyId);
+                        if (jadeCompany != null)
+                        {
+                            if (jadeCompany.Contacts != null && jadeCompany.Contacts.Count > 0)
+                            {
+                                ASI.EntityModel.Contact contact = jadeCompany.Contacts.ElementAt(0);
+                                user.Title = contact.Title;
+                                user.Suffix = contact.Suffix;
+                                if (jadeCompany.Contacts.ElementAt(0).Addresses != null &&
+                                   jadeCompany.Contacts.ElementAt(0).Addresses.Count > 0)
+                                {
+                                    ASI.EntityModel.Address address = jadeCompany.Contacts.ElementAt(0).Addresses.ElementAt(0);
+                                    user.Street1 = address.AddressLine1 + " " + address.AddressLine2;
+                                    user.Street2 = address.AddressLine3 + " " + address.AddressLine4;
+                                    user.State = address.State;
+                                    user.CountryCode = address.CountryCode;
+                                    user.Country = address.County;
+                                    user.Zip = address.ZipCode;
+                                    user.City = address.City;
+                                }
+                            }
+                        }
+                    }
                 }
             }
             catch { }
