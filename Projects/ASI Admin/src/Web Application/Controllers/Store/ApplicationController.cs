@@ -797,16 +797,6 @@ namespace asi.asicentral.web.Controllers.Store
             else if (command == ApplicationController.COMMAND_REJECT)
             {
                 order.ProcessStatus = OrderStatus.Rejected;
-                try
-                {
-                    if (CreditCardService != null && order.CreditCard != null && !string.IsNullOrEmpty(order.CreditCard.ExternalReference))
-                        CreditCardService.Delete(order.CreditCard.ExternalReference);
-                }
-                catch (Exception exception)
-                {
-                    ILogService log = LogService.GetLog(this.GetType());
-                    log.Error("Could not remove a credit card record: " + exception.Message);
-                }
                 order.CreditCard.ExternalReference = null;
             }
         }
