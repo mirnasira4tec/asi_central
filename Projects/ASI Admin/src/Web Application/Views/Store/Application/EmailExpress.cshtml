@@ -91,7 +91,7 @@
 }
 
 @section Scripts {
-    @Scripts.Render("~/bundles/MultiSelectedDatePicker")
+   
     @if (Model.ProductId == 61)
     {
         <script type="text/javascript">
@@ -180,7 +180,6 @@
             return Cost;
         }
         function CalculateTotal() {
-            var dates = $("#dates").multiDatesPicker('getDates');
             var total = 0;
             var quantity = 0;
             if ($("#ItemTypeId").val() == 1 || $("#ItemTypeId").val() == 2)
