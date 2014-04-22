@@ -717,73 +717,18 @@ namespace asi.asicentral.web.Controllers.Store
                             #region Update Email Express information
                             StoreDetailEmailExpress emailexpress = StoreService.GetAll<StoreDetailEmailExpress>().Where(product => product.OrderDetailId == orderDetail.Id).SingleOrDefault();
                             if (emailexpress == null) throw new Exception("Invalid id, could not find the Catalog information record");
-
                             if (orderDetail.Product != null)
                             {
-                                List<string> Dates = new List<string>();
-                                List<DateTime> updatedDateList = new List<DateTime>();
-                                Dates = System.Text.RegularExpressions.Regex.Split(string.IsNullOrEmpty(application.Dates) ? string.Empty : application.Dates, "\r\n").ToList();
-                                Dates = Dates.Where(u => u.ToString() != string.Empty).ToList();
                                 List<StoreDetailEmailExpressItem> loginScreen_previousItems = StoreService.GetAll<StoreDetailEmailExpressItem>().Where(details => details.OrderDetailId == application.OrderDetailId).ToList();
-                                if (application.ItemTypeId == 3 || application.ItemTypeId == 4)
-                                {
                                     foreach (StoreDetailEmailExpressItem item in loginScreen_previousItems)
                                     {
                                         StoreService.Delete<StoreDetailEmailExpressItem>(item);
                                     }
-                                }
-                                else
-                                {
-                                    //Adding or updating exisitng records
-                                    if (Dates != null && Dates.Count > 0)
-                                    {
-                                        int count = 1;
-                                        foreach (string slecteddate in Dates)
-                                        {
-                                            DateTime date = DateTime.Parse(slecteddate);
-                                            StoreDetailEmailExpressItem existingItem = loginScreen_previousItems.Where(item => item.AdSelectedDate == date).SingleOrDefault();
-                                            if (existingItem != null)
-                                            {
-                                                existingItem.Sequence = count++;
-                                                existingItem.UpdateDate = DateTime.UtcNow;
-                                                existingItem.UpdateSource = "ApplicationController - EditEmailExpress";
-                                                StoreService.Update<StoreDetailEmailExpressItem>(existingItem);
-                                            }
-                                            else
-                                            {
-                                                StoreDetailEmailExpressItem newitem = new StoreDetailEmailExpressItem();
-                                                newitem.AdSelectedDate = date;
-                                                newitem.Sequence = count++;
-                                                newitem.OrderDetailId = application.OrderDetailId;
-                                                newitem.CreateDate = DateTime.UtcNow;
-                                                newitem.UpdateDate = DateTime.UtcNow;
-                                                newitem.UpdateSource = "ApplicationController - EditEmailExpress";
-                                                StoreService.Add<StoreDetailEmailExpressItem>(newitem);
-                                            }
-                                            updatedDateList.Add(date);
-                                        }
-                                    }
-                                    //Deleting extra if any extra dates added in earlier submit.
-                                    if (updatedDateList != null && updatedDateList.Count > 0 && loginScreen_previousItems != null && loginScreen_previousItems.Count > 0)
-                                    {
-                                        foreach (StoreDetailEmailExpressItem item in loginScreen_previousItems)
-                                        {
-                                            if (updatedDateList.Where(date => date == item.AdSelectedDate).SingleOrDefault() == DateTime.MinValue)
-                                                StoreService.Delete<StoreDetailEmailExpressItem>(item);
-                                        }
-                                    }
-                                }
                                 emailexpress.ItemTypeId = application.ItemTypeId;
                                 if (application.ItemTypeId == 3 || application.ItemTypeId == 4)
-                                {
                                     orderDetail.Quantity = 1;
-                                    emailexpress.NumberOfDates = 0;
-                                }
                                 else
-                                {
-                                    if (updatedDateList != null) orderDetail.Quantity = application.Sends;
-                                    emailexpress.NumberOfDates = updatedDateList.Count;
-                                }
+                                    orderDetail.Quantity = application.Sends;
                                 orderDetail.Cost = EmailExpressHelper.GetCost(application.ItemTypeId, application.Sends);
                                 emailexpress.UpdateDate = DateTime.UtcNow;
                                 emailexpress.UpdateSource = "ApplicationController - EditEmailExpress";
