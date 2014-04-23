@@ -117,11 +117,7 @@ namespace asi.asicentral.web.model.store
         public int ItemTypeId { get; set; }
         public string Dates { get; set; }
         public int Sends { get; set; }
-         public int OptionId { get; set; }
-        public IList<SelectListItem> Options
-        {
-            get { return SupplierSpecialsHelper.GetPackagesOptions(); }
-        }
+        
         public List<System.Web.Mvc.SelectListItem> ItemTypes { get { return asi.asicentral.util.store.EmailExpressHelper.GetItemTypeOptions(); } }
         
         #endregion Email Express information
@@ -178,8 +174,6 @@ namespace asi.asicentral.web.model.store
                 
             }
             #endregion
-            if (orderdetail.OptionId != null)
-                this.OptionId = orderdetail.OptionId.Value;
             OrderId = order.Id;
             Price = order.Total;
             OrderStatus = order.ProcessStatus;
