@@ -30,10 +30,50 @@ namespace asi.asicentral.services.PersonifyProxy
         private const int PHONE_NUMBER_LENGTH = 10;
 
         private static readonly Dictionary<string, string> CreditCardType =
-            new Dictionary<string, string>(4) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
+            new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
+
+        private static readonly Dictionary<int, int> ProductIdStoreToPersonify =
+            new Dictionary<int, int>(1) { { 61, 1587 } };
+
+        public static CreateOrderOutput CreateOrder(StoreOrder storeOrder)
+        {
+            Task<CustomerInfo> companyInfoTask = Task.Run<CustomerInfo>(() => GetCompanyInfo(storeOrder.Company.Name));
+            var orderLineInputs = new DataServiceCollection<CreateOrderLineInput>(null, TrackingMode.None);
+            foreach (var orderDetail in storeOrder.OrderDetails)
+            {
+                PersonifyProductId storeProductId = (PersonifyProductId)Enum.Parse(typeof(PersonifyProductId), orderDetail.Product.Id.ToString());
+                if (Enum.IsDefined(typeof(PersonifyProductId), storeProductId))
+                {
+                    var orderLine = new CreateOrderLineInput()
+                    {
+                        ProductId = ProductIdStoreToPersonify[orderDetail.Product.Id],
+                        Quantity = Convert.ToInt16(orderDetail.Quantity),
+                    };
+                    orderLineInputs.Add(orderLine);
+                }
+            }
+            CustomerInfo companyInfo = companyInfoTask.Result;
+            if (companyInfo == null)
+            {
+                throw new Exception("Company information is not available in Personify.");
+            }
+            var createOrderInput = new CreateOrderInput()
+                {
+                    BillMasterCustomerID = companyInfo.MasterCustomerId,
+                    BillSubCustomerID = Convert.ToInt16(companyInfo.SubCustomerId),
+                    ShipMasterCustomerID = companyInfo.MasterCustomerId,
+                    ShipSubCustomerID = Convert.ToInt16(companyInfo.SubCustomerId),
+                    OrderLines = orderLineInputs,
+                };
+            CreateOrderOutput resp = SvcClient.Post<CreateOrderOutput>("CreateOrder", createOrderInput);
+            return resp;
+        }
 
         public static bool ValidateCreditCard(CreditCard info)
         {
+            var companyinfo = GetPersonifyCreditCardCompany();
+            if (companyinfo == null) return true;
+
             var asiValidateCreditCardInput = new ASIValidateCreditCardInput()
             {
                 ReceiptType = CreditCardType[info.Type.ToUpper()],
@@ -45,6 +85,10 @@ namespace asi.asicentral.services.PersonifyProxy
 
         public static string SaveCreditCard(CreditCard info)
         {
+            string profileId = "profileid";
+            var companyinfo = GetPersonifyCreditCardCompany();
+            if (companyinfo == null) return profileId;
+
             Dictionary<string, string> companyInfo = GetPersonifyCreditCardCompany();
             var customerCreditCardInput = new CustomerCreditCardInput()
                 {
@@ -65,7 +109,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     AddedOrModifiedBy = ADDRESS_ADDED_OR_MODIFIED_BY
                 };
             CustomerCreditCardOutput resp = SvcClient.Post<CustomerCreditCardOutput>("AddCustomerCreditCard", customerCreditCardInput);
-            return resp.Success ?? false ? "profileid" : null;
+            return resp.Success ?? false ? profileId : null;
         }
 
         public static IEnumerable<ASICustomerCreditCard> GetCreditCardInfos(StoreOrder storeOrder)
@@ -219,7 +263,7 @@ namespace asi.asicentral.services.PersonifyProxy
             }
             List<AddressInfo> companyAddressInfos = SvcClient.Ctxt.AddressInfos.Where(
                a => a.MasterCustomerId == companyInfo.MasterCustomerId).ToList();
-            if (companyAddressInfos.Count <= 0)
+            if (companyAddressInfos == null || companyAddressInfos.Count <= 0)
             {
                 throw new Exception("Company address is not available in Personify.");
             }
@@ -368,5 +412,11 @@ namespace asi.asicentral.services.PersonifyProxy
             ASIValidateCreditCardOutput resp = SvcClient.Post<ASIValidateCreditCardOutput>("ASIValidateCreditCard", asiValidateCreditCardInput);
             return resp.IsValid ?? false;
         }
+    }
+
+    public enum PersonifyProductId : short
+    {
+
+        EmailExpressBasic = 61,
     }
 }
