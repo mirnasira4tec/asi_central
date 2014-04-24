@@ -45,7 +45,7 @@ namespace asi.asicentral.web.Controllers.Store
             }
             if (formTab == OrderPageModel.TAB_PRODUCT && !string.IsNullOrEmpty(product))
             {
-                product = Server.HtmlDecode(product);
+                product = Server.UrlDecode(product);
                 orderDetailQuery = orderDetailQuery.Where(detail =>
                     (detail.Product != null && detail.Product.Name != null && detail.Product.Name == product)
                     || (detail.Order.Context != null && detail.Order.Context.Name == product));

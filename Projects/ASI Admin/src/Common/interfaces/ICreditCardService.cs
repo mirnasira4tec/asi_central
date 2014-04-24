@@ -1,4 +1,5 @@
 ﻿using asi.asicentral.model;
+using asi.asicentral.model.store;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,11 +23,5 @@ namespace asi.asicentral.interfaces
         /// <param name="creditCard"></param>
         /// <returns></returns>
         string Store(CreditCard creditCard);
-
-        /// <summary>
-        /// Permanently removes a credit card
-        /// </summary>
-        /// <param name="id"></param>
-        void Delete(string id);
     }
 }

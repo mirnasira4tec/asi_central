@@ -1,5 +1,6 @@
 ﻿using asi.asicentral.model.store;
 using asi.asicentral.Resources;
+using asi.asicentral.util.store;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -115,6 +116,10 @@ namespace asi.asicentral.web.model.store
         public int OrderDetailId { get; set; }
         public decimal Cost { get; set; }
         public bool IsStoreRequest { get; set; }
+        public IList<SelectListItem> Options
+        {
+            get { return SupplierSpecialsHelper.GetPackagesOptions(); }
+        }
         
         public string ActionName { get; set; }
         public string AcceptedByName { get; set; }
