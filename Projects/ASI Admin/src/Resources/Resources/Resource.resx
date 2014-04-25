@@ -691,7 +691,7 @@
     <value>EmailExpress Platinum</value>
   </data>
   <data name="EmailExpress_Regular" xml:space="preserve">
-    <value>Email Express Basic</value>
+    <value>EmailExpress Basic</value>
   </data>
   <data name="EmailExpress_Selected_Dates_Count" xml:space="preserve">
     <value>You have selected {x} date(s):</value>
