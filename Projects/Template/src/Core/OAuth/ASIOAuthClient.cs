@@ -152,7 +152,7 @@ namespace asi.asicentral.oauth
             return user;
         }
 
-        public static bool VerifyUserCredentials(string userName, string password)
+        public static bool IsValidUser(string userName, string password)
         {
             IDictionary<string, string> tokens = null;
             bool isValidUser = false;
@@ -165,6 +165,21 @@ namespace asi.asicentral.oauth
                 {
                     tokens = webServerClient.Login(userName, password);
                     isValidUser = true;
+                }
+                catch { isValidUser = false; }
+            }
+            return isValidUser;
+        }
+
+        public static bool IsValidUser(string email)
+        {
+            bool isValidUser = false;
+            if (!string.IsNullOrEmpty(email))
+            {
+                try
+                {
+                    List<ASI.Jade.UserManagement.DataObjects.User> jadeusers = JUser.Get(0,25,null, null, email, null, null);
+                    if (jadeusers != null && jadeusers.Count > 0 && jadeusers.Where(user => user.Email == email) != null) isValidUser = true;
                 }
                 catch { isValidUser = false; }
             }
