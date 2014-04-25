@@ -1821,4 +1821,7 @@
   <data name="UptoTen" xml:space="preserve">
     <value>Supplier Specials – The Target Ten Products Package</value>
   </data>
+  <data name="Sends_Val" xml:space="preserve">
+    <value>The value should be numeric</value>
+  </data>
 </root>

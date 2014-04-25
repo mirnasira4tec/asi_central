@@ -4003,6 +4003,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The value should be numeric.
+        /// </summary>
+        public static string Sends_Val {
+            get {
+                return ResourceManager.GetString("Sends_Val", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sequence.
         /// </summary>
         public static string Sequence {
