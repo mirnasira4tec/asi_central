@@ -10,14 +10,14 @@ namespace Core.Tests.OAuth
         [TestMethod]
         public void IsValidUserByEmail()
         {
-            bool result = ASIOAuthClient.IsValidUser("kphani@macrosoftindia.com");
+            bool result = ASIOAuthClient.IsValidEmail("kphani@macrosoftindia.com");
             Assert.IsTrue(result);
         }
 
         [TestMethod]
-        public void IsValidUserByFalseEmail()
+        public void IsValidEmail()
         {
-            bool result = ASIOAuthClient.IsValidUser("kphani1@macrosoftindia.com");
+            bool result = ASIOAuthClient.IsValidEmail("kphani1@macrosoftindia.com");
             Assert.IsFalse(result);
         }
 
@@ -33,6 +33,20 @@ namespace Core.Tests.OAuth
         {
             bool result = ASIOAuthClient.IsValidUser("125724pk1", "password1");
             Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void GetUserBySSO()
+        {
+            asi.asicentral.model.User result = ASIOAuthClient.GetUser(168793);
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void GetUserByToken()
+        {
+            asi.asicentral.model.User result = ASIOAuthClient.GetUser("endfOr-JCWaCHazhs25cMHS1N4ddMqjV7jqjgMi62_m4ifiU19TLfnOOUfzOXIvQUli25TFs3xAF8AVXp6sxSTikZaM1");
+            Assert.IsNull(result);
         }
     }
 }

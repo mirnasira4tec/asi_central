@@ -171,7 +171,7 @@ namespace asi.asicentral.oauth
             return isValidUser;
         }
 
-        public static bool IsValidUser(string email)
+        public static bool IsValidEmail(string email)
         {
             bool isValidUser = false;
             if (!string.IsNullOrEmpty(email))
