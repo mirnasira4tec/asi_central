@@ -48,6 +48,7 @@ namespace asi.asicentral.services
             {
                 log = LogService.GetLog(this.GetType());
                 result = PersonifyClient.SaveCreditCard(creditCard);
+                if (creditCard.Number.Length >= 4) creditCard.MaskedPAN = "****" + creditCard.Number.Substring(creditCard.Number.Length - 4, 4);
             }
             catch (Exception ex)
             {
