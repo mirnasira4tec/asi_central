@@ -69,6 +69,7 @@ namespace asi.asicentral.services
                 Country = creditCard.Country,
                 State = creditCard.State,
                 PostalCode = creditCard.PostalCode,
+                CountryCode = creditCard.CountryCode,
             };
             asi.asicentral.web.CreditCardService.CreditCardServiceClient cardServiceClient = GetClient();
             Guid identifier = cardServiceClient.Store(webCreditCard);
