@@ -682,7 +682,7 @@
     <value>Please enter sends.</value>
   </data>
   <data name="EmailExpress_Error_ItemType" xml:space="preserve">
-    <value>Please select one of the Email Express Option to proceed</value>
+    <value>Please select an EmailExpress product to proceed</value>
   </data>
   <data name="EmailExpress_Error_Terms" xml:space="preserve">
     <value>Please accept the Terms &amp; Conditions to proceed</value>
