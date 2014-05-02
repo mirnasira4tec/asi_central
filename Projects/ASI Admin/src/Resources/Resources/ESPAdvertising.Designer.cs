@@ -250,15 +250,6 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supported file formats (zip).
-        /// </summary>
-        public static string FileFormat_4 {
-            get {
-                return ResourceManager.GetString("FileFormat_4", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Fixed.
         /// </summary>
         public static string Fixed {

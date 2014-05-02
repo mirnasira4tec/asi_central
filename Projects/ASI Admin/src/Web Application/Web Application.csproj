@@ -269,7 +269,6 @@
     <Content Include="Images\sitebgtile.gif" />
     <Content Include="Images\transparent.gif" />
     <Content Include="Images\upload.png" />
-    <Content Include="Images\zip.png" />
     <Content Include="Scripts\asi.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />

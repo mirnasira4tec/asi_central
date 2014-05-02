@@ -6,25 +6,17 @@
 
 <div class="row">
     <div class="span2">
-        <a href="../Media/Download?file=@(string.IsNullOrEmpty(Model.Path) ? "" : Model.Path)">
-            <img src="/images/download.png" title="download" /></a>
-        <a href="#UploadFilesModalWindow" class="modal-link" data-toggle="modal">
-            <img src="/images/upload.png" title="Upload" /></a>
-        <a href="#UploadZipFilesModalWindow" class="modal-link" data-toggle="modal">
-            <img src="/images/zip.png" title="Upload Zip Files" /></a>
-        <a href="#CreateDirectoryModalWindow" class="modal-link" data-toggle="modal">
-            <img style="width: 32px; height: 32px" src="/images/CreateDirectory.png" width="32" height="32" title="CreateDirectory" /></a>
-       
-    </div>
-
-    <div class="span3">
-        <h2>@(string.IsNullOrEmpty(Model.Path) ? "/" : Model.Path)</h2>
-    </div>
+        <a href="../Media/Download?file=@(string.IsNullOrEmpty(Model.Path) ? "" : Model.Path)"><img src="/images/download.png" alt="download" /></a>
+        <a href="#UploadFilesModalWindow" class="modal-link" data-toggle="modal"><img src="/images/upload.png" alt="Upload" /></a>
+        <a href="#CreateDirectoryModalWindow" class="modal-link" data-toggle="modal"><img style="width:32px; height:32px" src="/images/CreateDirectory.png" width="32" height="32" alt="CreateDirectory" /></a>
+        <img src="/images/folder.png" width="32" height="32" alt="folder" />
+    </div> 
+    
+    <div class="span3"><h2>@(string.IsNullOrEmpty(Model.Path) ? "/" : Model.Path)</h2></div>
 </div>
 
 <table class="table table-condensed table-stripped">
-    <tr>
-        <th>&nbsp;</th>
+    <tr><th>&nbsp;</th>
         <th><a href="../Media/List?path=@(string.IsNullOrEmpty(Model.Path) ? "" : Model.Path)&&filterBy=Name">Name</a></th>
         <th><a href="../Media/List?path=@(string.IsNullOrEmpty(Model.Path) ? "" : Model.Path)&&filterBy=Created">Created</a></th>
         <th><a href="../Media/List?path=@(string.IsNullOrEmpty(Model.Path) ? "" : Model.Path)&&filterBy=Modified">Modified</a></th>
@@ -34,8 +26,7 @@
         <tr>
             @if (@fileItem.RelativePath != "")
             {
-                <td><a id="@fileItem.RelativePath" href="/Media/Delete?file=@fileItem.RelativePath" data-type="reject">
-                    <img id="imgDelete" src="/images/delete_small.jpg" width="20" height="20" class="command btn-primary" alt="delete " /></a></td>    
+                <td><a id="@fileItem.RelativePath" href="/Media/Delete?file=@fileItem.RelativePath" data-type="reject"><img id="imgDelete" src="/images/delete_small.jpg" width="20" height="20" class="command btn-primary" alt="delete " /></a></td>    
             }
             else
             {
@@ -43,14 +34,11 @@
             }
             @if (fileItem.Type == asi.asicentral.model.FileModel.FileType.Folder)
             {        
-                <td>
-                    <img src="/images/folder_small.png" width="20" height="20" alt="folder" />
-                    <a href="/Media/List?path=@fileItem.RelativePath">@fileItem.Name</a></td>
+                <td><img src="/images/folder_small.png" width="20" height="20" alt="folder" /> <a href="/Media/List?path=@fileItem.RelativePath">@fileItem.Name</a></td>
             }
             else
             {
-                <td><a href="/Media/Download?file=@fileItem.RelativePath">
-                    <img src="/images/file_small.png" width="20" height="20" alt="file" />@fileItem.Name</a></td>
+                <td><a href="/Media/Download?file=@fileItem.RelativePath"><img src="/images/file_small.png" width="20" height="20" alt="file" />@fileItem.Name</a></td>
             }
             <td>@fileItem.Created</td>
             <td>@fileItem.Modified</td>
@@ -62,53 +50,36 @@
 @using (Html.BeginForm("CreateDirectory", "Media", new { directoryPath = (string.IsNullOrEmpty(Model.Path) ? "" : Model.Path) }, FormMethod.Post))
 {
     <div id="CreateDirectoryModalWindow" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3 id="myModalLabel">Create Directory</h3>
-        </div>
+        <div class="modal-header">			
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		    <h3 id="myModalLabel">Create Directory</h3>
+	    </div>
         <div class="modal-body">
-            <p>Enter directory Name: @Html.TextBox("dirName") </p>
+            <p>Enter directory Name: @Html.TextBox("dirName") </p> 
         </div>
         <div class="modal-footer">
             <input class="btn btn-primary" type="submit" name="Submit" value="Ok" />
             <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-        </div>
-    </div>
+	    </div>	
+   </div>
 }
 
 <!-- Upload files -->
-@using (Html.BeginForm("UploadZip", "Media", new { uploadPath = (string.IsNullOrEmpty(Model.Path) ? "" : Model.Path) }, FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    <div id="UploadZipFilesModalWindow" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3 id="myZipModalLabel1">Upload Zip Files</h3>
-        </div>
-        <div class="modal-body">
-            <input id="fileUploadZip" type="file" name="files" multiple="multiple" accept="application/zip" />
-        </div>
-        <div class="modal-footer">
-            <input class="btn btn-primary" type="submit" name="Submit" value="Upload" />
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-        </div>
-    </div>
-}
-<!-- Upload files -->
-@using (Html.BeginForm("Upload", "Media", new { uploadPath = (string.IsNullOrEmpty(Model.Path) ? "" : Model.Path) }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+ @using (Html.BeginForm("Upload", "Media", new { uploadPath = (string.IsNullOrEmpty(Model.Path) ? "" : Model.Path) }, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <div id="UploadFilesModalWindow" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3 id="myModalLabel1">Upload Files</h3>
-        </div>
+        <div class="modal-header">			
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		    <h3 id="myModalLabel1">Upload Files</h3>
+	    </div>	
         <div class="modal-body">
-            <input type="file" name="files" multiple="multiple" />
+             <input type="file" name="files" multiple="multiple" />
         </div>
         <div class="modal-footer">
             <input class="btn btn-primary" type="submit" name="Submit" value="Upload" />
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-        </div>
-    </div>
+		    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	    </div>		
+</div>
 }
 
 <form id="frmDelete" method="post" action="/Media/Delete">
@@ -117,44 +88,18 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/form")
-    @Scripts.Render("~/bundles/fileUpload")
     <script src="/Scripts/asi.js"></script>
     <script>
-        var flag = true;
-        $('a[data-type="reject"]').click(function (e) {
+       $('a[data-type="reject"]').click(function (e) {
             e.preventDefault();
             asi.modal.confirm("Delete Confirmation", "Are you sure you want to delete file or folder?", function (result) {
                 if (result) {
                     $("#frmDelete input[name=file]").val(e.target.parentElement.id);
                     $("#frmDelete").submit();
                 };
-            }, "Yes", "No");
-        });
+            },"Yes","No");
+       });
 
-        $(document).ready(function () {
-            $('#fileUploadZip').change(function (e) {
-                var names = [];
-                for (var i = 0; i < $(this).get(0).files.length; ++i) {
-                    names.push($(this).get(0).files[i].name);
-                    var extension = names[i].replace(/^.*\./, '');
-                    if (extension != "zip") {
-                        flag = false;
-                        break;
-                    }
-                }
-                if (!flag)
-                    WrongFile();
-            });
-
-        });
-
-        function WrongFile() {
-            asi.modal.confirm('Error uploading file', '@Html.Raw(asi.asicentral.Resources.ESPAdvertising.FileFormat_4)', null, "#hide", "Close");
-            $('#UploadZipFilesModalWindow').hide();
-            $('.modal-backdrop').hide();
-            $('#fileUploadZip').val("");
-
-        }
-    </script>
+   </script>
 }
 
