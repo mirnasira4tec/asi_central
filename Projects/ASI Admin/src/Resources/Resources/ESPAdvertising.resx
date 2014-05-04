@@ -300,4 +300,7 @@
   <data name="YourESPRankings" xml:space="preserve">
     <value>Your ESP Rankings</value>
   </data>
+  <data name="FileFormat_4" xml:space="preserve">
+    <value>Supported file formats (zip)</value>
+  </data>
 </root>
