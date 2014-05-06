@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.oauth;
+using System.Collections.Generic;
 
 namespace Core.Tests.OAuth
 {
@@ -24,15 +25,15 @@ namespace Core.Tests.OAuth
         [TestMethod]
         public void IsValidUserByCredentials()
         {
-            bool result = ASIOAuthClient.IsValidUser("125724pk", "password1");
-            Assert.IsTrue(result);
+            IDictionary<string, string> result = ASIOAuthClient.IsValidUser("125724pk", "password1");
+            Assert.IsNotNull(result);
         }
 
         [TestMethod]
         public void IsValidUserByFalseCredentials()
         {
-            bool result = ASIOAuthClient.IsValidUser("125724pk1", "password1");
-            Assert.IsFalse(result);
+            IDictionary<string, string> result = ASIOAuthClient.IsValidUser("125724pk1", "password1");
+            Assert.IsNull(result);
         }
 
         [TestMethod]
