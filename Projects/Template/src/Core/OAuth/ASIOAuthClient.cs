@@ -62,6 +62,238 @@ namespace asi.asicentral.oauth
             try
             {
                 ASI.Jade.UserManagement.DataObjects.User jadeuser = JUser.Get(sso);
+                user = MapEntityModelUserToASIUser(jadeuser, user);
+            }
+            catch { }
+            return user;
+        }
+
+        //When ever you call this API, you need to reset the ssoid in the cookie using
+        public static IDictionary<string, string> IsValidUser(string userName, string password)
+        {
+            IDictionary<string, string> tokens = null;
+            var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
+            var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
+            if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
+            {
+                ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
+                try
+                {
+                    tokens = webServerClient.Login(userName, password);
+                }
+                catch { }
+            }
+            return tokens;
+        }
+
+        public static IDictionary<string, string> Login_FetchUserDetails(string userName, string password)
+        {
+            IDictionary<string, string> tokens = null;
+            var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
+            var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
+            if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
+            {
+                ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
+                try
+                {
+                    tokens = webServerClient.Login_FetchUserDetails("", userName, password);
+                }
+                catch { }
+            }
+            return tokens;
+        }
+
+        public static bool IsValidEmail(string email)
+        {
+            bool isValidUser = false;
+            if (!string.IsNullOrEmpty(email))
+            {
+                try
+                {
+                    List<ASI.Jade.UserManagement.DataObjects.User> jadeusers = JUser.Get(0,25,null, null, email, null, null);
+                    if (jadeusers != null && jadeusers.Count > 0 && jadeusers.Where(user => user.Email == email) != null) isValidUser = true;
+                }
+                catch { isValidUser = false; }
+            }
+            return isValidUser;
+        }
+
+        public static asi.asicentral.model.User GetUserByEmail(string email)
+        {
+            model.User user = null;
+            if (!string.IsNullOrEmpty(email))
+            {
+                try
+                {
+                    List<ASI.Jade.UserManagement.DataObjects.User> jadeusers = JUser.Get(0, 25, null, null, email, null, null);
+                    if (jadeusers != null && jadeusers.Count > 0 && jadeusers.Where(usr => usr.Email == email) != null)
+                    {
+                        MapEntityModelUserToASIUser(jadeusers.ElementAt(0), user);
+                        return user;
+                    }
+                }
+                catch { }
+            }
+            return null;
+        }
+
+        public static string CreateUser(asi.asicentral.model.User user)
+        {
+            string userDetails = string.Empty;
+            if (user != null)
+            {
+                try
+                {
+                    ASI.Jade.UserManagement.DataObjects.User jadeUser = new ASI.Jade.UserManagement.DataObjects.User();
+                    userDetails = JUser.Create(jadeUser);
+                }
+                catch {  }
+            }
+            return userDetails;
+        }
+
+        public static bool UpdateUser(string ssoid, asi.asicentral.model.User user)
+        {
+            bool isUserUpdated = false;
+            if (!string.IsNullOrEmpty(ssoid) && user != null)
+            {
+                try
+                {
+                    ASI.Jade.UserManagement.DataObjects.User jadeUser = new ASI.Jade.UserManagement.DataObjects.User();
+                    JUser.Update(ssoid, jadeUser);
+                    isUserUpdated = true;
+                }
+                catch { isUserUpdated = false; }
+            }
+            return isUserUpdated;
+        }
+
+        public static bool ChangePassword(int ssoid, asi.asicentral.model.Security security)
+        {
+            bool isPasswordChanged = false;
+            if (ssoid != 0 && security != null)
+            {
+                try
+                {
+                    ASI.Jade.UserManagement.DataObjects.Security jadeSecurity = new ASI.Jade.UserManagement.DataObjects.Security();
+                    if(MapASISecurityToJadeSecurity(security, jadeSecurity) != null)
+                        isPasswordChanged = JUser.ChangeSecurity(ssoid, jadeSecurity);
+                }
+                catch { isPasswordChanged = false; }
+            }
+            return isPasswordChanged;
+        }
+
+        private static ASI.Jade.UserManagement.DataObjects.User MapASIUserToEntityModelUser(asi.asicentral.model.User user, ASI.Jade.UserManagement.DataObjects.User jadeuser, bool isCreate)
+        {
+            if (user != null)
+            {
+                if (jadeuser == null) jadeuser = new ASI.Jade.UserManagement.DataObjects.User();
+                jadeuser.SSOId = user.SSOId;
+                jadeuser.Email = user.Email;
+                jadeuser.UserName = user.UserName;
+                jadeuser.InternalUserId = user.InternalUserId;
+                jadeuser.IndividualId = user.IndividualId;
+                jadeuser.Password = user.Password;
+                jadeuser.FirstName = user.FirstName;
+                jadeuser.MiddleName = user.MiddleName;
+                jadeuser.LastName = user.LastName;
+                jadeuser.Prefix = user.Prefix;
+                jadeuser.Suffix = user.Suffix;
+                if (isCreate)
+                {
+                    jadeuser.CreateDate = user.CreateDate;
+                    jadeuser.PasswordHint = user.PasswordHint;
+                    jadeuser.PasswordAnswer = user.PasswordAnswer;
+                    jadeuser.PasswordQuestionCode = user.PasswordQuestionCode;
+                    jadeuser.PasswordQuestion = user.PasswordQuestion;
+                }
+
+                jadeuser.UpdateDate = user.UpdateDate;
+                jadeuser.UpdateSource = user.UpdateSource;
+                jadeuser.CompanyId = user.CompanyId;
+                
+                jadeuser.IsTelephoneUpdatesAllowed = user.IsTelephoneUpdatesAllowed;
+                jadeuser.TelephonePassword = user.TelephonePassword;
+                jadeuser.PasswordResetRequired = user.PasswordResetRequired;
+                jadeuser.PasswordResetKey = user.PasswordResetKey;
+                jadeuser.PasswordResetExpireDate = user.PasswordResetExpireDate;
+                jadeuser.TerminatedDate = user.TerminatedDate;
+                jadeuser.IsSalesRep = user.IsSalesRep;
+                jadeuser.IsPVAdmin = user.IsPVAdmin;
+                jadeuser.IsConnectPrimary = user.IsConnectPrimary;
+                jadeuser.StatusCode = user.StatusCode;
+                jadeuser.SignonTypeCode = user.SignonTypeCode;
+                jadeuser.MmsLink = user.MmsLink;
+                jadeuser.AsiNumber = user.AsiNumber;
+                jadeuser.CompanyName = user.CompanyName;
+                jadeuser.MemberStatus_CD = user.MemberStatus_CD;
+                jadeuser.MemberType_CD = user.MemberType_CD;
+                jadeuser.Phone = user.Phone;
+                jadeuser.Cell = user.Cell;
+                jadeuser.Fax = user.Fax;
+            }
+            return jadeuser;
+        }
+
+        private static ASI.EntityModel.Company MapASIUserCompanyToEntityModelCompany(asi.asicentral.model.User user, ASI.EntityModel.Company company, bool isCreate)
+        {
+            if (user != null)
+            {
+                if (company == null) company = new ASI.EntityModel.Company();
+                ASI.EntityModel.Contact contact = null;
+                if (company.Contacts != null && company.Contacts.Count > 0)
+                {
+                    contact = company.Contacts.ElementAt(0);
+                }
+                else
+                {
+                    contact = new ASI.EntityModel.Contact();
+                    company.Contacts.Add(contact);
+                }
+                contact.Title = user.Title;
+                contact.Suffix = user.Suffix;
+
+                ASI.EntityModel.Address address = null;
+                if (company.Contacts.ElementAt(0).Addresses != null &&
+                    company.Contacts.ElementAt(0).Addresses.Count > 0)
+                {
+                    address = company.Contacts.ElementAt(0).Addresses.ElementAt(0);
+                }
+                else
+                {
+                    address = new ASI.EntityModel.Address();
+                    contact.Addresses.Add(address);
+                }
+
+                address.AddressLine1 = user.Street1;
+                address.AddressLine2 = user.Street2;
+                address.State = user.State;
+                address.CountryCode = user.CountryCode;
+                address.County = user.Country;
+                address.ZipCode = user.Zip;
+                address.City = user.City;
+            }
+            return company;
+        }
+
+        private static ASI.Jade.UserManagement.DataObjects.Security MapASISecurityToJadeSecurity(asi.asicentral.model.Security security, ASI.Jade.UserManagement.DataObjects.Security jadeSecurity)
+        {
+            if (security != null)
+            {
+                if (jadeSecurity == null) jadeSecurity = new ASI.Jade.UserManagement.DataObjects.Security();
+                jadeSecurity.Password = security.Password;
+                jadeSecurity.PasswordAnswer = security.Password;
+                jadeSecurity.PasswordHint = security.PasswordHint;
+                jadeSecurity.PasswordQuestion = security.PasswordQuestion;
+            }
+            return jadeSecurity;
+        }
+
+        private static asi.asicentral.model.User MapEntityModelUserToASIUser(ASI.Jade.UserManagement.DataObjects.User jadeuser, asi.asicentral.model.User user)
+        {
+            try
+            {
                 if (jadeuser != null)
                 {
                     user = new model.User();
@@ -133,212 +365,6 @@ namespace asi.asicentral.oauth
             }
             catch { }
             return user;
-        }
-
-        //When ever you call this API, you need to reset the ssoid in the cookie using
-        public static IDictionary<string, string> IsValidUser(string userName, string password)
-        {
-            IDictionary<string, string> tokens = null;
-            var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
-            var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
-            if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
-            {
-                ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
-                try
-                {
-                    tokens = webServerClient.Login(userName, password);
-                }
-                catch { }
-            }
-            return tokens;
-        }
-
-        public static IDictionary<string, string> Login_FetchUserDetails(string userName, string password)
-        {
-            IDictionary<string, string> tokens = null;
-            var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
-            var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
-            if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
-            {
-                ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
-                try
-                {
-                    tokens = webServerClient.Login_FetchUserDetails("", userName, password);
-                }
-                catch { }
-            }
-            return tokens;
-        }
-
-        public static bool IsValidEmail(string email)
-        {
-            bool isValidUser = false;
-            if (!string.IsNullOrEmpty(email))
-            {
-                try
-                {
-                    List<ASI.Jade.UserManagement.DataObjects.User> jadeusers = JUser.Get(0,25,null, null, email, null, null);
-                    if (jadeusers != null && jadeusers.Count > 0 && jadeusers.Where(user => user.Email == email) != null) isValidUser = true;
-                }
-                catch { isValidUser = false; }
-            }
-            return isValidUser;
-        }
-
-        public static string CreateUser(asi.asicentral.model.User user)
-        {
-            string userDetails = string.Empty;
-            if (user != null)
-            {
-                try
-                {
-                    ASI.Jade.UserManagement.DataObjects.User jadeUser = new ASI.Jade.UserManagement.DataObjects.User();
-                    userDetails = JUser.Create(jadeUser);
-                }
-                catch {  }
-            }
-            return userDetails;
-        }
-
-        public static bool UpdateUser(string ssoid, asi.asicentral.model.User user)
-        {
-            bool isUserUpdated = false;
-            if (!string.IsNullOrEmpty(ssoid) && user != null)
-            {
-                try
-                {
-                    ASI.Jade.UserManagement.DataObjects.User jadeUser = new ASI.Jade.UserManagement.DataObjects.User();
-                    JUser.Update(ssoid, jadeUser);
-                    isUserUpdated = true;
-                }
-                catch { isUserUpdated = false; }
-            }
-            return isUserUpdated;
-        }
-
-        public static bool ChangePassword(int ssoid, asi.asicentral.model.Security security)
-        {
-            bool isPasswordChanged = false;
-            if (ssoid != 0 && security != null)
-            {
-                try
-                {
-                    ASI.Jade.UserManagement.DataObjects.Security jadeSecurity = new ASI.Jade.UserManagement.DataObjects.Security();
-                    if(MapASISecurityToJadeSecurity(security, jadeSecurity))
-                        isPasswordChanged = JUser.ChangeSecurity(ssoid, jadeSecurity);
-                }
-                catch { isPasswordChanged = false; }
-            }
-            return isPasswordChanged;
-        }
-
-        private static bool MapASIUserToEntityModelUser(asi.asicentral.model.User user,  ASI.Jade.UserManagement.DataObjects.User jadeuser, bool isCreate)
-        {
-            bool isUserDetailsMapped = false;
-            if (jadeuser != null && user != null)
-            {
-                jadeuser.SSOId = user.SSOId;
-                jadeuser.Email = user.Email;
-                jadeuser.UserName = user.UserName;
-                jadeuser.InternalUserId = user.InternalUserId;
-                jadeuser.IndividualId = user.IndividualId;
-                jadeuser.Password = user.Password;
-                jadeuser.FirstName = user.FirstName;
-                jadeuser.MiddleName = user.MiddleName;
-                jadeuser.LastName = user.LastName;
-                jadeuser.Prefix = user.Prefix;
-                jadeuser.Suffix = user.Suffix;
-                if (isCreate)
-                {
-                    jadeuser.CreateDate = user.CreateDate;
-                    jadeuser.PasswordHint = user.PasswordHint;
-                    jadeuser.PasswordAnswer = user.PasswordAnswer;
-                    jadeuser.PasswordQuestionCode = user.PasswordQuestionCode;
-                    jadeuser.PasswordQuestion = user.PasswordQuestion;
-                }
-
-                jadeuser.UpdateDate = user.UpdateDate;
-                jadeuser.UpdateSource = user.UpdateSource;
-                jadeuser.CompanyId = user.CompanyId;
-                
-                jadeuser.IsTelephoneUpdatesAllowed = user.IsTelephoneUpdatesAllowed;
-                jadeuser.TelephonePassword = user.TelephonePassword;
-                jadeuser.PasswordResetRequired = user.PasswordResetRequired;
-                jadeuser.PasswordResetKey = user.PasswordResetKey;
-                jadeuser.PasswordResetExpireDate = user.PasswordResetExpireDate;
-                jadeuser.TerminatedDate = user.TerminatedDate;
-                jadeuser.IsSalesRep = user.IsSalesRep;
-                jadeuser.IsPVAdmin = user.IsPVAdmin;
-                jadeuser.IsConnectPrimary = user.IsConnectPrimary;
-                jadeuser.StatusCode = user.StatusCode;
-                jadeuser.SignonTypeCode = user.SignonTypeCode;
-                jadeuser.MmsLink = user.MmsLink;
-                jadeuser.AsiNumber = user.AsiNumber;
-                jadeuser.CompanyName = user.CompanyName;
-                jadeuser.MemberStatus_CD = user.MemberStatus_CD;
-                jadeuser.MemberType_CD = user.MemberType_CD;
-                jadeuser.Phone = user.Phone;
-                jadeuser.Cell = user.Cell;
-                jadeuser.Fax = user.Fax;
-                isUserDetailsMapped = true;
-            }
-            return isUserDetailsMapped;
-        }
-
-        private static bool MapASIUserCompanyToEntityModelCompany(asi.asicentral.model.User user, ASI.EntityModel.Company company, bool isCreate)
-        {
-            bool isCompanyDetailsMapped = false;
-            if (company != null && user != null)
-            {
-                ASI.EntityModel.Contact contact = null;
-                if (company.Contacts != null && company.Contacts.Count > 0)
-                {
-                    contact = company.Contacts.ElementAt(0);
-                }
-                else
-                {
-                    contact = new ASI.EntityModel.Contact();
-                    company.Contacts.Add(contact);
-                }
-                contact.Title = user.Title;
-                contact.Suffix = user.Suffix;
-
-                ASI.EntityModel.Address address = null;
-                if (company.Contacts.ElementAt(0).Addresses != null &&
-                    company.Contacts.ElementAt(0).Addresses.Count > 0)
-                {
-                    address = company.Contacts.ElementAt(0).Addresses.ElementAt(0);
-                }
-                else
-                {
-                    address = new ASI.EntityModel.Address();
-                    contact.Addresses.Add(address);
-                }
-
-                address.AddressLine1 = user.Street1;
-                address.AddressLine2 = user.Street2;
-                address.State = user.State;
-                address.CountryCode = user.CountryCode;
-                address.County = user.Country;
-                address.ZipCode = user.Zip;
-                address.City = user.City;
-                isCompanyDetailsMapped = true;
-            }
-            return isCompanyDetailsMapped;
-        }
-
-        private static bool MapASISecurityToJadeSecurity(asi.asicentral.model.Security security, ASI.Jade.UserManagement.DataObjects.Security jadeSecurity)
-        {
-            bool isSecurityDetailsMapped = false;
-            if (security != null && jadeSecurity != null)
-            {
-                jadeSecurity.Password = security.Password;
-                jadeSecurity.PasswordAnswer = security.Password;
-                jadeSecurity.PasswordHint = security.PasswordHint;
-                jadeSecurity.PasswordQuestion = security.PasswordQuestion;
-                isSecurityDetailsMapped = true;
-            }
-            return isSecurityDetailsMapped;
         }
     }
 }
