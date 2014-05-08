@@ -32,13 +32,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ASI.EntityModel, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ASI.EntityModel, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ASI.EntityModel.1.0.2\lib\ASI.EntityModel.dll</HintPath>
+      <HintPath>..\packages\ASI.EntityModel.1.0.3\lib\ASI.EntityModel.dll</HintPath>
     </Reference>
-    <Reference Include="ASI.Jade, Version=1.2.5.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ASI.Jade, Version=1.2.6.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ASI.Jade.1.2.5\lib\ASI.Jade.dll</HintPath>
+      <HintPath>..\packages\ASI.Jade.1.2.6\lib\ASI.Jade.dll</HintPath>
     </Reference>
     <Reference Include="ASI.Sugar">
       <HintPath>..\packages\Sugar.1.3.13\lib\ASI.Sugar.dll</HintPath>
