@@ -48,7 +48,9 @@ namespace asi.asicentral.model
         public string MemberType_CD { get; set; }
 
         public string Phone { get; set; }
+        public string PhoneAreaCode { get; set; }
         public string Cell { get; set; }
+        public string FaxAreaCode { get; set; }
         public string Fax { get; set; }
 
         //Added more for address

@@ -9,8 +9,44 @@ namespace Core.Tests.OAuth
     public class ASIOAuthClientTests
     {
         [TestMethod]
+        public void UserTestScenarios()
+        {
+            asi.asicentral.model.User user = new asi.asicentral.model.User();
+            user.Email = "Test11@abc.com";
+            user.FirstName = "First1";
+            user.LastName = "Last1";
+            //Title
+            user.Title = "TL";
+            //Company
+            user.CompanyName = "MacroSoft";
+            user.CompanyId = 115143;
+            user.UserName = "unique1234";
+            //ASI Number
+            user.StatusCode = StatusCode.ACTV.ToString();;
+            user.AsiNumber = "634567";
+            user.MemberType_CD = "DIST";
+            user.PhoneAreaCode = "315";
+            user.Phone = "5533255";
+            user.FaxAreaCode = "315";
+            user.Fax = "5533255";
+            user.Street1 = "Street1";
+            user.Street1 = "Street2";
+            user.City= "TVM";
+            user.CountryCode = "USA";
+            user.Country = "India";
+            user.State = "NY";
+            user.Zip = "6995581";
+
+            user.Password = "password1";
+            user.PasswordHint = "password1";
+
+            var result = ASIOAuthClient.CreateUser(user);
+        }
+
+        [TestMethod]
         public void IsValidUserByEmail()
         {
+            //bool result = ASIOAuthClient.IsValidEmail("kphani@macrosoftindia.com");
             bool result = ASIOAuthClient.IsValidEmail("kphani@macrosoftindia.com");
             Assert.IsTrue(result);
         }
@@ -18,7 +54,7 @@ namespace Core.Tests.OAuth
         [TestMethod]
         public void IsValidEmail()
         {
-            bool result = ASIOAuthClient.IsValidEmail("kphani1@macrosoftindia.com");
+            bool result = ASIOAuthClient.IsValidEmail("test123@hotmail.com");
             Assert.IsFalse(result);
         }
 
