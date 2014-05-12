@@ -32,9 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ASI.EntityModel, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ASI.EntityModel, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ASI.EntityModel.1.0.3\lib\ASI.EntityModel.dll</HintPath>
+      <HintPath>..\packages\ASI.EntityModel.1.0.4\lib\ASI.EntityModel.dll</HintPath>
     </Reference>
     <Reference Include="ASI.Jade, Version=1.2.6.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -178,7 +178,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
