@@ -5,12 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using System.Configuration;
 using ASI.Jade.Utilities;
 using ASI.Jade.v2;
 using ASI.EntityModel;
+using System.Threading.Tasks;
 
 namespace asi.asicentral.oauth
 {
@@ -21,7 +21,9 @@ namespace asi.asicentral.oauth
 
     public enum UsageCode
     {
-        GNRL
+        GNRL,
+        EBIL,
+        ESHP
     }
     
     public class ASIOAuthClient
@@ -72,14 +74,17 @@ namespace asi.asicentral.oauth
             model.User user = null;
             try
             {
-                ASI.EntityModel.User entityUser = UMS.UserSearch(sso);
+                ASI.EntityModel.User entityUser = Task.Factory.StartNew(() => UMS.UserSearch(sso).Result, TaskCreationOptions.LongRunning).Result;
                 user = MapEntityModelUserToASIUser(entityUser, user);
             }
-            catch (System.Exception Ex) {
+            catch (System.Exception Ex)
+            {
                 string Message = Ex.Message;
             }
             return user;
         }
+
+       
 
         //When ever you call this API, you need to reset the ssoid in the cookie using
         public static IDictionary<string, string> IsValidUser(string userName, string password)
@@ -123,7 +128,9 @@ namespace asi.asicentral.oauth
             {
                 try
                 {
-                    List<ASI.EntityModel.User> entityUsers = UMS.UserSearch(new UMS.UserSearchCriteria { EMail = email });
+                    var result = UMS.UserSearch(new UMS.UserSearchCriteria { EMail = email });
+                    result.Wait();
+                    List<ASI.EntityModel.User> entityUsers = result.Result;
                     if (entityUsers != null 
                         && entityUsers.Count > 0 
                         && entityUsers.Where(usr => usr.Emails != null 
@@ -146,7 +153,7 @@ namespace asi.asicentral.oauth
             {
                 try
                 {
-                    List<ASI.EntityModel.User> entityUser = UMS.UserSearch(new UMS.UserSearchCriteria { EMail = email });
+                    List<ASI.EntityModel.User> entityUser = Task.Factory.StartNew(() => UMS.UserSearch(new UMS.UserSearchCriteria { EMail = email }).Result, TaskCreationOptions.LongRunning).Result;
                     if (entityUser != null && entityUser.Count > 0 && entityUser.Where(usr => usr.Emails != null && usr.Emails.Count > 0
                         && usr.Emails.Where(mail => mail.Address == email).ToList() != null
                         ) != null)
@@ -162,7 +169,7 @@ namespace asi.asicentral.oauth
 
         public static string CreateUser(asi.asicentral.model.User user)
         {
-            string userDetails = string.Empty;
+            string ssoId = string.Empty;
             if (user != null)
             {
                 try
@@ -171,15 +178,12 @@ namespace asi.asicentral.oauth
                     ASI.EntityModel.Company entityCompany = null;
                     entityCompany = MapASIUserCompanyToEntityModelCompany(user, entityCompany, true);
                     entityUser = MapASIUserToEntityModelUser(user, entityUser, true);
-                    var x = UMS.Create(entityUser);
-                    x.Wait();
+                    
+                    ssoId = Task.Factory.StartNew(() => UMS.UserCreate(entityUser).Result, TaskCreationOptions.LongRunning).Result;
                 }
-                catch (System.Exception ex) 
-                { 
-                    string xx = ex.Message; 
-                }
+                catch { }
             }
-            return userDetails;
+            return ssoId;
         }
 
         public static bool UpdateUser(asi.asicentral.model.User user)
@@ -193,8 +197,7 @@ namespace asi.asicentral.oauth
                     ASI.EntityModel.Company entityCompany = null;
                     entityCompany = MapASIUserCompanyToEntityModelCompany(user, entityCompany, false);
                     entityUser = MapASIUserToEntityModelUser(user, entityUser, false);
-                    var x = UMS.Update(entityUser);
-                    x.Wait();
+                    var result = Task.Factory.StartNew(() => UMS.UserUpdate(entityUser).Result, TaskCreationOptions.LongRunning).Result;
                     isUserUpdated = true;
                 }
                 catch { isUserUpdated = false; }
@@ -222,9 +225,9 @@ namespace asi.asicentral.oauth
         {
             if (user != null)
             {
-                if (entityUser == null && user.SSOId != 0) entityUser = UMS.UserSearch(user.SSOId);
+                if (entityUser == null && user.SSOId != 0)  entityUser = UMS.UserSearch(user.SSOId).Result;
                 else entityUser = new ASI.EntityModel.User();
-                
+                            
                 if(!string.IsNullOrEmpty(user.Email))
                 {
                     Email email = null;
@@ -248,12 +251,9 @@ namespace asi.asicentral.oauth
                 entityUser.LastName = user.LastName;
                 entityUser.Prefix = user.Prefix;
                 entityUser.Suffix = user.Suffix;
-                if (isCreate)
-                {
-                    entityUser.Password = user.Password;
-                    entityUser.PasswordHint = user.PasswordHint;
-                }
-                if (user.CompanyId != 0) entityUser.CompanyId = user.CompanyId;
+                entityUser.Password = user.Password;
+                entityUser.PasswordHint = user.PasswordHint;
+                entityUser.CompanyId = user.CompanyId;
 
                 Address address = null;
                 if (entityUser.Addresses == null)
@@ -280,14 +280,14 @@ namespace asi.asicentral.oauth
                 
                 entityUser.StatusCode = user.StatusCode;
                 string memberType = string.Empty;
-                if (entityUser.Type == null)
+                if (entityUser.Types == null)
                 {
-                    entityUser.Type = new List<string>();
-                    entityUser.Type.Add(memberType);
+                    entityUser.Types = new List<string>();
+                    entityUser.Types.Add(memberType);
                 }
                 else
                 {
-                    memberType = entityUser.Type.ElementAt(0);
+                    memberType = entityUser.Types.ElementAt(0);
                 }
                 memberType = user.MemberType_CD;
 
@@ -336,6 +336,7 @@ namespace asi.asicentral.oauth
                 }
                 else
                 {
+                    company.Contacts = new List<Contact>();
                     contact = new ASI.EntityModel.Contact();
                     company.Contacts.Add(contact);
                 }
@@ -349,6 +350,7 @@ namespace asi.asicentral.oauth
                 }
                 else
                 {
+                    company.Addresses = new List<Address>();
                     address = new ASI.EntityModel.Address();
                     company.Addresses.Add(address);
                 }
@@ -397,8 +399,8 @@ namespace asi.asicentral.oauth
                     user.Suffix = entityUser.Suffix;
                     user.CompanyId = entityUser.CompanyId;
                     user.StatusCode = entityUser.StatusCode;
-                    if(entityUser.Type != null && entityUser.Type.Count > 0)
-                        user.MemberType_CD = entityUser.Type.ElementAt(0);
+                    if (entityUser.Types != null && entityUser.Types.Count > 0)
+                        user.MemberType_CD = entityUser.Types.ElementAt(0);
                     if (entityUser.Phones != null && entityUser.Phones.Count > 0)
                     {
                         Phone phone = entityUser.Phones.Where(ph => ph.IsPrimary).SingleOrDefault();
