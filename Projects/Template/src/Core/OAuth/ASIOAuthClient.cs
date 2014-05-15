@@ -456,11 +456,11 @@ namespace asi.asicentral.oauth
                         {
                             user.Street1 = address.AddressLine1;
                             user.Street2 = address.AddressLine2;
-                            user.State = address.State;
-                            user.CountryCode = address.CountryCode;
-                            user.Country = address.County;
-                            user.City = address.City;
-                            user.Zip = address.ZipCode;
+                            user.State = address.State.Trim();
+                            user.CountryCode = address.CountryCode.Trim();
+                            user.Country = address.County.Trim();
+                            user.City = address.City.Trim();
+                            user.Zip = address.ZipCode.Trim();
                         }
                     }
 
