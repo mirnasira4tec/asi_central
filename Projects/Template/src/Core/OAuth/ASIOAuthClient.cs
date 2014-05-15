@@ -183,6 +183,7 @@ namespace asi.asicentral.oauth
                     ASI.EntityModel.User entityUser = null;
                     ASI.EntityModel.Company entityCompany = null;
                     entityCompany = MapASIUserCompanyToEntityModelCompany(user, entityCompany, true);
+                    user.CompanyId = 114945;
                     entityUser = MapASIUserToEntityModelUser(user, entityUser, true);
                     
                     ssoId = Task.Factory.StartNew(() => UMS.UserCreate(entityUser).Result, TaskCreationOptions.LongRunning).Result;
@@ -276,9 +277,9 @@ namespace asi.asicentral.oauth
 
                 if (isCreate)
                 {
-                    entityUser.UserName = user.UserName;
+                    entityUser.UserName = user.Email;
                     entityUser.Password = user.Password;
-                    entityUser.PasswordHint = user.PasswordHint;
+                    entityUser.PasswordHint = user.Password;
                     entityUser.StatusCode = StatusCode.ACTV.ToString();
                 }
                 entityUser.FirstName = user.FirstName;
@@ -343,7 +344,7 @@ namespace asi.asicentral.oauth
                         entityUser.Phones.Add(fax);
                     }
                 }
-                else if(entityUser.Phones.Count > 0)
+                else if (entityUser.Phones != null && entityUser.Phones.Count > 0)
                 {
                     phone = entityUser.Phones.Where(ph => ph.IsPrimary).FirstOrDefault();
                     fax = entityUser.Phones.Where(ph => ph.IsFax).FirstOrDefault();
