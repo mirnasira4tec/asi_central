@@ -25,6 +25,16 @@ namespace asi.asicentral.oauth
         EBIL,
         ESHP
     }
+
+    public enum MemberType
+    {
+        DIST,
+        SPLR,
+        DECR,
+        EDBY,
+        AFFL,
+        UNKN
+    }
     
     public class ASIOAuthClient
     {
@@ -84,8 +94,6 @@ namespace asi.asicentral.oauth
             return user;
         }
 
-       
-
         //When ever you call this API, you need to reset the ssoid in the cookie using
         public static IDictionary<string, string> IsValidUser(string userName, string password)
         {
@@ -128,9 +136,7 @@ namespace asi.asicentral.oauth
             {
                 try
                 {
-                    var result = UMS.UserSearch(new UMS.UserSearchCriteria { EMail = email });
-                    result.Wait();
-                    List<ASI.EntityModel.User> entityUsers = result.Result;
+                    List<ASI.EntityModel.User> entityUsers = Task.Factory.StartNew(() => UMS.UserSearch(new UMS.UserSearchCriteria { EMail = email }).Result, TaskCreationOptions.LongRunning).Result;
                     if (entityUsers != null 
                         && entityUsers.Count > 0 
                         && entityUsers.Where(usr => usr.Emails != null 
@@ -221,11 +227,34 @@ namespace asi.asicentral.oauth
             return isPasswordChanged;
         }
 
+        public static string GetMemberTypeUMSCode(int code)
+        {
+            switch (code)
+            {
+                case 1:
+                case 6:
+                case 16:
+                    return MemberType.DIST.ToString();
+                case 2:
+                case 7:
+                    return MemberType.SPLR.ToString();
+                case 3:
+                case 12:
+                    return MemberType.DECR.ToString();
+                case 9:
+                    return MemberType.EDBY.ToString();
+                case 13:
+                    return MemberType.AFFL.ToString();
+                default:
+                    return MemberType.UNKN.ToString();
+            }
+        }
+
         private static ASI.EntityModel.User MapASIUserToEntityModelUser(asi.asicentral.model.User user, ASI.EntityModel.User entityUser, bool isCreate)
         {
             if (user != null)
             {
-                if (entityUser == null && user.SSOId != 0)  entityUser = UMS.UserSearch(user.SSOId).Result;
+                if (entityUser == null && user.SSOId != 0) entityUser = Task.Factory.StartNew(() => UMS.UserSearch(user.SSOId).Result, TaskCreationOptions.LongRunning).Result;
                 else entityUser = new ASI.EntityModel.User();
                             
                 if(!string.IsNullOrEmpty(user.Email))
@@ -245,14 +274,18 @@ namespace asi.asicentral.oauth
                     email.Address = user.Email;
                 }
 
-                entityUser.UserName = user.UserName;
+                if (isCreate)
+                {
+                    entityUser.UserName = user.UserName;
+                    entityUser.Password = user.Password;
+                    entityUser.PasswordHint = user.PasswordHint;
+                    entityUser.StatusCode = StatusCode.ACTV.ToString();
+                }
                 entityUser.FirstName = user.FirstName;
                 entityUser.MiddleName = user.MiddleName;
                 entityUser.LastName = user.LastName;
                 entityUser.Prefix = user.Prefix;
                 entityUser.Suffix = user.Suffix;
-                entityUser.Password = user.Password;
-                entityUser.PasswordHint = user.PasswordHint;
                 entityUser.CompanyId = user.CompanyId;
 
                 Address address = null;
@@ -278,7 +311,6 @@ namespace asi.asicentral.oauth
                 address.State = user.State;
                 address.ZipCode = user.Zip;
                 
-                entityUser.StatusCode = user.StatusCode;
                 string memberType = string.Empty;
                 if (entityUser.Types == null)
                 {
@@ -424,11 +456,11 @@ namespace asi.asicentral.oauth
                         {
                             user.Street1 = address.AddressLine1;
                             user.Street2 = address.AddressLine2;
-                            user.State = address.State;
-                            user.CountryCode = address.CountryCode;
-                            user.Country = address.County;
-                            user.City = address.City;
-                            user.Zip = address.ZipCode;
+                            user.State = address.State.Trim();
+                            user.CountryCode = address.CountryCode.Trim();
+                            user.Country = address.County.Trim();
+                            user.City = address.City.Trim();
+                            user.Zip = address.ZipCode.Trim();
                         }
                     }
 
