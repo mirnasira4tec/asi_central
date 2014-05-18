@@ -316,13 +316,13 @@ namespace asi.asicentral.oauth
                 if (entityUser.Types == null)
                 {
                     entityUser.Types = new List<string>();
-                    entityUser.Types.Add(memberType);
+                    entityUser.Types.Add(user.MemberType_CD);
                 }
                 else
                 {
                     memberType = entityUser.Types.ElementAt(0);
+                    memberType = user.MemberType_CD;
                 }
-                memberType = user.MemberType_CD;
 
                 Phone phone = null;
                 Phone fax = null;
@@ -373,6 +373,18 @@ namespace asi.asicentral.oauth
                     contact = new ASI.EntityModel.Contact();
                     company.Contacts.Add(contact);
                 }
+
+                if (company.Types != null && company.Types.Count > 0)
+                {
+                    string membertype = company.Types.ElementAt(0);
+                    membertype = user.MemberType_CD;
+                }
+                else
+                {
+                    company.Types = new List<string>();
+                    company.Types.Add(user.MemberType_CD);
+                }
+
                 contact.Title = user.Title;
                 contact.Suffix = user.Suffix;
                 
@@ -479,6 +491,8 @@ namespace asi.asicentral.oauth
                                 user.Title = contact.Title;
                                 user.Suffix = contact.Suffix;
                             }
+                            if (entityCompany.Types != null && entityCompany.Types.Count > 0)
+                                user.MemberType_CD = entityCompany.Types.ElementAt(0);
                         }
                     }
                 }
