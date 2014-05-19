@@ -64,6 +64,35 @@ namespace asi.asicentral.web.Controllers
             }
             return new RedirectResult(string.Format("/Media/List?path={0}", refreshPath));
         }
+        [HttpPost]
+        public virtual ActionResult UploadZip(string uploadPath)
+        {
+            string refreshPath = uploadPath;
+            string msg = string.Empty;
+            uploadPath = ConfigurationManager.AppSettings["MediaPath"] + uploadPath;
+
+            IList<HttpPostedFileBase> files = Request.Files.GetMultiple("files");
+            foreach (HttpPostedFileBase file in files)
+            {
+                if (file.ContentLength > 0)
+                {
+                    var fileName = Path.GetFileName(file.FileName);
+                    if (!System.IO.Directory.Exists(uploadPath))
+                        System.IO.Directory.CreateDirectory(uploadPath);
+
+                    using (ZipFile zip1 = ZipFile.Read(file.InputStream))
+                    {
+                        foreach (ZipEntry e in zip1)
+                        {
+                            e.Extract(uploadPath, ExtractExistingFileAction.OverwriteSilently);
+                        }
+                    }
+
+                }
+            }
+
+            return new RedirectResult(string.Format("/Media/List?path={0}", refreshPath));
+        }
 
         public void Download(string file)
         {
