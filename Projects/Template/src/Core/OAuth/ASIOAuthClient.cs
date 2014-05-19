@@ -332,14 +332,12 @@ namespace asi.asicentral.oauth
                     if (!string.IsNullOrEmpty(user.Phone))
                     {
                         phone = new Phone();
-                        phone.AreaCode = user.PhoneAreaCode;
                         phone.IsPrimary = true;
                         entityUser.Phones.Add(phone);
                     }
                     if (!string.IsNullOrEmpty(user.Fax))
                     {
                         fax = new Phone();
-                        fax.AreaCode = user.FaxAreaCode;
                         fax.IsFax = true;
                         entityUser.Phones.Add(fax);
                     }
@@ -349,8 +347,17 @@ namespace asi.asicentral.oauth
                     phone = entityUser.Phones.Where(ph => ph.IsPrimary).FirstOrDefault();
                     fax = entityUser.Phones.Where(ph => ph.IsFax).FirstOrDefault();
                 }
-                if(phone != null) phone.PhoneNumber = user.Phone;
-                if(fax != null) fax.PhoneNumber = user.Fax;
+                if (phone != null)
+                {
+                    phone.PhoneNumber = user.Phone;
+                    phone.AreaCode = user.PhoneAreaCode;
+
+                }
+                if (fax != null)
+                {
+                    fax.PhoneNumber = user.Fax;
+                    fax.AreaCode = user.FaxAreaCode;
+                }
             }
             return entityUser;
         }
