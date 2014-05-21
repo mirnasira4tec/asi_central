@@ -13,7 +13,7 @@ namespace Core.Tests.OAuth
     [TestClass]
     public class ASIOAuthClientTests
     {
-        [TestMethod]
+        //[TestMethod]
         public void UserTestScenarios()
         {
             asi.asicentral.model.User user = new asi.asicentral.model.User();
