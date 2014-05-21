@@ -416,6 +416,7 @@
         <EntitySet Name="ApplicationTypes" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ApplicationType" />
         <EntitySet Name="ASICusCreditCardProfiles" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASICusCreditCardProfile" />
         <EntitySet Name="ASICustomerCreditCards" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASICustomerCreditCard" />
+        <EntitySet Name="ASICustomerInfos" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASICustomerInfo" />
         <EntitySet Name="ASIGetInvoiceURLInputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASIGetInvoiceURLInput" />
         <EntitySet Name="ASIGetInvoiceURLOutputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASIGetInvoiceURLOutput" />
         <EntitySet Name="ASIOrderLines" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASIOrderLine" />
@@ -2033,6 +2034,25 @@
         <Property Name="UserDefinedDefaultFlag" Type="Edm.Boolean" Nullable="true" />
         <Property Name="UserDefinedOriginalCCReference" Type="Edm.String" Nullable="true" />
       </EntityType>
+      <EntityType Name="ASICustomerInfo">
+        <Key>
+          <PropertyRef Name="MasterCustomerId" />
+          <PropertyRef Name="SubCustomerId" />
+        </Key>
+        <Property Name="MasterCustomerId" Type="Edm.String" Nullable="false" />
+        <Property Name="SubCustomerId" Type="Edm.Int32" Nullable="false" />
+        <Property Name="RecordType" Type="Edm.String" Nullable="true" />
+        <Property Name="FirstName" Type="Edm.String" Nullable="true" />
+        <Property Name="LastName" Type="Edm.String" Nullable="true" />
+        <Property Name="LabelName" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedAsiNumber" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedAsiSource" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedAsiStatus" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedAsiTitle" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMemberStatusString" Type="Edm.String" Nullable="true" />
+        <Property Name="CustomerStatusCodeString" Type="Edm.String" Nullable="true" />
+        <Property Name="CustomerClassCodeString" Type="Edm.String" Nullable="true" />
+      </EntityType>
       <EntityType Name="ASIGetInvoiceURLInput">
         <Key>
           <PropertyRef Name="InternalKey" />
@@ -3283,6 +3303,7 @@
         <Property Name="InternalKey" Type="Edm.String" Nullable="false" />
         <Property Name="NavigationKey" Type="Edm.String" Nullable="true" />
         <Property Name="Success" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="CreditCardProfileId" Type="Edm.String" Nullable="true" />
         <NavigationProperty Name="AddCustomerCreditCardVI" Relationship="Personify.DataServices.EF.Model.ASI.DataModel.CustomerCreditCardOutputAddCustomerCreditCardVIToValidationIssue" FromRole="CustomerCreditCardOutput" ToRole="ValidationIssue" />
       </EntityType>
       <EntityType Name="CustomerInfo">
