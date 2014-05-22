@@ -62,5 +62,10 @@ namespace asi.asicentral.model
         public string CountryCode { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
+
+        //Tokens
+        public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
+
     }
 }
