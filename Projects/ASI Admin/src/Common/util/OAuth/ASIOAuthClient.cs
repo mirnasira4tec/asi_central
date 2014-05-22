@@ -35,6 +35,13 @@ namespace asi.asicentral.oauth
         AFFL,
         UNKN
     }
+
+    public enum ApplicationCodes
+    {
+        ASIC, //For ASI Central
+        EMES, //For Email-express
+        WESP //For ESP Web
+    }
     
     public class ASIOAuthClient
     {
@@ -94,6 +101,26 @@ namespace asi.asicentral.oauth
             return user;
         }
 
+        public static IDictionary<string, string> RefreshToken(string refreshToken)
+        {
+            IDictionary<string, string> tokens = null;
+            if (!string.IsNullOrEmpty(refreshToken))
+            {
+                var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
+                var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
+                if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
+                {
+                    ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
+                    try
+                    {
+                        tokens = webServerClient.RefreshToken(refreshToken);
+                    }
+                    catch { }
+                }
+            }
+            return tokens;
+        }
+
         //When ever you call this API, you need to reset the ssoid in the cookie using
         public static IDictionary<string, string> IsValidUser(string userName, string password)
         {
@@ -122,7 +149,26 @@ namespace asi.asicentral.oauth
                 ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
                 try
                 {
-                    tokens = webServerClient.Login_FetchUserDetails("", userName, password);
+                    tokens = webServerClient.Login(userName, password);
+                    if (tokens != null && tokens.Count > 0)
+                    {
+                        string accessToken = string.Empty;
+                        string refreshToken = string.Empty;
+                        if (tokens.ContainsKey("AuthToken")) accessToken = tokens["AuthToken"];
+                        if (tokens.ContainsKey("RefreshToken")) refreshToken = tokens["RefreshToken"];
+                        tokens = null;
+                        if (!string.IsNullOrEmpty(accessToken))
+                        {
+                            tokens = null;
+                            tokens = webServerClient.GetUserDetails(accessToken);
+                            if (tokens != null && tokens.Count > 0)
+                            {
+                                tokens.Add("AuthToken", accessToken);
+                                tokens.Add("RefreshToken", refreshToken);
+                            }
+
+                        }
+                    }
                 }
                 catch { }
             }

@@ -78,6 +78,13 @@ namespace Core.Tests.OAuth
         }
 
         [TestMethod]
+        public void VerifyUser()
+        {
+            IDictionary<string, string> result = ASIOAuthClient.IsValidUser("125724pk", "password1");
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
         public void GetUserByToken()
         {
             asi.asicentral.model.User result = ASIOAuthClient.GetUser("endfOr-JCWaCHazhs25cMHS1N4ddMqjV7jqjgMi62_m4ifiU19TLfnOOUfzOXIvQUli25TFs3xAF8AVXp6sxSTikZaM1");
