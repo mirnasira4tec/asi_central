@@ -223,7 +223,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supplier Specials – The All Products Package.
+        ///   Looks up a localized string similar to &lt;b&gt;Supplier Specials – &quot;The All Products Package&quot;&lt;/b&gt;&lt;br/&gt;This broad-range package provides you with a custom email with a general message or offer to be sent out to any distributor who clicks on any of your products in ESP within ONE HOUR of the search..
         /// </summary>
         public static string AllProducts {
             get {
@@ -1798,7 +1798,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email Express Basic.
+        ///   Looks up a localized string similar to EmailExpress Basic.
         /// </summary>
         public static string EmailExpress_Regular {
             get {
@@ -4003,6 +4003,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The value should be numeric.
+        /// </summary>
+        public static string Sends_Val {
+            get {
+                return ResourceManager.GetString("Sends_Val", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sequence.
         /// </summary>
         public static string Sequence {
@@ -5020,7 +5029,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supplier Specials – The Target Ten Products Package.
+        ///   Looks up a localized string similar to &lt;b&gt; Supplier Specials – &quot;The Target Ten Products Package&quot;&lt;/b&gt;&lt;br/&gt;Choose ten specific product categories to track and we will create ten different product-specific email messages – free of charge. Distributors clicking on one of your products in your chosen categories will receive a product-specific email within ONE HOUR of the search..
         /// </summary>
         public static string UptoTen {
             get {
