@@ -250,7 +250,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supported file formats (zip).
+        ///   Looks up a localized string similar to Supported file formats(zip).
         /// </summary>
         public static string FileFormat_4 {
             get {

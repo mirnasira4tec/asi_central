@@ -301,6 +301,6 @@
     <value>Your ESP Rankings</value>
   </data>
   <data name="FileFormat_4" xml:space="preserve">
-    <value>Supported file formats (zip)</value>
+    <value>Supported file formats(zip)</value>
   </data>
 </root>

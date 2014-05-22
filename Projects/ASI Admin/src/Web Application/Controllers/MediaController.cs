@@ -65,7 +65,6 @@ namespace asi.asicentral.web.Controllers
             }
             return new RedirectResult(string.Format("/Media/List?path={0}", refreshPath));
         }
-
         [HttpPost]
         public virtual ActionResult UploadZip(string uploadPath)
         {
@@ -92,7 +91,7 @@ namespace asi.asicentral.web.Controllers
 
                 }
             }
-           
+
             return new RedirectResult(string.Format("/Media/List?path={0}", refreshPath));
         }
 
