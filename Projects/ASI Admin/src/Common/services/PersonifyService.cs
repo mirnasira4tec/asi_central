@@ -22,7 +22,7 @@ namespace asi.asicentral.services
 	        this.storeService = storeService;
         }
 
-        public void PlaceOrder(StoreOrder order)
+        public virtual void PlaceOrder(StoreOrder order)
         {
 	        IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
 			if (order == null || order.Company == null || countryCodes == null)
@@ -61,12 +61,12 @@ namespace asi.asicentral.services
 		    return lineItems;
 	    }
 
-        public SaveCustomerOutput AddCompanyByNameAndMemberTypeId(string companyName, int memberTypeId)
+        public virtual SaveCustomerOutput AddCompanyByNameAndMemberTypeId(string companyName, int memberTypeId)
         {
             return PersonifyClient.AddCompanyByNameAndMemberTypeId(companyName, memberTypeId);
         }
 
-        public CustomerInfo GetCompanyInfoByAsiNumber(string asiNumber)
+        public virtual CustomerInfo GetCompanyInfoByAsiNumber(string asiNumber)
         {
             return PersonifyClient.GetCompanyInfoByAsiNumber(asiNumber);
         }
