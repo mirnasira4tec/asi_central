@@ -13,6 +13,8 @@ namespace asi.asicentral.services
         //Definition is on code so it can be static
         private IContainer _container;
         private IDictionary<string, IUnitOfWork> _repositories = new Dictionary<string, IUnitOfWork>();
+		protected static IList<string> objectsToCache = new List<string>();
+		private static IDictionary<string, Object> cache = new Dictionary<string, object>();
 
         /// <summary>
         /// Default Constructor
@@ -48,9 +50,29 @@ namespace asi.asicentral.services
 
         public virtual IQueryable<T> GetAll<T>(bool readOnly = false) where T : class
         {
-            IRepository<T> repository = GetRepository<T>();
-            IQueryable<T> query = repository.GetAll(readOnly);
-            return query;
+	        IQueryable<T> query = null;
+	        if (readOnly && objectsToCache.Contains(typeof (T).FullName))
+	        {
+		        //use cache
+		        if (cache.ContainsKey(typeof (T).FullName))
+		        {
+			        var cachedlList = cache[typeof (T).FullName] as IList<T>;
+			        if (cachedlList != null) query = cachedlList.AsQueryable();
+		        }
+		        if (query == null)
+		        {
+					//value not in cache, retrieve and add
+			        var list = GetRepository<T>().GetAll(true).ToList();
+			        cache[typeof (T).FullName] = list;
+			        query = list.AsQueryable();
+		        }
+	        }
+	        else
+	        {
+		        IRepository<T> repository = GetRepository<T>();
+		        query = repository.GetAll(readOnly);
+	        }
+	        return query;
         }
 
         public virtual IQueryable<T> GetAll<T>(string include, bool readOnly = false) where T : class
