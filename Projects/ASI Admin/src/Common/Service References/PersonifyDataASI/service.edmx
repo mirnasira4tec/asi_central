@@ -415,6 +415,7 @@
         <EntitySet Name="ApplicationSubcodes" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ApplicationSubcode" />
         <EntitySet Name="ApplicationTypes" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ApplicationType" />
         <EntitySet Name="ASICusCreditCardProfiles" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASICusCreditCardProfile" />
+        <EntitySet Name="ASICustomers" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASICustomer" />
         <EntitySet Name="ASICustomerCreditCards" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASICustomerCreditCard" />
         <EntitySet Name="ASICustomerInfos" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASICustomerInfo" />
         <EntitySet Name="ASIGetInvoiceURLInputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASIGetInvoiceURLInput" />
@@ -2003,6 +2004,57 @@
         <Property Name="ProfileReference" Type="Edm.String" Nullable="true" />
         <Property Name="ProfileReferenceType" Type="Edm.String" Nullable="true" />
         <Property Name="SubCustomerId" Type="Edm.Int32" Nullable="true" />
+      </EntityType>
+      <EntityType Name="ASICustomer">
+        <Key>
+          <PropertyRef Name="MasterCustomerId" />
+          <PropertyRef Name="SubCustomerId" />
+        </Key>
+        <Property Name="EntityGUID" Type="Edm.String" Nullable="true" />
+        <Property Name="MasterCustomerId" Type="Edm.String" Nullable="false" />
+        <Property Name="SubCustomerId" Type="Edm.Int32" Nullable="false" />
+        <Property Name="AddedBy" Type="Edm.String" Nullable="true" />
+        <Property Name="ChangedBy" Type="Edm.String" Nullable="true" />
+        <Property Name="FirstName" Type="Edm.String" Nullable="true" />
+        <Property Name="LastName" Type="Edm.String" Nullable="true" />
+        <Property Name="LabelName" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedAccountno" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedAsiSource" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedAsiStatus" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedAsiTitle" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedBankReference" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedBankrupt" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedBriefingsNumber" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedCommunicationrating" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedCompanySalesAmount" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedControlname" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedCustomerAccountCode" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedCustomerNumber" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedDatasource" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedDateAppsReceived" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedDivision" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedEndusersales" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedEntryDate" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedExclusiveLines" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedExtrachargeforrush" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedFacilitiesinformation" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedFamilyOwnedBusinessString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedFullTimeContractors" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedFullTimeSalesReps" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedGeography" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedHomeBasedString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedHpSalesRep" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedHpSalesRepCat" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedHpSalesRepInt" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedImprintingandpersonalization" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedImprintingrating" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedIndependantdistribReferences" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedInfolineProblemFlag" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedIsoCertifiedString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedListReason" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMemberStatusString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMinorityOwnedString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMinorityownershipinformation" Type="Edm.String" Nullable="true" />
       </EntityType>
       <EntityType Name="ASICustomerCreditCard">
         <Key>
