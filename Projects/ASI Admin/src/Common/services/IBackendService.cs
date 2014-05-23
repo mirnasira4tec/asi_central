@@ -7,9 +7,9 @@ using System.Collections.Generic;
 
 namespace asi.asicentral.services
 {
-    interface IBackendService
+    public interface IBackendService
     {
-        bool PlaceOrder(StoreOrder storeOrder, IList<LookSendMyAdCountryCode> countryCodes);
+        void PlaceOrder(StoreOrder storeOrder);
 
         SaveCustomerOutput AddCompanyByNameAndMemberTypeId(string companyName, int memberTypeId);
 
