@@ -76,6 +76,18 @@ namespace asi.asicentral.services.PersonifyProxy
             return resp;
         }
 
+        public static bool ComparePriceFromStoreAndPersonify(StoreOrder storeOrder, string masterCustomerId)
+        {
+            IList<WebOrderBalanceView> oOrdBalInfo = SvcClient.Ctxt.WebOrderBalanceViews
+                .Where(o => o.OrderNumber == masterCustomerId).ToList();
+            decimal personifyTotal = 0;
+            if (oOrdBalInfo.Count > 0)
+            {
+                personifyTotal = oOrdBalInfo.Sum(o => Convert.ToDecimal(o.ActualBalanceAmount));
+            }
+            return personifyTotal == storeOrder.Total;
+        }
+
         public static IEnumerable<AddressInfo> GetBillingAndShippingAddresses(StoreOrder storeOrder)
         {
             StoreCompany storeCompany = storeOrder.Company;
