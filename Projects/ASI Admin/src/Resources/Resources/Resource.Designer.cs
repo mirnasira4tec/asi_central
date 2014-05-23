@@ -1825,7 +1825,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to $50 surcharge for Tuesday and Wednesday sends.
+        ///   Looks up a localized string similar to There will be a $50 surcharge for Tuesday and Wednesday sends.
         /// </summary>
         public static string EmailExpress_Surcharge {
             get {
