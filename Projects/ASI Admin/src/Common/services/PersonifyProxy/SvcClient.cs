@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.Services.Client;
+//using PersonifySvcRef;
 using System.Net;
 using System.IO;
+//using Microsoft.Http;
+using Personify.DataServices.Serialization;
 using System.Xml.Linq;
 using asi.asicentral.PersonifyDataASI;
-using Personify.DataServices.Serialization;
 
-namespace asi.asicentral.services.PersonifyProxy
+namespace PersonifySvcClient
 {
     public class SvcClient
     {
@@ -20,6 +22,7 @@ namespace asi.asicentral.services.PersonifyProxy
         static string SourceFormatValue = System.Configuration.ConfigurationManager.AppSettings["CommunicationFormat"];
 
         static Uri svcUri = new Uri(sUri);
+        //const string SessionCookie = "ASP.NET_SessionId=PersonifySessionReuse; path=/; HttpOnly";
 
         #region Helpers
 
@@ -72,7 +75,7 @@ namespace asi.asicentral.services.PersonifyProxy
 
                     return (SourceFormatEnum)Enum.Parse(typeof(SourceFormatEnum), SourceFormatValue, true);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return SourceFormatEnum.XML;
                 }
@@ -89,6 +92,8 @@ namespace asi.asicentral.services.PersonifyProxy
                     return "application/xml;charset=utf-8";
             }
         }
+
+
 
         public static ReturnType Post<ReturnType>(string SvcOperName, object o)
         {
@@ -113,8 +118,10 @@ namespace asi.asicentral.services.PersonifyProxy
             }
 
             req.Method = "POST";
+            //req.ContentType = "application/x-www-form-urlencoded";
             req.ContentType = ContentType;
             req.Timeout = 1000 * 60 * 15; // 15 minutes
+            //WriteReqToTrace(svcOperName, o, null, true);
 
             byte[] arr = o.ToSerializedByteArrayUTF8();
             req.ContentLength = arr.Length;
@@ -146,6 +153,8 @@ namespace asi.asicentral.services.PersonifyProxy
             return oEntity;
         }
 
+
+
         private static string GetResponseString(HttpWebResponse response)
         {
             string objText = string.Empty;
@@ -155,6 +164,7 @@ namespace asi.asicentral.services.PersonifyProxy
             }
             return objText;
         }
+
 
         public static ReturnType Create<ReturnType>()
         {
@@ -169,8 +179,11 @@ namespace asi.asicentral.services.PersonifyProxy
 
             req.Credentials = cache;
             req.Method = "GET";
+            //req.ContentType = "application/x-www-form-urlencoded";
             req.ContentType = ContentType;
             req.Timeout = 1000 * 60 * 15; // 15 minutes
+
+            //req.Headers.Add("Cookie", SessionCookie);
 
             try
             {
@@ -198,6 +211,7 @@ namespace asi.asicentral.services.PersonifyProxy
 
             req.Credentials = cache;
             req.Method = "POST";
+            //req.ContentType = "application/x-www-form-urlencoded";
             req.ContentType = ContentType;
             req.Timeout = 1000 * 60 * 15; // 15 minutes
 
@@ -238,8 +252,10 @@ namespace asi.asicentral.services.PersonifyProxy
 
             req.Credentials = cache;
             req.Method = "POST";
+            //req.ContentType = "application/x-www-form-urlencoded";
             req.ContentType = ContentType;
             req.Timeout = 1000 * 60 * 15; // 15 minutes
+            //req.Headers.Add("Cookie", SessionCookie);
 
             byte[] arr = entityToDelete.ToSerializedByteArrayUTF8(SourceFormatting);
             req.ContentLength = arr.Length;
@@ -284,6 +300,8 @@ namespace asi.asicentral.services.PersonifyProxy
             {
                 throw DataServiceExceptionUtil.ParseException(wex);
             }
+
+
         }
 
         #endregion

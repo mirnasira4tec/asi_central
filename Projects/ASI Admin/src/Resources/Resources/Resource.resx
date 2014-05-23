@@ -897,11 +897,8 @@
   <data name="InvalidCreditCard" xml:space="preserve">
     <value>The Credit Card information is invalid</value>
   </data>
-  <data name="InvalidEmailOrPasswordMessage" xml:space="preserve">
-    <value>Invalid Email Or Password, please try again.</value>
-  </data>
-  <data name="InvalidPasswordMessage" xml:space="preserve">
-    <value>Invalid Password, please try again.</value>
+  <data name="InvalidOrUnauthorizedUserMessage" xml:space="preserve">
+    <value>Invalid or un-authorized user, please try again.</value>
   </data>
   <data name="IPAddress" xml:space="preserve">
     <value>IP Address</value>
@@ -1808,6 +1805,9 @@
   </data>
   <data name="EmailExpress_Quantity" xml:space="preserve">
     <value>Sends</value>
+  </data>
+  <data name="FieldLengthASI" xml:space="preserve">
+    <value>This is not a valid [Member] ASI #</value>
   </data>
   <data name="EmailExpress_Surcharge" xml:space="preserve">
     <value>There will be a $50 surcharge for Tuesday and Wednesday sends</value>

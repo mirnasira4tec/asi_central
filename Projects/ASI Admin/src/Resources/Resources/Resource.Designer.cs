@@ -2149,6 +2149,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This is not a valid [Member] ASI #.
+        /// </summary>
+        public static string FieldLengthASI {
+            get {
+                return ResourceManager.GetString("FieldLengthASI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only numbers will be accepted..
         /// </summary>
         public static string FieldNumber {
@@ -2437,20 +2446,11 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid Email Or Password, please try again..
+        ///   Looks up a localized string similar to Invalid or un-authorized user, please try again..
         /// </summary>
-        public static string InvalidEmailOrPasswordMessage {
+        public static string InvalidOrUnauthorizedUserMessage {
             get {
-                return ResourceManager.GetString("InvalidEmailOrPasswordMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid Password, please try again..
-        /// </summary>
-        public static string InvalidPasswordMessage {
-            get {
-                return ResourceManager.GetString("InvalidPasswordMessage", resourceCulture);
+                return ResourceManager.GetString("InvalidOrUnauthorizedUserMessage", resourceCulture);
             }
         }
         
