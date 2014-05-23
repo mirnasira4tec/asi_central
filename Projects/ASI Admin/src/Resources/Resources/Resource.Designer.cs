@@ -1753,7 +1753,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please select one of the Email Express Option to proceed.
+        ///   Looks up a localized string similar to Please select an EmailExpress product to proceed.
         /// </summary>
         public static string EmailExpress_Error_ItemType {
             get {
@@ -1825,7 +1825,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to $50 surcharge for Tuesday and Wednesday sends.
+        ///   Looks up a localized string similar to There will be a $50 surcharge for Tuesday and Wednesday sends.
         /// </summary>
         public static string EmailExpress_Surcharge {
             get {
