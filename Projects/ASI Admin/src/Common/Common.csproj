@@ -157,6 +157,7 @@
       <Private>True</Private>
       <HintPath>..\packages\System.Spatial.5.0.0\lib\net40\System.Spatial.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
@@ -404,6 +405,7 @@
     <Compile Include="services\ROIService.cs" />
     <Compile Include="services\StoreService.cs" />
     <Compile Include="util\OAuth\ASIOAuthClient.cs" />
+    <Compile Include="util\OAuth\CookiesHelper.cs" />
     <Compile Include="util\store\asismartsales\ASISmartSalesHelper.cs" />
     <Compile Include="util\store\catalogs\CatalogsHelper.cs" />
     <Compile Include="util\store\companystore\CompanyStoreHelper.cs" />
