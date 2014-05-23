@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace asi.asicentral.util.store
 {
-    public class Helper
+    public static class Helper
     {
         public static IList<SelectListItem> GetTitles()
         {
