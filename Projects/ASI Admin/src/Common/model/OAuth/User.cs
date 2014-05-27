@@ -30,7 +30,7 @@ namespace asi.asicentral.model
         public string PasswordQuestion { get; set; }
         public int IsTelephoneUpdatesAllowed { get; set; }
         public string TelephonePassword { get; set; }
-        public int PasswordResetRequired { get; set; }
+        public bool PasswordResetRequired { get; set; }
         public string PasswordResetKey { get; set; }
         public Nullable<System.DateTime> PasswordResetExpireDate { get; set; }
         public Nullable<System.DateTime> TerminatedDate { get; set; }
@@ -46,6 +46,7 @@ namespace asi.asicentral.model
         public string CompanyName { get; set; }
         public string MemberStatus_CD { get; set; }
         public string MemberType_CD { get; set; }
+        public int MemberTypeId { get; set; }
 
         public string Phone { get; set; }
         public string PhoneAreaCode { get; set; }
