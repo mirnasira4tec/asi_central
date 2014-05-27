@@ -16,6 +16,11 @@ namespace asi.asicentral.services
 	    private readonly IStoreService storeService;
         private bool disposed = false;
 
+        public PersonifyService()
+        {
+            log = LogService.GetLog(this.GetType());
+        }
+
         public PersonifyService(IStoreService storeService)
         {
             log = LogService.GetLog(this.GetType());
