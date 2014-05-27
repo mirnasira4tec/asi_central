@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using asi.asicentral.model;
 using asi.asicentral.PersonifyDataASI;
 using System.Diagnostics;
+using ASI.EntityModel;
+using DotLiquid.Tags;
 using PersonifySvcClient;
 using asi.asicentral.interfaces;
 
@@ -179,7 +181,33 @@ namespace asi.asicentral.services.PersonifyProxy
 			}
 			if (companyInfo != null)
 			{
-				//@todo need to reconcile the addresses
+                List<AddressInfo> addressInfos = SvcClient.Ctxt.AddressInfos.Where(
+                                        a => a.MasterCustomerId == companyInfo.MasterCustomerId).ToList();
+			    IList<StoreCompanyAddress> addresses =
+                    storeCompany.Addresses.Where(a => addressInfos.All(a2 => a2.Address1 != a.Address.Street1
+                                                                             && a2.PostalCode != a.Address.Zip)).ToList();
+                if (addresses.Count > 0)
+                {
+                    StoreCompanyAddress billTo = addresses.FirstOrDefault(a => a.IsBilling);
+                    if (billTo != null)
+                    {
+                        var countryCode = countryCodes.Alpha3Code(billTo.Address.Country);
+                        AddCompanyAddress(billTo, companyInfo, storeCompany.Name, countryCode);
+                    }
+                    StoreCompanyAddress shipTo = addresses.FirstOrDefault(a => a.IsShipping);
+                    if (shipTo != null)
+                    {
+                        var countryCode = countryCodes.Alpha3Code(shipTo.Address.Country);
+                        AddCompanyAddress(shipTo, companyInfo, storeCompany.Name, countryCode);
+                    }
+                    StoreCompanyAddress companyAddress = addresses.FirstOrDefault(a => !a.IsShipping && !a.IsBilling);
+                    if (companyAddress != null)
+                    {
+                        var countryCode = countryCodes.Alpha3Code(companyAddress.Address.Country);
+                        AddCompanyAddress(companyAddress, companyInfo, storeCompany.Name, countryCode);
+                    }
+                }
+			    //@todo need to reconcile the addresses
 			}
 			else {
 				//company not already there, create a new one
@@ -210,6 +238,38 @@ namespace asi.asicentral.services.PersonifyProxy
 			}
 			return companyInfo;
 		}
+
+        private static SaveAddressOutput AddCompanyAddress(StoreCompanyAddress address, CustomerInfo companyInfo, string companyName, string countryCode)
+        {
+            SaveAddressOutput result = null;
+	        AddressInfo primaryAddress = companyInfo.Addresses.FirstOrDefault(a => a.PrioritySeq == 0);
+	        if (primaryAddress != null)
+	        {
+	            var newCustomerAddress = new SaveAddressInput()
+	            {
+                    OwnerAddressId = Convert.ToInt32(primaryAddress.CustomerAddressId),
+                    MasterCustomerId = primaryAddress.MasterCustomerId,
+                    SubCustomerId = primaryAddress.SubCustomerId,
+                    AddressTypeCode = COMMUNICATION_LOCATION_CODE_CORPORATE,
+                    Address1 = address.Address.Street1,
+                    Address2 = address.Address.Street2,
+                    City = address.Address.City,
+                    State = address.Address.State,
+                    PostalCode = address.Address.Zip,
+                    CountryCode = countryCode,
+                    BillToFlag = address.IsBilling,
+                    ShipToFlag = address.IsShipping,
+                    DirectoryFlag = true,
+                    CompanyName = companyName,
+                    WebMobileDirectory = false,
+                    CreateNewAddressIfOrdersExist = true,
+                    OverrideAddressValidation = true,
+                    AddedOrModifiedBy = ADDED_OR_MODIFIED_BY
+	            };
+	            result = PersonifySvcClient.SvcClient.Post<SaveAddressOutput>("CreateOrUpdateAddress", newCustomerAddress);
+	        }
+	        return result;
+	    }
 
 		public static SaveCustomerOutput AddCompanyByNameAndMemberTypeId(string companyName, int memberTypeId)
 		{
