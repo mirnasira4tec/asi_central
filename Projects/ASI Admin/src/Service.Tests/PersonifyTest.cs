@@ -15,7 +15,7 @@ namespace asi.asicentral.Tests
 	public class PersonifyTest
 	{
 		[TestMethod]
-		public void PlaceOrderTest()
+		public void PlaceOrderNewCompanyTest()
 		{
 			using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
 			{
@@ -23,6 +23,19 @@ namespace asi.asicentral.Tests
 				IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
 				var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
 				StoreOrder order = CreateOrder("", supplierSpecials);
+				personify.PlaceOrder(order);
+			}
+		}
+
+		[TestMethod]
+		public void PlaceOrderExistingCompanyTest()
+		{
+			using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
+			{
+				IBackendService personify = new PersonifyService(storeService);
+				IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
+				var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
+				StoreOrder order = CreateOrder("33020", supplierSpecials);
 				personify.PlaceOrder(order);
 			}
 		}

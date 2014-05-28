@@ -31,14 +31,14 @@ namespace asi.asicentral.oauth
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public static void SetCookieValue(HttpRequestBase request, HttpResponseBase response, string key, string value, bool addCookie = false, string domain = null, bool persist = true)
+        public static void SetCookieValue(HttpRequestBase request, HttpResponseBase response, string key, string value, bool addCookie = false, string domain = null, bool persist = true, int year = 1)
         {
             HttpCookie cookie = request.Cookies.Get(key);
             if (cookie != null)
             {
                 if (!string.IsNullOrEmpty(domain)) cookie.Domain = domain;
                 cookie.Value = value;
-                if (persist) cookie.Expires = DateTime.Now.AddYears(1);
+                if (persist) cookie.Expires = DateTime.Now.AddYears(year);
                 response.Cookies.Set(cookie);
             }
             else if (addCookie)
@@ -46,7 +46,7 @@ namespace asi.asicentral.oauth
                 cookie = !string.IsNullOrEmpty(domain)
                     ? new HttpCookie(key, value) { Domain = domain }
                     : new HttpCookie(key, value);
-                if (persist) cookie.Expires = DateTime.Now.AddYears(1);
+                if (persist) cookie.Expires = DateTime.Now.AddYears(year);
                 response.Cookies.Add(cookie);
             }
         }
