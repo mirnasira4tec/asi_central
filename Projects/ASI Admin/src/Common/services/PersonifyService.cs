@@ -34,8 +34,9 @@ namespace asi.asicentral.services
 				throw new System.ArgumentException("You must pass a valid order and the country codes");
             try
             {
-				//@todo probably need to get reference for addresses so they can be assigned to order
-		        var companyInfo = PersonifyClient.AddCompanyInfo(order, countryCodes);
+				//@todo probably need to get reference for addresses so they cna be assigned to order
+                IDictionary<AddressType, long> addressesAdded = null;
+                var companyInfo = PersonifyClient.AddCompanyInfo(order, countryCodes, out addressesAdded);
 				PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo);
 	            var lineItems = GetPersonifyLineInputs(order);
                 var orderOutput = PersonifyClient.CreateOrder(order, companyInfo, lineItems);
