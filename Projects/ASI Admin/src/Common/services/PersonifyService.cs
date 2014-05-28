@@ -34,12 +34,11 @@ namespace asi.asicentral.services
 				throw new System.ArgumentException("You must pass a valid order and the country codes");
             try
             {
-				//@todo probably need to get reference for addresses so they cna be assigned to order
-                IDictionary<AddressType, long> addressesAdded = null;
-                var companyInfo = PersonifyClient.AddCompanyInfo(order, countryCodes, out addressesAdded);
+                var companyInfo = PersonifyClient.AddCompanyInfo(order, countryCodes);
+	            IDictionary<AddressType, long>  addresses = PersonifyClient.AddCompanyAddresses(order.Company, companyInfo, countryCodes);
 				PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo);
-	            var lineItems = GetPersonifyLineInputs(order);
-                var orderOutput = PersonifyClient.CreateOrder(order, companyInfo, lineItems);
+	            var lineItems = GetPersonifyLineInputs(order, addresses[AddressType.Shipping]);
+                var orderOutput = PersonifyClient.CreateOrder(order, companyInfo, addresses[AddressType.Billing], addresses[AddressType.Shipping], lineItems);
 	            order.ExternalReference = orderOutput.OrderNumber;
             }
             catch (Exception ex)
@@ -49,7 +48,7 @@ namespace asi.asicentral.services
             }
         }
 
-	    private IList<CreateOrderLineInput> GetPersonifyLineInputs(StoreOrder order)
+	    private IList<CreateOrderLineInput> GetPersonifyLineInputs(StoreOrder order, long shipAddressId)
 	    {
 		    var lineItems = new List<CreateOrderLineInput>();
 		    foreach (var orderDetail in order.OrderDetails)
@@ -61,6 +60,7 @@ namespace asi.asicentral.services
 					Quantity = Convert.ToInt16(orderDetail.Quantity),
 					RateCode = "1 Time Ad",
 					RateStructure = "Member",
+					ShipAddressID = Convert.ToInt32(shipAddressId),
 			    };
 				lineItems.Add(lineItem);
 		    }

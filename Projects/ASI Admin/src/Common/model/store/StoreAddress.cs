@@ -66,7 +66,17 @@ namespace asi.asicentral.model.store
             bool equals = false;
 
             StoreAddress address = obj as StoreAddress;
-            if (address != null) equals = address.Id == Id;
+	        if (address != null)
+	        {
+		        if (Id != 0 || address.Id != 0)
+		        {
+			        equals = address.Id == Id;
+		        }
+		        else
+		        {
+			        equals = ToString().Equals(address.ToString());
+		        }
+	        }
             return equals;
         }
 

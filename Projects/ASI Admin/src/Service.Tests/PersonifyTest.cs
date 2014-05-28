@@ -51,7 +51,6 @@ namespace asi.asicentral.Tests
 			using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
 			{
 				IBackendService personify = new PersonifyService(storeService);
-				IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
 				var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
 				StoreOrder order = CreateOrder("", supplierSpecials);
 				personify.PlaceOrder(order);
@@ -64,7 +63,6 @@ namespace asi.asicentral.Tests
 			using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
 			{
 				IBackendService personify = new PersonifyService(storeService);
-				storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
 				var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
 				StoreOrder order = CreateOrder("33020", supplierSpecials);
 				personify.PlaceOrder(order);
@@ -92,8 +90,8 @@ namespace asi.asicentral.Tests
 			};
 			var companyAddresses = new List<StoreCompanyAddress>()
 			{
-				new StoreCompanyAddress() { Address = address1, IsBilling = true, IsShipping = true },
-				new StoreCompanyAddress() { Address =  address2, IsShipping = true },
+				new StoreCompanyAddress() { Address = address1, IsBilling = false, IsShipping = false },
+				new StoreCompanyAddress() { Address =  address2, IsShipping = true, IsBilling = true },
 			};
 			var person = new StoreIndividual()
 			{
@@ -109,7 +107,7 @@ namespace asi.asicentral.Tests
 				Name = "Store Test " + tag,
 				Addresses = companyAddresses,
 				Individuals = contacts,
-				ASINumber = asiNumber,
+				ASINumber = asiNumber,				
 			};
 			var orderDetail = new StoreOrderDetail()
 			{
