@@ -170,6 +170,7 @@ namespace asi.asicentral.services.PersonifyProxy
 			{
 				throw new Exception("Store company is not valid.");
 			}
+			//@todo what do we do if we cannot find the company for the given ASI#
 			//look company by ASI#
 			if (!string.IsNullOrEmpty(storeCompany.ASINumber))
 			{
@@ -225,6 +226,7 @@ namespace asi.asicentral.services.PersonifyProxy
 				{
 					var subCustomerId = result.SubCustomerId.HasValue ? result.SubCustomerId.Value : 0;
 					//try update status - not caring so much whether it works or not
+					//@todo this does not seem to be working for updating the status
 					var q = SvcClient.Ctxt.ASICustomers.Where(p => p.MasterCustomerId == result.MasterCustomerId && p.SubCustomerId == subCustomerId).Select(o => o);
 					var customers = new DataServiceCollection<ASICustomer>(q, TrackingMode.None);
 					if (customers.Count > 0)
