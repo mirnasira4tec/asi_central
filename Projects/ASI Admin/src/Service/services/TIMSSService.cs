@@ -30,7 +30,6 @@ namespace asi.asicentral.services
             
             TIMSSCompany company = new TIMSSCompany()
             {
-                //@todo talk to gary about that column
                 DAPP_UserId = Guid.NewGuid(),
                 Name = order.Company.Name,
                 MasterCustomerId = order.ExternalReference,
