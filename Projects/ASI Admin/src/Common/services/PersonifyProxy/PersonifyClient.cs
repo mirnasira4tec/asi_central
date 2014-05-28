@@ -43,12 +43,38 @@ namespace asi.asicentral.services.PersonifyProxy
 
 		public static CreateOrderOutput CreateOrder(StoreOrder storeOrder, CustomerInfo companyInfo, IList<CreateOrderLineInput> lineItems)
 		{
-			if (companyInfo == null)
-				throw new ArgumentException("You need to pass the company information");
+            if (companyInfo == null)
+                throw new ArgumentException("You need to pass the company information");
 
-			var orderLineInputs = new DataServiceCollection<CreateOrderLineInput>(null, TrackingMode.None);
-			foreach (var lineItem in lineItems)
-				orderLineInputs.Add(lineItem);
+            List<AddressInfo> addressInfos = SvcClient.Ctxt.AddressInfos.Where(
+                                      a => a.MasterCustomerId == companyInfo.MasterCustomerId).ToList();
+            AddressInfo primaryAddress = addressInfos.FirstOrDefault(a => a.PrioritySeq == 0);
+            AddressInfo billTo = addressInfos.FirstOrDefault(a => a.BillToFlag ?? false);
+            billTo = billTo ?? primaryAddress;
+            AddressInfo shipTo = addressInfos.FirstOrDefault(a => a.ShipToFlag ?? false);
+            shipTo = shipTo ?? primaryAddress;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            var orderLineInputs = new DataServiceCollection<CreateOrderLineInput>(null, TrackingMode.None);
+            foreach (var lineItem in lineItems)
+                orderLineInputs.Add(lineItem);
 
 			var createOrderInput = new CreateOrderInput()
 				{					
@@ -161,8 +187,9 @@ namespace asi.asicentral.services.PersonifyProxy
 			return profileId == null ? string.Empty : profileId.ToString();
 		}
 
-		public static CustomerInfo AddCompanyInfo(StoreOrder order, IList<LookSendMyAdCountryCode> countryCodes)
+		public static CustomerInfo AddCompanyInfo(StoreOrder order, IList<LookSendMyAdCountryCode> countryCodes, out IDictionary<AddressType, long> addressesAdded )
 		{
+            addressesAdded = null;
 			CustomerInfo companyInfo = null;
 			StoreCompany storeCompany = order.Company;
 
@@ -181,32 +208,7 @@ namespace asi.asicentral.services.PersonifyProxy
 			}
 			if (companyInfo != null)
 			{
-                List<AddressInfo> addressInfos = SvcClient.Ctxt.AddressInfos.Where(
-                                        a => a.MasterCustomerId == companyInfo.MasterCustomerId).ToList();
-			    IList<StoreCompanyAddress> addresses =
-                    storeCompany.Addresses.Where(a => addressInfos.All(a2 => a2.Address1 != a.Address.Street1
-                                                                             && a2.PostalCode != a.Address.Zip)).ToList();
-                if (addresses.Count > 0)
-                {
-                    StoreCompanyAddress billTo = addresses.FirstOrDefault(a => a.IsBilling);
-                    if (billTo != null)
-                    {
-                        var countryCode = countryCodes.Alpha3Code(billTo.Address.Country);
-                        AddCompanyAddress(billTo, companyInfo, storeCompany.Name, countryCode);
-                    }
-                    StoreCompanyAddress shipTo = addresses.FirstOrDefault(a => a.IsShipping);
-                    if (shipTo != null)
-                    {
-                        var countryCode = countryCodes.Alpha3Code(shipTo.Address.Country);
-                        AddCompanyAddress(shipTo, companyInfo, storeCompany.Name, countryCode);
-                    }
-                    StoreCompanyAddress companyAddress = addresses.FirstOrDefault(a => !a.IsShipping && !a.IsBilling);
-                    if (companyAddress != null)
-                    {
-                        var countryCode = countryCodes.Alpha3Code(companyAddress.Address.Country);
-                        AddCompanyAddress(companyAddress, companyInfo, storeCompany.Name, countryCode);
-                    }
-                }
+               
 			    //@todo need to reconcile the addresses
 			}
 			else {
@@ -239,37 +241,132 @@ namespace asi.asicentral.services.PersonifyProxy
 			return companyInfo;
 		}
 
-        private static SaveAddressOutput AddCompanyAddress(StoreCompanyAddress address, CustomerInfo companyInfo, string companyName, string countryCode)
-        {
-            SaveAddressOutput result = null;
-	        AddressInfo primaryAddress = companyInfo.Addresses.FirstOrDefault(a => a.PrioritySeq == 0);
-	        if (primaryAddress != null)
+	    private static IDictionary<AddressType, long> AddCompanyAddresses(StoreCompany storeCompany,
+	        CustomerInfo companyInfo, IList<LookSendMyAdCountryCode> countryCodes)
+	    {
+	        if (storeCompany == null || storeCompany.Addresses == null || companyInfo == null)
 	        {
-	            var newCustomerAddress = new SaveAddressInput()
-	            {
-                    OwnerAddressId = Convert.ToInt32(primaryAddress.CustomerAddressId),
-                    MasterCustomerId = primaryAddress.MasterCustomerId,
-                    SubCustomerId = primaryAddress.SubCustomerId,
-                    AddressTypeCode = COMMUNICATION_LOCATION_CODE_CORPORATE,
-                    Address1 = address.Address.Street1,
-                    Address2 = address.Address.Street2,
-                    City = address.Address.City,
-                    State = address.Address.State,
-                    PostalCode = address.Address.Zip,
-                    CountryCode = countryCode,
-                    BillToFlag = address.IsBilling,
-                    ShipToFlag = address.IsShipping,
-                    DirectoryFlag = true,
-                    CompanyName = companyName,
-                    WebMobileDirectory = false,
-                    CreateNewAddressIfOrdersExist = true,
-                    OverrideAddressValidation = true,
-                    AddedOrModifiedBy = ADDED_OR_MODIFIED_BY
-	            };
-	            result = PersonifySvcClient.SvcClient.Post<SaveAddressOutput>("CreateOrUpdateAddress", newCustomerAddress);
+	            throw new Exception("Store address information and company infomation in personify are required");
 	        }
-	        return result;
-	    }
+	        IDictionary<AddressType, long> addressesAdded = null;
+	        StoreAddress companyAddress = storeCompany.GetCompanyAddress();
+	        StoreAddress billToAddress = storeCompany.GetCompanyBillingAddress();
+	        StoreAddress shipToAddress = storeCompany.GetCompanyShippingAddress();
+            AddressInfo companyAddressInfo = null;
+            AddressInfo billToAddressInfo = null;
+            AddressInfo shipToAddressInfo = null;
+            AddressInfo primaryAddressInfo = null;
+
+            List<AddressInfo> addressInfos = SvcClient.Ctxt.AddressInfos.Where(
+                    a => a.MasterCustomerId == companyInfo.MasterCustomerId).ToList();
+	        if (addressInfos.Any())
+	        {
+                companyAddressInfo = addressInfos.FirstOrDefault(a =>
+                   a.Address1 == companyAddress.Street1 && a.PostalCode == companyAddress.Zip);
+                billToAddressInfo = addressInfos.FirstOrDefault(a =>
+                    a.Address1 == billToAddress.Street1 && a.PostalCode == billToAddress.Zip);
+                shipToAddressInfo = addressInfos.FirstOrDefault(a =>
+                    a.Address1 == shipToAddress.Street1 && a.PostalCode == shipToAddress.Zip);
+                primaryAddressInfo = addressInfos.FirstOrDefault(a =>a.PrioritySeq == 0);
+            }
+
+            addressesAdded = new Dictionary<AddressType, long>();
+
+            if (companyAddressInfo == null)
+            {
+                var countryCode = countryCodes.Alpha3Code(companyAddress.Country);
+                var result = AddCompanyAddress(companyAddress, primaryAddressInfo, companyInfo,
+                                               storeCompany.Name, countryCode,
+                                               companyAddress.Equals(billToAddress), companyAddress.Equals(shipToAddress));
+                if (result != null && result.CusAddressId.HasValue)
+                {
+                    addressesAdded[AddressType.Primary] = result.CusAddressId.Value;
+                    if (companyAddress.Equals(billToAddress)) addressesAdded[AddressType.Billing] = result.CusAddressId.Value;
+                    if (companyAddress.Equals(shipToAddress)) addressesAdded[AddressType.Shipping] = result.CusAddressId.Value;
+                    if (primaryAddressInfo == null)
+                    {
+                        primaryAddressInfo = addressInfos.FirstOrDefault(a => a.PrioritySeq == 0);
+                    }
+                }
+            }
+            else
+            {
+                addressesAdded[AddressType.Primary] = companyAddressInfo.CustomerAddressId;
+            }
+
+            if (billToAddress != null && !billToAddress.Equals(companyAddress))
+            {
+                if (billToAddressInfo == null)
+                {
+
+                    var countryCode = countryCodes.Alpha3Code(billToAddress.Country);
+                    var result = AddCompanyAddress(billToAddress, primaryAddressInfo, companyInfo,
+                        storeCompany.Name, countryCode, true, false);
+                    if (result != null && result.CusAddressId.HasValue)
+                    {
+                        addressesAdded[AddressType.Billing] = result.CusAddressId.Value;
+                    }
+                }
+                else
+                {
+                    addressesAdded[AddressType.Billing] = billToAddressInfo.CustomerAddressId;
+                }
+            }
+
+            if (shipToAddress != null && !shipToAddress.Equals(companyAddress))
+            {
+                if (shipToAddressInfo == null)
+                {
+                    var countryCode = countryCodes.Alpha3Code(shipToAddress.Country);
+                    var result = AddCompanyAddress(shipToAddress, primaryAddressInfo, companyInfo,
+                        storeCompany.Name, countryCode, false, true);
+                    if (result != null && result.CusAddressId.HasValue)
+                    {
+                        addressesAdded[AddressType.Shipping] = result.CusAddressId.Value;
+                    }
+                }
+                else
+                {
+                    addressesAdded[AddressType.Shipping] = shipToAddressInfo.CustomerAddressId;
+                }
+            }
+
+            return addressesAdded;
+        }
+
+        private static SaveAddressOutput AddCompanyAddress(StoreAddress address, AddressInfo existingPrimaryAddress, 
+            CustomerInfo companyInfo, string companyName, string countryCode, bool billTo, bool shipTo)
+        {
+            var newCustomerAddress = new SaveAddressInput()
+            {
+                MasterCustomerId = companyInfo.MasterCustomerId,
+                SubCustomerId = companyInfo.SubCustomerId,
+                AddressTypeCode = COMMUNICATION_LOCATION_CODE_CORPORATE,
+                Address1 = address.Street1,
+                Address2 = address.Street2,
+                City = address.City,
+                State = address.State,
+                PostalCode = address.Zip,
+                CountryCode = countryCode,
+                BillToFlag = billTo,
+                ShipToFlag = shipTo,
+                DirectoryFlag = true,
+                CompanyName = companyName,
+                WebMobileDirectory = false,
+                CreateNewAddressIfOrdersExist = true,
+                OverrideAddressValidation = true,
+                AddedOrModifiedBy = ADDED_OR_MODIFIED_BY,
+            };
+            if (existingPrimaryAddress == null)
+            {
+                newCustomerAddress.PrioritySeq = 0;
+            }
+            else
+            {
+                newCustomerAddress.OwnerAddressId = Convert.ToInt32(existingPrimaryAddress.CustomerAddressId);
+            }
+            return PersonifySvcClient.SvcClient.Post<SaveAddressOutput>("CreateOrUpdateAddress", newCustomerAddress);
+        }
 
 		public static SaveCustomerOutput AddCompanyByNameAndMemberTypeId(string companyName, int memberTypeId)
 		{
@@ -598,4 +695,13 @@ namespace asi.asicentral.services.PersonifyProxy
 			return resp.IsValid ?? false;
 		}
 	}
+
+    public enum AddressType
+    {
+        Primary,
+        
+        Shipping,
+
+        Billing
+    }
 }
