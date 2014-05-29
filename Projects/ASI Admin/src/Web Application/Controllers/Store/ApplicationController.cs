@@ -394,7 +394,10 @@ namespace asi.asicentral.web.Controllers.Store
                             break;
                         case 71:
                             orderDetail.OptionId = application.OptionId;
-                            orderDetail.Cost = CompanyStoreHelper.GetCost(application.OptionId.Value);
+                            if (application.OptionId != 5)
+                                orderDetail.Cost = Convert.ToDecimal(CompanyStoreHelper.GetCost(0) * application.OptionId);
+                            else
+                                orderDetail.Cost = CompanyStoreHelper.GetCost(1);
                             break;
                         default:
                             int quantity = orderDetail.Quantity;
