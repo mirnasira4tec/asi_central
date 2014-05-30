@@ -19,10 +19,8 @@ using asi.asicentral.interfaces;
 
 namespace asi.asicentral.services.PersonifyProxy
 {
-
 	public static class PersonifyClient
 	{
-
 		private const string ADDED_OR_MODIFIED_BY = "ASI_Store";
 		private const string COMMUNICATION_INPUT_PHONE = "PHONE";
 		private const string COMMUNICATION_INPUT_FAX = "FAX";
@@ -377,7 +375,7 @@ namespace asi.asicentral.services.PersonifyProxy
 						=>
 					{
 						var customerInfo = CreateIndividualCustomerInfoInput(storeIndividual);
-						AddIndividualAddress(customerInfo, storeIndividual, storeCompany);
+                        AddIndividualAddress(customerInfo, storeIndividual, companyInfo);
 						AddCusCommunicationInput(customerInfo, COMMUNICATION_INPUT_PHONE, storeIndividual.Phone, COMMUNICATION_LOCATION_CODE_WORK, countryCode, isUsaAddress);
 						AddCusCommunicationInput(customerInfo, COMMUNICATION_INPUT_EMAIL, storeIndividual.Email, COMMUNICATION_LOCATION_CODE_WORK);
 						return customerInfo;
@@ -442,9 +440,8 @@ namespace asi.asicentral.services.PersonifyProxy
 			return customerInfo;
 		}
 
-		private static SaveCustomerInput AddIndividualAddress(SaveCustomerInput customerInfo, StoreIndividual storeIndividual, StoreCompany storeCompany)
+        private static SaveCustomerInput AddIndividualAddress(SaveCustomerInput customerInfo, StoreIndividual storeIndividual, CustomerInfo companyInfo)
 		{
-			CustomerInfo companyInfo = GetCompanyInfoByName(storeCompany.Name);
 			if (companyInfo == null)
 			{
 				throw new Exception("Company information is not available in Personify.");
@@ -554,8 +551,9 @@ namespace asi.asicentral.services.PersonifyProxy
 							CommTypeCode = key,
 							CountryCode = countryCode,
 							PhoneAreaCode = value.Substring(0, 3),
-							PhoneNumber = value.Substring(3, 7),
-							ActiveFlag = true
+							PhoneNumber = value.Substring(3, 7),                            
+							ActiveFlag = true,
+                            
 						});
 					}
 				}
@@ -573,8 +571,44 @@ namespace asi.asicentral.services.PersonifyProxy
 			return customerInfo;
 		}
 
-		private static CustomerInfo GetIndividualInfo(string masterCustomerId)
-		{
+        public static CusCommunication AddPhoneNumber(string phoneNumber, string countryCode, CustomerInfo companyInfo)
+        {
+            CusCommunication respSave = null;
+            try
+            {
+                phoneNumber = new string(phoneNumber.Where(Char.IsDigit).ToArray());
+                if (string.Equals(countryCode, "USA", StringComparison.InvariantCultureIgnoreCase) 
+                    && phoneNumber.Length == PHONE_NUMBER_LENGTH
+                    && !IsPhoneExist(phoneNumber, companyInfo))
+                {
+                    var respCreate = SvcClient.Create<CusCommunication>();
+                    respCreate.MasterCustomerId = companyInfo.MasterCustomerId;
+                    respCreate.SubCustomerId = companyInfo.SubCustomerId;
+                    respCreate.CommLocationCodeString = COMMUNICATION_LOCATION_CODE_CORPORATE; //COMMUNICATION_LOCATION_CODE_WORK;
+                    respCreate.CommTypeCodeString = COMMUNICATION_INPUT_PHONE;
+                    respCreate.PhoneAreaCode = phoneNumber.Substring(0,3);
+                    respCreate.PhoneNumber = phoneNumber.Substring(3,7);
+                    respCreate.CountryCode = countryCode;
+                    respCreate.PrimaryFlag = false;
+                    respSave = SvcClient.Save<CusCommunication>(respCreate);
+                }
+            }
+            catch (Exception ex)
+            {
+                respSave = null;
+            }
+            return respSave;
+        }
+
+        private static bool IsPhoneExist(string phoneNumber, CustomerInfo companyInfo)
+        {
+            IEnumerable<CusCommunication> cc = SvcClient.Ctxt.CusCommunications
+                .Where(c => c.MasterCustomerId == companyInfo.MasterCustomerId && c.SearchPhoneAddress == phoneNumber);
+            return cc.Any(c => string.Equals(c.CommTypeCodeString, "PHONE", StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        private static CustomerInfo GetIndividualInfo(string masterCustomerId)
+        {
 			List<CustomerInfo> oCusInfo = SvcClient.Ctxt.CustomerInfos.Where(
 				a => a.MasterCustomerId == masterCustomerId && a.RecordType == "I").ToList();
 			if (oCusInfo.Count == 0)
