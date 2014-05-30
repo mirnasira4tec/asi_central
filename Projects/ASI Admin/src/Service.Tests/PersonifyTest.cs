@@ -17,7 +17,7 @@ namespace asi.asicentral.Tests
 	public class PersonifyTest
 	{
 		[TestMethod]
-		public void StoreAndAssignCCTest()
+		public void StoreCCTest()
 		{
 			CreditCard cc = new CreditCard()
 			{
@@ -42,7 +42,6 @@ namespace asi.asicentral.Tests
 			//lookup company to assign CC to
 			CustomerInfo companyInfo = PersonifyClient.GetCompanyInfoByAsiNumber("33020");
 			Assert.IsNotNull(companyInfo);
-			PersonifyClient.AssignCreditCard(profileIdentifier, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
 		}
 
 		[TestMethod]

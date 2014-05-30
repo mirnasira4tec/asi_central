@@ -627,15 +627,6 @@ namespace asi.asicentral.services.PersonifyProxy
 			return resp.Success ?? false ? resp.CreditCardProfileId : null;
 		}
 
-		public static void AssignCreditCard(long profileId, string masterCustomerId, int subCustomerId)
-		{
-			var creditCards = SvcClient.Ctxt.ASICustomerCreditCards.Where(cc => cc.CustomerCreditCardProfileId == profileId).ToList();
-			if (creditCards.Count != 1) throw new Exception("Could not find the credit card");
-			creditCards[0].MasterCustomerId = masterCustomerId;
-			creditCards[0].SubCustomerId = subCustomerId;
-			SvcClient.Save<ASICustomerCreditCard>(creditCards[0]);
-		}
-
 		public static string GetCreditCardProfileId(CreditCard creditCard)
 		{
 			Dictionary<string, string> companyInfo = GetPersonifyCreditCardCompany();
