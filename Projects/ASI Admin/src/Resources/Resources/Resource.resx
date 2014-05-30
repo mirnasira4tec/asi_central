@@ -1807,7 +1807,7 @@
     <value>Sends</value>
   </data>
   <data name="FieldLengthASI" xml:space="preserve">
-    <value>This is not a valid [Member] ASI #</value>
+    <value>This is not a valid {0} ASI #</value>
   </data>
   <data name="EmailExpress_Surcharge" xml:space="preserve">
     <value>There will be a $50 surcharge for Tuesday and Wednesday sends</value>
