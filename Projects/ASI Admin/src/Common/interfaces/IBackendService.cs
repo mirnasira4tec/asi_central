@@ -5,7 +5,7 @@ using asi.asicentral.PersonifyDataASI;
 using System;
 using System.Collections.Generic;
 
-namespace asi.asicentral.services
+namespace asi.asicentral.interfaces
 {
     public interface IBackendService
     {

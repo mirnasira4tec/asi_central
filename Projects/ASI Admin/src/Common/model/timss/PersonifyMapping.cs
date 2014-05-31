@@ -8,6 +8,11 @@ namespace asi.asicentral.model.timss
 {
     public class PersonifyMapping
     {
+        public PersonifyMapping()
+        {
+            ItemCount = 1;
+        }
+
         public Guid Identifier { get; set; }
         public int? StoreContext { get; set; }
         public int StoreProduct { get; set; }
@@ -18,6 +23,6 @@ namespace asi.asicentral.model.timss
         public DateTime CreateDateUTC { get; set; }
         public DateTime UpdateDateUTC { get; set; }
         public string UpdateSource { get; set; }
-
+        public int ItemCount { get; set; }
     }
 }

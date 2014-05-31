@@ -404,7 +404,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="services\CreditCardService.cs" />
-    <Compile Include="services\IBackendService.cs" />
+    <Compile Include="interfaces\IBackendService.cs" />
     <Compile Include="services\PersonifyProxy\MemberData.cs" />
     <Compile Include="services\PersonifyProxy\MemberTypeIDToCD.cs" />
     <Compile Include="services\PersonifyProxy\PersonifyClient.cs" />

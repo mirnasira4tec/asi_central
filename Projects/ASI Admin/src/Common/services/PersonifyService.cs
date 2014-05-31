@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using asi.asicentral.services.PersonifyProxy;
 using DotLiquid.Exceptions;
+using asi.asicentral.model.timss;
 
 namespace asi.asicentral.services
 {
@@ -53,19 +54,45 @@ namespace asi.asicentral.services
 		    var lineItems = new List<CreateOrderLineInput>();
 		    foreach (var orderDetail in order.OrderDetails)
 		    {
-			    //lookup mapping table
-			    var lineItem = new CreateOrderLineInput()
-			    {
-					ProductId = 1566,
-					Quantity = Convert.ToInt16(orderDetail.Quantity),
-					RateCode = "1 Time Ad",
-					RateStructure = "Member",
-					ShipAddressID = Convert.ToInt32(shipAddressId),
-			    };
-				lineItems.Add(lineItem);
+                var items = LookupLineItem(orderDetail);
+                //one order detail may be more than one item in personify
+                //membership has one item for membership and one item for application fee
+                foreach (var item in items)
+                {
+                    //each line item may have to be repeated more than once, for instance
+                    //when purchasing more than one email express, each one is a line item
+                    for (int i = 0; i < item.ItemCount; i++)
+                    {
+                        var lineItem = new CreateOrderLineInput()
+                        {
+                            ProductId = item.PersonifyProduct,
+                            RateCode = item.PersonifyRateCode,
+                            RateStructure = item.PersonifyRateStructure,
+                            ShipAddressID = Convert.ToInt32(shipAddressId),
+                            Quantity = Convert.ToInt16(orderDetail.Quantity),
+                        };
+                        lineItems.Add(lineItem);
+                    }
+                }
 		    }
 		    return lineItems;
 	    }
+
+        private IList<PersonifyMapping> LookupLineItem(StoreOrderDetail orderDetail)
+        {
+            var mappings = new List<PersonifyMapping>();
+            switch (orderDetail.Product.Id)
+            {
+                case 77: //supplier specials
+                    string option = orderDetail.OptionId.ToString();
+                    PersonifyMapping mapping = storeService.GetAll<PersonifyMapping>().Single(map => Object.Equals(map.StoreContext, orderDetail.Order.ContextId) && 
+                        map.StoreProduct == orderDetail.Product.Id &&
+                        map.StoreOption == option);
+                    mappings.Add(mapping);
+                    break;
+            }
+            return mappings;
+        }
 
         public virtual SaveCustomerOutput AddCompanyByNameAndMemberTypeId(string companyName, int memberTypeId)
         {

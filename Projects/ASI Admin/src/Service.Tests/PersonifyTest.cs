@@ -52,7 +52,7 @@ namespace asi.asicentral.Tests
 			{
 				IBackendService personify = new PersonifyService(storeService);
 				var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
-				StoreOrder order = CreateOrder("", supplierSpecials);
+                StoreOrder order = CreateOrder("", new ContextProduct[] { supplierSpecials });
 				personify.PlaceOrder(order);
 			}
 		}
@@ -64,12 +64,12 @@ namespace asi.asicentral.Tests
 			{
 				IBackendService personify = new PersonifyService(storeService);
 				var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
-				StoreOrder order = CreateOrder("33020", supplierSpecials);
+                StoreOrder order = CreateOrder("33020", new ContextProduct[] { supplierSpecials });
 				personify.PlaceOrder(order);
 			}
 		}
 
-		private static StoreOrder CreateOrder(string asiNumber, ContextProduct product)
+		private static StoreOrder CreateOrder(string asiNumber, ContextProduct[] products)
 		{
 			var tag = DateTime.Now.Ticks;
 			var address1 = new StoreAddress()
@@ -104,28 +104,34 @@ namespace asi.asicentral.Tests
 			var contacts = new List<StoreIndividual>() { person };
 			var company = new StoreCompany()
 			{
-				Name = "Store Test " + tag,
+				Name = "ORDER Test " + tag,
 				Addresses = companyAddresses,
 				Individuals = contacts,
 				ASINumber = asiNumber,				
 			};
-			var orderDetail = new StoreOrderDetail()
-			{
-				ApplicationCost = 0,
-				Cost = 0,
-				IsSubscription = true,
-				Product = product,
-			};
-			var orderDetails = new List<StoreOrderDetail>() { orderDetail };
-			var order = new StoreOrder()
-			{
-				Company = company,
-				AnnualizedTotal = 10,
-				Total = 10,
-				BillingIndividual = person,
-				OrderDetails = orderDetails,
-				OrderRequestType = "Supplier",
-			};
+            var orderDetails = new List<StoreOrderDetail>();
+            var order = new StoreOrder()
+            {
+                Company = company,
+                AnnualizedTotal = 10,
+                Total = 10,
+                BillingIndividual = person,
+                OrderDetails = orderDetails,
+                OrderRequestType = "Supplier",
+            };
+            foreach (var product in products)
+            {
+                var orderDetail = new StoreOrderDetail()
+                {
+                    ApplicationCost = 0,
+                    Cost = 0,
+                    OptionId = 0,
+                    IsSubscription = true,
+                    Product = product,
+                    Order = order,
+                };
+                orderDetails.Add(orderDetail);
+            }
 			return order;
 		}
 	}
