@@ -11,6 +11,7 @@ namespace asi.asicentral.model.timss
         public PersonifyMapping()
         {
             ItemCount = 1;
+            Quantity = 1;
         }
 
         public Guid Identifier { get; set; }
@@ -23,6 +24,8 @@ namespace asi.asicentral.model.timss
         public DateTime CreateDateUTC { get; set; }
         public DateTime UpdateDateUTC { get; set; }
         public string UpdateSource { get; set; }
+        //not in the database but used for the process
         public int ItemCount { get; set; }
+        public int Quantity { get; set; }
     }
 }

@@ -70,6 +70,7 @@ namespace asi.asicentral.services
                             RateStructure = item.PersonifyRateStructure,
                             ShipAddressID = Convert.ToInt32(shipAddressId),
                             Quantity = Convert.ToInt16(orderDetail.Quantity),
+                            
                         };
                         lineItems.Add(lineItem);
                     }
@@ -89,6 +90,29 @@ namespace asi.asicentral.services
                         map.StoreProduct == orderDetail.Product.Id &&
                         map.StoreOption == option);
                     mappings.Add(mapping);
+                    mapping.Quantity = orderDetail.Quantity;
+                    break;
+                case 61: //email express
+                    StoreDetailEmailExpress emailexpressdetails = storeService.GetAll<StoreDetailEmailExpress>().Single(details => details.OrderDetailId == orderDetail.Id);
+                    option = emailexpressdetails.ItemTypeId.ToString();
+                    if (option == "1" || option == "2") 
+                    {
+                        option += ";";
+                        if (orderDetail.Quantity >= 120) option += "120X";
+                        else if (orderDetail.Quantity >= 52) option += "52X";
+                        else if (orderDetail.Quantity >= 26) option += "26X";
+                        else if (orderDetail.Quantity >= 12) option += "12X";
+                        else if (orderDetail.Quantity >= 6) option += "6X";
+                        else if (orderDetail.Quantity >= 3) option += "3X";
+                        else option += "1X";
+                    }
+                    mapping = storeService.GetAll<PersonifyMapping>().Single(map => Object.Equals(map.StoreContext, orderDetail.Order.ContextId) && 
+                        map.StoreProduct == orderDetail.Product.Id &&
+                        map.StoreOption == option);
+                    mappings.Add(mapping);
+                    //need to create a new line item for each one rather than one for all quantity
+                    mapping.ItemCount = orderDetail.Quantity;
+                    mapping.Quantity = 1;
                     break;
             }
             return mappings;

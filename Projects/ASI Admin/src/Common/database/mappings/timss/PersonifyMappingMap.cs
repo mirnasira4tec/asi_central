@@ -15,6 +15,7 @@ namespace asi.asicentral.database.mappings.timss
             this.ToTable("PERS-PRODUCT-MAPPING");
             this.HasKey(t => new { t.Identifier });
             this.Ignore(t => t.ItemCount);
+            this.Ignore(t => t.Quantity);
 
             // Properties
             this.Property(t => t.Identifier)

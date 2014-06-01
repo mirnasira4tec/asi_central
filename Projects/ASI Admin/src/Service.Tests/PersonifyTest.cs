@@ -50,9 +50,11 @@ namespace asi.asicentral.Tests
 		{
 			using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
 			{
+                InitOrderDetail(storeService);
 				IBackendService personify = new PersonifyService(storeService);
 				var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
-                StoreOrder order = CreateOrder("", new ContextProduct[] { supplierSpecials });
+                var emailExpress = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 61);
+                StoreOrder order = CreateOrder("", new ContextProduct[] { supplierSpecials, emailExpress });
 				personify.PlaceOrder(order);
 			}
 		}
@@ -68,6 +70,29 @@ namespace asi.asicentral.Tests
 				personify.PlaceOrder(order);
 			}
 		}
+
+        private void InitOrderDetail(IStoreService storeService)
+        {
+            //not elegant but good enough for now, need to mockup StoreService
+            StoreDetailEmailExpress emailexpressdetails = storeService.GetAll<StoreDetailEmailExpress>().FirstOrDefault(details => details.OrderDetailId == 1);
+            if (emailexpressdetails != null)
+            {
+                emailexpressdetails.ItemTypeId = 1;
+            }
+            else
+            {
+                StoreDetailEmailExpress emailExpress = new StoreDetailEmailExpress()
+                {
+                    OrderDetailId = 1,
+                    ItemTypeId = 1,
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    UpdateSource = "Test Case PlaceOrderNewCompanyTest",
+                };
+                storeService.Add<StoreDetailEmailExpress>(emailExpress);
+            }
+            storeService.SaveChanges();
+        }
 
 		private static StoreOrder CreateOrder(string asiNumber, ContextProduct[] products)
 		{
@@ -104,7 +129,7 @@ namespace asi.asicentral.Tests
 			var contacts = new List<StoreIndividual>() { person };
 			var company = new StoreCompany()
 			{
-				Name = "ORDER Test " + tag,
+				Name = "ORDER Test2 " + tag,
 				Addresses = companyAddresses,
 				Individuals = contacts,
 				ASINumber = asiNumber,				
@@ -123,9 +148,11 @@ namespace asi.asicentral.Tests
             {
                 var orderDetail = new StoreOrderDetail()
                 {
+                    Id = 1,
                     ApplicationCost = 0,
                     Cost = 0,
                     OptionId = 0,
+                    Quantity = 2,
                     IsSubscription = true,
                     Product = product,
                     Order = order,
