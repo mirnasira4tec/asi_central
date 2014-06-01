@@ -18,6 +18,7 @@ namespace asi.asicentral.database
         public DbSet<TIMSSContact> Contacts { get; set; }
         public DbSet<TIMSSCreditInfo> CreditInfos { get; set; }
         public DbSet<TIMSSProductType> ProductTypes { get; set; }
+        public DbSet<PersonifyMapping> PersonifyMappings { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -27,6 +28,7 @@ namespace asi.asicentral.database
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Configurations
+                .Add(new PersonifyMappingMap())
                 .Add(new TIMSSAccountTypeMap())
                 .Add(new TIMSSAdditionalInfoMap())
                 .Add(new TIMSSCompanyMap())

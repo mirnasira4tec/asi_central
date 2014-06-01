@@ -257,6 +257,7 @@
     <Compile Include="database\mappings\store\StoreOrderMap.cs" />
     <Compile Include="database\mappings\store\StoreTieredProductPricingMap.cs" />
     <Compile Include="database\mappings\store\TaxRateMap.cs" />
+    <Compile Include="database\mappings\timss\PersonifyMappingMap.cs" />
     <Compile Include="interfaces\ICreditCardService.cs" />
     <Compile Include="model\IDateUTCAndSource.cs" />
     <Compile Include="interfaces\IROI.cs" />
@@ -384,6 +385,7 @@
     <Compile Include="model\store\LegacyOrderContact.cs" />
     <Compile Include="model\store\StoreTieredProductPricing.cs" />
     <Compile Include="model\store\TaxRate.cs" />
+    <Compile Include="model\timss\PersonifyMapping.cs" />
     <Compile Include="model\timss\TIMSSAccountType.cs" />
     <Compile Include="model\timss\TIMSSAdditionalInfo.cs" />
     <Compile Include="model\timss\TIMSSCompany.cs" />
@@ -402,7 +404,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="services\CreditCardService.cs" />
-    <Compile Include="services\IBackendService.cs" />
+    <Compile Include="interfaces\IBackendService.cs" />
     <Compile Include="services\PersonifyProxy\MemberData.cs" />
     <Compile Include="services\PersonifyProxy\MemberTypeIDToCD.cs" />
     <Compile Include="services\PersonifyProxy\PersonifyClient.cs" />

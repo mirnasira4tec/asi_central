@@ -94,41 +94,11 @@ namespace asi.asicentral.oauth
                     redirectParams.FromApplicationCode = asi.asicentral.oauth.ApplicationCodes.ASIC.ToString();
                     redirectParams.FromApplicationVer = "1";
                     var url = ConfigurationManager.AppSettings["RedirectUrl"];
-                    redirectUrl = GenerateToClientUrl(url, redirectParams);
+                    redirectUrl = CrossApplication.GetDashboardRedirectorUrl(url, redirectParams);
                 }
             }
             return redirectUrl;
         }
-
-		/// <summary>
-		/// Should use jade function when bug is fixed ASCN-1204
-		/// </summary>
-		/// <param name="callbackUri"></param>
-		/// <param name="redirectParams"></param>
-		/// <returns></returns>
-		private static string GenerateToClientUrl(string callbackUri, CrossApplication.RedirectParams redirectParams)
-		{
-			var qs = "token=" + redirectParams.AccessToken;
-			if (!string.IsNullOrEmpty(redirectParams.RefreshToken)) qs += "&rtoken=" + redirectParams.RefreshToken;
-			if (redirectParams.TokenExpirationTime.HasValue && redirectParams.TokenExpirationTime.Value != DateTime.MinValue)
-				qs += "&tokenxtime=" + redirectParams.TokenExpirationTime.Value.ToString("G");
-			if (!string.IsNullOrEmpty(redirectParams.FromApplicationCode)) qs += "&fromAppCode=" + redirectParams.FromApplicationCode;
-			if (!string.IsNullOrEmpty(redirectParams.FromApplicationVer)) qs += "&fromAppVer=" + redirectParams.FromApplicationVer;
-			if (!string.IsNullOrEmpty(redirectParams.FromApplicationCode)) qs += "&toAppCode=" + redirectParams.ToApplicationCode;
-
-			return callbackUri + "?token=" + Base64Encode(qs);
-		}
-
-		/// <summary>
-		/// Should use the Jade function
-		/// </summary>
-		/// <param name="str"></param>
-		/// <returns></returns>
-		private static string Base64Encode(string str)
-		{
-			return HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(str));
-
-		}
 
         public static int GetId(bool isCompanyId, HttpRequestBase request, HttpResponseBase response, string cookieName)
         {
