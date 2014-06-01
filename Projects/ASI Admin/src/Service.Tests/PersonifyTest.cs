@@ -10,6 +10,8 @@ using asi.asicentral.PersonifyDataASI;
 using asi.asicentral.services;
 using asi.asicentral.services.PersonifyProxy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using asi.asicentral.model.timss;
 
 namespace asi.asicentral.Tests
 {
@@ -48,50 +50,43 @@ namespace asi.asicentral.Tests
 		[TestMethod]
 		public void PlaceOrderNewCompanyTest()
 		{
-			using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
-			{
-                InitOrderDetail(storeService);
-				IBackendService personify = new PersonifyService(storeService);
-				var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
-                var emailExpress = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 61);
-                StoreOrder order = CreateOrder("", new ContextProduct[] { supplierSpecials, emailExpress });
-				personify.PlaceOrder(order);
-			}
+            IStoreService storeService = MockupStoreService();
+			IBackendService personify = new PersonifyService(storeService);
+			var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
+            var emailExpress = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 61);
+            StoreOrder order = CreateOrder("", new ContextProduct[] { supplierSpecials, emailExpress });
+			personify.PlaceOrder(order);
 		}
 
 		[TestMethod]
 		public void PlaceOrderExistingCompanyTest()
 		{
-			using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
-			{
-				IBackendService personify = new PersonifyService(storeService);
-				var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
-                StoreOrder order = CreateOrder("33020", new ContextProduct[] { supplierSpecials });
-				personify.PlaceOrder(order);
-			}
+            IStoreService storeService = MockupStoreService();
+            IBackendService personify = new PersonifyService(storeService);
+			var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
+            StoreOrder order = CreateOrder("33020", new ContextProduct[] { supplierSpecials });
+			personify.PlaceOrder(order);
 		}
 
-        private void InitOrderDetail(IStoreService storeService)
+        private IStoreService MockupStoreService()
         {
-            //not elegant but good enough for now, need to mockup StoreService
-            StoreDetailEmailExpress emailexpressdetails = storeService.GetAll<StoreDetailEmailExpress>().FirstOrDefault(details => details.OrderDetailId == 1);
-            if (emailexpressdetails != null)
-            {
-                emailexpressdetails.ItemTypeId = 1;
-            }
-            else
-            {
-                StoreDetailEmailExpress emailExpress = new StoreDetailEmailExpress()
-                {
-                    OrderDetailId = 1,
-                    ItemTypeId = 1,
-                    CreateDate = DateTime.Now,
-                    UpdateDate = DateTime.Now,
-                    UpdateSource = "Test Case PlaceOrderNewCompanyTest",
-                };
-                storeService.Add<StoreDetailEmailExpress>(emailExpress);
-            }
-            storeService.SaveChanges();
+            var products = new List<ContextProduct>();
+            products.Add(new ContextProduct { Id = 77, HasBackEndIntegration = true });
+            products.Add(new ContextProduct { Id = 61, HasBackEndIntegration = true });
+            var emailExpresses = new List<StoreDetailEmailExpress>();
+            emailExpresses.Add(new StoreDetailEmailExpress { OrderDetailId = 1, ItemTypeId = 1 });
+            var mappings = new List<PersonifyMapping>();
+            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 77, StoreOption = "0", PersonifyProduct = 14471, PersonifyRateCode = "STD", PersonifyRateStructure = "MEMBER" } );
+            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 61, StoreOption = "1;1X", PersonifyProduct = 1587, PersonifyRateCode = "1X", PersonifyRateStructure = "MEMBER" } );
+            var codes = new List<LookSendMyAdCountryCode>();
+            codes.Add(new LookSendMyAdCountryCode { Alpha2 = "USA", Alpha3 = "USA", CountryName = "United States" });
+
+            Mock<IStoreService> mockObjectService = new Mock<IStoreService>();
+            mockObjectService.Setup(objectService => objectService.GetAll<ContextProduct>(true)).Returns(products.AsQueryable());
+            mockObjectService.Setup(objectService => objectService.GetAll<StoreDetailEmailExpress>(true)).Returns(emailExpresses.AsQueryable());
+            mockObjectService.Setup(objectService => objectService.GetAll<PersonifyMapping>(true)).Returns(mappings.AsQueryable());
+            mockObjectService.Setup(objectService => objectService.GetAll<LookSendMyAdCountryCode>(true)).Returns(codes.AsQueryable());
+            return mockObjectService.Object;
         }
 
 		private static StoreOrder CreateOrder(string asiNumber, ContextProduct[] products)

@@ -86,14 +86,14 @@ namespace asi.asicentral.services
             {
                 case 77: //supplier specials
                     string option = orderDetail.OptionId.ToString();
-                    PersonifyMapping mapping = storeService.GetAll<PersonifyMapping>().Single(map => Object.Equals(map.StoreContext, orderDetail.Order.ContextId) && 
+                    PersonifyMapping mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => Object.Equals(map.StoreContext, orderDetail.Order.ContextId) && 
                         map.StoreProduct == orderDetail.Product.Id &&
                         map.StoreOption == option);
                     mappings.Add(mapping);
                     mapping.Quantity = orderDetail.Quantity;
                     break;
                 case 61: //email express
-                    StoreDetailEmailExpress emailexpressdetails = storeService.GetAll<StoreDetailEmailExpress>().Single(details => details.OrderDetailId == orderDetail.Id);
+                    StoreDetailEmailExpress emailexpressdetails = storeService.GetAll<StoreDetailEmailExpress>(true).Single(details => details.OrderDetailId == orderDetail.Id);
                     option = emailexpressdetails.ItemTypeId.ToString();
                     if (option == "1" || option == "2") 
                     {
@@ -106,7 +106,7 @@ namespace asi.asicentral.services
                         else if (orderDetail.Quantity >= 3) option += "3X";
                         else option += "1X";
                     }
-                    mapping = storeService.GetAll<PersonifyMapping>().Single(map => Object.Equals(map.StoreContext, orderDetail.Order.ContextId) && 
+                    mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => Object.Equals(map.StoreContext, orderDetail.Order.ContextId) && 
                         map.StoreProduct == orderDetail.Product.Id &&
                         map.StoreOption == option);
                     mappings.Add(mapping);
