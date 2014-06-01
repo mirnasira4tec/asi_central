@@ -11,6 +11,13 @@ namespace asi.asicentral.interfaces
     {
         void PlaceOrder(StoreOrder storeOrder);
 
+        /// <summary>
+        /// Used to identify where the order detail is processed through backend
+        /// </summary>
+        /// <param name="orderDetail"></param>
+        /// <returns></returns>
+        bool IsProcessUsingBackend(StoreOrderDetail orderDetail);
+
         SaveCustomerOutput AddCompanyByNameAndMemberTypeId(string companyName, int memberTypeId);
 
         CustomerInfo GetCompanyInfoByAsiNumber(string asiNumber);

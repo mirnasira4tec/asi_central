@@ -49,6 +49,22 @@ namespace asi.asicentral.services
             }
         }
 
+        public bool IsProcessUsingBackend(StoreOrderDetail orderDetail)
+        {
+            bool processUsingBackend = false;
+            if (orderDetail != null && orderDetail.Product != null)
+            {
+                processUsingBackend = orderDetail.Product.HasBackEndIntegration;
+                if (orderDetail.Product.Id == 61)
+                {
+                    //not all email express products are to be integrated
+                    StoreDetailEmailExpress emailexpressdetails = storeService.GetAll<StoreDetailEmailExpress>(true).SingleOrDefault(details => details.OrderDetailId == orderDetail.Id);
+                    processUsingBackend = (emailexpressdetails != null && (emailexpressdetails.ItemTypeId == 1 || emailexpressdetails.ItemTypeId == 2));
+                }
+            }
+            return processUsingBackend;
+        }
+
 	    private IList<CreateOrderLineInput> GetPersonifyLineInputs(StoreOrder order, long shipAddressId)
 	    {
 		    var lineItems = new List<CreateOrderLineInput>();
