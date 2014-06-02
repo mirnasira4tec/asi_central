@@ -17,7 +17,6 @@ namespace asi.asicentral.web.Controllers.Store
         public const string COMMAND_SAVE = "Save";
         public const string COMMAND_REJECT = "Reject";
         public const string COMMAND_ACCEPT = "Accept";
-        
         //products associated only to StoreOrderDetail table
         public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 45, 46, 55, 62, 70, 71, 77 };
         //products associated to StoreDetailESPAdvertising table
@@ -35,7 +34,6 @@ namespace asi.asicentral.web.Controllers.Store
         public IStoreService StoreService { get; set; }
         public IFulfilmentService FulfilmentService { get; set; }
         public ICreditCardService CreditCardService { get; set; }
-       
 
         [HttpGet]
         public virtual ActionResult Edit(int id)
@@ -44,7 +42,6 @@ namespace asi.asicentral.web.Controllers.Store
             if (orderDetail == null) throw new Exception("Invalid Order Detail Id");
             StoreDetailApplication application = null;
             if (orderDetail != null) application = StoreService.GetApplication(orderDetail);
-           
             if (application != null)
             {
                 if (application is StoreDetailSupplierMembership) return View("../Store/Application/Supplier", new SupplierApplicationModel((StoreDetailSupplierMembership)application, orderDetail));
@@ -70,7 +67,7 @@ namespace asi.asicentral.web.Controllers.Store
                     IList<StoreDetailMagazineAdvertisingItem> detailMagazineAdvertising = StoreService.GetAll<StoreDetailMagazineAdvertisingItem>().Where(espadvertising => espadvertising.OrderDetailId == orderDetail.Id).ToList();
                     return View("../Store/Application/MagzineAdvertising", new MagazinesAdvertisingApplicationModel(orderDetail, detailMagazineAdvertising, StoreService));
                 }
-                else if (SUPPLIER_ESP_PAYFORPLACEMENT_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/PayForPlacement", new ESPPayForPlacementModel(orderDetail, StoreService) );
+                else if (SUPPLIER_ESP_PAYFORPLACEMENT_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/PayForPlacement", new ESPPayForPlacementModel(orderDetail, StoreService));
                 else if (SUPPLIER_EMAIL_EXPRESS_PRODUCT_ID==orderDetail.Product.Id)
                 {
                     StoreDetailEmailExpress detailEmailExpress = StoreService.GetAll<StoreDetailEmailExpress>().Where(emailexpress => emailexpress.OrderDetailId == orderDetail.Id).SingleOrDefault();
