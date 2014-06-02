@@ -40,7 +40,8 @@ namespace asi.asicentral.services.PersonifyProxy
             };
 
 		public static CreateOrderOutput CreateOrder(StoreOrder storeOrder, 
-			CustomerInfo companyInfo, 
+			CustomerInfo companyInfo,
+            CustomerInfo contactInfo, 
 			long billToAddressId,
 			long shiptoAddressId,
 			IList<CreateOrderLineInput> lineItems)
@@ -57,8 +58,9 @@ namespace asi.asicentral.services.PersonifyProxy
 					BillMasterCustomerID = companyInfo.MasterCustomerId,
 					BillSubCustomerID = Convert.ToInt16(companyInfo.SubCustomerId),
 					BillAddressID = Convert.ToInt32(billToAddressId),
-					ShipMasterCustomerID = companyInfo.MasterCustomerId,
-					ShipSubCustomerID = Convert.ToInt16(companyInfo.SubCustomerId),
+                    //@todo change the next 2 fields to use the contact customer information
+                    ShipMasterCustomerID = contactInfo.MasterCustomerId,
+                    ShipSubCustomerID = Convert.ToInt16(contactInfo.SubCustomerId),
 					ShipAddressID = Convert.ToInt32(shiptoAddressId),
 					OrderLines = orderLineInputs,
 					AddedOrModifiedBy = ADDED_OR_MODIFIED_BY,
@@ -574,28 +576,38 @@ namespace asi.asicentral.services.PersonifyProxy
         public static CusCommunication AddPhoneNumber(string phoneNumber, string countryCode, CustomerInfo companyInfo)
         {
             CusCommunication respSave = null;
-            try
+            string[] phoneNumberTypes = new string[] { "BUSINESS", "CORPORATE" };
+            IList<CusCommunication> oCusComms = SvcClient.Ctxt.CusCommunications
+                   .Where(c => c.MasterCustomerId == companyInfo.MasterCustomerId
+                               && c.CommTypeCodeString == "PHONE").ToList();
+            IEnumerable<string> commTypes1 = oCusComms.Where(c => !string.IsNullOrWhiteSpace(c.PhoneNumber))
+                                                      .Select(c => c.CommLocationCodeString.ToUpper());
+            IEnumerable<string> commTypes2 = phoneNumberTypes.Where(c=>!commTypes1.Contains(c.ToUpper()));
+            if (commTypes2.Any())
             {
-                phoneNumber = new string(phoneNumber.Where(Char.IsDigit).ToArray());
-                if (string.Equals(countryCode, "USA", StringComparison.InvariantCultureIgnoreCase) 
-                    && phoneNumber.Length == PHONE_NUMBER_LENGTH
-                    && !IsPhoneExist(phoneNumber, companyInfo))
+                try
                 {
-                    var respCreate = SvcClient.Create<CusCommunication>();
-                    respCreate.MasterCustomerId = companyInfo.MasterCustomerId;
-                    respCreate.SubCustomerId = companyInfo.SubCustomerId;
-                    respCreate.CommLocationCodeString = COMMUNICATION_LOCATION_CODE_CORPORATE; //COMMUNICATION_LOCATION_CODE_WORK;
-                    respCreate.CommTypeCodeString = COMMUNICATION_INPUT_PHONE;
-                    respCreate.PhoneAreaCode = phoneNumber.Substring(0,3);
-                    respCreate.PhoneNumber = phoneNumber.Substring(3,7);
-                    respCreate.CountryCode = countryCode;
-                    respCreate.PrimaryFlag = false;
-                    respSave = SvcClient.Save<CusCommunication>(respCreate);
+                    phoneNumber = new string(phoneNumber.Where(Char.IsDigit).ToArray());
+                    if (string.Equals(countryCode, "USA", StringComparison.InvariantCultureIgnoreCase)
+                        && phoneNumber.Length == PHONE_NUMBER_LENGTH
+                        && !IsPhoneExist(phoneNumber, companyInfo))
+                    {
+                        var respCreate = SvcClient.Create<CusCommunication>();
+                        respCreate.MasterCustomerId = companyInfo.MasterCustomerId;
+                        respCreate.SubCustomerId = companyInfo.SubCustomerId;
+                        respCreate.CommLocationCodeString = commTypes2.First();
+                        respCreate.CommTypeCodeString = COMMUNICATION_INPUT_PHONE;
+                        respCreate.PhoneAreaCode = phoneNumber.Substring(0, 3);
+                        respCreate.PhoneNumber = phoneNumber.Substring(3, 7);
+                        respCreate.CountryCode = countryCode;
+                        respCreate.PrimaryFlag = false;
+                        respSave = SvcClient.Save<CusCommunication>(respCreate);
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                respSave = null;
+                catch (Exception ex)
+                {
+                    respSave = null;
+                }
             }
             return respSave;
         }
