@@ -22,7 +22,6 @@ namespace asi.asicentral.oauth
             var extraData = JsonConvert.SerializeObject(redirectParams, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             var ticket = new FormsAuthenticationTicket(1, userName, DateTime.Now, DateTime.Now.AddHours(1), true, extraData, FormsAuthentication.FormsCookiePath);
             string hashedTicket = FormsAuthentication.Encrypt(ticket);
-            var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, hashedTicket);
             SetCookieValue(request, response, FormsAuthentication.FormsCookieName, hashedTicket, isCreate);
         }
 
