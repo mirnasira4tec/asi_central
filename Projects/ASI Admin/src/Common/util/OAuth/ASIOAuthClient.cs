@@ -11,6 +11,7 @@ using ASI.Jade.Utilities;
 using ASI.Jade.v2;
 using ASI.EntityModel;
 using System.Threading.Tasks;
+using asi.asicentral.services;
 
 namespace asi.asicentral.oauth
 {
@@ -77,6 +78,11 @@ namespace asi.asicentral.oauth
                 {
                     int SSOId = Convert.ToInt32(userDetails["sign_in_id"]);
                     user = GetUser(SSOId);
+                    if (redirectParams != null)
+                    {
+                        user.AccessToken = redirectParams.AccessToken;
+                        user.RefreshToken = redirectParams.RefreshToken;
+                    }
                 }
             }
             catch 
@@ -227,16 +233,48 @@ namespace asi.asicentral.oauth
                 try
                 {
                     ASI.EntityModel.User entityUser = null;
-                    ASI.EntityModel.Company entityCompany = null;
-                    entityCompany = MapASIUserCompanyToEntityModelCompany(user, entityCompany, true);
-                    user.CompanyId = 114945;
+                    var usePersonifyServices = ConfigurationManager.AppSettings["UsePersonifyServices"];
+                    if (!string.IsNullOrEmpty(usePersonifyServices) && Convert.ToBoolean(usePersonifyServices))
+                    {
+                        PersonifyService personifyService = new PersonifyService();
+                        try
+                        {
+                            PersonifyDataASI.SaveCustomerOutput company = personifyService.AddCompanyByNameAndMemberTypeId(user.CompanyName, user.MemberTypeId);
+                            if (company != null && string.IsNullOrEmpty(company.MasterCustomerId))
+                                user.CompanyId = Convert.ToInt32(company.MasterCustomerId);
+                        }
+                        catch { }
+                    }
+                    else if(user.CompanyId == 0) user.CompanyId = 114945;
                     entityUser = MapASIUserToEntityModelUser(user, entityUser, true);
-                    
                     ssoId = Task.Factory.StartNew(() => UMS.UserCreate(entityUser).Result, TaskCreationOptions.LongRunning).Result;
                 }
                 catch { }
             }
             return ssoId;
+        }
+
+        public static asi.asicentral.model.User GetCopmanyByASI(string asiNumber)
+        {
+            asi.asicentral.model.User user = null;
+            var usePersonifyServices = ConfigurationManager.AppSettings["UsePersonifyServices"];
+            if (!string.IsNullOrEmpty(usePersonifyServices) && Convert.ToBoolean(usePersonifyServices) && !string.IsNullOrEmpty(asiNumber))
+            {
+                try
+                {
+                    PersonifyService personifyService = new PersonifyService();
+                    PersonifyDataASI.CustomerInfo company = personifyService.GetCompanyInfoByAsiNumber(asiNumber);
+                    if (company != null && company.Memberships != null && company.Memberships.Count > 0)
+                    {
+                        user = new model.User();
+                        if (!string.IsNullOrEmpty(company.MasterCustomerId))
+                            user.CompanyId = Convert.ToInt32(company.MasterCustomerId);
+                        user.CompanyName = company.LabelName;
+                    }
+                }
+                catch { }
+            }
+            return user;
         }
 
         public static bool UpdateUser(asi.asicentral.model.User user)

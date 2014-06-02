@@ -31,14 +31,14 @@ namespace asi.asicentral.oauth
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public static void SetCookieValue(HttpRequestBase request, HttpResponseBase response, string key, string value, bool addCookie = false, string domain = null, bool persist = true)
+        public static void SetCookieValue(HttpRequestBase request, HttpResponseBase response, string key, string value, bool addCookie = false, string domain = null, bool persist = true, int year = 1)
         {
             HttpCookie cookie = request.Cookies.Get(key);
             if (cookie != null)
             {
                 if (!string.IsNullOrEmpty(domain)) cookie.Domain = domain;
                 cookie.Value = value;
-                if (persist) cookie.Expires = DateTime.Now.AddYears(1);
+                if (persist) cookie.Expires = DateTime.Now.AddYears(year);
                 response.Cookies.Set(cookie);
             }
             else if (addCookie)
@@ -46,7 +46,7 @@ namespace asi.asicentral.oauth
                 cookie = !string.IsNullOrEmpty(domain)
                     ? new HttpCookie(key, value) { Domain = domain }
                     : new HttpCookie(key, value);
-                if (persist) cookie.Expires = DateTime.Now.AddYears(1);
+                if (persist) cookie.Expires = DateTime.Now.AddYears(year);
                 response.Cookies.Add(cookie);
             }
         }
@@ -61,7 +61,7 @@ namespace asi.asicentral.oauth
             return cookieValue;
         }
 
-        public static string GetApplicationUrl(HttpRequestBase request, HttpResponseBase response, asi.asicentral.oauth.ApplicationCodes appCode, string userCookieName = "Name")
+        public static string GetApplicationUrl(HttpRequestBase request, HttpResponseBase response, ApplicationCodes appCode, string userCookieName = "Name")
         {
             string redirectUrl = string.Empty;
             string cookie = GetCookieValue(request, response, FormsAuthentication.FormsCookieName);
@@ -84,7 +84,7 @@ namespace asi.asicentral.oauth
                 }
                 if (extraData != null)
                 {
-                    CrossApplication.RedirectParams redirectParams = new CrossApplication.RedirectParams();
+                    var redirectParams = new ASI.Jade.Utilities.CrossApplication.RedirectParams();
                     redirectParams.AccessToken = extraData.AccessToken;
                     redirectParams.RefreshToken = extraData.RefreshToken;
                     redirectParams.TokenExpirationTime = (extraData.TokenExpirationTime.HasValue && extraData.TokenExpirationTime.Value > DateTime.Now) ? 
@@ -94,7 +94,7 @@ namespace asi.asicentral.oauth
                     redirectParams.FromApplicationCode = asi.asicentral.oauth.ApplicationCodes.ASIC.ToString();
                     redirectParams.FromApplicationVer = "1";
                     var url = ConfigurationManager.AppSettings["RedirectUrl"];
-                    redirectUrl = CrossApplication.GenerateToClientUrl(url, redirectParams);
+                    redirectUrl = CrossApplication.GetDashboardRedirectorUrl(url, redirectParams);
                 }
             }
             return redirectUrl;
