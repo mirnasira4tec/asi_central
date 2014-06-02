@@ -136,12 +136,14 @@ namespace asi.asicentral.services
 
         public virtual SaveCustomerOutput AddCompanyByNameAndMemberTypeId(string companyName, int memberTypeId)
         {
-            return PersonifyClient.AddCompanyByNameAndMemberTypeId(companyName, memberTypeId);
+            var company = PersonifyClient.AddCompanyByNameAndMemberTypeId(companyName, memberTypeId);
+            return company;
         }
 
         public virtual CustomerInfo GetCompanyInfoByAsiNumber(string asiNumber)
         {
-            return PersonifyClient.GetCompanyInfoByAsiNumber(asiNumber);
+            var company = PersonifyClient.GetCompanyInfoByAsiNumber(asiNumber);
+            return company;
         }
 
         public void Dispose()
