@@ -3,10 +3,7 @@
 @using asi.asicentral.services;
 @using asi.asicentral.interfaces;
 @model asi.asicentral.web.model.store.IMembershipModel
-<div>
-   
-     
-                
+<div>             
     @if(!string.IsNullOrEmpty(Model.ASINumber))
     {
     <h3>ASI #: @Model.ASINumber</h3>
@@ -17,8 +14,7 @@
     <div class="order-status">@Model.OrderStatus</div>
     <div class="timms-info">
         <div class="span3">
-           
-             @if (!IsBackEnd())
+           @if (!IsBackEnd())
            {
             <label class="order-status-label" for="Timms_ID">Timms ID:</label>
             <div class="order-status-input">
@@ -72,12 +68,13 @@
         public bool IsBackEnd()
         {
             bool useBackEndService = false;
-            useBackEndService = useBackEndService || BackendService.IsProcessUsingBackend(GetOrderDetail());
+            StoreOrderDetail orderDetail = GetOrderDetail();
+            if(orderDetail!=null)
+             useBackEndService = BackendService.IsProcessUsingBackend(orderDetail);
             return useBackEndService;
         }
         
   }
-
 </div>
 
           
