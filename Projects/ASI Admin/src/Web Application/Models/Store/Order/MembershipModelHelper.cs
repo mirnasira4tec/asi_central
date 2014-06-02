@@ -22,7 +22,6 @@ namespace asi.asicentral.web.model.store
         string ASINumber { get; set; }
         bool HasShipAddress { get; set; }
         bool HasBillAddress { get; set; }
-       
         IList<StoreIndividual> Contacts { get; set; }
 
         #region Billing information
