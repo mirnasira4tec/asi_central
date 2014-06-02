@@ -59,16 +59,10 @@
        @functions{
         public IStoreService StoreService { get; set; }
         public IBackendService BackendService { get; set; }
-        public StoreOrderDetail GetOrderDetail()
-        {
-            StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>(true).Where(detail => detail.Id == Model.OrderId).FirstOrDefault();
-            return orderDetail;
-        }
-
         public bool IsBackEnd()
         {
             bool useBackEndService = false;
-            StoreOrderDetail orderDetail = GetOrderDetail();
+            StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>(true).Where(detail => detail.Id == Model.OrderId).FirstOrDefault();
             if(orderDetail!=null)
              useBackEndService = BackendService.IsProcessUsingBackend(orderDetail);
             return useBackEndService;
