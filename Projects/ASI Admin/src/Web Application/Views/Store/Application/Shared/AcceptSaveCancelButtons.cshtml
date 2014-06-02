@@ -1,6 +1,12 @@
 ﻿@using asi.asicentral.web.Controllers.Store
+@using asi.asicentral.model.store;
+@using asi.asicentral.services;
+@using asi.asicentral.interfaces;
 @model asi.asicentral.web.model.store.IMembershipModel
 <div>
+   
+     
+                
     @if(!string.IsNullOrEmpty(Model.ASINumber))
     {
     <h3>ASI #: @Model.ASINumber</h3>
@@ -11,7 +17,8 @@
     <div class="order-status">@Model.OrderStatus</div>
     <div class="timms-info">
         <div class="span3">
-             @if(!Model.IsPersonify)
+           
+             @if (!IsBackEnd())
            {
             <label class="order-status-label" for="Timms_ID">Timms ID:</label>
             <div class="order-status-input">
@@ -21,7 +28,7 @@
              }
         </div>
         <div class="status-btns">
-           @if(!Model.IsPersonify)
+           @if(!IsBackEnd())
            {
             if (Model.IsCompleted && Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
             {
@@ -53,4 +60,24 @@
 
         </div>
     }
+       @functions{
+        public IStoreService StoreService { get; set; }
+        public IBackendService BackendService { get; set; }
+        public StoreOrderDetail GetOrderDetail()
+        {
+            StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>(true).Where(detail => detail.Id == Model.OrderId).FirstOrDefault();
+            return orderDetail;
+        }
+
+        public bool IsBackEnd()
+        {
+            bool useBackEndService = false;
+            useBackEndService = useBackEndService || BackendService.IsProcessUsingBackend(GetOrderDetail());
+            return useBackEndService;
+        }
+        
+  }
+
 </div>
+
+          

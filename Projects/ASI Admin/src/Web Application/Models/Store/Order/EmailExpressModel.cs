@@ -36,7 +36,7 @@ namespace asi.asicentral.web.model.store
         public string ASINumber { get; set; }
         public bool HasShipAddress { get; set; }
         public bool HasBillAddress { get; set; }
-        public bool IsPersonify { get; set; }
+       
 
         #region Billing information
 
