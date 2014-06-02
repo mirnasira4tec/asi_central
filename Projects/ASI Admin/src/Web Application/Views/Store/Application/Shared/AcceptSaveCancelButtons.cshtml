@@ -11,27 +11,33 @@
     <div class="order-status">@Model.OrderStatus</div>
     <div class="timms-info">
         <div class="span3">
+             @if(!Model.IsPersonify)
+           {
             <label class="order-status-label" for="Timms_ID">Timms ID:</label>
             <div class="order-status-input">
                 @Html.EditorFor(m => m.ExternalReference, new { @class = "span2" })
                 <span id="timmsErrorMessage" data-type="errormessage" class="field-validation-error"></span>
             </div>
+             }
         </div>
         <div class="status-btns">
-            @if (Model.IsCompleted && Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
+           @if(!Model.IsPersonify)
+           {
+            if (Model.IsCompleted && Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
             {
             <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
             }
-            @if (Model.IsCompleted && Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
+            if (Model.IsCompleted && Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
             { 
             <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
             }
             <input class="command btn-primary save" type="submit" value="@ApplicationController.COMMAND_SAVE" />
 
-            @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
+            if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
             { @Html.ActionLink("Close", "../Orders") }
             else
             { @Html.ActionLink("Cancel", "../Orders") }
+           }
 
         </div>
     </div>
