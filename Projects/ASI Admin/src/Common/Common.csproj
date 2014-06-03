@@ -44,11 +44,13 @@
     <Reference Include="asi.asicentral.Core">
       <HintPath>..\..\library\asi.asicentral.Core.dll</HintPath>
     </Reference>
-    <Reference Include="ASI.EntityModel">
-      <HintPath>..\packages\ASI.EntityModel.1.0.10\lib\ASI.EntityModel.dll</HintPath>
+    <Reference Include="ASI.EntityModel, Version=1.0.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ASI.EntityModel.1.0.13\lib\ASI.EntityModel.dll</HintPath>
     </Reference>
-    <Reference Include="ASI.Jade">
-      <HintPath>..\packages\ASI.Jade.1.2.9\lib\ASI.Jade.dll</HintPath>
+    <Reference Include="ASI.Jade, Version=1.2.10.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ASI.Jade.1.2.10\lib\ASI.Jade.dll</HintPath>
     </Reference>
     <Reference Include="ASI.Sugar">
       <HintPath>..\packages\Sugar.1.3.13\lib\ASI.Sugar.dll</HintPath>
