@@ -63,7 +63,7 @@ namespace asi.asicentral.Tests
 			{
 				IBackendService personify = new PersonifyService(storeService);
 				var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
-				StoreOrder order = CreateOrder("33020", supplierSpecials);
+				StoreOrder order = CreateOrder("30279", supplierSpecials);
 				personify.PlaceOrder(order);
 			}
 		}
