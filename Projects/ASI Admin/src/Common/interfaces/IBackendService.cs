@@ -18,6 +18,10 @@ namespace asi.asicentral.interfaces
         /// <returns></returns>
         bool IsProcessUsingBackend(StoreOrderDetail orderDetail);
 
+	    bool ValidateCreditCard(CreditCard creditCard);
+
+	    string SaveCreditCard(StoreCompany company, CreditCard creditCard);
+
         SaveCustomerOutput AddCompanyByNameAndMemberTypeId(string companyName, int memberTypeId);
 
         CustomerInfo GetCompanyInfoByAsiNumber(string asiNumber);

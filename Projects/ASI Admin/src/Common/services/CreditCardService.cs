@@ -3,24 +3,17 @@ using asi.asicentral.model;
 using asi.asicentral.model.store;
 using asi.asicentral.services.PersonifyProxy;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Helpers;
 
 namespace asi.asicentral.services
 {
 
     public class CreditCardService : ICreditCardService
     {
+	    private IBackendService backendService;
 
-        public CreditCardService()
+        public CreditCardService(IBackendService backendService)
         {
-            //nothing to do at this point
+	        this.backendService = backendService;
         }
 
         public virtual bool Validate(CreditCard creditCard)
@@ -30,7 +23,7 @@ namespace asi.asicentral.services
             try
             {
                 log = LogService.GetLog(this.GetType());
-                valid = PersonifyClient.ValidateCreditCard(creditCard);
+                valid = backendService.ValidateCreditCard(creditCard);
             }
             catch (Exception ex)
             {
@@ -40,14 +33,14 @@ namespace asi.asicentral.services
             return valid;
         }
 
-        public virtual string Store(CreditCard creditCard)
+        public virtual string Store(StoreCompany company, CreditCard creditCard)
         {
             string result = null;
             ILogService log = null;
             try
             {
                 log = LogService.GetLog(this.GetType());
-                result = PersonifyClient.SaveCreditCard(creditCard);
+                result = backendService.SaveCreditCard(company, creditCard);
                 if (creditCard.Number.Length >= 4) creditCard.MaskedPAN = "****" + creditCard.Number.Substring(creditCard.Number.Length - 4, 4);
             }
             catch (Exception ex)

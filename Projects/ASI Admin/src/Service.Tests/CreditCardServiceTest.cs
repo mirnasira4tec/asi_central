@@ -16,7 +16,7 @@ namespace asi.asicentral.Tests
             string webAPIUrl = ConfigurationManager.AppSettings["ConnectUrl"];
             if (!string.IsNullOrEmpty(webAPIUrl)) {
                 CreditCard card = GetVisaCC();
-                ICreditCardService cardService = new CreditCardService();
+                ICreditCardService cardService = new CreditCardService(new PersonifyService());
                 Assert.IsTrue(cardService.Validate(card));
                 card.Number = "4123456789012345";
                 Assert.IsFalse(cardService.Validate(card));
