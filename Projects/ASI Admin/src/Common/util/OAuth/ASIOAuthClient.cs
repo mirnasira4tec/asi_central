@@ -264,7 +264,7 @@ namespace asi.asicentral.oauth
                 {
                     PersonifyService personifyService = new PersonifyService();
                     PersonifyDataASI.CustomerInfo company = personifyService.GetCompanyInfoByAsiNumber(asiNumber);
-                    if (company != null && company.Memberships != null && company.Memberships.Count > 0)
+                    if (company != null)
                     {
                         user = new model.User();
                         if (!string.IsNullOrEmpty(company.MasterCustomerId))

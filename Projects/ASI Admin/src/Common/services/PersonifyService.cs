@@ -32,15 +32,21 @@ namespace asi.asicentral.services
         {
 	        IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
 			if (order == null || order.Company == null || countryCodes == null)
-				throw new System.ArgumentException("You must pass a valid order and the country codes");
+                throw new System.ArgumentException("You must pass a valid order and the country codes");
             try
             {
                 var companyInfo = PersonifyClient.AddCompanyInfo(order, countryCodes);
-	            IDictionary<AddressType, long>  addresses = PersonifyClient.AddCompanyAddresses(order.Company, companyInfo, countryCodes);
-				PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo);
-	            var lineItems = GetPersonifyLineInputs(order, addresses[AddressType.Shipping]);
-                var orderOutput = PersonifyClient.CreateOrder(order, companyInfo, addresses[AddressType.Billing], addresses[AddressType.Shipping], lineItems);
-	            order.ExternalReference = orderOutput.OrderNumber;
+                IDictionary<AddressType, long> addresses = PersonifyClient.AddCompanyAddresses(order.Company, companyInfo, countryCodes);
+                //@todo AddIndividualInfos needs to return CustomerInfo class for the primary contact
+                StoreIndividual primaryContact = order.GetContact();
+                IEnumerable<CustomerInfo> individualInfos = PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo);
+                CustomerInfo primaryContactInfo = individualInfos.FirstOrDefault(c =>
+                    string.Equals(c.FirstName, primaryContact.FirstName, StringComparison.InvariantCultureIgnoreCase)
+                    && string.Equals(c.LastName, primaryContact.LastName, StringComparison.InvariantCultureIgnoreCase));
+                var lineItems = GetPersonifyLineInputs(order, addresses[AddressType.Shipping]);
+                //@todo pass the primary contact information
+                var orderOutput = PersonifyClient.CreateOrder(order, companyInfo, primaryContactInfo, addresses[AddressType.Billing], addresses[AddressType.Shipping], lineItems);
+                order.ExternalReference = orderOutput.OrderNumber;
             }
             catch (Exception ex)
             {

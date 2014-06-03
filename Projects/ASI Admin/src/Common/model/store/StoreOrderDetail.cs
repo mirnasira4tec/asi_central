@@ -29,6 +29,7 @@ namespace asi.asicentral.model.store
         public bool IsSubscription { get; set; }
         public string AcceptedByName { get; set; }
         public int? OptionId { get; set; }
+        public DateTime? DateOption { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
