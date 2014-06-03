@@ -62,9 +62,12 @@
         public bool IsBackEnd()
         {
             bool useBackEndService = false;
-            StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>(true).Where(detail => detail.Id == Model.OrderId).FirstOrDefault();
-            if(orderDetail!=null)
-             useBackEndService = BackendService.IsProcessUsingBackend(orderDetail);
+            IList<StoreOrderDetail> OrderDetails = StoreService.GetAll<StoreOrderDetail>(true).Where(detail => detail.Id == Model.OrderId).ToList();
+            foreach (var orderDetail in OrderDetails)
+            {
+                useBackEndService = useBackEndService || BackendService.IsProcessUsingBackend(orderDetail);
+                if (useBackEndService) break;
+            }
             return useBackEndService;
         }
         
