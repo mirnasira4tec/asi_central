@@ -44,6 +44,8 @@ namespace asi.asicentral.services
                 var lineItems = GetPersonifyLineInputs(order, addresses[AddressType.Shipping].CustomerAddressId);
                 var orderOutput = PersonifyClient.CreateOrder(order, companyInfo, primaryContactInfo, addresses[AddressType.Billing].CustomerAddressId, addresses[AddressType.Shipping].CustomerAddressId, lineItems);
                 order.ExternalReference = orderOutput.OrderNumber;
+	            decimal orderTotal = PersonifyClient.GetOrderTotal(orderOutput.OrderNumber);
+	            PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, addresses[AddressType.Billing], companyInfo);
             }
             catch (Exception ex)
             {
