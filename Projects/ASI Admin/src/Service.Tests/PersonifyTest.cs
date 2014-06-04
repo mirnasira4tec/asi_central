@@ -52,19 +52,6 @@ namespace asi.asicentral.Tests
             StoreOrder order = CreateOrder("30279", new ContextProduct[] { supplierSpecials });
 			personify.PlaceOrder(order);
 		}
-
-        [TestMethod]
-        public void PayOrderWithCreditCardTest()
-        {
-            var result = PersonifyClient.PayOrderWithCreditCard(
-                "1100362966",
-                20m,
-                "38047965",
-                PersonifyClient.GetBillingAddress(38047963),
-                PersonifyClient.GetCompanyInfo("000009337624", 0)
-                );
-            Assert.IsNotNull(result);
-        }
       
         [TestMethod]
         public void AddPhoneNumberTest()
@@ -132,7 +119,7 @@ namespace asi.asicentral.Tests
 			var contacts = new List<StoreIndividual>() { person };
 			var company = new StoreCompany()
 			{
-				Name = "ORDER Test6 " + tag,
+				Name = "ORDER Test7 " + tag,
 				Addresses = companyAddresses,
 				Individuals = contacts,
 				ASINumber = asiNumber,				
