@@ -68,6 +68,17 @@ namespace asi.asicentral.Tests
 			personify.PlaceOrder(order);
 		}
 
+      
+        [TestMethod]
+        public void AddPhoneNumberTest()
+        {
+            CustomerInfo companyInfo = PersonifyClient.GetCompanyInfoByAsiNumber("33020");
+            if (companyInfo != null)
+            {
+                var cusComm = PersonifyClient.AddPhoneNumber("2222222222", "USA", companyInfo);
+            }
+        }
+
         private IStoreService MockupStoreService()
         {
             var products = new List<ContextProduct>();

@@ -151,7 +151,7 @@ namespace asi.asicentral.services.PersonifyProxy
 			return companyInfo;
 		}
 
-	    public static IDictionary<AddressType, long> AddCompanyAddresses(StoreCompany storeCompany,
+        public static IDictionary<AddressType, AddressInfo> AddCompanyAddresses(StoreCompany storeCompany,
 	        CustomerInfo companyInfo, 
 			IList<LookSendMyAdCountryCode> countryCodes)
 	    {
@@ -246,7 +246,15 @@ namespace asi.asicentral.services.PersonifyProxy
                 }
             }
 
-            return addressesAdded;
+            var addressInfoAdded = new Dictionary<AddressType, AddressInfo>();
+            List<AddressInfo> companyAddressInfos = SvcClient.Ctxt.AddressInfos.Where(
+               a => a.MasterCustomerId == companyInfo.MasterCustomerId && a.SubCustomerId == companyInfo.SubCustomerId).ToList();
+            foreach (var pair in addressesAdded)
+	        {
+	            AddressInfo addressInfo = companyAddressInfos.SingleOrDefault(a => a.CustomerAddressId == pair.Value);
+                addressInfoAdded[pair.Key] = addressInfo;
+	        }
+            return addressInfoAdded;
         }
 
         private static SaveAddressOutput AddCompanyAddress(StoreAddress address, AddressInfo existingPrimaryAddress, 
@@ -686,7 +694,6 @@ namespace asi.asicentral.services.PersonifyProxy
 		{
 			Dictionary<string, string> companyInfo = GetPersonifyCreditCardCompany();
 			if (companyInfo == null) throw new Exception("Could not find a company to assign the credit card to");
-
 			IEnumerable<ASICustomerCreditCard> oCreditCards = SvcClient.Ctxt.ASICustomerCreditCards
 				.Where(c => c.MasterCustomerId == companyInfo["MasterCustomerId"]
 						 && c.SubCustomerId == Convert.ToInt32(companyInfo["SubCustomerId"])
@@ -702,6 +709,60 @@ namespace asi.asicentral.services.PersonifyProxy
 			return profileId == null ? string.Empty : profileId.ToString();
 		}
 
+        public static ASICustomerCreditCard GetCreditCardByProfileId(CustomerInfo companyInfo, string profileId)
+        {
+            if (companyInfo == null || string.IsNullOrWhiteSpace(profileId))
+            {
+                throw new Exception("Company information and profile id are required.");
+            }
+            IEnumerable<ASICustomerCreditCard> oCreditCards = SvcClient.Ctxt.ASICustomerCreditCards
+                .Where(c => c.MasterCustomerId == companyInfo.MasterCustomerId
+                         && c.SubCustomerId == companyInfo.SubCustomerId
+                         && c.CustomerCreditCardProfileId == Convert.ToInt64(profileId));
+            ASICustomerCreditCard result = null;
+            if (oCreditCards.Any())
+            {
+                result = oCreditCards.First();
+            }
+            return result;
+        }
+
+        public static PayOrderOutput PayOrderWithCreditCard(
+            string orderNumber,
+            decimal amount,
+            string ccProfileid,
+            AddressInfo billToAddressInfo,
+            CustomerInfo contactInfo,
+            CustomerInfo companyInfo)
+        {
+            List<AddressInfo> companyAddressInfos = SvcClient.Ctxt.AddressInfos.Where(
+               a => a.MasterCustomerId == companyInfo.MasterCustomerId && a.SubCustomerId == companyInfo.SubCustomerId).ToList();
+            if (billToAddressInfo == null) throw new Exception("Billto address if required.");
+            ASICustomerCreditCard credirCard = GetCreditCardByProfileId(companyInfo, ccProfileid);
+            string orderLineNumbers = GetOrderLineByOrderId(orderNumber);
+            var payOrderInput = new PayOrderInput()
+            {
+                OrderNumber = orderNumber,
+                OrderLineNumbers = orderLineNumbers,
+                Amount = amount,
+                AcceptPartialPayment = true,
+                CurrencyCode = "USD",
+                MasterCustomerId = companyInfo.MasterCustomerId,
+                SubCustomerId = Convert.ToInt16(companyInfo.SubCustomerId),
+                BillMasterCustomerId = contactInfo.MasterCustomerId,
+                BillSubCustomerId = Convert.ToInt16(contactInfo.SubCustomerId),
+                BillingAddressStreet = billToAddressInfo.Address1,
+                BillingAddressCity = billToAddressInfo.City,
+                BillingAddressState = billToAddressInfo.State,
+                BillingAddressCountryCode = billToAddressInfo.CountryCode,
+                BillingAddressPostalCode = billToAddressInfo.PostalCode,
+                UseCreditCardOnFile = true,
+                CCProfileId = ccProfileid,
+                CompanyNumber = credirCard.UserDefinedCompanyNumber
+            };
+            PayOrderOutput resp = PersonifySvcClient.SvcClient.Post<PayOrderOutput>("PayOrder", payOrderInput);
+            return resp;
+        }
 
 		public static Dictionary<string, string> GetPersonifyCreditCardCompany()
 		{
@@ -717,6 +778,17 @@ namespace asi.asicentral.services.PersonifyProxy
 			}
 			return result;
 		}
+
+        public static string GetOrderLineByOrderId(string orderId)
+        {
+            IEnumerable<ASIOrderLine> oOrderLines = SvcClient.Ctxt.ASIOrderLines.Where(c => c.OrderNumber == orderId);
+            string result = null;
+            if (oOrderLines.Any())
+            {
+                result = string.Join(",", oOrderLines.Where(o => o.OrderLineNumber.HasValue).Select(o => o.OrderLineNumber));
+            }
+            return result;
+        }
 
 		#endregion Credit Card Handling
 

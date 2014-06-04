@@ -36,16 +36,16 @@ namespace asi.asicentral.services
             try
             {
                 var companyInfo = PersonifyClient.AddCompanyInfo(order, countryCodes);
-                IDictionary<AddressType, long> addresses = PersonifyClient.AddCompanyAddresses(order.Company, companyInfo, countryCodes);
+                IDictionary<AddressType, AddressInfo> addresses = PersonifyClient.AddCompanyAddresses(order.Company, companyInfo, countryCodes);
                 //@todo AddIndividualInfos needs to return CustomerInfo class for the primary contact
                 StoreIndividual primaryContact = order.GetContact();
                 IEnumerable<CustomerInfo> individualInfos = PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo);
                 CustomerInfo primaryContactInfo = individualInfos.FirstOrDefault(c =>
                     string.Equals(c.FirstName, primaryContact.FirstName, StringComparison.InvariantCultureIgnoreCase)
                     && string.Equals(c.LastName, primaryContact.LastName, StringComparison.InvariantCultureIgnoreCase));
-                var lineItems = GetPersonifyLineInputs(order, addresses[AddressType.Shipping]);
+                var lineItems = GetPersonifyLineInputs(order, addresses[AddressType.Shipping].CustomerAddressId);
                 //@todo pass the primary contact information
-                var orderOutput = PersonifyClient.CreateOrder(order, companyInfo, primaryContactInfo, addresses[AddressType.Billing], addresses[AddressType.Shipping], lineItems);
+                var orderOutput = PersonifyClient.CreateOrder(order, companyInfo, primaryContactInfo, addresses[AddressType.Billing].CustomerAddressId, addresses[AddressType.Shipping].CustomerAddressId, lineItems);
                 order.ExternalReference = orderOutput.OrderNumber;
             }
             catch (Exception ex)
@@ -115,6 +115,11 @@ namespace asi.asicentral.services
                     mapping.Quantity = orderDetail.Quantity;
                     break;
                 case 61: //email express
+
+
+
+                    var emailexpressdetailss = storeService.GetAll<StoreDetailEmailExpress>(true);
+
                     StoreDetailEmailExpress emailexpressdetails = storeService.GetAll<StoreDetailEmailExpress>(true).Single(details => details.OrderDetailId == orderDetail.Id);
                     option = emailexpressdetails.ItemTypeId.ToString();
                     if (option == "1" || option == "2") 
