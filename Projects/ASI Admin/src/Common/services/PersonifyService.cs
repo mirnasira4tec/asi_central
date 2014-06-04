@@ -35,14 +35,14 @@ namespace asi.asicentral.services
             try
             {
                 var companyInfo = PersonifyClient.ReconcileCompany(order.Company, countryCodes);
-                IDictionary<AddressType, long> addresses = PersonifyClient.AddCompanyAddresses(order.Company, companyInfo, countryCodes);
+                IDictionary<AddressType, AddressInfo> addresses = PersonifyClient.AddCompanyAddresses(order.Company, companyInfo, countryCodes);
                 StoreIndividual primaryContact = order.GetContact();
                 IEnumerable<CustomerInfo> individualInfos = PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo);
                 CustomerInfo primaryContactInfo = individualInfos.FirstOrDefault(c =>
                     string.Equals(c.FirstName, primaryContact.FirstName, StringComparison.InvariantCultureIgnoreCase)
                     && string.Equals(c.LastName, primaryContact.LastName, StringComparison.InvariantCultureIgnoreCase));
-                var lineItems = GetPersonifyLineInputs(order, addresses[AddressType.Shipping]);
-                var orderOutput = PersonifyClient.CreateOrder(order, companyInfo, primaryContactInfo, addresses[AddressType.Billing], addresses[AddressType.Shipping], lineItems);
+                var lineItems = GetPersonifyLineInputs(order, addresses[AddressType.Shipping].CustomerAddressId);
+                var orderOutput = PersonifyClient.CreateOrder(order, companyInfo, primaryContactInfo, addresses[AddressType.Billing].CustomerAddressId, addresses[AddressType.Shipping].CustomerAddressId, lineItems);
                 order.ExternalReference = orderOutput.OrderNumber;
             }
             catch (Exception ex)

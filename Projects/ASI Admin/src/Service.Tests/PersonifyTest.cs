@@ -4,7 +4,9 @@ using System.Linq;
 using asi.asicentral.interfaces;
 using asi.asicentral.model;
 using asi.asicentral.model.store;
+using asi.asicentral.PersonifyDataASI;
 using asi.asicentral.services;
+using asi.asicentral.services.PersonifyProxy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using asi.asicentral.model.timss;
@@ -51,6 +53,28 @@ namespace asi.asicentral.Tests
 			personify.PlaceOrder(order);
 		}
 
+        [TestMethod]
+        public void PayOrderWithCreditCardTest()
+        {
+            var result = PersonifyClient.PayOrderWithCreditCard(
+                "1100362966",
+                20m,
+                "38047965",
+                PersonifyClient.GetBillingAddress(38047963),
+                PersonifyClient.GetCompanyInfo("000009337624", 0)
+                );
+            Assert.IsNotNull(result);
+        }
+      
+        [TestMethod]
+        public void AddPhoneNumberTest()
+        {
+            CustomerInfo companyInfo = PersonifyClient.GetCompanyInfoByAsiNumber("33020");
+            if (companyInfo != null)
+            {
+                var cusComm = PersonifyClient.AddPhoneNumber("2222222222", "USA", companyInfo);
+            }
+        }
 
         private IStoreService MockupStoreService()
         {
