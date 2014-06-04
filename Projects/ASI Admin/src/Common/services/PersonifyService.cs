@@ -54,7 +54,7 @@ namespace asi.asicentral.services
             }
         }
 
-        public bool IsProcessUsingBackend(StoreOrderDetail orderDetail)
+        public virtual bool IsProcessUsingBackend(StoreOrderDetail orderDetail)
         {
             bool processUsingBackend = false;
             if (orderDetail != null && orderDetail.Product != null)
@@ -70,18 +70,19 @@ namespace asi.asicentral.services
             return processUsingBackend;
         }
 
-		public bool ValidateCreditCard(CreditCard creditCard)
+		public virtual bool ValidateCreditCard(CreditCard creditCard)
 		{
 			return PersonifyClient.ValidateCreditCard(creditCard);
 		}
 
-		public string SaveCreditCard(StoreCompany company, CreditCard creditCard)
+		public virtual string SaveCreditCard(StoreCompany company, CreditCard creditCard)
 		{
 			//assuming credit card is valid already
-			if (company == null || creditCard == null) throw new System.ArgumentException("Invalid parameters");
+			if (company == null || creditCard == null) throw new ArgumentException("Invalid parameters");
 			IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
 			//create company if not already there
 			var companyInfo = PersonifyClient.ReconcileCompany(company, countryCodes);
+			PersonifyClient.AddCompanyAddresses(company, companyInfo, countryCodes);
 			//Add credit card to the company
 			string profile = PersonifyClient.GetCreditCardProfileId(companyInfo, creditCard);
 			if (profile == string.Empty) profile = PersonifyClient.SaveCreditCard(companyInfo, creditCard);
