@@ -127,9 +127,10 @@ namespace asi.asicentral.services.PersonifyProxy
 						SvcClient.Save<ASICustomer>(customer);
 					}
 					companyInfo = GetCompanyInfo(result.MasterCustomerId, subCustomerId);
-					company.ExternalReference = result.MasterCustomerId + ";" + subCustomerId;
 				}
 			}
+			if (companyInfo != null) company.ExternalReference = companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId;
+
 			return companyInfo;
 		}
 

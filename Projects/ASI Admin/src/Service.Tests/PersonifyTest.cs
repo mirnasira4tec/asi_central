@@ -19,15 +19,29 @@ namespace asi.asicentral.Tests
 		[TestMethod]
 		public void PlaceOrderNewCompanyTest()
 		{
-            IStoreService storeService = MockupStoreService();
-			IBackendService personify = new PersonifyService(storeService);
+			IStoreService storeService = MockupStoreService();
 			var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
-            var emailExpress = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 61);
-            StoreOrder order = CreateOrder("", new ContextProduct[] { supplierSpecials, emailExpress });
+			var emailExpress = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 61);
+			PlaceOrderTest(string.Empty, storeService, new ContextProduct[] { supplierSpecials, emailExpress });
+		}
 
-			//simulate the store process
+		[TestMethod]
+		public void PlaceOrderExistingCompanyTest()
+		{
+			IStoreService storeService = MockupStoreService();
+			var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
+			var emailExpress = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 61);
+			PlaceOrderTest("30279", storeService, new ContextProduct[] {supplierSpecials, emailExpress});
+		}
+
+		private void PlaceOrderTest(string asiNumber, IStoreService storeService, ContextProduct[] products)
+		{
+			IBackendService personify = new PersonifyService(storeService);
+			StoreOrder order = CreateOrder(asiNumber, products);
+
+			//simulate the store process by first processing the credit card
 			ICreditCardService cardService = new CreditCardService(new PersonifyService(storeService));
-			CreditCard cc = new CreditCard
+			var cc = new CreditCard
 			{
 				Address = "",
 				CardHolderName = order.CreditCard.CardHolderName,
@@ -36,7 +50,7 @@ namespace asi.asicentral.Tests
 				ExpirationDate = new DateTime(int.Parse(order.CreditCard.ExpYear), int.Parse(order.CreditCard.ExpMonth), 1),
 			};
 			Assert.IsTrue(cardService.Validate(cc));
-			string profileIdentifier = cardService.Store(order.Company, cc);
+			var profileIdentifier = cardService.Store(order.Company, cc);
 			Assert.IsNotNull(profileIdentifier);
 			Assert.IsNotNull(order.Company.ExternalReference);
 			order.CreditCard.ExternalReference = profileIdentifier;
@@ -44,22 +58,12 @@ namespace asi.asicentral.Tests
 		}
 
 		[TestMethod]
-		public void PlaceOrderExistingCompanyTest()
-		{
-            IStoreService storeService = MockupStoreService();
-            IBackendService personify = new PersonifyService(storeService);
-			var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
-            StoreOrder order = CreateOrder("30279", new ContextProduct[] { supplierSpecials });
-			personify.PlaceOrder(order);
-		}
-      
-        [TestMethod]
         public void AddPhoneNumberTest()
         {
             CustomerInfo companyInfo = PersonifyClient.GetCompanyInfoByAsiNumber("33020");
             if (companyInfo != null)
             {
-                var cusComm = PersonifyClient.AddPhoneNumber("2222222222", "USA", companyInfo);
+                PersonifyClient.AddPhoneNumber("2222222222", "USA", companyInfo);
             }
         }
 
@@ -112,9 +116,10 @@ namespace asi.asicentral.Tests
 			{
 				Address = address1,
 				IsPrimary = true,
-				FirstName = "Store Test " + tag,
-				LastName = "Store Test " + tag,
-				Title = "Server",
+				FirstName = "Yann",
+				LastName = "Perrin",
+				Title = "Accountant",
+				Email = asiNumber == string.Empty ? "test" + tag + "@gmail.com" : "perrin.yann@gmail.com",
 			};
 			var contacts = new List<StoreIndividual>() { person };
 			var company = new StoreCompany()
