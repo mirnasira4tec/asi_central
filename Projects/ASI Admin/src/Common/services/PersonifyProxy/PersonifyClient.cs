@@ -414,8 +414,9 @@ namespace asi.asicentral.services.PersonifyProxy
 					.ContinueWith<CustomerInfo>(saveCustomerOutput => GetIndividualInfo(saveCustomerOutput.Result.MasterCustomerId)
 				)
 			);
-			var result2 = Task.WhenAll(saveCustomerOutputs);
-			return result2.Result;
+            var result2 = Task.WhenAll(saveCustomerOutputs);
+            IEnumerable<CustomerInfo> storeInfos2 = result2.Result;
+		    return storeInfos.Union(storeInfos2);
 		}
 
 		public static CustomerInfo GetIndividualInfo(string firstName, string lastName, CustomerInfo companyInfo)
