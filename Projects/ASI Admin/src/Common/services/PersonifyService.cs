@@ -6,7 +6,6 @@ using asi.asicentral.model;
 using System;
 using System.Collections.Generic;
 using asi.asicentral.services.PersonifyProxy;
-using DotLiquid.Exceptions;
 using asi.asicentral.model.timss;
 
 namespace asi.asicentral.services
@@ -32,10 +31,10 @@ namespace asi.asicentral.services
         {
 	        IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
 			if (order == null || order.Company == null || countryCodes == null)
-                throw new System.ArgumentException("You must pass a valid order and the country codes");
+                throw new ArgumentException("You must pass a valid order and the country codes");
             try
             {
-                var companyInfo = PersonifyClient.AddCompanyInfo(order, countryCodes);
+                var companyInfo = PersonifyClient.ReconcileCompany(order.Company, countryCodes);
                 IDictionary<AddressType, long> addresses = PersonifyClient.AddCompanyAddresses(order.Company, companyInfo, countryCodes);
                 //@todo AddIndividualInfos needs to return CustomerInfo class for the primary contact
                 StoreIndividual primaryContact = order.GetContact();
@@ -71,6 +70,24 @@ namespace asi.asicentral.services
             return processUsingBackend;
         }
 
+		public bool ValidateCreditCard(CreditCard creditCard)
+		{
+			return PersonifyClient.ValidateCreditCard(creditCard);
+		}
+
+		public string SaveCreditCard(StoreCompany company, CreditCard creditCard)
+		{
+			//assuming credit card is valid already
+			if (company == null || creditCard == null) throw new System.ArgumentException("Invalid parameters");
+			IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
+			//create company if not already there
+			var companyInfo = PersonifyClient.ReconcileCompany(company, countryCodes);
+			//Add credit card to the company
+			string profile = PersonifyClient.GetCreditCardProfileId(companyInfo, creditCard);
+			if (profile == string.Empty) profile = PersonifyClient.SaveCreditCard(companyInfo, creditCard);
+			return profile;
+		}
+
 	    private IList<CreateOrderLineInput> GetPersonifyLineInputs(StoreOrder order, long shipAddressId)
 	    {
 		    var lineItems = new List<CreateOrderLineInput>();
@@ -85,7 +102,7 @@ namespace asi.asicentral.services
                     //when purchasing more than one email express, each one is a line item
                     for (int i = 0; i < item.ItemCount; i++)
                     {
-                        var lineItem = new CreateOrderLineInput()
+                        var lineItem = new CreateOrderLineInput
                         {
                             ProductId = item.PersonifyProduct,
                             RateCode = item.PersonifyRateCode,
@@ -108,7 +125,7 @@ namespace asi.asicentral.services
             {
                 case 77: //supplier specials
                     string option = orderDetail.OptionId.ToString();
-                    PersonifyMapping mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => Object.Equals(map.StoreContext, orderDetail.Order.ContextId) && 
+                    PersonifyMapping mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => Equals(map.StoreContext, orderDetail.Order.ContextId) && 
                         map.StoreProduct == orderDetail.Product.Id &&
                         map.StoreOption == option);
                     mappings.Add(mapping);
@@ -128,7 +145,7 @@ namespace asi.asicentral.services
                         else if (orderDetail.Quantity >= 3) option += "3X";
                         else option += "1X";
                     }
-                    mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => Object.Equals(map.StoreContext, orderDetail.Order.ContextId) && 
+                    mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => Equals(map.StoreContext, orderDetail.Order.ContextId) && 
                         map.StoreProduct == orderDetail.Product.Id &&
                         map.StoreOption == option);
                     mappings.Add(mapping);
@@ -142,12 +159,14 @@ namespace asi.asicentral.services
 
         public virtual SaveCustomerOutput AddCompanyByNameAndMemberTypeId(string companyName, int memberTypeId)
         {
-            return PersonifyClient.AddCompanyByNameAndMemberTypeId(companyName, memberTypeId);
+            var company = PersonifyClient.AddCompanyByNameAndMemberTypeId(companyName, memberTypeId);
+            return company;
         }
 
         public virtual CustomerInfo GetCompanyInfoByAsiNumber(string asiNumber)
         {
-            return PersonifyClient.GetCompanyInfoByAsiNumber(asiNumber);
+            var company = PersonifyClient.GetCompanyInfoByAsiNumber(asiNumber);
+            return company;
         }
 
         public void Dispose()
@@ -172,5 +191,5 @@ namespace asi.asicentral.services
         {
             Dispose(false);
         }
-    }
+	}
 }

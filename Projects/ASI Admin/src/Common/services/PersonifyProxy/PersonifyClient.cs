@@ -1,7 +1,4 @@
 ﻿using System.Configuration;
-using System.Net.Sockets;
-using System.Web.Mvc;
-using asi.asicentral.model.ROI;
 using asi.asicentral.model.store;
 using System;
 using System.Collections.Generic;
@@ -11,11 +8,7 @@ using asi.asicentral.util.store.companystore;
 using System.Threading.Tasks;
 using asi.asicentral.model;
 using asi.asicentral.PersonifyDataASI;
-using System.Diagnostics;
-using ASI.EntityModel;
-using DotLiquid.Tags;
 using PersonifySvcClient;
-using asi.asicentral.interfaces;
 
 namespace asi.asicentral.services.PersonifyProxy
 {
@@ -106,38 +99,52 @@ namespace asi.asicentral.services.PersonifyProxy
 			return new List<AddressInfo>() { billingAddressInfo, shippingAddressInfo };
 		}
 
-		public static CustomerInfo AddCompanyInfo(StoreOrder order, IList<LookSendMyAdCountryCode> countryCodes)
+		public static CustomerInfo ReconcileCompany(StoreCompany company, IList<LookSendMyAdCountryCode> countryCodes)
 		{
 			CustomerInfo companyInfo = null;
-			StoreCompany storeCompany = order.Company;
 
-			if (storeCompany == null || string.IsNullOrWhiteSpace(storeCompany.Name))
+			if (company == null || string.IsNullOrWhiteSpace(company.Name))
 			{
 				throw new Exception("Store company is not valid.");
 			}
-			//look company by ASI#
-			if (!string.IsNullOrEmpty(storeCompany.ASINumber))
+			if (!string.IsNullOrEmpty(company.ExternalReference))
 			{
-				companyInfo = GetCompanyInfoByAsiNumber(order.Company.ASINumber);
+				string[] references = company.ExternalReference.Split(';');
+				int subCustomerId = Int32.Parse(references[1]);
+				companyInfo = GetCompanyInfo(references[0], subCustomerId);
+			}
+			else
+			{
+				//look company by ASI#
+				if (!string.IsNullOrEmpty(company.ASINumber))
+				{
+					companyInfo = GetCompanyInfoByAsiNumber(company.ASINumber);
+				}
 			}
 			if (companyInfo == null)
 			{
 				//company not already there, create a new one
-				StoreAddress companyAddress = storeCompany.GetCompanyAddress();
+				StoreAddress companyAddress = company.GetCompanyAddress();
 				bool isUsaAddress = countryCodes.IsUSAAddress(companyAddress.Country);
 				string countryCode = countryCodes.Alpha3Code(companyAddress.Country);
-				var saveCustomerInput = new SaveCustomerInput { LastName = storeCompany.Name, CustomerClassCode = "UNKNOWN"};
-				AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_PHONE, storeCompany.Phone, COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode, isUsaAddress);
-				AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_FAX, storeCompany.Fax, COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode, isUsaAddress);
-				AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_EMAIL, storeCompany.Email, COMMUNICATION_LOCATION_CODE_CORPORATE);
-				AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_WEB, storeCompany.WebURL, COMMUNICATION_LOCATION_CODE_CORPORATE);
+				var saveCustomerInput = new SaveCustomerInput {LastName = company.Name, CustomerClassCode = "UNKNOWN"};
+				AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_PHONE, company.Phone,
+					COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode, isUsaAddress);
+				AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_FAX, company.Fax,
+					COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode, isUsaAddress);
+				AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_EMAIL, company.Email,
+					COMMUNICATION_LOCATION_CODE_CORPORATE);
+				AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_WEB, company.WebURL,
+					COMMUNICATION_LOCATION_CODE_CORPORATE);
 				var result = SvcClient.Post<SaveCustomerOutput>("CreateCompany", saveCustomerInput);
 				if (result != null && string.IsNullOrWhiteSpace(result.WarningMessage))
 				{
 					var subCustomerId = result.SubCustomerId.HasValue ? result.SubCustomerId.Value : 0;
 					//try update status - not caring so much whether it works or not
 					//@todo this does not seem to be working for updating the status
-					var q = SvcClient.Ctxt.ASICustomers.Where(p => p.MasterCustomerId == result.MasterCustomerId && p.SubCustomerId == subCustomerId).Select(o => o);
+					var q =
+						SvcClient.Ctxt.ASICustomers.Where(
+							p => p.MasterCustomerId == result.MasterCustomerId && p.SubCustomerId == subCustomerId).Select(o => o);
 					var customers = new DataServiceCollection<ASICustomer>(q, TrackingMode.None);
 					if (customers.Count > 0)
 					{
@@ -146,6 +153,7 @@ namespace asi.asicentral.services.PersonifyProxy
 						SvcClient.Save<ASICustomer>(customer);
 					}
 					companyInfo = GetCompanyInfo(result.MasterCustomerId, subCustomerId);
+					company.ExternalReference = result.MasterCustomerId + ";" + subCustomerId;
 				}
 			}
 			return companyInfo;
@@ -496,7 +504,9 @@ namespace asi.asicentral.services.PersonifyProxy
 			return customerInfo;
 		}
 
-		private static SaveCustomerInput AddCompanyAddresses(SaveCustomerInput customerInfo, StoreCompany storeCompany, IList<LookSendMyAdCountryCode> countryCodes)
+		private static SaveCustomerInput AddCompanyAddresses(SaveCustomerInput customerInfo, 
+			StoreCompany storeCompany, 
+			IList<LookSendMyAdCountryCode> countryCodes)
 		{
 			if (customerInfo.Addresses == null)
 			{
@@ -537,7 +547,12 @@ namespace asi.asicentral.services.PersonifyProxy
 		}
 
 		private static SaveCustomerInput AddCusCommunicationInput(
-		 SaveCustomerInput customerInfo, string key, string value, string communitionLocationCode, string countryCode = null, bool isUSA = true)
+		 SaveCustomerInput customerInfo, 
+			string key, 
+			string value, 
+			string communitionLocationCode, 
+			string countryCode = null, 
+			bool isUSA = true)
 		{
 			if (!string.IsNullOrWhiteSpace(key) && !string.IsNullOrWhiteSpace(value))
 			{
@@ -634,9 +649,6 @@ namespace asi.asicentral.services.PersonifyProxy
 
 		public static bool ValidateCreditCard(CreditCard info)
 		{
-			var companyinfo = GetPersonifyCreditCardCompany();
-			if (companyinfo == null) return true;
-
 			var asiValidateCreditCardInput = new ASIValidateCreditCardInput()
 			{
 				ReceiptType = CreditCardType[info.Type.ToUpper()],
@@ -646,50 +658,37 @@ namespace asi.asicentral.services.PersonifyProxy
 			return resp.IsValid ?? false;
 		}
 
-		public static string SaveCreditCard(CreditCard info)
+		public static string SaveCreditCard(CustomerInfo companyInfo, CreditCard creditCard)
 		{
-			Dictionary<string, string> companyInfo = GetPersonifyCreditCardCompany();
-			if (companyInfo == null) return "545235";
-
 			var customerCreditCardInput = new CustomerCreditCardInput()
 			{
-				MasterCustomerId = companyInfo["MasterCustomerId"],
-				SubCustomerId = Convert.ToInt32(companyInfo["SubCustomerId"]),
-				ReceiptType = CreditCardType[info.Type.ToUpper()],
-				CreditCardNumber = info.Number,
-				ExpirationMonth = (short)info.ExpirationDate.Month,
-				ExpirationYear = (short)info.ExpirationDate.Year,
-				NameOnCard = info.CardHolderName,
-				BillingAddressStreet = info.Address,
-				BillingAddressCity = info.City,
-				BillingAddressState = info.State,
-				BillingAddressPostalCode = info.PostalCode,
-				BillingAddressCountryCode = info.CountryCode,
+				MasterCustomerId = companyInfo.MasterCustomerId,
+				SubCustomerId = companyInfo.SubCustomerId,
+				ReceiptType = CreditCardType[creditCard.Type.ToUpper()],
+				CreditCardNumber = creditCard.Number,
+				ExpirationMonth = (short)creditCard.ExpirationDate.Month,
+				ExpirationYear = (short)creditCard.ExpirationDate.Year,
+				NameOnCard = creditCard.CardHolderName,
+				BillingAddressStreet = creditCard.Address,
+				BillingAddressCity = creditCard.City,
+				BillingAddressState = creditCard.State,
+				BillingAddressPostalCode = creditCard.PostalCode,
+				BillingAddressCountryCode = creditCard.CountryCode,
 				DefaultFlag = true,
-				CompanyNumber = companyInfo["CompanyNumber"],
+				CompanyNumber = "1",
 				AddedOrModifiedBy = ADDED_OR_MODIFIED_BY
 			};
 			var resp = SvcClient.Post<CustomerCreditCardOutput>("AddCustomerCreditCard", customerCreditCardInput);
 			return resp.Success ?? false ? resp.CreditCardProfileId : null;
 		}
 
-		public static void AssignCreditCard(long profileId, string masterCustomerId, int subCustomerId)
+		public static string GetCreditCardProfileId(CustomerInfo companyInfo, CreditCard creditCard)
 		{
-			var creditCards = SvcClient.Ctxt.ASICustomerCreditCards.Where(cc => cc.CustomerCreditCardProfileId == profileId).ToList();
-			if (creditCards.Count != 1) throw new Exception("Could not find the credit card");
-			creditCards[0].MasterCustomerId = masterCustomerId;
-			creditCards[0].SubCustomerId = subCustomerId;
-			SvcClient.Save<ASICustomerCreditCard>(creditCards[0]);
-		}
-
-		public static string GetCreditCardProfileId(CreditCard creditCard)
-		{
-			Dictionary<string, string> companyInfo = GetPersonifyCreditCardCompany();
 			if (companyInfo == null) throw new Exception("Could not find a company to assign the credit card to");
 
 			IEnumerable<ASICustomerCreditCard> oCreditCards = SvcClient.Ctxt.ASICustomerCreditCards
-				.Where(c => c.MasterCustomerId == companyInfo["MasterCustomerId"]
-						 && c.SubCustomerId == Convert.ToInt32(companyInfo["SubCustomerId"])
+				.Where(c => c.MasterCustomerId == companyInfo.MasterCustomerId
+						 && c.SubCustomerId == companyInfo.SubCustomerId
 						 && c.ReceiptTypeCodeString == CreditCardType[creditCard.Type]);
 			long? profileId = null;
 			if (oCreditCards.Any())
@@ -702,38 +701,7 @@ namespace asi.asicentral.services.PersonifyProxy
 			return profileId == null ? string.Empty : profileId.ToString();
 		}
 
-
-		public static Dictionary<string, string> GetPersonifyCreditCardCompany()
-		{
-			Dictionary<string, string> result = null;
-			string personifyCreditCardCompany = ConfigurationManager.AppSettings["PersonifyCreditCardCompany"];
-			if (personifyCreditCardCompany != null)
-			{
-				string[] companyInfos = personifyCreditCardCompany.Split(new char[] { ';' });
-				result = companyInfos.ToDictionary(item =>
-					item.Substring(0, item.IndexOf('=')).Trim(),
-					item => item.Substring(item.IndexOf('=') + 1).Trim(),
-					StringComparer.InvariantCultureIgnoreCase);
-			}
-			return result;
-		}
-
 		#endregion Credit Card Handling
-
-		public static void UpdateCustomer()
-		{
-			var q = SvcClient.Ctxt.ASICustomers.Where(p => p.MasterCustomerId == "000000033020" && p.SubCustomerId == 0).Select(o => o);
-			var oMyCustomers = new DataServiceCollection<ASICustomer>(q, TrackingMode.None);
-			if (oMyCustomers.Count > 0)
-			{
-				ASICustomer oCustomerToSave = oMyCustomers[0];
-				oCustomerToSave.FirstName = "";
-				//oCustomerToSave.UserDefinedSales = "sales";
-				SvcClient.Save<ASICustomer>(oCustomerToSave);
-			}
-		}
-
-	
 	}
 
     public enum AddressType

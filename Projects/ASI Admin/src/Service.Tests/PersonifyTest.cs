@@ -19,35 +19,6 @@ namespace asi.asicentral.Tests
 	public class PersonifyTest
 	{
 		[TestMethod]
-		public void StoreAndAssignCCTest()
-		{
-			CreditCard cc = new CreditCard()
-			{
-				Type = "Visa",
-				Number = "4111111111111111",
-				ExpirationDate = new DateTime(2014, 11, 15),
-				CardHolderName = "ASI Store",
-				Address = "4800 Street Road",
-				City = "Trevose",
-				State = "PA",
-				Country = "USA",
-				PostalCode = "19053",
-			};
-			//first store the credit card
-			string identifier = PersonifyClient.GetCreditCardProfileId(cc);
-			if (string.IsNullOrEmpty(identifier))
-			{
-				Assert.IsTrue(PersonifyClient.ValidateCreditCard(cc));
-				identifier = PersonifyClient.SaveCreditCard(cc);
-			}
-			long profileIdentifier = long.Parse(identifier);
-			//lookup company to assign CC to
-			CustomerInfo companyInfo = PersonifyClient.GetCompanyInfoByAsiNumber("33020");
-			Assert.IsNotNull(companyInfo);
-			PersonifyClient.AssignCreditCard(profileIdentifier, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
-		}
-
-		[TestMethod]
 		public void PlaceOrderNewCompanyTest()
 		{
             IStoreService storeService = MockupStoreService();
@@ -55,6 +26,22 @@ namespace asi.asicentral.Tests
 			var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
             var emailExpress = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 61);
             StoreOrder order = CreateOrder("", new ContextProduct[] { supplierSpecials, emailExpress });
+
+			//simulate the store process
+			ICreditCardService cardService = new CreditCardService(new PersonifyService(storeService));
+			CreditCard cc = new CreditCard
+			{
+				Address = "",
+				CardHolderName = order.CreditCard.CardHolderName,
+				Type = order.CreditCard.CardType,
+				Number = order.CreditCard.CardNumber,
+				ExpirationDate = new DateTime(int.Parse(order.CreditCard.ExpYear), int.Parse(order.CreditCard.ExpMonth), 1),
+			};
+			Assert.IsTrue(cardService.Validate(cc));
+			string profileIdentifier = cardService.Store(order.Company, cc);
+			Assert.IsNotNull(profileIdentifier);
+			Assert.IsNotNull(order.Company.ExternalReference);
+			order.CreditCard.ExternalReference = profileIdentifier;
 			personify.PlaceOrder(order);
 		}
 
@@ -64,7 +51,7 @@ namespace asi.asicentral.Tests
             IStoreService storeService = MockupStoreService();
             IBackendService personify = new PersonifyService(storeService);
 			var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
-            StoreOrder order = CreateOrder("33020", new ContextProduct[] { supplierSpecials });
+            StoreOrder order = CreateOrder("30279", new ContextProduct[] { supplierSpecials });
 			personify.PlaceOrder(order);
 		}
 
@@ -81,7 +68,7 @@ namespace asi.asicentral.Tests
             var codes = new List<LookSendMyAdCountryCode>();
             codes.Add(new LookSendMyAdCountryCode { Alpha2 = "USA", Alpha3 = "USA", CountryName = "United States" });
 
-            Mock<IStoreService> mockObjectService = new Mock<IStoreService>();
+            var mockObjectService = new Mock<IStoreService>();
             mockObjectService.Setup(objectService => objectService.GetAll<ContextProduct>(true)).Returns(products.AsQueryable());
             mockObjectService.Setup(objectService => objectService.GetAll<StoreDetailEmailExpress>(true)).Returns(emailExpresses.AsQueryable());
             mockObjectService.Setup(objectService => objectService.GetAll<PersonifyMapping>(true)).Returns(mappings.AsQueryable());
@@ -129,6 +116,14 @@ namespace asi.asicentral.Tests
 				Individuals = contacts,
 				ASINumber = asiNumber,				
 			};
+			var creditCard = new StoreCreditCard()
+			{
+				CardType = "Visa",
+				CardNumber = "4111111111111111",
+				ExpMonth = "11",
+				ExpYear = "2015",
+				CardHolderName = "ASI Store",
+			};
             var orderDetails = new List<StoreOrderDetail>();
             var order = new StoreOrder()
             {
@@ -138,6 +133,7 @@ namespace asi.asicentral.Tests
                 BillingIndividual = person,
                 OrderDetails = orderDetails,
                 OrderRequestType = "Supplier",
+				CreditCard = creditCard,
             };
             foreach (var product in products)
             {
