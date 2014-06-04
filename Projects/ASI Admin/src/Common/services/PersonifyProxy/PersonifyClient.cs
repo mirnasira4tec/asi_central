@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using System.Threading;
 using asi.asicentral.model.store;
 using System;
 using System.Collections.Generic;
@@ -98,6 +99,13 @@ namespace asi.asicentral.services.PersonifyProxy
 			shippingAddressInfo.BillToFlag = true;
 			return new List<AddressInfo>() { billingAddressInfo, shippingAddressInfo };
 		}
+
+        public static AddressInfo GetBillingAddress(long customerAddressId)
+        {
+            List<AddressInfo> companyAddressInfos = SvcClient.Ctxt.AddressInfos.Where(
+               a => a.CustomerAddressId == customerAddressId).ToList();
+            return companyAddressInfos.FirstOrDefault();
+        }
 
 		public static CustomerInfo ReconcileCompany(StoreCompany company, IList<LookSendMyAdCountryCode> countryCodes)
 		{
@@ -642,7 +650,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return cc.Any(c => string.Equals(c.CommTypeCodeString, "PHONE", StringComparison.InvariantCultureIgnoreCase));
         }
 
-        private static CustomerInfo GetIndividualInfo(string masterCustomerId)
+        public static CustomerInfo GetIndividualInfo(string masterCustomerId)
         {
 			List<CustomerInfo> oCusInfo = SvcClient.Ctxt.CustomerInfos.Where(
 				a => a.MasterCustomerId == masterCustomerId && a.RecordType == "I").ToList();
@@ -731,12 +739,12 @@ namespace asi.asicentral.services.PersonifyProxy
             decimal amount,
             string ccProfileid,
             AddressInfo billToAddressInfo,
-            CustomerInfo contactInfo,
             CustomerInfo companyInfo)
         {
-            List<AddressInfo> companyAddressInfos = SvcClient.Ctxt.AddressInfos.Where(
-               a => a.MasterCustomerId == companyInfo.MasterCustomerId && a.SubCustomerId == companyInfo.SubCustomerId).ToList();
-            if (billToAddressInfo == null) throw new Exception("Billto address if required.");
+            if (billToAddressInfo == null || companyInfo == null)
+            {
+                throw new ArgumentException("Billto address and company information are required.");
+            }
             ASICustomerCreditCard credirCard = GetCreditCardByProfileId(companyInfo, ccProfileid);
             string orderLineNumbers = GetOrderLineByOrderId(orderNumber);
             var payOrderInput = new PayOrderInput()
@@ -748,8 +756,8 @@ namespace asi.asicentral.services.PersonifyProxy
                 CurrencyCode = "USD",
                 MasterCustomerId = companyInfo.MasterCustomerId,
                 SubCustomerId = Convert.ToInt16(companyInfo.SubCustomerId),
-                BillMasterCustomerId = contactInfo.MasterCustomerId,
-                BillSubCustomerId = Convert.ToInt16(contactInfo.SubCustomerId),
+                BillMasterCustomerId = companyInfo.MasterCustomerId,
+                BillSubCustomerId = Convert.ToInt16(companyInfo.SubCustomerId),
                 BillingAddressStreet = billToAddressInfo.Address1,
                 BillingAddressCity = billToAddressInfo.City,
                 BillingAddressState = billToAddressInfo.State,
@@ -765,11 +773,12 @@ namespace asi.asicentral.services.PersonifyProxy
 
         public static string GetOrderLineByOrderId(string orderId)
         {
-            IEnumerable<ASIOrderLine> oOrderLines = SvcClient.Ctxt.ASIOrderLines.Where(c => c.OrderNumber == orderId);
+            IEnumerable<OrderDetailInfo> oOrderLines =
+                SvcClient.Ctxt.OrderDetailInfos.Where(c => c.OrderNumber == orderId).ToList();
             string result = null;
             if (oOrderLines.Any())
             {
-                result = string.Join(",", oOrderLines.Where(o => o.OrderLineNumber.HasValue).Select(o => o.OrderLineNumber));
+                result = string.Join(",", oOrderLines.Select(o => o.OrderLineNumber));
             }
             return result;
         }
