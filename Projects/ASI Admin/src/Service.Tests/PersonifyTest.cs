@@ -45,6 +45,15 @@ namespace asi.asicentral.Tests
 			personify.PlaceOrder(order);
 		}
 
+        [TestMethod]
+        public void GetCompanyByASINumberTest()
+        {
+            IBackendService personify = new PersonifyService();
+            CustomerInfo csinfo =  personify.GetCompanyInfoByAsiNumber("342495");
+            Assert.IsNotNull(csinfo);
+        }
+
+
 		[TestMethod]
 		public void PlaceOrderExistingCompanyTest()
 		{

@@ -12,6 +12,7 @@ using ASI.Jade.v2;
 using ASI.EntityModel;
 using System.Threading.Tasks;
 using asi.asicentral.services;
+using asi.asicentral.interfaces;
 
 namespace asi.asicentral.oauth
 {
@@ -262,7 +263,7 @@ namespace asi.asicentral.oauth
             {
                 try
                 {
-                    PersonifyService personifyService = new PersonifyService();
+                    IBackendService personifyService = new PersonifyService();
                     PersonifyDataASI.CustomerInfo company = personifyService.GetCompanyInfoByAsiNumber(asiNumber);
                     if (company != null)
                     {
