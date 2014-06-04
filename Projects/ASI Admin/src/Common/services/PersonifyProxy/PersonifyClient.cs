@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using asi.asicentral.model.store;
+﻿using asi.asicentral.model.store;
 using System;
 using System.Collections.Generic;
 using System.Data.Services.Client;
@@ -51,15 +50,14 @@ namespace asi.asicentral.services.PersonifyProxy
 					BillMasterCustomerID = companyInfo.MasterCustomerId,
 					BillSubCustomerID = Convert.ToInt16(companyInfo.SubCustomerId),
 					BillAddressID = Convert.ToInt32(billToAddressId),
-                    //@todo change the next 2 fields to use the contact customer information
                     ShipMasterCustomerID = contactInfo.MasterCustomerId,
                     ShipSubCustomerID = Convert.ToInt16(contactInfo.SubCustomerId),
 					ShipAddressID = Convert.ToInt32(shiptoAddressId),
 					OrderLines = orderLineInputs,
 					AddedOrModifiedBy = ADDED_OR_MODIFIED_BY,
 				};
-			var resp = SvcClient.Post<CreateOrderOutput>("CreateOrder", createOrderInput);
-			return resp;
+			var orderOutput = SvcClient.Post<CreateOrderOutput>("CreateOrder", createOrderInput);
+			return orderOutput;
 		}
 
 		public static bool ComparePriceFromStoreAndPersonify(StoreOrder storeOrder, string masterCustomerId)
@@ -149,7 +147,7 @@ namespace asi.asicentral.services.PersonifyProxy
 					if (customers.Count > 0)
 					{
 						ASICustomer customer = customers[0];
-						customer.UserDefinedAsiStatus = "ACTIVE";
+						customer.UserDefinedMemberStatusString = "NON_MEMBER";
 						SvcClient.Save<ASICustomer>(customer);
 					}
 					companyInfo = GetCompanyInfo(result.MasterCustomerId, subCustomerId);
