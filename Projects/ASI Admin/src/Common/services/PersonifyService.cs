@@ -36,14 +36,12 @@ namespace asi.asicentral.services
             {
                 var companyInfo = PersonifyClient.ReconcileCompany(order.Company, countryCodes);
                 IDictionary<AddressType, AddressInfo> addresses = PersonifyClient.AddCompanyAddresses(order.Company, companyInfo, countryCodes);
-                //@todo AddIndividualInfos needs to return CustomerInfo class for the primary contact
                 StoreIndividual primaryContact = order.GetContact();
                 IEnumerable<CustomerInfo> individualInfos = PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo);
                 CustomerInfo primaryContactInfo = individualInfos.FirstOrDefault(c =>
                     string.Equals(c.FirstName, primaryContact.FirstName, StringComparison.InvariantCultureIgnoreCase)
                     && string.Equals(c.LastName, primaryContact.LastName, StringComparison.InvariantCultureIgnoreCase));
                 var lineItems = GetPersonifyLineInputs(order, addresses[AddressType.Shipping].CustomerAddressId);
-                //@todo pass the primary contact information
                 var orderOutput = PersonifyClient.CreateOrder(order, companyInfo, primaryContactInfo, addresses[AddressType.Billing].CustomerAddressId, addresses[AddressType.Shipping].CustomerAddressId, lineItems);
                 order.ExternalReference = orderOutput.OrderNumber;
             }
@@ -94,69 +92,77 @@ namespace asi.asicentral.services
 		    var lineItems = new List<CreateOrderLineInput>();
 		    foreach (var orderDetail in order.OrderDetails)
 		    {
-                var items = LookupLineItem(orderDetail);
-                //one order detail may be more than one item in personify
-                //membership has one item for membership and one item for application fee
-                foreach (var item in items)
-                {
-                    //each line item may have to be repeated more than once, for instance
-                    //when purchasing more than one email express, each one is a line item
-                    for (int i = 0; i < item.ItemCount; i++)
-                    {
+				switch (orderDetail.Product.Id)
+				{
+					case 77: //supplier specials
+						var startDate = (orderDetail.DateOption.HasValue ? orderDetail.DateOption.Value : DateTime.Now).ToString("MM/dd/yyyy");
+						var option = orderDetail.OptionId.ToString();
+						var mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => Equals(map.StoreContext, orderDetail.Order.ContextId) &&
+							map.StoreProduct == orderDetail.Product.Id &&
+							map.StoreOption == option);
+						mapping.Quantity = orderDetail.Quantity;
                         var lineItem = new CreateOrderLineInput
                         {
-                            ProductId = item.PersonifyProduct,
-                            RateCode = item.PersonifyRateCode,
-                            RateStructure = item.PersonifyRateStructure,
+                            ProductId = mapping.PersonifyProduct,
+							RateCode = mapping.PersonifyRateCode,
+							RateStructure = mapping.PersonifyRateStructure,
                             ShipAddressID = Convert.ToInt32(shipAddressId),
                             Quantity = Convert.ToInt16(orderDetail.Quantity),
-                            
-                        };
+							BeginDate = startDate,
+						};
                         lineItems.Add(lineItem);
-                    }
-                }
+						break;
+					case 61: //email express
+						var emailexpressdetails = storeService.GetAll<StoreDetailEmailExpress>(true).Single(details => details.OrderDetailId == orderDetail.Id);
+						option = emailexpressdetails.ItemTypeId.ToString();
+						if (option == "1" || option == "2")
+						{
+							option += ";";
+							if (orderDetail.Quantity >= 120) option += "120X";
+							else if (orderDetail.Quantity >= 52) option += "52X";
+							else if (orderDetail.Quantity >= 26) option += "26X";
+							else if (orderDetail.Quantity >= 12) option += "12X";
+							else if (orderDetail.Quantity >= 6) option += "6X";
+							else if (orderDetail.Quantity >= 3) option += "3X";
+							else option += "1X";
+						}
+						mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => Equals(map.StoreContext, orderDetail.Order.ContextId) &&
+							map.StoreProduct == orderDetail.Product.Id &&
+							map.StoreOption == option);
+						//need to create a new line item for each one rather than one for all quantity
+						for (int i = 0; i < orderDetail.Quantity; i++)
+						{
+							lineItem = new CreateOrderLineInput
+							{
+								ProductId = mapping.PersonifyProduct,
+								RateCode = mapping.PersonifyRateCode,
+								RateStructure = mapping.PersonifyRateStructure,
+								ShipAddressID = Convert.ToInt32(shipAddressId),
+								Quantity = 1,
+							};
+							lineItems.Add(lineItem);
+						}
+						mapping.ItemCount = orderDetail.Quantity;
+						mapping.Quantity = 1;
+						break;
+					default:
+						mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => Equals(map.StoreContext, orderDetail.Order.ContextId) &&
+							map.StoreProduct == orderDetail.Product.Id);
+
+						lineItem = new CreateOrderLineInput
+                        {
+                            ProductId = mapping.PersonifyProduct,
+							RateCode = mapping.PersonifyRateCode,
+							RateStructure = mapping.PersonifyRateStructure,
+                            ShipAddressID = Convert.ToInt32(shipAddressId),
+                            Quantity = Convert.ToInt16(orderDetail.Quantity),
+						};
+                        lineItems.Add(lineItem);
+						break;
+				}
 		    }
 		    return lineItems;
 	    }
-
-        private IList<PersonifyMapping> LookupLineItem(StoreOrderDetail orderDetail)
-        {
-            var mappings = new List<PersonifyMapping>();
-            switch (orderDetail.Product.Id)
-            {
-                case 77: //supplier specials
-                    string option = orderDetail.OptionId.ToString();
-                    PersonifyMapping mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => Equals(map.StoreContext, orderDetail.Order.ContextId) && 
-                        map.StoreProduct == orderDetail.Product.Id &&
-                        map.StoreOption == option);
-                    mappings.Add(mapping);
-                    mapping.Quantity = orderDetail.Quantity;
-                    break;
-                case 61: //email express
-                    StoreDetailEmailExpress emailexpressdetails = storeService.GetAll<StoreDetailEmailExpress>(true).Single(details => details.OrderDetailId == orderDetail.Id);
-                    option = emailexpressdetails.ItemTypeId.ToString();
-                    if (option == "1" || option == "2") 
-                    {
-                        option += ";";
-                        if (orderDetail.Quantity >= 120) option += "120X";
-                        else if (orderDetail.Quantity >= 52) option += "52X";
-                        else if (orderDetail.Quantity >= 26) option += "26X";
-                        else if (orderDetail.Quantity >= 12) option += "12X";
-                        else if (orderDetail.Quantity >= 6) option += "6X";
-                        else if (orderDetail.Quantity >= 3) option += "3X";
-                        else option += "1X";
-                    }
-                    mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => Equals(map.StoreContext, orderDetail.Order.ContextId) && 
-                        map.StoreProduct == orderDetail.Product.Id &&
-                        map.StoreOption == option);
-                    mappings.Add(mapping);
-                    //need to create a new line item for each one rather than one for all quantity
-                    mapping.ItemCount = orderDetail.Quantity;
-                    mapping.Quantity = 1;
-                    break;
-            }
-            return mappings;
-        }
 
         public virtual SaveCustomerOutput AddCompanyByNameAndMemberTypeId(string companyName, int memberTypeId)
         {

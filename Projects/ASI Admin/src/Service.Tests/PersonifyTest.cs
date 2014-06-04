@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using asi.asicentral.database.mappings;
 using asi.asicentral.interfaces;
 using asi.asicentral.model;
-using asi.asicentral.model.sgr;
 using asi.asicentral.model.store;
-using asi.asicentral.PersonifyDataASI;
 using asi.asicentral.services;
-using asi.asicentral.services.PersonifyProxy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using asi.asicentral.model.timss;
@@ -134,7 +130,7 @@ namespace asi.asicentral.Tests
 			var contacts = new List<StoreIndividual>() { person };
 			var company = new StoreCompany()
 			{
-				Name = "ORDER Test2 " + tag,
+				Name = "ORDER Test6 " + tag,
 				Addresses = companyAddresses,
 				Individuals = contacts,
 				ASINumber = asiNumber,				
@@ -170,6 +166,7 @@ namespace asi.asicentral.Tests
                     IsSubscription = true,
                     Product = product,
                     Order = order,
+					DateOption =  DateTime.Now.AddDays(2),
                 };
                 orderDetails.Add(orderDetail);
             }
