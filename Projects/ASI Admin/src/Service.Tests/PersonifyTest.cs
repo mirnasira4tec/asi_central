@@ -4,7 +4,9 @@ using System.Linq;
 using asi.asicentral.interfaces;
 using asi.asicentral.model;
 using asi.asicentral.model.store;
+using asi.asicentral.PersonifyDataASI;
 using asi.asicentral.services;
+using asi.asicentral.services.PersonifyProxy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using asi.asicentral.model.timss;
@@ -50,7 +52,16 @@ namespace asi.asicentral.Tests
             StoreOrder order = CreateOrder("30279", new ContextProduct[] { supplierSpecials });
 			personify.PlaceOrder(order);
 		}
-
+      
+        [TestMethod]
+        public void AddPhoneNumberTest()
+        {
+            CustomerInfo companyInfo = PersonifyClient.GetCompanyInfoByAsiNumber("33020");
+            if (companyInfo != null)
+            {
+                var cusComm = PersonifyClient.AddPhoneNumber("2222222222", "USA", companyInfo);
+            }
+        }
 
         private IStoreService MockupStoreService()
         {
@@ -108,7 +119,7 @@ namespace asi.asicentral.Tests
 			var contacts = new List<StoreIndividual>() { person };
 			var company = new StoreCompany()
 			{
-				Name = "ORDER Test6 " + tag,
+				Name = "ORDER Test7 " + tag,
 				Addresses = companyAddresses,
 				Individuals = contacts,
 				ASINumber = asiNumber,				
