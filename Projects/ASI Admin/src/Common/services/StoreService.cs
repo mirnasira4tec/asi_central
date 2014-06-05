@@ -11,18 +11,16 @@ namespace asi.asicentral.services
 {
     public class StoreService : ObjectService, IStoreService
     {
-        public StoreService(IContainer container)
+	    static StoreService()
+	    {
+			//listing objects to be cached
+			objectsToCache.Add("asi.asicentral.model.store.LookSendMyAdCountryCode");
+	    }
+
+	    public StoreService(IContainer container)
             : base(container)
         {
             //nothing to do right now
-        }
-
-       
-
-
-        public override IQueryable<T> GetAll<T>(bool readOnly = false)
-        {
-            return base.GetAll<T>(readOnly);
         }
 
         public virtual StoreDetailDistributorMembership GetDistributorApplication(model.store.StoreOrderDetail orderDetail)
@@ -30,7 +28,7 @@ namespace asi.asicentral.services
             StoreDetailDistributorMembership application = null;
             if (orderDetail.Product != null && StoreDetailDistributorMembership.Identifiers.Contains(orderDetail.Product.Id))
             {
-                application = GetAll<StoreDetailDistributorMembership>().Where(app => app.OrderDetailId == orderDetail.Id).SingleOrDefault();
+				application = GetAll<StoreDetailDistributorMembership>().SingleOrDefault(app => app.OrderDetailId == orderDetail.Id);
             }
             return application;
         }
@@ -40,7 +38,7 @@ namespace asi.asicentral.services
             StoreDetailSupplierMembership application = null;
             if (orderDetail.Product != null && StoreDetailSupplierMembership.Identifiers.Contains(orderDetail.Product.Id))
             {
-                application = GetAll<StoreDetailSupplierMembership>().Where(app => app.OrderDetailId == orderDetail.Id).SingleOrDefault();
+                application = GetAll<StoreDetailSupplierMembership>().SingleOrDefault(app => app.OrderDetailId == orderDetail.Id);
             }
             return application;
         }
@@ -50,7 +48,7 @@ namespace asi.asicentral.services
             StoreDetailDecoratorMembership application = null;
             if (orderDetail.Product != null && StoreDetailDecoratorMembership.Identifiers.Contains(orderDetail.Product.Id))
             {
-                application = GetAll<StoreDetailDecoratorMembership>().Where(app => app.OrderDetailId == orderDetail.Id).SingleOrDefault();
+                application = GetAll<StoreDetailDecoratorMembership>().SingleOrDefault(app => app.OrderDetailId == orderDetail.Id);
             }
             return application;
         }
@@ -91,7 +89,7 @@ namespace asi.asicentral.services
                 if (StoreDetailSupplierMembership.Identifiers.Contains(orderDetail.Product.Id))
                 {
                     //make sure the application does not already exist
-                    StoreDetailSupplierMembership supplierApplication = GetAll<StoreDetailSupplierMembership>(true).Where(supplier => supplier.OrderDetailId == orderDetail.Id).FirstOrDefault();
+                    StoreDetailSupplierMembership supplierApplication = GetAll<StoreDetailSupplierMembership>(true).FirstOrDefault(supplier => supplier.OrderDetailId == orderDetail.Id);
                     if (supplierApplication == null)
                     {
                         added = true;
@@ -103,7 +101,7 @@ namespace asi.asicentral.services
                 else if (StoreDetailDistributorMembership.Identifiers.Contains(orderDetail.Product.Id))
                 {
                     //make sure the application does not already exist
-                    StoreDetailDistributorMembership distributorApplication = GetAll<StoreDetailDistributorMembership>(true).Where(distributor => distributor.OrderDetailId == orderDetail.Id).FirstOrDefault();
+                    StoreDetailDistributorMembership distributorApplication = GetAll<StoreDetailDistributorMembership>(true).FirstOrDefault(distributor => distributor.OrderDetailId == orderDetail.Id);
                     if (distributorApplication == null)
                     {
                         added = true;
@@ -115,7 +113,7 @@ namespace asi.asicentral.services
                 else if (StoreDetailDecoratorMembership.Identifiers.Contains(orderDetail.Product.Id))
                 {
                     //make sure the application does not already exist
-                    StoreDetailDecoratorMembership decoratorApplication = GetAll<StoreDetailDecoratorMembership>(true).Where(decorator => decorator.OrderDetailId == orderDetail.Id).FirstOrDefault();
+                    StoreDetailDecoratorMembership decoratorApplication = GetAll<StoreDetailDecoratorMembership>(true).FirstOrDefault(decorator => decorator.OrderDetailId == orderDetail.Id);
                     if (decoratorApplication == null)
                     {
                         added = true;
@@ -193,7 +191,7 @@ namespace asi.asicentral.services
                             bool isGiftSupplement = false;
                             if (orderDetail.Product.Id == 39)
                             {
-                                StoreDetailCatalog catalogDetails = this.GetAll<StoreDetailCatalog>(false).Where(detail => detail.OrderDetailId == orderDetail.Id).SingleOrDefault();
+                                StoreDetailCatalog catalogDetails = this.GetAll<StoreDetailCatalog>(false).SingleOrDefault(detail => detail.OrderDetailId == orderDetail.Id);
                                 if (catalogDetails != null && catalogDetails.SupplementId == 24)
                                     isGiftSupplement = true;
                             }
@@ -248,7 +246,7 @@ namespace asi.asicentral.services
             {
                 decimal taxRate = 0m;
                 //look for a state record
-                TaxRate taxRateRecord = this.GetAll<TaxRate>().Where(taxRecord => taxRecord.State == address.State && taxRecord.Zip == null).SingleOrDefault();
+                TaxRate taxRateRecord = this.GetAll<TaxRate>().SingleOrDefault(taxRecord => taxRecord.State == address.State && taxRecord.Zip == null);
                 if (taxRateRecord != null)
                 {
                     taxRate = taxRateRecord.Rate;
@@ -260,7 +258,7 @@ namespace asi.asicentral.services
                     if (zipCode > 0)
                     {
                         //look for a state/zip record
-                        taxRateRecord = this.GetAll<TaxRate>().Where(taxRecord => taxRecord.State == address.State && taxRecord.Zip == zipCode).SingleOrDefault();
+                        taxRateRecord = this.GetAll<TaxRate>().SingleOrDefault(taxRecord => taxRecord.State == address.State && taxRecord.Zip == zipCode);
                         if (taxRateRecord != null) taxRate = taxRateRecord.Rate;
                     }
                 }
@@ -292,8 +290,7 @@ namespace asi.asicentral.services
                 {
                     if (shippingMethod == null) throw new Exception("You need to pass a shipping method for this product");
                     LookProductShippingRate productShippingrate = this.GetAll<LookProductShippingRate>()
-                        .Where(rate => rate.Country == country && rate.Origin == product.Origin && rate.ShippingMethod == shippingMethod)
-                        .FirstOrDefault();
+                        .FirstOrDefault(rate => rate.Country == country && rate.Origin == product.Origin && rate.ShippingMethod == shippingMethod);
                     if (productShippingrate == null) throw new Exception("We could not find a valid option for the GetShippingCost");
                     cost = productShippingrate.BaseAmount + (quantity * weight.Value * productShippingrate.AmountOrPercent);
                 }
@@ -308,7 +305,5 @@ namespace asi.asicentral.services
             }
             return cost;
         }
-
-        
     }
 }

@@ -45,7 +45,7 @@ namespace asi.asicentral.web.Controllers.Store
             }
             if (formTab == OrderPageModel.TAB_PRODUCT && !string.IsNullOrEmpty(product))
             {
-                product = Server.HtmlDecode(product);
+                product = Server.UrlDecode(product);
                 orderDetailQuery = orderDetailQuery.Where(detail =>
                     (detail.Product != null && detail.Product.Name != null && detail.Product.Name == product)
                     || (detail.Order.Context != null && detail.Order.Context.Name == product));
@@ -366,7 +366,7 @@ namespace asi.asicentral.web.Controllers.Store
         {
             string query = "Company;Company.Individuals;BillingIndividual";
             if (orderStatisticsData.Name == "Coupon") query = query + ";OrderDetails";
-            else if (orderStatisticsData.Name == "Product") query = query + ";OrderDetails";
+            else if (orderStatisticsData.Name == "Product") query = query + ";OrderDetails.Product";
             IQueryable<StoreOrder> ordersQuery = StoreService.GetAll<StoreOrder>(query, true);
             if (orderStatisticsData.EndDate.HasValue) orderStatisticsData.EndDate = orderStatisticsData.EndDate.Value.Date + new TimeSpan(23, 59, 59);
             if (orderStatisticsData.StartDate.HasValue)
@@ -387,7 +387,7 @@ namespace asi.asicentral.web.Controllers.Store
                         ordersQuery = ordersQuery.Where(order => order.Campaign == orderStatisticsData.StatisticsValue);
                         break;
                     case "Product":
-                        ordersQuery = ordersQuery.Where(order => order.OrderDetails.Count(det => det.Product.Name == orderStatisticsData.StatisticsValue) > 0);
+                        ordersQuery = ordersQuery.Where(order => order.OrderDetails.Count(det => det.Product.Name == orderStatisticsData.StatisticsValue) > 0 || order.Context.Name == orderStatisticsData.StatisticsValue);
                         break;
                     case "Coupon":
                         ordersQuery = ordersQuery.Where(order => order.OrderDetails.Count(det => det.Coupon != null && det.Coupon.CouponCode == orderStatisticsData.StatisticsValue) > 0);

@@ -289,6 +289,9 @@ namespace asi.asicentral.database.mappings
             For<IRepository<TIMSSProductType>>().Use<EFRepository<TIMSSProductType>>()
                 .Ctor<IValidatedContext>().Named("TIMSSContext");
 
+            For<IRepository<PersonifyMapping>>().Use<EFRepository<PersonifyMapping>>()
+                .Ctor<IValidatedContext>().Named("TIMSSContext");
+
             #endregion TIMSS Context
 
             #region Call Context

@@ -17,12 +17,17 @@ namespace asi.asicentral.web.Controllers.Store
         public const string COMMAND_SAVE = "Save";
         public const string COMMAND_REJECT = "Reject";
         public const string COMMAND_ACCEPT = "Accept";
-        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 45, 46, 55, 62, 70, 71 };
-        public static readonly int[] DISTRIBUTOR_CATALOG_PRODUCT_IDS = { 35, 36, 37, 38, 39, 40, 41 };
+        //products associated only to StoreOrderDetail table
+        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 45, 46, 55, 62, 70, 71, 77 };
+        //products associated to StoreDetailESPAdvertising table
         public static readonly int[] SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS = { 48, 49, 50, 51, 52, 53, 54 };
+        //products associated to StoreDetailCatalog table
+        public static readonly int[] DISTRIBUTOR_CATALOG_PRODUCT_IDS = { 35, 36, 37, 38, 39, 40, 41 };
+        //products associated to StoreDetailPayForPlacement table
         public static readonly int[] SUPPLIER_ESP_PAYFORPLACEMENT_PRODUCT_IDS = { 47, 63 };
-        public static readonly int[] SUPPLIER_MAGAZINEADVERTISING_PRODUCT_IDS = { 72, 73, 74, 75, 76 };
-        public static readonly int SUPPLIER_Email_Express_PRODUCT_ID = 61;
+        //products associated to StoreDetailEmailExpress table
+        public static readonly int SUPPLIER_EMAIL_EXPRESS_PRODUCT_ID= 61;
+        //products associated to StoreDetailProductCollection table
         public static readonly int SUPPLIER_ESP_WEBSITES_PRODUCT_COLLECTIONS_ID = 64;
 
 
@@ -57,15 +62,13 @@ namespace asi.asicentral.web.Controllers.Store
                     StoreDetailESPAdvertising detailESPAdvertising = StoreService.GetAll<StoreDetailESPAdvertising>().Where(espadvertising => espadvertising.OrderDetailId == orderDetail.Id).SingleOrDefault();
                     if (detailESPAdvertising != null) return View("../Store/Application/ESPAdvertising", new ESPAdvertisingModel(orderDetail, detailESPAdvertising, StoreService));
                 }
-                else if (SUPPLIER_MAGAZINEADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
+                else if (MagazinesAdvertisingHelper.SUPPLIER_MAGAZINEADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
                 {
                     IList<StoreDetailMagazineAdvertisingItem> detailMagazineAdvertising = StoreService.GetAll<StoreDetailMagazineAdvertisingItem>().Where(espadvertising => espadvertising.OrderDetailId == orderDetail.Id).ToList();
-
                     return View("../Store/Application/MagzineAdvertising", new MagazinesAdvertisingApplicationModel(orderDetail, detailMagazineAdvertising, StoreService));
-
                 }
                 else if (SUPPLIER_ESP_PAYFORPLACEMENT_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/PayForPlacement", new ESPPayForPlacementModel(orderDetail, StoreService));
-                else if (SUPPLIER_Email_Express_PRODUCT_ID == orderDetail.Product.Id)
+                else if (SUPPLIER_EMAIL_EXPRESS_PRODUCT_ID==orderDetail.Product.Id)
                 {
                     StoreDetailEmailExpress detailEmailExpress = StoreService.GetAll<StoreDetailEmailExpress>().Where(emailexpress => emailexpress.OrderDetailId == orderDetail.Id).SingleOrDefault();
                     return View("../Store/Application/EmailExpress", new EmailExpressModel(orderDetail, detailEmailExpress, StoreService));
@@ -579,11 +582,11 @@ namespace asi.asicentral.web.Controllers.Store
                             orderDetail.Quantity = Convert.ToInt32(application.Quantity);
                             if (orderDetail.Quantity == 0) orderDetail.Quantity = quantity;
                             break;
-                            
+
                     }
-                    
+
                 }
-                
+
 
                 //Update ESP Advertising Information
                 StoreAddress address = order.Company.GetCompanyShippingAddress();
@@ -698,6 +701,8 @@ namespace asi.asicentral.web.Controllers.Store
             }
         }
 
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(true)]
@@ -711,82 +716,7 @@ namespace asi.asicentral.web.Controllers.Store
                 if (order == null) throw new Exception("Invalid reference to an order");
                 order.ExternalReference = application.ExternalReference;
                 order = UpdateCompanyInformation(application, order);
-
-                #region Update Email Express information
-                StoreDetailEmailExpress emailexpress = StoreService.GetAll<StoreDetailEmailExpress>().Where(product => product.OrderDetailId == orderDetail.Id).SingleOrDefault();
-                if (emailexpress == null) throw new Exception("Invalid id, could not find the Catalog information record");
-
-                if (orderDetail.Product != null)
-                {
-                    List<string> Dates = new List<string>();
-                    List<DateTime> updatedDateList = new List<DateTime>();
-                    Dates = System.Text.RegularExpressions.Regex.Split(string.IsNullOrEmpty(application.Dates) ? string.Empty : application.Dates, "\r\n").ToList();
-                    Dates = Dates.Where(u => u.ToString() != string.Empty).ToList();
-                    List<StoreDetailEmailExpressItem> loginScreen_previousItems = StoreService.GetAll<StoreDetailEmailExpressItem>().Where(details => details.OrderDetailId == application.OrderDetailId).ToList();
-                    if (application.ItemTypeId == 3 || application.ItemTypeId == 4)
-                    {
-                        foreach (StoreDetailEmailExpressItem item in loginScreen_previousItems)
-                        {
-                            StoreService.Delete<StoreDetailEmailExpressItem>(item);
-                        }
-                    }
-                    else
-                    {
-                        //Adding or updating exisitng records
-                        if (Dates != null && Dates.Count > 0)
-                        {
-                            int count = 1;
-                            foreach (string slecteddate in Dates)
-                            {
-                                DateTime date = DateTime.Parse(slecteddate);
-                                StoreDetailEmailExpressItem existingItem = loginScreen_previousItems.Where(item => item.AdSelectedDate == date).SingleOrDefault();
-                                if (existingItem != null)
-                                {
-                                    existingItem.Sequence = count++;
-                                    existingItem.UpdateDate = DateTime.UtcNow;
-                                    existingItem.UpdateSource = "ApplicationController - EditEmailExpress";
-                                    StoreService.Update<StoreDetailEmailExpressItem>(existingItem);
-                                }
-                                else
-                                {
-                                    StoreDetailEmailExpressItem newitem = new StoreDetailEmailExpressItem();
-                                    newitem.AdSelectedDate = date;
-                                    newitem.Sequence = count++;
-                                    newitem.OrderDetailId = application.OrderDetailId;
-                                    newitem.CreateDate = DateTime.UtcNow;
-                                    newitem.UpdateDate = DateTime.UtcNow;
-                                    newitem.UpdateSource = "ApplicationController - EditEmailExpress";
-                                    StoreService.Add<StoreDetailEmailExpressItem>(newitem);
-                                }
-                                updatedDateList.Add(date);
-                            }
-                        }
-                        //Deleting extra if any extra dates added in earlier submit.
-                        if (updatedDateList != null && updatedDateList.Count > 0 && loginScreen_previousItems != null && loginScreen_previousItems.Count > 0)
-                        {
-                            foreach (StoreDetailEmailExpressItem item in loginScreen_previousItems)
-                            {
-                                if (updatedDateList.Where(date => date == item.AdSelectedDate).SingleOrDefault() == DateTime.MinValue)
-                                    StoreService.Delete<StoreDetailEmailExpressItem>(item);
-                            }
-                        }
-                    }
-                    emailexpress.ItemTypeId = application.ItemTypeId;
-                    if (application.ItemTypeId == 3 || application.ItemTypeId == 4)
-                    {
-                        orderDetail.Quantity = 1;
-                        emailexpress.NumberOfDates = 0;
-                    }
-                    else
-                    {
-                        if (updatedDateList != null) orderDetail.Quantity = updatedDateList.Count;
-                        emailexpress.NumberOfDates = updatedDateList.Count;
-                    }
-                    orderDetail.Cost = EmailExpressHelper.GetCost(application.ItemTypeId, updatedDateList.Count);
-                    emailexpress.UpdateDate = DateTime.UtcNow;
-                    emailexpress.UpdateSource = "ApplicationController - EditEmailExpress";
-                }
-                #endregion
+               
 
                 //Update Email Express Information
                 if (order.Company != null)
@@ -842,16 +772,6 @@ namespace asi.asicentral.web.Controllers.Store
             else if (command == ApplicationController.COMMAND_REJECT)
             {
                 order.ProcessStatus = OrderStatus.Rejected;
-                try
-                {
-                    if (CreditCardService != null && order.CreditCard != null && !string.IsNullOrEmpty(order.CreditCard.ExternalReference))
-                        CreditCardService.Delete(order.CreditCard.ExternalReference);
-                }
-                catch (Exception exception)
-                {
-                    ILogService log = LogService.GetLog(this.GetType());
-                    log.Error("Could not remove a credit card record: " + exception.Message);
-                }
                 order.CreditCard.ExternalReference = null;
             }
         }

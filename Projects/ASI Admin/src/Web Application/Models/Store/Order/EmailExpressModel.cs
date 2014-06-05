@@ -1,11 +1,13 @@
 ﻿using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
 using asi.asicentral.Resources;
+using asi.asicentral.util.store;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace asi.asicentral.web.model.store
 {
@@ -114,6 +116,8 @@ namespace asi.asicentral.web.model.store
 
         public int ItemTypeId { get; set; }
         public string Dates { get; set; }
+        public int Sends { get; set; }
+        
         public List<System.Web.Mvc.SelectListItem> ItemTypes { get { return asi.asicentral.util.store.EmailExpressHelper.GetItemTypeOptions(); } }
         
         #endregion Email Express information
@@ -165,13 +169,11 @@ namespace asi.asicentral.web.model.store
                 this.ItemTypeId = item.ItemTypeId;
                 this.TotalCost = orderdetail.Quantity * orderdetail.Cost;
                 string Dates = string.Empty;
-                List<StoreDetailEmailExpressItem> items = storeService.GetAll<StoreDetailEmailExpressItem>().Where(model => model.OrderDetailId == OrderDetailId).OrderBy(model => model.Sequence).ToList();
-                foreach (var dateitem in items)
-                    Dates += dateitem.AdSelectedDate.Date.ToString("ddd, dd MMM yy") + "\r\n";
+                this.Sends = orderdetail.Quantity;
                 this.Dates = Dates;
+                
             }
             #endregion
-
             OrderId = order.Id;
             Price = order.Total;
             OrderStatus = order.ProcessStatus;

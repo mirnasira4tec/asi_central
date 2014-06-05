@@ -678,11 +678,11 @@
   <data name="Email2" xml:space="preserve">
     <value>Email</value>
   </data>
-  <data name="EmailExpress_Error_Date" xml:space="preserve">
-    <value>Please choose at least one date</value>
+  <data name="EmailExpress_Error_Sends" xml:space="preserve">
+    <value>Please enter sends.</value>
   </data>
   <data name="EmailExpress_Error_ItemType" xml:space="preserve">
-    <value>Please select one of the Email Express Option to proceed</value>
+    <value>Please select an EmailExpress product to proceed</value>
   </data>
   <data name="EmailExpress_Error_Terms" xml:space="preserve">
     <value>Please accept the Terms &amp; Conditions to proceed</value>
@@ -691,7 +691,7 @@
     <value>EmailExpress Platinum</value>
   </data>
   <data name="EmailExpress_Regular" xml:space="preserve">
-    <value>Regular EmailExpress</value>
+    <value>EmailExpress Basic</value>
   </data>
   <data name="EmailExpress_Selected_Dates_Count" xml:space="preserve">
     <value>You have selected {x} date(s):</value>
@@ -897,11 +897,8 @@
   <data name="InvalidCreditCard" xml:space="preserve">
     <value>The Credit Card information is invalid</value>
   </data>
-  <data name="InvalidEmailOrPasswordMessage" xml:space="preserve">
-    <value>Invalid Email Or Password, please try again.</value>
-  </data>
-  <data name="InvalidPasswordMessage" xml:space="preserve">
-    <value>Invalid Password, please try again.</value>
+  <data name="InvalidOrUnauthorizedUserMessage" xml:space="preserve">
+    <value>Invalid or un-authorized user, please try again.</value>
   </data>
   <data name="IPAddress" xml:space="preserve">
     <value>IP Address</value>
@@ -1805,5 +1802,26 @@
   </data>
   <data name="MagazineAdvertisingSendMyAdEmail" xml:space="preserve">
     <value>You will receive an email with uploading instructions shortly.</value>
+  </data>
+  <data name="EmailExpress_Quantity" xml:space="preserve">
+    <value>Sends</value>
+  </data>
+  <data name="FieldLengthASI" xml:space="preserve">
+    <value>This is not a valid {0} ASI #</value>
+  </data>
+  <data name="EmailExpress_Surcharge" xml:space="preserve">
+    <value>There will be a $50 surcharge for Tuesday and Wednesday sends</value>
+  </data>
+  <data name="EmailExpressDescription" xml:space="preserve">
+    <value>Send your latest products, specials, closeouts and more to 60,000 ASI members and non-members with ASI’s direct email advertising service, EmailExpress</value>
+  </data>
+  <data name="AllProducts" xml:space="preserve">
+    <value>&lt;b&gt;Supplier Specials – "The All Products Package"&lt;/b&gt;&lt;br/&gt;This broad-range package provides you with a custom email with a general message or offer to be sent out to any distributor who clicks on any of your products in ESP within ONE HOUR of the search.</value>
+  </data>
+  <data name="UptoTen" xml:space="preserve">
+    <value>&lt;b&gt; Supplier Specials – "The Target Ten Products Package"&lt;/b&gt;&lt;br/&gt;Choose ten specific product categories to track and we will create ten different product-specific email messages – free of charge. Distributors clicking on one of your products in your chosen categories will receive a product-specific email within ONE HOUR of the search.</value>
+  </data>
+  <data name="Sends_Val" xml:space="preserve">
+    <value>The value should be numeric</value>
   </data>
 </root>

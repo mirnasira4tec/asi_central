@@ -33,6 +33,9 @@ namespace asi.asicentral.database.mappings.product
             this.Property(t => t.NotificationEmails)
                 .HasColumnName("NotificationEmails");
 
+	        this.Property(t => t.HasBackEndIntegration)
+				.HasColumnName("HasBackEndFlag");
+
             this.Property(t => t.CreateDate)
                 .HasColumnName("CreateDateUTC");
 
