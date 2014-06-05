@@ -7,7 +7,6 @@ using asi.asicentral.util.store.companystore;
 using System.Threading.Tasks;
 using asi.asicentral.model;
 using asi.asicentral.PersonifyDataASI;
-using ASI.Sugar.Collections;
 using PersonifySvcClient;
 
 namespace asi.asicentral.services.PersonifyProxy
@@ -328,9 +327,8 @@ namespace asi.asicentral.services.PersonifyProxy
 
 		public static IEnumerable<CustomerInfo> AddIndividualInfos(StoreOrder storeOrder,
 			IList<LookSendMyAdCountryCode> countryCodes,
-			CustomerInfo companyInfo,
-            IDictionary<AddressType, AddressInfo> companyAddressInfos)
-		{
+			CustomerInfo companyInfo)
+        {
 			if (storeOrder == null || storeOrder.Company == null)
 			{
 				throw new Exception("Order or company can't be null.");
@@ -368,9 +366,8 @@ namespace asi.asicentral.services.PersonifyProxy
 							LastName = storeIndividual.LastName,
 							CustomerClassCode = CUSTOMER_CLASS_INDIV
 						};
-						//AddIndividualAddress(customerInfo, storeIndividual, companyInfo);
-                        LinkIndividualAddress(customerInfo, storeIndividual, companyInfo, companyAddressInfos);
-						AddCusCommunicationInput(customerInfo, COMMUNICATION_INPUT_PHONE, storeIndividual.Phone, COMMUNICATION_LOCATION_CODE_WORK, countryCode, isUsaAddress);
+						AddIndividualAddress(customerInfo, storeIndividual, companyInfo);
+                        AddCusCommunicationInput(customerInfo, COMMUNICATION_INPUT_PHONE, storeIndividual.Phone, COMMUNICATION_LOCATION_CODE_WORK, countryCode, isUsaAddress);
 						AddCusCommunicationInput(customerInfo, COMMUNICATION_INPUT_EMAIL, storeIndividual.Email, COMMUNICATION_LOCATION_CODE_WORK);
 						return customerInfo;
 					}
@@ -421,83 +418,6 @@ namespace asi.asicentral.services.PersonifyProxy
 					}
 				}
 			}
-			return customerInfo;
-		}
-
-        private static SaveCustomerInput LinkIndividualAddress(
-            SaveCustomerInput customerInfo, 
-            StoreIndividual storeIndividual, 
-            CustomerInfo companyInfo,
-            IDictionary<AddressType, AddressInfo> companyAddressInfos)
-		{
-			if (companyInfo == null)
-			{
-				throw new Exception("Company information is not available in Personify.");
-			}
-         	if (companyAddressInfos == null || companyAddressInfos.Count <= 0)
-			{
-				throw new Exception("Company address is not available in Personify.");
-			}
-            AddressInfo companyAddressInfo = companyAddressInfos[0];
-			var customerAddressInput = new DataServiceCollection<SaveAddressInput>(null, TrackingMode.None);
-
-            IEnumerable<SaveAddressInput> saveAddressInputs = companyAddressInfos.Select(
-                    address => new SaveAddressInput()
-                    {
-                        AddressTypeCode = COMMUNICATION_LOCATION_CODE_CORPORATE,
-                        JobTitle = storeIndividual.Title,
-                        //OwnerMasterCustomer = companyInfo.MasterCustomerId,
-                        //OwnerSubCustomer = companyInfo.SubCustomerId,
-                        LinkToOwnersAddress = true,
-                        OwnerAddressStatusCode = companyAddressInfo.AddressStatusCode,
-                        //OwnerAddressId = companyAddressInfo.CustomerAddressId,
-                        OwnerAddressId = address.Value.CustomerAddressId,
-                        ShipToFlag = address.Key == AddressType.Shipping ? true : false,
-                        BillToFlag = address.Key == AddressType.Billing ? true : false,
-                        OwnerRecordType = companyInfo.RecordType,
-                        OwnerCompanyName = companyInfo.LastName,
-                        OverrideAddressValidation = true,
-                        CreateNewAddressIfOrdersExist = true,
-                        CreateRelationshipRecord = true,
-                        SetRelationshipAsPrimary = true,
-                        EndOldPrimaryRelationship = false,
-                        WebMobileDirectory = false,
-                        AddedOrModifiedBy = ADDED_OR_MODIFIED_BY,
-                    }
-                );
-			
-            
-            
-            //var saveAddressInput = new SaveAddressInput()
-            //{
-            //    AddressTypeCode = COMMUNICATION_LOCATION_CODE_CORPORATE,
-            //    JobTitle = storeIndividual.Title,
-            //    OwnerMasterCustomer = companyInfo.MasterCustomerId,
-            //    OwnerSubCustomer = companyInfo.SubCustomerId,
-            //    LinkToOwnersAddress = true,
-            //    OwnerAddressStatusCode = companyAddressInfo.AddressStatusCode,
-            //    //OwnerAddressId = companyAddressInfo.CustomerAddressId,
-            //    OwnerAddressId = companyAddressInfos[AddressType.Shipping].CustomerAddressId,
-            //    OwnerRecordType = companyInfo.RecordType,
-            //    OwnerCompanyName = companyInfo.LastName,
-            //    OverrideAddressValidation = true,
-            //    CreateNewAddressIfOrdersExist = true,
-            //    CreateRelationshipRecord = true,
-            //    SetRelationshipAsPrimary = true,
-            //    EndOldPrimaryRelationship = false,
-            //    WebMobileDirectory = false,
-            //    AddedOrModifiedBy = ADDED_OR_MODIFIED_BY,
-            //    Addresses = new SaveCustomerInput()
-            //};
-            //var addresses = new DataServiceCollection<SaveAddressInput>(null, TrackingMode.None);
-            //addresses.Add(saveAddressInput);
-            //customerInfo.Addresses = addresses;
-            var addresses = new DataServiceCollection<SaveAddressInput>(null, TrackingMode.None);
-            foreach (var addr in saveAddressInputs)
-            {
-                addresses.Add(addr);
-            }
-            customerInfo.Addresses = addresses;
 			return customerInfo;
 		}
 
