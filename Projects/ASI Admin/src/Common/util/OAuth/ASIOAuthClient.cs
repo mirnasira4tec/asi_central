@@ -33,9 +33,19 @@ namespace asi.asicentral.oauth
         DIST,
         SPLR,
         DECR,
+        MLRP,
         EDBY,
         AFFL,
         UNKN
+    }
+
+    public enum MemberTypeDesc
+    {
+        Supplier,
+        Distributor,
+        MultiLineRep,
+        Decorator,
+        Guest,
     }
 
     public enum ApplicationCodes
@@ -311,6 +321,25 @@ namespace asi.asicentral.oauth
                 catch { isPasswordChanged = false; }
             }
             return isPasswordChanged;
+        }
+
+        public static string GetMemberTypeDescription(string memberType)
+        {
+            MemberType code = (MemberType)Enum.Parse(typeof(MemberType), memberType);        
+            switch (code)
+            {
+                case MemberType.SPLR:
+                    return MemberTypeDesc.Supplier.ToString();
+                case MemberType.DIST:
+                    return MemberTypeDesc.Distributor.ToString();
+                case MemberType.MLRP:
+                    return MemberTypeDesc.MultiLineRep.ToString();
+                case MemberType.DECR:
+                    return MemberTypeDesc.Decorator.ToString();
+                case MemberType.UNKN:
+                default:
+                    return MemberTypeDesc.Guest.ToString();
+            }
         }
 
         public static string GetMemberTypeUMSCode(int code)

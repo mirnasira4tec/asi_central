@@ -71,6 +71,20 @@ namespace Core.Tests.OAuth
         }
 
         [TestMethod]
+        public void IsValidEmailTest()
+        {
+            bool result1 = ASIOAuthClient.IsValidEmail("kphani@macrosoftindia.com");
+            Assert.IsTrue(result1);
+        }
+
+        [TestMethod]
+        public void IsValidEmailFailureTest()
+        {
+            bool result1 = ASIOAuthClient.IsValidEmail("anyone@macrosoftindia.com");
+            Assert.IsFalse(result1);
+        }
+
+        [TestMethod]
         public void GetCopmanyByASITest()
         {
             asi.asicentral.model.User user = ASIOAuthClient.GetCopmanyByASI("342495");
