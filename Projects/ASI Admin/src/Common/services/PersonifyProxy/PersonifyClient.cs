@@ -7,6 +7,7 @@ using asi.asicentral.util.store.companystore;
 using System.Threading.Tasks;
 using asi.asicentral.model;
 using asi.asicentral.PersonifyDataASI;
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using PersonifySvcClient;
 
 namespace asi.asicentral.services.PersonifyProxy
@@ -366,7 +367,6 @@ namespace asi.asicentral.services.PersonifyProxy
                             LastName = storeIndividual.LastName,
                             CustomerClassCode = CUSTOMER_CLASS_INDIV
                         };
-                        AddIndividualAddress(customerInfo, storeIndividual, companyInfo);
                         AddCusCommunicationInput(customerInfo, COMMUNICATION_INPUT_PHONE, storeIndividual.Phone, COMMUNICATION_LOCATION_CODE_WORK, countryCode, isUsaAddress);
                         AddCusCommunicationInput(customerInfo, COMMUNICATION_INPUT_EMAIL, storeIndividual.Email, COMMUNICATION_LOCATION_CODE_WORK);
                         return customerInfo;
@@ -421,7 +421,63 @@ namespace asi.asicentral.services.PersonifyProxy
             return customerInfo;
         }
 
-        private static SaveCustomerInput AddIndividualAddress(SaveCustomerInput customerInfo, StoreIndividual storeIndividual, CustomerInfo companyInfo)
+        public static IEnumerable<SaveAddressOutput> AddIndividualAddresses(
+            IEnumerable<CustomerInfo> contactInfos,
+            IDictionary<AddressType, AddressInfo> addresseInfos)
+        {
+            IList<Task<SaveAddressOutput[]>> resultTasks = new List<Task<SaveAddressOutput[]>>();
+            foreach (var contactInfo in contactInfos)
+            {
+                IEnumerable<Task<SaveAddressOutput>> individualAddressTasks = addresseInfos.Select(
+                    addr => Task.Run<SaveAddressOutput>(() => AddIndividualAddress(contactInfo, addr.Key, addr.Value)));
+                resultTasks.Add(Task.WhenAll(individualAddressTasks));
+            }
+            IEnumerable<SaveAddressOutput> results = new List<SaveAddressOutput>();
+            resultTasks.ToList().ForEach(t => results = results.Union(t.Result));
+            return results;
+        }
+
+        public static SaveAddressOutput AddIndividualAddress(CustomerInfo contactInfo, AddressType addressType, AddressInfo addressInfo)
+        {
+            SaveAddressOutput result = null;
+            if (addressInfo != null)
+            {
+                var saveAddressInput = new SaveAddressInput()
+                {
+                    MasterCustomerId = contactInfo.MasterCustomerId,
+                    SubCustomerId = contactInfo.SubCustomerId,
+                    AddressTypeCode = "OFFICE",
+                    Address1 = addressInfo.Address1,
+                    City = addressInfo.City,
+                    State = addressInfo.State,
+                    PostalCode = addressInfo.PostalCode,
+                    CountryCode = addressInfo.CountryCode,
+                    DirectoryFlag = true,
+                    WebMobileDirectory = false,
+                    CreateNewAddressIfOrdersExist = true,
+                    OverrideAddressValidation = true,
+                    AddedOrModifiedBy = ADDED_OR_MODIFIED_BY,
+                };
+                switch (addressType)
+                {
+                    case AddressType.Primary:
+                        saveAddressInput.PrioritySeq = 0;
+                        break;
+
+                    case AddressType.Shipping:
+                        saveAddressInput.ShipToFlag = true;
+                        break;
+
+                    case AddressType.Billing:
+                        saveAddressInput.BillToFlag = true;
+                        break;
+                }
+                result = SvcClient.Post<SaveAddressOutput>("CreateOrUpdateAddress", saveAddressInput);
+            }
+            return result;
+        }
+
+        private static SaveCustomerInput LinkIndividualAddress(SaveCustomerInput customerInfo, StoreIndividual storeIndividual, CustomerInfo companyInfo)
         {
             if (companyInfo == null)
             {
@@ -489,7 +545,6 @@ namespace asi.asicentral.services.PersonifyProxy
                             PhoneAreaCode = value.Substring(0, 3),
                             PhoneNumber = value.Substring(3, 7),
                             ActiveFlag = true,
-
                         });
                     }
                 }
