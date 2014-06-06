@@ -61,7 +61,7 @@ namespace asi.asicentral.services
             if (orderDetail != null && orderDetail.Product != null)
             {
                 processUsingBackend = orderDetail.Product.HasBackEndIntegration;
-                if (orderDetail.Product.Id == 61)
+                if (processUsingBackend && orderDetail.Product.Id == 61)
                 {
                     //not all email express products are to be integrated
                     StoreDetailEmailExpress emailexpressdetails = storeService.GetAll<StoreDetailEmailExpress>(true).SingleOrDefault(details => details.OrderDetailId == orderDetail.Id);
