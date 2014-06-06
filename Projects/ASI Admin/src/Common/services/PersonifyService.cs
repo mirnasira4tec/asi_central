@@ -111,6 +111,7 @@ namespace asi.asicentral.services
                 {
                     case 77: //supplier specials
                         var startDate = (orderDetail.DateOption.HasValue ? orderDetail.DateOption.Value : DateTime.Now).ToString("MM/dd/yyyy");
+						var endDate = (orderDetail.DateOption.HasValue ? orderDetail.DateOption.Value : DateTime.Now).AddMonths(1).ToString("MM/dd/yyyy");
                         var option = orderDetail.OptionId.ToString();
                         var mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => Equals(map.StoreContext, orderDetail.Order.ContextId) &&
                             map.StoreProduct == orderDetail.Product.Id &&
@@ -124,6 +125,7 @@ namespace asi.asicentral.services
                             ShipAddressID = Convert.ToInt32(shipAddressId),
                             Quantity = Convert.ToInt16(orderDetail.Quantity),
                             BeginDate = startDate,
+							EndDate = endDate,
                         };
                         lineItems.Add(lineItem);
                         break;

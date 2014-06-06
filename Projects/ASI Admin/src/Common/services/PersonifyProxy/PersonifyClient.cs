@@ -7,7 +7,6 @@ using asi.asicentral.util.store.companystore;
 using System.Threading.Tasks;
 using asi.asicentral.model;
 using asi.asicentral.PersonifyDataASI;
-using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using PersonifySvcClient;
 
 namespace asi.asicentral.services.PersonifyProxy
@@ -444,6 +443,11 @@ namespace asi.asicentral.services.PersonifyProxy
             IEnumerable<AddressInfo> existingAddressInfos = SvcClient.Ctxt.AddressInfos.Where(
                         a => a.MasterCustomerId == contactInfo.MasterCustomerId
                           && a.SubCustomerId == contactInfo.SubCustomerId).ToList();
+			if (!existingAddressInfos.Any(info => (info.BillToFlag != null && info.BillToFlag.Value) || (info.ShipToFlag != null && info.ShipToFlag.Value)))
+	        {
+		        addressInfos[AddressType.Primary].BillToFlag = true;
+				addressInfos[AddressType.Primary].ShipToFlag = true;
+			}
             var comparer = new AddressInfoEqualityComparer();
             return addressInfos.Where(item => !existingAddressInfos.Contains(item.Value, comparer))
                 .ToDictionary(item => item.Key, item => item.Value);
@@ -468,20 +472,14 @@ namespace asi.asicentral.services.PersonifyProxy
                     WebMobileDirectory = false,
                     CreateNewAddressIfOrdersExist = true,
                     OverrideAddressValidation = true,
+					ShipToFlag = addressInfo.ShipToFlag,
+					BillToFlag = addressInfo.BillToFlag,
                     AddedOrModifiedBy = ADDED_OR_MODIFIED_BY,
                 };
                 switch (addressType)
                 {
                     case AddressType.Primary:
                         saveAddressInput.PrioritySeq = 0;
-                        break;
-
-                    case AddressType.Shipping:
-                        saveAddressInput.ShipToFlag = true;
-                        break;
-
-                    case AddressType.Billing:
-                        saveAddressInput.BillToFlag = true;
                         break;
                 }
                 result = SvcClient.Post<SaveAddressOutput>("CreateOrUpdateAddress", saveAddressInput);
