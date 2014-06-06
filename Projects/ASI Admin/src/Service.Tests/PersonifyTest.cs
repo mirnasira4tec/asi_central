@@ -124,7 +124,7 @@ namespace asi.asicentral.Tests
             var contacts = new List<StoreIndividual>() { person };
             var company = new StoreCompany()
             {
-                Name = "ORDER Test7 " + tag,
+		Name = "ORDER Test8 " + tag,
                 Addresses = companyAddresses,
                 Individuals = contacts,
                 ASINumber = asiNumber,

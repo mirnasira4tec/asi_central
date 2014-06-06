@@ -124,7 +124,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     if (customers.Count > 0)
                     {
                         ASICustomer customer = customers[0];
-                        customer.UserDefinedMemberStatusString = "NON_MEMBER";
+						customer.UserDefinedMemberStatusString = "ASICENTRAL";
                         SvcClient.Save<ASICustomer>(customer);
                     }
                     companyInfo = GetCompanyInfo(result.MasterCustomerId, subCustomerId);
