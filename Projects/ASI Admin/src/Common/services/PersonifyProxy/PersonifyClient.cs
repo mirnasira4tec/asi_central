@@ -427,13 +427,25 @@ namespace asi.asicentral.services.PersonifyProxy
             IList<Task<SaveAddressOutput[]>> resultTasks = new List<Task<SaveAddressOutput[]>>();
             foreach (var contactInfo in contactInfos)
             {
-                IEnumerable<Task<SaveAddressOutput>> individualAddressTasks = addresseInfos.Select(
+                var addressesToAdd = AddressesToBeAdded(contactInfo, addresseInfos);
+                IEnumerable<Task<SaveAddressOutput>> individualAddressTasks = addressesToAdd.Select(
                     addr => Task.Run<SaveAddressOutput>(() => AddIndividualAddress(contactInfo, addr.Key, addr.Value)));
                 resultTasks.Add(Task.WhenAll(individualAddressTasks));
             }
             IEnumerable<SaveAddressOutput> results = new List<SaveAddressOutput>();
             resultTasks.ToList().ForEach(t => results = results.Union(t.Result));
             return results;
+        }
+
+        private static IDictionary<AddressType, AddressInfo> AddressesToBeAdded(CustomerInfo contactInfo,
+            IDictionary<AddressType, AddressInfo> addressInfos)
+        {
+            IEnumerable<AddressInfo> existingAddressInfos = SvcClient.Ctxt.AddressInfos.Where(
+                        a => a.MasterCustomerId == contactInfo.MasterCustomerId
+                          && a.SubCustomerId == contactInfo.SubCustomerId).ToList();
+            var comparer = new AddressInfoEqualityComparer();
+            return addressInfos.Where(item => !existingAddressInfos.Contains(item.Value, comparer))
+                .ToDictionary(item => item.Key, item => item.Value);
         }
 
         public static SaveAddressOutput AddIndividualAddress(CustomerInfo contactInfo, AddressType addressType, AddressInfo addressInfo)
