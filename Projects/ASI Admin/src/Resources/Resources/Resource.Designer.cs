@@ -2167,6 +2167,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter a number between 1and 1000..
+        /// </summary>
+        public static string FieldNumberRange {
+            get {
+                return ResourceManager.GetString("FieldNumberRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Field Required.
         /// </summary>
         public static string FieldRequired {
