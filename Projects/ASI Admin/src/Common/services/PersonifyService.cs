@@ -29,6 +29,7 @@ namespace asi.asicentral.services
 
         public virtual void PlaceOrder(StoreOrder order)
         {
+            log.Debug(string.Format("Place order: {0}", order.ToString()));
             IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
             if (order == null || order.Company == null || countryCodes == null)
                 throw new ArgumentException("You must pass a valid order and the country codes");
@@ -47,6 +48,7 @@ namespace asi.asicentral.services
                 order.ExternalReference = orderOutput.OrderNumber;
                 decimal orderTotal = PersonifyClient.GetOrderTotal(orderOutput.OrderNumber);
                 PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, addresses[AddressType.Billing], companyInfo);
+                log.Debug(string.Format("The order of {0} has been created in Personify.", order.ToString()));
             }
             catch (Exception ex)
             {
@@ -57,6 +59,7 @@ namespace asi.asicentral.services
 
         public virtual bool IsProcessUsingBackend(StoreOrderDetail orderDetail)
         {
+            log.Debug(string.Format("Check if {0} is processed using background.", orderDetail.ToString()));
             bool processUsingBackend = false;
             if (orderDetail != null && orderDetail.Product != null)
             {
@@ -68,16 +71,22 @@ namespace asi.asicentral.services
                     processUsingBackend = (emailexpressdetails != null && (emailexpressdetails.ItemTypeId == 1 || emailexpressdetails.ItemTypeId == 2));
                 }
             }
+            log.Debug(string.Format("Processing {0} is using the backend: {1}", orderDetail.ToString(), processUsingBackend));
             return processUsingBackend;
         }
 
         public virtual bool ValidateCreditCard(CreditCard creditCard)
         {
-            return PersonifyClient.ValidateCreditCard(creditCard);
+
+            log.Debug(string.Format("Validate credit card {0} ({1}).", creditCard.MaskedPAN, creditCard.Type));
+            var result = PersonifyClient.ValidateCreditCard(creditCard);
+            log.Debug(string.Format("Credit card {0} ({1}) is {2}.", creditCard.MaskedPAN, creditCard.Type, result ? "valid" : "invalid"));
+            return result;
         }
 
         public virtual string SaveCreditCard(StoreCompany company, CreditCard creditCard)
         {
+            log.Debug(string.Format("Save credit of {0} ({1})", creditCard.MaskedPAN, company.Name));
             //assuming credit card is valid already
             if (company == null || creditCard == null) throw new ArgumentException("Invalid parameters");
             IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
@@ -87,11 +96,14 @@ namespace asi.asicentral.services
             //Add credit card to the company
             string profile = PersonifyClient.GetCreditCardProfileId(companyInfo, creditCard);
             if (profile == string.Empty) profile = PersonifyClient.SaveCreditCard(companyInfo, creditCard);
+            log.Debug(string.IsNullOrWhiteSpace(profile)?
+                "Fail to save the credit.":string.Format("Saved credit profile id : {0}",profile));
             return profile;
         }
 
         private IList<CreateOrderLineInput> GetPersonifyLineInputs(StoreOrder order, long shipAddressId)
         {
+            log.Debug(string.Format("Create personify order line input for order {0} with shipping address id {1}", order.ToString(), shipAddressId));
             var lineItems = new List<CreateOrderLineInput>();
             foreach (var orderDetail in order.OrderDetails)
             {
