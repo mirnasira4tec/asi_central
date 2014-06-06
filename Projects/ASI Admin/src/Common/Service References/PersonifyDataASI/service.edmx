@@ -2104,6 +2104,8 @@
         <Property Name="UserDefinedMemberStatusString" Type="Edm.String" Nullable="true" />
         <Property Name="CustomerStatusCodeString" Type="Edm.String" Nullable="true" />
         <Property Name="CustomerClassCodeString" Type="Edm.String" Nullable="true" />
+        <Property Name="LastFirstName" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedCustomerNumber" Type="Edm.Decimal" Nullable="true" />
       </EntityType>
       <EntityType Name="ASIGetInvoiceURLInput">
         <Key>
