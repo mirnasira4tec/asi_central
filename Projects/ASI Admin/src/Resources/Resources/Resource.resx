@@ -1824,4 +1824,7 @@
   <data name="Sends_Val" xml:space="preserve">
     <value>The value should be numeric</value>
   </data>
+  <data name="FieldNumberRange" xml:space="preserve">
+    <value>Please enter a value between 1 and 1000</value>
+  </data>
 </root>
