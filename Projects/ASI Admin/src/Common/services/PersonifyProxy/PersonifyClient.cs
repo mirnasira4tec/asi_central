@@ -115,7 +115,6 @@ namespace asi.asicentral.services.PersonifyProxy
                 {
                     var subCustomerId = result.SubCustomerId.HasValue ? result.SubCustomerId.Value : 0;
                     //try update status - not caring so much whether it works or not
-                    //@todo this does not seem to be working for updating the status
                     var q =
                         SvcClient.Ctxt.ASICustomers.Where(
                             p => p.MasterCustomerId == result.MasterCustomerId && p.SubCustomerId == subCustomerId).Select(o => o);
@@ -295,6 +294,13 @@ namespace asi.asicentral.services.PersonifyProxy
             return result;
         }
 
+		public static ASICustomerInfo GetAdditionalCompanyInfo(string asiNumber)
+		{
+			var customers = SvcClient.Ctxt.ASICustomerInfos.Where(p => p.UserDefinedAsiNumber == asiNumber).ToList();
+			if (customers.Count > 0) return customers[0];
+			return null;
+		}
+
         public static CustomerInfo GetCompanyInfo(string masterCustomerId, int subCustomerId)
         {
             CustomerInfo customerInfo = null;
@@ -364,7 +370,7 @@ namespace asi.asicentral.services.PersonifyProxy
                         {
                             FirstName = storeIndividual.FirstName,
                             LastName = storeIndividual.LastName,
-                            CustomerClassCode = CUSTOMER_CLASS_INDIV
+                            CustomerClassCode = CUSTOMER_CLASS_INDIV,							
                         };
                         AddCusCommunicationInput(customerInfo, COMMUNICATION_INPUT_PHONE, storeIndividual.Phone, COMMUNICATION_LOCATION_CODE_WORK, countryCode, isUsaAddress);
                         AddCusCommunicationInput(customerInfo, COMMUNICATION_INPUT_EMAIL, storeIndividual.Email, COMMUNICATION_LOCATION_CODE_WORK);
