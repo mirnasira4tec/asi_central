@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -1825,6 +1825,6 @@
     <value>The value should be numeric</value>
   </data>
   <data name="FieldNumberRange" xml:space="preserve">
-    <value>Please enter a number between 1and 1000.</value>
+    <value>Please enter a value between 1 and 1000</value>
   </data>
 </root>

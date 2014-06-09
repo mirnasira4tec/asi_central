@@ -409,6 +409,7 @@
     </Compile>
     <Compile Include="services\CreditCardService.cs" />
     <Compile Include="interfaces\IBackendService.cs" />
+    <Compile Include="services\PersonifyProxy\AddressInfoEqualityComparer.cs" />
     <Compile Include="services\PersonifyProxy\MemberData.cs" />
     <Compile Include="services\PersonifyProxy\MemberTypeIDToCD.cs" />
     <Compile Include="services\PersonifyProxy\PersonifyClient.cs" />
