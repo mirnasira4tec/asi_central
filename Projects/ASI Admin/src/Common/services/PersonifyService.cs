@@ -35,27 +35,34 @@ namespace asi.asicentral.services
                 throw new ArgumentException("You must pass a valid order and the country codes");
             try
             {
-                log.Debug(string.Format("Reconcile company of {0}.", order.Company.Name));
                 var companyInfo = PersonifyClient.ReconcileCompany(order.Company, countryCodes);
-                log.Debug(string.Format("Add addresses for company {0}", order.Company.Name));
+                log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order.ToString(), companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
                 IDictionary<AddressType, AddressInfo> addresses = PersonifyClient.AddCompanyAddresses(order.Company, companyInfo, countryCodes);
+                log.Debug(string.Format("Added addresses to '{1}' to order '{0}'.", order.ToString(), companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
                 StoreIndividual primaryContact = order.GetContact();
-                log.Debug(string.Format("Add individuals for company {0}", order.Company.Name));
                 IEnumerable<CustomerInfo> individualInfos = PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo);
-                log.Debug(string.Format("Add addresses for individuals of company {0}", order.Company.Name));
+                log.Debug(string.Format("Added individuals to company '{1}' to order '{0}'.", order.ToString(), companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
                 PersonifyClient.AddIndividualAddresses(individualInfos, addresses);
+                log.Debug(string.Format("Address added to individuals to the order '{0}'.", order.ToString()));
                 CustomerInfo primaryContactInfo = individualInfos.FirstOrDefault(c =>
                     string.Equals(c.FirstName, primaryContact.FirstName, StringComparison.InvariantCultureIgnoreCase)
                     && string.Equals(c.LastName, primaryContact.LastName, StringComparison.InvariantCultureIgnoreCase));
-                log.Debug(string.Format("Create order line items for order {0} with shipping address id {1}", order.ToString(), addresses[AddressType.Shipping].CustomerAddressId));
                 var lineItems = GetPersonifyLineInputs(order, addresses[AddressType.Shipping].CustomerAddressId);
-                log.Debug(string.Format("Create order in personify for order {0} with shipping address id {1}", order.ToString(), addresses[AddressType.Shipping].CustomerAddressId));
+                log.Debug(string.Format("Retrieved the line items to the order '{0}'.", order.ToString()));
                 var orderOutput = PersonifyClient.CreateOrder(order, companyInfo, primaryContactInfo, addresses[AddressType.Billing].CustomerAddressId, addresses[AddressType.Shipping].CustomerAddressId, lineItems);
+                log.Debug(string.Format("The order '{0}' has been created in Personify.", order.ToString()));
                 order.ExternalReference = orderOutput.OrderNumber;
                 decimal orderTotal = PersonifyClient.GetOrderTotal(orderOutput.OrderNumber);
-                log.Debug(string.Format("Order id: {0}, order total in personify {1}", orderOutput.OrderNumber, orderTotal));
-                PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, addresses[AddressType.Billing], companyInfo);
-                log.Debug(string.Format("The order of {0} has been created in Personify.", order.ToString()));
+                log.Debug(string.Format("Got the order total for the order '{0}'.", order.ToString()));
+                try
+                {
+                    PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, addresses[AddressType.Billing], companyInfo);
+                    log.Debug(string.Format("Payed the order '{0}'.", order.ToString()));
+                }
+                catch (Exception e)
+                {
+                    log.Error(string.Format("Failed to pay the order '{0}'. Error is {1}", order.ToString(), e.StackTrace));
+                }
             }
             catch (Exception ex)
             {
@@ -84,6 +91,7 @@ namespace asi.asicentral.services
 
         public virtual bool ValidateCreditCard(CreditCard creditCard)
         {
+
             log.Debug(string.Format("Validate credit card {0} ({1}).", creditCard.MaskedPAN, creditCard.Type));
             var result = PersonifyClient.ValidateCreditCard(creditCard);
             log.Debug(string.Format("Credit card {0} ({1}) is {2}.", creditCard.MaskedPAN, creditCard.Type, result ? "valid" : "invalid"));
@@ -189,19 +197,13 @@ namespace asi.asicentral.services
 
         public virtual SaveCustomerOutput AddCompanyByNameAndMemberTypeId(string companyName, int memberTypeId)
         {
-            log.Debug(string.Format("Add company {0} with member type id {1}", companyName, memberTypeId));
             var company = PersonifyClient.AddCompanyByNameAndMemberTypeId(companyName, memberTypeId);
-             log.Debug(string.Format("Add company {0} with member type id {1} {2}", 
-                 companyName, memberTypeId, company == null? "failed":"Succeeded"));
             return company;
         }
 
         public virtual CustomerInfo GetCompanyInfoByAsiNumber(string asiNumber)
         {
-            log.Debug(string.Format("Get company ({0}) information.", asiNumber));
             var company = PersonifyClient.GetCompanyInfoByAsiNumber(asiNumber);
-            log.Debug(string.Format("Getting company ({0}) information {1}", 
-                asiNumber, company == null ? "failed" : "Succeeded"));
             return company;
         }
 
