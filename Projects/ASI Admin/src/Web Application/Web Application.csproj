@@ -336,7 +336,6 @@
     <Content Include="Views\Store\Context\Productcomparison.cshtml" />
     <Content Include="Views\Shared\_SGRLayout.cshtml" />
     <Content Include="Views\Shared\_StoreLayout.cshtml" />
-    <Content Include="Views\Home\CreditCard.cshtml" />
     <Content Include="Views\Store\Admin\Statistics.cshtml" />
     <Content Include="Views\Home\Diagnostic.cshtml" />
     <Content Include="Views\Media\List.cshtml" />
