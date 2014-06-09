@@ -29,24 +29,40 @@ namespace asi.asicentral.services
 
         public virtual void PlaceOrder(StoreOrder order)
         {
+            log.Debug(string.Format("Place order: {0}", order.ToString()));
             IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
             if (order == null || order.Company == null || countryCodes == null)
                 throw new ArgumentException("You must pass a valid order and the country codes");
             try
             {
                 var companyInfo = PersonifyClient.ReconcileCompany(order.Company, countryCodes);
+                log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order.ToString(), companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
                 IDictionary<AddressType, AddressInfo> addresses = PersonifyClient.AddCompanyAddresses(order.Company, companyInfo, countryCodes);
+                log.Debug(string.Format("Added addresses to '{1}' to order '{0}'.", order.ToString(), companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
                 StoreIndividual primaryContact = order.GetContact();
                 IEnumerable<CustomerInfo> individualInfos = PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo);
+                log.Debug(string.Format("Added individuals to company '{1}' to order '{0}'.", order.ToString(), companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
                 PersonifyClient.AddIndividualAddresses(individualInfos, addresses);
+                log.Debug(string.Format("Address added to individuals to the order '{0}'.", order.ToString()));
                 CustomerInfo primaryContactInfo = individualInfos.FirstOrDefault(c =>
                     string.Equals(c.FirstName, primaryContact.FirstName, StringComparison.InvariantCultureIgnoreCase)
                     && string.Equals(c.LastName, primaryContact.LastName, StringComparison.InvariantCultureIgnoreCase));
                 var lineItems = GetPersonifyLineInputs(order, addresses[AddressType.Shipping].CustomerAddressId);
+                log.Debug(string.Format("Retrieved the line items to the order '{0}'.", order.ToString()));
                 var orderOutput = PersonifyClient.CreateOrder(order, companyInfo, primaryContactInfo, addresses[AddressType.Billing].CustomerAddressId, addresses[AddressType.Shipping].CustomerAddressId, lineItems);
+                log.Debug(string.Format("The order '{0}' has been created in Personify.", order.ToString()));
                 order.ExternalReference = orderOutput.OrderNumber;
                 decimal orderTotal = PersonifyClient.GetOrderTotal(orderOutput.OrderNumber);
-                PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, addresses[AddressType.Billing], companyInfo);
+                log.Debug(string.Format("Got the order total for the order '{0}'.", order.ToString()));
+                try
+                {
+                    PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, addresses[AddressType.Billing], companyInfo);
+                    log.Debug(string.Format("Payed the order '{0}'.", order.ToString()));
+                }
+                catch (Exception e)
+                {
+                    log.Error(string.Format("Failed to pay the order '{0}'. Error is {1}", order.ToString(), e.StackTrace));
+                }
             }
             catch (Exception ex)
             {
@@ -57,6 +73,7 @@ namespace asi.asicentral.services
 
         public virtual bool IsProcessUsingBackend(StoreOrderDetail orderDetail)
         {
+            log.Debug(string.Format("Check if {0} is processed using background.", orderDetail.ToString()));
             bool processUsingBackend = false;
             if (orderDetail != null && orderDetail.Product != null)
             {
@@ -68,16 +85,22 @@ namespace asi.asicentral.services
                     processUsingBackend = (emailexpressdetails != null && (emailexpressdetails.ItemTypeId == 1 || emailexpressdetails.ItemTypeId == 2));
                 }
             }
+            log.Debug(string.Format("Processing {0} is using the backend: {1}", orderDetail.ToString(), processUsingBackend));
             return processUsingBackend;
         }
 
         public virtual bool ValidateCreditCard(CreditCard creditCard)
         {
-            return PersonifyClient.ValidateCreditCard(creditCard);
+
+            log.Debug(string.Format("Validate credit card {0} ({1}).", creditCard.MaskedPAN, creditCard.Type));
+            var result = PersonifyClient.ValidateCreditCard(creditCard);
+            log.Debug(string.Format("Credit card {0} ({1}) is {2}.", creditCard.MaskedPAN, creditCard.Type, result ? "valid" : "invalid"));
+            return result;
         }
 
         public virtual string SaveCreditCard(StoreCompany company, CreditCard creditCard)
         {
+            log.Debug(string.Format("Save credit of {0} ({1})", creditCard.MaskedPAN, company.Name));
             //assuming credit card is valid already
             if (company == null || creditCard == null) throw new ArgumentException("Invalid parameters");
             IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
@@ -87,11 +110,14 @@ namespace asi.asicentral.services
             //Add credit card to the company
             string profile = PersonifyClient.GetCreditCardProfileId(companyInfo, creditCard);
             if (profile == string.Empty) profile = PersonifyClient.SaveCreditCard(companyInfo, creditCard);
+            log.Debug(string.IsNullOrWhiteSpace(profile)?
+                "Fail to save the credit.":string.Format("Saved credit profile id : {0}",profile));
             return profile;
         }
 
         private IList<CreateOrderLineInput> GetPersonifyLineInputs(StoreOrder order, long shipAddressId)
         {
+            log.Debug(string.Format("Create personify order line input for order {0} with shipping address id {1}", order.ToString(), shipAddressId));
             var lineItems = new List<CreateOrderLineInput>();
             foreach (var orderDetail in order.OrderDetails)
             {
@@ -99,6 +125,7 @@ namespace asi.asicentral.services
                 {
                     case 77: //supplier specials
                         var startDate = (orderDetail.DateOption.HasValue ? orderDetail.DateOption.Value : DateTime.Now).ToString("MM/dd/yyyy");
+						var endDate = (orderDetail.DateOption.HasValue ? orderDetail.DateOption.Value : DateTime.Now).AddMonths(1).ToString("MM/dd/yyyy");
                         var option = orderDetail.OptionId.ToString();
                         var mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => Equals(map.StoreContext, orderDetail.Order.ContextId) &&
                             map.StoreProduct == orderDetail.Product.Id &&
@@ -112,6 +139,7 @@ namespace asi.asicentral.services
                             ShipAddressID = Convert.ToInt32(shipAddressId),
                             Quantity = Convert.ToInt16(orderDetail.Quantity),
                             BeginDate = startDate,
+							EndDate = endDate,
                         };
                         lineItems.Add(lineItem);
                         break;
