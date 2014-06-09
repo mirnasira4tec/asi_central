@@ -12,7 +12,7 @@ namespace asi.asicentral.services
 {
     public class PersonifyService : IBackendService, IDisposable
     {
-        private LogService log = null;
+        private ILogService log = null;
         private readonly IStoreService storeService;
         private bool disposed = false;
 
@@ -219,7 +219,6 @@ namespace asi.asicentral.services
             {
                 if (disposing)
                 {
-                    log.Dispose();
                 }
             }
             disposed = true;
