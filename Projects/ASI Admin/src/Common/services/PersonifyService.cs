@@ -61,6 +61,7 @@ namespace asi.asicentral.services
                 }
                 catch (Exception e)
                 {
+					//@todo send email order failed to be charged
                     log.Error(string.Format("Failed to pay the order '{0}'. Error is {2}\n{1}", order, e.StackTrace, e.Message));
                 }
             }
@@ -201,10 +202,23 @@ namespace asi.asicentral.services
             return company;
         }
 
-        public virtual CustomerInfo GetCompanyInfoByAsiNumber(string asiNumber)
-        {
-            var company = PersonifyClient.GetCompanyInfoByAsiNumber(asiNumber);
-            return company;
+	    public virtual CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber)
+	    {
+		    var companyInfo = PersonifyClient.GetAdditionalCompanyInfo(asiNumber);
+		    var company = new CompanyInformation
+		    {
+			    ASINumber = asiNumber,
+			    Name = companyInfo.LabelName,
+			    MasterCustomerId = companyInfo.MasterCustomerId,
+			    SubCustomerId = companyInfo.SubCustomerId,
+				MemberType = companyInfo.CustomerClassCodeString,
+		    };
+		    if (companyInfo.UserDefinedCustomerNumber.HasValue)
+		    {
+			    company.CompanyId = Convert.ToInt32(companyInfo.UserDefinedCustomerNumber.Value);
+		    }
+
+		    return company;
         }
 
         public void Dispose()

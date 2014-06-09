@@ -263,6 +263,7 @@
     <Compile Include="database\mappings\store\TaxRateMap.cs" />
     <Compile Include="database\mappings\timss\PersonifyMappingMap.cs" />
     <Compile Include="interfaces\ICreditCardService.cs" />
+    <Compile Include="model\CompanyInformation.cs" />
     <Compile Include="model\IDateUTCAndSource.cs" />
     <Compile Include="interfaces\IROI.cs" />
     <Compile Include="model\call\CallQueue.cs" />
