@@ -364,7 +364,7 @@ namespace asi.asicentral.services.PersonifyProxy
                         {
                             FirstName = storeIndividual.FirstName,
                             LastName = storeIndividual.LastName,
-                            CustomerClassCode = CUSTOMER_CLASS_INDIV
+                            CustomerClassCode = CUSTOMER_CLASS_INDIV,							
                         };
                         AddCusCommunicationInput(customerInfo, COMMUNICATION_INPUT_PHONE, storeIndividual.Phone, COMMUNICATION_LOCATION_CODE_WORK, countryCode, isUsaAddress);
                         AddCusCommunicationInput(customerInfo, COMMUNICATION_INPUT_EMAIL, storeIndividual.Email, COMMUNICATION_LOCATION_CODE_WORK);

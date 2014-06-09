@@ -73,7 +73,7 @@ namespace asi.asicentral.services
 
         public virtual bool IsProcessUsingBackend(StoreOrderDetail orderDetail)
         {
-            log.Debug(string.Format("Check if {0} is processed using background.", orderDetail.ToString()));
+            log.Debug(string.Format("Check if {0} is processed using backend.", orderDetail.ToString()));
             bool processUsingBackend = false;
             if (orderDetail != null && orderDetail.Product != null)
             {
