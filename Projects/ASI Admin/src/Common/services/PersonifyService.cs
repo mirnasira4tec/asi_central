@@ -36,19 +36,33 @@ namespace asi.asicentral.services
             try
             {
                 var companyInfo = PersonifyClient.ReconcileCompany(order.Company, countryCodes);
+                log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order.ToString(), companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
                 IDictionary<AddressType, AddressInfo> addresses = PersonifyClient.AddCompanyAddresses(order.Company, companyInfo, countryCodes);
+                log.Debug(string.Format("Added addresses to '{1}' to order '{0}'.", order.ToString(), companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
                 StoreIndividual primaryContact = order.GetContact();
                 IEnumerable<CustomerInfo> individualInfos = PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo);
+                log.Debug(string.Format("Added individuals to company '{1}' to order '{0}'.", order.ToString(), companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
                 PersonifyClient.AddIndividualAddresses(individualInfos, addresses);
+                log.Debug(string.Format("Address added to individuals to the order '{0}'.", order.ToString()));
                 CustomerInfo primaryContactInfo = individualInfos.FirstOrDefault(c =>
                     string.Equals(c.FirstName, primaryContact.FirstName, StringComparison.InvariantCultureIgnoreCase)
                     && string.Equals(c.LastName, primaryContact.LastName, StringComparison.InvariantCultureIgnoreCase));
                 var lineItems = GetPersonifyLineInputs(order, addresses[AddressType.Shipping].CustomerAddressId);
+                log.Debug(string.Format("Retrieved the line items to the order '{0}'.", order.ToString()));
                 var orderOutput = PersonifyClient.CreateOrder(order, companyInfo, primaryContactInfo, addresses[AddressType.Billing].CustomerAddressId, addresses[AddressType.Shipping].CustomerAddressId, lineItems);
+                log.Debug(string.Format("The order '{0}' has been created in Personify.", order.ToString()));
                 order.ExternalReference = orderOutput.OrderNumber;
                 decimal orderTotal = PersonifyClient.GetOrderTotal(orderOutput.OrderNumber);
-                PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, addresses[AddressType.Billing], companyInfo);
-                log.Debug(string.Format("The order of {0} has been created in Personify.", order.ToString()));
+                log.Debug(string.Format("Got the order total for the order '{0}'.", order.ToString()));
+                try
+                {
+                    PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, addresses[AddressType.Billing], companyInfo);
+                    log.Debug(string.Format("Payed the order '{0}'.", order.ToString()));
+                }
+                catch (Exception e)
+                {
+                    log.Error(string.Format("Failed to pay the order '{0}'. Error is {1}", order.ToString(), e.StackTrace));
+                }
             }
             catch (Exception ex)
             {
