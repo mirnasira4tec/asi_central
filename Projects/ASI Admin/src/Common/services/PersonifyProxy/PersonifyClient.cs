@@ -294,12 +294,53 @@ namespace asi.asicentral.services.PersonifyProxy
             return result;
         }
 
-		public static ASICustomerInfo GetAdditionalCompanyInfo(string asiNumber)
+        #region Getting company information
+
+        public static CompanyInformation GetCompanyInfoByASINumber(string asiNumber)
 		{
 			var customers = SvcClient.Ctxt.ASICustomerInfos.Where(p => p.UserDefinedAsiNumber == asiNumber).ToList();
-			if (customers.Count > 0) return customers[0];
-			return null;
-		}
+			if (customers.Count == 0) return null;
+            return GetCompanyInfo(customers[0]);
+        }
+
+
+        public static CompanyInformation GetCompanyInfoByIdentifier(int companyIdentifier)
+        {
+            var customers = SvcClient.Ctxt.ASICustomerInfos.Where(p => p.UserDefinedCustomerNumber == companyIdentifier).ToList();
+            if (customers.Count == 0) return null;
+            return GetCompanyInfo(customers[0]);
+        }
+
+        private static CompanyInformation GetCompanyInfo(ASICustomerInfo customerInfo)
+        {
+            var company = new CompanyInformation
+            {
+                ASINumber = customerInfo.UserDefinedAsiNumber,
+                Name = customerInfo.LabelName,
+                MasterCustomerId = customerInfo.MasterCustomerId,
+                SubCustomerId = customerInfo.SubCustomerId,
+                MemberType = customerInfo.CustomerClassCodeString,
+            };
+            if (customerInfo.UserDefinedCustomerNumber.HasValue)
+            {
+                company.CompanyId = Convert.ToInt32(customerInfo.UserDefinedCustomerNumber.Value);
+            }
+            //get the company primary address
+            List<AddressInfo> companyAddressInfos = SvcClient.Ctxt.AddressInfos.Where(
+               a => a.MasterCustomerId == customerInfo.MasterCustomerId && a.SubCustomerId == customerInfo.SubCustomerId && a.PrioritySeq == 0).ToList();
+            if (companyAddressInfos.Count > 0)
+            {
+                var address = companyAddressInfos[0];
+                company.Street1 = address.Address1;
+                company.Street2 = address.Address2;
+                company.State = address.State;
+                company.City = address.City;
+                company.Country = address.CountryCode;
+                company.Zip = address.PostalCode;
+            }
+            return company;
+        }
+
 
         public static CustomerInfo GetCompanyInfo(string masterCustomerId, int subCustomerId)
         {
@@ -330,6 +371,8 @@ namespace asi.asicentral.services.PersonifyProxy
             }
             return customerInfo;
         }
+
+        #endregion Getting company information
 
         public static IEnumerable<CustomerInfo> AddIndividualInfos(StoreOrder storeOrder,
             IList<LookSendMyAdCountryCode> countryCodes,
