@@ -421,19 +421,26 @@ namespace asi.asicentral.services.PersonifyProxy
                         return customerInfo;
                     }
                 )
-                .Select(
-                    saveCustomerInput
-                        =>
-                    Task<SaveCustomerOutput>.Run(() => SvcClient.Post<SaveCustomerOutput>("CreateIndividual", saveCustomerInput))
+                .Select( saveCustomerInput => Task<SaveCustomerOutput>.Run(() => SvcClient.Post<SaveCustomerOutput>("CreateIndividual", saveCustomerInput))
                     .ContinueWith<CustomerInfo>(saveCustomerOutput => GetIndividualInfo(saveCustomerOutput.Result.MasterCustomerId)
                 )
             );
             var result2 = Task.WhenAll(saveCustomerOutputs);
             IEnumerable<CustomerInfo> storeInfos2 = result2.Result;
+
             return storeInfos.Union(storeInfos2);
         }
 
-        public static CustomerInfo GetIndividualInfo(string firstName, string lastName, CustomerInfo companyInfo)
+	    public static void AddRelationship(CustomerInfo customerInfo, CustomerInfo companyInfo)
+	    {
+
+		    var cusRelationship = new CusRelationship();
+			cusRelationship.AddedBy = ADDED_OR_MODIFIED_BY;
+			SvcClient.Ctxt.AddObject("CusRelationships", cusRelationship);
+		    SvcClient.Ctxt.SaveChanges();
+	    }
+
+	    public static CustomerInfo GetIndividualInfo(string firstName, string lastName, CustomerInfo companyInfo)
         {
             CustomerInfo customerInfo = null;
 
