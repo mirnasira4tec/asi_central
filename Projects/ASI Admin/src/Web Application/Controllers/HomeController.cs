@@ -32,27 +32,7 @@ namespace Web_Application.Controllers
 
         public virtual ActionResult Diagnostic()
         {
-            //Check access to the credit card service
             IList<string> messages = new List<string>();
-            if (string.IsNullOrEmpty(ConfigurationManager.AppSettings["CreditCardServicePassword"]) || string.IsNullOrEmpty(ConfigurationManager.AppSettings["CreditCardServiceUsername"]))
-            {
-                messages.Add("Error the config variables for the web service are not set properly");
-            }
-            else
-            {
-                try
-                {
-                    asi.asicentral.web.CreditCardService.CreditCardServiceClient cardServiceClient = new asi.asicentral.web.CreditCardService.CreditCardServiceClient();
-                    cardServiceClient.ClientCredentials.UserName.UserName = ConfigurationManager.AppSettings["CreditCardServiceUsername"];
-                    cardServiceClient.ClientCredentials.UserName.Password = ConfigurationManager.AppSettings["CreditCardServicePassword"];
-                    cardServiceClient.Ping();
-                    messages.Add("Successfully pinged the Web Service");
-                }
-                catch (Exception exception)
-                {
-                    messages.Add("Error could not connect to the web service: " + exception.Message);
-                }
-            }
             //Accessing MySQL database hosting the contexts
             try
             {
@@ -98,71 +78,6 @@ namespace Web_Application.Controllers
                 messages.Add("Error could not access the media server: " + exception.Message);
             }
             return View("Diagnostic", messages);
-        }
-
-        [HttpPost]
-        public virtual ActionResult CreditCard(CreditCardModel creditCardModel)
-        {
-            IEncryptionService encryptionService = new EncryptionService();
-            if (!string.IsNullOrEmpty(creditCardModel.Username) && string.IsNullOrEmpty(creditCardModel.ServiceUrl))
-            {
-                creditCardModel.Password = encryptionService.Encrypt("Credit Card Service", creditCardModel.Username);
-            }
-            if (!string.IsNullOrEmpty(creditCardModel.ServiceUrl) && !string.IsNullOrEmpty(creditCardModel.Username))
-            {
-                Guid recordId = Guid.Empty;
-                asi.asicentral.web.CreditCardService.CreditCardServiceClient cardServiceClient =
-                    new asi.asicentral.web.CreditCardService.CreditCardServiceClient("CreditCardService", creditCardModel.ServiceUrl);
-                cardServiceClient.ClientCredentials.UserName.UserName = creditCardModel.Username;
-                cardServiceClient.ClientCredentials.UserName.Password = encryptionService.Encrypt("Credit Card Service", creditCardModel.Username);
-                try
-                {
-                    cardServiceClient.Ping();
-                    creditCardModel.SuccessMessages.Add("Successfully pinged the web service");
-                }
-                catch (Exception exception)
-                {
-                    creditCardModel.ErrorMessages.Add("Could not ping the web service: " + exception.Message);
-                }
-                try
-                {
-                    asi.asicentral.web.CreditCardService.CreditCard webCreditCard = new asi.asicentral.web.CreditCardService.CreditCard()
-                    {
-                        CardHolderName = "Admin Tool",
-                        Type = "VISA",
-                        Number = "4111111111111111",
-                        ExpirationDate = DateTime.Now,
-                        Address = "Address Field",
-                        City = "City Field",
-                        Country = "Country Field",
-                        State = "State Field",
-                        PostalCode = "Postal",
-                    };
-                    recordId = cardServiceClient.Store(webCreditCard);
-                    creditCardModel.SuccessMessages.Add("Successfully stored the credit card");
-                }
-                catch (Exception exception)
-                {
-                    creditCardModel.ErrorMessages.Add("Could not store a credit card: " + exception.Message);
-                }
-                if (recordId != Guid.Empty)
-                {
-                    try
-                    {
-                        cardServiceClient.Delete(recordId);
-                        creditCardModel.SuccessMessages.Add("Successfully removed a credit card record");
-                    }
-                    catch (Exception exception)
-                    {
-                        creditCardModel.ErrorMessages.Add("Could not remove a credit card: " + exception.Message);
-                    }
-                }
-                else
-                {
-                    creditCardModel.ErrorMessages.Add("Do not have a record id to delete");
-                }
-            }
-            return View("CreditCard", creditCardModel);
         }
     }
 }

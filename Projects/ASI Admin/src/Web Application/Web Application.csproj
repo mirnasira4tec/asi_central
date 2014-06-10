@@ -278,6 +278,7 @@
     <Content Include="Images\transparent.gif" />
     <Content Include="Images\upload.png" />
     <Content Include="Images\zip.png" />
+    <Content Include="MvcDiagnostics.aspx" />
     <Content Include="Scripts\asi.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
@@ -335,7 +336,6 @@
     <Content Include="Views\Store\Context\Productcomparison.cshtml" />
     <Content Include="Views\Shared\_SGRLayout.cshtml" />
     <Content Include="Views\Shared\_StoreLayout.cshtml" />
-    <Content Include="Views\Home\CreditCard.cshtml" />
     <Content Include="Views\Store\Admin\Statistics.cshtml" />
     <Content Include="Views\Home\Diagnostic.cshtml" />
     <Content Include="Views\Media\List.cshtml" />
@@ -383,10 +383,6 @@
     <ProjectReference Include="..\Resources\Resources.csproj">
       <Project>{04d943e2-6c0d-4fd5-b3bc-1860c962c977}</Project>
       <Name>Resources</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Service.Tests\Service.Tests.csproj">
-      <Project>{ee6df0c2-aceb-4108-8f43-5d5138c5a3eb}</Project>
-      <Name>Service.Tests</Name>
     </ProjectReference>
     <ProjectReference Include="..\Service\Service.csproj">
       <Project>{cec7f727-f96b-484c-8687-e9426deb76a2}</Project>

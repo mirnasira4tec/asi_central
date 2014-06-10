@@ -1,4 +1,5 @@
-﻿using DotNetOpenAuth.AspNet;
+﻿using asi.asicentral.model;
+using DotNetOpenAuth.AspNet;
 using ASI.Jade.OAuth2;
 using ASI.Jade.UserManagement;
 using System;
@@ -254,7 +255,7 @@ namespace asi.asicentral.oauth
             return ssoId;
         }
 
-        public static asi.asicentral.model.User GetCopmanyByASI(string asiNumber)
+        public static asi.asicentral.model.User GetCompanyByASINumber(string asiNumber)
         {
             asi.asicentral.model.User user = null;
             var usePersonifyServices = ConfigurationManager.AppSettings["UsePersonifyServices"];
@@ -263,13 +264,16 @@ namespace asi.asicentral.oauth
                 try
                 {
                     PersonifyService personifyService = new PersonifyService();
-                    PersonifyDataASI.CustomerInfo company = personifyService.GetCompanyInfoByAsiNumber(asiNumber);
+	                CompanyInformation company = personifyService.GetCompanyInfoByAsiNumber(asiNumber);
                     if (company != null)
                     {
-                        user = new model.User();
-                        if (!string.IsNullOrEmpty(company.MasterCustomerId))
-                            user.CompanyId = Convert.ToInt32(company.MasterCustomerId);
-                        user.CompanyName = company.LabelName;
+	                    user = new model.User
+	                    {
+		                    CompanyName = company.Name,
+							CompanyId = company.CompanyId,
+							AsiNumber = asiNumber,
+							MemberType_CD = company.MemberType,
+	                    };
                     }
                 }
                 catch { }

@@ -34,6 +34,20 @@ namespace asi.asicentral.Tests
             PlaceOrderTest("30279", storeService, new ContextProduct[] { supplierSpecials, emailExpress });
         }
 
+	    [TestMethod]
+	    public void LookupCompany()
+	    {
+			IBackendService personify = new PersonifyService();
+		    var companyInformation = personify.GetCompanyInfoByAsiNumber("30279");
+			Assert.IsNotNull(companyInformation.CompanyId);
+            Assert.IsNotNull(companyInformation.City);
+            Assert.IsNotNull(companyInformation.MemberType);
+            companyInformation = personify.GetCompanyInfoByIdentifier(5806901);
+            Assert.IsNotNull(companyInformation.Name);
+            Assert.IsNotNull(companyInformation.City);
+            Assert.IsNotNull(companyInformation.MemberType);
+        }
+
         private void PlaceOrderTest(string asiNumber, IStoreService storeService, ContextProduct[] products)
         {
             IBackendService personify = new PersonifyService(storeService);

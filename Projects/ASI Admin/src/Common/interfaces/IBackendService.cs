@@ -22,8 +22,9 @@ namespace asi.asicentral.interfaces
 
 	    string SaveCreditCard(StoreCompany company, CreditCard creditCard);
 
-        SaveCustomerOutput AddCompanyByNameAndMemberTypeId(string companyName, int memberTypeId);
+        CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber);
+        CompanyInformation GetCompanyInfoByIdentifier(int companyIdentifier);
 
-        CustomerInfo GetCompanyInfoByAsiNumber(string asiNumber);
+        SaveCustomerOutput AddCompanyByNameAndMemberTypeId(string companyName, int memberTypeId);
     }
 }

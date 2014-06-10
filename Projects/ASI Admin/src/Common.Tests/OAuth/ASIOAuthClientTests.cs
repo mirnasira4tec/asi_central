@@ -73,14 +73,14 @@ namespace Core.Tests.OAuth
         [TestMethod]
         public void GetCopmanyByASITest()
         {
-            asi.asicentral.model.User user = ASIOAuthClient.GetCopmanyByASI("342495");
+            asi.asicentral.model.User user = ASIOAuthClient.GetCompanyByASINumber("342495");
             Assert.IsNotNull(user);
         }
 
         [TestMethod]
         public void GetCopmanyByASIFailedTest()
         {
-            asi.asicentral.model.User user = ASIOAuthClient.GetCopmanyByASI("12345");
+            asi.asicentral.model.User user = ASIOAuthClient.GetCompanyByASINumber("12345");
             Assert.IsNull(user);
         }
 
