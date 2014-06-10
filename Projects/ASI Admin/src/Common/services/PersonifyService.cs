@@ -29,39 +29,40 @@ namespace asi.asicentral.services
 
         public virtual void PlaceOrder(StoreOrder order)
         {
-            log.Debug(string.Format("Place order: {0}", order.ToString()));
+            log.Debug(string.Format("Place order: {0}", order));
             IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
             if (order == null || order.Company == null || countryCodes == null)
                 throw new ArgumentException("You must pass a valid order and the country codes");
             try
             {
                 var companyInfo = PersonifyClient.ReconcileCompany(order.Company, countryCodes);
-                log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order.ToString(), companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
+                log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
                 IDictionary<AddressType, AddressInfo> addresses = PersonifyClient.AddCompanyAddresses(order.Company, companyInfo, countryCodes);
-                log.Debug(string.Format("Added addresses to '{1}' to order '{0}'.", order.ToString(), companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
+                log.Debug(string.Format("Added addresses to '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
                 StoreIndividual primaryContact = order.GetContact();
                 IEnumerable<CustomerInfo> individualInfos = PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo);
-                log.Debug(string.Format("Added individuals to company '{1}' to order '{0}'.", order.ToString(), companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
+                log.Debug(string.Format("Added individuals to company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
                 PersonifyClient.AddIndividualAddresses(individualInfos, addresses);
-                log.Debug(string.Format("Address added to individuals to the order '{0}'.", order.ToString()));
+                log.Debug(string.Format("Address added to individuals to the order '{0}'.", order));
                 CustomerInfo primaryContactInfo = individualInfos.FirstOrDefault(c =>
                     string.Equals(c.FirstName, primaryContact.FirstName, StringComparison.InvariantCultureIgnoreCase)
                     && string.Equals(c.LastName, primaryContact.LastName, StringComparison.InvariantCultureIgnoreCase));
                 var lineItems = GetPersonifyLineInputs(order, addresses[AddressType.Shipping].CustomerAddressId);
-                log.Debug(string.Format("Retrieved the line items to the order '{0}'.", order.ToString()));
+                log.Debug(string.Format("Retrieved the line items to the order '{0}'.", order));
                 var orderOutput = PersonifyClient.CreateOrder(order, companyInfo, primaryContactInfo, addresses[AddressType.Billing].CustomerAddressId, addresses[AddressType.Shipping].CustomerAddressId, lineItems);
-                log.Debug(string.Format("The order '{0}' has been created in Personify.", order.ToString()));
+                log.Debug(string.Format("The order '{0}' has been created in Personify.", order));
                 order.ExternalReference = orderOutput.OrderNumber;
                 decimal orderTotal = PersonifyClient.GetOrderTotal(orderOutput.OrderNumber);
-                log.Debug(string.Format("Got the order total for the order '{0}'.", order.ToString()));
+                log.Debug(string.Format("Got the order total for the order '{0}'.", order));
                 try
                 {
                     PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, addresses[AddressType.Billing], companyInfo);
-                    log.Debug(string.Format("Payed the order '{0}'.", order.ToString()));
+                    log.Debug(string.Format("Payed the order '{0}'.", order));
                 }
                 catch (Exception e)
                 {
-                    log.Error(string.Format("Failed to pay the order '{0}'. Error is {1}", order.ToString(), e.StackTrace));
+					//@todo send email order failed to be charged
+                    log.Error(string.Format("Failed to pay the order '{0}'. Error is {2}\n{1}", order, e.StackTrace, e.Message));
                 }
             }
             catch (Exception ex)
@@ -73,7 +74,7 @@ namespace asi.asicentral.services
 
         public virtual bool IsProcessUsingBackend(StoreOrderDetail orderDetail)
         {
-            log.Debug(string.Format("Check if {0} is processed using background.", orderDetail.ToString()));
+            log.Debug(string.Format("Check if {0} is processed using backend.", orderDetail.ToString()));
             bool processUsingBackend = false;
             if (orderDetail != null && orderDetail.Product != null)
             {
@@ -201,10 +202,23 @@ namespace asi.asicentral.services
             return company;
         }
 
-        public virtual CustomerInfo GetCompanyInfoByAsiNumber(string asiNumber)
-        {
-            var company = PersonifyClient.GetCompanyInfoByAsiNumber(asiNumber);
-            return company;
+	    public virtual CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber)
+	    {
+		    var companyInfo = PersonifyClient.GetAdditionalCompanyInfo(asiNumber);
+		    var company = new CompanyInformation
+		    {
+			    ASINumber = asiNumber,
+			    Name = companyInfo.LabelName,
+			    MasterCustomerId = companyInfo.MasterCustomerId,
+			    SubCustomerId = companyInfo.SubCustomerId,
+				MemberType = companyInfo.CustomerClassCodeString,
+		    };
+		    if (companyInfo.UserDefinedCustomerNumber.HasValue)
+		    {
+			    company.CompanyId = Convert.ToInt32(companyInfo.UserDefinedCustomerNumber.Value);
+		    }
+
+		    return company;
         }
 
         public void Dispose()
