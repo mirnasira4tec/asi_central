@@ -37,26 +37,42 @@ namespace asi.asicentral.services
             {
                 var companyInfo = PersonifyClient.ReconcileCompany(order.Company, countryCodes);
                 log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
-                IDictionary<AddressType, AddressInfo> addresses = PersonifyClient.AddCompanyAddresses(order.Company, companyInfo, countryCodes);
+                
+                IEnumerable<StoreAddressInfo> addresses = PersonifyClient.AddCustomerAddresses(order.Company, companyInfo, countryCodes);
                 log.Debug(string.Format("Added addresses to '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
-                StoreIndividual primaryContact = order.GetContact();
-                IEnumerable<CustomerInfo> individualInfos = PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo);
+
+                
+                IList<CustomerInfo> individualInfos = PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo).ToList();
                 log.Debug(string.Format("Added individuals to company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
-                PersonifyClient.AddIndividualAddresses(individualInfos, addresses);
+
+                IList<StoreAddressInfo> addresses2 = PersonifyClient.AddIndividualAddresses(order.Company, individualInfos, countryCodes).ToList();
                 log.Debug(string.Format("Address added to individuals to the order '{0}'.", order));
+                
+                StoreIndividual primaryContact = order.GetContact();
                 CustomerInfo primaryContactInfo = individualInfos.FirstOrDefault(c =>
                     string.Equals(c.FirstName, primaryContact.FirstName, StringComparison.InvariantCultureIgnoreCase)
                     && string.Equals(c.LastName, primaryContact.LastName, StringComparison.InvariantCultureIgnoreCase));
-                var lineItems = GetPersonifyLineInputs(order, addresses[AddressType.Shipping].CustomerAddressId);
-                log.Debug(string.Format("Retrieved the line items to the order '{0}'.", order));
-                var orderOutput = PersonifyClient.CreateOrder(order, companyInfo, primaryContactInfo, addresses[AddressType.Billing].CustomerAddressId, addresses[AddressType.Shipping].CustomerAddressId, lineItems);
+
+                var shipToAddr = GetAddressInfo(addresses2, AddressType.Shipping, order);
+                var billToAddr = GetAddressInfo(addresses2, AddressType.Billing, order);
+                var lineItems = GetPersonifyLineInputs(order, shipToAddr.PersonifyAddr.CustomerAddressId);
+                log.Debug(string.Format("Retrieved the line items to the order '{0}'.", order.ToString()));
+                var orderOutput = PersonifyClient.CreateOrder(
+                    order, 
+                    companyInfo, 
+                    primaryContactInfo, 
+                    billToAddr.PersonifyAddr.CustomerAddressId, 
+                    shipToAddr.PersonifyAddr.CustomerAddressId, 
+                    lineItems);
                 log.Debug(string.Format("The order '{0}' has been created in Personify.", order));
+
+
                 order.ExternalReference = orderOutput.OrderNumber;
                 decimal orderTotal = PersonifyClient.GetOrderTotal(orderOutput.OrderNumber);
                 log.Debug(string.Format("Got the order total for the order '{0}'.", order));
                 try
                 {
-                    PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, addresses[AddressType.Billing], companyInfo);
+                    PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, billToAddr.PersonifyAddr, companyInfo);
                     log.Debug(string.Format("Payed the order '{0}'.", order));
                     log.Debug(string.Format("Place order End: {0}", order));
                 }
@@ -73,6 +89,33 @@ namespace asi.asicentral.services
                 log.Debug(string.Format("Place order End: {0}", order));
                 throw ex;
             }
+        }
+
+        private StoreAddressInfo GetAddressInfo(IList<StoreAddressInfo> addresses, AddressType type, StoreOrder order)
+        {
+            var addr = addresses.FirstOrDefault(a =>
+            {
+                if (type == AddressType.Shipping) return a.StoreIsShipping && !a.StoreIsPrimary;
+                if (type == AddressType.Billing) return a.StoreIsBilling && !a.StoreIsPrimary;
+                return false;
+            });
+            if (addr == null)
+            {
+                addr = addresses.FirstOrDefault(a =>
+                {
+                    if (type == AddressType.Shipping) return a.StoreIsShipping;
+                    if (type == AddressType.Billing) return a.StoreIsBilling;
+                    return false;
+                });
+            };
+       
+            if (addr == null || addr.PersonifyAddr == null)
+            {
+                string s = string.Format("Shipping and billing personify customer addresses are required for order {0}.", order.ToString());
+                throw new Exception(s);
+                log.Debug(s);
+            }
+            return addr;
         }
 
         public virtual bool IsProcessUsingBackend(StoreOrderDetail orderDetail)
@@ -110,7 +153,7 @@ namespace asi.asicentral.services
             IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
             //create company if not already there
             var companyInfo = PersonifyClient.ReconcileCompany(company, countryCodes);
-            PersonifyClient.AddCompanyAddresses(company, companyInfo, countryCodes);
+            PersonifyClient.AddCustomerAddresses(company, companyInfo, countryCodes);
             //Add credit card to the company
             string profile = PersonifyClient.GetCreditCardProfileId(companyInfo, creditCard);
             if (profile == string.Empty) profile = PersonifyClient.SaveCreditCard(companyInfo, creditCard);
