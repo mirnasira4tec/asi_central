@@ -15,6 +15,7 @@ namespace asi.asicentral.model
 		public int CompanyId { get; set; }
 		public string Name { get; set; }
 		public string MemberType { get; set; }
+		public string MemberStatus { get; set; }
 		public string ASINumber { get; set; }
 		[Display(ResourceType = typeof(Resource), Name = "Street1")]
 		public string Street1 { get; set; }
