@@ -29,7 +29,7 @@ namespace asi.asicentral.services
 
         public virtual void PlaceOrder(StoreOrder order)
         {
-            log.Debug(string.Format("Place order: {0}", order));
+            log.Debug(string.Format("Place order Start : {0}", order));
             IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
             if (order == null || order.Company == null || countryCodes == null)
                 throw new ArgumentException("You must pass a valid order and the country codes");
@@ -58,16 +58,19 @@ namespace asi.asicentral.services
                 {
                     PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, addresses[AddressType.Billing], companyInfo);
                     log.Debug(string.Format("Payed the order '{0}'.", order));
+                    log.Debug(string.Format("Place order End: {0}", order));
                 }
                 catch (Exception e)
                 {
-					//@todo send email order failed to be charged
-                    log.Error(string.Format("Failed to pay the order '{0}'. Error is {2}\n{1}", order, e.StackTrace, e.Message));
+                    log.Error(string.Format("Failed to pay the order '{0}'. Error is {2}{1}", order, e.StackTrace, e.Message));
+                    //@todo send email order failed to be charged
+                    log.Debug(string.Format("Place order End: {0}", order));
                 }
             }
             catch (Exception ex)
             {
-                log.Error(string.Format("Error in adding order to personify: {0}", ex.Message));
+                log.Error(string.Format("Unknown Error while adding order to personify: {0}{1}", ex.Message, ex.StackTrace));
+                log.Debug(string.Format("Place order End: {0}", order));
                 throw ex;
             }
         }
@@ -204,8 +207,8 @@ namespace asi.asicentral.services
 
 	    public virtual CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber)
 	    {
-		    var companyInfo = PersonifyClient.GetCompanyInfoByASINumber(asiNumber);
-		    return companyInfo;
+            var companyInfo = PersonifyClient.GetCompanyInfoByASINumber(asiNumber);
+            return companyInfo;
         }
 
         public virtual CompanyInformation GetCompanyInfoByIdentifier(int companyIdentifier)
