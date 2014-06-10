@@ -138,7 +138,7 @@ namespace asi.asicentral.Tests
             var contacts = new List<StoreIndividual>() { person };
             var company = new StoreCompany()
             {
-		Name = "ORDER Test8 " + tag,
+                Name = "ORDER Test8 " + tag,
                 Addresses = companyAddresses,
                 Individuals = contacts,
                 ASINumber = asiNumber,
@@ -179,6 +179,14 @@ namespace asi.asicentral.Tests
                 orderDetails.Add(orderDetail);
             }
             return order;
+        }
+
+        [TestMethod]
+        public void GetCompanyByASINumberTest()
+        {
+            IBackendService personify = new PersonifyService();
+            CustomerInfo csinfo = personify.GetCompanyInfoByAsiNumber("342495");
+            Assert.IsNotNull(csinfo);
         }
     }
 }

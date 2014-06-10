@@ -13,6 +13,7 @@ using ASI.Jade.v2;
 using ASI.EntityModel;
 using System.Threading.Tasks;
 using asi.asicentral.services;
+using asi.asicentral.interfaces;
 
 namespace asi.asicentral.oauth
 {
@@ -33,9 +34,19 @@ namespace asi.asicentral.oauth
         DIST,
         SPLR,
         DECR,
+        MLRP,
         EDBY,
         AFFL,
         UNKN
+    }
+
+    public enum MemberTypeDesc
+    {
+        Supplier,
+        Distributor,
+        MultiLineRep,
+        Decorator,
+        Guest,
     }
 
     public enum ApplicationCodes
@@ -263,7 +274,7 @@ namespace asi.asicentral.oauth
             {
                 try
                 {
-                    PersonifyService personifyService = new PersonifyService();
+                    IBackendService personifyService = new PersonifyService();
 	                CompanyInformation company = personifyService.GetCompanyInfoByAsiNumber(asiNumber);
                     if (company != null)
                     {
@@ -314,6 +325,25 @@ namespace asi.asicentral.oauth
                 catch { isPasswordChanged = false; }
             }
             return isPasswordChanged;
+        }
+
+        public static string GetMemberTypeDescription(string memberType)
+        {
+            MemberType code = (MemberType)Enum.Parse(typeof(MemberType), memberType);        
+            switch (code)
+            {
+                case MemberType.SPLR:
+                    return MemberTypeDesc.Supplier.ToString();
+                case MemberType.DIST:
+                    return MemberTypeDesc.Distributor.ToString();
+                case MemberType.MLRP:
+                    return MemberTypeDesc.MultiLineRep.ToString();
+                case MemberType.DECR:
+                    return MemberTypeDesc.Decorator.ToString();
+                case MemberType.UNKN:
+                default:
+                    return MemberTypeDesc.Guest.ToString();
+            }
         }
 
         public static string GetMemberTypeUMSCode(int code)
