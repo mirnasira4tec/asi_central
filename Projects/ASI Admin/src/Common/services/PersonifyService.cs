@@ -204,21 +204,14 @@ namespace asi.asicentral.services
 
 	    public virtual CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber)
 	    {
-		    var companyInfo = PersonifyClient.GetAdditionalCompanyInfo(asiNumber);
-		    var company = new CompanyInformation
-		    {
-			    ASINumber = asiNumber,
-			    Name = companyInfo.LabelName,
-			    MasterCustomerId = companyInfo.MasterCustomerId,
-			    SubCustomerId = companyInfo.SubCustomerId,
-				MemberType = companyInfo.CustomerClassCodeString,
-		    };
-		    if (companyInfo.UserDefinedCustomerNumber.HasValue)
-		    {
-			    company.CompanyId = Convert.ToInt32(companyInfo.UserDefinedCustomerNumber.Value);
-		    }
+		    var companyInfo = PersonifyClient.GetCompanyInfoByASINumber(asiNumber);
+		    return companyInfo;
+        }
 
-		    return company;
+        public virtual CompanyInformation GetCompanyInfoByIdentifier(int companyIdentifier)
+        {
+            var companyInfo = PersonifyClient.GetCompanyInfoByIdentifier(companyIdentifier);
+            return companyInfo;
         }
 
         public void Dispose()
