@@ -181,13 +181,5 @@ namespace asi.asicentral.Tests
             }
             return order;
         }
-
-        [TestMethod]
-        public void GetCompanyByASINumberTest()
-        {
-            IBackendService personify = new PersonifyService();
-            CustomerInfo csinfo = personify.GetCompanyInfoByAsiNumber("342495");
-            Assert.IsNotNull(csinfo);
-        }
     }
 }
