@@ -35,7 +35,7 @@ namespace asi.asicentral.services
                 throw new ArgumentException("You must pass a valid order and the country codes");
             try
             {
-                var companyInfo = PersonifyClient.ReconcileCompany(order.Company, countryCodes);
+                var companyInfo = PersonifyClient.ReconcileCompany(order.Company, "UNKNOWN", countryCodes);
                 log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
                 
                 IEnumerable<StoreAddressInfo> addresses = PersonifyClient.AddCustomerAddresses(order.Company, companyInfo, countryCodes);
@@ -152,7 +152,7 @@ namespace asi.asicentral.services
             if (company == null || creditCard == null) throw new ArgumentException("Invalid parameters");
             IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
             //create company if not already there
-            var companyInfo = PersonifyClient.ReconcileCompany(company, countryCodes);
+            var companyInfo = PersonifyClient.ReconcileCompany(company, "UNKNOWN", countryCodes);
             PersonifyClient.AddCustomerAddresses(company, companyInfo, countryCodes);
             //Add credit card to the company
             string profile = PersonifyClient.GetCreditCardProfileId(companyInfo, creditCard);
@@ -242,10 +242,33 @@ namespace asi.asicentral.services
             return lineItems;
         }
 
-        public virtual SaveCustomerOutput AddCompanyByNameAndMemberTypeId(string companyName, int memberTypeId)
+        public virtual CompanyInformation AddCompany(CompanyInformation companyInformation, int memberType)
         {
-            var company = PersonifyClient.AddCompanyByNameAndMemberTypeId(companyName, memberTypeId);
-            return company;
+            //create equivalent store objects
+            StoreCompany company = new StoreCompany
+            {
+                Name = companyInformation.Name,
+            };
+            StoreAddress address = new StoreAddress
+            {
+                Street1 = companyInformation.Street1,
+                Street2 = companyInformation.Street2,
+                City = companyInformation.City,
+                State = companyInformation.State,
+                Country = companyInformation.Country,
+                Zip = companyInformation.Zip,
+            };
+            company.Addresses.Add(new StoreCompanyAddress
+            {
+                Address = address,
+                IsBilling = true,
+                IsShipping = true,
+            });
+            //@todo convert membertype
+            //create company if not already there
+            var companyInfo = PersonifyClient.ReconcileCompany(company, "UNKNOWN", null);
+            PersonifyClient.AddCustomerAddresses(company, companyInfo, null);
+            return companyInformation;
         }
 
 	    public virtual CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber)

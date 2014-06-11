@@ -74,7 +74,7 @@ namespace asi.asicentral.services.PersonifyProxy
 			return total;
 		}
 
-		public static CustomerInfo ReconcileCompany(StoreCompany company, IList<LookSendMyAdCountryCode> countryCodes)
+		public static CustomerInfo ReconcileCompany(StoreCompany company, string customerClassCode, IList<LookSendMyAdCountryCode> countryCodes)
 		{
 			CustomerInfo companyInfo = null;
 
@@ -100,9 +100,9 @@ namespace asi.asicentral.services.PersonifyProxy
 			{
 				//company not already there, create a new one
 				StoreAddress companyAddress = company.GetCompanyAddress();
-				bool isUsaAddress = countryCodes.IsUSAAddress(companyAddress.Country);
-				string countryCode = countryCodes.Alpha3Code(companyAddress.Country);
-				var saveCustomerInput = new SaveCustomerInput { LastName = company.Name, CustomerClassCode = "UNKNOWN" };
+                bool isUsaAddress = countryCodes != null ? countryCodes.IsUSAAddress(companyAddress.Country) : companyAddress.Country == "USA";
+                string countryCode = countryCodes != null ? countryCodes.Alpha3Code(companyAddress.Country) : companyAddress.Country;
+				var saveCustomerInput = new SaveCustomerInput { LastName = company.Name, CustomerClassCode = customerClassCode };
 				AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_PHONE, company.Phone,
 					COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode, isUsaAddress);
 				AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_FAX, company.Fax,
@@ -139,7 +139,7 @@ namespace asi.asicentral.services.PersonifyProxy
 			CustomerInfo customerInfo,
 			IEnumerable<LookSendMyAdCountryCode> countryCodes)
 		{
-			if (storeCompany == null || storeCompany.Addresses == null || customerInfo == null || countryCodes == null)
+			if (storeCompany == null || storeCompany.Addresses == null || customerInfo == null)
 			{
 				throw new Exception("Store company and addresses, customer personify information and country codes are required");
 			}
@@ -218,7 +218,7 @@ namespace asi.asicentral.services.PersonifyProxy
 			}
 			storeCompanyAddresses = storeCompanyAddresses.Select(a =>
 			{
-				a.CountryCode = countryCodes.Alpha3Code(a.StoreAddr.Country);
+                a.CountryCode = countryCodes != null ? countryCodes.Alpha3Code(a.StoreAddr.Country) : a.StoreAddr.Country;
 				return a;
 			}).ToList();
 			return storeCompanyAddresses;
@@ -299,27 +299,6 @@ namespace asi.asicentral.services.PersonifyProxy
 				   a => a.MasterCustomerId == customerInfo.MasterCustomerId
 					 && a.SubCustomerId == customerInfo.SubCustomerId
 					 && a.CustomerAddressId == result.CusAddressId).ToList().FirstOrDefault();
-			return result;
-		}
-
-		public static SaveCustomerOutput AddCompanyByNameAndMemberTypeId(string companyName, int memberTypeId)
-		{
-			MemberData memberData = MemberTypeIDToCD.Data[memberTypeId];
-			if (string.IsNullOrWhiteSpace(companyName) || memberData == null)
-			{
-				throw new Exception("Company name or member type id is not valid.");
-			}
-			var saveCustomerInput = new SaveCustomerInput
-			{
-				LastName = companyName,
-				CustomerClassCode = memberData.MemberTypeCD,
-			};
-
-			var result = SvcClient.Post<SaveCustomerOutput>("CreateCompany", saveCustomerInput);
-			if (!string.IsNullOrWhiteSpace(result.WarningMessage))
-			{
-				result = null;
-			}
 			return result;
 		}
 
@@ -454,7 +433,7 @@ namespace asi.asicentral.services.PersonifyProxy
 			cusRelationship.RelatedMasterCustomerId = companyInfo.MasterCustomerId;
 			cusRelationship.RelatedSubCustomerId = companyInfo.SubCustomerId;
 			cusRelationship.ReciprocalCode = "Employer";
-			cusRelationship.BeginDate = DateTime.Now;
+			cusRelationship.BeginDate = DateTime.Now.AddDays(-1);
 			SvcClient.Save<CusRelationship>(cusRelationship);
 		}
 
