@@ -34,6 +34,25 @@ namespace asi.asicentral.Tests
             PlaceOrderTest("30279", storeService, new ContextProduct[] { supplierSpecials, emailExpress });
         }
 
+        [TestMethod]
+        public void AddCompany()
+        {
+            var tag = DateTime.Now.Ticks;
+
+            CompanyInformation companyInfo = new CompanyInformation
+            {
+                Name = "New Company1 " + tag,
+                Street1 = "4800 Street Rd",
+                City = "Trevose",
+                State = "PA",
+                Zip = "19053",
+                Country = "USA",
+            };
+            IBackendService personify = new PersonifyService();
+            companyInfo = personify.AddCompany(companyInfo, 2);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+        }
+
 	    [TestMethod]
 	    public void LookupCompany()
 	    {
@@ -139,7 +158,7 @@ namespace asi.asicentral.Tests
             var contacts = new List<StoreIndividual>() { person };
             var company = new StoreCompany()
             {
-                Name = "ORDER Test8 " + tag,
+                Name = "ORDER Test9 " + tag,
                 Addresses = companyAddresses,
                 Individuals = contacts,
                 ASINumber = asiNumber,
@@ -180,14 +199,6 @@ namespace asi.asicentral.Tests
                 orderDetails.Add(orderDetail);
             }
             return order;
-        }
-
-        [TestMethod]
-        public void GetCompanyByASINumberTest()
-        {
-            IBackendService personify = new PersonifyService();
-            CustomerInfo csinfo = personify.GetCompanyInfoByAsiNumber("342495");
-            Assert.IsNotNull(csinfo);
         }
     }
 }

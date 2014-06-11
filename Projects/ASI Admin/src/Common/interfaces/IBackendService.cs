@@ -25,6 +25,6 @@ namespace asi.asicentral.interfaces
         CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber);
         CompanyInformation GetCompanyInfoByIdentifier(int companyIdentifier);
 
-        SaveCustomerOutput AddCompanyByNameAndMemberTypeId(string companyName, int memberTypeId);
+        CompanyInformation AddCompany(CompanyInformation companyInfo, int memberType);
     }
 }

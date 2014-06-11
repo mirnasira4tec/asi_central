@@ -251,9 +251,19 @@ namespace asi.asicentral.oauth
                         PersonifyService personifyService = new PersonifyService();
                         try
                         {
-                            PersonifyDataASI.SaveCustomerOutput company = personifyService.AddCompanyByNameAndMemberTypeId(user.CompanyName, user.MemberTypeId);
-                            if (company != null && string.IsNullOrEmpty(company.MasterCustomerId))
-                                user.CompanyId = Convert.ToInt32(company.MasterCustomerId);
+                            CompanyInformation companyInfo = new CompanyInformation 
+                            {
+                                Name = user.CompanyName,
+                                Street1 = user.Street1,
+                                Street2 = user.Street2,
+                                City = user.City,
+                                Zip = user.Zip,
+                                State = user.State,
+                                Country = user.CountryCode,
+
+                            };
+                            companyInfo = personifyService.AddCompany(companyInfo, user.MemberTypeId);
+                            user.CompanyId = companyInfo.CompanyId;
                         }
                         catch { }
                     }
