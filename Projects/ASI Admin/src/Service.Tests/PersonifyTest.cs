@@ -39,7 +39,7 @@ namespace asi.asicentral.Tests
         {
             var tag = DateTime.Now.Ticks;
 
-            CompanyInformation companyInfo = new CompanyInformation
+            var companyInfo = new CompanyInformation
             {
                 Name = "New Company1 " + tag,
                 Street1 = "4800 Street Rd",

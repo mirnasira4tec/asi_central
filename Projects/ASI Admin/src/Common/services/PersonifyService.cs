@@ -245,11 +245,11 @@ namespace asi.asicentral.services
         public virtual CompanyInformation AddCompany(CompanyInformation companyInformation, int memberType)
         {
             //create equivalent store objects
-            StoreCompany company = new StoreCompany
+            var company = new StoreCompany
             {
                 Name = companyInformation.Name,
             };
-            StoreAddress address = new StoreAddress
+            var address = new StoreAddress
             {
                 Street1 = companyInformation.Street1,
                 Street2 = companyInformation.Street2,
@@ -268,6 +268,7 @@ namespace asi.asicentral.services
             //create company if not already there
             var companyInfo = PersonifyClient.ReconcileCompany(company, "UNKNOWN", null);
             PersonifyClient.AddCustomerAddresses(company, companyInfo, null);
+	        companyInformation = PersonifyClient.GetCompanyInfo(companyInfo);
             return companyInformation;
         }
 
