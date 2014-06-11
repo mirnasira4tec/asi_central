@@ -349,6 +349,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 MasterCustomerId = customerInfo.MasterCustomerId,
                 SubCustomerId = customerInfo.SubCustomerId,
                 MemberType = customerInfo.CustomerClassCodeString,
+				MemberStatus = customerInfo.CustomerStatusCodeString,
             };
             if (customerInfo.UserDefinedCustomerNumber.HasValue)
             {

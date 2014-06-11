@@ -42,7 +42,8 @@ namespace asi.asicentral.Tests
 			Assert.IsNotNull(companyInformation.CompanyId);
             Assert.IsNotNull(companyInformation.City);
             Assert.IsNotNull(companyInformation.MemberType);
-            companyInformation = personify.GetCompanyInfoByIdentifier(5806901);
+			Assert.IsNotNull(companyInformation.MemberStatus);
+			companyInformation = personify.GetCompanyInfoByIdentifier(5806901);
             Assert.IsNotNull(companyInformation.Name);
             Assert.IsNotNull(companyInformation.City);
             Assert.IsNotNull(companyInformation.MemberType);
