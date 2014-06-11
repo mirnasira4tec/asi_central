@@ -792,6 +792,7 @@ namespace asi.asicentral.web.Controllers.Store
                 }
                 catch
                 {
+                    LogService log = LogService.GetLog(this.GetType());
                     
                 }
             }
