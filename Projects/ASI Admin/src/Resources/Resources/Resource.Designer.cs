@@ -1789,7 +1789,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sends.
+        ///   Looks up a localized string similar to sends.
         /// </summary>
         public static string EmailExpress_Quantity {
             get {
