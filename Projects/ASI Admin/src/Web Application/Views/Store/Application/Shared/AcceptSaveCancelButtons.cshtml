@@ -3,47 +3,54 @@
 @using asi.asicentral.services;
 @using asi.asicentral.interfaces;
 @model asi.asicentral.web.model.store.IMembershipModel
-<div>             
-    @if(!string.IsNullOrEmpty(Model.ASINumber))
+<div>
+    @if (!string.IsNullOrEmpty(Model.ASINumber))
     {
-    <h3>ASI #: @Model.ASINumber</h3>
+        <h3>ASI #: @Model.ASINumber</h3>
     }
     @if (Model.TotalCost > 0.0m)
     {
-    <h3 class="order-status-header3">Order Status:</h3>
-    <div class="order-status">@Model.OrderStatus</div>
-    <div class="timms-info">
-        <div class="span3">
-           @if (!IsBackEnd())
-           {
-            <label class="order-status-label" for="Timms_ID">Timms ID:</label>
-            <div class="order-status-input">
-                @Html.EditorFor(m => m.ExternalReference, new { @class = "span2" })
-                <span id="timmsErrorMessage" data-type="errormessage" class="field-validation-error"></span>
+        <h3 class="order-status-header3">Order Status:</h3>
+        <div class="order-status">@Model.OrderStatus</div>
+        if (IsBackEnd() && Model.OrderStatus == OrderStatus.PersonifyError)
+        {
+        <div class="order-status">
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_RESUBMIT" /></div>
+        }
+        <div class="timms-info">
+            <div class="span3">
+                @if (!IsBackEnd())
+                {
+                    <label class="order-status-label" for="Timms_ID">Timms ID:</label>
+                    <div class="order-status-input">
+                        @Html.EditorFor(m => m.ExternalReference, new { @class = "span2" })
+                        <span id="timmsErrorMessage" data-type="errormessage" class="field-validation-error"></span>
+                    </div>
+                }
             </div>
-             }
-        </div>
-        <div class="status-btns">
-           @if(!IsBackEnd())
-           {
-            if (Model.IsCompleted && Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
-            {
-            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
-            }
-            if (Model.IsCompleted && Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
-            { 
-            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
-            }
-            <input class="command btn-primary save" type="submit" value="@ApplicationController.COMMAND_SAVE" />
+            <div class="status-btns">
+                @if (!IsBackEnd())
+                {
+                    if (Model.IsCompleted && Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
+                    {
+                    <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
+                    }
+                    if (Model.IsCompleted && Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
+                    { 
+                    <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
+                    }
+                    <input class="command btn-primary save" type="submit" value="@ApplicationController.COMMAND_SAVE" />
 
-            if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
-            { @Html.ActionLink("Close", "../Orders") }
-            else
-            { @Html.ActionLink("Cancel", "../Orders") }
-           }
+                    if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
+                    { @Html.ActionLink("Close", "../Orders") }
+                    else
+                    { @Html.ActionLink("Cancel", "../Orders") }
+                }
 
+
+
+            </div>
         </div>
-    </div>
     }
     else
     {
@@ -56,7 +63,7 @@
 
         </div>
     }
-       @functions{
+    @functions{
         public IStoreService StoreService { get; set; }
         public IBackendService BackendService { get; set; }
         public bool IsBackEnd()
@@ -74,4 +81,3 @@
   }
 </div>
 
-          
