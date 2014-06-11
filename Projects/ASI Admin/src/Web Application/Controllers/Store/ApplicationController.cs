@@ -17,6 +17,7 @@ namespace asi.asicentral.web.Controllers.Store
         public const string COMMAND_SAVE = "Save";
         public const string COMMAND_REJECT = "Reject";
         public const string COMMAND_ACCEPT = "Accept";
+        public const string COMMAND_RESUBMIT = "Resubmit";
         //products associated only to StoreOrderDetail table
         public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 45, 46, 55, 62, 70, 71, 77 };
         //products associated to StoreDetailESPAdvertising table
@@ -34,6 +35,7 @@ namespace asi.asicentral.web.Controllers.Store
         public IStoreService StoreService { get; set; }
         public IFulfilmentService FulfilmentService { get; set; }
         public ICreditCardService CreditCardService { get; set; }
+        public IBackendService BackendService { get; set; }
 
         [HttpGet]
         public virtual ActionResult Edit(int id)
@@ -750,6 +752,7 @@ namespace asi.asicentral.web.Controllers.Store
         /// <returns></returns>
         private void ProcessCommand(IStoreService storeService, IFulfilmentService fulfilmentService, StoreOrder order, StoreDetailApplication application, string command)
         {
+
             if (command == ApplicationController.COMMAND_ACCEPT)
             {
                 //make sure we have external reference
@@ -773,6 +776,24 @@ namespace asi.asicentral.web.Controllers.Store
             {
                 order.ProcessStatus = OrderStatus.Rejected;
                 order.CreditCard.ExternalReference = null;
+            }
+            else if (command == ApplicationController.COMMAND_RESUBMIT)
+            {
+                try
+                {
+                   BackendService.PlaceOrder(order);
+                    order.ProcessStatus = OrderStatus.Approved;
+                    order.ApprovedDate = DateTime.UtcNow;
+                    if (System.Web.HttpContext.Current != null)
+                    {
+                        if (System.Web.HttpContext.Current.User.Identity as System.Security.Principal.WindowsIdentity != null)
+                            order.ApprovedBy = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
+                    }
+                }
+                catch
+                {
+                    
+                }
             }
         }
 
