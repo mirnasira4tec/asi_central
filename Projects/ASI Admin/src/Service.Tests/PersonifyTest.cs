@@ -39,7 +39,7 @@ namespace asi.asicentral.Tests
         {
             var tag = DateTime.Now.Ticks;
 
-            CompanyInformation companyInfo = new CompanyInformation
+            var companyInfo = new CompanyInformation
             {
                 Name = "New Company1 " + tag,
                 Street1 = "4800 Street Rd",
@@ -47,11 +47,14 @@ namespace asi.asicentral.Tests
                 State = "PA",
                 Zip = "19053",
                 Country = "USA",
+				MemberTypeNumber = 6,
             };
             IBackendService personify = new PersonifyService();
-            companyInfo = personify.AddCompany(companyInfo, 2);
+            companyInfo = personify.AddCompany(companyInfo);
             Assert.IsTrue(companyInfo.CompanyId > 0);
-        }
+			Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
+			Assert.AreEqual("ASICENTRAL", companyInfo.MemberStatus);
+		}
 
 	    [TestMethod]
 	    public void LookupCompany()

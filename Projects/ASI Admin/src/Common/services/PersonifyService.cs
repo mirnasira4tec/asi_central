@@ -263,14 +263,14 @@ namespace asi.asicentral.services
             return lineItems;
         }
 
-        public virtual CompanyInformation AddCompany(CompanyInformation companyInformation, int memberType)
+        public virtual CompanyInformation AddCompany(CompanyInformation companyInformation)
         {
             //create equivalent store objects
-            StoreCompany company = new StoreCompany
+            var company = new StoreCompany
             {
                 Name = companyInformation.Name,
             };
-            StoreAddress address = new StoreAddress
+            var address = new StoreAddress
             {
                 Street1 = companyInformation.Street1,
                 Street2 = companyInformation.Street2,
@@ -285,24 +285,114 @@ namespace asi.asicentral.services
                 IsBilling = true,
                 IsShipping = true,
             });
-            //@todo convert membertype
+			UpdateMemberType(companyInformation);
+			if (companyInformation.MemberStatus == "ACTIVE") throw new Exception("We should not be creating an active company");
             //create company if not already there
-            var companyInfo = PersonifyClient.ReconcileCompany(company, "UNKNOWN", null);
+            var companyInfo = PersonifyClient.ReconcileCompany(company, companyInformation.MemberType, null);
             PersonifyClient.AddCustomerAddresses(company, companyInfo, null);
+	        companyInformation = PersonifyClient.GetCompanyInfo(companyInfo);
             return companyInformation;
         }
 
         public virtual CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber)
         {
             var companyInfo = PersonifyClient.GetCompanyInfoByASINumber(asiNumber);
-            return companyInfo;
+			UpdateMemberType(companyInfo);
+			return companyInfo;
         }
 
         public virtual CompanyInformation GetCompanyInfoByIdentifier(int companyIdentifier)
         {
             var companyInfo = PersonifyClient.GetCompanyInfoByIdentifier(companyIdentifier);
+			UpdateMemberType(companyInfo);
             return companyInfo;
         }
+
+	    private static void UpdateMemberType(CompanyInformation companyInformation)
+	    {
+		    if (companyInformation.MemberTypeNumber == 0 &&
+		        !string.IsNullOrEmpty(companyInformation.MemberType) &&
+		        !string.IsNullOrEmpty(companyInformation.MemberStatus))
+		    {
+			    if (companyInformation.MemberStatus == "ACTIVE")
+			    {
+				    switch (companyInformation.MemberType)
+				    {
+					    case "DISTRIBUTOR":
+						    companyInformation.MemberTypeNumber = 1;
+						    break;
+						case "DECORATOR":
+							companyInformation.MemberTypeNumber = 3;
+							break;
+						case "SUPPLIER":
+							companyInformation.MemberTypeNumber = 2;
+							break;
+					}
+			    }
+			    else
+			    {
+					switch (companyInformation.MemberType)
+					{
+						case "DISTRIBUTOR":
+							companyInformation.MemberTypeNumber = 6;
+							break;
+						case "DECORATOR":
+							companyInformation.MemberTypeNumber = 12;
+							break;
+						case "SUPPLIER":
+							companyInformation.MemberTypeNumber = 7;
+							break;
+						case "AFFILIATE":
+							companyInformation.MemberTypeNumber = 13;
+							break;
+						case "END_BUYER":
+							companyInformation.MemberTypeNumber = 9;
+							break;
+						default:
+							companyInformation.MemberTypeNumber = 15;
+							break;
+					}
+				}
+		    }
+		    else if (companyInformation.MemberTypeNumber > 0)
+		    {
+			    companyInformation.MemberStatus = "ASICENTRAL";
+			    switch (companyInformation.MemberTypeNumber)
+			    {
+					case 1:
+					case 16:
+					    companyInformation.MemberStatus = "ACTIVE";
+					    companyInformation.MemberType = "DISTRIBUTOR";
+					    break;
+					case 3:
+					    companyInformation.MemberStatus = "ACTIVE";
+					    companyInformation.MemberType = "DECORATOR";
+					    break;
+					case 2:
+						companyInformation.MemberStatus = "ACTIVE";
+						companyInformation.MemberType = "SUPPLIER";
+						break;
+					case 6:
+						companyInformation.MemberType = "DISTRIBUTOR";
+						break;
+					case 12:
+						companyInformation.MemberType = "DECORATOR";
+						break;
+					case 7:
+						companyInformation.MemberType = "SUPPLIER";
+						break;
+					case 13:
+						companyInformation.MemberType = "AFFILIATE";
+						break;
+					case 9:
+						companyInformation.MemberType = "END_BUYER";
+						break;
+					default:
+						companyInformation.MemberType = "UNKNOWN";
+						break;
+				}
+		    }
+	    }
 
         public void Dispose()
         {

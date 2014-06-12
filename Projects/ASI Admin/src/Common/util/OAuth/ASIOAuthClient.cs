@@ -19,7 +19,9 @@ namespace asi.asicentral.oauth
 {
     public enum StatusCode
     {
-        ACTV
+        ACTV,
+        ACTIVE,
+        ASICENTRAL
     }
 
     public enum UsageCode
@@ -27,26 +29,6 @@ namespace asi.asicentral.oauth
         GNRL,
         EBIL,
         ESHP
-    }
-
-    public enum MemberType
-    {
-        DIST,
-        SPLR,
-        DECR,
-        MLRP,
-        EDBY,
-        AFFL,
-        UNKN
-    }
-
-    public enum MemberTypeDesc
-    {
-        Supplier,
-        Distributor,
-        MultiLineRep,
-        Decorator,
-        Guest,
     }
 
     public enum ApplicationCodes
@@ -112,10 +94,7 @@ namespace asi.asicentral.oauth
                 ASI.EntityModel.User entityUser = Task.Factory.StartNew(() => UMS.UserSearch(sso).Result, TaskCreationOptions.LongRunning).Result;
                 user = MapEntityModelUserToASIUser(entityUser, user);
             }
-            catch (System.Exception Ex)
-            {
-                string Message = Ex.Message;
-            }
+            catch { }
             return user;
         }
 
@@ -245,29 +224,33 @@ namespace asi.asicentral.oauth
                 try
                 {
                     ASI.EntityModel.User entityUser = null;
-                    var usePersonifyServices = ConfigurationManager.AppSettings["UsePersonifyServices"];
-                    if (!string.IsNullOrEmpty(usePersonifyServices) && Convert.ToBoolean(usePersonifyServices))
+                    if (user.CompanyId == 0)
                     {
-                        PersonifyService personifyService = new PersonifyService();
-                        try
+                        var usePersonifyServices = ConfigurationManager.AppSettings["UsePersonifyServices"];
+                        if (!string.IsNullOrEmpty(usePersonifyServices) && Convert.ToBoolean(usePersonifyServices))
                         {
-                            CompanyInformation companyInfo = new CompanyInformation 
+                            PersonifyService personifyService = new PersonifyService();
+                            try
                             {
-                                Name = user.CompanyName,
-                                Street1 = user.Street1,
-                                Street2 = user.Street2,
-                                City = user.City,
-                                Zip = user.Zip,
-                                State = user.State,
-                                Country = user.CountryCode,
-
-                            };
-                            companyInfo = personifyService.AddCompany(companyInfo, user.MemberTypeId);
-                            user.CompanyId = companyInfo.CompanyId;
+                                CompanyInformation companyInfo = new CompanyInformation
+                                {
+                                    CompanyId = user.CompanyId,
+                                    Name = user.CompanyName,
+                                    Street1 = user.Street1,
+                                    Street2 = user.Street2,
+                                    City = user.City,
+                                    Zip = user.Zip,
+                                    State = user.State,
+                                    Country = user.CountryCode,
+                                    MemberTypeNumber = user.MemberTypeId,
+                                };
+                                companyInfo = personifyService.AddCompany(companyInfo);
+                                user.CompanyId = companyInfo.CompanyId;
+                            }
+                            catch { }
                         }
-                        catch { }
+                        else if (user.CompanyId == 0) user.CompanyId = 114945;
                     }
-                    else if(user.CompanyId == 0) user.CompanyId = 114945;
                     entityUser = MapASIUserToEntityModelUser(user, entityUser, true);
                     ssoId = Task.Factory.StartNew(() => UMS.UserCreate(entityUser).Result, TaskCreationOptions.LongRunning).Result;
                 }
@@ -294,6 +277,8 @@ namespace asi.asicentral.oauth
 							CompanyId = company.CompanyId,
 							AsiNumber = asiNumber,
 							MemberType_CD = company.MemberType,
+                            MemberTypeId = company.MemberTypeNumber,
+                            MemberStatus_CD = company.MemberStatus
 	                    };
                     }
                 }
@@ -335,48 +320,6 @@ namespace asi.asicentral.oauth
                 catch { isPasswordChanged = false; }
             }
             return isPasswordChanged;
-        }
-
-        public static string GetMemberTypeDescription(string memberType)
-        {
-            MemberType code = (MemberType)Enum.Parse(typeof(MemberType), memberType);        
-            switch (code)
-            {
-                case MemberType.SPLR:
-                    return MemberTypeDesc.Supplier.ToString();
-                case MemberType.DIST:
-                    return MemberTypeDesc.Distributor.ToString();
-                case MemberType.MLRP:
-                    return MemberTypeDesc.MultiLineRep.ToString();
-                case MemberType.DECR:
-                    return MemberTypeDesc.Decorator.ToString();
-                case MemberType.UNKN:
-                default:
-                    return MemberTypeDesc.Guest.ToString();
-            }
-        }
-
-        public static string GetMemberTypeUMSCode(int code)
-        {
-            switch (code)
-            {
-                case 1:
-                case 6:
-                case 16:
-                    return MemberType.DIST.ToString();
-                case 2:
-                case 7:
-                    return MemberType.SPLR.ToString();
-                case 3:
-                case 12:
-                    return MemberType.DECR.ToString();
-                case 9:
-                    return MemberType.EDBY.ToString();
-                case 13:
-                    return MemberType.AFFL.ToString();
-                default:
-                    return MemberType.UNKN.ToString();
-            }
         }
 
         private static ASI.EntityModel.User MapASIUserToEntityModelUser(asi.asicentral.model.User user, ASI.EntityModel.User entityUser, bool isCreate)
@@ -637,3 +580,4 @@ namespace asi.asicentral.oauth
         }
     }
 }
+
