@@ -1753,6 +1753,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the number of sends.
+        /// </summary>
+        public static string EmailExpress_EnterQuantity {
+            get {
+                return ResourceManager.GetString("EmailExpress_EnterQuantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please select an EmailExpress product to proceed.
         /// </summary>
         public static string EmailExpress_Error_ItemType {
@@ -1789,7 +1798,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the number of sends.
+        ///   Looks up a localized string similar to  sends.
         /// </summary>
         public static string EmailExpress_Quantity {
             get {
