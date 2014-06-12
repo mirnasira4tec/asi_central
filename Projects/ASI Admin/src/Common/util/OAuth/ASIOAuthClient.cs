@@ -14,7 +14,6 @@ using ASI.EntityModel;
 using System.Threading.Tasks;
 using asi.asicentral.services;
 using asi.asicentral.interfaces;
-using System.ComponentModel;
 
 namespace asi.asicentral.oauth
 {
@@ -30,39 +29,6 @@ namespace asi.asicentral.oauth
         GNRL,
         EBIL,
         ESHP
-    }
-
-    public enum MemberType
-    {
-        [Description("Distributor")]
-        DIST,
-        [Description("Distributor")]
-        DISTRIBUTOR,
-
-        [Description("Supplier")]
-        SPLR,
-        [Description("Supplier")]
-        SUPPLIER,
-
-        [Description("Decorator")]
-        DECR,
-        [Description("Decorator")]
-        DECORATOR,
-
-        [Description("End Buyer")]
-        EDBY,
-        [Description("End Buyer")]
-        END_BUYER,
-
-        [Description("Prospective Affiliate")]
-        AFFL,
-        [Description("Prospective Affiliate")]
-        AFFILIATE,
-
-        [Description("Guest")]
-        UNKN,
-        [Description("Guest")]
-        UNKNOWN
     }
 
     public enum ApplicationCodes
@@ -128,10 +94,7 @@ namespace asi.asicentral.oauth
                 ASI.EntityModel.User entityUser = Task.Factory.StartNew(() => UMS.UserSearch(sso).Result, TaskCreationOptions.LongRunning).Result;
                 user = MapEntityModelUserToASIUser(entityUser, user);
             }
-            catch (System.Exception Ex)
-            {
-                string Message = Ex.Message;
-            }
+            catch { }
             return user;
         }
 
@@ -261,29 +224,33 @@ namespace asi.asicentral.oauth
                 try
                 {
                     ASI.EntityModel.User entityUser = null;
-                    var usePersonifyServices = ConfigurationManager.AppSettings["UsePersonifyServices"];
-                    if (!string.IsNullOrEmpty(usePersonifyServices) && Convert.ToBoolean(usePersonifyServices))
+                    if (user.CompanyId == 0)
                     {
-                        PersonifyService personifyService = new PersonifyService();
-                        try
+                        var usePersonifyServices = ConfigurationManager.AppSettings["UsePersonifyServices"];
+                        if (!string.IsNullOrEmpty(usePersonifyServices) && Convert.ToBoolean(usePersonifyServices))
                         {
-                            CompanyInformation companyInfo = new CompanyInformation 
+                            PersonifyService personifyService = new PersonifyService();
+                            try
                             {
-                                Name = user.CompanyName,
-                                Street1 = user.Street1,
-                                Street2 = user.Street2,
-                                City = user.City,
-                                Zip = user.Zip,
-                                State = user.State,
-                                Country = user.CountryCode,
-								MemberTypeNumber = user.MemberTypeId,
-                            };
-                            companyInfo = personifyService.AddCompany(companyInfo);
-                            user.CompanyId = companyInfo.CompanyId;
+                                CompanyInformation companyInfo = new CompanyInformation
+                                {
+                                    CompanyId = user.CompanyId,
+                                    Name = user.CompanyName,
+                                    Street1 = user.Street1,
+                                    Street2 = user.Street2,
+                                    City = user.City,
+                                    Zip = user.Zip,
+                                    State = user.State,
+                                    Country = user.CountryCode,
+                                    MemberTypeNumber = user.MemberTypeId,
+                                };
+                                companyInfo = personifyService.AddCompany(companyInfo);
+                                user.CompanyId = companyInfo.CompanyId;
+                            }
+                            catch { }
                         }
-                        catch { }
+                        else if (user.CompanyId == 0) user.CompanyId = 114945;
                     }
-                    else if(user.CompanyId == 0) user.CompanyId = 114945;
                     entityUser = MapASIUserToEntityModelUser(user, entityUser, true);
                     ssoId = Task.Factory.StartNew(() => UMS.UserCreate(entityUser).Result, TaskCreationOptions.LongRunning).Result;
                 }
@@ -611,16 +578,6 @@ namespace asi.asicentral.oauth
             catch { }
             return user;
         }
-
-        public static string GetMemberTypeDesciptionForRole(string memberType)
-        {
-            MemberType code = (MemberType)Enum.Parse(typeof(MemberType), memberType);
-            System.Attribute  attribute = asi.asicentral.util.EnumHelper.GetAttributeOfType<System.Attribute>(code);
-            if (attribute != null)
-                return ((System.ComponentModel.DescriptionAttribute)(attribute)).Description;
-            else return null;
-        }
-
     }
 }
 
