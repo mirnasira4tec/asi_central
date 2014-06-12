@@ -36,6 +36,7 @@ namespace asi.asicentral.web.Controllers.Store
         public IFulfilmentService FulfilmentService { get; set; }
         public ICreditCardService CreditCardService { get; set; }
         public IBackendService BackendService { get; set; }
+        public IEmailService EmailService { get; set; }
 
         [HttpGet]
         public virtual ActionResult Edit(int id)
@@ -781,7 +782,7 @@ namespace asi.asicentral.web.Controllers.Store
             {
                 try
                 {
-                   BackendService.PlaceOrder(order);
+                    BackendService.PlaceOrder(order, EmailService);
                     order.ProcessStatus = OrderStatus.Approved;
                     order.ApprovedDate = DateTime.UtcNow;
                     if (System.Web.HttpContext.Current != null)

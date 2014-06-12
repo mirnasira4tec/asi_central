@@ -91,7 +91,7 @@ namespace asi.asicentral.Tests
             Assert.IsNotNull(profileIdentifier);
             Assert.IsNotNull(order.Company.ExternalReference);
             order.CreditCard.ExternalReference = profileIdentifier;
-            personify.PlaceOrder(order);
+            personify.PlaceOrder(order, new Mock<IEmailService>().Object);
         }
 
         [TestMethod]

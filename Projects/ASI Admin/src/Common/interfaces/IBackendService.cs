@@ -9,7 +9,7 @@ namespace asi.asicentral.interfaces
 {
     public interface IBackendService
     {
-        void PlaceOrder(StoreOrder storeOrder);
+        void PlaceOrder(StoreOrder storeOrder, IEmailService emailService);
 
         /// <summary>
         /// Used to identify where the order detail is processed through backend

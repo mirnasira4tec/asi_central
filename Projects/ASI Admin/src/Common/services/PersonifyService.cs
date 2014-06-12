@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using System.Net.Mail;
+using System.Text;
 using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
 using asi.asicentral.PersonifyDataASI;
@@ -7,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using asi.asicentral.services.PersonifyProxy;
 using asi.asicentral.model.timss;
+using ASI.EntityModel;
 
 namespace asi.asicentral.services
 {
@@ -27,7 +30,7 @@ namespace asi.asicentral.services
             this.storeService = storeService;
         }
 
-        public virtual void PlaceOrder(StoreOrder order)
+        public virtual void PlaceOrder(StoreOrder order, IEmailService emailService)
         {
             log.Debug(string.Format("Place order Start : {0}", order));
             IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
@@ -37,17 +40,17 @@ namespace asi.asicentral.services
             {
                 var companyInfo = PersonifyClient.ReconcileCompany(order.Company, "UNKNOWN", countryCodes);
                 log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
-                
+
                 IEnumerable<StoreAddressInfo> addresses = PersonifyClient.AddCustomerAddresses(order.Company, companyInfo, countryCodes);
                 log.Debug(string.Format("Added addresses to '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
-                
+
                 IList<CustomerInfo> individualInfos = PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo).ToList();
                 log.Debug(string.Format("Added individuals to company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
                 IList<StoreAddressInfo> addresses2 = PersonifyClient.AddIndividualAddresses(order.Company, individualInfos, countryCodes).ToList();
                 log.Debug(string.Format("Address added to individuals to the order '{0}'.", order));
-                
+
                 StoreIndividual primaryContact = order.GetContact();
                 CustomerInfo primaryContactInfo = individualInfos.FirstOrDefault(c =>
                     string.Equals(c.FirstName, primaryContact.FirstName, StringComparison.InvariantCultureIgnoreCase)
@@ -58,11 +61,11 @@ namespace asi.asicentral.services
                 var lineItems = GetPersonifyLineInputs(order, shipToAddr.PersonifyAddr.CustomerAddressId);
                 log.Debug(string.Format("Retrieved the line items to the order '{0}'.", order.ToString()));
                 var orderOutput = PersonifyClient.CreateOrder(
-                    order, 
-                    companyInfo, 
-                    primaryContactInfo, 
-                    billToAddr.PersonifyAddr.CustomerAddressId, 
-                    shipToAddr.PersonifyAddr.CustomerAddressId, 
+                    order,
+                    companyInfo,
+                    primaryContactInfo,
+                    billToAddr.PersonifyAddr.CustomerAddressId,
+                    shipToAddr.PersonifyAddr.CustomerAddressId,
                     lineItems);
                 log.Debug(string.Format("The order '{0}' has been created in Personify.", order));
 
@@ -70,6 +73,17 @@ namespace asi.asicentral.services
                 order.ExternalReference = orderOutput.OrderNumber;
                 decimal orderTotal = PersonifyClient.GetOrderTotal(orderOutput.OrderNumber);
                 log.Debug(string.Format("Got the order total for the order '{0}'.", order));
+                if (orderTotal != order.Total)
+                {
+                    var data = new EmailData()
+                    {
+                        Subject = "here is a price discrepancy for an order from the store to Personify",
+                        EmailBody = string.Format("A new order created in the store ({0}) has been transferred to a Personify "
+                        + "order ({1}). The prices do not match, the order needs to be looked at. The store price is {2:C} and "
+                        + "the Personify price is {3:C}.<br /><br />Thanks,<br /><br />ASICentral team", order.Id.ToString(), orderOutput.OrderNumber, order.Total, orderTotal)
+                    };
+                    data.SendEmail(emailService);
+                }
                 try
                 {
                     PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, billToAddr.PersonifyAddr, companyInfo);
@@ -78,8 +92,15 @@ namespace asi.asicentral.services
                 }
                 catch (Exception e)
                 {
-                    log.Error(string.Format("Failed to pay the order '{0}'. Error is {2}{1}", order, e.StackTrace, e.Message));
+                    string s = string.Format("Failed to pay the order '{0}'. Error is {2}{1}", order, e.StackTrace, e.Message);
+                    log.Error(s);
                     //@todo send email order failed to be charged
+                    var data = new EmailData()
+                    {
+                        Subject = "order failed to be charged",
+                        EmailBody = s + "<br /><br />Thanks,<br /><br />ASICentral team"
+                    };
+                    data.SendEmail(emailService);
                     log.Debug(string.Format("Place order End: {0}", order));
                 }
             }
@@ -108,7 +129,7 @@ namespace asi.asicentral.services
                     return false;
                 });
             };
-       
+
             if (addr == null || addr.PersonifyAddr == null)
             {
                 string s = string.Format("Shipping and billing personify customer addresses are required for order {0}.", order.ToString());
@@ -157,8 +178,8 @@ namespace asi.asicentral.services
             //Add credit card to the company
             string profile = PersonifyClient.GetCreditCardProfileId(companyInfo, creditCard);
             if (profile == string.Empty) profile = PersonifyClient.SaveCreditCard(companyInfo, creditCard);
-            log.Debug(string.IsNullOrWhiteSpace(profile)?
-                "Fail to save the credit.":string.Format("Saved credit profile id : {0}",profile));
+            log.Debug(string.IsNullOrWhiteSpace(profile) ?
+                "Fail to save the credit." : string.Format("Saved credit profile id : {0}", profile));
             return profile;
         }
 
@@ -172,7 +193,7 @@ namespace asi.asicentral.services
                 {
                     case 77: //supplier specials
                         var startDate = (orderDetail.DateOption.HasValue ? orderDetail.DateOption.Value : DateTime.Now).ToString("MM/dd/yyyy");
-						var endDate = (orderDetail.DateOption.HasValue ? orderDetail.DateOption.Value : DateTime.Now).AddMonths(1).ToString("MM/dd/yyyy");
+                        var endDate = (orderDetail.DateOption.HasValue ? orderDetail.DateOption.Value : DateTime.Now).AddMonths(1).ToString("MM/dd/yyyy");
                         var option = orderDetail.OptionId.ToString();
                         var mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => Equals(map.StoreContext, orderDetail.Order.ContextId) &&
                             map.StoreProduct == orderDetail.Product.Id &&
@@ -186,7 +207,7 @@ namespace asi.asicentral.services
                             ShipAddressID = Convert.ToInt32(shipAddressId),
                             Quantity = Convert.ToInt16(orderDetail.Quantity),
                             BeginDate = startDate,
-							EndDate = endDate,
+                            EndDate = endDate,
                         };
                         lineItems.Add(lineItem);
                         break;
@@ -273,8 +294,8 @@ namespace asi.asicentral.services
             return companyInformation;
         }
 
-	    public virtual CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber)
-	    {
+        public virtual CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber)
+        {
             var companyInfo = PersonifyClient.GetCompanyInfoByASINumber(asiNumber);
 			UpdateMemberType(companyInfo);
 			return companyInfo;
