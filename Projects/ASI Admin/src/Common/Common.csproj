@@ -44,9 +44,9 @@
     <Reference Include="asi.asicentral.Core">
       <HintPath>..\..\library\asi.asicentral.Core.dll</HintPath>
     </Reference>
-    <Reference Include="ASI.EntityModel, Version=1.0.13.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ASI.EntityModel, Version=1.0.14.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ASI.EntityModel.1.0.13\lib\ASI.EntityModel.dll</HintPath>
+      <HintPath>..\packages\ASI.EntityModel.1.0.14\lib\ASI.EntityModel.dll</HintPath>
     </Reference>
     <Reference Include="ASI.Jade, Version=1.2.11.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
