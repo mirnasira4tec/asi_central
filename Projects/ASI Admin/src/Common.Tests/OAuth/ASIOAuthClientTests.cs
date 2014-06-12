@@ -85,6 +85,13 @@ namespace Core.Tests.OAuth
         }
 
         [TestMethod]
+        public void GetMemberTypeDesciptionForRoleTest()
+        {
+            string result1 = ASIOAuthClient.GetMemberTypeDesciptionForRole("AFFL");
+            Assert.AreEqual(result1, "Prospective Affiliate");
+        }
+
+        [TestMethod]
         public void GetCopmanyByASITest()
         {
             asi.asicentral.model.User user = ASIOAuthClient.GetCompanyByASINumber("342495");
