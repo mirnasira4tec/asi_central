@@ -70,7 +70,7 @@ namespace asi.asicentral.services
                 log.Debug(string.Format("The order '{0}' has been created in Personify.", order));
 
 
-                order.ExternalReference = orderOutput.OrderNumber;
+                order.BackendReference = orderOutput.OrderNumber;
                 decimal orderTotal = PersonifyClient.GetOrderTotal(orderOutput.OrderNumber);
                 log.Debug(string.Format("Got the order total for the order '{0}'.", order));
                 if (orderTotal != order.Total)
@@ -94,7 +94,6 @@ namespace asi.asicentral.services
                 {
                     string s = string.Format("Failed to pay the order '{0}'. Error is {2}{1}", order, e.StackTrace, e.Message);
                     log.Error(s);
-                    //@todo send email order failed to be charged
                     var data = new EmailData()
                     {
                         Subject = "order failed to be charged",

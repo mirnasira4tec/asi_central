@@ -35,7 +35,8 @@ namespace asi.asicentral.model.store
         public string OrderRequestType { get; set; }
         public string Campaign { get; set; }
         public string ExternalReference { get; set; }
-        public string UserReference { get; set; }
+		public string BackendReference { get; set; }
+		public string UserReference { get; set; }
         public string LoggedUserEmail { get; set; }
         public string IPAdd { get; set; }
         public decimal Total { get; set; }
