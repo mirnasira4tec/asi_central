@@ -260,9 +260,9 @@ namespace asi.asicentral.oauth
                                 Zip = user.Zip,
                                 State = user.State,
                                 Country = user.CountryCode,
-
+								MemberTypeNumber = user.MemberTypeId,
                             };
-                            companyInfo = personifyService.AddCompany(companyInfo, user.MemberTypeId);
+                            companyInfo = personifyService.AddCompany(companyInfo);
                             user.CompanyId = companyInfo.CompanyId;
                         }
                         catch { }
@@ -335,48 +335,6 @@ namespace asi.asicentral.oauth
                 catch { isPasswordChanged = false; }
             }
             return isPasswordChanged;
-        }
-
-        public static string GetMemberTypeDescription(string memberType)
-        {
-            MemberType code = (MemberType)Enum.Parse(typeof(MemberType), memberType);        
-            switch (code)
-            {
-                case MemberType.SPLR:
-                    return MemberTypeDesc.Supplier.ToString();
-                case MemberType.DIST:
-                    return MemberTypeDesc.Distributor.ToString();
-                case MemberType.MLRP:
-                    return MemberTypeDesc.MultiLineRep.ToString();
-                case MemberType.DECR:
-                    return MemberTypeDesc.Decorator.ToString();
-                case MemberType.UNKN:
-                default:
-                    return MemberTypeDesc.Guest.ToString();
-            }
-        }
-
-        public static string GetMemberTypeUMSCode(int code)
-        {
-            switch (code)
-            {
-                case 1:
-                case 6:
-                case 16:
-                    return MemberType.DIST.ToString();
-                case 2:
-                case 7:
-                    return MemberType.SPLR.ToString();
-                case 3:
-                case 12:
-                    return MemberType.DECR.ToString();
-                case 9:
-                    return MemberType.EDBY.ToString();
-                case 13:
-                    return MemberType.AFFL.ToString();
-                default:
-                    return MemberType.UNKN.ToString();
-            }
         }
 
         private static ASI.EntityModel.User MapASIUserToEntityModelUser(asi.asicentral.model.User user, ASI.EntityModel.User entityUser, bool isCreate)

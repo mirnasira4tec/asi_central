@@ -115,11 +115,9 @@ namespace asi.asicentral.services.PersonifyProxy
 				if (result != null && string.IsNullOrWhiteSpace(result.WarningMessage))
 				{
 					var subCustomerId = result.SubCustomerId.HasValue ? result.SubCustomerId.Value : 0;
-					//try update status - not caring so much whether it works or not
-					var q =
-						SvcClient.Ctxt.ASICustomers.Where(
-							p => p.MasterCustomerId == result.MasterCustomerId && p.SubCustomerId == subCustomerId).Select(o => o);
-					var customers = new DataServiceCollection<ASICustomer>(q, TrackingMode.None);
+					//try update status, non critical but should be working
+					var customers = SvcClient.Ctxt.ASICustomers.Where(
+							p => p.MasterCustomerId == result.MasterCustomerId && p.SubCustomerId == subCustomerId).ToList();
 					if (customers.Count > 0)
 					{
 						ASICustomer customer = customers[0];
@@ -304,13 +302,19 @@ namespace asi.asicentral.services.PersonifyProxy
 
 		#region Getting company information
 
+		public static CompanyInformation GetCompanyInfo(CustomerInfo customerInfo)
+		{
+			var customers = SvcClient.Ctxt.ASICustomerInfos.Where(p => p.MasterCustomerId == customerInfo.MasterCustomerId && p.SubCustomerId == customerInfo.SubCustomerId).ToList();
+			if (customers.Count == 0) return null;
+			return GetCompanyInfo(customers[0]);
+		}
+
 		public static CompanyInformation GetCompanyInfoByASINumber(string asiNumber)
 		{
 			var customers = SvcClient.Ctxt.ASICustomerInfos.Where(p => p.UserDefinedAsiNumber == asiNumber).ToList();
 			if (customers.Count == 0) return null;
 			return GetCompanyInfo(customers[0]);
 		}
-
 
 		public static CompanyInformation GetCompanyInfoByIdentifier(int companyIdentifier)
 		{
@@ -328,7 +332,7 @@ namespace asi.asicentral.services.PersonifyProxy
 				MasterCustomerId = customerInfo.MasterCustomerId,
 				SubCustomerId = customerInfo.SubCustomerId,
 				MemberType = customerInfo.CustomerClassCodeString,
-				MemberStatus = customerInfo.CustomerStatusCodeString,
+				MemberStatus = customerInfo.UserDefinedMemberStatusString,
 			};
 			if (customerInfo.UserDefinedCustomerNumber.HasValue)
 			{
