@@ -1804,7 +1804,7 @@
     <value>You will receive an email with uploading instructions shortly.</value>
   </data>
   <data name="EmailExpress_Quantity" xml:space="preserve">
-    <value>sends</value>
+    <value>Enter the number of sends</value>
   </data>
   <data name="FieldLengthASI" xml:space="preserve">
     <value>This is not a valid {0} ASI #</value>
