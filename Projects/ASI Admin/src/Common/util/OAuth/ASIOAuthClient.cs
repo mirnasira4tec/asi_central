@@ -14,12 +14,15 @@ using ASI.EntityModel;
 using System.Threading.Tasks;
 using asi.asicentral.services;
 using asi.asicentral.interfaces;
+using System.ComponentModel;
 
 namespace asi.asicentral.oauth
 {
     public enum StatusCode
     {
-        ACTV
+        ACTV,
+        ACTIVE,
+        ASICENTRAL
     }
 
     public enum UsageCode
@@ -31,22 +34,35 @@ namespace asi.asicentral.oauth
 
     public enum MemberType
     {
+        [Description("Distributor")]
         DIST,
-        SPLR,
-        DECR,
-        MLRP,
-        EDBY,
-        AFFL,
-        UNKN
-    }
+        [Description("Distributor")]
+        DISTRIBUTOR,
 
-    public enum MemberTypeDesc
-    {
-        Supplier,
-        Distributor,
-        MultiLineRep,
-        Decorator,
-        Guest,
+        [Description("Supplier")]
+        SPLR,
+        [Description("Supplier")]
+        SUPPLIER,
+
+        [Description("Decorator")]
+        DECR,
+        [Description("Decorator")]
+        DECORATOR,
+
+        [Description("End Buyer")]
+        EDBY,
+        [Description("End Buyer")]
+        END_BUYER,
+
+        [Description("Prospective Affiliate")]
+        AFFL,
+        [Description("Prospective Affiliate")]
+        AFFILIATE,
+
+        [Description("Guest")]
+        UNKN,
+        [Description("Guest")]
+        UNKNOWN
     }
 
     public enum ApplicationCodes
@@ -294,6 +310,8 @@ namespace asi.asicentral.oauth
 							CompanyId = company.CompanyId,
 							AsiNumber = asiNumber,
 							MemberType_CD = company.MemberType,
+                            MemberTypeId = company.MemberTypeNumber,
+                            MemberStatus_CD = company.MemberStatus
 	                    };
                     }
                 }
@@ -593,5 +611,16 @@ namespace asi.asicentral.oauth
             catch { }
             return user;
         }
+
+        public static string GetMemberTypeDesciptionForRole(string memberType)
+        {
+            MemberType code = (MemberType)Enum.Parse(typeof(MemberType), memberType);
+            System.Attribute  attribute = asi.asicentral.util.EnumHelper.GetAttributeOfType<System.Attribute>(code);
+            if (attribute != null)
+                return ((System.ComponentModel.DescriptionAttribute)(attribute)).Description;
+            else return null;
+        }
+
     }
 }
+
