@@ -789,10 +789,12 @@ namespace asi.asicentral.web.Controllers.Store
                         if (System.Web.HttpContext.Current.User.Identity as System.Security.Principal.WindowsIdentity != null)
                             order.ApprovedBy = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
                     }
+                   
                 }
-                catch
+                catch(Exception ex)
                 {
-                    
+                    LogService log = LogService.GetLog(this.GetType());
+                    log.Error(ex.Message);
                 }
             }
         }

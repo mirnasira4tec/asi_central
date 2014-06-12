@@ -1804,7 +1804,7 @@
     <value>You will receive an email with uploading instructions shortly.</value>
   </data>
   <data name="EmailExpress_Quantity" xml:space="preserve">
-    <value>sends</value>
+    <value> sends</value>
   </data>
   <data name="FieldLengthASI" xml:space="preserve">
     <value>This is not a valid {0} ASI #</value>
@@ -1826,5 +1826,8 @@
   </data>
   <data name="FieldNumberRange" xml:space="preserve">
     <value>Choose a value between 1 and 1000</value>
+  </data>
+  <data name="EmailExpress_EnterQuantity" xml:space="preserve">
+    <value>Enter the number of sends</value>
   </data>
 </root>
