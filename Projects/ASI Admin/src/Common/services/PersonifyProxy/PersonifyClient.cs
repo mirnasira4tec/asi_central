@@ -160,12 +160,14 @@ namespace asi.asicentral.services.PersonifyProxy
 						return addr;
 					}).ToList();
 				}
-				foreach (var addr in storeCompanyAddresses)
-				{
-					if (addr.PersonifyAddr == null && !addr.IsAdded) AddCustomerAddress(addr, existingPrimaryAddress, customerInfo, storeCompany.Name);
-				}
-			}
-			return storeCompanyAddresses;
+                storeCompanyAddresses = storeCompanyAddresses.Select(addr =>
+                {
+                    if (addr.PersonifyAddr == null && !addr.IsAdded)
+                        AddCustomerAddress(addr, existingPrimaryAddress, customerInfo, storeCompany.Name);
+                    return addr;
+                });
+            }
+            return storeCompanyAddresses;
 		}
 
 		private static IList<StoreAddressInfo> ProcessStoreAddresses(StoreCompany storeCompany, IEnumerable<LookSendMyAdCountryCode> countryCodes)
