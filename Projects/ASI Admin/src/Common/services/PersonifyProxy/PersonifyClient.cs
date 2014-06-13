@@ -165,7 +165,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     if (addr.PersonifyAddr == null && !addr.IsAdded)
                         AddCustomerAddress(addr, existingPrimaryAddress, customerInfo, storeCompany.Name);
                     return addr;
-                });
+                }).ToList();
             }
             return storeCompanyAddresses;
 		}
