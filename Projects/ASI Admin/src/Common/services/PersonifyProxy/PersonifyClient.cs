@@ -403,22 +403,52 @@ namespace asi.asicentral.services.PersonifyProxy
 
 			foreach (var storeIndividual in storeCompany.Individuals)
 			{
-				var customerInfo = GetIndividualInfo(storeIndividual.FirstName, storeIndividual.LastName, companyInfo);
-				if (customerInfo == null)
-				{
-					var customerInfoInput = new SaveCustomerInput
-					{
-						FirstName = storeIndividual.FirstName,
-						LastName = storeIndividual.LastName,
-						CustomerClassCode = CUSTOMER_CLASS_INDIV,
-					};
-					AddCusCommunicationInput(customerInfoInput, COMMUNICATION_INPUT_PHONE, storeIndividual.Phone, COMMUNICATION_LOCATION_CODE_WORK, countryCode, isUsaAddress);
-					AddCusCommunicationInput(customerInfoInput, COMMUNICATION_INPUT_EMAIL, storeIndividual.Email, COMMUNICATION_LOCATION_CODE_WORK);
-					var customerInfoOutput = SvcClient.Post<SaveCustomerOutput>("CreateIndividual", customerInfoInput);
-					customerInfo = GetIndividualInfo(customerInfoOutput.MasterCustomerId);
-					AddRelationship(customerInfo, companyInfo);
-				}
-				allCustomers.Add(customerInfo);
+                CustomerInfo customerInfo = null;
+                //check if individual already exist based on email
+                List<CusCommunication> communications = SvcClient.Ctxt.CusCommunications.
+                    Where(comm => comm.SearchPhoneAddress == storeIndividual.Email).ToList();
+                if (communications.Count > 0)
+                {
+                    //we already have a contact with that email
+                    customerInfo = GetIndividualInfo(communications[0].MasterCustomerId);
+                    //check if contact belong to company
+                    List<CusRelationship> relationships = SvcClient.Ctxt.CusRelationships
+                        .Where(rel => rel.MasterCustomerId == customerInfo.MasterCustomerId
+                                    && rel.RelatedMasterCustomerId == companyInfo.MasterCustomerId
+                                    && rel.RelatedSubCustomerId == companyInfo.SubCustomerId).ToList();
+                    if (relationships.Count == 0)
+                    {
+                        //also link this user to the company
+                        AddRelationship(customerInfo, companyInfo);
+                    }
+                }
+                else
+                {
+                    //check if there is a contact with same name for same company already
+                    customerInfo = GetIndividualInfo(storeIndividual.FirstName, storeIndividual.LastName, companyInfo);
+                    if (customerInfo == null)
+                    {
+                        //could not find him, add him
+                        var customerInfoInput = new SaveCustomerInput
+                        {
+                            FirstName = storeIndividual.FirstName,
+                            LastName = storeIndividual.LastName,
+                            CustomerClassCode = CUSTOMER_CLASS_INDIV,
+                        };
+                        AddCusCommunicationInput(customerInfoInput, COMMUNICATION_INPUT_PHONE, storeIndividual.Phone, COMMUNICATION_LOCATION_CODE_WORK, countryCode, isUsaAddress);
+                        AddCusCommunicationInput(customerInfoInput, COMMUNICATION_INPUT_EMAIL, storeIndividual.Email, COMMUNICATION_LOCATION_CODE_WORK);
+                        var customerInfoOutput = SvcClient.Post<SaveCustomerOutput>("CreateIndividual", customerInfoInput);
+                        customerInfo = GetIndividualInfo(customerInfoOutput.MasterCustomerId);
+                        AddRelationship(customerInfo, companyInfo);
+                    }
+                    else
+                    {
+                        //already there but not with the email specified
+                        //@todo add the email?
+                        //@todo check the phone?
+                    }
+                }
+				if (customerInfo != null) allCustomers.Add(customerInfo);
 			}
 			return allCustomers;
 		}
