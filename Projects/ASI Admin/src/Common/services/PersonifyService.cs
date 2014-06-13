@@ -309,87 +309,90 @@ namespace asi.asicentral.services
 
 	    private static void UpdateMemberType(CompanyInformation companyInformation)
 	    {
-		    if (companyInformation.MemberTypeNumber == 0 &&
-		        !string.IsNullOrEmpty(companyInformation.MemberType) &&
-		        !string.IsNullOrEmpty(companyInformation.MemberStatus))
+		    if (companyInformation != null)
 		    {
-			    if (companyInformation.MemberStatus == "ACTIVE")
+			    if (companyInformation.MemberTypeNumber == 0 &&
+			        !string.IsNullOrEmpty(companyInformation.MemberType) &&
+			        !string.IsNullOrEmpty(companyInformation.MemberStatus))
 			    {
-				    switch (companyInformation.MemberType)
+				    if (companyInformation.MemberStatus == "ACTIVE")
 				    {
-					    case "DISTRIBUTOR":
-						    companyInformation.MemberTypeNumber = 1;
-						    break;
-						case "DECORATOR":
-							companyInformation.MemberTypeNumber = 3;
-							break;
-						case "SUPPLIER":
-							companyInformation.MemberTypeNumber = 2;
-							break;
-					}
+					    switch (companyInformation.MemberType)
+					    {
+						    case "DISTRIBUTOR":
+							    companyInformation.MemberTypeNumber = 1;
+							    break;
+						    case "DECORATOR":
+							    companyInformation.MemberTypeNumber = 3;
+							    break;
+						    case "SUPPLIER":
+							    companyInformation.MemberTypeNumber = 2;
+							    break;
+					    }
+				    }
+				    else
+				    {
+					    switch (companyInformation.MemberType)
+					    {
+						    case "DISTRIBUTOR":
+							    companyInformation.MemberTypeNumber = 6;
+							    break;
+						    case "DECORATOR":
+							    companyInformation.MemberTypeNumber = 12;
+							    break;
+						    case "SUPPLIER":
+							    companyInformation.MemberTypeNumber = 7;
+							    break;
+						    case "AFFILIATE":
+							    companyInformation.MemberTypeNumber = 13;
+							    break;
+						    case "END_BUYER":
+							    companyInformation.MemberTypeNumber = 9;
+							    break;
+						    default:
+							    companyInformation.MemberTypeNumber = 15;
+							    break;
+					    }
+				    }
 			    }
-			    else
+			    else if (companyInformation.MemberTypeNumber > 0)
 			    {
-					switch (companyInformation.MemberType)
-					{
-						case "DISTRIBUTOR":
-							companyInformation.MemberTypeNumber = 6;
-							break;
-						case "DECORATOR":
-							companyInformation.MemberTypeNumber = 12;
-							break;
-						case "SUPPLIER":
-							companyInformation.MemberTypeNumber = 7;
-							break;
-						case "AFFILIATE":
-							companyInformation.MemberTypeNumber = 13;
-							break;
-						case "END_BUYER":
-							companyInformation.MemberTypeNumber = 9;
-							break;
-						default:
-							companyInformation.MemberTypeNumber = 15;
-							break;
-					}
-				}
-		    }
-		    else if (companyInformation.MemberTypeNumber > 0)
-		    {
-			    companyInformation.MemberStatus = "ASICENTRAL";
-			    switch (companyInformation.MemberTypeNumber)
-			    {
-					case 1:
-					case 16:
-					    companyInformation.MemberStatus = "ACTIVE";
-					    companyInformation.MemberType = "DISTRIBUTOR";
-					    break;
-					case 3:
-					    companyInformation.MemberStatus = "ACTIVE";
-					    companyInformation.MemberType = "DECORATOR";
-					    break;
-					case 2:
-						companyInformation.MemberStatus = "ACTIVE";
-						companyInformation.MemberType = "SUPPLIER";
-						break;
-					case 6:
-						companyInformation.MemberType = "DISTRIBUTOR";
-						break;
-					case 12:
-						companyInformation.MemberType = "DECORATOR";
-						break;
-					case 7:
-						companyInformation.MemberType = "SUPPLIER";
-						break;
-					case 13:
-						companyInformation.MemberType = "AFFILIATE";
-						break;
-					case 9:
-						companyInformation.MemberType = "END_BUYER";
-						break;
-					default:
-						companyInformation.MemberType = "UNKNOWN";
-						break;
-				}
+				    companyInformation.MemberStatus = "ASICENTRAL";
+				    switch (companyInformation.MemberTypeNumber)
+				    {
+					    case 1:
+					    case 16:
+						    companyInformation.MemberStatus = "ACTIVE";
+						    companyInformation.MemberType = "DISTRIBUTOR";
+						    break;
+					    case 3:
+						    companyInformation.MemberStatus = "ACTIVE";
+						    companyInformation.MemberType = "DECORATOR";
+						    break;
+					    case 2:
+						    companyInformation.MemberStatus = "ACTIVE";
+						    companyInformation.MemberType = "SUPPLIER";
+						    break;
+					    case 6:
+						    companyInformation.MemberType = "DISTRIBUTOR";
+						    break;
+					    case 12:
+						    companyInformation.MemberType = "DECORATOR";
+						    break;
+					    case 7:
+						    companyInformation.MemberType = "SUPPLIER";
+						    break;
+					    case 13:
+						    companyInformation.MemberType = "AFFILIATE";
+						    break;
+					    case 9:
+						    companyInformation.MemberType = "END_BUYER";
+						    break;
+					    default:
+						    companyInformation.MemberType = "UNKNOWN";
+						    break;
+				    }
+			    }
 		    }
 	    }
 
