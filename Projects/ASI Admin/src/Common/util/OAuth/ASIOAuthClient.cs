@@ -14,6 +14,7 @@ using ASI.EntityModel;
 using System.Threading.Tasks;
 using asi.asicentral.services;
 using asi.asicentral.interfaces;
+using asi.asicentral.PersonifyDataASI;
 
 namespace asi.asicentral.oauth
 {
@@ -557,20 +558,39 @@ namespace asi.asicentral.oauth
 
                     if (entityUser.CompanyId != 0)
                     {
-                        ASI.EntityModel.Company entityCompany = ASI.Jade.Company.Retriever.Get(entityUser.CompanyId);
-                        if (entityCompany != null)
+                        var usePersonifyServices = ConfigurationManager.AppSettings["UsePersonifyServices"];
+                        if (!string.IsNullOrEmpty(usePersonifyServices) && Convert.ToBoolean(usePersonifyServices))
                         {
-                            user.CompanyName = entityCompany.Name;
-                            user.CompanyId = entityCompany.Id;
-                            user.AsiNumber = entityCompany.AsiNumber;
-                            if (entityCompany.Contacts != null && entityCompany.Contacts.Count > 0)
+                            IBackendService personify = new PersonifyService();
+                            CompanyInformation companyInfo = personify.GetCompanyInfoByIdentifier(entityUser.CompanyId);
+                            if (companyInfo != null)
                             {
-                                ASI.EntityModel.Contact contact = entityCompany.Contacts.ElementAt(0);
-                                user.Title = contact.Title;
-                                user.Suffix = contact.Suffix;
+                                user.CompanyName = companyInfo.Name;
+                                user.CompanyId = companyInfo.CompanyId;
+                                user.MemberType_CD = companyInfo.MemberType;
+                                user.MemberStatus_CD = companyInfo.MemberStatus;
+                                if(!string.IsNullOrEmpty(user.MemberStatus_CD) && user.MemberStatus_CD == asi.asicentral.oauth.StatusCode.ACTIVE.ToString())
+                                    user.AsiNumber = companyInfo.ASINumber;
+                                user.MemberTypeId = companyInfo.MemberTypeNumber;
                             }
-                            if (entityCompany.Types != null && entityCompany.Types.Count > 0)
-                                user.MemberType_CD = entityCompany.Types.ElementAt(0);
+                        }
+                        else
+                        {
+                            ASI.EntityModel.Company entityCompany = ASI.Jade.Company.Retriever.Get(entityUser.CompanyId);
+                            if (entityCompany != null)
+                            {
+                                user.CompanyName = entityCompany.Name;
+                                user.CompanyId = entityCompany.Id;
+                                user.AsiNumber = entityCompany.AsiNumber;
+                                if (entityCompany.Contacts != null && entityCompany.Contacts.Count > 0)
+                                {
+                                    ASI.EntityModel.Contact contact = entityCompany.Contacts.ElementAt(0);
+                                    user.Title = contact.Title;
+                                    user.Suffix = contact.Suffix;
+                                }
+                                if (entityCompany.Types != null && entityCompany.Types.Count > 0)
+                                    user.MemberType_CD = entityCompany.Types.ElementAt(0);
+                            }
                         }
                     }
                 }

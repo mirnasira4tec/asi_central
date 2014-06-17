@@ -36,12 +36,12 @@ namespace asi.asicentral.web.Controllers.Store
                 //form uses date filter
                 if (dateStart == null) dateStart = DateTime.Now.AddDays(-7);
                 if (dateEnd == null) dateEnd = DateTime.Now;
-                if (HasAddress == null) HasAddress = true;
                 else dateEnd = dateEnd.Value.Date + new TimeSpan(23, 59, 59);
+                if (HasAddress == null) HasAddress = true;
                 //create new value converted to UTC time to make sure getting the right database records
                 DateTime dateStartParam = dateStart.Value.ToUniversalTime();
                 DateTime dateEndParam = dateEnd.Value.ToUniversalTime();
-                orderDetailQuery = orderDetailQuery.Where(detail => detail.CreateDate >= dateStartParam && detail.CreateDate <= dateEndParam);
+              orderDetailQuery = orderDetailQuery.Where(detail => detail.CreateDate >= dateStartParam && detail.CreateDate <= dateEndParam);
             }
             if (formTab == OrderPageModel.TAB_PRODUCT && !string.IsNullOrEmpty(product))
             {
@@ -92,6 +92,7 @@ namespace asi.asicentral.web.Controllers.Store
             }
             else if (orderTab == OrderPageModel.ORDER_PENDING)
                 orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == true && detail.Order.ProcessStatus == OrderStatus.Pending);
+           
 
             //query has been constructed - get the data
             //IList<LegacyOrderDetail> orderDetails = orderDetailQuery.OrderByDescending(detail => detail.OrderId).ToList();

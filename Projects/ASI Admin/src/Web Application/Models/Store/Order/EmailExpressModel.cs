@@ -127,6 +127,7 @@ namespace asi.asicentral.web.model.store
         public StoreIndividual BillingIndividual { get; set; }
         public string ActionName { get; set; }
         public string ExternalReference { get; set; }
+        public string BackendReference { get; set; }
         public bool IsCompleted { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public string ProductName { get; set; }
@@ -134,6 +135,7 @@ namespace asi.asicentral.web.model.store
         public decimal Price { get; set; }
         public IList<StoreDetailEmailExpressItem> Videos { get; set; }
         public IList<StoreIndividual> Contacts { get; set; }
+        
 
         /// <summary>
         /// Required for MVC to rebuild the model
@@ -155,6 +157,7 @@ namespace asi.asicentral.web.model.store
 
             ActionName = "Approve";
             ExternalReference = order.ExternalReference;
+            BackendReference = order.BackendReference;
             if (orderdetail.Product != null)
             {
                 ProductName = orderdetail.Product.Name;
