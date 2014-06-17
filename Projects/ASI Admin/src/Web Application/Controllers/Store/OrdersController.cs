@@ -91,7 +91,7 @@ namespace asi.asicentral.web.Controllers.Store
 
             }
             else if (orderTab == OrderPageModel.ORDER_PENDING)
-                orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false && detail.Order.ProcessStatus == OrderStatus.PersonifyError);
+                orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == true && detail.Order.ProcessStatus == OrderStatus.Pending);
            
 
             //query has been constructed - get the data
