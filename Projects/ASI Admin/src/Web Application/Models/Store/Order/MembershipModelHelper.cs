@@ -67,6 +67,7 @@ namespace asi.asicentral.web.model.store
         int OrderId { get; set; }
         string ActionName { get; set; }
         string ExternalReference { get; set; }
+        string BackendReference { get; set; }
         OrderStatus OrderStatus { get; set; }
         bool IsCompleted { get; set; }
         #endregion

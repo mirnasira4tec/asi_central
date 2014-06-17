@@ -27,6 +27,14 @@
                         <span id="timmsErrorMessage" data-type="errormessage" class="field-validation-error"></span>
                     </div>
                 }
+                else
+                {
+                      <label class="order-status-label" for="Timms_ID">Timms ID:</label>
+                    <div class="order-status-input">
+                       @Model.BackendReference
+                       
+                    </div>
+                }
             </div>
             <div class="status-btns">
                 @if (!IsBackEnd())
