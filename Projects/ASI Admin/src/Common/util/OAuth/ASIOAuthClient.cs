@@ -567,9 +567,10 @@ namespace asi.asicentral.oauth
                             {
                                 user.CompanyName = companyInfo.Name;
                                 user.CompanyId = companyInfo.CompanyId;
-                                user.AsiNumber = companyInfo.ASINumber;
                                 user.MemberType_CD = companyInfo.MemberType;
                                 user.MemberStatus_CD = companyInfo.MemberStatus;
+                                if(!string.IsNullOrEmpty(user.MemberStatus_CD) && user.MemberStatus_CD == asi.asicentral.oauth.StatusCode.ACTIVE.ToString())
+                                    user.AsiNumber = companyInfo.ASINumber;
                                 user.MemberTypeId = companyInfo.MemberTypeNumber;
                             }
                         }
