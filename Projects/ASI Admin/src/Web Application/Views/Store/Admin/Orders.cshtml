@@ -226,6 +226,7 @@
             //find the current active form
             var tab = $('div[id*="formtab-content"] div.active')[0].id;
             $('form[id="form-' + tab + '"] input[name=ordertab]').val(tabname);
+            alert(tabname);
             $('form[id="form-' + tab + '"]').submit();
         });
         $('a.productRef').click(function (e) {
