@@ -55,28 +55,31 @@ namespace asi.asicentral.oauth
             }
         }
 
-        public static asi.asicentral.model.User GetUser(string token)
+        public static asi.asicentral.model.User GetUser(string token, asi.asicentral.oauth.ApplicationCodes toAppCode)
         {
             asi.asicentral.model.User user = null;
             try
             {
                 ASI.Jade.Utilities.CrossApplication.RedirectParams redirectParams = CrossApplication.ParseTokenUrl(token);
-                IDictionary<string, string> userDetails = null;
-                var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
-                var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
-                if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
+                if (redirectParams != null && toAppCode.ToString() == redirectParams.ToApplicationCode)
                 {
-                    ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
-                    userDetails = webServerClient.GetUserDetails(redirectParams.AccessToken);
-                }
-                if (userDetails != null && userDetails.Count > 0)
-                {
-                    int SSOId = Convert.ToInt32(userDetails["sign_in_id"]);
-                    user = GetUser(SSOId);
-                    if (redirectParams != null)
+                    IDictionary<string, string> userDetails = null;
+                    var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
+                    var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
+                    if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
                     {
-                        user.AccessToken = redirectParams.AccessToken;
-                        user.RefreshToken = redirectParams.RefreshToken;
+                        ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
+                        userDetails = webServerClient.GetUserDetails(redirectParams.AccessToken);
+                    }
+                    if (userDetails != null && userDetails.Count > 0)
+                    {
+                        int SSOId = Convert.ToInt32(userDetails["sign_in_id"]);
+                        user = GetUser(SSOId);
+                        if (redirectParams != null)
+                        {
+                            user.AccessToken = redirectParams.AccessToken;
+                            user.RefreshToken = redirectParams.RefreshToken;
+                        }
                     }
                 }
             }
