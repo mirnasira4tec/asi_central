@@ -61,7 +61,7 @@ namespace asi.asicentral.oauth
             try
             {
                 ASI.Jade.Utilities.CrossApplication.RedirectParams redirectParams = CrossApplication.ParseTokenUrl(token);
-                if (redirectParams != null && toAppCode.ToString() == redirectParams.ToApplicationCode)
+                if (redirectParams != null && !string.IsNullOrEmpty(redirectParams.AccessToken))
                 {
                     IDictionary<string, string> userDetails = null;
                     var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
