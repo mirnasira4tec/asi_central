@@ -41,10 +41,6 @@ namespace asi.asicentral.services
                 var companyInfo = PersonifyClient.ReconcileCompany(order.Company, "UNKNOWN", countryCodes);
                 log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
-                IEnumerable<StoreAddressInfo> addresses = PersonifyClient.AddCustomerAddresses(order.Company, companyInfo, countryCodes);
-                log.Debug(string.Format("Added addresses to '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
-
-
                 IList<CustomerInfo> individualInfos = PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo).ToList();
                 log.Debug(string.Format("Added individuals to company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
@@ -105,8 +101,16 @@ namespace asi.asicentral.services
             }
             catch (Exception ex)
             {
-                log.Error(string.Format("Unknown Error while adding order to personify: {0}{1}", ex.Message, ex.StackTrace));
-                log.Debug(string.Format("Place order End: {0}", order));
+                string error1 = string.Format("Unknown Error while adding order to personify: {0}{1}", ex.Message, ex.StackTrace);
+                string error2 = string.Format("Place order End: {0}", order);
+                log.Error(error1);
+                log.Debug(error2);
+                var data = new EmailData()
+                {
+                    Subject = error2,
+                    EmailBody = error1 + "<br /><br />" + error2 + "<br /><br />Thanks,<br /><br />ASICentral team"
+                };
+                data.SendEmail(emailService);
                 throw ex;
             }
         }
@@ -128,12 +132,11 @@ namespace asi.asicentral.services
                     return false;
                 });
             };
-
             if (addr == null || addr.PersonifyAddr == null)
             {
                 string s = string.Format("Shipping and billing personify customer addresses are required for order {0}.", order.ToString());
-                throw new Exception(s);
                 log.Debug(s);
+                throw new Exception(s);
             }
             return addr;
         }
@@ -173,7 +176,6 @@ namespace asi.asicentral.services
             IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
             //create company if not already there
             var companyInfo = PersonifyClient.ReconcileCompany(company, "UNKNOWN", countryCodes);
-            PersonifyClient.AddCustomerAddresses(company, companyInfo, countryCodes);
             //Add credit card to the company
             string profile = PersonifyClient.GetCreditCardProfileId(companyInfo, creditCard);
             if (profile == string.Empty) profile = PersonifyClient.SaveCreditCard(companyInfo, creditCard);
