@@ -107,3 +107,8 @@ asi.chat = asi.chat || {};
     }
 }(asi.chat, jQuery));
 
+if (typeof String.prototype.contains !== 'function') {
+    String.prototype.contains = function (value) {
+        return this.indexOf(value) >= 0;
+    }
+}
