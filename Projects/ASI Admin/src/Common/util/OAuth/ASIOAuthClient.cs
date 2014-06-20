@@ -572,22 +572,19 @@ namespace asi.asicentral.oauth
                                 user.CompanyId = companyInfo.CompanyId;
                                 user.MemberType_CD = companyInfo.MemberType;
                                 user.MemberStatus_CD = companyInfo.MemberStatus;
-                                if (!string.IsNullOrEmpty(user.MemberStatus_CD) && user.MemberStatus_CD == asi.asicentral.oauth.StatusCode.ACTIVE.ToString())
-                                {
+								user.MemberTypeId = companyInfo.MemberTypeNumber;
+								//Fill details from personify, in case UMS not provided below details
+								if (!string.IsNullOrEmpty(companyInfo.Street1))
+								{
+									user.Street1 = companyInfo.Street1;
+									user.Street2 = companyInfo.Street2;
+								}
+								if (!string.IsNullOrEmpty(companyInfo.City)) user.City = companyInfo.City;
+								if (!string.IsNullOrEmpty(companyInfo.State)) user.State = companyInfo.State;
+								if (!string.IsNullOrEmpty(companyInfo.Zip)) user.Zip = companyInfo.Zip;
+								if (!string.IsNullOrEmpty(companyInfo.Country)) user.Country = companyInfo.Country;
+								if (!string.IsNullOrEmpty(user.MemberStatus_CD) && user.MemberStatus_CD == asi.asicentral.oauth.StatusCode.ACTIVE.ToString())
                                     user.AsiNumber = companyInfo.ASINumber;
-
-                                    //Fill details from personify, in case UMS not provided below details
-                                    if (!string.IsNullOrEmpty(companyInfo.Street1))
-                                    {
-                                        user.Street1 = companyInfo.Street1;
-                                        user.Street2 = companyInfo.Street2;
-                                    }
-                                    if (!string.IsNullOrEmpty(companyInfo.City)) user.City = companyInfo.City;
-                                    if (!string.IsNullOrEmpty(companyInfo.State)) user.State = companyInfo.State;
-                                    if (!string.IsNullOrEmpty(companyInfo.Zip)) user.Zip = companyInfo.Zip;
-                                    if (!string.IsNullOrEmpty(companyInfo.Country)) user.Country = companyInfo.Country;
-                                }
-                                user.MemberTypeId = companyInfo.MemberTypeNumber;
                             }
                         }
                         else
