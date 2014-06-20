@@ -551,11 +551,11 @@ namespace asi.asicentral.oauth
                         {
                             user.Street1 = address.AddressLine1;
                             user.Street2 = address.AddressLine2;
-                            user.State = address.State.Trim();
-                            user.CountryCode = address.CountryCode.Trim();
-                            user.Country = address.County.Trim();
-                            user.City = address.City.Trim();
-                            user.Zip = address.ZipCode.Trim();
+                            if (!string.IsNullOrEmpty(address.State)) user.State = address.State.Trim();
+                            if (!string.IsNullOrEmpty(address.CountryCode)) user.CountryCode = address.CountryCode.Trim();
+                            if (!string.IsNullOrEmpty(address.County)) user.Country = address.County.Trim();
+                            if (!string.IsNullOrEmpty(address.City)) user.City = address.City.Trim();
+                            if (!string.IsNullOrEmpty(address.ZipCode)) user.Zip = address.ZipCode.Trim();
                         }
                     }
 
@@ -572,8 +572,21 @@ namespace asi.asicentral.oauth
                                 user.CompanyId = companyInfo.CompanyId;
                                 user.MemberType_CD = companyInfo.MemberType;
                                 user.MemberStatus_CD = companyInfo.MemberStatus;
-                                if(!string.IsNullOrEmpty(user.MemberStatus_CD) && user.MemberStatus_CD == asi.asicentral.oauth.StatusCode.ACTIVE.ToString())
+                                if (!string.IsNullOrEmpty(user.MemberStatus_CD) && user.MemberStatus_CD == asi.asicentral.oauth.StatusCode.ACTIVE.ToString())
+                                {
                                     user.AsiNumber = companyInfo.ASINumber;
+
+                                    //Fill details from personify, in case UMS not provided below details
+                                    if (!string.IsNullOrEmpty(companyInfo.Street1))
+                                    {
+                                        user.Street1 = companyInfo.Street1;
+                                        user.Street2 = companyInfo.Street2;
+                                    }
+                                    if (!string.IsNullOrEmpty(companyInfo.City)) user.City = companyInfo.City;
+                                    if (!string.IsNullOrEmpty(companyInfo.State)) user.State = companyInfo.State;
+                                    if (!string.IsNullOrEmpty(companyInfo.Zip)) user.Zip = companyInfo.Zip;
+                                    if (!string.IsNullOrEmpty(companyInfo.Country)) user.Country = companyInfo.Country;
+                                }
                                 user.MemberTypeId = companyInfo.MemberTypeNumber;
                             }
                         }
