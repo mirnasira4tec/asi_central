@@ -18,13 +18,36 @@ namespace asi.asicentral.services.PersonifyProxy
 
         public string EmailBody { get; set; }
 
+        private ILogService log = null;
+
         public EmailData()
         {
-            MailTo = ConfigurationManager.AppSettings["CreateOrderInPersonifyErrorEmail"].Split(new char[] {';', ',', ' '});
+            log = LogService.GetLog(this.GetType());
+            var em = ConfigurationManager.AppSettings["CreateOrderInPersonifyErrorEmail"];
+            if (!string.IsNullOrEmpty(em))
+            {
+                MailTo = ConfigurationManager.AppSettings["CreateOrderInPersonifyErrorEmail"].Split(new char[] { ';', ',', ' ' });
+            }
+            else
+            {
+                log.Debug("Entry of \"CreateOrderInPersonifyErrorEmail\" in configuration file isn't configured.");
+            }
         }
 
         public void SendEmail(IEmailService emailService)
         {
+            if (MailTo == null)
+            {
+                if (!string.IsNullOrEmpty(Subject))
+                {
+                    log.Debug(Subject);
+                }
+                if (!string.IsNullOrEmpty(EmailBody))
+                {
+                    log.Debug(EmailBody);
+                }
+                return;
+            }
             MailMessage mail = new MailMessage();
             mail.BodyEncoding = Encoding.UTF8;
             mail.IsBodyHtml = true;
