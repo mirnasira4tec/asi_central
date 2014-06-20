@@ -30,7 +30,7 @@ namespace asi.asicentral.services.PersonifyProxy
             }
             else
             {
-                log.Debug("Entry of \"CreateOrderInPersonifyErrorEmail\" in configuration file isn'r configured.");
+                log.Debug("Entry of \"CreateOrderInPersonifyErrorEmail\" in configuration file isn't configured.");
             }
         }
 
