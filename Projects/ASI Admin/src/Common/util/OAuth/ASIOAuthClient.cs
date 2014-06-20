@@ -61,22 +61,25 @@ namespace asi.asicentral.oauth
             try
             {
                 ASI.Jade.Utilities.CrossApplication.RedirectParams redirectParams = CrossApplication.ParseTokenUrl(token);
-                IDictionary<string, string> userDetails = null;
-                var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
-                var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
-                if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
+                if (redirectParams != null && !string.IsNullOrEmpty(redirectParams.AccessToken))
                 {
-                    ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
-                    userDetails = webServerClient.GetUserDetails(redirectParams.AccessToken);
-                }
-                if (userDetails != null && userDetails.Count > 0)
-                {
-                    int SSOId = Convert.ToInt32(userDetails["sign_in_id"]);
-                    user = GetUser(SSOId);
-                    if (redirectParams != null)
+                    IDictionary<string, string> userDetails = null;
+                    var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
+                    var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
+                    if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
                     {
-                        user.AccessToken = redirectParams.AccessToken;
-                        user.RefreshToken = redirectParams.RefreshToken;
+                        ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
+                        userDetails = webServerClient.GetUserDetails(redirectParams.AccessToken);
+                    }
+                    if (userDetails != null && userDetails.Count > 0)
+                    {
+                        int SSOId = Convert.ToInt32(userDetails["sign_in_id"]);
+                        user = GetUser(SSOId);
+                        if (redirectParams != null)
+                        {
+                            user.AccessToken = redirectParams.AccessToken;
+                            user.RefreshToken = redirectParams.RefreshToken;
+                        }
                     }
                 }
             }
@@ -548,11 +551,11 @@ namespace asi.asicentral.oauth
                         {
                             user.Street1 = address.AddressLine1;
                             user.Street2 = address.AddressLine2;
-                            user.State = address.State.Trim();
-                            user.CountryCode = address.CountryCode.Trim();
-                            user.Country = address.County.Trim();
-                            user.City = address.City.Trim();
-                            user.Zip = address.ZipCode.Trim();
+                            if (!string.IsNullOrEmpty(address.State)) user.State = address.State.Trim();
+                            if (!string.IsNullOrEmpty(address.CountryCode)) user.CountryCode = address.CountryCode.Trim();
+                            if (!string.IsNullOrEmpty(address.County)) user.Country = address.County.Trim();
+                            if (!string.IsNullOrEmpty(address.City)) user.City = address.City.Trim();
+                            if (!string.IsNullOrEmpty(address.ZipCode)) user.Zip = address.ZipCode.Trim();
                         }
                     }
 
@@ -569,9 +572,19 @@ namespace asi.asicentral.oauth
                                 user.CompanyId = companyInfo.CompanyId;
                                 user.MemberType_CD = companyInfo.MemberType;
                                 user.MemberStatus_CD = companyInfo.MemberStatus;
-                                if(!string.IsNullOrEmpty(user.MemberStatus_CD) && user.MemberStatus_CD == asi.asicentral.oauth.StatusCode.ACTIVE.ToString())
+								user.MemberTypeId = companyInfo.MemberTypeNumber;
+								//Fill details from personify, in case UMS not provided below details
+								if (!string.IsNullOrEmpty(companyInfo.Street1))
+								{
+									user.Street1 = companyInfo.Street1;
+									user.Street2 = companyInfo.Street2;
+								}
+								if (!string.IsNullOrEmpty(companyInfo.City)) user.City = companyInfo.City;
+								if (!string.IsNullOrEmpty(companyInfo.State)) user.State = companyInfo.State;
+								if (!string.IsNullOrEmpty(companyInfo.Zip)) user.Zip = companyInfo.Zip;
+								if (!string.IsNullOrEmpty(companyInfo.Country)) user.Country = companyInfo.Country;
+								if (!string.IsNullOrEmpty(user.MemberStatus_CD) && user.MemberStatus_CD == asi.asicentral.oauth.StatusCode.ACTIVE.ToString())
                                     user.AsiNumber = companyInfo.ASINumber;
-                                user.MemberTypeId = companyInfo.MemberTypeNumber;
                             }
                         }
                         else

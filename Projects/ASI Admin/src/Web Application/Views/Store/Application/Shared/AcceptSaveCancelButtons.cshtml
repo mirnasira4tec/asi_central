@@ -29,11 +29,10 @@
                 }
                 else
                 {
-                      <label class="order-status-label" for="Timms_ID">Personify Order Reference ID:</label>
-                    <div class="order-status-input">
-                       @Model.BackendReference
+                   <h3 class="order-status-header3">Personify Order Reference #:</h3>
+        <div class="order-status">@Model.BackendReference</div>
                        
-                    </div>
+                   
                 }
             </div>
             <div class="status-btns">
@@ -77,7 +76,7 @@
         public bool IsBackEnd()
         {
             bool useBackEndService = false;
-            IList<StoreOrderDetail> OrderDetails = StoreService.GetAll<StoreOrderDetail>(true).Where(detail => detail.Id == Model.OrderId).ToList();
+            IList<StoreOrderDetail> OrderDetails = StoreService.GetAll<StoreOrderDetail>(true).Where(detail => detail.Order.Id == Model.OrderId).ToList();
             foreach (var orderDetail in OrderDetails)
             {
                 useBackEndService = useBackEndService || BackendService.IsProcessUsingBackend(orderDetail);
