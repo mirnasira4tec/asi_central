@@ -530,13 +530,13 @@ namespace asi.asicentral.oauth
                         user.MemberType_CD = entityUser.Types.ElementAt(0);
                     if (entityUser.Phones != null && entityUser.Phones.Count > 0)
                     {
-                        Phone phone = entityUser.Phones.Where(ph => ph.IsPrimary).SingleOrDefault();
+                        Phone phone = entityUser.Phones.SingleOrDefault(ph => ph.IsPrimary);
                         if (phone != null)
                         {
                             user.Phone = phone.PhoneNumber;
                             user.PhoneAreaCode = phone.AreaCode;
                         }
-                        Phone fax = entityUser.Phones.Where(ph => ph.IsFax).SingleOrDefault();
+						Phone fax = entityUser.Phones.SingleOrDefault(ph => ph.IsFax);
                         if (fax != null)
                         {
                             user.Fax = fax.PhoneNumber;
@@ -546,7 +546,7 @@ namespace asi.asicentral.oauth
 
                     if (entityUser.Addresses != null && entityUser.Addresses.Count > 0)
                     {
-                        Address address = entityUser.Addresses.Where(add => add.UsageCode == UsageCode.GNRL.ToString()).SingleOrDefault();
+						Address address = entityUser.Addresses.SingleOrDefault(add => add.UsageCode == UsageCode.GNRL.ToString());
                         if (address != null)
                         {
                             user.Street1 = address.AddressLine1;
@@ -573,6 +573,7 @@ namespace asi.asicentral.oauth
                                 user.MemberType_CD = companyInfo.MemberType;
                                 user.MemberStatus_CD = companyInfo.MemberStatus;
 								user.MemberTypeId = companyInfo.MemberTypeNumber;
+	                            user.AsiNumber = companyInfo.ASINumber;
 								//Fill details from personify, in case UMS not provided below details
 								if (!string.IsNullOrEmpty(companyInfo.Street1))
 								{
@@ -583,13 +584,11 @@ namespace asi.asicentral.oauth
 								if (!string.IsNullOrEmpty(companyInfo.State)) user.State = companyInfo.State;
 								if (!string.IsNullOrEmpty(companyInfo.Zip)) user.Zip = companyInfo.Zip;
 								if (!string.IsNullOrEmpty(companyInfo.Country)) user.Country = companyInfo.Country;
-								if (!string.IsNullOrEmpty(user.MemberStatus_CD) && user.MemberStatus_CD == asi.asicentral.oauth.StatusCode.ACTIVE.ToString())
-                                    user.AsiNumber = companyInfo.ASINumber;
                             }
                         }
                         else
                         {
-                            ASI.EntityModel.Company entityCompany = ASI.Jade.Company.Retriever.Get(entityUser.CompanyId);
+                            Company entityCompany = ASI.Jade.Company.Retriever.Get(entityUser.CompanyId);
                             if (entityCompany != null)
                             {
                                 user.CompanyName = entityCompany.Name;
@@ -597,7 +596,7 @@ namespace asi.asicentral.oauth
                                 user.AsiNumber = entityCompany.AsiNumber;
                                 if (entityCompany.Contacts != null && entityCompany.Contacts.Count > 0)
                                 {
-                                    ASI.EntityModel.Contact contact = entityCompany.Contacts.ElementAt(0);
+                                    Contact contact = entityCompany.Contacts.ElementAt(0);
                                     user.Title = contact.Title;
                                     user.Suffix = contact.Suffix;
                                 }
@@ -607,6 +606,9 @@ namespace asi.asicentral.oauth
                         }
                     }
                 }
+				if (!string.IsNullOrEmpty(user.MemberStatus_CD) && user.MemberStatus_CD != StatusCode.ACTIVE.ToString())
+					user.AsiNumber = null;
+
             }
             catch { }
             return user;
