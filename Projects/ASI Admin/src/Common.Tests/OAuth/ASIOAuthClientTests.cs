@@ -13,11 +13,12 @@ namespace Core.Tests.OAuth
     [TestClass]
     public class ASIOAuthClientTests
     {
-        //[TestMethod]
+        [TestMethod]
         public void UserTestScenarios()
         {
+            var tag = DateTime.Now.Ticks;
             asi.asicentral.model.User user = new asi.asicentral.model.User();
-            user.Email = "TestCentralUser1114@abc.com";
+            user.Email = string.Format("TestCentralUser{0}@abc.com", tag.ToString());
             user.FirstName = "First1";
             user.LastName = "Last1";
             //Title
@@ -65,16 +66,6 @@ namespace Core.Tests.OAuth
 
             IDictionary<string, string> result2 = ASIOAuthClient.IsValidUser(user.UserName, user.Password);
             Assert.IsNotNull(result2);
-
-            //var res =  Task.Factory.StartNew(() => UMS.UserDelete(user.SSOId).Result, TaskCreationOptions.LongRunning).Result;
-            //Assert.AreEqual(res, user.SSOId.ToString());
-        }
-
-        [TestMethod]
-        public void IsValidEmailTest()
-        {
-            bool result1 = ASIOAuthClient.IsValidEmail("kphani@macrosoftindia.com");
-            Assert.IsTrue(result1);
         }
 
         [TestMethod]
@@ -97,32 +88,11 @@ namespace Core.Tests.OAuth
             asi.asicentral.model.User user = ASIOAuthClient.GetCompanyByASINumber("12345");
             Assert.IsNull(user);
         }
-
-        [TestMethod]
-        public void GetUserBySSO()
-        {
-            asi.asicentral.model.User getUser = ASIOAuthClient.GetUser(168793);
-            Assert.IsNotNull(getUser);
-        }
-
+                
         [TestMethod]
         public void IsValidUserByFalseCredentials()
         {
             IDictionary<string, string> result = ASIOAuthClient.IsValidUser("125724pk1", "password1");
-            Assert.IsNull(result);
-        }
-
-        [TestMethod]
-        public void VerifyUser()
-        {
-            IDictionary<string, string> result = ASIOAuthClient.IsValidUser("125724pk", "password1");
-            Assert.IsNotNull(result);
-        }
-
-        [TestMethod]
-        public void GetUserByToken()
-        {
-            asi.asicentral.model.User result = ASIOAuthClient.GetUser("endfOr-JCWaCHazhs25cMHS1N4ddMqjV7jqjgMi62_m4ifiU19TLfnOOUfzOXIvQUli25TFs3xAF8AVXp6sxSTikZaM1");
             Assert.IsNull(result);
         }
     }

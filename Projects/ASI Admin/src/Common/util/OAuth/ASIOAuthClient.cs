@@ -14,6 +14,7 @@ using ASI.EntityModel;
 using System.Threading.Tasks;
 using asi.asicentral.services;
 using asi.asicentral.interfaces;
+using asi.asicentral.PersonifyDataASI;
 
 namespace asi.asicentral.oauth
 {
@@ -54,28 +55,31 @@ namespace asi.asicentral.oauth
             }
         }
 
-        public static asi.asicentral.model.User GetUser(string token)
+        public static asi.asicentral.model.User GetUser(string token, asi.asicentral.oauth.ApplicationCodes toAppCode)
         {
             asi.asicentral.model.User user = null;
             try
             {
                 ASI.Jade.Utilities.CrossApplication.RedirectParams redirectParams = CrossApplication.ParseTokenUrl(token);
-                IDictionary<string, string> userDetails = null;
-                var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
-                var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
-                if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
+                if (redirectParams != null && !string.IsNullOrEmpty(redirectParams.AccessToken))
                 {
-                    ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
-                    userDetails = webServerClient.GetUserDetails(redirectParams.AccessToken);
-                }
-                if (userDetails != null && userDetails.Count > 0)
-                {
-                    int SSOId = Convert.ToInt32(userDetails["sign_in_id"]);
-                    user = GetUser(SSOId);
-                    if (redirectParams != null)
+                    IDictionary<string, string> userDetails = null;
+                    var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
+                    var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
+                    if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
                     {
-                        user.AccessToken = redirectParams.AccessToken;
-                        user.RefreshToken = redirectParams.RefreshToken;
+                        ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
+                        userDetails = webServerClient.GetUserDetails(redirectParams.AccessToken);
+                    }
+                    if (userDetails != null && userDetails.Count > 0)
+                    {
+                        int SSOId = Convert.ToInt32(userDetails["sign_in_id"]);
+                        user = GetUser(SSOId);
+                        if (redirectParams != null)
+                        {
+                            user.AccessToken = redirectParams.AccessToken;
+                            user.RefreshToken = redirectParams.RefreshToken;
+                        }
                     }
                 }
             }
@@ -557,20 +561,39 @@ namespace asi.asicentral.oauth
 
                     if (entityUser.CompanyId != 0)
                     {
-                        ASI.EntityModel.Company entityCompany = ASI.Jade.Company.Retriever.Get(entityUser.CompanyId);
-                        if (entityCompany != null)
+                        var usePersonifyServices = ConfigurationManager.AppSettings["UsePersonifyServices"];
+                        if (!string.IsNullOrEmpty(usePersonifyServices) && Convert.ToBoolean(usePersonifyServices))
                         {
-                            user.CompanyName = entityCompany.Name;
-                            user.CompanyId = entityCompany.Id;
-                            user.AsiNumber = entityCompany.AsiNumber;
-                            if (entityCompany.Contacts != null && entityCompany.Contacts.Count > 0)
+                            IBackendService personify = new PersonifyService();
+                            CompanyInformation companyInfo = personify.GetCompanyInfoByIdentifier(entityUser.CompanyId);
+                            if (companyInfo != null)
                             {
-                                ASI.EntityModel.Contact contact = entityCompany.Contacts.ElementAt(0);
-                                user.Title = contact.Title;
-                                user.Suffix = contact.Suffix;
+                                user.CompanyName = companyInfo.Name;
+                                user.CompanyId = companyInfo.CompanyId;
+                                user.MemberType_CD = companyInfo.MemberType;
+                                user.MemberStatus_CD = companyInfo.MemberStatus;
+                                if(!string.IsNullOrEmpty(user.MemberStatus_CD) && user.MemberStatus_CD == asi.asicentral.oauth.StatusCode.ACTIVE.ToString())
+                                    user.AsiNumber = companyInfo.ASINumber;
+                                user.MemberTypeId = companyInfo.MemberTypeNumber;
                             }
-                            if (entityCompany.Types != null && entityCompany.Types.Count > 0)
-                                user.MemberType_CD = entityCompany.Types.ElementAt(0);
+                        }
+                        else
+                        {
+                            ASI.EntityModel.Company entityCompany = ASI.Jade.Company.Retriever.Get(entityUser.CompanyId);
+                            if (entityCompany != null)
+                            {
+                                user.CompanyName = entityCompany.Name;
+                                user.CompanyId = entityCompany.Id;
+                                user.AsiNumber = entityCompany.AsiNumber;
+                                if (entityCompany.Contacts != null && entityCompany.Contacts.Count > 0)
+                                {
+                                    ASI.EntityModel.Contact contact = entityCompany.Contacts.ElementAt(0);
+                                    user.Title = contact.Title;
+                                    user.Suffix = contact.Suffix;
+                                }
+                                if (entityCompany.Types != null && entityCompany.Types.Count > 0)
+                                    user.MemberType_CD = entityCompany.Types.ElementAt(0);
+                            }
                         }
                     }
                 }

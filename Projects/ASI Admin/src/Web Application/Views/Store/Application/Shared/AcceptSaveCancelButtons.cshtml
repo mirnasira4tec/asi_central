@@ -27,6 +27,13 @@
                         <span id="timmsErrorMessage" data-type="errormessage" class="field-validation-error"></span>
                     </div>
                 }
+                else
+                {
+                   <h3 class="order-status-header3">Personify Order Reference #:</h3>
+        <div class="order-status">@Model.BackendReference</div>
+                       
+                   
+                }
             </div>
             <div class="status-btns">
                 @if (!IsBackEnd())
@@ -69,7 +76,7 @@
         public bool IsBackEnd()
         {
             bool useBackEndService = false;
-            IList<StoreOrderDetail> OrderDetails = StoreService.GetAll<StoreOrderDetail>(true).Where(detail => detail.Id == Model.OrderId).ToList();
+            IList<StoreOrderDetail> OrderDetails = StoreService.GetAll<StoreOrderDetail>(true).Where(detail => detail.Order.Id == Model.OrderId).ToList();
             foreach (var orderDetail in OrderDetails)
             {
                 useBackEndService = useBackEndService || BackendService.IsProcessUsingBackend(orderDetail);

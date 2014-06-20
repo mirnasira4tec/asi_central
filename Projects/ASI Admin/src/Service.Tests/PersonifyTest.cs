@@ -144,10 +144,19 @@ namespace asi.asicentral.Tests
                 Street1 = "4800 Street Road",
                 Zip = "19053",
             };
+            var address3 = new StoreAddress()
+            {
+                City = "Feasterville Trevose",
+                Country = "USA",
+                State = "PA",
+                Street1 = "Street2",
+                Zip = "19053",
+            };
             var companyAddresses = new List<StoreCompanyAddress>()
 			{
 				new StoreCompanyAddress() { Address = address1, IsBilling = false, IsShipping = false },
-				new StoreCompanyAddress() { Address =  address2, IsShipping = true, IsBilling = true },
+				new StoreCompanyAddress() { Address =  address2, IsShipping = true, IsBilling = false },
+                new StoreCompanyAddress() { Address =  address3, IsShipping = false, IsBilling = true },
 			};
             var person = new StoreIndividual()
             {
@@ -165,6 +174,8 @@ namespace asi.asicentral.Tests
                 Addresses = companyAddresses,
                 Individuals = contacts,
                 ASINumber = asiNumber,
+                Phone = "2153233242",
+                WebURL = "http://asicentral.com/default.aspx"
             };
             var creditCard = new StoreCreditCard()
             {
