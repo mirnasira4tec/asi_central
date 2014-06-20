@@ -41,9 +41,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ASI.EntityModel.1.0.14\lib\ASI.EntityModel.dll</HintPath>
     </Reference>
-    <Reference Include="ASI.Jade, Version=1.2.12.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ASI.Jade, Version=1.2.13.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ASI.Jade.1.2.12\lib\ASI.Jade.dll</HintPath>
+      <HintPath>..\packages\ASI.Jade.1.2.13\lib\ASI.Jade.dll</HintPath>
     </Reference>
     <Reference Include="ASI.Sugar">
       <HintPath>..\packages\Sugar.1.3.13\lib\ASI.Sugar.dll</HintPath>
