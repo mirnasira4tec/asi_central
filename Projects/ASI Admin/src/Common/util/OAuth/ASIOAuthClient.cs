@@ -55,7 +55,7 @@ namespace asi.asicentral.oauth
             }
         }
 
-        public static asi.asicentral.model.User GetUser(string token, asi.asicentral.oauth.ApplicationCodes toAppCode)
+        public static asi.asicentral.model.User GetUser(string token)
         {
             asi.asicentral.model.User user = null;
             try
