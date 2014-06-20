@@ -577,12 +577,15 @@ namespace asi.asicentral.oauth
                                     user.AsiNumber = companyInfo.ASINumber;
 
                                     //Fill details from personify, in case UMS not provided below details
-                                    if (string.IsNullOrEmpty(user.Street1) && !string.IsNullOrEmpty(companyInfo.Street1)) user.Street1 = companyInfo.Street1;
-                                    if (string.IsNullOrEmpty(user.Street2) && !string.IsNullOrEmpty(companyInfo.Street2)) user.Street2 = companyInfo.Street2;
-                                    if (string.IsNullOrEmpty(user.City) && !string.IsNullOrEmpty(companyInfo.City)) user.City = companyInfo.City;
-                                    if (string.IsNullOrEmpty(user.State) && !string.IsNullOrEmpty(companyInfo.State)) user.State = companyInfo.State;
-                                    if (string.IsNullOrEmpty(user.Zip) && !string.IsNullOrEmpty(companyInfo.Zip)) user.Zip = companyInfo.Zip;
-                                    if (string.IsNullOrEmpty(user.Country) && !string.IsNullOrEmpty(companyInfo.Country)) user.Country = companyInfo.Country;
+                                    if (!string.IsNullOrEmpty(companyInfo.Street1))
+                                    {
+                                        user.Street1 = companyInfo.Street1;
+                                        user.Street2 = companyInfo.Street2;
+                                    }
+                                    if (!string.IsNullOrEmpty(companyInfo.City)) user.City = companyInfo.City;
+                                    if (!string.IsNullOrEmpty(companyInfo.State)) user.State = companyInfo.State;
+                                    if (!string.IsNullOrEmpty(companyInfo.Zip)) user.Zip = companyInfo.Zip;
+                                    if (!string.IsNullOrEmpty(companyInfo.Country)) user.Country = companyInfo.Country;
                                 }
                                 user.MemberTypeId = companyInfo.MemberTypeNumber;
                             }
