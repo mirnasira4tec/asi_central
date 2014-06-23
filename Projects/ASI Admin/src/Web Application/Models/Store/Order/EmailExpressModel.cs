@@ -157,7 +157,6 @@ namespace asi.asicentral.web.model.store
 
             ActionName = "Approve";
             ExternalReference = order.ExternalReference;
-            BackendReference = order.BackendReference;
             if (orderdetail.Product != null)
             {
                 ProductName = orderdetail.Product.Name;
