@@ -27,7 +27,7 @@
                         <span id="timmsErrorMessage" data-type="errormessage" class="field-validation-error"></span>
                     </div>
                 }
-                else
+                else if (Model.OrderStatus == OrderStatus.Approved)
                 {
                    <h3 class="order-status-header3">Personify Order Reference #:</h3>
         <div class="order-status">@Model.BackendReference</div>
