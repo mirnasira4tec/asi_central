@@ -13,7 +13,7 @@ namespace asi.asicentral.oauth
 {
     public class CookiesHelper 
     {
-        public static void SetFormsAuthenticationCookie(HttpRequestBase request, HttpResponseBase response, asi.asicentral.model.User user, bool isCreate, string userCookieName = "Name")
+        public static void SetFormsAuthenticationCookie(HttpRequestBase request, HttpResponseBase response, asi.asicentral.model.User user, bool isCreate, string userCookieName = "Name", string domainName = null)
         {
             CrossApplication.RedirectParams redirectParams = new CrossApplication.RedirectParams();
             redirectParams.AccessToken = user.AccessToken;
@@ -22,7 +22,7 @@ namespace asi.asicentral.oauth
             var extraData = JsonConvert.SerializeObject(redirectParams, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             var ticket = new FormsAuthenticationTicket(1, userName, DateTime.Now, DateTime.Now.AddHours(1), true, extraData, FormsAuthentication.FormsCookiePath);
             string hashedTicket = FormsAuthentication.Encrypt(ticket);
-            SetCookieValue(request, response, FormsAuthentication.FormsCookieName, hashedTicket, isCreate);
+            SetCookieValue(request, response, FormsAuthentication.FormsCookieName, hashedTicket, isCreate, domainName);
         }
 
         /// <summary>

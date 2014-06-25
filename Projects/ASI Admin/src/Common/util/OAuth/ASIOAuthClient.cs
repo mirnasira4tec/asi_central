@@ -83,8 +83,10 @@ namespace asi.asicentral.oauth
                     }
                 }
             }
-            catch 
+            catch (Exception ex)
             {
+                LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                log.Error(ex.Message);
                 return null;
             }
             return user;
@@ -98,7 +100,11 @@ namespace asi.asicentral.oauth
                 ASI.EntityModel.User entityUser = Task.Factory.StartNew(() => UMS.UserSearch(sso).Result, TaskCreationOptions.LongRunning).Result;
                 user = MapEntityModelUserToASIUser(entityUser, user);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                log.Error(ex.Message);
+            }
             return user;
         }
 
@@ -116,7 +122,11 @@ namespace asi.asicentral.oauth
                     {
                         tokens = webServerClient.RefreshToken(refreshToken);
                     }
-                    catch { }
+                    catch (Exception ex)
+                    {
+                        LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                        log.Error(ex.Message);
+                    }
                 }
             }
             return tokens;
@@ -135,7 +145,11 @@ namespace asi.asicentral.oauth
                 {
                     tokens = webServerClient.Login(userName, password);
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                    log.Error(ex.Message);
+                }
             }
             return tokens;
         }
@@ -171,7 +185,11 @@ namespace asi.asicentral.oauth
                         }
                     }
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                    log.Error(ex.Message);
+                }
             }
             return tokens;
         }
@@ -194,7 +212,12 @@ namespace asi.asicentral.oauth
                         isValidUser = true;
                     }
                 }
-                catch { isValidUser = false; }
+                catch (Exception ex)
+                {
+                    isValidUser = false;
+                    LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                    log.Error(ex.Message);
+                }
             }
             return isValidUser;
         }
@@ -215,7 +238,11 @@ namespace asi.asicentral.oauth
                         return user;
                     }
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                    log.Error(ex.Message);
+                }
             }
             return null;
         }
@@ -251,14 +278,22 @@ namespace asi.asicentral.oauth
                                 companyInfo = personifyService.AddCompany(companyInfo);
                                 user.CompanyId = companyInfo.CompanyId;
                             }
-                            catch { }
+                            catch (Exception ex)
+                            {
+                                LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                                log.Error(ex.Message);
+                            }
                         }
                         else if (user.CompanyId == 0) user.CompanyId = 114945;
                     }
                     entityUser = MapASIUserToEntityModelUser(user, entityUser, true);
                     ssoId = Task.Factory.StartNew(() => UMS.UserCreate(entityUser).Result, TaskCreationOptions.LongRunning).Result;
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                    log.Error(ex.Message);
+                }
             }
             return ssoId;
         }
@@ -286,7 +321,11 @@ namespace asi.asicentral.oauth
 	                    };
                     }
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                    log.Error(ex.Message);
+                }
             }
             return user;
         }
@@ -305,7 +344,12 @@ namespace asi.asicentral.oauth
                     var result = Task.Factory.StartNew(() => UMS.UserUpdate(entityUser).Result, TaskCreationOptions.LongRunning).Result;
                     isUserUpdated = true;
                 }
-                catch { isUserUpdated = false; }
+                catch (Exception ex)
+                {
+                    isUserUpdated = false;
+                    LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                    log.Error(ex.Message);
+                }
             }
             return isUserUpdated;
         }
@@ -321,7 +365,12 @@ namespace asi.asicentral.oauth
                     if(MapASISecurityToJadeSecurity(security, jadeSecurity) != null)
                         isPasswordChanged = JUser.ChangeSecurity(ssoid, jadeSecurity);
                 }
-                catch { isPasswordChanged = false; }
+                catch (Exception ex)
+                {
+                    isPasswordChanged = false;
+                    LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                    log.Error(ex.Message);
+                }
             }
             return isPasswordChanged;
         }
@@ -610,7 +659,11 @@ namespace asi.asicentral.oauth
 					user.AsiNumber = null;
 
             }
-            catch { }
+            catch (Exception ex)
+            {
+                LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                log.Error(ex.Message);
+            }
             return user;
         }
     }
