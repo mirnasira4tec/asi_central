@@ -364,6 +364,12 @@ namespace asi.asicentral.oauth
                     ASI.Jade.UserManagement.DataObjects.Security jadeSecurity = new ASI.Jade.UserManagement.DataObjects.Security();
                     if(MapASISecurityToJadeSecurity(security, jadeSecurity) != null)
                         isPasswordChanged = JUser.ChangeSecurity(ssoid, jadeSecurity);
+                    if (isPasswordChanged)
+                    {
+                        asicentral.model.User user = GetUser(ssoid);
+                        user.PasswordResetRequired = false;
+                        UpdateUser(user);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -399,12 +405,16 @@ namespace asi.asicentral.oauth
                     email.Address = user.Email;
                 }
 
+                if(user.PasswordResetRequired) entityUser.PasswordResetRequired = "Y";
+                else entityUser.PasswordResetRequired = "N";
+                
                 if (isCreate)
                 {
                     entityUser.UserName = user.Email;
                     entityUser.Password = user.Password;
                     entityUser.PasswordHint = user.Password;
                     entityUser.StatusCode = StatusCode.ACTV.ToString();
+                    entityUser.PasswordResetRequired = "Y";
                 }
                 entityUser.FirstName = user.FirstName;
                 entityUser.MiddleName = user.MiddleName;
@@ -570,6 +580,9 @@ namespace asi.asicentral.oauth
                     user.Password = entityUser.Password;
                     user.FirstName = entityUser.FirstName;
                     user.MiddleName = entityUser.MiddleName;
+                    if (!string.IsNullOrEmpty(entityUser.PasswordResetRequired) && entityUser.PasswordResetRequired == "Y")
+                        user.PasswordResetRequired = true;
+                    else user.PasswordResetRequired = false;
                     user.LastName = entityUser.LastName;
                     user.Prefix = entityUser.Prefix;
                     user.Suffix = entityUser.Suffix;
