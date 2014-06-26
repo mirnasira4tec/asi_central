@@ -669,6 +669,7 @@ namespace asi.asicentral.services.PersonifyProxy
         public static CusCommunication AddPhoneNumber(string phoneNumber, string countryCode, CustomerInfo companyInfo)
         {
             CusCommunication respSave = null;
+            if (string.IsNullOrEmpty(phoneNumber)) return respSave;
             phoneNumber = new string(phoneNumber.Where(Char.IsDigit).ToArray());
             IList<CusCommunication> oCusComms = GetCusCommunications(companyInfo, COMMUNICATION_INPUT_PHONE);
             respSave = oCusComms.FirstOrDefault(c => c.SearchPhoneAddress == phoneNumber);
