@@ -282,9 +282,9 @@ namespace asi.asicentral.oauth
                             {
                                 LogService log = LogService.GetLog(typeof(ASIOAuthClient));
                                 log.Error(ex.Message);
+                                ssoId = ex.Message;
                             }
                         }
-                        else if (user.CompanyId == 0) user.CompanyId = 114945;
                     }
                     entityUser = MapASIUserToEntityModelUser(user, entityUser, true);
                     ssoId = Task.Factory.StartNew(() => UMS.UserCreate(entityUser).Result, TaskCreationOptions.LongRunning).Result;
@@ -293,6 +293,7 @@ namespace asi.asicentral.oauth
                 {
                     LogService log = LogService.GetLog(typeof(ASIOAuthClient));
                     log.Error(ex.Message);
+                    ssoId = ex.Message;
                 }
             }
             return ssoId;
