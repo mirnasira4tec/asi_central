@@ -42,6 +42,7 @@ namespace asi.asicentral.services
                 log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
                 IList<CustomerInfo> individualInfos = PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo).ToList();
+                if (!individualInfos.Any()) throw new Exception("Failed in creating individuald in Personify.");
                 log.Debug(string.Format("Added individuals to company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
                 IList<StoreAddressInfo> addresses2 = PersonifyClient.AddIndividualAddresses(order.Company, individualInfos, countryCodes).ToList();
@@ -65,10 +66,9 @@ namespace asi.asicentral.services
                     lineItems);
                 log.Debug(string.Format("The order '{0}' has been created in Personify.", order));
 
-
                 order.BackendReference = orderOutput.OrderNumber;
                 decimal orderTotal = PersonifyClient.GetOrderTotal(orderOutput.OrderNumber);
-                log.Debug(string.Format("Got the order total for the order '{0}'.", order));
+                log.Debug(string.Format("Got the order total {0} of for the order '{1}'.", orderTotal, order));
                 if (orderTotal != order.Total)
                 {
                     var data = new EmailData()
@@ -181,6 +181,7 @@ namespace asi.asicentral.services
             if (profile == string.Empty) profile = PersonifyClient.SaveCreditCard(companyInfo, creditCard);
             log.Debug(string.IsNullOrWhiteSpace(profile) ?
                 "Fail to save the credit." : string.Format("Saved credit profile id : {0}", profile));
+            if (string.IsNullOrEmpty(profile)) throw new Exception("Credit card can't be saved to Personify.");
             return profile;
         }
 
