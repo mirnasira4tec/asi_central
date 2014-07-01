@@ -39,9 +39,12 @@ namespace asi.asicentral.services.PersonifyProxy
             long shiptoAddressId,
             IList<CreateOrderLineInput> lineItems)
         {
-            if (companyInfo == null)
-                throw new ArgumentException("You need to pass the company information");
-
+            if (companyInfo == null || contactInfo == null)
+                throw new ArgumentException("You need to pass the company information and contact information");
+            if (lineItems == null || !lineItems.Any())
+            {
+                throw new Exception("lineItems can't be null.");
+            }
             var orderLineInputs = new DataServiceCollection<CreateOrderLineInput>(null, TrackingMode.None);
             foreach (var lineItem in lineItems)
                 orderLineInputs.Add(lineItem);
@@ -400,6 +403,7 @@ namespace asi.asicentral.services.PersonifyProxy
             {
                 throw new Exception("Order or company can't be null.");
             }
+            if(companyInfo == null) throw new Exception("Company information is needed.");
             StoreCompany storeCompany = storeOrder.Company;
             StoreAddress companyAddress = storeCompany.GetCompanyAddress();
             string countryCode = countryCodes.Alpha3Code(companyAddress.Country);
