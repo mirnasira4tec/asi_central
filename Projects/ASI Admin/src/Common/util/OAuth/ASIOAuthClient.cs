@@ -282,9 +282,9 @@ namespace asi.asicentral.oauth
                             {
                                 LogService log = LogService.GetLog(typeof(ASIOAuthClient));
                                 log.Error(ex.Message);
+                                ssoId = ex.Message;
                             }
                         }
-                        else if (user.CompanyId == 0) user.CompanyId = 114945;
                     }
                     entityUser = MapASIUserToEntityModelUser(user, entityUser, true);
                     ssoId = Task.Factory.StartNew(() => UMS.UserCreate(entityUser).Result, TaskCreationOptions.LongRunning).Result;
@@ -293,6 +293,7 @@ namespace asi.asicentral.oauth
                 {
                     LogService log = LogService.GetLog(typeof(ASIOAuthClient));
                     log.Error(ex.Message);
+                    ssoId = ex.Message;
                 }
             }
             return ssoId;
@@ -354,7 +355,7 @@ namespace asi.asicentral.oauth
             return isUserUpdated;
         }
 
-        public static bool ChangePassword(int ssoid, asi.asicentral.model.Security security)
+        public static bool ChangePassword(int ssoid, asi.asicentral.model.Security security, bool passwordResetRequired = false)
         {
             bool isPasswordChanged = false;
             if (ssoid != 0 && security != null)
@@ -367,7 +368,7 @@ namespace asi.asicentral.oauth
                     if (isPasswordChanged)
                     {
                         asicentral.model.User user = GetUser(ssoid);
-                        user.PasswordResetRequired = false;
+                        user.PasswordResetRequired = passwordResetRequired;
                         UpdateUser(user);
                     }
                 }
@@ -414,7 +415,7 @@ namespace asi.asicentral.oauth
                     entityUser.Password = user.Password;
                     entityUser.PasswordHint = user.Password;
                     entityUser.StatusCode = StatusCode.ACTV.ToString();
-                    entityUser.PasswordResetRequired = "Y";
+                    entityUser.PasswordResetRequired = "N";
                 }
                 entityUser.FirstName = user.FirstName;
                 entityUser.MiddleName = user.MiddleName;
