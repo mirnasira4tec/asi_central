@@ -435,13 +435,12 @@ namespace asi.asicentral.services.PersonifyProxy
                     }
                     catch (Exception ex)
                     {
-                        ILogService log = LogService.GetLog(typeof(PersonifyClient));
-                        log.Debug(string.Format("customerInfo.MasterCustomerId = {0}", customerInfo.MasterCustomerId));
-                        log.Debug(string.Format("companyInfo.MasterCustomerId = {0}", companyInfo.MasterCustomerId));
-                        log.Debug(string.Format("companyInfo.SubCustomerId = {0}", companyInfo.SubCustomerId));
-                        log.Debug(ex.Message);
-                        log.Debug(ex.StackTrace);
-                        throw;
+                        string s = string.Format("customerInfo.MasterCustomerId = {0}", customerInfo.MasterCustomerId)
+                                   + string.Format("\ncompanyInfo.MasterCustomerId = {0}", companyInfo.MasterCustomerId)
+                                   + string.Format("\ncompanyInfo.SubCustomerId = {0}\n", companyInfo.SubCustomerId)
+                                   + ex.Message
+                                   + ex.StackTrace;
+                        throw new Exception(s, ex);
                     }
                 }
                 else
