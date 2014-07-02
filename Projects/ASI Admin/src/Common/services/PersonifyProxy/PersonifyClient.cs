@@ -1,4 +1,5 @@
-﻿using asi.asicentral.model.store;
+﻿using asi.asicentral.interfaces;
+using asi.asicentral.model.store;
 using System;
 using System.Collections.Generic;
 using System.Data.Services.Client;
@@ -420,14 +421,27 @@ namespace asi.asicentral.services.PersonifyProxy
                     //we already have a contact with that email
                     customerInfo = GetIndividualInfo(communications[0].MasterCustomerId);
                     //check if contact belong to company
-                    List<CusRelationship> relationships = SvcClient.Ctxt.CusRelationships
-                        .Where(rel => rel.MasterCustomerId == customerInfo.MasterCustomerId
-                                    && rel.RelatedMasterCustomerId == companyInfo.MasterCustomerId
-                                    && rel.RelatedSubCustomerId == companyInfo.SubCustomerId).ToList();
-                    if (relationships.Count == 0)
+                    try
                     {
-                        //also link this user to the company
-                        AddRelationship(customerInfo, companyInfo);
+                        List<CusRelationship> relationships = SvcClient.Ctxt.CusRelationships
+                            .Where(rel => rel.MasterCustomerId == customerInfo.MasterCustomerId
+                                        && rel.RelatedMasterCustomerId == companyInfo.MasterCustomerId
+                                        && rel.RelatedSubCustomerId == companyInfo.SubCustomerId).ToList();
+                        if (relationships.Count == 0)
+                        {
+                            //also link this user to the company
+                            AddRelationship(customerInfo, companyInfo);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ILogService log = LogService.GetLog(typeof(PersonifyClient));
+                        log.Debug(string.Format("customerInfo.MasterCustomerId = {0}", customerInfo.MasterCustomerId));
+                        log.Debug(string.Format("companyInfo.MasterCustomerId = {0}", companyInfo.MasterCustomerId));
+                        log.Debug(string.Format("companyInfo.SubCustomerId = {0}", companyInfo.SubCustomerId));
+                        log.Debug(ex.Message);
+                        log.Debug(ex.StackTrace);
+                        throw;
                     }
                 }
                 else
