@@ -75,6 +75,11 @@ namespace asi.asicentral.web.DependencyResolution
 						.EnrichWith(backendService => proxyGenerator.CreateClassProxyWithTarget(backendService.GetType(), backendService, new object[] { null }, new IInterceptor[] { new LogInterceptor(backendService.GetType()) }))
 						.Ctor<IStoreService>();
 
+                    x.For<IEmailService>()
+                       .Use<SmtpEmailService>()
+                       .EnrichWith(emailService => proxyGenerator.CreateClassProxyWithTarget(emailService.GetType(), emailService, new IInterceptor[] { new LogInterceptor(emailService.GetType()) }));
+                       
+
 					//Used to store credit cards outside of the application and return a token
 					x.For<ICreditCardService>()
 						.Use<services.CreditCardService>()
@@ -85,6 +90,7 @@ namespace asi.asicentral.web.DependencyResolution
                     x.SetAllProperties(instance => instance.OfType<IStoreService>());
                     x.SetAllProperties(instance => instance.OfType<IEncryptionService>());
                     x.SetAllProperties(instance => instance.OfType<IFulfilmentService>());
+                    x.SetAllProperties(instance => instance.OfType<IEmailService>());
                     x.SetAllProperties(instance => instance.OfType<ICreditCardService>());
                     x.SetAllProperties(instance => instance.OfType<IBackendService>());
 
