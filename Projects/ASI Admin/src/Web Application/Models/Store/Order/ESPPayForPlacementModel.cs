@@ -3,6 +3,7 @@ using asi.asicentral.model.ROI;
 using asi.asicentral.model.store;
 using asi.asicentral.Resources;
 using asi.asicentral.services;
+using asi.asicentral.util;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -156,7 +157,7 @@ namespace asi.asicentral.web.model.store
             }
 
             #region Fill ESP Advertising details based on product
-            Guid userId = new Guid(order.UserId);
+            Guid userId = CommonUtil.GuidCreator(order.UserId);
             if (storeService != null && userId != null)
             {
                 string asiNumber = storeService.GetAll<CENTUserProfilesPROF>().Where(profile => profile.PROF_UserID == userId).Select(item => item.PROF_ASINo).SingleOrDefault();

@@ -1,6 +1,7 @@
 ﻿using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
 using asi.asicentral.model.timss;
+using asi.asicentral.util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,6 +57,7 @@ namespace asi.asicentral.services
                 }
             }
             _objectService.Add<TIMSSCompany>(company);
+            Guid extRef = CommonUtil.GuidCreator(order.CreditCard.ExternalReference);
             TIMSSCreditInfo credit = new TIMSSCreditInfo()
             {
                 DAPP_UserId = company.DAPP_UserId,
@@ -72,7 +74,7 @@ namespace asi.asicentral.services
                 City = order.BillingIndividual.Address.City,
                 State = order.BillingIndividual.Address.State,
                 Country = order.BillingIndividual.Address.Country,
-                ExternalReference = new Guid(order.CreditCard.ExternalReference),
+                ExternalReference = extRef,
                 DateCreated = DateTime.Now,
             };
             _objectService.Add<TIMSSCreditInfo>(credit);

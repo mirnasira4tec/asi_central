@@ -414,6 +414,7 @@
     <Compile Include="services\PersonifyService.cs" />
     <Compile Include="services\ROIService.cs" />
     <Compile Include="services\StoreService.cs" />
+    <Compile Include="util\CommonUtil.cs" />
     <Compile Include="util\OAuth\ASIOAuthClient.cs" />
     <Compile Include="util\OAuth\CookiesHelper.cs" />
     <Compile Include="util\OAuth\EnumHelper.cs" />
