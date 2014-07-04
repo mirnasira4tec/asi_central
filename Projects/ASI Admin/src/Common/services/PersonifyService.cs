@@ -52,6 +52,10 @@ namespace asi.asicentral.services
                 CustomerInfo primaryContactInfo = individualInfos.FirstOrDefault(c =>
                     string.Equals(c.FirstName, primaryContact.FirstName, StringComparison.InvariantCultureIgnoreCase)
                     && string.Equals(c.LastName, primaryContact.LastName, StringComparison.InvariantCultureIgnoreCase));
+                if (primaryContactInfo == null && !string.IsNullOrEmpty(primaryContact.Email))
+                {
+                    primaryContactInfo = PersonifyClient.GetIndividualInfoByEmail(primaryContact.Email);
+                }
 
                 var shipToAddr = GetAddressInfo(addresses2, AddressType.Shipping, order);
                 var billToAddr = GetAddressInfo(addresses2, AddressType.Billing, order);

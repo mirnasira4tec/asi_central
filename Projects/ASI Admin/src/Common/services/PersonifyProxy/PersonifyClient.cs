@@ -529,6 +529,29 @@ namespace asi.asicentral.services.PersonifyProxy
             return customerInfo;
         }
 
+        public static CustomerInfo GetIndividualInfo(string masterCustomerId)
+        {
+            List<CustomerInfo> oCusInfo = SvcClient.Ctxt.CustomerInfos.Where(
+                a => a.MasterCustomerId == masterCustomerId && a.RecordType == "I").ToList();
+            if (oCusInfo.Count == 0)
+            {
+                return null;
+            }
+            return oCusInfo.FirstOrDefault();
+        }
+
+        public static CustomerInfo GetIndividualInfoByEmail(string emailAddress)
+        {
+            CustomerInfo customerInfo = null;
+            List<CusCommunication> comms = SvcClient.Ctxt.CusCommunications.
+                 Where(comm => comm.SearchPhoneAddress == emailAddress).ToList();
+            if (comms.Any())
+            {
+                customerInfo = GetIndividualInfo(comms[0].MasterCustomerId);
+            }
+            return customerInfo;
+        }
+
         public static IEnumerable<StoreAddressInfo> AddIndividualAddresses(
            StoreCompany storeCompany,
            IEnumerable<CustomerInfo> individualInfos,
@@ -746,17 +769,6 @@ namespace asi.asicentral.services.PersonifyProxy
                 .Where(c => c.MasterCustomerId == companyInfo.MasterCustomerId
                          && c.SubCustomerId == companyInfo.SubCustomerId);
             return cc.Where(c => string.Equals(c.CommTypeCodeString, cusCommType, StringComparison.InvariantCultureIgnoreCase)).ToList();
-        }
-
-        public static CustomerInfo GetIndividualInfo(string masterCustomerId)
-        {
-            List<CustomerInfo> oCusInfo = SvcClient.Ctxt.CustomerInfos.Where(
-                a => a.MasterCustomerId == masterCustomerId && a.RecordType == "I").ToList();
-            if (oCusInfo.Count == 0)
-            {
-                return null;
-            }
-            return oCusInfo.FirstOrDefault();
         }
 
         #region Credit Card Handling
