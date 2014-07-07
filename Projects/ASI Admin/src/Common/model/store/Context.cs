@@ -26,6 +26,7 @@ namespace asi.asicentral.model.store
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
         public string NotificationEmails { get; set; }
+		public bool HasBackendNotification { get; set; }
         public int NumberOfPages { get; set; }
         public string HeaderImage { get; set; }
         public string ChatSettings { get; set; }

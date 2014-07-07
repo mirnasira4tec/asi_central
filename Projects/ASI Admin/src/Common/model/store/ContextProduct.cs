@@ -29,7 +29,8 @@ namespace asi.asicentral.model.store
         public bool HasShipping { get; set; }
         public bool IsSubscription { get; set; }
         public string NotificationEmails { get; set; }
-        public string SubscriptionFrequency { get; set; }
+		public bool HasBackendNotification { get; set; }
+		public string SubscriptionFrequency { get; set; }
         public bool IsASINumberFlag { get; set; }
 		public bool HasBackEndIntegration { get; set;  }
         public bool IsAvailable { get; set; }
