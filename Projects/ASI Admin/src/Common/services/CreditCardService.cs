@@ -64,9 +64,10 @@ namespace asi.asicentral.services
             {
                 if (log != null)
                 {
-                    log.Debug(string.Format("Error in accessing personify service for validation: {0}.", ex.Message));
+                    log.Debug(string.Format("Error in saving credit card to personify: {0}.", ex.Message));
                 }
                 result = null;
+                throw;
             }
             return result;
         }
