@@ -57,7 +57,7 @@ namespace asi.asicentral.services
                 }
             }
             _objectService.Add<TIMSSCompany>(company);
-            Guid extRef = CommonUtil.GuidCreator(order.CreditCard.ExternalReference);
+            Guid extRef = new Guid(order.CreditCard.ExternalReference);
             TIMSSCreditInfo credit = new TIMSSCreditInfo()
             {
                 DAPP_UserId = company.DAPP_UserId,

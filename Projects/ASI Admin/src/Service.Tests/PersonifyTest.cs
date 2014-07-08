@@ -87,7 +87,7 @@ namespace asi.asicentral.Tests
                 ExpirationDate = new DateTime(int.Parse(order.CreditCard.ExpYear), int.Parse(order.CreditCard.ExpMonth), 1),
             };
             Assert.IsTrue(cardService.Validate(cc));
-            var profileIdentifier = cardService.Store(order.Company, cc);
+            var profileIdentifier = cardService.Store(order.Company, cc, true);
             Assert.IsNotNull(profileIdentifier);
             Assert.IsNotNull(order.Company.ExternalReference);
             order.CreditCard.ExternalReference = profileIdentifier;
