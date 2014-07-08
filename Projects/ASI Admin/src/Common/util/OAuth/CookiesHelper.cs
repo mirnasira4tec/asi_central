@@ -96,6 +96,10 @@ namespace asi.asicentral.oauth
                     redirectUrl = CrossApplication.GetDashboardRedirectorUrl(url, redirectParams);
                 }
             }
+
+            if (string.IsNullOrEmpty(redirectUrl) && !string.IsNullOrEmpty(ConfigurationManager.AppSettings["RedirectUrl"]))
+                redirectUrl = ConfigurationManager.AppSettings["RedirectUrl"];
+
             return redirectUrl;
         }
 
