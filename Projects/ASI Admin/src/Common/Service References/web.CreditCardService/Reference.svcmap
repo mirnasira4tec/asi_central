@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="d0f30b9d-1cd0-412a-856b-415b3ce12891" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="https://pc-2200.asinetwork.local/service/CreditCardService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="CreditCardService.xsd" MetadataType="Schema" ID="5aba9229-02a5-4ad4-bce1-4a3e2d325803" SourceId="1" SourceUrl="https://pc-2200.asinetwork.local/service/CreditCardService.svc?xsd=xsd1" />
+    <MetadataFile FileName="CreditCardService1.xsd" MetadataType="Schema" ID="a4271324-bf93-44a3-9d1e-5b2f2a844279" SourceId="1" SourceUrl="https://pc-2200.asinetwork.local/service/CreditCardService.svc?xsd=xsd0" />
+    <MetadataFile FileName="CreditCardService2.xsd" MetadataType="Schema" ID="4ec0f68d-5ac4-4777-82cb-476192897a43" SourceId="1" SourceUrl="https://pc-2200.asinetwork.local/service/CreditCardService.svc?xsd=xsd2" />
+    <MetadataFile FileName="CreditCardService.disco" MetadataType="Disco" ID="8967dfaa-51e5-4384-aaae-861aa5fdf125" SourceId="1" SourceUrl="https://pc-2200.asinetwork.local/service/CreditCardService.svc?disco" />
+    <MetadataFile FileName="CreditCardService.wsdl" MetadataType="Wsdl" ID="079c2abe-be3c-475d-9c2e-64b7853ff008" SourceId="1" SourceUrl="https://pc-2200.asinetwork.local/service/CreditCardService.svc?wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
