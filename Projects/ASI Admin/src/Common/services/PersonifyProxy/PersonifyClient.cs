@@ -805,7 +805,16 @@ namespace asi.asicentral.services.PersonifyProxy
                 AddedOrModifiedBy = ADDED_OR_MODIFIED_BY
             };
             var resp = SvcClient.Post<CustomerCreditCardOutput>("AddCustomerCreditCard", customerCreditCardInput);
-            return resp.Success ?? false ? resp.CreditCardProfileId : null;
+            if (!(resp.Success?? false))
+            {
+                var m = string.Format("Error in saving credit {0} to Personify", GetCreditCardReference(creditCard.Number));
+                if (resp.AddCustomerCreditCardVI.Any())
+                {
+                    m = string.Format("{0}\n{1}", m, resp.AddCustomerCreditCardVI[0].Message);
+                }
+                throw new Exception(m);
+            }
+            return resp.CreditCardProfileId;
         }
 
         public static string GetCreditCardProfileId(CustomerInfo companyInfo, CreditCard creditCard)
@@ -818,9 +827,7 @@ namespace asi.asicentral.services.PersonifyProxy
             long? profileId = null;
             if (oCreditCards.Any())
             {
-                string ccReference = string.Format("{0}{1}{2}", creditCard.Number.Substring(0, 6),
-                    new string(Enumerable.Repeat('*', creditCard.Number.Length - 10).ToArray()),
-                    creditCard.Number.Substring(creditCard.Number.Length - 4));
+                string ccReference = GetCreditCardReference(creditCard.Number);
                 profileId = oCreditCards.Where(c => c.CCReference == ccReference).Select(c => c.CustomerCreditCardProfileId).FirstOrDefault();
             }
             return profileId == null ? string.Empty : profileId.ToString();
@@ -853,7 +860,14 @@ namespace asi.asicentral.services.PersonifyProxy
         {
             if (billToAddressInfo == null || companyInfo == null)
             {
-                throw new ArgumentException("Billto address and company information are required.");
+                throw new ArgumentException(
+                    string.Format("Billto address and company information are required for order {0}, created by Company {1}", 
+                    orderNumber, companyInfo.MasterCustomerId));
+            }
+            if (string.IsNullOrWhiteSpace(ccProfileid))
+            {
+                throw new Exception(string.Format("Creadit card profile id is null for order {0}, created by Company {1}", 
+                    orderNumber, companyInfo.MasterCustomerId));
             }
             ASICustomerCreditCard credirCard = GetCreditCardByProfileId(companyInfo, ccProfileid);
             string orderLineNumbers = GetOrderLinesByOrderId(orderNumber);
@@ -892,6 +906,19 @@ namespace asi.asicentral.services.PersonifyProxy
             }
             return result;
         }
+
+        private static string GetCreditCardReference(string num)
+        {
+            string result = string.Empty;
+            if (num.Length >= 10)
+            {
+                result = string.Format("{0}{1}{2}", num.Substring(0, 6),
+                    new string(Enumerable.Repeat('*', num.Length - 10).ToArray()),
+                    num.Substring(num.Length - 4));
+            }
+            return result;
+        }
+
         #endregion Credit Card Handling
     }
 
