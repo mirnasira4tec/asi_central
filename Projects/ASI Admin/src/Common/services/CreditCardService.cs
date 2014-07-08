@@ -42,33 +42,66 @@ namespace asi.asicentral.services
             return valid;
         }
 
-        public virtual string Store(StoreCompany company, CreditCard creditCard)
+        public virtual string Store(StoreCompany company, CreditCard creditCard, bool backendIntegration)
         {
-            string result = null;
+            string result;
             ILogService log = null;
-            try
-            {
-                log = LogService.GetLog(this.GetType());
-	            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["svcUri"]))
-	            {
-		            result = backendService.SaveCreditCard(company, creditCard);
-	            }
-	            else
-	            {
-		            log.Debug("By-passing personify, not validating the credit card");
-		            result = "Backend Not used";
-	            }
-	            if (creditCard.Number.Length >= 4) creditCard.MaskedPAN = "****" + creditCard.Number.Substring(creditCard.Number.Length - 4, 4);
-            }
-            catch (Exception ex)
-            {
-                if (log != null)
-                {
-                    log.Debug(string.Format("Error in accessing personify service for validation: {0}.", ex.Message));
-                }
-                result = null;
-            }
-            return result;
+	        if (backendIntegration)
+	        {
+		        try
+		        {
+			        log = LogService.GetLog(this.GetType());
+			        if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["svcUri"]))
+			        {
+				        result = backendService.SaveCreditCard(company, creditCard);
+			        }
+			        else
+			        {
+				        log.Debug("By-passing personify, not validating the credit card");
+				        result = "Backend Not used";
+			        }
+			        if (creditCard.Number.Length >= 4)
+				        creditCard.MaskedPAN = "****" + creditCard.Number.Substring(creditCard.Number.Length - 4, 4);
+		        }
+		        catch (Exception ex)
+		        {
+			        if (log != null)
+			        {
+				        log.Debug(string.Format("Error in accessing personify service for validation: {0}.", ex.Message));
+			        }
+			        result = null;
+		        }
+	        }
+	        else
+	        {
+				asi.asicentral.web.CreditCardService.CreditCard webCreditCard = new web.CreditCardService.CreditCard()
+				{
+					CardHolderName = creditCard.CardHolderName,
+					Type = creditCard.Type,
+					Number = creditCard.Number,
+					ExpirationDate = creditCard.ExpirationDate,
+					Address = creditCard.Address,
+					City = creditCard.City,
+					Country = creditCard.Country,
+					State = creditCard.State,
+					PostalCode = creditCard.PostalCode,
+					CountryCode = creditCard.CountryCode,
+				};
+				asi.asicentral.web.CreditCardService.CreditCardServiceClient cardServiceClient = GetClient();
+				Guid identifier = cardServiceClient.Store(webCreditCard);
+				if (creditCard.Number.Length >= 4) creditCard.MaskedPAN = "****" + creditCard.Number.Substring(creditCard.Number.Length - 4, 4);
+		        result = identifier.ToString();
+	        }
+	        return result;
         }
+
+		private asi.asicentral.web.CreditCardService.CreditCardServiceClient GetClient()
+		{
+			asi.asicentral.web.CreditCardService.CreditCardServiceClient cardServiceClient = new web.CreditCardService.CreditCardServiceClient();
+			EncryptionService encryptionService = new EncryptionService();
+			cardServiceClient.ClientCredentials.UserName.UserName = ConfigurationManager.AppSettings["CreditCardServiceUsername"];
+			cardServiceClient.ClientCredentials.UserName.Password = ConfigurationManager.AppSettings["CreditCardServicePassword"];
+			return cardServiceClient;
+		}
     }
 }
