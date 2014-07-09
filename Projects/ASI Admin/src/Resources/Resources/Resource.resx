@@ -1825,7 +1825,7 @@
     <value>The value should be numeric</value>
   </data>
   <data name="FieldNumberRange" xml:space="preserve">
-    <value>Choose a value between 1 and 1000</value>
+    <value>Choose a value between 1 and 20</value>
   </data>
   <data name="EmailExpress_EnterQuantity" xml:space="preserve">
     <value>Enter the number of sends</value>
