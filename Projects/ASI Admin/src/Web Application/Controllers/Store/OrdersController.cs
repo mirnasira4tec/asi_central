@@ -38,6 +38,7 @@ namespace asi.asicentral.web.Controllers.Store
                 if (dateEnd == null) dateEnd = DateTime.Now;
                 else dateEnd = dateEnd.Value.Date + new TimeSpan(23, 59, 59);
                 if (HasAddress == null) HasAddress = true;
+               
                 //create new value converted to UTC time to make sure getting the right database records
                 DateTime dateStartParam = dateStart.Value.ToUniversalTime();
                 DateTime dateEndParam = dateEnd.Value.ToUniversalTime();
