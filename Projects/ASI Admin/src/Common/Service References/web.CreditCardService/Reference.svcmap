@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="f6a91b41-2e2c-49d9-ba1c-264d830e821e" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="d0f30b9d-1cd0-412a-856b-415b3ce12891" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -22,11 +22,11 @@
     <MetadataSource Address="https://pc-2200.asinetwork.local/service/CreditCardService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="CreditCardService.xsd" MetadataType="Schema" ID="8000d53f-6f3c-4097-b82b-2c260e90a1ab" SourceId="1" SourceUrl="https://pc-2200.asinetwork.local/service/CreditCardService.svc?xsd=xsd1" />
-    <MetadataFile FileName="CreditCardService1.xsd" MetadataType="Schema" ID="3c751518-abfe-4aa6-9780-32b6187cf5ba" SourceId="1" SourceUrl="https://pc-2200.asinetwork.local/service/CreditCardService.svc?xsd=xsd0" />
-    <MetadataFile FileName="CreditCardService2.xsd" MetadataType="Schema" ID="c236dad1-3865-4745-9f3b-09f75061bd47" SourceId="1" SourceUrl="https://pc-2200.asinetwork.local/service/CreditCardService.svc?xsd=xsd2" />
-    <MetadataFile FileName="CreditCardService.disco" MetadataType="Disco" ID="ed0a5bd7-a0ff-48a9-afc2-420040e2bf5f" SourceId="1" SourceUrl="https://pc-2200.asinetwork.local/service/CreditCardService.svc?disco" />
-    <MetadataFile FileName="CreditCardService.wsdl" MetadataType="Wsdl" ID="66d7baf5-ed6b-4e48-85f4-378bc632960f" SourceId="1" SourceUrl="https://pc-2200.asinetwork.local/service/CreditCardService.svc?wsdl" />
+    <MetadataFile FileName="CreditCardService.xsd" MetadataType="Schema" ID="5aba9229-02a5-4ad4-bce1-4a3e2d325803" SourceId="1" SourceUrl="https://pc-2200.asinetwork.local/service/CreditCardService.svc?xsd=xsd1" />
+    <MetadataFile FileName="CreditCardService1.xsd" MetadataType="Schema" ID="a4271324-bf93-44a3-9d1e-5b2f2a844279" SourceId="1" SourceUrl="https://pc-2200.asinetwork.local/service/CreditCardService.svc?xsd=xsd0" />
+    <MetadataFile FileName="CreditCardService2.xsd" MetadataType="Schema" ID="4ec0f68d-5ac4-4777-82cb-476192897a43" SourceId="1" SourceUrl="https://pc-2200.asinetwork.local/service/CreditCardService.svc?xsd=xsd2" />
+    <MetadataFile FileName="CreditCardService.disco" MetadataType="Disco" ID="8967dfaa-51e5-4384-aaae-861aa5fdf125" SourceId="1" SourceUrl="https://pc-2200.asinetwork.local/service/CreditCardService.svc?disco" />
+    <MetadataFile FileName="CreditCardService.wsdl" MetadataType="Wsdl" ID="079c2abe-be3c-475d-9c2e-64b7853ff008" SourceId="1" SourceUrl="https://pc-2200.asinetwork.local/service/CreditCardService.svc?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

@@ -1,8 +1,10 @@
 ﻿using asi.asicentral.interfaces;
 using asi.asicentral.model.ROI;
 using asi.asicentral.model.store;
+using asi.asicentral.oauth;
 using asi.asicentral.Resources;
 using asi.asicentral.services;
+using asi.asicentral.util;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -121,6 +123,7 @@ namespace asi.asicentral.web.model.store
         public StoreIndividual BillingIndividual { get; set; }
         public string ActionName { get; set; }
         public string ExternalReference { get; set; }
+        public string BackendReference { get; set; }
         public bool IsCompleted { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public string ProductName { get; set; }
@@ -155,11 +158,13 @@ namespace asi.asicentral.web.model.store
             }
 
             #region Fill ESP Advertising details based on product
-            Guid userId = new Guid(order.UserId);
-            if (storeService != null && userId != null)
+            string userEmail = order.LoggedUserEmail.ToLower();
+            if (userEmail != null)
             {
-                string asiNumber = storeService.GetAll<CENTUserProfilesPROF>().Where(profile => profile.PROF_UserID == userId).Select(item => item.PROF_ASINo).SingleOrDefault();
-                if (!string.IsNullOrEmpty(asiNumber))
+	            string asiNumber = string.Empty;
+				var user = ASIOAuthClient.GetUserByEmail(userEmail);
+	            if (user != null) asiNumber = user.AsiNumber;
+				if (!string.IsNullOrEmpty(asiNumber))
                 {
                     IList<StoreDetailPayForPlacement> selectedCategories = storeService.GetAll<StoreDetailPayForPlacement>().Where(pfp => pfp.OrderDetailId == orderdetail.Id).ToList();
                     IROIService ROIService = new ROIService();

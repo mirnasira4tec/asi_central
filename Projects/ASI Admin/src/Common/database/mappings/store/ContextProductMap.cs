@@ -30,10 +30,13 @@ namespace asi.asicentral.database.mappings.product
             this.Property(t => t.IsAvailable)
                 .HasColumnName("IsAvailableFlag");
 
-            this.Property(t => t.NotificationEmails)
-                .HasColumnName("NotificationEmails");
+	        this.Property(t => t.HasBackEndIntegration)
+				.HasColumnName("HasBackEndFlag");
 
-            this.Property(t => t.CreateDate)
+			this.Property(t => t.HasBackendNotification)
+				.HasColumnName("HasBackendNotificationFlag");
+
+			this.Property(t => t.CreateDate)
                 .HasColumnName("CreateDateUTC");
 
             this.Property(t => t.UpdateDate)

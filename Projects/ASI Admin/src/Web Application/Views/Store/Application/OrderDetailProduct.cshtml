@@ -22,7 +22,7 @@
 <nav>
 	<ul class="nav nav-tabs" id="tabs">
         <li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
-        @if(Model.ProductId != 70)
+        @if (Model.ProductId != 70)
         {
 		<li><a href="#tabsubscription" data-toggle="tab">@Model.ProductName Information</a></li>
         }
@@ -30,7 +30,7 @@
 </nav>
 <div class="tab-content">
     @Html.Partial("../Store/Application/Shared/CompanyInformation", Model)
-    @if(Model.ProductId != 70)
+    @if (Model.ProductId != 70)
     {
 	<div id="tabsubscription" class="product-information tab-pane fade">
 		<fieldset class="company-info-form">
@@ -38,7 +38,7 @@
             @switch (Model.ProductId)
             {
                 case 46:
-                    if(Model.IsStoreRequest)
+                    if (Model.IsStoreRequest)
                     {
                     <span class="label-row span11">
 			            <label class="control-label" for="Cost">@asi.asicentral.Resources.Resource.CurrentMembershipPackage</label>
@@ -62,7 +62,7 @@
 			        @Html.EditorFor(m => m.AcceptedByName) @Html.ValidationMessageFor(m => m.AcceptedByName)
 		        </span>
                     break;
-                 case 71:
+                case 71:
                 <span class="label-row span11">
 			        @Html.Label(asi.asicentral.Resources.Resource.NumberOfLicensesInPackage)
                 </span>
@@ -70,6 +70,31 @@
 			        @Html.DropDownListFor(model => model.OptionId, asi.asicentral.util.store.CompanyStoreHelper.GetQuantityOptions(), new { @class = "tab1" }) @Html.ValidationMessageFor(model => model.OptionId)
 		        </span>
                     break;
+                case 77:
+                       
+                     @Html.HiddenFor(model => model.TotalCost)
+                    <div class="control-group">
+                        <label class="control-label" for="Cost">Selected package</label>
+                        <div class="controls">
+                            @foreach (var option in Model.Options)
+                            {
+                                <label class="radio">@Html.RadioButtonFor(model => model.OptionId, option.Value, new { @disabled="true" }) @option.Text </label>
+                            }
+                        </div>
+
+                    </div>
+                     <div class="control-group">
+                        <label class="control-label" for="Cost">Selected Date</label>
+                        <div class="controls">
+                           <input type="text" value="@Model.StartDate" readonly="true" />
+                        </div>
+
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                        </div>
+                    </div>
+                            break;
                 default:
                 <span class="label-row span11">
 			        @Html.LabelFor(m => m.Quantity) 
@@ -77,7 +102,7 @@
 		        <span class="label-row">
 			        @Html.EditorFor(m => m.Quantity) @Html.ValidationMessageFor(m => m.Quantity)
 		        </span>
-                    break;
+                            break;
             }
 		</fieldset>    
 	</div><!-- END #orderdetail-information -->	

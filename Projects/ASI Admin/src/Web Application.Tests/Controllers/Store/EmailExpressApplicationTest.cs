@@ -96,18 +96,14 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             model.OrderDetailId = 5;
             model.ActionName = ApplicationController.COMMAND_SAVE;
             model.ExternalReference = "102";
-            model.Dates = "Wed, 23 Oct 13\r\nThu, 24 Oct 13\r\nFri, 25 Oct 13\r\n";
             model.ItemTypeId = 1;
             // EmailExpress - 61
             RedirectToRouteResult result = controller.EditEmailExpress(model) as RedirectToRouteResult;
             Assert.AreEqual(result.RouteValues["controller"], "Application");
             Assert.AreEqual(orderRef.ExternalReference, model.ExternalReference);
             Assert.IsNotNull(detail);
-            Assert.AreEqual(detail.Quantity, 3);
-            Assert.IsNotNull(emailexpressDetail);
-            Assert.IsNotNull(dateItem);
-            Assert.AreEqual(dateItem.AdSelectedDate, new DateTime(2013,10,25));
-            Assert.AreEqual(emailexpressDetail.ItemTypeId, model.ItemTypeId);
+            Assert.AreEqual(detail.Quantity, 1);
+            Assert.IsNotNull(emailexpressDetail); 
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(1));
 
             // user clicks reject - order should be updated to reject

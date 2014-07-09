@@ -58,15 +58,25 @@ namespace asi.asicentral.model.store
 
         public override string ToString()
         {
-            return Id + " (" + Street1 != null ? Street1 : "no street" + City != null ? City : "no city" + Country != null ? Country : "no country)";
+            return Id + " (" + (Street1 ?? "no street") + (City ?? "no city") + (Country ?? "no country)");
         }
 
         public override bool Equals(object obj)
         {
             bool equals = false;
 
-            StoreAddress address = obj as StoreAddress;
-            if (address != null) equals = address.Id == Id;
+            var address = obj as StoreAddress;
+	        if (address != null)
+	        {
+		        if (Id != 0 || address.Id != 0)
+		        {
+			        equals = address.Id == Id;
+		        }
+		        else
+		        {
+			        equals = ToString().Equals(address.ToString());
+		        }
+	        }
             return equals;
         }
 

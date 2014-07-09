@@ -11,30 +11,12 @@ namespace asi.asicentral.Tests
     public class CreditCardServiceTest
     {
         [TestMethod]
-        public void Create()
-        {
-            ICreditCardService cardService = new CreditCardService();
-            string cardIdentifier = cardService.Store(GetVisaCC());
-            Assert.IsFalse(string.IsNullOrEmpty(cardIdentifier));
-            Assert.AreNotEqual(Guid.Empty.ToString(), cardIdentifier);
-        }
-
-        [TestMethod]
-        public void StoreGetAndDelete()
-        {
-            CreditCard card = GetVisaCC();
-            ICreditCardService cardService = new CreditCardService();
-            string cardIdentifier = cardService.Store(card);
-            cardService.Delete(cardIdentifier);
-        }
-
-        [TestMethod]
         public void ValidateCreditCard()
         {
             string webAPIUrl = ConfigurationManager.AppSettings["ConnectUrl"];
             if (!string.IsNullOrEmpty(webAPIUrl)) {
                 CreditCard card = GetVisaCC();
-                ICreditCardService cardService = new CreditCardService();
+                ICreditCardService cardService = new CreditCardService(new PersonifyService());
                 Assert.IsTrue(cardService.Validate(card));
                 card.Number = "4123456789012345";
                 Assert.IsFalse(cardService.Validate(card));
