@@ -70,15 +70,29 @@ namespace asi.asicentral.web.DependencyResolution
                         .Use<ROIService>()
                         .EnrichWith(roiService => proxyGenerator.CreateClassProxyWithTarget(roiService.GetType(), roiService, new object[] { null }, new IInterceptor[] { new LogInterceptor(roiService.GetType()) }));
 
-                    x.For<ICreditCardService>()
-                        .Use<asi.asicentral.services.CreditCardService>()
-                        .EnrichWith(cardService => proxyGenerator.CreateClassProxyWithTarget(cardService.GetType(), cardService, new IInterceptor[] { new LogInterceptor(cardService.GetType()) }));
+					x.For<IBackendService>()
+						.Use<PersonifyService>()
+						.EnrichWith(backendService => proxyGenerator.CreateClassProxyWithTarget(backendService.GetType(), backendService, new object[] { null }, new IInterceptor[] { new LogInterceptor(backendService.GetType()) }))
+						.Ctor<IStoreService>();
+
+                    x.For<IEmailService>()
+                       .Use<SmtpEmailService>()
+                       .EnrichWith(emailService => proxyGenerator.CreateClassProxyWithTarget(emailService.GetType(), emailService, new IInterceptor[] { new LogInterceptor(emailService.GetType()) }));
+                       
+
+					//Used to store credit cards outside of the application and return a token
+					x.For<ICreditCardService>()
+						.Use<services.CreditCardService>()
+						.EnrichWith(cardService => proxyGenerator.CreateClassProxyWithTarget(cardService.GetType(), cardService, new object[] { null }, new IInterceptor[] { new LogInterceptor(cardService.GetType()) }))
+						.Ctor<IBackendService>();
 
                     x.SetAllProperties(instance => instance.OfType<IObjectService>());
                     x.SetAllProperties(instance => instance.OfType<IStoreService>());
                     x.SetAllProperties(instance => instance.OfType<IEncryptionService>());
                     x.SetAllProperties(instance => instance.OfType<IFulfilmentService>());
+                    x.SetAllProperties(instance => instance.OfType<IEmailService>());
                     x.SetAllProperties(instance => instance.OfType<ICreditCardService>());
+                    x.SetAllProperties(instance => instance.OfType<IBackendService>());
 
                     x.For<IController>()
                         .EnrichAllWith(controller => proxyGenerator.CreateInterfaceProxyWithTarget(controller, new IInterceptor[] { new LogInterceptor(controller.GetType()) }));

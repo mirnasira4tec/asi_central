@@ -16,13 +16,15 @@ namespace asi.asicentral.Tests
         {
             using (IObjectService objectService = new ObjectService(new Container(new EFRegistry())))
             {
-                Company company = objectService.GetAll<Company>().FirstOrDefault();
-                Category category = objectService.GetAll<Category>().Where(cat => cat.Id == Category.CATEGORY_ALL).Single();
+                objectService.GetAll<Company>().FirstOrDefault();
+				Category category = objectService.GetAll<Category>().Single(cat => cat.Id == Category.CATEGORY_ALL);
                 for (int i = 0; i < 2; i++)
                 {
-                    Product product = new Product();
-                    product.Name = "Test " + i;
-                    product.ModelNumber = "AAA";
+                    var product = new Product()
+                    {
+						Name = "Test " + i,
+						ModelNumber = "AAA",	                    
+                    };
                     product.Categories.Add(category);
                     //this will create an error if we have multiple instances of the context class
                     objectService.Add<Product>(product);

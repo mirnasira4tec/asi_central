@@ -168,7 +168,7 @@
                                 }
                                 else
                                 {
-                                    <td><a href="#" class="productRef" data-id="@Server.HtmlEncode(order.Item)">@Html.Raw(order.Item)</a></td>
+                                    <td><a href="#" class="productRef" data-id="@Server.UrlEncode(order.Item)">@Html.Raw(order.Item)</a></td>
                                 }
                                 @if (order.Application != null || order.ProductType == "Product")
                                 { 

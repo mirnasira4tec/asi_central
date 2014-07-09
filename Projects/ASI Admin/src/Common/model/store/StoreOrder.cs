@@ -10,7 +10,8 @@ namespace asi.asicentral.model.store
     {
         Pending = 0,
         Approved = 1,
-        Rejected = 2
+        Rejected = 2,
+        PersonifyError = 3
     }
 
     public class StoreOrder
@@ -20,7 +21,7 @@ namespace asi.asicentral.model.store
             if (this.GetType() == typeof(StoreOrder))
             {
                 OrderDetails = new List<StoreOrderDetail>();
-            } 
+            }
         }
 
         public int Id { get; set; }
@@ -34,7 +35,8 @@ namespace asi.asicentral.model.store
         public string OrderRequestType { get; set; }
         public string Campaign { get; set; }
         public string ExternalReference { get; set; }
-        public string UserReference { get; set; }
+		public string BackendReference { get; set; }
+		public string UserReference { get; set; }
         public string LoggedUserEmail { get; set; }
         public string IPAdd { get; set; }
         public decimal Total { get; set; }
@@ -53,16 +55,18 @@ namespace asi.asicentral.model.store
         {
             get
             {
-                if (Context != null)
+                if (OrderDetails != null && OrderDetails.FirstOrDefault().Order != null && OrderDetails.FirstOrDefault().Order.ContextId != null && OrderDetails.FirstOrDefault().Order.Context != null)
                 {
-                    if (Context.Type != "Product")
+
+                    if (OrderDetails.FirstOrDefault().Order.Context.Type != "Product")
                     {
-                        if (Context.Type.StartsWith("SGR")) return "SGR Membership";
-                        else return Context.Type + " Membership";
+                        return OrderDetails.FirstOrDefault().Order.Context.Name;
+
                     }
                     else
                     {
-                        return Context.Name;
+                        if (Context.Type.StartsWith("SGR")) return "SGR Membership";
+                        else return Context.Type + " Membership";
                     }
                 }
                 else if (OrderDetails != null && OrderDetails.Where(detail => detail.Product != null).FirstOrDefault() != null) return OrderDetails.Where(detail => detail.Product != null).FirstOrDefault().Product.Name;

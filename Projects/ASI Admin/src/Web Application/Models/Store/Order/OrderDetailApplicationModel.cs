@@ -1,5 +1,6 @@
 ﻿using asi.asicentral.model.store;
 using asi.asicentral.Resources;
+using asi.asicentral.util.store;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -34,6 +35,7 @@ namespace asi.asicentral.web.model.store
         public string ASINumber { get; set; }
         public bool HasShipAddress { get; set; }
         public bool HasBillAddress { get; set; }
+        public string StartDate { get; set; }
 
         #region Billing information
 
@@ -115,11 +117,16 @@ namespace asi.asicentral.web.model.store
         public int OrderDetailId { get; set; }
         public decimal Cost { get; set; }
         public bool IsStoreRequest { get; set; }
+        public IList<SelectListItem> Options
+        {
+            get { return SupplierSpecialsHelper.GetPackagesOptions(); }
+        }
         
         public string ActionName { get; set; }
         public string AcceptedByName { get; set; }
         public StoreIndividual BillingIndividual { get; set; }
         public string ExternalReference { get; set; }
+        public string BackendReference { get; set; }
         public bool IsCompleted { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public string ProductName { get; set; }
@@ -147,6 +154,7 @@ namespace asi.asicentral.web.model.store
             OrderDetailId = orderdetail.Id;
             this.AcceptedByName = orderdetail.AcceptedByName;
             if (orderdetail.OptionId.HasValue) this.OptionId = orderdetail.OptionId;
+            if (orderdetail.DateOption.HasValue) this.StartDate = orderdetail.DateOption.Value.ToString("MM/dd/yyyy");
             this.Quantity = orderdetail.Quantity;
             this.AcceptedByName = orderdetail.AcceptedByName;
            

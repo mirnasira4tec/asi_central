@@ -11,12 +11,13 @@
 <input type="submit" class="btn btn-primary" value="Save"/><br /><br />
     
 <table class="table table-bordered table-condensed">
-    <thead><tr><th>Name</th><th>Notification</th><th>Is Available</th><th>Next Available Date</th></tr></thead>
+    <thead><tr><th>Name</th><th title="Backend notification">Force</th><th>Notification</th><th>Available</th><th>Next Available Date</th></tr></thead>
     <tbody>
         @for (int i = 0; i < Model.Count; i++)
         {
             <tr>
-                <td>@Html.HiddenFor(m => Model[i].Id) @Html.TextBoxFor(m => Model[i].Name, new { @readonly = "readonly" })</td>
+                <td>@Html.HiddenFor(m => Model[i].Id) @Html.TextBoxFor(m => Model[i].Name, new { @readonly = "readonly", @style = "width:180px" })</td>
+                <td class="center">@Html.CheckBoxFor(model => model[i].HasBackendNotification)</td>
                 <td>@Html.EditorFor(model => Model[i].NotificationEmails)</td>
                 <td class="center">@Html.CheckBoxFor(model => Model[i].IsAvailable)</td>
                 <td> 

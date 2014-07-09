@@ -4,6 +4,7 @@ using asi.asicentral.util;
 using asi.asicentral.web.model;
 using Ionic.Zip;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -29,9 +30,9 @@ namespace asi.asicentral.web.Controllers
                 model.Path = string.IsNullOrEmpty(path) ? string.Empty : path;
                 model.URL = string.IsNullOrEmpty(path) ? model.BaseURL : model.BaseURL + path.Replace("\\", "/");
                 log.Debug(string.Format("Accessing file system '{0}' using base folder '{1}'", model.BasePath + model.Path, model.Path));
-                if (filterBy == "Name") model.Children = FileSystemHelper.GetFiles(model.BasePath + model.Path, model.BasePath).OrderBy(x => x.Name).ToList();
-                else if (filterBy == "Created") model.Children = FileSystemHelper.GetFiles(model.BasePath + model.Path, model.BasePath).OrderByDescending(x => x.Created).ToList();
-                else if (filterBy == "Modified") model.Children = FileSystemHelper.GetFiles(model.BasePath + model.Path, model.BasePath).OrderByDescending(x => x.Modified).ToList();
+                 if (filterBy == "Name") model.Children = FileSystemHelper.GetFiles(model.BasePath + model.Path, model.BasePath).OrderBy(x => x.Type).ThenBy(x=>x.Name).ToList();
+                else if (filterBy == "Created") model.Children = FileSystemHelper.GetFiles(model.BasePath + model.Path, model.BasePath).OrderBy(x => x.Type).ThenByDescending(x=>x.Created).ToList();
+                 else if (filterBy == "Modified") model.Children = FileSystemHelper.GetFiles(model.BasePath + model.Path, model.BasePath).OrderBy(x => x.Type).ThenByDescending(x => x.Modified).ToList();
                 else model.Children = FileSystemHelper.GetFiles(model.BasePath + model.Path, model.BasePath);
                 return View("List", model);
             }
@@ -100,7 +101,7 @@ namespace asi.asicentral.web.Controllers
             string DirString = basePath + file;
             string SaveFileName = string.Empty;
             if(file == string.Empty)
-                SaveFileName = string.Format("{0}.zip", basePath);
+                SaveFileName = string.Format("{0}\\.zip", basePath);
             else
                 SaveFileName = string.Format("{0}\\{1}.zip", basePath, file.Substring(1));
             string devDirString = DirString.Replace("/Store", string.Empty);

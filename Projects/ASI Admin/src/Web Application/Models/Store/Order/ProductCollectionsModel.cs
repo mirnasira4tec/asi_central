@@ -119,6 +119,7 @@ namespace asi.asicentral.web.model.store
         public string ActionName { get; set; }
         public StoreIndividual BillingIndividual { get; set; }
         public string ExternalReference { get; set; }
+        public string BackendReference { get; set; }
         public bool IsCompleted { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public string ProductName { get; set; }

@@ -18,11 +18,8 @@ namespace asi.asicentral.database.mappings.product
                 .HasColumnName("ContextId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            this.Property(t => t.NotificationEmails)
-                .HasColumnName("NotificationEmails");
-
-            this.Property(t => t.HeaderImage)
-                .HasColumnName("HeaderImage");
+	        this.Property(t => t.HasBackendNotification)
+				.HasColumnName("HasBackendNotificationFlag");
 
             this.Property(t => t.ExpiryDate)
                 .HasColumnName("ExpiryDateUTC");

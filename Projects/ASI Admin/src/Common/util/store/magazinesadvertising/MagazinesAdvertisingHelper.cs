@@ -16,6 +16,8 @@ namespace asi.asicentral.util.store
         //Color
         public readonly string[] MAGAZINESADVERTISING_COLOR = { "4-Color", "Black & White" };
 
+        public static readonly int[] SUPPLIER_MAGAZINEADVERTISING_PRODUCT_IDS = { 72, 73, 74, 75, 76 };
+
         public decimal Discount = 0.15M;
     }
 }

@@ -67,6 +67,7 @@ namespace asi.asicentral.web.model.store
         int OrderId { get; set; }
         string ActionName { get; set; }
         string ExternalReference { get; set; }
+        string BackendReference { get; set; }
         OrderStatus OrderStatus { get; set; }
         bool IsCompleted { get; set; }
         #endregion
@@ -148,6 +149,10 @@ namespace asi.asicentral.web.model.store
                 if (orderDetail.Product.IsSubscription && orderDetail.Coupon != null && orderDetail.Coupon.IsSubscription) model.SubscriptionCost += (cost * quantity) + orderDetail.TaxCost + orderDetail.ShippingCost - orderDetail.DiscountAmount;
                 else if (orderDetail.Product.IsSubscription) model.SubscriptionCost += (cost * quantity) + orderDetail.TaxCost + orderDetail.ShippingCost;
                 model.SubscriptionFrequency = (!string.IsNullOrEmpty(orderDetail.Product.SubscriptionFrequency) ? (orderDetail.Product.SubscriptionFrequency == "M" ? "monthly" : "yearly") : string.Empty);
+                if (orderDetail.Product.HasBackEndIntegration && !string.IsNullOrEmpty(order.BackendReference))
+                {
+                    model.BackendReference = order.BackendReference;
+                }
             }
         }
     }

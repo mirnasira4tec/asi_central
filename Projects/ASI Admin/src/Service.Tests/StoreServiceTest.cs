@@ -211,9 +211,6 @@ namespace asi.asicentral.Tests
         [TestMethod]
         public void StoreDetailMagazineAdvertisingItemTest()
         {
-
-            IContainer container = new Container(new EFRegistry());
-
             using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
             {
                 IList<StoreDetailMagazineAdvertisingItem> dbMagazineAdItems = 
@@ -236,5 +233,16 @@ namespace asi.asicentral.Tests
                 Assert.IsTrue(dbMagazineAdItems.Count() >= 0);
             }
         }
+
+	    [TestMethod]
+	    public void LookSendMyAdCountryCodeCachedTest()
+	    {
+		    using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
+		    {
+				var usaCode = storeService.GetAll<LookSendMyAdCountryCode>(true).Single(code => code.Alpha3 == "USA");
+				var usaCode2 = storeService.GetAll<LookSendMyAdCountryCode>(true).Single(code => code.Alpha3 == "USA");
+				Assert.IsTrue(Object.ReferenceEquals(usaCode, usaCode2));
+			}
+	    }
     }
 }

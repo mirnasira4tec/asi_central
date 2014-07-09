@@ -29,7 +29,7 @@ public partial class Conversion : System.Web.UI.Page
             conn2.Open();
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
-            cmd.CommandText = "SELECT [Email] FROM [asiinternet].[dbo].[LOAD_UserPassword]"
+            cmd.CommandText = "SELECT [Email] FROM [LOAD_UserPassword]"
                               + " where  [LastLoginDate] >= convert(datetime,'2013-01-01 00:00:00.000') and [Password_MMS] is null"
                               + " order by [LastLoginDate] desc";
             using (DbDataReader dataReader = cmd.ExecuteReader())
@@ -49,8 +49,8 @@ public partial class Conversion : System.Web.UI.Page
                                 SqlCommand cmd2 = new SqlCommand();
                                 cmd2.Connection = conn2;
                                 password = password.Replace("'", "''");
-                                cmd2.CommandText = string.Format("UPDATE [dbo].[LOAD_UserPassword] SET [Password_MMS] = {0} WHERE [Email] = '{1}'",
-                                                   string.Format("HASHBYTES('SHA1', ISNULL('{0}', ''))", password), dataReader["Email"].ToString());
+                                cmd2.CommandText = string.Format("UPDATE [LOAD_UserPassword] SET [Password_MMS] = {0}, [Password_String] = '{2}' WHERE [Email] = '{1}'",
+                                                   string.Format("HASHBYTES('SHA1', ISNULL('{0}', ''))", password), dataReader["Email"].ToString(), password);
                                 cmd2.ExecuteNonQuery();
                                 i++;
                             }
