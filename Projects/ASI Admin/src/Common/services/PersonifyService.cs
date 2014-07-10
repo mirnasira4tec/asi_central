@@ -71,7 +71,7 @@ namespace asi.asicentral.services
                 log.Debug(string.Format("The order '{0}' has been created in Personify.", order));
 
                 order.BackendReference = orderOutput.OrderNumber;
-                decimal orderTotal = PersonifyClient.GetOrderTotal(orderOutput.OrderNumber);
+                decimal orderTotal = PersonifyClient.GetOrderBalanceTotal(orderOutput.OrderNumber);
                 log.Debug(string.Format("Got the order total {0} of for the order '{1}'.", orderTotal, order));
                 if (orderTotal != order.Total)
                 {
@@ -214,6 +214,7 @@ namespace asi.asicentral.services
                             Quantity = Convert.ToInt16(orderDetail.Quantity),
                             BeginDate = startDate,
                             EndDate = endDate,
+                            DiscountCode = "0"
                         };
                         lineItems.Add(lineItem);
                         break;
@@ -244,6 +245,7 @@ namespace asi.asicentral.services
                                 RateStructure = mapping.PersonifyRateStructure,
                                 ShipAddressID = Convert.ToInt32(shipAddressId),
                                 Quantity = 1,
+                                DiscountCode = "0"
                             };
                             lineItems.Add(lineItem);
                         }
@@ -261,6 +263,7 @@ namespace asi.asicentral.services
                             RateStructure = mapping.PersonifyRateStructure,
                             ShipAddressID = Convert.ToInt32(shipAddressId),
                             Quantity = Convert.ToInt16(orderDetail.Quantity),
+                            DiscountCode = "0"
                         };
                         lineItems.Add(lineItem);
                         break;

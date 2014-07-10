@@ -65,13 +65,12 @@ namespace asi.asicentral.services.PersonifyProxy
             return orderOutput;
         }
 
-        public static decimal GetOrderTotal(string orderNumber)
+        public static decimal GetOrderBalanceTotal(string orderNumber)
         {
             decimal total = 0;
             IList<WebOrderBalanceView> oOrdBalInfo = SvcClient.Ctxt.WebOrderBalanceViews
                 .Where(o => o.OrderNumber == orderNumber).ToList();
-
-            if (oOrdBalInfo.Count > 0)
+            if (oOrdBalInfo.Any())
             {
                 total = oOrdBalInfo.Sum(o => Convert.ToDecimal(o.ActualBalanceAmount));
             }
