@@ -776,7 +776,7 @@ namespace asi.asicentral.web.Controllers.Store
             else if (command == ApplicationController.COMMAND_REJECT)
             {
                 order.ProcessStatus = OrderStatus.Rejected;
-                order.CreditCard.ExternalReference = null;
+               
             }
             else if (command == ApplicationController.COMMAND_RESUBMIT)
             {
