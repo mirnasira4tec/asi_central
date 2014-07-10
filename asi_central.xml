@@ -41,8 +41,10 @@
 		</ItemGroup>
 		<Copy SourceFiles="@(OriginalWebConfig)" DestinationFiles="@(TempWebConfig)" />
 		<Copy SourceFiles="@(OriginalWebConfig)" DestinationFiles=".\Projects\ASI Admin\Config\Stage\Web.config" />
+		<Copy SourceFiles="@(OriginalWebConfig)" DestinationFiles=".\Projects\ASI Admin\Config\uat\Web.config" />
 		<Copy SourceFiles="@(OriginalWebConfig)" DestinationFiles=".\Projects\ASI Admin\Config\Prod\Web.config" />
 		<TransformXml Source="@(TempWebConfig)" Transform=".\Projects\ASI Admin\src\Web Application\Web.Stage.config" Destination=".\Projects\ASI Admin\Config\Stage\Web.config" StackTrace="true" />
+		<TransformXml Source="@(TempWebConfig)" Transform=".\Projects\ASI Admin\src\Web Application\Web.uat.config" Destination=".\Projects\ASI Admin\Config\uat\Web.config" StackTrace="true" />
 		<TransformXml Source="@(TempWebConfig)" Transform=".\Projects\ASI Admin\src\Web Application\Web.Prod.config" Destination=".\Projects\ASI Admin\Config\Prod\Web.config" StackTrace="true" />
 	</Target>
 	
