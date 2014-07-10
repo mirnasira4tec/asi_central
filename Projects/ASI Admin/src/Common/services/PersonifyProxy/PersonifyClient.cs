@@ -77,18 +77,6 @@ namespace asi.asicentral.services.PersonifyProxy
             return total;
         }
 
-        public static decimal GetOrderCostTotal(string orderNumber)
-        {
-            decimal total = 0;
-            IList<OrderDetailInfo> oOrdBalInfo = SvcClient.Ctxt.OrderDetailInfos
-                .Where(o => o.OrderNumber == orderNumber).ToList();
-            if (oOrdBalInfo.Any())
-            {
-                total = oOrdBalInfo.Sum(o => Convert.ToDecimal(o.ActualTotalAmount));
-            }
-            return total;
-        }
-
         public static CustomerInfo ReconcileCompany(StoreCompany company, string customerClassCode, IList<LookSendMyAdCountryCode> countryCodes)
         {
             CustomerInfo companyInfo = null;
