@@ -399,9 +399,11 @@ namespace asi.asicentral.services.PersonifyProxy
             IList<LookSendMyAdCountryCode> countryCodes,
             CustomerInfo companyInfo)
         {
-            if (storeOrder == null || storeOrder.Company == null)
+            if (storeOrder == null || storeOrder.Company == null || storeOrder.Company.Individuals == null)
             {
-                throw new Exception("Order or company can't be null.");
+                var s = "Order, company and compnay contact can't be null.";
+                if (storeOrder != null) s += string.Format(" Order id {0}", storeOrder.Id);
+                throw new Exception(s);
             }
             if(companyInfo == null) throw new Exception("Company information is needed.");
             StoreCompany storeCompany = storeOrder.Company;
@@ -857,16 +859,18 @@ namespace asi.asicentral.services.PersonifyProxy
             AddressInfo billToAddressInfo,
             CustomerInfo companyInfo)
         {
-            if (billToAddressInfo == null || companyInfo == null)
+            if (string.IsNullOrWhiteSpace(orderNumber))
             {
-                throw new ArgumentException(
-                    string.Format("Billto address and company information are required for order {0}, created by Company {1}", 
-                    orderNumber, companyInfo.MasterCustomerId));
+                throw new Exception("Personify order id is null");
             }
             if (string.IsNullOrWhiteSpace(ccProfileid))
             {
-                throw new Exception(string.Format("Creadit card profile id is null for order {0}, created by Company {1}", 
-                    orderNumber, companyInfo.MasterCustomerId));
+                throw new Exception(string.Format("Creadit card profile id is null for order {0}", orderNumber));
+            }
+            if (billToAddressInfo == null || companyInfo == null)
+            {
+                throw new ArgumentException(
+                    string.Format("Billto address and company information are required for order {0}", orderNumber));
             }
             ASICustomerCreditCard credirCard = GetCreditCardByProfileId(companyInfo, ccProfileid);
             string orderLineNumbers = GetOrderLinesByOrderId(orderNumber);

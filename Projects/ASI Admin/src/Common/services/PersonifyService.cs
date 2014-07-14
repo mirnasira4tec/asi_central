@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using asi.asicentral.interfaces;
@@ -30,11 +31,11 @@ namespace asi.asicentral.services
             this.storeService = storeService;
         }
 
-        public virtual void PlaceOrder(StoreOrder order, IEmailService emailService)
+        public virtual void PlaceOrder(StoreOrder order, IEmailService emailService, string url)
         {
             log.Debug(string.Format("Place order Start : {0}", order));
             IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
-            if (order == null || order.Company == null || countryCodes == null)
+            if (order == null || order.Company == null || order.Company.Individuals == null || countryCodes == null)
                 throw new ArgumentException("You must pass a valid order and the country codes");
             try
             {
@@ -73,6 +74,7 @@ namespace asi.asicentral.services
                 order.BackendReference = orderOutput.OrderNumber;
                 decimal orderTotal = PersonifyClient.GetOrderBalanceTotal(orderOutput.OrderNumber);
                 log.Debug(string.Format("Got the order total {0} of for the order '{1}'.", orderTotal, order));
+
                 if (orderTotal != order.Total)
                 {
                     var data = new EmailData()
@@ -80,7 +82,7 @@ namespace asi.asicentral.services
                         Subject = "here is a price discrepancy for an order from the store to Personify",
                         EmailBody = string.Format("A new order created in the store ({0}) has been transferred to a Personify "
                         + "order ({1}). The prices do not match, the order needs to be looked at. The store price is {2:C} and "
-                        + "the Personify price is {3:C}.<br /><br />Thanks,<br /><br />ASICentral team", order.Id.ToString(), orderOutput.OrderNumber, order.Total, orderTotal)
+                        + "the Personify price is {3:C}.{4}", order.Id.ToString(), orderOutput.OrderNumber, order.Total, orderTotal, GetMessageSuffix(url))
                     };
                     data.SendEmail(emailService);
                 }
@@ -92,12 +94,12 @@ namespace asi.asicentral.services
                 }
                 catch (Exception e)
                 {
-                    string s = string.Format("Failed to pay the order '{0}'. Error is {2}{1}", order, e.StackTrace, e.Message);
+                    string s = string.Format("Failed to pay the order '{0} {3}'. Error is {2}{1}", order, e.StackTrace, e.Message, orderOutput.OrderNumber);
                     log.Error(s);
                     var data = new EmailData()
                     {
                         Subject = "order failed to be charged",
-                        EmailBody = s + "<br /><br />Thanks,<br /><br />ASICentral team"
+                        EmailBody = s + GetMessageSuffix(url)
                     };
                     data.SendEmail(emailService);
                     log.Debug(string.Format("Place order End: {0}", order));
@@ -112,11 +114,18 @@ namespace asi.asicentral.services
                 var data = new EmailData()
                 {
                     Subject = error2,
-                    EmailBody = error1 + "<br /><br />" + error2 + "<br /><br />Thanks,<br /><br />ASICentral team"
+                    EmailBody = error1 + "<br /><br />" + error2 + GetMessageSuffix(url)
                 };
                 data.SendEmail(emailService);
                 throw ex;
             }
+        }
+
+        private string GetMessageSuffix(string url)
+        {
+            var s = "<br /><br />Thanks,<br /><br />ASICentral team";
+            if(!string.IsNullOrEmpty(url)) s = "<br /><br />" + url + s;
+            return s;    
         }
 
         private StoreAddressInfo GetAddressInfo(IList<StoreAddressInfo> addresses, AddressType type, StoreOrder order)
