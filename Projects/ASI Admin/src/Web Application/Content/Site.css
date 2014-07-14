@@ -455,3 +455,9 @@ header#site-header {
 .ClearBoth {
     clear:both;
 }
+
+/*praveen*/
+
+ul#tabs {
+    clear:both;
+}
