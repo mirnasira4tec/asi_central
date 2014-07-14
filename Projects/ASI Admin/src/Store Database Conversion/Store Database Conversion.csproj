@@ -42,6 +42,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Stage|AnyCPU'">
     <OutputPath>bin\Stage\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'uat|AnyCPU'">
+    <OutputPath>bin\uat\</OutputPath>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="asi.asicentral.Core">
       <HintPath>..\..\library\asi.asicentral.Core.dll</HintPath>
