@@ -895,6 +895,10 @@ namespace asi.asicentral.services.PersonifyProxy
                 CompanyNumber = credirCard.UserDefinedCompanyNumber
             };
             var resp = SvcClient.Post<PayOrderOutput>("PayOrder", payOrderInput);
+            if (!(resp.Success ?? false))
+            {
+                throw new Exception(resp.ErrorMessage ?? "Error in paying order");
+            }
             return resp;
         }
 
