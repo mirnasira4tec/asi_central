@@ -249,15 +249,6 @@
   <data name="PerMonth" xml:space="preserve">
     <value>per month</value>
   </data>
-  <data name="PromoCafeDesc" xml:space="preserve">
-    <value>Instant Messaging and Webchat are some of the most popular ways to communicate online.</value>
-  </data>
-  <data name="PromoCafe_Size1" xml:space="preserve">
-    <value>468px x 60px</value>
-  </data>
-  <data name="PromoCafe_Size2" xml:space="preserve">
-    <value>234px x 60px</value>
-  </data>
   <data name="Question1" xml:space="preserve">
     <value>1. Choose where you want to appear in search results:</value>
   </data>

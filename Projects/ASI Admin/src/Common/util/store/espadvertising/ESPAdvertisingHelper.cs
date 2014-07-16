@@ -31,9 +31,6 @@ namespace asi.asicentral.util.store
         public static readonly string[] ESPAdvertising_Clearance_New_Rush_Options = { "", "Clearance", "New", " Rush",};
         public static readonly string[] ESPAdvertising_Clearance_New_Rush_CostOptions = { "", "$125/month for 3 products"};
 
-        //PromoCafe
-        public static readonly string[] ESPAdvertising_PromoCafe_CostOptions = { "", "Main Chat Room $750/mo.", "Instant Messenger $450/mo.", "Buddy List $199/mo." };
-
         public static string GetBannerTileTowerOption(int option)
         {
             return ESPAdvertising_BANNER_TILE_TOWER_Options[option];
