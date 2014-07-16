@@ -1,10 +1,6 @@
 ﻿using asi.asicentral.model.timss;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace asi.asicentral.database.mappings.timss
 {
@@ -12,7 +8,7 @@ namespace asi.asicentral.database.mappings.timss
     {
         public PersonifyMappingMap()
         {
-            this.ToTable("PERS-PRODUCT-MAPPING");
+            this.ToTable("PERS_PRODUCT_MAPPING");
             this.HasKey(t => new { t.Identifier });
             this.Ignore(t => t.ItemCount);
             this.Ignore(t => t.Quantity);
