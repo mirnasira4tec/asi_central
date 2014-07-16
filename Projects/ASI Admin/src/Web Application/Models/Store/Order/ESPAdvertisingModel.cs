@@ -233,10 +233,7 @@ namespace asi.asicentral.web.model.store
                         }
                     }
                     break;
-                case 54:
-                    Products_OptionId_First = espAdvertising.FirstOptionId - 1;
-                    LogoPath = espAdvertising.LogoPath;
-                    break;
+               
             }
             #endregion
 
