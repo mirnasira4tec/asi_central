@@ -88,6 +88,7 @@
     <EmbeddedResource Include="Resources\ESPAdvertising.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ESPAdvertising.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ESPWebsites.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

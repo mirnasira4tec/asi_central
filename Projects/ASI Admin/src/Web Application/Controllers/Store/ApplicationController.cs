@@ -21,7 +21,7 @@ namespace asi.asicentral.web.Controllers.Store
         //products associated only to StoreOrderDetail table
         public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 45, 46, 55, 62, 70, 71, 77 };
         //products associated to StoreDetailESPAdvertising table
-        public static readonly int[] SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS = { 48, 49, 50, 51, 52, 53, 54 };
+        public static readonly int[] SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS = { 48, 49, 50, 51, 52, 53};
         //products associated to StoreDetailCatalog table
         public static readonly int[] DISTRIBUTOR_CATALOG_PRODUCT_IDS = { 35, 36, 37, 38, 39, 40, 41 };
         //products associated to StoreDetailPayForPlacement table
@@ -529,10 +529,7 @@ namespace asi.asicentral.web.Controllers.Store
                                 }
                             }
                             break;
-                        case 54:
-                            espAdvertising.FirstOptionId = application.Products_OptionId_First + 1;
-                            orderDetail.Cost = Convert.ToDecimal(ESPAdvertisingHelper.ESPAdvertising_PROMO_CAFE_COST[application.Products_OptionId_First]);
-                            break;
+                       
                     }
                     espAdvertising.UpdateDate = DateTime.UtcNow;
                     espAdvertising.UpdateSource = "ApplicationController - EditESPAdvertising";
