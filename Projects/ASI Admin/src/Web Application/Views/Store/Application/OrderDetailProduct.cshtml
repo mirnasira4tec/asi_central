@@ -78,7 +78,7 @@
                         <div class="controls">
                             @foreach (var option in Model.Options)
                             {
-                                <label class="radio">@Html.RadioButtonFor(model => model.OptionId, option.Value, new { @disabled="true" }) @option.Text </label>
+                                <label class="radio">@Html.RadioButtonFor(model => model.OptionId, option.Value, new { @disabled="true" }) @Html.Raw(option.Text) </label>
                             }
                         </div>
 
