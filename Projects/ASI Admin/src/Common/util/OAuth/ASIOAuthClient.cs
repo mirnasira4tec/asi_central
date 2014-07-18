@@ -382,6 +382,24 @@ namespace asi.asicentral.oauth
             return isPasswordChanged;
         }
 
+        public static string GetUserName(string firstName, string lastName)
+        {
+            string userName = string.Empty;
+            if (!string.IsNullOrEmpty(firstName))
+            {
+                userName = firstName + ' ' + lastName;
+                userName = userName.Replace(',', ' ');
+                userName = userName.Trim();
+            }
+
+            if(string.IsNullOrEmpty(userName))
+            {
+                LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                log.Error("Username is empty");
+            }
+            return userName;
+        }
+
         private static ASI.EntityModel.User MapASIUserToEntityModelUser(asi.asicentral.model.User user, ASI.EntityModel.User entityUser, bool isCreate)
         {
             if (user != null)

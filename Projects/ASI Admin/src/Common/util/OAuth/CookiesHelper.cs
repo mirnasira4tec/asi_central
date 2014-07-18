@@ -18,7 +18,7 @@ namespace asi.asicentral.oauth
             CrossApplication.RedirectParams redirectParams = new CrossApplication.RedirectParams();
             redirectParams.AccessToken = user.AccessToken;
             redirectParams.RefreshToken = user.RefreshToken;
-            string userName = GetCookieValue(request, response, userCookieName);
+            string userName = ASIOAuthClient.GetUserName(user.FirstName, user.LastName);
             var extraData = JsonConvert.SerializeObject(redirectParams, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             var ticket = new FormsAuthenticationTicket(1, userName, DateTime.Now, DateTime.Now.AddHours(1), true, extraData, FormsAuthentication.FormsCookiePath);
             string hashedTicket = FormsAuthentication.Encrypt(ticket);
