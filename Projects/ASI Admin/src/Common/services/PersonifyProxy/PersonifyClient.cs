@@ -408,7 +408,15 @@ namespace asi.asicentral.services.PersonifyProxy
             if(companyInfo == null) throw new Exception("Company information is needed.");
             StoreCompany storeCompany = storeOrder.Company;
             StoreAddress companyAddress = storeCompany.GetCompanyAddress();
+            if (companyAddress == null)
+            {
+                throw new Exception("Company address is required");
+            }
             string countryCode = countryCodes.Alpha3Code(companyAddress.Country);
+            if (string.IsNullOrEmpty(countryCode))
+            {
+                throw new Exception("Country code is required");
+            }
             var allCustomers = new List<CustomerInfo>();
 
             foreach (var storeIndividual in storeCompany.Individuals)
@@ -422,26 +430,29 @@ namespace asi.asicentral.services.PersonifyProxy
                     //we already have a contact with that email
                     customerInfo = GetIndividualInfo(communications[0].MasterCustomerId);
                     //check if contact belong to company
-                    try
+                    if (customerInfo != null)
                     {
-                        List<CusRelationship> relationships = SvcClient.Ctxt.CusRelationships
-                            .Where(rel => rel.MasterCustomerId == customerInfo.MasterCustomerId
-                                        && rel.RelatedMasterCustomerId == companyInfo.MasterCustomerId
-                                        && rel.RelatedSubCustomerId == companyInfo.SubCustomerId).ToList();
-                        if (relationships.Count == 0)
+                        try
                         {
-                            //also link this user to the company
-                            AddRelationship(customerInfo, companyInfo);
+                            List<CusRelationship> relationships = SvcClient.Ctxt.CusRelationships
+                                .Where(rel => rel.MasterCustomerId == customerInfo.MasterCustomerId
+                                              && rel.RelatedMasterCustomerId == companyInfo.MasterCustomerId
+                                              && rel.RelatedSubCustomerId == companyInfo.SubCustomerId).ToList();
+                            if (relationships.Count == 0)
+                            {
+                                //also link this user to the company
+                                AddRelationship(customerInfo, companyInfo);
+                            }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        string s = string.Format("customerInfo.MasterCustomerId = {0}", customerInfo.MasterCustomerId)
-                                   + string.Format("\ncompanyInfo.MasterCustomerId = {0}", companyInfo.MasterCustomerId)
-                                   + string.Format("\ncompanyInfo.SubCustomerId = {0}\n", companyInfo.SubCustomerId)
-                                   + ex.Message
-                                   + ex.StackTrace;
-                        throw new Exception(s, ex);
+                        catch (Exception ex)
+                        {
+                            string s = string.Format("customerInfo.MasterCustomerId = {0}", customerInfo.MasterCustomerId)
+                                       + string.Format("\ncompanyInfo.MasterCustomerId = {0}", companyInfo.MasterCustomerId)
+                                       + string.Format("\ncompanyInfo.SubCustomerId = {0}\n", companyInfo.SubCustomerId)
+                                       + ex.Message
+                                       + ex.StackTrace;
+                            throw new Exception(s, ex);
+                        }
                     }
                 }
                 else
@@ -460,8 +471,11 @@ namespace asi.asicentral.services.PersonifyProxy
                         AddCusCommunicationInput(customerInfoInput, COMMUNICATION_INPUT_PHONE, storeIndividual.Phone, COMMUNICATION_LOCATION_CODE_WORK, countryCode);
                         AddCusCommunicationInput(customerInfoInput, COMMUNICATION_INPUT_EMAIL, storeIndividual.Email, COMMUNICATION_LOCATION_CODE_WORK);
                         var customerInfoOutput = SvcClient.Post<SaveCustomerOutput>("CreateIndividual", customerInfoInput);
-                        customerInfo = GetIndividualInfo(customerInfoOutput.MasterCustomerId);
-                        AddRelationship(customerInfo, companyInfo);
+                        if (customerInfoOutput != null)
+                        {
+                            customerInfo = GetIndividualInfo(customerInfoOutput.MasterCustomerId);
+                            if (customerInfo != null) AddRelationship(customerInfo, companyInfo);
+                        }
                     }
                     else
                     {
@@ -477,6 +491,10 @@ namespace asi.asicentral.services.PersonifyProxy
 
         private static void AddRelationship(CustomerInfo customerInfo, CustomerInfo companyInfo)
         {
+            if (customerInfo == null || companyInfo == null)
+            {
+                throw new Exception("To add a relation between individual and company, information from both sides is required");
+            }
             var cusRelationship = SvcClient.Create<CusRelationship>();
             cusRelationship.AddedBy = ADDED_OR_MODIFIED_BY;
             //Provide values and Save
@@ -666,6 +684,14 @@ namespace asi.asicentral.services.PersonifyProxy
             string communitionLocationCode,
             string countryCode = null)
         {
+            if (customerInfo == null)
+            {
+                throw new Exception("To add communiaction, customer information is required");
+            }
+            if (customerInfo == null)
+            {
+                throw new Exception("To add communiaction, country code is required");
+            }
             if (!string.IsNullOrWhiteSpace(key) && !string.IsNullOrWhiteSpace(value))
             {
                 if ((key == COMMUNICATION_INPUT_PHONE || key == COMMUNICATION_INPUT_FAX) && !string.IsNullOrWhiteSpace(key))
