@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using ASI.Jade.v2;
 using System.Threading.Tasks;
 using asi.asicentral.model;
-using unirest_net.http;
 using System.Net.Http;
 
 namespace Core.Tests.OAuth
