@@ -87,6 +87,13 @@ namespace Core.Tests.OAuth
             asi.asicentral.model.User user = ASIOAuthClient.GetCompanyByASINumber("12345");
             Assert.IsNull(user);
         }
+
+        [TestMethod]
+        public void IsValidUserByTrueCredentials()
+        {
+            IDictionary<string, string> result = ASIOAuthClient.IsValidUser("125724pk", "password1");
+            Assert.IsNotNull(result);
+        }
                 
         [TestMethod]
         public void IsValidUserByFalseCredentials()
