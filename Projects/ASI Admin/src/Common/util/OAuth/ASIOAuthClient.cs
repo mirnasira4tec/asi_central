@@ -202,15 +202,8 @@ namespace asi.asicentral.oauth
                 try
                 {
                     List<ASI.EntityModel.User> entityUsers = Task.Factory.StartNew(() => UMS.UserSearch(new UMS.UserSearchCriteria { EMail = email }).Result, TaskCreationOptions.LongRunning).Result;
-                    if (entityUsers != null 
-                        && entityUsers.Count > 0 
-                        && entityUsers.Where(usr => usr.Emails != null 
-                                            && usr.Emails.Count > 0
-                                            && usr.Emails.Where(mail => mail.Address == email).ToList() != null
-                                            ) != null)
-                    {
+                    if(entityUsers != null && entityUsers.Count > 0 && FilterUserWithEmail(entityUsers, email) != null)
                         isValidUser = true;
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -229,14 +222,15 @@ namespace asi.asicentral.oauth
             {
                 try
                 {
-                    List<ASI.EntityModel.User> entityUser = Task.Factory.StartNew(() => UMS.UserSearch(new UMS.UserSearchCriteria { EMail = email }).Result, TaskCreationOptions.LongRunning).Result;
-                    if (entityUser != null && entityUser.Count > 0 && entityUser.Where(usr => usr.Emails != null && usr.Emails.Count > 0
-                        && usr.Emails.Where(mail => mail.Address == email).ToList() != null
-                        ) != null)
+                    List<ASI.EntityModel.User> entityUsers = Task.Factory.StartNew(() => UMS.UserSearch(new UMS.UserSearchCriteria { EMail = email }).Result, TaskCreationOptions.LongRunning).Result;
+                    if(entityUsers == null || entityUsers.Count == 0) return null;
+                    ASI.EntityModel.User entityUser = FilterUserWithEmail(entityUsers, email);
+                    if (entityUser != null)
                     {
-                        user = MapEntityModelUserToASIUser(entityUser.ElementAt(0), user);
+                        user = MapEntityModelUserToASIUser(entityUser, user);
                         return user;
                     }
+                    else return null;
                 }
                 catch (Exception ex)
                 {
@@ -398,6 +392,23 @@ namespace asi.asicentral.oauth
                 log.Error("Username is empty");
             }
             return userName;
+        }
+
+        private static ASI.EntityModel.User FilterUserWithEmail(IList<ASI.EntityModel.User> entityUsers, string email)
+        {
+            if (entityUsers != null
+                        && entityUsers.Count > 0)
+            {
+                foreach (ASI.EntityModel.User entityUser in entityUsers)
+                {
+                    foreach (ASI.EntityModel.Email emailFromDB in entityUser.Emails)
+                    {
+                        if (!string.IsNullOrEmpty(emailFromDB.Address) && string.Compare(emailFromDB.Address.ToLower(), email.ToLower()) == 0)
+                            return entityUser;
+                    }
+                }
+            }
+            return null;
         }
 
         private static ASI.EntityModel.User MapASIUserToEntityModelUser(asi.asicentral.model.User user, ASI.EntityModel.User entityUser, bool isCreate)
