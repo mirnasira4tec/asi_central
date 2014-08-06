@@ -22,7 +22,9 @@ namespace asi.asicentral.oauth
     {
         ACTV,
         ACTIVE,
-        ASICENTRAL
+        ASICENTRAL,
+        //Consider dist_newlie as Active; they are active customer within the first  90 days of membership.
+        DIST_NEWLIE
     }
 
     public enum UsageCode
@@ -701,7 +703,8 @@ namespace asi.asicentral.oauth
                         }
                     }
                 }
-				if (!string.IsNullOrEmpty(user.MemberStatus_CD) && user.MemberStatus_CD != StatusCode.ACTIVE.ToString())
+				if (!string.IsNullOrEmpty(user.MemberStatus_CD)
+                    && (user.MemberStatus_CD != StatusCode.ACTIVE.ToString() || user.MemberStatus_CD != StatusCode.DIST_NEWLIE.ToString()))
 					user.AsiNumber = null;
 
             }
