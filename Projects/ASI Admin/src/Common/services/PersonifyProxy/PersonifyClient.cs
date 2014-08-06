@@ -425,10 +425,13 @@ namespace asi.asicentral.services.PersonifyProxy
                 //check if individual already exist based on email
                 List<CusCommunication> communications = SvcClient.Ctxt.CusCommunications.
                     Where(comm => comm.SearchPhoneAddress == storeIndividual.Email).ToList();
-                if (communications.Count > 0)
+	            foreach (var communication in communications)
+	            {
+					customerInfo = GetIndividualInfo(communication.MasterCustomerId);
+		            if (customerInfo != null) break;
+	            }
+                if (customerInfo != null)
                 {
-                    //we already have a contact with that email
-                    customerInfo = GetIndividualInfo(communications[0].MasterCustomerId);
                     //check if contact belong to company
                     if (customerInfo != null)
                     {
