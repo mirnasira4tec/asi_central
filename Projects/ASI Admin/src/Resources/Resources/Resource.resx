@@ -1830,4 +1830,7 @@
   <data name="EmailExpress_EnterQuantity" xml:space="preserve">
     <value>Enter the number of sends</value>
   </data>
+  <data name="EmailExpressDesc" xml:space="preserve">
+    <value>Send your latest products, specials, closeouts and more to 60,000 ASI members and non-members with ASI’s direct email advertising service, EmailExpress.</value>
+  </data>
 </root>
