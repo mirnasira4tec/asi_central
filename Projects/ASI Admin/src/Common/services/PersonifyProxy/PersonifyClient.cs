@@ -453,7 +453,7 @@ namespace asi.asicentral.services.PersonifyProxy
                                    + ex.Message
                                    + ex.StackTrace;
                         ILogService log = LogService.GetLog(typeof(PersonifyClient));
-                        log.Debug(string.Format("Error in adding individuals: {0}", s));
+                        log.Error(string.Format("Error in adding individuals: {0}", s));
                         throw new Exception(s, ex);
                     }
                 }
