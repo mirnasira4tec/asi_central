@@ -425,37 +425,36 @@ namespace asi.asicentral.services.PersonifyProxy
                 //check if individual already exist based on email
                 List<CusCommunication> communications = SvcClient.Ctxt.CusCommunications.
                     Where(comm => comm.SearchPhoneAddress == storeIndividual.Email).ToList();
-	            foreach (var communication in communications)
-	            {
-					customerInfo = GetIndividualInfo(communication.MasterCustomerId);
-		            if (customerInfo != null) break;
-	            }
+                foreach (var communication in communications)
+                {
+                    customerInfo = GetIndividualInfo(communication.MasterCustomerId);
+                    if (customerInfo != null) break;
+                }
+                //check if contact belong to company
                 if (customerInfo != null)
                 {
-                    //check if contact belong to company
-                    if (customerInfo != null)
+                    try
                     {
-                        try
+                        List<CusRelationship> relationships = SvcClient.Ctxt.CusRelationships
+                            .Where(rel => rel.MasterCustomerId == customerInfo.MasterCustomerId
+                                          && rel.RelatedMasterCustomerId == companyInfo.MasterCustomerId
+                                          && rel.RelatedSubCustomerId == companyInfo.SubCustomerId).ToList();
+                        if (relationships.Count == 0)
                         {
-                            List<CusRelationship> relationships = SvcClient.Ctxt.CusRelationships
-                                .Where(rel => rel.MasterCustomerId == customerInfo.MasterCustomerId
-                                              && rel.RelatedMasterCustomerId == companyInfo.MasterCustomerId
-                                              && rel.RelatedSubCustomerId == companyInfo.SubCustomerId).ToList();
-                            if (relationships.Count == 0)
-                            {
-                                //also link this user to the company
-                                AddRelationship(customerInfo, companyInfo);
-                            }
+                            //also link this user to the company
+                            AddRelationship(customerInfo, companyInfo);
                         }
-                        catch (Exception ex)
-                        {
-                            string s = string.Format("customerInfo.MasterCustomerId = {0}", customerInfo.MasterCustomerId)
-                                       + string.Format("\ncompanyInfo.MasterCustomerId = {0}", companyInfo.MasterCustomerId)
-                                       + string.Format("\ncompanyInfo.SubCustomerId = {0}\n", companyInfo.SubCustomerId)
-                                       + ex.Message
-                                       + ex.StackTrace;
-                            throw new Exception(s, ex);
-                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        string s = string.Format("customerInfo.MasterCustomerId = {0}", customerInfo.MasterCustomerId)
+                                   + string.Format("\ncompanyInfo.MasterCustomerId = {0}", companyInfo.MasterCustomerId)
+                                   + string.Format("\ncompanyInfo.SubCustomerId = {0}\n", companyInfo.SubCustomerId)
+                                   + ex.Message
+                                   + ex.StackTrace;
+                        ILogService log = LogService.GetLog(typeof(PersonifyClient));
+                        log.Debug(string.Format("Error in adding individuals: {0}", s));
+                        throw new Exception(s, ex);
                     }
                 }
                 else
