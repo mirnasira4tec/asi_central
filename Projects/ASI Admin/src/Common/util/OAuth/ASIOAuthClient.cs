@@ -22,7 +22,9 @@ namespace asi.asicentral.oauth
     {
         ACTV,
         ACTIVE,
-        ASICENTRAL
+        ASICENTRAL,
+        //Consider dist_newlie as Active; they are active customer within the first  90 days of membership.
+        DIST_NEWLIE
     }
 
     public enum UsageCode
@@ -394,6 +396,16 @@ namespace asi.asicentral.oauth
             return userName;
         }
 
+        public static bool IsActiveUser(string memberStatus)
+        {
+            if (!string.IsNullOrEmpty(memberStatus) 
+                && (memberStatus == StatusCode.ACTIVE.ToString()
+                || memberStatus == StatusCode.ACTV.ToString() 
+                || memberStatus == StatusCode.DIST_NEWLIE.ToString()))
+                return true;
+            else return false;
+        }
+
         private static ASI.EntityModel.User FilterUserWithEmail(IList<ASI.EntityModel.User> entityUsers, string email)
         {
             if (entityUsers != null
@@ -701,9 +713,7 @@ namespace asi.asicentral.oauth
                         }
                     }
                 }
-				if (!string.IsNullOrEmpty(user.MemberStatus_CD) && user.MemberStatus_CD != StatusCode.ACTIVE.ToString())
-					user.AsiNumber = null;
-
+                if (!IsActiveUser(user.MemberStatus_CD)) user.AsiNumber = null;
             }
             catch (Exception ex)
             {
