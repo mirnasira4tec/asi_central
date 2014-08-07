@@ -1852,6 +1852,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send your latest products, specials, closeouts and more to 60,000 ASI members and non-members with ASI’s direct email advertising service, EmailExpress..
+        /// </summary>
+        public static string EmailExpressDesc {
+            get {
+                return ResourceManager.GetString("EmailExpressDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Send your latest products, specials, closeouts and more to 60,000 ASI members and non-members with ASI’s direct email advertising service, EmailExpress.
         /// </summary>
         public static string EmailExpressDescription {
