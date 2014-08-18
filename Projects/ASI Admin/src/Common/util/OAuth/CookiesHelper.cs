@@ -53,8 +53,12 @@ namespace asi.asicentral.oauth
         public static string GetCookieValue(HttpRequestBase request, HttpResponseBase response, string key)
         {
             string cookieValue = string.Empty;
-            HttpCookie cookie = request.Cookies.Get(key);
-            if (cookie == null) cookie = response.Cookies.Get(key);
+            if (request == null && response == null) return cookieValue;
+            HttpCookie cookie = null;
+            if (request.Cookies != null && request.Cookies.AllKeys != null && request.Cookies.AllKeys.Contains(key)) 
+                cookie = request.Cookies.Get(key);
+            if (cookie == null && response.Cookies != null && request.Cookies.AllKeys != null && response.Cookies.AllKeys.Contains(key)) 
+                cookie = response.Cookies.Get(key);
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
                 cookieValue = cookie.Value;
             return cookieValue;
@@ -106,13 +110,12 @@ namespace asi.asicentral.oauth
         public static int GetId(bool isCompanyId, HttpRequestBase request, HttpResponseBase response, string cookieName)
         {
             int id = 0;
-            HttpCookie cookie = null;
-            if (request != null) cookie = request.Cookies.Get(cookieName);
-            if (cookie == null && response != null) cookie = response.Cookies.Get(cookieName);
-            if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
+            string cmpsso = string.Empty;
+            cmpsso = CookiesHelper.GetCookieValue(request, response, cookieName);
+            if (!string.IsNullOrEmpty(cmpsso))
             {
-                if (isCompanyId) id = Convert.ToInt32(cookie.Value.Substring(0, cookie.Value.IndexOf('-')));
-                else id = Convert.ToInt32(cookie.Value.Substring(cookie.Value.IndexOf('-') + 1));
+                if (isCompanyId) id = Convert.ToInt32(cmpsso.Substring(0, cmpsso.IndexOf('-')));
+                else id = Convert.ToInt32(cmpsso.Substring(cmpsso.IndexOf('-') + 1));
             }
             return id;
         }
