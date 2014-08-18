@@ -110,8 +110,7 @@ namespace asi.asicentral.oauth
         public static int GetId(bool isCompanyId, HttpRequestBase request, HttpResponseBase response, string cookieName)
         {
             int id = 0;
-            string cmpsso = string.Empty;
-            cmpsso = CookiesHelper.GetCookieValue(request, response, cookieName);
+            string cmpsso = GetCookieValue(request, response, cookieName);
             if (!string.IsNullOrEmpty(cmpsso))
             {
                 if (isCompanyId) id = Convert.ToInt32(cmpsso.Substring(0, cmpsso.IndexOf('-')));
