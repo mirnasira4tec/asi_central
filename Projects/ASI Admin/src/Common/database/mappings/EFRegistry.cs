@@ -6,6 +6,7 @@ using asi.asicentral.model.store;
 using asi.asicentral.model.news;
 using asi.asicentral.model.timss;
 using asi.asicentral.model.call;
+using asi.asicentral.model.findsupplier;
 
 namespace asi.asicentral.database.mappings
 {
@@ -27,6 +28,7 @@ namespace asi.asicentral.database.mappings
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<TIMSSContext>().Name = "TIMSSContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<CallContext>().Name = "CallContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIEmailBlastContext>().Name = "ASIEmailBlastContext";
+            For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<MemberDemogrContext>().Name = "MemberDemogrContext";
 
 
             //for each model - get the repository class with the appropriate context 
@@ -129,6 +131,22 @@ namespace asi.asicentral.database.mappings
                 .Ctor<IValidatedContext>().Named("InternetContext");
 
             #endregion InternetContext
+
+            #region MemberDemogrContext
+
+            For<IRepository<SupplierPolicy>>().Use<EFRepository<SupplierPolicy>>()
+                .Ctor<IValidatedContext>().Named("MemberDemogrContext");
+
+            For<IRepository<SupplierPhone>>().Use<EFRepository<SupplierPhone>>()
+                .Ctor<IValidatedContext>().Named("MemberDemogrContext");
+
+            For<IRepository<SupplierSeadElectronicAddress>>().Use<EFRepository<SupplierSeadElectronicAddress>>()
+                .Ctor<IValidatedContext>().Named("MemberDemogrContext");
+
+            For<IRepository<SupplierRating>>().Use<EFRepository<SupplierRating>>()
+                .Ctor<IValidatedContext>().Named("MemberDemogrContext");
+
+            #endregion MemberDemogrContext
 
             #region StoreContext
 
