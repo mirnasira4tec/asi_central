@@ -108,6 +108,11 @@ namespace asi.asicentral.services
             catch (Exception ex)
             {
                 string error1 = string.Format("Unknown Error while adding order to personify: {0}{1}", ex.Message, ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    error1 = string.Format("Unknown Error while adding order to personify: {0}{1}\n{2}",
+                        ex.InnerException.Message, ex.InnerException.StackTrace, error1);
+                }
                 string error2 = string.Format("Place order End: {0}", order);
                 log.Error(error1);
                 log.Debug(error2);
