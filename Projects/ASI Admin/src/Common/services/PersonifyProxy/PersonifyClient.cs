@@ -405,7 +405,14 @@ namespace asi.asicentral.services.PersonifyProxy
                 if (storeOrder != null) s += string.Format(" Order id {0}", storeOrder.Id);
                 throw new Exception(s);
             }
-            if(companyInfo == null) throw new Exception("Company information is needed.");
+            if (countryCodes == null)
+            {
+                throw new Exception("Country codes are needed");
+            }
+            if (companyInfo == null)
+            {
+                throw new Exception("Company information is needed.");
+            }
             StoreCompany storeCompany = storeOrder.Company;
             StoreAddress companyAddress = storeCompany.GetCompanyAddress();
             if (companyAddress == null)
