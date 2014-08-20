@@ -12,10 +12,10 @@ namespace asi.asicentral.database
             Database.SetInitializer<MemberDemogrContext>(null);
         }
 
-        public DbSet<SupplierPolicy> News { get; set; }
-        public DbSet<SupplierPhone> News { get; set; }
-        public DbSet<SupplierRating> News { get; set; }
-        public DbSet<SupplierSeadElectronicAddress> News { get; set; }
+        public DbSet<SupplierPolicy> SupplierPolicies { get; set; }
+        public DbSet<SupplierPhone> SupplierPhones { get; set; }
+        public DbSet<SupplierRating> SupplierRatings { get; set; }
+        public DbSet<SupplierSeadElectronicAddress> SupplierSeadElectronicAddresses { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
