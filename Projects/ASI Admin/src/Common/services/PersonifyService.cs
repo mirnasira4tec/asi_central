@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using asi.asicentral.services.PersonifyProxy;
 using asi.asicentral.model.timss;
 using ASI.EntityModel;
-using EasyNetQ.SystemMessages;
 
 namespace asi.asicentral.services
 {
