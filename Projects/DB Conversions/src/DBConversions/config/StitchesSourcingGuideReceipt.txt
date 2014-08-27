@@ -1,0 +1,64 @@
+﻿<div style="width:600px; text-align:left;"><div style="float:left;">
+<table width="100%" cellspacing="0" cellpadding="5" border="0" align="center">
+<tbody>
+<tr>
+<td valign="top" align="center">
+<img alt="" src="http://www.asicentral.com/images/StitchesSourcingGuide/Stitches_pubhome.gif"/>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div style="float: left; width: 580px; padding: 10px;">
+<table width="100%" cellspacing="0" cellpadding="5" border="0" align="center"><tbody>
+<tr><td valign="top" align="center">
+<table width="590" border="0"><tbody>
+<tr>    
+<td width="50%" align="center">
+<strong>[Name][Thank] you for your Stitches Sourcing Guide order.
+<br />
+<br />
+<strong>Order Information:</strong>
+<br />
+<br />
+Company Name: [Company]
+<br />
+ASI #: [ASI]
+<br />
+Address: [Address]
+<br />
+City: [City]
+<br />
+State: [State]
+<br />
+Zip: [Zip]
+<br />
+Website: [Website]
+<br />
+Email: [Email]
+<br />
+Phone: [Phone]
+<br />
+Toll Free Phone: [TollFree]
+<br />
+Fax: [Fax]
+<br />
+<br />
+<strong>Categories:</strong>
+<br />
+[Categories]
+<br />
+<br />
+<strong>Total:</strong> [Total]
+<br />
+<br />
+<br />For assistance, please call or e-mail ASI Customer Service.
+<br />Monday – Friday<br/>8:00am – 6:00pm EST<br/>800-546-1350 option 1 or<br/>215-953-4000
+<br/><a href="mailto:customerservice@asicentral.com">customerservice@asicentral.com</a>
+</center>
+<br/></h1><em><span style="font-family: Arial, Helvetica, sans-serif; font-size: 11px;">ref. order # [OrderID]</span></em>
+</td>
+</tr>
+</tbody></table>
+</td></tr></tbody>
+</table></div></div>

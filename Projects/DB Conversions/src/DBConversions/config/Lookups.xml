@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--These IDs match up to the asiinternet.CENT_RegMemberType_MBTY table-->
+<MemberTypes>
+	<MemberType>
+		<id>6</id>
+		<desc>I'd like to learn more about membership benefits for ASI Distributors.</desc>
+		<role>Prospective Distributor</role>
+	</MemberType>
+	<MemberType>
+		<id>7</id>
+		<desc>I'd like to learn more about membership benefits for ASI Suppliers.</desc>
+		<role>Prospective Supplier</role>
+	</MemberType>
+	<MemberType>
+		<id>12</id>
+		<desc>I'd like to learn more about membership benefits for Decorators.</desc>
+		<role>Prospective Decorator</role>
+	</MemberType>
+	<MemberType>
+		<id>13</id>
+		<desc>I'd like to become an affiliate of ASI.</desc>
+		<role>Prospective Affiliate</role>
+	</MemberType>
+	<MemberType>
+		<id>9</id>
+		<desc>I'm researching/looking to purchase advertising specialties or promotional products.</desc>
+		<role>End Buyer</role>
+	</MemberType>
+	<MemberType>
+		<id>15</id>
+		<desc>Other</desc>
+		<role>Guest</role>
+	</MemberType>
+</MemberTypes>
