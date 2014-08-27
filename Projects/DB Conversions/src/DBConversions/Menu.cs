@@ -21,22 +21,26 @@ namespace DBConversions
     {
 
         public static readonly int NEWSLETTER_PARENT_NODE_ID = 3226;
-        public static readonly string FOLDER_DOC_TYPE = "issue";
+        public static readonly string FOLDER_DOC_TYPE = "Issue";
         public static readonly string VOLUME_DOC_TYPE = "NewsItem";
         public static readonly int TEMPLATE_ID=1116;
         public static readonly  Regex Regex = new Regex(@"(?<info>.+)\s*(?<date>\d\d/\d+/\d+)");
+       
+        
         public IContentService Service = null;
-       // public Dictionary<int, string> Childnodesdictionary = new Dictionary<int, string>();
+
         public Dictionary<int, int> nodeFolderIds = new Dictionary<int, int>()
             {
-                {3227,372},
-                {3228,548},
-                {3229,368},
-                {3230,546},
-                {3231,374},
-                {3232,370},
-                {3233,551},
-                {3234,552}
+                {3339,372},
+                {3340,548},
+                {3341,368},
+                {3342,546},
+                {3343,374},
+                {3344,370},
+                {3345,551},
+                {3346,552},
+                {4343,412},
+                {4342,542}
             };
         
         public Menu()
@@ -57,7 +61,7 @@ namespace DBConversions
             foreach (KeyValuePair<int, int> node in nodeFolderIds)
             {
                 List<NewsLetter> Newsletters = new List<NewsLetter>();
-                string sql = String.Format("SELECT content_title,content_html,date_created from asicentral..[content] where folder_ID in ('{0}')  order by date_created desc ", node.Value);
+                string sql = String.Format("SELECT  content_title,content_html,date_created from asicentral..[content] where folder_ID in ('{0}') and content_status = 'A' order by date_created desc ", node.Value);
                 Newsletters = RetriveDatabaseValues(sql);
                 CreateNodes(node, Newsletters);
             }
@@ -74,7 +78,26 @@ namespace DBConversions
             #region code to insert in to umbraco DB
             foreach (NewsLetter newsletterobj in Newsletternodes)
             {
-                string issuedYear = newsletterobj.date.ToString("Y").Replace(',', ' ');
+                if (node.Value != 542)
+                {
+                    Match match = Regex.Match(newsletterobj.ChildNodeName);
+                    if (match.Success)
+                    {
+                        newsletterobj.ChildNodeName = match.Groups["info"].Value;
+                    }
+                    if(node.Value==551 ||node.Value==552)
+                    {
+                        string[] name = newsletterobj.ChildNodeName.Replace(". ",".").Split(' ');
+                        newsletterobj.ChildNodeName = name[0];
+
+                    }
+                    newsletterobj.ChildNodeName = newsletterobj.ChildNodeName.ToLower().Replace("vol", "Vol ");
+
+                }
+               
+                    newsletterobj.ChildNodeName = newsletterobj.ChildNodeName.Replace(".", "").Replace(",", "").Replace("  ", " ");
+               
+                string issuedYear = newsletterobj.date.ToString("Y").Replace(',', ' ').Replace("  "," ");
                 DateTime monthIssued = DateTime.Parse(string.Concat("01 ", issuedYear));
 
                 IContent yearContent = null;
@@ -159,12 +182,6 @@ namespace DBConversions
                     newsletterobj.Content = reader["content_html"].ToString();
                     newsletterobj.date = DateTime.Parse(reader["date_created"].ToString());
                     newsletterobj.ChildNodeName = reader["content_title"].ToString();
-                    Match match = Regex.Match(newsletterobj.ChildNodeName);
-                    if (match.Success)
-                    {
-                        newsletterobj.ChildNodeName = match.Groups["info"].Value;
-                    }
-                    newsletterobj.ChildNodeName = newsletterobj.ChildNodeName.ToLower().Replace("vol", "Vol ");
                     newsletterNodes.Add(newsletterobj);
                 }
                 return newsletterNodes;
@@ -179,7 +196,6 @@ namespace DBConversions
             application.Start(application, new EventArgs());
             var context = Umbraco.Core.ApplicationContext.Current;
             var serviceContext = context.Services;
-            //var contentTypeService = serviceContext.ContentTypeService;
             
             return (serviceContext.ContentService);
         }
@@ -190,8 +206,6 @@ namespace DBConversions
             string oldBannertable = string.Empty;
             string htmlcontent = rawcontent;
             bool isbannerremoved = false;
-
-            //htmlcontent = htmlcontent.TrimStart();
             if (htmlcontent.TrimStart().Substring(0, 6) == "<table")
             {
                 int trindex = rawcontent.IndexOf("<tr>");

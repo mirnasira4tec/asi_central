@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Stocks>
+	<Stock>
+		<Company>Logo Intern.</Company>
+		<Symbol>APII</Symbol>
+		<Market>NASDAQ</Market>
+		<Type>MarketMover</Type>
+		<Currency></Currency>
+	</Stock>
+	<Stock>
+		<Company>Delta Apparel</Company>
+		<Symbol>DLA</Symbol>
+		<Market>AMEX</Market>
+		<Type>MarketMover</Type>
+		<Currency></Currency>
+	</Stock>
+	<Stock>
+		<Company>Hilton Apparel</Company>
+		<Symbol>JAH</Symbol>
+		<Market>NYSE</Market>
+		<Type>MarketMover</Type>
+		<Currency></Currency>
+	</Stock>
+	<Stock>
+		<Company>Halo/Lee Wayne</Company>
+		<Symbol>CODI</Symbol>
+		<Market>NASDAQ</Market>
+		<Type>MarketMover</Type>
+		<Currency></Currency>
+	</Stock>
+	<Stock>
+		<Company>Inner Workings</Company>
+		<Symbol>INWK</Symbol>
+		<Market>NASDAQ</Market>
+		<Type>MarketMover</Type>
+		<Currency></Currency>
+	</Stock>
+</Stocks>

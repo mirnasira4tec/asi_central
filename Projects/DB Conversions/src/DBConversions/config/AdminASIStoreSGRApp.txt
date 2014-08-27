@@ -1,0 +1,587 @@
+﻿<table width="700px" cellspacing="0" cellpadding="4" border="0">
+<tbody>
+    <tr>
+        <td align="center" style="background:#CC0000;"><font color="#ffffff">
+            <strong>Supplier Application</strong></font>
+        </td>
+    </tr>
+    <tr>
+        <td bgcolor="#ffffff" align="center" style="border-bottom: 1px solid rgb(165, 188, 207);">
+            <div style="margin: 8px;">
+                <div style="text-align: center;">
+                    <img height="63" width="250" src="http://www.asicentral.com/images/logos/asistore_lg.gif" /><br /><br />
+                    <table border="0">
+                        <tbody>
+                            <tr>
+                                <td valign="top" scope="row">
+                                    <strong>Company Name: </strong>
+                                </td>
+                                <td valign="top">[SGRA_Company]</td>
+                            </tr>
+                            <tr>
+                                <td valign="top" scope="row">
+                                    <strong>Bill to Address: </strong>
+                                </td>
+                                <td valign="top">[SGRA_BillAddress]<br />[SGRA_BillCity], [SGRA_BillState], [SGRA_BillCountry] [SGRA_BillZip]</td>
+                            </tr>
+                            <tr>
+                                <td valign="top" scope="row">
+                                    <strong>Phone: </strong>
+                                </td>
+                                <td valign="top">[SGRA_Phone]</td>
+                            </tr>
+                            <tr>
+                                <td valign="top" scope="row">
+                                    <strong>Cell Phone: </strong>
+                                </td>
+                                <td valign="top">[SGRA_CellPhone]</td>
+                            </tr>
+                            <tr>
+                                <td valign="top" scope="row">
+                                    <strong>Fax:</strong>
+                                </td>
+                                <td valign="top">[SGRA_Fax]</td>
+                            </tr>
+                            <tr>
+                                <td valign="top" scope="row">
+                                    <strong>Primary Email: </strong>
+                                </td>
+                                <td valign="top">[SGRA_BillEmail]</td>
+                            </tr>
+                            <tr>
+                                <td valign="top" scope="row">
+                                    <strong>Web Address: </strong>
+                                </td>
+                                <td valign="top">[SGRA_WebAdd]</td></tr><tr><td scope="row"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong>Ship to Address: </strong>
+                                </td>
+                                <td>[SGRA_ShipAddress]<br />[SGRA_ShipCity], [SGRA_ShipState], [SGRA_ShipCountry] [SGRA_ShipZip]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong>Primary Contact Name:</strong>
+                                </td>
+                                <td>[SGRA_PrimName]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong>Primary Title:</strong>
+                                </td>
+                                <td>[SGRA_PrimTitle]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong>Primary Email:</strong>
+                                </td>
+                                <td>[SGRA_PrimEmail]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong>Primary Phone:</strong>
+                                </td>
+                                <td>[SGRA_PrimPhone]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Line Names: </strong></strong>
+                                </td>
+                                <td>[SGRA_LineName]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Total Annual Sales Volume: </strong></strong>
+                                </td>
+                                <td>[SGRA_SalesVol]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Year company was Est: </strong></strong>
+                                </td>
+                                <td>[SGRA_YearEst]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Year company entered advertising specialty industry: </strong></strong>
+                                </td>
+                                <td>[SGRA_YearAdv]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Office Hours: </strong></strong>
+                                </td>
+                                <td>[SGRA_OfficeHourStart]&nbsp;to&nbsp;[SGRA_OfficeHourEnd]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>No. of employees: </strong></strong>
+                                </td>
+                                <td>[SGRA_TotalEmployee]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Sales Force: </strong></strong>
+                                </td>
+                                <td>[SGRA_SalesForce]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Do you have formal product saftey testing procedures?: </strong></strong>
+                                </td>
+                                <td>[SGRA_Saftey]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Production Time: </strong></strong>
+                                </td>
+                                <td>[SGRA_ProdTime]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Rush Service available?: </strong></strong>
+                                </td>
+                                <td>[SGRA_Rush]</td>
+                            </tr>
+		            <tr>
+                                <td scope="row">
+                                    <strong><strong>Production Time?: </strong></strong>
+                                </td>
+                                <td>[SGRA_ProdTime]</td>
+                            </tr>
+                        
+            <br />
+            <table width="550px" cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                    <tr>
+                        <td width="50%" valign="top" scope="row">
+                        <br/>
+                        <br/>
+                            <table width="100%" cellspacing="0" cellpadding="5" border="0">
+                            <tbody>
+                                <tr>
+                                    <td bgcolor="#ebebeb" align="center">
+                                        <table width="100%" cellspacing="0" cellpadding="4" border="0">
+                                            <tbody>
+                                                <tr>
+                                                    <td align="center">
+                                                        <div align="center">
+                                                            <strong>Business Functions</strong>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td bgcolor="#ffffff" align="center" style="border-bottom: 1px solid rgb(165, 188, 207);"class="textCenter">
+                                                        <table border="0" align="center">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td scope="row">[SGRB_FuncId]</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td scope="row">
+                                                                        <strong><strong>Other: </strong></strong>[SGRA_OtherBusFunc]
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <h3></h3>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            </table>
+                            <p />
+                        </td>
+                        
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+            <table width="100%" cellspacing="0" cellpadding="1" border="0" align="center">
+            <tbody>
+                <tr>
+                    <td style="background:#4B83B2;">
+                        <table width="100%" cellspacing="1" cellpadding="2" border="0">
+                        <tbody>
+                            <tr valign="bottom">
+                                <td></td>
+                            </tr>
+                            <tr align="center">
+                                <td style="background:#ebf5fb;">
+                                    <table width="100%" cellspacing="1" border="0">
+                                    <tbody>
+                                        <tr>
+                                            <td valign="top" align="center">
+                                                <h1><u>Company Contacts</u></h1>
+                                                <table  width="100%">
+                                                <tbody>
+                                                    <tr>
+                                                        <td><h3>Executive Contact</h3></td>
+                                                    </tr>
+                                                
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <strong>Contact Name:<br /><br /></strong>
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Title:<br /><br /></strong> 
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Email:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Phone:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Fax:<br /><br /></strong> 
+                                                        </td>
+							<td valign="top" width="20%">
+                                                            <strong>Contact Speaks English?:<br /><br /></strong> 
+                                                        </td>
+                                                    </tr>    
+                                                    <tr>
+                                                        <td valign="top">
+                                                            [SGRI_NameExec]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_TitleExec]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_EmailExec]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_PhoneExec]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_FaxExec]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_EnglishExec]<br />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5"><hr></hr></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><h3>Sales Contact</h3></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <strong>Contact Name:<br /><br /></strong>
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Title:<br /><br /></strong> 
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Email:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Phone:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Fax:<br /><br /></strong> 
+                                                        </td>
+							<td valign="top" width="20%">
+                                                            <strong>Contact Speaks English?:<br /><br /></strong> 
+                                                        </td>
+                                                    </tr>    
+                                                    <tr>
+                                                        <td valign="top">
+                                                            [SGRI_NameSales]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_TitleSales]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_EmailSales]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_PhoneSales]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_FaxSales]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_EnglishSales]<br />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5"><hr></hr></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><h3>Credit Manager Contact</h3></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <strong>Contact Name:<br /><br /></strong>
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Title:<br /><br /></strong> 
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Email:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Phone:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Fax:<br /><br /></strong> 
+                                                        </td>
+							<td valign="top" width="20%">
+                                                            <strong>Contact Speaks English?:<br /><br /></strong> 
+                                                        </td>
+                                                    </tr>    
+                                                    <tr>
+                                                        <td valign="top">
+                                                            [SGRI_NameCredit]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_TitleCredit]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_EmailCredit]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_PhoneCredit]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_FaxCredit]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_EnglishCredit]<br />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5"><hr></hr></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><h3>Customer Service Contact</h3></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <strong>Contact Name:<br /><br /></strong>
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Title:<br /><br /></strong> 
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Email:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Phone:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Fax:<br /><br /></strong> 
+                                                        </td>
+							<td valign="top" width="20%">
+                                                            <strong>Contact Speaks English?:<br /><br /></strong> 
+                                                        </td>
+                                                    </tr>    
+                                                    <tr>
+                                                        <td valign="top">
+                                                            [SGRI_NameCust]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_TitleCust]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_EmailCust]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_PhoneCust]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_FaxCust]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_EnglishCust]<br />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5"><hr></hr></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><h3>Marketing Contact</h3></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <strong>Contact Name:<br /><br /></strong>
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Title:<br /><br /></strong> 
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Email:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Phone:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Fax:<br /><br /></strong> 
+                                                        </td>
+							<td valign="top" width="20%">
+                                                            <strong>Contact Speaks English?:<br /><br /></strong> 
+                                                        </td>
+                                                    </tr>    
+                                                    <tr>
+                                                        <td valign="top">
+                                                            [SGRI_NameMark]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_TitleMark]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_EmailMark]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_PhoneMark]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_FaxMark]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_EnglishMark]<br />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5"><hr></hr></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><h3>Artwork Contact</h3></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <strong>Contact Name:<br /><br /></strong>
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Title:<br /><br /></strong> 
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Email:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Phone:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Fax:<br /><br /></strong> 
+                                                        </td>
+							<td valign="top" width="20%">
+                                                            <strong>Contact Speaks English?:<br /><br /></strong> 
+                                                        </td>
+                                                    </tr>    
+                                                    <tr>
+                                                        <td valign="top">
+                                                            [SGRI_NameArt]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_TitleArt]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_EmailArt]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_PhoneArt]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_FaxArt]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_EnglishArt]<br />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5"><hr></hr></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><h3>Orders Contact</h3></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <strong>Contact Name:<br /><br /></strong>
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Title:<br /><br /></strong> 
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Email:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Phone:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Fax:<br /><br /></strong> 
+                                                        </td>
+							<td valign="top" width="20%">
+                                                            <strong>Contact Speaks English?:<br /><br /></strong> 
+                                                        </td>
+                                                    </tr>    
+                                                    <tr>
+                                                        <td valign="top">
+                                                            [SGRI_NameOrder]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_TitleOrder]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_EmailOrder]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_PhoneOrder]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_FaxOrder]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SGRI_EnglishOrder]<br />
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+            <br />
+            <table width="550" cellspacing="3" cellpadding="0" border="0" align="center">
+            <tbody>
+            <tr>
+                <td nowrap="nowrap"><span style="display: none;"><input type="checkbox" value="agree. Selected" id="rqTerms&amp;Conditions" name="rqTerms&amp;Conditions" /></span>I agree to the terms and conditions.  <strong>[SGRA_Terms]</strong></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="background:#ebf5fb;" style="text-align:center;"><span style="font-weight:bold;">Admin Information</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Application ID:  </strong>[SGRA_AppID]
+                </td>
+            </tr>
+        </tbody>
+        </table>
+        </div>
+        </div>
+        </td>
+    </tr>
+</tbody>
+</table>

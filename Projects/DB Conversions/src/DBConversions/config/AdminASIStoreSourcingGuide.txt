@@ -1,0 +1,143 @@
+﻿<table width="700px" cellspacing="0" cellpadding="4" border="0">
+<tbody>    
+	<tr>        
+		<td align="center" style="background:#4B83B2;"><font color="#ffffff">            <strong>Sourcing Guide Order</strong></font>        </td>    
+	</tr>    
+	<tr>        
+		<td bgcolor="#ffffff" align="center" style="border-bottom: 1px solid rgb(165, 188, 207);">            
+			<div style="margin: 8px;">                
+				<div style="text-align: center;">                    
+					<img height="63" width="250" src="http://www.asicentral.com/images/logos/asistore_lg.gif" /><br /><br />                    
+					<table border="0" style="margin:0 auto;">                        
+					<tbody>  
+					    <tr>                                
+							<td valign="top" scope="row"><strong>Sourcing Guide Type: </strong> </td>                                
+							<td valign="top">[PROD_ProdDesc]</td>
+		                </tr>  
+		                <tr>                                
+							<td valign="top" scope="row"><strong>Order Type: </strong> </td>                                
+							<td valign="top">[SGOT_Description]</td>
+		                </tr>
+						<tr>                                
+							<td valign="top" scope="row"><strong>Company Name: </strong> </td>                                
+							<td valign="top">[SGOI_Company]</td>
+		                </tr> 
+		                <tr>                                
+							<td valign="top" scope="row"><strong>ASI #: </strong> </td>                                
+							<td valign="top">[SGOI_Asi]</td>
+		                </tr>                           
+						<tr>                                
+							<td valign="top" scope="row"><strong>Phone: </strong></td>                                
+							<td valign="top">[SGOI_Phone]</td>                            
+						</tr>
+						<tr>                                
+							<td valign="top" scope="row"><strong>Toll Free Phone: </strong></td> 
+			                <td valign="top">[SGOI_TollFree]</td>                            
+						</tr>
+						<tr>                                
+							<td valign="top" scope="row"><strong>Fax: </strong></td> 
+			                <td valign="top">[SGOI_Fax]</td>                            
+						</tr>
+						<tr>                                
+							<td valign="top" scope="row"><strong>Email: </strong></td> 
+			                <td valign="top">[SGOI_Email]</td>                            
+						</tr>
+						<tr>                                
+							<td valign="top" scope="row"><strong>Address: </strong></td> 
+			                <td valign="top">[SGOI_Address]</td>                            
+						</tr>
+						<tr>                                
+							<td valign="top" scope="row"><strong>City: </strong></td> 
+			                <td valign="top">[SGOI_City]</td>                            
+						</tr>
+						<tr>                                
+							<td valign="top" scope="row"><strong>State: </strong></td> 
+			                <td valign="top">[SGOI_State]</td>                            
+						</tr>
+						<tr>                                
+							<td valign="top" scope="row"><strong>Zip: </strong></td> 
+			                <td valign="top">[SGOI_Zip]</td>                            
+						</tr>
+						<tr>                                
+							<td valign="top" scope="row"><strong>Website: </strong></td> 
+			                <td valign="top">[SGOI_Website]</td>                            
+						</tr>						
+						<tr>
+						    <td></td>
+						    <td></td>
+						</tr>
+						<tr>
+						    <td></td>
+						    <td></td>
+						</tr>
+						<tr>
+						    <td></td>
+						    <td></td>
+						</tr>
+						<tr>
+						    <td></td>
+						    <td></td>
+						</tr>
+						<tr>
+						    <td></td>
+						    <td></td>
+						</tr>
+						<tr>
+						    <td></td>
+						    <td></td>
+						</tr>
+						<tr>
+						    <td></td>
+						    <td></td>
+						</tr>
+						<tr>
+						    <td></td>
+						    <td></td>
+						</tr>						
+						<tr>                                
+							<td scope="row"><strong>Enhanced Listing Copy:</strong></td>                                
+							<td>[SGOI_Copy]</td>
+						</tr>
+						<tr>                                
+							<td scope="row"><strong>Enhanced Listing Image File Name:</strong></td>                                
+							<td>[SCOI_Img]</td>
+						</tr>
+						<tr>
+						    <td></td>
+						    <td></td>
+						</tr>
+						<tr>
+						    <td></td>
+						    <td></td>
+						</tr>
+						<tr>
+						    <td></td>
+						    <td></td>
+						</tr>
+						<tr>                                
+							<td scope="row" valign="top"><strong>Categories:</strong></td>                                
+							<td>[SubCatDesc]</td>
+						</tr>       
+						<table width="550" cellspacing="3" cellpadding="0" border="0" align="center">            
+						<tbody>            
+							<tr>                
+								<td style="background:#ebf5fb;" style="text-align:center;"><span style="font-weight:bold;">Admin Information</span></td>            
+							</tr>            
+							<tr>                
+								<td>                    
+									<strong>IP Address:  </strong>[ORDR_IPAdd]
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<strong>Order ID:  </strong>[ORDR_OrderID]                
+								</td>            
+							</tr>        
+						</tbody>        
+						</table>        
+					</div>        
+				</div>        
+			</td>    
+		</tr>
+	</tbody>
+	</table>

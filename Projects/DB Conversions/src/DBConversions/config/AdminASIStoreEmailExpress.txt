@@ -1,0 +1,81 @@
+<table width="700px" cellspacing="0" cellpadding="4" border="0">
+<tbody>    
+	<tr>        
+		<td align="center" style="background:#4B83B2;"><font color="#ffffff">            <strong>ASI Email Express Order</strong></font>        </td>    
+	</tr>    
+	<tr>        
+		<td bgcolor="#ffffff" align="center" style="border-bottom: 1px solid rgb(165, 188, 207);">            
+			<div style="margin: 8px;">                
+				<div style="text-align: center;">                    
+					<img height="63" width="250" src="http://www.asicentral.com/images/logos/asistore_lg.gif" /><br /><br />                    
+					<table border="0">                        
+					<tbody>                           
+						<tr>
+						<tr>                                
+							<td valign="top" scope="row"><strong>Company Name: </strong> </td>                                
+							<td valign="top">[OCNT_Company]</td>
+		                </tr> 
+		                <tr>                                
+							<td valign="top" scope="row"><strong>First Name: </strong> </td>                                
+							<td valign="top">[OCNT_FName]</td>
+		                </tr> 
+		                <tr>                                
+							<td valign="top" scope="row"><strong>Last Name: </strong> </td>                                
+							<td valign="top">[OCNT_LName]</td>
+		                </tr>
+		                <tr>                                
+							<td valign="top" scope="row"><strong>ASI #: </strong> </td>                                
+							<td valign="top">[OCNT_ASINo]</td>
+		                </tr>                           
+						<tr>                                
+							<td valign="top" scope="row"><strong>Phone: </strong></td>                                
+							<td valign="top">[OCNT_Phone]</td>                            
+						</tr>                            
+						<tr>                                
+							<td valign="top" scope="row"><strong>Primary Email: </strong></td> 
+			                                <td valign="top">[OCNT_Email]</td>                            
+						</tr>
+						<tr>                                
+							<td valign="top" scope="row"><strong>Title: </strong></td> 
+			                                <td valign="top">[OCNT_Title]</td>                            
+						</tr>
+						<tr>                                
+							<td scope="row"><strong>Purchase Type:</strong></td>                                
+							<td>[EMET_PurchaseTypeDesc]</td>
+						</tr>
+						<tr>                                
+							<td scope="row"><strong>Purchase Type Price Point:</strong></td>                                
+							<td>$[EMET_PP]</td>
+						</tr>
+						<tr>                                
+							<td scope="row"><strong>Total Cost:</strong></td>                                
+							<td>$[EMET_Total]</td>
+						</tr>	
+						<tr>                                
+							<td scope="row"><strong>Already Purchased?</strong></td>                                
+							<td>[EMEP_AlreadyPurchased]</td>
+						</tr>
+						<tr>                                
+							<td scope="row"><strong>Agreed to Terms:</strong></td>                                
+							<td>[EMEP_LicenseAgreement]</td>
+						</tr>
+						<tr>
+						    <td><br/></td>
+						    <td><br/></td>
+						</tr>
+						<tr>
+						    <td><br/></td>
+						    <td><br/></td>
+						</tr>
+						<tr>                                
+							<td scope="row" valign="top"><strong>Dates:</strong></td>                                
+							<td>[EMED_Date]</td>
+						</tr>     
+						</tbody>        
+						</table>        
+					</div>        
+				</div>        
+			</td>    
+		</tr>
+	</tbody>
+	</table>

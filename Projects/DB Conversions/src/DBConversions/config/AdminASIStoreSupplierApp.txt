@@ -1,0 +1,638 @@
+﻿<table width="700px" cellspacing="0" cellpadding="4" border="0">
+<tbody>
+    <tr>
+        <td align="center" style="background:#CC0000;"><font color="#ffffff">
+            <strong>Supplier Application</strong></font>
+        </td>
+    </tr>
+    <tr>
+        <td bgcolor="#ffffff" align="center" style="border-bottom: 1px solid rgb(165, 188, 207);">
+            <div style="margin: 8px;">
+                <div style="text-align: center;">
+                    <img height="63" width="250" src="http://www.asicentral.com/images/logos/asistore_lg.gif" /><br /><br />
+                    <table border="0">
+                        <tbody>
+                            <tr>
+                                <td valign="top" scope="row">
+                                    <strong>Company Name: </strong>
+                                </td>
+                                <td valign="top">[SAPP_Company]</td>
+                            </tr>
+                            <tr>
+                                <td valign="top" scope="row">
+                                    <strong>Bill to Address: </strong>
+                                </td>
+                                <td valign="top">[SAPP_BillAddress]<br />[SAPP_BillCity], [SAPP_BillState] [SAPP_BillZip]</td>
+                            </tr>
+                            <tr>
+                                <td valign="top" scope="row">
+                                    <strong>Phone: </strong>
+                                </td>
+                                <td valign="top">[SAPP_BillPhone]</td>
+                            </tr>
+                            <tr>
+                                <td valign="top" scope="row">
+                                    <strong>Toll Free Phone: </strong>
+                                </td>
+                                <td valign="top">[SAPP_BillTollFree]</td>
+                            </tr>
+                            <tr>
+                                <td valign="top" scope="row">
+                                    <strong>Fax:</strong>
+                                </td>
+                                <td valign="top">[SAPP_BillFax]</td>
+                            </tr>
+                            <tr>
+                                <td valign="top" scope="row">
+                                    <strong>Primary Email: </strong>
+                                </td>
+                                <td valign="top">[SAPP_BillEmail]</td>
+                            </tr>
+                            <tr>
+                                <td valign="top" scope="row">
+                                    <strong>Web Address: </strong>
+                                </td>
+                                <td valign="top">[SAPP_BillWebAdd]</td></tr><tr><td scope="row"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong>Ship to Address: </strong>
+                                </td>
+                                <td>[SAPP_ShipAddress]<br />[SAPP_ShipCity], [SAPP_ShipState] [SAPP_ShipZip]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong>Primary Contact Name:</strong>
+                                </td>
+                                <td>[SAPP_PrimName]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong>Primary Title:</strong>
+                                </td>
+                                <td>[SAPP_PrimTitle]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong>Primary Email:</strong>
+                                </td>
+                                <td>[SAPP_PrimEmail]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong>Primary Phone:</strong>
+                                </td>
+                                <td>[SAPP_PrimPhone]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Line Names: </strong></strong>
+                                </td>
+                                <td>[SAPP_LineNames]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Line Minority Owned: </strong></strong>
+                                </td>
+                                <td>[SAPP_Minority]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Total Annual Sales Volume: </strong></strong>
+                                </td>
+                                <td>[SAPP_SalesVol]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Year company was Est: </strong></strong>
+                                </td>
+                                <td>[SAPP_YearEst]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Year company entered advertising specialty industry: </strong></strong>
+                                </td>
+                                <td>[SAPP_YearAdv]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Office Hours: </strong></strong>
+                                </td>
+                                <td>[SAPP_OffHourStart]&nbsp;to&nbsp;[SAPP_OffHourEnd]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>No. of employees: </strong></strong>
+                                </td>
+                                <td>[SAPP_TotalEmployee]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Sales Force: </strong></strong>
+                                </td>
+                                <td>[SAPP_SalesForce]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Is a Imprinter/Decorator?: </strong></strong>
+                                </td>
+                                <td>[SAPP_ImprintDec]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Is a Importer?: </strong></strong>
+                                </td>
+                                <td>[SAPP_Importer]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Is a Manufacturer?: </strong></strong>
+                                </td>
+                                <td>[SAPP_Manufacturer]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Is a Retailer?: </strong></strong>
+                                </td>
+                                <td>[SAPP_Retailer]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Is a Wholesaler?: </strong></strong>
+                                </td>
+                                <td>[SAPP_Wholesaler]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Federal Tax ID: </strong></strong>
+                                </td>
+                                <td>[SAPP_FedTaxID]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Sells to End User?: </strong></strong>
+                                </td>
+                                <td>[SAPP_ThruEndUsers]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Sells to End User through internet/ecommerce?: </strong></strong>
+                                </td>
+                                <td>[SAPP_ThruInternet]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Sells to End User through retail locations?: </strong></strong>
+                                </td>
+                                <td>[SAPP_ThruRetail]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Sells to End User through direct marketing efforts?: </strong></strong>
+                                </td>
+                                <td>[SAPP_ThruDirect]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Sells to End User through affiliated company?: </strong></strong>
+                                </td>
+                                <td>[SAPP_ThruAff]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row"></td>
+                                <td><strong>&nbsp;Affiliate Company Name:&nbsp;</strong>[SAPP_AffCompany]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row"></td>
+                                <td><strong>Affiliate ASI #:&nbsp;</strong>[SAPP_AffASI]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Is union made?: </strong></strong>
+                                </td>
+                                <td>[SAPP_UnionMade]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Production Time: </strong></strong>
+                                </td>
+                                <td>[SAPP_ProdTime]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>Rush Service available?: </strong></strong>
+                                </td>
+                                <td>[SAPP_Rush]</td>
+                            </tr>
+                            <tr>
+                                <td valign="top" scope="row">
+                                    <strong><strong>UPS Address: </strong></strong>
+                                </td>
+                                <td valign="top">[SAPP_UpsAddress]<br />[SAPP_UpsCity], [SAPP_UpsState] [SAPP_UpsZip]</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">
+                                    <strong><strong>UPS Shipper Number: </strong></strong>
+                                </td>
+                                <td>[SAPP_UpsShipNum]</td>
+                            </tr>
+                        
+            <br />
+            <table width="550px" cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                    <tr>
+                        <td width="50%" valign="top" scope="row">
+                        <br/>
+                        <br/>
+                            <table width="100%" cellspacing="0" cellpadding="5" border="0">
+                            <tbody>
+                                <tr>
+                                    <td bgcolor="#ebebeb" align="center">
+                                        <table width="100%" cellspacing="0" cellpadding="4" border="0">
+                                            <tbody>
+                                                <tr>
+                                                    <td align="center">
+                                                        <div align="center">
+                                                            <strong>Methods of Imprinting</strong>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td bgcolor="#ffffff" align="center" style="border-bottom: 1px solid rgb(165, 188, 207);"class="textCenter">
+                                                        <table border="0" align="center">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td scope="row">[SAPP_DecType]</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td scope="row">
+                                                                        <strong><strong>Other: </strong></strong>[SAPP_OtherDec]
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <h3></h3>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            </table>
+                            <p />
+                        </td>
+                        
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+            <table width="100%" cellspacing="0" cellpadding="1" border="0" align="center">
+            <tbody>
+                <tr>
+                    <td style="background:#4B83B2;">
+                        <table width="100%" cellspacing="1" cellpadding="2" border="0">
+                        <tbody>
+                            <tr valign="bottom">
+                                <td></td>
+                            </tr>
+                            <tr align="center">
+                                <td style="background:#ebf5fb;">
+                                    <table width="100%" cellspacing="1" border="0">
+                                    <tbody>
+                                        <tr>
+                                            <td valign="top" align="center">
+                                                <h1><u>Company Contacts</u></h1>
+                                                <table  width="100%">
+                                                <tbody>
+                                                    <tr>
+                                                        <td><h3>Executive Contact</h3></td>
+                                                    </tr>
+                                                
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <strong>Contact Name:<br /><br /></strong>
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Title:<br /><br /></strong> 
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Email:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Phone:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Fax:<br /><br /></strong> 
+                                                        </td>
+                                                    </tr>    
+                                                    <tr>
+                                                        <td valign="top">
+                                                            [SAPP_ContactNameExec]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactTitleExec]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactEmailExec]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactPhoneExec]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactFaxExec]<br />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5"><hr></hr></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><h3>Sales Contact</h3></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <strong>Contact Name:<br /><br /></strong>
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Title:<br /><br /></strong> 
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Email:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Phone:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Fax:<br /><br /></strong> 
+                                                        </td>
+                                                    </tr>    
+                                                    <tr>
+                                                        <td valign="top">
+                                                            [SAPP_ContactNameSales]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactTitleSales]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactEmailSales]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactPhoneSales]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactFaxSales]<br />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5"><hr></hr></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><h3>Credit Manager Contact</h3></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <strong>Contact Name:<br /><br /></strong>
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Title:<br /><br /></strong> 
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Email:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Phone:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Fax:<br /><br /></strong> 
+                                                        </td>
+                                                    </tr>    
+                                                    <tr>
+                                                        <td valign="top">
+                                                            [SAPP_ContactNameCredit]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactTitleCredit]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactEmailCredit]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactPhoneCredit]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactFaxCredit]<br />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5"><hr></hr></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><h3>Customer Service Contact</h3></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <strong>Contact Name:<br /><br /></strong>
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Title:<br /><br /></strong> 
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Email:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Phone:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Fax:<br /><br /></strong> 
+                                                        </td>
+                                                    </tr>    
+                                                    <tr>
+                                                        <td valign="top">
+                                                            [SAPP_ContactNameCust]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactTitleCust]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactEmailCust]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactPhoneCust]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactFaxCust]<br />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5"><hr></hr></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><h3>Marketing Contact</h3></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <strong>Contact Name:<br /><br /></strong>
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Title:<br /><br /></strong> 
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Email:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Phone:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Fax:<br /><br /></strong> 
+                                                        </td>
+                                                    </tr>    
+                                                    <tr>
+                                                        <td valign="top">
+                                                            [SAPP_ContactNameMark]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactTitleMark]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactEmailMark]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactPhoneMark]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactFaxMark]<br />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5"><hr></hr></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><h3>Artwork Contact</h3></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <strong>Contact Name:<br /><br /></strong>
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Title:<br /><br /></strong> 
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Email:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Phone:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Fax:<br /><br /></strong> 
+                                                        </td>
+                                                    </tr>    
+                                                    <tr>
+                                                        <td valign="top">
+                                                            [SAPP_ContactNameArt]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactTitleArt]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactEmailArt]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactPhoneArt]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactFaxArt]<br />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5"><hr></hr></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><h3>Orders Contact</h3></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <strong>Contact Name:<br /><br /></strong>
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Title:<br /><br /></strong> 
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Email:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Phone:<br /><br /></strong>  
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            <strong>Contact Fax:<br /><br /></strong> 
+                                                        </td>
+                                                    </tr>    
+                                                    <tr>
+                                                        <td valign="top">
+                                                            [SAPP_ContactNameOrder]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactTitleOrder]
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactEmailOrder]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactPhoneOrder]<br />
+                                                        </td>
+                                                        <td valign="top" width="20%">
+                                                            [SAPP_ContactFaxOrder]<br />
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+            <br />
+            <table width="550" cellspacing="3" cellpadding="0" border="0" align="center">
+            <tbody>
+            <tr>
+                <td>I hereby request and authorize ASI to open a UPS&reg; account for my company to take advantage of the ASI shipping program incentives. I understand the shipping incentives will begin 10 working days after I receive my ASI number and there are no other incentives available to my existing UPS&reg; account number.  <strong>[SAPP_UpsAuth]</strong>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap"></td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap"><span style="display: none;"><input type="checkbox" value="agree. Selected" id="rqTerms&amp;Conditions" name="rqTerms&amp;Conditions" /></span>I agree to the terms and conditions.  <strong>[SAPP_AsiTerms]</strong></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="background:#ebf5fb;" style="text-align:center;"><span style="font-weight:bold;">Admin Information</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Application ID:  </strong>[SAPP_AppID]
+                </td>
+            </tr>
+        </tbody>
+        </table>
+        </div>
+        </div>
+        </td>
+    </tr>
+</tbody>
+</table>
