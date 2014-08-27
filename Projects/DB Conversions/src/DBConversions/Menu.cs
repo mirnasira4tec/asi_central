@@ -28,32 +28,20 @@ namespace DBConversions
        
         
         public IContentService Service = null;
-       // public Dictionary<int, string> Childnodesdictionary = new Dictionary<int, string>();
+
         public Dictionary<int, int> nodeFolderIds = new Dictionary<int, int>()
             {
-                {3227,372},
-                {3228,548},
-                {3229,368},
-                {3230,546},
-                {3231,374},
-                {3232,370},
-                {3233,551},
-                {3234,552},
-                {3373,542},
-                {3374,412}
+                {3339,372},
+                {3340,548},
+                {3341,368},
+                {3342,546},
+                {3343,374},
+                {3344,370},
+                {3345,551},
+                {3346,552},
+                {4343,412},
+                {4342,542}
             };
-        //public Dictionary<int, int> nodeFolderIds = new Dictionary<int, int>()
-        //    {
-        //        {3339,372},
-        //        {3340,548},
-        //        {3341,368},
-        //        {3342,546},
-        //        {3343,374},
-        //        {3344,370},
-        //        {3345,551},
-        //        {3346,552}
-                
-        //    };
         
         public Menu()
         {
@@ -73,7 +61,7 @@ namespace DBConversions
             foreach (KeyValuePair<int, int> node in nodeFolderIds)
             {
                 List<NewsLetter> Newsletters = new List<NewsLetter>();
-                string sql = String.Format("SELECT content_title,content_html,date_created from asicentral..[content] where folder_ID in ('{0}')  order by date_created desc ", node.Value);
+                string sql = String.Format("SELECT  content_title,content_html,date_created from asicentral..[content] where folder_ID in ('{0}') and content_status = 'A' order by date_created desc ", node.Value);
                 Newsletters = RetriveDatabaseValues(sql);
                 CreateNodes(node, Newsletters);
             }
@@ -208,7 +196,6 @@ namespace DBConversions
             application.Start(application, new EventArgs());
             var context = Umbraco.Core.ApplicationContext.Current;
             var serviceContext = context.Services;
-            //var contentTypeService = serviceContext.ContentTypeService;
             
             return (serviceContext.ContentService);
         }
@@ -219,8 +206,6 @@ namespace DBConversions
             string oldBannertable = string.Empty;
             string htmlcontent = rawcontent;
             bool isbannerremoved = false;
-
-            //htmlcontent = htmlcontent.TrimStart();
             if (htmlcontent.TrimStart().Substring(0, 6) == "<table")
             {
                 int trindex = rawcontent.IndexOf("<tr>");
