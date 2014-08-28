@@ -31,6 +31,7 @@
             this.BtnConvert = new System.Windows.Forms.Button();
             this.Lbl_Menu = new System.Windows.Forms.Label();
             this.lbl_confirmation = new System.Windows.Forms.Label();
+            this.btnPressReleases = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // BtnConvert
@@ -61,11 +62,22 @@
             this.lbl_confirmation.Size = new System.Drawing.Size(222, 23);
             this.lbl_confirmation.TabIndex = 6;
             // 
+            // btnPressReleases
+            // 
+            this.btnPressReleases.Location = new System.Drawing.Point(10, 79);
+            this.btnPressReleases.Name = "btnPressReleases";
+            this.btnPressReleases.Size = new System.Drawing.Size(151, 23);
+            this.btnPressReleases.TabIndex = 7;
+            this.btnPressReleases.Text = "Convert PressReleases";
+            this.btnPressReleases.UseVisualStyleBackColor = true;
+            this.btnPressReleases.Click += new System.EventHandler(this.btnPressReleases_Click);
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.btnPressReleases);
             this.Controls.Add(this.lbl_confirmation);
             this.Controls.Add(this.Lbl_Menu);
             this.Controls.Add(this.BtnConvert);
@@ -81,6 +93,7 @@
         private System.Windows.Forms.Button BtnConvert;
         private System.Windows.Forms.Label Lbl_Menu;
         private System.Windows.Forms.Label lbl_confirmation;
+        private System.Windows.Forms.Button btnPressReleases;
     }
 }
 

@@ -14,6 +14,7 @@ using System.Collections;
 using System.Collections.Generic;
 using umbraco.NodeFactory;
 using System.Text.RegularExpressions;
+using ASICentralDBConversions;
 
 namespace DBConversions
 {
@@ -42,7 +43,12 @@ namespace DBConversions
                 {4343,412},
                 {4342,542}
             };
-        
+        //For Press Releases :: By Pavan on Aug 21st, 2014.
+
+        public Dictionary<int, int> nodePressReleaseIds = new Dictionary<int, int>()
+            {
+                {3651,134}
+            };
         public Menu()
         {
             InitializeComponent();
@@ -261,5 +267,144 @@ namespace DBConversions
 
             return rawcontent;
         }
+
+        //======================================
+        //Press Releases by Pavan..
+
+
+
+        private void btnPressReleases_Click(object sender, EventArgs e)
+        {
+            List<int> parentNodeID = new List<int>();
+
+            if (Service == null)
+            {
+                Service = getContentservice();
+            }
+            foreach (KeyValuePair<int, int> node in nodePressReleaseIds)
+            {
+                List<PressReleases> lstPressRelease = new List<PressReleases>();
+
+                // For checking first 20 records
+                string sql = String.Format("SELECT c.content_id, c.content_title,c.image,c.content_teaser,c.content_html,c.date_created FROM asicentral..[content] c WHERE	c.content_status = 'A' AND c.folder_id = {0} ORDER BY date_created DESC", node.Value);
+                lstPressRelease = RetrieveDatabaseValues(sql);
+                CreateNodes(node, lstPressRelease);
+            }
+            lbl_confirmation.Text = "Nodes Creation Completed!!";
+        }
+
+        internal List<PressReleases> RetrieveDatabaseValues(string sql)
+        {
+            using (SqlConnection ektronConn = new SqlConnection(ConfigurationManager.ConnectionStrings["Ektron.DbConnection"].ToString()))
+            {
+                List<PressReleases> pressreleaseNodes = new List<PressReleases>();
+                SqlDataReader reader = null;
+                SqlCommand cmd = new SqlCommand(sql, ektronConn);
+                ektronConn.Open();
+                reader = cmd.ExecuteReader();
+
+                while (reader != null && reader.Read())
+                {
+                    PressReleases pressreleaseObj = new PressReleases();
+                    pressreleaseObj.Content = reader["content_html"].ToString();
+                   // pressreleaseObj.ContentText = reader["content_text"].ToString();
+                    pressreleaseObj.DatePublished = DateTime.Parse(reader["date_created"].ToString());
+                    pressreleaseObj.ChildNodeName = reader["content_title"].ToString();
+                    pressreleaseNodes.Add(pressreleaseObj);
+                }
+                return pressreleaseNodes;
+
+            }
+        }
+
+        internal void CreateNodes(KeyValuePair<int, int> node, List<PressReleases> pressreleaseNodes)
+        {
+
+            string currentnodeYear = string.Empty;
+            int parentContentID = -1;
+
+            #region code to insert in to umbraco DB
+
+            foreach (PressReleases pressreleaseObj in pressreleaseNodes)
+            {
+                string issuedYear = pressreleaseObj.DatePublished.ToString("Y").Replace(',', ' ');
+                DateTime monthIssued = DateTime.Parse(string.Concat("01 ", issuedYear));
+
+                IContent yearContent = null;
+
+
+                if (currentnodeYear != issuedYear)
+                {
+                    parentContentID = -1;
+
+                    IEnumerable<IContent> rootnodes = Service.GetChildren(node.Key);
+
+                    foreach (var childnode in rootnodes)
+                    {
+
+                        if (childnode.Name == issuedYear.ToString())
+                        {
+                            parentContentID = childnode.Id;
+                            break;
+                        }
+                    }
+
+                    if (parentContentID == -1)
+                    {
+                        yearContent = Service.CreateContent(issuedYear.ToString(), node.Key, FOLDER_DOC_TYPE);
+                        try
+                        {
+                            yearContent.SetValue("issueDate", monthIssued.ToString("yyyy-MM-dd"));
+                            Service.Save(yearContent);
+                        }
+                        catch { }
+
+                        parentContentID = yearContent.Id;
+                    }
+                    currentnodeYear = issuedYear;
+
+                }
+
+                var contentnodes = Service.GetChildren(parentContentID);
+                int innerContentID = -1;
+                foreach (var childNode in contentnodes)
+                {
+
+                    if (childNode.Name == pressreleaseObj.ChildNodeName)
+                    {
+                        innerContentID = childNode.Id;
+                        break;
+                    }
+                }
+                if (innerContentID == -1)
+                {
+                    var volContent = Service.CreateContent(pressreleaseObj.ChildNodeName, parentContentID, VOLUME_DOC_TYPE);
+                    
+                    if (node.Value == 134)
+                    {
+                        pressreleaseObj.Content = ParseContent(pressreleaseObj.Content);
+                    }
+                    try
+                    {
+                        
+
+                        string innerContent = pressreleaseObj.Content.Replace("<center>", "<p>");
+                        innerContent = innerContent.Replace("</center>", "</p></header>");
+                        string objContent = "<h1>PRESS RELEASES</h1> " + "<article><header><h1>" + pressreleaseObj.ChildNodeName.ToFirstUpper() + "</h1>" + innerContent.TrimStart() + "<article>";
+
+                        volContent.SetValue("postedDate", pressreleaseObj.DatePublished.ToString("yyyy-MM-dd hh:mm:ss"));
+                        volContent.SetValue("content",objContent);
+                      //volContent.SetValue("contentText", pressreleaseObj.ContentText);
+                        
+                        Service.Save(volContent);
+                    }
+                    catch { }
+
+                }
+
+            }
+            #endregion code to insert in to umbraco DB
+        }
+
     }
 }
