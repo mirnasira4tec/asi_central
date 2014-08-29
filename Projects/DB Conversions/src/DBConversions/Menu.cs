@@ -32,16 +32,16 @@ namespace DBConversions
 
         public Dictionary<int, int> nodeFolderIds = new Dictionary<int, int>()
             {
-                {3339,372},
-                {3340,548},
-                {3341,368},
-                {3342,546},
-                {3343,374},
-                {3344,370},
-                {3345,551},
-                {3346,552},
-                {4343,412},
-                {4342,542}
+                {3339,372},//Promogram
+                {7338,548},//Promogram-Canada
+                {7339,368},//SuccessFul Promotions
+                {7340,546},//Successful Promotions Canada
+                {7341,374},//Wearables Style
+                {7342,370},//Advantages hot Deals
+                {7343,551},//Esp Websites
+                {7344,552},//ESP Tips
+                {7346,412},//Advantages Case studies
+                {7345,542}//spot asi savings
             };
         //For Press Releases :: By Pavan on Aug 21st, 2014.
 
@@ -152,7 +152,7 @@ namespace DBConversions
                     }
                 }
                 if (innerContentID == -1)
-                {
+                {    
                     var volumecontent = Service.CreateContent(newsletterobj.ChildNodeName, parentContentID, VOLUME_DOC_TYPE);
                     if (node.Value == 372)
                     {
@@ -160,6 +160,7 @@ namespace DBConversions
                     }
                     try
                     {
+                        
                         volumecontent.SetValue("postedDate", newsletterobj.date.ToString());
                         volumecontent.SetValue("content", newsletterobj.Content);
                         Service.Save(volumecontent);
