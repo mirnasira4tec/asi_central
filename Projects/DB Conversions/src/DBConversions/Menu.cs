@@ -24,6 +24,7 @@ namespace DBConversions
         public static readonly int NEWSLETTER_PARENT_NODE_ID = 3226;
         public static readonly string FOLDER_DOC_TYPE = "Issue";
         public static readonly string VOLUME_DOC_TYPE = "NewsItem";
+        public static readonly string VOLUME_DOC_TYPE_PRESS = "PressItem";
         public static readonly int TEMPLATE_ID=1116;
         public static readonly  Regex Regex = new Regex(@"(?<info>.+)\s*(?<date>\d\d/\d+/\d+)");
        
@@ -47,7 +48,7 @@ namespace DBConversions
 
         public Dictionary<int, int> nodePressReleaseIds = new Dictionary<int, int>()
             {
-                {3651,134}
+                {10136,134}
             };
         public Menu()
         {
@@ -287,7 +288,7 @@ namespace DBConversions
                 List<PressReleases> lstPressRelease = new List<PressReleases>();
 
                 // For checking first 20 records
-                string sql = String.Format("SELECT c.content_id, c.content_title,c.image,c.content_teaser,c.content_html,c.date_created FROM asicentral..[content] c WHERE	c.content_status = 'A' AND c.folder_id = {0} ORDER BY date_created DESC", node.Value);
+                string sql = String.Format("SELECT c.content_id, c.content_title,c.image,c.content_teaser,c.content_html,c.date_created,c.content_text FROM asicentral..[content] c WHERE	c.content_status = 'A' AND c.folder_id = {0} ORDER BY date_created DESC", node.Value);
                 lstPressRelease = RetrieveDatabaseValues(sql);
                 CreateNodes(node, lstPressRelease);
             }
@@ -308,7 +309,7 @@ namespace DBConversions
                 {
                     PressReleases pressreleaseObj = new PressReleases();
                     pressreleaseObj.Content = reader["content_html"].ToString();
-                   // pressreleaseObj.ContentText = reader["content_text"].ToString();
+                    pressreleaseObj.ContentTeaser = reader["content_teaser"].ToString();
                     pressreleaseObj.DatePublished = DateTime.Parse(reader["date_created"].ToString());
                     pressreleaseObj.ChildNodeName = reader["content_title"].ToString();
                     pressreleaseNodes.Add(pressreleaseObj);
@@ -379,7 +380,7 @@ namespace DBConversions
                 }
                 if (innerContentID == -1)
                 {
-                    var volContent = Service.CreateContent(pressreleaseObj.ChildNodeName, parentContentID, VOLUME_DOC_TYPE);
+                    var volContent = Service.CreateContent(pressreleaseObj.ChildNodeName, parentContentID, VOLUME_DOC_TYPE_PRESS);
                     
                     if (node.Value == 134)
                     {
@@ -387,16 +388,14 @@ namespace DBConversions
                     }
                     try
                     {
-                        
-
                         string innerContent = pressreleaseObj.Content.Replace("<center>", "<p>");
                         innerContent = innerContent.Replace("</center>", "</p></header>");
                         string objContent = "<h1>PRESS RELEASES</h1> " + "<article><header><h1>" + pressreleaseObj.ChildNodeName.ToFirstUpper() + "</h1>" + innerContent.TrimStart() + "<article>";
 
                         volContent.SetValue("postedDate", pressreleaseObj.DatePublished.ToString("yyyy-MM-dd hh:mm:ss"));
                         volContent.SetValue("content",objContent);
-                      //volContent.SetValue("contentText", pressreleaseObj.ContentText);
-                        
+                        volContent.SetValue("contentTeaser", pressreleaseObj.ContentTeaser);
+                                               
                         Service.Save(volContent);
                     }
                     catch { }
