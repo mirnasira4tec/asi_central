@@ -14,7 +14,7 @@ namespace ASICentralDBConversions
         public int ContentID { get; set; }
         public string ChildNodeName { get; set; }
         public string Content { get; set; }
-       // public string ContentText { get; set; }
+        public string ContentTeaser { get; set; }
         public DateTime DatePublished { get; set; }
     }
 }
