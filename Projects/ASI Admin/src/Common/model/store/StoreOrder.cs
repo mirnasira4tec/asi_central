@@ -55,7 +55,10 @@ namespace asi.asicentral.model.store
         {
             get
             {
-                if (OrderDetails != null && OrderDetails.FirstOrDefault().Order != null && OrderDetails.FirstOrDefault().Order.ContextId != null && OrderDetails.FirstOrDefault().Order.Context != null)
+                if (OrderDetails != null && OrderDetails.FirstOrDefault() != null &&
+					OrderDetails.FirstOrDefault().Order != null && 
+					OrderDetails.FirstOrDefault().Order.ContextId != null && 
+					OrderDetails.FirstOrDefault().Order.Context != null)
                 {
 
                     if (OrderDetails.FirstOrDefault().Order.Context.Type != "Product")
