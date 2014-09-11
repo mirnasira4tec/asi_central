@@ -41,7 +41,6 @@ namespace DBConversions
                 {7342,370},//Advantages hot Deals
                 {7343,551},//Esp Websites
                 {7344,552},//ESP Tips
-                {7346,412},//Advantages Case studies
                 {7345,542}//spot asi savings
             };
         //For Press Releases :: By Pavan on Aug 21st, 2014.
