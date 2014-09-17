@@ -34,7 +34,7 @@ namespace ImageResize
 						string newFolder = destination + file.DirectoryName.Substring(original.Length + 1);
 						DirectoryInfo newFolderInfo = new DirectoryInfo(newFolder);
 						if (!newFolderInfo.Exists) newFolderInfo.Create();
-						File.Copy(file.FullName, newFolder + "\\" + file.Name, true);
+						File.Copy(resized + file.Name, newFolder + "\\" + file.Name, true);
 						File.SetLastAccessTimeUtc(newFolder + "\\" + file.Name, DateTime.UtcNow);
 						Console.WriteLine("Found: " + newFolder);
 					}
