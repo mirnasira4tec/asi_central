@@ -57,7 +57,7 @@ namespace asi.asicentral.oauth
             HttpCookie cookie = null;
             if (request.Cookies != null && request.Cookies.AllKeys != null && request.Cookies.AllKeys.Contains(key)) 
                 cookie = request.Cookies.Get(key);
-            if (cookie == null && response.Cookies != null && request.Cookies.AllKeys != null && response.Cookies.AllKeys.Contains(key)) 
+            if (cookie == null && response.Cookies != null && response.Cookies.AllKeys != null && response.Cookies.AllKeys.Contains(key)) 
                 cookie = response.Cookies.Get(key);
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
                 cookieValue = cookie.Value;
