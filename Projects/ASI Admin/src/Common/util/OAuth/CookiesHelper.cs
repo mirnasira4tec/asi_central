@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Configuration;
 using System.Web.Security;
+using ASI.Jade.UserManagement.DataObjects;
 
 namespace asi.asicentral.oauth
 {
@@ -92,7 +93,15 @@ namespace asi.asicentral.oauth
                     redirectParams.RefreshToken = extraData.RefreshToken;
                     redirectParams.TokenExpirationTime = (extraData.TokenExpirationTime.HasValue && extraData.TokenExpirationTime.Value > DateTime.Now) ? 
                         extraData.TokenExpirationTime.Value : DateTime.Now.Add(new TimeSpan(2, 0, 0));
-                    redirectParams.ExtGuid = string.Empty;
+                    if (ApplicationCodes.WESP == appCode)
+                    {
+                        ASI.Jade.UserManagement.Session session = new ASI.Jade.UserManagement.Session();
+                        Session sessionData = new Session(GetId(false, request, response, "CMPSSO"), appCode.ToString(), "1.0.0", HttpContext.Current.Request.UserHostAddress);
+                        string sessionId = session.Create(sessionData);
+                        if (!string.IsNullOrEmpty(sessionId)) redirectParams.ExtGuid = sessionId;
+                    }
+                    else
+                        redirectParams.ExtGuid = string.Empty;
                     redirectParams.ToApplicationCode = appCode.ToString();
                     redirectParams.FromApplicationCode = asi.asicentral.oauth.ApplicationCodes.ASIC.ToString();
                     redirectParams.FromApplicationVer = "1";
