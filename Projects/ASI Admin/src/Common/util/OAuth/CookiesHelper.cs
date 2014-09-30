@@ -96,7 +96,7 @@ namespace asi.asicentral.oauth
                     if (ApplicationCodes.WESP == appCode)
                     {
                         ASI.Jade.UserManagement.Session session = new ASI.Jade.UserManagement.Session();
-                        Session sessionData = new Session(GetId(false, request, response, "CMPSSO"), appCode.ToString(), "1.0.0", HttpContext.Current.Request.UserHostAddress);
+                        Session sessionData = new Session(GetId(false, request, response, "CMPSSO"), ApplicationCodes.ASIC.ToString(), "1.0.0", HttpContext.Current.Request.UserHostAddress);
                         string sessionId = session.Create(sessionData);
                         if (!string.IsNullOrEmpty(sessionId)) redirectParams.ExtGuid = sessionId;
                     }
@@ -104,7 +104,7 @@ namespace asi.asicentral.oauth
                         redirectParams.ExtGuid = string.Empty;
                     redirectParams.ToApplicationCode = appCode.ToString();
                     redirectParams.FromApplicationCode = asi.asicentral.oauth.ApplicationCodes.ASIC.ToString();
-                    redirectParams.FromApplicationVer = "1";
+                    redirectParams.FromApplicationVer = "1.0.0";
                     var url = ConfigurationManager.AppSettings["RedirectUrl"];
                     redirectUrl = CrossApplication.GetDashboardRedirectorUrl(url, redirectParams);
                 }
