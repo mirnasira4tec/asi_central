@@ -16,7 +16,7 @@ namespace asi.asicentral.oauth
     {
         public static void SetFormsAuthenticationCookie(HttpRequestBase request, HttpResponseBase response, asi.asicentral.model.User user, bool isCreate, string userCookieName = "Name", string domainName = null)
         {
-            CrossApplication.RedirectParams redirectParams = new CrossApplication.RedirectParams();
+            var redirectParams = new CrossApplication.RedirectParams();
             redirectParams.AccessToken = user.AccessToken;
             redirectParams.RefreshToken = user.RefreshToken;
             string userName = ASIOAuthClient.GetUserName(user.FirstName, user.LastName);
@@ -41,7 +41,7 @@ namespace asi.asicentral.oauth
                 if (persist) cookie.Expires = DateTime.Now.AddYears(year);
                 response.Cookies.Set(cookie);
             }
-            else if (addCookie)
+            else if (addCookie && response != null)
             {
                 cookie = !string.IsNullOrEmpty(domain)
                     ? new HttpCookie(key, value) { Domain = domain }
@@ -56,9 +56,9 @@ namespace asi.asicentral.oauth
             string cookieValue = string.Empty;
             if (request == null && response == null) return cookieValue;
             HttpCookie cookie = null;
-            if (request.Cookies != null && request.Cookies.AllKeys != null && request.Cookies.AllKeys.Contains(key)) 
+            if (request.Cookies != null && request.Cookies.AllKeys.Contains(key)) 
                 cookie = request.Cookies.Get(key);
-            if (cookie == null && response.Cookies != null && response.Cookies.AllKeys != null && response.Cookies.AllKeys.Contains(key)) 
+            if (cookie == null && response != null && response.Cookies != null && response.Cookies.AllKeys.Contains(key)) 
                 cookie = response.Cookies.Get(key);
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
                 cookieValue = cookie.Value;
@@ -78,7 +78,7 @@ namespace asi.asicentral.oauth
                     var tokens = ASIOAuthClient.RefreshToken(extraData.RefreshToken);
                     if (tokens != null && tokens.Count > 0)
                     {
-                        asi.asicentral.model.User user = new asicentral.model.User();
+                        var user = new model.User();
                         if (tokens.ContainsKey("AccessToken")) user.AccessToken = tokens["AccessToken"];
                         if (tokens.ContainsKey("RefreshToken")) user.RefreshToken = tokens["RefreshToken"];
                         SetFormsAuthenticationCookie(request, response, user, false, userCookieName);
@@ -88,15 +88,15 @@ namespace asi.asicentral.oauth
                 }
                 if (extraData != null)
                 {
-                    var redirectParams = new ASI.Jade.Utilities.CrossApplication.RedirectParams();
+                    var redirectParams = new CrossApplication.RedirectParams();
                     redirectParams.AccessToken = extraData.AccessToken;
                     redirectParams.RefreshToken = extraData.RefreshToken;
                     redirectParams.TokenExpirationTime = (extraData.TokenExpirationTime.HasValue && extraData.TokenExpirationTime.Value > DateTime.Now) ? 
                         extraData.TokenExpirationTime.Value : DateTime.Now.Add(new TimeSpan(2, 0, 0));
                     if (ApplicationCodes.WESP == appCode)
                     {
-                        ASI.Jade.UserManagement.Session session = new ASI.Jade.UserManagement.Session();
-                        Session sessionData = new Session(GetId(false, request, response, "CMPSSO"), appCode.ToString(), "1.0.0", HttpContext.Current.Request.UserHostAddress);
+                        var session = new ASI.Jade.UserManagement.Session();
+                        var sessionData = new Session(GetId(false, request, response, "CMPSSO"), appCode.ToString(), "1.0.0", HttpContext.Current.Request.UserHostAddress);
                         string sessionId = session.Create(sessionData);
                         if (!string.IsNullOrEmpty(sessionId)) redirectParams.ExtGuid = sessionId;
                     }
