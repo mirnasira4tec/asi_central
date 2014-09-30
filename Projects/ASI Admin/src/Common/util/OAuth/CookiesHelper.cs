@@ -99,12 +99,15 @@ namespace asi.asicentral.oauth
                         Session sessionData = new Session(GetId(false, request, response, "CMPSSO"), ApplicationCodes.ASIC.ToString(), "1.0.0", HttpContext.Current.Request.UserHostAddress);
                         string sessionId = session.Create(sessionData);
                         if (!string.IsNullOrEmpty(sessionId)) redirectParams.ExtGuid = sessionId;
+                        redirectParams.FromApplicationVer = "1.0.0";
                     }
                     else
+                    {
                         redirectParams.ExtGuid = string.Empty;
+                        redirectParams.FromApplicationVer = "1";
+                    }
                     redirectParams.ToApplicationCode = appCode.ToString();
                     redirectParams.FromApplicationCode = asi.asicentral.oauth.ApplicationCodes.ASIC.ToString();
-                    redirectParams.FromApplicationVer = "1.0.0";
                     var url = ConfigurationManager.AppSettings["RedirectUrl"];
                     redirectUrl = CrossApplication.GetDashboardRedirectorUrl(url, redirectParams);
                 }
