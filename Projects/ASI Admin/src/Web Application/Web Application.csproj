@@ -44,8 +44,72 @@
     <Reference Include="asi.asicentral.Core">
       <HintPath>..\..\library\asi.asicentral.Core.dll</HintPath>
     </Reference>
+    <Reference Include="ASI.EntityModel, Version=1.0.18.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ASI.EntityModel.1.0.18\lib\ASI.EntityModel.dll</HintPath>
+    </Reference>
+    <Reference Include="ASI.Jade, Version=1.3.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ASI.Jade.1.3.7-beta\lib\ASI.Jade.dll</HintPath>
+    </Reference>
+    <Reference Include="ASI.Sugar, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ASI.Sugar.1.4.0-beta\lib\ASI.Sugar.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core">
       <HintPath>..\packages\Castle.Core.3.1.0\lib\net40-client\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="DotLiquid, Version=1.8.0.0, Culture=neutral, PublicKeyToken=82e46016ecf9f07c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotLiquid.1.8.0\lib\NET45\DotLiquid.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.AspNet, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.AspNet.4.3.1.13153\lib\net45-full\DotNetOpenAuth.AspNet.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.Core.4.3.1.13153\lib\net45-full\DotNetOpenAuth.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OAuth, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.OAuth.Core.4.3.1.13153\lib\net45-full\DotNetOpenAuth.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OAuth.Consumer, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.OAuth.Consumer.4.3.1.13153\lib\net45-full\DotNetOpenAuth.OAuth.Consumer.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OAuth2, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.OAuth2.Core.4.3.1.13153\lib\net45-full\DotNetOpenAuth.OAuth2.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OAuth2.Client, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.OAuth2.Client.4.3.1.13153\lib\net45-full\DotNetOpenAuth.OAuth2.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OAuth2.ClientAuthorization, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.OAuth2.ClientAuthorization.4.3.1.13153\lib\net45-full\DotNetOpenAuth.OAuth2.ClientAuthorization.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.OpenId.Core.4.3.1.13153\lib\net45-full\DotNetOpenAuth.OpenId.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId.RelyingParty, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.OpenId.RelyingParty.4.3.1.13153\lib\net45-full\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
+    </Reference>
+    <Reference Include="EasyNetQ, Version=0.32.0.264, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EasyNetQ.0.32.0.264\lib\net40\EasyNetQ.dll</HintPath>
+    </Reference>
+    <Reference Include="EasyNetQ.Management.Client, Version=0.32.0.264, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EasyNetQ.Management.Client.0.32.0.264\lib\net40\EasyNetQ.Management.Client.dll</HintPath>
     </Reference>
     <Reference Include="EFProviderWrapperToolkit">
       <HintPath>..\packages\CommunityEFProviderWrappers.EFProviderWrapperToolkit.1.0.0\lib\net40-Client\EFProviderWrapperToolkit.dll</HintPath>
@@ -56,6 +120,10 @@
     <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageResizer, Version=3.4.3.103, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ImageResizer.3.4.3\lib\ImageResizer.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\..\library\Ionic.Zip.dll</HintPath>
@@ -80,9 +148,13 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RabbitMQ.Client, Version=3.3.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RabbitMQ.Client.3.3.0\lib\net30\RabbitMQ.Client.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
@@ -165,6 +237,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="unirest-net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\unirest-net.1.0.0\lib\unirest-net.dll</HintPath>
+    </Reference>
     <Reference Include="WebActivator">
       <HintPath>..\packages\WebActivator.1.5.3\lib\net40\WebActivator.dll</HintPath>
     </Reference>
@@ -179,30 +255,6 @@
     <Reference Include="WebMatrix.WebData, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.WebData.2.0.20710.0\lib\net40\WebMatrix.WebData.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetOpenAuth.AspNet, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\DotNetOpenAuth.AspNet.4.0.3.12153\lib\net40-full\DotNetOpenAuth.AspNet.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetOpenAuth.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\DotNetOpenAuth.Core.4.0.3.12153\lib\net40-full\DotNetOpenAuth.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetOpenAuth.OAuth.Consumer, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\DotNetOpenAuth.OAuth.Consumer.4.0.3.12153\lib\net40-full\DotNetOpenAuth.OAuth.Consumer.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetOpenAuth.OAuth, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\DotNetOpenAuth.OAuth.Core.4.0.3.12153\lib\net40-full\DotNetOpenAuth.OAuth.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetOpenAuth.OpenId, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\DotNetOpenAuth.OpenId.Core.4.0.3.12153\lib\net40-full\DotNetOpenAuth.OpenId.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetOpenAuth.OpenId.RelyingParty, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\DotNetOpenAuth.OpenId.RelyingParty.4.0.3.12153\lib\net40-full\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>

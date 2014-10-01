@@ -10,8 +10,7 @@ namespace asi.asicentral.util
 {
     public class IPHelper
     {
-        private static string[] ASIAN_COUNTRIES = new string[] { "CHINA", "HONG KONG" };
-
+        private static string[] ASIAN_COUNTRIES = new string[] { "CHINA", "HONG KONG","INDIA","KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF","KOREA, REPUBLIC OF","TAIWAN, PROVINCE OF CHINA" };
         /// <summary>
         /// Gives country based on give IP addres, caches the value in session
         /// </summary>

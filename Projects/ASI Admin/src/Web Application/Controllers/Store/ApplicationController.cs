@@ -23,7 +23,7 @@ namespace asi.asicentral.web.Controllers.Store
         //products associated to StoreDetailESPAdvertising table
         public static readonly int[] SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS = { 48, 49, 50, 51, 52, 53};
         //products associated to StoreDetailCatalog table
-        public static readonly int[] DISTRIBUTOR_CATALOG_PRODUCT_IDS = { 35, 36, 37, 38, 39, 40, 41 };
+        public static readonly int[] DISTRIBUTOR_CATALOG_PRODUCT_IDS = { 35, 36, 37, 38, 39, 40, 41, 82 };
         //products associated to StoreDetailPayForPlacement table
         public static readonly int[] SUPPLIER_ESP_PAYFORPLACEMENT_PRODUCT_IDS = { 47, 63 };
         //products associated to StoreDetailEmailExpress table

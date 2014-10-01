@@ -1,0 +1,40 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>
+<body>
+<div>Thank you for registering with <a href="<%ASICentral%>"><%ASICentral%></a>.  The online home of the Advertising Specialty Institute, the largest media and marketing organization serving the 
+
+ad 
+
+specialty industry.</div><br/>
+
+<div>Find information about ASI's products and services along with content from our award-winning editorial staff.  The site is 
+
+updated daily, so visit often at 
+
+<a href="<%ASICentral%>"><%ASICentral%></a>.</div><br/>
+
+<div>Your username is:&nbsp;<b><a href='mailto:<%Email%>'><%Email%></a></b></div><br>
+
+<div>Please save this email for 
+
+future reference.</div><br>
+
+<div>To change your profile, please visit<br><a href="<%ASIEditProfile%>"><%ASIEditProfile%></a><br></div>
+
+<br><div>If you have any 
+
+questions about accessing the site, please contact us at <a href="mailto:support@asicentral.com">support@asicentral.com</a> or call 800-546-1350.</div><br>
+
+<div>To provide feedback on what you've read or heard on 
+
+<a href="<%ASICentral%>"><%ASICentral%></a>, please send your comments to <a href="mailto:feedback@asicentral.com">feedback@asicentral.com</a>.</div><br>
+
+<div>Regards,</div>
+
+<div>The ASICentral Team</div>
+
+ 
+
+<div><a href="<%ASICentral%>"><%ASICentral%></a></div>
+</div><br><br></div>  </div> </div>  </div> </div></body></html>

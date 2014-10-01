@@ -1,0 +1,2 @@
+<div style="width:600px; text-align:left;"><div style="float:left;"></div><div style="float:left;"><p>A Successful Promotions Offer was completed<br/><br/>OrderID: [orderID]</div></div>
+

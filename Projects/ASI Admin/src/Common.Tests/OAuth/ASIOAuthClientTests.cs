@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using ASI.Jade.v2;
 using System.Threading.Tasks;
 using asi.asicentral.model;
-using unirest_net.http;
 using System.Net.Http;
 
 namespace Core.Tests.OAuth
@@ -87,6 +86,13 @@ namespace Core.Tests.OAuth
         {
             asi.asicentral.model.User user = ASIOAuthClient.GetCompanyByASINumber("12345");
             Assert.IsNull(user);
+        }
+
+        [TestMethod]
+        public void IsValidUserByTrueCredentials()
+        {
+            IDictionary<string, string> result = ASIOAuthClient.IsValidUser("125724pk", "password1");
+            Assert.IsNotNull(result);
         }
                 
         [TestMethod]

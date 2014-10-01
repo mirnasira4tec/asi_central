@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Configuration;
 using System.Web.Security;
+using ASI.Jade.UserManagement.DataObjects;
 
 namespace asi.asicentral.oauth
 {
@@ -15,7 +16,7 @@ namespace asi.asicentral.oauth
     {
         public static void SetFormsAuthenticationCookie(HttpRequestBase request, HttpResponseBase response, asi.asicentral.model.User user, bool isCreate, string userCookieName = "Name", string domainName = null)
         {
-            CrossApplication.RedirectParams redirectParams = new CrossApplication.RedirectParams();
+            var redirectParams = new CrossApplication.RedirectParams();
             redirectParams.AccessToken = user.AccessToken;
             redirectParams.RefreshToken = user.RefreshToken;
             string userName = ASIOAuthClient.GetUserName(user.FirstName, user.LastName);
@@ -40,7 +41,7 @@ namespace asi.asicentral.oauth
                 if (persist) cookie.Expires = DateTime.Now.AddYears(year);
                 response.Cookies.Set(cookie);
             }
-            else if (addCookie)
+            else if (addCookie && response != null)
             {
                 cookie = !string.IsNullOrEmpty(domain)
                     ? new HttpCookie(key, value) { Domain = domain }
@@ -53,8 +54,12 @@ namespace asi.asicentral.oauth
         public static string GetCookieValue(HttpRequestBase request, HttpResponseBase response, string key)
         {
             string cookieValue = string.Empty;
-            HttpCookie cookie = request.Cookies.Get(key);
-            if (cookie == null) cookie = response.Cookies.Get(key);
+            if (request == null && response == null) return cookieValue;
+            HttpCookie cookie = null;
+            if (request.Cookies != null && request.Cookies.AllKeys.Contains(key)) 
+                cookie = request.Cookies.Get(key);
+            if (cookie == null && response != null && response.Cookies != null && response.Cookies.AllKeys.Contains(key)) 
+                cookie = response.Cookies.Get(key);
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
                 cookieValue = cookie.Value;
             return cookieValue;
@@ -73,7 +78,7 @@ namespace asi.asicentral.oauth
                     var tokens = ASIOAuthClient.RefreshToken(extraData.RefreshToken);
                     if (tokens != null && tokens.Count > 0)
                     {
-                        asi.asicentral.model.User user = new asicentral.model.User();
+                        var user = new model.User();
                         if (tokens.ContainsKey("AccessToken")) user.AccessToken = tokens["AccessToken"];
                         if (tokens.ContainsKey("RefreshToken")) user.RefreshToken = tokens["RefreshToken"];
                         SetFormsAuthenticationCookie(request, response, user, false, userCookieName);
@@ -83,15 +88,26 @@ namespace asi.asicentral.oauth
                 }
                 if (extraData != null)
                 {
-                    var redirectParams = new ASI.Jade.Utilities.CrossApplication.RedirectParams();
+                    var redirectParams = new CrossApplication.RedirectParams();
                     redirectParams.AccessToken = extraData.AccessToken;
                     redirectParams.RefreshToken = extraData.RefreshToken;
                     redirectParams.TokenExpirationTime = (extraData.TokenExpirationTime.HasValue && extraData.TokenExpirationTime.Value > DateTime.Now) ? 
                         extraData.TokenExpirationTime.Value : DateTime.Now.Add(new TimeSpan(2, 0, 0));
-                    redirectParams.ExtGuid = string.Empty;
+                    if (ApplicationCodes.WESP == appCode)
+                    {
+                        var session = new ASI.Jade.UserManagement.Session();
+                        var sessionData = new Session(GetId(false, request, response, "CMPSSO"), ApplicationCodes.ASIC.ToString(), "1.0.0", HttpContext.Current.Request.UserHostAddress);
+                        string sessionId = session.Create(sessionData);
+                        if (!string.IsNullOrEmpty(sessionId)) redirectParams.ExtGuid = sessionId;
+                        redirectParams.FromApplicationVer = "1.0.0";
+                    }
+                    else
+                    {
+                        redirectParams.ExtGuid = string.Empty;
+                        redirectParams.FromApplicationVer = "1";
+                    }
                     redirectParams.ToApplicationCode = appCode.ToString();
                     redirectParams.FromApplicationCode = asi.asicentral.oauth.ApplicationCodes.ASIC.ToString();
-                    redirectParams.FromApplicationVer = "1";
                     var url = ConfigurationManager.AppSettings["RedirectUrl"];
                     redirectUrl = CrossApplication.GetDashboardRedirectorUrl(url, redirectParams);
                 }
@@ -106,13 +122,11 @@ namespace asi.asicentral.oauth
         public static int GetId(bool isCompanyId, HttpRequestBase request, HttpResponseBase response, string cookieName)
         {
             int id = 0;
-            HttpCookie cookie = null;
-            if (request != null) cookie = request.Cookies.Get(cookieName);
-            if (cookie == null && response != null) cookie = response.Cookies.Get(cookieName);
-            if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
+            string cmpsso = GetCookieValue(request, response, cookieName);
+            if (!string.IsNullOrEmpty(cmpsso))
             {
-                if (isCompanyId) id = Convert.ToInt32(cookie.Value.Substring(0, cookie.Value.IndexOf('-')));
-                else id = Convert.ToInt32(cookie.Value.Substring(cookie.Value.IndexOf('-') + 1));
+                if (isCompanyId) id = Convert.ToInt32(cmpsso.Substring(0, cmpsso.IndexOf('-')));
+                else id = Convert.ToInt32(cmpsso.Substring(cmpsso.IndexOf('-') + 1));
             }
             return id;
         }

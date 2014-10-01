@@ -12,6 +12,25 @@ namespace asi.asicentral.services
     public class EncryptionService : IEncryptionService
     {
         private static byte[] _salt = Encoding.ASCII.GetBytes("What happens at ASI stays at ASI");
+		
+		public string ECBEncrypt(string key, string text)
+		{
+			RijndaelManaged aes = new RijndaelManaged();
+			aes.BlockSize = 128;
+			aes.KeySize = 256;
+
+			/// In Java, Same with below code
+			/// Cipher _Cipher = Cipher.getInstance("AES");  // Java Code
+			aes.Mode = CipherMode.ECB;
+
+			aes.Key = ASCIIEncoding.UTF8.GetBytes(key);
+
+			ICryptoTransform encrypto = aes.CreateEncryptor();
+
+			byte[] plainTextByte = ASCIIEncoding.UTF8.GetBytes(text);
+			byte[] CipherText = encrypto.TransformFinalBlock(plainTextByte, 0, plainTextByte.Length);
+			return Convert.ToBase64String(CipherText);
+		}
 
         public string Encrypt(string key, string text)
         {

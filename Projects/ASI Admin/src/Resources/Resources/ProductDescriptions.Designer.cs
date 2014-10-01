@@ -411,5 +411,14 @@ namespace asi.asicentral.Resources {
                 return ResourceManager.GetString("ProductWearablesAdvertising", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dedicated to apparel, the most popular product category in the promotional products industry! .
+        /// </summary>
+        public static string TheApparelCatalogNEWFORFALL2015 {
+            get {
+                return ResourceManager.GetString("TheApparelCatalogNEWFORFALL2015", resourceCulture);
+            }
+        }
     }
 }

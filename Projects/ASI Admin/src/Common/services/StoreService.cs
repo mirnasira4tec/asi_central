@@ -274,7 +274,7 @@ namespace asi.asicentral.services
         /// <param name="product"></param>
         /// <param name="quantity"></param>
         /// <returns></returns>
-        private decimal GetShippingCost(ContextProduct product, string country, int quantity = 1, string shippingMethod = "UPS2Day", bool isGiftSupplement = false, decimal? weight = null)
+        private decimal GetShippingCost(ContextProduct product, string country, int quantity = 1, string shippingMethod = "UPSGround", bool isGiftSupplement = false, decimal? weight = null)
         {
             decimal cost = 0m;
             if (product == null || country == null) throw new Exception("Invalid call to the GetShippingCost method");
