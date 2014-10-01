@@ -69,49 +69,64 @@ namespace asi.asicentral.oauth
         {
             string redirectUrl = string.Empty;
             string cookie = GetCookieValue(request, response, FormsAuthentication.FormsCookieName);
-            if (!string.IsNullOrEmpty(cookie))
-            {
-                var hashedTicket = FormsAuthentication.Decrypt(cookie);
-                var extraData = JsonConvert.DeserializeObject<CrossApplication.RedirectParams>(hashedTicket.UserData, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
-                if (extraData != null && !string.IsNullOrEmpty(extraData.RefreshToken) && extraData.TokenExpirationTime < DateTime.Now)
-                {
-                    var tokens = ASIOAuthClient.RefreshToken(extraData.RefreshToken);
-                    if (tokens != null && tokens.Count > 0)
-                    {
-                        var user = new model.User();
-                        if (tokens.ContainsKey("AccessToken")) user.AccessToken = tokens["AccessToken"];
-                        if (tokens.ContainsKey("RefreshToken")) user.RefreshToken = tokens["RefreshToken"];
-                        SetFormsAuthenticationCookie(request, response, user, false, userCookieName);
-                        hashedTicket = FormsAuthentication.Decrypt(cookie);
-                        extraData = JsonConvert.DeserializeObject<CrossApplication.RedirectParams>(hashedTicket.UserData);
-                    }
-                }
-                if (extraData != null)
-                {
-                    var redirectParams = new CrossApplication.RedirectParams();
-                    redirectParams.AccessToken = extraData.AccessToken;
-                    redirectParams.RefreshToken = extraData.RefreshToken;
-                    redirectParams.TokenExpirationTime = (extraData.TokenExpirationTime.HasValue && extraData.TokenExpirationTime.Value > DateTime.Now) ? 
-                        extraData.TokenExpirationTime.Value : DateTime.Now.Add(new TimeSpan(2, 0, 0));
-                    if (ApplicationCodes.WESP == appCode)
-                    {
-                        var session = new ASI.Jade.UserManagement.Session();
-                        var sessionData = new Session(GetId(false, request, response, "CMPSSO"), ApplicationCodes.ASIC.ToString(), "1.0.0", HttpContext.Current.Request.UserHostAddress);
-                        string sessionId = session.Create(sessionData);
-                        if (!string.IsNullOrEmpty(sessionId)) redirectParams.ExtGuid = sessionId;
-                        redirectParams.FromApplicationVer = "1.0.0";
-                    }
-                    else
-                    {
-                        redirectParams.ExtGuid = string.Empty;
-                        redirectParams.FromApplicationVer = "1";
-                    }
-                    redirectParams.ToApplicationCode = appCode.ToString();
-                    redirectParams.FromApplicationCode = asi.asicentral.oauth.ApplicationCodes.ASIC.ToString();
-                    var url = ConfigurationManager.AppSettings["RedirectUrl"];
-                    redirectUrl = CrossApplication.GetDashboardRedirectorUrl(url, redirectParams);
-                }
-            }
+	        if (!string.IsNullOrEmpty(cookie))
+	        {
+		        var hashedTicket = FormsAuthentication.Decrypt(cookie);
+		        var extraData = JsonConvert.DeserializeObject<CrossApplication.RedirectParams>(hashedTicket.UserData,
+			        new JsonSerializerSettings() {NullValueHandling = NullValueHandling.Ignore});
+		        if (extraData != null && !string.IsNullOrEmpty(extraData.RefreshToken) &&
+		            extraData.TokenExpirationTime < DateTime.Now)
+		        {
+			        var tokens = ASIOAuthClient.RefreshToken(extraData.RefreshToken);
+			        if (tokens != null && tokens.Count > 0)
+			        {
+				        var user = new model.User();
+				        if (tokens.ContainsKey("AccessToken")) user.AccessToken = tokens["AccessToken"];
+				        if (tokens.ContainsKey("RefreshToken")) user.RefreshToken = tokens["RefreshToken"];
+				        SetFormsAuthenticationCookie(request, response, user, false, userCookieName);
+				        hashedTicket = FormsAuthentication.Decrypt(cookie);
+				        extraData = JsonConvert.DeserializeObject<CrossApplication.RedirectParams>(hashedTicket.UserData);
+			        }
+		        }
+		        if (extraData != null)
+		        {
+			        var redirectParams = new CrossApplication.RedirectParams();
+			        redirectParams.AccessToken = extraData.AccessToken;
+			        redirectParams.RefreshToken = extraData.RefreshToken;
+			        redirectParams.TokenExpirationTime = (extraData.TokenExpirationTime.HasValue &&
+			                                              extraData.TokenExpirationTime.Value > DateTime.Now)
+				        ? extraData.TokenExpirationTime.Value
+				        : DateTime.Now.Add(new TimeSpan(2, 0, 0));
+			        if (ApplicationCodes.WESP == appCode)
+			        {
+				        var session = new ASI.Jade.UserManagement.Session();
+				        var sessionData = new Session(GetId(false, request, response, "CMPSSO"), ApplicationCodes.ASIC.ToString(),
+					        "1.0.0", HttpContext.Current.Request.UserHostAddress);
+				        string sessionId = session.Create(sessionData);
+				        if (!string.IsNullOrEmpty(sessionId)) redirectParams.ExtGuid = sessionId;
+				        redirectParams.FromApplicationVer = "1.0.0";
+			        }
+			        else
+			        {
+				        redirectParams.ExtGuid = string.Empty;
+				        redirectParams.FromApplicationVer = "1";
+			        }
+			        redirectParams.ToApplicationCode = appCode.ToString();
+			        redirectParams.FromApplicationCode = ApplicationCodes.ASIC.ToString();
+			        var url = ConfigurationManager.AppSettings["RedirectUrl"];
+			        redirectUrl = CrossApplication.GetDashboardRedirectorUrl(url, redirectParams);
+		        }
+	        }
+	        else
+	        {
+		        //user is not logged in
+		        switch (appCode)
+		        {
+			        case ApplicationCodes.WESP:
+				        redirectUrl = "http://espweb.asicentral.com/";
+				        break;
+		        }
+	        }
 
             if (string.IsNullOrEmpty(redirectUrl) && !string.IsNullOrEmpty(ConfigurationManager.AppSettings["RedirectUrl"]))
                 redirectUrl = ConfigurationManager.AppSettings["RedirectUrl"];

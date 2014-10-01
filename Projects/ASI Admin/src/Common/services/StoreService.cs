@@ -188,6 +188,7 @@ namespace asi.asicentral.services
                         if (string.IsNullOrEmpty(orderDetail.ShippingMethod)) orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity);
                         else
                         {
+							//specturm has a supplement option which may impact shipping
                             bool isGiftSupplement = false;
                             if (orderDetail.Product.Id == 39)
                             {
@@ -203,7 +204,7 @@ namespace asi.asicentral.services
 
                     orderDetail.TaxCost = tax;
                     //this is the cost of what to pay now
-                    order.Total += (((orderDetail.Cost + orderDetail.TaxCost) * orderDetail.Quantity) - orderDetail.DiscountAmount) + orderDetail.ShippingCost + orderDetail.ApplicationCost;
+					order.Total += (orderDetail.Cost * orderDetail.Quantity) + orderDetail.TaxCost - orderDetail.DiscountAmount + orderDetail.ShippingCost + orderDetail.ApplicationCost;
                     if (order.Total < 0.0m) order.Total = 0;
 
                     //This is to calculate annualized cost
