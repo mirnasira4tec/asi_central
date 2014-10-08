@@ -502,26 +502,30 @@ namespace asi.asicentral.oauth
 
                 Phone phone = null;
                 Phone fax = null;
-                if (entityUser.Phones == null && (!string.IsNullOrEmpty(user.Phone) ||  !string.IsNullOrEmpty(user.Fax)))
+                if ((entityUser.Phones == null || (entityUser.Phones != null && entityUser.Phones.Count == 0)) && (!string.IsNullOrEmpty(user.Phone) || !string.IsNullOrEmpty(user.Fax)))
                 {
-                    entityUser.Phones = new List<Phone>();
+                    if(entityUser.Phones == null) entityUser.Phones = new List<Phone>();
                     if (!string.IsNullOrEmpty(user.Phone))
                     {
                         phone = new Phone();
                         phone.IsPrimary = true;
+                        phone.UserId = user.SSOId;
                         entityUser.Phones.Add(phone);
                     }
                     if (!string.IsNullOrEmpty(user.Fax))
                     {
                         fax = new Phone();
                         fax.IsFax = true;
+                        fax.UserId = user.SSOId;
                         entityUser.Phones.Add(fax);
                     }
                 }
                 else if (entityUser.Phones != null && entityUser.Phones.Count > 0)
                 {
                     phone = entityUser.Phones.Where(ph => ph.IsPrimary).FirstOrDefault();
+                    if (string.IsNullOrEmpty(user.Phone)) { entityUser.Phones.Remove(phone); phone = null; }
                     fax = entityUser.Phones.Where(ph => ph.IsFax).FirstOrDefault();
+                    if (string.IsNullOrEmpty(user.Fax)) { entityUser.Phones.Remove(fax); fax = null; }
                 }
                 if (phone != null)
                 {
