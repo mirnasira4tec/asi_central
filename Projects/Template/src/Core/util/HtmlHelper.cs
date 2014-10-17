@@ -232,10 +232,11 @@ namespace asi.asicentral.util
                     request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
                 }
                 request.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.168 Safari/535.19");
-                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml", 0.9));
-                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/html", 0.8));
-                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/xml", 0.8));
-                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xhtml+xml", 0.8));
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/html"));
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/xml"));
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xhtml+xml"));
                 if (headerParam != null)
                 {
                     foreach (string key in headerParam.Keys)
@@ -311,16 +312,19 @@ namespace asi.asicentral.util
             if (!post && parameters.Count > 0)
                 webParams.Append("?");
             //build query string
-            foreach (string key in parameters.Keys)
-            {
-                if (webParams.Length > 1) webParams.Append("&");
-                webParams.Append(key)
-                    .Append("=")
-                    .Append(HttpUtility.UrlEncode(parameters[key]));
-                logService.Debug("\t" + key + "=" + parameters[key]);
-            }
-            //create the web request
-            string finalUrl = (post ? url : url + webParams.ToString());
+	        if (parameters != null)
+	        {
+		        foreach (string key in parameters.Keys)
+		        {
+			        if (webParams.Length > 1) webParams.Append("&");
+			        webParams.Append(key)
+				        .Append("=")
+				        .Append(HttpUtility.UrlEncode(parameters[key]));
+			        logService.Debug("\t" + key + "=" + parameters[key]);
+		        }
+	        }
+	        //create the web request
+            string finalUrl = (post ? url : url + webParams);
             string content = (post ? webParams.ToString() : null);
             logService.Debug("Submit Form - Calling: " + finalUrl);
             return SubmitWebRequest(finalUrl, null, content, post, returnContent);
