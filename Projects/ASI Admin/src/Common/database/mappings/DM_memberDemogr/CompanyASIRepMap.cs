@@ -14,12 +14,10 @@ namespace asi.asicentral.database.mappings.DM_memberDemogr
         public CompanyASIRepMap()
         {
             this.ToTable("vwCompanyASIRep");
-           // this.HasKey(t => t.CompanyID+t.IndividualID+t.IndividualRoleCode);
-            this.HasKey(t => t.CompanyID);
+           this.HasKey(t => t.CompanyID);
 
             this.Property(t => t.CompanyID)
-                .HasColumnName("Company_ID")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+                .HasColumnName("Company_ID");
                
             this.Property(t => t.IndividualID)
                 .HasColumnName("Individual_ID");
