@@ -7,6 +7,7 @@ using asi.asicentral.model.news;
 using asi.asicentral.model.timss;
 using asi.asicentral.model.call;
 using asi.asicentral.model.findsupplier;
+using asi.asicentral.model.DM_memberDemogr;
 
 namespace asi.asicentral.database.mappings
 {
@@ -21,6 +22,7 @@ namespace asi.asicentral.database.mappings
             SelectConstructor<ASIInternetContext>(() => new ASIInternetContext());
             SelectConstructor<StoreContext>(() => new StoreContext());
             SelectConstructor<ASIEmailBlastContext>(() => new ASIEmailBlastContext());
+            SelectConstructor<DM_MemberDemogrContext>(() => new DM_MemberDemogrContext());
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIInternetContext>().Name = "ASIInternetContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIPublicationContext>().Name = "ASIPublicationContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<InternetContext>().Name = "InternetContext";
@@ -29,6 +31,7 @@ namespace asi.asicentral.database.mappings
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<CallContext>().Name = "CallContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIEmailBlastContext>().Name = "ASIEmailBlastContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<MemberDemogrContext>().Name = "MemberDemogrContext";
+            For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<DM_MemberDemogrContext>().Name = "DM_MemberDemogrContext";
 
 
             //for each model - get the repository class with the appropriate context 
@@ -328,6 +331,12 @@ namespace asi.asicentral.database.mappings
                 .Ctor<IValidatedContext>().Named("ASIEmailBlastContext");
 
             #endregion ASIEmailBlastContext
+
+            #region DM_MemberDemogrContext
+            For<IRepository<CompanyASIRep>>().Use<EFRepository<CompanyASIRep>>()
+                .Ctor<IValidatedContext>().Named("DM_MemberDemogrContext");
+            #endregion DM_MemberDemogrContext
+
         }
     }
 }

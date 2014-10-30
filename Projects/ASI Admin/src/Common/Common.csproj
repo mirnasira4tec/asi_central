@@ -213,6 +213,7 @@
     <Compile Include="database\ASIInternetContext.cs" />
     <Compile Include="database\ASIPublicationContext.cs" />
     <Compile Include="database\CallContext.cs" />
+    <Compile Include="database\DM_MemberDemogrContext.cs" />
     <Compile Include="database\mappings\asiemailblast\ClosedCampaignDateMap.cs" />
     <Compile Include="database\mappings\asiinternet\ASPNetUsersMap.cs" />
     <Compile Include="database\mappings\asiinternet\CENTUserProfilesPROFMap.cs" />
@@ -228,6 +229,7 @@
     <Compile Include="database\mappings\asiinternet\SupplierDecoratingTypeMap.cs" />
     <Compile Include="database\mappings\call\CallQueueMap.cs" />
     <Compile Include="database\mappings\call\CallRequestsMap.cs" />
+    <Compile Include="database\mappings\DM_memberDemogr\CompanyASIRepMap.cs" />
     <Compile Include="database\mappings\memberdemogr\SupplierPhoneMap.cs" />
     <Compile Include="database\mappings\memberdemogr\SupplierPolicyMap.cs" />
     <Compile Include="database\mappings\memberdemogr\SupplierRatingMap.cs" />
@@ -276,6 +278,7 @@
     <Compile Include="database\MemberDemogrContext.cs" />
     <Compile Include="interfaces\ICreditCardService.cs" />
     <Compile Include="model\CompanyInformation.cs" />
+    <Compile Include="model\DM_memberDemogr\CompanyASIRep.cs" />
     <Compile Include="model\findsupplier\memberdemogr\SupplierRating.cs" />
     <Compile Include="model\findsupplier\memberdemogr\SupplierSeadElectronicAddress.cs" />
     <Compile Include="model\findsupplier\memberdemogr\SupplierPhone.cs" />
