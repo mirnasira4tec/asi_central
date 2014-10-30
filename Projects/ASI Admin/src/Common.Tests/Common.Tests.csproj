@@ -46,6 +46,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="asi.asicentral.Core, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\library\asi.asicentral.Core.dll</HintPath>
+    </Reference>
     <Reference Include="ASI.EntityModel">
       <HintPath>..\packages\ASI.EntityModel.1.0.18\lib\ASI.EntityModel.dll</HintPath>
     </Reference>
