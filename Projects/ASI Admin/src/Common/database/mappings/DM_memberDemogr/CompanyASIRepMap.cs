@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings.DM_memberDemogr
 {
-    class CompanyASIRepMap : EntityTypeConfiguration<CompanyASIRep>
+    public class CompanyASIRepMap : EntityTypeConfiguration<CompanyASIRep>
     {
         public CompanyASIRepMap()
         {
