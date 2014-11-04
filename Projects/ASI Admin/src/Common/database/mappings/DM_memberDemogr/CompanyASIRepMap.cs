@@ -14,11 +14,11 @@ namespace asi.asicentral.database.mappings.DM_memberDemogr
         public CompanyASIRepMap()
         {
             this.ToTable("vwCompanyASIRep");
-           this.HasKey(t => t.CompanyID);
+            this.HasKey(t => new { t.CompanyID, t.IndividualID, t.IndividualRoleCode });
 
             this.Property(t => t.CompanyID)
                 .HasColumnName("Company_ID");
-               
+
             this.Property(t => t.IndividualID)
                 .HasColumnName("Individual_ID");
 
@@ -70,7 +70,7 @@ namespace asi.asicentral.database.mappings.DM_memberDemogr
             this.Property(t => t.PrimaryPhoneFormatted)
                 .HasColumnName("Primary_Phone_Formatted");
 
-            
+
         }
     }
 }
