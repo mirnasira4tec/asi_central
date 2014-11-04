@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,8 +10,9 @@ namespace asi.asicentral.model.DM_memberDemogr
 {
     public class CompanyASIRep
     {
-        [Key]
+        [Column(Order = 0), Key]
         public int CompanyID { get; set; }
+        [Column(Order = 1), Key]
         public int IndividualID { get; set; }
         public string CustomerStatusCode { get; set; }
         public int? MasterCustomerID { get; set; }
@@ -23,6 +25,7 @@ namespace asi.asicentral.model.DM_memberDemogr
         public string NickName { get; set; }
         public string SalutationFormal { get; set; }
         public string SalutationInformal { get; set; }
+        [Column(Order = 2), Key]
         public string IndividualRoleCode { get; set; }
         public string RoleDescription { get; set; }
         public string PrimaryEmail { get; set; }
