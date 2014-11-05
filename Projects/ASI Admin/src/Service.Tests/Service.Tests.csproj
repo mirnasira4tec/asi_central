@@ -123,6 +123,7 @@
     <Compile Include="ROIServiceTest.cs" />
     <Compile Include="ASIEmailBlastContextTest.cs" />
     <Compile Include="PersonifyTest.cs" />
+    <Compile Include="DM_MemberDemogrContextTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
