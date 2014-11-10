@@ -25,6 +25,9 @@ namespace asi.asicentral.database
         public DbSet<ContextFeatureProduct> FeatureProducts { get; set; }
         public DbSet<ContextProductSequence> ProductSequences { get; set; }
         public DbSet<Coupon> Coupons { get; set; }
+        public DbSet<FormType> FormTypes { get; set; }
+        public DbSet<FormInstance> FormInstances { get; set; }
+        public DbSet<FormValue> FormValues { get; set; }
         public DbSet<StoreDetailHallmarkRequest> HallmarkFormRequests { get; set; }
         public DbSet<LookCatalogOption> LookCatalogOptions { get; set; }
         public DbSet<LookDecoratorImprintingType> LookDecoratorImprintingTypes { get; set; }
@@ -80,6 +83,9 @@ namespace asi.asicentral.database
                 .Add(new ContextFeatureProductMap())
                 .Add(new ContextProductSequenceMap())
                 .Add(new CouponMap())
+                .Add(new FormTypeMap())
+                .Add(new FormInstanceMap())
+                .Add(new FormValueMap())
                 .Add(new StoreDetailHallmarkRequestMap())
                 .Add(new LookCatalogOptionMap())
                 .Add(new LookDecoratorImprintingTypeMap())
