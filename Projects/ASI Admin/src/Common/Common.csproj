@@ -235,6 +235,9 @@
     <Compile Include="database\mappings\memberdemogr\SupplierRatingMap.cs" />
     <Compile Include="database\mappings\memberdemogr\SupplierSeadElectronicAddressMap.cs" />
     <Compile Include="database\mappings\store\CouponMap.cs" />
+    <Compile Include="database\mappings\store\FormInstanceMap.cs" />
+    <Compile Include="database\mappings\store\FormTypeMap.cs" />
+    <Compile Include="database\mappings\store\FormValueMap.cs" />
     <Compile Include="database\mappings\store\LookAdPositionMap.cs" />
     <Compile Include="database\mappings\store\LookAdSizeMap.cs" />
     <Compile Include="database\mappings\store\LookEventMerchandiseProductMap.cs" />
@@ -292,6 +295,9 @@
     <Compile Include="model\OAuth\User.cs" />
     <Compile Include="model\ROI\Category.cs" />
     <Compile Include="model\ROI\Company.cs" />
+    <Compile Include="model\store\FormInstance.cs" />
+    <Compile Include="model\store\FormType.cs" />
+    <Compile Include="model\store\FormValue.cs" />
     <Compile Include="model\store\LookAdPosition.cs" />
     <Compile Include="model\store\LookAdSize.cs" />
     <Compile Include="model\store\ASPNetUsers.cs" />

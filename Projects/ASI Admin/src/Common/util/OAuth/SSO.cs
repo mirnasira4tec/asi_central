@@ -32,8 +32,7 @@ namespace asi.asicentral.oauth
 
             [Description("MultiLineRep")]
             MULTILINE_REP,
-
-            [Description("Multi Line Rep")]
+            [Description("MultiLineRep")]
             MULTI_LINE_REP,
 
             [Description("Supplier")]
