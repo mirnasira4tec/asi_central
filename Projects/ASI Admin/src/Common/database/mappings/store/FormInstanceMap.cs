@@ -30,9 +30,9 @@ namespace asi.asicentral.database.mappings.store
             this.Property(t => t.UpdateDate)
                 .HasColumnName("UpdateDateUTC");
 
-            HasRequired(instance => instance.FormType)
-                .WithMany()
-                .HasForeignKey(order => order.FormTypeId);
+	        this.HasRequired(instance => instance.FormType)
+		        .WithMany(type => type.FormInstances)
+		        .HasForeignKey(instance => instance.FormTypeId);
 
             HasMany(instance => instance.Values)
                 .WithRequired()

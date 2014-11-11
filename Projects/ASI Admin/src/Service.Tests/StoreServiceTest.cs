@@ -302,6 +302,7 @@ namespace asi.asicentral.Tests
                 var form = storeService.GetAll<FormInstance>().SingleOrDefault(instance => instance.ExternalReference == testKey);
                 Assert.IsNotNull(form, "Form could not be saved or retrieved");
                 Assert.AreEqual(2, form.Values.Count, "Did not get the right number of values");
+				Assert.IsNotNull(form.FormType);
             }
         }
     }
