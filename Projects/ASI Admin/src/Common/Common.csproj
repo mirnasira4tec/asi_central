@@ -459,6 +459,8 @@
     <Compile Include="util\store\Helper.cs" />
     <Compile Include="util\store\magazinesadvertising\MagazinesAdvertisingHelper.cs" />
     <Compile Include="util\store\magazinesadvertising\UpdateDateAndSource.cs" />
+    <Compile Include="views\CustomVirtualFile.cs" />
+    <Compile Include="views\CustomVirtualPathProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -478,6 +480,7 @@
     <None Include="Service References\web.CreditCardService\CreditCardService2.xsd">
       <SubType>Designer</SubType>
     </None>
+    <EmbeddedResource Include="views\store\GenericForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

@@ -17,7 +17,7 @@ namespace asi.asicentral.model.store
         }
 
         public int Id { get; set; }
-        public FormType FormType { get; set; }
+        public virtual FormType FormType { get; set; }
         public int FormTypeId { get; set; }
         public string Email { get; set; }
         public string Salutation { get; set; }
