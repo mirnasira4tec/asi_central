@@ -480,6 +480,7 @@
     <None Include="Service References\web.CreditCardService\CreditCardService2.xsd">
       <SubType>Designer</SubType>
     </None>
+    <EmbeddedResource Include="views\store\GenericForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

@@ -33,7 +33,7 @@
 	<ul class="dropdown-menu">
 		@foreach (var formType in Model.FormTypes)
 		{
-			<li><a href="#">@formType.Name</a></li>
+			<li><a href="/Forms/SendForm/@formType.Id">@formType.Name</a></li>
 		}
 	</ul>
 </div>

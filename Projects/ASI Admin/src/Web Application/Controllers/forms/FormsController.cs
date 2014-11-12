@@ -38,5 +38,16 @@ namespace asi.asicentral.web.Controllers.forms
 			viewModel.FormTypes = StoreService.GetAll<FormType>(true).ToList();
 			return View("../Forms/Index", viewModel);
         }
+
+        public ActionResult SendForm(int id)
+        {
+            FormType formType = StoreService.GetAll<FormType>(true).SingleOrDefault(fType => fType.Id == id);
+            if (formType == null) throw new Exception("Invalid FormType identifier: " + id);
+            FormInstance form = new FormInstance
+            {
+                FormType = formType,
+            };
+            return View("../Forms/SendForm", form);
+        }
     }
 }

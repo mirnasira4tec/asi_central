@@ -16,7 +16,7 @@ namespace asi.asicentral.views
 		private bool IsEmbeddedResourcePath(string virtualPath)
 		{
 			var checkPath = VirtualPathUtility.ToAppRelative(virtualPath);
-			return checkPath.StartsWith("~/asicentral/", StringComparison.InvariantCultureIgnoreCase);
+			return checkPath.StartsWith("~/asi.asicentral.common/", StringComparison.InvariantCultureIgnoreCase);
 		}
 
 		public override bool FileExists(string virtualPath)
