@@ -151,6 +151,7 @@ namespace asi.asicentral.web.Controllers.Store
         /// </summary>
         /// <param name="orderStatisticsData"></param>
         /// <returns></returns>
+        public static readonly string[] IGNORED_ASI_NUMBERS = { "30232", "30235", "125724" };
         public virtual ActionResult Statistics(OrderStatisticData orderStatisticsData, string statistics)
         {
             orderStatisticsData.FormTab = statistics + "Tab";
@@ -172,7 +173,7 @@ namespace asi.asicentral.web.Controllers.Store
                 else orderStatisticsData.EndDate = new DateTime(orderStatisticsData.EndDate.Value.Year, orderStatisticsData.EndDate.Value.Month, orderStatisticsData.EndDate.Value.Day, 23, 59, 59);
             }
             IQueryable<StoreOrder> ordersQuery = GetQuery(orderStatisticsData);
-            IList<StoreOrder> orders = ordersQuery.ToList();
+            IList<StoreOrder> orders = ExcludeInternalOrders(ordersQuery);
             IList<Group> groups = new List<Group>();
             switch (orderStatisticsData.Name)
             {
@@ -316,6 +317,32 @@ namespace asi.asicentral.web.Controllers.Store
             return Download(ordersQuery);
         }
 
+        private IList<StoreOrder> ExcludeInternalOrders(IQueryable<StoreOrder> ordersQuery)
+        {
+            //exclude the orders made using @asicentral.com, for orders made after login 
+            IList<StoreOrder> orders = ordersQuery.Where(o => (!string.IsNullOrEmpty(o.UserId) && !o.LoggedUserEmail.Contains("@asicentral.com"))
+                || (string.IsNullOrEmpty(o.UserId))).ToList();
+
+            //exclude the orders made with asinumbers 30232, 30235, 125724
+            orders = orders.Where(o => o.Company == null || !IGNORED_ASI_NUMBERS.Contains(o.Company.ASINumber)).ToList();
+
+            //exclude the orders made using @asicentral.com, for orders made without login  
+            if (orders != null)
+            {
+                IList<StoreOrder> filteredorders = new List<StoreOrder>();
+                foreach (StoreOrder order in orders)
+                {
+                    if (!(order.Company != null && order.Company.Individuals != null && order.Company.Individuals.Count > 0
+                        && !string.IsNullOrEmpty(order.Company.Individuals.ElementAt(0).Email)
+                        && order.Company.Individuals.ElementAt(0).Email.Contains("@asicentral.com")))
+                            filteredorders.Add(order);
+                }
+
+                orders = filteredorders;
+            }
+            return orders;
+        }
+
         /// <summary>
         /// Creates csv for the order query
         /// </summary>
@@ -328,8 +355,7 @@ namespace asi.asicentral.web.Controllers.Store
             csv.Append("Order ID" + separator + "Timss ID" + separator + "Company Name" + separator + "Contact Name" + separator + "Contact Phone" + separator + "Contact Email" + separator + "Orderstatus" + separator + "Amount" + separator + "Created Date" + separator + "Product Name" + separator + "Approved Date" + separator + "Annualized Amount");
             csv.Append(System.Environment.NewLine);
 
-            IList<StoreOrder> orders = ordersQuery.ToList();
-
+            IList<StoreOrder> orders = ExcludeInternalOrders(ordersQuery);
             foreach (StoreOrder order in orders)
             {
                 string orderid = string.Empty, timss = string.Empty, companyname = string.Empty, contactname = string.Empty, contactphone = string.Empty, contactemail = string.Empty, orderstatus = string.Empty, amount = string.Empty, annualizedamount = string.Empty, productname = string.Empty, approveddate = string.Empty, date = string.Empty;
