@@ -273,7 +273,7 @@ namespace asi.asicentral.Tests
                     FormType = formType,
                     UpdateSource = "FormPersistenceTest",                    
                     Email = "test@test.com",
-                    Salutation = "Mr Happy",
+                    Greetings = "Mr Happy",
                     ExternalReference = testKey,
                 };
                 form.Values.Add(new FormValue
