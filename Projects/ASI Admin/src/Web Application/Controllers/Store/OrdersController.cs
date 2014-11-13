@@ -320,11 +320,11 @@ namespace asi.asicentral.web.Controllers.Store
         private IList<StoreOrder> ExcludeInternalOrders(IQueryable<StoreOrder> ordersQuery)
         {
             //exclude the orders made using @asicentral.com, for orders made after login 
-            IList<StoreOrder> orders = ordersQuery.Where(o => (!string.IsNullOrEmpty(o.UserId) && !o.LoggedUserEmail.Contains("@asicentral.com"))
-                || (string.IsNullOrEmpty(o.UserId))).ToList();
+            ordersQuery = ordersQuery.Where(o => (!string.IsNullOrEmpty(o.UserId) && !o.LoggedUserEmail.Contains("@asicentral.com"))
+                || (string.IsNullOrEmpty(o.UserId)));
 
             //exclude the orders made with asinumbers 30232, 30235, 125724
-            orders = orders.Where(o => o.Company == null || !IGNORED_ASI_NUMBERS.Contains(o.Company.ASINumber)).ToList();
+            IList<StoreOrder> orders = ordersQuery.Where(o => o.Company == null || !IGNORED_ASI_NUMBERS.Contains(o.Company.ASINumber)).ToList();
 
             //exclude the orders made using @asicentral.com, for orders made without login  
             if (orders != null)
