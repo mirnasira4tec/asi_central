@@ -1,4 +1,5 @@
-﻿using asi.asicentral.model.store;
+﻿using System.Diagnostics;
+using asi.asicentral.model.store;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -38,6 +39,10 @@ namespace asi.asicentral.database.mappings.store
                 .WithRequired()
                 .HasForeignKey(formValue => formValue.FormInstanceId)
                 .WillCascadeOnDelete();
+
+	        HasOptional(instance => instance.OrderDetail)
+		        .WithMany()
+		        .HasForeignKey(instance => instance.OrderDetailId);
         }
     }
 }

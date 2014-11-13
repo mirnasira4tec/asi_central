@@ -33,7 +33,7 @@
 	<ul class="dropdown-menu">
 		@foreach (var formType in Model.FormTypes)
 		{
-			<li><a href="/Forms/SendForm/@formType.Id">@formType.Name</a></li>
+			<li><a href="/Forms/AddForm/@formType.Id">@formType.Name</a></li>
 		}
 	</ul>
 </div>
@@ -52,7 +52,7 @@
 		<tr>
 			<td>@form.CreateDate</td>
 			<td>@form.Email</td>
-			<td>@form.FormType.Name</td>
+			<td><a href="/Forms/SendForm/@form.Id">@form.FormType.Name</a></td>
 		</tr>
 	}
 	</tbody>
