@@ -3,9 +3,49 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Send a Form";
+	//Html.Partial("~/asi.asicentral.common/asi.asicentral.views.store.GenericForm.cshtml")
 }
 
-<h2>SendForm</h2>
-Add form specific fields here
+<h2>Send a @Model.FormType.Name</h2>
 
-@Html.Partial("~/asi.asicentral.common/asi.asicentral.views.store.GenericForm.cshtml")
+
+@using (Html.BeginForm("PostSendForm", "../Forms" ))
+{
+	@Html.AntiForgeryToken()
+	<input type="hidden" name="FormTypeId" value="@Model.FormType.Id"/>
+	<input type="hidden" name="ExternalReference" value="@Model.ExternalReference"/>
+	<div class="forms-header">
+		<div class="row">
+			<div class="span4">
+				<div class="form-group">
+					@Html.LabelFor(model => model.Email) @Html.EditorFor(model => model.Email)<br/>@Html.ValidationMessageFor(model => model.Email)
+				</div>
+			</div>
+			<div class="span4">
+				<div class="form-group">
+					@Html.LabelFor(model => model.Total) @Html.EditorFor(model => model.Total)<br/> @Html.ValidationMessageFor(model => model.Total)
+				</div>			
+			</div>
+			<div class="span2">
+				<br /><input type="submit" class="btn btn-primary" value="Send"/>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span8">
+				@Html.LabelFor(model => model.Greetings) @Html.EditorFor(model => model.Greetings)<br/> @Html.ValidationMessageFor(model => model.Greetings)
+			</div>
+		</div>
+	</div>
+	<br />
+	@Html.Partial(Model.FormType.Implementation)
+		<div class="row">
+			<div class="span8">&nbsp;</div>
+			<div class="span2">
+				<br /><input type="submit" class="btn btn-primary" value="Send"/>
+			</div>
+		</div>
+}
+
+@section Scripts {
+	@Scripts.Render("~/bundles/form")
+}
