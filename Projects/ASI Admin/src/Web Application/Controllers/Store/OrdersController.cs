@@ -381,6 +381,8 @@ namespace asi.asicentral.web.Controllers.Store
                         contactemail = primaryContact.Email;
                     }
                 }
+                if (string.IsNullOrEmpty(contactemail) && !string.IsNullOrEmpty(order.LoggedUserEmail))
+                    contactemail = order.LoggedUserEmail;
                 csv.Append(orderid + separator + timss + separator + companyname + separator + contactname + separator + contactphone + separator + contactemail + separator + orderstatus + separator + amount + separator + date.ToString() + separator + productname + separator + approveddate + separator + annualizedamount);
                 csv.Append(System.Environment.NewLine);
 
