@@ -11,6 +11,6 @@ namespace asi.asicentral.util.store
         public static readonly string[] PRODUCT_TYPES = { "Product", "Form" };
 
         //products associated only to Forms created
-        public static readonly int[] FORMS_ASSOCIATED_PRODUCT_IDS = { 17, 83, 84, 85, 86, 87, 88 };
+        public static readonly int[] FORMS_ASSOCIATED_PRODUCT_IDS = { 17 };
     }
 }
