@@ -131,7 +131,8 @@ namespace asi.asicentral.web.model.store
         public decimal Price { get; set; }
 
         public IList<StoreIndividual> Contacts { get; set; }
-        public FormInstance FormInstanceObject { get; set; } 
+        public FormInstance FormInstanceObject { get; set; }
+        public int FormInstanceId { get; set; }
         
         /// <summary>
         /// Required for MVC to rebuild the model
@@ -171,6 +172,7 @@ namespace asi.asicentral.web.model.store
             IsCompleted = order.IsCompleted;
             IsStoreRequest = order.IsStoreRequest;
             FormInstanceObject = storeService.GetAll<FormInstance>(false).SingleOrDefault(f => f.OrderDetailId == OrderDetailId);
+            if(FormInstanceObject != null) FormInstanceId = FormInstanceObject.Id;
 
             MembershipModelHelper.PopulateModel(this, orderdetail);
         }

@@ -13,11 +13,12 @@
 <p>@Model.ProductName product purchase fee is @Model.Price.ToString("C")</p>
 }
 @Html.Partial("../Store/Application/Shared/OrderSummary", Model)
-@using (Html.BeginForm("EditOrderDetailProduct", "Application"))
+@using (Html.BeginForm("EditFormProduct", "Application"))
 {        
 @Html.AntiForgeryToken()
 @Html.HiddenFor(m => m.ProductId)
 @Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
+@Html.HiddenFor(m => m.FormInstanceId)
 @Html.Partial("../Store/Application/Shared/AcceptSaveCancelButtons", Model)
 <nav>
 	<ul class="nav nav-tabs" id="tabs">
@@ -29,11 +30,10 @@
 </nav>
 <div class="tab-content">
     @Html.Partial("../Store/Application/Shared/CompanyInformation", Model)
-	<div id="tabsubscription" class="product-information tab-pane fade">
-		<fieldset class="company-info-form">
-            <legend>@Model.ProductName Information</legend>	
-            <div class="controls-group">@Html.Partial(Model.FormInstanceObject.FormType.Implementation, Model.FormInstanceObject)</div>
-		</fieldset>    
+	<div id="tabsubscription" class="product-customize tab-pane fade">
+        <div class="controls-group">
+	     @Html.Partial(Model.FormInstanceObject.FormType.Implementation, Model.FormInstanceObject)
+            </div>
         <!-- END #orderdetail-information -->	
 	</div>
  </div> <!-- END #content -->
