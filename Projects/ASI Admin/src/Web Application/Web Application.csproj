@@ -300,6 +300,7 @@
     <Compile Include="Models\sgr\ViewCompany.cs" />
     <Compile Include="Models\sgr\ViewProduct.cs" />
     <Compile Include="Models\Store\Order\CatalogsApplicationModel.cs" />
+    <Compile Include="Models\Store\Order\FormsModel.cs" />
     <Compile Include="Models\Store\Order\MagazinesAdvertisingApplicationModel.cs" />
     <Compile Include="Models\Store\Order\CouponModel.cs" />
     <Compile Include="Models\Store\Order\DecoratorApplicationModel.cs" />
@@ -438,6 +439,7 @@
     <Content Include="Views\Forms\Index.cshtml" />
     <Content Include="Views\Forms\GenericForm.cshtml" />
     <Content Include="Views\Forms\SendForm.cshtml" />
+    <Content Include="Views\Store\Application\FormProduct.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

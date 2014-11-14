@@ -52,7 +52,7 @@ namespace asi.asicentral.web.Controllers.Store
                 else if (application is StoreDetailDecoratorMembership) return View("../Store/Application/Decorator", new DecoratorApplicationModel((StoreDetailDecoratorMembership)application, orderDetail));
                 else throw new Exception("Retieved an unknown type of application");
             }
-            else if (orderDetail.Product != null && orderDetail.Product.Type == "Product")
+            else if (orderDetail.Product != null && FormsHelper.PRODUCT_TYPES.Contains(orderDetail.Product.Type))
             {
                 if (orderDetail.MagazineSubscriptions != null && orderDetail.MagazineSubscriptions.Count > 0) return View("../Store/Application/Magazines", new MagazinesApplicationModel(orderDetail, StoreService));
                 else if (DISTRIBUTOR_CATALOG_PRODUCT_IDS.Contains(orderDetail.Product.Id))
@@ -78,6 +78,7 @@ namespace asi.asicentral.web.Controllers.Store
                 }
                 else if (ORDERDETAIL_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/OrderDetailProduct", new OrderDetailApplicationModel(orderDetail));
                 else if (SUPPLIER_ESP_WEBSITES_PRODUCT_COLLECTIONS_ID == orderDetail.Product.Id) return View("../Store/Application/ProductCollections", new ProductCollectionsModel(orderDetail, StoreService));
+                else if (FormsHelper.FORMS_ASSOCIATED_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/FormProduct", new FormsModel(orderDetail, StoreService));
             }
             throw new Exception("Retieved an unknown type of application");
         }
@@ -415,7 +416,34 @@ namespace asi.asicentral.web.Controllers.Store
                 StoreAddress address = order.Company.GetCompanyShippingAddress();
                 StoreService.UpdateTaxAndShipping(order);
                 orderDetail.UpdateDate = DateTime.UtcNow;
-                orderDetail.UpdateSource = "ApplicationController - EditCatalogs";
+                orderDetail.UpdateSource = "ApplicationController - EditOrderDetailProduct";
+
+                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                StoreService.SaveChanges();
+                if (application.ActionName == ApplicationController.COMMAND_REJECT)
+                    return RedirectToAction("List", "Orders");
+                else
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId });
+            }
+            else
+            {
+                return View("../Store/Application/OrderDetailProduct", application);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(true)]
+        public virtual ActionResult EditFormProduct(FormsModel application)
+        {
+            if (ModelState.IsValid)
+            {
+                StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
+                if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
+                StoreOrder order = orderDetail.Order;
+                if (order == null) throw new Exception("Invalid reference to an order");
+                order.ExternalReference = application.ExternalReference;
+                order = UpdateCompanyInformation(application, order);
 
                 ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
                 StoreService.SaveChanges();
