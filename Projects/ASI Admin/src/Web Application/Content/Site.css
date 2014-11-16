@@ -442,6 +442,12 @@ header#site-header {
         width: 508px;
         height: 76px;
     }
+.forms-send {
+    padding-left: 20px   
+}
+.forms-review {
+    padding-left: 20px   
+}
 
 @media (max-width: 600px) {
     .label-row input {
