@@ -31,9 +31,11 @@
 <div class="tab-content">
     @Html.Partial("../Store/Application/Shared/CompanyInformation", Model)
 	<div id="tabsubscription" class="product-customize tab-pane fade">
-        <div class="controls-group">
-	     @Html.Partial(Model.FormInstanceObject.FormType.Implementation, Model.FormInstanceObject)
-            </div>
+		<div class="controls-group">
+			<div class="forms-review">
+				@Html.Partial(Model.FormInstanceObject.FormType.Implementation, Model.FormInstanceObject)
+			</div>
+		</div>
         <!-- END #orderdetail-information -->	
 	</div>
  </div> <!-- END #content -->

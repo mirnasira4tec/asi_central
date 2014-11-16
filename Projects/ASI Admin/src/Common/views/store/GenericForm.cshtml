@@ -29,6 +29,6 @@
 <div class="row">
 	<div class="span8">
 		<input type="hidden" name="Values[0].Name" value="Proceed" />
-		<input type="checkbox" name="Values[0].Value" checked="@(Model.Values[0].Value != null && Model.Values[0].Value == "on" ? "checked" : "")"/> I want to proceed with the order
+		<input type="checkbox" name="Values[0].Value" @(Model.Values[0].Value != null && Model.Values[0].Value == "on" ? "checked" : "")/> I want to proceed with the order
 	</div>	
 </div>
