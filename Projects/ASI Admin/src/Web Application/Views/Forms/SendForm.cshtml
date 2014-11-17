@@ -5,14 +5,13 @@
     ViewBag.Title = "Send a Form";
 	//Html.Partial("~/asi.asicentral.common/asi.asicentral.views.store.GenericForm.cshtml")
 }
-
 <h2>Send a @Model.FormType.Name</h2>
 @if (!string.IsNullOrEmpty(Model.ExternalReference))
 {
-	<text>Link sent to user <a href="https://store.asicentral.com/@Model.FormType.RequestType/Form?reference=@Model.ExternalReference">https://store.asicentral.com/@Model.FormType.RequestType/Form?reference=@Model.ExternalReference</a></text>
+	<text>Link sent to user <a href="https://store.asicentral.com/Store/@Model.FormType.RequestType/Form?reference=@Model.ExternalReference">https://store.asicentral.com/@Model.FormType.RequestType/Form?reference=@Model.ExternalReference</a></text>
 }
 
-@using (Html.BeginForm("PostSendForm", "../Forms" ))
+@using (Html.BeginForm("PostSendForm", "../Forms", FormMethod.Post, new { id = "forms-send"} ))
 {
 	@Html.AntiForgeryToken()
 	<input type="hidden" name="FormTypeId" value="@Model.FormType.Id"/>
@@ -40,9 +39,7 @@
 		</div>
 	</div>
 	<br />
-	<div class="forms-send">
-		@Html.Partial(Model.FormType.Implementation)
-	</div>
+	@Html.Partial(Model.FormType.Implementation)
 	<div class="row">
 		<div class="span8">&nbsp;</div>
 		<div class="span2">
@@ -50,7 +47,6 @@
 		</div>
 	</div>
 }
-
 @section Scripts {
 	@Scripts.Render("~/bundles/form")
     <script src="http://code.jquery.com/jquery-latest.js"></script>

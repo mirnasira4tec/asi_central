@@ -432,8 +432,6 @@ header#site-header {
 /*-------------------------------------------FORMS-----------------------------------*/
 .forms-header {
     background-color: #bebec5;
-    margin-left: -20px;
-    margin-right: -20px;
     padding-top: 5px;
     padding-left: 40px;
     padding-right: 10px;
@@ -442,8 +440,8 @@ header#site-header {
         width: 508px;
         height: 76px;
     }
-.forms-send {
-    padding-left: 20px   
+#forms-send {
+    padding: 0px 0px 0px 0px;  
 }
 .forms-review {
     padding-left: 20px   
