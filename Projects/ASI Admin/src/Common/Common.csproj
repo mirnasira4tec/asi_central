@@ -482,6 +482,7 @@
       <SubType>Designer</SubType>
     </None>
     <EmbeddedResource Include="views\store\GenericForm.cshtml" />
+    <EmbeddedResource Include="views\store\ASIShowForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
