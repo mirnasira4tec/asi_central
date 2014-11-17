@@ -440,10 +440,8 @@
     <Content Include="Views\Store\Coupon\CouponDetails.cshtml" />
     <Content Include="Views\Store\Application\MagzineAdvertising.cshtml" />
     <Content Include="Views\Forms\Index.cshtml" />
-    <Content Include="Views\Forms\GenericForm.cshtml" />
     <Content Include="Views\Forms\SendForm.cshtml" />
     <Content Include="Views\Store\Application\FormProduct.cshtml" />
-    <Content Include="Views\Forms\ASIShowForm.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
