@@ -36,6 +36,10 @@ namespace asi.asicentral.web
                         "~/Content/datepicker.css",
                         "~/Content/site.css"));
 
+            bundles.Add(new StyleBundle("~/Content/forms").Include(
+                        "~/Content/asi-store.css",
+                        "~/Content/form.css"));
+
             bundles.Add(new StyleBundle("~/Content/form").Include(
                         "~/Content/datepicker.css",
                         "~/Content/bootstrap-datetimepicker.css"));

@@ -321,6 +321,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\asi-store.css" />
     <Content Include="Content\bootstrap-datetimepicker.css" />
     <Content Include="Content\bootstrap-datetimepicker.min.css" />
     <Content Include="Content\bootstrap-responsive.css" />
@@ -328,6 +329,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\datepicker.css" />
+    <Content Include="Content\form.css" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\multiselecteddatepicker.css" />
@@ -351,6 +353,7 @@
     <Content Include="Images\folder.png" />
     <Content Include="Images\folder_small.png" />
     <Content Include="Images\sitebgtile.gif" />
+    <Content Include="Images\store\ASI-form-header.jpg" />
     <Content Include="Images\transparent.gif" />
     <Content Include="Images\upload.png" />
     <Content Include="Images\zip.png" />
@@ -440,6 +443,7 @@
     <Content Include="Views\Forms\GenericForm.cshtml" />
     <Content Include="Views\Forms\SendForm.cshtml" />
     <Content Include="Views\Store\Application\FormProduct.cshtml" />
+    <Content Include="Views\Forms\ASIShowForm.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
