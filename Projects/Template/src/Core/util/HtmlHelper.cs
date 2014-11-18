@@ -65,12 +65,14 @@ namespace asi.asicentral.util
             }
             List<string> countryNames = countriesDic.Keys.ToList();
             countries.Add(new SelectListItem { Selected = true, Value = "", Text = "-- Select a Country --" });
-            countryNames.Sort();
             foreach (string countryName in countryNames)
             {
                 if (includeAll || !countryNotSupportedByTIMSS.Contains(countriesDic[countryName]))
                     countries.Add(new SelectListItem { Text = countryName, Value = countriesDic[countryName], Selected = (countriesDic[countryName] == value) });
             }
+            countries.Add(new SelectListItem { Text = "Bermuda", Value = "BMU", Selected = ("BMU" == value) });
+            countries.Add(new SelectListItem { Text = "Barbados", Value = "BRB", Selected = ("BRB" == value) });
+            countries = countries.OrderBy(country => country.Text).Where(country => country.Text != "Puerto Rico").ToList();
             return countries;
         }
 
