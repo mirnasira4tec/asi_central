@@ -72,7 +72,7 @@ namespace asi.asicentral.util
             }
             countries.Add(new SelectListItem { Text = "Bermuda", Value = "BMU", Selected = ("BMU" == value) });
             countries.Add(new SelectListItem { Text = "Barbados", Value = "BRB", Selected = ("BRB" == value) });
-            countries = countries.OrderBy(country => country.Text).Where(country => country.Text != "Puerto Rico").ToList();
+            countries = countries.Where(country => country.Text != "Puerto Rico").OrderBy(country => country.Text).ToList();
             return countries;
         }
 
