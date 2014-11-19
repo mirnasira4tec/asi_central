@@ -25,6 +25,9 @@ namespace asi.asicentral.model.store
 		[Required(ErrorMessage = "The user email is required")]
 		[DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+		[Display(Description = "Salutation", Prompt = "How to address the user")]
+		[Required(ErrorMessage = "You need a way to address the user")]
+		public string Salutation { get; set; }
 
 		[Display(Description = "Greetings", Prompt = "A small introduction to the order")]
 		[Required(ErrorMessage = "You need a greeting message for the email")]
@@ -38,6 +41,12 @@ namespace asi.asicentral.model.store
 		public decimal Total { get; set; }
 		public virtual StoreOrderDetail OrderDetail { get; set; }
 		public int? OrderDetailId { get; set; }
+
+		[Display(Description = "Comments", Prompt = "Internal comments about the order")]
+		[DataType(DataType.MultilineText)]
+		public string Comments { get; set; }
+
+		public string Sender { get; set; }
 		public virtual IList<FormValue> Values { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }

@@ -440,6 +440,10 @@ header#site-header {
         width: 508px;
         height: 76px;
     }
+    .forms-header #Comments {
+        width: 508px;
+        height: 76px;
+    }
 #forms-send {
     padding: 0px 0px 0px 0px;  
 }
