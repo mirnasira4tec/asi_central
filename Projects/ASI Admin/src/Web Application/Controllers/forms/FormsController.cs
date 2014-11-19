@@ -71,6 +71,7 @@ namespace asi.asicentral.web.Controllers.forms
 					form.CreateDate = DateTime.UtcNow;
 					form.UpdateDate = form.CreateDate;
 					form.UpdateSource = "FormsController.PostSendForm";
+					form.Sender = ((System.Security.Principal.WindowsIdentity) System.Web.HttpContext.Current.User.Identity).Name;
 					int i = 0;
 					foreach (var value in form.Values)
 					{

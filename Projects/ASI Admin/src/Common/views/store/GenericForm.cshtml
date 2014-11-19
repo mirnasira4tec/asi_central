@@ -4,7 +4,7 @@
 @{
 	if (Model.Values == null || Model.Values.Count == 0)
 	{
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < 1; i++)
 		{
 			Model.Values.Add(new FormValue());
 		}
@@ -20,15 +20,8 @@
 <div class="row">
 	<div class="span8">
 		<label for="form-description">Order details</label>
-		<input type="hidden" name="Values[1].Name" value="Description" />
-		<textarea id="form-description" class="text-box multi-line valid" data-val="true" data-val-required="You need to describe the order to your customer" placeholder="Enter a description of the order" name="Values[1].Value">@Model.Values[1].Value</textarea>
-		<br /><span class="field-validation-valid" data-valmsg-for="Values[1].Value" data-valmsg-replace="true"></span>
+		<input type="hidden" name="Values[0].Name" value="Description" />
+		<textarea id="form-description" class="text-box multi-line valid" data-val="true" data-val-required="You need to describe the order to your customer" placeholder="Enter a description of the order" name="Values[1].Value">@Model.Values[0].Value</textarea>
+		<br /><span class="field-validation-valid" data-valmsg-for="Values[0].Value" data-valmsg-replace="true"></span>
 	</div>	
 </div> 
-<br />
-<div class="row">
-	<div class="span8">
-		<input type="hidden" name="Values[0].Name" value="Proceed" />
-		<input type="checkbox" name="Values[0].Value" @(Model.Values[0].Value != null && Model.Values[0].Value == "on" ? "checked" : "")/> I want to proceed with the order
-	</div>	
-</div>

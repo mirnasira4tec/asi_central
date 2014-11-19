@@ -52,7 +52,7 @@ namespace asi.asicentral.web.Controllers.Store
                 else if (application is StoreDetailDecoratorMembership) return View("../Store/Application/Decorator", new DecoratorApplicationModel((StoreDetailDecoratorMembership)application, orderDetail));
                 else throw new Exception("Retieved an unknown type of application");
             }
-            else if (orderDetail.Product != null && FormsHelper.PRODUCT_TYPES.Contains(orderDetail.Product.Type))
+            else if (orderDetail.Product != null)
             {
                 if (orderDetail.MagazineSubscriptions != null && orderDetail.MagazineSubscriptions.Count > 0) return View("../Store/Application/Magazines", new MagazinesApplicationModel(orderDetail, StoreService));
                 else if (DISTRIBUTOR_CATALOG_PRODUCT_IDS.Contains(orderDetail.Product.Id))

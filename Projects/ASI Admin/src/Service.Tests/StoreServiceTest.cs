@@ -266,14 +266,15 @@ namespace asi.asicentral.Tests
                     storeService.Add<FormType>(formType);
                     storeService.SaveChanges();
                 }
-                FormInstance form = new FormInstance
+                var form = new FormInstance
                 {
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
                     FormType = formType,
                     UpdateSource = "FormPersistenceTest",                    
                     Email = "test@test.com",
-                    Greetings = "Mr Happy",
+					Salutation = "Yann",
+                    Greetings = "Please check the order",
                     ExternalReference = testKey,
                 };
                 form.Values.Add(new FormValue
@@ -295,7 +296,14 @@ namespace asi.asicentral.Tests
                     Value = "true",
                 });
                 storeService.Add<FormInstance>(form);
-                storeService.SaveChanges();
+	            try
+	            {
+		            storeService.SaveChanges();
+	            }
+	            catch (Exception e)
+	            {
+		            Assert.IsTrue(false, e.Message);
+	            }
             }
             using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
             {
