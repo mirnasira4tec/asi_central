@@ -8,7 +8,7 @@
 <h2>Send a @Model.FormType.Name</h2>
 @if (!string.IsNullOrEmpty(Model.ExternalReference))
 {
-	<text>Link sent to user <a href="https://store.asicentral.com/Store/@Model.FormType.RequestType/Form?reference=@Model.ExternalReference">https://store.asicentral.com/@Model.FormType.RequestType/Form?reference=@Model.ExternalReference</a></text>
+	<text>Link sent to user <a href="https://store.asicentral.com/Store/@Model.FormType.RequestType/Form?reference=@Model.ExternalReference">Store Link with reference @Model.ExternalReference</a></text>
 }
 
 @using (Html.BeginForm("PostSendForm", "../Forms", FormMethod.Post, new { id = "forms-send"} ))
