@@ -8,6 +8,7 @@ using asi.asicentral.interfaces;
 using asi.asicentral.model;
 using asi.asicentral.model.store;
 using asi.asicentral.web.Models.forms;
+using System.Text;
 
 namespace asi.asicentral.web.Controllers.forms
 {
@@ -16,6 +17,7 @@ namespace asi.asicentral.web.Controllers.forms
     {
 		public IStoreService StoreService { get; set; }
 		public IEmailService EmailService { get; set; }
+        public ITemplateService TemplateService { get; set; }
 
 		public ActionResult Index(DateTime? dateStart, DateTime? dateEnd, String formTab)
         {
@@ -100,13 +102,16 @@ namespace asi.asicentral.web.Controllers.forms
 				}
 				StoreService.SaveChanges();
 				//email the customer
-				var mail = new Mail
-				{
-					Body = "You have an order to review, <a href=\"\">click here to continue</a>",
-					Subject = "You have an order waiting to be reviewed",
-					To = form.Email,
-				};
-				EmailService.SendMail(mail);
+                form.FormType = StoreService.GetAll<FormType>(true).SingleOrDefault(f => f.Id == form.FormTypeId);
+                string emailBody = TemplateService.Render("asi.asicentral.web.Views.Emails.FormSentEmail.cshtml", form);
+                MailMessage mail = new MailMessage();
+                string to = form.Email;
+                mail.To.Add(new MailAddress(to));
+                mail.Subject = "You have an order waiting to be reviewed";
+                mail.Body = emailBody;
+                mail.BodyEncoding = Encoding.UTF8;
+                mail.IsBodyHtml = true;
+                EmailService.SendMail(mail);
 				return new RedirectResult("/Forms/Index");
 			}
 			else
