@@ -54,23 +54,17 @@ html {
             <td>
                 <table border="0" cellpadding="0" cellspacing="20" width="100%">
                     <tr>
-                <td colspan="2">
-                    <h2>You have an order to review, <a href="https://store.asicentral.com/@Model.FormType.RequestType/Form?reference=@Model.ExternalReference">click here to continue</a></h2>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    Salutation: @Model.Salutation
-                    <br />
-                    Email : @Model.Email
-                    <br />
-                    Total : @Model.Total
-                    <br />
-                    Greetings : @Model.Greetings
-                    <br />
-                    Comments : @Model.Comments
-                </td>
-            </tr>
+                        <td colspan="2">
+                            <h2>Hi @Model.Salutation,</h2>
+                            <h2>You have an order to review, </h2><h1><a href="https://store.asicentral.com/@Model.FormType.RequestType/Form?reference=@Model.ExternalReference">click here to continue</a></h1>
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <h2>@Model.Greetings.Replace(Environment.NewLine, "<br/>")</h2>
+                        </td>
+                    </tr>
                     <tfoot>
                         <tr>
                             <td>Thank you,<br />
