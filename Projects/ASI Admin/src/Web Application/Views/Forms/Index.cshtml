@@ -44,6 +44,7 @@
 		    <th>Created</th>
 		    <th>Email</th>
 		    <th>Type</th>
+			<th>Creator</th>
 	    </tr>
     </thead>
 	<tbody>
@@ -53,6 +54,7 @@
 			<td>@form.CreateDate</td>
 			<td>@form.Email</td>
 			<td><a href="/Forms/SendForm/@form.Id">@form.FormType.Name</a></td>
+			<td>@form.Sender</td>
 		</tr>
 	}
 	</tbody>

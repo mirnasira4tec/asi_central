@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.DirectoryServices;
 using System.Linq;
 using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using asi.asicentral.interfaces;
 using asi.asicentral.model;
 using asi.asicentral.model.store;
@@ -50,6 +52,7 @@ namespace asi.asicentral.web.Controllers.forms
             var form = new FormInstance
             {
                 FormType = formType,
+				Greetings = "Here is the order we discussed together, please review and let me know if you have any issues.\n\nThank you",
             };
             return View("../Forms/SendForm", form);
         }
@@ -74,6 +77,7 @@ namespace asi.asicentral.web.Controllers.forms
 					form.UpdateDate = form.CreateDate;
 					form.UpdateSource = "FormsController.PostSendForm";
 					form.Sender = ((System.Security.Principal.WindowsIdentity) System.Web.HttpContext.Current.User.Identity).Name;
+					form.Sender = form.Sender.Replace(@"ASINETWORK\", "");
 					int i = 0;
 					foreach (var value in form.Values)
 					{

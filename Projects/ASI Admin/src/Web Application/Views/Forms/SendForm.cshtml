@@ -1,4 +1,5 @@
-﻿@using asi.asicentral.model.store;
+﻿@using System.Configuration
+@using asi.asicentral.model.store;
 @model FormInstance
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,47 +9,52 @@
 <h2>Send a @Model.FormType.Name</h2>
 @if (!string.IsNullOrEmpty(Model.ExternalReference))
 {
-	<text>Link sent to user <a href="https://store.asicentral.com/Store/@Model.FormType.RequestType/Form?reference=@Model.ExternalReference">Store Link with reference @Model.ExternalReference</a></text>
+	<text>Link sent to user <a href="@ConfigurationManager.AppSettings["StoreURL"]/Store/@Model.FormType.RequestType/Form?reference=@Model.ExternalReference" target="_blank">Store Link with reference @Model.ExternalReference</a></text>
 }
 
-@using (Html.BeginForm("PostSendForm", "../Forms", FormMethod.Post, new { id = "forms-send"} ))
+@using (Html.BeginForm("PostSendForm", "../Forms", FormMethod.Post, new { id="forms-send", @class="form-inline" }))
 {
 	@Html.AntiForgeryToken()
 	<input type="hidden" name="FormTypeId" value="@Model.FormType.Id"/>
 	<input type="hidden" name="ExternalReference" value="@Model.ExternalReference"/>
 	<div class="forms-header">
+		<br />
 		<div class="row">
 			<div class="span4">
 				<div class="form-group">
-					@Html.LabelFor(model => model.Salutation) @Html.EditorFor(model => model.Salutation)<br/>@Html.ValidationMessageFor(model => model.Salutation)
+					@Html.LabelFor(model => model.Salutation) <br />@Html.EditorFor(model => model.Salutation)<br/>@Html.ValidationMessageFor(model => model.Salutation)
 				</div>
 			</div>
 			<div class="span4">
 				<div class="form-group">
-					@Html.LabelFor(model => model.Email) @Html.EditorFor(model => model.Email)<br/>@Html.ValidationMessageFor(model => model.Email)
+					@Html.LabelFor(model => model.Email) <br />@Html.EditorFor(model => model.Email)<br/>@Html.ValidationMessageFor(model => model.Email)
 				</div>
 			</div>
 			<div class="span2">
 				<br /><input type="submit" class="btn btn-primary" value="Send"/>
 			</div>
 		</div>
+		<br />
 		<div class="row">
 			<div class="span4">
 				<div class="form-group">
-					@Html.LabelFor(model => model.Total) @Html.EditorFor(model => model.Total)<br/> @Html.ValidationMessageFor(model => model.Total)
+					@Html.LabelFor(model => model.Total) <br />@Html.EditorFor(model => model.Total)<br/> @Html.ValidationMessageFor(model => model.Total)
 				</div>			
 			</div>
 		</div>
+		<br />
 		<div class="row">
 			<div class="span7">
 				@Html.LabelFor(model => model.Greetings) @Html.EditorFor(model => model.Greetings)<br/> @Html.ValidationMessageFor(model => model.Greetings)
 			</div>
 		</div>
+		<br />
 		<div class="row">
 			<div class="span7">
 				@Html.LabelFor(model => model.Comments) @Html.EditorFor(model => model.Comments)<br/> @Html.ValidationMessageFor(model => model.Comments)
 			</div>
 		</div>
+		<br />
 	</div>
 	<br />
 	@Html.Partial(Model.FormType.Implementation)
