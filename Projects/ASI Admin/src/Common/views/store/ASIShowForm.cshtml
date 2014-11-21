@@ -10,7 +10,7 @@
 		}
 	}
 }
-<div class="container-fluid-store">
+<div class="container-fluid-store form-inline">
 	<header>
 		<img src="https://store.asicentral.com/media/Forms/ASI-form-header.jpg" alt="ASI 2015 Form">
 	</header>
@@ -73,96 +73,106 @@
 					<tr>
 						<td colspan="5">
 							<div class="booth-show-section">
-								<label class="checkbox inline">
-                                    <input type="hidden" name="Values[3].Name" value="BIOrlando" />
-									<input type="checkbox" name="Values[3].Value" @(Model.Values[3].Value != null && Model.Values[3].Value == "on" ? "checked" : "")>
-									<h2>Orlando - $2,529</h2>
-								</label>
-								<label>
-									<div>
-										Booth number: 
-                                        <input type="hidden" name="Values[4].Name" value="BNOrlando" />
-                                        <input type="text" name="Values[4].Value" value="@Model.Values[4].Value" /> 
-									</div>
-								</label>
-								<label>
-									<div>
-                                        <input type="hidden" name="Values[5].Name" value="NBOrlando" />
-										<input type="text" class="input-small" name="Values[5].Value" value="@Model.Values[5].Value" /> Number of booths
-									</div>
-								</label>
-								<label class="checkbox inline">
-                                    <input type="hidden" name="Values[6].Name" value="BIDallas" />
-									<input type="checkbox" name="Values[6].Value" @(Model.Values[6].Value != null && Model.Values[6].Value == "on" ? "checked" : "")>
-									<h2>Dallas - $2,429</h2>
-								</label>
-								<label>
-									<div>
-										Booth number: 
-                                        <input type="hidden" name="Values[7].Name" value="BNDallas" />
-                                        <input type="text" name="Values[7].Value" value="@Model.Values[7].Value" /> 
-									</div>
-								</label>
-								<label>
-									<div>
-                                        <input type="hidden" name="Values[8].Name" value="NBDallas" />
-										<input type="text" class="input-small" name="Values[8].Value" value="@Model.Values[8].Value" /> Number of booths
-									</div>
-								</label>
-								<label class="checkbox inline">
-                                    <input type="hidden" name="Values[9].Name" value="BILongBeach" />
-									<input type="checkbox" name="Values[9].Value" @(Model.Values[9].Value != null && Model.Values[9].Value == "on" ? "checked" : "")>
-									<h2>Long Beach - $2,399</h2>
-								</label>
-								<label>
-									<div>
-										Booth number: 
-                                        <input type="hidden" name="Values[10].Name" value="BNLongBeach" />
-                                        <input type="text" name="Values[10].Value" value="@Model.Values[10].Value" /> 
-									</div>
-								</label>
-								<label>
-									<div>
-                                        <input type="hidden" name="Values[11].Name" value="NBLongBeach" />
-										<input type="text" class="input-small" name="Values[11].Value" value="@Model.Values[11].Value" /> Number of booths
-									</div>
-								</label>
-								<label class="checkbox inline">
-                                    <input type="hidden" name="Values[12].Name" value="BINewYork" />
-									<input type="checkbox" name="Values[12].Value" @(Model.Values[12].Value != null && Model.Values[12].Value == "on" ? "checked" : "")>
-									<h2>New York - $2,399</h2>
-								</label>
-								<label>
-									<div>
-										Booth number: 
-                                        <input type="hidden" name="Values[13].Name" value="BNNewYork" />
-                                        <input type="text" name="Values[13].Value" value="@Model.Values[13].Value" /> 
-									</div>
-								</label>
-								<label>
-									<div>
-                                        <input type="hidden" name="Values[14].Name" value="NBNewYork" />
-										<input type="text" class="input-small" name="Values[14].Value" value="@Model.Values[14].Value" /> Number of booths
-									</div>
-								</label>
-								<label class="checkbox inline">
-                                    <input type="hidden" name="Values[15].Name" value="BIChicago" />
-									<input type="checkbox" name="Values[15].Value" @(Model.Values[15].Value != null && Model.Values[15].Value == "on" ? "checked" : "")>
-									<h2>Chicago - $2,529</h2>
-								</label>
-								<label>
-									<div>
-										Booth number: 
-                                        <input type="hidden" name="Values[16].Name" value="BNChicago" />
-                                        <input type="text" name="Values[16].Value" value="@Model.Values[16].Value" /> 
-									</div>
-								</label>
-								<label>
-									<div>
-                                        <input type="hidden" name="Values[17].Name" value="NBChicago" />
-										<input type="text" class="input-small" name="Values[17].Value" value="@Model.Values[17].Value" /> Number of booths
-									</div>
-								</label>
+                                <div>
+								    <label class="checkbox inline">
+                                        <input type="hidden" name="Values[3].Name" value="BIOrlando" />
+									    <input type="checkbox" name="Values[3].Value" @(Model.Values[3].Value != null && Model.Values[3].Value == "on" ? "checked" : "")>
+									    <h2>Orlando - $2,529</h2>
+								    </label>
+								    <label>
+									    <div>
+										    Booth number: 
+                                            <input type="hidden" name="Values[4].Name" value="BNOrlando" />
+                                            <input type="text" class="input-medium" name="Values[4].Value" value="@Model.Values[4].Value" /> 
+									    </div>
+								    </label>
+								    <label>
+									    <div>
+                                            <input type="hidden" name="Values[5].Name" value="NBOrlando" />
+										    <input type="text" class="input-small" name="Values[5].Value" value="@Model.Values[5].Value" /> Number of booths
+									    </div>
+								    </label>
+                                </div>
+                                <div>
+								    <label class="checkbox inline">
+                                        <input type="hidden" name="Values[6].Name" value="BIDallas" />
+									    <input type="checkbox" name="Values[6].Value" @(Model.Values[6].Value != null && Model.Values[6].Value == "on" ? "checked" : "")>
+									    <h2>Dallas - $2,429</h2>
+								    </label>
+								    <label>
+									    <div>
+										    Booth number: 
+                                            <input type="hidden" name="Values[7].Name" value="BNDallas" />
+                                            <input type="text" class="input-medium" name="Values[7].Value" value="@Model.Values[7].Value" /> 
+									    </div>
+								    </label>
+								    <label>
+									    <div>
+                                            <input type="hidden" name="Values[8].Name" value="NBDallas" />
+										    <input type="text" class="input-small" name="Values[8].Value" value="@Model.Values[8].Value" /> Number of booths
+									    </div>
+								    </label>
+                                </div>
+                                <div>
+								    <label class="checkbox inline">
+                                        <input type="hidden" name="Values[9].Name" value="BILongBeach" />
+									    <input type="checkbox" name="Values[9].Value" @(Model.Values[9].Value != null && Model.Values[9].Value == "on" ? "checked" : "")>
+									    <h2>Long Beach - $2,399</h2>
+								    </label>
+								    <label>
+									    <div>
+										    Booth number: 
+                                            <input type="hidden" name="Values[10].Name" value="BNLongBeach" />
+                                            <input type="text" class="input-medium" name="Values[10].Value" value="@Model.Values[10].Value" /> 
+									    </div>
+								    </label>
+								    <label>
+									    <div>
+                                            <input type="hidden" name="Values[11].Name" value="NBLongBeach" />
+										    <input type="text" class="input-small" name="Values[11].Value" value="@Model.Values[11].Value" /> Number of booths
+									    </div>
+								    </label>
+                                </div>
+                                <div>
+								    <label class="checkbox inline">
+                                        <input type="hidden" name="Values[12].Name" value="BINewYork" />
+									    <input type="checkbox" name="Values[12].Value" @(Model.Values[12].Value != null && Model.Values[12].Value == "on" ? "checked" : "")>
+									    <h2>New York - $2,399</h2>
+								    </label>
+								    <label>
+									    <div>
+										    Booth number: 
+                                            <input type="hidden" name="Values[13].Name" value="BNNewYork" />
+                                            <input type="text" class="input-medium" name="Values[13].Value" value="@Model.Values[13].Value" /> 
+									    </div>
+								    </label>
+								    <label>
+									    <div>
+                                            <input type="hidden" name="Values[14].Name" value="NBNewYork" />
+										    <input type="text" class="input-small" name="Values[14].Value" value="@Model.Values[14].Value" /> Number of booths
+									    </div>
+								    </label>
+                                </div>
+                                <div>
+								    <label class="checkbox inline">
+                                        <input type="hidden" name="Values[15].Name" value="BIChicago" />
+									    <input type="checkbox" name="Values[15].Value" @(Model.Values[15].Value != null && Model.Values[15].Value == "on" ? "checked" : "")>
+									    <h2>Chicago - $2,529</h2>
+								    </label>
+								    <label>
+									    <div>
+										    Booth number: 
+                                            <input type="hidden" name="Values[16].Name" value="BNChicago" />
+                                            <input type="text" class="input-medium" name="Values[16].Value" value="@Model.Values[16].Value" /> 
+									    </div>
+								    </label>
+								    <label>
+									    <div>
+                                            <input type="hidden" name="Values[17].Name" value="NBChicago" />
+										    <input type="text" class="input-small" name="Values[17].Value" value="@Model.Values[17].Value" /> Number of booths
+									    </div>
+								    </label>
+                                </div>
 							</div>
 						</td>
 					</tr>
