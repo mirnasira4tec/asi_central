@@ -297,6 +297,7 @@
     </Compile>
     <Compile Include="Models\asicentral\CallVolume.cs" />
     <Compile Include="Models\CreditCardModel.cs" />
+    <Compile Include="Models\forms\FormModel.cs" />
     <Compile Include="Models\forms\FormPageModel.cs" />
     <Compile Include="Models\MediaFolderModel.cs" />
     <Compile Include="Models\sgr\ViewCategory.cs" />
