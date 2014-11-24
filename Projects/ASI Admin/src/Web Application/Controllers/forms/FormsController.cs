@@ -39,7 +39,7 @@ namespace asi.asicentral.web.Controllers.forms
 			if (dateStart.HasValue) viewModel.StartDate = dateStart.Value.ToString("MM/dd/yyyy");
 			if (dateEnd.HasValue) viewModel.EndDate = dateEnd.Value.ToString("MM/dd/yyyy");
 			viewModel.FormTab = formTab;
-			viewModel.Forms = formInstanceQuery.ToList();
+			viewModel.Forms = formInstanceQuery.OrderByDescending(form => form.CreateDate).ToList();
 			viewModel.FormTypes = StoreService.GetAll<FormType>(true).ToList();
 			return View("../Forms/Index", viewModel);
         }

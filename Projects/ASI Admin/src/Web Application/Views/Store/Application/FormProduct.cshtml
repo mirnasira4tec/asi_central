@@ -6,7 +6,7 @@
 @{
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
 }
-
+@Styles.Render("~/Content/forms")
 <h1>@string.Format(Model.ProductName) (#@Model.OrderId)</h1>
 @if (Model.Price > 0.0m)
 {
