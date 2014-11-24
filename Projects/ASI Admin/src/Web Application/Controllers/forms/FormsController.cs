@@ -104,9 +104,17 @@ namespace asi.asicentral.web.Controllers.forms
 					//edit an existing one
 					var oldForm = StoreService.GetAll<FormInstance>().SingleOrDefault(f => f.ExternalReference == form.ExternalReference);
 					if (oldForm == null) throw new Exception("invalid form reference");
+                    //copying the fields values
+                    oldForm.Comments = form.Comments;
+                    oldForm.Email = form.Email;
+                    oldForm.Greetings = form.Greetings;
+                    oldForm.NotificationEmails = form.NotificationEmails;
+                    oldForm.Salutation = form.Salutation;
+                    oldForm.Total = form.Total;
+                    oldForm.UpdateDate = DateTime.UtcNow;
+                    oldForm.UpdateSource = "FormsController.PostSendForm";
+                    //copying the form values
 					oldForm.Values = oldForm.Values.OrderBy(value => value.Sequence).ToList();
-					oldForm.UpdateDate = DateTime.UtcNow;
-					oldForm.UpdateSource = "FormsController.PostSendForm";
 					for (int i = 0; i < oldForm.Values.Count; i++)
 					{
 						oldForm.Values[i].Value = form.Values[i].Value;
