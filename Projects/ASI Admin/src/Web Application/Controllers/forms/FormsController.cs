@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.DirectoryServices;
 using System.Linq;
 using System.Net.Mail;
 using System.Web;
@@ -54,20 +53,31 @@ namespace asi.asicentral.web.Controllers.forms
                 FormType = formType,
 				Greetings = "Here is the order we discussed together, please review and let me know if you have any issues.\n\nThank you",
             };
-            return View("../Forms/SendForm", form);
+            var model = new FormModel
+            {
+                Form = form,
+                Command = "Send",
+            };
+            return View("../Forms/SendForm", model);
         }
 
 		public ActionResult SendForm(int id)
 		{
 			FormInstance instance = StoreService.GetAll<FormInstance>(true).SingleOrDefault(form => form.Id == id);
-			return View("../Forms/SendForm", instance);
+            var model = new FormModel
+            {
+                Command = "Send",
+                Form = instance,
+            };
+			return View("../Forms/SendForm", model);
 		}
 
 		[ValidateAntiForgeryToken]
-		public ActionResult PostSendForm(FormInstance form)
+		public ActionResult PostSendForm(FormModel model)
 		{
 			if (ModelState.IsValid)
 			{
+                var form = model.Form;
 				//save the form in the database
 				if (string.IsNullOrEmpty(form.ExternalReference))
 				{
@@ -94,9 +104,17 @@ namespace asi.asicentral.web.Controllers.forms
 					//edit an existing one
 					var oldForm = StoreService.GetAll<FormInstance>().SingleOrDefault(f => f.ExternalReference == form.ExternalReference);
 					if (oldForm == null) throw new Exception("invalid form reference");
+                    //copying the fields values
+                    oldForm.Comments = form.Comments;
+                    oldForm.Email = form.Email;
+                    oldForm.Greetings = form.Greetings;
+                    oldForm.NotificationEmails = form.NotificationEmails;
+                    oldForm.Salutation = form.Salutation;
+                    oldForm.Total = form.Total;
+                    oldForm.UpdateDate = DateTime.UtcNow;
+                    oldForm.UpdateSource = "FormsController.PostSendForm";
+                    //copying the form values
 					oldForm.Values = oldForm.Values.OrderBy(value => value.Sequence).ToList();
-					oldForm.UpdateDate = DateTime.UtcNow;
-					oldForm.UpdateSource = "FormsController.PostSendForm";
 					for (int i = 0; i < oldForm.Values.Count; i++)
 					{
 						oldForm.Values[i].Value = form.Values[i].Value;
@@ -105,22 +123,25 @@ namespace asi.asicentral.web.Controllers.forms
 					}
 				}
 				StoreService.SaveChanges();
-				//email the customer
-                form.FormType = StoreService.GetAll<FormType>(true).SingleOrDefault(f => f.Id == form.FormTypeId);
-                string emailBody = TemplateService.Render("asi.asicentral.web.Views.Emails.FormSentEmail.cshtml", form);
-                MailMessage mail = new MailMessage();
-                string to = form.Email;
-                mail.To.Add(new MailAddress(to));
-                mail.Subject = "You have an order waiting to be reviewed";
-                mail.Body = emailBody;
-                mail.BodyEncoding = Encoding.UTF8;
-                mail.IsBodyHtml = true;
-                EmailService.SendMail(mail);
+                if (model.Command == "Send")
+                {
+                    //email the customer
+                    form.FormType = StoreService.GetAll<FormType>(true).SingleOrDefault(f => f.Id == form.FormTypeId);
+                    string emailBody = TemplateService.Render("asi.asicentral.web.Views.Emails.FormSentEmail.cshtml", form);
+                    MailMessage mail = new MailMessage();
+                    string to = form.Email;
+                    mail.To.Add(new MailAddress(to));
+                    mail.Subject = "You have an order waiting to be reviewed";
+                    mail.Body = emailBody;
+                    mail.BodyEncoding = Encoding.UTF8;
+                    mail.IsBodyHtml = true;
+                    EmailService.SendMail(mail);
+                }
 				return new RedirectResult("/Forms/Index");
 			}
 			else
 			{
-				return View("../Forms/SendForm", form);
+				return View("../Forms/SendForm", model);
 			}
 		}
 	}

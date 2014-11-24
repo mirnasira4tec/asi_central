@@ -28,6 +28,11 @@ namespace asi.asicentral.model.store
         [StringLength(500, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
         public string Email { get; set; }
 
+        [Display(Description = "Notification", Prompt = "The people to notify when order is through")]
+        [DataType(DataType.EmailAddress)]
+        [StringLength(500, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
+        public string NotificationEmails { get; set; }
+
 		[Display(Description = "Salutation", Prompt = "How to address the user")]
 		[Required(ErrorMessage = "You need a way to address the user")]
         [StringLength(200, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
