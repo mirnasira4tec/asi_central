@@ -13,15 +13,15 @@
 <style>
 	#form-description {
 		width: 550px;
-		height: 76px;
+		height: 200px;
 	}
 </style>
 
 <div class="row container-fluid-store form-inline"">
 	<div class="span8">
 		<label for="form-description">Order details</label>
-		<input type="hidden" name="Form.Form.Values[0].Name" value="Description" />
-		<textarea id="form-description" class="text-box multi-line valid" data-val="true" data-val-required="You need to describe the order to your customer" placeholder="Enter a description of the order" name="Form.Form.Values[0].Value">@Model.Values[0].Value</textarea>
-		<br /><span class="field-validation-valid" data-valmsg-for="Form.Form.Values[0].Value" data-valmsg-replace="true"></span>
+		<input type="hidden" name="Form.Values[0].Name" value="Description" />
+		<textarea id="form-description" class="text-box multi-line valid" data-val="true" data-val-required="You need to describe the order to your customer" placeholder="Enter a description of the order" name="Form.Values[0].Value">@Model.Values[0].Value</textarea>
+		<br /><span class="field-validation-valid" data-valmsg-for="Form.Values[0].Value" data-valmsg-replace="true"></span>
 	</div>	
 </div> 
