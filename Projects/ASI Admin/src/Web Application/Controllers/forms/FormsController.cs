@@ -51,7 +51,7 @@ namespace asi.asicentral.web.Controllers.forms
             var form = new FormInstance
             {
                 FormType = formType,
-				Greetings = "Here is the order we discussed together, please review and let me know if you have any issues.\n\nThank you",
+				Greetings = "Here is the order we discussed together. Please review and let me know if you have any issues.\n\nThank you.",
             };
             var model = new FormModel
             {
