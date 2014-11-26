@@ -38,7 +38,8 @@ namespace asi.asicentral.oauth
     {
         ASIC, //For ASI Central
         EMES, //For Email-express
-        WESP //For ESP Web
+        WESP, //For ESP Web
+        UPSIDE //for upsidelms
     }
     
     public class ASIOAuthClient
