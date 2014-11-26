@@ -5,7 +5,7 @@
     var count = 0;
 	if (Model.Values == null || Model.Values.Count == 0)
 	{
-		for (int i = 0; i < 59; i++)
+		for (int i = 0; i < 54; i++)
 		{
 			Model.Values.Add(new FormValue());
 		}
@@ -71,10 +71,7 @@
 					<td colspan="5">
 						<div class="booth-show-section">
                             <div>
-                                @{count++;}
 								<label class="checkbox inline">
-                                    <input type="hidden" name="Form.Values[@count].Name" value="BIOrlando" />
-									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									<h2>Orlando - $2,529</h2>
 								</label>
                                 @{count++;}
@@ -94,10 +91,7 @@
 								</label>
                             </div>
                             <div>
-                                @{count++;}
 								<label class="checkbox inline">
-                                    <input type="hidden" name="Form.Values[@count].Name" value="BIDallas" />
-									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									<h2>Dallas - $2,429</h2>
 								</label>
                                 @{count++;}
@@ -117,10 +111,7 @@
 								</label>
                             </div>
                             <div>
-                                @{count++;}
 								<label class="checkbox inline">
-                                    <input type="hidden" name="Form.Values[@count].Name" value="BILongBeach" />
-									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									<h2>Long Beach - $2,399</h2>
 								</label>
                                 @{count++;}
@@ -140,10 +131,7 @@
 								</label>
                             </div>
                             <div>
-                                @{count++;}
 								<label class="checkbox inline">
-                                    <input type="hidden" name="Form.Values[@count].Name" value="BINewYork" />
-									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									<h2>New York - $2,399</h2>
 								</label>
                                 @{count++;}
@@ -163,10 +151,7 @@
 								</label>
                             </div>
                             <div>
-                                @{count++;}
 								<label class="checkbox inline">
-                                    <input type="hidden" name="Form.Values[@count].Name" value="BIChicago" />
-									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									<h2>Chicago - $2,529</h2>
 								</label>
                                 @{count++;}
