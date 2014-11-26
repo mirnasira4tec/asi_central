@@ -131,7 +131,7 @@ namespace asi.asicentral.web.Controllers.forms
                     MailMessage mail = new MailMessage();
                     string to = form.Email;
                     mail.To.Add(new MailAddress(to));
-                    mail.Subject = "You have an order waiting to be reviewed";
+                    mail.Subject = "You have an order for " + form.FormType.Name + " waiting to be reviewed";
                     mail.Body = emailBody;
                     mail.BodyEncoding = Encoding.UTF8;
                     mail.IsBodyHtml = true;
