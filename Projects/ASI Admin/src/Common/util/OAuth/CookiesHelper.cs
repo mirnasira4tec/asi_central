@@ -69,45 +69,48 @@ namespace asi.asicentral.oauth
         public static string GetApplicationUrl(HttpRequestBase request, HttpResponseBase response, ApplicationCodes appCode, string userCookieName = "Name")
         {
             string redirectUrl = string.Empty;
-            string cookie = GetCookieValue(request, response, FormsAuthentication.FormsCookieName);
-            if (!string.IsNullOrEmpty(cookie))
+            if (SSO.IsLoggedIn())
             {
-                var extraData = GetLatestTokens(request, response, cookie, userCookieName);
-                if (extraData != null)
+                string cookie = GetCookieValue(request, response, FormsAuthentication.FormsCookieName);
+                if (!string.IsNullOrEmpty(cookie))
                 {
-                    var redirectParams = new CrossApplication.RedirectParams();
-                    redirectParams.AccessToken = extraData.AccessToken;
-                    redirectParams.RefreshToken = extraData.RefreshToken;
-                    redirectParams.TokenExpirationTime = (extraData.TokenExpirationTime.HasValue &&
-                                                          extraData.TokenExpirationTime.Value > DateTime.Now)
-                        ? extraData.TokenExpirationTime.Value
-                        : DateTime.Now.Add(new TimeSpan(2, 0, 0));
-                    if (ApplicationCodes.WESP == appCode)
+                    var extraData = GetLatestTokens(request, response, cookie, userCookieName);
+                    if (extraData != null)
                     {
-                        var session = new ASI.Jade.UserManagement.Session();
-                        var sessionData = new Session(GetId(false, request, response, "CMPSSO"), ApplicationCodes.ASIC.ToString(),
-                            "1.0.0", HttpContext.Current.Request.UserHostAddress);
-                        string sessionId = session.Create(sessionData);
-                        if (!string.IsNullOrEmpty(sessionId)) redirectParams.ExtGuid = sessionId;
-                        redirectParams.FromApplicationVer = "1.0.0";
-                    }
-                    else if (ApplicationCodes.UPSIDE == appCode)
-                    {
-                        string encryptedToken = EncriptToken(extraData.AccessToken);
-                        var Lmsurl = ConfigurationManager.AppSettings["LMSRedirectUrl"];
-                        redirectUrl = string.Format("{0}learnerssologin.jsp?tokenid={1}", Lmsurl, HttpUtility.UrlEncode(encryptedToken));
-                    }
-                    else
-                    {
-                        redirectParams.ExtGuid = string.Empty;
-                        redirectParams.FromApplicationVer = "1";
-                    }
-                    if (ApplicationCodes.UPSIDE != appCode)
-                    {
-                        redirectParams.ToApplicationCode = appCode.ToString();
-                        redirectParams.FromApplicationCode = ApplicationCodes.ASIC.ToString();
-                        var url = ConfigurationManager.AppSettings["RedirectUrl"];
-                        redirectUrl = CrossApplication.GetDashboardRedirectorUrl(url, redirectParams);
+                        var redirectParams = new CrossApplication.RedirectParams();
+                        redirectParams.AccessToken = extraData.AccessToken;
+                        redirectParams.RefreshToken = extraData.RefreshToken;
+                        redirectParams.TokenExpirationTime = (extraData.TokenExpirationTime.HasValue &&
+                                                              extraData.TokenExpirationTime.Value > DateTime.Now)
+                            ? extraData.TokenExpirationTime.Value
+                            : DateTime.Now.Add(new TimeSpan(2, 0, 0));
+                        if (ApplicationCodes.WESP == appCode)
+                        {
+                            var session = new ASI.Jade.UserManagement.Session();
+                            var sessionData = new Session(GetId(false, request, response, "CMPSSO"), ApplicationCodes.ASIC.ToString(),
+                                "1.0.0", HttpContext.Current.Request.UserHostAddress);
+                            string sessionId = session.Create(sessionData);
+                            if (!string.IsNullOrEmpty(sessionId)) redirectParams.ExtGuid = sessionId;
+                            redirectParams.FromApplicationVer = "1.0.0";
+                        }
+                        else if (ApplicationCodes.UPSIDE == appCode)
+                        {
+                            string encryptedToken = EncriptToken(extraData.AccessToken);
+                            var Lmsurl = ConfigurationManager.AppSettings["LMSRedirectUrl"];
+                            redirectUrl = string.Format("{0}learnerssologin.jsp?tokenid={1}", Lmsurl, HttpUtility.UrlEncode(encryptedToken));
+                        }
+                        else
+                        {
+                            redirectParams.ExtGuid = string.Empty;
+                            redirectParams.FromApplicationVer = "1";
+                        }
+                        if (ApplicationCodes.UPSIDE != appCode)
+                        {
+                            redirectParams.ToApplicationCode = appCode.ToString();
+                            redirectParams.FromApplicationCode = ApplicationCodes.ASIC.ToString();
+                            var url = ConfigurationManager.AppSettings["RedirectUrl"];
+                            redirectUrl = CrossApplication.GetDashboardRedirectorUrl(url, redirectParams);
+                        }
                     }
                 }
             }
@@ -118,6 +121,9 @@ namespace asi.asicentral.oauth
                 {
                     case ApplicationCodes.WESP:
                         redirectUrl = "http://espweb.asicentral.com/";
+                        break;
+                    case ApplicationCodes.UPSIDE:
+                        redirectUrl = ConfigurationManager.AppSettings["LMSRedirectUrl"];
                         break;
                 }
             }
