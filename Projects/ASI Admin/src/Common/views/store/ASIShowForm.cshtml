@@ -2,9 +2,10 @@
 @using asi.asicentral.model.store;
 @inherits System.Web.Mvc.WebViewPage<FormInstance>
 @{
+    var count = 0;
 	if (Model.Values == null || Model.Values.Count == 0)
 	{
-		for (int i = 0; i < 60; i++)
+		for (int i = 0; i < 59; i++)
 		{
 			Model.Values.Add(new FormValue());
 		}
@@ -52,16 +53,13 @@
 				<td colspan="5">
 					<fieldset>
 						<label>Show Contact:
-                            <input type="hidden" name="Form.Values[0].Name" value="ShowContact" />
-							<input type="text" class="input-md" name="Form.Values[0].Value" value="@Model.Values[0].Value" />
+                            <input type="hidden" name="Form.Values[@count].Name" value="ShowContact" />
+							<input type="text" class="input-md" name="Form.Values[@count].Value" value="@Model.Values[count].Value" />
 						</label>
+                        @{count++;}
 						<label>Title:
-                            <input type="hidden" name="Form.Values[1].Name" value="Title" />
-							<input type="text" class="input-md" name="Form.Values[1].Value" value="@Model.Values[1].Value" />
-						</label>
-						<label>Brief Product Description <small>(for assignment purposes only)</small>:
-                            <input type="hidden" name="Form.Values[2].Name" value="ProductDescription" />
-							<input type="text" class="input-large" name="Form.Values[2].Value" value="@Model.Values[2].Value" />
+                            <input type="hidden" name="Form.Values[@count].Name" value="Title" />
+							<input type="text" class="input-md" name="Form.Values[@count].Value" value="@Model.Values[count].Value" />
 						</label>
 					</fieldset>
 				</td>
@@ -73,102 +71,117 @@
 					<td colspan="5">
 						<div class="booth-show-section">
                             <div>
+                                @{count++;}
 								<label class="checkbox inline">
-                                    <input type="hidden" name="Form.Values[3].Name" value="BIOrlando" />
-									<input type="checkbox" name="Form.Values[3].Value" @(Model.Values[3].Value != null && Model.Values[3].Value == "on" ? "checked" : "")>
+                                    <input type="hidden" name="Form.Values[@count].Name" value="BIOrlando" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									<h2>Orlando - $2,529</h2>
 								</label>
+                                @{count++;}
 								<label>
 									<div>
 										Booth number: 
-                                        <input type="hidden" name="Form.Values[4].Name" value="BNOrlando" />
-                                        <input type="text" class="input-medium" name="Form.Values[4].Value" value="@Model.Values[4].Value" /> 
+                                        <input type="hidden" name="Form.Values[@count].Name" value="BNOrlando" />
+                                        <input type="text" class="input-medium" name="Form.Values[@count].Value" value="@Model.Values[count].Value" /> 
 									</div>
 								</label>
+                                @{count++;}
 								<label>
 									<div>
-                                        <input type="hidden" name="Form.Values[5].Name" value="NBOrlando" />
-										<input type="text" class="input-small" name="Form.Values[5].Value" value="@Model.Values[5].Value" /> Number of booths
+                                        <input type="hidden" name="Form.Values[@count].Name" value="NBOrlando" />
+										<input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value" /> Number of booths
 									</div>
 								</label>
                             </div>
                             <div>
+                                @{count++;}
 								<label class="checkbox inline">
-                                    <input type="hidden" name="Form.Values[6].Name" value="BIDallas" />
-									<input type="checkbox" name="Form.Values[6].Value" @(Model.Values[6].Value != null && Model.Values[6].Value == "on" ? "checked" : "")>
+                                    <input type="hidden" name="Form.Values[@count].Name" value="BIDallas" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									<h2>Dallas - $2,429</h2>
 								</label>
+                                @{count++;}
 								<label>
 									<div>
 										Booth number: 
-                                        <input type="hidden" name="Form.Values[7].Name" value="BNDallas" />
-                                        <input type="text" class="input-medium" name="Form.Values[7].Value" value="@Model.Values[7].Value" /> 
+                                        <input type="hidden" name="Form.Values[@count].Name" value="BNDallas" />
+                                        <input type="text" class="input-medium" name="Form.Values[@count].Value" value="@Model.Values[count].Value" /> 
 									</div>
 								</label>
+                                @{count++;}
 								<label>
 									<div>
-                                        <input type="hidden" name="Form.Values[8].Name" value="NBDallas" />
-										<input type="text" class="input-small" name="Form.Values[8].Value" value="@Model.Values[8].Value" /> Number of booths
+                                        <input type="hidden" name="Form.Values[@count].Name" value="NBDallas" />
+										<input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value" /> Number of booths
 									</div>
 								</label>
                             </div>
                             <div>
+                                @{count++;}
 								<label class="checkbox inline">
-                                    <input type="hidden" name="Form.Values[9].Name" value="BILongBeach" />
-									<input type="checkbox" name="Form.Values[9].Value" @(Model.Values[9].Value != null && Model.Values[9].Value == "on" ? "checked" : "")>
+                                    <input type="hidden" name="Form.Values[@count].Name" value="BILongBeach" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									<h2>Long Beach - $2,399</h2>
 								</label>
+                                @{count++;}
 								<label>
 									<div>
 										Booth number: 
-                                        <input type="hidden" name="Form.Values[10].Name" value="BNLongBeach" />
-                                        <input type="text" class="input-medium" name="Form.Values[10].Value" value="@Model.Values[10].Value" /> 
+                                        <input type="hidden" name="Form.Values[@count].Name" value="BNLongBeach" />
+                                        <input type="text" class="input-medium" name="Form.Values[@count].Value" value="@Model.Values[count].Value" /> 
 									</div>
 								</label>
+                                @{count++;}
 								<label>
 									<div>
-                                        <input type="hidden" name="Form.Values[11].Name" value="NBLongBeach" />
-										<input type="text" class="input-small" name="Form.Values[11].Value" value="@Model.Values[11].Value" /> Number of booths
+                                        <input type="hidden" name="Form.Values[@count].Name" value="NBLongBeach" />
+										<input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value" /> Number of booths
 									</div>
 								</label>
                             </div>
                             <div>
+                                @{count++;}
 								<label class="checkbox inline">
-                                    <input type="hidden" name="Form.Values[12].Name" value="BINewYork" />
-									<input type="checkbox" name="Form.Values[12].Value" @(Model.Values[12].Value != null && Model.Values[12].Value == "on" ? "checked" : "")>
+                                    <input type="hidden" name="Form.Values[@count].Name" value="BINewYork" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									<h2>New York - $2,399</h2>
 								</label>
+                                @{count++;}
 								<label>
 									<div>
 										Booth number: 
-                                        <input type="hidden" name="Form.Values[13].Name" value="BNNewYork" />
-                                        <input type="text" class="input-medium" name="Form.Values[13].Value" value="@Model.Values[13].Value" /> 
+                                        <input type="hidden" name="Form.Values[@count].Name" value="BNNewYork" />
+                                        <input type="text" class="input-medium" name="Form.Values[@count].Value" value="@Model.Values[count].Value" /> 
 									</div>
 								</label>
+                                @{count++;}
 								<label>
 									<div>
-                                        <input type="hidden" name="Form.Values[14].Name" value="NBNewYork" />
-										<input type="text" class="input-small" name="Form.Values[14].Value" value="@Model.Values[14].Value" /> Number of booths
+                                        <input type="hidden" name="Form.Values[@count].Name" value="NBNewYork" />
+										<input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value" /> Number of booths
 									</div>
 								</label>
                             </div>
                             <div>
+                                @{count++;}
 								<label class="checkbox inline">
-                                    <input type="hidden" name="Form.Values[15].Name" value="BIChicago" />
-									<input type="checkbox" name="Form.Values[15].Value" @(Model.Values[15].Value != null && Model.Values[15].Value == "on" ? "checked" : "")>
+                                    <input type="hidden" name="Form.Values[@count].Name" value="BIChicago" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									<h2>Chicago - $2,529</h2>
 								</label>
+                                @{count++;}
 								<label>
 									<div>
 										Booth number: 
-                                        <input type="hidden" name="Form.Values[16].Name" value="BNChicago" />
-                                        <input type="text" class="input-medium" name="Form.Values[16].Value" value="@Model.Values[16].Value" /> 
+                                        <input type="hidden" name="Form.Values[@count].Name" value="BNChicago" />
+                                        <input type="text" class="input-medium" name="Form.Values[@count].Value" value="@Model.Values[count].Value" /> 
 									</div>
 								</label>
+                                @{count++;}
 								<label>
 									<div>
-                                        <input type="hidden" name="Form.Values[17].Name" value="NBChicago" />
-										<input type="text" class="input-small" name="Form.Values[17].Value" value="@Model.Values[17].Value" /> Number of booths
+                                        <input type="hidden" name="Form.Values[@count].Name" value="NBChicago" />
+										<input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value" /> Number of booths
 									</div>
 								</label>
                             </div>
@@ -180,26 +193,30 @@
 						<h3>Place me in the:</h3>
 						<div><strong>
 							Incentive Pavilion (
+                            @{count++;}
 							<label class="checkbox">
-                                <input type="hidden" name="Form.Values[18].Name" value="IPOR" />
-								<input type="checkbox" name="Form.Values[18].Value" @(Model.Values[18].Value != null && Model.Values[18].Value == "on" ? "checked" : "")>
+                                <input type="hidden" name="Form.Values[@count].Name" value="IPOR" />
+								<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 								<strong>OR</strong>
 							</label>
+                            @{count++;}
 							<label class="checkbox">
-                                <input type="hidden" name="Form.Values[19].Name" value="IPCH" />
-								<input type="checkbox" name="Form.Values[19].Value" @(Model.Values[19].Value != null && Model.Values[19].Value == "on" ? "checked" : "")>
+                                <input type="hidden" name="Form.Values[@count].Name" value="IPCH" />
+								<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 								<strong>CH</strong>
 							</label>).............	  
 								ASI Decoration Pavilion
+                            @{count++;}
 							<label class="checkbox">
-                                <input type="hidden" name="Form.Values[20].Name" value="DPOR" />
-								<input type="checkbox" name="Form.Values[20].Value" @(Model.Values[20].Value != null && Model.Values[20].Value == "on" ? "checked" : "")>
+                                <input type="hidden" name="Form.Values[@count].Name" value="DPOR" />
+								<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 								<strong>OR</strong>
 							</label>.............	  
 								Graphics Central
+                            @{count++;}
 							<label class="checkbox">
-                                <input type="hidden" name="Form.Values[21].Name" value="DPCH" />
-								<input type="checkbox" name="Form.Values[21].Value" @(Model.Values[21].Value != null && Model.Values[21].Value == "on" ? "checked" : "")>
+                                <input type="hidden" name="Form.Values[@count].Name" value="DPCH" />
+								<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 								<strong>CH</strong>
 							</label>
 						</strong></div>
@@ -246,209 +263,241 @@
 							<tr>
 								<td>Premium locations: $199 per booth</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[22].Name" value="BS01" />
-									    <input type="checkbox" name="Form.Values[22].Value" @(Model.Values[22].Value != null && Model.Values[22].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS01" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[23].Name" value="BS02" />
-									    <input type="checkbox" name="Form.Values[23].Value" @(Model.Values[23].Value != null && Model.Values[23].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS02" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[24].Name" value="BS03" />
-									    <input type="checkbox" name="Form.Values[24].Value" @(Model.Values[24].Value != null && Model.Values[24].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS03" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[25].Name" value="BS04" />
-									    <input type="checkbox" name="Form.Values[25].Value" @(Model.Values[25].Value != null && Model.Values[25].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS04" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[26].Name" value="BS05" />
-									    <input type="checkbox" name="Form.Values[26].Value" @(Model.Values[26].Value != null && Model.Values[26].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS05" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 							</tr>
 							<tr>
 								<td>Corner(s): $399 per corner</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[27].Name" value="BS11" />
-									    <input type="checkbox" name="Form.Values[27].Value" @(Model.Values[27].Value != null && Model.Values[27].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS11" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[28].Name" value="BS12" />
-									    <input type="checkbox" name="Form.Values[28].Value" @(Model.Values[28].Value != null && Model.Values[28].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS12" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[29].Name" value="BS13" />
-									    <input type="checkbox" name="Form.Values[29].Value" @(Model.Values[29].Value != null && Model.Values[29].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS13" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[30].Name" value="BS14" />
-									    <input type="checkbox" name="Form.Values[30].Value" @(Model.Values[30].Value != null && Model.Values[30].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS14" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[31].Name" value="BS15" />
-									    <input type="checkbox" name="Form.Values[31].Value" @(Model.Values[31].Value != null && Model.Values[31].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS15" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 							</tr>
 							<tr>
 								<td>Hanging sign*: $199 per booth in advance / $300 on site</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[32].Name" value="BS21" />
-									    <input type="checkbox" name="Form.Values[32].Value" @(Model.Values[32].Value != null && Model.Values[32].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS21" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[33].Name" value="BS22" />
-									    <input type="checkbox" name="Form.Values[33].Value" @(Model.Values[33].Value != null && Model.Values[33].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS22" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[34].Name" value="BS23" />
-									    <input type="checkbox" name="Form.Values[34].Value" @(Model.Values[34].Value != null && Model.Values[34].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS23" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[35].Name" value="BS24" />
-									    <input type="checkbox" name="Form.Values[35].Value" @(Model.Values[35].Value != null && Model.Values[35].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS24" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[36].Name" value="BS24" />
-									    <input type="checkbox" name="Form.Values[36].Value" @(Model.Values[36].Value != null && Model.Values[36].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS24" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 							</tr>
 							<tr>
 								<td>Aisle span*: $199 per booth in advance / $300 on site</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[37].Name" value="BS31" />
-									    <input type="checkbox" name="Form.Values[37].Value" @(Model.Values[37].Value != null && Model.Values[37].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS31" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[38].Name" value="BS32" />
-									    <input type="checkbox" name="Form.Values[38].Value" @(Model.Values[38].Value != null && Model.Values[38].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS32" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[39].Name" value="BS33" />
-									    <input type="checkbox" name="Form.Values[39].Value" @(Model.Values[39].Value != null && Model.Values[39].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS33" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[40].Name" value="BS34" />
-									    <input type="checkbox" name="Form.Values[40].Value" @(Model.Values[40].Value != null && Model.Values[40].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS34" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[41].Name" value="BS35" />
-									    <input type="checkbox" name="Form.Values[41].Value" @(Model.Values[41].Value != null && Model.Values[41].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS35" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 							</tr>
 							<tr>
 								<td>Aisle carpet*: $199 per booth in advance / $300 on site</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[42].Name" value="BS41" />
-									    <input type="checkbox" name="Form.Values[42].Value" @(Model.Values[42].Value != null && Model.Values[42].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS41" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[43].Name" value="BS42" />
-									    <input type="checkbox" name="Form.Values[43].Value" @(Model.Values[43].Value != null && Model.Values[43].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS42" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[44].Name" value="BS43" />
-									    <input type="checkbox" name="Form.Values[44].Value" @(Model.Values[44].Value != null && Model.Values[44].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS43" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[45].Name" value="BS44" />
-									    <input type="checkbox" name="Form.Values[45].Value" @(Model.Values[45].Value != null && Model.Values[45].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS44" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[46].Name" value="BS45" />
-									    <input type="checkbox" name="Form.Values[46].Value" @(Model.Values[46].Value != null && Model.Values[46].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS45" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 							</tr>
 							<tr>
 								<td>Extended height*: $199 per booth in advance / $300 on site</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[47].Name" value="BS51" />
-									    <input type="checkbox" name="Form.Values[47].Value" @(Model.Values[47].Value != null && Model.Values[47].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS51" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[48].Name" value="BS52" />
-									    <input type="checkbox" name="Form.Values[48].Value" @(Model.Values[48].Value != null && Model.Values[48].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS52" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[49].Name" value="BS53" />
-									    <input type="checkbox" name="Form.Values[49].Value" @(Model.Values[49].Value != null && Model.Values[49].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS53" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[50].Name" value="BS54" />
-									    <input type="checkbox" name="Form.Values[50].Value" @(Model.Values[50].Value != null && Model.Values[50].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS54" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 								<td>
+                                    @{count++;}
 									<label class="checkbox">
-										<input type="hidden" name="Form.Values[51].Name" value="BS55" />
-									    <input type="checkbox" name="Form.Values[51].Value" @(Model.Values[51].Value != null && Model.Values[51].Value == "on" ? "checked" : "")>
+										<input type="hidden" name="Form.Values[@count].Name" value="BS55" />
+									    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 									</label>
 								</td>
 							</tr>
 							<tr>
 								<td colspan="6">
 									<p>Please do not position my booth near the following companies: (List every competitor or company – do not list product lines – that you do not wish to appear next to or close to. You may be assigned next to or close to companies you do not list on this form.)</p>
-                                    <input type="hidden" name="Form.Values[52].Name" value="Companies" />
-									<textarea rows="4" cols="50" name="Form.Values[52].Value">@Model.Values[52].Value</textarea>
+                                    @{count++;}
+                                    <input type="hidden" name="Form.Values[@count].Name" value="Companies" />
+									<textarea rows="4" cols="50" name="Form.Values[@count].Value">@Model.Values[count].Value</textarea>
+                                    @{count++;}
 									<label>Products to be exhibited (to be used when assigning booths)                             
-                                        <input type="hidden" name="Form.Values[53].Name" value="ExhibitedProducts" />
-										<input type="text" class="input-large" name="Form.Values[53].Value" value="@Model.Values[53].Value" />
+                                        <input type="hidden" name="Form.Values[@count].Name" value="ExhibitedProducts" />
+										<input type="text" class="input-large" name="Form.Values[@count].Value" value="@Model.Values[count].Value" />
 									</label>
 								</td>
 							</tr>
@@ -469,9 +518,10 @@
 				<tr class="yellow-bg">
 					<td colspan="5">
 						<div class="pull-left">
+                            @{count++;}
 							<label class="checkbox">
-								<input type="hidden" name="Form.Values[54].Name" value="LaunchPackage1" />
-								<input type="checkbox" name="Form.Values[54].Value" @(Model.Values[54].Value != null && Model.Values[54].Value == "on" ? "checked" : "")>
+								<input type="hidden" name="Form.Values[@count].Name" value="LaunchPackage1" />
+								<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
                                 <h4>Launch Package 2: $995</h4>
 							</label>
 							<p><strong>Package value: $1,995</strong></p>
@@ -482,9 +532,10 @@
 								<li>Product in Showcase</li>
 								<li>Post-show email blast</li>
 							</ul>
+                            @{count++;}
 							<label class="checkbox">
-								<input type="hidden" name="Form.Values[55].Name" value="LaunchPackage2" />
-								<input type="checkbox" name="Form.Values[55].Value" @(Model.Values[55].Value != null && Model.Values[55].Value == "on" ? "checked" : "")>
+								<input type="hidden" name="Form.Values[@count].Name" value="LaunchPackage2" />
+								<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
                                 <h4>First Impressions: $700</h4>
 							</label>
 							<p><strong>Package value: $1,325</strong></p>
@@ -497,8 +548,9 @@
 						</div>
 						<div class="pull-left">
 						<label class="checkbox">
-								<input type="hidden" name="Form.Values[56].Name" value="LaunchPackage3" />
-								<input type="checkbox" name="Form.Values[56].Value" @(Model.Values[56].Value != null && Model.Values[56].Value == "on" ? "checked" : "")>
+                            @{count++;}
+								<input type="hidden" name="Form.Values[@count].Name" value="LaunchPackage3" />
+								<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
                                     <h4>Digital Messaging: $1,800</h4>
 							</label>
 							<p><strong>Package value: $2,695</strong></p>
@@ -509,9 +561,10 @@
 								<li>Post-show email blast</li>
 								<li>Banner ad on show specific website</li>
 							</ul>
+                            @{count++;}
 							<label class="checkbox">
-								<input type="hidden" name="Form.Values[57].Name" value="LaunchPackage4" />
-								<input type="checkbox" name="Form.Values[57].Value" @(Model.Values[57].Value != null && Model.Values[57].Value == "on" ? "checked" : "")>
+								<input type="hidden" name="Form.Values[@count].Name" value="LaunchPackage4" />
+								<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
                                 <h4>Lead Generation: $2,250</h4>
 							</label>
 							<p><strong>Package value: $3,297</strong></p>
@@ -524,9 +577,10 @@
 							</ul>
 						</div>
 						<div class="pull-left">
+                            @{count++;}
 							<label class="checkbox">
-								<input type="hidden" name="Form.Values[58].Name" value="LaunchPackage5" />
-								<input type="checkbox" name="Form.Values[58].Value" @(Model.Values[58].Value != null && Model.Values[58].Value == "on" ? "checked" : "")>
+								<input type="hidden" name="Form.Values[@count].Name" value="LaunchPackage5" />
+								<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
                                 <h4>Brand Building: $2,900</h4>
 							</label>
 							<p><strong>Package value: $3,998</strong></p>
@@ -537,9 +591,10 @@
 								<li>Full page ad in the show directory</li>
 								<li>High Profile Directory listing</li>
 							</ul>
+                            @{count++;}
 							<label class="checkbox">
-								<input type="hidden" name="Form.Values[59].Name" value="LaunchPackage6" />
-								<input type="checkbox" name="Form.Values[59].Value" @(Model.Values[59].Value != null && Model.Values[59].Value == "on" ? "checked" : "")>
+								<input type="hidden" name="Form.Values[@count].Name" value="LaunchPackage6" />
+								<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
                                 <h4>Product Specific Marketing Package: $3,600</h4>
 							</label>
 							<p><strong>Package value: $4,897</strong></p>
@@ -694,89 +749,5 @@
 				</tr>
 		</tbody>
 	</table>
-	<!---TERMS AND CONDITIONS------>
-	<div id="terms" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			<h1 class="red-text">The ASI Show Space Reservation Agreement Terms and Conditions</h1>
-		</div>
-		<div class="modal-body">
-			<p>This contract is a commitment to exhibit with non-refundable payments. This application for booth space becomes an official Agreement when signed by an agent of my Company. The use of “My”, “You”, “Your” or “We” means You or Your Company for which You are signing this Agreement. We, as an exhibitor, agree to the following statements:</p>
-			<p>Booths may not be re-sold, transferred or assigned. Only the company completing the front of this form may show the products it sells to distributors in the booth.</p>
-			<p>You may not conduct business outside of Your booth(s) or solicit business from other exhibitors. Distribution of samples and printed material or other promotional items is restricted to Your booth(s).</p>
-			<p>You are responsible for Your booth, the material that You ship to and from the Show and the material in Your booth. Consequently, You should have appropriate insurance.</p>
-			<p><em>The ASI Show</em> (“<em>Show</em>”) reserves the rights to reject, eject or prohibit any exhibit in whole or in part, with or without giving cause. Show liability for rejection without giving cause shall be limited to a refund to You of the amount of fees unearned at the time of ejection. However, if You or Your exhibit is ejected for violation of these rules or for any other stated reason (with cause), no return of fees will be made.</p>
-			<p>You are expressly forbidden from dismantling or packing any portion of Your exhibit booth prior to the official show closing. Violations may result in the loss of Show points, participation in future Shows and/or a $500 fee.</p>
-			<p><strong class="red-text">Booth Fees:</strong> Additional upcharges for special booth positions and options are listed on the front of this form and described in the section below. These fees will be added to Your charges when Your booths are assigned.</p>
-			<p><em>Show</em> requires a deposit of $500 per booth for the Shows. Agreements without payment will not be processed, without exception. Methods of payment include Visa, MasterCard, American Express, Discover or check. Deposits are non-refundable and non-creditable.</p>
-			<p>Additional booth space will be at the then current price. Any reduction in Your booth space will result in a loss of any discounts and the forfeiture of Priority Points. There are no refunds for cancellations for The ASI Shows. All cancellations must be made in writing to Show management.</p>
-			<p>If You do not pay Your invoice by the due date, You will not receive any applicable discounts or Priority Points. Accounts 30 days past due will pay current booth pricing. Accounts past due will be assessed 1.5% interest per month.</p>
-			<p>All <em>ASI Show</em> five-show exhibitors who pay their full booth balance per the terms of this agreement, by September 30, 2014, will receive free shipping and storage between consecutive ASI Shows.</p>
-			<p>To earn special offers, You must pay for a minimum of the same number of booths as You did for 2014. No deposit is required for the free 10’x10’ booth at ASI Chicago. You are responsible for all upcharges and/or special booth configurations on free booth. All payment deadlines apply in order to receive these special offers. Failure to pay within 15 days of the due dates for any of the booths results in forfeiting the free booth discount and other special offers.</p>
-			<p>Except for the 30-day grace period that expires February 28, 2014, this is a non-cancellable contract and deposits paid will be forfeited if any booths are cancelled, or space reduced.</p>
-			<p><strong class="red-text">Cancellation of Booth Space:</strong> See the cancellation table for policies involving partial credit for cancellations. Deposits are not refundable, non-transferable or credited. All cancellations will lose any Priority Points given for the Show. Any exhibitor who has reserved a booth and does not attend Show without notifying Show management in writing a minimum of 30 days before the Show will be charged the full, non-discounted fee for the booth space as well as $1,000 per 10’ x 10’ booth to cover costs incurred by Show including those associated with decorating the booth space, moving other exhibitors, and other costs. All amounts forfeited are considered to be liquidated and agreed upon damages for injuries that Show will suffer as a result of Your cancellation. This provision for liquidated and agreed upon damages is a bona fide provision and not a penalty. The parties understand that the withdrawal of the space reserved from availability at a time when other parties would be interested in applying for it will cause Show to sustain damages. In this situation, Show damages will be substantial, but they will not be capable of determination with mathematical precision. Therefore, the provisions for liquidated and agreed upon damages have been incorporated into this Agreement as a valid pre-estimate of these damages. The date of cancellation shall be the date Show receives the written notice. Regardless of when Your cancellation is received, You remain responsible for the full contract amount. However, You will receive a credit in accordance with the Cancellation Timetable set forth below. Show reserves the right to treat Your downsizing of booth space as cancellation of the original space and purchase of new booth space. You may be required to move to a new location if You request a downsizing of space. Any amount credited to You by Show can only be used towards Show booth balance or advertising at a Show within 12 months of the cancellation.</p>
-			<p><strong class="red-text">Booth Assignments:</strong> Booth Selection Forms and show floor plans will be made available to You based on Your accrued Priority Points. Be sure to return Your Agreement now, so You will be included in the appropriate mailing and receive the best booth selection opportunity. You agree that Show in its sole discretion has the final say concerning the layout of the show floor. You also agree that Show has the right to relocate exhibitors for any reason.</p>
-			<p><strong class="red-text">Cancellation Timetable (deposits are not part of amount credited):</strong></p>
-			<table>
-				<tr>
-					<th>Deadline Before Show</th>
-					<th>Percentage Credited after Deposit</th>
-				</tr>
-				<tr>
-					<td>6 months</td>
-					<td>50%</td>
-				</tr>
-				<tr>
-					<td>120 days</td>
-					<td>25%</td>
-				</tr>
-				<tr>
-					<td>Less than 90 days</td>
-					<td>0%</td>
-				</tr>
-			</table>
-			<p><strong class="red-text">Exhibit space will be assigned from a Booth Selection Form based on:</strong> 1) Priority Points; 2) Square footage; 3) Date Space Reservation Form is received (see Booth Assignments); 4) Proximity to competitors</p>
-			<p><strong class="red-text">Show Program Directory and Promotion:</strong> Your listings will be taken from the Directory Listing Form which must be returned to Show. Show is not responsible for errors or omissions in the directory listings (no refunds or credits will be issued). Fire and Safety Laws: Federal, State and City Laws must be strictly observed. Cloth decorations must be flame proof. Wiring must comply with fire department’s and underwriter’s rules. Smoking in exhibits is forbidden. Crowding will be restricted. Exhibits cannot block aisles and fire exits. Storage of any kind behind Your booth or behind Your back wall is strictly forbidden. A full listing of these fire and safety regulations will be found in the Exhibitor Service Manual.</p>
-			<p><strong class="red-text">Visual and Audio Recording Rights:</strong> All visual and audio recording rights in Show are reserved to Show or its affiliates. Any displayed item within Your booth may be recorded by Show or its affiliates for future use. No recording of booths, other than Your own, is permitted at any time. Your booth space, exhibit and personnel may be recorded by Show or its affiliates before, during or after the open hours of the Show for any Show or its affiliates use.</p>
-			<p><strong class="red-text">Outside Exhibits/Hospitality Suites:</strong> Without express written approval from Show, You may not display products/services and/or other advertising material in areas outside Your booth space in areas such as, but not limited to, parking lots, hotel lobbies, lounges, corridors, sleeping rooms, etc. You may not conduct unauthorized facility tours.</p>
-			<p>You also agree not to operate hospitality suites, or hold any other functions open to attendees, during Show hours or when Show sponsored activities are being held. Only exhibitors may host a hospitality function in an official Show hotel. All requests for a hospitality suite or public function space must be made through Show.</p>
-			<p><strong class="red-text">Listings and Promotional Materials:</strong> By exhibiting at the Show, You grant to Show or its affiliates a fully paid, perpetual non-exclusive license to use, display and reproduce Your name, trade names and product names in any directory (print, electronic or other media) listing Your Company at the Show and to use such name in Show or its affiliates promotional materials. Show shall not be liable for any errors in any listing or descriptions, or for omitting You from the Show program or other lists or materials. Show management reserves the right to edit and/or delete Show program submissions. Companies not current with payment will not be included in the Show program</p>
-			<p><strong class="red-text">Booth Package:</strong> You will receive the “Advantage Booth Package” at no charge. This includes:</p>
-			<ol>
-				<li>Pipe, drape, aisle and booth carpet</li>
-				<li>Cleaning (including booth carpet vacuuming before the Show opens)</li>
-				<li>2-line identification sign</li>
-				<li>Exhibitor badges</li>
-			</ol>
-			<p><strong class="red-text">Priority Points:</strong> All Priority Points accumulated per Show. To receive Priority Points, You must pay all invoices on time. Failure to pay on time will result in the forfeiture of Priority Points.</p>
-			<p>All exhibitors who pay in full with contract before May 1, 2014 will receive an extra bonus Priority Point.</p>
-			<p>If for any reason You do not maintain or lose Your ASI supplier member status You will forfeit all Priority Points that You have earned.</p> 
-			<p>Non ASI supplier members permitted to exhibit at Shows do not receive Priority Points or discounts. As a non-ASI member, You are able to exhibit one (1) time only prior to becoming an ASI member. The cost of 10’x10’ booth is the standard rate in addition to the non-member charge of $500. When a non-member supplier becomes a member within ninety (90) days of exhibiting, the $500 fee will be applied towards ASI membership.</p>
-			<p><strong class="red-text">Charter Status:</strong> Charter exhibitors are ASI supplier members who participated in the first ASI Show in 1998. In order to maintain Charter Exhibitor status, charter exhibitors must exhibit at a minimum of one ASI Show per year.</p>
-			<p><strong class="red-text">Assumption of Risks; Releases:</strong> You expressly assume all risks associated with, resulting from or arising in connection with Your participation at the Show including, without limitation, all risks of theft, loss, harm, damage or injury to the person (including death), property, business or profits of exhibitor, whether caused by negligence, intentional act, accident, act of God or otherwise. You have sole responsibility for Your property or any theft, damage or other loss to such property (whether or not stored in any courtesy storage area), you waive any subrogation claims that Your insurer may have. Neither Show or the exhibit facility accepts responsibility, nor is a bailment created for property delivered by or to You. Neither Show or the exhibit facility shall be liable for, and You hereby release all of them from and covenants not to sue any of them with respect to any and all risks, losses, damages and liabilities described in this paragraph.</p>
-			<p><strong class="red-text">Indemnification:</strong> You shall indemnify, defend (with legal counsel satisfactory to Show), and hold Show, its affiliates, and the exhibit facility harmless from any claims, demands, suits, liabilities, damages, losses, costs, reasonable attorneys’ fees and expenses which result from, or arise out of or in connection with: (a) Your participation or presence at the Show, (b) any breach by You of any agreements, covenants, promises or other obligations under this contract: (c) any matter for which You are otherwise responsible under the terms of this contract: (d) any violation or infringement (or claim of violation or infringement) of any law or ordinance or the rights of any party under any patent, copyright, trademark, trade secret, or other proprietary right: (e) any libel, slander, defamation or similar claims resulting from Your actions; (f) harm or injury (including death) to You; and (g) loss of or damage to Your property, Your business, or Your profits, whether caused by negligence, intentional act, accident, act of God, theft, mysterious disappearance or otherwise.</p>
-			<p><strong class="red-text">Qualifications of Exhibitor:</strong> Show, in its sole discretion, determines whether a prospective exhibitor is eligible to participate in the Show. Eligibility is generally limited to ASI listed Supplier members, who are in good standing with Show and current in payment of charges invoiced by Show. Show reserves the right to restrict or remove any exhibit which Show, in its sole discretion, believes is objectionable or inappropriate. Suppliers that are not listed with ASI and that are a distributor or affiliated with a distributor may not exhibit at Show.</p>
-			<p>Except for first-time exhibitors or other exceptions noted in the Terms and Conditions, to exhibit at Show and receive ASI supplier member prices, the exhibitor must be an ASI supplier member in good standing at the time of application, as well as at the time the Show is held.</p>
-			<p><strong class="red-text">Cancellation by Show:</strong> If You fail to make a payment required by this contract in a timely manner, Show may terminate this contract (and Your participation in the Show) without further notice and without obligation to refund monies previously paid. Show reserves the right to refuse You permission to move in and set up an exhibit if You are in arrears of a payment due to Show.</p>
-			<p><em>Show</em> is expressly authorized (but has no obligation) to occupy or dispose of any space vacated or made available by reason of action taken under this paragraph in such manner as it may deem best, and without releasing You from any liability hereunder. <em>Show</em> may also terminate this contract, effective upon written notice of termination, if You breach any of Your obligations under this contract, without any obligation on the part of Show to refund any payments previously made and without releasing You from any liability arising as a result of, or in connection with such breach.</p>
-			<p><strong class="red-text">Cancellation of the Show:</strong> If Show cancels the ASI Show due to circumstances beyond its reasonable control (for example: acts of God, acts of war, act of terrorism, earthquake, government emergency, or government actions, labor actions or unavailability of the Exhibit Facility), Show shall refund to each Exhibitor its exhibit space rental payment previously paid, minus a share of costs and expenses incurred, in full satisfaction of all liabilities of Show to Exhibitor. Show reserves the right to cancel, re-name or relocate Show or change the dates of the ASI Show that are not more than 90 days earlier or 90 days later than the dates on which the ASI Show was originally scheduled to be held. If Show should take such action, no refund will be due to the Exhibitor, but Show shall assign to the Exhibitor, in lieu of the original space, such other space as Show deems appropriate and the Exhibitor agrees to use such space under the terms of this contract. If Show removes or restricts an exhibit which it considers objectionable or inappropriate, no refund will be due to the Exhibitor. If Show elects to cancel the <em>ASI Show</em> other than for such a reason previously described in this paragraph, Show shall refund to each Exhibitor its entire exhibit space rental payment previously paid, in full satisfaction of all liabilities of Show to Exhibitor.</p>
-			<p><strong class="red-text">Copyrighted Materials:</strong> You shall not play or permit the playing or performance of, or distribution of any copyrighted material at the Show, unless You have obtained all necessary rights and paid all required royalties, fees or other payments.</p>
-			<p><strong class="red-text">Observance of Laws:</strong> You shall abide by and observe all federal, state and local laws, codes, ordinances, rules and regulations, and all rules and regulations of the exhibit facility (including any union labor work rules). Without limiting the foregoing, You shall construct Your exhibits to comply with the Americans with Disabilities Act.</p>
-			<p><strong class="red-text">Taxes and Licenses:</strong> You shall be solely responsible for obtaining any licenses, permits or approvals under federal, state or local law applicable to its activities at the Show. You shall be solely responsible for obtaining any necessary tax identification numbers and permits and for paying all taxes, license fees, use fees, or other fees, charges, levies, or penalties that become due to any governmental authority in connection with its activities at the <em>Show</em>.</p>
-			<p><strong class="red-text">Insurance:</strong> You shall, at Your own expense, secure and maintain through the term of this contract, including move-in and move-out days, the insurance listed below, as well as any additional Event-specific insurance to be outlined in the Exhibitor Service Manual.</p>
-			<p>Workers’ Compensation Insurance: Workers’ Compensation Insurance complying with all federal laws and laws of the state in which the Event is being held.</p>
-			<p>Comprehensive General Liability Insurance with limits not less than $1,000,000 each occurrence, $2,000,000 aggregate, combined single limit for bodily injury and property damages, including coverage for personal injury, contractual and operation of mobile equipment, products and liquor liability (if applicable).</p>
-			<p>Automobile Liability Insurance with limits not less than $500,000 each occurrence, combined single-limit for bodily injury and property damage, including coverage for owned, non-owned and hired vehicles, including loading and unloading operators.</p>
-			<p>Comprehensive General Liability and Automobile Liability insurance policies shall name as additional insured Show and each of its subsidiaries. If requested, copies of additional insured endorsements, primary coverage endorsements and complete copies of policies, satisfactory to Show shall be furnished to Show thirty (30) days before the first day of the Show. The Certificates of Insurance or policies shall provide that they may not be cancelled without 30 days advance written notice to Show.</p>
-			<p><strong class="red-text">Additional Terms and Conditions:</strong> Show has sole control over attendance policies. Except as provided to the contrary in this contract, all monies paid by You shall be deemed fully earned and non-refundable at the time of payment. You shall conduct Yourself at all times in accordance with normal standards of decorum and good taste.</p>
-			<p>In addition to its right to close an exhibit and withdraw acceptance of the contract, Show in its sole judgement, may refuse to consider You for participation in future Shows if You violate or fail to abide by the contract and any of the accompanying rules and regulations.</p>
-			<p>Any amendment to this contract must be in writing and signed by an authorized representative of Show. You may not assign this contract or any right hereunder, nor may You sublet or license all or any portion of Your exhibit space. The terms and conditions of this Agreement shall govern notwithstanding any inconsistent or additional terms and conditions on any purchase order or other documents You submit to the Show. No presumption or burden of proof or persuasion shall be implied by virtue of the fact that this Agreement was prepared by a particular party.</p>
-			<p>You agree if the Show takes legal action to enforce this Agreement, You shall be responsible for all reasonable costs, including attorney fees, for such enforcement. Non-member exhibitors cannot attend The ASI Show Gala.</p>
-			<p>Any leads or contact information You obtain from exhibiting at an ASI Show or ASI activity cannot be provided to or used by or for a competitor of ASI or <em>The ASI Show</em>.</p>
-			<p><strong class="red-text">Incorporation of Rules and Regulations:</strong> Any and all matters pertaining to the Show and not specifically covered by the terms and conditions of this contract shall be subject to determination by Show in its sole discretion. Show may adopt rules or regulations from time to time governing such matters and may amend or revoke them at any time, upon reasonable notice to You. Any such rules and regulations (whether or not included in an Exhibitor Service Manual or similar document) are an integral part of this contract and are incorporated herein by reference. You shall observe and abide by additional regulations made by Show as soon as these additional rules or regulations are communicated to You. This contract (including the Exhibitor Service Manual and any additional rules or regulations adopted by Show from time to time) states the entire agreement of the parties with respect to the subject matter hereof.</p>
-			<p><strong class="red-text">Disclaimer of Liability:</strong> <em>THE ASI SHOW</em> DISCLAIMS ANY AND ALL WARRANTIES WHETHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT. THE ASI SHOW MAKES NO REPRESENTATION OR WARRANTIES, EXPRESS OR IMPLIED, CONCERNING THE NUMBER OF PEOPLE OR EXHIBITORS WHO WILL ATTEND AN ASI SHOW OR ANY OTHER ACTIVITIES OR FUNCTIONS OR ANY OTHER MATTERS. IN NO EVENT SHALL THE ASI SHOW BE LIABLE FOR ANY INCIDENTAL, INDIRECT, SPECIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND, INCLUDING, BUT NOT LIMITED TO, LOST REVENUE OR PROFITS REGARDLESS OF THE FORM OF ACTION WHETHER IN CONTRACT, TORT (INCLUDING NEGLIGENCE), OR OTHERWISE, EVEN IF THE ASI SHOW HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. IN NO EVENT SHALL THE MAXIMUM LIABILITY OF THE ASI SHOW EXCEED THE BOOTH FEES PAID.</p>
-			<p>This Agreement shall be governed in accordance with the laws of the Commonwealth of Pennsylvania without giving effect to any choice or conflicts of law. The parties agree to submit to the exclusive personal jurisdiction and venue of the state courts in Bucks County, Pennsylvania or the federal court in the Eastern District of Pennsylvania for disputes relating to, or concerning this Agreement.</p>
-		</div>
-	</div>
 </div><!--End Container-->
        
