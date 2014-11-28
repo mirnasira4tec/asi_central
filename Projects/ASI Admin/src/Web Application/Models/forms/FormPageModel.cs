@@ -12,6 +12,7 @@ namespace asi.asicentral.web.Models.forms
 		public String FormTab { get; set; }
 		public string StartDate { get; set; }
 		public string EndDate { get; set; }
+        public string Creator { get; set; }
 		public IList<FormInstance> Forms { get; set; }
 		public IList<FormType> FormTypes { get; set; } 
 	}
