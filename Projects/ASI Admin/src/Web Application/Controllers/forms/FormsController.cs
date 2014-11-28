@@ -20,7 +20,7 @@ namespace asi.asicentral.web.Controllers.forms
 		public IEmailService EmailService { get; set; }
         public ITemplateService TemplateService { get; set; }
 
-		public ActionResult Index(DateTime? dateStart, DateTime? dateEnd, String formTab)
+        public ActionResult Index(DateTime? dateStart, DateTime? dateEnd, String formTab, string filterBy = "Created")
         {
 			var viewModel = new FormPageModel();
 			IQueryable<FormInstance> formInstanceQuery = StoreService.GetAll<FormInstance>(true);
@@ -39,7 +39,14 @@ namespace asi.asicentral.web.Controllers.forms
 			if (dateStart.HasValue) viewModel.StartDate = dateStart.Value.ToString("MM/dd/yyyy");
 			if (dateEnd.HasValue) viewModel.EndDate = dateEnd.Value.ToString("MM/dd/yyyy");
 			viewModel.FormTab = formTab;
-			viewModel.Forms = formInstanceQuery.OrderByDescending(form => form.CreateDate).ToList();
+            if (filterBy == "Creator")
+                viewModel.Forms = formInstanceQuery.OrderBy(form => form.Sender).ThenByDescending(form => form.CreateDate).ToList();
+            else if (filterBy == "Email")
+                viewModel.Forms = formInstanceQuery.OrderBy(form => form.Email).ThenByDescending(form => form.CreateDate).ToList();
+            else if (filterBy == "Type")
+                viewModel.Forms = formInstanceQuery.OrderBy(form => form.FormType.Name).ThenByDescending(form => form.CreateDate).ToList();
+            else 
+                viewModel.Forms = formInstanceQuery.OrderByDescending(form => form.CreateDate).ToList();
 			viewModel.FormTypes = StoreService.GetAll<FormType>(true).ToList();
 			return View("../Forms/Index", viewModel);
         }
