@@ -45,6 +45,8 @@
             <th><a href="../Forms/Index?filterBy=Email">Email</a></th>
             <th><a href="../Forms/Index?filterBy=Type">Type</a></th>
             <th><a href="../Forms/Index?filterBy=Creator">Creator</a></th>
+            <th>Order Status</th>
+            <th>Step</th>
 	    </tr>
     </thead>
 	<tbody>
@@ -55,8 +57,31 @@
 			<td>@form.Email</td>
 			<td><a href="/Forms/SendForm/@form.Id">@form.FormType.Name</a></td>
 			<td>@form.Sender</td>
+            @if(form.OrderDetail != null && form.OrderDetail.Order != null)
+            {
+                if(form.OrderDetail.Order.IsCompleted)
+                {
+                    <td>Completed</td>
+                }
+                else
+                {
+                    <td>Not Completed</td>
+                }
+            }
+            else
+            {
+                   <td>No Order Yet</td>
+            }
+            @if (form.OrderDetail != null && form.OrderDetail.Order != null)
+            {
+                <td>@form.OrderDetail.Order.CompletedStep</td>
+            }
+            else
+            {
+                <td>0</td>
+            }
 		</tr>
-	}
+    }
 	</tbody>
 </table>
 @section Scripts {
