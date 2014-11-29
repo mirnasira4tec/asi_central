@@ -26,8 +26,14 @@ namespace asi.asicentral.web.model.store
         {
             get
             {
-                if (this.orderDetail.Order.GetContact() == null) return "";
-                else return (this.orderDetail.Order.GetContact().Email);
+                if (this.orderDetail.Order.GetContact() == null)
+                {
+                    return string.IsNullOrEmpty(this.orderDetail.Order.LoggedUserEmail) ? "" : this.orderDetail.Order.LoggedUserEmail;
+                }
+                else
+                {
+                    return (this.orderDetail.Order.GetContact().Email);
+                }
             }
         }
 

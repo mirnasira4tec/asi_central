@@ -1,0 +1,113 @@
+﻿@using asi.asicentral.web.Models.forms;
+@model FormPageModel
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = "Forms Index";
+}
+<h1>Store Forms</h1>
+<div class="tabbable tabs-below small">
+	<h5>Search by</h5>
+	<ul id="formtab" class="nav nav-tabs">
+		<li class="@(Model.FormTab == FormPageModel.TAB_DATE ? "active" : string.Empty)"><a href="#@FormPageModel.TAB_DATE">Date</a></li>
+	</ul>
+	<div class="tab-content" id="formtab-content">
+		<div class="tab-pane @(Model.FormTab == FormPageModel.TAB_DATE ? "active" : string.Empty)" id="@FormPageModel.TAB_DATE">
+			<div class="well">
+				@using (Html.BeginForm("List", "../forms/Index", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @FormPageModel.TAB_DATE }))
+				{                
+					<div class="formField">
+						<label for="creator">Creator</label>
+						<input name="Creator" type="text" id="creator" value="@Model.Creator" />
+					</div>
+					<div class="formField">
+						<label for="startDate">Start Date</label>
+						<input data-type="date" name="DateStart" type="text" id="startDate" value="@Model.StartDate" />
+						<label for="endDate">End Date</label>
+						<input data-type="date" name="DateEnd" type="text" id="endDate" value="@Model.EndDate" />
+						<input type="hidden" value="@FormPageModel.TAB_DATE" name="formtab" />
+						<input type="submit" value="Search" class="btn" />
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</div>
+<div class="btn-group">
+	<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Send a Form <span class="caret"></span></a>
+	<ul class="dropdown-menu">
+		@foreach (var formType in Model.FormTypes)
+		{
+			<li><a href="/Forms/AddForm/@formType.Id">@formType.Name</a></li>
+		}
+	</ul>
+</div>
+<br /><br />
+<table class="table table-bordered table-condensed table-striped">
+    <thead>
+	    <tr>
+            <th>Created</th>
+            <th>Email</th>
+            <th>Type</th>
+            <th>Creator</th>
+            <th>Order Status</th>
+            <th>Step</th>
+	    </tr>
+    </thead>
+	<tbody>
+	@foreach (var form in @Model.Forms)
+	{
+		<tr>
+			<td>@form.CreateDate</td>
+			<td>@form.Email</td>
+			<td><a href="/Forms/SendForm/@form.Id">@form.FormType.Name</a></td>
+			<td>@form.Sender</td>
+            @if(form.OrderDetail != null && form.OrderDetail.Order != null)
+            {
+                if (form.OrderDetail.Order.ProcessStatus == asi.asicentral.model.store.OrderStatus.Approved)
+                {
+                    <td>Approved</td>
+                }
+                else if (form.OrderDetail.Order.ProcessStatus == asi.asicentral.model.store.OrderStatus.Rejected)
+                {
+                    <td>Rejected</td>
+                }
+                else if (form.OrderDetail.Order.IsCompleted)
+                {
+                    <td>Purchased</td>
+                }
+                else
+                {
+                    <td>In Progress</td>
+                }
+            }
+            else
+            {
+                   <td>Not Started</td>
+            }
+            @if (form.OrderDetail != null && form.OrderDetail.Order != null)
+            {
+                <td>@form.OrderDetail.Order.CompletedStep</td>
+            }
+            else
+            {
+                <td>0</td>
+            }
+		</tr>
+    }
+	</tbody>
+</table>
+@section Scripts {
+	@Scripts.Render("~/bundles/form")
+	<script src="/Scripts/asi.js"></script>
+	<script>
+		$('input[data-type*="date"]').datepicker();
+
+		$('ul[id*="formtab"] a').click(function(e) {
+			e.preventDefault();
+			var tabname = e.target.toString();
+			tabname = tabname.substr(tabname.indexOf("#") + 1);
+			$('input[name*="formtab"]').val(tabname);
+			$(this).tab('show');
+		});
+	</script>
+}

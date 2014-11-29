@@ -244,5 +244,74 @@ namespace asi.asicentral.Tests
 				Assert.IsTrue(Object.ReferenceEquals(usaCode, usaCode2));
 			}
 	    }
+
+        [TestMethod]
+        public void FormPersistenceTest()
+        {
+            string testKey = Guid.NewGuid().ToString();
+            using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
+            {
+                var formType = storeService.GetAll<FormType>(false).FirstOrDefault();
+                if (formType == null)
+                {
+                    //add a form type for the test
+                    formType = new FormType
+                    {
+                        CreateDate = DateTime.UtcNow,
+                        UpdateDate = DateTime.UtcNow,
+                        UpdateSource = "FormPersistenceTest",
+                        Name = "Form Test",
+                        Implementation = "Not important",
+                    };
+                    storeService.Add<FormType>(formType);
+                    storeService.SaveChanges();
+                }
+                var form = new FormInstance
+                {
+                    CreateDate = DateTime.UtcNow,
+                    UpdateDate = DateTime.UtcNow,
+                    FormType = formType,
+                    UpdateSource = "FormPersistenceTest",                    
+                    Email = "test@test.com",
+					Salutation = "Yann",
+                    Greetings = "Please check the order",
+                    ExternalReference = testKey,
+                };
+                form.Values.Add(new FormValue
+                {
+                    CreateDate = DateTime.UtcNow,
+                    UpdateDate = DateTime.UtcNow,
+                    UpdateSource = "FormPersistenceTest",                    
+                    Sequence = 0,
+                    Name = "option one",
+                    Value = "true",
+                });
+                form.Values.Add(new FormValue
+                {
+                    CreateDate = DateTime.UtcNow,
+                    UpdateDate = DateTime.UtcNow,
+                    UpdateSource = "FormPersistenceTest",
+                    Sequence = 1,
+                    Name = "option two",
+                    Value = "true",
+                });
+                storeService.Add<FormInstance>(form);
+	            try
+	            {
+		            storeService.SaveChanges();
+	            }
+	            catch (Exception e)
+	            {
+		            Assert.IsTrue(false, e.Message);
+	            }
+            }
+            using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
+            {
+                var form = storeService.GetAll<FormInstance>().SingleOrDefault(instance => instance.ExternalReference == testKey);
+                Assert.IsNotNull(form, "Form could not be saved or retrieved");
+                Assert.AreEqual(2, form.Values.Count, "Did not get the right number of values");
+				Assert.IsNotNull(form.FormType);
+            }
+        }
     }
 }

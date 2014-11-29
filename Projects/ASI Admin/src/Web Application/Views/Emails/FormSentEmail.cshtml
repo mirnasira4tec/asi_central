@@ -1,0 +1,83 @@
+@using System.Configuration
+@model  asi.asicentral.model.store.FormInstance
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252">
+    <title>ASICentral</title>
+    <style type="text/css">
+html {
+    height: 100%;
+	-webkit-text-size-adjust:none;
+    }
+    h1 {
+    font-size: 18px;
+    font-style: normal;
+    font-weight: normal;
+    }
+    h2 {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: normal;
+    }
+    a, a:active{
+    color:#DA1C23;
+    text-decoration:none;
+	outline:none;
+    }
+    a:hover{
+    text-decoration:underline;
+    }
+    img {
+    display:block;
+    }
+    .white-link{
+        color: #FFFFFF;
+    }
+    .white-link:hover,
+    .white-link:active{
+        color:#FFFFFF;
+    }
+    </style>
+</head>
+<body style="font-family: Helvetica, Arial, sans-serif;font-size: 14px;margin: 0 auto;line-height: 18px;padding:0;">
+    <table style="background-color: #FFFFFF;margin: 0 auto;vertical-align:top;" width="650" border="0" cellspacing="0" cellpadding="0">
+        <tr style="vertical-align:top;">
+            <td colspan="2">
+                <table border="0" cellpadding="0" cellspacing="0" width="650">
+                    <tr>
+                        <td><img alt="ASI Logo" src="https://store.asicentral.com/media/emails/asi-logo.jpg" width="150" height="90" /></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr  style="vertical-align:top;">
+            <td>
+                <table border="0" cellpadding="0" cellspacing="20" width="100%">
+                    <tr>
+                        <td colspan="2">
+                            <p>Hi @Model.Salutation,</p>
+                        </td>
+                        
+                    </tr>
+	                <tr>
+		                <td colspan="2">
+			                <p>
+				                @foreach (var line in Model.Greetings.Split('\n'))
+				                {
+					                @line<br />
+				                }
+			                </p>
+		                </td>
+	                </tr>
+	                <tr>
+		                <td>
+							<p><a href="@ConfigurationManager.AppSettings["StoreURL"]/Store/@Model.FormType.RequestType/Form?reference=@Model.ExternalReference">click here </a> to review the order</p>		                
+						</td>
+	                </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

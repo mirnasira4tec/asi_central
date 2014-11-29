@@ -171,6 +171,15 @@ namespace asi.asicentral.database.mappings
             For<IRepository<Coupon>>().Use<EFRepository<Coupon>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
+            For<IRepository<FormType>>().Use<EFRepository<FormType>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<FormInstance>>().Use<EFRepository<FormInstance>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<FormValue>>().Use<EFRepository<FormValue>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
+
             For<IRepository<StoreDetailHallmarkRequest>>().Use<EFRepository<StoreDetailHallmarkRequest>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
