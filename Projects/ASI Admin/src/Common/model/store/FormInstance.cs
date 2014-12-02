@@ -22,8 +22,8 @@ namespace asi.asicentral.model.store
         public virtual FormType FormType { get; set; }
         public int FormTypeId { get; set; }
 
-		[Display(Name = "User Email", Prompt = "The user email")]
-		[Required(ErrorMessage = "The user email is required")]
+		[Display(Name = "Customer Email", Prompt = "Customer email the form is sent to")]
+		[Required(ErrorMessage = "The customer email is required")]
 		[DataType(DataType.EmailAddress)]
         [StringLength(500, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
         public string Email { get; set; }
