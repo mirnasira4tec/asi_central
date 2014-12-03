@@ -235,6 +235,9 @@
     <Compile Include="database\mappings\memberdemogr\SupplierRatingMap.cs" />
     <Compile Include="database\mappings\memberdemogr\SupplierSeadElectronicAddressMap.cs" />
     <Compile Include="database\mappings\store\CouponMap.cs" />
+    <Compile Include="database\mappings\store\FormInstanceMap.cs" />
+    <Compile Include="database\mappings\store\FormTypeMap.cs" />
+    <Compile Include="database\mappings\store\FormValueMap.cs" />
     <Compile Include="database\mappings\store\LookAdPositionMap.cs" />
     <Compile Include="database\mappings\store\LookAdSizeMap.cs" />
     <Compile Include="database\mappings\store\LookEventMerchandiseProductMap.cs" />
@@ -292,6 +295,9 @@
     <Compile Include="model\OAuth\User.cs" />
     <Compile Include="model\ROI\Category.cs" />
     <Compile Include="model\ROI\Company.cs" />
+    <Compile Include="model\store\FormInstance.cs" />
+    <Compile Include="model\store\FormType.cs" />
+    <Compile Include="model\store\FormValue.cs" />
     <Compile Include="model\store\LookAdPosition.cs" />
     <Compile Include="model\store\LookAdSize.cs" />
     <Compile Include="model\store\ASPNetUsers.cs" />
@@ -447,12 +453,15 @@
     <Compile Include="util\store\catalogs\CatalogsHelper.cs" />
     <Compile Include="util\store\companystore\CompanyStoreHelper.cs" />
     <Compile Include="util\store\companystore\CountryCodeHelper.cs" />
+    <Compile Include="util\store\Forms\FormsHelper.cs" />
     <Compile Include="util\store\supplierspecials\SupplierSpecialsHelper.cs" />
     <Compile Include="util\store\emailexpress\EmailExpressHelper.cs" />
     <Compile Include="util\store\espadvertising\ESPAdvertisingHelper.cs" />
     <Compile Include="util\store\Helper.cs" />
     <Compile Include="util\store\magazinesadvertising\MagazinesAdvertisingHelper.cs" />
     <Compile Include="util\store\magazinesadvertising\UpdateDateAndSource.cs" />
+    <Compile Include="views\CustomVirtualFile.cs" />
+    <Compile Include="views\CustomVirtualPathProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -472,6 +481,10 @@
     <None Include="Service References\web.CreditCardService\CreditCardService2.xsd">
       <SubType>Designer</SubType>
     </None>
+    <EmbeddedResource Include="views\store\GenericForm.cshtml" />
+    <EmbeddedResource Include="views\store\ASIShowForm.cshtml" />
+    <EmbeddedResource Include="views\store\RoadshowMLRForm.cshtml" />
+    <EmbeddedResource Include="views\store\RoadshowEexhibitorAgreement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

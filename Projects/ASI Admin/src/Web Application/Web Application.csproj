@@ -156,6 +156,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\RabbitMQ.Client.3.3.0\lib\net30\RabbitMQ.Client.dll</HintPath>
     </Reference>
+    <Reference Include="RazorEngine">
+      <HintPath>..\packages\RazorEngine.3.2.0\lib\net40\RazorEngine.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
     </Reference>
@@ -191,6 +194,10 @@
       <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.40804.0\lib\net40\System.Web.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.20715.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -221,10 +228,6 @@
     </Reference>
     <Reference Include="System.Web.Optimization">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.0.0\lib\net40\System.Web.Optimization.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.20710.0\lib\net40\System.Web.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -274,6 +277,7 @@
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\asicentral\CallQueueController.cs" />
+    <Compile Include="Controllers\forms\FormsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MediaController.cs" />
     <Compile Include="Controllers\sgr\CategoryController.cs" />
@@ -293,11 +297,14 @@
     </Compile>
     <Compile Include="Models\asicentral\CallVolume.cs" />
     <Compile Include="Models\CreditCardModel.cs" />
+    <Compile Include="Models\forms\FormModel.cs" />
+    <Compile Include="Models\forms\FormPageModel.cs" />
     <Compile Include="Models\MediaFolderModel.cs" />
     <Compile Include="Models\sgr\ViewCategory.cs" />
     <Compile Include="Models\sgr\ViewCompany.cs" />
     <Compile Include="Models\sgr\ViewProduct.cs" />
     <Compile Include="Models\Store\Order\CatalogsApplicationModel.cs" />
+    <Compile Include="Models\Store\Order\FormsModel.cs" />
     <Compile Include="Models\Store\Order\MagazinesAdvertisingApplicationModel.cs" />
     <Compile Include="Models\Store\Order\CouponModel.cs" />
     <Compile Include="Models\Store\Order\DecoratorApplicationModel.cs" />
@@ -318,6 +325,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\asi-store.css" />
     <Content Include="Content\bootstrap-datetimepicker.css" />
     <Content Include="Content\bootstrap-datetimepicker.min.css" />
     <Content Include="Content\bootstrap-responsive.css" />
@@ -325,6 +333,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\datepicker.css" />
+    <Content Include="Content\form.css" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\multiselecteddatepicker.css" />
@@ -348,6 +357,7 @@
     <Content Include="Images\folder.png" />
     <Content Include="Images\folder_small.png" />
     <Content Include="Images\sitebgtile.gif" />
+    <Content Include="Images\store\ASI-form-header.jpg" />
     <Content Include="Images\transparent.gif" />
     <Content Include="Images\upload.png" />
     <Content Include="Images\zip.png" />
@@ -433,6 +443,12 @@
     <Content Include="Views\Store\Coupon\CouponList.cshtml" />
     <Content Include="Views\Store\Coupon\CouponDetails.cshtml" />
     <Content Include="Views\Store\Application\MagzineAdvertising.cshtml" />
+    <Content Include="Views\Forms\Index.cshtml" />
+    <Content Include="Views\Forms\SendForm.cshtml" />
+    <Content Include="Views\Store\Application\FormProduct.cshtml" />
+    <EmbeddedResource Include="Views\Emails\FormSentEmail.cshtml">
+      <SubType>Code</SubType>
+    </EmbeddedResource>
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

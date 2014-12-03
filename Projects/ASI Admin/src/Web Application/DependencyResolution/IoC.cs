@@ -24,6 +24,7 @@ using StructureMap.Configuration.DSL;
 using Castle.DynamicProxy;
 using asi.asicentral.util;
 using System.Web.Mvc;
+using System.Reflection;
 namespace asi.asicentral.web.DependencyResolution
 {
     public static class IoC
@@ -75,6 +76,18 @@ namespace asi.asicentral.web.DependencyResolution
 						.EnrichWith(backendService => proxyGenerator.CreateClassProxyWithTarget(backendService.GetType(), backendService, new object[] { null }, new IInterceptor[] { new LogInterceptor(backendService.GetType()) }))
 						.Ctor<IStoreService>();
 
+                    x.For<IFileSystemService>()
+                        .Singleton()
+                        .Use<AssemblyFileService>()
+                        .EnrichWith(fileService => proxyGenerator.CreateClassProxyWithTarget(fileService.GetType(), fileService, new object[] { Assembly.GetAssembly(typeof(IoC)) }, new IInterceptor[] { new LogInterceptor(fileService.GetType()) }))
+                        .Ctor<Assembly>().Is(Assembly.GetAssembly(typeof(IoC)));
+
+                    x.For<ITemplateService>()
+                       .Singleton()
+                       .Use<RazorTemplateEngine>()
+                       .EnrichWith(templateService => proxyGenerator.CreateClassProxyWithTarget(templateService.GetType(), templateService, new object[] { null }, new IInterceptor[] { new LogInterceptor(templateService.GetType()) }))
+                       .Ctor<IFileSystemService>();
+
                     x.For<IEmailService>()
                        .Use<SmtpEmailService>()
                        .EnrichWith(emailService => proxyGenerator.CreateClassProxyWithTarget(emailService.GetType(), emailService, new IInterceptor[] { new LogInterceptor(emailService.GetType()) }));
@@ -90,6 +103,8 @@ namespace asi.asicentral.web.DependencyResolution
                     x.SetAllProperties(instance => instance.OfType<IStoreService>());
                     x.SetAllProperties(instance => instance.OfType<IEncryptionService>());
                     x.SetAllProperties(instance => instance.OfType<IFulfilmentService>());
+                    x.SetAllProperties(instance => instance.OfType<IFileSystemService>());
+                    x.SetAllProperties(instance => instance.OfType<ITemplateService>());
                     x.SetAllProperties(instance => instance.OfType<IEmailService>());
                     x.SetAllProperties(instance => instance.OfType<ICreditCardService>());
                     x.SetAllProperties(instance => instance.OfType<IBackendService>());

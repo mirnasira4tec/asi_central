@@ -1,0 +1,94 @@
+﻿@using System.Configuration
+@using asi.asicentral.model.store;
+@model asi.asicentral.web.Models.forms.FormModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Send a Form";
+}
+<h2>Send a @Model.Form.FormType.Name</h2>
+@if (!string.IsNullOrEmpty(Model.Form.ExternalReference))
+{
+	<text>Link sent to user <a href="@ConfigurationManager.AppSettings["StoreURL"]/Store/@Model.Form.FormType.RequestType/Form?reference=@Model.Form.ExternalReference" target="_blank">Store Link with reference @Model.Form.ExternalReference</a></text>
+}
+
+@using (Html.BeginForm("PostSendForm", "../Forms", FormMethod.Post, new { id="forms-send", @class="form-inline" }))
+{
+	@Html.AntiForgeryToken()
+	<input type="hidden" name="Form.FormTypeId" value="@Model.Form.FormType.Id"/>
+	<input type="hidden" name="Form.ExternalReference" value="@Model.Form.ExternalReference"/>
+    <input type="hidden" id="command" name="Command" value="@Model.Command"/>
+	<div class="forms-header">
+		<br />
+		<div class="row">
+			<div class="span4">
+				<div class="form-group">
+					@Html.LabelFor(model => model.Form.Salutation) <br />@Html.EditorFor(model => model.Form.Salutation)<br/>@Html.ValidationMessageFor(model => model.Form.Salutation)
+				</div>
+			</div>
+			<div class="span4">
+				<div class="form-group">
+					@Html.LabelFor(model => model.Form.Email) <br />@Html.EditorFor(model => model.Form.Email)<br/>@Html.ValidationMessageFor(model => model.Form.Email)
+				</div>
+			</div>
+			<div class="span2">
+				<br /><input type="submit" class="btn btn-primary" value="Send"/>
+			</div>
+		</div>
+		<br />
+		<div class="row">
+			<div class="span4">
+				<div class="form-group">
+					@Html.LabelFor(model => model.Form.NotificationEmails) <br />@Html.EditorFor(model => model.Form.NotificationEmails)<br/>@Html.ValidationMessageFor(model => model.Form.NotificationEmails)
+				</div>
+			</div>
+			<div class="span4">
+				<div class="form-group">
+					@Html.LabelFor(model => model.Form.Total) <br />@Html.EditorFor(model => model.Form.Total)<br/> @Html.ValidationMessageFor(model => model.Form.Total)
+				</div>			
+			</div>
+		</div>
+		<br />
+		<div class="row">
+			<div class="span8">
+				@Html.LabelFor(model => model.Form.Greetings) <br /> @Html.EditorFor(model => model.Form.Greetings)<br/> @Html.ValidationMessageFor(model => model.Form.Greetings)
+			</div>
+		</div>
+		<br />
+		<div class="row">
+			<div class="span8">
+				@Html.LabelFor(model => model.Form.Comments) <br /> @Html.EditorFor(model => model.Form.Comments)<br/> @Html.ValidationMessageFor(model => model.Form.Comments)
+			</div>
+			<div class="span2">
+				<br /><input type="button" id="save" class="btn btn-primary" value="Save"/>
+			</div>
+		</div>
+		<br />
+	</div>
+	<br />
+	@Html.Partial(Model.Form.FormType.Implementation, Model.Form)
+	<div class="row forms-footer">
+		<div class="span4">&nbsp;</div>
+		<div class="span4">&nbsp;</div>
+		<div class="span2">
+			<br /><input type="submit" class="btn btn-primary" value="Send"/>
+		</div>
+	</div>
+}
+@section Scripts {
+	@Scripts.Render("~/bundles/form")
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script src="~/Scripts/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        
+        $(document).ready(function () {
+            $("#save").click(function () {
+                $("#command").val("save");
+                $("#forms-send").submit();
+            });
+        });
+	</script>
+}
+
+@section css {
+     @Styles.Render("~/Content/forms")
+}
