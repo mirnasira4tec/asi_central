@@ -38,7 +38,7 @@ asi.modal = asi.modal || {};
         callback = null;
     };
     //processing modal
-    var processingDiv = $('<div class="modal hide" data-backdrop="static" data-keyboard="false"><div class="modal-header"><h3>Loading... Please wait <img src="/Images/store/loader-blue.gif" alt="loading"></h1></div><div class="modal-body"></div></div>');
+    var processingDiv = $('<div class="modal hide" data-backdrop="static" data-keyboard="false"><div class="modal-header"><h3>Loading... Please wait <img src="" alt="loading"></h1></div><div class="modal-body"></div></div>');
     modal.showProcessing = function () {
         processingDiv.modal();
     };
