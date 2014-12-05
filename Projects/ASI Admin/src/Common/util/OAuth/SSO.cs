@@ -277,6 +277,12 @@ namespace asi.asicentral.oauth
             return value;
         }
 
+        public static bool IsUserInRole(string rolename)
+        {
+            return (!string.IsNullOrEmpty(rolename) && IsLoggedIn() &&
+                Roles.IsUserInRole(HttpContext.Current.User.Identity.Name, rolename));
+        }
+
         public static HttpRequestBase GetHttpRequestBase(HttpRequest request)
         {
             return new HttpRequestWrapper(request);
