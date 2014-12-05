@@ -28,7 +28,7 @@ namespace asi.asicentral.model.store
         [StringLength(500, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
         public string Email { get; set; }
 
-        [Display(Name = "Notification Emails", Prompt = "The people to notify when order is through")]
+        [Display(Name = "Internal Notification Emails", Prompt = "The people to notify when order is through")]
         [StringLength(500, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
         public string NotificationEmails { get; set; }
 
