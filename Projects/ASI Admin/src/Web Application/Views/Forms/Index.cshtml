@@ -57,7 +57,7 @@
 	@foreach (var form in @Model.Forms)
 	{
 		<tr>
-			<td>@form.CreateDate</td>
+			<td>@form.CreateDate.ToLocalTime()</td>
 			<td>@form.Email</td>
 			<td><a href="/Forms/SendForm/@form.Id">@form.FormType.Name</a></td>
 			<td>@form.Sender</td>
