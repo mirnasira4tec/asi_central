@@ -125,7 +125,7 @@ namespace asi.asicentral.oauth
                         redirectUrl = "http://espweb.asicentral.com/";
                         break;
                     case ApplicationCodes.UPSIDE:
-                        redirectUrl = string.Format("{0}lr_login.jsp",ConfigurationManager.AppSettings["LMSRedirectUrl"]);
+                        redirectUrl = string.Format("{0}lr_login.jsp", ConfigurationManager.AppSettings["LMSRedirectUrl"]);
                         break;
                 }
             }
@@ -135,7 +135,7 @@ namespace asi.asicentral.oauth
                 if (ApplicationCodes.WESP == appCode && !string.IsNullOrEmpty(ConfigurationManager.AppSettings["RedirectUrl"]))
                     redirectUrl = ConfigurationManager.AppSettings["RedirectUrl"];
                 else if (ApplicationCodes.UPSIDE == appCode && !string.IsNullOrEmpty(ConfigurationManager.AppSettings["LMSRedirectUrl"]))
-                    redirectUrl = ConfigurationManager.AppSettings["LMSRedirectUrl"];
+                    redirectUrl = string.Format("{0}lr_login.jsp", ConfigurationManager.AppSettings["LMSRedirectUrl"]);
             }
             return redirectUrl;
         }
