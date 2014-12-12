@@ -192,7 +192,7 @@ namespace asi.asicentral.oauth
                     tokens = webServerClient.Login(userName, password);
                     if (tokens != null && tokens.Count > 0)
                     {
-                        foreach(string key in tokens.Keys) 
+                        foreach (string key in tokens.Keys)
                         {
                             log.Debug("Login_FetchUserDetails - Tokens " + key + " = " + tokens[key]);
                         }
@@ -210,8 +210,11 @@ namespace asi.asicentral.oauth
                             {
                                 tokens.Add("AuthToken", accessToken);
                                 tokens.Add("RefreshToken", refreshToken);
+                                foreach (string key in tokens.Keys)
+                                {
+                                    log.Debug("Login_FetchUserDetails - Tokens " + key + " = " + tokens[key]);
+                                }
                             }
-
                         }
                     }
                 }
