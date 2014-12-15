@@ -120,7 +120,7 @@ namespace asi.asicentral.oauth
                 var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
                 if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
                 {
-                    ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
+                    WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
                     try
                     {
                         tokens = webServerClient.RefreshToken(refreshToken);
