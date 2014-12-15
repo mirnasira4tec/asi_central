@@ -10,6 +10,8 @@ using System.Configuration;
 using System.Web.Security;
 using ASI.Jade.UserManagement.DataObjects;
 using Newtonsoft.Json.Linq;
+using asi.asicentral.services;
+using asi.asicentral.interfaces;
 
 namespace asi.asicentral.oauth
 {
@@ -123,7 +125,7 @@ namespace asi.asicentral.oauth
                         redirectUrl = "http://espweb.asicentral.com/";
                         break;
                     case ApplicationCodes.UPSIDE:
-                        redirectUrl = ConfigurationManager.AppSettings["LMSRedirectUrl"];
+                        redirectUrl = string.Format("{0}lr_login.jsp", ConfigurationManager.AppSettings["LMSRedirectUrl"]);
                         break;
                 }
             }
@@ -133,19 +135,22 @@ namespace asi.asicentral.oauth
                 if (ApplicationCodes.WESP == appCode && !string.IsNullOrEmpty(ConfigurationManager.AppSettings["RedirectUrl"]))
                     redirectUrl = ConfigurationManager.AppSettings["RedirectUrl"];
                 else if (ApplicationCodes.UPSIDE == appCode && !string.IsNullOrEmpty(ConfigurationManager.AppSettings["LMSRedirectUrl"]))
-                    redirectUrl = ConfigurationManager.AppSettings["LMSRedirectUrl"];
+                    redirectUrl = string.Format("{0}lr_login.jsp", ConfigurationManager.AppSettings["LMSRedirectUrl"]);
             }
             return redirectUrl;
         }
 
         private static CrossApplication.RedirectParams GetLatestTokens(HttpRequestBase request, HttpResponseBase response, string cookie, string userCookieName = "Name")
         {
+            ILogService log = LogService.GetLog(typeof(CookiesHelper));
+            log.Debug("GetLatestTokens - Start");
             var hashedTicket = FormsAuthentication.Decrypt(cookie);
             var extraData = JsonConvert.DeserializeObject<CrossApplication.RedirectParams>(hashedTicket.UserData,
                 new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
             if (extraData != null && !string.IsNullOrEmpty(extraData.RefreshToken) &&
                 extraData.TokenExpirationTime < DateTime.Now)
             {
+                log.Debug("GetLatestTokens - Requesting a new token");
                 var tokens = ASIOAuthClient.RefreshToken(extraData.RefreshToken);
                 if (tokens != null && tokens.Count > 0)
                 {
@@ -157,15 +162,21 @@ namespace asi.asicentral.oauth
                     extraData = JsonConvert.DeserializeObject<CrossApplication.RedirectParams>(hashedTicket.UserData);
                 }
             }
+            if (extraData != null) log.Debug("GetLatestTokens - End: " + extraData.AccessToken);
             return extraData;
         }
+
         private static string EncriptToken(string accessToken)
         {
+            ILogService log = LogService.GetLog(typeof(CookiesHelper));
+            log.Debug("EncriptToken - Start");
             string encryptedToken = string.Empty;
             asi.asicentral.services.EncryptionService encryptionService = new asi.asicentral.services.EncryptionService();
             encryptedToken = encryptionService.ECBEncrypt("ASIP@ssWord34567", accessToken);
+            log.Debug("EncriptToken - End: " + encryptedToken);
             return encryptedToken;
         }
+
         public static string GetLMSToken(HttpRequestBase request, HttpResponseBase response, ApplicationCodes appCode, string userCookieName = "Name")
         {
             string LMSToken = string.Empty;
@@ -178,6 +189,7 @@ namespace asi.asicentral.oauth
             }
             return LMSToken;
         }
+
         public static int GetId(bool isCompanyId, HttpRequestBase request, HttpResponseBase response, string cookieName)
         {
             int id = 0;
@@ -189,6 +201,5 @@ namespace asi.asicentral.oauth
             }
             return id;
         }
-
     }
 }
