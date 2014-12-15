@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Configuration;
+using ASI.Jade.OAuth2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.oauth;
 using System.Collections.Generic;
@@ -91,9 +93,9 @@ namespace Core.Tests.OAuth
         [TestMethod]
         public void IsValidUserByTrueCredentials()
         {
-            IDictionary<string, string> result = ASIOAuthClient.IsValidUser("125724pk", "password1");
+            IDictionary<string, string> result = ASIOAuthClient.IsValidUser("yperrin", "asiCentral5");
             Assert.IsNotNull(result);
-        }
+		}
                 
         [TestMethod]
         public void IsValidUserByFalseCredentials()
@@ -101,5 +103,34 @@ namespace Core.Tests.OAuth
             IDictionary<string, string> result = ASIOAuthClient.IsValidUser("125724pk1", "password1");
             Assert.IsNull(result);
         }
+
+	    [TestMethod]
+	    public void Login()
+	    {
+			string accessToken = string.Empty;
+			string refreshToken = string.Empty;
+			string accessTokenNew = string.Empty;
+			string refreshTokenNew = string.Empty;
+
+			var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
+			var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
+			if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
+			{
+				WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
+				IDictionary<string, string> tokens = webServerClient.Login("yperrin", "asiCentral5");
+				if (tokens.ContainsKey("AuthToken")) accessToken = tokens["AuthToken"];
+				if (tokens.ContainsKey("RefreshToken")) refreshToken = tokens["RefreshToken"];
+				Assert.IsNotNull(accessToken);
+				Assert.IsNotNull(refreshToken);
+
+				tokens = webServerClient.RefreshToken(refreshToken);
+				if (tokens.ContainsKey("AuthToken")) accessTokenNew = tokens["AuthToken"];
+				if (tokens.ContainsKey("RefreshToken")) refreshTokenNew = tokens["RefreshToken"];
+				Assert.IsNotNull(accessTokenNew);
+				Assert.IsNotNull(refreshTokenNew);
+				Assert.AreNotEqual(accessToken, accessTokenNew);
+				Assert.AreNotEqual(refreshToken, refreshTokenNew);
+			}
+		}
     }
 }
