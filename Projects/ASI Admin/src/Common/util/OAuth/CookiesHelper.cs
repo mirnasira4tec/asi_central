@@ -148,7 +148,7 @@ namespace asi.asicentral.oauth
             var extraData = JsonConvert.DeserializeObject<CrossApplication.RedirectParams>(hashedTicket.UserData,
                 new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
             if (extraData != null && !string.IsNullOrEmpty(extraData.RefreshToken) &&
-                extraData.TokenExpirationTime < DateTime.Now)
+                (extraData.TokenExpirationTime == null || extraData.TokenExpirationTime < DateTime.Now))
             {
                 log.Debug("GetLatestTokens - Requesting a new token");
                 var tokens = ASIOAuthClient.RefreshToken(extraData.RefreshToken);
