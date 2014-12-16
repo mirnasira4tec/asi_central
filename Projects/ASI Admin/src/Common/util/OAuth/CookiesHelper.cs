@@ -22,6 +22,7 @@ namespace asi.asicentral.oauth
             var redirectParams = new CrossApplication.RedirectParams();
             redirectParams.AccessToken = user.AccessToken;
             redirectParams.RefreshToken = user.RefreshToken;
+            redirectParams.TokenExpirationTime = DateTime.Now.AddHours(2); //defaulting token to expire in 2 hours
             string userName = ASIOAuthClient.GetUserName(user.FirstName, user.LastName);
             var extraData = JsonConvert.SerializeObject(redirectParams, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             var ticket = new FormsAuthenticationTicket(1, userName, DateTime.Now, DateTime.Now.AddYears(1), true, extraData, FormsAuthentication.FormsCookiePath);
@@ -150,22 +151,26 @@ namespace asi.asicentral.oauth
 	        log.Debug("GetLatestTokens - Refresh token - " + (!string.IsNullOrEmpty(extraData.RefreshToken) ? extraData.RefreshToken : "No Refresh token"));
 			log.Debug("GetLatestTokens - TokenExpirationTime - " + extraData.TokenExpirationTime);
 			if (extraData != null && !string.IsNullOrEmpty(extraData.RefreshToken) &&
-                extraData.TokenExpirationTime < DateTime.Now)
+                (extraData.TokenExpirationTime == null || extraData.TokenExpirationTime < DateTime.Now))
             {
                 log.Debug("GetLatestTokens - Requesting a new token");
                 var tokens = ASIOAuthClient.RefreshToken(extraData.RefreshToken);
                 if (tokens != null && tokens.Count > 0)
                 {
-					foreach (var key in tokens.Keys)
-					{
-						log.Debug("GetLatestTokens - RefreshToken - " + key + " " + tokens[key]);
-					}
-					var user = new model.User();
-                    if (tokens.ContainsKey("AccessToken")) user.AccessToken = tokens["AuthToken"];
+                    foreach (var key in tokens.Keys)
+                    {
+                        log.Debug("GetLatestTokens - RefreshToken - " + key + " " + tokens[key]);
+                    }
+                    var user = new model.User();
+                    if (tokens.ContainsKey("AuthToken")) user.AccessToken = tokens["AuthToken"];
                     if (tokens.ContainsKey("RefreshToken")) user.RefreshToken = tokens["RefreshToken"];
                     SetFormsAuthenticationCookie(request, response, user, false, userCookieName);
                     hashedTicket = FormsAuthentication.Decrypt(cookie);
                     extraData = JsonConvert.DeserializeObject<CrossApplication.RedirectParams>(hashedTicket.UserData);
+                }
+                else
+                {
+                    log.Error("GetLatestTokens - RefreshToken - did not get a new token");
                 }
             }
             if (extraData != null) log.Debug("GetLatestTokens - End: " + extraData.AccessToken);
