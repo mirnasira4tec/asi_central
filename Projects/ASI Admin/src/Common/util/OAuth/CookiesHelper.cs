@@ -147,14 +147,20 @@ namespace asi.asicentral.oauth
             var hashedTicket = FormsAuthentication.Decrypt(cookie);
             var extraData = JsonConvert.DeserializeObject<CrossApplication.RedirectParams>(hashedTicket.UserData,
                 new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
-            if (extraData != null && !string.IsNullOrEmpty(extraData.RefreshToken) &&
+	        log.Debug("GetLatestTokens - Refresh token - " + (!string.IsNullOrEmpty(extraData.RefreshToken) ? extraData.RefreshToken : "No Refresh token"));
+			log.Debug("GetLatestTokens - TokenExpirationTime - " + extraData.TokenExpirationTime);
+			if (extraData != null && !string.IsNullOrEmpty(extraData.RefreshToken) &&
                 (extraData.TokenExpirationTime == null || extraData.TokenExpirationTime < DateTime.Now))
             {
                 log.Debug("GetLatestTokens - Requesting a new token");
                 var tokens = ASIOAuthClient.RefreshToken(extraData.RefreshToken);
                 if (tokens != null && tokens.Count > 0)
                 {
-                    var user = new model.User();
+					foreach (var key in tokens.Keys)
+					{
+						log.Debug("GetLatestTokens - RefreshToken - " + key + " " + tokens[key]);
+					}
+					var user = new model.User();
                     if (tokens.ContainsKey("AccessToken")) user.AccessToken = tokens["AuthToken"];
                     if (tokens.ContainsKey("RefreshToken")) user.RefreshToken = tokens["RefreshToken"];
                     SetFormsAuthenticationCookie(request, response, user, false, userCookieName);
