@@ -60,10 +60,12 @@ namespace asi.asicentral.oauth
             string cookieValue = string.Empty;
             if (request == null && response == null) return cookieValue;
             HttpCookie cookie = null;
-            if (request.Cookies != null && request.Cookies.AllKeys.Contains(key))
+			//we should look in response first in case cookie was updated in current process
+			if (cookie == null && response != null && response.Cookies != null && response.Cookies.AllKeys.Contains(key))
+				cookie = response.Cookies.Get(key);
+			//we then look in the request
+			if (request != null && request.Cookies != null && request.Cookies.AllKeys.Contains(key))
                 cookie = request.Cookies.Get(key);
-            if (cookie == null && response != null && response.Cookies != null && response.Cookies.AllKeys.Contains(key))
-                cookie = response.Cookies.Get(key);
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
                 cookieValue = cookie.Value;
             return cookieValue;
@@ -165,8 +167,8 @@ namespace asi.asicentral.oauth
                     if (tokens.ContainsKey("AuthToken")) user.AccessToken = tokens["AuthToken"];
                     if (tokens.ContainsKey("RefreshToken")) user.RefreshToken = tokens["RefreshToken"];
                     SetFormsAuthenticationCookie(request, response, user, false, userCookieName);
-                    hashedTicket = FormsAuthentication.Decrypt(cookie);
-                    extraData = JsonConvert.DeserializeObject<CrossApplication.RedirectParams>(hashedTicket.UserData);
+	                extraData.AccessToken = user.AccessToken;
+	                extraData.RefreshToken = user.RefreshToken;
                 }
                 else
                 {
@@ -182,7 +184,7 @@ namespace asi.asicentral.oauth
             ILogService log = LogService.GetLog(typeof(CookiesHelper));
             log.Debug("EncriptToken - Start");
             string encryptedToken = string.Empty;
-            asi.asicentral.services.EncryptionService encryptionService = new asi.asicentral.services.EncryptionService();
+            var encryptionService = new EncryptionService();
             encryptedToken = encryptionService.ECBEncrypt("ASIP@ssWord34567", accessToken);
             log.Debug("EncriptToken - End: " + encryptedToken);
             return encryptedToken;
@@ -190,15 +192,15 @@ namespace asi.asicentral.oauth
 
         public static string GetLMSToken(HttpRequestBase request, HttpResponseBase response, ApplicationCodes appCode, string userCookieName = "Name")
         {
-            string LMSToken = string.Empty;
+            string lmsToken = string.Empty;
             string cookie = GetCookieValue(request, response, FormsAuthentication.FormsCookieName);
             if (!string.IsNullOrEmpty(cookie))
             {
                 var extraData = GetLatestTokens(request, response, cookie, userCookieName);
                 if (extraData != null)
-                    LMSToken = EncriptToken(extraData.AccessToken);
+                    lmsToken = EncriptToken(extraData.AccessToken);
             }
-            return LMSToken;
+            return lmsToken;
         }
 
         public static int GetId(bool isCompanyId, HttpRequestBase request, HttpResponseBase response, string cookieName)
