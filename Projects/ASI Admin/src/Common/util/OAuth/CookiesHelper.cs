@@ -60,12 +60,12 @@ namespace asi.asicentral.oauth
             string cookieValue = string.Empty;
             if (request == null && response == null) return cookieValue;
             HttpCookie cookie = null;
-			//we should look in response first in case cookie was updated in current process
-			if (cookie == null && response != null && response.Cookies != null && response.Cookies.AllKeys.Contains(key))
-				cookie = response.Cookies.Get(key);
-			//we then look in the request
-			if (request != null && request.Cookies != null && request.Cookies.AllKeys.Contains(key))
+            //we look in the request
+            if (request != null && request.Cookies != null && request.Cookies.AllKeys.Contains(key))
                 cookie = request.Cookies.Get(key);
+            //response takes precedence
+            if (response != null && response.Cookies != null && response.Cookies.AllKeys.Contains(key))
+                cookie = response.Cookies.Get(key);
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
                 cookieValue = cookie.Value;
             return cookieValue;
@@ -150,9 +150,9 @@ namespace asi.asicentral.oauth
             var hashedTicket = FormsAuthentication.Decrypt(cookie);
             var extraData = JsonConvert.DeserializeObject<CrossApplication.RedirectParams>(hashedTicket.UserData,
                 new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
-	        log.Debug("GetLatestTokens - Refresh token - " + (!string.IsNullOrEmpty(extraData.RefreshToken) ? extraData.RefreshToken : "No Refresh token"));
-			log.Debug("GetLatestTokens - TokenExpirationTime - " + extraData.TokenExpirationTime);
-			if (extraData != null && !string.IsNullOrEmpty(extraData.RefreshToken) &&
+            log.Debug("GetLatestTokens - Refresh token - " + (!string.IsNullOrEmpty(extraData.RefreshToken) ? extraData.RefreshToken : "No Refresh token"));
+            log.Debug("GetLatestTokens - TokenExpirationTime - " + extraData.TokenExpirationTime);
+            if (extraData != null && !string.IsNullOrEmpty(extraData.RefreshToken) &&
                 (extraData.TokenExpirationTime == null || extraData.TokenExpirationTime < DateTime.Now))
             {
                 log.Debug("GetLatestTokens - Requesting a new token");
@@ -167,8 +167,8 @@ namespace asi.asicentral.oauth
                     if (tokens.ContainsKey("AuthToken")) user.AccessToken = tokens["AuthToken"];
                     if (tokens.ContainsKey("RefreshToken")) user.RefreshToken = tokens["RefreshToken"];
                     SetFormsAuthenticationCookie(request, response, user, false, userCookieName);
-	                extraData.AccessToken = user.AccessToken;
-	                extraData.RefreshToken = user.RefreshToken;
+                    extraData.AccessToken = user.AccessToken;
+                    extraData.RefreshToken = user.RefreshToken;
                 }
                 else
                 {
