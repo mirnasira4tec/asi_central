@@ -22,6 +22,6 @@ namespace asi.asicentral.interfaces
         /// </summary>
         /// <param name="creditCard"></param>
         /// <returns></returns>
-		string Store(StoreCompany company, CreditCard creditCard, bool backendIntegration);
+		string Store(StoreOrder order, CreditCard creditCard, bool backendIntegration);
     }
 }

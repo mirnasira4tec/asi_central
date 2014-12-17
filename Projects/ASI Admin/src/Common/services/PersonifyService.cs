@@ -186,8 +186,9 @@ namespace asi.asicentral.services
             return result;
         }
 
-        public virtual string SaveCreditCard(StoreCompany company, CreditCard creditCard)
-        {
+		public virtual string SaveCreditCard(StoreOrder order, CreditCard creditCard)
+		{
+			StoreCompany company = order.Company;
             log.Debug(string.Format("Save credit of {0} ({1})", creditCard.MaskedPAN, company.Name));
             //assuming credit card is valid already
             if (company == null || creditCard == null) throw new ArgumentException("Invalid parameters");

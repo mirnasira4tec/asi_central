@@ -2,7 +2,6 @@
 using asi.asicentral.interfaces;
 using asi.asicentral.model;
 using asi.asicentral.model.store;
-using asi.asicentral.services.PersonifyProxy;
 using System;
 
 namespace asi.asicentral.services
@@ -20,10 +19,9 @@ namespace asi.asicentral.services
         public virtual bool Validate(CreditCard creditCard)
         {
             bool valid = false;
-            ILogService log = null;
+			ILogService log = LogService.GetLog(this.GetType());
 	        try
 	        {
-		        log = LogService.GetLog(this.GetType());
 		        if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["svcUri"]))
 		        {
 			        valid = backendService.ValidateCreditCard(creditCard);
@@ -42,7 +40,7 @@ namespace asi.asicentral.services
             return valid;
         }
 
-        public virtual string Store(StoreCompany company, CreditCard creditCard, bool backendIntegration)
+		public virtual string Store(StoreOrder order, CreditCard creditCard, bool backendIntegration)
         {
             string result;
             ILogService log = null;
@@ -53,7 +51,7 @@ namespace asi.asicentral.services
 			        log = LogService.GetLog(this.GetType());
 			        if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["svcUri"]))
 			        {
-				        result = backendService.SaveCreditCard(company, creditCard);
+				        result = backendService.SaveCreditCard(order, creditCard);
 			        }
 			        else
 			        {
@@ -66,16 +64,13 @@ namespace asi.asicentral.services
 		        catch (Exception ex)
 		        {
 			        if (log != null)
-			        {
-                    log.Debug(string.Format("Error in saving credit card to personify: {0}.", ex.Message));
-			        }
-			        result = null;
-                    throw;
+						log.Debug(string.Format("Error in saving credit card to personify: {0}.", ex.Message));
+                    throw ex;
 		        }
 	        }
 	        else
 	        {
-				asi.asicentral.web.CreditCardService.CreditCard webCreditCard = new web.CreditCardService.CreditCard()
+				var webCreditCard = new web.CreditCardService.CreditCard()
 				{
 					CardHolderName = creditCard.CardHolderName,
 					Type = creditCard.Type,
@@ -88,18 +83,17 @@ namespace asi.asicentral.services
 					PostalCode = creditCard.PostalCode,
 					CountryCode = creditCard.CountryCode,
 				};
-				asi.asicentral.web.CreditCardService.CreditCardServiceClient cardServiceClient = GetClient();
-				Guid identifier = cardServiceClient.Store(webCreditCard);
+				web.CreditCardService.CreditCardServiceClient cardServiceClient = GetClient();
+				var identifier = cardServiceClient.Store(webCreditCard);
 				if (creditCard.Number.Length >= 4) creditCard.MaskedPAN = "****" + creditCard.Number.Substring(creditCard.Number.Length - 4, 4);
 		        result = identifier.ToString();
 	        }
 	        return result;
         }
 
-		private asi.asicentral.web.CreditCardService.CreditCardServiceClient GetClient()
+		private web.CreditCardService.CreditCardServiceClient GetClient()
 		{
-			asi.asicentral.web.CreditCardService.CreditCardServiceClient cardServiceClient = new web.CreditCardService.CreditCardServiceClient();
-			EncryptionService encryptionService = new EncryptionService();
+			var cardServiceClient = new web.CreditCardService.CreditCardServiceClient();
 			cardServiceClient.ClientCredentials.UserName.UserName = ConfigurationManager.AppSettings["CreditCardServiceUsername"];
 			cardServiceClient.ClientCredentials.UserName.Password = ConfigurationManager.AppSettings["CreditCardServicePassword"];
 			return cardServiceClient;

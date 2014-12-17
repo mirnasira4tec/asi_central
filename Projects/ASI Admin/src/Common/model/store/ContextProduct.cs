@@ -40,6 +40,7 @@ namespace asi.asicentral.model.store
         public DateTime? NextAvailableDate { get; set; }
         public decimal? Weight { get; set; }
         public string Origin { get; set; }
+		public string ASICompany { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }

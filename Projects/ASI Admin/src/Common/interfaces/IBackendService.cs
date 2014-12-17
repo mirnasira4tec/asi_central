@@ -20,10 +20,11 @@ namespace asi.asicentral.interfaces
 
 	    bool ValidateCreditCard(CreditCard creditCard);
 
-	    string SaveCreditCard(StoreCompany company, CreditCard creditCard);
+		string SaveCreditCard(StoreOrder order, CreditCard creditCard);
 
         CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber);
-        CompanyInformation GetCompanyInfoByIdentifier(int companyIdentifier);
+
+		CompanyInformation GetCompanyInfoByIdentifier(int companyIdentifier);
 
         CompanyInformation AddCompany(CompanyInformation companyInfo);
     }
