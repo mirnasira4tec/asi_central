@@ -153,10 +153,10 @@ namespace Core.Tests.OAuth
         }
 
         [TestMethod]
-        public void TestRefreshTokenAfter2Hours()
+        public void TestRefreshTokenIfAccessTokenIsNotValid()
         {
-            string accessToken = "be50e4f8b50acaae6c5d7f310617dbb701d5720ffa3cf08d4dd79345000ba15f";
-            string refreshToken = "b66072a0cc308444211751cac3f96359e4ead729bfd52659021d7b0a54c3b78c";
+            string accessToken = "05c89e19a6cdac7c5fccd2e3127ce6774de8cdaf10dbdf3035cd375be24c99a0";
+            string refreshToken = "f04abcd87aac84f7edf99bda1cfbd1ffd4f5e3cf3f36a4e51ab3e2b3ebb56894";
             string accessTokenNew = string.Empty;
             string refreshTokenNew = string.Empty;
 
