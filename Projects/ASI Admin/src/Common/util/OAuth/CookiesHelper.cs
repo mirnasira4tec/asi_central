@@ -152,8 +152,9 @@ namespace asi.asicentral.oauth
                 new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
             log.Debug("GetLatestTokens - Refresh token - " + (!string.IsNullOrEmpty(extraData.RefreshToken) ? extraData.RefreshToken : "No Refresh token"));
             log.Debug("GetLatestTokens - TokenExpirationTime - " + extraData.TokenExpirationTime);
-            if (extraData != null && !string.IsNullOrEmpty(extraData.RefreshToken) &&
-                (extraData.TokenExpirationTime == null || extraData.TokenExpirationTime < DateTime.Now))
+            if (extraData != null && !string.IsNullOrEmpty(extraData.RefreshToken)
+                && !string.IsNullOrEmpty(extraData.AccessToken)
+                && !ASIOAuthClient.IsValidAccessToken(extraData.AccessToken))
             {
                 log.Debug("GetLatestTokens - Requesting a new token");
                 var tokens = ASIOAuthClient.RefreshToken(extraData.RefreshToken);

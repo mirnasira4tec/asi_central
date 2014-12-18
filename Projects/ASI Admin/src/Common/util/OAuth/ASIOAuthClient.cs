@@ -53,6 +53,32 @@ namespace asi.asicentral.oauth
             }
         }
 
+        public static bool IsValidAccessToken(string accessToken)
+        {
+            ILogService log = LogService.GetLog(typeof(ASIOAuthClient));
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
+                var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
+                if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
+                {
+                    ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
+                    try
+                    {
+                        var userDetails = webServerClient.GetUserDetails(accessToken);
+                        return (userDetails != null && userDetails.Count > 0);
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error(ex.Message);
+                        return false;
+                    }
+                }
+            }
+            else log.Error("IsValidAccessToken : given access token is empty");
+            return false;
+        }
+
         public static asi.asicentral.model.User GetUser(string token)
         {
             asi.asicentral.model.User user = null;
