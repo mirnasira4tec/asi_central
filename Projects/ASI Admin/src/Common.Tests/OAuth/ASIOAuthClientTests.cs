@@ -143,20 +143,24 @@ namespace Core.Tests.OAuth
 			var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
             if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
             {
-                WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
-                IDictionary<string, string> tokens = webServerClient.Login("yperrin", "asiCentral5");
+                var webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
+                var tokens = webServerClient.Login("yperrin", "asiCentral5");
                 if (tokens.ContainsKey("AuthToken")) accessToken = tokens["AuthToken"];
                 if (tokens.ContainsKey("RefreshToken")) refreshToken = tokens["RefreshToken"];
                 Assert.IsNotNull(accessToken);
                 Assert.IsNotNull(refreshToken);
-            }
+				Console.WriteLine("Auth:" + accessToken);
+				Console.WriteLine("Refresh:" + refreshToken);
+			}
         }
 
         [TestMethod]
         public void TestRefreshTokenIfAccessTokenIsNotValid()
         {
-            string accessToken = "05c89e19a6cdac7c5fccd2e3127ce6774de8cdaf10dbdf3035cd375be24c99a0";
-            string refreshToken = "f04abcd87aac84f7edf99bda1cfbd1ffd4f5e3cf3f36a4e51ab3e2b3ebb56894";
+			string accessToken = "b3ff0a9e522801bdbae57323b396dea0b9002a8cecb539c1f8c562c7193648a9";
+			string refreshToken = "2db23f88dd8b837700df59c3b3a3183e86adbbdddf52210b9f818386468b9774";
+			//string accessToken = "b3ff0a9e522801bdbae57323b396dea0b9002a8cecb539c1f8c562c7193648a9";
+			//string refreshToken = "2db23f88dd8b837700df59c3b3a3183e86adbbdddf52210b9f818386468b9774";
             string accessTokenNew = string.Empty;
             string refreshTokenNew = string.Empty;
 
@@ -164,18 +168,34 @@ namespace Core.Tests.OAuth
             var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
             if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
             {
-                WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
+                var webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
+	            if (accessToken == string.Empty)
+	            {
+					var tokens = webServerClient.Login("yperrin", "asiCentral5");
+					if (tokens.ContainsKey("AuthToken")) accessToken = tokens["AuthToken"];
+					if (tokens.ContainsKey("RefreshToken")) refreshToken = tokens["RefreshToken"];		            
+	            }
                 bool isValidToken = ASIOAuthClient.IsValidAccessToken(accessToken);
                 if (!isValidToken)
                 {
                     IDictionary<string, string> tokens = ASIOAuthClient.RefreshToken(refreshToken);
-                    if (tokens.ContainsKey("AuthToken")) accessToken = tokens["AuthToken"];
-                    if (tokens.ContainsKey("RefreshToken")) refreshToken = tokens["RefreshToken"];
+                    if (tokens.ContainsKey("AuthToken")) accessTokenNew = tokens["AuthToken"];
+                    if (tokens.ContainsKey("RefreshToken")) refreshTokenNew = tokens["RefreshToken"];
                     Assert.IsNotNull(accessTokenNew);
                     Assert.IsNotNull(refreshTokenNew);
                     Assert.AreNotEqual(accessToken, accessTokenNew);
                     Assert.AreNotEqual(refreshToken, refreshTokenNew);
-                }
+					//test new access token
+					isValidToken = ASIOAuthClient.IsValidAccessToken(accessTokenNew);
+					Assert.IsTrue(isValidToken, "The new token was not valid from: " + accessToken + " to " + accessTokenNew);
+					//call lms
+					IDictionary<string, string> parameters = new Dictionary<string, string>();
+					parameters.Add("tokenid", accessTokenNew);
+					asi.asicentral.util.HtmlHelper.SubmitForm("http://asi.upsidelms.com/asi/rest/curriculumtranscriptdetail", parameters, true, true);
+					//test again
+					isValidToken = ASIOAuthClient.IsValidAccessToken(accessTokenNew);
+					Assert.IsTrue(isValidToken, "The new token was not valid after lms from: " + accessToken + " to " + accessTokenNew);
+				}
             }
         }
     }
