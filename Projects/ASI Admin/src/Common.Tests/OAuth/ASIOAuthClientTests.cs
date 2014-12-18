@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using asi.asicentral.services;
 using ASI.Jade.OAuth2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.oauth;
@@ -157,13 +158,14 @@ namespace Core.Tests.OAuth
         [TestMethod]
         public void TestRefreshTokenIfAccessTokenIsNotValid()
         {
-			string accessToken = "b3ff0a9e522801bdbae57323b396dea0b9002a8cecb539c1f8c562c7193648a9";
-			string refreshToken = "2db23f88dd8b837700df59c3b3a3183e86adbbdddf52210b9f818386468b9774";
+			string accessToken = string.Empty;
+			string refreshToken = string.Empty;
+			string accessTokenNew = string.Empty;
+			string refreshTokenNew = string.Empty;
 			//string accessToken = "b3ff0a9e522801bdbae57323b396dea0b9002a8cecb539c1f8c562c7193648a9";
 			//string refreshToken = "2db23f88dd8b837700df59c3b3a3183e86adbbdddf52210b9f818386468b9774";
-            string accessTokenNew = string.Empty;
-            string refreshTokenNew = string.Empty;
 
+			var encryptionService = new EncryptionService();
             var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
             var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
             if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
@@ -178,7 +180,13 @@ namespace Core.Tests.OAuth
                 bool isValidToken = ASIOAuthClient.IsValidAccessToken(accessToken);
                 if (!isValidToken)
                 {
-                    IDictionary<string, string> tokens = ASIOAuthClient.RefreshToken(refreshToken);
+					//call lms with valid token
+					IDictionary<string, string> parameters = new Dictionary<string, string>();
+					parameters.Add("tokenid", encryptionService.ECBEncrypt("ASIP@ssWord34567", accessToken));
+					string data = asi.asicentral.util.HtmlHelper.SubmitForm("http://asi.upsidelms.com/asi/rest/curriculumtranscriptdetail", parameters, true, true);
+					Assert.IsNotNull(data);
+					
+					IDictionary<string, string> tokens = ASIOAuthClient.RefreshToken(refreshToken);
                     if (tokens.ContainsKey("AuthToken")) accessTokenNew = tokens["AuthToken"];
                     if (tokens.ContainsKey("RefreshToken")) refreshTokenNew = tokens["RefreshToken"];
                     Assert.IsNotNull(accessTokenNew);
@@ -189,9 +197,10 @@ namespace Core.Tests.OAuth
 					isValidToken = ASIOAuthClient.IsValidAccessToken(accessTokenNew);
 					Assert.IsTrue(isValidToken, "The new token was not valid from: " + accessToken + " to " + accessTokenNew);
 					//call lms
-					IDictionary<string, string> parameters = new Dictionary<string, string>();
-					parameters.Add("tokenid", accessTokenNew);
-					asi.asicentral.util.HtmlHelper.SubmitForm("http://asi.upsidelms.com/asi/rest/curriculumtranscriptdetail", parameters, true, true);
+					parameters = new Dictionary<string, string>();
+					parameters.Add("tokenid", encryptionService.ECBEncrypt("ASIP@ssWord34567", accessTokenNew));
+					data = asi.asicentral.util.HtmlHelper.SubmitForm("http://asi.upsidelms.com/asi/rest/curriculumtranscriptdetail", parameters, true, true);
+					Assert.IsNotNull(data);
 					//test again
 					isValidToken = ASIOAuthClient.IsValidAccessToken(accessTokenNew);
 					Assert.IsTrue(isValidToken, "The new token was not valid after lms from: " + accessToken + " to " + accessTokenNew);
