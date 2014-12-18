@@ -9,7 +9,7 @@ namespace asi.asicentral.services
 
     public class CreditCardService : ICreditCardService
     {
-	    private IBackendService backendService;
+	    private readonly IBackendService backendService;
 
         public CreditCardService(IBackendService backendService)
         {
@@ -84,7 +84,7 @@ namespace asi.asicentral.services
 					CountryCode = creditCard.CountryCode,
 				};
 				web.CreditCardService.CreditCardServiceClient cardServiceClient = GetClient();
-				var identifier = cardServiceClient.Store(webCreditCard);
+		        var identifier = cardServiceClient.StoreCreditCard(order.GetASICompany(), webCreditCard);
 				if (creditCard.Number.Length >= 4) creditCard.MaskedPAN = "****" + creditCard.Number.Substring(creditCard.Number.Length - 4, 4);
 		        result = identifier.ToString();
 	        }

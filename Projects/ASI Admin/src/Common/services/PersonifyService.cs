@@ -196,8 +196,8 @@ namespace asi.asicentral.services
             //create company if not already there
             var companyInfo = PersonifyClient.ReconcileCompany(company, "UNKNOWN", countryCodes);
             //Add credit card to the company
-            string profile = PersonifyClient.GetCreditCardProfileId(companyInfo, creditCard);
-            if (profile == string.Empty) profile = PersonifyClient.SaveCreditCard(companyInfo, creditCard);
+            string profile = PersonifyClient.GetCreditCardProfileId(order.GetASICompany(), companyInfo, creditCard);
+            if (profile == string.Empty) profile = PersonifyClient.SaveCreditCard(order.GetASICompany(), companyInfo, creditCard);
             log.Debug(string.IsNullOrWhiteSpace(profile) ?
                 "Fail to save the credit." : string.Format("Saved credit profile id : {0}", profile));
             if (string.IsNullOrEmpty(profile)) throw new Exception("Credit card can't be saved to Personify.");
