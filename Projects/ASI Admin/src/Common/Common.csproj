@@ -471,16 +471,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\PersonifyDataASI\service.edmx" />
-    <None Include="Service References\web.CreditCardService\CreditCardService.wsdl" />
-    <None Include="Service References\web.CreditCardService\CreditCardService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\web.CreditCardService\CreditCardService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\web.CreditCardService\CreditCardService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <EmbeddedResource Include="views\store\GenericForm.cshtml" />
     <EmbeddedResource Include="views\store\ASIShowForm.cshtml" />
     <EmbeddedResource Include="views\store\RoadshowMLRForm.cshtml" />
@@ -522,15 +512,22 @@
     <WCFMetadataStorage Include="Service References\web.CreditCardService\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\web.CreditCardService\CreditCardService.disco" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Service References\web.CreditCardService\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\web.CreditCardService\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Service References\web.CreditCardService\CreditCardService1.wsdl" />
+    <None Include="Service References\web.CreditCardService\CreditCardService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\web.CreditCardService\CreditCardService31.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\web.CreditCardService\CreditCardService32.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\web.CreditCardService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

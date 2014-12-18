@@ -19,14 +19,13 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="https://pc-2200.asinetwork.local/service/CreditCardService.svc" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:4110/service/CreditCardService.svc?wsdl" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="CreditCardService.xsd" MetadataType="Schema" ID="5aba9229-02a5-4ad4-bce1-4a3e2d325803" SourceId="1" SourceUrl="https://pc-2200.asinetwork.local/service/CreditCardService.svc?xsd=xsd1" />
-    <MetadataFile FileName="CreditCardService1.xsd" MetadataType="Schema" ID="a4271324-bf93-44a3-9d1e-5b2f2a844279" SourceId="1" SourceUrl="https://pc-2200.asinetwork.local/service/CreditCardService.svc?xsd=xsd0" />
-    <MetadataFile FileName="CreditCardService2.xsd" MetadataType="Schema" ID="4ec0f68d-5ac4-4777-82cb-476192897a43" SourceId="1" SourceUrl="https://pc-2200.asinetwork.local/service/CreditCardService.svc?xsd=xsd2" />
-    <MetadataFile FileName="CreditCardService.disco" MetadataType="Disco" ID="8967dfaa-51e5-4384-aaae-861aa5fdf125" SourceId="1" SourceUrl="https://pc-2200.asinetwork.local/service/CreditCardService.svc?disco" />
-    <MetadataFile FileName="CreditCardService.wsdl" MetadataType="Wsdl" ID="079c2abe-be3c-475d-9c2e-64b7853ff008" SourceId="1" SourceUrl="https://pc-2200.asinetwork.local/service/CreditCardService.svc?wsdl" />
+    <MetadataFile FileName="CreditCardService3.xsd" MetadataType="Schema" ID="d27c7a83-00c9-46b9-8b5e-7357a71d20f0" SourceId="1" SourceUrl="http://localhost:4110/service/CreditCardService.svc?xsd=xsd1" />
+    <MetadataFile FileName="CreditCardService1.wsdl" MetadataType="Wsdl" ID="7332609b-7a36-4db8-b145-217aa806faac" SourceId="1" SourceUrl="http://localhost:4110/service/CreditCardService.svc?wsdl" />
+    <MetadataFile FileName="CreditCardService31.xsd" MetadataType="Schema" ID="3a0a9d09-3578-4490-a700-e69b340beac9" SourceId="1" SourceUrl="http://localhost:4110/service/CreditCardService.svc?xsd=xsd0" />
+    <MetadataFile FileName="CreditCardService32.xsd" MetadataType="Schema" ID="cb93d819-7993-4d9b-a68e-947d0cb36f0a" SourceId="1" SourceUrl="http://localhost:4110/service/CreditCardService.svc?xsd=xsd2" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

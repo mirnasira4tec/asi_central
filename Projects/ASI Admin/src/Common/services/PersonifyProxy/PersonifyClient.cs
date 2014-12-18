@@ -27,11 +27,11 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string RECORD_TYPE_CORPORATE = "C";
         private const int PHONE_NUMBER_LENGTH = 10;
 
-        private static readonly Dictionary<string, string> CreditCardType =
-            new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase)
-            {
-                { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" }
-            };
+		private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
+		private static readonly IDictionary<string, string> ASIShowCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "SHOW AE" }, { "DISCOVER", "SHOW DISC" }, { "MASTERCARD", "SHOW MS" }, { "VISA", "SHOW VS" } };
+		private static readonly IDictionary<string, string> ASICanadaCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "CAN AMEX" }, { "DISCOVER", "CAN DISC" }, { "MASTERCARD", "CAN MC" }, { "VISA", "CAN VISA" } };
+		private static readonly IDictionary<string, IDictionary<string, string>> CreditCardType = new Dictionary<string, IDictionary<string, string>>(3, StringComparer.InvariantCultureIgnoreCase) { { "ASI", ASICreditCardType }, { "ASI Show", ASIShowCreditCardType }, { "ASI Canada", ASICanadaCreditCardType } };
+		private static readonly IDictionary<string, string> CompanyNumber = new Dictionary<string, string>(3, StringComparer.InvariantCultureIgnoreCase) { { "ASI", "1" }, { "ASI Show", "2" }, { "ASI Canada", "4" } };
 
         public static CreateOrderOutput CreateOrder(StoreOrder storeOrder,
             CustomerInfo companyInfo,
@@ -811,22 +811,26 @@ namespace asi.asicentral.services.PersonifyProxy
 
         public static bool ValidateCreditCard(CreditCard info)
         {
+			//when validating the credit card we can use ASI for the company
+	        string creditCardType = CreditCardType["ASI"][info.Type.ToUpper()];
             var asiValidateCreditCardInput = new ASIValidateCreditCardInput()
             {
-                ReceiptType = CreditCardType[info.Type.ToUpper()],
+                ReceiptType = creditCardType,
                 CreditCardNumber = info.Number
             };
             var resp = SvcClient.Post<ASIValidateCreditCardOutput>("ASIValidateCreditCard", asiValidateCreditCardInput);
             return resp.IsValid ?? false;
         }
 
-        public static string SaveCreditCard(CustomerInfo companyInfo, CreditCard creditCard)
+        public static string SaveCreditCard(string asiCompany, CustomerInfo companyInfo, CreditCard creditCard)
         {
+	        if (string.IsNullOrEmpty(asiCompany)) asiCompany = "ASI";
+	        string creditCardType = CreditCardType[asiCompany][creditCard.Type.ToUpper()];
             var customerCreditCardInput = new CustomerCreditCardInput()
             {
                 MasterCustomerId = companyInfo.MasterCustomerId,
                 SubCustomerId = companyInfo.SubCustomerId,
-                ReceiptType = CreditCardType[creditCard.Type.ToUpper()],
+                ReceiptType = creditCardType,
                 CreditCardNumber = creditCard.Number,
                 ExpirationMonth = (short)creditCard.ExpirationDate.Month,
                 ExpirationYear = (short)creditCard.ExpirationDate.Year,
@@ -853,13 +857,14 @@ namespace asi.asicentral.services.PersonifyProxy
             return resp.CreditCardProfileId;
         }
 
-        public static string GetCreditCardProfileId(CustomerInfo companyInfo, CreditCard creditCard)
+        public static string GetCreditCardProfileId(string asiCompany, CustomerInfo companyInfo, CreditCard creditCard)
         {
+	        string creditCardType = CreditCardType[asiCompany][creditCard.Type];
             if (companyInfo == null) throw new Exception("Could not find a company to assign the credit card to");
             IEnumerable<ASICustomerCreditCard> oCreditCards = SvcClient.Ctxt.ASICustomerCreditCards
                 .Where(c => c.MasterCustomerId == companyInfo.MasterCustomerId
                          && c.SubCustomerId == companyInfo.SubCustomerId
-                         && c.ReceiptTypeCodeString == CreditCardType[creditCard.Type]);
+                         && c.ReceiptTypeCodeString == creditCardType);
             long? profileId = null;
             if (oCreditCards.Any())
             {
