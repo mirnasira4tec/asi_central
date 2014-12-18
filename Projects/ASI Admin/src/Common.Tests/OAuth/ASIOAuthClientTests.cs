@@ -132,5 +132,51 @@ namespace Core.Tests.OAuth
 				Assert.AreNotEqual(refreshToken, refreshTokenNew);
 			}
 		}
+
+        [TestMethod]
+        public void GenarateTokens()
+        {
+            string accessToken = string.Empty;
+			string refreshToken = string.Empty;
+            
+            var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
+			var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
+            if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
+            {
+                WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
+                IDictionary<string, string> tokens = webServerClient.Login("yperrin", "asiCentral5");
+                if (tokens.ContainsKey("AuthToken")) accessToken = tokens["AuthToken"];
+                if (tokens.ContainsKey("RefreshToken")) refreshToken = tokens["RefreshToken"];
+                Assert.IsNotNull(accessToken);
+                Assert.IsNotNull(refreshToken);
+            }
+        }
+
+        [TestMethod]
+        public void TestRefreshTokenIfAccessTokenIsNotValid()
+        {
+            string accessToken = "05c89e19a6cdac7c5fccd2e3127ce6774de8cdaf10dbdf3035cd375be24c99a0";
+            string refreshToken = "f04abcd87aac84f7edf99bda1cfbd1ffd4f5e3cf3f36a4e51ab3e2b3ebb56894";
+            string accessTokenNew = string.Empty;
+            string refreshTokenNew = string.Empty;
+
+            var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
+            var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
+            if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
+            {
+                WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
+                bool isValidToken = ASIOAuthClient.IsValidAccessToken(accessToken);
+                if (!isValidToken)
+                {
+                    IDictionary<string, string> tokens = ASIOAuthClient.RefreshToken(refreshToken);
+                    if (tokens.ContainsKey("AuthToken")) accessToken = tokens["AuthToken"];
+                    if (tokens.ContainsKey("RefreshToken")) refreshToken = tokens["RefreshToken"];
+                    Assert.IsNotNull(accessTokenNew);
+                    Assert.IsNotNull(refreshTokenNew);
+                    Assert.AreNotEqual(accessToken, accessTokenNew);
+                    Assert.AreNotEqual(refreshToken, refreshTokenNew);
+                }
+            }
+        }
     }
 }
