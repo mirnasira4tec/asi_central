@@ -328,8 +328,8 @@ namespace asi.asicentral.oauth
         {
             string domainName = null;
             if (!request.Url.Authority.Contains("localhost")) domainName = domain;
-            CookiesHelper.SetCookieValue(request, response, COOKIES_CMPSSO, string.Empty, domain: domainName, year: -1);
-            CookiesHelper.SetCookieValue(request, response, FormsAuthentication.FormsCookieName, string.Empty, domain: domainName, persist: true, year: -1);
+            CookiesHelper.SetCookieValue(request, response, COOKIES_CMPSSO, string.Empty, domainName: domainName, year: -1);
+            CookiesHelper.SetCookieValue(request, response, FormsAuthentication.FormsCookieName, string.Empty, domainName: domainName, persist: true, year: -1);
             CookiesHelper.SetCookieValue(request, response, COOKIES_ASP_NET_SESSION_ID, string.Empty, persist: true, year: -1);
         }
 

@@ -35,20 +35,20 @@ namespace asi.asicentral.oauth
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public static void SetCookieValue(HttpRequestBase request, HttpResponseBase response, string key, string value, bool addCookie = false, string domain = null, bool persist = true, int year = 1)
+        public static void SetCookieValue(HttpRequestBase request, HttpResponseBase response, string key, string value, bool addCookie = false, string domainName = null, bool persist = true, int year = 1)
         {
             HttpCookie cookie = request.Cookies.Get(key);
             if (cookie != null)
             {
-                if (!string.IsNullOrEmpty(domain)) cookie.Domain = domain;
+                if (!string.IsNullOrEmpty(domainName)) cookie.Domain = domainName;
                 cookie.Value = value;
                 if (persist) cookie.Expires = DateTime.Now.AddYears(year);
                 response.Cookies.Set(cookie);
             }
             else if (addCookie && response != null)
             {
-                cookie = !string.IsNullOrEmpty(domain)
-                    ? new HttpCookie(key, value) { Domain = domain }
+                cookie = !string.IsNullOrEmpty(domainName)
+                    ? new HttpCookie(key, value) { Domain = domainName }
                     : new HttpCookie(key, value);
                 if (persist) cookie.Expires = DateTime.Now.AddYears(year);
                 response.Cookies.Add(cookie);
@@ -71,7 +71,7 @@ namespace asi.asicentral.oauth
             return cookieValue;
         }
 
-        public static string GetApplicationUrl(HttpRequestBase request, HttpResponseBase response, ApplicationCodes appCode, string userCookieName = "Name")
+        public static string GetApplicationUrl(HttpRequestBase request, HttpResponseBase response, ApplicationCodes appCode, string domainName, string userCookieName = "Name")
         {
             string redirectUrl = string.Empty;
             if (SSO.IsLoggedIn())
@@ -79,7 +79,7 @@ namespace asi.asicentral.oauth
                 string cookie = GetCookieValue(request, response, FormsAuthentication.FormsCookieName);
                 if (!string.IsNullOrEmpty(cookie))
                 {
-                    var extraData = GetLatestTokens(request, response, cookie, userCookieName);
+                    var extraData = GetLatestTokens(request, response, cookie, domainName, userCookieName);
                     if (extraData != null)
                     {
                         var redirectParams = new CrossApplication.RedirectParams();
@@ -143,7 +143,7 @@ namespace asi.asicentral.oauth
             return redirectUrl;
         }
 
-        private static CrossApplication.RedirectParams GetLatestTokens(HttpRequestBase request, HttpResponseBase response, string cookie, string userCookieName = "Name")
+        private static CrossApplication.RedirectParams GetLatestTokens(HttpRequestBase request, HttpResponseBase response, string cookie, string domainName, string userCookieName = "Name")
         {
             ILogService log = LogService.GetLog(typeof(CookiesHelper));
             log.Debug("GetLatestTokens - Start");
@@ -167,7 +167,7 @@ namespace asi.asicentral.oauth
                     var user = new model.User();
                     if (tokens.ContainsKey("AuthToken")) user.AccessToken = tokens["AuthToken"];
                     if (tokens.ContainsKey("RefreshToken")) user.RefreshToken = tokens["RefreshToken"];
-                    SetFormsAuthenticationCookie(request, response, user, false, userCookieName);
+                    SetFormsAuthenticationCookie(request, response, user, false, userCookieName, domainName);
                     extraData.AccessToken = user.AccessToken;
                     extraData.RefreshToken = user.RefreshToken;
                 }
@@ -191,7 +191,7 @@ namespace asi.asicentral.oauth
             return encryptedToken;
         }
 
-        public static string GetLMSToken(HttpRequestBase request, HttpResponseBase response, ApplicationCodes appCode, string userCookieName = "Name")
+        public static string GetLMSToken(HttpRequestBase request, HttpResponseBase response, ApplicationCodes appCode, string domain, string userCookieName = "Name")
         {
             string lmsToken = string.Empty;
             string cookie = GetCookieValue(request, response, FormsAuthentication.FormsCookieName);
