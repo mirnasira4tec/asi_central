@@ -192,13 +192,13 @@ namespace asi.asicentral.oauth
             return encryptedToken;
         }
 
-        public static string GetLMSToken(HttpRequestBase request, HttpResponseBase response, ApplicationCodes appCode, string domain, string userCookieName = "Name")
+        public static string GetLMSToken(HttpRequestBase request, HttpResponseBase response, ApplicationCodes appCode, string domainName, string userCookieName = "Name")
         {
             string lmsToken = string.Empty;
             string cookie = GetCookieValue(request, response, FormsAuthentication.FormsCookieName);
             if (!string.IsNullOrEmpty(cookie))
             {
-                var extraData = GetLatestTokens(request, response, cookie, domain, userCookieName:userCookieName);
+                var extraData = GetLatestTokens(request, response, cookie, domainName, userCookieName: userCookieName);
                 if (extraData != null)
                     lmsToken = EncriptToken(extraData.AccessToken);
             }
