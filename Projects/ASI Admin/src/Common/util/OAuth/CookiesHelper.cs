@@ -168,6 +168,7 @@ namespace asi.asicentral.oauth
                     var user = new model.User();
                     if (tokens.ContainsKey("AuthToken")) user.AccessToken = tokens["AuthToken"];
                     if (tokens.ContainsKey("RefreshToken")) user.RefreshToken = tokens["RefreshToken"];
+                    user.FirstName = HttpContext.Current.User.Identity.Name;
                     SetFormsAuthenticationCookie(request, response, user, false, userCookieName, domainName);
                     extraData.AccessToken = user.AccessToken;
                     extraData.RefreshToken = user.RefreshToken;
