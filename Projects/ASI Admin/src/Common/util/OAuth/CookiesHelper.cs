@@ -38,6 +38,7 @@ namespace asi.asicentral.oauth
         public static void SetCookieValue(HttpRequestBase request, HttpResponseBase response, string key, string value, bool addCookie = false, string domainName = null, bool persist = true, int year = 1)
         {
             HttpCookie cookie = request.Cookies.Get(key);
+            if (request.Url.Authority.Contains("localhost")) domainName = null;
             if (cookie != null)
             {
                 if (!string.IsNullOrEmpty(domainName)) cookie.Domain = domainName;
@@ -197,7 +198,7 @@ namespace asi.asicentral.oauth
             string cookie = GetCookieValue(request, response, FormsAuthentication.FormsCookieName);
             if (!string.IsNullOrEmpty(cookie))
             {
-                var extraData = GetLatestTokens(request, response, cookie, userCookieName);
+                var extraData = GetLatestTokens(request, response, cookie, domain, userCookieName:userCookieName);
                 if (extraData != null)
                     lmsToken = EncriptToken(extraData.AccessToken);
             }
