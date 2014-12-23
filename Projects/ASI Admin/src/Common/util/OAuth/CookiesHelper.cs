@@ -22,7 +22,7 @@ namespace asi.asicentral.oauth
             var redirectParams = new CrossApplication.RedirectParams();
             redirectParams.AccessToken = user.AccessToken;
             redirectParams.RefreshToken = user.RefreshToken;
-            redirectParams.TokenExpirationTime = DateTime.Now.AddHours(2); //defaulting token to expire in 2 hours
+            redirectParams.TokenExpirationTime = DateTime.Now.AddHours(1).AddMinutes(55); //defaulting token to expire in 1 .55 hours
             string userName = ASIOAuthClient.GetUserName(user.FirstName, user.LastName);
             var extraData = JsonConvert.SerializeObject(redirectParams, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             var ticket = new FormsAuthenticationTicket(1, userName, DateTime.Now, DateTime.Now.AddYears(1), true, extraData, FormsAuthentication.FormsCookiePath);
@@ -154,6 +154,7 @@ namespace asi.asicentral.oauth
             log.Debug("GetLatestTokens - Refresh token - " + (!string.IsNullOrEmpty(extraData.RefreshToken) ? extraData.RefreshToken : "No Refresh token"));
             log.Debug("GetLatestTokens - TokenExpirationTime - " + extraData.TokenExpirationTime);
             if (extraData != null && !string.IsNullOrEmpty(extraData.RefreshToken)
+                && (extraData.TokenExpirationTime != null && extraData.TokenExpirationTime.HasValue && extraData.TokenExpirationTime < DateTime.Now)
                 && !string.IsNullOrEmpty(extraData.AccessToken)
                 && !ASIOAuthClient.IsValidAccessToken(extraData.AccessToken))
             {
