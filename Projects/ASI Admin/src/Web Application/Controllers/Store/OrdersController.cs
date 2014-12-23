@@ -324,22 +324,17 @@ namespace asi.asicentral.web.Controllers.Store
                 || (string.IsNullOrEmpty(o.UserId)));
 
             //exclude the orders made with asinumbers 30232, 30235, 125724
-            IList<StoreOrder> orders = ordersQuery.Where(o => o.Company == null || !IGNORED_ASI_NUMBERS.Contains(o.Company.ASINumber)).ToList();
+	        //ordersQuery = ordersQuery.Where(o => o.Company == null || !IGNORED_ASI_NUMBERS.Contains(o.Company.ASINumber));
+            IList<StoreOrder> orders = ordersQuery.ToList();
 
             //exclude the orders made using @asicentral.com, for orders made without login  
-            if (orders != null)
-            {
-                IList<StoreOrder> filteredorders = new List<StoreOrder>();
-                foreach (StoreOrder order in orders)
-                {
-                    if (!(order.Company != null && order.Company.Individuals != null && order.Company.Individuals.Count > 0
-                        && !string.IsNullOrEmpty(order.Company.Individuals.ElementAt(0).Email)
-                        && order.Company.Individuals.ElementAt(0).Email.Contains("@asicentral.com")))
-                            filteredorders.Add(order);
-                }
-
-                orders = filteredorders;
-            }
+	        orders =
+		        orders.Where(
+			        order =>
+				        (order.Company == null || order.Company.Individuals == null || order.Company.Individuals.Count == 0
+				            || string.IsNullOrEmpty(order.Company.Individuals.ElementAt(0).Email)
+				            || !order.Company.Individuals.ElementAt(0).Email.Contains("@asicentral.com")) &&
+				        (order.Company == null || !IGNORED_ASI_NUMBERS.Contains(order.Company.ASINumber))).ToList();
             return orders;
         }
 
