@@ -66,7 +66,8 @@ namespace asi.asicentral.database
         public DbSet<LookAdSize> AdSizes { get; set; }
         public DbSet<LookSendMyAdPublication> LookSendMyAdPublications { get; set; }
         public DbSet<LookSendMyAdAdSpec> LookSendMyAdAdSpecs { get; set; }
-        public DbSet<LookSendMyAdCountryCode> LookSendMyAdCountryCodes { get; set; }   
+        public DbSet<LookSendMyAdCountryCode> LookSendMyAdCountryCodes { get; set; }  
+        public DbSet<StoreDetailCatalogAdvertisingItem> StoreDetailCatalogAdvertisingItems { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -124,7 +125,8 @@ namespace asi.asicentral.database
                 .Add(new LookAdSizeMap())
                 .Add(new LookSendMyAdPublicationMap())
                 .Add(new LookSendMyAdAdSpecMap())
-                .Add(new LookSendMyAdCountryCodeMap());
+                .Add(new LookSendMyAdCountryCodeMap())
+                .Add(new StoreDetailCatalogAdvertisingItemMap());
         }
     }
 }

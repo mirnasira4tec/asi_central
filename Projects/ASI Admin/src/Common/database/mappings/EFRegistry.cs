@@ -297,6 +297,9 @@ namespace asi.asicentral.database.mappings
             For<IRepository<LookSendMyAdCountryCode>>().Use<EFRepository<LookSendMyAdCountryCode>>()
               .Ctor<IValidatedContext>().Named("StoreContext");
 
+            For<IRepository<StoreDetailCatalogAdvertisingItem>>().Use<EFRepository<StoreDetailCatalogAdvertisingItem>>()
+              .Ctor<IValidatedContext>().Named("StoreContext");
+
             #endregion StoreContext
 
             #region TIMSS Context

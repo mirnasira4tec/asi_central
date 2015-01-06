@@ -246,6 +246,7 @@
     <Compile Include="database\mappings\store\LookSendMyAdAdSpecMap.cs" />
     <Compile Include="database\mappings\store\LookSendMyAdPublicationMap.cs" />
     <Compile Include="database\mappings\store\LookSendMyAdCountryCodeMap.cs" />
+    <Compile Include="database\mappings\store\StoreDetailCatalogAdvertisingItemMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailMagazineAdvertisingItemMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailProductCollectionsItemMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailProductCollectionsMap.cs" />
@@ -310,6 +311,7 @@
     <Compile Include="model\store\LookSendMyAdAdSpec.cs" />
     <Compile Include="model\store\LookSendMyAdCountryCode.cs" />
     <Compile Include="model\store\LookSendMyAdPublication.cs" />
+    <Compile Include="model\store\StoreDetailCatalogAdvertisingItem.cs" />
     <Compile Include="model\store\StoreDetailMagazineAdvertisingItem.cs" />
     <Compile Include="model\store\StoreDetailStoreDetailProductCollections.cs" />
     <Compile Include="model\store\StoreDetailStoreDetailProductCollectionsItem.cs" />
@@ -450,6 +452,8 @@
     <Compile Include="util\OAuth\EnumHelper.cs" />
     <Compile Include="util\OAuth\SSO.cs" />
     <Compile Include="util\store\asismartsales\ASISmartSalesHelper.cs" />
+    <Compile Include="util\store\catalogadvertising\CatalogAdvertisingHelper.cs" />
+    <Compile Include="util\store\catalogadvertising\CatalogAdvertisingTieredProductPricing.cs" />
     <Compile Include="util\store\catalogs\CatalogsHelper.cs" />
     <Compile Include="util\store\companystore\CompanyStoreHelper.cs" />
     <Compile Include="util\store\companystore\CountryCodeHelper.cs" />

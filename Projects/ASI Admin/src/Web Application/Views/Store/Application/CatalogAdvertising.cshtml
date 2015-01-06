@@ -1,0 +1,93 @@
+﻿@using asi.asicentral.util.store.catalogadvertising
+@using asi.asicentral.web.Controllers.Store
+@model asi.asicentral.web.Models.Store.Order.CatalogAdvertisingApplicationModel
+@{
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+<h1>@string.Format(Model.ProductName) (#@Model.OrderId)</h1>
+@if (Model.Price > 0.0m)
+{
+    <p>@Model.ProductName product purchase fee is @Model.Price.ToString("C")</p>
+}
+@Html.Partial("../Store/Application/Shared/OrderSummary", Model)
+@using (Html.BeginForm("EditCatalogAdvertising", "Application"))
+{        
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.ProductId)
+    @Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
+    @Html.Partial("../Store/Application/Shared/AcceptSaveCancelButtons", Model)
+    <nav>
+        <ul class="nav nav-tabs" id="tabs">
+            <li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
+            <li><a href="#tabsubscription" data-toggle="tab">@string.Format("{0} Information", Html.Raw(Model.ProductName))</a></li>
+        </ul>
+    </nav>
+    <div class="tab-content">
+        @Html.Partial("../Store/Application/Shared/CompanyInformation", Model)
+
+        <div id="tabsubscription" class="product-information tab-pane fade">
+            <fieldset class="company-info-form">
+                <legend>@string.Format("{0} Information", Html.Raw(Model.ProductName))</legend>
+                @switch (Model.ProductId)
+                {
+                    case 84:
+                        {
+                            <span class="label-row">
+                                @Html.Label("Ad Size")
+                                @Html.Label("Product Description")
+                                @Html.Label("Product Pricing")
+                            </span>
+                            <span class="label-row">
+                                @Html.DropDownListFor(model => model.CatalogAdvertisingItems[0].AdSize, new SelectList(Model.Prices.Select(price => new {Name = price.AdSizeName, Value = price.Price}), 
+                                        "Value", "Name", CatalogAdvertisingTieredProductPricing.GetAdSizeValue(Model.ProductId, Model.CatalogAdvertisingItems[0].AdSize)));
+                                @Html.EditorFor(m => m.CatalogAdvertisingItems[0].ProductDescription);
+                                @Html.EditorFor(m => m.CatalogAdvertisingItems[0].ProductPricing);
+                            </span> 
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            </fieldset>
+        </div>
+        <!-- END #orderdetail-information -->
+
+    </div> <!-- END #content -->
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/form")
+    <script src="/Scripts/asi.js"></script>
+    <script>
+        $('input.command').click(function(e) {
+            $('#ActionName').val(e.target.value);
+            if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
+                //make sure we have Timms value
+                if (!$('#ExternalReference').val()) {
+                    asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
+                    $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                    $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
+                    e.preventDefault();
+                } else {
+                    var isnum = /^\d+$/.test($('#ExternalReference').val());
+                    if (!isnum) {
+                        asi.modal.confirm('Error', 'TIMMS ID must contain only numbers.', null, "#hide", "Close");
+                        $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                        $("#timmsErrorMessage").text("TIMMS ID must contain only numbers.");
+                        e.preventDefault();
+                    }
+                }
+            }
+        });
+        $('[rel*="isprimary"]').change(function() {
+            $('[rel*="isprimary"]').attr("checked", false);
+            this.checked = true;
+        });
+        $(document).ready(function () {
+            $('.save').on("click", function (e) {
+                $('#CatalogAdvertisingItems_0__AdSize').children(':selected').val($('#CatalogAdvertisingItems_0__AdSize').children(':selected').text());
+            });
+        });
+    </script>
+}
+

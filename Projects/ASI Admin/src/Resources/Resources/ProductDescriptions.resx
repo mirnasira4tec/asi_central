@@ -253,4 +253,32 @@
   <data name="TheApparelCatalogNEWFORFALL2015" xml:space="preserve">
     <value>Dedicated to apparel, the most popular product category in the promotional products industry! </value>
   </data>
+  <data name="ProductTheApparelCatalogAdvertising" xml:space="preserve">
+    <value>Designed exclusively for the apparel market, this catalog speaks to end-buyers looking for trends in the upcoming year.</value>
+  </data>
+  <data name="ProductTheApparelCatalogAdvertising2" xml:space="preserve">
+    <value>&lt;em&gt;The Apparel Catalog&lt;/em&gt; is home to the most unique apparel products in the industry. Designed exclusively for the apparel markets, this catalog speaks to end-buyers looking for trends in the upcoming year.</value>
+  </data>
+  <data name="ProductIdeaShowcaseSchoolsAdvertising" xml:space="preserve">
+    <value>Put your products in front of 300,000 end-buyers in the industy's second-largest ad specialties market - EDUCATION!</value>
+    <comment>
+
+
+</comment>
+  </data>
+  <data name="ProductSpectrumCelebrationAdvertising" xml:space="preserve">
+    <value>Introducing the &amp;lt;strong&amp;gt;NEW&amp;lt;/strong&amp;gt; Spectrum Celebration - a large, grander format completely redesigned to give your products twice the advertising space.</value>
+  </data>
+  <data name="ProductTheGiftBookAdvertising" xml:space="preserve">
+    <value>Our most upscale and elegant catalog contains an impressive collection of timeless gifts and incentrives.</value>
+  </data>
+  <data name="ProductSpectrumAdvertising" xml:space="preserve">
+    <value>Don't miss the opportunity to reach over 625,000 end-buyers with Spectrum, the most versatile and sought-after catalog in the industry.</value>
+  </data>
+  <data name="ProductIdeaShowcaseAdvertising" xml:space="preserve">
+    <value>What do you have that they don't? Idea Showcase gives you the chance to bu the go-to source for unique multi-use products for a full year.</value>
+  </data>
+  <data name="ProductTheProfessionalBuyersGuideAdvertising" xml:space="preserve">
+    <value>There is no idustry catalog more popular with Canads's distributors than The Professional Buyer's Guide.</value>
+  </data>
 </root>

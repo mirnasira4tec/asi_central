@@ -187,11 +187,29 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What do you have that they don&apos;t? Idea Showcase gives you the chance to bu the go-to source for unique multi-use products for a full year..
+        /// </summary>
+        public static string ProductIdeaShowcaseAdvertising {
+            get {
+                return ResourceManager.GetString("ProductIdeaShowcaseAdvertising", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create sales with this compact catalog that’s perfect for leave-behinds and mailers. This is one of the most popular catalogs with end-buyers because it showcases a cross section of products, from standard items like pens and stress balls to unique products like rally hair and glowing ice cubes..
         /// </summary>
         public static string ProductIdeaShowcaseSchools {
             get {
                 return ResourceManager.GetString("ProductIdeaShowcaseSchools", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Put your products in front of 300,000 end-buyers in the industy&apos;s second-largest ad specialties market - EDUCATION!.
+        /// </summary>
+        public static string ProductIdeaShowcaseSchoolsAdvertising {
+            get {
+                return ResourceManager.GetString("ProductIdeaShowcaseSchoolsAdvertising", resourceCulture);
             }
         }
         
@@ -277,11 +295,29 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t miss the opportunity to reach over 625,000 end-buyers with Spectrum, the most versatile and sought-after catalog in the industry..
+        /// </summary>
+        public static string ProductSpectrumAdvertising {
+            get {
+                return ResourceManager.GetString("ProductSpectrumAdvertising", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;strong&gt;Introducing Spectrum Celebration!&lt;/strong&gt; Our best-selling end-buyer catalog is now available in a summer/fall edition. It includes a special SELECT section featuring the top rated 4 star and up suppliers as well as a customer favorites section too..
         /// </summary>
         public static string ProductSpectrumCelebration {
             get {
                 return ResourceManager.GetString("ProductSpectrumCelebration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Introducing the &amp;lt;strong&amp;gt;NEW&amp;lt;/strong&amp;gt; Spectrum Celebration - a large, grander format completely redesigned to give your products twice the advertising space..
+        /// </summary>
+        public static string ProductSpectrumCelebrationAdvertising {
+            get {
+                return ResourceManager.GetString("ProductSpectrumCelebrationAdvertising", resourceCulture);
             }
         }
         
@@ -341,6 +377,24 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Designed exclusively for the apparel market, this catalog speaks to end-buyers looking for trends in the upcoming year..
+        /// </summary>
+        public static string ProductTheApparelCatalogAdvertising {
+            get {
+                return ResourceManager.GetString("ProductTheApparelCatalogAdvertising", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;em&gt;The Apparel Catalog&lt;/em&gt; is home to the most unique apparel products in the industry. Designed exclusively for the apparel markets, this catalog speaks to end-buyers looking for trends in the upcoming year..
+        /// </summary>
+        public static string ProductTheApparelCatalogAdvertising2 {
+            get {
+                return ResourceManager.GetString("ProductTheApparelCatalogAdvertising2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Event Planner offers one-stop shopping for distributors looking for event merchandise.  All events are listed on the ESP™ homepage providing instant accessibility, homepage visibility, and unlimited views. This new feature fully integrates the event concept and incorporates selling themed products within a pricing tier. Never before has it been so easy to sell a full package of products within a selected price range..
         /// </summary>
         public static string ProductTheEventPlanner {
@@ -368,6 +422,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Our most upscale and elegant catalog contains an impressive collection of timeless gifts and incentrives..
+        /// </summary>
+        public static string ProductTheGiftBookAdvertising {
+            get {
+                return ResourceManager.GetString("ProductTheGiftBookAdvertising", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Catalogs product - The Green Catalog.
         /// </summary>
         public static string ProductTheGreenCatalog {
@@ -382,6 +445,15 @@ namespace asi.asicentral.Resources {
         public static string ProductTheProfessionalBuyersGuide {
             get {
                 return ResourceManager.GetString("ProductTheProfessionalBuyersGuide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no idustry catalog more popular with Canads&apos;s distributors than The Professional Buyer&apos;s Guide..
+        /// </summary>
+        public static string ProductTheProfessionalBuyersGuideAdvertising {
+            get {
+                return ResourceManager.GetString("ProductTheProfessionalBuyersGuideAdvertising", resourceCulture);
             }
         }
         

@@ -5,9 +5,13 @@ using System.Web;
 using System.Web.Mvc;
 using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
+using asi.asicentral.util.store.catalogadvertising;
+using asi.asicentral.util.store.magazinesadvertising;
 using asi.asicentral.web.model.store;
 using asi.asicentral.services;
 using asi.asicentral.util.store;
+using asi.asicentral.web.Models.Store.Order;
+using ASI.EntityModel;
 
 namespace asi.asicentral.web.Controllers.Store
 {
@@ -30,6 +34,7 @@ namespace asi.asicentral.web.Controllers.Store
         public static readonly int SUPPLIER_EMAIL_EXPRESS_PRODUCT_ID= 61;
         //products associated to StoreDetailProductCollection table
         public static readonly int SUPPLIER_ESP_WEBSITES_PRODUCT_COLLECTIONS_ID = 64;
+        public static readonly int[] SUPPLIER_CATALOG_ADVERTISING_PRODUCT_IDS = { 84, 85, 86, 87, 88, 89, 90 };
 
 
         public IStoreService StoreService { get; set; }
@@ -79,6 +84,11 @@ namespace asi.asicentral.web.Controllers.Store
                 else if (ORDERDETAIL_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/OrderDetailProduct", new OrderDetailApplicationModel(orderDetail));
                 else if (SUPPLIER_ESP_WEBSITES_PRODUCT_COLLECTIONS_ID == orderDetail.Product.Id) return View("../Store/Application/ProductCollections", new ProductCollectionsModel(orderDetail, StoreService));
                 else if (FormsHelper.FORMS_ASSOCIATED_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/FormProduct", new FormsModel(orderDetail, StoreService));
+                else if (SUPPLIER_CATALOG_ADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
+                {
+                    var catalogAdvertisings = StoreService.GetAll<StoreDetailCatalogAdvertisingItem>().Where(item=>item.OrderDetailId == orderDetail.Id).ToList();
+                    return View("../Store/Application/CatalogAdvertising", new CatalogAdvertisingApplicationModel(orderDetail, catalogAdvertisings, StoreService));
+                }
             }
             throw new Exception("Retieved an unknown type of application");
         }
@@ -766,6 +776,55 @@ namespace asi.asicentral.web.Controllers.Store
             {
                 return View("../Store/Application/EmailExpress", application);
             }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(true)]
+        public virtual ActionResult EditCatalogAdvertising(CatalogAdvertisingApplicationModel application)
+        {
+            if (ModelState.IsValid)
+            {
+                var orderDetail = StoreService.GetAll<StoreOrderDetail>().FirstOrDefault(detail => detail.Id == application.OrderDetailId);
+                if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
+                orderDetail.UpdateDate = DateTime.UtcNow;
+                orderDetail.UpdateSource = "ApplicationController - EditCatalogAdvertising";
+                var adItems = StoreService.GetAll<StoreDetailCatalogAdvertisingItem>().Where(detail => detail.OrderDetailId == application.OrderDetailId).ToList();
+                if (adItems.Count <= 0) throw new Exception("Catalog advertising item doesn't exist.");
+                if (orderDetail.Product != null)
+                {
+                    switch (orderDetail.Product.Id)
+                    {
+                        case 84:
+                            
+                            if (adItems != null)
+                            {
+                                adItems[0].AdSize = application.CatalogAdvertisingItems[0].AdSize;
+                                adItems[0].ProductDescription = application.CatalogAdvertisingItems[0].ProductDescription;
+                                adItems[0].ProductPricing = application.CatalogAdvertisingItems[0].ProductPricing;
+                                adItems[0].UpdateDateUTCAndSource();
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                orderDetail.Cost = adItems.Sum(item => CatalogAdvertisingTieredProductPricing.GetAdSizeValue(application.ProductId, adItems[0].AdSize));
+                
+                var order = orderDetail.Order;
+                if (order == null) throw new Exception("Invalid reference to an order");
+                order.ExternalReference = application.ExternalReference;
+                order = UpdateCompanyInformation(application, order);
+                StoreService.UpdateTaxAndShipping(order);
+                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                StoreService.SaveChanges();
+                if (application.ActionName == COMMAND_REJECT)
+                {
+                    return RedirectToAction("List", "Orders");
+                }
+                return RedirectToAction("Edit", "Application", new {id = application.OrderDetailId});
+            }
+            return View("../Store/Application/CatalogAdvertising", application);
         }
 
         /// <summary>
