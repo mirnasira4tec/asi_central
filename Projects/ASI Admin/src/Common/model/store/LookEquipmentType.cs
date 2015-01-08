@@ -12,7 +12,7 @@ namespace asi.asicentral.model.store
         public const string SCREENPRINTING = "Screen Printing";
         public const string HEATTRANSFER = "Heat Transfer";
         public const string DIGITIZING = "Digitizing";
-        public const string ENGRAVING = "Engraving  ";
+        public const string ENGRAVING = "Engraving";
         public const string SUBLIMITION = "Sublimation";
         public const string MONOGRAMING = "Monogramming";
         
