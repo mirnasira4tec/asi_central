@@ -1833,4 +1833,41 @@
   <data name="EmailExpressDesc" xml:space="preserve">
     <value>Send your latest products, specials, closeouts and more to 60,000 ASI members and non-members with ASI’s direct email advertising service, EmailExpress.</value>
   </data>
+  <data name="BankCity" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="BankName" xml:space="preserve">
+    <value>Bank Name</value>
+  </data>
+  <data name="BankState" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="NumberOfEmployeesLocatedAtBilling" xml:space="preserve">
+    <value>Number of employees located at the billing address listed on this
+ application</value>
+  </data>
+  <data name="NumberOfEmployeesNotInNorthAmerica" xml:space="preserve">
+    <value>Number of employees located outside of North America</value>
+  </data>
+  <data name="TotalSalesForce" xml:space="preserve">
+    <value>Total Sales Force</value>
+  </data>
+  <data name="Digitizing" xml:space="preserve">
+    <value>Digitizing</value>
+  </data>
+  <data name="Embroidery" xml:space="preserve">
+    <value>Embroidery</value>
+  </data>
+  <data name="EquipmentScreenPrinting" xml:space="preserve">
+    <value>Screen Printing</value>
+  </data>
+  <data name="HeatTransfer" xml:space="preserve">
+    <value>Heat Transfer</value>
+  </data>
+  <data name="Monogramming" xml:space="preserve">
+    <value>Monogramming</value>
+  </data>
+  <data name="Sublimation" xml:space="preserve">
+    <value>Sublimation</value>
+  </data>
 </root>

@@ -234,6 +234,8 @@
     <Compile Include="database\mappings\memberdemogr\SupplierPolicyMap.cs" />
     <Compile Include="database\mappings\memberdemogr\SupplierRatingMap.cs" />
     <Compile Include="database\mappings\memberdemogr\SupplierSeadElectronicAddressMap.cs" />
+    <Compile Include="database\mappings\store\StoreDetailEquipmentMembershipMap.cs" />
+    <Compile Include="database\mappings\store\LookEquipmentTypeMap.cs" />
     <Compile Include="database\mappings\store\CouponMap.cs" />
     <Compile Include="database\mappings\store\FormInstanceMap.cs" />
     <Compile Include="database\mappings\store\FormTypeMap.cs" />
@@ -295,6 +297,7 @@
     <Compile Include="model\OAuth\User.cs" />
     <Compile Include="model\ROI\Category.cs" />
     <Compile Include="model\ROI\Company.cs" />
+    <Compile Include="model\store\LookEquipmentType.cs" />
     <Compile Include="model\store\FormInstance.cs" />
     <Compile Include="model\store\FormType.cs" />
     <Compile Include="model\store\FormValue.cs" />
@@ -310,6 +313,7 @@
     <Compile Include="model\store\LookSendMyAdAdSpec.cs" />
     <Compile Include="model\store\LookSendMyAdCountryCode.cs" />
     <Compile Include="model\store\LookSendMyAdPublication.cs" />
+    <Compile Include="model\store\StoreDetailEquipmentMembership.cs" />
     <Compile Include="model\store\StoreDetailMagazineAdvertisingItem.cs" />
     <Compile Include="model\store\StoreDetailStoreDetailProductCollections.cs" />
     <Compile Include="model\store\StoreDetailStoreDetailProductCollectionsItem.cs" />

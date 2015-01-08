@@ -34,6 +34,7 @@ namespace asi.asicentral.database
         public DbSet<LookDistributorAccountType> LookDistributorAccountTypes { get; set; }
         public DbSet<LookDistributorRevenueType> LookDistributorRevenueTypes { get; set; }
         public DbSet<LookEventMerchandiseProduct> LookEventMerchandiseProducts { get; set; }
+        public DbSet<LookEquipmentType> LookEquipmentTypes { get; set; }
         public DbSet<LookProductCollections> LookProductCollections { get; set; }
         public DbSet<LookProductLine> LookProductLines { get; set; }
         public DbSet<LookProductShippingRate> LookProductShippingRates { get; set; }
@@ -45,6 +46,7 @@ namespace asi.asicentral.database
         public DbSet<StoreDetailCatalog> StoreDetailCatalogs { get; set; }
         public DbSet<StoreDetailDecoratorMembership> StoreDetailDecoratorMemberships { get; set; }
         public DbSet<StoreDetailDistributorMembership> StoreDetailDistributorMemberships { get; set; }
+        public DbSet<StoreDetailEquipmentMembership> StoreDetailEquipmentMemberships { get; set; }
         public DbSet<StoreDetailESPAdvertising> StoreDetailESPAdvertisings { get; set; }
         public DbSet<StoreDetailEspTowerAd> StoreDetailEspTowerAds { get; set; }
         public DbSet<StoreDetailESPAdvertisingItem> StoreDetailESPAdvertisingItems { get; set; }
@@ -92,6 +94,7 @@ namespace asi.asicentral.database
                 .Add(new LookDistributorAccountTypeMap())
                 .Add(new LookDistributorRevenueTypeMap())
                 .Add(new LookEventMerchandiseProductMap())
+                .Add(new LookEquipmentTypeMap())
                 .Add(new LookProductCollectionsMap())
                 .Add(new LookProductLineMap())
                 .Add(new LookProductShippingRateMap())
@@ -106,6 +109,7 @@ namespace asi.asicentral.database
                 .Add(new StoreDetailESPAdvertisingMap())
                 .Add(new StoreDetailEspTowerAdMap())
                 .Add(new StoreDetailESPAdvertisingItemMap())
+                 .Add(new StoreDetailEquipmentMembershipMap())
                 .Add(new StoreDetailPayForPlacementMap())
                 .Add(new StoreDetailSupplierMembershipMap())
                 .Add(new StoreIndividualMap())
