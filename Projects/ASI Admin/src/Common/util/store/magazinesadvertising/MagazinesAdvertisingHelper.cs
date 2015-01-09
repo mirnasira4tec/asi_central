@@ -18,6 +18,8 @@ namespace asi.asicentral.util.store
 
         public static readonly int[] SUPPLIER_MAGAZINEADVERTISING_PRODUCT_IDS = { 72, 73, 74, 75, 76 };
 
+        public static readonly int[] EQUIPMENT_MAGAZINEADVERTISING_PRODUCT_IDS = { 72, 73, 74, 75, 76 };
+
         public decimal Discount = 0.15M;
     }
 }
