@@ -1871,7 +1871,7 @@
     <value>Sublimation</value>
   </data>
   <data name="ASI" xml:space="preserve">
-    <value>asi/</value>
+    <value>ASI#</value>
   </data>
   <data name="IsEmployeesSharedWithOther" xml:space="preserve">
     <value>Do you share employees with any other entity?</value>

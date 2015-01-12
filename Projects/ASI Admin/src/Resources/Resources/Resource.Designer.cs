@@ -331,7 +331,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to asi/.
+        ///   Looks up a localized string similar to ASI#.
         /// </summary>
         public static string ASI {
             get {
