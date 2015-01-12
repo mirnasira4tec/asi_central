@@ -49,6 +49,27 @@ namespace asi.asicentral.model.store
         [Display(ResourceType = typeof(Resource), Name = "NumberOfEmployeesNotInNorthAmerica")]
         public string NumberOfEmployeesNotInNorthAmerica { get; set; }
 
+        [Display(ResourceType = typeof(Resource), Name = "IsEmployeesSharedWithOther")]
+        public Nullable<bool> IsEmployeesSharedWithOther { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "StoreCompanyName")]
+        public string CompanyName1 { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "StoreCompanyName")]
+        public string CompanyName2 { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "StoreCompanyName")]
+        public string CompanyName3 { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "ASI")]
+        public string ASINumber1 { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "ASI")]
+        public string ASINumber2 { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "ASI")]
+        public string ASINumber3 { get; set; }
+
         [Display(ResourceType = typeof(Resource), Name = "OtherDec")]
         public string OtherDec { get; set; }
 
@@ -91,6 +112,13 @@ namespace asi.asicentral.model.store
             equipment.NumberOfEmployee = NumberOfEmployee;
             equipment.NumberOfLocatedAtBilling = NumberOfLocatedAtBilling;
             equipment.NumberOfEmployeesNotInNorthAmerica = NumberOfEmployeesNotInNorthAmerica;
+            equipment.IsEmployeesSharedWithOther = IsEmployeesSharedWithOther;
+            equipment.CompanyName1 = CompanyName1;
+            equipment.CompanyName2 = CompanyName2;
+            equipment.CompanyName3 = CompanyName3;
+            equipment.ASINumber1 = ASINumber1;
+            equipment.ASINumber2 = ASINumber2;
+            equipment.ASINumber3 = ASINumber3;
             equipment.TotalSalesForce = TotalSalesForce;
             equipment.OtherDec = OtherDec;
         }

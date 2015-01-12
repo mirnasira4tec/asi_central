@@ -331,6 +331,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ASI#.
+        /// </summary>
+        public static string ASI {
+            get {
+                return ResourceManager.GetString("ASI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ASI Contact.
         /// </summary>
         public static string ASIContact {
@@ -2559,6 +2568,15 @@ namespace asi.asicentral.Resources {
         public static string IsArtworkToProof {
             get {
                 return ResourceManager.GetString("IsArtworkToProof", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you share employees with any other entity?.
+        /// </summary>
+        public static string IsEmployeesSharedWithOther {
+            get {
+                return ResourceManager.GetString("IsEmployeesSharedWithOther", resourceCulture);
             }
         }
         
