@@ -1876,4 +1876,19 @@
   <data name="IsEmployeesSharedWithOther" xml:space="preserve">
     <value>Do you share employees with any other entity?</value>
   </data>
+  <data name="CreditManager" xml:space="preserve">
+    <value>Credit Manager</value>
+  </data>
+  <data name="CustomerService" xml:space="preserve">
+    <value>Customer Service</value>
+  </data>
+  <data name="Marketing" xml:space="preserve">
+    <value>Marketing</value>
+  </data>
+  <data name="Orders" xml:space="preserve">
+    <value>Orders</value>
+  </data>
+  <data name="Sales" xml:space="preserve">
+    <value>Sales</value>
+  </data>
 </root>
