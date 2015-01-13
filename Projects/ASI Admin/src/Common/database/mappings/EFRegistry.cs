@@ -285,6 +285,9 @@ namespace asi.asicentral.database.mappings
             For<IRepository<StoreDetailMagazineAdvertisingItem>>().Use<EFRepository<StoreDetailMagazineAdvertisingItem>>()
                .Ctor<IValidatedContext>().Named("StoreContext");
 
+            For<IRepository<StoreSupplierRepresentativeInformation>>().Use<EFRepository<StoreSupplierRepresentativeInformation>>()
+               .Ctor<IValidatedContext>().Named("StoreContext");
+
             For<IRepository<LookMagazineIssue>>().Use<EFRepository<LookMagazineIssue>>()
                .Ctor<IValidatedContext>().Named("StoreContext");
 

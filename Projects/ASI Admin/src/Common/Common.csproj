@@ -234,6 +234,7 @@
     <Compile Include="database\mappings\memberdemogr\SupplierPolicyMap.cs" />
     <Compile Include="database\mappings\memberdemogr\SupplierRatingMap.cs" />
     <Compile Include="database\mappings\memberdemogr\SupplierSeadElectronicAddressMap.cs" />
+    <Compile Include="database\mappings\store\StoreSupplierRepresentativeInformationMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailEquipmentMembershipMap.cs" />
     <Compile Include="database\mappings\store\LookEquipmentTypeMap.cs" />
     <Compile Include="database\mappings\store\CouponMap.cs" />
@@ -297,6 +298,7 @@
     <Compile Include="model\OAuth\User.cs" />
     <Compile Include="model\ROI\Category.cs" />
     <Compile Include="model\ROI\Company.cs" />
+    <Compile Include="model\store\StoreSupplierRepresentativeInformation.cs" />
     <Compile Include="model\store\LookEquipmentType.cs" />
     <Compile Include="model\store\FormInstance.cs" />
     <Compile Include="model\store\FormType.cs" />
