@@ -178,6 +178,9 @@ namespace asi.asicentral.web.Models.Store.Order
             switch (ProductId)
             {
                 case 84:
+                case 86:
+                case 87:
+                case 90:
                     catalogAdvertisingItems = catalogAdvertisingItems.OrderBy(item => item.Sequence).ToList();
                     CatalogAdvertisingItems = new List<CatalogAdvertisingItem>();
                     for (int i = 0; i < catalogAdvertisingItems.Count; i++)

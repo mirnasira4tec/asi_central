@@ -261,13 +261,9 @@
   </data>
   <data name="ProductIdeaShowcaseSchoolsAdvertising" xml:space="preserve">
     <value>Put your products in front of 300,000 end-buyers in the industy's second-largest ad specialties market - EDUCATION!</value>
-    <comment>
-
-
-</comment>
   </data>
   <data name="ProductSpectrumCelebrationAdvertising" xml:space="preserve">
-    <value>Introducing the &amp;lt;strong&amp;gt;NEW&amp;lt;/strong&amp;gt; Spectrum Celebration - a large, grander format completely redesigned to give your products twice the advertising space.</value>
+    <value>Introducing the &lt;strong&gt;NEW&lt;/strong&gt; Spectrum Celebration - a large, grander format completely redesigned to give your products twice the advertising space.</value>
   </data>
   <data name="ProductTheGiftBookAdvertising" xml:space="preserve">
     <value>Our most upscale and elegant catalog contains an impressive collection of timeless gifts and incentrives.</value>
@@ -280,5 +276,14 @@
   </data>
   <data name="ProductTheProfessionalBuyersGuideAdvertising" xml:space="preserve">
     <value>There is no idustry catalog more popular with Canads's distributors than The Professional Buyer's Guide.</value>
+  </data>
+  <data name="ProductSpectrumCelebrationAdvertising2" xml:space="preserve">
+    <value>Introducing the &lt;strong&gt;NEW&lt;/strong&gt; &lt;em&gt;Spectrum Celebration&lt;/em&gt; - a larger, grander format completely redesigned to give your products twice the adverting space!</value>
+  </data>
+  <data name="ProductTheGiftBookAdvertising2" xml:space="preserve">
+    <value>Our most upscale, elegant catalog containing an impressive collection of timeless gifts and incentives. It's the perfect catalog to kick-off the holiday and 4th-quarter selling season.</value>
+  </data>
+  <data name="ProductTheProfessionalBuyersGuideAdvertising2" xml:space="preserve">
+    <value>There is no industry catalog more popular with Canada's distributors than &lt;em&gt;The Professional Buyer's Guide&lt;/em&gt;.</value>
   </data>
 </root>

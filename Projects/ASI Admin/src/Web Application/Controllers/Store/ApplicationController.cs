@@ -790,20 +790,19 @@ namespace asi.asicentral.web.Controllers.Store
                 orderDetail.UpdateDate = DateTime.UtcNow;
                 orderDetail.UpdateSource = "ApplicationController - EditCatalogAdvertising";
                 var adItems = StoreService.GetAll<StoreDetailCatalogAdvertisingItem>().Where(detail => detail.OrderDetailId == application.OrderDetailId).ToList();
-                if (adItems.Count <= 0) throw new Exception("Catalog advertising item doesn't exist.");
+                if (!adItems.Any()) throw new Exception("Catalog advertising item doesn't exist.");
                 if (orderDetail.Product != null)
                 {
                     switch (orderDetail.Product.Id)
                     {
                         case 84:
-                            
-                            if (adItems != null)
-                            {
-                                adItems[0].AdSize = application.CatalogAdvertisingItems[0].AdSize;
-                                adItems[0].ProductDescription = application.CatalogAdvertisingItems[0].ProductDescription;
-                                adItems[0].ProductPricing = application.CatalogAdvertisingItems[0].ProductPricing;
-                                adItems[0].UpdateDateUTCAndSource();
-                            }
+                        case 86:
+                        case 87:
+                        case 90:
+                            adItems[0].AdSize = application.CatalogAdvertisingItems[0].AdSize;
+                            adItems[0].ProductDescription = application.CatalogAdvertisingItems[0].ProductDescription;
+                            adItems[0].ProductPricing = application.CatalogAdvertisingItems[0].ProductPricing;
+                            adItems[0].UpdateDateUTCAndSource();
                             break;
                         default:
                             break;

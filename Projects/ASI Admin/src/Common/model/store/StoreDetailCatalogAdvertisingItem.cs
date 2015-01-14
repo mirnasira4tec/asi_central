@@ -28,6 +28,9 @@ namespace asi.asicentral.model.store
             switch (productId)
             {
                 case 84:
+                case 86:
+                case 87:
+                case 90:
                     result.Add(string.Format("Ad Size: {0}", AdSize));
                     if (!string.IsNullOrWhiteSpace(ProductDescription))
                     {

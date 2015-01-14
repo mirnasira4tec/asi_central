@@ -313,11 +313,20 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Introducing the &amp;lt;strong&amp;gt;NEW&amp;lt;/strong&amp;gt; Spectrum Celebration - a large, grander format completely redesigned to give your products twice the advertising space..
+        ///   Looks up a localized string similar to Introducing the &lt;strong&gt;NEW&lt;/strong&gt; Spectrum Celebration - a large, grander format completely redesigned to give your products twice the advertising space..
         /// </summary>
         public static string ProductSpectrumCelebrationAdvertising {
             get {
                 return ResourceManager.GetString("ProductSpectrumCelebrationAdvertising", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Introducing the &lt;strong&gt;NEW&lt;/strong&gt; &lt;em&gt;Spectrum Celebration&lt;/em&gt; - a larger, grander format completely redesigned to give your products twice the adverting space!.
+        /// </summary>
+        public static string ProductSpectrumCelebrationAdvertising2 {
+            get {
+                return ResourceManager.GetString("ProductSpectrumCelebrationAdvertising2", resourceCulture);
             }
         }
         
@@ -431,6 +440,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Our most upscale, elegant catalog containing an impressive collection of timeless gifts and incentives. It&apos;s the perfect catalog to kick-off the holiday and 4th-quarter selling season..
+        /// </summary>
+        public static string ProductTheGiftBookAdvertising2 {
+            get {
+                return ResourceManager.GetString("ProductTheGiftBookAdvertising2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Catalogs product - The Green Catalog.
         /// </summary>
         public static string ProductTheGreenCatalog {
@@ -454,6 +472,15 @@ namespace asi.asicentral.Resources {
         public static string ProductTheProfessionalBuyersGuideAdvertising {
             get {
                 return ResourceManager.GetString("ProductTheProfessionalBuyersGuideAdvertising", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no industry catalog more popular with Canada&apos;s distributors than &lt;em&gt;The Professional Buyer&apos;s Guide&lt;/em&gt;..
+        /// </summary>
+        public static string ProductTheProfessionalBuyersGuideAdvertising2 {
+            get {
+                return ResourceManager.GetString("ProductTheProfessionalBuyersGuideAdvertising2", resourceCulture);
             }
         }
         
