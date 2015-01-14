@@ -14,11 +14,16 @@ namespace asi.asicentral.model.store
         public string Role { get; set; }
         public virtual StoreOrderDetail OrderDetail { get; set; }
         public int? OrderDetailId { get; set; }
-        public bool IsSameAsPrimary { get; set; }
+        [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
         public string Name { get; set; }
+        [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
         public string Title { get; set; }
+        [DataType(DataType.EmailAddress)]
+        [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
         public string Email { get; set; }
+        [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
         public string Phone { get; set; }
+        [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
         public string Fax { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
