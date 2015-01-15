@@ -916,6 +916,12 @@ namespace asi.asicentral.web.Controllers.Store
                 order.Company.Phone = model.Phone;
                 order.Company.WebURL = model.BillingWebUrl;
                 order.Company.ASINumber = model.ASINumber;
+                if (model.HasBankInformation)
+                {
+                    order.Company.BankName = model.BankName;
+                    order.Company.BankCity = model.BankCity;
+                    order.Company.BankState = model.BankState;
+                }
                 order.UpdateDate = DateTime.UtcNow;
                 order.UpdateSource = "ASI Admin Application - UpdateCompanyInformation";
 
