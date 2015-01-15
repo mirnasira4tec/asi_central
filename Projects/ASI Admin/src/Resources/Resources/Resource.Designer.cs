@@ -3328,8 +3328,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of employees located at the billing address listed on this
-        /// application.
+        ///   Looks up a localized string similar to Number of employees located at the billing address.
         /// </summary>
         public static string NumberOfEmployeesLocatedAtBilling {
             get {

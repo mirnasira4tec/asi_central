@@ -1,16 +1,15 @@
-﻿using asi.asicentral.interfaces;
-using asi.asicentral.model.store;
-using asi.asicentral.Resources;
+﻿using asi.asicentral.model.store;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using asi.asicentral.interfaces;
+using asi.asicentral.Resources;
 
 namespace asi.asicentral.web.model.store
 {
-    public class ProductCollectionsModel : IMembershipModel
+    public class EquipmentApplicationModel : StoreDetailEquipmentMembership, IMembershipModel
     {
         [Display(ResourceType = typeof(Resource), Name = "CompanyName")]
         public string Company { get; set; }
@@ -107,6 +106,7 @@ namespace asi.asicentral.web.model.store
         public decimal TotalCost { get; set; }
         public decimal SubscriptionCost { get; set; }
         public string SubscriptionFrequency { get; set; }
+        public int Quantity { get; set; }
         public decimal PromotionalDiscount { get; set; }
         #endregion
 
@@ -123,62 +123,113 @@ namespace asi.asicentral.web.model.store
         public string BankCity { get; set; }
         #endregion
 
+        public IList<StoreSupplierRepresentativeInformation> Representatives { get; set; }
+
+        // What diffent types of equipments do you offer?
+        [Display(ResourceType = typeof(Resource), Name = "Embroidery")]
+        public bool Embroidery { set; get; }
+        [Display(ResourceType = typeof(Resource), Name = "EquipmentScreenPrinting")]
+        public bool ScreenPrinting { set; get; }
+        [Display(ResourceType = typeof(Resource), Name = "HeatTransfer")]
+        public bool HeatTransfer { set; get; }
+        [Display(ResourceType = typeof(Resource), Name = "Digitizing")]
+        public bool Digitizing { set; get; }
+        [Display(ResourceType = typeof(Resource), Name = "Engraving")]
+        public bool Engraving { set; get; }
+        [Display(ResourceType = typeof(Resource), Name = "Sublimation")]
+        public bool Sublimation { set; get; }
+        [Display(ResourceType = typeof(Resource), Name = "Monogramming")]
+        public bool Monogramming { set; get; }
+
         public int OrderId { get; set; }
-        public int OrderDetailId { get; set; }
-        public decimal Cost { get; set; }
-        public bool IsStoreRequest { get; set; }
-        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
-        public int Quantity { get; set; }
         public string ActionName { get; set; }
-        public StoreIndividual BillingIndividual { get; set; }
         public string ExternalReference { get; set; }
         public string BackendReference { get; set; }
         public bool IsCompleted { get; set; }
         public OrderStatus OrderStatus { get; set; }
-        public string ProductName { get; set; }
-        public int ProductId { get; set; }
-        public int? OptionId { get; set; }
         public decimal Price { get; set; }
+
         public IList<StoreIndividual> Contacts { get; set; }
-        public IList<StoreDetailProductCollection> productCollections { get; set; }
-        
+
         /// <summary>
         /// Required for MVC to rebuild the model
         /// </summary>
         /// 
-        public ProductCollectionsModel()
-            : base()
+        public EquipmentApplicationModel() : base()
         {
+            this.Representatives = new List<StoreSupplierRepresentativeInformation>();
+            this.EquipmentTypes = new List<LookEquipmentType>();
             this.Contacts = new List<StoreIndividual>();
         }
 
-        public ProductCollectionsModel(StoreOrderDetail orderdetail, IStoreService storeService)
-            : base()
+        public EquipmentApplicationModel(StoreDetailEquipmentMembership application, StoreOrderDetail orderdetail, IStoreService storeService)
         {
-            this.Contacts = new List<StoreIndividual>();
+            application.CopyTo(this);
             StoreOrder order = orderdetail.Order;
-            BillingIndividual = order.BillingIndividual;
-            OrderDetailId = orderdetail.Id;
-            if (orderdetail.OptionId.HasValue) this.OptionId = orderdetail.OptionId;
-            this.Quantity = orderdetail.Quantity;
-           
-            if (orderdetail.Product != null)
+
+            IList<StoreSupplierRepresentativeInformation> representatives = storeService.GetAll<StoreSupplierRepresentativeInformation>(true).Where(rep => rep.OrderDetailId == orderdetail.Id).ToList();
+            this.Representatives = new List<StoreSupplierRepresentativeInformation>();
+            foreach (string rep in StoreSupplierRepresentativeInformation.SUPPLIER_REPRESENTATIVES)
             {
-                ProductName = orderdetail.Product.Name;
-                ProductId = orderdetail.Product.Id;
-                Cost = orderdetail.Cost;
+                StoreSupplierRepresentativeInformation newRep = null;
+                if (representatives != null)
+                {
+                    newRep = representatives.SingleOrDefault(r => r.Role == rep);
+                }
+                if (newRep == null)
+                {
+                    newRep = new StoreSupplierRepresentativeInformation();
+                    newRep.Role = rep;
+                    newRep.OrderDetailId = orderdetail.Id;
+                }
+                Representatives.Add(newRep);
             }
-
-            productCollections = storeService.GetAll<StoreDetailProductCollection>().Where(collection => collection.OrderDetailId == OrderDetailId).ToList();
-
+            
             ActionName = "Approve";
             ExternalReference = order.ExternalReference;
             OrderId = order.Id;
             OrderStatus = order.ProcessStatus;
             Price = order.Total;
             IsCompleted = order.IsCompleted;
-            IsStoreRequest = order.IsStoreRequest;
             MembershipModelHelper.PopulateModel(this, orderdetail);
+        }
+
+        private void UpdateEquipmentTypesProperties()
+        {
+            Embroidery = HasEquipment(LookEquipmentType.EMBROIDERY);
+            ScreenPrinting = HasEquipment(LookEquipmentType.SCREENPRINTING);
+            HeatTransfer = HasEquipment(LookEquipmentType.HEATTRANSFER);
+            Digitizing = HasEquipment(LookEquipmentType.DIGITIZING);
+            Engraving = HasEquipment(LookEquipmentType.ENGRAVING);
+            Sublimation = HasEquipment(LookEquipmentType.SUBLIMITION);
+            Monogramming = HasEquipment(LookEquipmentType.MONOGRAMING);
+        }
+
+        private bool HasEquipment(string EquipmentName)
+        {
+            return EquipmentTypes.Where(type => type.Description == EquipmentName).Count() == 1;
+        }
+
+        /// <summary>
+        /// Apply the extra bool values from the view model to the many to many
+        /// </summary>
+        /// <param name="StoreService"></param>
+        public void SyncEquipmentTypes(IList<LookEquipmentType> equipmentTypes, StoreDetailEquipmentMembership application)
+        {
+            AddEquipmentType(this.Embroidery, LookEquipmentType.EMBROIDERY, equipmentTypes, application);
+            AddEquipmentType(this.ScreenPrinting, LookEquipmentType.SCREENPRINTING, equipmentTypes, application);
+            AddEquipmentType(this.HeatTransfer, LookEquipmentType.HEATTRANSFER, equipmentTypes, application);
+            AddEquipmentType(this.Digitizing, LookEquipmentType.DIGITIZING, equipmentTypes, application);
+            AddEquipmentType(this.Engraving, LookEquipmentType.ENGRAVING, equipmentTypes, application);
+            AddEquipmentType(this.Sublimation, LookEquipmentType.SUBLIMITION, equipmentTypes, application);
+            AddEquipmentType(this.Monogramming, LookEquipmentType.MONOGRAMING, equipmentTypes, application);
+        }
+
+        private void AddEquipmentType(bool selected, String typeName, IList<LookEquipmentType> equipmentTypes, StoreDetailEquipmentMembership application)
+        {
+            LookEquipmentType existing = application.EquipmentTypes.Where(equType => equType.Description == typeName).SingleOrDefault();
+            if (selected && existing == null) application.EquipmentTypes.Add(equipmentTypes.Where(type => type.Description == typeName).SingleOrDefault());
+            else if (!selected && existing != null) application.EquipmentTypes.Remove(existing);
         }
     }
 }
