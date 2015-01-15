@@ -110,6 +110,8 @@ namespace asi.asicentral.web.model.store
         public decimal PromotionalDiscount { get; set; }
         #endregion
 
+        public IList<StoreSupplierRepresentativeInformation> Representatives { get; set; }
+
         // What diffent types of equipments do you offer?
         [Display(ResourceType = typeof(Resource), Name = "Embroidery")]
         public bool Embroidery { set; get; }
@@ -142,22 +144,34 @@ namespace asi.asicentral.web.model.store
         /// 
         public EquipmentApplicationModel() : base()
         {
+            this.Representatives = new List<StoreSupplierRepresentativeInformation>();
             this.EquipmentTypes = new List<LookEquipmentType>();
             this.Contacts = new List<StoreIndividual>();
         }
 
-        public EquipmentApplicationModel(StoreDetailEquipmentMembership application, StoreOrderDetail orderdetail)
+        public EquipmentApplicationModel(StoreDetailEquipmentMembership application, StoreOrderDetail orderdetail, IStoreService storeService)
         {
             application.CopyTo(this);
             StoreOrder order = orderdetail.Order;
-            UpdateEquipmentTypesProperties();
-            //if (!String.IsNullOrEmpty(OtherDec))
-            //{
-            //    OtherDecoratingMethod = true;
-            //    OtherDecoratingMethodName = this.OtherDec;
-            //}
-            //else OtherDecoratingMethod = false;
 
+            IList<StoreSupplierRepresentativeInformation> representatives = storeService.GetAll<StoreSupplierRepresentativeInformation>(true).Where(rep => rep.OrderDetailId == orderdetail.Id).ToList();
+            this.Representatives = new List<StoreSupplierRepresentativeInformation>();
+            foreach (string rep in StoreSupplierRepresentativeInformation.SUPPLIER_REPRESENTATIVES)
+            {
+                StoreSupplierRepresentativeInformation newRep = null;
+                if (representatives != null)
+                {
+                    newRep = representatives.SingleOrDefault(r => r.Role == rep);
+                }
+                if (newRep == null)
+                {
+                    newRep = new StoreSupplierRepresentativeInformation();
+                    newRep.Role = rep;
+                    newRep.OrderDetailId = orderdetail.Id;
+                }
+                Representatives.Add(newRep);
+            }
+            
             ActionName = "Approve";
             ExternalReference = order.ExternalReference;
             OrderId = order.Id;

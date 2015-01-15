@@ -10,6 +10,8 @@ namespace asi.asicentral.model.store
 {
     public class StoreSupplierRepresentativeInformation
     {
+        public static readonly string[] SUPPLIER_REPRESENTATIVES = { Resources.Resource.Executive, Resources.Resource.Sales, Resources.Resource.Orders, Resources.Resource.CreditManager, Resources.Resource.CustomerService, Resources.Resource.Marketing, Resources.Resource.Artwork };
+
         public int Id { get; set; }
         public string Role { get; set; }
         public virtual StoreOrderDetail OrderDetail { get; set; }

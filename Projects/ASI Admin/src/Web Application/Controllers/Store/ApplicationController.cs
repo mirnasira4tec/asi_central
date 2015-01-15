@@ -50,7 +50,7 @@ namespace asi.asicentral.web.Controllers.Store
                 if (application is StoreDetailSupplierMembership) return View("../Store/Application/Supplier", new SupplierApplicationModel((StoreDetailSupplierMembership)application, orderDetail));
                 else if (application is StoreDetailDistributorMembership) return View("../Store/Application/Distributor", new DistributorApplicationModel((StoreDetailDistributorMembership)application, orderDetail));
                 else if (application is StoreDetailDecoratorMembership) return View("../Store/Application/Decorator", new DecoratorApplicationModel((StoreDetailDecoratorMembership)application, orderDetail));
-                else if (application is StoreDetailEquipmentMembership) return View("../Store/Application/Equipment", new EquipmentApplicationModel((StoreDetailEquipmentMembership)application, orderDetail));
+                else if (application is StoreDetailEquipmentMembership) return View("../Store/Application/Equipment", new EquipmentApplicationModel((StoreDetailEquipmentMembership)application, orderDetail, StoreService));
                 else throw new Exception("Retieved an unknown type of application");
             }
             else if (orderDetail.Product != null)
@@ -280,7 +280,46 @@ namespace asi.asicentral.web.Controllers.Store
                 order = UpdateCompanyInformation(application, order);
                 application.CopyTo(equipmentApplication);
                 equipmentApplication.UpdateDate = DateTime.UtcNow;
-                equipmentApplication.UpdateSource = "ASI Admin Application - EditSupplier";
+                equipmentApplication.UpdateSource = "ASI Admin Application - EditEquipment";
+
+                //Update supplier reprasentative information
+                if (application != null && application.Representatives != null && application.Representatives.Count > 0)
+                {
+                    foreach (StoreSupplierRepresentativeInformation rep in application.Representatives)
+                    {
+                        StoreSupplierRepresentativeInformation existingRep = StoreService.GetAll<StoreSupplierRepresentativeInformation>().SingleOrDefault(r => r.Role == rep.Role && r.OrderDetailId == orderDetail.Id);
+                        if (!string.IsNullOrEmpty(rep.Name) ||
+                            !string.IsNullOrEmpty(rep.Title) ||
+                            !string.IsNullOrEmpty(rep.Email) ||
+                            !string.IsNullOrEmpty(rep.Phone) ||
+                            !string.IsNullOrEmpty(rep.Fax))
+                        {
+                            StoreSupplierRepresentativeInformation newRep = null;
+                            if (existingRep == null)
+                            {
+                                newRep = new StoreSupplierRepresentativeInformation();
+                                newRep.OrderDetailId = orderDetail.Id;
+                                newRep.CreateDate = DateTime.UtcNow;
+                                StoreService.Add<StoreSupplierRepresentativeInformation>(newRep);
+                            }
+                            else
+                            {
+                                newRep = existingRep;
+                                StoreService.Update<StoreSupplierRepresentativeInformation>(newRep);
+                            }
+                            newRep.Role = rep.Role;
+                            newRep.Name = rep.Name;
+                            newRep.Title = rep.Title;
+                            newRep.Email = rep.Email;
+                            newRep.Phone = rep.Phone;
+                            newRep.Fax = rep.Fax;
+                            newRep.UpdateSource = "Equipment Controller - Confirmation";
+                            newRep.UpdateDate = DateTime.UtcNow;
+                        }
+                        else if (existingRep != null) StoreService.Delete<StoreSupplierRepresentativeInformation>(existingRep);
+                    }
+                }
+
                 ProcessCommand(StoreService, FulfilmentService, order, equipmentApplication, application.ActionName);
                 StoreService.SaveChanges();
                 if (application.ActionName == ApplicationController.COMMAND_REJECT)
