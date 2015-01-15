@@ -34,6 +34,7 @@ namespace asi.asicentral.model.store
         public bool IsASINumberFlag { get; set; }
 		public bool HasBackEndIntegration { get; set;  }
         public bool IsAvailable { get; set; }
+        public bool HasBankInformation { get; set; }
         public string ChatSettings { get; set; }
         public string ConversionSettings { get; set; }
         [DataType(DataType.Date)]

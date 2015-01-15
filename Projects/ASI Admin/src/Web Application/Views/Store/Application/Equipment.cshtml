@@ -1,0 +1,161 @@
+﻿@using asi.asicentral.web
+@using asi.asicentral.web.Controllers.Store
+@using asi.asicentral.Resources
+@model asi.asicentral.web.model.store.EquipmentApplicationModel
+
+@{
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+
+<h1>@Resource.StoreTitleSupplierApplication (#@Model.OrderId)</h1>
+<p>The Membership product purchase fee is @Model.Price.ToString("C")</p>
+@Html.Partial("../Store/Application/Shared/OrderSummary", Model)
+@using (Html.BeginForm("EditEquipment", "Application"))
+{        
+@Html.AntiForgeryToken()
+@Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
+@Html.Partial("../Store/Application/Shared/AcceptSaveCancelButtons", Model)
+<nav>
+	<ul class="nav nav-tabs" id="tabs">
+		<li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
+		<li><a href="#tabproduct" data-toggle="tab">Product Information</a></li>
+		<li><a href="#tabaccount" data-toggle="tab">Account Information</a></li>
+	</ul>
+</nav>
+<div class="tab-content">
+	@Html.Partial("../Store/Application/Shared/CompanyInformation", Model)
+    	
+	<div id="tabproduct" class="product-information tab-pane fade">
+        <fieldset><legend><small>Equipment types</small></legend>
+			<span class="checkbox-left">
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Embroidery)">@Html.CheckBox("Embroidery") @Html.LabelFor(m => m.Embroidery)</label>
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ScreenPrinting)">@Html.CheckBox("ScreenPrinting") @Html.LabelFor(m => m.ScreenPrinting)</label>
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.HeatTransfer)">@Html.CheckBox("HeatTransfer") @Html.LabelFor(m => m.HeatTransfer)</label>
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Digitizing)">@Html.CheckBox("Digitizing") @Html.LabelFor(m => m.Digitizing)</label>
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Engraving)">@Html.CheckBox("Engraving") @Html.LabelFor(m => m.Engraving)</label>
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Sublimation)">@Html.CheckBox("Sublimation") @Html.LabelFor(m => m.Sublimation)</label>
+                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Monogramming)">@Html.CheckBox("Monogramming") @Html.LabelFor(m => m.Monogramming)</label> 
+                <span class="label-row">@Html.EditorFor(m => m.OtherDec, new { @class = "input-medium" }) @Html.ValidationMessageFor(m => m.OtherDec)</span>
+            </span>
+        </fieldset>
+    </div>
+
+	<div id="tabaccount" class="account-information tab-pane fade">
+        <fieldset><legend><small>Account Information</small></legend>
+				<span class="label-row">
+					@Html.LabelFor(m => m.YearEstablished)
+					@Html.LabelFor(m => m.YearEnteredAdvertising)
+                    @Html.LabelFor(m => m.SalesVolume)
+				</span>
+				<span class="label-row">
+					@Html.EditorFor(m => m.YearEstablished) @Html.ValidationMessageFor(m => m.YearEstablished)
+					@Html.EditorFor(m => m.YearEnteredAdvertising) @Html.ValidationMessageFor(m => m.YearEnteredAdvertising)
+                    @Html.EditorFor(m => m.SalesVolume) @Html.ValidationMessageFor(m => m.SalesVolume)
+				</span>
+				<span class="label-row">
+                    @Html.LabelFor(m => m.NumberOfEmployee)
+                    @Html.LabelFor(m => m.NumberOfLocatedAtBilling)
+                    @Html.LabelFor(m => m.NumberOfEmployeesNotInNorthAmerica)
+				</span>
+				<span class="label-row">
+                    @Html.EditorFor(m => m.NumberOfEmployee) @Html.ValidationMessageFor(m => m.NumberOfEmployee)
+                    @Html.EditorFor(m => m.NumberOfLocatedAtBilling) @Html.ValidationMessageFor(m => m.NumberOfLocatedAtBilling)
+                    @Html.EditorFor(m => m.NumberOfEmployeesNotInNorthAmerica) @Html.ValidationMessageFor(m => m.NumberOfEmployeesNotInNorthAmerica)
+				</span>
+				<span class="label-row">
+                    @Html.LabelFor(m => m.TotalSalesForce)
+                    @Html.LabelFor(m => m.OfficeHourStart)
+                    @Html.LabelFor(m => m.OfficeHourEnd)
+				</span>
+				<span class="label-row">
+                    @Html.EditorFor(m => m.TotalSalesForce) @Html.ValidationMessageFor(m => m.TotalSalesForce)
+                    @Html.EditorFor(m => m.OfficeHourStart) @Html.ValidationMessageFor(m => m.OfficeHourStart)
+                    @Html.EditorFor(m => m.OfficeHourEnd) @Html.ValidationMessageFor(m => m.OfficeHourEnd)
+				</span>
+                <span class="checkbox-left">
+                    <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.IsEmployeesSharedWithOther)">@Html.CheckBox("IsEmployeesSharedWithOther") @Html.LabelFor(m => m.IsEmployeesSharedWithOther)</label>
+                </span>
+                <div id="other-company-details">
+                    <span class="label-row">
+                        @Html.LabelFor(m => m.CompanyName1)
+                        @Html.LabelFor(m => m.CompanyName2)
+                        @Html.LabelFor(m => m.CompanyName3)
+				    </span>
+				    <span class="label-row">
+                        @Html.EditorFor(m => m.CompanyName1) @Html.ValidationMessageFor(m => m.CompanyName1)
+                        @Html.EditorFor(m => m.CompanyName2) @Html.ValidationMessageFor(m => m.CompanyName2)
+                        @Html.EditorFor(m => m.CompanyName3) @Html.ValidationMessageFor(m => m.CompanyName3)
+				    </span>
+                    <span class="label-row">
+                        @Html.LabelFor(m => m.ASINumber1)
+                        @Html.LabelFor(m => m.ASINumber2)
+                        @Html.LabelFor(m => m.ASINumber3)
+				    </span>
+				    <span class="label-row">
+                        @Html.EditorFor(m => m.ASINumber1) @Html.ValidationMessageFor(m => m.ASINumber1)
+                        @Html.EditorFor(m => m.ASINumber2) @Html.ValidationMessageFor(m => m.ASINumber2)
+                        @Html.EditorFor(m => m.ASINumber3) @Html.ValidationMessageFor(m => m.ASINumber3)
+				    </span>
+                </div>
+			    <span class="checkbox-left">
+                    <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.IsMinorityOwned)">@Html.CheckBox("IsMinorityOwned") @Html.LabelFor(m => m.IsMinorityOwned)</label>
+                </span>
+        </fieldset>
+    </div>
+</div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/form")
+    <script src="/Scripts/asi.js"></script>
+    <script>
+        $('input.command').click(function (e) {
+            $('#ActionName').val(e.target.value);
+            if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
+                //make sure we have Timms value
+                if (!$('#ExternalReference').val()) {
+                    asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
+                    $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                    $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
+                    e.preventDefault();
+                }
+                else {
+                    var isnum = /^\d+$/.test($('#ExternalReference').val());
+                    if (!isnum) {
+                        asi.modal.confirm('Error', 'TIMMS ID must contain only numbers.', null, "#hide", "Close");
+                        $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                        $("#timmsErrorMessage").text("TIMMS ID must contain only numbers.");
+                        e.preventDefault();
+                    }
+                }
+            }
+        });
+        $('[rel*="isprimary"]').change(function () {
+            $('[rel*="isprimary"]').attr("checked", false);
+            this.checked = true;
+        });
+
+       
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            ShowOrHideOtherCompanyDetails();
+
+            $("#IsEmployeesSharedWithOther").change(function () {
+                ShowOrHideOtherCompanyDetails()
+            });
+        });
+
+        function ShowOrHideOtherCompanyDetails() {
+            var value = $("#IsEmployeesSharedWithOther").prop('checked');
+            if (value) {
+                $("#other-company-details").show();
+            }
+            else {
+                $("#other-company-details").hide();
+            }
+        }
+        </script>
+}
+        

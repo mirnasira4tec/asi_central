@@ -1843,8 +1843,7 @@
     <value>State</value>
   </data>
   <data name="NumberOfEmployeesLocatedAtBilling" xml:space="preserve">
-    <value>Number of employees located at the billing address listed on this
- application</value>
+    <value>Number of employees located at the billing address</value>
   </data>
   <data name="NumberOfEmployeesNotInNorthAmerica" xml:space="preserve">
     <value>Number of employees located outside of North America</value>

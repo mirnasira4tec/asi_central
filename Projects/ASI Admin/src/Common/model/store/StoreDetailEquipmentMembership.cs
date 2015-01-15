@@ -113,14 +113,27 @@ namespace asi.asicentral.model.store
             equipment.NumberOfLocatedAtBilling = NumberOfLocatedAtBilling;
             equipment.NumberOfEmployeesNotInNorthAmerica = NumberOfEmployeesNotInNorthAmerica;
             equipment.IsEmployeesSharedWithOther = IsEmployeesSharedWithOther;
-            equipment.CompanyName1 = CompanyName1;
-            equipment.CompanyName2 = CompanyName2;
-            equipment.CompanyName3 = CompanyName3;
-            equipment.ASINumber1 = ASINumber1;
-            equipment.ASINumber2 = ASINumber2;
-            equipment.ASINumber3 = ASINumber3;
+            if (equipment.IsEmployeesSharedWithOther != null && equipment.IsEmployeesSharedWithOther.Value)
+            {
+                equipment.CompanyName1 = CompanyName1;
+                equipment.CompanyName2 = CompanyName2;
+                equipment.CompanyName3 = CompanyName3;
+                equipment.ASINumber1 = ASINumber1;
+                equipment.ASINumber2 = ASINumber2;
+                equipment.ASINumber3 = ASINumber3;
+            }
+            else
+            {
+                equipment.CompanyName1 = null;
+                equipment.CompanyName2 = null;
+                equipment.CompanyName3 = null;
+                equipment.ASINumber1 = null;
+                equipment.ASINumber2 = null;
+                equipment.ASINumber3 = null;
+            }
             equipment.TotalSalesForce = TotalSalesForce;
             equipment.OtherDec = OtherDec;
+            equipment.EquipmentTypes = EquipmentTypes;
         }
     }
 }
