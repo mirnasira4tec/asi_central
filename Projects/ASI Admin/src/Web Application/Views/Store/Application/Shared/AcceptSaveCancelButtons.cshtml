@@ -1,6 +1,5 @@
 ﻿@using asi.asicentral.web.Controllers.Store
 @using asi.asicentral.model.store;
-@using asi.asicentral.services;
 @using asi.asicentral.interfaces;
 @model asi.asicentral.web.model.store.IMembershipModel
 <div>
@@ -12,7 +11,7 @@
 	{
 		<h3>Personify Order#: @Model.BackendReference</h3>
 	}
-    @if (Model.TotalCost > 0.0m)
+    @if (Model.TotalCost >= 0.0m)
     {
 	    <div><h3 class="order-status-header3">Order Status:</h3><div class="order-status">@Model.OrderStatus</div></div>
 	    if (IsBackEnd() && Model.OrderStatus == OrderStatus.PersonifyError)
@@ -34,17 +33,17 @@
             <div class="status-btns">
                 @if (!IsBackEnd())
                 {
-                    if (Model.IsCompleted && Model.OrderStatus != asi.asicentral.model.store.OrderStatus.Approved)
+                    if (Model.IsCompleted && Model.OrderStatus != OrderStatus.Approved)
                     {
                     <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
                     }
-                    if (Model.IsCompleted && Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Pending)
+                    if (Model.IsCompleted && Model.OrderStatus == OrderStatus.Pending)
                     { 
                     <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
                     }
                     <input class="command btn-primary save" type="submit" value="@ApplicationController.COMMAND_SAVE" />
 
-                    if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
+                    if (Model.OrderStatus == OrderStatus.Approved)
                     { @Html.ActionLink("Close", "../Orders") }
                     else
                     { @Html.ActionLink("Cancel", "../Orders") }
@@ -59,7 +58,7 @@
     {
         <div class="timms-info span3 status-btns">
             <input class="command btn-primary save" type="submit" value="@ApplicationController.COMMAND_SAVE" />
-            @if (Model.OrderStatus == asi.asicentral.model.store.OrderStatus.Approved)
+            @if (Model.OrderStatus == OrderStatus.Approved)
             { @Html.ActionLink("Close", "../Orders") }
             else
             { @Html.ActionLink("Cancel", "../Orders") }
