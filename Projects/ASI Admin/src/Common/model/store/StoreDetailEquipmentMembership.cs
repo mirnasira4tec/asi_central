@@ -10,7 +10,7 @@ namespace asi.asicentral.model.store
 {
     public class StoreDetailEquipmentMembership : StoreDetailApplication
     {
-        public static int[] Identifiers = new int[] { 84, 85, 86, 87, 88};
+        public static int[] Identifiers = new int[] { 91, 92, 93, 94, 95};
 
         public StoreDetailEquipmentMembership()
         {
