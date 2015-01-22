@@ -36,7 +36,7 @@
                 <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Engraving)">@Html.CheckBox("Engraving") @Html.LabelFor(m => m.Engraving)</label>
                 <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Sublimation)">@Html.CheckBox("Sublimation") @Html.LabelFor(m => m.Sublimation)</label>
                 <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Monogramming)">@Html.CheckBox("Monogramming") @Html.LabelFor(m => m.Monogramming)</label> 
-                <span class="label-row">@Html.EditorFor(m => m.OtherDec, new { @class = "input-medium" }) @Html.ValidationMessageFor(m => m.OtherDec)</span>
+                <span class="label-row">@Html.Label("Other") @Html.EditorFor(m => m.OtherDec, new { @class = "input-medium" }) @Html.ValidationMessageFor(m => m.OtherDec)</span>
             </span>
         </fieldset>
     </div>

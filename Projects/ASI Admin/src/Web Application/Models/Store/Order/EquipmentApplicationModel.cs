@@ -166,7 +166,7 @@ namespace asi.asicentral.web.model.store
         {
             application.CopyTo(this);
             StoreOrder order = orderdetail.Order;
-
+            UpdateEquipmentTypesProperties();
             IList<StoreSupplierRepresentativeInformation> representatives = storeService.GetAll<StoreSupplierRepresentativeInformation>(true).Where(rep => rep.OrderDetailId == orderdetail.Id).ToList();
             this.Representatives = new List<StoreSupplierRepresentativeInformation>();
             foreach (string rep in StoreSupplierRepresentativeInformation.SUPPLIER_REPRESENTATIVES)
