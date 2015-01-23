@@ -20,13 +20,15 @@ namespace asi.asicentral.web.Controllers.forms
 		public IEmailService EmailService { get; set; }
         public ITemplateService TemplateService { get; set; }
 
-        public ActionResult Index(DateTime? dateStart, DateTime? dateEnd, String formTab, string creator)
+        public ActionResult Index(DateTime? dateStart, DateTime? dateEnd, String formTab, string creator, string showPendingOnly = null)
         {
 			var viewModel = new FormPageModel();
 			IQueryable<FormInstance> formInstanceQuery = StoreService.GetAll<FormInstance>(true);
 			if (string.IsNullOrEmpty(formTab)) formTab = FormPageModel.TAB_DATE;
             if (formTab == FormPageModel.TAB_DATE)
             {
+				//assume first time if no dates specified
+	            viewModel.ShowPendingOnly = (dateStart == null && dateEnd == null ? true : !string.IsNullOrEmpty(showPendingOnly));
                 //form uses date filter
                 if (dateStart == null) dateStart = DateTime.Now.AddDays(-7);
                 if (dateEnd == null) dateEnd = DateTime.Now;
