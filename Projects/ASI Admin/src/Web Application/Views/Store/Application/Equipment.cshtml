@@ -36,8 +36,12 @@
                 <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Engraving)">@Html.CheckBox("Engraving") @Html.LabelFor(m => m.Engraving)</label>
                 <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Sublimation)">@Html.CheckBox("Sublimation") @Html.LabelFor(m => m.Sublimation)</label>
                 <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.Monogramming)">@Html.CheckBox("Monogramming") @Html.LabelFor(m => m.Monogramming)</label> 
-                <span class="label-row">@Html.Label("Other") @Html.EditorFor(m => m.OtherDec, new { @class = "input-medium" }) @Html.ValidationMessageFor(m => m.OtherDec)</span>
+                <span class="label-row">
+	                <label for="Other">OtherDec</label> 
+                </span>
+                <span>@Html.EditorFor(m => m.OtherDec, new { @class = "input-medium" }) @Html.ValidationMessageFor(m => m.OtherDec)</span>
             </span>
+            
         </fieldset>
     </div>
 
@@ -103,13 +107,12 @@
                 </span>
             </fieldset>
             <fieldset>
-            <legend><small>Supplier representative information:</small></legend>
+            <legend><small>Supplier Representative Information:</small></legend>
             <table id="supplier-rep-information">
 		        <thead>
 			        <tr>
 				        <td class="information-title"></td>
 				        <td><b>Name</b></td>
-				        <td><b>Title</b></td>
 				        <td><b>Email</b></td>
                         <td><b>Phone</b></td>
 				        <td><b>Fax</b></td>
@@ -129,10 +132,7 @@
                             @Html.EditorFor(model => model.Representatives[count].Name, new { @class = "input-medium" }) @Html.ValidationMessageFor(model => model.Representatives.ElementAt(count).Name)
                         </td>
                         <td>
-                            @Html.EditorFor(model => model.Representatives[count].Title, new { @class = "input-small" }) @Html.ValidationMessageFor(model => model.Representatives.ElementAt(count).Title)
-                        </td>
-                        <td>
-                            @Html.EditorFor(model => model.Representatives[count].Email, new { @class = "input-medium" }) @Html.ValidationMessageFor(model => model.Representatives[count].Email)
+                            @Html.EditorFor(model => model.Representatives[count].Email) @Html.ValidationMessageFor(model => model.Representatives[count].Email)
                         </td>
                         <td>
                             @Html.EditorFor(model => model.Representatives[count].Phone, new { @class = "input-small" }) @Html.ValidationMessageFor(model => model.Representatives[count].Phone)

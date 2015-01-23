@@ -289,7 +289,6 @@ namespace asi.asicentral.web.Controllers.Store
                     {
                         StoreSupplierRepresentativeInformation existingRep = StoreService.GetAll<StoreSupplierRepresentativeInformation>().SingleOrDefault(r => r.Role == rep.Role && r.OrderDetailId == orderDetail.Id);
                         if (!string.IsNullOrEmpty(rep.Name) ||
-                            !string.IsNullOrEmpty(rep.Title) ||
                             !string.IsNullOrEmpty(rep.Email) ||
                             !string.IsNullOrEmpty(rep.Phone) ||
                             !string.IsNullOrEmpty(rep.Fax))
@@ -309,7 +308,6 @@ namespace asi.asicentral.web.Controllers.Store
                             }
                             newRep.Role = rep.Role;
                             newRep.Name = rep.Name;
-                            newRep.Title = rep.Title;
                             newRep.Email = rep.Email;
                             newRep.Phone = rep.Phone;
                             newRep.Fax = rep.Fax;
