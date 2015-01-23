@@ -18,8 +18,6 @@ namespace asi.asicentral.model.store
         public int? OrderDetailId { get; set; }
         [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
         public string Name { get; set; }
-        [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
-        public string Title { get; set; }
         [DataType(DataType.EmailAddress)]
         [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
         public string Email { get; set; }
