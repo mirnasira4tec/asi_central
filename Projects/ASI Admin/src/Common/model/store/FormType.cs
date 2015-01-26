@@ -8,6 +8,7 @@ namespace asi.asicentral.model.store
 {
     public class FormType
     {
+        public static int[] FORM_IDENTIFIERS = { 17 };
         public int Id { get; set; }
         public string Name { get; set; }
         public string RequestType { get; set; }
