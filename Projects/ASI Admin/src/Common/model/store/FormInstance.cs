@@ -1,6 +1,9 @@
-﻿using asi.asicentral.Resources;
+﻿using asi.asicentral.interfaces;
+using asi.asicentral.Resources;
+using asi.asicentral.services;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -10,6 +13,8 @@ namespace asi.asicentral.model.store
 {
     public class FormInstance
     {
+        private string _status = null;
+
         public FormInstance()
         {
             if (this.GetType() == typeof(FormInstance))
@@ -66,6 +71,88 @@ namespace asi.asicentral.model.store
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
-		public string Status { get; set; }
+		public string Status {
+            get
+            {
+                if (_status == null)
+                {
+                    _status = Id > 0 ? "Not Started" : "New";
+                    if (OrderDetail != null && OrderDetail.Order != null)
+                    {
+                        if (OrderDetail.Order.ProcessStatus == asi.asicentral.model.store.OrderStatus.Approved)
+                        {
+                            _status = "Approved";
+                        }
+                        else if (OrderDetail.Order.ProcessStatus == asi.asicentral.model.store.OrderStatus.Rejected)
+                        {
+                            _status = "Rejected";
+                        }
+                        else if (OrderDetail.Order.IsCompleted)
+                        {
+                            _status = "Purchased";
+                        }
+                        else
+                        {
+                            _status = "In Progress";
+                        }
+                    }
+                }
+                return _status;
+            }
+
+            set
+            {
+                _status = value;
+            }
+        }
+
+        public StoreOrder CreateOrder(IStoreService storeService)
+        {
+            StoreOrder value = null;
+
+            if (OrderDetail == null)
+            {
+                var order = new StoreOrder
+                {
+                    IsCompleted = false,
+                    ContextId = FormType.ContextId,
+                    OrderRequestType = FormType.RequestType,
+                    ProcessStatus = OrderStatus.Pending,
+                    IsStoreRequest = false,
+                    LoggedUserEmail = Email.ToLower(),
+                    UserReference = Guid.NewGuid().ToString(),
+                    Campaign = FormType.Name,
+                    Total = Total,
+                    AnnualizedTotal = Total,
+                    CreateDate = DateTime.UtcNow,
+                    UpdateDate = DateTime.UtcNow,
+                    UpdateSource = "FormInstance-CreateOrder",
+                };
+                //add order detail record
+                var product = storeService.GetAll<ContextProduct>(false).SingleOrDefault(prod => prod.Id == FormType.ProductIdentifier);
+                if (product == null) throw new Exception("The Form product cannot be found in the database");
+                var orderDetail = new StoreOrderDetail
+                {
+                    Product = product,
+                    Quantity = 1,
+                    Cost = Total,
+                    ApplicationCost = 0,
+                    IsSubscription = false,
+                    TaxCost = 0,
+                    ShippingCost = 0,
+                    CreateDate = DateTime.UtcNow,
+                    UpdateDate = DateTime.UtcNow,
+                    UpdateSource = "FormInstance-CreateOrder",
+                };
+                order.OrderDetails.Add(orderDetail);
+                OrderDetail = orderDetail;
+                value = order;
+            }
+            else
+            {
+                value = OrderDetail.Order;
+            }
+            return value;
+        }
     }
 }
