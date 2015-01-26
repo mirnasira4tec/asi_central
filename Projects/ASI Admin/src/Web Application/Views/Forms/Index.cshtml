@@ -53,26 +53,6 @@
 	<tbody>
 	@foreach (var form in @Model.Forms)
 	{
-		form.Status = "Not Started";
-		if (form.OrderDetail != null && form.OrderDetail.Order != null)
-		{
-			if (form.OrderDetail.Order.ProcessStatus == asi.asicentral.model.store.OrderStatus.Approved)
-			{
-				form.Status = "Approved";
-			}
-			else if (form.OrderDetail.Order.ProcessStatus == asi.asicentral.model.store.OrderStatus.Rejected)
-			{
-				form.Status = "Rejected";
-			}
-			else if (form.OrderDetail.Order.IsCompleted)
-			{
-				form.Status = "Purchased";
-			}
-			else
-			{
-				form.Status = "In Progress";
-			}
-		}
 		if (!Model.ShowPendingOnly || form.Status == "Not Started" || form.Status == "In Progress")
 		{
 			<tr>

@@ -117,6 +117,15 @@ namespace asi.asicentral.web.Controllers.forms
                     oldForm.NotificationEmails = form.NotificationEmails;
                     oldForm.Salutation = form.Salutation;
                     oldForm.Total = form.Total;
+                    if (oldForm.OrderDetail != null)
+                    {
+                        oldForm.OrderDetail.Cost = form.Total;
+                        if (oldForm.OrderDetail.Order != null)
+                        {
+                            oldForm.OrderDetail.Order.Total = form.Total;
+                            oldForm.OrderDetail.Order.AnnualizedTotal = form.Total;
+                        }
+                    }
                     oldForm.UpdateDate = DateTime.UtcNow;
                     oldForm.UpdateSource = "FormsController.PostSendForm";
                     //copying the form values
@@ -127,7 +136,14 @@ namespace asi.asicentral.web.Controllers.forms
 						oldForm.Values[i].UpdateDate = DateTime.UtcNow;
 						oldForm.Values[i].UpdateSource = oldForm.UpdateSource;
 					}
+                    form = oldForm;
 				}
+                if (model.Command == "Cancel")
+                {
+                    StoreOrder order = form.CreateOrder(StoreService);
+                    order.ProcessStatus = OrderStatus.Rejected;
+                    StoreService.Add(order);
+                }
 				StoreService.SaveChanges();
                 if (model.Command == "Send")
                 {
