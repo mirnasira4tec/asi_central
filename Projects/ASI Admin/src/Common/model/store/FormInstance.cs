@@ -51,6 +51,10 @@ namespace asi.asicentral.model.store
         [StringLength(150, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
         public string ExternalReference { get; set; }
 
+        [Display(Name = "Order Initial Payment", Prompt = "amount")]
+        [DataType(DataType.Currency)]
+        public decimal? InitialPayment { get; set; }
+
 		[Display(Name = "Order Total", Prompt = "amount")]
 		[Required(ErrorMessage = "You need to specify the order amount")]
 		[DataType(DataType.Currency)]
@@ -106,6 +110,38 @@ namespace asi.asicentral.model.store
             }
         }
 
+        public void Copy(FormInstance instance, string updateSource)
+        {
+            //copying the fields values
+            Comments = instance.Comments;
+            Email = instance.Email;
+            Greetings = instance.Greetings;
+            NotificationEmails = instance.NotificationEmails;
+            Salutation = instance.Salutation;
+            InitialPayment = instance.InitialPayment;
+            Total = instance.Total;
+            UpdateDate = DateTime.UtcNow;
+            UpdateSource = updateSource;
+            if (OrderDetail != null)
+            {
+                OrderDetail.Cost = instance.Total;
+                if (OrderDetail.Order != null)
+                {
+                    InitialPayment = instance.InitialPayment;
+                    OrderDetail.Order.Total = instance.Total;
+                    OrderDetail.Order.AnnualizedTotal = instance.Total;
+                }
+            }
+            //copying the form values
+            Values = Values.OrderBy(value => value.Sequence).ToList();
+            for (int i = 0; i < Values.Count; i++)
+            {
+                Values[i].Value = instance.Values[i].Value;
+                Values[i].UpdateDate = DateTime.UtcNow;
+                Values[i].UpdateSource = updateSource;
+            }
+        }
+
         public StoreOrder CreateOrder(IStoreService storeService)
         {
             StoreOrder value = null;
@@ -122,6 +158,7 @@ namespace asi.asicentral.model.store
                     LoggedUserEmail = Email.ToLower(),
                     UserReference = Guid.NewGuid().ToString(),
                     Campaign = FormType.Name,
+                    InitialPayment = InitialPayment.HasValue && InitialPayment.Value > 0 ? InitialPayment.Value : (decimal?)null,
                     Total = Total,
                     AnnualizedTotal = Total,
                     CreateDate = DateTime.UtcNow,

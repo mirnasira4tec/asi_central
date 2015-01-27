@@ -39,6 +39,7 @@ namespace asi.asicentral.model.store
 		public string UserReference { get; set; }
         public string LoggedUserEmail { get; set; }
         public string IPAdd { get; set; }
+        public decimal? InitialPayment { get; set; }
         public decimal Total { get; set; }
         public decimal AnnualizedTotal { get; set; }
         public DateTime CreateDate { get; set; }
