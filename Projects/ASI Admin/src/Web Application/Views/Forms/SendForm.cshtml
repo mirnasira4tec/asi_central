@@ -57,6 +57,14 @@
 					@Html.LabelFor(model => model.Form.NotificationEmails) <br />@Html.EditorFor(model => model.Form.NotificationEmails)<br/>@Html.ValidationMessageFor(model => model.Form.NotificationEmails)
 				</div>
 			</div>
+		</div>
+		<br />
+		<div class="row">
+			<div class="span4">
+				<div class="form-group">
+					@Html.LabelFor(model => model.Form.InitialPayment) <br />@Html.EditorFor(model => model.Form.InitialPayment)<br/> @Html.ValidationMessageFor(model => model.Form.InitialPayment)
+				</div>
+			</div>
 			<div class="span4">
 				<div class="form-group">
 					@Html.LabelFor(model => model.Form.Total) <br />@Html.EditorFor(model => model.Form.Total)<br/> @Html.ValidationMessageFor(model => model.Form.Total)
