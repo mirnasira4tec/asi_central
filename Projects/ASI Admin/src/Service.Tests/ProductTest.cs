@@ -786,6 +786,7 @@ namespace asi.asicentral.Tests
                 Assert.IsTrue(objectContext.LookSupplierDecoratingTypes.Count() > 0);
                 Assert.IsTrue(objectContext.StoreTieredProductPricings.Count() > 0);
                 Assert.IsTrue(objectContext.LookProductShippingRates.Count() > 0);
+                Assert.IsTrue(objectContext.LookEquipmentTypes.Count() > 0);
             }
         }
 
@@ -818,6 +819,9 @@ namespace asi.asicentral.Tests
                 StoreCompany company = new StoreCompany()
                 {
                     Name = "Company Test Case",
+                    BankName = "BANK1",
+                    BankCity = "CITI1",
+                    BankState = "AL",
                     CreateDate = DateTime.Now,
                     UpdateDate = DateTime.Now,
                     UpdateSource = "Test Case",
@@ -841,6 +845,9 @@ namespace asi.asicentral.Tests
                 //check order records can be retrieved properly
                 StoreCompany company = objectContext.StoreCompanies.Where(t => t.Id == companyId).FirstOrDefault();
                 Assert.IsNotNull(company);
+                Assert.AreEqual("BANK1", company.BankName);
+                Assert.AreEqual("CITI1", company.BankCity);
+                Assert.AreEqual("AL", company.BankState);
                 Assert.AreEqual(1, company.Individuals.Count);
                 Assert.AreEqual(1, company.Addresses.Count);
                 Assert.IsNotNull(company.Individuals[0].Address);
@@ -883,6 +890,9 @@ namespace asi.asicentral.Tests
                 StoreCompany company = new StoreCompany()
                 {
                     Name = "Company Test Case",
+                    BankName = "BANK1",
+                    BankCity = "CITI1",
+                    BankState = "AL",
                     CreateDate = DateTime.Now,
                     UpdateDate = DateTime.Now,
                     UpdateSource = "Test Case",                    
@@ -961,6 +971,9 @@ namespace asi.asicentral.Tests
                 Assert.IsNotNull(order);
                 Assert.IsNotNull(order.CreditCard);
                 Assert.IsNotNull(order.Company);
+                Assert.IsNotNull(order.Company.BankName);
+                Assert.IsNotNull(order.Company.BankCity);
+                Assert.IsNotNull(order.Company.BankState);
                 Assert.IsNotNull(order.BillingIndividual);
                 Assert.IsNotNull(order.BillingIndividual.Address);
                 Assert.IsTrue(order.OrderDetails.Count > 0);

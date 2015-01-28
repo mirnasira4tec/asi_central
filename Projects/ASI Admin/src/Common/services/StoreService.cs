@@ -53,6 +53,16 @@ namespace asi.asicentral.services
             return application;
         }
 
+        public virtual model.store.StoreDetailEquipmentMembership GetEquipmentApplication(model.store.StoreOrderDetail orderDetail)
+        {
+            StoreDetailEquipmentMembership application = null;
+            if (orderDetail.Product != null && StoreDetailEquipmentMembership.Identifiers.Contains(orderDetail.Product.Id))
+            {
+                application = GetAll<StoreDetailEquipmentMembership>().SingleOrDefault(app => app.OrderDetailId == orderDetail.Id);
+            }
+            return application;
+        }
+
 
         /// <summary>
         /// Retrieves the application associated with the order detail
@@ -67,6 +77,7 @@ namespace asi.asicentral.services
                 if (StoreDetailSupplierMembership.Identifiers.Contains(orderDetail.Product.Id)) return GetSupplierApplication(orderDetail);
                 else if (StoreDetailDistributorMembership.Identifiers.Contains(orderDetail.Product.Id)) return GetDistributorApplication(orderDetail);
                 else if (StoreDetailDecoratorMembership.Identifiers.Contains(orderDetail.Product.Id)) return GetDecoratorApplication(orderDetail);
+                else if (StoreDetailEquipmentMembership.Identifiers.Contains(orderDetail.Product.Id)) return GetEquipmentApplication(orderDetail);
             }
             return application;
         }
@@ -120,6 +131,18 @@ namespace asi.asicentral.services
                         decoratorApplication = new StoreDetailDecoratorMembership();
                         Add<StoreDetailDecoratorMembership>(decoratorApplication);
                         application = decoratorApplication;
+                    }
+                }
+                else if (StoreDetailEquipmentMembership.Identifiers.Contains(orderDetail.Product.Id))
+                {
+                    //make sure the application does not already exist
+                    StoreDetailEquipmentMembership equipmentApplication = GetAll<StoreDetailEquipmentMembership>(true).FirstOrDefault(equipment => equipment.OrderDetailId == orderDetail.Id);
+                    if (equipmentApplication == null)
+                    {
+                        added = true;
+                        equipmentApplication = new StoreDetailEquipmentMembership();
+                        Add<StoreDetailEquipmentMembership>(equipmentApplication);
+                        application = equipmentApplication;
                     }
                 }
                 if (added)

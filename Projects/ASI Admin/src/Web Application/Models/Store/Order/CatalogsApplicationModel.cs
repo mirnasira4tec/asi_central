@@ -13,7 +13,6 @@ namespace asi.asicentral.web.model.store
 {
     public class CatalogsApplicationModel : IMembershipModel
     {
-
         [Display(ResourceType = typeof(Resource), Name = "CompanyName")]
         public string Company { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "Street1")]
@@ -110,6 +109,19 @@ namespace asi.asicentral.web.model.store
         public decimal SubscriptionCost { get; set; }
         public string SubscriptionFrequency { get; set; }
         public decimal PromotionalDiscount { get; set; }
+        #endregion
+
+        #region Bank information
+        public bool HasBankInformation { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "BankName")]
+        public string BankName { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "BankState")]
+        public string BankState { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "BankCity")]
+        public string BankCity { get; set; }
         #endregion
 
         #region Catalog information
