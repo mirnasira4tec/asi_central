@@ -35,6 +35,8 @@ namespace asi.asicentral.database.mappings.store
 		        .WithMany(type => type.FormInstances)
 		        .HasForeignKey(instance => instance.FormTypeId);
 
+			this.Ignore(t => t.Status);
+
             HasMany(instance => instance.Values)
                 .WithRequired()
                 .HasForeignKey(formValue => formValue.FormInstanceId)

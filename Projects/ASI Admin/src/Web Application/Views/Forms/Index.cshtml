@@ -16,16 +16,13 @@
 				@using (Html.BeginForm("List", "../forms/Index", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @FormPageModel.TAB_DATE }))
 				{                
 					<div class="formField">
-						<label for="creator">Creator</label>
-						<input name="Creator" type="text" id="creator" value="@Model.Creator" />
+						<label for="creator">Creator</label> <input name="Creator" type="text" id="creator" value="@Model.Creator" />
+						&nbsp;<input name="ShowPendingOnly" type="checkbox" id="ShowPendingOnly" @(Model.ShowPendingOnly ? "checked" : "") /> <label for="showPendingOnly">Only Show Pending</label>
 					</div>
 					<div class="formField">
-						<label for="startDate">Start Date</label>
-						<input data-type="date" name="DateStart" type="text" id="startDate" value="@Model.StartDate" />
-						<label for="endDate">End Date</label>
-						<input data-type="date" name="DateEnd" type="text" id="endDate" value="@Model.EndDate" />
-						<input type="hidden" value="@FormPageModel.TAB_DATE" name="formtab" />
-						<input type="submit" value="Search" class="btn" />
+						<label for="startDate">Start Date</label><input data-type="date" name="DateStart" type="text" id="startDate" value="@Model.StartDate" />
+						&nbsp;<label for="endDate">End Date</label><input data-type="date" name="DateEnd" type="text" id="endDate" value="@Model.EndDate" />
+						<input type="hidden" value="@FormPageModel.TAB_DATE" name="formtab" /><input type="submit" value="Search" class="btn" />
 					</div>
 				}
 			</div>
@@ -56,44 +53,25 @@
 	<tbody>
 	@foreach (var form in @Model.Forms)
 	{
-		<tr>
-			<td>@form.CreateDate.ToLocalTime()</td>
-			<td>@form.Email</td>
-			<td><a href="/Forms/SendForm/@form.Id">@form.FormType.Name</a></td>
-			<td>@form.Sender</td>
-            @if(form.OrderDetail != null && form.OrderDetail.Order != null)
-            {
-                if (form.OrderDetail.Order.ProcessStatus == asi.asicentral.model.store.OrderStatus.Approved)
-                {
-                    <td>Approved</td>
-                }
-                else if (form.OrderDetail.Order.ProcessStatus == asi.asicentral.model.store.OrderStatus.Rejected)
-                {
-                    <td>Rejected</td>
-                }
-                else if (form.OrderDetail.Order.IsCompleted)
-                {
-                    <td>Purchased</td>
-                }
-                else
-                {
-                    <td>In Progress</td>
-                }
-            }
-            else
-            {
-                   <td>Not Started</td>
-            }
-            @if (form.OrderDetail != null && form.OrderDetail.Order != null)
-            {
-                <td>@form.OrderDetail.Order.CompletedStep</td>
-            }
-            else
-            {
-                <td>0</td>
-            }
-		</tr>
-    }
+		if (!Model.ShowPendingOnly || form.Status == "Not Started" || form.Status == "In Progress")
+		{
+			<tr>
+				<td>@form.CreateDate.ToLocalTime()</td>
+				<td>@form.Email</td>
+				<td><a href="/Forms/SendForm/@form.Id">@form.FormType.Name</a></td>
+				<td>@form.Sender</td>
+				<td>@form.Status</td>
+				@if (form.OrderDetail != null && form.OrderDetail.Order != null)
+				{
+					<td>@form.OrderDetail.Order.CompletedStep</td>
+				}
+				else
+				{
+					<td>0</td>
+				}
+			</tr>
+		}
+	}
 	</tbody>
 </table>
 @section Scripts {

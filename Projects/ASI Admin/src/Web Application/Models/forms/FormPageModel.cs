@@ -13,6 +13,7 @@ namespace asi.asicentral.web.Models.forms
 		public string StartDate { get; set; }
 		public string EndDate { get; set; }
         public string Creator { get; set; }
+		public bool ShowPendingOnly { get; set; }
 		public IList<FormInstance> Forms { get; set; }
 		public IList<FormType> FormTypes { get; set; } 
 	}

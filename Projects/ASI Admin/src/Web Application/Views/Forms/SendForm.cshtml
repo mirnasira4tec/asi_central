@@ -22,8 +22,12 @@
 	<div class="row forms-footer">
 		<div class="span4">&nbsp;</div>
 		<div class="span4">&nbsp;</div>
-		<div class="span2">
-			<br /><input type="submit" class="btn btn-primary" value="Send"/>
+		<div class="span2"> <br />
+            @if (Model.Form.Status == "Not Started" || Model.Form.Status == "In Progress")
+            {
+                <input type="submit" id="cancel" class="btn btn-primary" value="Reject"/>
+            }
+			<input type="submit" class="btn btn-primary" value="Send"/>
 		</div>
 	</div>
 	<br />
@@ -51,6 +55,14 @@
 			<div class="span4">
 				<div class="form-group">
 					@Html.LabelFor(model => model.Form.NotificationEmails) <br />@Html.EditorFor(model => model.Form.NotificationEmails)<br/>@Html.ValidationMessageFor(model => model.Form.NotificationEmails)
+				</div>
+			</div>
+		</div>
+		<br />
+		<div class="row">
+			<div class="span4">
+				<div class="form-group">
+					@Html.LabelFor(model => model.Form.InitialPayment) <br />@Html.EditorFor(model => model.Form.InitialPayment)<br/> @Html.ValidationMessageFor(model => model.Form.InitialPayment)
 				</div>
 			</div>
 			<div class="span4">
@@ -89,8 +101,12 @@
 				window.setTimeout(function () { $(".btn-primary").css({ 'cursor': 'default' }); }, 2000);
 			});
 			$("#save").click(function() {
-				$("#command").val("save");
+				$("#command").val("Save");
 				$("#forms-send").submit();
+			});
+			$("#cancel").click(function () {
+			    $("#command").val("Cancel");
+			    $("#forms-send").submit();
 			});
 		});
 	</script>
