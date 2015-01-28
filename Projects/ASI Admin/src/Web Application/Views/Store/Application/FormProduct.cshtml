@@ -32,6 +32,10 @@
     @Html.Partial("../Store/Application/Shared/CompanyInformation", Model)
 	<div id="tabsubscription" class="product-customize tab-pane fade">
 		<div class="controls-group">
+			@if (!string.IsNullOrEmpty(Model.FormInstanceObject.Comments))
+			{
+				<p><strong>Comments:</strong>@Model.FormInstanceObject.Comments</p>
+			}
 			<div class="forms-review" id="userForm">
 				@Html.Partial(Model.FormInstanceObject.FormType.Implementation, Model.FormInstanceObject)
 			</div>

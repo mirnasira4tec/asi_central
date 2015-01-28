@@ -116,8 +116,8 @@ namespace asi.asicentral.web.Controllers.forms
                 if (model.Command == "Cancel")
                 {
                     StoreOrder order = form.CreateOrder(StoreService);
+					if (order.Id == 0) StoreService.Add(order);
                     order.ProcessStatus = OrderStatus.Rejected;
-                    StoreService.Add(order);
                 }
 				StoreService.SaveChanges();
                 if (model.Command == "Send")
