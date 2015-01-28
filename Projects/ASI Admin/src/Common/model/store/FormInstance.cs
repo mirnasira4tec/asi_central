@@ -51,7 +51,7 @@ namespace asi.asicentral.model.store
         [StringLength(150, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
         public string ExternalReference { get; set; }
 
-        [Display(Name = "Order Initial Payment", Prompt = "amount")]
+        [Display(Name = "Payment Due Now", Prompt = "amount")]
         [DataType(DataType.Currency)]
         public decimal? InitialPayment { get; set; }
 
