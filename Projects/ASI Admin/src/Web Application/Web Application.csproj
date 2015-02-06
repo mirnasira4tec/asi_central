@@ -305,6 +305,7 @@
     <Compile Include="Models\sgr\ViewProduct.cs" />
     <Compile Include="Models\Store\Order\CatalogAdvertisingApplicationModel.cs" />
     <Compile Include="Models\Store\Order\CatalogsApplicationModel.cs" />
+    <Compile Include="Models\Store\Order\EquipmentApplicationModel.cs" />
     <Compile Include="Models\Store\Order\FormsModel.cs" />
     <Compile Include="Models\Store\Order\MagazinesAdvertisingApplicationModel.cs" />
     <Compile Include="Models\Store\Order\CouponModel.cs" />
@@ -451,6 +452,7 @@
       <SubType>Code</SubType>
     </EmbeddedResource>
     <Content Include="Views\Store\Application\CatalogAdvertising.cshtml" />
+    <Content Include="Views\Store\Application\Equipment.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -351,6 +351,7 @@ namespace asi.asicentral.services
 							    companyInformation.MemberTypeNumber = 3;
 							    break;
 						    case "SUPPLIER":
+                            case "EQUIPMENT":
 							    companyInformation.MemberTypeNumber = 2;
 							    break;
 					    }

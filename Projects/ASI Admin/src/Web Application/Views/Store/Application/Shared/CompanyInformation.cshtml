@@ -47,6 +47,23 @@
 				@Html.DropDownListFor(m => m.Country, asi.asicentral.util.HtmlHelper.GetCountries(), new { @class = "span3 long" }) @Html.ValidationMessageFor(m => m.Country)
 			</span>
 	</fieldset>
+    @Html.HiddenFor(m => m.HasBankInformation)
+    @if(Model.HasBankInformation && Model.Country == "USA")
+    {
+    <fieldset class="company-info-form">			
+		<legend>Bank Information</legend>
+        <span class="label-row">
+            @Html.LabelFor(m => m.BankName, new { @class = "span3" }) 
+			@Html.LabelFor(m => m.BankCity, new { @class = "span3" })
+			@Html.LabelFor(m => m.BankState, new { @class = "span3" })
+        </span>
+        <span class="label-row">
+			@Html.EditorFor(m => m.BankName) @Html.ValidationMessageFor(m => m.BankName)
+			@Html.EditorFor(m => m.BankCity) @Html.ValidationMessageFor(m => m.BankCity)
+			@Html.DropDownListFor(m => m.BankState, asi.asicentral.util.HtmlHelper.GetStates(), new { @class = "span3 long" }) @Html.ValidationMessageFor(m => m.BankState)
+		</span>
+    </fieldset>
+    }
 
 	<fieldset class="contact-info-form">
 		<legend>Contacts</legend>

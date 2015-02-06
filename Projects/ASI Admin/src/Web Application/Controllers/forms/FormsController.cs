@@ -20,13 +20,15 @@ namespace asi.asicentral.web.Controllers.forms
 		public IEmailService EmailService { get; set; }
         public ITemplateService TemplateService { get; set; }
 
-        public ActionResult Index(DateTime? dateStart, DateTime? dateEnd, String formTab, string creator)
+        public ActionResult Index(DateTime? dateStart, DateTime? dateEnd, String formTab, string creator, string showPendingOnly = null)
         {
 			var viewModel = new FormPageModel();
 			IQueryable<FormInstance> formInstanceQuery = StoreService.GetAll<FormInstance>(true);
 			if (string.IsNullOrEmpty(formTab)) formTab = FormPageModel.TAB_DATE;
             if (formTab == FormPageModel.TAB_DATE)
             {
+				//assume first time if no dates specified
+	            viewModel.ShowPendingOnly = (dateStart == null && dateEnd == null ? true : !string.IsNullOrEmpty(showPendingOnly));
                 //form uses date filter
                 if (dateStart == null) dateStart = DateTime.Now.AddDays(-7);
                 if (dateEnd == null) dateEnd = DateTime.Now;
@@ -108,24 +110,15 @@ namespace asi.asicentral.web.Controllers.forms
 					//edit an existing one
 					var oldForm = StoreService.GetAll<FormInstance>().SingleOrDefault(f => f.ExternalReference == form.ExternalReference);
 					if (oldForm == null) throw new Exception("invalid form reference");
-                    //copying the fields values
-                    oldForm.Comments = form.Comments;
-                    oldForm.Email = form.Email;
-                    oldForm.Greetings = form.Greetings;
-                    oldForm.NotificationEmails = form.NotificationEmails;
-                    oldForm.Salutation = form.Salutation;
-                    oldForm.Total = form.Total;
-                    oldForm.UpdateDate = DateTime.UtcNow;
-                    oldForm.UpdateSource = "FormsController.PostSendForm";
-                    //copying the form values
-					oldForm.Values = oldForm.Values.OrderBy(value => value.Sequence).ToList();
-					for (int i = 0; i < oldForm.Values.Count; i++)
-					{
-						oldForm.Values[i].Value = form.Values[i].Value;
-						oldForm.Values[i].UpdateDate = DateTime.UtcNow;
-						oldForm.Values[i].UpdateSource = oldForm.UpdateSource;
-					}
+                    oldForm.Copy(form, "FormsController.PostSendForm");
+                    form = oldForm;
 				}
+                if (model.Command == "Cancel")
+                {
+                    StoreOrder order = form.CreateOrder(StoreService);
+					if (order.Id == 0) StoreService.Add(order);
+                    order.ProcessStatus = OrderStatus.Rejected;
+                }
 				StoreService.SaveChanges();
                 if (model.Command == "Send")
                 {
@@ -145,7 +138,9 @@ namespace asi.asicentral.web.Controllers.forms
 			}
 			else
 			{
-				return View("../Forms/SendForm", model);
+                FormType formType = StoreService.GetAll<FormType>(true).SingleOrDefault(fType => fType.Id == model.Form.FormTypeId);
+                model.Form.FormType = formType;
+                return View("../Forms/SendForm", model);
 			}
 		}
 	}

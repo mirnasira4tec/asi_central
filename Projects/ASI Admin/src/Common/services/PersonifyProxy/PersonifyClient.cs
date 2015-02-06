@@ -342,6 +342,11 @@ namespace asi.asicentral.services.PersonifyProxy
                 MemberType = customerInfo.CustomerClassCodeString,
                 MemberStatus = customerInfo.UserDefinedMemberStatusString,
             };
+            if(company != null && !string.IsNullOrEmpty(company.ASINumber) && 
+                company.MemberType == "SUPPLIER" && 
+                int.Parse(company.ASINumber) > 10000 && int.Parse(company.ASINumber) < 20000)
+                company.MemberType = "EQUIPMENT";
+
             if (customerInfo.UserDefinedCustomerNumber.HasValue)
             {
                 company.CompanyId = Convert.ToInt32(customerInfo.UserDefinedCustomerNumber.Value);

@@ -55,6 +55,7 @@ namespace asi.asicentral.web.Controllers.Store
                 if (application is StoreDetailSupplierMembership) return View("../Store/Application/Supplier", new SupplierApplicationModel((StoreDetailSupplierMembership)application, orderDetail));
                 else if (application is StoreDetailDistributorMembership) return View("../Store/Application/Distributor", new DistributorApplicationModel((StoreDetailDistributorMembership)application, orderDetail));
                 else if (application is StoreDetailDecoratorMembership) return View("../Store/Application/Decorator", new DecoratorApplicationModel((StoreDetailDecoratorMembership)application, orderDetail));
+                else if (application is StoreDetailEquipmentMembership) return View("../Store/Application/Equipment", new EquipmentApplicationModel((StoreDetailEquipmentMembership)application, orderDetail, StoreService));
                 else throw new Exception("Retieved an unknown type of application");
             }
             else if (orderDetail.Product != null)
@@ -266,6 +267,77 @@ namespace asi.asicentral.web.Controllers.Store
             else
             {
                 return View("../Store/Application/Decorator", application);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(true)]
+        public virtual ActionResult EditEquipment(EquipmentApplicationModel application)
+        {
+            if (ModelState.IsValid)
+            {
+                StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
+                if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
+                StoreOrder order = orderDetail.Order;
+                StoreDetailEquipmentMembership equipmentApplication = StoreService.GetAll<StoreDetailEquipmentMembership>(false).Where(app => app.OrderDetailId == application.OrderDetailId).SingleOrDefault();
+                if (order == null) throw new Exception("Invalid reference to an order");
+                if (equipmentApplication == null) throw new Exception("Invalid reference to an application");
+                order.ExternalReference = application.ExternalReference;
+                //copy decorating types bool to the collections
+                application.SyncEquipmentTypes(StoreService.GetAll<LookEquipmentType>().ToList(), equipmentApplication);
+                application.EquipmentTypes = equipmentApplication.EquipmentTypes;
+                order = UpdateCompanyInformation(application, order);
+                application.CopyTo(equipmentApplication);
+                equipmentApplication.UpdateDate = DateTime.UtcNow;
+                equipmentApplication.UpdateSource = "ASI Admin Application - EditEquipment";
+
+                //Update supplier reprasentative information
+                if (application != null && application.Representatives != null && application.Representatives.Count > 0)
+                {
+                    foreach (StoreSupplierRepresentativeInformation rep in application.Representatives)
+                    {
+                        StoreSupplierRepresentativeInformation existingRep = StoreService.GetAll<StoreSupplierRepresentativeInformation>().SingleOrDefault(r => r.Role == rep.Role && r.OrderDetailId == orderDetail.Id);
+                        if (!string.IsNullOrEmpty(rep.Name) ||
+                            !string.IsNullOrEmpty(rep.Email) ||
+                            !string.IsNullOrEmpty(rep.Phone) ||
+                            !string.IsNullOrEmpty(rep.Fax))
+                        {
+                            StoreSupplierRepresentativeInformation newRep = null;
+                            if (existingRep == null)
+                            {
+                                newRep = new StoreSupplierRepresentativeInformation();
+                                newRep.OrderDetailId = orderDetail.Id;
+                                newRep.CreateDate = DateTime.UtcNow;
+                                StoreService.Add<StoreSupplierRepresentativeInformation>(newRep);
+                            }
+                            else
+                            {
+                                newRep = existingRep;
+                                StoreService.Update<StoreSupplierRepresentativeInformation>(newRep);
+                            }
+                            newRep.Role = rep.Role;
+                            newRep.Name = rep.Name;
+                            newRep.Email = rep.Email;
+                            newRep.Phone = rep.Phone;
+                            newRep.Fax = rep.Fax;
+                            newRep.UpdateSource = "Equipment Controller - Confirmation";
+                            newRep.UpdateDate = DateTime.UtcNow;
+                        }
+                        else if (existingRep != null) StoreService.Delete<StoreSupplierRepresentativeInformation>(existingRep);
+                    }
+                }
+
+                ProcessCommand(StoreService, FulfilmentService, order, equipmentApplication, application.ActionName);
+                StoreService.SaveChanges();
+                if (application.ActionName == ApplicationController.COMMAND_REJECT)
+                    return RedirectToAction("List", "Orders");
+                else
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId });
+            }
+            else
+            {
+                return View("../Store/Application/Equipment", application);
             }
         }
 
@@ -900,6 +972,12 @@ namespace asi.asicentral.web.Controllers.Store
                 order.Company.Phone = model.Phone;
                 order.Company.WebURL = model.BillingWebUrl;
                 order.Company.ASINumber = model.ASINumber;
+                if (model.HasBankInformation)
+                {
+                    order.Company.BankName = model.BankName;
+                    order.Company.BankCity = model.BankCity;
+                    order.Company.BankState = model.BankState;
+                }
                 order.UpdateDate = DateTime.UtcNow;
                 order.UpdateSource = "ASI Admin Application - UpdateCompanyInformation";
 

@@ -109,6 +109,19 @@ namespace asi.asicentral.web.model.store
         public decimal PromotionalDiscount { get; set; }
         #endregion
 
+        #region Bank information
+        public bool HasBankInformation { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "BankName")]
+        public string BankName { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "BankState")]
+        public string BankState { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "BankCity")]
+        public string BankCity { get; set; }
+        #endregion
+
         public IList<StoreIndividual> Contacts { get; set; }
         public string BuisnessRevenue { set; get; }
 
