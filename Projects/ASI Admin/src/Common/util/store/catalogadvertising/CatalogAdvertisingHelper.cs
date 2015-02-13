@@ -25,5 +25,20 @@ namespace asi.asicentral.util.store.catalogadvertising
             tag.InnerHtml = labelText;
             return new MvcHtmlString(tag.ToString());
         }
+
+        public static void CopyModelState(ModelStateDictionary from, ModelStateDictionary to)
+        {
+            if (from == null || to == null) return;
+            var keys = from.Keys.ToList();
+            var values = from.Values.ToList();
+            for (var i = 0; i < keys.Count; i++)
+            {
+                var errors = values[i].Errors.ToList();
+                for (var j = 0; j < errors.Count; j++)
+                {
+                    to.AddModelError(keys[i], errors[j].ErrorMessage);
+                }
+            }
+        }
     }
 }
