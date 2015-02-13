@@ -10,6 +10,8 @@ using asi.asicentral.model.store;
 using asi.asicentral.Resources;
 using asi.asicentral.util.store;
 using asi.asicentral.util.store.catalogadvertising;
+using asi.asicentral.util.store.magazinesadvertising;
+using asi.asicentral.web.Controllers.Store;
 using asi.asicentral.web.model.store;
 using Castle.DynamicProxy.Contributors;
 
@@ -40,6 +42,7 @@ namespace asi.asicentral.web.Models.Store.Order
         public string ASINumber { get; set; }
         public bool HasShipAddress { get; set; }
         public bool HasBillAddress { get; set; }
+        public bool HasBankInformation { get; set; }
 
         #region Billing information
 
@@ -116,6 +119,12 @@ namespace asi.asicentral.web.Models.Store.Order
         public decimal PromotionalDiscount { get; set; }
         #endregion
 
+        #region Bank information
+        public string BankName { get; set; }
+        public string BankState { get; set; }
+        public string BankCity { get; set; }
+        #endregion
+
         #region Catalog Advertising information
         public int Id { get; set; }
 
@@ -174,28 +183,12 @@ namespace asi.asicentral.web.Models.Store.Order
             }
 
             #region Fill Catalog Advertising details
-          
-            switch (ProductId)
+
+            catalogAdvertisingItems = catalogAdvertisingItems.OrderBy(item => item.Id).ToList();
+            CatalogAdvertisingItems = new List<CatalogAdvertisingItem>();
+            foreach (var item in catalogAdvertisingItems)
             {
-                case 84:
-                case 86:
-                case 87:
-                case 90:
-                    catalogAdvertisingItems = catalogAdvertisingItems.OrderBy(item => item.Sequence).ToList();
-                    CatalogAdvertisingItems = new List<CatalogAdvertisingItem>();
-                    for (int i = 0; i < catalogAdvertisingItems.Count; i++)
-                    {
-                        var item = new CatalogAdvertisingItem();
-                        item.Id = catalogAdvertisingItems[i].Id;
-                        item.AdSize = catalogAdvertisingItems[i].AdSize;
-                        item.ProductDescription = catalogAdvertisingItems[i].ProductDescription;
-                        item.ProductPricing = catalogAdvertisingItems[i].ProductPricing;
-                        item.Sequence = catalogAdvertisingItems[i].Sequence;
-                        CatalogAdvertisingItems.Add(item);
-                    }
-                    break;
-                default:
-                    break;
+                CatalogAdvertisingItems.Add(CatalogAdvertisingItem.GenerateFrom(item));
             }
             Prices = CatalogAdvertisingTieredProductPricing.GetTieredProductPricing(ProductId);
 
@@ -213,7 +206,9 @@ namespace asi.asicentral.web.Models.Store.Order
     {
         public int Id { get; set; }
 
-        [DisplayName("Ad Size:")]
+        public CatalogAdvertisingUpload ProductType { get; set; }
+
+        [DisplayName("Ad Size")]
         public string AdSize { get; set; }
 
         [DisplayName("Product Description")]
@@ -222,6 +217,47 @@ namespace asi.asicentral.web.Models.Store.Order
         [DisplayName("Product Pricing")]
         public string ProductPricing { get; set; }
 
+        [DisplayName("Website")]
+        public string Website { get; set; }
+
+        [DisplayName("Product Number")]
+        public string ProductNumber { get; set; }
+
+        [DisplayName("ESP Number")]
+        public string ESPNumber { get; set; }
+
+        [DisplayName("Product Image")]
+        public string ProductImage { get; set; }
+
         public int Sequence { get; set; }
+
+        public static CatalogAdvertisingItem GenerateFrom(StoreDetailCatalogAdvertisingItem item)
+        {
+            var result = new CatalogAdvertisingItem();
+            result.ProductType = item.ProductType;
+            result.Id = item.Id;
+            result.AdSize = item.AdSize;
+            result.ProductDescription = item.ProductDescription;
+            result.ProductPricing = item.ProductPricing;
+            result.Website = item.Website;
+            result.ProductNumber = item.ProductNumber;
+            result.ESPNumber = item.ESPNumber;
+            result.ProductImage = item.ProductImage;
+            result.Sequence = item.Sequence;
+            return result;
+        }
+
+        public void CopyTo(StoreDetailCatalogAdvertisingItem item)
+        {
+            if (item == null || item.Id != Id) return;
+            item.AdSize = AdSize;
+            item.ProductDescription = ProductDescription;
+            item.ProductPricing = ProductPricing;
+            item.Website = Website;
+            item.ProductNumber = ProductNumber;
+            item.ESPNumber = ESPNumber;
+            item.ProductImage = ProductImage;
+            item.UpdateDateUTCAndSource();
+        }
     }
 }

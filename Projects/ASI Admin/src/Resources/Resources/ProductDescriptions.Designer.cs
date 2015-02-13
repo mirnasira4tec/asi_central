@@ -196,6 +196,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What do you have that they don&apos;t. Idea Showcase gives you the chance to be the go-to source for unique multi-use products for a full year!.
+        /// </summary>
+        public static string ProductIdeaShowcaseAdvertising2 {
+            get {
+                return ResourceManager.GetString("ProductIdeaShowcaseAdvertising2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create sales with this compact catalog that’s perfect for leave-behinds and mailers. This is one of the most popular catalogs with end-buyers because it showcases a cross section of products, from standard items like pens and stress balls to unique products like rally hair and glowing ice cubes..
         /// </summary>
         public static string ProductIdeaShowcaseSchools {
@@ -210,6 +219,15 @@ namespace asi.asicentral.Resources {
         public static string ProductIdeaShowcaseSchoolsAdvertising {
             get {
                 return ResourceManager.GetString("ProductIdeaShowcaseSchoolsAdvertising", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Put your products in front of 300,000 end-buyers in the industry&apos;s second-largest ad specialties market - EDUCATION!.
+        /// </summary>
+        public static string ProductIdeaShowcaseSchoolsAdvertising2 {
+            get {
+                return ResourceManager.GetString("ProductIdeaShowcaseSchoolsAdvertising2", resourceCulture);
             }
         }
         
@@ -304,6 +322,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t miss the opportunity to reach over 625,000 end-buyers with Spectrum, the most versatile and sought-after catalog in the industry. It&apos;s an any marketing choice for suppliers who want their products displayed to a large audience year-round..
+        /// </summary>
+        public static string ProductSpectrumAdvertising2 {
+            get {
+                return ResourceManager.GetString("ProductSpectrumAdvertising2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;strong&gt;Introducing Spectrum Celebration!&lt;/strong&gt; Our best-selling end-buyer catalog is now available in a summer/fall edition. It includes a special SELECT section featuring the top rated 4 star and up suppliers as well as a customer favorites section too..
         /// </summary>
         public static string ProductSpectrumCelebration {
@@ -322,7 +349,9 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Introducing the &lt;strong&gt;NEW&lt;/strong&gt; &lt;em&gt;Spectrum Celebration&lt;/em&gt; - a larger, grander format completely redesigned to give your products twice the adverting space!.
+        ///   Looks up a localized string similar to Introducing the &lt;strong&gt;NEW&lt;/strong&gt; &lt;em&gt;Spectrum Celebration&lt;/em&gt; - a larger, grander format completely redesigned to give your products twice the adverting space!
+        ///&lt;br /&gt;&lt;br /&gt;
+        ///Everyone will be checking out the newly designed issue for promotional products for the season&apos;s corporate events, fundraisers, sporting events and more! Take advantage of this one-time opportunity to be part of the BIGGEST &lt;em&gt;Spectrum Celebration&lt;/em&gt; ever!.
         /// </summary>
         public static string ProductSpectrumCelebrationAdvertising2 {
             get {

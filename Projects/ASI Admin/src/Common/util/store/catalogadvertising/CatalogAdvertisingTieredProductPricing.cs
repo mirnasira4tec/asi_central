@@ -21,8 +21,11 @@ namespace asi.asicentral.util.store.catalogadvertising
             ProductToTieredPricesMap = new Dictionary<int, List<int>>()
             {
                 {84,new List<int>(){0,1}},
+                {85,new List<int>(){2,3}},
                 {86,new List<int>(){4,5,6}},
                 {87,new List<int>(){4,5,6}},
+                {88,new List<int>(){7,8}},
+                {89,new List<int>(){9,10}},
                 {90,new List<int>(){11,12,13,14,15,16}}
             };
 
@@ -40,6 +43,20 @@ namespace asi.asicentral.util.store.catalogadvertising
                     Id = 1,
                     AdSizeName = "Two Advertorial Spread",
                     Price = 5000.00m,
+                    Sequence = 2
+                },
+                new CatalogAdvertisingTieredProductPricing()
+                {
+                    Id = 2,
+                    AdSizeName = "Full Page",
+                    Price = 6015.00m,
+                    Sequence = 1
+                },
+                new CatalogAdvertisingTieredProductPricing()
+                {
+                    Id = 3,
+                    AdSizeName = "Single-Product Page",
+                    Price = 1500.00m,
                     Sequence = 2
                 },
                 new CatalogAdvertisingTieredProductPricing()
@@ -62,6 +79,35 @@ namespace asi.asicentral.util.store.catalogadvertising
                     AdSizeName = "Single-Product Page",
                     Price = 1000.00m,
                     Sequence = 3
+                },
+                new CatalogAdvertisingTieredProductPricing()
+                {
+                    Id = 7,
+                    AdSizeName = "Full Page",
+                    Price = 6015.00m,
+                    Sequence = 1
+                },
+                new CatalogAdvertisingTieredProductPricing()
+                {
+                    Id = 8,
+                    AdSizeName = "Single-Product Page",
+                    Price = 5000.00m,
+                    Sequence = 2
+                },
+
+                new CatalogAdvertisingTieredProductPricing()
+                {
+                    Id = 9,
+                    AdSizeName = "Full Page",
+                    Price = 6015.00m,
+                    Sequence = 1
+                },
+                new CatalogAdvertisingTieredProductPricing()
+                {
+                    Id = 10,
+                    AdSizeName = "Single-Product Page",
+                    Price = 1500.00m,
+                    Sequence = 2
                 },
                 new CatalogAdvertisingTieredProductPricing()
                 {
@@ -123,8 +169,11 @@ namespace asi.asicentral.util.store.catalogadvertising
                 case 84:
                     result = TieredProducts.Where(item => items.Contains(item.Id) && item.AdSizeName == "One Advertorial Spread").Select(item => item.Price).Single();
                     break;
+                case 85:
                 case 86:
                 case 87:
+                case 88:
+                case 89:
                 case 90:
                     result = TieredProducts.Where(item => items.Contains(item.Id) && item.AdSizeName == "Full Page").Select(item => item.Price).Single();
                     break;

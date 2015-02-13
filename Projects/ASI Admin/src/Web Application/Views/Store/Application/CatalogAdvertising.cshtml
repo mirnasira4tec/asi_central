@@ -1,4 +1,5 @@
-﻿@using asi.asicentral.util.store.catalogadvertising
+﻿@using asi.asicentral.model.store
+@using asi.asicentral.util.store.catalogadvertising
 @using asi.asicentral.web.Controllers.Store
 @model asi.asicentral.web.Models.Store.Order.CatalogAdvertisingApplicationModel
 @{
@@ -28,32 +29,67 @@
         <div id="tabsubscription" class="product-information tab-pane fade">
             <fieldset class="company-info-form">
                 <legend>@Html.Raw(string.Format("{0} Information", Model.ProductName))</legend>
-                @switch (Model.ProductId)
+                @if (StoreDetailCatalogAdvertisingItem.SUPPLIER_CATALOG_ADVERTISING_PRODUCT_1_IDS.Contains(Model.ProductId))
                 {
-                    case 84:
-                    case 86:
-                    case 87:
-                    case 90:
+                    <span class="label-row">
+                        @Html.LabelFor(model => model.CatalogAdvertisingItems[0].AdSize)
+                        @Html.LabelFor(model => model.CatalogAdvertisingItems[0].ProductDescription)
+                        @Html.LabelFor(model => model.CatalogAdvertisingItems[0].ProductPricing)
+                    </span>
+                    <span class="label-row">
+                        @if (Model.CatalogAdvertisingItems.Any())
                         {
-                            <span class="label-row">
-                                @Html.Label("Ad Size")
-                                @Html.Label("Product Description")
-                                @Html.Label("Product Pricing")
-                            </span>
-                            <span class="label-row">
-                                @if (Model.CatalogAdvertisingItems.Any())
-                                {
-                                    @Html.DropDownListFor(model => model.CatalogAdvertisingItems[0].AdSize, new SelectList(Model.Prices.Select(price => new { Name = price.AdSizeName, Value = price.Price }),
-                                                "Value", "Name", CatalogAdvertisingTieredProductPricing.GetAdSizeValue(Model.ProductId, Model.CatalogAdvertisingItems[0].AdSize)))
-                                    @Html.EditorFor(m => m.CatalogAdvertisingItems[0].ProductDescription)
-                                    @Html.EditorFor(m => m.CatalogAdvertisingItems[0].ProductPricing)
-                                        }
-                            </span> 
+                            @Html.TextBoxFor(m => m.CatalogAdvertisingItems[0].AdSize, new { @readonly = "true", @class = "valid" })
+                            @Html.TextBoxFor(m => m.CatalogAdvertisingItems[0].ProductDescription, new { @readonly = "true", @class = "valid" })
+                            @Html.TextBoxFor(m => m.CatalogAdvertisingItems[0].ProductPricing, new { @readonly = "true", @class = "valid" })
                         }
-                        break;
-                    default:
-                        break;
+                    </span> 
                 }
+                @if (StoreDetailCatalogAdvertisingItem.SUPPLIER_CATALOG_ADVERTISING_PRODUCT_2_IDS.Contains(Model.ProductId))
+                {
+                    for (int i = 0; i < Model.CatalogAdvertisingItems.Count; i++)
+                    {
+                        var j = i + 1;
+                        <span class="label-row">@Html.Raw("Ad Item# " + j)</span>
+                        <span class="label-row">
+                            @Html.LabelFor(model => model.CatalogAdvertisingItems[i].AdSize)
+                            @switch (Model.CatalogAdvertisingItems[i].ProductType)
+                            {
+                                case CatalogAdvertisingUpload.WebAndProductNumber:
+                                    @Html.LabelFor(model => model.CatalogAdvertisingItems[i].Website)
+                                    @Html.LabelFor(model => model.CatalogAdvertisingItems[i].ProductNumber)
+                                    break;
+                                case CatalogAdvertisingUpload.ESPNumber:
+                                    @Html.LabelFor(model => model.CatalogAdvertisingItems[i].ESPNumber)
+                                    break;
+                                case CatalogAdvertisingUpload.ProductImage:
+                                    @Html.LabelFor(model => model.CatalogAdvertisingItems[i].ProductImage)
+                                    break;
+                                default:
+                                    break;
+                            }
+                        </span>
+                        <span class="label-row">
+                            @Html.TextBoxFor(m => m.CatalogAdvertisingItems[i].AdSize, new { @readonly = "true", @class = "valid" })
+                            @switch (Model.CatalogAdvertisingItems[i].ProductType)
+                            {
+                                case CatalogAdvertisingUpload.WebAndProductNumber:
+                                    @Html.TextBoxFor(m => m.CatalogAdvertisingItems[i].Website, new { @readonly = "true", @class = "valid" })
+                                    @Html.TextBoxFor(m => m.CatalogAdvertisingItems[i].ProductNumber, new { @readonly = "true", @class = "valid" })
+                                    break;
+                                case CatalogAdvertisingUpload.ESPNumber:
+                                    @Html.TextBoxFor(m => m.CatalogAdvertisingItems[i].ESPNumber, new { @readonly = "true", @class = "valid" })
+                                    break;
+                                case CatalogAdvertisingUpload.ProductImage:
+                                    @Html.TextBoxFor(m => m.CatalogAdvertisingItems[i].ProductImage, new { @readonly = "true", @class = "valid" })
+                                    break;
+                                default:
+                                    break;
+                            }
+                        </span>
+                    }
+               }
+
             </fieldset>
         </div>
         <!-- END #orderdetail-information -->

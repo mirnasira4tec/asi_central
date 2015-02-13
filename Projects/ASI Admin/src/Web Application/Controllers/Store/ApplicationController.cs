@@ -12,6 +12,7 @@ using asi.asicentral.services;
 using asi.asicentral.util.store;
 using asi.asicentral.web.Models.Store.Order;
 using ASI.EntityModel;
+using asi.asicentral.model.store;
 
 namespace asi.asicentral.web.Controllers.Store
 {
@@ -34,9 +35,7 @@ namespace asi.asicentral.web.Controllers.Store
         public static readonly int SUPPLIER_EMAIL_EXPRESS_PRODUCT_ID= 61;
         //products associated to StoreDetailProductCollection table
         public static readonly int SUPPLIER_ESP_WEBSITES_PRODUCT_COLLECTIONS_ID = 64;
-        public static readonly int[] SUPPLIER_CATALOG_ADVERTISING_PRODUCT_IDS = { 84, 85, 86, 87, 88, 89, 90 };
-
-
+       
         public IStoreService StoreService { get; set; }
         public IFulfilmentService FulfilmentService { get; set; }
         public ICreditCardService CreditCardService { get; set; }
@@ -85,7 +84,7 @@ namespace asi.asicentral.web.Controllers.Store
                 else if (ORDERDETAIL_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/OrderDetailProduct", new OrderDetailApplicationModel(orderDetail));
                 else if (SUPPLIER_ESP_WEBSITES_PRODUCT_COLLECTIONS_ID == orderDetail.Product.Id) return View("../Store/Application/ProductCollections", new ProductCollectionsModel(orderDetail, StoreService));
                 else if (FormsHelper.FORMS_ASSOCIATED_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/FormProduct", new FormsModel(orderDetail, StoreService));
-                else if (SUPPLIER_CATALOG_ADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
+                else if (StoreDetailCatalogAdvertisingItem.SUPPLIER_CATALOG_ADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
                 {
                     var catalogAdvertisings = StoreService.GetAll<StoreDetailCatalogAdvertisingItem>().Where(item=>item.OrderDetailId == orderDetail.Id).ToList();
                     return View("../Store/Application/CatalogAdvertising", new CatalogAdvertisingApplicationModel(orderDetail, catalogAdvertisings, StoreService));
@@ -863,25 +862,21 @@ namespace asi.asicentral.web.Controllers.Store
                 orderDetail.UpdateSource = "ApplicationController - EditCatalogAdvertising";
                 var adItems = StoreService.GetAll<StoreDetailCatalogAdvertisingItem>().Where(detail => detail.OrderDetailId == application.OrderDetailId).ToList();
                 if (!adItems.Any()) throw new Exception("Catalog advertising item doesn't exist.");
-                if (orderDetail.Product != null)
+                if (orderDetail.Product != null && StoreDetailCatalogAdvertisingItem.SUPPLIER_CATALOG_ADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
                 {
-                    switch (orderDetail.Product.Id)
+                    application.CatalogAdvertisingItems[0].CopyTo(adItems[0]);
+                    adItems[0].UpdateDateUTCAndSource();
+                    foreach (var item in application.CatalogAdvertisingItems)
                     {
-                        case 84:
-                        case 86:
-                        case 87:
-                        case 90:
-                            adItems[0].AdSize = application.CatalogAdvertisingItems[0].AdSize;
-                            adItems[0].ProductDescription = application.CatalogAdvertisingItems[0].ProductDescription;
-                            adItems[0].ProductPricing = application.CatalogAdvertisingItems[0].ProductPricing;
-                            adItems[0].UpdateDateUTCAndSource();
-                            break;
-                        default:
-                            break;
-                    }
+                        foreach (var adItem in adItems)
+                        {
+                            item.CopyTo(adItem);
+                            adItem.UpdateDateUTCAndSource();
+                        }
+                    }                    
                 }
                 orderDetail.Cost = adItems.Sum(item => CatalogAdvertisingTieredProductPricing.GetAdSizeValue(application.ProductId, adItems[0].AdSize));
-                
+
                 var order = orderDetail.Order;
                 if (order == null) throw new Exception("Invalid reference to an order");
                 order.ExternalReference = application.ExternalReference;
@@ -893,7 +888,7 @@ namespace asi.asicentral.web.Controllers.Store
                 {
                     return RedirectToAction("List", "Orders");
                 }
-                return RedirectToAction("Edit", "Application", new {id = application.OrderDetailId});
+                return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId });
             }
             return View("../Store/Application/CatalogAdvertising", application);
         }
