@@ -1,0 +1,82 @@
+﻿@using asi.asicentral.web
+@using asi.asicentral.model.store
+@using asi.asicentral.web.Controllers.Store
+@model asi.asicentral.web.model.store.FormsModel
+
+@{
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+@Styles.Render("~/Content/forms")
+<h1>@string.Format(Model.ProductName) (#@Model.OrderId)</h1>
+@if (Model.Price > 0.0m)
+{
+<p>@Model.ProductName product purchase fee is @Model.Price.ToString("C")</p>
+}
+@Html.Partial("../Store/Application/Shared/OrderSummary", Model)
+@using (Html.BeginForm("EditFormProduct", "Application"))
+{        
+@Html.AntiForgeryToken()
+@Html.HiddenFor(m => m.ProductId)
+@Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
+@Html.HiddenFor(m => m.FormInstanceId)
+@Html.Partial("../Store/Application/Shared/AcceptSaveCancelButtons", Model)
+<nav>
+	<ul class="nav nav-tabs" id="tabs">
+        <li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
+        
+		<li><a href="#tabsubscription" data-toggle="tab">@Model.ProductName Information</a></li>
+        
+	</ul>
+</nav>
+<div class="tab-content">
+    @Html.Partial("../Store/Application/Shared/CompanyInformation", Model)
+	<div id="tabsubscription" class="product-customize tab-pane fade">
+		<div class="controls-group">
+			@if (!string.IsNullOrEmpty(Model.FormInstanceObject.Comments))
+			{
+				<p><strong>Comments:</strong>@Model.FormInstanceObject.Comments</p>
+			}
+			<div class="forms-review" id="userForm">
+				@Html.Partial(Model.FormInstanceObject.FormType.Implementation, Model.FormInstanceObject)
+			</div>
+		</div>
+        <!-- END #orderdetail-information -->	
+	</div>
+ </div> <!-- END #content -->
+}
+    
+@section Scripts {
+    @Scripts.Render("~/bundles/form")
+    <script src="/Scripts/asi.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#userForm').find('input, textarea, button, select').prop("disabled", true);
+        });
+
+        $('input.command').click(function (e) {
+            $('#ActionName').val(e.target.value);
+            if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
+                //make sure we have Timms value
+                if (!$('#ExternalReference').val()) {
+                    asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
+                    $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                    $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
+                    e.preventDefault();
+                }
+                else {
+                    var isnum = /^\d+$/.test($('#ExternalReference').val());
+                    if (!isnum) {
+                        asi.modal.confirm('Error', 'TIMMS ID must contain only numbers.', null, "#hide", "Close");
+                        $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                        $("#timmsErrorMessage").text("TIMMS ID must contain only numbers.");
+                        e.preventDefault();
+                    }
+                }
+            }
+        });
+        $('[rel*="isprimary"]').change(function () {
+            $('[rel*="isprimary"]').attr("checked", false);
+            this.checked = true;
+        });
+    </script>
+}

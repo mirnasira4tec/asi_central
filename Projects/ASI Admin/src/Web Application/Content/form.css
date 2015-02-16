@@ -1,0 +1,351 @@
+/*-------------ASI SHOW 2015 Form---------------*/
+#ASI-Show-form,
+#booth-selection-form{
+	border: 2px solid black;
+	padding: 10px;
+	width:100%;
+}
+	#ASI-Show-form .checkbox input[type="checkbox"]{
+		margin-top:1px;
+		margin-right:6px;
+	}
+	#ASI-Show-form p,
+	.fasilitate-small-tables p,
+	.roadshow-small-tables p,
+	#Roadshow-schedule-form p,
+	#booth-selection-form p{
+		margin: 10px 0;
+	}
+	#ASI-Show-form thead td{
+		width:20% !important;
+		background-color:#fffbdf;
+		border-right: 2px solid black;
+		text-align:center;
+	}
+	#booth-selection-form thead td{
+		border-right: 2px solid black;
+		text-align:center;
+	}
+		#ASI-Show-form thead td h1,
+		#booth-selection-form thead td h1{
+			color:#da1c23;
+			font-size: 30px;
+		}
+		#ASI-Show-form thead td h2{
+			color:#000;
+			background-color:#fffbdf;
+			font-size:24px;
+		}
+		#booth-selection-form thead td h2{
+			color:#000;
+			background-color:#fff;
+			font-size:24px;
+		}
+	#ASI-Show-form tbody th,
+	#booth-selection-form tbody th{
+		background-color:#da1c23;
+		color:#fff;
+		font-size:18px;
+		text-align:left;
+		padding:6px;
+	}
+	#ASI-Show-form tbody td,
+	#booth-selection-form tbody td{
+		border:2px solid black;
+		padding:10px;
+	}
+	#ASI-Show-form tbody h1,
+	#booth-selection-form tbody h1{
+		color:#da1c23;
+		font-size: 29px;
+		padding:0;
+		margin:0;
+	}
+	#ASI-Show-form tbody h2,
+	#booth-selection-form tbody h2{
+		color:#000;
+		font-size:24px;
+		line-height: 26px;
+		background-color:#fff;
+		padding:0;
+		margin:0;
+	}
+	#ASI-Show-form tbody h3,
+	#booth-selection-form tbody h3{
+		font-size:18px;
+		padding:0;
+		margin:0;
+	}
+	#ASI-Show-form .booth-show-section .checkbox,
+	#booth-selection-form .booth-show-section .checkbox{
+		width:258px;
+	}
+		#ASI-Show-form .booth-show-section .checkbox input[type="checkbox"],
+		#ASI-Show-form .booth-special-savings .checkbox input[type="checkbox"],
+		#ASI-Show-form .booth-first-impressions .checkbox input[type="checkbox"],
+		#booth-selection-form .booth-first-impressions .checkbox input[type="checkbox"]{
+			margin:5px 11px 0 0;
+		}
+	#ASI-Show-form .booth-special-savings{
+		background-color:#fffbdf;
+		border-bottom:2px solid black;
+		padding-top:20px;
+		margin:-9px;
+		padding:10px;
+	}
+		#ASI-Show-form .booth-special-savings h2{
+			background-color:#fffbdf;
+		}
+	#ASI-Show-form .booth-first-impressions{
+		padding:10px;
+		text-align:center;
+	}
+		#ASI-Show-form .booth-first-impressions ul{
+			margin:0;
+		}
+	#ASI-Show-form .red-text,
+	#Roadshow-schedule-form .red-text,
+	#booth-selection-form .red-text{
+		color:#da1c23;
+	}
+	#ASI-Show-form .yellow-bg,
+	#booth-selection-form .yellow-bg{
+		background-color:#fffbdf;
+		text-align:center;
+	}
+		#ASI-Show-form .yellow-bg h2,
+		#booth-selection-form .yellow-bg h2{
+			background-color:#fffbdf;
+		}
+		#ASI-Show-form .yellow-bg div,
+		#booth-selection-form .yellow-bg div{
+			width:33%;
+			text-align:left;
+		}
+		#ASI-Show-form .yellow-bg h4,
+		#booth-selection-form .yellow-bg h4{
+			color:#da1c23;
+			font-size: 16px;
+			padding:0;
+			margin:0;
+			width:280px;
+		}
+	#ASI-Show-form .gray-header,
+	#booth-selection-form .gray-header{
+		background-color:#ccc;
+	}
+		#ASI-Show-form .gray-header h2,
+		#booth-selection-form .gray-header h2{
+			background-color:#ccc;
+		}
+	#ASI-Show-form .input-large,
+	#Roadshow-schedule-form .input-large{
+		width: 500px;
+	}
+	#ASI-Show-form .input-md,
+	#Roadshow-schedule-form .input-md{
+		width:225px;
+	}
+	#ASI-Show-form .passed-dates{
+		opacity:0.5 !important;
+		-webkit-opacity: 0.5;
+		-webkit-transform: translateZ(0);
+	}
+	#ASI-Show-form .no-padding,
+	#booth-selection-form .no-padding{
+		padding:0px !important;
+	}
+	#terms.modal{
+		margin-left:-425px !important;
+		width:850px !important;
+	}
+	#booth-selection-form .special-savings td{
+		width:50%;
+		text-align:left;
+	}
+	#booth-selection-form .special-savings h1{
+		width:400px;
+	}
+.booth-placement{
+	margin:10px 0 0 0;
+}
+	.booth-placement .checkbox.inline{
+		width:125px;
+	}
+#booth-selection td{
+	width:16%;
+}
+	#booth-selection textarea{
+		width:97%;
+		margin: 10px 0 20px;
+	}
+
+/*----Roadshow form------*/
+#Roadshow-schedule-form{
+	width:100%;
+	margin-top:15px;
+	border-collapse:separate !important;
+}
+	#Roadshow-schedule-form thead{
+		background-color:#da1c23;
+		color:#fff;
+		font-size: 20px;
+		text-align:center;
+		border:1px solid #da1c23;
+	}
+		#Roadshow-schedule-form thead td{
+			border:1px solid #fff;
+		}
+		#Roadshow-schedule-form thead td small{
+			font-size:13px;
+			padding:2px;
+		}
+	#Roadshow-schedule-form tbody td{
+		border:1px solid #000;
+		padding:6px;
+		font-weight:bold;
+		text-align:center;
+	}
+	#Roadshow-schedule-form tbody .gray-bg{
+		background-color:#e7e7e8;
+	}
+	#Roadshow-schedule-form tbody .red-bar{
+		border:1px solid #da1c23;
+		background-color:#da1c23;
+	}
+.roadshow-small-tables,
+.fasilitate-small-tables{
+	margin:15px 0;
+	width:100%;
+	border:3px solid #da1c23;
+	border-collapse:separate !important;
+}
+	.roadshow-small-tables td,
+	.fasilitate-small-tables td{
+		padding:10px;
+	}
+	.roadshow-small-tables h1,
+	.fasilitate-small-tables h1,
+	#fasilitate-header h1{
+		font-size:24px;
+		color:#da1c23;
+	}
+	.roadshow-small-tables h2,
+	.fasilitate-small-tables h2,
+	#fasilitate-header h2{
+		font-size:18px;
+		background-color:#fff;
+		margin:0px;
+		padding:0px;
+	}
+	.roadshow-small-tables thead,
+	.fasilitate-small-tables thead{
+		background-color:#da1c23;
+		color:#fff;
+	}
+		.roadshow-small-tables thead td,
+		.fasilitate-small-tables thead td{
+			padding:5px 0 5px 15px;
+		}
+	.early-bird-total{
+		width:33%;
+	}
+#fasilitate-header{
+	text-align:center;
+	margin:0 0 10px 0;
+	border-top:2px solid #da1c23;
+	border-bottom:2px solid #da1c23;
+	border-collapse:separate;
+}
+	#fasilitate-header .checkbox.inline{
+		width:100px;
+	}
+	#fasilitate-header .checkbox input[type="checkbox"]{
+		margin-top:15px;
+	}
+	#fasilitate-header td{
+		padding: 10px 0;
+	}
+#payment-schedule {
+	width:100%;
+}
+	#payment-schedule thead{
+			background-color:#58585a;
+		}
+		#payment-schedule thead td{
+			border:1px solid #fff;
+			padding:5px 10px;
+		}
+	#payment-schedule td{
+		border:1px solid #58585a;
+	}
+#canads-seminar{
+	text-align:center;
+}
+	#canads-seminar h1{
+		color:#da1c23;
+		font-size: 30px;
+		line-height:34px;
+		margin:24px 0;
+	}
+	#canads-seminar h2{
+		color:#58585a;
+		font-size:30px;
+		background-color:#fff;
+		margin:16px 0;
+	}
+	#canads-seminar h3{
+		color:#da1c23;
+		font-size: 18px;
+	}
+	#canads-seminar .can-seminar-ul{
+		width:67%;
+		margin: 0 auto;
+		font-size:18px;
+	}
+		#canads-seminar .text-left ul li{
+			margin:15px 0;
+		}
+	#canads-seminar blockquote{
+		font-size:18px;
+		color:#000;
+	}
+	#canads-seminar #canada-contact-table{
+		width:700px;
+		text-align:left;
+		margin:0 auto 20px auto;
+		border-bottom:#da1c23 solid 1px;
+		
+	}
+		#canads-seminar #canada-contact-table thead{
+			background-color: #58585a;
+			color: #fff;
+			font-size:18px;
+			font-weight:bold;
+		}
+			#canads-seminar #canada-contact-table thead td{
+				padding:5px 0 5px 10px;
+			}
+		#canads-seminar #canada-contact-table tbody {
+			background-color:#f3f3f4;
+		}
+			#canads-seminar #canada-contact-table tbody .gray-row{
+				background-color:#d8d9da;
+			}
+			#canads-seminar #canada-contact-table tbody td{
+				padding:5px 0 5px 10px;
+			}
+	#canads-seminar .supplier-members{
+		font-size:18px;
+		line-height:22px;
+		margin:30px 0;
+		border-bottom:#da1c23 solid 1px;
+	}
+		#canads-seminar .supplier-members p{
+			margin:10px 0;
+		}
+	#canads-seminar #contact-table{
+		width:100%;
+		text-align:left;
+		margin-bottom:20px;
+	}

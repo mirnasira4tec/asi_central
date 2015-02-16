@@ -22,6 +22,7 @@ namespace asi.asicentral.web.model.store
         string ASINumber { get; set; }
         bool HasShipAddress { get; set; }
         bool HasBillAddress { get; set; }
+        bool HasBankInformation { get; set; }
         IList<StoreIndividual> Contacts { get; set; }
 
         #region Billing information
@@ -71,6 +72,12 @@ namespace asi.asicentral.web.model.store
         OrderStatus OrderStatus { get; set; }
         bool IsCompleted { get; set; }
         #endregion
+
+        #region Bank information
+        string BankName { get; set; }
+        string BankState { get; set; }
+        string BankCity { get; set; }
+        #endregion
     }
 
     /// <summary>
@@ -90,6 +97,10 @@ namespace asi.asicentral.web.model.store
                 model.Phone = order.Company.Phone;
                 model.BillingWebUrl = order.Company.WebURL;
                 model.ASINumber = order.Company.ASINumber;
+                model.BankName = order.Company.BankName;
+                model.BankCity = order.Company.BankCity;
+                model.BankState = order.Company.BankState;
+
                 StoreAddress companyAddress = order.Company.GetCompanyAddress();
                 if (companyAddress != null)
                 {
@@ -146,6 +157,7 @@ namespace asi.asicentral.web.model.store
 
             if (orderDetail.Product != null)
             {
+                model.HasBankInformation = orderDetail.Product.HasBankInformation;
                 if (orderDetail.Product.IsSubscription && orderDetail.Coupon != null && orderDetail.Coupon.IsSubscription) model.SubscriptionCost += (cost * quantity) + orderDetail.TaxCost + orderDetail.ShippingCost - orderDetail.DiscountAmount;
                 else if (orderDetail.Product.IsSubscription) model.SubscriptionCost += (cost * quantity) + orderDetail.TaxCost + orderDetail.ShippingCost;
                 model.SubscriptionFrequency = (!string.IsNullOrEmpty(orderDetail.Product.SubscriptionFrequency) ? (orderDetail.Product.SubscriptionFrequency == "M" ? "monthly" : "yearly") : string.Empty);

@@ -5,9 +5,14 @@ using System.Web;
 using System.Web.Mvc;
 using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
+using asi.asicentral.util.store.catalogadvertising;
+using asi.asicentral.util.store.magazinesadvertising;
 using asi.asicentral.web.model.store;
 using asi.asicentral.services;
 using asi.asicentral.util.store;
+using asi.asicentral.web.Models.Store.Order;
+using ASI.EntityModel;
+using asi.asicentral.model.store;
 
 namespace asi.asicentral.web.Controllers.Store
 {
@@ -30,8 +35,7 @@ namespace asi.asicentral.web.Controllers.Store
         public static readonly int SUPPLIER_EMAIL_EXPRESS_PRODUCT_ID= 61;
         //products associated to StoreDetailProductCollection table
         public static readonly int SUPPLIER_ESP_WEBSITES_PRODUCT_COLLECTIONS_ID = 64;
-
-
+       
         public IStoreService StoreService { get; set; }
         public IFulfilmentService FulfilmentService { get; set; }
         public ICreditCardService CreditCardService { get; set; }
@@ -50,9 +54,10 @@ namespace asi.asicentral.web.Controllers.Store
                 if (application is StoreDetailSupplierMembership) return View("../Store/Application/Supplier", new SupplierApplicationModel((StoreDetailSupplierMembership)application, orderDetail));
                 else if (application is StoreDetailDistributorMembership) return View("../Store/Application/Distributor", new DistributorApplicationModel((StoreDetailDistributorMembership)application, orderDetail));
                 else if (application is StoreDetailDecoratorMembership) return View("../Store/Application/Decorator", new DecoratorApplicationModel((StoreDetailDecoratorMembership)application, orderDetail));
+                else if (application is StoreDetailEquipmentMembership) return View("../Store/Application/Equipment", new EquipmentApplicationModel((StoreDetailEquipmentMembership)application, orderDetail, StoreService));
                 else throw new Exception("Retieved an unknown type of application");
             }
-            else if (orderDetail.Product != null && orderDetail.Product.Type == "Product")
+            else if (orderDetail.Product != null)
             {
                 if (orderDetail.MagazineSubscriptions != null && orderDetail.MagazineSubscriptions.Count > 0) return View("../Store/Application/Magazines", new MagazinesApplicationModel(orderDetail, StoreService));
                 else if (DISTRIBUTOR_CATALOG_PRODUCT_IDS.Contains(orderDetail.Product.Id))
@@ -78,6 +83,12 @@ namespace asi.asicentral.web.Controllers.Store
                 }
                 else if (ORDERDETAIL_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/OrderDetailProduct", new OrderDetailApplicationModel(orderDetail));
                 else if (SUPPLIER_ESP_WEBSITES_PRODUCT_COLLECTIONS_ID == orderDetail.Product.Id) return View("../Store/Application/ProductCollections", new ProductCollectionsModel(orderDetail, StoreService));
+                else if (FormsHelper.FORMS_ASSOCIATED_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/FormProduct", new FormsModel(orderDetail, StoreService));
+                else if (StoreDetailCatalogAdvertisingItem.SUPPLIER_CATALOG_ADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
+                {
+                    var catalogAdvertisings = StoreService.GetAll<StoreDetailCatalogAdvertisingItem>().Where(item=>item.OrderDetailId == orderDetail.Id).ToList();
+                    return View("../Store/Application/CatalogAdvertising", new CatalogAdvertisingApplicationModel(orderDetail, catalogAdvertisings, StoreService));
+                }
             }
             throw new Exception("Retieved an unknown type of application");
         }
@@ -261,6 +272,77 @@ namespace asi.asicentral.web.Controllers.Store
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(true)]
+        public virtual ActionResult EditEquipment(EquipmentApplicationModel application)
+        {
+            if (ModelState.IsValid)
+            {
+                StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
+                if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
+                StoreOrder order = orderDetail.Order;
+                StoreDetailEquipmentMembership equipmentApplication = StoreService.GetAll<StoreDetailEquipmentMembership>(false).Where(app => app.OrderDetailId == application.OrderDetailId).SingleOrDefault();
+                if (order == null) throw new Exception("Invalid reference to an order");
+                if (equipmentApplication == null) throw new Exception("Invalid reference to an application");
+                order.ExternalReference = application.ExternalReference;
+                //copy decorating types bool to the collections
+                application.SyncEquipmentTypes(StoreService.GetAll<LookEquipmentType>().ToList(), equipmentApplication);
+                application.EquipmentTypes = equipmentApplication.EquipmentTypes;
+                order = UpdateCompanyInformation(application, order);
+                application.CopyTo(equipmentApplication);
+                equipmentApplication.UpdateDate = DateTime.UtcNow;
+                equipmentApplication.UpdateSource = "ASI Admin Application - EditEquipment";
+
+                //Update supplier reprasentative information
+                if (application != null && application.Representatives != null && application.Representatives.Count > 0)
+                {
+                    foreach (StoreSupplierRepresentativeInformation rep in application.Representatives)
+                    {
+                        StoreSupplierRepresentativeInformation existingRep = StoreService.GetAll<StoreSupplierRepresentativeInformation>().SingleOrDefault(r => r.Role == rep.Role && r.OrderDetailId == orderDetail.Id);
+                        if (!string.IsNullOrEmpty(rep.Name) ||
+                            !string.IsNullOrEmpty(rep.Email) ||
+                            !string.IsNullOrEmpty(rep.Phone) ||
+                            !string.IsNullOrEmpty(rep.Fax))
+                        {
+                            StoreSupplierRepresentativeInformation newRep = null;
+                            if (existingRep == null)
+                            {
+                                newRep = new StoreSupplierRepresentativeInformation();
+                                newRep.OrderDetailId = orderDetail.Id;
+                                newRep.CreateDate = DateTime.UtcNow;
+                                StoreService.Add<StoreSupplierRepresentativeInformation>(newRep);
+                            }
+                            else
+                            {
+                                newRep = existingRep;
+                                StoreService.Update<StoreSupplierRepresentativeInformation>(newRep);
+                            }
+                            newRep.Role = rep.Role;
+                            newRep.Name = rep.Name;
+                            newRep.Email = rep.Email;
+                            newRep.Phone = rep.Phone;
+                            newRep.Fax = rep.Fax;
+                            newRep.UpdateSource = "Equipment Controller - Confirmation";
+                            newRep.UpdateDate = DateTime.UtcNow;
+                        }
+                        else if (existingRep != null) StoreService.Delete<StoreSupplierRepresentativeInformation>(existingRep);
+                    }
+                }
+
+                ProcessCommand(StoreService, FulfilmentService, order, equipmentApplication, application.ActionName);
+                StoreService.SaveChanges();
+                if (application.ActionName == ApplicationController.COMMAND_REJECT)
+                    return RedirectToAction("List", "Orders");
+                else
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId });
+            }
+            else
+            {
+                return View("../Store/Application/Equipment", application);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(true)]
         public virtual ActionResult EditMagazines(MagazinesApplicationModel application)
         {
             if (ModelState.IsValid)
@@ -415,7 +497,34 @@ namespace asi.asicentral.web.Controllers.Store
                 StoreAddress address = order.Company.GetCompanyShippingAddress();
                 StoreService.UpdateTaxAndShipping(order);
                 orderDetail.UpdateDate = DateTime.UtcNow;
-                orderDetail.UpdateSource = "ApplicationController - EditCatalogs";
+                orderDetail.UpdateSource = "ApplicationController - EditOrderDetailProduct";
+
+                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                StoreService.SaveChanges();
+                if (application.ActionName == ApplicationController.COMMAND_REJECT)
+                    return RedirectToAction("List", "Orders");
+                else
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId });
+            }
+            else
+            {
+                return View("../Store/Application/OrderDetailProduct", application);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(true)]
+        public virtual ActionResult EditFormProduct(FormsModel application)
+        {
+            if (ModelState.IsValid)
+            {
+                StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
+                if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
+                StoreOrder order = orderDetail.Order;
+                if (order == null) throw new Exception("Invalid reference to an order");
+                order.ExternalReference = application.ExternalReference;
+                order = UpdateCompanyInformation(application, order);
 
                 ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
                 StoreService.SaveChanges();
@@ -740,6 +849,50 @@ namespace asi.asicentral.web.Controllers.Store
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(true)]
+        public virtual ActionResult EditCatalogAdvertising(CatalogAdvertisingApplicationModel application)
+        {
+            if (ModelState.IsValid)
+            {
+                var orderDetail = StoreService.GetAll<StoreOrderDetail>().FirstOrDefault(detail => detail.Id == application.OrderDetailId);
+                if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
+                orderDetail.UpdateDate = DateTime.UtcNow;
+                orderDetail.UpdateSource = "ApplicationController - EditCatalogAdvertising";
+                var adItems = StoreService.GetAll<StoreDetailCatalogAdvertisingItem>().Where(detail => detail.OrderDetailId == application.OrderDetailId).ToList();
+                if (!adItems.Any()) throw new Exception("Catalog advertising item doesn't exist.");
+                if (orderDetail.Product != null && StoreDetailCatalogAdvertisingItem.SUPPLIER_CATALOG_ADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
+                {
+                    application.CatalogAdvertisingItems[0].CopyTo(adItems[0]);
+                    adItems[0].UpdateDateUTCAndSource();
+                    foreach (var item in application.CatalogAdvertisingItems)
+                    {
+                        foreach (var adItem in adItems)
+                        {
+                            item.CopyTo(adItem);
+                            adItem.UpdateDateUTCAndSource();
+                        }
+                    }                    
+                }
+                orderDetail.Cost = adItems.Sum(item => CatalogAdvertisingTieredProductPricing.GetAdSizeValue(application.ProductId, adItems[0].AdSize));
+
+                var order = orderDetail.Order;
+                if (order == null) throw new Exception("Invalid reference to an order");
+                order.ExternalReference = application.ExternalReference;
+                order = UpdateCompanyInformation(application, order);
+                StoreService.UpdateTaxAndShipping(order);
+                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                StoreService.SaveChanges();
+                if (application.ActionName == COMMAND_REJECT)
+                {
+                    return RedirectToAction("List", "Orders");
+                }
+                return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId });
+            }
+            return View("../Store/Application/CatalogAdvertising", application);
+        }
+
         /// <summary>
         /// Common code between Edit supplier and distributor
         /// </summary>
@@ -814,6 +967,12 @@ namespace asi.asicentral.web.Controllers.Store
                 order.Company.Phone = model.Phone;
                 order.Company.WebURL = model.BillingWebUrl;
                 order.Company.ASINumber = model.ASINumber;
+                if (model.HasBankInformation)
+                {
+                    order.Company.BankName = model.BankName;
+                    order.Company.BankCity = model.BankCity;
+                    order.Company.BankState = model.BankState;
+                }
                 order.UpdateDate = DateTime.UtcNow;
                 order.UpdateSource = "ASI Admin Application - UpdateCompanyInformation";
 

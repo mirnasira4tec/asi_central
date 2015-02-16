@@ -71,6 +71,30 @@ namespace asi.asicentral.Tests
             Assert.IsNotNull(companyInformation.MemberType);
         }
 
+        [TestMethod]
+        public void EquipmentASINumberTest()
+        {
+            IBackendService personify = new PersonifyService();
+            string[] asiNumbers = { "18200","12555" };
+
+            //Equipment ASI Numbers
+            //"12310", "12550", "12553", "12555", "12600", 
+            //                            "14703", "18200", "14970", "14971", "14972", 
+            //                            "14973", "14974", "14976", "14977", "14980", 
+            //                            "14981", "16000", "16001", "16002", "16004",
+            //                            "16008", "16010", "18200", "18201", "18202",
+            //                            "18203", "18205"
+
+            foreach (string number in asiNumbers)
+            {
+                var companyInformation = personify.GetCompanyInfoByAsiNumber(number);
+                Assert.IsNotNull(companyInformation.CompanyId);
+                Assert.IsNotNull(companyInformation.City);
+                Assert.IsNotNull(companyInformation.MemberType, "EQUIPMENT");
+                Assert.IsNotNull(companyInformation.MemberStatus);
+            }
+        }
+
         private void PlaceOrderTest(string asiNumber, IStoreService storeService, ContextProduct[] products)
         {
             IBackendService personify = new PersonifyService(storeService);
@@ -87,7 +111,7 @@ namespace asi.asicentral.Tests
                 ExpirationDate = new DateTime(int.Parse(order.CreditCard.ExpYear), int.Parse(order.CreditCard.ExpMonth), 1),
             };
             Assert.IsTrue(cardService.Validate(cc));
-            var profileIdentifier = cardService.Store(order.Company, cc, true);
+            var profileIdentifier = cardService.Store(order, cc, true);
             Assert.IsNotNull(profileIdentifier);
             Assert.IsNotNull(order.Company.ExternalReference);
             order.CreditCard.ExternalReference = profileIdentifier;

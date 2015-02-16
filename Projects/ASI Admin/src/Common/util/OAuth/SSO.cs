@@ -277,6 +277,12 @@ namespace asi.asicentral.oauth
             return value;
         }
 
+        public static bool IsUserInRole(string rolename)
+        {
+            return (!string.IsNullOrEmpty(rolename) && IsLoggedIn() &&
+                Roles.IsUserInRole(HttpContext.Current.User.Identity.Name, rolename));
+        }
+
         public static HttpRequestBase GetHttpRequestBase(HttpRequest request)
         {
             return new HttpRequestWrapper(request);
@@ -322,8 +328,8 @@ namespace asi.asicentral.oauth
         {
             string domainName = null;
             if (!request.Url.Authority.Contains("localhost")) domainName = domain;
-            CookiesHelper.SetCookieValue(request, response, COOKIES_CMPSSO, string.Empty, domain: domainName, year: -1);
-            CookiesHelper.SetCookieValue(request, response, FormsAuthentication.FormsCookieName, string.Empty, domain: domainName, persist: true, year: -1);
+            CookiesHelper.SetCookieValue(request, response, COOKIES_CMPSSO, string.Empty, domainName: domainName, year: -1);
+            CookiesHelper.SetCookieValue(request, response, FormsAuthentication.FormsCookieName, string.Empty, domainName: domainName, persist: true, year: -1);
             CookiesHelper.SetCookieValue(request, response, COOKIES_ASP_NET_SESSION_ID, string.Empty, persist: true, year: -1);
         }
 

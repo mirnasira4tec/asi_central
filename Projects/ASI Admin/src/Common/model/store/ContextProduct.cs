@@ -34,12 +34,14 @@ namespace asi.asicentral.model.store
         public bool IsASINumberFlag { get; set; }
 		public bool HasBackEndIntegration { get; set;  }
         public bool IsAvailable { get; set; }
+        public bool HasBankInformation { get; set; }
         public string ChatSettings { get; set; }
         public string ConversionSettings { get; set; }
         [DataType(DataType.Date)]
         public DateTime? NextAvailableDate { get; set; }
         public decimal? Weight { get; set; }
         public string Origin { get; set; }
+		public string ASICompany { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }

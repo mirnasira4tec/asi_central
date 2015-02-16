@@ -234,7 +234,13 @@
     <Compile Include="database\mappings\memberdemogr\SupplierPolicyMap.cs" />
     <Compile Include="database\mappings\memberdemogr\SupplierRatingMap.cs" />
     <Compile Include="database\mappings\memberdemogr\SupplierSeadElectronicAddressMap.cs" />
+    <Compile Include="database\mappings\store\StoreSupplierRepresentativeInformationMap.cs" />
+    <Compile Include="database\mappings\store\StoreDetailEquipmentMembershipMap.cs" />
+    <Compile Include="database\mappings\store\LookEquipmentTypeMap.cs" />
     <Compile Include="database\mappings\store\CouponMap.cs" />
+    <Compile Include="database\mappings\store\FormInstanceMap.cs" />
+    <Compile Include="database\mappings\store\FormTypeMap.cs" />
+    <Compile Include="database\mappings\store\FormValueMap.cs" />
     <Compile Include="database\mappings\store\LookAdPositionMap.cs" />
     <Compile Include="database\mappings\store\LookAdSizeMap.cs" />
     <Compile Include="database\mappings\store\LookEventMerchandiseProductMap.cs" />
@@ -243,6 +249,7 @@
     <Compile Include="database\mappings\store\LookSendMyAdAdSpecMap.cs" />
     <Compile Include="database\mappings\store\LookSendMyAdPublicationMap.cs" />
     <Compile Include="database\mappings\store\LookSendMyAdCountryCodeMap.cs" />
+    <Compile Include="database\mappings\store\StoreDetailCatalogAdvertisingItemMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailMagazineAdvertisingItemMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailProductCollectionsItemMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailProductCollectionsMap.cs" />
@@ -292,6 +299,11 @@
     <Compile Include="model\OAuth\User.cs" />
     <Compile Include="model\ROI\Category.cs" />
     <Compile Include="model\ROI\Company.cs" />
+    <Compile Include="model\store\StoreSupplierRepresentativeInformation.cs" />
+    <Compile Include="model\store\LookEquipmentType.cs" />
+    <Compile Include="model\store\FormInstance.cs" />
+    <Compile Include="model\store\FormType.cs" />
+    <Compile Include="model\store\FormValue.cs" />
     <Compile Include="model\store\LookAdPosition.cs" />
     <Compile Include="model\store\LookAdSize.cs" />
     <Compile Include="model\store\ASPNetUsers.cs" />
@@ -304,6 +316,8 @@
     <Compile Include="model\store\LookSendMyAdAdSpec.cs" />
     <Compile Include="model\store\LookSendMyAdCountryCode.cs" />
     <Compile Include="model\store\LookSendMyAdPublication.cs" />
+    <Compile Include="model\store\StoreDetailCatalogAdvertisingItem.cs" />
+    <Compile Include="model\store\StoreDetailEquipmentMembership.cs" />
     <Compile Include="model\store\StoreDetailMagazineAdvertisingItem.cs" />
     <Compile Include="model\store\StoreDetailStoreDetailProductCollections.cs" />
     <Compile Include="model\store\StoreDetailStoreDetailProductCollectionsItem.cs" />
@@ -444,15 +458,20 @@
     <Compile Include="util\OAuth\EnumHelper.cs" />
     <Compile Include="util\OAuth\SSO.cs" />
     <Compile Include="util\store\asismartsales\ASISmartSalesHelper.cs" />
+    <Compile Include="util\store\catalogadvertising\CatalogAdvertisingHelper.cs" />
+    <Compile Include="util\store\catalogadvertising\CatalogAdvertisingTieredProductPricing.cs" />
     <Compile Include="util\store\catalogs\CatalogsHelper.cs" />
     <Compile Include="util\store\companystore\CompanyStoreHelper.cs" />
     <Compile Include="util\store\companystore\CountryCodeHelper.cs" />
+    <Compile Include="util\store\Forms\FormsHelper.cs" />
     <Compile Include="util\store\supplierspecials\SupplierSpecialsHelper.cs" />
     <Compile Include="util\store\emailexpress\EmailExpressHelper.cs" />
     <Compile Include="util\store\espadvertising\ESPAdvertisingHelper.cs" />
     <Compile Include="util\store\Helper.cs" />
     <Compile Include="util\store\magazinesadvertising\MagazinesAdvertisingHelper.cs" />
     <Compile Include="util\store\magazinesadvertising\UpdateDateAndSource.cs" />
+    <Compile Include="views\CustomVirtualFile.cs" />
+    <Compile Include="views\CustomVirtualPathProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -462,16 +481,12 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\PersonifyDataASI\service.edmx" />
-    <None Include="Service References\web.CreditCardService\CreditCardService.wsdl" />
-    <None Include="Service References\web.CreditCardService\CreditCardService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\web.CreditCardService\CreditCardService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\web.CreditCardService\CreditCardService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
+    <EmbeddedResource Include="views\store\GenericForm.cshtml" />
+    <EmbeddedResource Include="views\store\ASIShowForm.cshtml" />
+    <EmbeddedResource Include="views\store\RoadshowMLRForm.cshtml" />
+    <EmbeddedResource Include="views\store\RoadshowEexhibitorAgreement.cshtml" />
+    <EmbeddedResource Include="views\store\SpaceDrawForm.cshtml" />
+    <EmbeddedResource Include="views\store\SpaceDrawForm2015.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -508,15 +523,22 @@
     <WCFMetadataStorage Include="Service References\web.CreditCardService\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\web.CreditCardService\CreditCardService.disco" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Service References\web.CreditCardService\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\web.CreditCardService\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Service References\web.CreditCardService\CreditCardService1.wsdl" />
+    <None Include="Service References\web.CreditCardService\CreditCardService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\web.CreditCardService\CreditCardService31.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\web.CreditCardService\CreditCardService32.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\web.CreditCardService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

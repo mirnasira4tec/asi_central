@@ -25,12 +25,16 @@ namespace asi.asicentral.database
         public DbSet<ContextFeatureProduct> FeatureProducts { get; set; }
         public DbSet<ContextProductSequence> ProductSequences { get; set; }
         public DbSet<Coupon> Coupons { get; set; }
+        public DbSet<FormType> FormTypes { get; set; }
+        public DbSet<FormInstance> FormInstances { get; set; }
+        public DbSet<FormValue> FormValues { get; set; }
         public DbSet<StoreDetailHallmarkRequest> HallmarkFormRequests { get; set; }
         public DbSet<LookCatalogOption> LookCatalogOptions { get; set; }
         public DbSet<LookDecoratorImprintingType> LookDecoratorImprintingTypes { get; set; }
         public DbSet<LookDistributorAccountType> LookDistributorAccountTypes { get; set; }
         public DbSet<LookDistributorRevenueType> LookDistributorRevenueTypes { get; set; }
         public DbSet<LookEventMerchandiseProduct> LookEventMerchandiseProducts { get; set; }
+        public DbSet<LookEquipmentType> LookEquipmentTypes { get; set; }
         public DbSet<LookProductCollections> LookProductCollections { get; set; }
         public DbSet<LookProductLine> LookProductLines { get; set; }
         public DbSet<LookProductShippingRate> LookProductShippingRates { get; set; }
@@ -42,6 +46,7 @@ namespace asi.asicentral.database
         public DbSet<StoreDetailCatalog> StoreDetailCatalogs { get; set; }
         public DbSet<StoreDetailDecoratorMembership> StoreDetailDecoratorMemberships { get; set; }
         public DbSet<StoreDetailDistributorMembership> StoreDetailDistributorMemberships { get; set; }
+        public DbSet<StoreDetailEquipmentMembership> StoreDetailEquipmentMemberships { get; set; }
         public DbSet<StoreDetailESPAdvertising> StoreDetailESPAdvertisings { get; set; }
         public DbSet<StoreDetailEspTowerAd> StoreDetailEspTowerAds { get; set; }
         public DbSet<StoreDetailESPAdvertisingItem> StoreDetailESPAdvertisingItems { get; set; }
@@ -51,6 +56,7 @@ namespace asi.asicentral.database
         public DbSet<StoreMagazineSubscription> StoreMagazineSubscriptions { get; set; }
         public DbSet<StoreOrder> StoreOrders { get; set; }
         public DbSet<StoreOrderDetail> StoreOrderDetails { get; set; }
+        public DbSet<StoreSupplierRepresentativeInformation> StoreSupplierRepresentatives { get; set; }
         public DbSet<StoreTieredProductPricing> StoreTieredProductPricings { get; set; }
         public DbSet<TaxRate> TaxRates { get; set; }
         public DbSet<StoreDetailEmailExpress> StoreDetailEmailExpresss { get; set; }
@@ -63,7 +69,8 @@ namespace asi.asicentral.database
         public DbSet<LookAdSize> AdSizes { get; set; }
         public DbSet<LookSendMyAdPublication> LookSendMyAdPublications { get; set; }
         public DbSet<LookSendMyAdAdSpec> LookSendMyAdAdSpecs { get; set; }
-        public DbSet<LookSendMyAdCountryCode> LookSendMyAdCountryCodes { get; set; }   
+        public DbSet<LookSendMyAdCountryCode> LookSendMyAdCountryCodes { get; set; }  
+        public DbSet<StoreDetailCatalogAdvertisingItem> StoreDetailCatalogAdvertisingItems { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -80,12 +87,16 @@ namespace asi.asicentral.database
                 .Add(new ContextFeatureProductMap())
                 .Add(new ContextProductSequenceMap())
                 .Add(new CouponMap())
+                .Add(new FormTypeMap())
+                .Add(new FormInstanceMap())
+                .Add(new FormValueMap())
                 .Add(new StoreDetailHallmarkRequestMap())
                 .Add(new LookCatalogOptionMap())
                 .Add(new LookDecoratorImprintingTypeMap())
                 .Add(new LookDistributorAccountTypeMap())
                 .Add(new LookDistributorRevenueTypeMap())
                 .Add(new LookEventMerchandiseProductMap())
+                .Add(new LookEquipmentTypeMap())
                 .Add(new LookProductCollectionsMap())
                 .Add(new LookProductLineMap())
                 .Add(new LookProductShippingRateMap())
@@ -100,12 +111,14 @@ namespace asi.asicentral.database
                 .Add(new StoreDetailESPAdvertisingMap())
                 .Add(new StoreDetailEspTowerAdMap())
                 .Add(new StoreDetailESPAdvertisingItemMap())
+                 .Add(new StoreDetailEquipmentMembershipMap())
                 .Add(new StoreDetailPayForPlacementMap())
                 .Add(new StoreDetailSupplierMembershipMap())
                 .Add(new StoreIndividualMap())
                 .Add(new StoreMagazineSubscriptionMap())
                 .Add(new StoreOrderMap())
                 .Add(new StoreOrderDetailMap())
+                .Add(new StoreSupplierRepresentativeInformationMap())
                 .Add(new StoreTieredProductPricingMap())
                 .Add(new TaxRateMap())
                 .Add(new StoreDetailEmailExpressMap())
@@ -118,7 +131,8 @@ namespace asi.asicentral.database
                 .Add(new LookAdSizeMap())
                 .Add(new LookSendMyAdPublicationMap())
                 .Add(new LookSendMyAdAdSpecMap())
-                .Add(new LookSendMyAdCountryCodeMap());
+                .Add(new LookSendMyAdCountryCodeMap())
+                .Add(new StoreDetailCatalogAdvertisingItemMap());
         }
     }
 }

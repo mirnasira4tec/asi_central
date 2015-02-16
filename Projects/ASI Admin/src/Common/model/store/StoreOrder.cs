@@ -39,6 +39,7 @@ namespace asi.asicentral.model.store
 		public string UserReference { get; set; }
         public string LoggedUserEmail { get; set; }
         public string IPAdd { get; set; }
+        public decimal? InitialPayment { get; set; }
         public decimal Total { get; set; }
         public decimal AnnualizedTotal { get; set; }
         public DateTime CreateDate { get; set; }
@@ -72,7 +73,7 @@ namespace asi.asicentral.model.store
                         else return Context.Type + " Membership";
                     }
                 }
-                else if (OrderDetails != null && OrderDetails.Where(detail => detail.Product != null).FirstOrDefault() != null) return OrderDetails.Where(detail => detail.Product != null).FirstOrDefault().Product.Name;
+				else if (OrderDetails != null && OrderDetails.FirstOrDefault(detail => detail.Product != null) != null) return OrderDetails.FirstOrDefault(detail => detail.Product != null).Product.Name;
                 else return "(Unknown)";
             }
         }
@@ -80,7 +81,7 @@ namespace asi.asicentral.model.store
         {
             get
             {
-                if (OrderDetails != null && OrderDetails.Where(detail => detail.Coupon != null).FirstOrDefault() != null) return OrderDetails.Where(detail => detail.Coupon != null).FirstOrDefault().Coupon.CouponCode;
+				if (OrderDetails != null && OrderDetails.FirstOrDefault(detail => detail.Coupon != null) != null) return OrderDetails.FirstOrDefault(detail => detail.Coupon != null).Coupon.CouponCode;
                 else return "(Unknown)";
             }
         }
@@ -97,7 +98,7 @@ namespace asi.asicentral.model.store
         {
             bool equals = false;
 
-            StoreOrder order = obj as StoreOrder;
+            var order = obj as StoreOrder;
             if (order != null) equals = (order.Id == Id && ((LegacyId.HasValue && LegacyId == order.LegacyId) || !LegacyId.HasValue));
             return equals;
         }
@@ -114,9 +115,21 @@ namespace asi.asicentral.model.store
         public StoreIndividual GetContact()
         {
             StoreIndividual contact = null;
-            if (Company != null) contact = Company.Individuals.Where(ctct => ctct.IsPrimary).FirstOrDefault();
+            if (Company != null) contact = Company.Individuals.FirstOrDefault(ctct => ctct.IsPrimary);
             if (contact == null && BillingIndividual != null) contact = BillingIndividual;
             return contact;
         }
+
+	    public string GetASICompany()
+	    {
+		    string asiCompany = "ASI";
+		    if (OrderDetails != null && OrderDetails.Any())
+		    {
+			    ContextProduct product = OrderDetails.FirstOrDefault().Product;
+				if (product != null && !string.IsNullOrEmpty(product.ASICompany))
+					asiCompany = product.ASICompany;
+		    }
+		    return asiCompany;
+	    }
     }
 }

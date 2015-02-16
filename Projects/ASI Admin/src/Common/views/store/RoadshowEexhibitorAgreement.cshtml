@@ -1,0 +1,324 @@
+﻿@using System.Web.Mvc.Html
+@using asi.asicentral.model.store;
+@inherits System.Web.Mvc.WebViewPage<FormInstance>
+@{
+	if (Model.Values == null || Model.Values.Count == 0)
+	{
+		for (int i = 0; i < 44; i++)
+		{
+			Model.Values.Add(new FormValue());
+		}
+	}
+}
+<div class="container-fluid-store">
+	<header>
+		<img src="https://store.asicentral.com/media/Forms/roadshow-exhibitor-header.jpg" alt="ASI Roadshow 2015 Form">
+	</header>
+	<table id="Roadshow-schedule-form">
+		<thead>
+			<tr>
+				<td  colspan="4">THE 2015 ASI ROADSHOW SCHEDULE</td>
+				<td><small>EXHIBIT</small></td>
+				<td><small>BUS/<br/>CARGO</small></td>
+				<td><small>CARGO<br/>ONLY</small></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="gray-bg">
+				<td>1</td>
+				<td>NORTHEAST I</td>
+				<td>JANUARY 19-23</td>
+				<td>BOSTON, LONG ISLAND, NY/NJ, PHILADELPHIA, BALTIMORE</td>
+				<td>
+                    <input type="hidden" name="Form.Values[0].Name" value="EXHIBIT1" />
+					<input type="checkbox" name="Form.Values[0].Value" @(Model.Values[0].Value != null && Model.Values[0].Value == "on" ? "checked" : "")>
+				</td>
+				<td>
+                    <input type="hidden" name="Form.Values[1].Name" value="BUSORCARGO1" />
+					<input type="checkbox" name="Form.Values[1].Value" @(Model.Values[1].Value != null && Model.Values[1].Value == "on" ? "checked" : "")>
+				</td>
+				<td>
+                    <input type="hidden" name="Form.Values[2].Name" value="CARGOONLY1" />
+					<input type="checkbox" name="Form.Values[2].Value" @(Model.Values[2].Value != null && Model.Values[2].Value == "on" ? "checked" : "")>
+				</td>
+			</tr>
+			<tr>
+				<td>2</td>
+				<td>PACIFIC</td>
+				<td>FEBRUARY 9-12</td>
+				<td>SEATTLE, PORTLAND, <i class="icon-plane"></i> SACRAMENTO, SAN JOSE</td>
+				<td>
+                    <input type="hidden" name="Form.Values[3].Name" value="EXHIBIT2" />
+					<input type="checkbox" name="Form.Values[3].Value" @(Model.Values[3].Value != null && Model.Values[3].Value == "on" ? "checked" : "")>
+				</td>
+				<td>
+                    <input type="hidden" name="Form.Values[4].Name" value="BUSORCARGO2" />
+					<input type="checkbox" name="Form.Values[4].Value" @(Model.Values[4].Value != null && Model.Values[4].Value == "on" ? "checked" : "")>
+				</td>
+				<td>
+                    <input type="hidden" name="Form.Values[5].Name" value="CARGOONLY2" />
+					<input type="checkbox" name="Form.Values[5].Value" @(Model.Values[5].Value != null && Model.Values[5].Value == "on" ? "checked" : "")>
+				</td>
+			</tr>
+			<tr class="gray-bg">
+				<td>3</td>
+				<td>SOUTHEAST</td>
+				<td>FEBRUARY 24-27</td>
+				<td>RALEIGH, CHARLOTTE, ATLANTA, NASHVILLE</td>
+				<td>
+                    <input type="hidden" name="Form.Values[6].Name" value="EXHIBIT3" />
+					<input type="checkbox" name="Form.Values[6].Value" @(Model.Values[6].Value != null && Model.Values[6].Value == "on" ? "checked" : "")>
+				</td>
+				<td>
+                    <input type="hidden" name="Form.Values[7].Name" value="BUSORCARGO3" />
+					<input type="checkbox" name="Form.Values[7].Value" @(Model.Values[7].Value != null && Model.Values[7].Value == "on" ? "checked" : "")>
+				</td>
+				<td>
+                    <input type="hidden" name="Form.Values[8].Name" value="CARGOONLY3" />
+					<input type="checkbox" name="Form.Values[8].Value" @(Model.Values[8].Value != null && Model.Values[8].Value == "on" ? "checked" : "")>
+				</td>
+			</tr>
+			<tr>
+				<td>4</td>
+				<td>FLORIDA</td>
+				<td>MARCH 2-5</td>
+				<td>JACKSONVILLE, ORLANDO, TAMPA, FT. LAUDERDALE</td>
+				<td>
+                    <input type="hidden" name="Form.Values[9].Name" value="EXHIBIT4" />
+					<input type="checkbox" name="Form.Values[9].Value" @(Model.Values[9].Value != null && Model.Values[9].Value == "on" ? "checked" : "")>
+				</td>
+				<td>
+                    <input type="hidden" name="Form.Values[10].Name" value="BUSORCARGO4" />
+					<input type="checkbox" name="Form.Values[10].Value" @(Model.Values[10].Value != null && Model.Values[10].Value == "on" ? "checked" : "")>
+				</td>
+				<td>
+                    <input type="hidden" name="Form.Values[11].Name" value="CARGOONLY4" />
+					<input type="checkbox" name="Form.Values[11].Value" @(Model.Values[11].Value != null && Model.Values[11].Value == "on" ? "checked" : "")>
+				</td>
+			</tr>
+			<tr class="gray-bg">
+				<td>5</td>
+				<td>CANADA EAST</td>
+				<td>MARCH 30-APRIL 1</td>
+				<td>OTTAWA, TORONTO, BURLINGTON</td>
+				<td>
+                    <input type="hidden" name="Form.Values[12].Name" value="EXHIBIT5" />
+					<input type="checkbox" name="Form.Values[12].Value" @(Model.Values[12].Value != null && Model.Values[12].Value == "on" ? "checked" : "")>
+				</td>
+				<td>
+                    <input type="hidden" name="Form.Values[13].Name" value="BUSORCARGO5" />
+					<input type="checkbox" name="Form.Values[13].Value" @(Model.Values[13].Value != null && Model.Values[13].Value == "on" ? "checked" : "")>
+				</td>
+				<td>
+                    <input type="hidden" name="Form.Values[14].Name" value="CARGOONLY5" />
+					<input type="checkbox" name="Form.Values[14].Value" @(Model.Values[14].Value != null && Model.Values[14].Value == "on" ? "checked" : "")>
+				</td>
+			</tr>
+			<tr>
+				<td>6</td>
+				<td>MIDWEST I</td>
+				<td>APRIL 13-17</td>
+				<td>MINNEAPOLIS, DES MOINES, OMAHA, KANSAS CITY, ST. LOUIS</td>
+				<td>
+                    <input type="hidden" name="Form.Values[15].Name" value="EXHIBIT6" />
+					<input type="checkbox" name="Form.Values[15].Value" @(Model.Values[15].Value != null && Model.Values[15].Value == "on" ? "checked" : "")>
+				</td>
+				<td>
+                    <input type="hidden" name="Form.Values[16].Name" value="BUSORCARGO6" />
+					<input type="checkbox" name="Form.Values[16].Value" @(Model.Values[16].Value != null && Model.Values[16].Value == "on" ? "checked" : "")>
+				</td>
+				<td>
+                    <input type="hidden" name="Form.Values[17].Name" value="CARGOONLY6" />
+					<input type="checkbox" name="Form.Values[17].Value" @(Model.Values[17].Value != null && Model.Values[17].Value == "on" ? "checked" : "")>
+				</td>
+			</tr>
+			<tr class="gray-bg">
+				<td>7</td>
+				<td>MIDWEST II</td>
+				<td>APRIL 27-30</td>
+				<td>DETROIT, CLEVELAND, INDIANAPOLIS, CHICAGO</td>
+				<td>
+                    <input type="hidden" name="Form.Values[18].Name" value="EXHIBIT7" />
+					<input type="checkbox" name="Form.Values[18].Value" @(Model.Values[18].Value != null && Model.Values[18].Value == "on" ? "checked" : "")>
+				</td>
+				<td>
+                    <input type="hidden" name="Form.Values[19].Name" value="BUSORCARGO7" />
+					<input type="checkbox" name="Form.Values[19].Value" @(Model.Values[19].Value != null && Model.Values[19].Value == "on" ? "checked" : "")>
+				</td>
+				<td>
+                    <input type="hidden" name="Form.Values[20].Name" value="CARGOONLY7" />
+					<input type="checkbox" name="Form.Values[20].Value" @(Model.Values[20].Value != null && Model.Values[20].Value == "on" ? "checked" : "")>
+				</td>
+			</tr>
+			<tr>
+				<td>8</td>
+				<td>CANADA WEST</td>
+				<td>JUNE 1-4</td>
+				<td>VANCOUVER, TRAVEL DAY, <i class="icon-plane"></i> CALGARY, EDMONTON</td>
+				<td>
+                    <input type="hidden" name="Form.Values[21].Name" value="EXHIBIT8" />
+					<input type="checkbox" name="Form.Values[21].Value" @(Model.Values[21].Value != null && Model.Values[21].Value == "on" ? "checked" : "")>
+				</td>
+				<td>
+                    <input type="hidden" name="Form.Values[22].Name" value="BUSORCARGO8" />
+					<input type="checkbox" name="Form.Values[22].Value" @(Model.Values[22].Value != null && Model.Values[22].Value == "on" ? "checked" : "")>
+				</td>
+				<td>
+                    <input type="hidden" name="Form.Values[23].Name" value="CARGOONLY8" />
+					<input type="checkbox" name="Form.Values[23].Value" @(Model.Values[23].Value != null && Model.Values[23].Value == "on" ? "checked" : "")>
+				</td>
+			</tr>
+			<tr class="gray-bg">
+				<td>9</td>
+				<td>GREAT WEST</td>
+				<td>JUNE 15-18</td>
+				<td>SALT LAKE CITY, <i class="icon-plane"></i> DENVER, <i class="icon-plane"></i> ALBUQUERQUE, <i class="icon-plane"></i> PHOENIX</td>
+				<td>
+                    <input type="hidden" name="Form.Values[24].Name" value="EXHIBIT9" />
+					<input type="checkbox" name="Form.Values[24].Value" @(Model.Values[24].Value != null && Model.Values[24].Value == "on" ? "checked" : "")>
+				</td>
+				<td>
+                    <input type="hidden" name="Form.Values[25].Name" value="BUSORCARGO9" />
+					<input type="checkbox" name="Form.Values[25].Value" @(Model.Values[25].Value != null && Model.Values[25].Value == "on" ? "checked" : "")>
+				</td>
+				<td>
+                    <input type="hidden" name="Form.Values[26].Name" value="CARGOONLY9" />
+					<input type="checkbox" name="Form.Values[26].Value" @(Model.Values[26].Value != null && Model.Values[26].Value == "on" ? "checked" : "")>
+				</td>
+			</tr>
+			<tr>
+				<td>10</td>
+				<td>NORTHEAST II</td>
+				<td>AUG. 31- SEPT. 3</td>
+				<td>BOSTON, LONG ISLAND, NY/NJ, BALTIMORE</td>
+				<td>
+                    <input type="hidden" name="Form.Values[27].Name" value="EXHIBIT10" />
+					<input type="checkbox" name="Form.Values[27].Value" @(Model.Values[27].Value != null && Model.Values[27].Value == "on" ? "checked" : "")>
+				</td>
+				<td>
+                    <input type="hidden" name="Form.Values[28].Name" value="BUSORCARGO10" />
+					<input type="checkbox" name="Form.Values[28].Value" @(Model.Values[28].Value != null && Model.Values[28].Value == "on" ? "checked" : "")>
+				</td>
+				<td>
+                    <input type="hidden" name="Form.Values[29].Name" value="CARGOONLY10" />
+					<input type="checkbox" name="Form.Values[29].Value" @(Model.Values[29].Value != null && Model.Values[29].Value == "on" ? "checked" : "")>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="7" class="red-bar"></td>
+			</tr>
+		</tbody>
+	</table>
+	<table id="pricing" class="roadshow-small-tables">
+		<thead>
+			<tr>
+				<td colspan="2">PRICING  INFORMATION:</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<div>
+						<label>5-day Roadshow Week.......... $1,399 
+                            <input type="hidden" name="Form.Values[30].Name" value="SEBP1" />
+							<input type="text" class="input-small" name="Form.Values[30].Value" value="@Model.Values[30].Value"/>
+						</label>
+						<label>x $1,399 per week = 
+							<input type="hidden" name="Form.Values[31].Name" value="SEBPTOTAL1" />
+							<input type="text" class="input-small" name="Form.Values[31].Value" value="@Model.Values[31].Value"/>
+						</label>
+					</div>
+					<div>
+						<label>4-day Roadshow Week..............$1,120
+							<input type="hidden" name="Form.Values[32].Name" value="SEBP2" />
+							<input type="text" class="input-small" name="Form.Values[32].Value" value="@Model.Values[32].Value"/>
+						</label>
+						<label>x $1,120 per week =
+							<input type="hidden" name="Form.Values[33].Name" value="SEBPTOTAL2" />
+							<input type="text" class="input-small" name="Form.Values[33].Value" value="@Model.Values[33].Value"/>
+						</label>
+					</div>
+					<div>
+						<label>3-day Roadshow Week..............$840
+							<input type="hidden" name="Form.Values[34].Name" value="SEBP3" />
+							<input type="text" class="input-small" name="Form.Values[34].Value" value="@Model.Values[34].Value"/>
+						</label>
+						<label>x $840 per week =
+							<input type="hidden" name="Form.Values[35].Name" value="SEBPTOTAL3" />
+							<input type="text" class="input-small" name="Form.Values[35].Value" value="@Model.Values[35].Value"/>
+						</label>
+					</div>
+					<div>
+						<label>$499 for an additional table
+							<input type="hidden" name="Form.Values[36].Name" value="SEBP4" />
+							<input type="text" class="input-small" name="Form.Values[36].Value" value="@Model.Values[36].Value"/>
+						</label>
+						<label>x $499 per week =
+							<input type="hidden" name="Form.Values[37].Name" value="SEBPTOTAL4" />
+							<input type="text" class="input-small" name="Form.Values[37].Value" value="@Model.Values[37].Value"/>
+						</label>
+					</div>
+					<div>
+						<label>$499 one city option <small>(vs. entire week)</small>
+							<input type="hidden" name="Form.Values[38].Name" value="SEBP5" />
+							<input type="text" class="input-small" name="Form.Values[38].Value" value="@Model.Values[38].Value"/>
+						</label>
+						<label>x $499 per week =
+							<input type="hidden" name="Form.Values[39].Name" value="SEBPTOTAL5" />
+							<input type="text" class="input-small" name="Form.Values[39].Value" value="@Model.Values[39].Value"/>
+						</label>
+					</div>
+					<div>
+						<label>Extra Charges: <small>Bus/Cargo Service: $499; Cargo Only: $399; Electricity: $50 =</small>
+							<input type="hidden" name="Form.Values[40].Name" value="SEBPEXTRAS" />
+							<input type="text" class="input-small" name="Form.Values[40].Value" value="@Model.Values[40].Value"/>
+						</label>
+					</div>
+				</td>
+				<td class="early-bird-total">
+					<h2>EXHIBITOR FEE INCLUDES: 8’ TABLE, LIGHT SNACKS AND ATTENDEE LIST VIA EMAIL.</h2>
+				    <p>(The contact information may be used only by exhibiting company and cannot be transferred to another person or entity. Any misuse of this information will result in a $1,500 fine. Attendee list only available to ASI supplier members.) Prices and dates are subject to change.</p>
+					<label><h1>TOTAL =
+						<input type="hidden" name="Form.Values[41].Name" value="SEBPGRANDTOTAL" />
+						<input type="text" class="input-small" name="Form.Values[41].Value" value="@Model.Values[41].Value"/>
+					</label>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<table id="contact" class="roadshow-small-tables">
+		<thead>
+			<tr>
+				<td>CONTACT INFORMATION:</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<label>Line Name:   
+                        <input type="hidden" name="Form.Values[42].Name" value="LineName" />
+						<input type="text"  class="input-large" name="Form.Values[42].Value" value="@Model.Values[42].Value" />                           
+					</label>
+					<label>Rep Name:
+						<input type="hidden" name="Form.Values[43].Name" value="RepName" />
+					<input type="text" class="input-md" name="Form.Values[43].Value" value="@Model.Values[43].Value" />
+					</label>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<table id="payment" class="roadshow-small-tables">
+		<thead>
+			<tr>
+				<td colspan="2">PAYMENT METHOD:</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<p>A minimum deposit of $250 per show week is due with registration. The deposit must be paid by the discount deadline to take a discount. The balance is due 60 days prior to show week. Discount does not apply to extra services. By using a credit card, I authorize <em>The ASI Show</em> to charge the balance when due on my credit card for ASI Roadshow weeks. Payment must be US dollars.</p>
+				</td>
+				</tr>
+		</tbody>
+	</table>
+</div><!--End Container-->       

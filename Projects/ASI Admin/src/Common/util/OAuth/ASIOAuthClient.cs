@@ -1,12 +1,8 @@
 ﻿using asi.asicentral.model;
-using DotNetOpenAuth.AspNet;
 using ASI.Jade.OAuth2;
-using ASI.Jade.UserManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Web;
 using System.Configuration;
 using ASI.Jade.Utilities;
 using ASI.Jade.v2;
@@ -14,7 +10,6 @@ using ASI.EntityModel;
 using System.Threading.Tasks;
 using asi.asicentral.services;
 using asi.asicentral.interfaces;
-using asi.asicentral.PersonifyDataASI;
 
 namespace asi.asicentral.oauth
 {
@@ -38,7 +33,8 @@ namespace asi.asicentral.oauth
     {
         ASIC, //For ASI Central
         EMES, //For Email-express
-        WESP //For ESP Web
+        WESP, //For ESP Web
+        UPSIDE //for upsidelms
     }
     
     public class ASIOAuthClient
@@ -55,6 +51,32 @@ namespace asi.asicentral.oauth
                 }
                 else { return _juser; }
             }
+        }
+
+        public static bool IsValidAccessToken(string accessToken)
+        {
+            ILogService log = LogService.GetLog(typeof(ASIOAuthClient));
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
+                var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
+                if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
+                {
+                    ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
+                    try
+                    {
+                        var userDetails = webServerClient.GetUserDetails(accessToken);
+                        return (userDetails != null && userDetails.Count > 0);
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error(ex.Message);
+                        return false;
+                    }
+                }
+            }
+            else log.Error("IsValidAccessToken : given access token is empty");
+            return false;
         }
 
         public static asi.asicentral.model.User GetUser(string token)
@@ -112,26 +134,38 @@ namespace asi.asicentral.oauth
 
         public static IDictionary<string, string> RefreshToken(string refreshToken)
         {
-            IDictionary<string, string> tokens = null;
+			ILogService log = LogService.GetLog(typeof(ASIOAuthClient));
+			log.Debug("RefreshToken - Start");
+			IDictionary<string, string> tokens = null;
             if (!string.IsNullOrEmpty(refreshToken))
             {
                 var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
                 var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
                 if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
                 {
-                    ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
-                    try
+					log.Debug("RefreshToken - Get Client");
+					var webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
+					log.Debug("RefreshToken - Client created - " + webServerClient.AuthorizationServer.AuthorizationEndpoint);
+					try
                     {
-                        tokens = webServerClient.RefreshToken(refreshToken);
+						log.Debug("RefreshToken - Calling refresh with " + refreshToken);
+						tokens = webServerClient.RefreshToken(refreshToken);
+	                    if (tokens != null)
+	                    {
+							foreach (var key in tokens.Keys)
+							{
+								log.Debug("RefreshToken - RefreshToken - " + key + " " + tokens[key]);
+							}
+						}
                     }
                     catch (Exception ex)
                     {
-                        LogService log = LogService.GetLog(typeof(ASIOAuthClient));
                         log.Error(ex.Message);
                     }
                 }
             }
-            return tokens;
+			log.Debug("RefreshToken - End");
+			return tokens;
         }
 
         //When ever you call this API, you need to reset the ssoid in the cookie using
@@ -142,7 +176,7 @@ namespace asi.asicentral.oauth
             var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
             if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
             {
-                ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
+                WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
                 try
                 {
                     tokens = webServerClient.Login(userName, password);
@@ -158,41 +192,52 @@ namespace asi.asicentral.oauth
 
         public static IDictionary<string, string> Login_FetchUserDetails(string userName, string password)
         {
-            IDictionary<string, string> tokens = null;
+			ILogService log = LogService.GetLog(typeof(ASIOAuthClient));
+			log.Debug("Login_FetchUserDetails - Start");
+			IDictionary<string, string> tokens = null;
             var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
             var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
             if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
             {
-                ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
-                try
+                var webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
+				log.Debug("Login_FetchUserDetails - Client created - " + webServerClient.AuthorizationServer.AuthorizationEndpoint);
+				try
                 {
-                    tokens = webServerClient.Login(userName, password);
-                    if (tokens != null && tokens.Count > 0)
+					log.Debug("Login_FetchUserDetails - Login");
+					tokens = webServerClient.Login(userName, password);
+					if (tokens != null && tokens.Count > 0)
                     {
-                        string accessToken = string.Empty;
+						foreach (var key in tokens.Keys)
+						{
+							log.Debug("Login_FetchUserDetails - Login - " + key + " " + tokens[key]);
+						}
+						string accessToken = string.Empty;
                         string refreshToken = string.Empty;
                         if (tokens.ContainsKey("AuthToken")) accessToken = tokens["AuthToken"];
                         if (tokens.ContainsKey("RefreshToken")) refreshToken = tokens["RefreshToken"];
                         tokens = null;
                         if (!string.IsNullOrEmpty(accessToken))
                         {
-                            tokens = null;
-                            tokens = webServerClient.GetUserDetails(accessToken);
+							log.Debug("Login_FetchUserDetails - GetUserDetails");
+							tokens = webServerClient.GetUserDetails(accessToken);
                             if (tokens != null && tokens.Count > 0)
                             {
+	                            foreach (var key in tokens.Keys)
+	                            {
+									log.Debug("Login_FetchUserDetails - GetUserDetails - " + key + " " + tokens[key]);
+	                            }
                                 tokens.Add("AuthToken", accessToken);
                                 tokens.Add("RefreshToken", refreshToken);
                             }
-
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    LogService log = LogService.GetLog(typeof(ASIOAuthClient));
                     log.Error(ex.Message);
                 }
-            }
+				log.Debug("Login_FetchUserDetails - End");
+			}
             return tokens;
         }
 

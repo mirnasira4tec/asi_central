@@ -1,7 +1,10 @@
-﻿using System;
+﻿using asi.asicentral.interfaces;
+using asi.asicentral.services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -10,6 +13,7 @@ namespace asi.asicentral.util
 {
     public class IPHelper
     {
+        private static readonly ILogService Log = LogService.GetLog(MethodBase.GetCurrentMethod().DeclaringType);
         private static string[] ASIAN_COUNTRIES = new string[] { "CHINA", "HONG KONG","INDIA","KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF","KOREA, REPUBLIC OF","TAIWAN, PROVINCE OF CHINA" };
         /// <summary>
         /// Gives country based on give IP addres, caches the value in session
@@ -24,6 +28,7 @@ namespace asi.asicentral.util
 
             string result = IpLookup.LookupByIp(ipAddress);
             session["IpCountry"] = result;
+            Log.Debug(string.Format("Country basesd on GetCountry: {0}", result));
             return result;
         }
 
@@ -36,7 +41,7 @@ namespace asi.asicentral.util
         public static bool IsFromAsia(HttpSessionStateBase session, string ipAddress)
         {
             string result = GetCountry(session, ipAddress);
-            return ASIAN_COUNTRIES.Contains(result);
+            return ASIAN_COUNTRIES.Contains(result, StringComparer.OrdinalIgnoreCase);
         }
     }
 
@@ -45,6 +50,7 @@ namespace asi.asicentral.util
     /// </summary>
     public class IpLookup
     {
+        private static readonly ILogService Log = LogService.GetLog(MethodBase.GetCurrentMethod().DeclaringType);
         /*API key and service obtained from api.ipinfodb.com*/
         public const string ApiKey = "abee718c443d7ec82acf30d0996ecea2507deacab2f646516e7bed165070059e";
         public const string DEFAULTCOUNTRY = "UNITED STATES";
@@ -69,12 +75,14 @@ namespace asi.asicentral.util
                     return result;
                 }
 
-                result = dataResults[4].ToString() == "-" ? DEFAULTCOUNTRY : dataResults[4].ToString();
-                return result;
+                result = dataResults[4].ToString() == "-" ? DEFAULTCOUNTRY.ToLower() : dataResults[4].ToString();
+                Log.Debug(string.Format("Country basesd on LookupByIp: {0}", result.ToLower()));
+                return result.ToLower();
             }
             catch (Exception)
             {
-                return DEFAULTCOUNTRY;
+                Log.Debug(string.Format("Country basesd on LookupByIp: {0}", DEFAULTCOUNTRY.ToLower()));
+                return DEFAULTCOUNTRY.ToLower();
             }
         }
     }

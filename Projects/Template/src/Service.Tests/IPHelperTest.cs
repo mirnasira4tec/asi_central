@@ -15,8 +15,15 @@ namespace asi.asicentral.Tests
             var session = new Mock<HttpSessionStateBase>();
             session.SetupGet(x => x["IpCountry"]).Returns(string.Empty);
             string country = IPHelper.GetCountry(session.Object, "98.221.206.30");
-            Assert.AreEqual("UNITED STATES", country);
+            Assert.AreEqual("united states", country);
             Assert.IsFalse(IPHelper.IsFromAsia(session.Object, "98.221.206.30"));
+            bool isFromAsia = IPHelper.IsFromAsia(session.Object, "1.186.255.255");
+            Assert.IsTrue(isFromAsia);
+            isFromAsia = false;
+            isFromAsia = IPHelper.IsFromAsia(session.Object, "1.2.31.255");
+            country = IPHelper.GetCountry(session.Object, "1.2.31.255");
+            Assert.IsTrue(isFromAsia);
+            Assert.AreEqual("china", country);
         }
     }
 }
