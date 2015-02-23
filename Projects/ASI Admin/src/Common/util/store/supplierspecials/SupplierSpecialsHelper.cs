@@ -10,7 +10,7 @@ namespace asi.asicentral.util.store
 {
     public class SupplierSpecialsHelper
     {
-        public static readonly decimal[] SupplierSpecials_Cost = { 450, 650 };
+        public static readonly decimal[] SupplierSpecials_Cost = { 475, 675 };
 
         public static IList<SelectListItem> GetPackagesOptions()
         {
