@@ -40,5 +40,18 @@ namespace asi.asicentral.util.store.catalogadvertising
                 }
             }
         }
+
+        public static string GetOriginalFileName(string logoPath, string cartID)
+        {
+            string newName = string.Empty;
+            if (!string.IsNullOrEmpty(logoPath))
+            {
+                if (logoPath.Contains(cartID + "_")) newName = logoPath.Substring((cartID + "_").Length);
+                else newName = logoPath;
+                if (!string.IsNullOrEmpty(newName) && newName.LastIndexOf("_") != -1 && newName.LastIndexOf(".") != -1)
+                    newName = newName.Substring(0, newName.LastIndexOf("_")) + newName.Substring(newName.LastIndexOf("."));
+            }
+            return newName;
+        }
     }
 }

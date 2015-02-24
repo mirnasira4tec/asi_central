@@ -82,6 +82,7 @@
                                     break;
                                 case CatalogAdvertisingUpload.ProductImage:
                                     @Html.TextBoxFor(m => m.CatalogAdvertisingItems[i].ProductImage, new { @readonly = "true", @class = "valid" })
+                                    <a style="position: relative;bottom: 4px;left: 8px;" href="/Media/Download?file=/Store/uploads/catalogadvertising/@Model.CatalogAdvertisingItems[i].ProductImage">Download Image</a>
                                     break;
                                 default:
                                     break;
