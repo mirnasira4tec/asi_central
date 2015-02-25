@@ -187,7 +187,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What do you have that they don&apos;t? Idea Showcase gives you the chance to buy the go-to source for unique multi-use products for a full year..
+        ///   Looks up a localized string similar to What do you have that they don&apos;t? Idea Showcase gives you the chance to be the go-to source for unique multi-use products for a full year..
         /// </summary>
         public static string ProductIdeaShowcaseAdvertising {
             get {
@@ -214,7 +214,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Put your products in front of 300,000 end-buyers in the industy&apos;s second-largest ad specialties market - EDUCATION!.
+        ///   Looks up a localized string similar to Put your products in front of 300,000 end-buyers in the industry&apos;s second-largest ad specialties market - EDUCATION!.
         /// </summary>
         public static string ProductIdeaShowcaseSchoolsAdvertising {
             get {
@@ -322,7 +322,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Don&apos;t miss the opportunity to reach over 625,000 end-buyers with Spectrum, the most versatile and sought-after catalog in the industry. It&apos;s an any marketing choice for suppliers who want their products displayed to a large audience year-round..
+        ///   Looks up a localized string similar to Don&apos;t miss the opportunity to reach over 625,000 end-buyers with Spectrum, the most versatile and sought-after catalog in the industry. It&apos;s an easy marketing choice for suppliers who want their products displayed to a large audience year-round..
         /// </summary>
         public static string ProductSpectrumAdvertising2 {
             get {
@@ -496,7 +496,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no idustry catalog more popular with Canads&apos;s distributors than The Professional Buyer&apos;s Guide..
+        ///   Looks up a localized string similar to There is no industry catalog more popular with Canada&apos;s distributors than The Professional Buyer&apos;s Guide..
         /// </summary>
         public static string ProductTheProfessionalBuyersGuideAdvertising {
             get {

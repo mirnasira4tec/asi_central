@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using asi.asicentral.util.store.catalogadvertising;
 using asi.asicentral.util.store.magazinesadvertising;
 using ASI.EntityModel;
 
@@ -127,7 +128,7 @@ namespace asi.asicentral.model.store
                             case CatalogAdvertisingUpload.ProductImage:
                                 if (!string.IsNullOrWhiteSpace(ProductImage))
                                 {
-                                    result.Add("Upload image of the product", ProductImage);
+                                    result.Add("Upload image of the product", CatalogAdvertisingHelper.GetOriginalFileName(ProductImage, OrderDetailId.ToString()));
                                 }
                                 break;
                             default:
