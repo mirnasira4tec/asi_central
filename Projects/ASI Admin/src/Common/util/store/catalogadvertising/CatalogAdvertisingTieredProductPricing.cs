@@ -41,7 +41,7 @@ namespace asi.asicentral.util.store.catalogadvertising
                 new CatalogAdvertisingTieredProductPricing()
                 {
                     Id = 1,
-                    AdSizeName = "Two Advertorial Spread",
+                    AdSizeName = "Two Advertorial Spreads",
                     Price = 5000.00m,
                     Sequence = 2
                 },
