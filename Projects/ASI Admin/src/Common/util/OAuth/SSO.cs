@@ -193,21 +193,15 @@ namespace asi.asicentral.oauth
             }
             return isValidPassword;
         }
-        public static bool ResetPassword(string newPassword, int ssoid, asi.asicentral.model.User user = null, bool passwordResetRequired = false)
+        public static bool ResetPassword(string newPassword, int ssoid)
         {
             bool isPasswordchanged = false;
-
             if (!string.IsNullOrEmpty(newPassword) && !string.IsNullOrEmpty(ssoid.ToString()))
             {
                 int sso = ssoid;
-                if (user == null)
-                    user = ASIOAuthClient.GetUser(sso);
-                if (user != null)
-                {
-                    asi.asicentral.model.Security security = new asi.asicentral.model.Security();
-                    security.Password = newPassword;
-                    isPasswordchanged = ASIOAuthClient.ChangePassword(sso, security, passwordResetRequired);
-                }
+                asi.asicentral.model.Security security = new asi.asicentral.model.Security();
+                security.Password = newPassword;
+                isPasswordchanged = ASIOAuthClient.ChangePassword(sso, security, false);
             }
             return isPasswordchanged;
         }
@@ -235,7 +229,7 @@ namespace asi.asicentral.oauth
             }
             return isPasswordchanged;
         }
-        
+
         /// <summary>
         /// Generate random password
         /// Code - http://forums.asp.net/p/1493859/3520369.aspx
@@ -337,7 +331,7 @@ namespace asi.asicentral.oauth
                 CookiesHelper.SetCookieValue(request, response, COOKIES_CMPSSO, companyId + "-" + sso, true, domainName);
 
                 //Code to add userrole
-                if(isAddRoles) AddOrRemoveUserFromRole(username, user.Email, user.MemberType_CD, user.MemberStatus_CD, true);
+                if (isAddRoles) AddOrRemoveUserFromRole(username, user.Email, user.MemberType_CD, user.MemberStatus_CD, true);
             }
         }
 
