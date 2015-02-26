@@ -198,10 +198,9 @@ namespace asi.asicentral.oauth
             bool isPasswordchanged = false;
             if (!string.IsNullOrEmpty(newPassword) && !string.IsNullOrEmpty(ssoid.ToString()))
             {
-                int sso = ssoid;
                 asi.asicentral.model.Security security = new asi.asicentral.model.Security();
                 security.Password = newPassword;
-                isPasswordchanged = ASIOAuthClient.ChangePassword(sso, security, false);
+                isPasswordchanged = ASIOAuthClient.ChangePassword(ssoid, security, false);
             }
             return isPasswordchanged;
         }
