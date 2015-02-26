@@ -193,7 +193,24 @@ namespace asi.asicentral.oauth
             }
             return isValidPassword;
         }
+        public static bool ResetPassword(string newPassword, int ssoid, asi.asicentral.model.User user = null, bool passwordResetRequired = false)
+        {
+            bool isPasswordchanged = false;
 
+            if (!string.IsNullOrEmpty(newPassword) && !string.IsNullOrEmpty(ssoid.ToString()))
+            {
+                int sso = ssoid;
+                if (user == null)
+                    user = ASIOAuthClient.GetUser(sso);
+                if (user != null)
+                {
+                    asi.asicentral.model.Security security = new asi.asicentral.model.Security();
+                    security.Password = newPassword;
+                    isPasswordchanged = ASIOAuthClient.ChangePassword(sso, security, passwordResetRequired);
+                }
+            }
+            return isPasswordchanged;
+        }
         public static bool ChangePassword(string currentPassword, string newPassword, System.Security.Principal.IPrincipal securityUser, HttpRequestBase request, HttpResponseBase response, bool isUserVerified = false, asi.asicentral.model.User user = null, bool passwordResetRequired = false)
         {
             bool isPasswordchanged = false;
