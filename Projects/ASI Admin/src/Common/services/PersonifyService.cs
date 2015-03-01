@@ -195,6 +195,8 @@ namespace asi.asicentral.services
             IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
             //create company if not already there
             var companyInfo = PersonifyClient.ReconcileCompany(company, "UNKNOWN", countryCodes);
+			//field used to map an order to a company before approval for non backoffice orders
+			order.ExternalReference = companyInfo.MasterCustomerId;
             //Add credit card to the company
             string profile = PersonifyClient.GetCreditCardProfileId(order.GetASICompany(), companyInfo, creditCard);
             if (profile == string.Empty) profile = PersonifyClient.SaveCreditCard(order.GetASICompany(), companyInfo, creditCard);
