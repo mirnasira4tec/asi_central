@@ -44,6 +44,7 @@ namespace asi.asicentral.services
         {
             string result;
             ILogService log = null;
+			//check for ASI #
 	        if (backendIntegration)
 	        {
 		        try
