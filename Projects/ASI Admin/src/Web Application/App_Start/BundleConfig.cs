@@ -45,14 +45,6 @@ namespace asi.asicentral.web
 
             bundles.Add(new StyleBundle("~/Content/MultiSelectedDatePicker").Include(
                     "~/Content/multiselecteddatepicker.css"));
-
-            bundles.Add(new ScriptBundle("~/bundles/MultiSelectedDatePicker").Include(
-        "~/Scripts/jquery.ui.core.js",
-        "~/Scripts/jquery.ui.datepicker.js",
-        "~/Scripts/jquery-ui.multidatespicker.js"));
-
-            bundles.Add(new StyleBundle("~/Content/MultiSelectedDatePicker").Include(
-                    "~/Content/multiselecteddatepicker.css"));
         }
     }
 }
