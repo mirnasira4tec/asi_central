@@ -316,8 +316,21 @@ namespace asi.asicentral.services
             //create company if not already there
             var companyInfo = PersonifyClient.ReconcileCompany(company, companyInformation.MemberType, null);
             PersonifyClient.AddCustomerAddresses(company, companyInfo, null);
+            PersonifyClient.AddPhoneNumber(companyInformation.Phone, GetCountryCode(companyInformation.Country), companyInfo);
 	        companyInformation = PersonifyClient.GetCompanyInfo(companyInfo);
             return companyInformation;
+        }
+
+        private string GetCountryCode(string country)
+        {
+            string result = null;
+            if (!string.IsNullOrWhiteSpace(country))
+            {
+                country = country.ToLower();
+                if (country.Contains("united states") || country == "usa") result = "USA";
+                if (country == "canada" || country == "can") result = "CAN";
+            }
+            return result;
         }
 
         public virtual CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber)
