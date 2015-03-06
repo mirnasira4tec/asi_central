@@ -308,6 +308,7 @@ namespace asi.asicentral.oauth
                                 {
                                     CompanyId = user.CompanyId,
                                     Name = user.CompanyName,
+                                    Phone = user.PhoneAreaCode + user.Phone,
                                     Street1 = user.Street1,
                                     Street2 = user.Street2,
                                     City = user.City,
