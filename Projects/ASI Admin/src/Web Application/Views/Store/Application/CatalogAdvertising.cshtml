@@ -1,0 +1,135 @@
+﻿@using asi.asicentral.model.store
+@using asi.asicentral.util.store.catalogadvertising
+@using asi.asicentral.web.Controllers.Store
+@model asi.asicentral.web.Models.Store.Order.CatalogAdvertisingApplicationModel
+@{
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+<h1>@Html.Raw(string.Format("{0} (#{1})", Model.ProductName, Model.OrderId))</h1>
+@if (Model.Price > 0.0m)
+{
+    <p>@Model.ProductName product purchase fee is @Model.Price.ToString("C")</p>
+}
+@Html.Partial("../Store/Application/Shared/OrderSummary", Model)
+@using (Html.BeginForm("EditCatalogAdvertising", "Application"))
+{        
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.ProductId)
+    @Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
+    @Html.Partial("../Store/Application/Shared/AcceptSaveCancelButtons", Model)
+    <nav>
+        <ul class="nav nav-tabs" id="tabs">
+            <li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
+            <li><a href="#tabsubscription" data-toggle="tab">@Html.Raw(string.Format("{0} Information", Model.ProductName))</a></li>
+        </ul>
+    </nav>
+    <div class="tab-content">
+        @Html.Partial("../Store/Application/Shared/CompanyInformation", Model)
+
+        <div id="tabsubscription" class="product-information tab-pane fade">
+            <fieldset class="company-info-form">
+                <legend>@Html.Raw(string.Format("{0} Information", Model.ProductName))</legend>
+                @if (StoreDetailCatalogAdvertisingItem.SUPPLIER_CATALOG_ADVERTISING_PRODUCT_1_IDS.Contains(Model.ProductId))
+                {
+                    <span class="label-row">
+                        @Html.LabelFor(model => model.CatalogAdvertisingItems[0].AdSize)
+                        @Html.LabelFor(model => model.CatalogAdvertisingItems[0].ProductDescription)
+                        @Html.LabelFor(model => model.CatalogAdvertisingItems[0].ProductPricing)
+                    </span>
+                    <span class="label-row">
+                        @if (Model.CatalogAdvertisingItems.Any())
+                        {
+                            @Html.TextBoxFor(m => m.CatalogAdvertisingItems[0].AdSize, new { @readonly = "true", @class = "valid" })
+                            @Html.TextBoxFor(m => m.CatalogAdvertisingItems[0].ProductDescription, new { @readonly = "true", @class = "valid" })
+                            @Html.TextBoxFor(m => m.CatalogAdvertisingItems[0].ProductPricing, new { @readonly = "true", @class = "valid" })
+                        }
+                    </span> 
+                }
+                @if (StoreDetailCatalogAdvertisingItem.SUPPLIER_CATALOG_ADVERTISING_PRODUCT_2_IDS.Contains(Model.ProductId))
+                {
+                    for (int i = 0; i < Model.CatalogAdvertisingItems.Count; i++)
+                    {
+                        var j = i + 1;
+                        <span class="label-row">@Html.Raw("Ad Item# " + j)</span>
+                        <span class="label-row">
+                            @Html.LabelFor(model => model.CatalogAdvertisingItems[i].AdSize)
+                            @switch (Model.CatalogAdvertisingItems[i].ProductType)
+                            {
+                                case CatalogAdvertisingUpload.WebAndProductNumber:
+                                    @Html.LabelFor(model => model.CatalogAdvertisingItems[i].Website)
+                                    @Html.LabelFor(model => model.CatalogAdvertisingItems[i].ProductNumber)
+                                    break;
+                                case CatalogAdvertisingUpload.ESPNumber:
+                                    @Html.LabelFor(model => model.CatalogAdvertisingItems[i].ESPNumber)
+                                    break;
+                                case CatalogAdvertisingUpload.ProductImage:
+                                    @Html.LabelFor(model => model.CatalogAdvertisingItems[i].ProductImage)
+                                    break;
+                                default:
+                                    break;
+                            }
+                        </span>
+                        <span class="label-row">
+                            @Html.TextBoxFor(m => m.CatalogAdvertisingItems[i].AdSize, new { @readonly = "true", @class = "valid" })
+                            @switch (Model.CatalogAdvertisingItems[i].ProductType)
+                            {
+                                case CatalogAdvertisingUpload.WebAndProductNumber:
+                                    @Html.TextBoxFor(m => m.CatalogAdvertisingItems[i].Website, new { @readonly = "true", @class = "valid" })
+                                    @Html.TextBoxFor(m => m.CatalogAdvertisingItems[i].ProductNumber, new { @readonly = "true", @class = "valid" })
+                                    break;
+                                case CatalogAdvertisingUpload.ESPNumber:
+                                    @Html.TextBoxFor(m => m.CatalogAdvertisingItems[i].ESPNumber, new { @readonly = "true", @class = "valid" })
+                                    break;
+                                case CatalogAdvertisingUpload.ProductImage:
+                                    @Html.TextBoxFor(m => m.CatalogAdvertisingItems[i].ProductImage, new { @readonly = "true", @class = "valid" })
+                                    <a style="position: relative;bottom: 4px;left: 8px;" href="/Media/Download?file=/Store/uploads/catalogadvertising/@Model.CatalogAdvertisingItems[i].ProductImage">Download Image</a>
+                                    break;
+                                default:
+                                    break;
+                            }
+                        </span>
+                    }
+               }
+
+            </fieldset>
+        </div>
+        <!-- END #orderdetail-information -->
+    </div> <!-- END #content -->
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/form")
+    <script src="/Scripts/asi.js"></script>
+    <script>
+        $('input.command').click(function(e) {
+            $('#ActionName').val(e.target.value);
+            if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
+                //make sure we have Timms value
+                if (!$('#ExternalReference').val()) {
+                    asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
+                    $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                    $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
+                    e.preventDefault();
+                } else {
+                    var isnum = /^\d+$/.test($('#ExternalReference').val());
+                    if (!isnum) {
+                        asi.modal.confirm('Error', 'TIMMS ID must contain only numbers.', null, "#hide", "Close");
+                        $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
+                        $("#timmsErrorMessage").text("TIMMS ID must contain only numbers.");
+                        e.preventDefault();
+                    }
+                }
+            }
+        });
+        $('[rel*="isprimary"]').change(function() {
+            $('[rel*="isprimary"]').attr("checked", false);
+            this.checked = true;
+        });
+        $(document).ready(function () {
+            $('.save').on("click", function (e) {
+                $('#CatalogAdvertisingItems_0__AdSize').children(':selected').val($('#CatalogAdvertisingItems_0__AdSize').children(':selected').text());
+            });
+        });
+    </script>
+}
+

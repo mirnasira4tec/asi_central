@@ -773,8 +773,8 @@ namespace asi.asicentral.services.PersonifyProxy
                     respCreate.CommTypeCodeString = COMMUNICATION_INPUT_PHONE;
                     respCreate.PrimaryFlag = false;
                     if (!string.IsNullOrWhiteSpace(countryCode)
-                        && string.Equals(countryCode, "USA", StringComparison.InvariantCultureIgnoreCase)
-                        || string.Equals(countryCode, "CAN", StringComparison.InvariantCultureIgnoreCase))
+                        && (string.Equals(countryCode, "USA", StringComparison.InvariantCultureIgnoreCase)
+                        || string.Equals(countryCode, "CAN", StringComparison.InvariantCultureIgnoreCase)))
                     {
                         if (phoneNumber.Length == PHONE_NUMBER_LENGTH && !IsPhoneExist(phoneNumber, companyInfo))
                         {
