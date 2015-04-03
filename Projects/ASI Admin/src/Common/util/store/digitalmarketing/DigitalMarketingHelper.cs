@@ -14,6 +14,7 @@ namespace asi.asicentral.util.store
         //Supplement options
         public static readonly int AD_WORDS_INCREMENT = 50;
         public static readonly int DIGITAL_MARKETING_CONTEXTID = 24;
+        public static readonly int[] MAIN_FEATURES = { 227, 234 };
 
         public static IList<SelectListItem> GetGoogleAdWordOptions()
         {
@@ -23,6 +24,20 @@ namespace asi.asicentral.util.store
                 selectedItems.Add(new SelectListItem() { Text = option.ToString(), Value = option.ToString(), Selected = false });
             }
             return selectedItems;
+        }
+
+        public static IList<ContextFeature> GetFeatureDetails(IStoreService storeService, StoreOrderDetail orderDetail)
+        {
+            IList<ContextFeature>  featureDetails= new List<ContextFeature>();
+            IList<ContextFeature> features = storeService.GetAll<ContextFeature>(true).Where(feature => MAIN_FEATURES.Contains(feature.Id)).ToList();
+            foreach (ContextFeature feature in features)
+            {
+                foreach (ContextFeature featureProduct in feature.ChildFeatures)
+                {
+                    featureDetails.Add(featureProduct);
+                }
+            }
+            return featureDetails;
         }
     }
 }
