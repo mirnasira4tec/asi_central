@@ -470,10 +470,10 @@ namespace asi.asicentral.web.Controllers.Store
                     switch (orderDetail.Product.Id)
                     {
                         case 46:
-                            if (application.OptionId.HasValue)
+                            if (application.OptionId != 0)
                             {
                                 orderDetail.OptionId = application.OptionId;
-                                orderDetail.Cost = ASISmartSalesHelper.GetCost(application.OptionId.Value);
+                                orderDetail.Cost = ASISmartSalesHelper.GetCost(application.OptionId);
                             }
                             orderDetail.Quantity = Convert.ToInt32(application.Quantity);
                             break;

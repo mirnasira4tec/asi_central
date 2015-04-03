@@ -36,6 +36,7 @@ namespace asi.asicentral.web.model.store
         public bool HasShipAddress { get; set; }
         public bool HasBillAddress { get; set; }
         public string StartDate { get; set; }
+        public int ContextId { get; set; }
 
         #region Billing information
 
@@ -144,7 +145,7 @@ namespace asi.asicentral.web.model.store
         public OrderStatus OrderStatus { get; set; }
         public string ProductName { get; set; }
         public int ProductId { get; set; }
-        public int? OptionId { get; set; }
+        public int OptionId { get; set; }
         public decimal Price { get; set; }
         public IList<StoreIndividual> Contacts { get; set; }
         
@@ -166,7 +167,7 @@ namespace asi.asicentral.web.model.store
             BillingIndividual = order.BillingIndividual;
             OrderDetailId = orderdetail.Id;
             this.AcceptedByName = orderdetail.AcceptedByName;
-            if (orderdetail.OptionId.HasValue) this.OptionId = orderdetail.OptionId;
+            if (orderdetail.OptionId.HasValue) this.OptionId = orderdetail.OptionId.Value;
             if (orderdetail.DateOption.HasValue) this.StartDate = orderdetail.DateOption.Value.ToString("MM/dd/yyyy");
             this.Quantity = orderdetail.Quantity;
             this.AcceptedByName = orderdetail.AcceptedByName;

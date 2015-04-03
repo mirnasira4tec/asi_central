@@ -35,6 +35,7 @@ namespace asi.asicentral.web.model.store
         public string ASINumber { get; set; }
         public bool HasShipAddress { get; set; }
         public bool HasBillAddress { get; set; }
+        public int ContextId { get; set; }
 
         #region Billing information
 
@@ -137,7 +138,7 @@ namespace asi.asicentral.web.model.store
         public OrderStatus OrderStatus { get; set; }
         public string ProductName { get; set; }
         public int ProductId { get; set; }
-        public int? OptionId { get; set; }
+        public int OptionId { get; set; }
         public decimal Price { get; set; }
         public IList<StoreIndividual> Contacts { get; set; }
         public IList<StoreDetailProductCollection> productCollections { get; set; }
@@ -159,7 +160,7 @@ namespace asi.asicentral.web.model.store
             StoreOrder order = orderdetail.Order;
             BillingIndividual = order.BillingIndividual;
             OrderDetailId = orderdetail.Id;
-            if (orderdetail.OptionId.HasValue) this.OptionId = orderdetail.OptionId;
+            if (orderdetail.OptionId.HasValue) this.OptionId = orderdetail.OptionId.Value;
             this.Quantity = orderdetail.Quantity;
            
             if (orderdetail.Product != null)

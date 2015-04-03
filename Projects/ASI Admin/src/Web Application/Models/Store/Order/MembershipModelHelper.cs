@@ -23,6 +23,8 @@ namespace asi.asicentral.web.model.store
         bool HasShipAddress { get; set; }
         bool HasBillAddress { get; set; }
         bool HasBankInformation { get; set; }
+        int OptionId { get; set; }
+        int ContextId { get; set; }
         IList<StoreIndividual> Contacts { get; set; }
 
         #region Billing information
@@ -89,6 +91,8 @@ namespace asi.asicentral.web.model.store
         {
             if (orderDetail == null || orderDetail.Order == null) return;
             StoreOrder order = orderDetail.Order;
+
+            if (order != null && order.Context != null) model.ContextId = order.Context.Id;
             //fill in company fields
             if (order.Company != null)
             {
@@ -151,6 +155,7 @@ namespace asi.asicentral.web.model.store
             model.ShippingCost = orderDetail.ShippingCost;
             model.PromotionalDiscount = orderDetail.DiscountAmount;
             model.TotalCost = order.Total;
+            model.OptionId = (orderDetail.OptionId.HasValue) ? orderDetail.OptionId.Value : 0;
 
             decimal cost = orderDetail.Cost;
             int quantity = orderDetail.Quantity;
@@ -159,7 +164,12 @@ namespace asi.asicentral.web.model.store
             {
                 model.HasBankInformation = orderDetail.Product.HasBankInformation;
                 if (orderDetail.Product.IsSubscription && orderDetail.Coupon != null && orderDetail.Coupon.IsSubscription) model.SubscriptionCost += (cost * quantity) + orderDetail.TaxCost + orderDetail.ShippingCost - orderDetail.DiscountAmount;
-                else if (orderDetail.Product.IsSubscription) model.SubscriptionCost += (cost * quantity) + orderDetail.TaxCost + orderDetail.ShippingCost;
+                else if (orderDetail.Product.IsSubscription)
+                {
+                    model.SubscriptionCost += (cost * quantity) + orderDetail.TaxCost + orderDetail.ShippingCost;
+                    if (model.ContextId == DigitalMarketingHelper.DIGITAL_MARKETING_CONTEXTID && model.OptionId != 0)
+                        model.SubscriptionCost += DigitalMarketingHelper.AD_WORDS_INCREMENT * model.OptionId;
+                }
                 model.SubscriptionFrequency = (!string.IsNullOrEmpty(orderDetail.Product.SubscriptionFrequency) ? (orderDetail.Product.SubscriptionFrequency == "M" ? "monthly" : "yearly") : string.Empty);
                 if (orderDetail.Product.HasBackEndIntegration && !string.IsNullOrEmpty(order.BackendReference))
                 {
