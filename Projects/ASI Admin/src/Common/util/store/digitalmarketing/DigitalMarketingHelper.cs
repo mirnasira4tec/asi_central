@@ -19,9 +19,10 @@ namespace asi.asicentral.util.store
         public static IList<SelectListItem> GetGoogleAdWordOptions()
         {
             IList<SelectListItem> selectedItems = new List<SelectListItem>();
-            for (int option = 2; option <= 15; option++)
+            for (int option = 1; option <= 15; option++)
             {
-                selectedItems.Add(new SelectListItem() { Text = option.ToString(), Value = option.ToString(), Selected = false });
+                string text = string.Format("${0}", AD_WORDS_INCREMENT * option);
+                selectedItems.Add(new SelectListItem() { Text = text, Value = option.ToString(), Selected = false });
             }
             return selectedItems;
         }
