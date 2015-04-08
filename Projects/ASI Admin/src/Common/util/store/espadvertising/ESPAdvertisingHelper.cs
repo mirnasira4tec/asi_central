@@ -82,14 +82,14 @@ namespace asi.asicentral.util.store
         public static IList<SelectListItem> GetCPMOptions(string value = null)
         {
             IList<SelectListItem> cpmOptions = new List<SelectListItem>();
-            cpmOptions.Add(new SelectListItem() { Text = "1st - $295", Value = "0", Selected = ("0" == value) });
-            cpmOptions.Add(new SelectListItem() { Text = "2nd - $280", Value = "1", Selected = ("1" == value) });
-            cpmOptions.Add(new SelectListItem() { Text = "3rd - $265", Value = "2", Selected = ("2" == value) });
-            cpmOptions.Add(new SelectListItem() { Text = "4th - $245", Value = "3", Selected = ("3" == value) });
-            cpmOptions.Add(new SelectListItem() { Text = "5th - $235", Value = "4", Selected = ("4" == value) });
-            cpmOptions.Add(new SelectListItem() { Text = "6th - $225", Value = "5", Selected = ("5" == value) });
-            cpmOptions.Add(new SelectListItem() { Text = "7th - $215", Value = "6", Selected = ("6" == value) });
-            cpmOptions.Add(new SelectListItem() { Text = "8th - $210", Value = "7", Selected = ("7" == value) });
+            cpmOptions.Add(new SelectListItem() { Text = "1st - $300", Value = "0", Selected = ("0" == value) });
+            cpmOptions.Add(new SelectListItem() { Text = "2nd - $285", Value = "1", Selected = ("1" == value) });
+            cpmOptions.Add(new SelectListItem() { Text = "3rd - $270", Value = "2", Selected = ("2" == value) });
+            cpmOptions.Add(new SelectListItem() { Text = "4th - $260", Value = "3", Selected = ("3" == value) });
+            cpmOptions.Add(new SelectListItem() { Text = "5th - $250", Value = "4", Selected = ("4" == value) });
+            cpmOptions.Add(new SelectListItem() { Text = "6th - $240", Value = "5", Selected = ("5" == value) });
+            cpmOptions.Add(new SelectListItem() { Text = "7th - $230", Value = "6", Selected = ("6" == value) });
+            cpmOptions.Add(new SelectListItem() { Text = "8th - $220", Value = "7", Selected = ("7" == value) });
             return cpmOptions;
         }
 
