@@ -13,7 +13,7 @@ namespace asi.asicentral.util.store
     {
         //Supplement options
         public static readonly int AD_WORDS_INCREMENT = 50;
-        public static readonly int DIGITAL_MARKETING_CONTEXTID = 24;
+        public static readonly int[] DIGITAL_MARKETING_CONTEXTID = { 24, 11012 };
         public static readonly int[] MAIN_FEATURES = { 227, 234 };
 
         public static IList<SelectListItem> GetGoogleAdWordOptions()

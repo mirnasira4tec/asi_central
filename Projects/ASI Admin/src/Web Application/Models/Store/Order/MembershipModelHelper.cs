@@ -167,7 +167,7 @@ namespace asi.asicentral.web.model.store
                 else if (orderDetail.Product.IsSubscription)
                 {
                     model.SubscriptionCost += (cost * quantity) + orderDetail.TaxCost + orderDetail.ShippingCost;
-                    if (model.ContextId == DigitalMarketingHelper.DIGITAL_MARKETING_CONTEXTID && model.OptionId != 0)
+                    if (DigitalMarketingHelper.DIGITAL_MARKETING_CONTEXTID.Contains(model.ContextId) && model.OptionId != 0)
                         model.SubscriptionCost += DigitalMarketingHelper.AD_WORDS_INCREMENT * model.OptionId;
                 }
                 model.SubscriptionFrequency = (!string.IsNullOrEmpty(orderDetail.Product.SubscriptionFrequency) ? (orderDetail.Product.SubscriptionFrequency == "M" ? "monthly" : "yearly") : string.Empty);
