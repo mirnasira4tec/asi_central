@@ -791,7 +791,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     }
                     respSave = SvcClient.Save<CusCommunication>(respCreate);
                 }
-                catch (Exception ex)
+                catch
                 {
                     respSave = null;
                 }

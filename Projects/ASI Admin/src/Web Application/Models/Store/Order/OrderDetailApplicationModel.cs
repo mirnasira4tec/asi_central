@@ -36,6 +36,7 @@ namespace asi.asicentral.web.model.store
         public bool HasShipAddress { get; set; }
         public bool HasBillAddress { get; set; }
         public string StartDate { get; set; }
+        public int ContextId { get; set; }
 
         #region Billing information
 
