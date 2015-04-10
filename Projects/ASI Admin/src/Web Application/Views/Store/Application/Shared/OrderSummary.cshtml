@@ -11,12 +11,12 @@
         <td/>
         <td>@Model.Quantity.ToString()</td>
     </tr>
-    @if (Model.ContextId == DigitalMarketingHelper.DIGITAL_MARKETING_CONTEXTID && Model.OptionId != 0)
+    @if (ASIBrandBuilderHelper.ASI_BRAND_BUILDER_CONTEXTIDS.Contains(Model.ContextId) && Model.OptionId.HasValue && Model.OptionId.Value != 0)
     {
     <tr>
         <td>Google AdWords Cost:</td>
         <td/>
-        <td>$@((Model.OptionId * DigitalMarketingHelper.AD_WORDS_INCREMENT).ToString("N"))</td>
+        <td>$@((Model.OptionId.Value * ASIBrandBuilderHelper.AD_WORDS_INCREMENT).ToString("N"))</td>
     </tr>
     }
     @if (Model.ApplicationFeeCost > 0)

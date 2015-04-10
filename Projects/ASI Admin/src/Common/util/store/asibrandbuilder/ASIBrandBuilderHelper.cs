@@ -9,11 +9,11 @@ using asi.asicentral.Resources;
 
 namespace asi.asicentral.util.store
 {
-    public class DigitalMarketingHelper
+    public class ASIBrandBuilderHelper
     {
         //Supplement options
         public static readonly int AD_WORDS_INCREMENT = 50;
-        public static readonly int[] DIGITAL_MARKETING_CONTEXTID = { 24, 11012 };
+        public static readonly int[] ASI_BRAND_BUILDER_CONTEXTIDS = { 24, 11012 };
         public static readonly int[] MAIN_FEATURES = { 227, 234 };
 
         public static IList<SelectListItem> GetGoogleAdWordOptions()

@@ -23,7 +23,7 @@ namespace asi.asicentral.web.model.store
         bool HasShipAddress { get; set; }
         bool HasBillAddress { get; set; }
         bool HasBankInformation { get; set; }
-        int OptionId { get; set; }
+        int? OptionId { get; set; }
         int ContextId { get; set; }
         IList<StoreIndividual> Contacts { get; set; }
 
@@ -167,8 +167,8 @@ namespace asi.asicentral.web.model.store
                 else if (orderDetail.Product.IsSubscription)
                 {
                     model.SubscriptionCost += (cost * quantity) + orderDetail.TaxCost + orderDetail.ShippingCost;
-                    if (DigitalMarketingHelper.DIGITAL_MARKETING_CONTEXTID.Contains(model.ContextId) && model.OptionId != 0)
-                        model.SubscriptionCost += DigitalMarketingHelper.AD_WORDS_INCREMENT * model.OptionId;
+                    if (ASIBrandBuilderHelper.ASI_BRAND_BUILDER_CONTEXTIDS.Contains(model.ContextId) && model.OptionId.HasValue && model.OptionId != 0)
+                        model.SubscriptionCost += ASIBrandBuilderHelper.AD_WORDS_INCREMENT * model.OptionId.Value;
                 }
                 model.SubscriptionFrequency = (!string.IsNullOrEmpty(orderDetail.Product.SubscriptionFrequency) ? (orderDetail.Product.SubscriptionFrequency == "M" ? "monthly" : "yearly") : string.Empty);
                 if (orderDetail.Product.HasBackEndIntegration && !string.IsNullOrEmpty(order.BackendReference))

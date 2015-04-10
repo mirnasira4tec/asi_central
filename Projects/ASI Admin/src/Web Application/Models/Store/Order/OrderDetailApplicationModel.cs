@@ -145,7 +145,7 @@ namespace asi.asicentral.web.model.store
         public OrderStatus OrderStatus { get; set; }
         public string ProductName { get; set; }
         public int ProductId { get; set; }
-        public int OptionId { get; set; }
+        public int? OptionId { get; set; }
         public decimal Price { get; set; }
         public IList<StoreIndividual> Contacts { get; set; }
         

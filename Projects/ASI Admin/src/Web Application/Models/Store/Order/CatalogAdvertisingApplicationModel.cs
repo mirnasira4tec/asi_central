@@ -43,7 +43,7 @@ namespace asi.asicentral.web.Models.Store.Order
         public bool HasShipAddress { get; set; }
         public bool HasBillAddress { get; set; }
         public bool HasBankInformation { get; set; }
-        public int OptionId { get; set; }
+        public int? OptionId { get; set; }
         public int ContextId { get; set; }
 
         #region Billing information
