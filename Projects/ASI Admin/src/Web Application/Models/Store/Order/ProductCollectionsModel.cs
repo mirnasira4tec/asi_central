@@ -160,7 +160,7 @@ namespace asi.asicentral.web.model.store
             StoreOrder order = orderdetail.Order;
             BillingIndividual = order.BillingIndividual;
             OrderDetailId = orderdetail.Id;
-            if (orderdetail.OptionId.HasValue) this.OptionId = orderdetail.OptionId.Value;
+            if (orderdetail.OptionId.HasValue) this.OptionId = orderdetail.OptionId;
             this.Quantity = orderdetail.Quantity;
            
             if (orderdetail.Product != null)

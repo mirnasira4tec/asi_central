@@ -167,7 +167,7 @@ namespace asi.asicentral.web.model.store
             BillingIndividual = order.BillingIndividual;
             OrderDetailId = orderdetail.Id;
             this.AcceptedByName = orderdetail.AcceptedByName;
-            if (orderdetail.OptionId.HasValue) this.OptionId = orderdetail.OptionId.Value;
+            if (orderdetail.OptionId.HasValue) this.OptionId = orderdetail.OptionId;
             if (orderdetail.DateOption.HasValue) this.StartDate = orderdetail.DateOption.Value.ToString("MM/dd/yyyy");
             this.Quantity = orderdetail.Quantity;
             this.AcceptedByName = orderdetail.AcceptedByName;
