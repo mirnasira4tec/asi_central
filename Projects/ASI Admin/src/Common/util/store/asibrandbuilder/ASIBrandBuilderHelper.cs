@@ -38,6 +38,12 @@ namespace asi.asicentral.util.store
                     featureDetails.Add(featureProduct);
                 }
             }
+            if(orderDetail != null && orderDetail.OptionId.HasValue && orderDetail.OptionId.Value != 0)
+            {
+                ContextFeature cf = new ContextFeature();
+                cf.Name = "Extra Google AdWords Cost is $" + (orderDetail.OptionId.Value * AD_WORDS_INCREMENT).ToString();
+                featureDetails.Add(cf);
+            }
             return featureDetails;
         }
     }
