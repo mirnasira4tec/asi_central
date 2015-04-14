@@ -193,7 +193,17 @@ namespace asi.asicentral.oauth
             }
             return isValidPassword;
         }
-
+        public static bool ResetPassword(string newPassword, int ssoid)
+        {
+            bool isPasswordchanged = false;
+            if (!string.IsNullOrEmpty(newPassword) && !string.IsNullOrEmpty(ssoid.ToString()))
+            {
+                asi.asicentral.model.Security security = new asi.asicentral.model.Security();
+                security.Password = newPassword;
+                isPasswordchanged = ASIOAuthClient.ChangePassword(ssoid, security, false);
+            }
+            return isPasswordchanged;
+        }
         public static bool ChangePassword(string currentPassword, string newPassword, System.Security.Principal.IPrincipal securityUser, HttpRequestBase request, HttpResponseBase response, bool isUserVerified = false, asi.asicentral.model.User user = null, bool passwordResetRequired = false)
         {
             bool isPasswordchanged = false;
@@ -218,7 +228,7 @@ namespace asi.asicentral.oauth
             }
             return isPasswordchanged;
         }
-        
+
         /// <summary>
         /// Generate random password
         /// Code - http://forums.asp.net/p/1493859/3520369.aspx
@@ -320,7 +330,7 @@ namespace asi.asicentral.oauth
                 CookiesHelper.SetCookieValue(request, response, COOKIES_CMPSSO, companyId + "-" + sso, true, domainName);
 
                 //Code to add userrole
-                if(isAddRoles) AddOrRemoveUserFromRole(username, user.Email, user.MemberType_CD, user.MemberStatus_CD, true);
+                if (isAddRoles) AddOrRemoveUserFromRole(username, user.Email, user.MemberType_CD, user.MemberStatus_CD, true);
             }
         }
 
