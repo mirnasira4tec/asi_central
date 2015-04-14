@@ -136,8 +136,10 @@ namespace asi.asicentral.web.model.store
             order.orderDetail = orderDetail;
             order.CompletedStep = orderDetail.Order.CompletedStep.ToString();
             order.Application = storeService.GetApplication(orderDetail);
-            order.ShowIcons = orderDetail.Order.ProcessStatus == OrderStatus.Pending && order.Application != null && orderDetail.Order.IsCompleted == true;
-            if (!order.ShowIcons) order.ShowIcons = orderDetail.Order.ProcessStatus == OrderStatus.Pending && order.ProductType == "Product" && orderDetail.Order.IsCompleted == true;
+            bool isShowIcons = orderDetail.Order != null && orderDetail.Order.ProcessStatus == OrderStatus.Pending && orderDetail.Order.IsCompleted;
+            order.ShowIcons =  isShowIcons && order.Application != null;
+            if (!order.ShowIcons) order.ShowIcons = isShowIcons && order.ProductType == "Product";
+            if (!order.ShowIcons) order.ShowIcons = isShowIcons && orderDetail.Order.ContextId != null;
             if (orderDetail.Order.Company != null)
                 order.Company = orderDetail.Order.Company.Name;
             if (orderDetail.Order.CreditCard != null && !string.IsNullOrEmpty(orderDetail.Order.CreditCard.CardNumber))

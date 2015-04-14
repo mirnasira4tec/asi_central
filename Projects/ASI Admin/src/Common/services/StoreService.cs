@@ -228,6 +228,8 @@ namespace asi.asicentral.services
                     orderDetail.TaxCost = tax;
                     //this is the cost of what to pay now
 					order.Total += (orderDetail.Cost * orderDetail.Quantity) + orderDetail.TaxCost - orderDetail.DiscountAmount + orderDetail.ShippingCost + orderDetail.ApplicationCost;
+                    if (orderDetail.Order.Context != null && ASIBrandBuilderHelper.ASI_BRAND_BUILDER_CONTEXTIDS.Contains(orderDetail.Order.Context.Id) && orderDetail.OptionId.HasValue && orderDetail.OptionId.Value != 0)
+                        order.Total += ASIBrandBuilderHelper.AD_WORDS_INCREMENT * orderDetail.OptionId.Value;
                     if (order.Total < 0.0m) order.Total = 0;
 
                     //This is to calculate annualized cost

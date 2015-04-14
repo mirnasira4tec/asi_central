@@ -10,6 +10,8 @@ namespace asi.asicentral.util.store
 {
     public static class Helper
     {
+        public static readonly int[] SPECIAL_CONTEXT_IDS = { 21, 10016, 24, 11012 };
+
         public static IList<SelectListItem> GetTitles()
         {
             IList<SelectListItem> titles = new List<SelectListItem>();
