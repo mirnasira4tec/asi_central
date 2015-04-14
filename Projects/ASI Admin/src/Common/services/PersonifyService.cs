@@ -199,7 +199,7 @@ namespace asi.asicentral.services
 			order.ExternalReference = companyInfo.MasterCustomerId;
             //Add credit card to the company
             string profile = PersonifyClient.GetCreditCardProfileId(order.GetASICompany(), companyInfo, creditCard);
-			//temporary measure, always add the credit card. No longer checking if (profile == string.Empty) 
+			//@todo CC Personify temporary measure, always add the credit card. No longer checking if (profile == string.Empty) 
 			profile = PersonifyClient.SaveCreditCard(order.GetASICompany(), companyInfo, creditCard);
             log.Debug(string.IsNullOrWhiteSpace(profile) ?
                 "Fail to save the credit." : string.Format("Saved credit profile id : {0}", profile));

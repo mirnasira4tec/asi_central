@@ -46,7 +46,7 @@ namespace asi.asicentral.services
             ILogService log = null;
 			//check for ASI #
 			var hasASINumber = order.Company != null && !string.IsNullOrEmpty(order.Company.ASINumber);
-	        if (backendIntegration || hasASINumber)
+            if (backendIntegration)//@todo CC Personify  || hasASINumber)
 	        {
 				//put the credit card in back office directly
 		        try
