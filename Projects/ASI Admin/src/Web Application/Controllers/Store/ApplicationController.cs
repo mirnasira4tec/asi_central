@@ -24,7 +24,7 @@ namespace asi.asicentral.web.Controllers.Store
         public const string COMMAND_ACCEPT = "Accept";
         public const string COMMAND_RESUBMIT = "Resubmit";
         //products associated only to StoreOrderDetail table
-        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 45, 46, 55, 62, 70, 71, 77 };
+        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 45, 46, 55, 62, 70, 71, 77, 96, 97, 98 };
         //products associated to StoreDetailESPAdvertising table
         public static readonly int[] SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS = { 48, 49, 50, 51, 52, 53};
         //products associated to StoreDetailCatalog table
@@ -76,7 +76,7 @@ namespace asi.asicentral.web.Controllers.Store
                     return View("../Store/Application/MagzineAdvertising", new MagazinesAdvertisingApplicationModel(orderDetail, detailMagazineAdvertising, StoreService));
                 }
                 else if (SUPPLIER_ESP_PAYFORPLACEMENT_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/PayForPlacement", new ESPPayForPlacementModel(orderDetail, StoreService));
-                else if (SUPPLIER_EMAIL_EXPRESS_PRODUCT_ID==orderDetail.Product.Id)
+                else if (SUPPLIER_EMAIL_EXPRESS_PRODUCT_ID == orderDetail.Product.Id)
                 {
                     StoreDetailEmailExpress detailEmailExpress = StoreService.GetAll<StoreDetailEmailExpress>().Where(emailexpress => emailexpress.OrderDetailId == orderDetail.Id).SingleOrDefault();
                     return View("../Store/Application/EmailExpress", new EmailExpressModel(orderDetail, detailEmailExpress, StoreService));
@@ -86,7 +86,7 @@ namespace asi.asicentral.web.Controllers.Store
                 else if (FormsHelper.FORMS_ASSOCIATED_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/FormProduct", new FormsModel(orderDetail, StoreService));
                 else if (StoreDetailCatalogAdvertisingItem.SUPPLIER_CATALOG_ADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
                 {
-                    var catalogAdvertisings = StoreService.GetAll<StoreDetailCatalogAdvertisingItem>().Where(item=>item.OrderDetailId == orderDetail.Id).ToList();
+                    var catalogAdvertisings = StoreService.GetAll<StoreDetailCatalogAdvertisingItem>().Where(item => item.OrderDetailId == orderDetail.Id).ToList();
                     return View("../Store/Application/CatalogAdvertising", new CatalogAdvertisingApplicationModel(orderDetail, catalogAdvertisings, StoreService));
                 }
             }

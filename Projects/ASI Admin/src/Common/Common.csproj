@@ -463,6 +463,7 @@
     <Compile Include="util\store\catalogs\CatalogsHelper.cs" />
     <Compile Include="util\store\companystore\CompanyStoreHelper.cs" />
     <Compile Include="util\store\companystore\CountryCodeHelper.cs" />
+    <Compile Include="util\store\asibrandbuilder\ASIBrandBuilderHelper.cs" />
     <Compile Include="util\store\Forms\FormsHelper.cs" />
     <Compile Include="util\store\supplierspecials\SupplierSpecialsHelper.cs" />
     <Compile Include="util\store\emailexpress\EmailExpressHelper.cs" />
