@@ -57,27 +57,35 @@ namespace asi.asicentral.services
                 }
             }
             _objectService.Add<TIMSSCompany>(company);
-            Guid extRef = new Guid(order.CreditCard.ExternalReference);
-            TIMSSCreditInfo credit = new TIMSSCreditInfo()
-            {
-                DAPP_UserId = company.DAPP_UserId,
-                Name = order.CreditCard.CardHolderName,
-                FirstName = GetNamePart(order.CreditCard.CardHolderName, true),
-                LastName = GetNamePart(order.CreditCard.CardHolderName, false),
-                ExpirationMonth = order.CreditCard.ExpMonth,
-                ExpirationYear = order.CreditCard.ExpYear,
-                Type = order.CreditCard.CardType,
-                Number = order.CreditCard.ExternalReference,
-                Street1 = order.BillingIndividual.Address.Street1,
-                Street2 = order.BillingIndividual.Address.Street2,
-                Zip = order.BillingIndividual.Address.Zip,
-                City = order.BillingIndividual.Address.City,
-                State = order.BillingIndividual.Address.State,
-                Country = order.BillingIndividual.Address.Country,
-                ExternalReference = extRef,
-                DateCreated = DateTime.Now,
-            };
-            _objectService.Add<TIMSSCreditInfo>(credit);
+			try
+			{
+				Guid extRef = new Guid(order.CreditCard.ExternalReference);
+				TIMSSCreditInfo credit = new TIMSSCreditInfo()
+				{
+					DAPP_UserId = company.DAPP_UserId,
+					Name = order.CreditCard.CardHolderName,
+					FirstName = GetNamePart(order.CreditCard.CardHolderName, true),
+					LastName = GetNamePart(order.CreditCard.CardHolderName, false),
+					ExpirationMonth = order.CreditCard.ExpMonth,
+					ExpirationYear = order.CreditCard.ExpYear,
+					Type = order.CreditCard.CardType,
+					Number = order.CreditCard.ExternalReference,
+					Street1 = order.BillingIndividual.Address.Street1,
+					Street2 = order.BillingIndividual.Address.Street2,
+					Zip = order.BillingIndividual.Address.Zip,
+					City = order.BillingIndividual.Address.City,
+					State = order.BillingIndividual.Address.State,
+					Country = order.BillingIndividual.Address.Country,
+					ExternalReference = extRef,
+					DateCreated = DateTime.Now,
+				};
+				_objectService.Add<TIMSSCreditInfo>(credit);
+			}
+			catch (Exception)
+			{
+				//with new process, external reference could be the profile id
+				//would not work but that is ok.
+			}
             //add the contacts
             if (order.Company != null && order.Company.Individuals.Count > 0)
             {

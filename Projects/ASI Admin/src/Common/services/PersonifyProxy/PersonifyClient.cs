@@ -791,7 +791,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     }
                     respSave = SvcClient.Save<CusCommunication>(respCreate);
                 }
-                catch (Exception ex)
+                catch
                 {
                     respSave = null;
                 }
@@ -846,7 +846,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 BillingAddressPostalCode = creditCard.PostalCode,
                 BillingAddressCountryCode = creditCard.CountryCode,
                 DefaultFlag = true,
-                CompanyNumber = "1",
+				CompanyNumber = CompanyNumber[asiCompany],
                 AddedOrModifiedBy = ADDED_OR_MODIFIED_BY
             };
             var resp = SvcClient.Post<CustomerCreditCardOutput>("AddCustomerCreditCard", customerCreditCardInput);
