@@ -81,19 +81,27 @@
                                 <label class="radio">@Html.RadioButtonFor(model => model.OptionId, option.Value, new { @disabled="true" }) @Html.Raw(option.Text) </label>
                             }
                         </div>
-
                     </div>
                      <div class="control-group">
                         <label class="control-label" for="Cost">Selected Date</label>
                         <div class="controls">
                            <input type="text" value="@Model.StartDate" readonly="true" />
                         </div>
-
                     </div>
                     <div class="control-group">
                         <div class="controls">
                         </div>
                     </div>
+                            break;
+                case 96:
+                case 97:
+                case 98:
+                    <span class="label-row span11">
+                        @Html.Label("Google AdWords Cost")
+		            </span>
+		            <span class="label-row">
+			             @Html.DropDownListFor(model => model.OptionId, asi.asicentral.util.store.ASIBrandBuilderHelper.GetGoogleAdWordOptions(), new { @class = "tab1", @disabled="true" }) @Html.ValidationMessageFor(model => model.OptionId)
+		            </span>
                             break;
                 default:
                 <span class="label-row span11">
