@@ -166,9 +166,6 @@ namespace asi.asicentral.web.model.store
                 if (orderDetail.Product.IsSubscription && orderDetail.Coupon != null && orderDetail.Coupon.IsSubscription) model.SubscriptionCost += (cost * quantity) + orderDetail.TaxCost + orderDetail.ShippingCost - orderDetail.DiscountAmount;
                 else if (orderDetail.Product.IsSubscription) model.SubscriptionCost += (cost * quantity) + orderDetail.TaxCost + orderDetail.ShippingCost;
 
-                if (orderDetail.Product.IsSubscription &&  ASIBrandBuilderHelper.ASI_BRAND_BUILDER_PRODUCTIDS.Contains(orderDetail.Product.Id) && model.OptionId.HasValue && model.OptionId != 0)
-                    model.SubscriptionCost += ASIBrandBuilderHelper.AD_WORDS_INCREMENT * model.OptionId.Value;
-
                 model.SubscriptionFrequency = (!string.IsNullOrEmpty(orderDetail.Product.SubscriptionFrequency) ? (orderDetail.Product.SubscriptionFrequency == "M" ? "monthly" : "yearly") : string.Empty);
                 if (orderDetail.Product.HasBackEndIntegration && !string.IsNullOrEmpty(order.BackendReference))
                 {
