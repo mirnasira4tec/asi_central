@@ -9,6 +9,8 @@ using System.Web;
 using Umbraco.Core.Services;
 using Umbraco.Core.Models;
 using Umbraco.Core;
+using asi.asicentral.interfaces;
+using asi.asicentral.services;
 
 namespace asi.asicentral.oauth
 {
@@ -135,6 +137,8 @@ namespace asi.asicentral.oauth
 
         public static int AddOrRemoveUserFromRole(string username, string email, string memberType, string memberStatus, bool isAddRole)
         {
+            ILogService logService = LogService.GetLog(typeof(SSO));
+            logService.Debug("AddOrRemoveUserFromRole - Start: U-" + username + " Type-" + memberType + " S-" + memberStatus);
             int status = 0;
             if (!string.IsNullOrEmpty(username))
             {
@@ -178,6 +182,7 @@ namespace asi.asicentral.oauth
                 else status = 4; // Username or rolename are empty
 
             }
+            logService.Debug("AddOrRemoveUserFromRole - End:" + status);
             return status;
         }
 

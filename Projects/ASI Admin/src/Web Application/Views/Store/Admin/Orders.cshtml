@@ -151,12 +151,12 @@
                         {
                             <tr>
                                 <td width="80px">@if (order.ShowIcons)
-                                                 { 
+                                { 
                                     <a id="@order.OrderId" rel="tooltip" data-placement="top" data-type="reject" title="Click here to reject the order" href="#"><i class="icon-remove"></i></a>
                                     <a rel="tooltip" data-placement="top" title="Click here to accept the order" href="@Url.Action("Edit", "Application", new { Id = order.OrderDetailId })"><i data-orderid="@order.OrderId" class="icon-ok"></i></a> 
-                                                 }
-                                                 else
-                                                 { <img src="/images/transparent.gif" style="height: 1px; width: 33px" /> }
+                                }
+                                else
+                                { <img src="/images/transparent.gif" style="height: 1px; width: 33px" /> }
                                     @order.OrderId</td>
                                 <td>@order.Name</td>
                                 <td>@order.Email</td>
@@ -168,7 +168,7 @@
                                 {
                                     <td><a href="#" class="productRef" data-id="@Server.UrlEncode(order.Item)">@Html.Raw(order.Item)</a></td>
                                 }
-                                @if (order.ShowIcons)
+                                @if (order.Application != null || order.ProductType == "Product")
                                 { 
                                     <td><a href="@Url.Action("Edit", "Application", new { Id = order.OrderDetailId })">Application</a></td> 
                                 }
