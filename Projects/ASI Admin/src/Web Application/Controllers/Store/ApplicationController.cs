@@ -13,6 +13,7 @@ using asi.asicentral.util.store;
 using asi.asicentral.web.Models.Store.Order;
 using ASI.EntityModel;
 using asi.asicentral.model.store;
+using asi.asicentral.web.Models.Store.interfaces;
 
 namespace asi.asicentral.web.Controllers.Store
 {
