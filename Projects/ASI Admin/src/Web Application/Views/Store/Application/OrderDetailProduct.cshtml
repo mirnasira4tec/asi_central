@@ -100,9 +100,16 @@
                         @Html.Label("Google AdWords Cost")
 		            </span>
 		            <span class="label-row">
+                    @if(Model.OptionId.HasValue && Model.OptionId.Value != 0)
+                    {
 			             @Html.DropDownListFor(model => model.OptionId, asi.asicentral.util.store.ASIBrandBuilderHelper.GetGoogleAdWordOptions(), new { @class = "tab1", @disabled="true" }) @Html.ValidationMessageFor(model => model.OptionId)
+                    }
+                    else
+                    {
+                        @Html.Label("$0")
+                    }
 		            </span>
-                            break;
+                    break;
                 default:
                 <span class="label-row span11">
 			        @Html.LabelFor(m => m.Quantity) 
