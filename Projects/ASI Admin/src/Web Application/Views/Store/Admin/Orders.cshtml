@@ -168,12 +168,7 @@
                                 {
                                     <td><a href="#" class="productRef" data-id="@Server.UrlEncode(order.Item)">@Html.Raw(order.Item)</a></td>
                                 }
-                                @if (order.Application != null || order.ProductType == "Product")
-                                { 
-                                    <td><a href="@Url.Action("Edit", "Application", new { Id = order.OrderDetailId })">Application</a></td> 
-                                }
-                                else
-                                { <td>&nbsp</td> }
+                                <td><a href="@Url.Action("Edit", "Application", new { Id = order.OrderDetailId })">Application</a></td> 
                                 <td>@order.CompletedStep</td>
                                 <td>@order.Quantity</td>
                                 <td>$@order.Price</td>

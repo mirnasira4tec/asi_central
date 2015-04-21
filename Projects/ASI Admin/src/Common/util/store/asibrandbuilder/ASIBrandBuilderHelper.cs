@@ -13,8 +13,8 @@ namespace asi.asicentral.util.store
     {
         //Supplement options
         public static readonly int AD_WORDS_INCREMENT = 50;
-        public static readonly int[] ASI_BRAND_BUILDER_CONTEXTIDS = { 24, 11012 };
         public static readonly int[] MAIN_FEATURES = { 227, 234 };
+        public static readonly int[] ASI_BRAND_BUILDER_PRODUCTIDS = { 96, 97, 98 };
 
         public static IList<SelectListItem> GetGoogleAdWordOptions()
         {
@@ -27,24 +27,25 @@ namespace asi.asicentral.util.store
             return selectedItems;
         }
 
-        public static IList<ContextFeature> GetFeatureDetails(IStoreService storeService, StoreOrderDetail orderDetail)
+        public static IList<string> GetSummaryDetails(IStoreService storeService, StoreOrderDetail orderDetail)
         {
-            IList<ContextFeature>  featureDetails= new List<ContextFeature>();
+            IList<string> summaryItems = null;
             IList<ContextFeature> features = storeService.GetAll<ContextFeature>(true).Where(feature => MAIN_FEATURES.Contains(feature.Id)).ToList();
-            foreach (ContextFeature feature in features)
+            if (features != null && features.Count > 0)
             {
-                foreach (ContextFeature featureProduct in feature.ChildFeatures)
+                summaryItems = new List<string>();
+                foreach (ContextFeature feature in features)
                 {
-                    featureDetails.Add(featureProduct);
+                    foreach (ContextFeature featureProduct in feature.ChildFeatures)
+                    {
+                        summaryItems.Add(featureProduct.Name);
+                    }
                 }
+                if (orderDetail != null && orderDetail.OptionId.HasValue && orderDetail.OptionId.Value != 0)
+                    summaryItems.Add(string.Format("Extra Google AdWords Cost is ${0}", (orderDetail.OptionId.Value * AD_WORDS_INCREMENT).ToString()));
             }
-            if(orderDetail != null && orderDetail.OptionId.HasValue && orderDetail.OptionId.Value != 0)
-            {
-                ContextFeature cf = new ContextFeature();
-                cf.Name = "Extra Google AdWords Cost is $" + (orderDetail.OptionId.Value * AD_WORDS_INCREMENT).ToString();
-                featureDetails.Add(cf);
-            }
-            return featureDetails;
+            
+            return summaryItems;
         }
     }
 }

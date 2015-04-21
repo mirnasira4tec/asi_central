@@ -1,5 +1,5 @@
 ﻿@using asi.asicentral.util.store
-@model asi.asicentral.web.model.store.IMembershipModel
+@model asi.asicentral.web.store.interfaces.IMembershipModel
 <table>
     <tr>
         <td>Cost:</td>
@@ -11,14 +11,6 @@
         <td/>
         <td>@Model.Quantity.ToString()</td>
     </tr>
-    @if (ASIBrandBuilderHelper.ASI_BRAND_BUILDER_CONTEXTIDS.Contains(Model.ContextId) && Model.OptionId.HasValue && Model.OptionId.Value != 0)
-    {
-    <tr>
-        <td>Google AdWords Cost:</td>
-        <td/>
-        <td>$@((Model.OptionId.Value * ASIBrandBuilderHelper.AD_WORDS_INCREMENT).ToString("N"))</td>
-    </tr>
-    }
     @if (Model.ApplicationFeeCost > 0)
     {
     <tr>

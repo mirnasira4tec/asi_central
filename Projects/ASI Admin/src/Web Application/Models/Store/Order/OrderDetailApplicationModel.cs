@@ -46,7 +46,7 @@ namespace asi.asicentral.web.model.store
            
             if (orderdetail.Product != null)
             {
-                ProductName = orderdetail.Product.Name;
+                ProductName += orderdetail.Product.Name;
                 ProductId = orderdetail.Product.Id;
                 Cost = orderdetail.Cost;
             }

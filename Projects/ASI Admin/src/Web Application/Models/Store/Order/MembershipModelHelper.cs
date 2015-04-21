@@ -1,7 +1,7 @@
 ﻿using asi.asicentral.model.store;
 using asi.asicentral.services;
 using asi.asicentral.util.store;
-using asi.asicentral.web.interfaces;
+using asi.asicentral.web.store.interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,12 +88,8 @@ namespace asi.asicentral.web.model.store
             {
                 model.HasBankInformation = orderDetail.Product.HasBankInformation;
                 if (orderDetail.Product.IsSubscription && orderDetail.Coupon != null && orderDetail.Coupon.IsSubscription) model.SubscriptionCost += (cost * quantity) + orderDetail.TaxCost + orderDetail.ShippingCost - orderDetail.DiscountAmount;
-                else if (orderDetail.Product.IsSubscription)
-                {
-                    model.SubscriptionCost += (cost * quantity) + orderDetail.TaxCost + orderDetail.ShippingCost;
-                    if (ASIBrandBuilderHelper.ASI_BRAND_BUILDER_CONTEXTIDS.Contains(model.ContextId) && model.OptionId.HasValue && model.OptionId != 0)
-                        model.SubscriptionCost += ASIBrandBuilderHelper.AD_WORDS_INCREMENT * model.OptionId.Value;
-                }
+                else if (orderDetail.Product.IsSubscription) model.SubscriptionCost += (cost * quantity) + orderDetail.TaxCost + orderDetail.ShippingCost;
+
                 model.SubscriptionFrequency = (!string.IsNullOrEmpty(orderDetail.Product.SubscriptionFrequency) ? (orderDetail.Product.SubscriptionFrequency == "M" ? "monthly" : "yearly") : string.Empty);
                 if (orderDetail.Product.HasBackEndIntegration && !string.IsNullOrEmpty(order.BackendReference))
                 {
