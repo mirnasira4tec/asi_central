@@ -16,7 +16,6 @@ namespace asi.asicentral.web.model.store
         public decimal Cost { get; set; }
         public bool IsStoreRequest { get; set; }
         public string AcceptedByName { get; set; }
-        public int? OptionId { get; set; }
         public FormInstance FormInstanceObject { get; set; }
         public int FormInstanceId { get; set; }
         

@@ -58,9 +58,6 @@ namespace asi.asicentral.web.model.store
         public IStoreService StoreService { get; set; }
         public IList<StoreIndividual> Contacts { get; set; }
 
-        private CatalogsHelper catalogsHelper { get; set; }
-        private IList<LookCatalogOption> catalogOptions { get; set; }
-
         #region Billing information
 
         [Display(ResourceType = typeof(Resource), Name = "BillingTollPhone")]
@@ -123,103 +120,6 @@ namespace asi.asicentral.web.model.store
         public string ShippingCountry { get; set; }
 
         #endregion shipping information
-
-        #region Catalog information
-
-        [Display(ResourceType = typeof(Resource), Name = "Cover")]
-        public string Cover { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "Area")]
-        public string Area { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "Color")]
-        public string Color { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "ImprintInstruction")]
-        public string Imprint { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "Supplement")]
-        public string Supplement { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "Line1")]
-        public string Line1 { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "Line2")]
-        public string Line2 { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "Line3")]
-        public string Line3 { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "Line4")]
-        public string Line4 { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "Line5")]
-        public string Line5 { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "Line6")]
-        public string Line6 { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "Line1")]
-        public string BackLine1 { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "Line2")]
-        public string BackLine2 { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "Line3")]
-        public string BackLine3 { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "Line4")]
-        public string BackLine4 { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "Artwork")]
-        public string ArtworkOption { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "LogoPath")]
-        public string LogoPath { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "IsArtworkToProof")]
-        public bool IsArtworkToProof { get; set; }
-
-        [Display(ResourceType = typeof(Resource), Name = "ShippingMethod")]
-        public string ShippingMethod { get; set; }
-
-        IList<SelectListItem> coverOptions { get; set; }
-        public IList<SelectListItem> CoverOptions
-        {
-            get { return coverOptions; }
-        }
-
-        IList<SelectListItem> areaOptions { get; set; }
-        public IList<SelectListItem> AreaOptions
-        {
-            get { return areaOptions; }
-        }
-
-        IList<SelectListItem> colorOptions { get; set; }
-        public IList<SelectListItem> ColorOptions
-        {
-            get { return colorOptions; }
-        }
-
-        IList<SelectListItem> imprintOptions { get; set; }
-        public IList<SelectListItem> ImprintOptions
-        {
-            get { return imprintOptions; }
-        }
-
-        IList<SelectListItem> supplementOptions { get; set; }
-        public IList<SelectListItem> SupplementOptions
-        {
-            get { return supplementOptions; }
-        }
-
-        IList<SelectListItem> shippingOptions { get; set; }
-        public IList<SelectListItem> ShippingOptions
-        {
-            get { return shippingOptions; }
-        }
-
-        #endregion
 
         #region Cost information
         public decimal ItemsCost { get; set; }

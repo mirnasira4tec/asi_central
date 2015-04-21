@@ -20,10 +20,7 @@ namespace asi.asicentral.web.model.store
             get { return SupplierSpecialsHelper.GetPackagesOptions(); }
         }
         public string AcceptedByName { get; set; }
-       
-        public int? OptionId { get; set; }
-       
-        
+
         /// <summary>
         /// Required for MVC to rebuild the model
         /// </summary>
