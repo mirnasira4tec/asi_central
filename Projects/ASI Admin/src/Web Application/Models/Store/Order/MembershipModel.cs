@@ -2,7 +2,7 @@
 using asi.asicentral.model.store;
 using asi.asicentral.Resources;
 using asi.asicentral.util.store;
-using asi.asicentral.web.Models.Store.interfaces;
+using asi.asicentral.web.interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace asi.asicentral.web.Models.Store.Order
+namespace asi.asicentral.web.model.store
 {
     public class MembershipModel : IMembershipModel
 

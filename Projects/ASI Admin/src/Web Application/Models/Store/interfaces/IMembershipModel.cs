@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace asi.asicentral.web.Models.Store.interfaces
+namespace asi.asicentral.web.interfaces
 {
     public interface IMembershipModel
     {

@@ -8,7 +8,6 @@ using asi.asicentral.interfaces;
 using System.Web.Mvc;
 using asi.asicentral.util.store;
 using asi.asicentral.Resources;
-using asi.asicentral.web.Models.Store.Order;
 
 namespace asi.asicentral.web.model.store
 {

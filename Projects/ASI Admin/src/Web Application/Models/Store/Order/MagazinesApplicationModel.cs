@@ -6,7 +6,6 @@ using System.Linq;
 using System.Web;
 using asi.asicentral.interfaces;
 using asi.asicentral.Resources;
-using asi.asicentral.web.Models.Store.Order;
 
 namespace asi.asicentral.web.model.store
 {

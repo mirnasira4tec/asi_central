@@ -1,7 +1,6 @@
 ﻿using asi.asicentral.model.store;
 using asi.asicentral.Resources;
 using asi.asicentral.util.store;
-using asi.asicentral.web.Models.Store.Order;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

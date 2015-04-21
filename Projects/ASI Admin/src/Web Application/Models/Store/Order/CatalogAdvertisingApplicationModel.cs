@@ -15,7 +15,7 @@ using asi.asicentral.web.Controllers.Store;
 using asi.asicentral.web.model.store;
 using Castle.DynamicProxy.Contributors;
 
-namespace asi.asicentral.web.Models.Store.Order
+namespace asi.asicentral.web.model.store
 {
     public class CatalogAdvertisingApplicationModel : MembershipModel
     {
