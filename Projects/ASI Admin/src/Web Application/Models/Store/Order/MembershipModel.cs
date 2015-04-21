@@ -13,7 +13,6 @@ using System.Web.Mvc;
 namespace asi.asicentral.web.model.store
 {
     public class MembershipModel : IMembershipModel
-
     {
         [Display(ResourceType = typeof(Resource), Name = "CompanyName")]
         public string Company { get; set; }
