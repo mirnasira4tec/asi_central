@@ -6,7 +6,7 @@ using System.Linq;
 using System.Web;
 using asi.asicentral.interfaces;
 using asi.asicentral.Resources;
-using asi.asicentral.web.interfaces;
+using asi.asicentral.web.store.interfaces;
 
 namespace asi.asicentral.web.model.store
 {

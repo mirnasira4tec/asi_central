@@ -2,7 +2,7 @@
 using asi.asicentral.model.store;
 using asi.asicentral.Resources;
 using asi.asicentral.util.store;
-using asi.asicentral.web.interfaces;
+using asi.asicentral.web.store.interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

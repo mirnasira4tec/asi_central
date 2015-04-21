@@ -12,7 +12,7 @@ using asi.asicentral.services;
 using asi.asicentral.util.store;
 using ASI.EntityModel;
 using asi.asicentral.model.store;
-using asi.asicentral.web.interfaces;
+using asi.asicentral.web.store.interfaces;
 
 namespace asi.asicentral.web.Controllers.Store
 {
