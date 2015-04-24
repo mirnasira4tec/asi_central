@@ -303,6 +303,7 @@
     <Compile Include="Models\sgr\ViewCategory.cs" />
     <Compile Include="Models\sgr\ViewCompany.cs" />
     <Compile Include="Models\sgr\ViewProduct.cs" />
+    <Compile Include="Models\Store\interfaces\IMembershipModel.cs" />
     <Compile Include="Models\Store\Order\CatalogAdvertisingApplicationModel.cs" />
     <Compile Include="Models\Store\Order\CatalogsApplicationModel.cs" />
     <Compile Include="Models\Store\Order\EquipmentApplicationModel.cs" />
@@ -316,6 +317,7 @@
     <Compile Include="Models\Store\Order\ESPPayForPlacementModel.cs" />
     <Compile Include="Models\Store\Order\EventDetailsModel.cs" />
     <Compile Include="Models\Store\Order\MagazinesApplicationModel.cs" />
+    <Compile Include="Models\Store\Order\MembershipModel.cs" />
     <Compile Include="Models\Store\Order\MembershipModelHelper.cs" />
     <Compile Include="Models\Store\Order\OrderDetailApplicationModel.cs" />
     <Compile Include="Models\Store\Order\OrderModel.cs" />
