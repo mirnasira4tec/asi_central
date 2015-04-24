@@ -1,5 +1,6 @@
 ﻿using asi.asicentral.model.store;
 using asi.asicentral.Resources;
+using asi.asicentral.web.store.interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -33,6 +34,8 @@ namespace asi.asicentral.web.model.store
         public string ASINumber { get; set; }
         public bool HasShipAddress { get; set; }
         public bool HasBillAddress { get; set; }
+        public int? OptionId { get; set; }
+        public int ContextId { get; set; }
 
         #region Billing information
 

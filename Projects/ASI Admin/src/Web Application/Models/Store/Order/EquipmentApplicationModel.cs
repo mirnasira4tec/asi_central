@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using asi.asicentral.interfaces;
 using asi.asicentral.Resources;
+using asi.asicentral.web.store.interfaces;
 
 namespace asi.asicentral.web.model.store
 {
@@ -34,6 +35,8 @@ namespace asi.asicentral.web.model.store
         public string ASINumber { get; set; }
         public bool HasShipAddress { get; set; }
         public bool HasBillAddress { get; set; }
+        public int? OptionId { get; set; }
+        public int ContextId { get; set; }
 
         #region Billing information
 
