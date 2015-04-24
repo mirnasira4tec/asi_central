@@ -10,5 +10,6 @@
 			{"Decorator Membership - Standard","DECM-49.99"}, {"Decorator Membership - Plus", "DECM-99.99"}, {"Decorator Membership - Pro", "DECM-149.99"}};
 
 		public static readonly string[,] FEES = { { "Application Fee", "APPF-150" }, { "Set Up Fee", "STPF-199" } };
+        public static readonly int SALES_FORM_PRODUCT_ID = 99;
 	}
 }

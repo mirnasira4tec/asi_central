@@ -89,6 +89,11 @@ namespace asi.asicentral.web.Controllers.Store
                     var catalogAdvertisings = StoreService.GetAll<StoreDetailCatalogAdvertisingItem>().Where(item => item.OrderDetailId == orderDetail.Id).ToList();
                     return View("../Store/Application/CatalogAdvertising", new CatalogAdvertisingApplicationModel(orderDetail, catalogAdvertisings, StoreService));
                 }
+                else if (SalesFormHelper.SALES_FORM_PRODUCT_ID == orderDetail.Product.Id)
+                {
+                    var specialProducItems = StoreService.GetAll<StoreDetailSpecialProductItem>().Where(item => item.OrderDetailId == orderDetail.Id).ToList();
+                    return View("../Store/Application/SalesForm", new SalesFormApplicationModel(orderDetail, specialProducItems, StoreService));
+                }
             }
             throw new Exception("Retieved an unknown type of application");
         }
