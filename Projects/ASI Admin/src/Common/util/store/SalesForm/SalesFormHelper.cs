@@ -11,5 +11,30 @@
 
 		public static readonly string[,] FEES = { { "Application Fee", "APPF-150" }, { "Set Up Fee", "STPF-199" } };
         public static readonly int SALES_FORM_PRODUCT_ID = 99;
+
+		public static string GetProductDescription(string code)
+		{
+			var description = string.Empty;
+			for (var i = 0; i < PRODUCTS.GetLength(0); i++)
+			{
+				if (PRODUCTS[i,1].Equals(code))
+				{
+					description = PRODUCTS[i, 0];
+					break;
+				}
+			}
+			if (description.Equals(string.Empty))
+			{
+				for (var i = 0; i < FEES.GetLength(0); i++)
+				{
+					if (FEES[i, 1].Equals(code))
+					{
+						description = FEES[i, 0];
+						break;
+					}
+				}				
+			}
+			return description;
+		}
 	}
 }
