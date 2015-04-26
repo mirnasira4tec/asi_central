@@ -21,6 +21,8 @@ namespace asi.asicentral.web.model.store
     {
         #region Sales Form information
 
+        public IList<StoreDetailSpecialProductItem> SpecialProductItems { get; set; }
+
         #endregion Sales Form information
 
         /// <summary>
@@ -56,6 +58,7 @@ namespace asi.asicentral.web.model.store
             OrderStatus = order.ProcessStatus;
             IsCompleted = order.IsCompleted;
             MembershipModelHelper.PopulateModel(this, orderdetail);
+            this.SpecialProductItems = specialProducItems;
         }
     }
 }
