@@ -11,7 +11,7 @@
     <p>@Model.ProductName product purchase fee is @Model.Price.ToString("C")</p>
 }
 @Html.Partial("../Store/Application/Shared/OrderSummary", Model)
-@using (Html.BeginForm("EditCatalogAdvertising", "Application"))
+@using (Html.BeginForm("EditSalesForm", "Application"))
 {        
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.ProductId)
