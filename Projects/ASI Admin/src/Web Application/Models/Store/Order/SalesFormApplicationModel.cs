@@ -40,6 +40,7 @@ namespace asi.asicentral.web.model.store
             StoreOrder order = orderdetail.Order;
             BillingIndividual = order.BillingIndividual;
             OrderDetailId = orderdetail.Id;
+	        OrderDetailComments = orderdetail.Comments;
 
             ActionName = "Approve";
             ExternalReference = order.ExternalReference;
