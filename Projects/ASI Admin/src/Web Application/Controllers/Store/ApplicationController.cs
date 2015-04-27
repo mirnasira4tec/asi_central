@@ -863,8 +863,6 @@ namespace asi.asicentral.web.Controllers.Store
             {
                 var orderDetail = StoreService.GetAll<StoreOrderDetail>().FirstOrDefault(detail => detail.Id == application.OrderDetailId);
                 if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
-                orderDetail.UpdateDate = DateTime.UtcNow;
-                orderDetail.UpdateSource = "ApplicationController - EditCatalogAdvertising";
                 var adItems = StoreService.GetAll<StoreDetailCatalogAdvertisingItem>().Where(detail => detail.OrderDetailId == application.OrderDetailId).ToList();
                 if (!adItems.Any()) throw new Exception("Catalog advertising item doesn't exist.");
                 if (orderDetail.Product != null && StoreDetailCatalogAdvertisingItem.SUPPLIER_CATALOG_ADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
@@ -882,7 +880,9 @@ namespace asi.asicentral.web.Controllers.Store
                 }
                 orderDetail.Cost = adItems.Sum(item => CatalogAdvertisingTieredProductPricing.GetAdSizeValue(application.ProductId, adItems[0].AdSize));
 
-                var order = orderDetail.Order;
+				orderDetail.UpdateDate = DateTime.UtcNow;
+				orderDetail.UpdateSource = "ApplicationController - EditCatalogAdvertising";
+				var order = orderDetail.Order;
                 if (order == null) throw new Exception("Invalid reference to an order");
                 order.ExternalReference = application.ExternalReference;
                 order = UpdateCompanyInformation(application, order);
@@ -897,6 +897,34 @@ namespace asi.asicentral.web.Controllers.Store
             }
             return View("../Store/Application/CatalogAdvertising", application);
         }
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[ValidateInput(true)]
+		public virtual ActionResult EditSalesForm(SalesFormApplicationModel application)
+		{
+			if (ModelState.IsValid)
+			{
+				var orderDetail = StoreService.GetAll<StoreOrderDetail>().FirstOrDefault(detail => detail.Id == application.OrderDetailId);
+				if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
+
+				var order = orderDetail.Order;
+				if (order == null) throw new Exception("Invalid reference to an order");
+				orderDetail.UpdateDate = DateTime.UtcNow;
+				orderDetail.UpdateSource = "ApplicationController - EditSalesForm";
+				order.ExternalReference = application.ExternalReference;
+				order = UpdateCompanyInformation(application, order);
+				StoreService.UpdateTaxAndShipping(order);
+				ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+				StoreService.SaveChanges();
+				if (application.ActionName == COMMAND_REJECT)
+				{
+					return RedirectToAction("List", "Orders");
+				}
+				return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId });
+			}
+			return View("../Store/Application/SalesForm", application);
+		}
 
         /// <summary>
         /// Common code between Edit supplier and distributor
