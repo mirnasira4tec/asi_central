@@ -110,6 +110,31 @@
                     }
 		            </span>
                     break;
+                case 104:
+                    <span class="label-row span11">
+                        @Html.Label("Monthly Budget:")
+		            </span>
+		            <span class="label-row">
+                    @if(Model.OptionId.HasValue && Model.OptionId.Value != 0)
+                    {
+			             @Html.TextBoxFor(model => model.OptionId, new { @class = "tab1", @disabled="true" }) @Html.ValidationMessageFor(model => model.OptionId)
+                    }
+                    else
+                    {
+                        @Html.Label("$0")
+                    }
+		            </span>
+                    <span class="label-row span11">
+                        @Html.Label("Selected Product:")
+		            </span>
+		            <span class="label-row">
+                    @if(!string.IsNullOrEmpty(Model.AcceptedByName))
+                    {
+			             @Html.TextBoxFor(model => model.AcceptedByName, new { @class = "tab1", @disabled="true" }) @Html.ValidationMessageFor(model => model.AcceptedByName)
+                    }
+                    </span>
+                    break;
+                
                 default:
                 <span class="label-row span11">
 			        @Html.LabelFor(m => m.Quantity) 
