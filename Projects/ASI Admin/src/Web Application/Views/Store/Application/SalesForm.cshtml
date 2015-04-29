@@ -25,38 +25,55 @@
     </nav>
     <div class="tab-content">
         @Html.Partial("../Store/Application/Shared/CompanyInformation", Model)
-        <div id="tabproduct" class="product-information tab-pane fade">
-            @if (Model.SpecialProductItems != null && Model.SpecialProductItems.Any())
-            {
-		    <table class="table">
-			    <thead>
-				    <tr>
-					    <th>ASI Services</th>
-                        <th>Fee</th>
-					    <th>Quantity</th>
-					    <th>Regular Price</th>
-					    <th>Limited Time offer</th>
-				    </tr>
-			    </thead>
-			    <tbody >
-                    @foreach (var item in Model.SpecialProductItems)
-                    {
-                        <tr>
-                            <td>@asi.asicentral.util.store.SalesFormHelper.GetProductDescription(item.ServiceType)</td>
-                            <td>@Html.Raw(item.IsSetupCharges ? "<i class=\"icon-ok\"></i>" : "&nbsp;")</td>
-                            <td>@item.Quantity</td>
-                            <td>@item.Price</td>
-                            <td>@item.OfferPrice</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-            }
-            else 
-            {
-                <text>No data was associated with this order</text>
-            }
-        </div>
+	    <div id="tabproduct" class="product-information tab-pane fade">
+			@if (Model.SpecialProductItems != null && Model.SpecialProductItems.Any())
+			{
+		    <fieldset>
+			    <legend>Sales Representative</legend>
+				<span>@Model.SpecialProductItems.First().ASIContactName</span>
+		    </fieldset>
+			}
+		    @if(!string.IsNullOrEmpty(Model.OrderDetailComments))
+		    {
+		    <fieldset>
+			    <legend>Special Instructions</legend>
+				<span>@Model.OrderDetailComments</span>
+		    </fieldset>
+			}
+		    <fieldset>
+			    <legend>Order Details</legend>
+		    </fieldset>
+		    @if (Model.SpecialProductItems != null && Model.SpecialProductItems.Any())
+	  {
+			    <table class="table">
+				    <thead>
+					    <tr>
+						    <th>ASI Services</th>
+						    <th>Fee</th>
+						    <th>Quantity</th>
+						    <th>Regular Price</th>
+						    <th>Limited Time offer</th>
+					    </tr>
+				    </thead>
+				    <tbody >
+					    @foreach (var item in Model.SpecialProductItems)
+		 {
+						    <tr>
+							    <td>@asi.asicentral.util.store.SalesFormHelper.GetProductDescription(item.ServiceType)</td>
+							    <td>@Html.Raw(item.IsSetupCharges ? "<i class=\"icon-ok\"></i>" : "&nbsp;")</td>
+							    <td>@item.Quantity</td>
+							    <td>@item.Price</td>
+							    <td>@item.OfferPrice</td>
+						    </tr>
+		 }
+				    </tbody>
+			    </table>
+	  }
+	  else
+	  {
+			    <text>No data was associated with this order</text>
+	  }
+	    </div>
         <!-- END #orderdetail-information -->
     </div> <!-- END #content -->
 }
