@@ -26,6 +26,13 @@
     <div class="tab-content">
         @Html.Partial("../Store/Application/Shared/CompanyInformation", Model)
 	    <div id="tabproduct" class="product-information tab-pane fade">
+			@if (Model.SpecialProductItems != null && Model.SpecialProductItems.Any())
+			{
+		    <fieldset>
+			    <legend>Sales Representative</legend>
+				<span>@Model.SpecialProductItems.First().ASIContactName</span>
+		    </fieldset>
+			}
 		    @if(!string.IsNullOrEmpty(Model.OrderDetailComments))
 		    {
 		    <fieldset>
@@ -37,7 +44,7 @@
 			    <legend>Order Details</legend>
 		    </fieldset>
 		    @if (Model.SpecialProductItems != null && Model.SpecialProductItems.Any())
-		    {
+	  {
 			    <table class="table">
 				    <thead>
 					    <tr>
@@ -50,7 +57,7 @@
 				    </thead>
 				    <tbody >
 					    @foreach (var item in Model.SpecialProductItems)
-					    {
+		 {
 						    <tr>
 							    <td>@asi.asicentral.util.store.SalesFormHelper.GetProductDescription(item.ServiceType)</td>
 							    <td>@Html.Raw(item.IsSetupCharges ? "<i class=\"icon-ok\"></i>" : "&nbsp;")</td>
@@ -58,14 +65,14 @@
 							    <td>@item.Price</td>
 							    <td>@item.OfferPrice</td>
 						    </tr>
-					    }
+		 }
 				    </tbody>
 			    </table>
-		    }
-		    else 
-		    {
+	  }
+	  else
+	  {
 			    <text>No data was associated with this order</text>
-		    }
+	  }
 	    </div>
         <!-- END #orderdetail-information -->
     </div> <!-- END #content -->
