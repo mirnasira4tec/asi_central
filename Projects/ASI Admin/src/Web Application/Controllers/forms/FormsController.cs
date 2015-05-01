@@ -8,6 +8,7 @@ using System.Web.Security;
 using asi.asicentral.interfaces;
 using asi.asicentral.model;
 using asi.asicentral.model.store;
+using asi.asicentral.services.PersonifyProxy;
 using asi.asicentral.web.Models.forms;
 using System.Text;
 
@@ -20,7 +21,7 @@ namespace asi.asicentral.web.Controllers.forms
 		public IEmailService EmailService { get; set; }
         public ITemplateService TemplateService { get; set; }
 
-        public ActionResult Index(DateTime? dateStart, DateTime? dateEnd, String formTab, string creator, string showPendingOnly = null)
+        public ActionResult Index(DateTime? dateStart, DateTime? dateEnd, String formTab, string creator, string companyName, string showPendingOnly = null)
         {
 			var viewModel = new FormPageModel();
 			IQueryable<FormInstance> formInstanceQuery = StoreService.GetAll<FormInstance>(true);
@@ -41,9 +42,19 @@ namespace asi.asicentral.web.Controllers.forms
                     formInstanceQuery = formInstanceQuery.Where(form => form.Sender.Contains(creator));
 
             }
-			if (dateStart.HasValue) viewModel.StartDate = dateStart.Value.ToString("MM/dd/yyyy");
+			else if (formTab == FormPageModel.TAB_COMPANY && !string.IsNullOrEmpty(companyName))
+			{
+				if (dateStart == null) dateStart = DateTime.Now.AddDays(-7);
+				if (dateEnd == null) dateEnd = DateTime.Now;
+				else dateEnd = dateEnd.Value.Date + new TimeSpan(23, 59, 59);
+				viewModel.ShowPendingOnly = false;
+				formInstanceQuery = formInstanceQuery.Where(form => form.OrderDetail != null && form.OrderDetail.Order != null && form.OrderDetail.Order.Company != null
+				 && form.OrderDetail.Order.Company.Name.Contains(companyName));			
+			}
+	        if (dateStart.HasValue) viewModel.StartDate = dateStart.Value.ToString("MM/dd/yyyy");
 			if (dateEnd.HasValue) viewModel.EndDate = dateEnd.Value.ToString("MM/dd/yyyy");
 	        if (!string.IsNullOrEmpty(creator)) viewModel.Creator = creator;
+			if (!string.IsNullOrEmpty(companyName)) viewModel.CompanyName = companyName;
 			viewModel.FormTab = formTab;
             viewModel.Forms = formInstanceQuery.OrderByDescending(form => form.CreateDate).ToList();
 			viewModel.FormTypes = StoreService.GetAll<FormType>(true).ToList();
