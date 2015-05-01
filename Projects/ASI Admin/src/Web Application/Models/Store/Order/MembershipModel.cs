@@ -42,6 +42,7 @@ namespace asi.asicentral.web.model.store
 
         public int OrderId { get; set; }
         public int OrderDetailId { get; set; }
+		public string OrderDetailComments { get; set; }
         [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
         public int Quantity { get; set; }
         public StoreDetailCatalog StoreDetailCatalog { get; set; }
