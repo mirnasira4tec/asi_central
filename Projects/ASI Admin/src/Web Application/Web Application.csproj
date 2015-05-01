@@ -303,8 +303,10 @@
     <Compile Include="Models\sgr\ViewCategory.cs" />
     <Compile Include="Models\sgr\ViewCompany.cs" />
     <Compile Include="Models\sgr\ViewProduct.cs" />
+    <Compile Include="Models\Store\interfaces\IMembershipModel.cs" />
     <Compile Include="Models\Store\Order\CatalogAdvertisingApplicationModel.cs" />
     <Compile Include="Models\Store\Order\CatalogsApplicationModel.cs" />
+    <Compile Include="Models\Store\Order\SalesFormApplicationModel.cs" />
     <Compile Include="Models\Store\Order\EquipmentApplicationModel.cs" />
     <Compile Include="Models\Store\Order\FormsModel.cs" />
     <Compile Include="Models\Store\Order\MagazinesAdvertisingApplicationModel.cs" />
@@ -316,6 +318,7 @@
     <Compile Include="Models\Store\Order\ESPPayForPlacementModel.cs" />
     <Compile Include="Models\Store\Order\EventDetailsModel.cs" />
     <Compile Include="Models\Store\Order\MagazinesApplicationModel.cs" />
+    <Compile Include="Models\Store\Order\MembershipModel.cs" />
     <Compile Include="Models\Store\Order\MembershipModelHelper.cs" />
     <Compile Include="Models\Store\Order\OrderDetailApplicationModel.cs" />
     <Compile Include="Models\Store\Order\OrderModel.cs" />
@@ -453,6 +456,7 @@
     </EmbeddedResource>
     <Content Include="Views\Store\Application\CatalogAdvertising.cshtml" />
     <Content Include="Views\Store\Application\Equipment.cshtml" />
+    <Content Include="Views\Store\Application\SalesForm.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

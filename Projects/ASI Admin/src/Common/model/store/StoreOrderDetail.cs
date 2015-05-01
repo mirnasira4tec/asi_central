@@ -33,6 +33,7 @@ namespace asi.asicentral.model.store
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
+        public string Comments { get; set; }
         public virtual StoreOrder Order { get; set; }
         public virtual ContextProduct Product { get; set; }
         public virtual Coupon Coupon { get; set; }

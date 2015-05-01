@@ -22,6 +22,11 @@ namespace asi.asicentral.web.model.store
             get { return orderDetail.Order.Id; }
         }
 
+        public int? ContextId
+        {
+            get { return this.orderDetail.Order.Context != null ? this.orderDetail.Order.Context.Id : (int?)null; }
+        }
+
         public String Email
         {
             get
