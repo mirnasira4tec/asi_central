@@ -234,6 +234,7 @@
     <Compile Include="database\mappings\memberdemogr\SupplierPolicyMap.cs" />
     <Compile Include="database\mappings\memberdemogr\SupplierRatingMap.cs" />
     <Compile Include="database\mappings\memberdemogr\SupplierSeadElectronicAddressMap.cs" />
+    <Compile Include="database\mappings\store\StoreDetailSpecialProductItemMap.cs" />
     <Compile Include="database\mappings\store\StoreSupplierRepresentativeInformationMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailEquipmentMembershipMap.cs" />
     <Compile Include="database\mappings\store\LookEquipmentTypeMap.cs" />
@@ -299,6 +300,7 @@
     <Compile Include="model\OAuth\User.cs" />
     <Compile Include="model\ROI\Category.cs" />
     <Compile Include="model\ROI\Company.cs" />
+    <Compile Include="model\store\StoreDetailSpecialProductItem.cs" />
     <Compile Include="model\store\StoreSupplierRepresentativeInformation.cs" />
     <Compile Include="model\store\LookEquipmentType.cs" />
     <Compile Include="model\store\FormInstance.cs" />
@@ -467,6 +469,7 @@
     <Compile Include="util\store\digitalmarketing\ASIBrandBuilderHelper.cs" />
     <Compile Include="util\store\digitalmarketing\TrafficBuilderHelper.cs" />
     <Compile Include="util\store\Forms\FormsHelper.cs" />
+    <Compile Include="util\store\SalesForm\SalesFormHelper.cs" />
     <Compile Include="util\store\supplierspecials\SupplierSpecialsHelper.cs" />
     <Compile Include="util\store\emailexpress\EmailExpressHelper.cs" />
     <Compile Include="util\store\espadvertising\ESPAdvertisingHelper.cs" />

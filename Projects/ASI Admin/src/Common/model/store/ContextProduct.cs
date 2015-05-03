@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace asi.asicentral.model.store
 {
@@ -32,7 +29,8 @@ namespace asi.asicentral.model.store
 		public bool HasBackendNotification { get; set; }
 		public string SubscriptionFrequency { get; set; }
         public bool IsASINumberFlag { get; set; }
-		public bool HasBackEndIntegration { get; set;  }
+		public bool IsASINumberOptionalFlag { get; set; }
+		public bool HasBackEndIntegration { get; set; }
         public bool IsAvailable { get; set; }
         public bool HasBankInformation { get; set; }
         public string ChatSettings { get; set; }
@@ -55,9 +53,9 @@ namespace asi.asicentral.model.store
 
         public override bool Equals(object obj)
         {
-            bool equals = false;
+            var equals = false;
 
-            ContextProduct product = obj as ContextProduct;
+            var product = obj as ContextProduct;
             if (product != null) equals = product.Id == Id;
             return equals;
         }

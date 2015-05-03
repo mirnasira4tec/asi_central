@@ -9,6 +9,7 @@
 	<h5>Search by</h5>
 	<ul id="formtab" class="nav nav-tabs">
 		<li class="@(Model.FormTab == FormPageModel.TAB_DATE ? "active" : string.Empty)"><a href="#@FormPageModel.TAB_DATE">Date</a></li>
+		<li class="@(Model.FormTab == FormPageModel.TAB_COMPANY ? "active" : string.Empty)"><a href="#@FormPageModel.TAB_COMPANY">Company</a></li>
 	</ul>
 	<div class="tab-content" id="formtab-content">
 		<div class="tab-pane @(Model.FormTab == FormPageModel.TAB_DATE ? "active" : string.Empty)" id="@FormPageModel.TAB_DATE">
@@ -23,6 +24,19 @@
 						<label for="startDate">Start Date</label><input data-type="date" name="DateStart" type="text" id="startDate" value="@Model.StartDate" />
 						&nbsp;<label for="endDate">End Date</label><input data-type="date" name="DateEnd" type="text" id="endDate" value="@Model.EndDate" />
 						<input type="hidden" value="@FormPageModel.TAB_DATE" name="formtab" /><input type="submit" value="Search" class="btn" />
+					</div>
+				}
+			</div>
+		</div>
+		<div class="tab-pane @(Model.FormTab == FormPageModel.TAB_COMPANY ? "active" : string.Empty)" id="@FormPageModel.TAB_COMPANY">
+			<div class="well">
+				@using (Html.BeginForm("List", "../forms/Index", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @FormPageModel.TAB_COMPANY }))
+				{                
+					<div class="formField">
+						<label for="companyName">Company</label> <input name="companyName" type="text" id="companyName" value="@Model.CompanyName" />
+					</div>
+					<div class="formField">
+						<input type="hidden" value="@FormPageModel.TAB_COMPANY" name="formtab" /><input type="submit" value="Search" class="btn" />
 					</div>
 				}
 			</div>
@@ -42,12 +56,12 @@
 <table class="table table-bordered table-condensed table-striped">
     <thead>
 	    <tr>
-            <th>Created</th>
+            <th style="width:65px">Created</th>
             <th>Email</th>
             <th>Type</th>
             <th>Creator</th>
-            <th>Order Status</th>
-            <th>Step</th>
+            <th>Company</th>
+            <th style="width:95px">Status</th>
 	    </tr>
     </thead>
 	<tbody>
@@ -56,18 +70,25 @@
 		if (!Model.ShowPendingOnly || form.Status == "Not Started" || form.Status == "In Progress")
 		{
 			<tr>
-				<td>@form.CreateDate.ToLocalTime()</td>
+				<td>@Html.Raw(string.Format("{0:MM/dd/yy} <br /> {0:hh:mm tt}",form.CreateDate.ToLocalTime()))</td>
 				<td>@form.Email</td>
 				<td><a href="/Forms/SendForm/@form.Id">@form.FormType.Name</a></td>
 				<td>@form.Sender</td>
-				<td>@form.Status</td>
-				@if (form.OrderDetail != null && form.OrderDetail.Order != null)
+				@if (form.OrderDetail != null && form.OrderDetail.Order != null && form.OrderDetail.Order.Company != null)
 				{
-					<td>@form.OrderDetail.Order.CompletedStep</td>
+					<td>@form.OrderDetail.Order.Company.Name</td>
 				}
 				else
 				{
-					<td>0</td>
+					<td>&nbsp;</td>
+				}
+				@if (form.OrderDetail != null && form.OrderDetail.Order != null)
+				{
+					<td>@form.Status (@form.OrderDetail.Order.CompletedStep)</td>
+				}
+				else
+				{
+					<td>@form.Status</td>
 				}
 			</tr>
 		}
