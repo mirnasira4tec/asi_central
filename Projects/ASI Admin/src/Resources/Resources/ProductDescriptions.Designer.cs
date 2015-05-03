@@ -514,6 +514,16 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;&lt;strong&gt;ASI® WILL INCREASE TRAFFIC TO YOUR WEBSITE BY SENDING YOU QUALIFIED TRAFFIC FROM EVERY DIRECTION.&lt;/strong&gt;
+        ///        There’s no better way to reach hot prospects then when they’re actively searching for products and services you offer. That’s why ASI is combining the power of &lt;strong&gt;pay-per-click (PPC) and local search engine optimization (SEO) to drive maximum traffic to your website.&lt;/strong&gt;&lt;/p&gt;&lt;br /&gt;.
+        /// </summary>
+        public static string ProductTrafficBuilderPlus {
+            get {
+                return ResourceManager.GetString("ProductTrafficBuilderPlus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to By presenting your products in both mediums with an ESP video, a much stronger and memorable message will be delivered to your potential or existing customer base..
         /// </summary>
         public static string ProductVideo {
