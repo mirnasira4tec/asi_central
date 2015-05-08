@@ -1890,4 +1890,7 @@
   <data name="Sales" xml:space="preserve">
     <value>Sales</value>
   </data>
+  <data name="FieldInvalidWholeNumber" xml:space="preserve">
+    <value>Please enter a valid whole number.</value>
+  </data>
 </root>
