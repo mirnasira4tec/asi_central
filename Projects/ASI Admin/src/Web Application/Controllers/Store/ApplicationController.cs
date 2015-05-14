@@ -11,7 +11,6 @@ using asi.asicentral.web.model.store;
 using asi.asicentral.services;
 using asi.asicentral.util.store;
 using ASI.EntityModel;
-using asi.asicentral.model.store;
 using asi.asicentral.web.store.interfaces;
 
 namespace asi.asicentral.web.Controllers.Store
@@ -24,7 +23,7 @@ namespace asi.asicentral.web.Controllers.Store
         public const string COMMAND_ACCEPT = "Accept";
         public const string COMMAND_RESUBMIT = "Resubmit";
         //products associated only to StoreOrderDetail table
-        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 45, 46, 55, 56, 57, 58, 59, 60, 62, 70, 71, 77, 96, 97, 98 };
+        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 45, 46, 55, 56, 57, 58, 59, 60, 62, 70, 71, 77, 96, 97, 98, 100, 101, 102, 104 };
         //products associated to StoreDetailESPAdvertising table
         public static readonly int[] SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS = { 48, 49, 50, 51, 52, 53};
         //products associated to StoreDetailCatalog table
