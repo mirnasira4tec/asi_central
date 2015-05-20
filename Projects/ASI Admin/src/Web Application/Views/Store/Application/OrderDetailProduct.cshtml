@@ -110,14 +110,32 @@
                     }
 		            </span>
                     break;
+                case 104:
+                    if(Model.OptionId.HasValue && Model.OptionId.Value != 0)
+                    {
+                    <span class="label-row span11">
+                        @Html.Label("Monthly Budget:")
+		            </span>
+		            <span class="label-row">
+			             @Html.TextBoxFor(model => model.OptionId, new { @class = "tab1", @disabled="true" }) @Html.ValidationMessageFor(model => model.OptionId)
+		            </span>
+                    <span class="label-row span11">
+                        @Html.Label("Selected Package:")
+		            </span>
+		            <span class="label-row">
+                         @{ string productName = asi.asicentral.util.store.TrafficBuilderHelper.GetProductName(Model.OptionId.Value); }
+			             @Html.TextBoxFor(model => productName, new { @class = "tab1", @disabled="true" }) @Html.ValidationMessageFor(model => model.AcceptedByName)
+                      </span>
+                    }
+                break;
                 default:
                 <span class="label-row span11">
 			        @Html.LabelFor(m => m.Quantity) 
 		        </span>
 		        <span class="label-row">
-			        @Html.EditorFor(m => m.Quantity) @Html.ValidationMessageFor(m => m.Quantity)
+			        @Html.TextBoxFor(m => m.Quantity, new { @class = "tab1", @disabled = "true" }) @Html.ValidationMessageFor(m => m.Quantity)
 		        </span>
-                            break;
+                break;
             }
 		</fieldset>    
 	</div><!-- END #orderdetail-information -->	
