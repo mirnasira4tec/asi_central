@@ -811,7 +811,7 @@ namespace asi.asicentral.services.PersonifyProxy
 								.Where(c => c.MasterCustomerId == masterCustomerId && c.SubCustomerId == subCustomerId && 
 									c.UserDefinedCompanyNumber == CompanyNumber[asiCompany]);
 
-			    foreach (var personifyCreditCard in personifyCreditCards)
+			    foreach (var personifyCreditCard in personifyCreditCards.OrderByDescending( cc => cc.AddedOn))
 			    {
 				    var card = new StoreCreditCard()
 				    {
@@ -822,7 +822,9 @@ namespace asi.asicentral.services.PersonifyProxy
 					//convert credit card type
 				    var creditCardType = ASICreditCardType.Union(ASIShowCreditCardType).Union(ASICanadaCreditCardType).FirstOrDefault(c => c.Value == card.CardType);
 				    if (creditCardType.Key != null) card.CardType = creditCardType.Key;
-					creditCards.Add(card);
+					//make sure we do not add a duplicate card reference
+					if (!creditCards.Any(cc => cc.CardNumber == card.CardNumber && cc.CardType == card.CardType))
+						creditCards.Add(card);
 			    }
 		    }
 			return creditCards;

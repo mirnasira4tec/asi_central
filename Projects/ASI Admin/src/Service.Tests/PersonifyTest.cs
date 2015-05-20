@@ -137,7 +137,7 @@ namespace asi.asicentral.Tests
 		{
 			StoreCompany company = new StoreCompany()
 			{
-				ASINumber = "33020",
+				ASINumber = "125724",
 				Name = "ASI"
 			};
 			var creditCards = PersonifyClient.GetCompanyCreditCards(company, "ASI");
