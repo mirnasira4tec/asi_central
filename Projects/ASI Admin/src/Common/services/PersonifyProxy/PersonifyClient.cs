@@ -1,11 +1,11 @@
-﻿using asi.asicentral.interfaces;
+﻿using System.Web.SessionState;
+using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
 using System;
 using System.Collections.Generic;
 using System.Data.Services.Client;
 using System.Linq;
 using asi.asicentral.util.store.companystore;
-using System.Threading.Tasks;
 using asi.asicentral.model;
 using asi.asicentral.PersonifyDataASI;
 
@@ -13,9 +13,16 @@ using PersonifySvcClient;
 
 namespace asi.asicentral.services.PersonifyProxy
 {
-    public static class PersonifyClient
-    {
-        private const string ADDED_OR_MODIFIED_BY = "ASI_Store";
+	public enum AddressType
+	{
+		Primary,
+		Shipping,
+		Billing
+	}
+	
+	public static class PersonifyClient
+    {		
+		private const string ADDED_OR_MODIFIED_BY = "ASI_Store";
         private const string COMMUNICATION_INPUT_PHONE = "PHONE";
         private const string COMMUNICATION_INPUT_FAX = "FAX";
         private const string COMMUNICATION_INPUT_WEB = "WEB";
@@ -79,26 +86,7 @@ namespace asi.asicentral.services.PersonifyProxy
 
         public static CustomerInfo ReconcileCompany(StoreCompany company, string customerClassCode, IList<LookSendMyAdCountryCode> countryCodes)
         {
-            CustomerInfo companyInfo = null;
-
-            if (company == null || string.IsNullOrWhiteSpace(company.Name))
-            {
-                throw new Exception("Store company is not valid.");
-            }
-            if (!string.IsNullOrEmpty(company.ExternalReference))
-            {
-                string[] references = company.ExternalReference.Split(';');
-                int subCustomerId = Int32.Parse(references[1]);
-                companyInfo = GetCompanyInfo(references[0], subCustomerId);
-            }
-            else
-            {
-                //look company by ASI#
-                if (!string.IsNullOrEmpty(company.ASINumber))
-                {
-                    companyInfo = GetCompanyInfoByAsiNumber(company.ASINumber);
-                }
-            }
+			CustomerInfo companyInfo = FindCustomerInfo(company);
             StoreAddress companyAddress = company.GetCompanyAddress();
             string countryCode = countryCodes != null ? countryCodes.Alpha3Code(companyAddress.Country) : companyAddress.Country;
             if (companyInfo == null)
@@ -317,13 +305,6 @@ namespace asi.asicentral.services.PersonifyProxy
             return GetCompanyInfo(customers[0]);
         }
 
-        public static CompanyInformation GetCompanyInfoByASINumber(string asiNumber)
-        {
-            var customers = SvcClient.Ctxt.ASICustomerInfos.Where(p => p.UserDefinedAsiNumber == asiNumber).ToList();
-            if (customers.Count == 0) return null;
-            return GetCompanyInfo(customers[0]);
-        }
-
         public static CompanyInformation GetCompanyInfoByIdentifier(int companyIdentifier)
         {
             var customers = SvcClient.Ctxt.ASICustomerInfos.Where(p => p.UserDefinedCustomerNumber == companyIdentifier).ToList();
@@ -342,7 +323,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 MemberType = customerInfo.CustomerClassCodeString,
                 MemberStatus = customerInfo.UserDefinedMemberStatusString,
             };
-            if(company != null && !string.IsNullOrEmpty(company.ASINumber) && 
+            if(!string.IsNullOrEmpty(company.ASINumber) && 
                 company.MemberType == "SUPPLIER" && 
                 int.Parse(company.ASINumber) > 10000 && int.Parse(company.ASINumber) < 20000)
                 company.MemberType = "EQUIPMENT";
@@ -352,7 +333,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 company.CompanyId = Convert.ToInt32(customerInfo.UserDefinedCustomerNumber.Value);
             }
             //get the company primary address
-            List<AddressInfo> companyAddressInfos = SvcClient.Ctxt.AddressInfos.Where(
+            var companyAddressInfos = SvcClient.Ctxt.AddressInfos.Where(
                a => a.MasterCustomerId == customerInfo.MasterCustomerId && a.SubCustomerId == customerInfo.SubCustomerId && a.PrioritySeq == 0).ToList();
             if (companyAddressInfos.Count > 0)
             {
@@ -367,7 +348,6 @@ namespace asi.asicentral.services.PersonifyProxy
             return company;
         }
 
-
         public static CustomerInfo GetCompanyInfo(string masterCustomerId, int subCustomerId)
         {
             CustomerInfo customerInfo = null;
@@ -381,24 +361,53 @@ namespace asi.asicentral.services.PersonifyProxy
             return customerInfo;
         }
 
-        public static CustomerInfo GetCompanyInfoByAsiNumber(string asiNumber)
+		public static CompanyInformation GetCompanyInfoByASINumber(string asiNumber)
+		{
+			var customers = SvcClient.Ctxt.ASICustomerInfos.Where(p => p.UserDefinedAsiNumber == asiNumber).ToList();
+			return customers.Any() ? GetCompanyInfo(customers[0]) : null;
+		}
+		
+		public static CustomerInfo GetCustomerInfoByASINumber(string asiNumber)
         {
             CustomerInfo customerInfo = null;
             if (!string.IsNullOrWhiteSpace(asiNumber))
             {
                 IList<ASICustomerInfo> customerinfos = SvcClient.Ctxt.ASICustomerInfos
-                    .Where(c => c.UserDefinedAsiNumber == asiNumber).ToList();
-                if (customerinfos.Count > 0)
+					.Where(c => c.UserDefinedAsiNumber == asiNumber).ToList();
+                if (customerinfos.Any())
                 {
-                    IList<CustomerInfo> customerinfos2 = SvcClient.Ctxt.CustomerInfos.Where(
-                                c => c.MasterCustomerId == customerinfos[0].MasterCustomerId).ToList();
-                    customerInfo = customerinfos2.Count == 0 ? null : customerinfos2.FirstOrDefault();
+                    IList<CustomerInfo> customerinfos2 = SvcClient.Ctxt.CustomerInfos
+						.Where(c =>  c.MasterCustomerId == customerinfos[0].MasterCustomerId && c.SubCustomerId == customerinfos[0].SubCustomerId)
+						.ToList();
+                    customerInfo = customerinfos2.Any() ? customerinfos2.FirstOrDefault() : null;
                 }
             }
             return customerInfo;
         }
 
-        #endregion Getting company information
+		public static CustomerInfo FindCustomerInfo(StoreCompany company)
+	    {
+			CustomerInfo companyInfo = null;
+
+			if (company == null || string.IsNullOrWhiteSpace(company.Name)) throw new Exception("Store company is not valid.");
+			if (!string.IsNullOrEmpty(company.ExternalReference))
+			{
+				string[] references = company.ExternalReference.Split(';');
+				int subCustomerId = Int32.Parse(references[1]);
+				companyInfo = GetCompanyInfo(references[0], subCustomerId);
+			}
+			else
+			{
+				//look company by ASI#
+				if (!string.IsNullOrEmpty(company.ASINumber))
+				{
+					companyInfo = GetCustomerInfoByASINumber(company.ASINumber);
+				}
+			}
+			return companyInfo;
+	    }
+
+	    #endregion Getting company information
 
         public static IEnumerable<CustomerInfo> AddIndividualInfos(StoreOrder storeOrder,
             IList<LookSendMyAdCountryCode> countryCodes,
@@ -647,50 +656,6 @@ namespace asi.asicentral.services.PersonifyProxy
             return result;
         }
 
-        private static SaveCustomerInput LinkIndividualAddress(SaveCustomerInput customerInfo, StoreIndividual storeIndividual, CustomerInfo companyInfo)
-        {
-            if (companyInfo == null)
-            {
-                throw new Exception("Company information is not available in Personify.");
-            }
-            List<AddressInfo> companyAddressInfos = SvcClient.Ctxt.AddressInfos.Where(
-               a => a.MasterCustomerId == companyInfo.MasterCustomerId).ToList();
-            if (companyAddressInfos == null || companyAddressInfos.Count <= 0)
-            {
-                throw new Exception("Company address is not available in Personify.");
-            }
-            if (companyAddressInfos.Count > 1)
-            {
-                List<AddressInfo> companyAddressInfos1 = companyAddressInfos.Where(a => a.PrioritySeq == 0).ToList();
-                if (companyAddressInfos1.Count >= 1) companyAddressInfos = companyAddressInfos1;
-            }
-            AddressInfo companyAddressInfo = companyAddressInfos[0];
-            var customerAddressInput = new DataServiceCollection<SaveAddressInput>(null, TrackingMode.None);
-            var saveAddressInput = new SaveAddressInput()
-            {
-                AddressTypeCode = COMMUNICATION_LOCATION_CODE_CORPORATE,
-                JobTitle = storeIndividual.Title,
-                OwnerMasterCustomer = companyInfo.MasterCustomerId,
-                OwnerSubCustomer = companyInfo.SubCustomerId,
-                LinkToOwnersAddress = true,
-                OwnerAddressStatusCode = companyAddressInfo.AddressStatusCode,
-                OwnerAddressId = companyAddressInfo.CustomerAddressId,
-                OwnerRecordType = companyInfo.RecordType,
-                OwnerCompanyName = companyInfo.LastName,
-                OverrideAddressValidation = true,
-                CreateNewAddressIfOrdersExist = true,
-                CreateRelationshipRecord = true,
-                SetRelationshipAsPrimary = true,
-                EndOldPrimaryRelationship = false,
-                WebMobileDirectory = false,
-                AddedOrModifiedBy = ADDED_OR_MODIFIED_BY
-            };
-            var addresses = new DataServiceCollection<SaveAddressInput>(null, TrackingMode.None);
-            addresses.Add(saveAddressInput);
-            customerInfo.Addresses = addresses;
-            return customerInfo;
-        }
-
         private static SaveCustomerInput AddCusCommunicationInput(
             SaveCustomerInput customerInfo,
             string key,
@@ -813,6 +778,55 @@ namespace asi.asicentral.services.PersonifyProxy
         }
 
         #region Credit Card Handling
+
+	    public static IEnumerable<StoreCreditCard> GetCompanyCreditCards(StoreCompany company, string asiCompany)
+	    {
+		    var creditCards = new List<StoreCreditCard>();
+			if (company == null || string.IsNullOrWhiteSpace(company.Name)) throw new Exception("Store company is not valid.");
+		    string masterCustomerId = string.Empty;
+		    int subCustomerId = 0;
+
+			if (!string.IsNullOrEmpty(company.ExternalReference))
+			{
+				string[] references = company.ExternalReference.Split(';');
+				subCustomerId = Int32.Parse(references[1]);
+				masterCustomerId = references[0];
+			}
+			else
+			{
+				//look company by ASI#
+				if (!string.IsNullOrEmpty(company.ASINumber))
+				{
+					var customers = SvcClient.Ctxt.ASICustomerInfos.Where(p => p.UserDefinedAsiNumber == company.ASINumber).ToList();
+					if (customers.Any())
+					{
+						masterCustomerId = customers[0].MasterCustomerId;
+						subCustomerId = customers[0].SubCustomerId;
+					}
+				}
+			}
+		    if (!string.IsNullOrEmpty(masterCustomerId))
+		    {
+				IEnumerable<ASICustomerCreditCard> personifyCreditCards = SvcClient.Ctxt.ASICustomerCreditCards
+								.Where(c => c.MasterCustomerId == masterCustomerId && c.SubCustomerId == subCustomerId && 
+									c.UserDefinedCompanyNumber == CompanyNumber[asiCompany]);
+
+			    foreach (var personifyCreditCard in personifyCreditCards)
+			    {
+				    var card = new StoreCreditCard()
+				    {
+						CardNumber = "****" + personifyCreditCard.CCReference.Substring(personifyCreditCard.CCReference.Length - 4),
+						ExternalReference = personifyCreditCard.CustomerCreditCardProfileId.ToString(),
+						CardType = personifyCreditCard.ReceiptTypeCodeString,
+				    };
+					//convert credit card type
+				    var creditCardType = ASICreditCardType.Union(ASIShowCreditCardType).Union(ASICanadaCreditCardType).FirstOrDefault(c => c.Value == card.CardType);
+				    if (creditCardType.Key != null) card.CardType = creditCardType.Key;
+					creditCards.Add(card);
+			    }
+		    }
+			return creditCards;
+	    }
 
         public static bool ValidateCreditCard(CreditCard info)
         {
@@ -972,12 +986,5 @@ namespace asi.asicentral.services.PersonifyProxy
         }
 
         #endregion Credit Card Handling
-    }
-
-    public enum AddressType
-    {
-        Primary,
-        Shipping,
-        Billing
     }
 }

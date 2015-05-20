@@ -66,7 +66,7 @@ namespace asi.asicentral.util
             try
             {
                 string result = string.Empty;
-                WebClient client = new WebClient();
+                var client = new WebClient();
                 byte[] data = client.DownloadData(IpLookup.LookupServiceUrl + ipAddress);
                 string[] dataResults = Encoding.Default.GetString(data).Split(";".ToArray());
 
@@ -75,8 +75,8 @@ namespace asi.asicentral.util
                     return result;
                 }
 
-                result = dataResults[4].ToString() == "-" ? DEFAULTCOUNTRY.ToLower() : dataResults[4].ToString();
-                Log.Debug(string.Format("Country basesd on LookupByIp: {0}", result.ToLower()));
+                result = dataResults[4] == "-" ? DEFAULTCOUNTRY.ToLower() : dataResults[4];
+                Log.Debug(string.Format("Country based on LookupByIp: {0}", result.ToLower()));
                 return result.ToLower();
             }
             catch (Exception)
