@@ -88,7 +88,7 @@ namespace asi.asicentral.database
             Type type = typeof(T);
             if (_supportedTypes.Keys.Contains(type))
                 info = _supportedTypes[typeof(T)];
-            else if (type.BaseType != null && _supportedTypes.Keys.Contains(type))
+            else if (type.BaseType != null && _supportedTypes.Keys.Contains(type.BaseType))
                 info = _supportedTypes[type.BaseType];
             DbSet<T> value = info.GetValue(this, null) as DbSet<T>;
             return value;
