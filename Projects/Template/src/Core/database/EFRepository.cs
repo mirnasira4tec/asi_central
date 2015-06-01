@@ -51,8 +51,7 @@ namespace asi.asicentral.database
             _context.Supports(typeof(T));
             if (string.IsNullOrEmpty(include))
             {
-                if (readOnly) return _context.GetSet<T>().AsNoTracking() as IQueryable<T>;
-                else return _context.GetSet<T>() as IQueryable<T>;
+                return GetAll(readOnly);
             }
             else
             {
@@ -68,7 +67,6 @@ namespace asi.asicentral.database
         public virtual void Update(T entity)
         {
             _context.Supports(typeof(T));
-            _context.Entry(entity).State = System.Data.EntityState.Modified;
             _context.Entry(entity).State = System.Data.EntityState.Modified;
         }
 
