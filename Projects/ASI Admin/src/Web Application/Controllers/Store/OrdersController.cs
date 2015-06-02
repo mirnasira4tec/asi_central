@@ -339,27 +339,24 @@ namespace asi.asicentral.web.Controllers.Store
         }
 
         private void GetAllTypeStatistics(IList<StoreOrder> orders, IList<Group> groups, string filter)
-        {
-            orders = orders.Where(order => order.OrderDetails != null && order.OrderDetails.Count > 0).ToList();
-
+        {            
             if (string.IsNullOrEmpty(filter) || !OrderStatisticData.Statistics_Special_Types.Values.Contains(filter))
-            {
-                foreach (var type in orders.Select(order => order.OrderDetails.FirstOrDefault())
-                                           .Select(d => d.Product.Type).Distinct().OrderBy(type => type))
+            { 
+                // get all order types but "Sales" and "Show"
+                foreach (var type in orders.Select(order => order.OrderRequestType).Distinct().OrderBy(type => type))
                 {
                     //for each type create section and populate with data already there
-                    var typeData = orders.Where(order => order.OrderDetails.FirstOrDefault().Product.Type == type
-                                                         && !OrderStatisticData.Statistics_Special_Types.Keys.Contains(order.OrderDetails.FirstOrDefault().Product.Id))
-                        .GroupBy(order => new { order.CompletedStep })
-                        .Select(grouped => new
-                        {
-                            CompletedStep = grouped.Key.CompletedStep,
-                            Count = grouped.Count(),
-                            Amount = grouped.Sum(order => order.Total),
-                            AnnualizedAmout = grouped.Sum(order => order.AnnualizedTotal),
-                        })
-                        .OrderBy(data => data.CompletedStep)
-                        .ToList();
+                    var typeOrders = orders.Where(order => order.OrderRequestType == type && !OrderStatisticData.Statistics_Special_Types.Keys.Contains(order.OrderTypeId));
+                    var typeData = typeOrders.GroupBy(order => new { order.CompletedStep })
+                                             .Select(grouped => new
+                                             {
+                                                 CompletedStep = grouped.Key.CompletedStep,
+                                                 Count = grouped.Count(),
+                                                 Amount = grouped.Sum(order => order.Total),
+                                                 AnnualizedAmout = grouped.Sum(order => order.AnnualizedTotal),
+                                             })
+                                             .OrderBy(data => data.CompletedStep)
+                                             .ToList();
                     Group group = new Group() { Name = type ?? "(Unknown)" };
                     foreach (var item in typeData)
                     {
@@ -368,25 +365,19 @@ namespace asi.asicentral.web.Controllers.Store
                         group.Data[index].Count += item.Count;
                         group.Data[index].Amount += item.Amount;
                     }
+
                     //combine the total
                     for (int i = 3; i >= 0; i--) group.Data[i].Count += group.Data[i + 1].Count;
                     //check rejected
-                    group.Data[5].Count = orders.Where(order => order.OrderDetails.FirstOrDefault().Product.Type == type
-                                                                 && order.ProcessStatus == OrderStatus.Rejected).Count();
-                    group.Data[5].Amount = orders.Where(order => order.OrderDetails.FirstOrDefault().Product.Type == type
-                                                                 && order.ProcessStatus == OrderStatus.Rejected).Sum(order => order.Total);
+                    group.Data[5].Count = typeOrders.Where(order => order.ProcessStatus == OrderStatus.Rejected).Count();
+                    group.Data[5].Amount = typeOrders.Where(order => order.ProcessStatus == OrderStatus.Rejected).Sum(order => order.Total);
                     //check pending approval
-                    group.Data[6].Count = orders.Where(order => order.OrderDetails.FirstOrDefault().Product.Type == type
-                                                                && order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Count();
-                    group.Data[6].Amount = orders.Where(order => order.OrderDetails.FirstOrDefault().Product.Type == type
-                                                                 && order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Sum(order => order.Total);
+                    group.Data[6].Count = typeOrders.Where(order => order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Count();
+                    group.Data[6].Amount = typeOrders.Where(order => order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Sum(order => order.Total);
                     //check approved
-                    group.Data[7].Count = orders.Where(order => order.OrderDetails.FirstOrDefault().Product.Type == type
-                                                                && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Count();
-                    group.Data[7].Amount = orders.Where(order => order.OrderDetails.FirstOrDefault().Product.Type == type
-                                                                 && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.Total);
-                    group.Data[7].AnnualizedAmount = orders.Where(order => order.OrderDetails.FirstOrDefault().Product.Type == type
-                                                                           && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.AnnualizedTotal);
+                    group.Data[7].Count = typeOrders.Where(order => order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Count();
+                    group.Data[7].Amount = typeOrders.Where(order => order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.Total);
+                    group.Data[7].AnnualizedAmount = typeOrders.Where(order => order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.AnnualizedTotal);
                     groups.Add(group);
                 }
             }
@@ -406,18 +397,18 @@ namespace asi.asicentral.web.Controllers.Store
         private Group GetTypeStatistics(IList<StoreOrder> orders, int productId, string type)
         {
             Group group = null;
+            var typeOrders = orders.Where(order => order.OrderTypeId == productId);
 
-            var typeData = orders.Where(order => order.OrderDetails.FirstOrDefault().Product.Id == productId)
-                .GroupBy(order => new { order.CompletedStep })
-                .Select(grouped => new
-                {
-                    CompletedStep = grouped.Key.CompletedStep,
-                    Count = grouped.Count(),
-                    Amount = grouped.Sum(order => order.Total),
-                    AnnualizedAmout = grouped.Sum(order => order.AnnualizedTotal),
-                })
-                .OrderBy(data => data.CompletedStep)
-                .ToList();            
+            var typeData = typeOrders.GroupBy(order => new { order.CompletedStep })
+                                     .Select(grouped => new
+                                     {
+                                         CompletedStep = grouped.Key.CompletedStep,
+                                         Count = grouped.Count(),
+                                         Amount = grouped.Sum(order => order.Total),
+                                         AnnualizedAmout = grouped.Sum(order => order.AnnualizedTotal),
+                                     })
+                                     .OrderBy(data => data.CompletedStep)
+                                     .ToList();            
 
             if (typeData.Count > 0)
             {
@@ -432,15 +423,15 @@ namespace asi.asicentral.web.Controllers.Store
                 //combine the total
                 for (int i = 3; i >= 0; i--) group.Data[i].Count += group.Data[i + 1].Count;
                 //check rejected
-                group.Data[5].Count = orders.Where(order => order.OrderDetails.FirstOrDefault().Product.Id == productId && order.ProcessStatus == OrderStatus.Rejected).Count();
-                group.Data[5].Amount = orders.Where(order => order.OrderDetails.FirstOrDefault().Product.Id == productId && order.ProcessStatus == OrderStatus.Rejected).Sum(order => order.Total);
+                group.Data[5].Count = typeOrders.Where(order => order.ProcessStatus == OrderStatus.Rejected).Count();
+                group.Data[5].Amount = typeOrders.Where(order => order.ProcessStatus == OrderStatus.Rejected).Sum(order => order.Total);
                 //check pending approval
-                group.Data[6].Count = orders.Where(order => order.OrderDetails.FirstOrDefault().Product.Id == productId && order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Count();
-                group.Data[6].Amount = orders.Where(order => order.OrderDetails.FirstOrDefault().Product.Id == productId && order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Sum(order => order.Total);
+                group.Data[6].Count = typeOrders.Where(order => order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Count();
+                group.Data[6].Amount = typeOrders.Where(order => order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Sum(order => order.Total);
                 //check approved
-                group.Data[7].Count = orders.Where(order => order.OrderDetails.FirstOrDefault().Product.Id == productId && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Count();
-                group.Data[7].Amount = orders.Where(order => order.OrderDetails.FirstOrDefault().Product.Id == productId && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.Total);
-                group.Data[7].AnnualizedAmount = orders.Where(order => order.OrderDetails.FirstOrDefault().Product.Id == productId && order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.AnnualizedTotal);
+                group.Data[7].Count = typeOrders.Where(order => order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Count();
+                group.Data[7].Amount = typeOrders.Where(order => order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.Total);
+                group.Data[7].AnnualizedAmount = typeOrders.Where(order => order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.AnnualizedTotal);
             }
 
             return group;
@@ -535,7 +526,7 @@ namespace asi.asicentral.web.Controllers.Store
                                                                                                  (det.Product.Id == 17 && orderStatisticsData.StatisticsValue == "Show")
                                                                                                  || (det.Product.Id == 99 && orderStatisticsData.StatisticsValue == "Sales")
                                                                                                  || (!OrderStatisticData.Statistics_Special_Types.Keys.Contains(det.Product.Id) &&
-                                                                                                      det.Product.Type == orderStatisticsData.StatisticsValue)) > 0);
+                                                                                                      order.OrderRequestType == orderStatisticsData.StatisticsValue)) > 0);
                         break;
                     default:
                         break;
