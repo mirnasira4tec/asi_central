@@ -357,7 +357,7 @@ namespace asi.asicentral.web.Controllers.Store
                                              })
                                              .OrderBy(data => data.CompletedStep)
                                              .ToList();
-                    Group group = new Group() { Name = type ?? "(Unknown)" };
+                    Group group = new Group() { Name = !string.IsNullOrEmpty(type) ? type : "(Unknown)" };
                     foreach (var item in typeData)
                     {
                         int index = item.CompletedStep >= 4 ? 4 : item.CompletedStep;
@@ -385,9 +385,10 @@ namespace asi.asicentral.web.Controllers.Store
             // get statistics for Show - ProductId 17; Sales - ProductId 99
             foreach (var typeId in OrderStatisticData.Statistics_Special_Types.Keys)
             {
-                if( string.IsNullOrEmpty(filter) || OrderStatisticData.Statistics_Special_Types[typeId] == filter)
+                var type = OrderStatisticData.Statistics_Special_Types[typeId];
+                if( string.IsNullOrEmpty(filter) || type == filter)
                 {
-                    var grp = GetTypeStatistics(orders, typeId, OrderStatisticData.Statistics_Special_Types[typeId]);
+                    var grp = GetTypeStatistics(orders, typeId, type);
                     if( grp != null )
                         groups.Add(grp);
                 }
