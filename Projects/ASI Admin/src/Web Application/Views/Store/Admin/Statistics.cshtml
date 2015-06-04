@@ -101,7 +101,7 @@
         $('.icon-remove').click(function (e) {
             $('input[name="' + $(e.target).data("name") + '"]').val("");
         });
-        @if (Model.FormTab != "ProductTab") 
+        @if (Model.FormTab != "ProductTab" && Model.FormTab != "TypeTab") 
         {
         <text>
         $('input[name="StatisticsValue"]').change(function (e) {
