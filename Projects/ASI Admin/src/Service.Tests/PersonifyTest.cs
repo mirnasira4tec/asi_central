@@ -121,12 +121,38 @@ namespace asi.asicentral.Tests
         [TestMethod]
         public void AddPhoneNumberTest()
         {
-            CustomerInfo companyInfo = PersonifyClient.GetCompanyInfoByAsiNumber("33020");
-            if (companyInfo != null)
-            {
-                PersonifyClient.AddPhoneNumber("2222222222", "USA", companyInfo);
-            }
+            CustomerInfo companyInfo = PersonifyClient.GetCustomerInfoByASINumber("33020");
+	        if (companyInfo != null)
+	        {
+		        PersonifyClient.AddPhoneNumber("2222222222", "USA", companyInfo);
+	        }
+	        else
+	        {
+		        Assert.IsTrue(false, "Could not find the Company forASI# 33020");
+	        }
         }
+
+		[TestMethod]
+		public void GetCompanyCreditCards()
+		{
+			StoreCompany company = new StoreCompany()
+			{
+				ASINumber = "125724",
+				Name = "ASI"
+			};
+			var creditCards = PersonifyClient.GetCompanyCreditCards(company, "ASI");
+			if (creditCards.Any())
+			{
+				foreach (var creditCard in creditCards)
+				{
+					Assert.IsTrue(!string.IsNullOrEmpty(creditCard.CardNumber));
+				}
+			}
+			else
+			{
+				Assert.IsTrue(false, "Could not find any credit cards for ASI# 33020");
+			}
+		}
 
         private IStoreService MockupStoreService()
         {

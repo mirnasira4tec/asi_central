@@ -3,9 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace asi.asicentral.database.mappings.store
 {
@@ -13,21 +10,21 @@ namespace asi.asicentral.database.mappings.store
     {
         public StoreOrderMap()
         {
-            this.ToTable("STOR_Order");
-            this.HasKey(t => t.Id);
+            ToTable("STOR_Order");
+            HasKey(t => t.Id);
 
             //Properties
-            this.Property(t => t.Id)
+            Property(t => t.Id)
                 .HasColumnName("OrderId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            this.Property(t => t.ApprovedDate)
+            Property(t => t.ApprovedDate)
                 .HasColumnName("ApprovedDateUTC");
 
-            this.Property(t => t.CreateDate)
+            Property(t => t.CreateDate)
                 .HasColumnName("CreateDateUTC");
 
-            this.Property(t => t.UpdateDate)
+            Property(t => t.UpdateDate)
                 .HasColumnName("UpdateDateUTC");
 
             // Relationships
