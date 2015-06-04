@@ -84,14 +84,14 @@ namespace asi.asicentral.util.store.catalogadvertising
                 {
                     Id = 7,
                     AdSizeName = "Full Page",
-                    Price = 6015.00m,
+                    Price = 8460.00m,
                     Sequence = 1
                 },
                 new CatalogAdvertisingTieredProductPricing()
                 {
                     Id = 8,
                     AdSizeName = "Single-Product Page",
-                    Price = 5000.00m,
+                    Price = 2500.00m,
                     Sequence = 2
                 },
 
