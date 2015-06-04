@@ -13,5 +13,6 @@
         public string PostalCode { get; set; }
         public string Country { get; set; }
         public string CountryCode { get; set; }
+        public string ExternalReference { get; set; }
     }
 }
