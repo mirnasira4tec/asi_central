@@ -88,6 +88,8 @@ namespace asi.asicentral.services
 					PostalCode = creditCard.PostalCode,
 					CountryCode = creditCard.CountryCode,                
 				};
+                if (!string.IsNullOrEmpty(creditCard.ExternalReference))
+                    webCreditCard.Token = Int32.Parse(creditCard.ExternalReference);
 				web.CreditCardService.CreditCardServiceClient cardServiceClient = GetClient();
 		        var identifier = cardServiceClient.StoreCreditCard(order.GetASICompany(), webCreditCard);
 				if (creditCard.Number.Length >= 4) creditCard.MaskedPAN = "****" + creditCard.Number.Substring(creditCard.Number.Length - 4, 4);
