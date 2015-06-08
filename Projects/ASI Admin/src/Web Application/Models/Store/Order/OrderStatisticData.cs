@@ -11,6 +11,10 @@ namespace asi.asicentral.web.model.store.order
         public const String Statistics_Campaign = "Campaign";
         public const String Statistics_Product = "Product";
         public const String Statistics_Coupon = "Coupon";
+        public const String Statistics_Type = "Type";
+
+        public static readonly Dictionary<int, string> Statistics_Special_Types 
+                        = new Dictionary<int, string>(){ {17, "Show"}, {99, "Sales"} };
 
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
