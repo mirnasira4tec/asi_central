@@ -1,5 +1,5 @@
 ﻿@using asi.asicentral.web.model.store.order;
-@model asi.asicentral.web.model.store.order.OrderStatisticData
+@model OrderStatisticData
 
 @{
     ViewBag.Title = "Statistics";
@@ -14,6 +14,7 @@
         <li id="CampaignTab" class="@(Model.Name == OrderStatisticData.Statistics_Campaign ? "active" : "")"><a href="/store/Orders/Statistics?statistics=@OrderStatisticData.Statistics_Campaign">Campaign Statistics</a></li>
         <li id="ProductTab"  class="@(Model.Name == OrderStatisticData.Statistics_Product ? "active" : "")"><a href="/store/Orders/Statistics?statistics=@OrderStatisticData.Statistics_Product">Product Statistics</a></li>
         <li id="CouponTab"  class="@(Model.Name == OrderStatisticData.Statistics_Coupon ? "active" : "")"><a href="/store/Orders/Statistics?statistics=@OrderStatisticData.Statistics_Coupon">Coupon Statistics</a></li>
+        <li id="TypeTab"  class="@(Model.Name == OrderStatisticData.Statistics_Type ? "active" : "")"><a href="/store/Orders/Statistics?statistics=@OrderStatisticData.Statistics_Type">Type Statistics</a></li>
     </ul>
 </div>
 
@@ -100,7 +101,7 @@
         $('.icon-remove').click(function (e) {
             $('input[name="' + $(e.target).data("name") + '"]').val("");
         });
-        @if (Model.FormTab != "ProductTab") 
+        @if(Model.FormTab != "ProductTab" && Model.FormTab != "TypeTab") 
         {
         <text>
         $('input[name="StatisticsValue"]').change(function (e) {
@@ -134,6 +135,12 @@
             {
             <text>
             name = '@OrderStatisticData.Statistics_Coupon';
+            </text>
+            }
+            else if (Model.FormTab == "TypeTab")
+            {
+            <text>
+            name = '@OrderStatisticData.Statistics_Type';
             </text>
             }
             var location = "@Url.Action("DownloadCSV", "Orders", null)/" + "?Name=" + name + "&StatisticsValue=" + statisticsValue + "&StartDate=" + startdate + "&EndDate=" + enddate;
