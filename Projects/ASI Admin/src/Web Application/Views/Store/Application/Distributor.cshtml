@@ -12,7 +12,7 @@
 @using (Html.BeginForm("EditDistributor", "Application"))
 {
     @Html.AntiForgeryToken()
-    @Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
+    @Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName) @Html.HiddenFor(m => m.CreateDate)
     @Html.Partial("../Store/Application/Shared/AcceptSaveCancelButtons", Model)
 	<nav>
 		<ul class="nav nav-tabs" id="tabs">

@@ -86,6 +86,19 @@ namespace asi.asicentral.model.store
                 else return "(Unknown)";
             }
         }
+        public int OrderTypeId
+        {
+            get
+            {
+                if (OrderDetails != null &&
+                     OrderDetails.FirstOrDefault(d => d.Product != null) != null)
+                {
+                    return OrderDetails.FirstOrDefault(d => d.Product != null).Product.Id;
+                }
+                else
+                    return 0;
+            }
+        }
         public string ConfirmationNumber
         {
             get { return string.Format("{0:#00000}", Id); }
