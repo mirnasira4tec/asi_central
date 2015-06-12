@@ -37,7 +37,7 @@
                     {
                     <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
                     }
-                    if (Model.IsCompleted && Model.OrderStatus == OrderStatus.Pending)
+                    if (Model.IsCompleted && (Model.OrderStatus == OrderStatus.Pending || Model.OrderStatus == OrderStatus.Approved) )
                     { 
                     <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
                     }
