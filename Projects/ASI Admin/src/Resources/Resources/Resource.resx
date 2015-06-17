@@ -1893,4 +1893,10 @@
   <data name="FieldInvalidWholeNumber" xml:space="preserve">
     <value>Please enter a valid whole number.</value>
   </data>
+  <data name="FieldMonthRequired" xml:space="preserve">
+    <value>The Month field is required.</value>
+  </data>
+  <data name="FieldYearRequired" xml:space="preserve">
+    <value>The Year field is required.</value>
+  </data>
 </root>

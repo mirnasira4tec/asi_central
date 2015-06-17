@@ -2266,6 +2266,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Month field is required..
+        /// </summary>
+        public static string FieldMonthRequired {
+            get {
+                return ResourceManager.GetString("FieldMonthRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only numbers will be accepted..
         /// </summary>
         public static string FieldNumber {
@@ -2343,6 +2352,15 @@ namespace asi.asicentral.Resources {
         public static string FieldYearRange {
             get {
                 return ResourceManager.GetString("FieldYearRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Year field is required..
+        /// </summary>
+        public static string FieldYearRequired {
+            get {
+                return ResourceManager.GetString("FieldYearRequired", resourceCulture);
             }
         }
         
