@@ -46,7 +46,8 @@ namespace asi.asicentral.services
             ILogService log = null;
 			//check for ASI #
 			var hasASINumber = order.Company != null && !string.IsNullOrEmpty(order.Company.ASINumber);
-            if (backendIntegration || hasASINumber)
+            //save the credit card in personify if we have an asi number but not if we have an external reference (already comes from personify)
+            if ((backendIntegration || hasASINumber) && string.IsNullOrEmpty(creditCard.ExternalReference))
 	        {
 				//put the credit card in back office directly
 		        try
@@ -85,8 +86,10 @@ namespace asi.asicentral.services
 					Country = creditCard.Country,
 					State = creditCard.State,
 					PostalCode = creditCard.PostalCode,
-					CountryCode = creditCard.CountryCode,
+					CountryCode = creditCard.CountryCode,                
 				};
+                if (!string.IsNullOrEmpty(creditCard.ExternalReference))
+                    webCreditCard.Token = Int32.Parse(creditCard.ExternalReference);
 				web.CreditCardService.CreditCardServiceClient cardServiceClient = GetClient();
 		        var identifier = cardServiceClient.StoreCreditCard(order.GetASICompany(), webCreditCard);
 				if (creditCard.Number.Length >= 4) creditCard.MaskedPAN = "****" + creditCard.Number.Substring(creditCard.Number.Length - 4, 4);

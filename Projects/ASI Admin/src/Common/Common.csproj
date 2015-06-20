@@ -535,14 +535,14 @@
     <None Include="Service References\web.CreditCardService\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\web.CreditCardService\CreditCardService1.wsdl" />
-    <None Include="Service References\web.CreditCardService\CreditCardService3.xsd">
+    <None Include="Service References\web.CreditCardService\CreditCardService.wsdl" />
+    <None Include="Service References\web.CreditCardService\CreditCardService.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\web.CreditCardService\CreditCardService31.xsd">
+    <None Include="Service References\web.CreditCardService\CreditCardService1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\web.CreditCardService\CreditCardService32.xsd">
+    <None Include="Service References\web.CreditCardService\CreditCardService2.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\web.CreditCardService\Reference.svcmap">

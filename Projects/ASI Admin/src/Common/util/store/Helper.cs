@@ -10,7 +10,7 @@ namespace asi.asicentral.util.store
 {
     public static class Helper
     {
-        public static readonly int[] SPECIAL_CONTEXT_IDS = { 21, 10016, 24, 11012 };
+        public const string CARD_ON_FILE = "Card on file";
 
         public static IList<SelectListItem> GetTitles()
         {

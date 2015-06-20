@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Linq;
-using System.Net.Mail;
-using System.Text;
+﻿using System.Linq;
 using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
 using asi.asicentral.PersonifyDataASI;
@@ -10,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using asi.asicentral.services.PersonifyProxy;
 using asi.asicentral.model.timss;
-using ASI.EntityModel;
 
 namespace asi.asicentral.services
 {
@@ -126,13 +122,6 @@ namespace asi.asicentral.services
             }
         }
 
-        private string GetMessageSuffix(string url)
-        {
-            var s = "<br /><br />Thanks,<br /><br />ASICentral team";
-            if(!string.IsNullOrEmpty(url)) s = "<br /><br />" + url + s;
-            return s;    
-        }
-
         private StoreAddressInfo GetAddressInfo(IList<StoreAddressInfo> addresses, AddressType type, StoreOrder order)
         {
             var addr = addresses.FirstOrDefault(a =>
@@ -206,6 +195,11 @@ namespace asi.asicentral.services
             if (string.IsNullOrEmpty(profile)) throw new Exception("Credit card can't be saved to Personify.");
             return profile;
         }
+
+	    public virtual IEnumerable<StoreCreditCard> GetCompanyCreditCards(StoreCompany company, string asiCompany)
+	    {
+		    return PersonifyClient.GetCompanyCreditCards(company, asiCompany);
+	    } 
 
         private IList<CreateOrderLineInput> GetPersonifyLineInputs(StoreOrder order, long shipAddressId)
         {
@@ -322,18 +316,6 @@ namespace asi.asicentral.services
             return companyInformation;
         }
 
-        private string GetCountryCode(string country)
-        {
-            string result = null;
-            if (!string.IsNullOrWhiteSpace(country))
-            {
-                country = country.ToLower();
-                if (country.Contains("united states") || country == "usa") result = "USA";
-                if (country == "canada" || country == "can") result = "CAN";
-            }
-            return result;
-        }
-
         public virtual CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber)
         {
             var companyInfo = PersonifyClient.GetCompanyInfoByASINumber(asiNumber);
@@ -348,7 +330,26 @@ namespace asi.asicentral.services
             return companyInfo;
         }
 
-	    private static void UpdateMemberType(CompanyInformation companyInformation)
+		private static string GetMessageSuffix(string url)
+		{
+			var s = "<br /><br />Thanks,<br /><br />ASICentral team";
+			if (!string.IsNullOrEmpty(url)) s = "<br /><br />" + url + s;
+			return s;
+		}
+
+		private static string GetCountryCode(string country)
+		{
+			string result = null;
+			if (!string.IsNullOrWhiteSpace(country))
+			{
+				country = country.ToLower();
+				if (country.Contains("united states") || country == "usa") result = "USA";
+				if (country == "canada" || country == "can") result = "CAN";
+			}
+			return result;
+		}
+
+		private static void UpdateMemberType(CompanyInformation companyInformation)
 	    {
 		    if (companyInformation != null)
 		    {

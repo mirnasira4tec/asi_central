@@ -19,13 +19,13 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:4110/service/CreditCardService.svc?wsdl" Protocol="http" SourceId="1" />
+    <MetadataSource Address="https://stage-asicentralcreditcard.asicentral.com/service/CreditCardService.svc?wsdl" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="CreditCardService3.xsd" MetadataType="Schema" ID="d27c7a83-00c9-46b9-8b5e-7357a71d20f0" SourceId="1" SourceUrl="http://localhost:4110/service/CreditCardService.svc?xsd=xsd1" />
-    <MetadataFile FileName="CreditCardService1.wsdl" MetadataType="Wsdl" ID="7332609b-7a36-4db8-b145-217aa806faac" SourceId="1" SourceUrl="http://localhost:4110/service/CreditCardService.svc?wsdl" />
-    <MetadataFile FileName="CreditCardService31.xsd" MetadataType="Schema" ID="3a0a9d09-3578-4490-a700-e69b340beac9" SourceId="1" SourceUrl="http://localhost:4110/service/CreditCardService.svc?xsd=xsd0" />
-    <MetadataFile FileName="CreditCardService32.xsd" MetadataType="Schema" ID="cb93d819-7993-4d9b-a68e-947d0cb36f0a" SourceId="1" SourceUrl="http://localhost:4110/service/CreditCardService.svc?xsd=xsd2" />
+    <MetadataFile FileName="CreditCardService.xsd" MetadataType="Schema" ID="2317710b-9432-42cd-9dea-428f5ab47f69" SourceId="1" SourceUrl="https://stage-asicentralcreditcard.asicentral.com/service/CreditCardService.svc?xsd=xsd2" />
+    <MetadataFile FileName="CreditCardService1.xsd" MetadataType="Schema" ID="6dd30285-5919-4d4f-8154-d91e33d7efd0" SourceId="1" SourceUrl="https://stage-asicentralcreditcard.asicentral.com/service/CreditCardService.svc?xsd=xsd1" />
+    <MetadataFile FileName="CreditCardService2.xsd" MetadataType="Schema" ID="ae562538-0b91-4be5-a245-b5c113cb6364" SourceId="1" SourceUrl="https://stage-asicentralcreditcard.asicentral.com/service/CreditCardService.svc?xsd=xsd0" />
+    <MetadataFile FileName="CreditCardService.wsdl" MetadataType="Wsdl" ID="be5d7c2a-ed20-480f-ae47-4a1a0692d989" SourceId="1" SourceUrl="https://stage-asicentralcreditcard.asicentral.com/service/CreditCardService.svc?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
