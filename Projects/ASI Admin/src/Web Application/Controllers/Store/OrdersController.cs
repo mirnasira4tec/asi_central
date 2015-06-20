@@ -128,7 +128,7 @@ namespace asi.asicentral.web.Controllers.Store
             asi.asicentral.model.store.StoreOrder order = StoreService.GetAll<asi.asicentral.model.store.StoreOrder>().Where(ordr => ordr.Id == id).SingleOrDefault();
             if (order != null)
             {
-                if (order.ProcessStatus == OrderStatus.Pending)
+                if (order.ProcessStatus == OrderStatus.Pending || order.ProcessStatus == OrderStatus.Approved )
                 {
                     order.ProcessStatus = OrderStatus.Rejected;
 

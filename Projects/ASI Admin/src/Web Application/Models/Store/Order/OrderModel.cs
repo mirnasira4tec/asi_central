@@ -155,7 +155,9 @@ namespace asi.asicentral.web.model.store
                 else
                     order.CreditCard += "-" + orderDetail.Order.CreditCard.CardNumber;
                 if (orderDetail.Order.CreditCard.ExpMonth != null && orderDetail.Order.CreditCard.ExpMonth.Length > 1 &&
-                    orderDetail.Order.CreditCard.ExpYear != null && orderDetail.Order.CreditCard.ExpYear.Length > 1)
+                    orderDetail.Order.CreditCard.ExpYear != null && orderDetail.Order.CreditCard.ExpYear.Length > 1 &&
+                    !string.IsNullOrEmpty(orderDetail.Order.CreditCard.CardHolderName) &&
+                    orderDetail.Order.CreditCard.CardHolderName != asi.asicentral.util.store.Helper.CARD_ON_FILE)
 
                     order.CreditCard += " (" + orderDetail.Order.CreditCard.ExpMonth + "/" + orderDetail.Order.CreditCard.ExpYear.Substring(orderDetail.Order.CreditCard.ExpYear.Length - 2) + ")";
             }

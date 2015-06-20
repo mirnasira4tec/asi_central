@@ -1,5 +1,6 @@
 ﻿@using asi.asicentral.web.model.store
 @using asi.asicentral.Resources
+@using asi.asicentral.model.store
 @model OrderPageModel
 
 @{
@@ -150,10 +151,15 @@
                         @foreach (OrderModel order in Model.Orders)
                         {
                             <tr>
-                                <td width="80px">@if (order.ShowIcons)
+                                <td width="80px">
+                                @if (order.ShowIcons)
                                 { 
                                     <a id="@order.OrderId" rel="tooltip" data-placement="top" data-type="reject" title="Click here to reject the order" href="#"><i class="icon-remove"></i></a>
                                     <a rel="tooltip" data-placement="top" title="Click here to accept the order" href="@Url.Action("Edit", "Application", new { Id = order.OrderDetailId })"><i data-orderid="@order.OrderId" class="icon-ok"></i></a> 
+                                }
+                                else if( order.ApprovalStatus == OrderStatus.Approved)
+                                {
+                                    <a id="@order.OrderId" rel="tooltip" data-placement="top" data-type="reject" title="Click here to reject the order" href="#"><i class="icon-remove"></i></a>
                                 }
                                 else
                                 { <img src="/images/transparent.gif" style="height: 1px; width: 33px" /> }
