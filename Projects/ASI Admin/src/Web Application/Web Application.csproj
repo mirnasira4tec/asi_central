@@ -464,11 +464,9 @@
     <Content Include="Views\Store\Application\Equipment.cshtml" />
     <Content Include="Views\Store\Application\SalesForm.cshtml" />
     <Content Include="Views\TermsConditions\Index.cshtml" />
-    <Content Include="Views\TermsConditions\Type.cshtml" />
     <Content Include="Views\TermsConditions\Terms&amp;Conditions.cshtml" />
     <Content Include="Views\TermsConditions\_TermsLayout.cshtml" />
     <Content Include="Views\TermsConditions\Types.cshtml" />
-    <Content Include="Views\TermsConditions\Add.cshtml" />
     <Content Include="Views\TermsConditions\Edit.cshtml" />
     <EmbeddedResource Include="Views\Emails\TermsConditionsEmail.cshtml" />
     <None Include="Web.Dev.config">

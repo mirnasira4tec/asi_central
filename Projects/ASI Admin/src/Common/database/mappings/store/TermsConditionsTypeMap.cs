@@ -2,11 +2,11 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
-namespace asi.asicentral.database.mappings.TermCondition
+namespace asi.asicentral.database.mappings.store
 {
-    public class TermsConditionsMap : EntityTypeConfiguration<TermsConditionsType>
+    public class TermsConditionsTypeMap : EntityTypeConfiguration<TermsConditionsType>
     {
-        public TermsConditionsMap()
+        public TermsConditionsTypeMap()
         {
             this.ToTable("TERM_Type");
             this.HasKey(t => t.Id);

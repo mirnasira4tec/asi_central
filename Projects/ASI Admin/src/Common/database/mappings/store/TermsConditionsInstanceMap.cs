@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
-namespace asi.asicentral.database.mappings.TermCondition
+namespace asi.asicentral.database.mappings.store
 {
     public class TermsConditionsInstanceMap: EntityTypeConfiguration<TermsConditionsInstance>
     {

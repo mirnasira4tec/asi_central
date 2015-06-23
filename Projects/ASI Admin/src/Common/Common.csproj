@@ -283,7 +283,7 @@
     <Compile Include="database\mappings\store\StoreTieredProductPricingMap.cs" />
     <Compile Include="database\mappings\store\TaxRateMap.cs" />
     <Compile Include="database\mappings\store\TermsConditionsInstanceMap.cs" />
-    <Compile Include="database\mappings\store\TermsConditionsMap.cs" />
+    <Compile Include="database\mappings\store\TermsConditionsTypeMap.cs" />
     <Compile Include="database\mappings\timss\PersonifyMappingMap.cs" />
     <Compile Include="database\MemberDemogrContext.cs" />
     <Compile Include="interfaces\ICreditCardService.cs" />
