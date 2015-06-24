@@ -9,7 +9,8 @@
 }
 <h2>@ViewBag.Header</h2>
 <a href="/TermsConditions/Index">Back to the list</a>
-
+<br />
+@Html.Partial("_statusMessagePartial")
 @using (Html.BeginForm("Edit", "TermsConditions", FormMethod.Post, new { id = "termsConditions-form", @class = "form-horizontal", role = "form" }))
 {
 	@Html.AntiForgeryToken()
@@ -19,14 +20,13 @@
     @Html.HiddenFor(m => m.UpdateDate)
     @Html.HiddenFor(m => m.UpdateSource)
     @Html.HiddenFor(m => m.TypeId)
-    if( Model.TypeIdListWithSameGuid != null )
+    if (Model.TypesWithSameGuid != null)
     {
-        for (int i = 0; i < Model.TypeIdListWithSameGuid.Count; i++ )
+        for (int i = 0; i < Model.TypesWithSameGuid.Count; i++)
         {
-            @Html.HiddenFor(m => m.TypeIdListWithSameGuid[i], new { @class="TypeIdListWithSameGuid", value = Model.TypeIdListWithSameGuid[i]})
+            @Html.HiddenFor(m => m.TypesWithSameGuid[i], new { @class="TypeIdListWithSameGuid", value = Model.TypesWithSameGuid[i]})
         }
     }
-    <br />
 	<div>
 		<div class="row">
 			<div class="span4">
@@ -78,7 +78,7 @@
 			<div class="span4">
 				<div class="form-group">
                     @Html.LabelFor(m => m.TermsConditionsName)
-                    @Html.ListBox("termsConditionsList", new MultiSelectList(Model.TermList, "Id", "Name"), new { @multiple = "multiple", @style = "width:100%" })
+                    @Html.ListBox("termsConditionsList", new MultiSelectList(Model.TermList, "Id", "Name", "Name"), new { @multiple = "multiple", @style = "width:100%" })
 				</div>
 			</div>
 
@@ -93,7 +93,7 @@
     			        @Html.LabelFor(model => model.OrderId)
 			        </div>
 			        <div class="span2">
-    			        <a href="/store/Application/Edit/@Model.OrderDetailId">@Model.OrderId</a>
+    			        <a href="/TermsConditions/OrderDetail/@Model.OrderId">@Model.OrderId</a>
 			        </div>
 		        </div>
             }
@@ -157,8 +157,11 @@
 	    $(document).ready(function () {
 	        var typeList = $('.TypeIdListWithSameGuid');
 	        for (var i = 0; i < typeList.size() ; i++) {
-	            var id = $(typeList[i]).val();
-	            $('#termsConditionsList option').filter('[value='+ id +']').attr('selected', true);
+	            var termsName = $(typeList[i]).val();
+	            $('#termsConditionsList option').each(function () {
+	                if ($(this).text() == termsName)
+	                    $(this).attr('selected', true);
+	            });
 	        }
 	    });
 	</script>

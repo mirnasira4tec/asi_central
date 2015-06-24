@@ -8,30 +8,9 @@
     <div id="modal-container"></div>
 </div>
 <h2>Terms and Conditions</h2>
-@{
-    if (TempData["Message"] != null )
-    {
-        string message = TempData["Message"].ToString();
-        if(!string.IsNullOrEmpty(message))
-        {
-            
-            if (message.ToLower().Contains("error"))
-            {
-                <div class="well alert alert-danger alert-dismissable" >
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    @TempData["Message"]
-                </div>
-            }
-            else
-            {
-                <div class="well alert alert-info alert-dismissable">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    @TempData["Message"]
-                </div>
-            }
-        }
-    }
-}
+
+@Html.Partial("_statusMessagePartial")
+
 <div class="tabbable tabs-below small">
 	<h5>Search by</h5>
 	<ul id="formtab" class="nav nav-tabs">
@@ -101,7 +80,7 @@
                    <td>
                     @if( @termInst.OrderId != null)
                     {
-                    <a href="/store/Application/Edit/@termInst.OrderDetailId">@termInst.OrderId</a>
+                    <a href="/TermsConditions/OrderDetail/@termInst.OrderId">@termInst.OrderId</a>
                     }
                     </td>
                     <td style="width:85px">
@@ -111,7 +90,7 @@
                     }
                     </td>
                     <td>@termInst.LastUpdatedBy</td>
-                    </tr>
+                </tr>
             }
         }
     </tbody>
@@ -174,7 +153,7 @@
                                          r.CustomerName,
                                          r.CustomerEmail,
                                          r.CompanyName,
-                                         r.OrderId != null ? '<a href="/store/Application/Edit/'+r.OrderDetailId+'">'+r.OrderId+'</a>' : '',
+                                         r.OrderId != null ? '<a href="/TermsConditions/OrderDetail/' + r.OrderId + '">' + r.OrderId + '</a>' : '',
                                          r.DateAgreedOn == null ? '' : r.DateAgreedOn.substr(0, 10),
                                          r.LastUpdatedBy]);
                     }

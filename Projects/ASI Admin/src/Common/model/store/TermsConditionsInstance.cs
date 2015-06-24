@@ -23,6 +23,5 @@ namespace asi.asicentral.model.store
         public string UpdateSource { get; set; }
 
         public virtual TermsConditionsType TermsAndConditions { get; set; }
-        public virtual StoreOrder StoreOrder { get; set; }
     }
 }

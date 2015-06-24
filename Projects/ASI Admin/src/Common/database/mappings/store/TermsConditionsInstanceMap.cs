@@ -26,11 +26,6 @@ namespace asi.asicentral.database.mappings.store
             HasRequired(t => t.TermsAndConditions)
                 .WithMany()
                 .HasForeignKey(t => t.TypeId);
-
-            HasOptional(t => t.StoreOrder)
-                .WithMany(order => order.TermsConditionsInstance)
-                .HasForeignKey(t => t.OrderId)
-                .WillCascadeOnDelete();
         }    
     }
 }

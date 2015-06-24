@@ -19,7 +19,6 @@ namespace asi.asicentral.model.store
             if (this.GetType() == typeof(StoreOrder))
             {
                 OrderDetails = new List<StoreOrderDetail>();
-                TermsConditionsInstance = new List<TermsConditionsInstance>();
             }
         }
 
@@ -53,7 +52,6 @@ namespace asi.asicentral.model.store
         public virtual StoreIndividual BillingIndividual { get; set; }
         public virtual IList<StoreOrderDetail> OrderDetails { get; set; }
         public virtual Context Context { get; set; }
-        public virtual IList<TermsConditionsInstance> TermsConditionsInstance { get; set; }
 
         public string ProductName
         {

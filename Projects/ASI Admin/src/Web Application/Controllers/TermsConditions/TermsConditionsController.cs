@@ -26,7 +26,8 @@ namespace asi.asicentral.web.Controllers.TermsConditions
                 // List all terms and conditions instances for last 7 days
                 var startDate = DateTime.Now.AddDays(-7);
                 var modelList = StoreService.GetAll<TermsConditionsInstance>(true)
-                                            .Where(t => t.CreateDate >= startDate && t.DateAgreedOn == null).ToList();
+                                            .Where(t => t.CreateDate >= startDate && t.DateAgreedOn == null)
+                                            .ToList(); //ToList is necessary here to get TermsConditionsType object
                 foreach (var model in modelList)
                 {
                     viewModelList.Add(model.ToViewModel());
@@ -62,7 +63,8 @@ namespace asi.asicentral.web.Controllers.TermsConditions
                         //add all TypeIds
                         for (int i = 1; i < termsModel.Count; i++)
                         {
-                            viewModel.TypeIdListWithSameGuid.Add(termsModel[i].TypeId);
+                            if( termsModel[i].TermsAndConditions != null)
+                                viewModel.TypesWithSameGuid.Add(termsModel[i].TermsAndConditions.Name);
                         }
                     }
                     else
@@ -89,7 +91,7 @@ namespace asi.asicentral.web.Controllers.TermsConditions
         {
             try
             {
-                if (ModelState.IsValid)
+                if (ModelState.IsValid && termsConditionsList != null && termsConditionsList.Length > 0 )
                 {
                     int newTermsStartIndex = 0;
                     var emailTermsList = new List<TermsConditionsInstance>();
@@ -165,8 +167,19 @@ namespace asi.asicentral.web.Controllers.TermsConditions
                     model.TermList = StoreService.GetAll<asi.asicentral.model.store.TermsConditionsType>(true)
                                                                        .Where(t => t.IsActive == true).ToList();
 
-                    var modelStateErrors = ModelState.Values.SelectMany(m => m.Errors);
-                    var errorMessage = string.Join(". ", modelStateErrors.Select(m => m.ErrorMessage));
+                    string errorMessage = string.Empty;
+
+                    if (termsConditionsList == null || termsConditionsList.Length < 1)
+                    {
+                        errorMessage += "Please select at least one terms and conditions.";
+                    }
+
+                    if (!ModelState.IsValid)
+                    {
+                        var modelStateErrors = ModelState.Values.SelectMany(m => m.Errors);
+                        errorMessage += string.Join(". ", modelStateErrors.Select(m => m.ErrorMessage));
+                    }
+
                     TempData["Message"] = "Error: " + errorMessage;
 
                     return View(model);
@@ -235,6 +248,32 @@ namespace asi.asicentral.web.Controllers.TermsConditions
 
             return JsonConvert.SerializeObject(Json(termInstList).Data);
         }
+
+        public ActionResult OrderDetail(int id)
+        {
+            if (id != 0)
+            {
+                try
+                {
+                    var order = StoreService.GetAll<StoreOrder>(true)
+                                            .Where(o => o.Id == id).FirstOrDefault();
+
+                    if (order != null && order.OrderDetails != null && order.OrderDetails.Count > 0)
+                    {
+                        int orderDetailId = order.OrderDetails[0].Id;
+                        return Redirect("/Store/Application/Edit/" + orderDetailId);
+                    }
+
+                    TempData["Message"] = string.Format("The order {1} has no details provided. ", id.ToString());
+                }
+                catch (Exception ex) 
+                {
+                    TempData["Message"] = "Error: " + ex.Message;
+                }
+            }
+
+            return RedirectToAction("Index");
+        }
         #endregion
 
         #region Terms and Conditions Types tab
@@ -259,7 +298,7 @@ namespace asi.asicentral.web.Controllers.TermsConditions
             var viewModelList = new List<TermsConditionsTypeVM>();
             try
             {
-                var modelList = StoreService.GetAll<TermsConditionsType>(true).ToList();
+                var modelList = StoreService.GetAll<TermsConditionsType>(true);
                 foreach (var model in modelList)
                 {
                     viewModelList.Add(model.ToViewModel());

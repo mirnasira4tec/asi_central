@@ -24,7 +24,6 @@ namespace asi.asicentral.web.Models.TermsConditions
         [Display(Name = "Select terms and conditions")]
         public string TermsConditionsName { get; set; }
         public int TypeId { get; set; }
-        public int OrderDetailId { get; set; }
         public string IPAddress { get; set; }
         public int? OrderId { get; set; }
         [Display(Name = "Date Agreed On")]
@@ -41,7 +40,7 @@ namespace asi.asicentral.web.Models.TermsConditions
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
 
-        public List<int> TypeIdListWithSameGuid { get; set; }
+        public List<string> TypesWithSameGuid { get; set; }
         public List<TermsConditionsType> TermList { get; set; }
     }
 
@@ -73,16 +72,9 @@ namespace asi.asicentral.web.Models.TermsConditions
                      UpdateSource = model.UpdateSource
                  };
 
-                viewModel.TypeIdListWithSameGuid = new List<int>() {model.TypeId};
-
-                if (model.StoreOrder != null )
-                {
-                    var orderDetail = model.StoreOrder.OrderDetails;
-                    if (orderDetail != null && orderDetail.Count > 0)
-                    {
-                        viewModel.OrderDetailId = orderDetail[0].Id;
-                    }
-                }
+                viewModel.TypesWithSameGuid = new List<string>();
+                if (model.TermsAndConditions != null)
+                    viewModel.TypesWithSameGuid.Add(model.TermsAndConditions.Name);
             }
             else
                 viewModel = new TermsConditionsInstanceVM();

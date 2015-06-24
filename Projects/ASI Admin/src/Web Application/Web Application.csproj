@@ -469,6 +469,7 @@
     <Content Include="Views\TermsConditions\Types.cshtml" />
     <Content Include="Views\TermsConditions\Edit.cshtml" />
     <EmbeddedResource Include="Views\Emails\TermsConditionsEmail.cshtml" />
+    <Content Include="Views\TermsConditions\_statusMessagePartial.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
