@@ -26,13 +26,16 @@ namespace asi.asicentral.web.Controllers.TermsConditions
                 // List all terms and conditions instances for last 7 days
                 var startDate = DateTime.Now.AddDays(-7);
                 var modelList = StoreService.GetAll<TermsConditionsInstance>(true)
-                                            .Where(t => t.CreateDate >= startDate && t.DateAgreedOn.Year == 1).ToList();
+                                            .Where(t => t.CreateDate >= startDate && t.DateAgreedOn == null).ToList();
                 foreach (var model in modelList)
                 {
                     viewModelList.Add(model.ToViewModel());
                 }
             }
-            catch (Exception) { }
+            catch (Exception ex) 
+            { 
+                TempData["Message"] = "Error: " + ex.Message; 
+            }
 
             return View("../TermsConditions/Index", viewModelList);
         }
@@ -70,7 +73,6 @@ namespace asi.asicentral.web.Controllers.TermsConditions
                 else
                     viewModel = new TermsConditionsInstanceVM();
 
-                viewModel.StoreOrderList = StoreService.GetAll<StoreOrder>(true).ToList();
                 viewModel.TermList = StoreService.GetAll<TermsConditionsType>(true)
                                                  .Where(t => t.IsActive == true).ToList();
             }
@@ -160,8 +162,8 @@ namespace asi.asicentral.web.Controllers.TermsConditions
                 }
                 else
                 {
-                    model.StoreOrderList = StoreService.GetAll<StoreOrder>(true).ToList();
-                    model.TermList = StoreService.GetAll<asi.asicentral.model.store.TermsConditionsType>(true).ToList();
+                    model.TermList = StoreService.GetAll<asi.asicentral.model.store.TermsConditionsType>(true)
+                                                                       .Where(t => t.IsActive == true).ToList();
 
                     var modelStateErrors = ModelState.Values.SelectMany(m => m.Errors);
                     var errorMessage = string.Join(". ", modelStateErrors.Select(m => m.ErrorMessage));
@@ -206,7 +208,7 @@ namespace asi.asicentral.web.Controllers.TermsConditions
 
                 if (showOnlyPending != null && showOnlyPending.Value)
                 {
-                    modelList = modelList.Where(t => t.DateAgreedOn.Year == 1);
+                    modelList = modelList.Where(t => t.DateAgreedOn == null);
                 }
 
                 if (!string.IsNullOrEmpty(customerName))

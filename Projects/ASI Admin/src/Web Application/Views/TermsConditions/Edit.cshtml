@@ -5,7 +5,7 @@
     ViewBag.Title = "Terms and Conditions";
     ViewBag.IsNew = Model.Id == 0;
     ViewBag.Header = ViewBag.IsNew ? "Add a New Terms and Conditions" : "Edit a Terms and Conditions";
-    ViewBag.IsEditable = Model.DateAgreedOn.Year == 1;
+    ViewBag.IsEditable = Model.DateAgreedOn == null;
 }
 <h2>@ViewBag.Header</h2>
 <a href="/TermsConditions/Index">Back to the list</a>
@@ -78,7 +78,7 @@
 			<div class="span4">
 				<div class="form-group">
                     @Html.LabelFor(m => m.TermsConditionsName)
-                    @Html.ListBox("termsConditionsList", new MultiSelectList(Model.TermList.Where(t => t.IsActive == true), "Id", "Name"), new { @multiple = "multiple", @style = "width:100%" })
+                    @Html.ListBox("termsConditionsList", new MultiSelectList(Model.TermList, "Id", "Name"), new { @multiple = "multiple", @style = "width:100%" })
 				</div>
 			</div>
 

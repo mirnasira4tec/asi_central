@@ -28,7 +28,7 @@ namespace asi.asicentral.web.Models.TermsConditions
         public string IPAddress { get; set; }
         public int? OrderId { get; set; }
         [Display(Name = "Date Agreed On")]
-        public DateTime DateAgreedOn { get; set; }
+        public DateTime? DateAgreedOn { get; set; }
         [Display(Name = "Created By")]
         public string CreatedBy { get; set; }
         [Display(Name = "Last Updated By")]
@@ -43,7 +43,6 @@ namespace asi.asicentral.web.Models.TermsConditions
 
         public List<int> TypeIdListWithSameGuid { get; set; }
         public List<TermsConditionsType> TermList { get; set; }
-        public List<StoreOrder> StoreOrderList { get; set; }
     }
 
     public static class TermsConditionsInstanceExtensions

@@ -13,7 +13,7 @@ namespace asi.asicentral.model.store
         public int TypeId { get; set; }
         public string IPAddress { get; set; }
         public int? OrderId { get; set; }
-        public DateTime DateAgreedOn { get; set; }
+        public DateTime? DateAgreedOn { get; set; }
         public string CreatedBy { get; set; }
         public string LastUpdatedBy { get; set; }
         public string NotificationEmail { get; set; }
