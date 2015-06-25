@@ -1,0 +1,168 @@
+﻿@using asi.asicentral.web.Models.TermsConditions
+@model TermsConditionsInstanceVM
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Terms and Conditions";
+    ViewBag.IsNew = Model.Id == 0;
+    ViewBag.Header = ViewBag.IsNew ? "Add a New Terms and Conditions" : "Edit a Terms and Conditions";
+    ViewBag.IsEditable = Model.DateAgreedOn == null;
+}
+<h2>@ViewBag.Header</h2>
+<a href="/TermsConditions/Index">Back to the list</a>
+<br />
+@Html.Partial("_statusMessagePartial")
+@using (Html.BeginForm("Edit", "TermsConditions", FormMethod.Post, new { id = "termsConditions-form", @class = "form-horizontal", role = "form" }))
+{
+	@Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.GUID)
+    @Html.HiddenFor(m => m.CreateDate)
+    @Html.HiddenFor(m => m.UpdateDate)
+    @Html.HiddenFor(m => m.UpdateSource)
+    @Html.HiddenFor(m => m.TypeId)
+    if (Model.TypesWithSameGuid != null)
+    {
+        for (int i = 0; i < Model.TypesWithSameGuid.Count; i++)
+        {
+            @Html.HiddenFor(m => m.TypesWithSameGuid[i], new { @class="TypeIdListWithSameGuid", value = Model.TypesWithSameGuid[i]})
+        }
+    }
+	<div>
+		<div class="row">
+			<div class="span4">
+				<div class="form-group">
+					@Html.LabelFor(model => model.CustomerName)
+                    @Html.TextBoxFor(model => model.CustomerName)
+                    @Html.ValidationMessageFor(model => model.CustomerName)
+				</div>
+			</div>
+			<div class="span4">
+				<div class="form-group">
+					@Html.LabelFor(model => model.CustomerEmail)
+                    @Html.TextBoxFor(model => model.CustomerEmail)
+                    @Html.ValidationMessageFor(model => model.CustomerEmail)
+				</div>
+			</div>
+			<div class="span2">
+                <br />
+                @if( ViewBag.IsEditable)
+                {
+                    <button class="btn btn-primary" id="termsSend" type="submit" name="btnSubmit" value="Send">Send</button>
+                    <a class="btn btn-default" href="@Url.Action("Index", "TermsConditions")">Cancel</a>
+                }
+                else
+                {
+                    <a class="btn btn-default" href="@Url.Action("Index", "TermsConditions")">Close</a>
+                }
+			</div>
+		</div>
+		<br />
+		<div class="row">
+			<div class="span4">
+				<div class="form-group">
+					@Html.LabelFor(model => model.CompanyName)
+                    @Html.TextBoxFor(model => model.CompanyName)
+                    @Html.ValidationMessageFor(model => model.CompanyName)
+				</div>
+			</div>
+			<div class="span4">
+				<div class="form-group">
+					@Html.LabelFor(model => model.NotificationEmail)
+                    @Html.TextBoxFor(model => model.NotificationEmail)
+                    @Html.ValidationMessageFor(model => model.NotificationEmail)
+				</div>
+			</div>
+		</div>
+		<br />
+		<div class="row">
+			<div class="span4">
+				<div class="form-group">
+                    @Html.LabelFor(m => m.TermsConditionsName)
+                    @Html.ListBox("termsConditionsList", new MultiSelectList(Model.TermList, "Id", "Name", "Name"), new { @multiple = "multiple", @style = "width:100%" })
+				</div>
+			</div>
+
+		</div>
+		<br />
+        @if (!ViewBag.IsNew)
+        {
+            if (Model.OrderId > 0)
+            {
+		        <div class="row">
+			        <div class="span1">
+    			        @Html.LabelFor(model => model.OrderId)
+			        </div>
+			        <div class="span2">
+    			        <a href="/TermsConditions/OrderDetail/@Model.OrderId">@Model.OrderId</a>
+			        </div>
+		        </div>
+            }
+    		<div class="row">
+			    <div class="span4">
+				    <div class="form-group">
+					    @Html.LabelFor(model => model.CreatedBy)
+                        @Html.TextBoxFor(model => model.CreatedBy, new { @readonly ="readonly"})
+				    </div>
+			    </div>
+			    <div class="span4">
+				    <div class="form-group">
+					    @Html.LabelFor(model => model.LastUpdatedBy)
+                        @Html.TextBoxFor(model => model.LastUpdatedBy, new { @readonly = "readonly"})
+				    </div>
+			    </div>
+		    </div>
+		    <br />
+            if (!ViewBag.IsEditable)
+            {
+		        <div class="row">
+			        <div class="span4">
+				        <div class="form-group">
+					        @Html.LabelFor(model => model.IPAddress)
+                            @Html.TextBoxFor(model => model.IPAddress, new { @readonly = "readonly"})
+				        </div>
+			        </div>
+			            <div class="span4">
+				            <div class="form-group">
+					            @Html.LabelFor(model => model.DateAgreedOn)
+                                @Html.TextBoxFor(model => model.DateAgreedOn, new { data_type = "date", @readonly = "readonly" })
+				            </div>
+			            </div>
+		        </div>
+ 		        <br />
+           }
+        }        
+		<div class="row">
+            <div class="span8">
+				@Html.LabelFor(model => Model.Messages) 
+                @Html.TextAreaFor(model => model.Messages, new { @style = "width: 85%; height: 100px" })
+            </div>
+		</div>
+        <div class="row">
+            <div class="span4"></div><div class="span4"></div>
+			<div class="span2">
+            @if (ViewBag.IsEditable)
+            {
+            <button class="btn btn-primary" id="termsSave" type="submit" name="btnSubmit" value="Save">Save</button>
+            }
+			</div>
+        </div>
+	</div>
+}
+@section Scripts {
+	@Scripts.Render("~/bundles/form")
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script src="~/Scripts/bootstrap.min.js"></script>
+	<script type="text/javascript">
+        //select terms and conditions if not new
+	    $(document).ready(function () {
+	        var typeList = $('.TypeIdListWithSameGuid');
+	        for (var i = 0; i < typeList.size() ; i++) {
+	            var termsName = $(typeList[i]).val();
+	            $('#termsConditionsList option').each(function () {
+	                if ($(this).text() == termsName)
+	                    $(this).attr('selected', true);
+	            });
+	        }
+	    });
+	</script>
+}

@@ -288,6 +288,7 @@
     <Compile Include="Controllers\Store\CouponController.cs" />
     <Compile Include="Controllers\Store\OrdersController.cs" />
     <Compile Include="Controllers\Store\ProductsController.cs" />
+    <Compile Include="Controllers\TermsConditions\TermsConditionsController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyResolver.cs" />
@@ -327,6 +328,8 @@
     <Compile Include="Models\Store\Order\PFPCategory.cs" />
     <Compile Include="Models\Store\Order\ProductCollectionsModel.cs" />
     <Compile Include="Models\Store\Order\SupplierApplicationModel.cs" />
+    <Compile Include="Models\TermsConditions\TermsConditionsInstanceVM.cs" />
+    <Compile Include="Models\TermsConditions\TermsConditionsTypeVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -373,12 +376,15 @@
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\dataTables.bootstrap.js" />
     <Content Include="Scripts\html5.js" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
     <Content Include="Scripts\jquery-ui.multidatespicker.js" />
+    <Content Include="Scripts\jquery.dataTables-1.10.3.js" />
+    <Content Include="Scripts\jquery.dataTables-1.10.3.min.js" />
     <Content Include="Scripts\jquery.ui.core.js" />
     <Content Include="Scripts\jquery.ui.datepicker.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
@@ -457,6 +463,13 @@
     <Content Include="Views\Store\Application\CatalogAdvertising.cshtml" />
     <Content Include="Views\Store\Application\Equipment.cshtml" />
     <Content Include="Views\Store\Application\SalesForm.cshtml" />
+    <Content Include="Views\TermsConditions\Index.cshtml" />
+    <Content Include="Views\TermsConditions\Terms&amp;Conditions.cshtml" />
+    <Content Include="Views\TermsConditions\_TermsLayout.cshtml" />
+    <Content Include="Views\TermsConditions\Types.cshtml" />
+    <Content Include="Views\TermsConditions\Edit.cshtml" />
+    <EmbeddedResource Include="Views\Emails\TermsConditionsEmail.cshtml" />
+    <Content Include="Views\TermsConditions\_statusMessagePartial.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

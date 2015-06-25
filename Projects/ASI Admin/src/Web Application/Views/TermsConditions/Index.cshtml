@@ -1,0 +1,165 @@
+﻿@using asi.asicentral.web.Models.TermsConditions;
+@model  IList<TermsConditionsInstanceVM>
+
+@{
+    Layout = "~/Views/TermsConditions/_TermsLayout.cshtml";
+}
+<div id="termsConditions-modal" class="modal fade">
+    <div id="modal-container"></div>
+</div>
+<h2>Terms and Conditions</h2>
+
+@Html.Partial("_statusMessagePartial")
+
+<div class="tabbable tabs-below small">
+	<h5>Search by</h5>
+	<ul id="formtab" class="nav nav-tabs">
+		<li class="active"><a href="#terms_date">Date</a></li>
+		<li><a href="#terms_customer">Customer</a></li>
+	</ul>
+	<div class="tab-content" id="formtab-content">
+		<div class="tab-pane active" id="terms_date">
+			<div class="well" style="padding:10px">
+					<div>
+						Created By: &nbsp; <input name="Creator" type="text" id="creator" value="" />
+						&nbsp; 
+                        <input name="ShowPendingOnly" type="checkbox" id="ShowPendingOnly" checked/> &nbsp; Only Show Pending
+					</div>
+					<div>
+						Start Date: &nbsp;<input data-type="date" name="DateStart" type="text" id="startDate" value=@DateTime.Now.AddDays(-7).ToShortDateString() />
+						&nbsp; 
+                        End Date: &nbsp;<input data-type="date" name="DateEnd" type="text" id="endDate" value=@DateTime.Now.AddHours(23.99).ToShortDateString() />
+						<input type="button" value="Search" class="btn searchTerms" />
+					</div>
+			</div>
+		</div>
+		<div class="tab-pane" id="terms_customer">
+			<div class="well" style="padding:10px">
+				<div>
+					Customer Name:&nbsp;<input name="CustomerName" type="text"/>
+					&nbsp;Customer Email:&nbsp;<input name="CustomerEmail" type="text"/>
+					<input type="button" value="Search" class="btn searchTerms" />
+				</div>
+				<div>
+					Company:&nbsp;<input name="CompanyName" type="text"/>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div>
+<a href="/store/TermsConditions/Add" class="btn btn-primary">Add new</a>
+</div>
+<br />
+<table id="termInstanceList" class="table table-bordered table-condensed table-striped table-responsive">
+    <thead>
+        <tr>
+            <th>&nbsp;</th>
+            <th>Terms and Conditions</th>
+            <th>Customer Name</th>
+            <th>Customer Email</th>
+            <th>Company Name</th>
+            <th>Order Id</th>
+            <th>Date Agreed on</th>
+            <th>Last Updated by</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if( Model != null && Model.Count > 0)
+        {
+            foreach (TermsConditionsInstanceVM termInst in Model)
+            {
+                <tr>
+                    <td>
+                        <a class="edit" href="/TermsConditions/Edit?guid=@termInst.GUID"><i class="icon-pencil"></i></a>
+                    </td>
+                    <td><a id=@termInst.TypeId class="terms">@termInst.TermsConditionsName</a></td>
+                     <td>@termInst.CustomerName</td>
+                    <td>@termInst.CustomerEmail</td>
+                    <td>@termInst.CompanyName</td>
+                   <td>
+                    @if( @termInst.OrderId != null)
+                    {
+                    <a href="/TermsConditions/OrderDetail/@termInst.OrderId">@termInst.OrderId</a>
+                    }
+                    </td>
+                    <td style="width:85px">
+                    @if( termInst.DateAgreedOn != null)
+                    {
+                        @termInst.DateAgreedOn.Value.ToString("yyyy-MM-dd")
+                    }
+                    </td>
+                    <td>@termInst.LastUpdatedBy</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@section scripts
+{  
+    @Scripts.Render("~/bundles/dataTable")
+    @Scripts.Render("~/bundles/form")
+    <script>
+        var tabName = "terms_date";
+        $('ul[id*="formtab"] a').click(function (e) {
+            e.preventDefault();
+            tabName = e.target.toString();
+            tabName = tabName.substr(tabName.indexOf("#") + 1);
+            $('input[name*="formtab"]').val(tabName);
+            $(this).tab('show');
+        });
+
+        $('#termInstanceList').dataTable({
+            "sDom": "t<'pager'p>",
+            "order": [[6, "desc"]],
+            "pageLength": 20
+        });
+
+        $("#termInstanceList").on("click", "tbody tr td a.terms", function(){
+            var id = $(this).attr('id');
+            var url = "/TermsConditions/Type?id=" + id;
+            $.get(url, function (data) {
+                $("#modal-container").html(data);
+                $("#termsConditions-modal").modal("show");
+            });
+        });
+
+        $('input[data-type="date"]').datepicker();
+
+        $('.searchTerms').on('click', function(){
+            var parameter = "";
+            if (tabName == "terms_date")
+                parameter = "startDate=" + $('input[name="DateStart"]').val() +
+                            "&endDate=" + $('input[name="DateEnd"]').val() + 
+                            "&creator=" + $('input[name="Creator"]').val() +
+                            "&showOnlyPending=" + $('#ShowPendingOnly').is(':checked');
+            else
+                parameter = "customerName=" + $('input[name="CustomerName"]').val() +
+                            "&customerEmail=" + $('input[name="CustomerEmail"]').val() +
+                            "&company=" + $('input[name="CompanyName"]').val();
+            $.ajax({
+                type: 'POST',
+                url: '/TermsConditions/Search?' + parameter,
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (data) {
+                    var table = $('#termInstanceList').dataTable();
+                    table.fnClearTable();
+                    for (var i = 0; i < data.length; i++) {
+                        var r = data[i];
+                        table.fnAddData(['<a class="edit" href="/TermsConditions/Edit?guid='+r.GUID+'"><i class="icon-pencil"></i></a>',
+                                         '<a id=' + r.TypeId + ' class="terms">' + r.TermsConditionsName + '</a>',
+                                         r.CustomerName,
+                                         r.CustomerEmail,
+                                         r.CompanyName,
+                                         r.OrderId != null ? '<a href="/TermsConditions/OrderDetail/' + r.OrderId + '">' + r.OrderId + '</a>' : '',
+                                         r.DateAgreedOn == null ? '' : r.DateAgreedOn.substr(0, 10),
+                                         r.LastUpdatedBy]);
+                    }
+                    table.fnDraw();
+                }
+            });
+       });
+    </script>
+}
