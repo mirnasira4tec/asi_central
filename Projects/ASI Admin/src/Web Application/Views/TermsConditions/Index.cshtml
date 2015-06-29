@@ -86,7 +86,7 @@
                     <td style="width:85px">
                     @if( termInst.DateAgreedOn != null)
                     {
-                        @termInst.DateAgreedOn.Value.ToString("yyyy-MM-dd")
+                        @termInst.DateAgreedOn.Value.ToString()
                     }
                     </td>
                     <td>@termInst.LastUpdatedBy</td>
@@ -154,7 +154,7 @@
                                          r.CustomerEmail,
                                          r.CompanyName,
                                          r.OrderId != null ? '<a href="/TermsConditions/OrderDetail/' + r.OrderId + '">' + r.OrderId + '</a>' : '',
-                                         r.DateAgreedOn == null ? '' : r.DateAgreedOn.substr(0, 10),
+                                         r.DateAgreedOn == null ? '' : r.DateAgreedOn,
                                          r.LastUpdatedBy]);
                     }
                     table.fnDraw();
