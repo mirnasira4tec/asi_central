@@ -18,6 +18,7 @@ namespace asi.asicentral.model.store
         public string LastUpdatedBy { get; set; }
         public string NotificationEmail { get; set; }
         public string Messages { get; set; }
+        public string AcceptedBy { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }

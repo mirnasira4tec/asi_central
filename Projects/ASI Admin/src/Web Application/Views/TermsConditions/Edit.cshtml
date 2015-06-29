@@ -117,8 +117,8 @@
 		        <div class="row">
 			        <div class="span4">
 				        <div class="form-group">
-					        @Html.LabelFor(model => model.IPAddress)
-                            @Html.TextBoxFor(model => model.IPAddress, new { @readonly = "readonly"})
+					        @Html.LabelFor(model => model.AcceptedBy)
+                            @Html.TextBoxFor(model => model.AcceptedBy, new { @readonly = "readonly"})
 				        </div>
 			        </div>
 			            <div class="span4">
@@ -129,6 +129,15 @@
 			            </div>
 		        </div>
  		        <br />
+		        <div class="row">
+			        <div class="span4">
+				        <div class="form-group">
+					        @Html.LabelFor(model => model.IPAddress)
+                            @Html.TextBoxFor(model => model.IPAddress, new { @readonly = "readonly"})
+				        </div>
+			        </div>
+		        </div>
+                <br />
            }
         }        
 		<div class="row">
