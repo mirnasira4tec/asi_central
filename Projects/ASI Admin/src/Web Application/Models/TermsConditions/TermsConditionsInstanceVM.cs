@@ -26,7 +26,7 @@ namespace asi.asicentral.web.Models.TermsConditions
         public int TypeId { get; set; }
         public string IPAddress { get; set; }
         public int? OrderId { get; set; }
-        [Display(Name = "Date Agreed On")]
+        [Display(Name = "Acceptance Date")]
         public DateTime? DateAgreedOn { get; set; }
         [Display(Name = "Created By")]
         public string CreatedBy { get; set; }
@@ -35,6 +35,8 @@ namespace asi.asicentral.web.Models.TermsConditions
         [Display(Name = "Internal Notification Emails")]
         public string NotificationEmail { get; set; }
         public string Messages { get; set; }
+        [Display(Name = "Accepted By")]
+        public string AcceptedBy { get; set; }
 
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
@@ -67,6 +69,7 @@ namespace asi.asicentral.web.Models.TermsConditions
                      LastUpdatedBy = model.LastUpdatedBy,
                      NotificationEmail = model.NotificationEmail,
                      Messages = model.Messages,
+                     AcceptedBy = model.AcceptedBy,
                      CreateDate = model.CreateDate,
                      UpdateDate = model.UpdateDate,
                      UpdateSource = model.UpdateSource
@@ -102,6 +105,7 @@ namespace asi.asicentral.web.Models.TermsConditions
                     LastUpdatedBy = viewModel.LastUpdatedBy,
                     NotificationEmail = viewModel.NotificationEmail,
                     Messages = viewModel.Messages,
+                    AcceptedBy = viewModel.AcceptedBy,
                     CreateDate = viewModel.Id == 0 ? DateTime.Now : viewModel.CreateDate,
                     UpdateDate = DateTime.Now,
                     UpdateSource = viewModel.UpdateSource
