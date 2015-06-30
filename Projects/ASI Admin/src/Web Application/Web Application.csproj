@@ -277,6 +277,7 @@
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\asicentral\CallQueueController.cs" />
+    <Compile Include="Controllers\CompanyValidationsController.cs" />
     <Compile Include="Controllers\forms\FormsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MediaController.cs" />
@@ -303,6 +304,7 @@
     <Compile Include="Models\sgr\ViewCategory.cs" />
     <Compile Include="Models\sgr\ViewCompany.cs" />
     <Compile Include="Models\sgr\ViewProduct.cs" />
+    <Compile Include="Models\Store\CompanyValidationsModel.cs" />
     <Compile Include="Models\Store\interfaces\IMembershipModel.cs" />
     <Compile Include="Models\Store\Order\CatalogAdvertisingApplicationModel.cs" />
     <Compile Include="Models\Store\Order\CatalogsApplicationModel.cs" />
@@ -457,6 +459,8 @@
     <Content Include="Views\Store\Application\CatalogAdvertising.cshtml" />
     <Content Include="Views\Store\Application\Equipment.cshtml" />
     <Content Include="Views\Store\Application\SalesForm.cshtml" />
+    <Content Include="Views\Store\CompanyValidations\List.cshtml" />
+    <Content Include="Views\Store\CompanyValidations\GroupByType.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
