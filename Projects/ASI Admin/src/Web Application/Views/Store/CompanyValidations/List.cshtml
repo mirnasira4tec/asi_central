@@ -1,14 +1,15 @@
-﻿@using asi.asicentral.model.store;
+﻿@using asi.asicentral.web.model.store;
+@using asi.asicentral.model.store;
 @using asi.asicentral.services;
 @using asi.asicentral.interfaces;
-@model  IList<CompanyValidation>
+@model  CompanyValidationsModel
 @{
     ViewBag.Title = "Company Validations";
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
-    
-    var endBuyers = Model.Where(li => li.Type == CompanyValidation.END_BUYERS_KEYWORDS).ToList();
-    var registeredTrademarks = Model.Where(li => li.Type == CompanyValidation.REGISTERED_TRADEMARKS).ToList();
-    var emailDomains = Model.Where(li => li.Type == CompanyValidation.EMAIL_DOMAINS).ToList();
+
+    var endBuyers = Model.CompanyValidations.Where(li => li.Type == CompanyValidation.END_BUYERS_KEYWORDS).ToList();
+    var registeredTrademarks = Model.CompanyValidations.Where(li => li.Type == CompanyValidation.REGISTERED_TRADEMARKS).ToList();
+    var emailDomains = Model.CompanyValidations.Where(li => li.Type == CompanyValidation.EMAIL_DOMAINS).ToList();
 }
 
 <h2>Company Validations</h2>
@@ -54,8 +55,9 @@
     @Scripts.Render("~/bundles/form")
     <script type="text/javascript">
         $(document).ready(function () {
-        $("#editValidation").hide();
-        $('a.delete').click(function () {
+            $("#editValidation").hide();
+            SelectTabByIndex(@Model.Index);
+            $('a.delete').click(function () {
            var confirms = confirm("Are you sure you want to delete?");
            if (confirms) 
                 return true
@@ -102,15 +104,22 @@
                 $("#emailDomains").show();
                 type = '@CompanyValidation.EMAIL_DOMAINS';
             }
-           
             $("#Type").val(type);
-            
         })
     });
 
     function FillPostData() {
         $("#frmAddEdit [name=Value]").val($('#validationVal').val());
         $("#frmAddEdit").submit();
+    }
+
+    function SelectTabByIndex(index) {
+        if(index == 0)
+            $('a[href="#tabEndBuyers"]').tab('show');
+        else if(index == 1)
+            $('a[href="#tabRegisteredTrademarks"]').tab('show');
+        else if (index == 2)
+            $('a[href="#tabEmailDomains"]').tab('show');
     }
     </script>
 }
