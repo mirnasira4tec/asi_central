@@ -1,5 +1,6 @@
 ﻿using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
+using asi.asicentral.services;
 using asi.asicentral.web.Models.TermsConditions;
 using Newtonsoft.Json;
 using System;
@@ -187,7 +188,9 @@ namespace asi.asicentral.web.Controllers.TermsConditions
             }
             catch (Exception ex)
             {
-                TempData["Message"] = "Error: " + ex.Message;
+                LogService log = LogService.GetLog(this.GetType());
+                log.Error(ex.StackTrace);
+                throw ex;
             }
 
             return RedirectToAction("Index");
