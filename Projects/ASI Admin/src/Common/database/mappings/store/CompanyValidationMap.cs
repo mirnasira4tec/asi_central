@@ -7,7 +7,7 @@ using asi.asicentral.model.store;
 using System.Data.Entity.ModelConfiguration;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace asi.asicentral.database.mappings
+namespace asi.asicentral.database.mappings.store
 {
 
     class CompanyValidationMap : EntityTypeConfiguration<CompanyValidation>

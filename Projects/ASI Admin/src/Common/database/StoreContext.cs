@@ -1,5 +1,4 @@
-﻿using asi.asicentral.database.mappings;
-using asi.asicentral.database.mappings.product;
+﻿using asi.asicentral.database.mappings.product;
 using asi.asicentral.database.mappings.store;
 using asi.asicentral.model.store;
 using System.Data.Entity;
