@@ -189,7 +189,7 @@ namespace asi.asicentral.web.Controllers.TermsConditions
             catch (Exception ex)
             {
                 LogService log = LogService.GetLog(this.GetType());
-                log.Error(ex.StackTrace);
+                log.Error(ex.Message + " " + ex.StackTrace);
                 throw ex;
             }
 
