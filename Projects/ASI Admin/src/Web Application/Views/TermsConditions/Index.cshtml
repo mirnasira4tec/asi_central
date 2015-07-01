@@ -56,13 +56,12 @@
         <tr>
             <th>&nbsp;</th>
             <th>Terms and Conditions</th>
-            <th>Customer Name</th>
-            <th>Customer Email</th>
-            <th>Company Name</th>
-            <th>Order Id</th>
-            <th>Date Updated</th>
-            <th>Acceptance Date</th>
-            <th>Last Updated by</th>
+            <th>Customer&nbsp;&nbsp;&nbsp;</th>
+            <th>Email</th>
+            <th>Company</th>
+            <th>Created</th>
+            <th>Accepted</th>
+            <th>Creator&nbsp;&nbsp;&nbsp;</th>
         </tr>
     </thead>
     <tbody>
@@ -78,20 +77,14 @@
                      <td>@termInst.CustomerName</td>
                     <td>@termInst.CustomerEmail</td>
                     <td>@termInst.CompanyName</td>
-                   <td>
-                    @if( @termInst.OrderId != null)
-                    {
-                    <a href="/TermsConditions/OrderDetail/@termInst.OrderId">@termInst.OrderId</a>
-                    }
-                    </td>
-                    <td>@termInst.UpdateDate</td>
+                    <td>@termInst.CreateDate</td>
                     <td style="width:85px">
                     @if( termInst.DateAgreedOn != null)
                     {
                         @termInst.DateAgreedOn.Value.ToString()
                     }
                     </td>
-                    <td>@termInst.LastUpdatedBy</td>
+                    <td>@termInst.CreatedBy</td>
                 </tr>
             }
         }
@@ -114,7 +107,7 @@
 
         $('#termInstanceList').dataTable({
             "sDom": "t<'pager'p>",
-            "order": [[6, "desc"], [7, 'desc']],
+            "order": [[5, "desc"], [6, 'desc']],
             "pageLength": 20
         });
 
@@ -155,10 +148,9 @@
                                          r.CustomerName,
                                          r.CustomerEmail,
                                          r.CompanyName,
-                                         r.OrderId != null ? '<a href="/TermsConditions/OrderDetail/' + r.OrderId + '">' + r.OrderId + '</a>' : '',
-                                         r.UpdateDate,
+                                         r.CreateDate,
                                          r.DateAgreedOn == null ? '' : r.DateAgreedOn,
-                                         r.LastUpdatedBy]);
+                                         r.CreatedBy]);
                     }
                     table.fnDraw();
                 }

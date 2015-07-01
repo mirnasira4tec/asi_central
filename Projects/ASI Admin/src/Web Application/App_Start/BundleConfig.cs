@@ -34,7 +34,8 @@ namespace asi.asicentral.web
             bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/bootstrap.css",
                         "~/Content/datepicker.css",
-                        "~/Content/site.css"));
+                        "~/Content/site.css",
+                        "~/Content/datatables-bootstrap.css"));
 
             bundles.Add(new StyleBundle("~/Content/forms").Include(
                         "~/Content/form.css"));
