@@ -60,6 +60,7 @@
             <th>Customer Email</th>
             <th>Company Name</th>
             <th>Order Id</th>
+            <th>Date Updated</th>
             <th>Acceptance Date</th>
             <th>Last Updated by</th>
         </tr>
@@ -83,6 +84,7 @@
                     <a href="/TermsConditions/OrderDetail/@termInst.OrderId">@termInst.OrderId</a>
                     }
                     </td>
+                    <td>@termInst.UpdateDate</td>
                     <td style="width:85px">
                     @if( termInst.DateAgreedOn != null)
                     {
@@ -112,7 +114,7 @@
 
         $('#termInstanceList').dataTable({
             "sDom": "t<'pager'p>",
-            "order": [[6, "desc"]],
+            "order": [[6, "desc"], [7, 'desc']],
             "pageLength": 20
         });
 
@@ -154,6 +156,7 @@
                                          r.CustomerEmail,
                                          r.CompanyName,
                                          r.OrderId != null ? '<a href="/TermsConditions/OrderDetail/' + r.OrderId + '">' + r.OrderId + '</a>' : '',
+                                         r.UpdateDate,
                                          r.DateAgreedOn == null ? '' : r.DateAgreedOn,
                                          r.LastUpdatedBy]);
                     }
