@@ -9,10 +9,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace asi.asicentral.database.mappings.store
 {
-
     class CompanyValidationMap : EntityTypeConfiguration<CompanyValidation>
     {
-
         public CompanyValidationMap()
         {
             this.ToTable("COMP_Validation");

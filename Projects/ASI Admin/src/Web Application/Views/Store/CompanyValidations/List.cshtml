@@ -13,14 +13,31 @@
 }
 
 <h2>Company Validations</h2>
-
-    <span class="label-row">
-		@Html.Label("Name/Keyword")
-        @Html.TextBox("validationVal")
-        <input class="btn btn-primary" id="addValidation" type="submit" value="Add" />
-        <input class="btn btn-primary" id="editValidation" type="submit" value="Save" data-id="" />
-	</span>
-    <br />
+    @using (Html.BeginForm("AddOrEdit", "CompanyValidations", FormMethod.Post, new { id = "frmAddEdit", @class = "form-horizontal" }))
+    {
+         @Html.AntiForgeryToken()
+        <input type="hidden" name="Id" value="0" />
+        <input type="hidden" name="Value" value="" />
+        <input type="hidden" id="Type" name="Type" value="@CompanyValidation.END_BUYERS_KEYWORDS" />
+        <div class="pull-left product-customize-form-left">
+            <div class="control-group">
+                <label class="control-label" for="Cost">Name/Keyword</label>
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.NameOrKeyword)
+                    @Html.ValidationMessageFor(model => model.NameOrKeyword)
+                    
+                </div>
+            </div>
+            <div class="control-group form-btns">
+                <div class="controls">
+                    <input class="btn btn-primary command span2" id="addValidation" type="submit" value="Add" />
+                    <input class="btn btn-primary command span2" id="editValidation" type="submit" value="Save" data-id="" />
+                    <input class="btn btn-primary command span2" id="cancelValidation" type="submit" value="Cancel" />
+                </div>
+            </div>
+        </div>
+    }
+    
     <ul class="nav nav-tabs" id="tabs">
         <li class="active"><a href="#tabEndBuyers" data-toggle="tab">@CompanyValidation.END_BUYERS_KEYWORDS</a></li>
         <li><a href="#tabRegisteredTrademarks" data-toggle="tab">@CompanyValidation.REGISTERED_TRADEMARKS</a></li>
@@ -44,18 +61,12 @@
        </div>
     </div>
 
-<form id="frmAddEdit" method="post" action="/Store/CompanyValidations/AddOrEdit/">
-    @Html.AntiForgeryToken()
-    <input type="hidden" name="Id" value="0" />
-    <input type="hidden" name="Value" value="" />
-    <input type="hidden" id="Type" name="Type" value="@CompanyValidation.END_BUYERS_KEYWORDS" />
-</form>
-
 @section scripts {
     @Scripts.Render("~/bundles/form")
     <script type="text/javascript">
         $(document).ready(function () {
             $("#editValidation").hide();
+            $("#cancelValidation").hide();
             SelectTabByIndex(@Model.Index);
             $('a.delete').click(function () {
            var confirms = confirm("Are you sure you want to delete?");
@@ -67,9 +78,10 @@
 
         $('a.edit').click(function (ev) {
             $("#editValidation").show();
+            $("#cancelValidation").show();
             $("#addValidation").hide();
             var value = $(this).attr('data-value');
-            $('#validationVal').val(value);
+            $('#NameOrKeyword').val(value);
             $('#editValidation').attr('data-id', $(this).attr('data-id'));
         });
 
@@ -81,6 +93,14 @@
             var id = $(this).attr('data-id');
             $("#frmAddEdit [name=Id]").val(id);
             FillPostData();
+        });
+
+        $("#cancelValidation").click(function (ev) {
+            $('#NameOrKeyword').val("");
+            $("#editValidation").hide();
+            $("#cancelValidation").hide();
+            $("#addValidation").show();
+            ev.preventDefault();
         });
 
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
@@ -109,7 +129,7 @@
     });
 
     function FillPostData() {
-        $("#frmAddEdit [name=Value]").val($('#validationVal').val());
+        $("#frmAddEdit [name=Value]").val($('#NameOrKeyword').val());
         $("#frmAddEdit").submit();
     }
 
