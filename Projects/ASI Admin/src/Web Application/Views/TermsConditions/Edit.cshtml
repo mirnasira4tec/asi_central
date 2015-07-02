@@ -75,28 +75,24 @@
 		</div>
 		<br />
 		<div class="row">
-			<div class="span4">
+			<div class="span5">
 				<div class="form-group">
                     @Html.LabelFor(m => m.TermsConditionsName)
-                    @Html.ListBox("termsConditionsList", new MultiSelectList(Model.TermList, "Id", "Name", "Name"), new { @multiple = "multiple", @style = "width:100%" })
+                    @Html.ListBox("termsConditionsList", new MultiSelectList(Model.TermList, "Id", "Name", "Name"), new { @multiple = "multiple", @style = "overflow-x:auto; width:95%; height: 140px" })
 				</div>
 			</div>
+            @if( Model.OrderId > 0)
+            {
+                <div class="span2">
+                    <br />
+    			    <a href="/TermsConditions/OrderDetail/@Model.OrderId">View Order: @Model.OrderId</a>
+			    </div>
+            }
 
 		</div>
 		<br />
         @if (!ViewBag.IsNew)
         {
-            if (Model.OrderId > 0)
-            {
-		        <div class="row">
-			        <div class="span1">
-    			        @Html.LabelFor(model => model.OrderId)
-			        </div>
-			        <div class="span2">
-    			        <a href="/TermsConditions/OrderDetail/@Model.OrderId">@Model.OrderId</a>
-			        </div>
-		        </div>
-            }
     		<div class="row">
 			    <div class="span4">
 				    <div class="form-group">

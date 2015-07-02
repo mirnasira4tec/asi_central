@@ -340,10 +340,14 @@
     <Content Include="Content\bootstrap-responsive.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\datatables-bootstrap.css" />
     <Content Include="Content\datepicker.css" />
     <Content Include="Content\form.css" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Content\images\sort_asc.png" />
+    <Content Include="Content\images\sort_both.png" />
+    <Content Include="Content\images\sort_desc.png" />
     <Content Include="Content\multiselecteddatepicker.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />

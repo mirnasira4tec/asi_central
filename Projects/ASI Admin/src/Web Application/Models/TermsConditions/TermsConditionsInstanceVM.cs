@@ -21,7 +21,7 @@ namespace asi.asicentral.web.Models.TermsConditions
         [Display(ResourceType = typeof(Resource), Name = "CompanyName")]
         [StringLength(200, ErrorMessage = "Max name length is 200 characters")]
         public string CompanyName { get; set; }
-        [Display(Name = "Select terms and conditions")]
+        [Display(Name = "Select Terms and Conditions")]
         public string TermsConditionsName { get; set; }
         public int TypeId { get; set; }
         public string IPAddress { get; set; }
