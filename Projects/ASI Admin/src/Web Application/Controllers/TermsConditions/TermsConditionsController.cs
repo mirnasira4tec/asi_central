@@ -151,15 +151,13 @@ namespace asi.asicentral.web.Controllers.TermsConditions
                     if (btnSubmit == "Send" && emailTermsList.Count > 0)
                     {
                         string emailBody = TemplateService.Render("asi.asicentral.web.Views.Emails.TermsConditionsEmail.cshtml", model);
-                        var mail = new MailMessage()
-                        {
-                            Subject = "You have Terms and Conditions to be accepted",
-                            Body = emailBody,
-                            BodyEncoding = Encoding.UTF8,
-                            IsBodyHtml = true
-                        };
-
+                        var mail = new MailMessage();
+                        mail.Subject = "You have Terms and Conditions to be accepted";
+                        mail.Body = emailBody;
+                        mail.BodyEncoding = Encoding.UTF8;
+                        mail.IsBodyHtml = true;
                         mail.To.Add(new MailAddress(model.CustomerEmail));
+
                         EmailService.SendMail(mail);
                     }
                 }
@@ -188,9 +186,9 @@ namespace asi.asicentral.web.Controllers.TermsConditions
             }
             catch (Exception ex)
             {
-                TempData["Message"] = "Error: " + ex.StackTrace;
-                //LogService log = LogService.GetLog(this.GetType());
-                //log.Error(ex.Message + " " + ex.StackTrace);
+                TempData["Message"] = "Error: " + ex.Message;
+                LogService log = LogService.GetLog(this.GetType());
+                log.Error(ex.Message + " " + ex.StackTrace);
             }
 
             return RedirectToAction("Index");
