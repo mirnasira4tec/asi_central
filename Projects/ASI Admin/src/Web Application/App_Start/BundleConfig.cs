@@ -34,8 +34,7 @@ namespace asi.asicentral.web
             bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/bootstrap.css",
                         "~/Content/datepicker.css",
-                        "~/Content/site.css",
-                        "~/Content/datatables-bootstrap.css"));
+                        "~/Content/site.css"));
 
             bundles.Add(new StyleBundle("~/Content/forms").Include(
                         "~/Content/form.css"));
@@ -50,6 +49,9 @@ namespace asi.asicentral.web
             bundles.Add(new ScriptBundle("~/bundles/datatable").Include(
                         "~/Scripts/jquery.dataTables*",
                         "~/Scripts/dataTables.*"));
+
+            bundles.Add(new StyleBundle("~/dataTable/css").Include(
+                        "~/Content/datatables-bootstrap.css"));
         }
     }
 }
