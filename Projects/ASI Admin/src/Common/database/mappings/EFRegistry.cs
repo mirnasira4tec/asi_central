@@ -314,6 +314,12 @@ namespace asi.asicentral.database.mappings
             For<IRepository<StoreDetailCatalogAdvertisingItem>>().Use<EFRepository<StoreDetailCatalogAdvertisingItem>>()
               .Ctor<IValidatedContext>().Named("StoreContext");
 
+            For<IRepository<TermsConditionsType>>().Use<EFRepository<TermsConditionsType>>()
+             .Ctor<IValidatedContext>().Named("StoreContext");
+
+            For<IRepository<TermsConditionsInstance>>().Use<EFRepository<TermsConditionsInstance>>()
+             .Ctor<IValidatedContext>().Named("StoreContext");
+
             #endregion StoreContext
 
             #region TIMSS Context
