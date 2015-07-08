@@ -32,5 +32,7 @@ namespace asi.asicentral.interfaces
 		CompanyInformation GetCompanyInfoByIdentifier(int companyIdentifier);
 
         CompanyInformation AddCompany(CompanyInformation companyInfo);
+
+        CompanyInformation ReconcileCompany(StoreCompany company, string customerClassCode, IList<LookSendMyAdCountryCode> countryCodes);
     }
 }

@@ -290,6 +290,7 @@ namespace asi.asicentral.services
             var company = new StoreCompany
             {
                 Name = companyInformation.Name,
+                Phone = companyInformation.Phone
             };
             var address = new StoreAddress
             {
@@ -314,6 +315,12 @@ namespace asi.asicentral.services
             PersonifyClient.AddPhoneNumber(companyInformation.Phone, GetCountryCode(companyInformation.Country), companyInfo);
 	        companyInformation = PersonifyClient.GetCompanyInfo(companyInfo);
             return companyInformation;
+        }
+
+        public virtual CompanyInformation ReconcileCompany(StoreCompany company, string customerClassCode, IList<LookSendMyAdCountryCode> countryCodes)
+        {
+            var companyInfo = PersonifyClient.ReconcileCompany(company, customerClassCode, null);
+            return PersonifyClient.GetCompanyInfo(companyInfo);
         }
 
         public virtual CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber)

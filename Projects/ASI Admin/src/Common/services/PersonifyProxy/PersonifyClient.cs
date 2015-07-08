@@ -10,6 +10,7 @@ using asi.asicentral.model;
 using asi.asicentral.PersonifyDataASI;
 
 using PersonifySvcClient;
+using System.Text.RegularExpressions;
 
 namespace asi.asicentral.services.PersonifyProxy
 {
@@ -396,18 +397,225 @@ namespace asi.asicentral.services.PersonifyProxy
 				int subCustomerId = Int32.Parse(references[1]);
 				companyInfo = GetCompanyInfo(references[0], subCustomerId);
 			}
-			else
-			{
-				//look company by ASI#
-				if (!string.IsNullOrEmpty(company.ASINumber))
-				{
-					companyInfo = GetCustomerInfoByASINumber(company.ASINumber);
-				}
+			else if (!string.IsNullOrEmpty(company.ASINumber))
+			{  //look company by ASI#
+ 				companyInfo = GetCustomerInfoByASINumber(company.ASINumber);
 			}
+            else            
+            {  // find matching company by phone, email or name
+                List<CustomerInfo> companyList = null;
+                companyInfo = FindMatchingCompany(company, out companyList);
+            }
+
 			return companyInfo;
 	    }
-
 	    #endregion Getting company information
+
+        #region Find matching company
+        private static CustomerInfo FindMatchingCompany(StoreCompany company, out List<CustomerInfo> matchList)
+        {
+            matchList = new List<CustomerInfo>();
+            if (string.Equals(company.MemberType, "Supplier", StringComparison.InvariantCultureIgnoreCase))
+            {
+                MatchPhoneEmail(company, ref matchList, false, true);
+                if (matchList.Count < 1)
+                    MatchCompanyName(company, ref matchList);
+                if (matchList.Count < 1)
+                    MatchPhoneEmail(company, ref matchList, true, false);
+            }
+            else
+            {
+                MatchCompanyName(company, ref matchList);
+                if( matchList.Count < 1 )
+                    MatchPhoneEmail(company, ref matchList, true, true);
+            }
+
+            ASICustomer leadCompany = null;
+            bool isExistingLead = false;
+            foreach( var m in matchList)
+            {  // find Lead company              
+                var customers = SvcClient.Ctxt.ASICustomers
+                                .Where( p => p.MasterCustomerId == m.MasterCustomerId && 
+                                             p.SubCustomerId == m.SubCustomerId).ToList();
+                if (customers.Count > 0)
+                {
+                    var customer = customers[0];
+                    if (leadCompany == null)
+                    {
+                        leadCompany = customer;
+                        isExistingLead = string.Equals(customer.UserDefinedMemberStatusString, "LEAD", StringComparison.InvariantCultureIgnoreCase) ||
+                                         string.Equals(customer.UserDefinedMemberStatusString, "ASICENTRAL", StringComparison.InvariantCultureIgnoreCase);
+                    }
+                    else
+                    {
+                        bool isLead = string.Equals(customer.UserDefinedMemberStatusString, "LEAD", StringComparison.InvariantCultureIgnoreCase) ||
+                                      string.Equals(customer.UserDefinedMemberStatusString, "ASICENTRAL", StringComparison.InvariantCultureIgnoreCase);
+
+                        if ( isLead )
+                        {
+                            if( !isExistingLead || customer.UserDefinedEntryDate > leadCompany.UserDefinedEntryDate)
+                            {
+                                leadCompany = customer;
+                                isExistingLead = true;
+                            }
+                        }
+                        else if( !isExistingLead && customer.UserDefinedEntryDate > leadCompany.UserDefinedEntryDate )
+                        {
+                            leadCompany = customer;
+                        }
+                    }
+                }
+            }
+
+            var companyInfo = leadCompany != null ? GetCompanyInfo(leadCompany.MasterCustomerId, leadCompany.SubCustomerId) : null;
+            return companyInfo;
+        }
+
+        private static void MatchPhoneEmail(StoreCompany company, ref List<CustomerInfo> matchList, bool matchEmail, bool matchPhone)
+        {
+            if (matchEmail && string.IsNullOrEmpty(company.Email) || matchPhone && string.IsNullOrEmpty(company.Phone) )
+            {
+                return;
+            }
+
+            List<CusCommunication> matchCusCommunication = new List<CusCommunication>();
+            var cusCommunications = SvcClient.Ctxt.CusCommunications.Where(c => c.SubCustomerId == 0);
+
+            if (matchEmail)
+            {
+                cusCommunications = cusCommunications.Where(c => string.Compare(c.FormattedPhoneAddress, company.Email.Trim()) == 0 &&
+                                                                 string.Compare(c.CommTypeCodeString, COMMUNICATION_INPUT_EMAIL) == 0);
+            }
+
+            if( matchPhone)
+            {
+                cusCommunications = cusCommunications.Where(c => c.SearchPhoneAddress == IgnoreSpecialChars(company.Phone) &&
+                                                                 string.Compare(c.CommTypeCodeString, COMMUNICATION_INPUT_PHONE, StringComparison.InvariantCultureIgnoreCase) == 0);
+            }            
+
+            foreach (var cus in cusCommunications)
+            {
+                var companys = SvcClient.Ctxt.ASICustomerInfos
+                               .Where(p => p.MasterCustomerId == cus.MasterCustomerId &&
+                                           p.SubCustomerId == cus.SubCustomerId).ToList();
+
+                if (companys.Count > 0)
+                {
+                    var match = companys[0];
+                    if (string.Equals(match.RecordType, RECORD_TYPE_CORPORATE, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        matchCusCommunication.Add(cus);
+                    }
+                    else
+                    {  // Find company for an individual
+                        var cusRelations = SvcClient.Ctxt.CusRelationships
+                            .Where(a => a.RelatedMasterCustomerId == match.MasterCustomerId 
+                                        && a.RelatedSubCustomerId == match.SubCustomerId ).ToList();
+
+                        if (cusRelations.Count > 0)
+                        {
+                            var parentCompany = cusRelations[0];
+                            companys = SvcClient.Ctxt.ASICustomerInfos
+                                        .Where(p => p.MasterCustomerId == parentCompany.MasterCustomerId &&
+                                                    p.SubCustomerId == parentCompany.SubCustomerId &&
+                                                    string.Compare(p.RecordType, RECORD_TYPE_CORPORATE, StringComparison.InvariantCultureIgnoreCase) == 0).ToList();
+
+                            if (companys.Count > 0)
+                            {
+                                var matchCus = SvcClient.Ctxt.CusCommunications
+                                                .Where(c => c.MasterCustomerId == companys[0].MasterCustomerId &&
+                                                            c.SubCustomerId == companys[0].SubCustomerId).ToList();
+                                if (matchCus.Count > 0)
+                                {
+                                    matchCusCommunication.Add(matchCus[0]);
+                                }
+                            }
+                        }
+                    }
+                }                
+            }
+
+            foreach (var m in matchCusCommunication)
+            {
+                if (m.DoNotCallFlag.HasValue && !m.DoNotCallFlag.Value)
+                {
+                    var companyInfo = GetCompanyInfo(m.MasterCustomerId, m.SubCustomerId);
+                    if( companyInfo != null )
+                        matchList.Add(companyInfo);
+                }
+            }
+        }
+
+        private static void MatchCompanyName(StoreCompany company, ref List<CustomerInfo> matchList)
+        {
+            var companys = SvcClient.Ctxt.ASICustomerInfos
+                           .Where(p => p.RecordType == RECORD_TYPE_CORPORATE && p.SubCustomerId == 0 &&
+                                       string.Compare(p.LastName, company.Name) == 0).ToList();
+
+            if (companys.Count < 1)
+            {
+                companys = SvcClient.Ctxt.ASICustomerInfos
+                           .Where(p => p.RecordType == RECORD_TYPE_CORPORATE && p.SubCustomerId == 0 &&
+                                       string.Compare(p.LastName, IgnoreSpecialChars(company.Name)) == 0).ToList();
+            }
+
+            foreach (var com in companys)
+            {
+                var cusCommunications = SvcClient.Ctxt.CusCommunications
+                                         .Where(c => c.MasterCustomerId == com.MasterCustomerId &&
+                                                     c.SubCustomerId == com.SubCustomerId).ToList();
+
+                if (cusCommunications.Count > 0 && cusCommunications[0].DoNotCallFlag.HasValue 
+                                                && !cusCommunications[0].DoNotCallFlag.Value)
+                {
+                    var companyInfo = GetCompanyInfo(com.MasterCustomerId, com.SubCustomerId);
+                    if (companyInfo != null)
+                        matchList.Add(companyInfo);
+                }
+            }
+        }
+
+        private static string IgnoreSpecialChars(string input)
+        {
+            var result = Regex.Replace(input.Trim(), @"[-\.]*$", "");
+            return Regex.Replace(result, @"^[-\.]*", "");
+        }
+
+        //private static Tuple<string, int> CompanyHasLatestNote(List<Tuple<string, int>> companyList)
+        //{
+            //CustomerInfo company = null;
+            //if (companyInfoList.Count > 1)
+            //{
+            //    List<Tuple<string, int>> companyList = companyInfoList
+            //        .Select(item => new Tuple<string, int>(item.MasterCustomerId, item.SubCustomerId)).ToList();
+            //    string condition = null;
+            //    foreach (var tuple in companyList)
+            //    {
+            //        if (condition == null)
+            //            condition = string.Format("(MasterCustomerId eq '{0}' and SubCustomerId eq {1})", tuple.Item1,
+            //                tuple.Item2);
+            //        else
+            //            condition = string.Format("{0} or (MasterCustomerId eq '{1}' and SubCustomerId eq {2})",
+            //                condition,
+            //                tuple.Item1, tuple.Item2);
+            //    }
+               
+            //    var result1 = SvcClient.Ctxt.CusActivities.AddQueryOption("$filter", condition).ToList();
+            //    var max = result1.Max(item => item.ActivityDate);
+            //    var result2 = result1.SingleOrDefault(item => item.ActivityDate == max);
+            //    if (result2 != null)
+            //    {
+            //        company = PersonifyClient.GetCompanyInfo(result2.MasterCustomerId, (result2.SubCustomerId ?? -1));
+            //    }
+            //}
+            //else
+            //{
+            //    company = companyInfoList.FirstOrDefault();
+            //}
+            //return result;
+        //}
+
+  	    #endregion Find matching company
 
         public static IEnumerable<CustomerInfo> AddIndividualInfos(StoreOrder storeOrder,
             IList<LookSendMyAdCountryCode> countryCodes,
@@ -673,10 +881,10 @@ namespace asi.asicentral.services.PersonifyProxy
             }
             if (!string.IsNullOrWhiteSpace(key) && !string.IsNullOrWhiteSpace(value))
             {
-                if ((key == COMMUNICATION_INPUT_PHONE || key == COMMUNICATION_INPUT_FAX) && !string.IsNullOrWhiteSpace(key))
+                if ( key == COMMUNICATION_INPUT_PHONE || key == COMMUNICATION_INPUT_FAX )
                 {
                     value = new string(value.Where(Char.IsDigit).ToArray());
-                    value = value.Substring(0, Math.Min(value.Substring(0).Length, PHONE_NUMBER_LENGTH));
+                    value = value.Substring(0, Math.Min(value.Length, PHONE_NUMBER_LENGTH));
                     var comm = new CusCommunicationInput()
                         {
                             CommLocationCode = communitionLocationCode,
@@ -698,6 +906,8 @@ namespace asi.asicentral.services.PersonifyProxy
                     }
                     customerInfo.Communication.Add(comm);
                 }
+                // (key != COMMUNICATION_INPUT_PHONE || key != COMMUNICATION_INPUT_FAX) is always true, should be &&
+                // then we could use "else if"
                 if ((key != COMMUNICATION_INPUT_PHONE || key != COMMUNICATION_INPUT_FAX) && countryCode == null)
                 {
                     customerInfo.Communication.Add(new CusCommunicationInput
