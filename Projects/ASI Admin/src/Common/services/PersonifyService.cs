@@ -317,9 +317,9 @@ namespace asi.asicentral.services
             return companyInformation;
         }
 
-        public virtual CompanyInformation ReconcileCompany(StoreCompany company, string customerClassCode, IList<LookSendMyAdCountryCode> countryCodes)
+        public virtual CompanyInformation ReconcileCompany(StoreCompany company, string customerClassCode, IList<LookSendMyAdCountryCode> countryCodes, List<CusCommunication> companyList)
         {
-            var companyInfo = PersonifyClient.ReconcileCompany(company, customerClassCode, null);
+            var companyInfo = PersonifyClient.ReconcileCompany(company, customerClassCode, null, companyList);
             return PersonifyClient.GetCompanyInfo(companyInfo);
         }
 

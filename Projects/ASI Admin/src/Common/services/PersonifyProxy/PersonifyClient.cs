@@ -85,9 +85,9 @@ namespace asi.asicentral.services.PersonifyProxy
             return total;
         }
 
-        public static CustomerInfo ReconcileCompany(StoreCompany company, string customerClassCode, IList<LookSendMyAdCountryCode> countryCodes)
+        public static CustomerInfo ReconcileCompany(StoreCompany company, string customerClassCode, IList<LookSendMyAdCountryCode> countryCodes, List<CusCommunication> companyList = null)
         {
-			CustomerInfo companyInfo = FindCustomerInfo(company);
+            CustomerInfo companyInfo = FindCustomerInfo(company, companyList);
             StoreAddress companyAddress = company.GetCompanyAddress();
             string countryCode = countryCodes != null ? countryCodes.Alpha3Code(companyAddress.Country) : companyAddress.Country;
             if (companyInfo == null)
@@ -386,7 +386,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return customerInfo;
         }
 
-		public static CustomerInfo FindCustomerInfo(StoreCompany company)
+		public static CustomerInfo FindCustomerInfo(StoreCompany company, List<CusCommunication> companyList)
 	    {
 			CustomerInfo companyInfo = null;
 
@@ -403,8 +403,7 @@ namespace asi.asicentral.services.PersonifyProxy
 			}
             else            
             {  // find matching company by phone, email or name
-                List<CustomerInfo> companyList = null;
-                companyInfo = FindMatchingCompany(company, out companyList);
+                companyInfo = FindMatchingCompany(company, companyList);
             }
 
 			return companyInfo;
@@ -412,34 +411,50 @@ namespace asi.asicentral.services.PersonifyProxy
 	    #endregion Getting company information
 
         #region Find matching company
-        private static CustomerInfo FindMatchingCompany(StoreCompany company, out List<CustomerInfo> matchList)
+        private static CustomerInfo FindMatchingCompany(StoreCompany company, List<CusCommunication> matchList)
         {
-            matchList = new List<CustomerInfo>();
-            int firstCount = 0;
-            int secondCount = 0;
+            if (matchList == null)
+                matchList = new List<CusCommunication>();
+
+            ASICustomer matchCompany = null;
             if (string.Equals(company.MemberType, "Supplier", StringComparison.InvariantCultureIgnoreCase))
             {
-                MatchPhoneEmail(company, ref matchList, false, true);
-                firstCount = matchList.Count;
-                MatchCompanyName(company, ref matchList);
-                secondCount = matchList.Count;
-                MatchPhoneEmail(company, ref matchList, true, false);
+                MatchPhoneEmail(company, matchList, false, true);
+                if (matchList.Count > 0)
+                    matchCompany = GetMatchingCompany(matchList);
+
+                MatchCompanyName(company, matchList);
+                if( matchCompany == null && matchList.Count > 0 )
+                    matchCompany = GetMatchingCompany(matchList);
+
+                MatchPhoneEmail(company, matchList, true, false);
+                if (matchCompany == null && matchList.Count > 0)
+                    matchCompany = GetMatchingCompany(matchList);
             }
             else
             {
-                MatchCompanyName(company, ref matchList);
-                firstCount = matchList.Count;
-                MatchPhoneEmail(company, ref matchList, true, true);
+                MatchCompanyName(company, matchList);
+                if (matchList.Count > 0)
+                    matchCompany = GetMatchingCompany(matchList);
+
+                MatchPhoneEmail(company, matchList, true, true);
+                if (matchCompany == null && matchList.Count > 0)
+                    matchCompany = GetMatchingCompany(matchList);
             }
 
+            var companyInfo = matchCompany != null ? GetCompanyInfo(matchCompany.MasterCustomerId, matchCompany.SubCustomerId) : null;
+            return companyInfo;
+        }
+
+        private static ASICustomer GetMatchingCompany(List<CusCommunication> matchList)
+        {
             ASICustomer leadCompany = null;
             bool isExistingLead = false;
-            for( int i = 0; i < matchList.Count; i++)
-            {  // find Lead company 
-                var m = matchList[i];
+            foreach (var curCompany in matchList)
+            { 
                 var customers = SvcClient.Ctxt.ASICustomers
-                                .Where( p => p.MasterCustomerId == m.MasterCustomerId && 
-                                             p.SubCustomerId == m.SubCustomerId).ToList();
+                                .Where(p => p.MasterCustomerId == curCompany.MasterCustomerId &&
+                                             p.SubCustomerId == curCompany.SubCustomerId).ToList();
                 if (customers.Count > 0)
                 {
                     var customer = customers[0];
@@ -454,37 +469,33 @@ namespace asi.asicentral.services.PersonifyProxy
                         bool isLead = string.Equals(customer.UserDefinedMemberStatusString, "LEAD", StringComparison.InvariantCultureIgnoreCase) ||
                                       string.Equals(customer.UserDefinedMemberStatusString, "ASICENTRAL", StringComparison.InvariantCultureIgnoreCase);
 
-                        if ( isLead )
+                        if (isLead)
                         {
-                            if( !isExistingLead || customer.UserDefinedEntryDate > leadCompany.UserDefinedEntryDate)
+                            if (!isExistingLead || customer.UserDefinedEntryDate > leadCompany.UserDefinedEntryDate)
                             {
                                 leadCompany = customer;
                                 isExistingLead = true;
                             }
                         }
-                        else if( !isExistingLead && customer.UserDefinedEntryDate > leadCompany.UserDefinedEntryDate )
+                        else if (!isExistingLead && customer.UserDefinedEntryDate > leadCompany.UserDefinedEntryDate)
                         {
                             leadCompany = customer;
                         }
                     }
                 }
-
-                if (leadCompany != null && (i == firstCount - 1 || i == secondCount - 1))
-                    break;
             }
 
-            var companyInfo = leadCompany != null ? GetCompanyInfo(leadCompany.MasterCustomerId, leadCompany.SubCustomerId) : null;
-            return companyInfo;
+            return leadCompany;
         }
 
-        private static void MatchPhoneEmail(StoreCompany company, ref List<CustomerInfo> matchList, bool matchEmail, bool matchPhone)
+        private static void MatchPhoneEmail(StoreCompany company, List<CusCommunication> matchList, bool matchEmail, bool matchPhone)
         {
             if (matchEmail && string.IsNullOrEmpty(company.Email) || matchPhone && string.IsNullOrEmpty(company.Phone) )
             {
                 return;
             }
 
-            List<CusCommunication> matchCusCommunication = new List<CusCommunication>();
+            //List<CusCommunication> matchCusCommunication = new List<CusCommunication>();
             var cusCommunications = SvcClient.Ctxt.CusCommunications.Where(c => c.SubCustomerId == 0);
 
             if (matchEmail)
@@ -510,7 +521,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     var match = companys[0];
                     if (string.Equals(match.RecordType, RECORD_TYPE_CORPORATE, StringComparison.InvariantCultureIgnoreCase))
                     {
-                        matchCusCommunication.Add(cus);
+                        matchList.Add(cus);
                     }
                     else
                     {  // Find company for an individual
@@ -533,26 +544,16 @@ namespace asi.asicentral.services.PersonifyProxy
                                                             c.SubCustomerId == companys[0].SubCustomerId).ToList();
                                 if (matchCus.Count > 0)
                                 {
-                                    matchCusCommunication.Add(matchCus[0]);
+                                    matchList.Add(matchCus[0]);
                                 }
                             }
                         }
                     }
                 }                
             }
-
-            foreach (var m in matchCusCommunication)
-            {
-                if (m.DoNotCallFlag.HasValue && !m.DoNotCallFlag.Value)
-                {
-                    var companyInfo = GetCompanyInfo(m.MasterCustomerId, m.SubCustomerId);
-                    if( companyInfo != null )
-                        matchList.Add(companyInfo);
-                }
-            }
         }
 
-        private static void MatchCompanyName(StoreCompany company, ref List<CustomerInfo> matchList)
+        private static void MatchCompanyName(StoreCompany company, List<CusCommunication> matchList)
         {
             var companys = SvcClient.Ctxt.ASICustomerInfos
                            .Where(p => p.RecordType == RECORD_TYPE_CORPORATE && p.SubCustomerId == 0 &&
@@ -571,12 +572,9 @@ namespace asi.asicentral.services.PersonifyProxy
                                          .Where(c => c.MasterCustomerId == com.MasterCustomerId &&
                                                      c.SubCustomerId == com.SubCustomerId).ToList();
 
-                if (cusCommunications.Count > 0 && cusCommunications[0].DoNotCallFlag.HasValue 
-                                                && !cusCommunications[0].DoNotCallFlag.Value)
+                if (cusCommunications.Count > 0 )
                 {
-                    var companyInfo = GetCompanyInfo(com.MasterCustomerId, com.SubCustomerId);
-                    if (companyInfo != null)
-                        matchList.Add(companyInfo);
+                    matchList.Add(cusCommunications[0]);
                 }
             }
         }
