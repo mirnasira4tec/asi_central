@@ -1,0 +1,52 @@
+﻿@using asi.asicentral.web.Models.TermsConditions;
+@model  IList<TermsConditionsTypeVM>
+
+@{
+    Layout = "~/Views/TermsConditions/_TermsLayout.cshtml";
+}
+<div id="termsConditions-modal" class="modal fade">
+    <div id="modal-container">
+    </div>
+</div>
+
+<h2>Terms and Conditions Types</h2>   
+    <table class="table table-bordered table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Is Active</th>
+                <th>Start Date</th>
+                <th>Create Date</th>
+                <th>Update Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if( Model != null && Model.Count > 0)
+            {
+                foreach (TermsConditionsTypeVM type in Model)
+                {
+                    <tr>
+                        <td><a id=@type.Id class="terms">@type.Name</a></td>
+                        <td>@type.IsActive</td>
+                        <td>@type.StartDate.ToString("dd-MMM-yyyy")</td>
+                        <td>@type.CreateDate.ToString("dd-MMM-yyyy")</td>
+                        <td>@type.UpdateDate.ToString("dd-MMM-yyyy")</td>
+                     </tr>
+                }
+            }
+        </tbody>
+    </table>  
+  
+@section scripts
+{
+    <script>
+        $('.terms').click(function () {
+            var id = $(this).attr('id');
+            var url = "/TermsConditions/Type?id=" + id;
+            $.get(url, function (data) {
+                $("#modal-container").html(data);
+                $("#termsConditions-modal").modal("show");
+            });
+        });
+    </script>
+}
