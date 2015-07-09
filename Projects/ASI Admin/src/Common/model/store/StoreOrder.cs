@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace asi.asicentral.model.store
 {
@@ -48,11 +46,13 @@ namespace asi.asicentral.model.store
         public string UpdateSource { get; set; }
         public DateTime? ApprovedDate { get; set; }
         public string ApprovedBy { get; set; }
+
         public virtual StoreCompany Company { get; set; }
         public virtual StoreCreditCard CreditCard { get; set; }
         public virtual StoreIndividual BillingIndividual { get; set; }
         public virtual IList<StoreOrderDetail> OrderDetails { get; set; }
         public virtual Context Context { get; set; }
+
         public string ProductName
         {
             get
