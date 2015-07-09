@@ -415,25 +415,28 @@ namespace asi.asicentral.services.PersonifyProxy
         private static CustomerInfo FindMatchingCompany(StoreCompany company, out List<CustomerInfo> matchList)
         {
             matchList = new List<CustomerInfo>();
+            int firstCount = 0;
+            int secondCount = 0;
             if (string.Equals(company.MemberType, "Supplier", StringComparison.InvariantCultureIgnoreCase))
             {
                 MatchPhoneEmail(company, ref matchList, false, true);
-                if (matchList.Count < 1)
-                    MatchCompanyName(company, ref matchList);
-                if (matchList.Count < 1)
-                    MatchPhoneEmail(company, ref matchList, true, false);
+                firstCount = matchList.Count;
+                MatchCompanyName(company, ref matchList);
+                secondCount = matchList.Count;
+                MatchPhoneEmail(company, ref matchList, true, false);
             }
             else
             {
                 MatchCompanyName(company, ref matchList);
-                if( matchList.Count < 1 )
-                    MatchPhoneEmail(company, ref matchList, true, true);
+                firstCount = matchList.Count;
+                MatchPhoneEmail(company, ref matchList, true, true);
             }
 
             ASICustomer leadCompany = null;
             bool isExistingLead = false;
-            foreach( var m in matchList)
-            {  // find Lead company              
+            for( int i = 0; i < matchList.Count; i++)
+            {  // find Lead company 
+                var m = matchList[i];
                 var customers = SvcClient.Ctxt.ASICustomers
                                 .Where( p => p.MasterCustomerId == m.MasterCustomerId && 
                                              p.SubCustomerId == m.SubCustomerId).ToList();
@@ -465,6 +468,9 @@ namespace asi.asicentral.services.PersonifyProxy
                         }
                     }
                 }
+
+                if (leadCompany != null && (i == firstCount - 1 || i == secondCount - 1))
+                    break;
             }
 
             var companyInfo = leadCompany != null ? GetCompanyInfo(leadCompany.MasterCustomerId, leadCompany.SubCustomerId) : null;
@@ -490,7 +496,7 @@ namespace asi.asicentral.services.PersonifyProxy
             if( matchPhone)
             {
                 cusCommunications = cusCommunications.Where(c => c.SearchPhoneAddress == IgnoreSpecialChars(company.Phone) &&
-                                                                 string.Compare(c.CommTypeCodeString, COMMUNICATION_INPUT_PHONE, StringComparison.InvariantCultureIgnoreCase) == 0);
+                                                                 string.Compare(c.CommTypeCodeString, COMMUNICATION_INPUT_PHONE) == 0);
             }            
 
             foreach (var cus in cusCommunications)
@@ -577,8 +583,7 @@ namespace asi.asicentral.services.PersonifyProxy
 
         private static string IgnoreSpecialChars(string input)
         {
-            var result = Regex.Replace(input.Trim(), @"[-\.]*$", "");
-            return Regex.Replace(result, @"^[-\.]*", "");
+            return Regex.Replace(input.Trim(), @"[\.\$@&#\?,!]*", "");
         }
 
         //private static Tuple<string, int> CompanyHasLatestNote(List<Tuple<string, int>> companyList)

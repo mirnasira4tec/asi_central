@@ -159,7 +159,7 @@ namespace asi.asicentral.Tests
         {
             var company = new StoreCompany
             {
-                Name = ".FIND MATCHING COMPANY.",
+                Name = ".FIND MATCHING $@#?$!&,COMPANY.",
                 Phone = "2121111112",
                 Email = "match@random.com",
                 MemberType = "DISTRIBUTOR"
