@@ -194,7 +194,7 @@ namespace asi.asicentral.web.Controllers.TermsConditions
             return RedirectToAction("Index");
         }
 
-        public string Search(string startDate, string endDate, string creator, bool? showOnlyPending,
+        public JsonResult Search(string startDate, string endDate, string creator, bool? showOnlyPending,
                              string customerName, string customerEmail, string company)
         {
             var termInstList = new List<TermsConditionsInstanceVM>();
@@ -247,7 +247,7 @@ namespace asi.asicentral.web.Controllers.TermsConditions
             }
             catch (Exception) { }
 
-            return JsonConvert.SerializeObject(Json(termInstList).Data);
+            return Json(termInstList);
         }
 
         public ActionResult OrderDetail(int id)
