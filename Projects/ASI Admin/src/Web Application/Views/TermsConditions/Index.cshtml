@@ -150,8 +150,8 @@
                                          r.CustomerName,
                                          r.CustomerEmail,
                                          r.CompanyName,
-                                         r.CreateDate,
-                                         r.DateAgreedOn == null ? '' : r.DateAgreedOn,
+                                         new Date(parseInt(r.CreateDate.substr(6))).toLocaleString().replace(",", ""),
+                                         r.DateAgreedOn == null ? '' : new Date(parseInt(r.DateAgreedOn.substr(6))).toLocaleString().replace(",", ""),
                                          r.CreatedBy]);
                     }
                     table.fnDraw();
