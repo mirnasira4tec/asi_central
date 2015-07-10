@@ -321,7 +321,7 @@ namespace asi.asicentral.services
         {
             CustomerInfo customerInfo;
             log.Debug(string.Format("Reconcile Company {0} , phone {1}, email {2}.", company.Name, company.Phone, company.Email));
-            masterIdList = PersonifyClient.ReconcileCompany(company, customerClassCode, out customerInfo, null);
+            masterIdList = PersonifyClient.ReconcileCompany(company, customerClassCode, out customerInfo, null, false);
             log.Debug(string.Format("Finish Reconcile Company {0}, total matches: {1}", company.Name, masterIdList.Count));
             return PersonifyClient.GetCompanyInfo(customerInfo);
         }

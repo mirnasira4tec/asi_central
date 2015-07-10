@@ -88,16 +88,16 @@ namespace asi.asicentral.services.PersonifyProxy
         public static CustomerInfo ReconcileCompany(StoreCompany company, string customerClassCode, IList<LookSendMyAdCountryCode> countryCodes)
         {
             CustomerInfo companyInfo;
-            ReconcileCompany(company, customerClassCode, out companyInfo, countryCodes);
+            ReconcileCompany(company, customerClassCode, out companyInfo, countryCodes, true);
             return companyInfo;
         }
 
-        public static List<string> ReconcileCompany(StoreCompany company, string customerClassCode, out CustomerInfo companyInfo, IList<LookSendMyAdCountryCode> countryCodes)
+        public static List<string> ReconcileCompany(StoreCompany company, string customerClassCode, out CustomerInfo companyInfo, IList<LookSendMyAdCountryCode> countryCodes, bool createNew = false)
         {
             var masterIdList = FindCustomerInfo(company, out companyInfo);
             StoreAddress companyAddress = company.GetCompanyAddress();
             string countryCode = countryCodes != null ? countryCodes.Alpha3Code(companyAddress.Country) : companyAddress.Country;
-            if (companyInfo == null)
+            if (companyInfo == null && createNew)
             {
                 //company not already there, create a new one
                 var saveCustomerInput = new SaveCustomerInput { LastName = company.Name, CustomerClassCode = customerClassCode };
@@ -130,10 +130,11 @@ namespace asi.asicentral.services.PersonifyProxy
                 AddPhoneNumber(company.Phone, countryCode, companyInfo);
             }
 
-            if (companyInfo != null) 
+            if (companyInfo != null)
+            {
                 company.ExternalReference = companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId;
-
-            PersonifyClient.AddCustomerAddresses(company, companyInfo, countryCodes);
+                PersonifyClient.AddCustomerAddresses(company, companyInfo, countryCodes);
+            }
 
             return masterIdList;
         }
