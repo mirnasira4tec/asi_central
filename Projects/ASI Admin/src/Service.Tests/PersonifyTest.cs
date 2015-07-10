@@ -180,10 +180,10 @@ namespace asi.asicentral.Tests
             });
 
             IBackendService personify = new PersonifyService();
-            var companyInfo = personify.ReconcileCompany(company, "DISTRIBUTOR", null);
-            Assert.IsTrue(companyInfo.CompanyId > 0);
-            Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
-            Assert.AreEqual("LEAD", companyInfo.MemberStatus);
+            CustomerInfo companyInfo;
+            var masterIdList = personify.ReconcileCompany(company, "DISTRIBUTOR", out companyInfo, null);
+            Assert.IsTrue(!string.IsNullOrEmpty(companyInfo.MasterCustomerId));
+            Assert.AreEqual("C", companyInfo.RecordType.ToUpper());
         }
 
         [TestMethod]
@@ -212,10 +212,10 @@ namespace asi.asicentral.Tests
             });
 
             IBackendService personify = new PersonifyService();
-            var companyInfo = personify.ReconcileCompany(company, "SUPPLIER", null);
-            Assert.IsTrue(companyInfo.CompanyId > 0);
-            Assert.AreEqual("SUPPLIER", companyInfo.MemberType);
-            Assert.AreEqual("LEAD", companyInfo.MemberStatus);
+            CustomerInfo companyInfo;
+            var masterIdList = personify.ReconcileCompany(company, "SUPPLIER", out companyInfo, null);
+            Assert.IsTrue(!string.IsNullOrEmpty(companyInfo.MasterCustomerId));
+            Assert.AreEqual("C", companyInfo.RecordType.ToUpper());
         }
 
         [TestMethod]
@@ -225,7 +225,7 @@ namespace asi.asicentral.Tests
             {
                 Name = "find matching company",
                 Phone = "2121111112",
-                Email = "",
+                Email = "match@random.com",
                 MemberType = "DISTRIBUTOR"
             };
             var address = new StoreAddress
@@ -244,10 +244,10 @@ namespace asi.asicentral.Tests
             });
 
             IBackendService personify = new PersonifyService();
-            var companyInfo = personify.ReconcileCompany(company, "DISTRIBUTOR", null);
-            Assert.IsTrue(companyInfo.CompanyId > 0);
-            Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
-            Assert.AreEqual("LEAD", companyInfo.MemberStatus);
+            CustomerInfo companyInfo;
+            var masterIdList = personify.ReconcileCompany(company, "DISTRIBUTOR", out companyInfo, null);
+            Assert.IsTrue(!string.IsNullOrEmpty(companyInfo.MasterCustomerId));
+            Assert.AreEqual("C", companyInfo.RecordType.ToUpper());
         }
 
         private IStoreService MockupStoreService()
