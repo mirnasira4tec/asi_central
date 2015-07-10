@@ -317,9 +317,13 @@ namespace asi.asicentral.services
             return companyInformation;
         }
 
-        public virtual List<string> ReconcileCompany(StoreCompany company, string customerClassCode, out CustomerInfo companyInfo, IList<LookSendMyAdCountryCode> countryCodes)
+        public virtual CompanyInformation ReconcileCompany(StoreCompany company, string customerClassCode, out List<string> masterIdList, IList<LookSendMyAdCountryCode> countryCodes)
         {
-            return PersonifyClient.ReconcileCompany(company, customerClassCode, out companyInfo, null);
+            CustomerInfo customerInfo;
+            log.Debug(string.Format("Reconcile Company {0} , phone {1}, email {2}.", company.Name, company.Phone, company.Email));
+            masterIdList = PersonifyClient.ReconcileCompany(company, customerClassCode, out customerInfo, null);
+            log.Debug(string.Format("Finish Reconcile Company {0}, total matches: {1}", company.Name, masterIdList.Count));
+            return PersonifyClient.GetCompanyInfo(customerInfo);
         }
 
         public virtual CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber)

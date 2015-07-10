@@ -476,10 +476,14 @@ namespace asi.asicentral.services.PersonifyProxy
             }
             else
             {
-                cusCommunications = cusCommunications.Where(c => (string.Compare(c.FormattedPhoneAddress, company.Email.Trim()) == 0 &&
-                                                                  string.Compare(c.CommTypeCodeString, COMMUNICATION_INPUT_EMAIL) == 0)||
-                                                                 (string.Compare(c.SearchPhoneAddress, IgnoreSpecialChars(company.Phone)) == 0 &&
-                                                                  string.Compare(c.CommTypeCodeString, COMMUNICATION_INPUT_PHONE) == 0));
+                // error when calling from store
+                //cusCommunications = cusCommunications.Where(c => (string.Compare(c.FormattedPhoneAddress, company.Email.Trim()) == 0 &&
+                //                                                  string.Compare(c.CommTypeCodeString, COMMUNICATION_INPUT_EMAIL) == 0)||
+                //                                                 (string.Compare(c.SearchPhoneAddress, IgnoreSpecialChars(company.Phone)) == 0 &&
+                //                                                  string.Compare(c.CommTypeCodeString, COMMUNICATION_INPUT_PHONE) == 0));
+                var filter = string.Format("(FormattedPhoneAddress eq '{0}' and CommTypeCodeString eq '{1}') or (SearchPhoneAddress eq '{2}' and CommTypeCodeString eq '{3}')",
+                                            company.Email.Trim(), COMMUNICATION_INPUT_EMAIL, IgnoreSpecialChars(company.Phone), COMMUNICATION_INPUT_PHONE);
+                cusCommunications = SvcClient.Ctxt.CusCommunications.AddQueryOption("$filter", filter);
             }
 
             if (matchBoth)
@@ -538,6 +542,7 @@ namespace asi.asicentral.services.PersonifyProxy
 
         private static CustomerInfo GetCompanyWithLatestNote(List<string> masterIdList)
         {
+            string matchMasterId = null;
             if (masterIdList.Count > 1)
             {
                 string condition = null;
@@ -575,13 +580,17 @@ namespace asi.asicentral.services.PersonifyProxy
                 var result = cusActivities.SingleOrDefault(item => item.ActivityDate == max);
                 if (result != null)
                 {
-                    return GetCompanyInfo(result.MasterCustomerId, 0);
+                    matchMasterId = result.MasterCustomerId;
+                }
+                else 
+                { // none have activites
+                    matchMasterId = leadCustomers.Count > 0 ? leadCustomers[0].MasterCustomerId : masterIdList[0];
                 }
             }
             else if( masterIdList.Count == 1 )
-                return GetCompanyInfo(masterIdList[0], 0);
+                matchMasterId = masterIdList[0];
 
-            return null;
+            return matchMasterId != null ? GetCompanyInfo(matchMasterId, 0) : null;
         }
 
   	    #endregion matching company

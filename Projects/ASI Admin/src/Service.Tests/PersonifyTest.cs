@@ -180,10 +180,10 @@ namespace asi.asicentral.Tests
             });
 
             IBackendService personify = new PersonifyService();
-            CustomerInfo companyInfo;
-            var masterIdList = personify.ReconcileCompany(company, "DISTRIBUTOR", out companyInfo, null);
-            Assert.IsTrue(!string.IsNullOrEmpty(companyInfo.MasterCustomerId));
-            Assert.AreEqual("C", companyInfo.RecordType.ToUpper());
+            List<string> masterIdList;
+            var companyInfo = personify.ReconcileCompany(company, "DISTRIBUTOR", out masterIdList, null);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
         }
 
         [TestMethod]
@@ -212,10 +212,10 @@ namespace asi.asicentral.Tests
             });
 
             IBackendService personify = new PersonifyService();
-            CustomerInfo companyInfo;
-            var masterIdList = personify.ReconcileCompany(company, "SUPPLIER", out companyInfo, null);
+            List<string> masterIdList;
+            var companyInfo = personify.ReconcileCompany(company, "SUPPLIER", out masterIdList, null);
             Assert.IsTrue(!string.IsNullOrEmpty(companyInfo.MasterCustomerId));
-            Assert.AreEqual("C", companyInfo.RecordType.ToUpper());
+            Assert.AreEqual("SUPPLIER", companyInfo.MemberType);
         }
 
         [TestMethod]
@@ -244,10 +244,10 @@ namespace asi.asicentral.Tests
             });
 
             IBackendService personify = new PersonifyService();
-            CustomerInfo companyInfo;
-            var masterIdList = personify.ReconcileCompany(company, "DISTRIBUTOR", out companyInfo, null);
+            List<string> masterIdList;
+            var companyInfo = personify.ReconcileCompany(company, "DISTRIBUTOR", out masterIdList, null);
             Assert.IsTrue(!string.IsNullOrEmpty(companyInfo.MasterCustomerId));
-            Assert.AreEqual("C", companyInfo.RecordType.ToUpper());
+            Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
         }
 
         private IStoreService MockupStoreService()
