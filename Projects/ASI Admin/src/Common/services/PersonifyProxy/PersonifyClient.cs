@@ -427,14 +427,8 @@ namespace asi.asicentral.services.PersonifyProxy
             var matchList = new List<string>();
 
             MatchCompanyName(company, matchList);
-            if (string.Equals(company.MemberType, "Supplier", StringComparison.InvariantCultureIgnoreCase))
-            {
-                MatchPhoneEmail(company, matchList, false);
-            }
-            else
-            {
-                MatchPhoneEmail(company, matchList, true);
-            }
+            bool matchBoth = !string.Equals(company.MemberType, "Supplier", StringComparison.InvariantCultureIgnoreCase);
+            MatchPhoneEmail(company, matchList, matchBoth);
 
             matchList = matchList.Distinct().ToList();
             companyInfo = GetCompanyWithLatestNote(matchList);
