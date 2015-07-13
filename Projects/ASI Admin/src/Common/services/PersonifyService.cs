@@ -35,7 +35,7 @@ namespace asi.asicentral.services
                 throw new ArgumentException("You must pass a valid order and the country codes");
             try
             {
-                var companyInfo = PersonifyClient.ReconcileCompany(order.Company, "UNKNOWN", countryCodes);
+                var companyInfo = PersonifyClient.ReconcileCompany(order.Company, "UNKNOWN", countryCodes, true);
                 log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
                 IList<CustomerInfo> individualInfos = PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo).ToList();
@@ -310,7 +310,7 @@ namespace asi.asicentral.services
 			UpdateMemberType(companyInformation);
 			if (companyInformation.MemberStatus == "ACTIVE") throw new Exception("We should not be creating an active company");
             //create company if not already there
-            var companyInfo = PersonifyClient.ReconcileCompany(company, companyInformation.MemberType, null);
+            var companyInfo = PersonifyClient.ReconcileCompany(company, companyInformation.MemberType, null, true);
             PersonifyClient.AddCustomerAddresses(company, companyInfo, null);
             PersonifyClient.AddPhoneNumber(companyInformation.Phone, GetCountryCode(companyInformation.Country), companyInfo);
 	        companyInformation = PersonifyClient.GetCompanyInfo(companyInfo);
@@ -319,15 +319,22 @@ namespace asi.asicentral.services
 
         public virtual CompanyInformation ReconcileCompany(StoreCompany company, string customerClassCode, ref List<string> masterIdList, IList<LookSendMyAdCountryCode> countryCodes)
         {
-            CustomerInfo customerInfo;
+            CustomerInfo customerInfo = null;
             var startTime = DateTime.Now;
-            log.Debug(string.Format("Reconcile Company {0} , phone {1}, email {2}.", company.Name, company.Phone, company.Email));
-            masterIdList = PersonifyClient.ReconcileCompany(company, customerClassCode, out customerInfo, null, false);
-            log.Debug(string.Format("Finish Reconcile Company {0}, total matches: {1}; time: {2}", 
+            log.Debug(string.Format("ReconcileCompany - start: Company {0} , phone {1}, email {2}.", company.Name, company.Phone, company.Email));
+            customerInfo = PersonifyClient.ReconcileCompany(company, customerClassCode, ref masterIdList);
+            var companyInfo = customerInfo != null ? PersonifyClient.GetCompanyInfo(customerInfo) : null;
+            log.Debug(string.Format("ReconcileCompany - end: Company {0}, total matches: {1}; time: {2}", 
                                     company.Name, 
                                     masterIdList != null ? masterIdList.Count : 0, 
                                     DateTime.Now.Subtract(startTime).TotalMilliseconds.ToString()));
-            return customerInfo != null ? PersonifyClient.GetCompanyInfo(customerInfo) : null;
+
+            return companyInfo;
+        }
+
+        public virtual CustomerInfo FindCustomerInfo(StoreCompany company, ref List<string> matchList)
+        {
+            return PersonifyClient.FindCustomerInfo(company, ref matchList);
         }
 
         public virtual CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber)
