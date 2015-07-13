@@ -1,5 +1,6 @@
 ﻿using asi.asicentral.model;
 using asi.asicentral.model.store;
+using asi.asicentral.PersonifyDataASI;
 using System.Collections.Generic;
 
 namespace asi.asicentral.interfaces
@@ -32,5 +33,7 @@ namespace asi.asicentral.interfaces
 		CompanyInformation GetCompanyInfoByIdentifier(int companyIdentifier);
 
         CompanyInformation AddCompany(CompanyInformation companyInfo);
+
+        CompanyInformation ReconcileCompany(StoreCompany company, string customerClassCode, ref List<string> matchCompanyIdList, IList<LookSendMyAdCountryCode> countryCodes);
     }
 }

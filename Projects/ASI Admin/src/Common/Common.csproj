@@ -282,6 +282,8 @@
     <Compile Include="database\mappings\store\StoreOrderMap.cs" />
     <Compile Include="database\mappings\store\StoreTieredProductPricingMap.cs" />
     <Compile Include="database\mappings\store\TaxRateMap.cs" />
+    <Compile Include="database\mappings\store\TermsConditionsInstanceMap.cs" />
+    <Compile Include="database\mappings\store\TermsConditionsTypeMap.cs" />
     <Compile Include="database\mappings\timss\PersonifyMappingMap.cs" />
     <Compile Include="database\MemberDemogrContext.cs" />
     <Compile Include="interfaces\ICreditCardService.cs" />
@@ -425,6 +427,8 @@
     <Compile Include="model\store\LegacyOrderContact.cs" />
     <Compile Include="model\store\StoreTieredProductPricing.cs" />
     <Compile Include="model\store\TaxRate.cs" />
+    <Compile Include="model\store\TermsConditionsType.cs" />
+    <Compile Include="model\store\TermsConditionsInstance.cs" />
     <Compile Include="model\timss\PersonifyMapping.cs" />
     <Compile Include="model\timss\TIMSSAccountType.cs" />
     <Compile Include="model\timss\TIMSSAdditionalInfo.cs" />

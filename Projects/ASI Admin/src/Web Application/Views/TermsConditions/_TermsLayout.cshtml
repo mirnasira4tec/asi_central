@@ -1,0 +1,15 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Terms and Conditions";
+}
+@RenderSection("Content", required: false)
+@RenderBody()
+@section navigation { 
+    <nav id="admin-subnavigation">
+    <ul class="clearfix">
+	    <li><a href="/TermsConditions/Index">Terms and Conditions</a></li>
+	    <li><a href="/TermsConditions/Types">Types</a></li>
+    </ul>
+    </nav>    
+}
+@section scripts { @RenderSection("scripts", required: false)}
