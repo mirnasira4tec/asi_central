@@ -419,6 +419,16 @@ namespace asi.asicentral.services.PersonifyProxy
 	    }
 	    #endregion Getting company information
 
+        public static bool CompanyDoNotCallFlag(string masterCustomerId, int subCustomerId)
+        {
+            var cc = SvcClient.Ctxt.CusCommunications
+                                   .Where(c => c.MasterCustomerId == masterCustomerId &&
+                                               c.SubCustomerId == subCustomerId &&
+                                               c.DoNotCallFlag == true).ToList();
+
+            return cc.Count > 0;
+        }
+
         #region matching company with name, email or phone
         private static CustomerInfo FindMatchingCompany(StoreCompany company, ref List<string> matchList)
         {

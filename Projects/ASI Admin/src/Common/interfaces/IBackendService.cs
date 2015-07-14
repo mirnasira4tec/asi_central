@@ -34,6 +34,6 @@ namespace asi.asicentral.interfaces
 
         CompanyInformation AddCompany(CompanyInformation companyInfo);
 
-        CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList);
+        CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList, ref bool dnsFlg);
     }
 }

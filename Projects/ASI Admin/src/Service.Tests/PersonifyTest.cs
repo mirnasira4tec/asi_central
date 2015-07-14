@@ -156,10 +156,10 @@ namespace asi.asicentral.Tests
 
         #region FindCompanyInfo performance tests
         // Companys and Employees: 
-        //      Reconcile Company Supplier 1, 2135555551, ASICENTRAL: 000010252975
+        //      Reconcile Company Supplier 1, 2135555551, 000010252975
         //          Reconcile Individual1, 2135555551, 2135555552, individual1@reconcile.com, : 000010252976
         //
-        //      Reconcile Company Supplier 2, 2135555561, LEAD: 000010252977
+        //      Reconcile Company Supplier 2, 2135555561, 000010252977
         //          Reconcile Individual2, 2135555561, 2135555552, individual2@reconcile.com, : 000010252978
         //
         //      Reconcile Company Supplier 3, 2135555541, ASICENTRAL : 000010252985
@@ -193,7 +193,8 @@ namespace asi.asicentral.Tests
 
             IBackendService personify = new PersonifyService();
             List<string> masterIdList = null;
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
+            bool dnsFlag = false;
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
         }
@@ -208,7 +209,8 @@ namespace asi.asicentral.Tests
 
             IBackendService personify = new PersonifyService();
             List<string> masterIdList = null;
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
+            bool dnsFlag = false;
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
         }
@@ -223,8 +225,8 @@ namespace asi.asicentral.Tests
 
             IBackendService personify = new PersonifyService();
             List<string> masterIdList = null;
-            //var companyInfo = personify.ReconcileCompany(company, "SUPPLIER", ref masterIdList, null);
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
+            bool dnsFlag = false;
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
             Assert.IsTrue(companyInfo.CompanyId > 0);
         }
 
@@ -238,7 +240,8 @@ namespace asi.asicentral.Tests
 
             IBackendService personify = new PersonifyService();
             List<string> masterIdList = null;
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
+            bool dnsFlag = false;
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
         }
@@ -253,8 +256,8 @@ namespace asi.asicentral.Tests
 
             IBackendService personify = new PersonifyService();
             List<string> masterIdList = null;
-            //var companyInfo = personify.ReconcileCompany(company, "SUPPLIER", ref masterIdList, null);
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
+            bool dnsFlag = false;
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.IsTrue(masterIdList.Count > 0);
         }
@@ -269,7 +272,8 @@ namespace asi.asicentral.Tests
 
             IBackendService personify = new PersonifyService();
             List<string> masterIdList = null;
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
+            bool dnsFlag = false;
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
             Assert.AreEqual(companyInfo, null);
         }
 

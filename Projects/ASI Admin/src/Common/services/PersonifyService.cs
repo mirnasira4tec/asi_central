@@ -317,13 +317,20 @@ namespace asi.asicentral.services
             return companyInformation;
         }
 
-        public virtual CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList)
+        public virtual CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList, ref bool dnsFlag)
         {
             var startTime = DateTime.Now;
             log.Debug(string.Format("FindCompanyInfo - start: Company {0} , phone {1}", company.Name, company.Phone));
             var customerInfo = PersonifyClient.FindCustomerInfo(company, ref matchList);
-            var companyInfo = customerInfo != null ? PersonifyClient.GetCompanyInfo(customerInfo) : null;
-			//@todo lookup dns flag
+            CompanyInformation companyInfo = null;
+
+            if (customerInfo != null)
+            {
+                companyInfo = PersonifyClient.GetCompanyInfo(customerInfo);
+			    //set dns flag
+                dnsFlag = PersonifyClient.CompanyDoNotCallFlag(customerInfo.MasterCustomerId, customerInfo.SubCustomerId);
+            }
+
             log.Debug(string.Format("FindCompanyInfo - end: Company {0}, total matches: {1}; time: {2}",
                                     company.Name,
                                     matchList != null ? matchList.Count : 0,
