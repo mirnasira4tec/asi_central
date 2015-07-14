@@ -90,15 +90,10 @@ namespace asi.asicentral.services.PersonifyProxy
         public static CustomerInfo ReconcileCompany(StoreCompany company, string customerClassCode, IList<LookSendMyAdCountryCode> countryCodes, bool update = false)
         {
             List<string> masterIdList = null;
-            return ReconcileCompany(company, customerClassCode, ref masterIdList, countryCodes, update);
-        }
-
-        public static CustomerInfo ReconcileCompany(StoreCompany company, string customerClassCode, ref List<string> masterIdList, IList<LookSendMyAdCountryCode> countryCodes = null, bool update = false)
-        {
-            var companyInfo = FindCustomerInfo(company, ref masterIdList);
+            var customerInfo = FindCustomerInfo(company, ref masterIdList);
             StoreAddress companyAddress = company.GetCompanyAddress();
             string countryCode = countryCodes != null ? countryCodes.Alpha3Code(companyAddress.Country) : companyAddress.Country;
-            if (companyInfo == null )
+            if (customerInfo == null)
             {
                 //company not already there, create a new one
                 var saveCustomerInput = new SaveCustomerInput { LastName = company.Name, CustomerClassCode = customerClassCode };
@@ -123,19 +118,20 @@ namespace asi.asicentral.services.PersonifyProxy
                         customer.UserDefinedMemberStatusString = "ASICENTRAL";
                         SvcClient.Save<ASICustomer>(customer);
                     }
-                    companyInfo = GetCompanyInfo(result.MasterCustomerId, subCustomerId);
+                    customerInfo = GetCompanyInfo(result.MasterCustomerId, subCustomerId);
                 }
             }
-            else if( update)
-                AddPhoneNumber(company.Phone, countryCode, companyInfo);
-            
-            if( update )
+            else if (update)
             {
-                company.ExternalReference = companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId;
-                PersonifyClient.AddCustomerAddresses(company, companyInfo, countryCodes);
+	            AddPhoneNumber(company.Phone, countryCode, customerInfo);
+            }
+	        if(customerInfo != null && update)
+            {
+                company.ExternalReference = customerInfo.MasterCustomerId + ";" + customerInfo.SubCustomerId;
+                AddCustomerAddresses(company, customerInfo, countryCodes);
             }
 
-            return companyInfo;
+            return customerInfo;
         }
 
         public static IEnumerable<StoreAddressInfo> AddCustomerAddresses(
