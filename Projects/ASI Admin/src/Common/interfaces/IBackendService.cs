@@ -34,6 +34,6 @@ namespace asi.asicentral.interfaces
 
         CompanyInformation AddCompany(CompanyInformation companyInfo);
 
-        CompanyInformation ReconcileCompany(StoreCompany company, string customerClassCode, ref List<string> matchCompanyIdList, IList<LookSendMyAdCountryCode> countryCodes);
+        CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList);
     }
 }
