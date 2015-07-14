@@ -684,13 +684,13 @@ namespace asi.asicentral.oauth
                         user.MemberType_CD = entityUser.Types.ElementAt(0);
                     if (entityUser.Phones != null && entityUser.Phones.Count > 0)
                     {
-                        Phone phone = entityUser.Phones.SingleOrDefault(ph => ph.IsPrimary);
+                        Phone phone = entityUser.Phones.FirstOrDefault(ph => ph.IsPrimary);
                         if (phone != null)
                         {
                             user.Phone = phone.PhoneNumber;
                             user.PhoneAreaCode = phone.AreaCode;
                         }
-						Phone fax = entityUser.Phones.SingleOrDefault(ph => ph.IsFax);
+						Phone fax = entityUser.Phones.FirstOrDefault(ph => ph.IsFax);
                         if (fax != null)
                         {
                             user.Fax = fax.PhoneNumber;
@@ -700,7 +700,7 @@ namespace asi.asicentral.oauth
 
                     if (entityUser.Addresses != null && entityUser.Addresses.Count > 0)
                     {
-						Address address = entityUser.Addresses.SingleOrDefault(add => add.UsageCode == UsageCode.GNRL.ToString());
+						Address address = entityUser.Addresses.FirstOrDefault(add => add.UsageCode == UsageCode.GNRL.ToString());
                         if (address != null)
                         {
                             user.Street1 = address.AddressLine1;
