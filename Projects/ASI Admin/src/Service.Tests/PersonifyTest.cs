@@ -154,34 +154,61 @@ namespace asi.asicentral.Tests
 			}
 		}
 
+        #region FindCompanyInfo performance tests
+        // Companys and Employees: 
+        //      Reconcile Company Supplier 1, 2135555551, ASICENTRAL: 000010252975
+        //          Reconcile Individual1, 2135555551, 2135555552, individual1@reconcile.com, : 000010252976
+        //
+        //      Reconcile Company Supplier 2, 2135555561, LEAD: 000010252977
+        //          Reconcile Individual2, 2135555561, 2135555552, individual2@reconcile.com, : 000010252978
+        //
+        //      Reconcile Company Supplier 3, 2135555541, ASICENTRAL : 000010252985
+        //          Reconcile Individual5, 2135555541, 2135555552, individual5@reconcile.com, : 000010252986
+        //
+        //      Reconcile Company Distributor 1, 2135555571,      : 000010252979
+        //          Reconcile Individual3, 2135555571, 2135555552, individual3@reconcile.com, : 000010252980
+        //
+        //      Reconcile Company Decorator 1, 2135555581,      : 000010252982
+        //          Reconcile Individual4, 2135555581, 2135555552, individual4@reconcile.com, : 000010252984
+        //
         [TestMethod]
-        public void ReconcileCompanyNameWithSpecialChars()
+        public void ReconcileCompanyPerformance()
         {
-            var company = new StoreCompany
-            {
-                Name = ".FIND MATCHING $@#?$!&,COMPANY.",
-                Phone = "2121111100",
-                Email = "noMatch@random.com",
-                MemberType = "DISTRIBUTOR"
-            };
-            var address = new StoreAddress
-            {
-                Street1 = "4800 Street Rd",
-                City = "Trevose",
-                State = "PA",
-                Country = "USA",
-                Zip = "19053"
-            };
-            company.Addresses.Add(new StoreCompanyAddress
-            {
-                Address = address,
-                IsBilling = true,
-                IsShipping = true,
-            });
+            ReconcileCompanyMatchNameOnly();
+            ReconcileCompanyMatchNameOnly();
+            ReconcileCompanyNameWithSpecialChars();
+            ReconcileCompanySupplierWithIndividualEmail();
+            ReconcileCompanyWithPhoneEmail();
+            ReconcileCompanyMultipleMatches();
+            ReconcileCompanySupplierNoMatch();
+        }
+
+        [TestMethod]
+        public void ReconcileCompanyMatchNameOnly()
+        {
+            var company = GetStoreCompany("Reconcile Company Distributor 1", 
+                                          "1111111111", 
+                                          "noMatch@reconcile.com", 
+                                          "DISTRIBUTOR");
 
             IBackendService personify = new PersonifyService();
             List<string> masterIdList = null;
-            var companyInfo = personify.ReconcileCompany(company, "DISTRIBUTOR", ref masterIdList, null);
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
+        }
+
+        [TestMethod]
+        public void ReconcileCompanyNameWithSpecialChars()
+        {
+            var company = GetStoreCompany(".Reconcile Company $@#?$!&,Distributor 1.",
+                                          "1111111111",
+                                          "noMatch@reconcile.com",
+                                          "DISTRIBUTOR");
+
+            IBackendService personify = new PersonifyService();
+            List<string> masterIdList = null;
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
         }
@@ -189,76 +216,70 @@ namespace asi.asicentral.Tests
         [TestMethod]
         public void ReconcileCompanySupplierWithIndividualEmail()
         {
-            var company = new StoreCompany
-            {
-                Name = "Failed Match",
-                Phone = "2121111124",
-                Email = "supplierEmployee@match.com",
-                MemberType = "SUPPLIER"
-            };
-            var address = new StoreAddress
-            {
-                Street1 = "4805 Street Rd",
-                City = "Trevose",
-                State = "PA",
-                Country = "USA",
-                Zip = "19053"
-            };
-            company.Addresses.Add(new StoreCompanyAddress
-            {
-                Address = address,
-                IsBilling = true,
-                IsShipping = true,
-            });
+            var company = GetStoreCompany("Failed Match",
+                                          "1110011100",
+                                          "individual1@reconcile.com",
+                                          "SUPPLIER");
 
             IBackendService personify = new PersonifyService();
             List<string> masterIdList = null;
-            var companyInfo = personify.ReconcileCompany(company, "SUPPLIER", ref masterIdList, null);
-            Assert.IsTrue(!string.IsNullOrEmpty(companyInfo.MasterCustomerId));
-            Assert.AreEqual("SUPPLIER", companyInfo.MemberType);
+            //var companyInfo = personify.ReconcileCompany(company, "SUPPLIER", ref masterIdList, null);
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+        }
+
+        [TestMethod]
+        public void ReconcileCompanyWithPhoneEmail()
+        {
+            var company = GetStoreCompany("Reconcile Company Distributor 1",
+                                          "2135555552",
+                                          "individual3@reconcile.com",
+                                          "DISTRIBUTOR");
+
+            IBackendService personify = new PersonifyService();
+            List<string> masterIdList = null;
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
         }
 
         [TestMethod]
         public void ReconcileCompanyMultipleMatches()
         {
-            var company = new StoreCompany
-            {
-                Name = "Matching Company Supplier",
-                Phone = "2121111112",
-                Email = "supplier@match.com",
-                MemberType = "SUPPLIER"
-            };
-            var address = new StoreAddress
-            {
-                Street1 = "4800 Street Rd",
-                City = "Trevose",
-                State = "PA",
-                Country = "USA",
-                Zip = "19053"
-            };
-            company.Addresses.Add(new StoreCompanyAddress
-            {
-                Address = address,
-                IsBilling = true,
-                IsShipping = true,
-            });
+            var company = GetStoreCompany("Reconcile Company Supplier 1",
+                                          "2135555552",
+                                          "individual4@reconcile.com",
+                                          "SUPPLIER");
 
             IBackendService personify = new PersonifyService();
             List<string> masterIdList = null;
-            var companyInfo = personify.ReconcileCompany(company, "SUPPLIER", ref masterIdList, null);
-            Assert.IsTrue(!string.IsNullOrEmpty(companyInfo.MasterCustomerId));
+            //var companyInfo = personify.ReconcileCompany(company, "SUPPLIER", ref masterIdList, null);
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.IsTrue(masterIdList.Count > 0);
         }
 
         [TestMethod]
         public void ReconcileCompanySupplierNoMatch()
         {
+            var company = GetStoreCompany("Invalid XXX Name",
+                                          "1110011100",
+                                          "nomatch@reconcile.com",
+                                          "SUPPLIER");
+
+            IBackendService personify = new PersonifyService();
+            List<string> masterIdList = null;
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
+            Assert.AreEqual(companyInfo, null);
+        }
+
+        private StoreCompany GetStoreCompany(string name, string phone, string email, string memberType)
+        {
             var company = new StoreCompany
             {
-                Name = "Invalid Company Name",
-                Phone = "2121111100",
-                Email = "nomatch@test1.com",
-                MemberType = "SUPPLIER"
+                Name = name,
+                Phone = phone,
+                MemberType = memberType
             };
             var address = new StoreAddress
             {
@@ -275,43 +296,15 @@ namespace asi.asicentral.Tests
                 IsShipping = true,
             });
 
-            IBackendService personify = new PersonifyService();
-            List<string> masterIdList = null;
-            var companyInfo = personify.ReconcileCompany(company, "SUPPLIER", ref masterIdList, null);
-            Assert.AreEqual(companyInfo, null);
+            if (!string.IsNullOrEmpty(email))
+            {
+                company.Individuals = new List<StoreIndividual>();
+                company.Individuals.Add(new StoreIndividual() { Email = email, IsPrimary = true });
+            }
+            return company;
         }
 
-        [TestMethod]
-        public void ReconcileCompanyMatchNameOnly()
-        {
-            var company = new StoreCompany
-            {
-                Name = "FIND MATCHING $@#?$!&,COMPANY",
-                Phone = "2121111100",
-                Email = "nomatch@test.com",
-                MemberType = "DISTRIBUTOR"
-            };
-            var address = new StoreAddress
-            {
-                Street1 = "4800 Street Rd",
-                City = "Trevose",
-                State = "PA",
-                Country = "USA",
-                Zip = "19053"
-            };
-            company.Addresses.Add(new StoreCompanyAddress
-            {
-                Address = address,
-                IsBilling = true,
-                IsShipping = true,
-            });
-
-            IBackendService personify = new PersonifyService();
-            List<string> masterIdList = null;
-            var companyInfo = personify.ReconcileCompany(company, "DISTRIBUTOR", ref masterIdList, null);
-            Assert.IsTrue(!string.IsNullOrEmpty(companyInfo.MasterCustomerId));
-            Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
-        }
+        #endregion end FindCompanyInfo performance tests
 
         private IStoreService MockupStoreService()
         {

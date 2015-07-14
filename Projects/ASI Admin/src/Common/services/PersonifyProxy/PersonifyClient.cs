@@ -469,7 +469,10 @@ namespace asi.asicentral.services.PersonifyProxy
         {
             var startTime = DateTime.Now;
             _log.Debug(string.Format("MatchPhoneEmail - start: company name {0} , phone {1}, email {2}.", company.Name, company.Phone, company.Email));
-            if (matchBoth && (string.IsNullOrEmpty(company.Email) || string.IsNullOrEmpty(company.Phone)) )
+            
+            var primaryContact = company.Individuals.Where(c => c.IsPrimary && !string.IsNullOrEmpty(c.Email)).FirstOrDefault();
+            var email = primaryContact != null ? primaryContact.Email.Trim() : string.Empty;
+            if (matchBoth && (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(company.Phone)) )
             {
                 return;
             }
@@ -477,7 +480,7 @@ namespace asi.asicentral.services.PersonifyProxy
             var cusCommunications = SvcClient.Ctxt.CusCommunications.Where(c => c.SubCustomerId == 0);
             if (matchBoth)
             {
-                cusCommunications = cusCommunications.Where(c => string.Compare(c.FormattedPhoneAddress, company.Email.Trim()) == 0 &&
+                cusCommunications = cusCommunications.Where(c => string.Compare(c.FormattedPhoneAddress, email) == 0 &&
                                                                  string.Compare(c.CommTypeCodeString, COMMUNICATION_INPUT_EMAIL) == 0 );
 
                 cusCommunications = cusCommunications.Where(c => string.Compare(c.SearchPhoneAddress, IgnoreSpecialChars(company.Phone)) == 0 &&
@@ -485,13 +488,23 @@ namespace asi.asicentral.services.PersonifyProxy
             }
             else
             {
-                // error when calling from store
-                //cusCommunications = cusCommunications.Where(c => (string.Compare(c.FormattedPhoneAddress, company.Email.Trim()) == 0 &&
-                //                                                  string.Compare(c.CommTypeCodeString, COMMUNICATION_INPUT_EMAIL) == 0)||
-                //                                                 (string.Compare(c.SearchPhoneAddress, IgnoreSpecialChars(company.Phone)) == 0 &&
-                //                                                  string.Compare(c.CommTypeCodeString, COMMUNICATION_INPUT_PHONE) == 0));
-                var filter = string.Format("(FormattedPhoneAddress eq '{0}' and CommTypeCodeString eq '{1}') or (SearchPhoneAddress eq '{2}' and CommTypeCodeString eq '{3}')",
-                                            company.Email.Trim(), COMMUNICATION_INPUT_EMAIL, IgnoreSpecialChars(company.Phone), COMMUNICATION_INPUT_PHONE);
+                var filter = string.Empty;
+
+                if (!string.IsNullOrEmpty(company.Phone))
+                {
+                    filter = string.Format("SearchPhoneAddress eq '{0}' and CommTypeCodeString eq '{1}'",
+                                            IgnoreSpecialChars(company.Phone), COMMUNICATION_INPUT_PHONE);
+                }
+
+                if (!string.IsNullOrEmpty(email))
+                {
+                    var emailFilter = string.Format("FormattedPhoneAddress eq '{0}' and CommTypeCodeString eq '{1}'",
+                                                     email, COMMUNICATION_INPUT_EMAIL);
+                    if (string.IsNullOrEmpty(filter))
+                        filter = emailFilter;
+                    else
+                        filter = string.Format("({0}) or ({1})", filter, emailFilter);
+                }
                 cusCommunications = SvcClient.Ctxt.CusCommunications.AddQueryOption("$filter", filter);
             }
 
