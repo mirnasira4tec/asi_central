@@ -326,7 +326,7 @@ namespace asi.asicentral.services
             log.Debug(string.Format("FindCompanyInfo - end: Company {0}, total matches: {1}; time: {2}",
                                     company.Name,
                                     matchList != null ? matchList.Count : 0,
-                                    DateTime.Now.Subtract(startTime).TotalMilliseconds.ToString()));
+                                    DateTime.Now.Subtract(startTime).TotalMilliseconds));
             return companyInfo;
         }
 

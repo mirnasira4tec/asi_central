@@ -401,7 +401,7 @@ namespace asi.asicentral.services.PersonifyProxy
 	    {
             var startTime = DateTime.Now;
             CustomerInfo companyInfo = null;
-            _log.Debug(string.Format("FindCustomerInfo - start: company name {0} , phone {1}, email {2}.", company.Name, company.Phone, company.Email));
+            _log.Debug(string.Format("FindCustomerInfo - start: company {0} ", company.Name));
             if (company == null || string.IsNullOrWhiteSpace(company.Name)) throw new Exception("Store company is not valid.");
 			if (!string.IsNullOrEmpty(company.ExternalReference))
 			{
@@ -417,7 +417,7 @@ namespace asi.asicentral.services.PersonifyProxy
             {  // find matching company by phone, email or name
                 companyInfo = FindMatchingCompany(company, ref matchList);
             }
-            _log.Debug(string.Format("FindCustomerInfo - end, company: {0} ({1})", company.Name, DateTime.Now.Subtract(startTime).TotalMilliseconds));
+            _log.Debug(string.Format("FindCustomerInfo - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
 
             return companyInfo;
 	    }
@@ -427,7 +427,7 @@ namespace asi.asicentral.services.PersonifyProxy
         private static CustomerInfo FindMatchingCompany(StoreCompany company, ref List<string> matchList)
         {
             var startTime = DateTime.Now;
-            _log.Debug(string.Format("FindMatchingCompany - start: company name {0} , phone {1}, email {2}.", company.Name, company.Phone, company.Email));
+            _log.Debug(string.Format("FindMatchingCompany - start: company name {0} ", company.Name));
             
             matchList = new List<string>();
             MatchCompanyName(company, matchList);
@@ -436,7 +436,7 @@ namespace asi.asicentral.services.PersonifyProxy
 
             matchList = matchList.Distinct().ToList();
             var companyInfo = GetCompanyWithLatestNote(matchList);
-            _log.Debug(string.Format("FindMatchingCompany - end: company name {0}, ({1})", company.Name, DateTime.Now.Subtract(startTime).TotalMilliseconds));
+            _log.Debug(string.Format("FindMatchingCompany - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
 
             return companyInfo;
         }
@@ -444,7 +444,7 @@ namespace asi.asicentral.services.PersonifyProxy
         private static void MatchCompanyName(StoreCompany company, List<string> masterIdList)
         {
             var startTime = DateTime.Now;
-            _log.Debug(string.Format("MatchCompanyName - start: company name {0} , phone {1}, email {2}.", company.Name, company.Phone, company.Email));
+            _log.Debug(string.Format("MatchCompanyName - start: company name {0}", company.Name));
             var companys = SvcClient.Ctxt.ASICustomerInfos
                            .Where(p => p.RecordType == RECORD_TYPE_CORPORATE && p.SubCustomerId == 0 &&
                                        string.Compare(p.LastName, company.Name) == 0).ToList();
@@ -462,13 +462,13 @@ namespace asi.asicentral.services.PersonifyProxy
             if( companys.Count > 0 )
                 masterIdList.AddRange(companys.Select(c => c.MasterCustomerId).Distinct());
 
-            _log.Debug(string.Format("MatchCompanyName - end: company name {0}, ({1})", company.Name, DateTime.Now.Subtract(startTime).TotalMilliseconds));
+            _log.Debug(string.Format("MatchCompanyName - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
         }
 
         private static void MatchPhoneEmail(StoreCompany company, List<string> masterIdList, bool matchBoth)
         {
             var startTime = DateTime.Now;
-            _log.Debug(string.Format("MatchPhoneEmail - start: company name {0} , phone {1}, email {2}.", company.Name, company.Phone, company.Email));
+            _log.Debug(string.Format("MatchPhoneEmail - start: company name {0}", company.Name));
             
             var primaryContact = company.Individuals.Where(c => c.IsPrimary && !string.IsNullOrEmpty(c.Email)).FirstOrDefault();
             var email = primaryContact != null ? primaryContact.Email.Trim() : string.Empty;
@@ -555,7 +555,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     }
                 }
             }
-            _log.Debug(string.Format("MatchPhoneEmail - end: company name {0}, ({1})", company.Name, DateTime.Now.Subtract(startTime).TotalMilliseconds));
+            _log.Debug(string.Format("MatchPhoneEmail - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
         }
         
         private static string IgnoreSpecialChars(string input)
@@ -565,7 +565,7 @@ namespace asi.asicentral.services.PersonifyProxy
 
         private static CustomerInfo GetCompanyWithLatestNote(List<string> masterIdList)
         {
-            _log.Debug(string.Format("GetCompanyWithLatestNote - start: "));
+            _log.Debug("GetCompanyWithLatestNote - start: ");
             var startTime = DateTime.Now;
             string matchMasterId = null;
             if (masterIdList.Count > 1)
@@ -610,8 +610,13 @@ namespace asi.asicentral.services.PersonifyProxy
                         matchMasterId = result.MasterCustomerId;
                     }
                     else
-                    { // none have activites
-                        matchMasterId = leadCustomers.Count > 0 ? leadCustomers[0].MasterCustomerId : masterIdList[0];
+                    { // none have activites, get the latest one
+                        max = asiCustomers.Max(item => item.UserDefinedEntryDate);
+                        var company = asiCustomers.SingleOrDefault(item => item.UserDefinedEntryDate == max);
+                        if (company != null)
+                            matchMasterId = company.MasterCustomerId;
+                        else
+                            matchMasterId = leadCustomers.Count > 0 ? leadCustomers[0].MasterCustomerId : masterIdList[0];
                     }
                 }
             }
