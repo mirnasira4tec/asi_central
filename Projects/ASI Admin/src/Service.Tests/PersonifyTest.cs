@@ -324,6 +324,7 @@ namespace asi.asicentral.Tests
             var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);            
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.IsTrue(masterIdList.Count > 0);
+            Assert.IsTrue(dnsFlag);
 
             company.ExternalReference = string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
             company.MatchingCompanyIds = string.Join("|", masterIdList);
