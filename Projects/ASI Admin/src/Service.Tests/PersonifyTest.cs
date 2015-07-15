@@ -310,6 +310,30 @@ namespace asi.asicentral.Tests
 
         #endregion end FindCompanyInfo performance tests
 
+        [TestMethod]
+        public void AddActivity()
+        {
+            var company = GetStoreCompany("Reconcile Company Supplier 1",
+                                          "2135555552",
+                                          "individual4@reconcile.com",
+                                          "SUPPLIER");
+
+            IBackendService personify = new PersonifyService();
+            List<string> masterIdList = null;
+            bool dnsFlag = false;
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);            
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.IsTrue(masterIdList.Count > 0);
+            Assert.IsTrue(dnsFlag);
+
+            company.ExternalReference = string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+            company.MatchingCompanyIds = string.Join("|", masterIdList);
+
+            personify.AddActivities(company, 
+                                    "This company tried to purchase supplier membership from the store but was rejected because the DNS flag is set to true. ", 
+                                    "CONTACTTRACKING");
+        }
+
         private IStoreService MockupStoreService()
         {
             var products = new List<ContextProduct>();
