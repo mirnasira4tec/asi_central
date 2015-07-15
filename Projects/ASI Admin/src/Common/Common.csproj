@@ -494,10 +494,10 @@
     <EmbeddedResource Include="views\store\GenericForm.cshtml" />
     <EmbeddedResource Include="views\store\ASIShowForm.cshtml" />
     <EmbeddedResource Include="views\store\RoadshowMLRForm.cshtml" />
-    <EmbeddedResource Include="views\store\RoadshowEexhibitorAgreement.cshtml" />
+    <EmbeddedResource Include="views\store\RoadshowExhibitorAgreement.cshtml" />
     <EmbeddedResource Include="views\store\SpaceDrawForm.cshtml" />
     <EmbeddedResource Include="views\store\SpaceDrawForm2015.cshtml" />
-    <EmbeddedResource Include="views\store\RoadshowEexhibitorAgreement2016.cshtml" />
+    <EmbeddedResource Include="views\store\RoadshowExhibitorAgreement2016.cshtml" />
     <EmbeddedResource Include="views\store\RoadshowMLRForm2016.cshtml" />
     <EmbeddedResource Include="views\store\SpaceDrawForm2016.cshtml" />
   </ItemGroup>
