@@ -327,14 +327,18 @@ namespace asi.asicentral.services
             if (customerInfo != null)
             {
                 companyInfo = PersonifyClient.GetCompanyInfo(customerInfo);
-			    //set dns flag
-                dnsFlag = PersonifyClient.CompanyDoNotCallFlag(customerInfo.MasterCustomerId, customerInfo.SubCustomerId);
             }
 
             log.Debug(string.Format("FindCompanyInfo - end: Company {0}, total matches: {1}; time: {2}",
                                     company.Name,
                                     matchList != null ? matchList.Count : 0,
                                     DateTime.Now.Subtract(startTime).TotalMilliseconds));
+			//set dns flag
+            if (customerInfo != null)
+            {
+                dnsFlag = PersonifyClient.CompanyDoNotCallFlag(customerInfo.MasterCustomerId, customerInfo.SubCustomerId);
+            }
+
             return companyInfo;
         }
 
@@ -352,9 +356,9 @@ namespace asi.asicentral.services
             return companyInfo;
         }
 
-        public virtual long AddActivities(string masterCustomerId, int subCustomerId, string activityText, string activityCode, long? parentActivityId)
+        public virtual void AddActivities(StoreCompany company, string activityText, string activityCode)
         {
-            return PersonifyClient.AddActivities(masterCustomerId, subCustomerId, activityText, activityCode, parentActivityId);
+            PersonifyClient.AddActivities(company, activityText, activityCode);
         }
 
 		private static string GetMessageSuffix(string url)

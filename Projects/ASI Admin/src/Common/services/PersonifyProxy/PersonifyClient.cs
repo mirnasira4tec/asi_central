@@ -421,35 +421,41 @@ namespace asi.asicentral.services.PersonifyProxy
 
         public static bool CompanyDoNotCallFlag(string masterCustomerId, int subCustomerId)
         {
+            _log.Debug("CompanyDoNotCallFlag - start");
+            var startTime = DateTime.Now;
             var cc = SvcClient.Ctxt.CusCommunications
                                    .Where(c => c.MasterCustomerId == masterCustomerId &&
                                                c.SubCustomerId == subCustomerId &&
                                                c.DoNotCallFlag == true).ToList();
 
-            return cc.Count > 0;
+            _log.Debug(string.Format("CompanyDoNotCallFlag - end ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
+            return cc.Any();
         }
 
-        public static long AddActivities(string masterCustomerId, int subCustomerId, string activityText, string activityCode, long? parentActivityId = null)
+        public static void AddActivities(StoreCompany company, string activityText, string activityCode)
         {
-            long activityId = 0;
-            if (!string.IsNullOrEmpty(masterCustomerId))
+            if (!string.IsNullOrEmpty(company.ExternalReference))
             {
+                string[] references = company.ExternalReference.Split(';');
+                int subCustomerId = Int32.Parse(references[1]);
+                var masterCustomerId = references[0];
+
                 var activity = SvcClient.Create<CusActivity>();
                 activity.MasterCustomerId = masterCustomerId;
                 activity.SubCustomerId = subCustomerId;
-                activity.ActivityText = activityText;
-                activity.ParentActivityId = parentActivityId;
-                activity.ActivityCode = activityCode;
+                activity.ActivityCode = "CONTACTTRACKING"; // hard-coded for now
                 activity.ActivityDate = DateTime.Now;
                 activity.Subsystem = "MRM";
-                activity.CallTypeCode = "PHONE-INBOUND";
+                activity.CallTypeCode = "PHONE-INBOUND"; // hard-coded for now
+                activity.ActivityText = activityText;
+
+                if (!string.IsNullOrEmpty(company.MatchingCompanyIds))
+                {
+                    activity.ActivityText = string.Format("{0} We also potentially matched the operation with those other companies: {1}", activityText, company.MatchingCompanyIds);
+                }
 
                 SvcClient.Save<CusActivity>(activity);
-
-                activityId = activity.CustomerActivityId;
             }
-
-            return activityId;
         }
 
         #region matching company with name, email or phone
@@ -467,17 +473,7 @@ namespace asi.asicentral.services.PersonifyProxy
             var companyInfo = GetCompanyWithLatestNote(matchList);
 
             if (companyInfo != null)
-            {
-                var parentActivityId = AddActivities(companyInfo.MasterCustomerId, companyInfo.SubCustomerId, "Reconcile company", "CONTACTTRACKING");
-                foreach (var id in matchList)
-                {
-                    string[] references = id.Split(';');
-                    int subId = references.Length > 1 ? Int32.Parse(references[1]) : 0;
-                    var masterId = references[0];
-
-                    PersonifyClient.AddActivities(masterId, subId, "Reconcile company match company", "CONTACTTRACKING", parentActivityId);
-                }
-            }
+                matchList.Remove(companyInfo.MasterCustomerId);
 
             _log.Debug(string.Format("FindMatchingCompany - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
 

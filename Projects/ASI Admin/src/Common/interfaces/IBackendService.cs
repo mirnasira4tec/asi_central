@@ -36,6 +36,6 @@ namespace asi.asicentral.interfaces
 
         CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList, ref bool dnsFlg);
 
-        long AddActivities(string masterCustomerId, int subCustomerId, string activityText, string activityCode, long? parentActivityId = null);
+        void AddActivities(StoreCompany company, string activityText, string activityCode);
     }
 }
