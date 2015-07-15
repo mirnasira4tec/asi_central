@@ -419,6 +419,39 @@ namespace asi.asicentral.services.PersonifyProxy
 	    }
 	    #endregion Getting company information
 
+        public static bool CompanyDoNotCallFlag(string masterCustomerId, int subCustomerId)
+        {
+            var cc = SvcClient.Ctxt.CusCommunications
+                                   .Where(c => c.MasterCustomerId == masterCustomerId &&
+                                               c.SubCustomerId == subCustomerId &&
+                                               c.DoNotCallFlag == true).ToList();
+
+            return cc.Count > 0;
+        }
+
+        public static long AddActivities(string masterCustomerId, int subCustomerId, string activityText, string activityCode, long? parentActivityId = null)
+        {
+            long activityId = 0;
+            if (!string.IsNullOrEmpty(masterCustomerId))
+            {
+                var activity = SvcClient.Create<CusActivity>();
+                activity.MasterCustomerId = masterCustomerId;
+                activity.SubCustomerId = subCustomerId;
+                activity.ActivityText = activityText;
+                activity.ParentActivityId = parentActivityId;
+                activity.ActivityCode = activityCode;
+                activity.ActivityDate = DateTime.Now;
+                activity.Subsystem = "MRM";
+                activity.CallTypeCode = "PHONE-INBOUND";
+
+                SvcClient.Save<CusActivity>(activity);
+
+                activityId = activity.CustomerActivityId;
+            }
+
+            return activityId;
+        }
+
         #region matching company with name, email or phone
         private static CustomerInfo FindMatchingCompany(StoreCompany company, ref List<string> matchList)
         {
@@ -432,6 +465,20 @@ namespace asi.asicentral.services.PersonifyProxy
 
             matchList = matchList.Distinct().ToList();
             var companyInfo = GetCompanyWithLatestNote(matchList);
+
+            if (companyInfo != null)
+            {
+                var parentActivityId = AddActivities(companyInfo.MasterCustomerId, companyInfo.SubCustomerId, "Reconcile company", "CONTACTTRACKING");
+                foreach (var id in matchList)
+                {
+                    string[] references = id.Split(';');
+                    int subId = references.Length > 1 ? Int32.Parse(references[1]) : 0;
+                    var masterId = references[0];
+
+                    PersonifyClient.AddActivities(masterId, subId, "Reconcile company match company", "CONTACTTRACKING", parentActivityId);
+                }
+            }
+
             _log.Debug(string.Format("FindMatchingCompany - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
 
             return companyInfo;
@@ -504,51 +551,44 @@ namespace asi.asicentral.services.PersonifyProxy
                 cusCommunications = SvcClient.Ctxt.CusCommunications.AddQueryOption("$filter", filter);
             }
 
-            if (matchBoth)
-            { // ?? should be a company if match both phone and email
-                masterIdList.AddRange(cusCommunications.ToList().Select(c => c.MasterCustomerId).Distinct());
+            string condition = null;
+            foreach (var cus in cusCommunications)
+            {
+                if (condition == null)
+                    condition = string.Format("(MasterCustomerId eq '{0}' and SubCustomerId eq {1})",
+                                                cus.MasterCustomerId, cus.SubCustomerId);
+                else
+                    condition = string.Format("{0} or (MasterCustomerId eq '{1}' and SubCustomerId eq {2})",
+                                                condition, cus.MasterCustomerId, cus.SubCustomerId);
             }
-            else
-            { // need to check it is an individual or company
-                string condition = null;
-                foreach (var cus in cusCommunications)
+
+            if (condition != null)
+            {
+                var customInfos = SvcClient.Ctxt.ASICustomerInfos.AddQueryOption("$filter", condition);
+                string condition2 = null;
+                foreach (var info in customInfos)
                 {
-                    if (condition == null)
-                        condition = string.Format("(MasterCustomerId eq '{0}' and SubCustomerId eq {1})",
-                                                   cus.MasterCustomerId, cus.SubCustomerId);
+                    if (string.Equals(info.RecordType, RECORD_TYPE_CORPORATE, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        masterIdList.Add(info.MasterCustomerId);                                    
+                    }
                     else
-                        condition = string.Format("{0} or (MasterCustomerId eq '{1}' and SubCustomerId eq {2})",
-                                                   condition, cus.MasterCustomerId, cus.SubCustomerId);
+                    {  // it is an individual
+                        if (condition2 == null)
+                            condition2 = string.Format("(RelatedMasterCustomerId eq '{0}' and RelatedSubCustomerId eq {1} and RelationshipType eq 'EMPLOYMENT')",
+                                                        info.MasterCustomerId, info.SubCustomerId);
+                        else
+                            condition2 = string.Format("{0} or (RelatedMasterCustomerId eq '{1}' and RelatedSubCustomerId eq {2} and RelationshipType eq 'EMPLOYMENT')",
+                                                        condition, info.MasterCustomerId, info.SubCustomerId);
+                    }
                 }
 
-                if (condition != null)
+                // find company info for individuals
+                if (condition2 != null)
                 {
-                    var customInfos = SvcClient.Ctxt.ASICustomerInfos.AddQueryOption("$filter", condition);
-                    string condition2 = null;
-                    foreach (var info in customInfos)
-                    {
-                        if (string.Equals(info.RecordType, RECORD_TYPE_CORPORATE, StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            masterIdList.Add(info.MasterCustomerId);                                    
-                        }
-                        else
-                        {  // it is an individual
-                            if (condition2 == null)
-                                condition2 = string.Format("(RelatedMasterCustomerId eq '{0}' and RelatedSubCustomerId eq {1} and RelationshipType eq 'EMPLOYMENT')",
-                                                           info.MasterCustomerId, info.SubCustomerId);
-                            else
-                                condition2 = string.Format("{0} or (RelatedMasterCustomerId eq '{1}' and RelatedSubCustomerId eq {2} and RelationshipType eq 'EMPLOYMENT')",
-                                                           condition, info.MasterCustomerId, info.SubCustomerId);
-                        }
-                    }
-
-                    // find company info for individuals
-                    if (condition2 != null)
-                    {
-                        var cusRelations = SvcClient.Ctxt.CusRelationships.AddQueryOption("$filter", condition2);
-                        foreach (var r in cusRelations)
-                            masterIdList.Add(r.MasterCustomerId);
-                    }
+                    var cusRelations = SvcClient.Ctxt.CusRelationships.AddQueryOption("$filter", condition2);
+                    foreach (var r in cusRelations)
+                        masterIdList.Add(r.MasterCustomerId);
                 }
             }
             _log.Debug(string.Format("MatchPhoneEmail - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
