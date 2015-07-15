@@ -429,6 +429,29 @@ namespace asi.asicentral.services.PersonifyProxy
             return cc.Count > 0;
         }
 
+        public static long AddActivities(string masterCustomerId, int subCustomerId, string activityText, string activityCode, long? parentActivityId = null)
+        {
+            long activityId = 0;
+            if (!string.IsNullOrEmpty(masterCustomerId))
+            {
+                var activity = SvcClient.Create<CusActivity>();
+                activity.MasterCustomerId = masterCustomerId;
+                activity.SubCustomerId = subCustomerId;
+                activity.ActivityText = activityText;
+                activity.ParentActivityId = parentActivityId;
+                activity.ActivityCode = activityCode;
+                activity.ActivityDate = DateTime.Now;
+                activity.Subsystem = "MRM";
+                activity.CallTypeCode = "PHONE-INBOUND";
+
+                SvcClient.Save<CusActivity>(activity);
+
+                activityId = activity.CustomerActivityId;
+            }
+
+            return activityId;
+        }
+
         #region matching company with name, email or phone
         private static CustomerInfo FindMatchingCompany(StoreCompany company, ref List<string> matchList)
         {
@@ -442,6 +465,20 @@ namespace asi.asicentral.services.PersonifyProxy
 
             matchList = matchList.Distinct().ToList();
             var companyInfo = GetCompanyWithLatestNote(matchList);
+
+            if (companyInfo != null)
+            {
+                var parentActivityId = AddActivities(companyInfo.MasterCustomerId, companyInfo.SubCustomerId, "Reconcile company", "CONTACTTRACKING");
+                foreach (var id in matchList)
+                {
+                    string[] references = id.Split(';');
+                    int subId = references.Length > 1 ? Int32.Parse(references[1]) : 0;
+                    var masterId = references[0];
+
+                    PersonifyClient.AddActivities(masterId, subId, "Reconcile company match company", "CONTACTTRACKING", parentActivityId);
+                }
+            }
+
             _log.Debug(string.Format("FindMatchingCompany - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
 
             return companyInfo;

@@ -352,6 +352,11 @@ namespace asi.asicentral.services
             return companyInfo;
         }
 
+        public virtual long AddActivities(string masterCustomerId, int subCustomerId, string activityText, string activityCode, long? parentActivityId)
+        {
+            return PersonifyClient.AddActivities(masterCustomerId, subCustomerId, activityText, activityCode, parentActivityId);
+        }
+
 		private static string GetMessageSuffix(string url)
 		{
 			var s = "<br /><br />Thanks,<br /><br />ASICentral team";
