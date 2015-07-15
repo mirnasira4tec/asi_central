@@ -188,7 +188,7 @@ namespace asi.asicentral.services
 			order.ExternalReference = companyInfo.MasterCustomerId;
             //Add credit card to the company
 			//@todo CC Personify temporary measure, always add the credit card. No longer checking if (profile == string.Empty) from string profile = PersonifyClient.GetCreditCardProfileId(order.GetASICompany(), companyInfo, creditCard);
-			profile = PersonifyClient.SaveCreditCard(order.GetASICompany(), companyInfo, creditCard);
+			var profile = PersonifyClient.SaveCreditCard(order.GetASICompany(), companyInfo, creditCard);
             log.Debug(string.IsNullOrWhiteSpace(profile) ?
                 "Fail to save the credit." : string.Format("Saved credit profile id : {0}", profile));
             if (string.IsNullOrEmpty(profile)) throw new Exception("Credit card can't be saved to Personify.");
