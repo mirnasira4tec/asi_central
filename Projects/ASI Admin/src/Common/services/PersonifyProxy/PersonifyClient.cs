@@ -514,51 +514,44 @@ namespace asi.asicentral.services.PersonifyProxy
                 cusCommunications = SvcClient.Ctxt.CusCommunications.AddQueryOption("$filter", filter);
             }
 
-            if (matchBoth)
-            { // ?? should be a company if match both phone and email
-                masterIdList.AddRange(cusCommunications.ToList().Select(c => c.MasterCustomerId).Distinct());
+            string condition = null;
+            foreach (var cus in cusCommunications)
+            {
+                if (condition == null)
+                    condition = string.Format("(MasterCustomerId eq '{0}' and SubCustomerId eq {1})",
+                                                cus.MasterCustomerId, cus.SubCustomerId);
+                else
+                    condition = string.Format("{0} or (MasterCustomerId eq '{1}' and SubCustomerId eq {2})",
+                                                condition, cus.MasterCustomerId, cus.SubCustomerId);
             }
-            else
-            { // need to check it is an individual or company
-                string condition = null;
-                foreach (var cus in cusCommunications)
+
+            if (condition != null)
+            {
+                var customInfos = SvcClient.Ctxt.ASICustomerInfos.AddQueryOption("$filter", condition);
+                string condition2 = null;
+                foreach (var info in customInfos)
                 {
-                    if (condition == null)
-                        condition = string.Format("(MasterCustomerId eq '{0}' and SubCustomerId eq {1})",
-                                                   cus.MasterCustomerId, cus.SubCustomerId);
+                    if (string.Equals(info.RecordType, RECORD_TYPE_CORPORATE, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        masterIdList.Add(info.MasterCustomerId);                                    
+                    }
                     else
-                        condition = string.Format("{0} or (MasterCustomerId eq '{1}' and SubCustomerId eq {2})",
-                                                   condition, cus.MasterCustomerId, cus.SubCustomerId);
+                    {  // it is an individual
+                        if (condition2 == null)
+                            condition2 = string.Format("(RelatedMasterCustomerId eq '{0}' and RelatedSubCustomerId eq {1} and RelationshipType eq 'EMPLOYMENT')",
+                                                        info.MasterCustomerId, info.SubCustomerId);
+                        else
+                            condition2 = string.Format("{0} or (RelatedMasterCustomerId eq '{1}' and RelatedSubCustomerId eq {2} and RelationshipType eq 'EMPLOYMENT')",
+                                                        condition, info.MasterCustomerId, info.SubCustomerId);
+                    }
                 }
 
-                if (condition != null)
+                // find company info for individuals
+                if (condition2 != null)
                 {
-                    var customInfos = SvcClient.Ctxt.ASICustomerInfos.AddQueryOption("$filter", condition);
-                    string condition2 = null;
-                    foreach (var info in customInfos)
-                    {
-                        if (string.Equals(info.RecordType, RECORD_TYPE_CORPORATE, StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            masterIdList.Add(info.MasterCustomerId);                                    
-                        }
-                        else
-                        {  // it is an individual
-                            if (condition2 == null)
-                                condition2 = string.Format("(RelatedMasterCustomerId eq '{0}' and RelatedSubCustomerId eq {1} and RelationshipType eq 'EMPLOYMENT')",
-                                                           info.MasterCustomerId, info.SubCustomerId);
-                            else
-                                condition2 = string.Format("{0} or (RelatedMasterCustomerId eq '{1}' and RelatedSubCustomerId eq {2} and RelationshipType eq 'EMPLOYMENT')",
-                                                           condition, info.MasterCustomerId, info.SubCustomerId);
-                        }
-                    }
-
-                    // find company info for individuals
-                    if (condition2 != null)
-                    {
-                        var cusRelations = SvcClient.Ctxt.CusRelationships.AddQueryOption("$filter", condition2);
-                        foreach (var r in cusRelations)
-                            masterIdList.Add(r.MasterCustomerId);
-                    }
+                    var cusRelations = SvcClient.Ctxt.CusRelationships.AddQueryOption("$filter", condition2);
+                    foreach (var r in cusRelations)
+                        masterIdList.Add(r.MasterCustomerId);
                 }
             }
             _log.Debug(string.Format("MatchPhoneEmail - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
