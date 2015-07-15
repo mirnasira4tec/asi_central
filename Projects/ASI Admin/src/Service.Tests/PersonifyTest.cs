@@ -329,7 +329,7 @@ namespace asi.asicentral.Tests
             company.MatchingCompanyIds = string.Join("|", masterIdList);
 
             personify.AddActivities(company, 
-                                    "This company tried to purchase distributor membership from the store but was rejected because the DNS flag is set to true. ", 
+                                    "This company tried to purchase supplier membership from the store but was rejected because the DNS flag is set to true. ", 
                                     "CONTACTTRACKING");
         }
 
