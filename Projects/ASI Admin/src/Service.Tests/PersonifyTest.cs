@@ -156,10 +156,10 @@ namespace asi.asicentral.Tests
 
         #region FindCompanyInfo performance tests
         // Companys and Employees: 
-        //      Reconcile Company Supplier 1, 2135555551, 000010252975
+        //      Reconcile Company Supplier 1, 2135555551, LEAD, 000010252975
         //          Reconcile Individual1, 2135555551, 2135555552, individual1@reconcile.com, : 000010252976
         //
-        //      Reconcile Company Supplier 2, 2135555561, 000010252977
+        //      Reconcile Company Supplier 2, 2135555561, LEAD, 000010252977
         //          Reconcile Individual2, 2135555561, 2135555552, individual2@reconcile.com, : 000010252978
         //
         //      Reconcile Company Supplier 3, 2135555541, ASICENTRAL : 000010252985
@@ -168,17 +168,28 @@ namespace asi.asicentral.Tests
         //      Reconcile Company Distributor 1, 2135555571,      : 000010252979
         //          Reconcile Individual3, 2135555571, 2135555552, individual3@reconcile.com, : 000010252980
         //
-        //      Reconcile Company Decorator 1, 2135555581,      : 000010252982
+        //      Reconcile Company Distributor 2, 2135555501, LEAD : 000010252994
+        //          Reconcile Individual6, 2135555502, 2135555552, individual6@reconcile.com, : 000010252995
+        //
+        //      Reconcile Company Distributor 3, 2135555591, LEAD : 000010252996
+        //          Reconcile Individual7, 2135555592, 2135555552, individual7@reconcile.com, : 
+        //
+        //      Reconcile Company Decorator 1, 2135555581, LEAD  : 000010252982
         //          Reconcile Individual4, 2135555581, 2135555552, individual4@reconcile.com, : 000010252984
+        //
+        //      Reconcile Company Decorator 2, 2135555511,      : 000010252998
+        //          Reconcile Individual8, 2135555512, 2135555553, individual8@reconcile.com, : 000010252999
+        //
+        //      Reconcile Company Decorator 3, 2135555531,      : 000010253000
+        //          Reconcile Individual9, 2135555532, 2135555553, individual9@reconcile.com, : 000010253001
         //
         [TestMethod]
         public void ReconcileCompanyPerformance()
         {
             ReconcileCompanyMatchNameOnly();
             ReconcileCompanyMatchNameOnly();
-            ReconcileCompanyNameWithSpecialChars();
-            ReconcileCompanySupplierWithIndividualEmail();
-            ReconcileCompanyWithPhoneEmail();
+            ReconcileCompanySupplierWithPhoneEmail();
+            ReconcileCompanyNonSupplierPhoneEmail();
             ReconcileCompanyMultipleMatches();
             ReconcileCompanySupplierNoMatch();
         }
@@ -187,7 +198,7 @@ namespace asi.asicentral.Tests
         public void ReconcileCompanyMatchNameOnly()
         {
             var company = GetStoreCompany("Reconcile Company Distributor 1", 
-                                          "1111111111", 
+                                          "1110001111", 
                                           "noMatch@reconcile.com", 
                                           "DISTRIBUTOR");
 
@@ -197,28 +208,21 @@ namespace asi.asicentral.Tests
             var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
-        }
+            Assert.AreEqual(companyInfo.Name, "Reconcile Company Distributor 1");
 
-        [TestMethod]
-        public void ReconcileCompanyNameWithSpecialChars()
-        {
-            var company = GetStoreCompany(".Reconcile Company $@#?$!&,Distributor 1.",
-                                          "1111111111",
-                                          "noMatch@reconcile.com",
-                                          "DISTRIBUTOR");
-
-            IBackendService personify = new PersonifyService();
-            List<string> masterIdList = null;
-            bool dnsFlag = false;
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            // company name with extra special characters
+            company.Name = ".Reconcile $@#?Company $@#?$!&,Distributor 1.";
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
             Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.AreEqual(companyInfo.Name, "Reconcile Company Distributor 1");
             Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
         }
 
         [TestMethod]
-        public void ReconcileCompanySupplierWithIndividualEmail()
+        public void ReconcileCompanySupplierWithPhoneEmail()
         {
-            var company = GetStoreCompany("Failed Match",
+            // match email only
+            var company = GetStoreCompany("Failed aaa Match",
                                           "1110011100",
                                           "individual1@reconcile.com",
                                           "SUPPLIER");
@@ -228,11 +232,63 @@ namespace asi.asicentral.Tests
             bool dnsFlag = false;
             var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
             Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.AreEqual(companyInfo.Name, "Reconcile Company Supplier 1");
+
+            // match phone or email with LEAD matches
+            company.Phone = "2135555552";
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.IsTrue(companyInfo.MemberStatus.ToUpper() == "ASICENTRAL" ||
+                          companyInfo.MemberStatus.ToUpper() == "LEAD");
+
+            company.Phone = "2135555553";
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.IsTrue(companyInfo.MemberStatus.ToUpper() == "ASICENTRAL" ||
+                          companyInfo.MemberStatus.ToUpper() == "LEAD");
+
+            // phone or email without LEAD matches
+            company = GetStoreCompany("Failed aaa Match",
+                                      "2135555553",
+                                      "nommmmatch@reconcile.com",
+                                      "SUPPLIER"); ;
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.IsTrue(companyInfo.MemberStatus.ToUpper() != "ASICENTRAL" &&
+                          companyInfo.MemberStatus.ToUpper() != "LEAD");
         }
 
         [TestMethod]
-        public void ReconcileCompanyWithPhoneEmail()
+        public void ReconcileCompanyNonSupplierPhoneEmail()
         {
+            //Distributor
+            var company = GetStoreCompany("No matchhhh",
+                                          "2135555571",
+                                          "individual3@reconcile.com",
+                                          "DISTRIBUTOR");
+
+            IBackendService personify = new PersonifyService();
+            List<string> masterIdList = null;
+            bool dnsFlag = false;
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.AreEqual(companyInfo.Name, "Reconcile Company Distributor 1");
+
+            //Decorator 
+            company = GetStoreCompany("No matchhhh",
+                                      "2135555553",
+                                      "individual8@reconcile.com",
+                                      "DECORATOR");
+
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.AreEqual(companyInfo.Name, "Reconcile Company Decorator 2");
+        }
+
+        [TestMethod]
+        public void ReconcileCompanyMultipleMatches()
+        {
+            //Distributor
             var company = GetStoreCompany("Reconcile Company Distributor 1",
                                           "2135555552",
                                           "individual3@reconcile.com",
@@ -244,22 +300,29 @@ namespace asi.asicentral.Tests
             var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
-        }
 
-        [TestMethod]
-        public void ReconcileCompanyMultipleMatches()
-        {
-            var company = GetStoreCompany("Reconcile Company Supplier 1",
-                                          "2135555552",
-                                          "individual4@reconcile.com",
-                                          "SUPPLIER");
+            //Decorator with LEAD
+            company = GetStoreCompany("Reconcile Company Decorator 1",
+                                      "2135555553",
+                                      "individual8@reconcile.com",
+                                      "DECORATOR");
 
-            IBackendService personify = new PersonifyService();
-            List<string> masterIdList = null;
-            bool dnsFlag = false;
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
             Assert.IsTrue(companyInfo.CompanyId > 0);
-            Assert.IsTrue(masterIdList.Count > 0);
+            Assert.AreEqual(companyInfo.Name, "Reconcile Company Decorator 1");
+            Assert.IsTrue(companyInfo.MemberStatus.ToUpper() == "ASICENTRAL" ||
+                          companyInfo.MemberStatus.ToUpper() == "LEAD");
+
+            //Decorator without LEAD
+            company = GetStoreCompany("Reconcile Company Decorator 2",
+                                      "2135555553",
+                                      "individual8@reconcile.com",
+                                      "DECORATOR");
+
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.IsTrue(companyInfo.MemberStatus.ToUpper() != "ASICENTRAL" &&
+                          companyInfo.MemberStatus.ToUpper() != "LEAD");
         }
 
         [TestMethod]
