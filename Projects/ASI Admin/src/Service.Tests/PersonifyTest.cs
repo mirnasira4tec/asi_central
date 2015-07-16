@@ -329,9 +329,9 @@ namespace asi.asicentral.Tests
             company.ExternalReference = string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
             company.MatchingCompanyIds = string.Join("|", masterIdList);
 
-            personify.AddActivities(company, 
-                                    "This company tried to purchase supplier membership from the store but was rejected because the DNS flag is set to true. ", 
-                                    "CONTACTTRACKING");
+            personify.AddActivity(company, 
+                                  "This company tried to purchase supplier membership from the store but was rejected because the DNS flag is set to true. ", 
+                                  "CONTACTTRACKING");
         }
 
         private IStoreService MockupStoreService()
