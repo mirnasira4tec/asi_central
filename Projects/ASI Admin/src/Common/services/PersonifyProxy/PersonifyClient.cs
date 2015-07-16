@@ -432,7 +432,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return cc.Any();
         }
 
-        public static void AddActivities(StoreCompany company, string activityText, string activityCode)
+        public static void AddActivity(StoreCompany company, string activityText, string activityCode)
         {
             if (!string.IsNullOrEmpty(company.ExternalReference))
             {

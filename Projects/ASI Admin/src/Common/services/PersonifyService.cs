@@ -356,9 +356,9 @@ namespace asi.asicentral.services
             return companyInfo;
         }
 
-        public virtual void AddActivities(StoreCompany company, string activityText, string activityCode)
+        public virtual void AddActivity(StoreCompany company, string activityText, string activityCode)
         {
-            PersonifyClient.AddActivities(company, activityText, activityCode);
+            PersonifyClient.AddActivity(company, activityText, activityCode);
         }
 
 		private static string GetMessageSuffix(string url)
