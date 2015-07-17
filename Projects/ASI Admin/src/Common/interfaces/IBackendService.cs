@@ -34,6 +34,8 @@ namespace asi.asicentral.interfaces
 
         CompanyInformation AddCompany(CompanyInformation companyInfo);
 
+        CompanyInformation CreateCompany(StoreCompany storeCompany, string customerClassCode, IList<LookSendMyAdCountryCode> countryCodes);
+
         CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList, ref bool dnsFlg);
 
         void AddActivity(StoreCompany company, string activityText, string activityCode);

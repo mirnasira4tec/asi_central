@@ -95,42 +95,61 @@ namespace asi.asicentral.services.PersonifyProxy
             string countryCode = countryCodes != null ? countryCodes.Alpha3Code(companyAddress.Country) : companyAddress.Country;
             if (customerInfo == null)
             {
-                //company not already there, create a new one
-                var saveCustomerInput = new SaveCustomerInput { LastName = company.Name, CustomerClassCode = customerClassCode };
-                AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_PHONE, company.Phone,
-                    COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode);
-                AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_FAX, company.Fax,
-                    COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode);
-                AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_EMAIL, company.Email,
-                    COMMUNICATION_LOCATION_CODE_CORPORATE);
-                AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_WEB, company.WebURL,
-                    COMMUNICATION_LOCATION_CODE_CORPORATE);
-                var result = SvcClient.Post<SaveCustomerOutput>("CreateCompany", saveCustomerInput);
-                if (result != null && string.IsNullOrWhiteSpace(result.WarningMessage))
-                {
-                    var subCustomerId = result.SubCustomerId.HasValue ? result.SubCustomerId.Value : 0;
-                    //try update status, non critical but should be working
-                    var customers = SvcClient.Ctxt.ASICustomers.Where(
-                            p => p.MasterCustomerId == result.MasterCustomerId && p.SubCustomerId == subCustomerId).ToList();
-                    if (customers.Count > 0)
-                    {
-                        ASICustomer customer = customers[0];
-                        customer.UserDefinedMemberStatusString = "ASICENTRAL";
-                        SvcClient.Save<ASICustomer>(customer);
-                    }
-                    customerInfo = GetCompanyInfo(result.MasterCustomerId, subCustomerId);
-                }
+                customerInfo = CreateCompany(company, customerClassCode, countryCodes);
             }
-            else if (update)
-            {
-	            AddPhoneNumber(company.Phone, countryCode, customerInfo);
-            }
-	        if(customerInfo != null && update)
+            else 
             {
                 company.ExternalReference = customerInfo.MasterCustomerId + ";" + customerInfo.SubCustomerId;
-                AddCustomerAddresses(company, customerInfo, countryCodes);
+                if (update)
+                {
+                    AddPhoneNumber(company.Phone, countryCode, customerInfo);
+                    AddCustomerAddresses(company, customerInfo, countryCodes);
+                }
             }
 
+            return customerInfo;
+        }
+
+        public static CustomerInfo CreateCompany(StoreCompany storeCompany, string customerClassCode, IList<LookSendMyAdCountryCode> countryCodes)
+        {
+            var startTime = DateTime.Now;
+            _log.Debug(string.Format("CreateCompany - start: company name {0}", storeCompany.Name));
+
+            CustomerInfo customerInfo = null;
+            StoreAddress companyAddress = storeCompany.GetCompanyAddress();
+            string countryCode = countryCodes != null ? countryCodes.Alpha3Code(companyAddress.Country) : companyAddress.Country;
+
+            var saveCustomerInput = new SaveCustomerInput { LastName = storeCompany.Name, CustomerClassCode = customerClassCode };
+            AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_PHONE, storeCompany.Phone,
+                COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode);
+            AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_FAX, storeCompany.Fax,
+                COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode);
+            AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_EMAIL, storeCompany.Email,
+                COMMUNICATION_LOCATION_CODE_CORPORATE);
+            AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_WEB, storeCompany.WebURL,
+                COMMUNICATION_LOCATION_CODE_CORPORATE);
+
+            var result = SvcClient.Post<SaveCustomerOutput>("CreateCompany", saveCustomerInput);
+            if (result != null && string.IsNullOrWhiteSpace(result.WarningMessage))
+            {
+                var subCustomerId = result.SubCustomerId.HasValue ? result.SubCustomerId.Value : 0;
+                //try update status, non critical but should be working
+                var customers = SvcClient.Ctxt.ASICustomers.Where(
+                        p => p.MasterCustomerId == result.MasterCustomerId && p.SubCustomerId == subCustomerId).ToList();
+                if (customers.Count > 0)
+                {
+                    ASICustomer customer = customers[0];
+                    customer.UserDefinedMemberStatusString = "ASICENTRAL";
+                    SvcClient.Save<ASICustomer>(customer);
+                }
+
+                customerInfo = GetCompanyInfo(result.MasterCustomerId, subCustomerId);
+                AddPhoneNumber(storeCompany.Phone, countryCode, customerInfo);
+                storeCompany.ExternalReference = customerInfo.MasterCustomerId + ";" + customerInfo.SubCustomerId;
+                AddCustomerAddresses(storeCompany, customerInfo, countryCodes);
+            }
+
+            _log.Debug(string.Format("CreateCompany - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
             return customerInfo;
         }
 
@@ -570,10 +589,12 @@ namespace asi.asicentral.services.PersonifyProxy
             foreach (var cus in cusCommunications)
             {
                 if (condition == null)
-                    condition = string.Format("(MasterCustomerId eq '{0}' and SubCustomerId eq 0)", cus.MasterCustomerId);
+                    condition = string.Format("(MasterCustomerId eq '{0}' and SubCustomerId eq {1})", 
+                                               cus.MasterCustomerId,
+                                               cus.SubCustomerId);
                 else
-                    condition = string.Format("{0} or (MasterCustomerId eq '{1}' and SubCustomerId eq 0)",
-                                              condition, cus.MasterCustomerId);
+                    condition = string.Format("{0} or (MasterCustomerId eq '{1}' and SubCustomerId eq {2})",
+                                              condition, cus.MasterCustomerId, cus.SubCustomerId);
             }
 
             if (condition != null)
@@ -582,17 +603,17 @@ namespace asi.asicentral.services.PersonifyProxy
                 string condition2 = null;
                 foreach (var info in customInfos)
                 {
-                    if (string.Equals(info.RecordType, RECORD_TYPE_CORPORATE, StringComparison.InvariantCultureIgnoreCase))
+                    if (info.SubCustomerId == 0 && string.Equals(info.RecordType, RECORD_TYPE_CORPORATE, StringComparison.InvariantCultureIgnoreCase))
                     {
                         masterIdList.Add(info.MasterCustomerId);
                     }
                     else
                     {  // it is an individual
                         if (condition2 == null)
-                            condition2 = string.Format("(RelatedMasterCustomerId eq '{0}' and RelatedSubCustomerId eq {1} and RelationshipType eq 'EMPLOYMENT')",
+                            condition2 = string.Format("(SubCustomerId eq 0 and RelatedMasterCustomerId eq '{0}' and RelatedSubCustomerId eq {1} and RelationshipType eq 'EMPLOYMENT')",
                                                         info.MasterCustomerId, info.SubCustomerId);
                         else
-                            condition2 = string.Format("{0} or (RelatedMasterCustomerId eq '{1}' and RelatedSubCustomerId eq {2} and RelationshipType eq 'EMPLOYMENT')",
+                            condition2 = string.Format("{0} or (SubCustomerId eq 0 and RelatedMasterCustomerId eq '{1}' and RelatedSubCustomerId eq {2} and RelationshipType eq 'EMPLOYMENT')",
                                                         condition2, info.MasterCustomerId, info.SubCustomerId);
                     }
                 }

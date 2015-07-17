@@ -154,6 +154,20 @@ namespace asi.asicentral.Tests
 			}
 		}
 
+        [TestMethod]
+        public void CreatCompany()
+        {
+            var companyName = "Createcompany" + DateTime.Now.Ticks;
+            StoreCompany company = GetStoreCompany(companyName, "2122223333", "createCompany@unittest.com", "SUPPLIER");
+            IBackendService personify = new PersonifyService();
+            var companyInfo = personify.CreateCompany(company, "SUPPLIER" , null);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.AreEqual("SUPPLIER", companyInfo.MemberType);
+            Assert.AreEqual(companyName, companyInfo.Name);
+            Assert.IsTrue(!string.IsNullOrEmpty(company.ExternalReference));
+        }
+
+
         #region FindCompanyInfo performance tests
         // Companys and Employees: 
         //      Reconcile Company Supplier 1, 2135555551, LEAD, 000010252975
