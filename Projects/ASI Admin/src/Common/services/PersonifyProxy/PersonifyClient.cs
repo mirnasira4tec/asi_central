@@ -91,8 +91,6 @@ namespace asi.asicentral.services.PersonifyProxy
         {
             List<string> masterIdList = null;
             var customerInfo = FindCustomerInfo(company, ref masterIdList);
-            StoreAddress companyAddress = company.GetCompanyAddress();
-            string countryCode = countryCodes != null ? countryCodes.Alpha3Code(companyAddress.Country) : companyAddress.Country;
             if (customerInfo == null)
             {
                 customerInfo = CreateCompany(company, customerClassCode, countryCodes);
@@ -102,6 +100,8 @@ namespace asi.asicentral.services.PersonifyProxy
                 company.ExternalReference = customerInfo.MasterCustomerId + ";" + customerInfo.SubCustomerId;
                 if (update)
                 {
+                    StoreAddress companyAddress = company.GetCompanyAddress();
+                    string countryCode = countryCodes != null ? countryCodes.Alpha3Code(companyAddress.Country) : companyAddress.Country;
                     AddPhoneNumber(company.Phone, countryCode, customerInfo);
                     AddCustomerAddresses(company, customerInfo, countryCodes);
                 }
