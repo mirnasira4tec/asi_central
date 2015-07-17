@@ -317,6 +317,15 @@ namespace asi.asicentral.services
             return companyInformation;
         }
 
+        public virtual CompanyInformation CreateCompany(StoreCompany storeCompany, string customerClassCode)
+        {
+            var countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
+            CustomerInfo customerInfo = PersonifyClient.CreateCompany(storeCompany, customerClassCode, countryCodes);
+            CompanyInformation company = customerInfo != null ? PersonifyClient.GetCompanyInfo(customerInfo) : null;
+
+            return company;
+        }
+
         public virtual CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList, ref bool dnsFlag)
         {
             var startTime = DateTime.Now;

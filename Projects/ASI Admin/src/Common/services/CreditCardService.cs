@@ -45,9 +45,12 @@ namespace asi.asicentral.services
             string result;
             ILogService log = null;
 			//check for ASI #
-			var hasASINumber = order.Company != null && !string.IsNullOrEmpty(order.Company.ASINumber);
+            var companyExist = order.Company != null && (!string.IsNullOrEmpty(order.Company.ASINumber) || 
+                                                         (!string.IsNullOrEmpty(order.Company.ExternalReference) &&
+                                                          !string.Equals(order.Company.ExternalReference, "NOT_FOUND")));
+            
             //save the credit card in personify if we have an asi number but not if we have an external reference (already comes from personify)
-            if ((backendIntegration || hasASINumber) && string.IsNullOrEmpty(creditCard.ExternalReference))
+            if ((backendIntegration || companyExist) && string.IsNullOrEmpty(creditCard.ExternalReference))
 	        {
 				//put the credit card in back office directly
 		        try

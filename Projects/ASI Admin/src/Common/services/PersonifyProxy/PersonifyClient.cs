@@ -91,46 +91,64 @@ namespace asi.asicentral.services.PersonifyProxy
         {
             List<string> masterIdList = null;
             var customerInfo = FindCustomerInfo(company, ref masterIdList);
-            StoreAddress companyAddress = company.GetCompanyAddress();
-            string countryCode = countryCodes != null ? countryCodes.Alpha3Code(companyAddress.Country) : companyAddress.Country;
             if (customerInfo == null)
             {
-                //company not already there, create a new one
-                var saveCustomerInput = new SaveCustomerInput { LastName = company.Name, CustomerClassCode = customerClassCode };
-                AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_PHONE, company.Phone,
-                    COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode);
-                AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_FAX, company.Fax,
-                    COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode);
-                AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_EMAIL, company.Email,
-                    COMMUNICATION_LOCATION_CODE_CORPORATE);
-                AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_WEB, company.WebURL,
-                    COMMUNICATION_LOCATION_CODE_CORPORATE);
-                var result = SvcClient.Post<SaveCustomerOutput>("CreateCompany", saveCustomerInput);
-                if (result != null && string.IsNullOrWhiteSpace(result.WarningMessage))
-                {
-                    var subCustomerId = result.SubCustomerId.HasValue ? result.SubCustomerId.Value : 0;
-                    //try update status, non critical but should be working
-                    var customers = SvcClient.Ctxt.ASICustomers.Where(
-                            p => p.MasterCustomerId == result.MasterCustomerId && p.SubCustomerId == subCustomerId).ToList();
-                    if (customers.Count > 0)
-                    {
-                        ASICustomer customer = customers[0];
-                        customer.UserDefinedMemberStatusString = "ASICENTRAL";
-                        SvcClient.Save<ASICustomer>(customer);
-                    }
-                    customerInfo = GetCompanyInfo(result.MasterCustomerId, subCustomerId);
-                }
+                customerInfo = CreateCompany(company, customerClassCode, countryCodes);
             }
-            else if (update)
-            {
-	            AddPhoneNumber(company.Phone, countryCode, customerInfo);
-            }
-	        if(customerInfo != null && update)
+            else 
             {
                 company.ExternalReference = customerInfo.MasterCustomerId + ";" + customerInfo.SubCustomerId;
-                AddCustomerAddresses(company, customerInfo, countryCodes);
+                if (update)
+                {
+                    StoreAddress companyAddress = company.GetCompanyAddress();
+                    string countryCode = countryCodes != null ? countryCodes.Alpha3Code(companyAddress.Country) : companyAddress.Country;
+                    AddPhoneNumber(company.Phone, countryCode, customerInfo);
+                    AddCustomerAddresses(company, customerInfo, countryCodes);
+                }
             }
 
+            return customerInfo;
+        }
+
+        public static CustomerInfo CreateCompany(StoreCompany storeCompany, string customerClassCode, IList<LookSendMyAdCountryCode> countryCodes)
+        {
+            var startTime = DateTime.Now;
+            _log.Debug(string.Format("CreateCompany - start: company name {0}", storeCompany.Name));
+
+            CustomerInfo customerInfo = null;
+            StoreAddress companyAddress = storeCompany.GetCompanyAddress();
+            string countryCode = countryCodes != null ? countryCodes.Alpha3Code(companyAddress.Country) : companyAddress.Country;
+
+            var saveCustomerInput = new SaveCustomerInput { LastName = storeCompany.Name, CustomerClassCode = customerClassCode };
+            AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_PHONE, storeCompany.Phone,
+                COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode);
+            AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_FAX, storeCompany.Fax,
+                COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode);
+            AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_EMAIL, storeCompany.Email,
+                COMMUNICATION_LOCATION_CODE_CORPORATE);
+            AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_WEB, storeCompany.WebURL,
+                COMMUNICATION_LOCATION_CODE_CORPORATE);
+
+            var result = SvcClient.Post<SaveCustomerOutput>("CreateCompany", saveCustomerInput);
+            if (result != null && string.IsNullOrWhiteSpace(result.WarningMessage))
+            {
+                var subCustomerId = result.SubCustomerId.HasValue ? result.SubCustomerId.Value : 0;
+                //try update status, non critical but should be working
+                var customers = SvcClient.Ctxt.ASICustomers.Where(
+                        p => p.MasterCustomerId == result.MasterCustomerId && p.SubCustomerId == subCustomerId).ToList();
+                if (customers.Count > 0)
+                {
+                    ASICustomer customer = customers[0];
+                    customer.UserDefinedMemberStatusString = "ASICENTRAL";
+                    SvcClient.Save<ASICustomer>(customer);
+                }
+
+                customerInfo = GetCompanyInfo(result.MasterCustomerId, subCustomerId);
+                storeCompany.ExternalReference = customerInfo.MasterCustomerId + ";" + customerInfo.SubCustomerId;
+                AddCustomerAddresses(storeCompany, customerInfo, countryCodes);
+            }
+
+            _log.Debug(string.Format("CreateCompany - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
             return customerInfo;
         }
 
@@ -401,9 +419,12 @@ namespace asi.asicentral.services.PersonifyProxy
             if (company == null || string.IsNullOrWhiteSpace(company.Name)) throw new Exception("Store company is not valid.");
 			if (!string.IsNullOrEmpty(company.ExternalReference))
 			{
-				string[] references = company.ExternalReference.Split(';');
-				int subCustomerId = Int32.Parse(references[1]);
-				companyInfo = GetCompanyInfo(references[0], subCustomerId);
+                if( !string.Equals(company.ExternalReference, "NOT_FOUND"))
+                {
+				    string[] references = company.ExternalReference.Split(';');
+				    int subCustomerId = Int32.Parse(references[1]);
+				    companyInfo = GetCompanyInfo(references[0], subCustomerId);
+                }
 			}
 			else if (!string.IsNullOrEmpty(company.ASINumber))
 			{  //look company by ASI#
@@ -516,46 +537,66 @@ namespace asi.asicentral.services.PersonifyProxy
                 return;
             }
 
-            var cusCommunications = SvcClient.Ctxt.CusCommunications.Where(c => c.SubCustomerId == 0);
+            var filter = string.Empty;
+            if (!string.IsNullOrEmpty(company.Phone))
+            {
+                filter = string.Format("SearchPhoneAddress eq '{0}'", IgnoreSpecialChars(company.Phone));
+            }
+
+            if (!string.IsNullOrEmpty(email))
+            {
+                var emailFilter = string.Format("FormattedPhoneAddress eq '{0}'", email);
+                if (string.IsNullOrEmpty(filter))
+                    filter = emailFilter;
+                else
+                    filter = string.Format("({0}) or ({1})", filter, emailFilter);
+            }
+
+            var cusCommunications = SvcClient.Ctxt.CusCommunications.AddQueryOption("$filter", filter).ToList();
+
             if (matchBoth)
             {
-                cusCommunications = cusCommunications.Where(c => string.Compare(c.FormattedPhoneAddress, email) == 0 &&
-                                                                 string.Compare(c.CommTypeCodeString, COMMUNICATION_INPUT_EMAIL) == 0 );
+                // get matches from phone/email separately
+                var emailMatches = cusCommunications.Where(c => string.Compare(c.SearchPhoneAddress, email) == 0);
+                var phoneMatches = cusCommunications.Where(c => string.Compare(c.SearchPhoneAddress, IgnoreSpecialChars(company.Phone)) == 0);
 
-                cusCommunications = cusCommunications.Where(c => string.Compare(c.SearchPhoneAddress, IgnoreSpecialChars(company.Phone)) == 0 &&
-                                                                 string.Compare(c.CommTypeCodeString, COMMUNICATION_INPUT_PHONE) == 0);
+                if (emailMatches.Count() > 0 && phoneMatches.Count() > 0)
+                {  // Get companys matching both phone and email.
+                    var idsFromEmail = new List<string>();
+                    var idsFromPhone = new List<string>();
+                    GetMatchCompanys(emailMatches, idsFromEmail);
+                    GetMatchCompanys(phoneMatches, idsFromPhone);
+                    foreach (var e in idsFromEmail)
+                    {
+                        if (idsFromPhone.FirstOrDefault(p => p == e) != null)
+                        {
+                            masterIdList.Add(e);
+                        }
+                    }
+                }
             }
             else
             {
-                var filter = string.Empty;
-
-                if (!string.IsNullOrEmpty(company.Phone))
-                {
-                    filter = string.Format("SearchPhoneAddress eq '{0}' and CommTypeCodeString eq '{1}'",
-                                            IgnoreSpecialChars(company.Phone), COMMUNICATION_INPUT_PHONE);
-                }
-
-                if (!string.IsNullOrEmpty(email))
-                {
-                    var emailFilter = string.Format("FormattedPhoneAddress eq '{0}' and CommTypeCodeString eq '{1}'",
-                                                     email, COMMUNICATION_INPUT_EMAIL);
-                    if (string.IsNullOrEmpty(filter))
-                        filter = emailFilter;
-                    else
-                        filter = string.Format("({0}) or ({1})", filter, emailFilter);
-                }
-                cusCommunications = SvcClient.Ctxt.CusCommunications.AddQueryOption("$filter", filter);
+                // either phone or email matches is oK
+                GetMatchCompanys(cusCommunications, masterIdList);
             }
 
+            _log.Debug(string.Format("MatchPhoneEmail - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
+        }
+
+        // get company MasterCustomerIds from list of CusCommunications
+        private static void GetMatchCompanys(IEnumerable<CusCommunication> cusCommunications, List<string> masterIdList)
+        {
             string condition = null;
             foreach (var cus in cusCommunications)
             {
                 if (condition == null)
-                    condition = string.Format("(MasterCustomerId eq '{0}' and SubCustomerId eq {1})",
-                                                cus.MasterCustomerId, cus.SubCustomerId);
+                    condition = string.Format("(MasterCustomerId eq '{0}' and SubCustomerId eq {1})", 
+                                               cus.MasterCustomerId,
+                                               cus.SubCustomerId);
                 else
                     condition = string.Format("{0} or (MasterCustomerId eq '{1}' and SubCustomerId eq {2})",
-                                                condition, cus.MasterCustomerId, cus.SubCustomerId);
+                                              condition, cus.MasterCustomerId, cus.SubCustomerId);
             }
 
             if (condition != null)
@@ -564,18 +605,18 @@ namespace asi.asicentral.services.PersonifyProxy
                 string condition2 = null;
                 foreach (var info in customInfos)
                 {
-                    if (string.Equals(info.RecordType, RECORD_TYPE_CORPORATE, StringComparison.InvariantCultureIgnoreCase))
+                    if (info.SubCustomerId == 0 && string.Equals(info.RecordType, RECORD_TYPE_CORPORATE, StringComparison.InvariantCultureIgnoreCase))
                     {
-                        masterIdList.Add(info.MasterCustomerId);                                    
+                        masterIdList.Add(info.MasterCustomerId);
                     }
                     else
                     {  // it is an individual
                         if (condition2 == null)
-                            condition2 = string.Format("(RelatedMasterCustomerId eq '{0}' and RelatedSubCustomerId eq {1} and RelationshipType eq 'EMPLOYMENT')",
+                            condition2 = string.Format("(SubCustomerId eq 0 and RelatedMasterCustomerId eq '{0}' and RelatedSubCustomerId eq {1} and RelationshipType eq 'EMPLOYMENT')",
                                                         info.MasterCustomerId, info.SubCustomerId);
                         else
-                            condition2 = string.Format("{0} or (RelatedMasterCustomerId eq '{1}' and RelatedSubCustomerId eq {2} and RelationshipType eq 'EMPLOYMENT')",
-                                                        condition, info.MasterCustomerId, info.SubCustomerId);
+                            condition2 = string.Format("{0} or (SubCustomerId eq 0 and RelatedMasterCustomerId eq '{1}' and RelatedSubCustomerId eq {2} and RelationshipType eq 'EMPLOYMENT')",
+                                                        condition2, info.MasterCustomerId, info.SubCustomerId);
                     }
                 }
 
@@ -587,9 +628,8 @@ namespace asi.asicentral.services.PersonifyProxy
                         masterIdList.Add(r.MasterCustomerId);
                 }
             }
-            _log.Debug(string.Format("MatchPhoneEmail - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
         }
-        
+
         private static string IgnoreSpecialChars(string input)
         {
             return Regex.Replace(input.Trim(), @"[\.\$@&#\?,!]*", "");
@@ -643,12 +683,13 @@ namespace asi.asicentral.services.PersonifyProxy
                     }
                     else
                     { // none have activites, get the latest one
-                        max = asiCustomers.Max(item => item.UserDefinedEntryDate);
-                        var company = asiCustomers.SingleOrDefault(item => item.UserDefinedEntryDate == max);
+                        var resultCustomers = leadCustomers.Count > 1 ? leadCustomers : asiCustomers;
+                        var maxDate = resultCustomers.Max(item => item.UserDefinedEntryDate);
+                        var company = resultCustomers.FirstOrDefault(item => item.UserDefinedEntryDate == maxDate);
                         if (company != null)
                             matchMasterId = company.MasterCustomerId;
                         else
-                            matchMasterId = leadCustomers.Count > 0 ? leadCustomers[0].MasterCustomerId : masterIdList[0];
+                            matchMasterId = resultCustomers[0].MasterCustomerId;
                     }
                 }
             }
