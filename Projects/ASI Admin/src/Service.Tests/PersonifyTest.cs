@@ -159,7 +159,7 @@ namespace asi.asicentral.Tests
         {
             var companyName = "Createcompany" + DateTime.Now.Ticks;
             StoreCompany company = GetStoreCompany(companyName, "2122223333", "createCompany@unittest.com", "SUPPLIER");
-            IBackendService personify = new PersonifyService();
+            IBackendService personify = new PersonifyService(MockupStoreService());
             var companyInfo = personify.CreateCompany(company, "SUPPLIER");
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.AreEqual("SUPPLIER", companyInfo.MemberType);

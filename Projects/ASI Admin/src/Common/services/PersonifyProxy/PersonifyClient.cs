@@ -144,7 +144,6 @@ namespace asi.asicentral.services.PersonifyProxy
                 }
 
                 customerInfo = GetCompanyInfo(result.MasterCustomerId, subCustomerId);
-                AddPhoneNumber(storeCompany.Phone, countryCode, customerInfo);
                 storeCompany.ExternalReference = customerInfo.MasterCustomerId + ";" + customerInfo.SubCustomerId;
                 AddCustomerAddresses(storeCompany, customerInfo, countryCodes);
             }
@@ -420,9 +419,12 @@ namespace asi.asicentral.services.PersonifyProxy
             if (company == null || string.IsNullOrWhiteSpace(company.Name)) throw new Exception("Store company is not valid.");
 			if (!string.IsNullOrEmpty(company.ExternalReference))
 			{
-				string[] references = company.ExternalReference.Split(';');
-				int subCustomerId = Int32.Parse(references[1]);
-				companyInfo = GetCompanyInfo(references[0], subCustomerId);
+                if( !string.Equals(company.ExternalReference, "NOT_FOUND"))
+                {
+				    string[] references = company.ExternalReference.Split(';');
+				    int subCustomerId = Int32.Parse(references[1]);
+				    companyInfo = GetCompanyInfo(references[0], subCustomerId);
+                }
 			}
 			else if (!string.IsNullOrEmpty(company.ASINumber))
 			{  //look company by ASI#
