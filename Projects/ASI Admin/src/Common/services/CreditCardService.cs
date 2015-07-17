@@ -3,6 +3,7 @@ using asi.asicentral.interfaces;
 using asi.asicentral.model;
 using asi.asicentral.model.store;
 using System;
+using asi.asicentral.util.store;
 
 namespace asi.asicentral.services
 {
@@ -47,7 +48,7 @@ namespace asi.asicentral.services
 			//check for ASI #
             var companyExist = order.Company != null && (!string.IsNullOrEmpty(order.Company.ASINumber) || 
                                                          (!string.IsNullOrEmpty(order.Company.ExternalReference) &&
-                                                          !string.Equals(order.Company.ExternalReference, "NOT_FOUND")));
+                                                          !string.Equals(order.Company.ExternalReference, Helper.NOT_FOUND)));
             
             //save the credit card in personify if we have an asi number but not if we have an external reference (already comes from personify)
             if ((backendIntegration || companyExist) && string.IsNullOrEmpty(creditCard.ExternalReference))
