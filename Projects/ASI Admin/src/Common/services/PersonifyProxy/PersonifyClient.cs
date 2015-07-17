@@ -11,6 +11,7 @@ using asi.asicentral.PersonifyDataASI;
 
 using PersonifySvcClient;
 using System.Text.RegularExpressions;
+using asi.asicentral.util.store;
 
 namespace asi.asicentral.services.PersonifyProxy
 {
@@ -419,7 +420,7 @@ namespace asi.asicentral.services.PersonifyProxy
             if (company == null || string.IsNullOrWhiteSpace(company.Name)) throw new Exception("Store company is not valid.");
 			if (!string.IsNullOrEmpty(company.ExternalReference))
 			{
-                if( !string.Equals(company.ExternalReference, "NOT_FOUND"))
+                if (!string.Equals(company.ExternalReference, Helper.NOT_FOUND))
                 {
 				    string[] references = company.ExternalReference.Split(';');
 				    int subCustomerId = Int32.Parse(references[1]);
