@@ -553,8 +553,8 @@ namespace asi.asicentral.services.PersonifyProxy
             var idsFromPhone = new List<string>();
             var phoneFilter = string.IsNullOrEmpty(company.Phone) ? string.Empty
                                     : string.Format("SearchPhoneAddress eq '{0}'", IgnoreSpecialChars(company.Phone));
-            var emailFilter = string.IsNullOrEmpty(email) ? string.Empty 
-                                    : string.Format("FormattedPhoneAddress eq '{0}'", email);
+            var emailFilter = string.IsNullOrEmpty(email) ? string.Empty
+                                    : string.Format("SearchPhoneAddress eq '{0}'", email);
 
             Task[] tasks = new Task[2]
                             {
