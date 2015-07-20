@@ -34,7 +34,7 @@ namespace asi.asicentral.interfaces
 
         CompanyInformation AddCompany(CompanyInformation companyInfo);
 
-        CompanyInformation CreateCompany(StoreCompany storeCompany, string customerClassCode);
+        CompanyInformation CreateCompany(StoreCompany storeCompany, string storeType);
 
         CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList, ref bool dnsFlg);
 
