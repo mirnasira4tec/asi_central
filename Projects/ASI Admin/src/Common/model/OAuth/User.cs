@@ -44,6 +44,7 @@ namespace asi.asicentral.model
 
         public string AsiNumber { get; set; }
         public string CompanyName { get; set; }
+        public string CompanyPhone { get; set; }
         public string MemberStatus_CD { get; set; }
         public string MemberType_CD { get; set; }
         public int MemberTypeId { get; set; }
