@@ -1,19 +1,16 @@
-﻿using System.Web.SessionState;
-using asi.asicentral.interfaces;
+﻿using asi.asicentral.interfaces;
+using asi.asicentral.model;
 using asi.asicentral.model.store;
+using asi.asicentral.PersonifyDataASI;
+using asi.asicentral.util.store;
+using asi.asicentral.util.store.companystore;
+using PersonifySvcClient;
 using System;
 using System.Collections.Generic;
 using System.Data.Services.Client;
 using System.Linq;
-using asi.asicentral.util.store.companystore;
-using asi.asicentral.model;
-using asi.asicentral.PersonifyDataASI;
-
-using PersonifySvcClient;
 using System.Text.RegularExpressions;
-using asi.asicentral.util.store;
 using System.Threading.Tasks;
-using System.Threading;
 
 namespace asi.asicentral.services.PersonifyProxy
 {
@@ -45,6 +42,8 @@ namespace asi.asicentral.services.PersonifyProxy
 		private static readonly IDictionary<string, string> ASICanadaCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "CAN AMEX" }, { "DISCOVER", "CAN DISC" }, { "MASTERCARD", "CAN MC" }, { "VISA", "CAN VISA" } };
 		private static readonly IDictionary<string, IDictionary<string, string>> CreditCardType = new Dictionary<string, IDictionary<string, string>>(3, StringComparer.InvariantCultureIgnoreCase) { { "ASI", ASICreditCardType }, { "ASI Show", ASIShowCreditCardType }, { "ASI Canada", ASICanadaCreditCardType } };
 		private static readonly IDictionary<string, string> CompanyNumber = new Dictionary<string, string>(3, StringComparer.InvariantCultureIgnoreCase) { { "ASI", "1" }, { "ASI Show", "2" }, { "ASI Canada", "4" } };
+        private static readonly IDictionary<Activity, IList<string>> ActivityCodes = new Dictionary<Activity, IList<string>>() { { Activity.Exception, new List<string>(){ "EXCEPTION", "VALIDATION" } }, 
+                                                                                                                                 { Activity.Order, new List<string>(){ "ACTIVITY", "ORDER" } } };
 
         public static CreateOrderOutput CreateOrder(StoreOrder storeOrder,
             CustomerInfo companyInfo,
@@ -456,27 +455,31 @@ namespace asi.asicentral.services.PersonifyProxy
             return cc.Any();
         }
 
-        public static void AddActivity(StoreCompany company, string activityText, string activityCode)
+        public static void AddActivity(StoreCompany company, string activityText, Activity activityType)
         {
             if (!string.IsNullOrEmpty(company.ExternalReference))
             {
                 string[] references = company.ExternalReference.Split(';');
                 int subCustomerId = Int32.Parse(references[1]);
                 var masterCustomerId = references[0];
-
+                var curActivity = ActivityCodes.Keys.Contains(activityType) ? ActivityCodes[activityType] : ActivityCodes[Activity.Exception];
+               
                 var activity = SvcClient.Create<CusActivity>();
                 activity.MasterCustomerId = masterCustomerId;
                 activity.SubCustomerId = subCustomerId;
-                activity.ActivityCode = activityCode;
+                activity.ActivityCode = "CONTACTTRACKING";
+                activity.CallTopicCode = curActivity[0];
+                activity.CallTopicSubcode = curActivity[1];
+                activity.CallTypeCode = "STORE"; 
                 activity.ActivityDate = DateTime.Now;
                 activity.Subsystem = "MRM";
-                activity.CallTypeCode = "PHONE-INBOUND"; // hard-coded for now
-                activity.ActivityText = activityText;
 
                 if (!string.IsNullOrEmpty(company.MatchingCompanyIds))
                 {
                     activity.ActivityText = string.Format("{0} We also potentially matched the operation with those other companies: {1}", activityText, company.MatchingCompanyIds);
                 }
+                else
+                    activity.ActivityText = activityText;
 
                 SvcClient.Save<CusActivity>(activity);
             }
