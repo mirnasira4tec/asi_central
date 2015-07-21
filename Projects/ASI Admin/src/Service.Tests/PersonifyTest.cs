@@ -10,6 +10,8 @@ using asi.asicentral.services.PersonifyProxy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using asi.asicentral.model.timss;
+using asi.asicentral.util.store;
+using PersonifySvcClient;
 
 namespace asi.asicentral.Tests
 {
@@ -407,7 +409,27 @@ namespace asi.asicentral.Tests
 
             personify.AddActivity(company, 
                                   "This company tried to purchase supplier membership from the store but was rejected because the DNS flag is set to true. ", 
-                                  "CONTACTTRACKING");
+                                  Activity.Exception);
+        }
+
+        [TestMethod]
+        public void PersonifyAddActivity()
+        {
+            var activity = SvcClient.Create<CusActivity>();
+            activity.MasterCustomerId = "000010252985";
+            activity.SubCustomerId = 0;
+            activity.ActivityCode = "CONTACTTRACKING";
+            activity.CallTopicCode = "EXCEPTION";
+            activity.CallTopicSubcode = "VALIDATION";
+            activity.CallTypeCode = "STORE"; 
+            activity.ActivityDate = DateTime.Now;
+            activity.Subsystem = "MRM";
+            activity.ActivityText = "Test personify activity Type and Subject.";
+
+            var result = SvcClient.Save<CusActivity>(activity);
+            Assert.AreEqual(result.CallTopicCode, "EXCEPTION");
+            Assert.AreEqual(result.CallTopicSubcode, "VALIDATION");
+            Assert.AreEqual(result.CallTypeCode, "STORE");
         }
 
         private IStoreService MockupStoreService()

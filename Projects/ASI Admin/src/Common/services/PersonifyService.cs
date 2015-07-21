@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using asi.asicentral.services.PersonifyProxy;
 using asi.asicentral.model.timss;
+using asi.asicentral.util.store;
 
 namespace asi.asicentral.services
 {
@@ -365,9 +366,9 @@ namespace asi.asicentral.services
             return companyInfo;
         }
 
-        public virtual void AddActivity(StoreCompany company, string activityText, string activityCode)
+        public virtual void AddActivity(StoreCompany company, string activityText, Activity activityType)
         {
-            PersonifyClient.AddActivity(company, activityText, activityCode);
+            PersonifyClient.AddActivity(company, activityText, activityType);
         }
 
 		private static string GetMessageSuffix(string url)
