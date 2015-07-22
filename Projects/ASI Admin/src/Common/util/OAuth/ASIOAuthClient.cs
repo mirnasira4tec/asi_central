@@ -20,7 +20,6 @@ namespace asi.asicentral.oauth
         //http://stage-asiservice.asicentral.com/nanny/api/lookup?typecodename=signonstatus
 
         //Code list from personify
-        //
         [Description("Active")]
         ACTV,
         [Description("Active")]
