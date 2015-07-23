@@ -346,7 +346,7 @@ namespace asi.asicentral.services
 			//set dns flag
             if (customerInfo != null)
             {
-                dnsFlag = PersonifyClient.CompanyDoNotCallFlag(customerInfo.MasterCustomerId, customerInfo.SubCustomerId);
+                dnsFlag = PersonifyClient.CompanyDoNotSolicitFlag(customerInfo.MasterCustomerId, customerInfo.SubCustomerId);
             }
 
             return companyInfo;
