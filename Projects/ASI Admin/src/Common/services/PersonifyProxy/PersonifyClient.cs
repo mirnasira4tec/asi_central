@@ -442,17 +442,11 @@ namespace asi.asicentral.services.PersonifyProxy
 	    }
 	    #endregion Getting company information
 
-        public static bool CompanyDoNotCallFlag(string masterCustomerId, int subCustomerId)
+        public static bool CompanyDoNotSolicitFlag(string masterCustomerId, int subCustomerId)
         {
-            _log.Debug("CompanyDoNotCallFlag - start");
-            var startTime = DateTime.Now;
-            var cc = SvcClient.Ctxt.CusCommunications
-                                   .Where(c => c.MasterCustomerId == masterCustomerId &&
-                                               c.SubCustomerId == subCustomerId &&
-                                               c.DoNotCallFlag == true).ToList();
-
-            _log.Debug(string.Format("CompanyDoNotCallFlag - end ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
-            return cc.Any();
+            //_log.Debug("CompanyDoNotCallFlag - start");
+            //_log.Debug(string.Format("CompanyDoNotCallFlag - end ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
+            return false;
         }
 
         public static void AddActivity(StoreCompany company, string activityText, Activity activityType)
