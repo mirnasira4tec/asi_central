@@ -686,12 +686,15 @@ namespace asi.asicentral.services.PersonifyProxy
                     else
                     { // none have activites, get the latest one
                         var resultCustomers = leadCustomers.Count > 1 ? leadCustomers : asiCustomers;
-                        var maxDate = resultCustomers.Max(item => item.UserDefinedEntryDate);
-                        var company = resultCustomers.FirstOrDefault(item => item.UserDefinedEntryDate == maxDate);
-                        if (company != null)
-                            matchMasterId = company.MasterCustomerId;
-                        else if (resultCustomers != null && resultCustomers.Count > 0)
-                            matchMasterId = resultCustomers[0].MasterCustomerId;
+                        if (resultCustomers != null && resultCustomers.Count > 0)
+                        {
+                            var maxId = resultCustomers.Max(item => item.MasterCustomerId);
+                            var company = resultCustomers.FirstOrDefault(item => item.MasterCustomerId == maxId);
+                            if (company != null)
+                                matchMasterId = company.MasterCustomerId;
+                            else
+                                matchMasterId = resultCustomers[0].MasterCustomerId;
+                        }
                     }
                 }
             }
