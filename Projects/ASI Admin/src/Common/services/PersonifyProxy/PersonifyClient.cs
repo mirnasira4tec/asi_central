@@ -690,7 +690,7 @@ namespace asi.asicentral.services.PersonifyProxy
                         var company = resultCustomers.FirstOrDefault(item => item.UserDefinedEntryDate == maxDate);
                         if (company != null)
                             matchMasterId = company.MasterCustomerId;
-                        else
+                        else if (resultCustomers != null && resultCustomers.Count > 0)
                             matchMasterId = resultCustomers[0].MasterCustomerId;
                     }
                 }
