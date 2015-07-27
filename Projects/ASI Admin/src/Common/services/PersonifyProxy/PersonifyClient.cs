@@ -677,8 +677,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 if ( matchMasterId == null)
                 {
                     var cusActivities = SvcClient.Ctxt.CusActivities.AddQueryOption("$filter", condition).ToList();
-                    var max = cusActivities.Max(item => item.ActivityDate);
-                    var result = cusActivities.SingleOrDefault(item => item.ActivityDate == max);
+                    var result = cusActivities.OrderByDescending(c => c.ActivityDate).FirstOrDefault();
                     if (result != null)
                     {
                         matchMasterId = result.MasterCustomerId;
@@ -686,10 +685,9 @@ namespace asi.asicentral.services.PersonifyProxy
                     else
                     { // none have activites, get the latest one
                         var resultCustomers = leadCustomers.Count > 1 ? leadCustomers : asiCustomers;
-                        if (resultCustomers != null && resultCustomers.Count > 0)
+                        if (resultCustomers != null && resultCustomers.Any())
                         {
-                            var maxId = resultCustomers.Max(item => item.MasterCustomerId);
-                            var company = resultCustomers.FirstOrDefault(item => item.MasterCustomerId == maxId);
+                            var company = resultCustomers.OrderByDescending(c => c.MasterCustomerId).FirstOrDefault();
                             if (company != null)
                                 matchMasterId = company.MasterCustomerId;
                             else
