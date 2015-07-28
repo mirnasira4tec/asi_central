@@ -16,46 +16,9 @@ namespace asi.asicentral.Tests
     [TestClass]
     public class ShowServiceTest
     {
-        
+       
         [TestMethod]
         public void ShowTypeTest()
-        {
-            int ShowTypeId;
-            string Type = "East";
-            using (var objectContext = new ShowContext())
-            {
-                int recordCount = objectContext.ShowType.Count();
-                Assert.IsTrue(recordCount >= 0);
-                ShowType context = new ShowType()
-                {
-                    Type = Type,
-                    CreateDate = DateTime.UtcNow,
-                    UpdateDate = DateTime.UtcNow,
-                    UpdateSource = "Test Case",
-                };
-                objectContext.ShowType.Add(context);
-                objectContext.SaveChanges();
-                ShowTypeId = context.Id;
-            }
-            using (var objectContext = new ShowContext())
-            {
-                ShowType context = objectContext.ShowType.Where(ctxt => ctxt.Id == ShowTypeId).SingleOrDefault();
-                Assert.IsNotNull(context);
-                Assert.AreEqual(Type, context.Type);
-                objectContext.ShowType.Remove(context);
-                objectContext.SaveChanges();
-            }
-            using (var objectContext = new ShowContext())
-            {
-                ShowType context = objectContext.ShowType.Where(ctxt => ctxt.Id == ShowTypeId).SingleOrDefault();
-                Assert.IsNull(context);
-            }
-        
-            
-        }
-
-        [TestMethod]
-        public void ShowTypeTest1()
         {
             Registry registry = new EFRegistry();
             IContainer container = new Container(registry);

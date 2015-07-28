@@ -294,7 +294,6 @@
     <Compile Include="database\mappings\store\TermsConditionsTypeMap.cs" />
     <Compile Include="database\mappings\timss\PersonifyMappingMap.cs" />
     <Compile Include="database\MemberDemogrContext.cs" />
-    <Compile Include="database\ShowContext.cs" />
     <Compile Include="database\Umbraco_ShowContext.cs" />
     <Compile Include="interfaces\ICreditCardService.cs" />
     <Compile Include="model\CompanyInformation.cs" />

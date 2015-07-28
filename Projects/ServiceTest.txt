@@ -660,3 +660,91 @@ where ([ShowTypeId] = @0)
 FROM [dbo].[ShowType] AS [Extent1]
 WHERE [Extent1].[ShowTypeId] = @p__linq__0
 -- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 13
+2015-07-28 04:52:39,764 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Starting a SQL Execution
+2015-07-28 04:52:39,806 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Executed SQL (00:00:00.0293306): insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource])
+values (@0, @1, @2, @3)
+select [ShowTypeId]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [ShowTypeId] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "East"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/28/2015 8:52:37 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/28/2015 8:52:38 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "ShowServiceTest - ShowTypeTest1"
+2015-07-28 04:52:45,612 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Starting a SQL Execution
+2015-07-28 04:52:45,614 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Executed SQL (00:00:00.0015124): SELECT TOP (2) 
+[Extent1].[ShowTypeId] AS [ShowTypeId], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[CreateDateUTC] AS [CreateDateUTC], 
+[Extent1].[UpdateDateUTC] AS [UpdateDateUTC], 
+[Extent1].[UpdateSource] AS [UpdateSource]
+FROM [dbo].[ShowType] AS [Extent1]
+WHERE [Extent1].[ShowTypeId] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 1
+2015-07-28 04:52:45,988 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Starting a SQL Execution
+2015-07-28 04:52:45,991 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Executed SQL (00:00:00.0028464): update [dbo].[ShowType]
+set [Type] = @0, [CreateDateUTC] = @1, [UpdateDateUTC] = @2, [UpdateSource] = @3
+where ([ShowTypeId] = @4)
+
+-- @0 (dbtype=String, size=-1, direction=Input) = "West"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/28/2015 8:52:37 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/28/2015 8:52:45 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "ShowServiceTest - ShowTypeTest1"
+-- @4 (dbtype=Int32, size=0, direction=Input) = 1
+2015-07-28 04:52:47,735 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Starting a SQL Execution
+2015-07-28 04:52:47,737 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Executed SQL (00:00:00.0016269): delete [dbo].[ShowType]
+where ([ShowTypeId] = @0)
+-- @0 (dbtype=Int32, size=0, direction=Input) = 1
+2015-07-28 04:52:48,205 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Starting a SQL Execution
+2015-07-28 04:52:48,206 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Executed SQL (00:00:00.0007257): SELECT TOP (2) 
+[Extent1].[ShowTypeId] AS [ShowTypeId], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[CreateDateUTC] AS [CreateDateUTC], 
+[Extent1].[UpdateDateUTC] AS [UpdateDateUTC], 
+[Extent1].[UpdateSource] AS [UpdateSource]
+FROM [dbo].[ShowType] AS [Extent1]
+WHERE [Extent1].[ShowTypeId] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 1
+2015-07-28 05:09:32,209 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Starting a SQL Execution
+2015-07-28 05:09:32,222 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Executed SQL (00:00:00.0015603): insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource])
+values (@0, @1, @2, @3)
+select [ShowTypeId]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [ShowTypeId] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "East"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/28/2015 9:09:29 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/28/2015 9:09:31 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "ShowServiceTest - ShowTypeTest1"
+2015-07-28 05:09:38,670 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Starting a SQL Execution
+2015-07-28 05:09:38,671 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Executed SQL (00:00:00.0009886): SELECT TOP (2) 
+[Extent1].[ShowTypeId] AS [ShowTypeId], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[CreateDateUTC] AS [CreateDateUTC], 
+[Extent1].[UpdateDateUTC] AS [UpdateDateUTC], 
+[Extent1].[UpdateSource] AS [UpdateSource]
+FROM [dbo].[ShowType] AS [Extent1]
+WHERE [Extent1].[ShowTypeId] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 2
+2015-07-28 05:09:39,432 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Starting a SQL Execution
+2015-07-28 05:09:39,432 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Executed SQL (00:00:00.0007116): update [dbo].[ShowType]
+set [Type] = @0, [CreateDateUTC] = @1, [UpdateDateUTC] = @2, [UpdateSource] = @3
+where ([ShowTypeId] = @4)
+
+-- @0 (dbtype=String, size=-1, direction=Input) = "West"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/28/2015 9:09:29 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/28/2015 9:09:38 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "ShowServiceTest - ShowTypeTest1"
+-- @4 (dbtype=Int32, size=0, direction=Input) = 2
+2015-07-28 05:09:43,718 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Starting a SQL Execution
+2015-07-28 05:09:43,719 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Executed SQL (00:00:00.0005879): delete [dbo].[ShowType]
+where ([ShowTypeId] = @0)
+-- @0 (dbtype=Int32, size=0, direction=Input) = 2
+2015-07-28 05:09:44,540 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Starting a SQL Execution
+2015-07-28 05:09:44,541 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Executed SQL (00:00:00.0008098): SELECT TOP (2) 
+[Extent1].[ShowTypeId] AS [ShowTypeId], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[CreateDateUTC] AS [CreateDateUTC], 
+[Extent1].[UpdateDateUTC] AS [UpdateDateUTC], 
+[Extent1].[UpdateSource] AS [UpdateSource]
+FROM [dbo].[ShowType] AS [Extent1]
+WHERE [Extent1].[ShowTypeId] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 2
