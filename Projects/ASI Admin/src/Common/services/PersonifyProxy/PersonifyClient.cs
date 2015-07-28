@@ -488,7 +488,8 @@ namespace asi.asicentral.services.PersonifyProxy
             matchList = new List<string>();
             var nameMatchList = new List<string>();
             var phoneEmailMatchList = new List<string>();
-            bool matchBoth = !string.Equals(company.MemberType, "Supplier", StringComparison.InvariantCultureIgnoreCase);
+            bool matchBoth = !string.Equals(company.MemberType, "SUPPLIER", StringComparison.InvariantCultureIgnoreCase) &&
+                             !string.Equals(company.MemberType, "EQUIPMENT", StringComparison.InvariantCultureIgnoreCase);
 
             Task[] tasks = new Task[2]
             {

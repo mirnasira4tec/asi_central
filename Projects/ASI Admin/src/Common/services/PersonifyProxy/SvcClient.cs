@@ -34,6 +34,7 @@ namespace PersonifySvcClient
                 if (ctxt == null)
                 {
                     ctxt = new PersonifyEntitiesASI(svcUri);
+                    ctxt.MergeOption = MergeOption.OverwriteChanges;
 
                     //enable authentication if necessary
                     if (Convert.ToBoolean(EnableBasicAuthentication) == true)
