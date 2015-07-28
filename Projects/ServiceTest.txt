@@ -1,0 +1,662 @@
+2015-07-21 05:56:39,921 [10] DEBUG asi.asicentral.database.StoreContext - Starting a SQL Execution
+2015-07-21 05:56:39,969 [10] DEBUG asi.asicentral.database.StoreContext - Executed SQL (00:00:00.0359930): SELECT
+`GroupBy1`.`A1` AS `C1`
+FROM (SELECT
+COUNT(1) AS `A1`
+FROM `PROD_Context` AS `Extent1`) AS `GroupBy1`
+2015-07-21 05:56:40,182 [10] DEBUG asi.asicentral.database.StoreContext - Starting a SQL Execution
+2015-07-21 05:56:40,189 [10] DEBUG asi.asicentral.database.StoreContext - Executed SQL (00:00:00.0065981): INSERT INTO `PROD_Context`(
+`Type`, 
+`Name`, 
+`Active`, 
+`ExpiryDateUTC`, 
+`CreateDateUTC`, 
+`UpdateDateUTC`, 
+`UpdateSource`, 
+`NotificationEmails`, 
+`HasBackendNotificationFlag`, 
+`NumberOfPages`, 
+`HeaderImage`, 
+`ChatSettings`, 
+`ConversionSettings`, 
+`Phone`) VALUES (
+@gp1, 
+@gp2, 
+0, 
+NULL, 
+@gp3, 
+@gp4, 
+@gp5, 
+NULL, 
+0, 
+0, 
+NULL, 
+NULL, 
+NULL, 
+NULL);
+SELECT
+`ContextId`
+FROM `PROD_Context`
+ WHERE  row_count() > 0 AND `ContextId`=last_insert_id()
+-- @gp1 (dbtype=String, size=15, direction=Input) = "Yann MemberShip"
+-- @gp2 (dbtype=String, size=15, direction=Input) = "Yann MemberShip"
+-- @gp3 (dbtype=DateTime, size=0, direction=Input) = 7/21/2015 9:56:39 AM
+-- @gp4 (dbtype=DateTime, size=0, direction=Input) = 7/21/2015 9:56:39 AM
+-- @gp5 (dbtype=String, size=9, direction=Input) = "Test Case"
+2015-07-21 05:56:40,342 [10] DEBUG asi.asicentral.database.StoreContext - Starting a SQL Execution
+2015-07-21 05:56:40,344 [10] DEBUG asi.asicentral.database.StoreContext - Executed SQL (00:00:00.0012885): SELECT
+`Extent1`.`ContextId`, 
+`Extent1`.`Type`, 
+`Extent1`.`Name`, 
+`Extent1`.`Active`, 
+`Extent1`.`ExpiryDateUTC`, 
+`Extent1`.`CreateDateUTC`, 
+`Extent1`.`UpdateDateUTC`, 
+`Extent1`.`UpdateSource`, 
+`Extent1`.`NotificationEmails`, 
+`Extent1`.`HasBackendNotificationFlag`, 
+`Extent1`.`NumberOfPages`, 
+`Extent1`.`HeaderImage`, 
+`Extent1`.`ChatSettings`, 
+`Extent1`.`ConversionSettings`, 
+`Extent1`.`Phone`
+FROM `PROD_Context` AS `Extent1`
+ WHERE `Extent1`.`ContextId` = @p__linq__0 LIMIT 2
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 100022
+2015-07-21 05:56:40,354 [10] DEBUG asi.asicentral.database.StoreContext - Starting a SQL Execution
+2015-07-21 05:56:40,386 [10] DEBUG asi.asicentral.database.StoreContext - Executed SQL (00:00:00.0319468): DELETE FROM `PROD_Context` WHERE `ContextId` = 100022
+2015-07-21 05:56:40,474 [10] DEBUG asi.asicentral.database.StoreContext - Starting a SQL Execution
+2015-07-21 05:56:40,475 [10] DEBUG asi.asicentral.database.StoreContext - Executed SQL (00:00:00.0007968): SELECT
+`Extent1`.`ContextId`, 
+`Extent1`.`Type`, 
+`Extent1`.`Name`, 
+`Extent1`.`Active`, 
+`Extent1`.`ExpiryDateUTC`, 
+`Extent1`.`CreateDateUTC`, 
+`Extent1`.`UpdateDateUTC`, 
+`Extent1`.`UpdateSource`, 
+`Extent1`.`NotificationEmails`, 
+`Extent1`.`HasBackendNotificationFlag`, 
+`Extent1`.`NumberOfPages`, 
+`Extent1`.`HeaderImage`, 
+`Extent1`.`ChatSettings`, 
+`Extent1`.`ConversionSettings`, 
+`Extent1`.`Phone`
+FROM `PROD_Context` AS `Extent1`
+ WHERE `Extent1`.`ContextId` = @p__linq__0 LIMIT 2
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 100022
+2015-07-22 06:15:43,530 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-22 06:15:43,553 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0118361): SELECT 
+[GroupBy1].[A1] AS [C1]
+FROM ( SELECT 
+	COUNT(1) AS [A1]
+	FROM [dbo].[ShowType] AS [Extent1]
+)  AS [GroupBy1]
+2015-07-22 06:28:05,481 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-22 06:28:05,492 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0007830): SELECT 
+[GroupBy1].[A1] AS [C1]
+FROM ( SELECT 
+	COUNT(1) AS [A1]
+	FROM [dbo].[ShowType] AS [Extent1]
+)  AS [GroupBy1]
+2015-07-22 06:28:09,231 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-22 06:28:09,445 [10] ERROR asi.asicentral.database.ShowContext - Failed to execute SQL: insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource], [Show_Id])
+values (@0, @1, @2, @3, null)
+select [ShowTypeId]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [ShowTypeId] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "East"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/22/2015 10:28:07 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/22/2015 10:28:07 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "Test Case"
+2015-07-22 06:32:06,537 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-22 06:32:06,550 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0008281): SELECT 
+[GroupBy1].[A1] AS [C1]
+FROM ( SELECT 
+	COUNT(1) AS [A1]
+	FROM [dbo].[ShowType] AS [Extent1]
+)  AS [GroupBy1]
+2015-07-22 06:42:52,165 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-22 06:42:52,178 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0009051): SELECT 
+[GroupBy1].[A1] AS [C1]
+FROM ( SELECT 
+	COUNT(1) AS [A1]
+	FROM [dbo].[ShowType] AS [Extent1]
+)  AS [GroupBy1]
+2015-07-22 06:48:45,932 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-22 06:48:45,944 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0007185): SELECT 
+[GroupBy1].[A1] AS [C1]
+FROM ( SELECT 
+	COUNT(1) AS [A1]
+	FROM [dbo].[ShowType] AS [Extent1]
+)  AS [GroupBy1]
+2015-07-22 06:54:07,044 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-22 06:54:07,056 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0017669): SELECT 
+[GroupBy1].[A1] AS [C1]
+FROM ( SELECT 
+	COUNT(1) AS [A1]
+	FROM [dbo].[ShowType] AS [Extent1]
+)  AS [GroupBy1]
+2015-07-22 06:59:15,701 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-22 06:59:15,712 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0006869): SELECT 
+[GroupBy1].[A1] AS [C1]
+FROM ( SELECT 
+	COUNT(1) AS [A1]
+	FROM [dbo].[ShowType] AS [Extent1]
+)  AS [GroupBy1]
+2015-07-22 07:01:26,068 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-22 07:01:26,080 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0017896): SELECT 
+[GroupBy1].[A1] AS [C1]
+FROM ( SELECT 
+	COUNT(1) AS [A1]
+	FROM [dbo].[ShowType] AS [Extent1]
+)  AS [GroupBy1]
+2015-07-22 07:29:54,504 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-22 07:29:54,517 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0008559): SELECT 
+[GroupBy1].[A1] AS [C1]
+FROM ( SELECT 
+	COUNT(1) AS [A1]
+	FROM [dbo].[ShowType] AS [Extent1]
+)  AS [GroupBy1]
+2015-07-22 07:29:56,909 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-22 07:29:56,984 [10] ERROR asi.asicentral.database.ShowContext - Failed to execute SQL: insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource], [Show_Id])
+values (@0, @1, @2, @3, null)
+select [ShowTypeId]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [ShowTypeId] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "East"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/22/2015 11:29:55 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/22/2015 11:29:55 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "Test Case"
+2015-07-22 07:33:38,879 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-22 07:33:38,890 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0007770): SELECT 
+[GroupBy1].[A1] AS [C1]
+FROM ( SELECT 
+	COUNT(1) AS [A1]
+	FROM [dbo].[ShowType] AS [Extent1]
+)  AS [GroupBy1]
+2015-07-22 07:33:42,316 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-22 07:33:42,544 [10] ERROR asi.asicentral.database.ShowContext - Failed to execute SQL: insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource], [Show_Id])
+values (@0, @1, @2, @3, null)
+select [Id]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [Id] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "East"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/22/2015 11:33:40 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/22/2015 11:33:40 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "Test Case"
+2015-07-23 00:33:04,884 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 00:33:04,897 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0021320): SELECT 
+[GroupBy1].[A1] AS [C1]
+FROM ( SELECT 
+	COUNT(1) AS [A1]
+	FROM [dbo].[ShowType] AS [Extent1]
+)  AS [GroupBy1]
+2015-07-23 00:33:07,236 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 00:33:07,310 [10] ERROR asi.asicentral.database.ShowContext - Failed to execute SQL: insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource], [Show_Id])
+values (@0, @1, @2, @3, null)
+select [Id]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [Id] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "East"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/23/2015 4:33:05 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/23/2015 4:33:05 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "Test Case"
+2015-07-23 00:40:07,360 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 00:40:07,372 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0007950): SELECT 
+[GroupBy1].[A1] AS [C1]
+FROM ( SELECT 
+	COUNT(1) AS [A1]
+	FROM [dbo].[ShowType] AS [Extent1]
+)  AS [GroupBy1]
+2015-07-23 00:40:10,528 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 00:40:10,603 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0738893): insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource])
+values (@0, @1, @2, @3)
+select [Id]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [Id] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "East"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/23/2015 4:40:08 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/23/2015 4:40:08 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "Test Case"
+2015-07-23 00:40:18,763 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 00:40:18,767 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0033458): SELECT TOP (2) 
+[Extent1].[Id] AS [Id], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[CreateDateUTC] AS [CreateDateUTC], 
+[Extent1].[UpdateDateUTC] AS [UpdateDateUTC], 
+[Extent1].[UpdateSource] AS [UpdateSource]
+FROM [dbo].[ShowType] AS [Extent1]
+WHERE [Extent1].[Id] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 1
+2015-07-23 00:40:22,375 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 00:40:22,377 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0018644): delete [dbo].[ShowType]
+where ([Id] = @0)
+-- @0 (dbtype=Int32, size=0, direction=Input) = 1
+2015-07-23 00:40:25,508 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 00:40:25,508 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0005471): SELECT TOP (2) 
+[Extent1].[Id] AS [Id], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[CreateDateUTC] AS [CreateDateUTC], 
+[Extent1].[UpdateDateUTC] AS [UpdateDateUTC], 
+[Extent1].[UpdateSource] AS [UpdateSource]
+FROM [dbo].[ShowType] AS [Extent1]
+WHERE [Extent1].[Id] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 1
+2015-07-23 01:23:13,495 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 01:23:13,507 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0009900): SELECT 
+[GroupBy1].[A1] AS [C1]
+FROM ( SELECT 
+	COUNT(1) AS [A1]
+	FROM [dbo].[ShowType] AS [Extent1]
+)  AS [GroupBy1]
+2015-07-23 01:23:25,064 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 01:23:25,065 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0007645): insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource])
+values (@0, @1, @2, @3)
+select [Id]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [Id] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "East"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/23/2015 5:23:16 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/23/2015 5:23:16 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "Test Case"
+2015-07-23 01:23:30,417 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 01:23:30,418 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0004900): SELECT TOP (2) 
+[Extent1].[Id] AS [Id], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[CreateDateUTC] AS [CreateDateUTC], 
+[Extent1].[UpdateDateUTC] AS [UpdateDateUTC], 
+[Extent1].[UpdateSource] AS [UpdateSource]
+FROM [dbo].[ShowType] AS [Extent1]
+WHERE [Extent1].[Id] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 2
+2015-07-23 01:23:34,222 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 01:23:34,223 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0005291): delete [dbo].[ShowType]
+where ([Id] = @0)
+-- @0 (dbtype=Int32, size=0, direction=Input) = 2
+2015-07-23 01:23:36,928 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 01:23:36,929 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0004242): SELECT TOP (2) 
+[Extent1].[Id] AS [Id], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[CreateDateUTC] AS [CreateDateUTC], 
+[Extent1].[UpdateDateUTC] AS [UpdateDateUTC], 
+[Extent1].[UpdateSource] AS [UpdateSource]
+FROM [dbo].[ShowType] AS [Extent1]
+WHERE [Extent1].[Id] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 2
+2015-07-23 01:25:00,026 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 01:25:00,037 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0007032): SELECT 
+[GroupBy1].[A1] AS [C1]
+FROM ( SELECT 
+	COUNT(1) AS [A1]
+	FROM [dbo].[ShowType] AS [Extent1]
+)  AS [GroupBy1]
+2015-07-23 01:25:01,659 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 01:25:01,660 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0006165): insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource])
+values (@0, @1, @2, @3)
+select [Id]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [Id] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "East"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/23/2015 5:25:00 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/23/2015 5:25:00 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "Test Case"
+2015-07-23 05:42:23,170 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 05:42:23,186 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0010224): insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource])
+values (@0, @1, @2, @3)
+select [Id]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [Id] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "East"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/23/2015 9:41:55 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/23/2015 9:42:06 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "UpdateShowType"
+2015-07-23 05:47:16,083 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 05:47:16,096 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0008714): insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource])
+values (@0, @1, @2, @3)
+select [Id]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [Id] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "East"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/23/2015 9:47:14 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/23/2015 9:47:14 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "UpdateShowType"
+2015-07-23 05:47:24,148 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 05:47:24,148 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0004602): SELECT TOP (2) 
+[Extent1].[Id] AS [Id], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[CreateDateUTC] AS [CreateDateUTC], 
+[Extent1].[UpdateDateUTC] AS [UpdateDateUTC], 
+[Extent1].[UpdateSource] AS [UpdateSource]
+FROM [dbo].[ShowType] AS [Extent1]
+WHERE [Extent1].[Id] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 5
+2015-07-23 05:47:25,225 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 05:47:25,228 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0025025): update [dbo].[ShowType]
+set [Type] = @0, [UpdateDateUTC] = @1
+where ([Id] = @2)
+
+-- @0 (dbtype=String, size=-1, direction=Input) = "West"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/23/2015 9:47:24 AM
+-- @2 (dbtype=Int32, size=0, direction=Input) = 5
+2015-07-23 05:48:18,211 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 05:48:18,222 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0008020): insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource])
+values (@0, @1, @2, @3)
+select [Id]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [Id] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "East"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/23/2015 9:48:17 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/23/2015 9:48:17 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "UpdateShowType"
+2015-07-23 05:48:21,317 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 05:48:21,318 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0004288): SELECT TOP (2) 
+[Extent1].[Id] AS [Id], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[CreateDateUTC] AS [CreateDateUTC], 
+[Extent1].[UpdateDateUTC] AS [UpdateDateUTC], 
+[Extent1].[UpdateSource] AS [UpdateSource]
+FROM [dbo].[ShowType] AS [Extent1]
+WHERE [Extent1].[Id] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 6
+2015-07-23 05:48:22,404 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 05:48:22,404 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0004266): update [dbo].[ShowType]
+set [Type] = @0, [UpdateDateUTC] = @1
+where ([Id] = @2)
+
+-- @0 (dbtype=String, size=-1, direction=Input) = "West"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/23/2015 9:48:21 AM
+-- @2 (dbtype=Int32, size=0, direction=Input) = 6
+2015-07-23 05:52:49,220 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 05:52:49,235 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0010091): insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource])
+values (@0, @1, @2, @3)
+select [Id]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [Id] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "East"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/23/2015 9:52:48 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/23/2015 9:52:48 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "UpdateShowType"
+2015-07-23 05:52:51,067 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 05:52:51,068 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0005272): SELECT TOP (2) 
+[Extent1].[Id] AS [Id], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[CreateDateUTC] AS [CreateDateUTC], 
+[Extent1].[UpdateDateUTC] AS [UpdateDateUTC], 
+[Extent1].[UpdateSource] AS [UpdateSource]
+FROM [dbo].[ShowType] AS [Extent1]
+WHERE [Extent1].[Id] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 7
+2015-07-23 05:52:52,845 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 05:52:52,846 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0005150): update [dbo].[ShowType]
+set [Type] = @0, [UpdateDateUTC] = @1
+where ([Id] = @2)
+
+-- @0 (dbtype=String, size=-1, direction=Input) = "West"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/23/2015 9:52:51 AM
+-- @2 (dbtype=Int32, size=0, direction=Input) = 7
+2015-07-23 05:53:05,551 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 05:53:05,552 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0003552): delete [dbo].[ShowType]
+where ([Id] = @0)
+-- @0 (dbtype=Int32, size=0, direction=Input) = 7
+2015-07-23 05:53:07,935 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-23 05:53:07,936 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0004819): SELECT TOP (2) 
+[Extent1].[Id] AS [Id], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[CreateDateUTC] AS [CreateDateUTC], 
+[Extent1].[UpdateDateUTC] AS [UpdateDateUTC], 
+[Extent1].[UpdateSource] AS [UpdateSource]
+FROM [dbo].[ShowType] AS [Extent1]
+WHERE [Extent1].[Id] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 7
+2015-07-24 02:03:53,427 [10] DEBUG asi.asicentral.database.Umbraco_ShowContext - Starting a SQL Execution
+2015-07-24 02:03:53,516 [10] ERROR asi.asicentral.database.Umbraco_ShowContext - Failed to execute SQL: insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource])
+values (@0, @1, @2, @3)
+select [Id]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [Id] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "East"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/24/2015 6:03:51 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/24/2015 6:03:52 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "ShowServiceTest - ShowTypeTest1"
+2015-07-24 02:09:06,190 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-24 02:09:06,202 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0008923): insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource])
+values (@0, @1, @2, @3)
+select [Id]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [Id] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "East"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/24/2015 6:09:03 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/24/2015 6:09:05 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "ShowServiceTest - ShowTypeTest1"
+2015-07-24 02:09:22,476 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-24 02:09:22,477 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0004534): insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource])
+values (@0, @1, @2, @3)
+select [Id]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [Id] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "West"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/24/2015 6:09:21 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/24/2015 6:09:21 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "ShowServiceTest - ShowTypeTest1"
+2015-07-24 02:10:04,455 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-24 02:10:04,466 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0008894): insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource])
+values (@0, @1, @2, @3)
+select [Id]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [Id] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "East"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/24/2015 6:10:01 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/24/2015 6:10:02 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "ShowServiceTest - ShowTypeTest1"
+2015-07-24 02:15:40,606 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-24 02:15:40,617 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0009596): insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource])
+values (@0, @1, @2, @3)
+select [Id]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [Id] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "East"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/24/2015 6:15:38 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/24/2015 6:15:39 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "ShowServiceTest - ShowTypeTest1"
+2015-07-24 02:16:03,925 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-24 02:16:03,926 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0005153): SELECT TOP (2) 
+[Extent1].[Id] AS [Id], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[CreateDateUTC] AS [CreateDateUTC], 
+[Extent1].[UpdateDateUTC] AS [UpdateDateUTC], 
+[Extent1].[UpdateSource] AS [UpdateSource]
+FROM [dbo].[ShowType] AS [Extent1]
+WHERE [Extent1].[Id] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 11
+2015-07-24 02:16:08,453 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-24 02:16:08,458 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0051913): update [dbo].[ShowType]
+set [Type] = @0, [CreateDateUTC] = @1, [UpdateDateUTC] = @2, [UpdateSource] = @3
+where ([Id] = @4)
+
+-- @0 (dbtype=String, size=-1, direction=Input) = "west"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/24/2015 6:15:38 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/24/2015 6:16:04 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "ShowServiceTest - ShowTypeTest1"
+-- @4 (dbtype=Int32, size=0, direction=Input) = 11
+2015-07-24 02:17:04,357 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-24 02:17:04,369 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0009355): insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource])
+values (@0, @1, @2, @3)
+select [Id]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [Id] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "East"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/24/2015 6:17:01 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/24/2015 6:17:03 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "ShowServiceTest - ShowTypeTest1"
+2015-07-24 02:17:12,238 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-24 02:17:12,239 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0004914): SELECT TOP (2) 
+[Extent1].[Id] AS [Id], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[CreateDateUTC] AS [CreateDateUTC], 
+[Extent1].[UpdateDateUTC] AS [UpdateDateUTC], 
+[Extent1].[UpdateSource] AS [UpdateSource]
+FROM [dbo].[ShowType] AS [Extent1]
+WHERE [Extent1].[Id] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 12
+2015-07-24 02:17:13,324 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-24 02:17:13,326 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0013429): update [dbo].[ShowType]
+set [Type] = @0, [CreateDateUTC] = @1, [UpdateDateUTC] = @2, [UpdateSource] = @3
+where ([Id] = @4)
+
+-- @0 (dbtype=String, size=-1, direction=Input) = "West"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/24/2015 6:17:01 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/24/2015 6:17:12 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "ShowServiceTest - ShowTypeTest1"
+-- @4 (dbtype=Int32, size=0, direction=Input) = 12
+2015-07-24 02:17:21,646 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-24 02:17:21,647 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0003252): delete [dbo].[ShowType]
+where ([Id] = @0)
+-- @0 (dbtype=Int32, size=0, direction=Input) = 12
+2015-07-24 02:17:25,980 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-24 02:17:25,981 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0005264): SELECT TOP (2) 
+[Extent1].[Id] AS [Id], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[CreateDateUTC] AS [CreateDateUTC], 
+[Extent1].[UpdateDateUTC] AS [UpdateDateUTC], 
+[Extent1].[UpdateSource] AS [UpdateSource]
+FROM [dbo].[ShowType] AS [Extent1]
+WHERE [Extent1].[Id] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 12
+2015-07-27 04:31:41,249 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-27 04:31:41,262 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0030530): insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource])
+values (@0, @1, @2, @3)
+select [ShowTypeId]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [ShowTypeId] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "East"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/27/2015 8:31:29 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/27/2015 8:31:30 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "ShowServiceTest - ShowTypeTest1"
+2015-07-27 04:31:51,836 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-27 04:31:51,837 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0014469): SELECT TOP (2) 
+[Extent1].[ShowTypeId] AS [ShowTypeId], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[CreateDateUTC] AS [CreateDateUTC], 
+[Extent1].[UpdateDateUTC] AS [UpdateDateUTC], 
+[Extent1].[UpdateSource] AS [UpdateSource]
+FROM [dbo].[ShowType] AS [Extent1]
+WHERE [Extent1].[ShowTypeId] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 12
+2015-07-27 04:31:53,434 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-27 04:31:53,437 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0024566): update [dbo].[ShowType]
+set [Type] = @0, [CreateDateUTC] = @1, [UpdateDateUTC] = @2, [UpdateSource] = @3
+where ([ShowTypeId] = @4)
+
+-- @0 (dbtype=String, size=-1, direction=Input) = "West"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/27/2015 8:31:29 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/27/2015 8:31:51 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "ShowServiceTest - ShowTypeTest1"
+-- @4 (dbtype=Int32, size=0, direction=Input) = 12
+2015-07-27 04:31:59,083 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-27 04:31:59,085 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0018552): delete [dbo].[ShowType]
+where ([ShowTypeId] = @0)
+-- @0 (dbtype=Int32, size=0, direction=Input) = 12
+2015-07-27 04:32:00,519 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-27 04:32:00,519 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0004365): SELECT TOP (2) 
+[Extent1].[ShowTypeId] AS [ShowTypeId], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[CreateDateUTC] AS [CreateDateUTC], 
+[Extent1].[UpdateDateUTC] AS [UpdateDateUTC], 
+[Extent1].[UpdateSource] AS [UpdateSource]
+FROM [dbo].[ShowType] AS [Extent1]
+WHERE [Extent1].[ShowTypeId] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 12
+2015-07-27 04:52:16,431 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-27 04:52:16,891 [10] ERROR asi.asicentral.database.ShowContext - Failed to execute SQL: insert [dbo].[Show]([Name], [StartDate], [EndDate], [TypeId], [AddressId], [CreateDateUTC], [UpdateDateUTC], [UpdateSource])
+values (@0, @1, @2, null, null, @3, @4, @5)
+select [ShowId]
+from [dbo].[Show]
+where @@ROWCOUNT > 0 and [ShowId] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "Orlando"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/27/2015 8:52:10 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/27/2015 8:52:10 AM
+-- @3 (dbtype=DateTime2, size=0, direction=Input) = 7/27/2015 8:52:10 AM
+-- @4 (dbtype=DateTime2, size=0, direction=Input) = 7/27/2015 8:52:11 AM
+-- @5 (dbtype=String, size=-1, direction=Input) = "ShowServiceTest - ShowTest"
+2015-07-27 05:07:03,532 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-27 05:07:03,865 [10] ERROR asi.asicentral.database.ShowContext - Failed to execute SQL: insert [dbo].[Show]([Name], [StartDate], [EndDate], [TypeId], [AddressId], [CreateDateUTC], [UpdateDateUTC], [UpdateSource])
+values (@0, @1, @2, @3, @4, @5, @6, @7)
+select [ShowId]
+from [dbo].[Show]
+where @@ROWCOUNT > 0 and [ShowId] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "Orlando"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/27/2015 9:07:02 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/27/2015 9:07:02 AM
+-- @3 (dbtype=Int32, size=0, direction=Input) = 0
+-- @4 (dbtype=Int32, size=0, direction=Input) = 0
+-- @5 (dbtype=DateTime2, size=0, direction=Input) = 7/27/2015 9:07:02 AM
+-- @6 (dbtype=DateTime2, size=0, direction=Input) = 7/27/2015 9:07:03 AM
+-- @7 (dbtype=String, size=-1, direction=Input) = "ShowServiceTest - ShowTest"
+2015-07-27 05:15:48,490 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-27 05:15:48,578 [10] ERROR asi.asicentral.database.ShowContext - Failed to execute SQL: insert [dbo].[Address]([PhoneAreaCode], [Phone], [Cell], [FaxAreaCode], [Fax], [Title], [Street1], [Street2], [Zip], [City], [State], [CountryCode], [Country], [CompanyId], [CreateDateUTC], [UpdateDateUTC], [UpdateSource])
+values (@0, @1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11, @12, @13, @14, @15, @16)
+select [AddressId]
+from [dbo].[Address]
+where @@ROWCOUNT > 0 and [AddressId] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "1234"
+-- @1 (dbtype=String, size=-1, direction=Input) = "11231231234"
+-- @2 (dbtype=String, size=-1, direction=Input) = "9029123456"
+-- @3 (dbtype=String, size=-1, direction=Input) = "12345"
+-- @4 (dbtype=String, size=-1, direction=Input) = "11231231234"
+-- @5 (dbtype=String, size=-1, direction=Input) = "Title"
+-- @6 (dbtype=String, size=-1, direction=Input) = "Street 1"
+-- @7 (dbtype=String, size=-1, direction=Input) = "Street 2"
+-- @8 (dbtype=String, size=-1, direction=Input) = "11111"
+-- @9 (dbtype=String, size=-1, direction=Input) = "City"
+-- @10 (dbtype=String, size=-1, direction=Input) = "State"
+-- @11 (dbtype=String, size=-1, direction=Input) = "CountryCode"
+-- @12 (dbtype=String, size=-1, direction=Input) = "Country"
+-- @13 (dbtype=Int32, size=0, direction=Input) = 0
+-- @14 (dbtype=DateTime2, size=0, direction=Input) = 7/27/2015 9:15:45 AM
+-- @15 (dbtype=DateTime2, size=0, direction=Input) = 7/27/2015 9:15:45 AM
+-- @16 (dbtype=String, size=-1, direction=Input) = "ShowServiceTest - AddressTest"
+2015-07-27 07:37:51,876 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-27 07:37:51,888 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0009689): insert [dbo].[ShowType]([Type], [CreateDateUTC], [UpdateDateUTC], [UpdateSource])
+values (@0, @1, @2, @3)
+select [ShowTypeId]
+from [dbo].[ShowType]
+where @@ROWCOUNT > 0 and [ShowTypeId] = scope_identity()
+-- @0 (dbtype=String, size=-1, direction=Input) = "East"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/27/2015 11:37:49 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/27/2015 11:37:50 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "ShowServiceTest - ShowTypeTest1"
+2015-07-27 07:37:57,233 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-27 07:37:57,234 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0004698): SELECT TOP (2) 
+[Extent1].[ShowTypeId] AS [ShowTypeId], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[CreateDateUTC] AS [CreateDateUTC], 
+[Extent1].[UpdateDateUTC] AS [UpdateDateUTC], 
+[Extent1].[UpdateSource] AS [UpdateSource]
+FROM [dbo].[ShowType] AS [Extent1]
+WHERE [Extent1].[ShowTypeId] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 13
+2015-07-27 07:37:57,238 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-27 07:37:57,239 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0004596): update [dbo].[ShowType]
+set [Type] = @0, [CreateDateUTC] = @1, [UpdateDateUTC] = @2, [UpdateSource] = @3
+where ([ShowTypeId] = @4)
+
+-- @0 (dbtype=String, size=-1, direction=Input) = "West"
+-- @1 (dbtype=DateTime2, size=0, direction=Input) = 7/27/2015 11:37:49 AM
+-- @2 (dbtype=DateTime2, size=0, direction=Input) = 7/27/2015 11:37:57 AM
+-- @3 (dbtype=String, size=-1, direction=Input) = "ShowServiceTest - ShowTypeTest1"
+-- @4 (dbtype=Int32, size=0, direction=Input) = 13
+2015-07-27 07:37:57,241 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-27 07:37:57,242 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0002611): delete [dbo].[ShowType]
+where ([ShowTypeId] = @0)
+-- @0 (dbtype=Int32, size=0, direction=Input) = 13
+2015-07-27 07:37:57,243 [10] DEBUG asi.asicentral.database.ShowContext - Starting a SQL Execution
+2015-07-27 07:37:57,244 [10] DEBUG asi.asicentral.database.ShowContext - Executed SQL (00:00:00.0002446): SELECT TOP (2) 
+[Extent1].[ShowTypeId] AS [ShowTypeId], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[CreateDateUTC] AS [CreateDateUTC], 
+[Extent1].[UpdateDateUTC] AS [UpdateDateUTC], 
+[Extent1].[UpdateSource] AS [UpdateSource]
+FROM [dbo].[ShowType] AS [Extent1]
+WHERE [Extent1].[ShowTypeId] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 13

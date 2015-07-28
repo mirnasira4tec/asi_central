@@ -8,6 +8,8 @@ using asi.asicentral.model.timss;
 using asi.asicentral.model.call;
 using asi.asicentral.model.findsupplier;
 using asi.asicentral.model.DM_memberDemogr;
+using asi.asicentral.database.mappings.show;
+using asi.asicentral.model.show;
 
 namespace asi.asicentral.database.mappings
 {
@@ -32,6 +34,8 @@ namespace asi.asicentral.database.mappings
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIEmailBlastContext>().Name = "ASIEmailBlastContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<MemberDemogrContext>().Name = "MemberDemogrContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<DM_MemberDemogrContext>().Name = "DM_MemberDemogrContext";
+            For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<Umbraco_ShowContext>().Name = "Umbraco_ShowContext";
+            For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ShowContext>().Name = "ShowContext";
 
 
             //for each model - get the repository class with the appropriate context 
@@ -366,6 +370,34 @@ namespace asi.asicentral.database.mappings
             For<IRepository<CompanyASIRep>>().Use<EFRepository<CompanyASIRep>>()
                 .Ctor<IValidatedContext>().Named("DM_MemberDemogrContext");
             #endregion DM_MemberDemogrContext
+
+            #region Umbraco_ShowContext
+
+            For<IRepository<Address>>().Use<EFRepository<Address>>()
+                .Ctor<IValidatedContext>().Named("ShowContext");
+
+            For<IRepository<Attendee>>().Use<EFRepository<Attendee>>()
+                .Ctor<IValidatedContext>().Named("ShowContext");
+
+            For<IRepository<Company>>().Use<EFRepository<Company>>()
+                .Ctor<IValidatedContext>().Named("ShowContext");
+
+            For<IRepository<Employee>>().Use<EFRepository<Employee>>()
+                .Ctor<IValidatedContext>().Named("ShowContext");
+
+            For<IRepository<EmployeeAttendee>>().Use<EFRepository<EmployeeAttendee>>()
+                .Ctor<IValidatedContext>().Named("ShowContext");
+
+            For<IRepository<Show>>().Use<EFRepository<Show>>()
+                .Ctor<IValidatedContext>().Named("ShowContext");
+
+            For<IRepository<ShowType>>().Use<EFRepository<ShowType>>()
+                .Ctor<IValidatedContext>().Named("ShowContext");
+
+            For<IRepository<CompanyAddress>>().Use<EFRepository<CompanyAddress>>()
+                .Ctor<IValidatedContext>().Named("ShowContext");
+
+            #endregion Umbraco_ShowContext
 
         }
     }
