@@ -12,7 +12,6 @@ namespace asi.asicentral.model.show
         public int Id { get; set; }
         [Required(ErrorMessage = "Show Type is required")]
         public string Type { get; set; }
-       // public virtual Show Show { get; set; }  
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }

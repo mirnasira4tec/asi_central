@@ -13,7 +13,7 @@ namespace asi.asicentral.model.show
         {
             if (this.GetType() == typeof(Show))
             {
-                Attendee = new List<Attendee>();
+                Attendee = new List<ShowAttendee>();
             }
         }
         public int Id { get; set; }
@@ -26,8 +26,8 @@ namespace asi.asicentral.model.show
         public int? ShowTypeId { get; set; }
         public ShowType ShowType { get; set; }
         public int? AddressId { get; set; }
-        public Address Address { get; set; } 
-        public virtual List<Attendee> Attendee { get; set; }
+        public ShowAddress Address { get; set; } 
+        public virtual List<ShowAttendee> Attendee { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }

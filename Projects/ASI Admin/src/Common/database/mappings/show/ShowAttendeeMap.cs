@@ -9,9 +9,9 @@ using asi.asicentral.model.show;
 
 namespace asi.asicentral.database.mappings.show
 {
-    public class AttendeeMap : EntityTypeConfiguration<Attendee>
+    public class ShowAttendeeMap : EntityTypeConfiguration<ShowAttendee>
     {
-        public AttendeeMap()
+        public ShowAttendeeMap()
         {
             this.ToTable("Attendee");
             this.HasKey(t => t.Id);
@@ -28,7 +28,7 @@ namespace asi.asicentral.database.mappings.show
                 .HasColumnName("UpdateDateUTC");
 
             //Relationships
-           // HasRequired(t => t.Address).WithRequiredDependent(u => u.Attendee);
+           
             HasRequired(x => x.Address)
              .WithMany()
              .HasForeignKey(x => x.AddressId);

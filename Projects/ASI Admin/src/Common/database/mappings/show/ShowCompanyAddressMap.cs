@@ -9,16 +9,17 @@ using asi.asicentral.model.show;
 
 namespace asi.asicentral.database.mappings.show
 {
-   public class CompanyMap :EntityTypeConfiguration<ShowCompany>
+    public class ShowCompanyAddressMap : EntityTypeConfiguration<ShowCompanyAddress>
     {
-       public CompanyMap()
+        public ShowCompanyAddressMap()
         {
-            this.ToTable("Company");
+            this.ToTable("CompanyAddress");
             this.HasKey(t => t.Id);
 
             //Properties
+
             this.Property(t => t.Id)
-                .HasColumnName("CompanyId")
+                .HasColumnName("CompanyAddressId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.CreateDate)
@@ -27,20 +28,11 @@ namespace asi.asicentral.database.mappings.show
             this.Property(t => t.UpdateDate)
                 .HasColumnName("UpdateDateUTC");
 
-            HasMany(t => t.Employee)
-                .WithOptional()
-                .HasForeignKey(t => t.CompanyId)
-                .WillCascadeOnDelete();
+            //relationships
+            HasOptional(t => t.Address)
+                .WithMany()
+                .Map(t => t.MapKey("AddressId"));
 
-            HasMany(t => t.Attendee)
-                 .WithOptional()
-                 .HasForeignKey(t => t.CompanyId)
-                 .WillCascadeOnDelete();
-
-            HasMany(t => t.Address)
-                  .WithOptional()
-                  .HasForeignKey(t => t.CompanyId)
-                  .WillCascadeOnDelete();
 
         }
     }

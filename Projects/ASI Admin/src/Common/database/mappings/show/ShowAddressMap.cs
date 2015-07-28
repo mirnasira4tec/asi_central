@@ -9,41 +9,25 @@ using asi.asicentral.model.show;
 
 namespace asi.asicentral.database.mappings.show
 {
-   public class ShowMap : EntityTypeConfiguration<Show>
+    public class ShowAddressMap : EntityTypeConfiguration<ShowAddress>
     {
-       public ShowMap()
+        public ShowAddressMap()
         {
-            this.ToTable("Show");
+            this.ToTable("Address");
             this.HasKey(t => t.Id);
 
             //Properties
-            this.Property(t => t.Id)
-                .HasColumnName("ShowId")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            this.Property(t => t.ShowTypeId)
-                 .HasColumnName("TypeId");
+            this.Property(t => t.Id)
+                .HasColumnName("AddressId")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.CreateDate)
                 .HasColumnName("CreateDateUTC");
 
             this.Property(t => t.UpdateDate)
                 .HasColumnName("UpdateDateUTC");
-
-            //relationship  
-
-            HasMany(t => t.Attendee)
-                .WithOptional()
-                .HasForeignKey(t => t.ShowId)
-                .WillCascadeOnDelete();
-
-            HasRequired(x => x.ShowType)
-              .WithMany()
-              .HasForeignKey(x => x.ShowTypeId);
-
-            HasRequired(x => x.Address)
-               .WithMany()
-               .HasForeignKey(x => x.AddressId);
+          
         }
     }
 }

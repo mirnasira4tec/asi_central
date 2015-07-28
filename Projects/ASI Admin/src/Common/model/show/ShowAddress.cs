@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.model.show
 {
-   public class Address
+   public class ShowAddress
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "Phone Area code is required")]
@@ -31,12 +31,6 @@ namespace asi.asicentral.model.show
         public string CountryCode { get; set; }
         [Required(ErrorMessage = "Country is required")]
         public string Country { get; set; }
-        //public int CompanyId { get; set; }
-        //public virtual ShowCompany Company { get; set; }
-
-      //  public virtual Show Show { get; set; }
-       // public virtual Employee Employee { get; set; }
-       // public virtual Attendee Attendee { get; set; } 
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }

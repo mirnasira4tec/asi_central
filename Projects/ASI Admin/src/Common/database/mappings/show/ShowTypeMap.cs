@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using asi.asicentral.model.show;
@@ -29,9 +28,6 @@ namespace asi.asicentral.database.mappings.show
             this.Property(t => t.UpdateDate)
                 .HasColumnName("UpdateDateUTC");
 
-            //relationship  
-            
-           // HasRequired(t => t.Show).WithRequiredDependent(u => u.ShowType); 
         }
     }
 }

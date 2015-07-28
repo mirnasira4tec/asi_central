@@ -54,29 +54,29 @@ namespace asi.asicentral.util.show
           show.Name = objShow.Name;
           show.StartDate = objShow.StartDate;
           show.EndDate = objShow.EndDate;
-          show.ShowTypeId = Convert.ToInt32(objShow.ShowType);
-          show.AddressId = Convert.ToInt32(objShow.Address);
+          show.ShowType = objShow.ShowType;
+          show.Address = objShow.Address;
           show.UpdateDate = DateTime.UtcNow;
           show.UpdateSource = objShow.UpdateSource;
           return show;
       }
 
-      public static Address CreateOrUpdateAddress(ObjectService objectService, Address objAddress)
+      public static ShowAddress CreateOrUpdateAddress(ObjectService objectService, ShowAddress objAddress)
       {
           if (objAddress == null) return null;
-          Address address = null;
+          ShowAddress address = null;
           if (objAddress.Id == 0)
           {
-              address = new Address()
+              address = new ShowAddress()
               {
                   CreateDate = DateTime.UtcNow,
               };
-              objectService.Add<Address>(address);
+              objectService.Add<ShowAddress>(address);
           }
           else
           {
-              address = objectService.GetAll<Address>().Where(ctxt => ctxt.Id == objAddress.Id).SingleOrDefault();
-              objectService.Update<Address>(address);
+              address = objectService.GetAll<ShowAddress>().Where(ctxt => ctxt.Id == objAddress.Id).SingleOrDefault();
+              objectService.Update<ShowAddress>(address);
           }
           address.Phone = objAddress.Phone;
           address.PhoneAreaCode = objAddress.PhoneAreaCode;
@@ -96,29 +96,29 @@ namespace asi.asicentral.util.show
           return address;
       }
 
-      public static Employee CreateOrUpdateEmployee(ObjectService objectService, Employee objEmployee)
+      public static ShowEmployee CreateOrUpdateEmployee(ObjectService objectService, ShowEmployee objEmployee)
       {
           if (objEmployee == null) return null;
-          Employee employee = null;
+          ShowEmployee employee = null;
           if (objEmployee.Id == 0)
           {
-              employee = new Employee()
+              employee = new ShowEmployee()
               {
                   CreateDate = DateTime.UtcNow,
               };
-              objectService.Add<Employee>(employee);
+              objectService.Add<ShowEmployee>(employee);
           }
           else
           {
-              employee = objectService.GetAll<Employee>().Where(ctxt => ctxt.Id == objEmployee.Id).SingleOrDefault();
-              objectService.Update<Employee>(employee);
+              employee = objectService.GetAll<ShowEmployee>().Where(ctxt => ctxt.Id == objEmployee.Id).SingleOrDefault();
+              objectService.Update<ShowEmployee>(employee);
           }
           employee.FirstName = objEmployee.FirstName;
           employee.MiddleName = objEmployee.MiddleName;
           employee.LastName = objEmployee.LastName;
           employee.Email = objEmployee.Email;
-          employee.CompanyId = Convert.ToInt32(objEmployee.Company);
-          employee.AddressId = Convert.ToInt32(objEmployee.Address);
+          employee.Company = objEmployee.Company;
+          employee.Address = objEmployee.Address;
           employee.UpdateDate = DateTime.UtcNow;
           employee.UpdateSource = objEmployee.UpdateSource;
           return employee;
@@ -149,22 +149,22 @@ namespace asi.asicentral.util.show
           return company;
       }
 
-      public static CompanyAddress CreateOrUpdateCompanyAddress(ObjectService objectService, CompanyAddress objCompanyAddress)
+      public static ShowCompanyAddress CreateOrUpdateCompanyAddress(ObjectService objectService, ShowCompanyAddress objCompanyAddress)
       {
           if (objCompanyAddress == null) return null;
-          CompanyAddress companyAddress = null;
+          ShowCompanyAddress companyAddress = null;
           if (objCompanyAddress.Id == 0)
           {
-              companyAddress = new CompanyAddress()
+              companyAddress = new ShowCompanyAddress()
               {
                   CreateDate = DateTime.UtcNow,
               };
-              objectService.Add<CompanyAddress>(companyAddress);
+              objectService.Add<ShowCompanyAddress>(companyAddress);
           }
           else
           {
-              companyAddress = objectService.GetAll<CompanyAddress>().Where(ctxt => ctxt.Id == objCompanyAddress.Id).SingleOrDefault();
-              objectService.Update<CompanyAddress>(companyAddress);
+              companyAddress = objectService.GetAll<ShowCompanyAddress>().Where(ctxt => ctxt.Id == objCompanyAddress.Id).SingleOrDefault();
+              objectService.Update<ShowCompanyAddress>(companyAddress);
           }
           companyAddress.CompanyId = objCompanyAddress.CompanyId;
           companyAddress.AddressId = objCompanyAddress.AddressId;

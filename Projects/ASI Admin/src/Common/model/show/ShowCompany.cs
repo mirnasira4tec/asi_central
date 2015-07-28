@@ -13,10 +13,9 @@ namespace asi.asicentral.model.show
         {
             if (this.GetType() == typeof(ShowCompany))
             {
-                Address = new List<CompanyAddress>();
-                Employee = new List<Employee>();
-                Attendee = new List<Attendee>();
-
+                Address = new List<ShowCompanyAddress>();
+                Employee = new List<ShowEmployee>();
+                Attendee = new List<ShowAttendee>();
             }
         }
         public int Id { get; set; }
@@ -25,9 +24,9 @@ namespace asi.asicentral.model.show
         public string WebUrl { get; set; }
         public string Email { get; set; }
         public int ASINumber { get; set; }
-        public virtual List<CompanyAddress> Address { get; set; }
-        public virtual List<Employee> Employee { get; set; }
-        public virtual List<Attendee> Attendee { get; set; }
+        public virtual List<ShowCompanyAddress> Address { get; set; }
+        public virtual List<ShowEmployee> Employee { get; set; }
+        public virtual List<ShowAttendee> Attendee { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }

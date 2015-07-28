@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.model.show
 {
-    public class EmployeeAttendee
+    public class ShowEmployeeAttendee
     {
         public int Id { get; set; }
         public int AttendeesId { get; set; }
         public int EmployeeId { get; set; }
-        public Attendee Attendee { get; set; }
-        public Employee Employee { get; set; } 
+        public ShowAttendee Attendee { get; set; }
+        public ShowEmployee Employee { get; set; } 
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }

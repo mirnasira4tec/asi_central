@@ -35,8 +35,6 @@ namespace asi.asicentral.database.mappings
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<MemberDemogrContext>().Name = "MemberDemogrContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<DM_MemberDemogrContext>().Name = "DM_MemberDemogrContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<Umbraco_ShowContext>().Name = "Umbraco_ShowContext";
-            //For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ShowContext>().Name = "ShowContext";
-
 
             //for each model - get the repository class with the appropriate context 
 
@@ -373,19 +371,19 @@ namespace asi.asicentral.database.mappings
 
             #region Umbraco_ShowContext
 
-            For<IRepository<Address>>().Use<EFRepository<Address>>()
+            For<IRepository<ShowAddress>>().Use<EFRepository<ShowAddress>>()
                 .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
-            For<IRepository<Attendee>>().Use<EFRepository<Attendee>>()
+            For<IRepository<ShowAttendee>>().Use<EFRepository<ShowAttendee>>()
                 .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
             For<IRepository<Company>>().Use<EFRepository<Company>>()
                 .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
-            For<IRepository<Employee>>().Use<EFRepository<Employee>>()
+            For<IRepository<ShowEmployee>>().Use<EFRepository<ShowEmployee>>()
                 .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
-            For<IRepository<EmployeeAttendee>>().Use<EFRepository<EmployeeAttendee>>()
+            For<IRepository<ShowEmployeeAttendee>>().Use<EFRepository<ShowEmployeeAttendee>>()
                 .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
             For<IRepository<Show>>().Use<EFRepository<Show>>()

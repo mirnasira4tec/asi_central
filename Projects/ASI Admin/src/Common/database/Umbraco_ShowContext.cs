@@ -12,10 +12,10 @@ namespace asi.asicentral.database
             Database.SetInitializer<Umbraco_ShowContext>(null);
             EnableTracing(typeof(Umbraco_ShowContext));
         }
-        public DbSet<Address> Address { get; set; }
-        public DbSet<Attendee> Attendee { get; set; }
-        public DbSet<Employee> Employee { get; set; }
-        public DbSet<EmployeeAttendee> EmployeeAttendee { get; set; }
+        public DbSet<ShowAddress> Address { get; set; }
+        public DbSet<ShowAttendee> Attendee { get; set; }
+        public DbSet<ShowEmployee> Employee { get; set; }
+        public DbSet<ShowEmployeeAttendee> EmployeeAttendee { get; set; }
         public DbSet<Show> Show { get; set; }
         public DbSet<ShowCompany> Company { get; set; }
         public DbSet<ShowType> ShowType { get; set; }
@@ -30,11 +30,11 @@ namespace asi.asicentral.database
             base.OnModelCreating(modelBuilder);
             Configuration.LazyLoadingEnabled = true;
             modelBuilder.Configurations
-                .Add(new AddressMap())
-                .Add(new AttendeeMap())
-                .Add(new CompanyMap())
-                .Add(new EmployeeAttendeeMap())
-                .Add(new EmployeeMap())
+                .Add(new ShowAddressMap())
+                .Add(new ShowAttendeeMap())
+                .Add(new ShowCompanyMap())
+                .Add(new ShowEmployeeAttendeeMap())
+                .Add(new ShowEmployeeMap())
                 .Add(new ShowMap())
                 .Add(new ShowTypeMap());
                 //.Add(new CompanyAddressMap())
