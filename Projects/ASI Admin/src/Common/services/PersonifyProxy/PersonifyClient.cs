@@ -722,6 +722,18 @@ namespace asi.asicentral.services.PersonifyProxy
                 if (storeOrder != null) s += string.Format(" Order id {0}", storeOrder.Id);
                 throw new Exception(s);
             }
+
+            return AddIndividualInfos(storeOrder.Company, countryCodes, companyInfo);
+        }
+
+        public static IEnumerable<CustomerInfo> AddIndividualInfos(StoreCompany storeCompany, 
+                                                                   IList<LookSendMyAdCountryCode> countryCodes,
+                                                                   CustomerInfo companyInfo)
+        {
+            if (storeCompany == null || storeCompany.Individuals == null)
+            {
+                throw new Exception("Company and compnay contact can't be null.");
+            }
             if (countryCodes == null)
             {
                 throw new Exception("Country codes are needed");
@@ -731,13 +743,6 @@ namespace asi.asicentral.services.PersonifyProxy
                 throw new Exception("Company information is needed.");
             }
 
-            return AddIndividualInfos(storeOrder.Company, countryCodes, companyInfo);
-        }
-
-        public static IEnumerable<CustomerInfo> AddIndividualInfos(StoreCompany storeCompany, 
-                                                                   IList<LookSendMyAdCountryCode> countryCodes,
-                                                                   CustomerInfo companyInfo)
-        {
             StoreAddress companyAddress = storeCompany.GetCompanyAddress();
             if (companyAddress == null)
             {
