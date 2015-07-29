@@ -730,7 +730,14 @@ namespace asi.asicentral.services.PersonifyProxy
             {
                 throw new Exception("Company information is needed.");
             }
-            StoreCompany storeCompany = storeOrder.Company;
+
+            return AddIndividualInfos(storeOrder.Company, countryCodes, companyInfo);
+        }
+
+        public static IEnumerable<CustomerInfo> AddIndividualInfos(StoreCompany storeCompany, 
+                                                                   IList<LookSendMyAdCountryCode> countryCodes,
+                                                                   CustomerInfo companyInfo)
+        {
             StoreAddress companyAddress = storeCompany.GetCompanyAddress();
             if (companyAddress == null)
             {

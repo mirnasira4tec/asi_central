@@ -320,9 +320,15 @@ namespace asi.asicentral.services
 
         public virtual CompanyInformation CreateCompany(StoreCompany storeCompany, string storeType)
         {
+            CompanyInformation company = null;
+
             var countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
             CustomerInfo customerInfo = PersonifyClient.CreateCompany(storeCompany, storeType, countryCodes);
-            CompanyInformation company = customerInfo != null ? PersonifyClient.GetCompanyInfo(customerInfo) : null;
+            if (customerInfo != null)
+            {
+                PersonifyClient.AddIndividualInfos(storeCompany, countryCodes, customerInfo);
+                company = PersonifyClient.GetCompanyInfo(customerInfo);
+            }
 
             return company;
         }
