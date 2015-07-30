@@ -767,6 +767,7 @@ namespace asi.asicentral.oauth
                                 user.MemberStatus_CD = companyInfo.MemberStatus;
 								user.MemberTypeId = companyInfo.MemberTypeNumber;
 	                            user.AsiNumber = companyInfo.ASINumber;
+                                user.ExternalReference = string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
                                 user.CompanyPhone = companyInfo.Phone;
 								//Fill details from personify, in case UMS not provided below details
                                 if(string.IsNullOrEmpty(user.City))
