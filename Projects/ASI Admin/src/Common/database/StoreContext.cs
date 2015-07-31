@@ -24,6 +24,7 @@ namespace asi.asicentral.database
         public DbSet<ContextFeature> Features { get; set; }
         public DbSet<ContextFeatureProduct> FeatureProducts { get; set; }
         public DbSet<ContextProductSequence> ProductSequences { get; set; }
+        public DbSet<CompanyValidation> CompanyValidations { get; set; }
         public DbSet<Coupon> Coupons { get; set; }
         public DbSet<FormType> FormTypes { get; set; }
         public DbSet<FormInstance> FormInstances { get; set; }
@@ -84,6 +85,7 @@ namespace asi.asicentral.database
             base.OnModelCreating(modelBuilder);
             Configuration.LazyLoadingEnabled = true;
             modelBuilder.Configurations
+                .Add(new CompanyValidationMap())
                 .Add(new ContextMap())
                 .Add(new ContextProductMap())
                 .Add(new ContextFeatureMap())

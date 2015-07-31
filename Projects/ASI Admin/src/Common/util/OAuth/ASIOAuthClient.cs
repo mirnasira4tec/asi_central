@@ -10,16 +10,55 @@ using ASI.EntityModel;
 using System.Threading.Tasks;
 using asi.asicentral.services;
 using asi.asicentral.interfaces;
+using System.ComponentModel;
 
 namespace asi.asicentral.oauth
 {
     public enum StatusCode
     {
+        //API which provide codes for status from MMS
+        //http://stage-asiservice.asicentral.com/nanny/api/lookup?typecodename=signonstatus
+
+        //Code list from personify
+        [Description("Active")]
         ACTV,
+        [Description("Active")]
         ACTIVE,
+        [Description("ASI Central")]
         ASICENTRAL,
         //Consider dist_newlie as Active; they are active customer within the first  90 days of membership.
-        DIST_NEWLIE
+        [Description("Distributor Newlie")]
+        DIST_NEWLIE,
+        [Description("Delisted")]
+        DELS,
+        [Description("Delisted")]
+        DELISTED,
+        [Description("Terminated")]
+        TRMN,
+        [Description("Terminated")]
+        TERMINATED,
+        [Description("Corporate Lead")]
+        CORP_LEAD,
+        [Description("Cross Referenced")]
+        CROSS_REFERENCED,
+        [Description("Desk Filed")]
+        DESKFILED,
+        [Description("End_Buyer")]
+        END_BUYER,
+        [Description("Expired Trial Member")]
+        EXPIRED_TRIAL,
+        [Description("Inactive")]
+        INACTIVE,
+        [Description("Lead")]
+        LEAD,
+        [Description("MMS Datafeed")]
+        MMS_LOAD,
+        [Description("Non Member")]
+        NON_MEMBER,
+        [Description("Out Of Business")]
+        OUT_OF_BUSINESS,
+        [Description("Trial")]
+        TRIAL,
     }
 
     public enum UsageCode
@@ -728,6 +767,8 @@ namespace asi.asicentral.oauth
                                 user.MemberStatus_CD = companyInfo.MemberStatus;
 								user.MemberTypeId = companyInfo.MemberTypeNumber;
 	                            user.AsiNumber = companyInfo.ASINumber;
+                                user.ExternalReference = string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+                                user.CompanyPhone = companyInfo.Phone;
 								//Fill details from personify, in case UMS not provided below details
                                 if(string.IsNullOrEmpty(user.City))
                                 {

@@ -2,21 +2,23 @@
 <div id="tabbasic" class="basic-information tab-pane fade in active">
 	<fieldset class="company-info-form">			
 		<legend>Company Information</legend>
-            @if(!string.IsNullOrEmpty(Model.ASINumber))
-            {
+           
             <span class="label-row">
+                @if(!string.IsNullOrEmpty(Model.ASINumber))
+                {
 				@Html.Label(string.Format("ASI #:"))
+                }
+                @Html.LabelFor(m => m.Company) 
+                @Html.LabelFor(m => m.Phone) 
             </span>
             <span class="label-row">
+                @if(!string.IsNullOrEmpty(Model.ASINumber))
+                {
                 @Html.EditorFor(m => m.ASINumber) @Html.ValidationMessageFor(m => m.ASINumber)
+                }
+                @Html.EditorFor(m => m.Company) @Html.ValidationMessageFor(m => m.Company)
+                @Html.EditorFor(m => m.Phone) @Html.ValidationMessageFor(m => m.Phone)
 			</span>
-            }
-			<span class="label-row">
-				@Html.LabelFor(m => m.Company) 
-			</span>
-            <span class="label-row">
-                	@Html.EditorFor(m => m.Company) @Html.ValidationMessageFor(m => m.Company)
-            </span>
 			<span class="label-row">
 				@Html.LabelFor(m => m.Address1)
 				@Html.LabelFor(m => m.Address2)

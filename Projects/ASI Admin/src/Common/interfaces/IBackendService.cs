@@ -1,9 +1,16 @@
 ﻿using asi.asicentral.model;
 using asi.asicentral.model.store;
+using asi.asicentral.PersonifyDataASI;
 using System.Collections.Generic;
 
 namespace asi.asicentral.interfaces
 {
+    public enum Activity
+    {
+        Order = 0,
+        Exception = 1
+    }
+
     public interface IBackendService
     {
         void PlaceOrder(StoreOrder storeOrder, IEmailService emailService, string url);
@@ -32,5 +39,11 @@ namespace asi.asicentral.interfaces
 		CompanyInformation GetCompanyInfoByIdentifier(int companyIdentifier);
 
         CompanyInformation AddCompany(CompanyInformation companyInfo);
+
+        CompanyInformation CreateCompany(StoreCompany storeCompany, string storeType);
+
+        CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList, ref bool dnsFlg);
+
+        void AddActivity(StoreCompany company, string activityText, Activity activityType);
     }
 }
