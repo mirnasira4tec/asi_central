@@ -35,6 +35,7 @@ namespace asi.asicentral.model.store
         public string BankName { get; set; }
         public string BankCity { get; set; }
         public string BankState { get; set; }
+        public string MatchingCompanyIds { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }

@@ -152,6 +152,8 @@ namespace asi.asicentral.database.mappings
             #endregion MemberDemogrContext
 
             #region StoreContext
+            For<IRepository<CompanyValidation>>().Use<EFRepository<CompanyValidation>>()
+                .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<Context>>().Use<EFRepository<Context>>()
                 .Ctor<IValidatedContext>().Named("StoreContext");
