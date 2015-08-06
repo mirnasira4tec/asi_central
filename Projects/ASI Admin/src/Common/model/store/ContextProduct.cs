@@ -46,6 +46,11 @@ namespace asi.asicentral.model.store
      
         public virtual ICollection<ContextFeatureProduct> Features { get; set; }
 
+        public bool IsMembership()
+        {
+            return Name.ToLower().Contains("membership") || Type.ToLower().Contains("membership");
+        }
+
         public override string ToString()
         {
             return string.Format("Product: {0} - {1}", Id, Name);

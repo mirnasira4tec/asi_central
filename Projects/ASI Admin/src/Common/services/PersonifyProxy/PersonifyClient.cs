@@ -100,8 +100,8 @@ namespace asi.asicentral.services.PersonifyProxy
                 BillAddressTypeCode = "CORPORATE",
                 RateStructure = mapping.PersonifyRateStructure,
                 
-                RateCode = mapping.PersonifyRateCode,
-                BundleGroupName = mapping.PersonifyBundle
+                RateCode = "FY_DISTMEM", //mapping.PersonifyRateCode,
+                BundleGroupName = "DIST_MEM" //mapping.PersonifyBundle
             };
 
             var bOutput = SvcClient.Post<ASICreateBundleOrderOutput>("ASICreateBundleOrder", bundleOrderInput);
@@ -408,6 +408,30 @@ namespace asi.asicentral.services.PersonifyProxy
             var customers = SvcClient.Ctxt.ASICustomerInfos.Where(p => p.UserDefinedCustomerNumber == companyIdentifier).ToList();
             if (customers.Count == 0) return null;
             return GetCompanyInfo(customers[0]);
+        }
+
+        public static string GetCompanyStatus(string masterCustomerId, int subCustomerId)
+        {
+            string status = string.Empty;
+            var asiCustomers = SvcClient.Ctxt.ASICustomers.Where(c => c.MasterCustomerId == masterCustomerId && c.SubCustomerId == subCustomerId);
+            if( asiCustomers.Any() )
+                status = asiCustomers.ElementAt(0).UserDefinedMemberStatusString;
+
+            return status;
+        }
+
+        public static string GetCompanyAsiNumber(string masterCustomerId, int subCustomerId)
+        {
+            string asiNumber = string.Empty;
+            var asiCustomerInfos = SvcClient.Ctxt.ASICustomerInfos
+                                            .Where(c => c.MasterCustomerId == masterCustomerId && c.SubCustomerId == subCustomerId);
+
+            if (asiCustomerInfos.Any())
+            {
+                asiNumber = asiCustomerInfos.ElementAt(0).UserDefinedAsiNumber;
+            }
+
+            return asiNumber;
         }
 
         private static CompanyInformation GetCompanyInfo(ASICustomerInfo customerInfo)
