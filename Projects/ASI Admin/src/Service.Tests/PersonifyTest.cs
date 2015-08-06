@@ -12,6 +12,7 @@ using Moq;
 using asi.asicentral.model.timss;
 using asi.asicentral.util.store;
 using PersonifySvcClient;
+using asi.asicentral.model.personify;
 
 namespace asi.asicentral.Tests
 {
@@ -34,6 +35,14 @@ namespace asi.asicentral.Tests
             var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
             var emailExpress = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 61);
             PlaceOrderTest("30279", storeService, new ContextProduct[] { supplierSpecials, emailExpress });
+        }
+
+        [TestMethod]
+        public void PlaceOrderBundleTest()
+        {
+            IStoreService storeService = MockupStoreService();
+            var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 5);
+            PlaceOrderTest(string.Empty, storeService, new ContextProduct[] { distributor });
         }
 
         [TestMethod]
@@ -451,11 +460,13 @@ namespace asi.asicentral.Tests
             var products = new List<ContextProduct>();
             products.Add(new ContextProduct { Id = 77, HasBackEndIntegration = true });
             products.Add(new ContextProduct { Id = 61, HasBackEndIntegration = true });
+            products.Add(new ContextProduct { Id = 5, HasBackEndIntegration = true });
             var emailExpresses = new List<StoreDetailEmailExpress>();
             emailExpresses.Add(new StoreDetailEmailExpress { OrderDetailId = 1, ItemTypeId = 1 });
             var mappings = new List<PersonifyMapping>();
             mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 77, StoreOption = "0", PersonifyProduct = 14471, PersonifyRateCode = "STD", PersonifyRateStructure = "MEMBER" });
             mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 61, StoreOption = "1;1X", PersonifyProduct = 1587, PersonifyRateCode = "1X", PersonifyRateStructure = "MEMBER" });
+            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 5, PersonifyProduct = 1003113722, PersonifyRateCode = "FY_DISTMEM", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "DIST_MEM" });
             var codes = new List<LookSendMyAdCountryCode>();
             codes.Add(new LookSendMyAdCountryCode { Alpha2 = "USA", Alpha3 = "USA", CountryName = "United States" });
 

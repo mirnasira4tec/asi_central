@@ -475,7 +475,7 @@
     <value>Call us at 800-546-1350 x318 to speak with an ASI representative to check the status of your application.</value>
   </data>
   <data name="ConfirmationConfirmationMessage" xml:space="preserve">
-    <value>Your order confirmation number (this is not your ASI Number) is</value>
+    <value>Your ASI Number is</value>
   </data>
   <data name="ConfirmationDistributorsCantFind" xml:space="preserve">
     <value>Distributors can't find your products</value>
@@ -1898,5 +1898,14 @@
   </data>
   <data name="FieldYearRequired" xml:space="preserve">
     <value>The Year field is required.</value>
+  </data>
+  <data name="ConfirmationASINumberMessage" xml:space="preserve">
+    <value>Someone will contact you shortly with your ASI Number</value>
+  </data>
+  <data name="ConfirmationOrderCreatedMessage" xml:space="preserve">
+    <value>Your order has been created and it will be processed as soon as possible.</value>
+  </data>
+  <data name="ConfirmationOrderNumberMessage" xml:space="preserve">
+    <value>Your order confirmation number is</value>
   </data>
 </root>
