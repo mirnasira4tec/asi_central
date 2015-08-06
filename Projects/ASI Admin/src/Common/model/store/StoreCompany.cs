@@ -29,7 +29,6 @@ namespace asi.asicentral.model.store
         public string Fax { get; set; }
         public string Email { get; set; }
         public string WebURL { get; set; }
-        [RegularExpression(@"^[1-9][0-9]{3,5}$", ErrorMessageResourceName = "FieldInvalidASINumber", ErrorMessageResourceType = typeof(Resource))]
         public string ASINumber { get; set; }
 	    public string ExternalReference { get; set; }
         public string BankName { get; set; }
