@@ -421,7 +421,8 @@ namespace asi.asicentral.services.PersonifyProxy
             if (company == null || string.IsNullOrWhiteSpace(company.Name)) throw new Exception("Store company is not valid.");
 			if (!string.IsNullOrEmpty(company.ExternalReference))
 			{
-                if (!string.Equals(company.ExternalReference, Helper.NOT_FOUND))
+                // company exists in personify
+                if ( company.HasExternalReference() )
                 {
 				    string[] references = company.ExternalReference.Split(';');
 				    int subCustomerId = Int32.Parse(references[1]);

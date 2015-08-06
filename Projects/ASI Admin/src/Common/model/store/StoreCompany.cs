@@ -1,4 +1,5 @@
 ﻿using asi.asicentral.Resources;
+using asi.asicentral.util.store;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -40,6 +41,11 @@ namespace asi.asicentral.model.store
         public string UpdateSource { get; set; }
         public virtual IList<StoreCompanyAddress> Addresses { get; set; }
         public virtual IList<StoreIndividual> Individuals { get; set; }
+
+        public bool HasExternalReference()
+        {
+            return !string.IsNullOrEmpty(ExternalReference) && ExternalReference != Helper.NOT_FOUND;
+        }
 
         public override string ToString()
         {
