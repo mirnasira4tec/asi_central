@@ -38,7 +38,7 @@ namespace asi.asicentral.interfaces
 
 		CompanyInformation GetCompanyInfoByIdentifier(int companyIdentifier);
 
-        CompanyInformation AddCompany(CompanyInformation companyInfo);
+        CompanyInformation AddCompany(CompanyInformation companyInfo, User curUser = null);
 
         CompanyInformation CreateCompany(StoreCompany storeCompany, string storeType);
 
