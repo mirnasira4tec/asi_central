@@ -44,6 +44,9 @@ namespace asi.asicentral.interfaces
 
         CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList, ref bool dnsFlg);
 
+        string GetCompanyStatus(string masterCustomerId, int subCustomerId);
+        string GetCompanyAsiNumber(string masterCustomerId, int subCustomerId);
+
         void AddActivity(StoreCompany company, string activityText, Activity activityType);
     }
 }

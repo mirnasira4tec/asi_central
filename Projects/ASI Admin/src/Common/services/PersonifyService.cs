@@ -434,6 +434,16 @@ namespace asi.asicentral.services
             PersonifyClient.AddActivity(company, activityText, activityType);
         }
 
+        public string GetCompanyStatus(string masterCustomerId, int subCustomerId)
+        {
+            return PersonifyClient.GetCompanyStatus(masterCustomerId, subCustomerId);
+        }
+
+        public string GetCompanyAsiNumber(string masterCustomerId, int subCustomerId)
+        {
+            return PersonifyClient.GetCompanyAsiNumber(masterCustomerId, subCustomerId);
+        }
+
  		private static string GetMessageSuffix(string url)
 		{
 			var s = "<br /><br />Thanks,<br /><br />ASICentral team";
