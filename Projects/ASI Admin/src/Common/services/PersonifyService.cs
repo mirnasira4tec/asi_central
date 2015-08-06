@@ -1,13 +1,13 @@
-﻿using System.Linq;
-using asi.asicentral.interfaces;
-using asi.asicentral.model.store;
-using asi.asicentral.PersonifyDataASI;
+﻿using asi.asicentral.interfaces;
 using asi.asicentral.model;
+using asi.asicentral.model.personify;
+using asi.asicentral.model.store;
+using asi.asicentral.model.timss;
+using asi.asicentral.PersonifyDataASI;
+using asi.asicentral.services.PersonifyProxy;
 using System;
 using System.Collections.Generic;
-using asi.asicentral.services.PersonifyProxy;
-using asi.asicentral.model.timss;
-using asi.asicentral.util.store;
+using System.Linq;
 
 namespace asi.asicentral.services
 {
@@ -57,49 +57,51 @@ namespace asi.asicentral.services
 
                 var shipToAddr = GetAddressInfo(addresses2, AddressType.Shipping, order);
                 var billToAddr = GetAddressInfo(addresses2, AddressType.Billing, order);
-                var lineItems = GetPersonifyLineInputs(order, shipToAddr.PersonifyAddr.CustomerAddressId);
-                log.Debug(string.Format("Retrieved the line items to the order '{0}'.", order.ToString()));
-                var orderOutput = PersonifyClient.CreateOrder(
-                    order,
-                    companyInfo,
-                    primaryContactInfo,
-                    billToAddr.PersonifyAddr.CustomerAddressId,
-                    shipToAddr.PersonifyAddr.CustomerAddressId,
-                    lineItems);
-                log.Debug(string.Format("The order '{0}' has been created in Personify.", order));
+                var orderDetail = order.OrderDetails[0];
 
-                order.BackendReference = orderOutput.OrderNumber;
-                decimal orderTotal = PersonifyClient.GetOrderBalanceTotal(orderOutput.OrderNumber);
-                log.Debug(string.Format("Got the order total {0} of for the order '{1}'.", orderTotal, order));
+                var mapping = storeService.GetAll<PersonifyMapping>(true)
+                                          .FirstOrDefault(map => map.StoreContext == orderDetail.Order.ContextId &&
+                                                                 map.StoreProduct == orderDetail.Product.Id &&
+                                                                 map.PersonifyRateStructure == "BUNDLE");
+                if( mapping != null)
+                {
+                    PersonifyClient.CreateBundleOrder(order, mapping, companyInfo, primaryContactInfo, billToAddr.PersonifyAddr.CustomerAddressId, shipToAddr.PersonifyAddr.CustomerAddressId);
+                    ValidateOrderTotal(order, emailService, url);
+                }
+                else
+                {
+                    var lineItems = GetPersonifyLineInputs(order, shipToAddr.PersonifyAddr.CustomerAddressId);
+                    log.Debug(string.Format("Retrieved the line items to the order '{0}'.", order.ToString()));
+                    var orderOutput = PersonifyClient.CreateOrder(
+                        order,
+                        companyInfo,
+                        primaryContactInfo,
+                        billToAddr.PersonifyAddr.CustomerAddressId,
+                        shipToAddr.PersonifyAddr.CustomerAddressId,
+                        lineItems);
+                    log.Debug(string.Format("The order '{0}' has been created in Personify.", order));
 
-                if (orderTotal != order.Total)
-                {
-                    var data = new EmailData()
+                    order.BackendReference = orderOutput.OrderNumber;
+                    decimal orderTotal = ValidateOrderTotal(order, emailService, url);
+
+                    try
                     {
-                        Subject = "here is a price discrepancy for an order from the store to Personify",
-                        EmailBody = string.Format("A new order created in the store ({0}) has been transferred to a Personify "
-                        + "order ({1}). The prices do not match, the order needs to be looked at. The store price is {2:C} and "
-                        + "the Personify price is {3:C}.{4}", order.Id.ToString(), orderOutput.OrderNumber, order.Total, orderTotal, GetMessageSuffix(url))
-                    };
-                    data.SendEmail(emailService);
-                }
-                try
-                {
-                    PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, billToAddr.PersonifyAddr, companyInfo);
-                    log.Debug(string.Format("Payed the order '{0}'.", order));
-                    log.Debug(string.Format("Place order End: {0}", order));
-                }
-                catch (Exception e)
-                {
-                    string s = string.Format("Failed to pay the order '{0} {3}'. Error is {2}{1}", order, e.StackTrace, e.Message, orderOutput.OrderNumber);
-                    log.Error(s);
-                    var data = new EmailData()
+                        PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, billToAddr.PersonifyAddr, companyInfo);
+                        log.Debug(string.Format("Payed the order '{0}'.", order));
+                        log.Debug(string.Format("Place order End: {0}", order));
+                    }
+                    catch (Exception e)
                     {
-                        Subject = "order failed to be charged",
-                        EmailBody = s + GetMessageSuffix(url)
-                    };
-                    data.SendEmail(emailService);
-                    log.Debug(string.Format("Place order End: {0}", order));
+                        string s = string.Format("Failed to pay the order '{0} {3}'. Error is {2}{1}", order, e.StackTrace, e.Message, orderOutput.OrderNumber);
+                        log.Error(s);
+                        var data = new EmailData()
+                        {
+                            Subject = "order failed to be charged",
+                            EmailBody = s + EmailData.GetMessageSuffix(url)
+                        };
+                        data.SendEmail(emailService);
+                        log.Debug(string.Format("Place order End: {0}", order));
+                    }
                 }
             }
             catch (Exception ex)
@@ -116,11 +118,31 @@ namespace asi.asicentral.services
                 var data = new EmailData()
                 {
                     Subject = error2,
-                    EmailBody = error1 + "<br /><br />" + error2 + GetMessageSuffix(url)
+                    EmailBody = error1 + "<br /><br />" + error2 + EmailData.GetMessageSuffix(url)
                 };
                 data.SendEmail(emailService);
                 throw ex;
             }
+        }
+
+        private decimal ValidateOrderTotal(StoreOrder order, IEmailService emailService, string url)
+        {
+            decimal orderTotal = PersonifyClient.GetOrderBalanceTotal(order.ExternalReference);
+            log.Debug(string.Format("Got the order total {0} of for the order '{1}'.", orderTotal, order));
+
+            if (orderTotal != order.Total)
+            {
+                var data = new EmailData()
+                {
+                    Subject = "here is a price discrepancy for an order from the store to Personify",
+                    EmailBody = string.Format("A new order created in the store ({0}) has been transferred to a Personify "
+                    + "order ({1}). The prices do not match, the order needs to be looked at. The store price is {2:C} and "
+                    + "the Personify price is {3:C}.{4}", order.Id.ToString(), order.BackendReference, order.Total, orderTotal, EmailData.GetMessageSuffix(url))
+                };
+                data.SendEmail(emailService);
+            }
+
+            return orderTotal;
         }
 
         private StoreAddressInfo GetAddressInfo(IList<StoreAddressInfo> addresses, AddressType type, StoreOrder order)
@@ -199,7 +221,7 @@ namespace asi.asicentral.services
 	    public virtual IEnumerable<StoreCreditCard> GetCompanyCreditCards(StoreCompany company, string asiCompany)
 	    {
 		    return PersonifyClient.GetCompanyCreditCards(company, asiCompany);
-	    } 
+	    }
 
         private IList<CreateOrderLineInput> GetPersonifyLineInputs(StoreOrder order, long shipAddressId)
         {
@@ -213,7 +235,7 @@ namespace asi.asicentral.services
                         var startDate = (orderDetail.DateOption.HasValue ? orderDetail.DateOption.Value : DateTime.Now).ToString("MM/dd/yyyy");
                         var endDate = (orderDetail.DateOption.HasValue ? orderDetail.DateOption.Value : DateTime.Now).AddMonths(1).ToString("MM/dd/yyyy");
                         var option = orderDetail.OptionId.ToString();
-                        var mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => Equals(map.StoreContext, orderDetail.Order.ContextId) &&
+                        var mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => (map.StoreContext ?? -1) == (orderDetail.Order.ContextId ?? -1) &&
                             map.StoreProduct == orderDetail.Product.Id &&
                             map.StoreOption == option);
                         mapping.Quantity = orderDetail.Quantity;
@@ -244,7 +266,7 @@ namespace asi.asicentral.services
                             else if (orderDetail.Quantity >= 3) option += "3X";
                             else option += "1X";
                         }
-                        mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => Equals(map.StoreContext, orderDetail.Order.ContextId) &&
+                        mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => (map.StoreContext ?? -1) == (orderDetail.Order.ContextId ?? -1) &&
                             map.StoreProduct == orderDetail.Product.Id &&
                             map.StoreOption == option);
                         //need to create a new line item for each one rather than one for all quantity
@@ -265,7 +287,7 @@ namespace asi.asicentral.services
                         mapping.Quantity = 1;
                         break;
                     default:
-                        mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => Equals(map.StoreContext, orderDetail.Order.ContextId) &&
+                        mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => (map.StoreContext ?? -1) == (orderDetail.Order.ContextId ?? -1) &&
                             map.StoreProduct == orderDetail.Product.Id);
 
                         lineItem = new CreateOrderLineInput
@@ -412,7 +434,7 @@ namespace asi.asicentral.services
             PersonifyClient.AddActivity(company, activityText, activityType);
         }
 
-		private static string GetMessageSuffix(string url)
+ 		private static string GetMessageSuffix(string url)
 		{
 			var s = "<br /><br />Thanks,<br /><br />ASICentral team";
 			if (!string.IsNullOrEmpty(url)) s = "<br /><br />" + url + s;

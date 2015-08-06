@@ -1,5 +1,6 @@
 ﻿using asi.asicentral.interfaces;
 using asi.asicentral.model;
+using asi.asicentral.model.personify;
 using asi.asicentral.model.store;
 using asi.asicentral.PersonifyDataASI;
 using asi.asicentral.util.store;
@@ -75,6 +76,75 @@ namespace asi.asicentral.services.PersonifyProxy
             };
             var orderOutput = SvcClient.Post<CreateOrderOutput>("CreateOrder", createOrderInput);
             return orderOutput;
+        }
+
+        public static void CreateBundleOrder(StoreOrder storeOrder,
+                                            PersonifyMapping mapping,
+                                            CustomerInfo companyInfo,
+                                            CustomerInfo contactInfo,
+                                            long billToAddressId,
+                                            long shiptoAddressId)
+        {
+            _log.Debug(string.Format("CreateBundleOrder - start: order {0} ", storeOrder));
+            DateTime startTime = DateTime.Now;
+
+            var bundleOrderInput = new ASICreateBundleOrderInput()
+            {
+                ShipMasterCustomerID = contactInfo.MasterCustomerId,
+                ShipSubCustomerID = 0,
+                ShipAddressID = (int)billToAddressId,
+                ShipAddressTypeCode = "CORPORATE",
+                BillMasterCustomerID = companyInfo.MasterCustomerId,
+                BillSubCustomerID = 0,
+                BillAddressID = (int)shiptoAddressId,
+                BillAddressTypeCode = "CORPORATE",
+                RateStructure = mapping.PersonifyRateStructure,
+                
+                RateCode = mapping.PersonifyRateCode,
+                BundleGroupName = mapping.PersonifyBundle
+            };
+
+            var bOutput = SvcClient.Post<ASICreateBundleOrderOutput>("ASICreateBundleOrder", bundleOrderInput);
+            storeOrder.BackendReference = bOutput.ASIBundleOrderNumber;
+
+            // get order line items
+            var orderLineItems = SvcClient.Ctxt.OrderDetailInfos
+                                               .Where(c => c.OrderNumber == bOutput.ASIBundleOrderNumber && c.BaseTotalAmount > 0)
+                                               .ToList();
+            if (orderLineItems.Any())
+            {
+                foreach (var item in orderLineItems)
+                {
+                    // order payment schedule
+                    var iPaySchedual = new ASICreatePayScheduleInput()
+                    {
+                        OrderNumber = item.OrderNumber,
+                        OrderLineNumber = (short)item.RelatedLineNumber,
+                        PayFrequency = "MONTHLY",
+                        PayStartDate = DateTime.Now,
+                        PayMethodCode = "CC",
+                        CCProfileId = Int32.Parse(storeOrder.CreditCard.ExternalReference),
+                        SyncPayScheduleFlag = true
+                    };
+
+                    SvcClient.Post<ASICreatePayScheduleOutput>("ASICreatePaySchedule", iPaySchedual);
+                }
+
+                // add application fee
+                var linePriceInput = new ASIAddOrderLinewithPriceInput()
+                {
+                    OrderNumber = bOutput.ASIBundleOrderNumber,
+                    ProductID = 160, 
+                    Quantity = 1,
+                    UserDefinedBoltOn = true,
+                    RateStructure = "MEMBER",
+                    RateCode = "STD"
+                };
+
+                SvcClient.Post<OrderNumberParam>("ASIAddOrderLinewithPrice", linePriceInput);
+            }
+
+            _log.Debug(string.Format("CreateBundleOrder - end: order {0} ({1})", storeOrder, DateTime.Now.Subtract(startTime).TotalMilliseconds));
         }
 
         public static decimal GetOrderBalanceTotal(string orderNumber)

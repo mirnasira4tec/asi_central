@@ -10,6 +10,7 @@ using asi.asicentral.model.findsupplier;
 using asi.asicentral.model.DM_memberDemogr;
 using asi.asicentral.database.mappings.show;
 using asi.asicentral.model.show;
+using asi.asicentral.model.personify;
 
 namespace asi.asicentral.database.mappings
 {
@@ -25,6 +26,7 @@ namespace asi.asicentral.database.mappings
             SelectConstructor<StoreContext>(() => new StoreContext());
             SelectConstructor<ASIEmailBlastContext>(() => new ASIEmailBlastContext());
             SelectConstructor<DM_MemberDemogrContext>(() => new DM_MemberDemogrContext());
+            SelectConstructor<PersonifyContext>(() => new PersonifyContext());
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIInternetContext>().Name = "ASIInternetContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIPublicationContext>().Name = "ASIPublicationContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<InternetContext>().Name = "InternetContext";
@@ -35,6 +37,7 @@ namespace asi.asicentral.database.mappings
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<MemberDemogrContext>().Name = "MemberDemogrContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<DM_MemberDemogrContext>().Name = "DM_MemberDemogrContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<Umbraco_ShowContext>().Name = "Umbraco_ShowContext";
+            For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<PersonifyContext>().Name = "PersonifyContext";
 
             //for each model - get the repository class with the appropriate context 
 
@@ -399,6 +402,10 @@ namespace asi.asicentral.database.mappings
 
             #endregion Umbraco_ShowContext
 
+            #region PersonifyContext
+            For<IRepository<PersonifyMapping>>().Use<EFRepository<PersonifyMapping>>()
+                .Ctor<IValidatedContext>().Named("PersonifyContext");            
+            #endregion
         }
     }
 }
