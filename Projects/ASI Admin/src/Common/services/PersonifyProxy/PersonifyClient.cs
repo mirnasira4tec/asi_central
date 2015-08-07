@@ -413,7 +413,7 @@ namespace asi.asicentral.services.PersonifyProxy
         public static string GetCompanyStatus(string masterCustomerId, int subCustomerId)
         {
             string status = string.Empty;
-            var asiCustomers = SvcClient.Ctxt.ASICustomers.Where(c => c.MasterCustomerId == masterCustomerId && c.SubCustomerId == subCustomerId);
+            var asiCustomers = SvcClient.Ctxt.ASICustomers.Where(c => c.MasterCustomerId == masterCustomerId && c.SubCustomerId == subCustomerId).ToList();
             if( asiCustomers.Any() )
                 status = asiCustomers.ElementAt(0).UserDefinedMemberStatusString;
 
@@ -424,7 +424,7 @@ namespace asi.asicentral.services.PersonifyProxy
         {
             string asiNumber = string.Empty;
             var asiCustomerInfos = SvcClient.Ctxt.ASICustomerInfos
-                                            .Where(c => c.MasterCustomerId == masterCustomerId && c.SubCustomerId == subCustomerId);
+                                            .Where(c => c.MasterCustomerId == masterCustomerId && c.SubCustomerId == subCustomerId).ToList();
 
             if (asiCustomerInfos.Any())
             {
