@@ -356,7 +356,7 @@ namespace asi.asicentral.oauth
                                     Country = user.CountryCode,
                                     MemberTypeNumber = user.MemberTypeId,
                                 };
-                                companyInfo = personifyService.AddCompany(companyInfo);
+                                companyInfo = personifyService.AddCompany(companyInfo, user);
                                 user.CompanyId = companyInfo.CompanyId;
                             }
                             catch (Exception ex)

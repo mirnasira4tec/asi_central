@@ -284,7 +284,7 @@ namespace asi.asicentral.services
             return lineItems;
         }
 
-        public virtual CompanyInformation AddCompany(CompanyInformation companyInformation)
+        public virtual CompanyInformation AddCompany(CompanyInformation companyInformation, User curUser = null)
         {
             //create equivalent store objects
             var company = new StoreCompany
@@ -313,7 +313,22 @@ namespace asi.asicentral.services
             var companyInfo = PersonifyClient.ReconcileCompany(company, companyInformation.MemberType, null, true);
             PersonifyClient.AddCustomerAddresses(company, companyInfo, null);
             PersonifyClient.AddPhoneNumber(companyInformation.Phone, GetCountryCode(companyInformation.Country), companyInfo);
-	        companyInformation = PersonifyClient.GetCompanyInfo(companyInfo);
+            if (curUser != null)
+            {
+                company.Individuals = new List<StoreIndividual>()
+                    {
+                        new StoreIndividual() { FirstName = curUser.FirstName,
+                                                LastName = curUser.LastName,
+                                                Email = curUser.Email,
+                                                Phone = curUser.PhoneAreaCode + curUser.Phone,
+                                                Address = address,
+                                                IsPrimary = true }
+                    };
+
+                var countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
+                PersonifyClient.AddIndividualInfos(company, countryCodes, companyInfo);
+            }
+            companyInformation = PersonifyClient.GetCompanyInfo(companyInfo);
             return companyInformation;
         }
 
