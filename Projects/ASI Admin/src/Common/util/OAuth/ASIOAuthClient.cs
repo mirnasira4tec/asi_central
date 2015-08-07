@@ -343,21 +343,7 @@ namespace asi.asicentral.oauth
                             PersonifyService personifyService = new PersonifyService();
                             try
                             {
-                                CompanyInformation companyInfo = new CompanyInformation
-                                {
-                                    CompanyId = user.CompanyId,
-                                    Name = user.CompanyName,
-                                    Phone = user.PhoneAreaCode + user.Phone,
-                                    Street1 = user.Street1,
-                                    Street2 = user.Street2,
-                                    City = user.City,
-                                    Zip = user.Zip,
-                                    State = user.State,
-                                    Country = user.CountryCode,
-                                    MemberTypeNumber = user.MemberTypeId,
-                                };
-                                companyInfo = personifyService.AddCompany(companyInfo, user);
-                                user.CompanyId = companyInfo.CompanyId;
+                                personifyService.AddCompany(user);
                             }
                             catch (Exception ex)
                             {
