@@ -403,8 +403,16 @@ namespace asi.asicentral.Tests
 
             if (!string.IsNullOrEmpty(email))
             {
-                company.Individuals = new List<StoreIndividual>();
-                company.Individuals.Add(new StoreIndividual() { Email = email, IsPrimary = true });
+                company.Individuals = new List<StoreIndividual>()
+                {
+                    new StoreIndividual() 
+                      {   Email = email, 
+                          IsPrimary = true, 
+                          FirstName = "TestFirstName", 
+                          LastName = "TestLastName",
+                          Address = address
+                      }
+                };
             }
             return company;
         }
