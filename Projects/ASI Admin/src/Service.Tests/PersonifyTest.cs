@@ -51,8 +51,22 @@ namespace asi.asicentral.Tests
                 Country = "USA",
 				MemberTypeNumber = 6,
             };
-            IBackendService personify = new PersonifyService();
-            companyInfo = personify.AddCompany(companyInfo);
+            var accountInfo = new User
+            {
+                FirstName = "New First Name",
+                LastName =  "New Last Name",
+                Email = String.Format("user{0}@addCompany.com", tag),
+                CompanyName = "New Company1 " + tag,
+                Street1 = "4800 Street Rd",
+                City = "Trevose",
+                State = "PA",
+                Zip = "19053",
+                Country = "USA",
+                MemberTypeId  = 6,
+                CountryCode = "USA"
+            };
+            IBackendService personify = new PersonifyService(MockupStoreService());
+            companyInfo = personify.AddCompany(accountInfo);
             Assert.IsTrue(companyInfo.CompanyId > 0);
 			Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
 			Assert.AreEqual("ASICENTRAL", companyInfo.MemberStatus);
