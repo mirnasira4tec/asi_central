@@ -339,9 +339,9 @@ namespace asi.asicentral.services
             var companyInfo = PersonifyClient.ReconcileCompany(company, companyInformation.MemberType, null, true);
             PersonifyClient.AddCustomerAddresses(company, companyInfo, null);
             PersonifyClient.AddPhoneNumber(companyInformation.Phone, GetCountryCode(companyInformation.Country), companyInfo);
-            var countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
+
             // Add contact to personify
-            PersonifyClient.AddIndividualInfos(company, countryCodes, companyInfo);
+            PersonifyClient.AddIndividualInfos(company, null, companyInfo);
 
             companyInformation = PersonifyClient.GetCompanyInfo(companyInfo);
             user.CompanyId = companyInformation.CompanyId;
