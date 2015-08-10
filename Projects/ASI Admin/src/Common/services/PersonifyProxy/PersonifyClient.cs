@@ -83,7 +83,7 @@ namespace asi.asicentral.services.PersonifyProxy
                                             CustomerInfo companyInfo,
                                             CustomerInfo contactInfo,
                                             long billToAddressId,
-                                            long shiptoAddressId)
+                                            long shipToAddressId)
         {
             _log.Debug(string.Format("CreateBundleOrder - start: order {0} ", storeOrder));
             DateTime startTime = DateTime.Now;
@@ -92,16 +92,16 @@ namespace asi.asicentral.services.PersonifyProxy
             {
                 ShipMasterCustomerID = contactInfo.MasterCustomerId,
                 ShipSubCustomerID = 0,
-                ShipAddressID = (int)billToAddressId,
+                ShipAddressID = (int)shipToAddressId,
                 ShipAddressTypeCode = "CORPORATE",
                 BillMasterCustomerID = companyInfo.MasterCustomerId,
                 BillSubCustomerID = 0,
-                BillAddressID = (int)shiptoAddressId,
+                BillAddressID = (int)billToAddressId,
                 BillAddressTypeCode = "CORPORATE",
                 RateStructure = mapping.PersonifyRateStructure,
                 
-                RateCode = "FY_DISTMEM", //mapping.PersonifyRateCode,
-                BundleGroupName = "DIST_MEM" //mapping.PersonifyBundle
+                RateCode = mapping.PersonifyRateCode, //"FY_DISTMEM", //,
+                BundleGroupName = mapping.PersonifyBundle //"DIST_MEM" //
             };
 
             var bOutput = SvcClient.Post<ASICreateBundleOrderOutput>("ASICreateBundleOrder", bundleOrderInput);
@@ -130,18 +130,24 @@ namespace asi.asicentral.services.PersonifyProxy
                     SvcClient.Post<ASICreatePayScheduleOutput>("ASICreatePaySchedule", iPaySchedual);
                 }
 
-                // add application fee
-                var linePriceInput = new ASIAddOrderLinewithPriceInput()
-                {
-                    OrderNumber = bOutput.ASIBundleOrderNumber,
-                    ProductID = 160, 
-                    Quantity = 1,
-                    UserDefinedBoltOn = true,
-                    RateStructure = "MEMBER",
-                    RateCode = "STD"
-                };
+                //add membership application fee
+                var memberType = storeOrder.OrderDetails[0].Product.Type;
 
-                SvcClient.Post<OrderNumberParam>("ASIAddOrderLinewithPrice", linePriceInput);
+                if (Helper.APPLICATION_FEE_IDS.Keys.Contains(memberType.ToLower().Trim()))
+                {
+                    // add application fee
+                    var linePriceInput = new ASIAddOrderLinewithPriceInput()
+                    {
+                        OrderNumber = bOutput.ASIBundleOrderNumber,
+                        ProductID = Helper.APPLICATION_FEE_IDS[memberType], 
+                        Quantity = 1,
+                        UserDefinedBoltOn = true,
+                        RateStructure = "MEMBER",
+                        RateCode = "STD"
+                    };
+
+                    SvcClient.Post<OrderNumberParam>("ASIAddOrderLinewithPrice", linePriceInput);
+                }
             }
 
             _log.Debug(string.Format("CreateBundleOrder - end: order {0} ({1})", storeOrder, DateTime.Now.Subtract(startTime).TotalMilliseconds));

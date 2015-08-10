@@ -127,7 +127,7 @@ namespace asi.asicentral.services
 
         private decimal ValidateOrderTotal(StoreOrder order, IEmailService emailService, string url)
         {
-            decimal orderTotal = PersonifyClient.GetOrderBalanceTotal(order.ExternalReference);
+            decimal orderTotal = PersonifyClient.GetOrderBalanceTotal(order.BackendReference);
             log.Debug(string.Format("Got the order total {0} of for the order '{1}'.", orderTotal, order));
 
             if (orderTotal != order.Total)
