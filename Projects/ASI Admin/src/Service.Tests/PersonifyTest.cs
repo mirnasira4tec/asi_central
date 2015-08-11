@@ -468,7 +468,7 @@ namespace asi.asicentral.Tests
             var products = new List<ContextProduct>();
             products.Add(new ContextProduct { Id = 77, HasBackEndIntegration = true });
             products.Add(new ContextProduct { Id = 61, HasBackEndIntegration = true });
-            products.Add(new ContextProduct { Id = 5, HasBackEndIntegration = true });
+            products.Add(new ContextProduct { Id = 5, HasBackEndIntegration = true, Type = "Distributor Membership" });
             var emailExpresses = new List<StoreDetailEmailExpress>();
             emailExpresses.Add(new StoreDetailEmailExpress { OrderDetailId = 1, ItemTypeId = 1 });
             var mappings = new List<PersonifyMapping>();
