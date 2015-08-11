@@ -43,7 +43,7 @@ namespace asi.asicentral.services
                 if (!individualInfos.Any()) throw new Exception("Failed in creating individuald in Personify.");
                 log.Debug(string.Format("Added individuals to company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
-                IList<StoreAddressInfo> addresses2 = PersonifyClient.AddIndividualAddresses(order.Company, individualInfos, countryCodes).ToList();
+                IList<StoreAddressInfo> contactAddresses = PersonifyClient.AddIndividualAddresses(order.Company, individualInfos, countryCodes).ToList();
                 log.Debug(string.Format("Address added to individuals to the order '{0}'.", order));
 
                 StoreIndividual primaryContact = order.GetContact();
@@ -55,8 +55,9 @@ namespace asi.asicentral.services
                     primaryContactInfo = PersonifyClient.GetIndividualInfoByEmail(primaryContact.Email);
                 }
 
-                var shipToAddr = GetAddressInfo(addresses2, AddressType.Shipping, order);
-                var billToAddr = GetAddressInfo(addresses2, AddressType.Billing, order);
+                var companyAddresses = PersonifyClient.GetPersonifyAddresses(companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+                var shipToAddr = GetAddressInfo(contactAddresses, AddressType.Shipping, order).PersonifyAddr;
+                var billToAddr = companyAddresses.FirstOrDefault(a => a.BillToFlag == true); ;
                 var orderDetail = order.OrderDetails[0];
 
                 var mapping = storeService.GetAll<PersonifyMapping>(true)
@@ -65,19 +66,19 @@ namespace asi.asicentral.services
                                                                  map.PersonifyRateStructure == "BUNDLE");
                 if( mapping != null)
                 {
-                    PersonifyClient.CreateBundleOrder(order, mapping, companyInfo, primaryContactInfo, billToAddr.PersonifyAddr.CustomerAddressId, shipToAddr.PersonifyAddr.CustomerAddressId);
+                    PersonifyClient.CreateBundleOrder(order, mapping, companyInfo, primaryContactInfo, billToAddr, shipToAddr);
                     ValidateOrderTotal(order, emailService, url);
                 }
                 else
                 {
-                    var lineItems = GetPersonifyLineInputs(order, shipToAddr.PersonifyAddr.CustomerAddressId);
+                    var lineItems = GetPersonifyLineInputs(order, shipToAddr.CustomerAddressId);
                     log.Debug(string.Format("Retrieved the line items to the order '{0}'.", order.ToString()));
                     var orderOutput = PersonifyClient.CreateOrder(
                         order,
                         companyInfo,
                         primaryContactInfo,
-                        billToAddr.PersonifyAddr.CustomerAddressId,
-                        shipToAddr.PersonifyAddr.CustomerAddressId,
+                        billToAddr.CustomerAddressId,
+                        shipToAddr.CustomerAddressId,
                         lineItems);
                     log.Debug(string.Format("The order '{0}' has been created in Personify.", order));
 
@@ -86,7 +87,7 @@ namespace asi.asicentral.services
 
                     try
                     {
-                        PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, billToAddr.PersonifyAddr, companyInfo);
+                        PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, billToAddr, companyInfo);
                         log.Debug(string.Format("Payed the order '{0}'.", order));
                         log.Debug(string.Format("Place order End: {0}", order));
                     }

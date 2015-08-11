@@ -82,40 +82,71 @@ namespace asi.asicentral.services.PersonifyProxy
                                             PersonifyMapping mapping,
                                             CustomerInfo companyInfo,
                                             CustomerInfo contactInfo,
-                                            long billToAddressId,
-                                            long shipToAddressId)
+                                            AddressInfo billToAddress,
+                                            AddressInfo shipToAddress)
         {
             _log.Debug(string.Format("CreateBundleOrder - start: order {0} ", storeOrder));
             DateTime startTime = DateTime.Now;
 
+            // create bundle
             var bundleOrderInput = new ASICreateBundleOrderInput()
             {
                 ShipMasterCustomerID = contactInfo.MasterCustomerId,
                 ShipSubCustomerID = 0,
-                ShipAddressID = (int)shipToAddressId,
+                ShipAddressID = (int)shipToAddress.CustomerAddressId,
                 ShipAddressTypeCode = "CORPORATE",
                 BillMasterCustomerID = companyInfo.MasterCustomerId,
                 BillSubCustomerID = 0,
-                BillAddressID = (int)billToAddressId,
+                BillAddressID = (int)billToAddress.CustomerAddressId,
                 BillAddressTypeCode = "CORPORATE",
                 RateStructure = mapping.PersonifyRateStructure,
                 
-                RateCode = mapping.PersonifyRateCode, //"FY_DISTMEM", //,
-                BundleGroupName = mapping.PersonifyBundle //"DIST_MEM" //
+                RateCode = "FP_ESPPMDLMORD14", //mapping.PersonifyRateCode, //"FY_DISTMEM", //,
+                BundleGroupName = "ESPP-MD-LM-ORD" //mapping.PersonifyBundle //"DIST_MEM" //
             };
 
             var bOutput = SvcClient.Post<ASICreateBundleOrderOutput>("ASICreateBundleOrder", bundleOrderInput);
             storeOrder.BackendReference = bOutput.ASIBundleOrderNumber;
 
-            // get order line items
-            var orderLineItems = SvcClient.Ctxt.OrderDetailInfos
-                                               .Where(c => c.OrderNumber == bOutput.ASIBundleOrderNumber && c.BaseTotalAmount > 0)
-                                               .ToList();
-            if (orderLineItems.Any())
+            //add membership application fee
+            long? applicationFeeId = null;
+            var memberType = storeOrder.OrderDetails[0].Product.Type;
+            if (!string.IsNullOrEmpty(memberType))
+                memberType = memberType.Trim().ToLower();
+
+            if (Helper.APPLICATION_FEE_IDS.Keys.Contains(memberType))
             {
-                foreach (var item in orderLineItems)
+                applicationFeeId = Helper.APPLICATION_FEE_IDS[memberType];
+                var linePriceInput = new ASIAddOrderLinewithPriceInput()
                 {
-                    // order payment schedule
+                    OrderNumber = bOutput.ASIBundleOrderNumber,
+                    ProductID = 160, //applicationFeeId, 
+                    Quantity = 1,
+                    UserDefinedBoltOn = true,
+                    RateStructure = "MEMBER",
+                    RateCode = "STD"
+                };
+
+                SvcClient.Post<OrderNumberParam>("ASIAddOrderLinewithPrice", linePriceInput);
+            }            
+            
+            // Order payment
+            var orderLineItems = SvcClient.Ctxt.OrderDetailInfos
+                                               .Where(c => c.OrderNumber == bOutput.ASIBundleOrderNumber && c.BaseTotalAmount > 0);
+            foreach (var item in orderLineItems)
+            {                    
+                if (item.ProductId == applicationFeeId)
+                {
+                    // one time application fee payment
+                    PayOrderWithCreditCard(item.OrderNumber,
+                                            item.BaseTotalAmount.Value,
+                                            storeOrder.CreditCard.ExternalReference,
+                                            billToAddress,
+                                            companyInfo);
+                }
+                else
+                {
+                    //payment schedule for bundle line items
                     var iPaySchedual = new ASICreatePayScheduleInput()
                     {
                         OrderNumber = item.OrderNumber,
@@ -128,25 +159,6 @@ namespace asi.asicentral.services.PersonifyProxy
                     };
 
                     SvcClient.Post<ASICreatePayScheduleOutput>("ASICreatePaySchedule", iPaySchedual);
-                }
-
-                //add membership application fee
-                var memberType = storeOrder.OrderDetails[0].Product.Type;
-
-                if (Helper.APPLICATION_FEE_IDS.Keys.Contains(memberType.ToLower().Trim()))
-                {
-                    // add application fee
-                    var linePriceInput = new ASIAddOrderLinewithPriceInput()
-                    {
-                        OrderNumber = bOutput.ASIBundleOrderNumber,
-                        ProductID = Helper.APPLICATION_FEE_IDS[memberType], 
-                        Quantity = 1,
-                        UserDefinedBoltOn = true,
-                        RateStructure = "MEMBER",
-                        RateCode = "STD"
-                    };
-
-                    SvcClient.Post<OrderNumberParam>("ASIAddOrderLinewithPrice", linePriceInput);
                 }
             }
 
@@ -266,6 +278,12 @@ namespace asi.asicentral.services.PersonifyProxy
                 }).ToList();
             }
             return storeCompanyAddresses;
+        }
+
+        public static IEnumerable<AddressInfo> GetPersonifyAddresses(string masterCustomerId, int subCustomerId)
+        {
+            return SvcClient.Ctxt.AddressInfos.Where(a => a.MasterCustomerId == masterCustomerId && 
+                                                          a.SubCustomerId == subCustomerId).ToList();
         }
 
         private static IList<StoreAddressInfo> ProcessStoreAddresses(StoreCompany storeCompany, IEnumerable<LookSendMyAdCountryCode> countryCodes)
