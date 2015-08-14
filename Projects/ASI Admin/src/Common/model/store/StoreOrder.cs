@@ -146,5 +146,18 @@ namespace asi.asicentral.model.store
 		    }
 		    return asiCompany;
 	    }
+
+        public bool IsNewMemberShip(ref string newMemberType)
+        {
+            bool newMembership = false;
+            if( Company != null && OrderDetails != null && OrderDetails.Any() && OrderDetails[0].Product != null)
+            {
+                newMembership = Company.MemberType.ToUpper() == "DISTRIBUTOR" && (OrderDetails[0].Product.Id == 70 || OrderDetails[0].Product.Id == 66);
+                if( newMembership )
+                    newMemberType = "Decorator";
+            }
+
+            return newMembership;
+        }
     }
 }

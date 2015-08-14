@@ -37,6 +37,7 @@ namespace asi.asicentral.services
             try
             {
                 var companyInfo = PersonifyClient.ReconcileCompany(order.Company, "UNKNOWN", countryCodes, true);
+
                 log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
                 IList<CustomerInfo> individualInfos = PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo).ToList();
@@ -206,8 +207,20 @@ namespace asi.asicentral.services
             //assuming credit card is valid already
             if (company == null || creditCard == null) throw new ArgumentException("Invalid parameters");
             IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
+            
             //create company if not already there
-            var companyInfo = PersonifyClient.ReconcileCompany(company, "UNKNOWN", countryCodes);
+            CustomerInfo companyInfo = null;
+            string newMemberType = string.Empty;
+            if (order.IsNewMemberShip(ref newMemberType))
+            { 
+                // create a new Personify company if Distributor is buying Decorator membership
+                companyInfo = PersonifyClient.CreateCompany(order.Company, newMemberType, countryCodes);
+                order.Company.ExternalReference = string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+                order.Company.MemberType = newMemberType;
+            }
+            else 
+                companyInfo = PersonifyClient.ReconcileCompany(company, "UNKNOWN", countryCodes);
+
 			//field used to map an order to a company before approval for non backoffice orders
 			order.ExternalReference = companyInfo.MasterCustomerId;
             //Add credit card to the company
