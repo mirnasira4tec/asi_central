@@ -284,13 +284,30 @@ namespace asi.asicentral.services
             return lineItems;
         }
 
-        public virtual CompanyInformation AddCompany(CompanyInformation companyInformation)
+        public virtual CompanyInformation AddCompany(User user)
         {
+            // create Store CompanyInformation
+            var companyInformation = new CompanyInformation
+            {
+                CompanyId = user.CompanyId,
+                Name = user.CompanyName,
+                Phone = user.PhoneAreaCode + user.Phone,
+                Street1 = user.Street1,
+                Street2 = user.Street2,
+                City = user.City,
+                Zip = user.Zip,
+                State = user.State,
+                Country = user.CountryCode,
+                MemberTypeNumber = user.MemberTypeId,
+                ASINumber = user.AsiNumber
+            };
+
             //create equivalent store objects
             var company = new StoreCompany
             {
                 Name = companyInformation.Name,
-                Phone = companyInformation.Phone
+                Phone = companyInformation.Phone,
+                ASINumber = user.AsiNumber
             };
             var address = new StoreAddress
             {
@@ -299,7 +316,7 @@ namespace asi.asicentral.services
                 City = companyInformation.City,
                 State = companyInformation.State,
                 Country = companyInformation.Country,
-                Zip = companyInformation.Zip,
+                Zip = companyInformation.Zip
             };
             company.Addresses.Add(new StoreCompanyAddress
             {
@@ -307,13 +324,32 @@ namespace asi.asicentral.services
                 IsBilling = true,
                 IsShipping = true,
             });
+
+            company.Individuals.Add(new StoreIndividual()
+            { 
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Phone = user.PhoneAreaCode + user.Phone,
+                Address = address,
+                IsPrimary = true 
+            });
+
 			UpdateMemberType(companyInformation);
+            company.MemberType = companyInformation.MemberType;
+
 			if (companyInformation.MemberStatus == "ACTIVE") throw new Exception("We should not be creating an active company");
             //create company if not already there
             var companyInfo = PersonifyClient.ReconcileCompany(company, companyInformation.MemberType, null, true);
             PersonifyClient.AddCustomerAddresses(company, companyInfo, null);
             PersonifyClient.AddPhoneNumber(companyInformation.Phone, GetCountryCode(companyInformation.Country), companyInfo);
-	        companyInformation = PersonifyClient.GetCompanyInfo(companyInfo);
+
+            // Add contact to personify
+            PersonifyClient.AddIndividualInfos(company, null, companyInfo);
+
+            companyInformation = PersonifyClient.GetCompanyInfo(companyInfo);
+            user.CompanyId = companyInformation.CompanyId;
+
             return companyInformation;
         }
 
