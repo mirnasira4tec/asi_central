@@ -421,7 +421,8 @@ namespace asi.asicentral.services.PersonifyProxy
             if (company == null || string.IsNullOrWhiteSpace(company.Name)) throw new Exception("Store company is not valid.");
 			if (!string.IsNullOrEmpty(company.ExternalReference))
 			{
-                if (!string.Equals(company.ExternalReference, Helper.NOT_FOUND))
+                // company exists in personify
+                if ( company.HasExternalReference() )
                 {
 				    string[] references = company.ExternalReference.Split(';');
 				    int subCustomerId = Int32.Parse(references[1]);
@@ -734,10 +735,6 @@ namespace asi.asicentral.services.PersonifyProxy
             {
                 throw new Exception("Company and compnay contact can't be null.");
             }
-            if (countryCodes == null)
-            {
-                throw new Exception("Country codes are needed");
-            }
             if (companyInfo == null)
             {
                 throw new Exception("Company information is needed.");
@@ -748,10 +745,14 @@ namespace asi.asicentral.services.PersonifyProxy
             {
                 throw new Exception("Company address is required");
             }
-            string countryCode = countryCodes.Alpha3Code(companyAddress.Country);
+            string countryCode = countryCodes != null ? countryCodes.Alpha3Code(companyAddress.Country) : companyAddress.Country;
             if (string.IsNullOrEmpty(countryCode))
             {
                 throw new Exception("Country code is required");
+            }
+            else if (countryCode.Trim().Length != 3)
+            {
+                throw new Exception("Invalid Country code: " + countryCode);
             }
             var allCustomers = new List<CustomerInfo>();
 

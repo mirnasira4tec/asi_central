@@ -1,4 +1,5 @@
 ﻿using asi.asicentral.Resources;
+using asi.asicentral.util.store;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -29,7 +30,6 @@ namespace asi.asicentral.model.store
         public string Fax { get; set; }
         public string Email { get; set; }
         public string WebURL { get; set; }
-        [RegularExpression(@"^[1-9][0-9]{3,5}$", ErrorMessageResourceName = "FieldInvalidASINumber", ErrorMessageResourceType = typeof(Resource))]
         public string ASINumber { get; set; }
 	    public string ExternalReference { get; set; }
         public string BankName { get; set; }
@@ -41,6 +41,11 @@ namespace asi.asicentral.model.store
         public string UpdateSource { get; set; }
         public virtual IList<StoreCompanyAddress> Addresses { get; set; }
         public virtual IList<StoreIndividual> Individuals { get; set; }
+
+        public bool HasExternalReference()
+        {
+            return !string.IsNullOrEmpty(ExternalReference) && ExternalReference != Helper.NOT_FOUND;
+        }
 
         public override string ToString()
         {
