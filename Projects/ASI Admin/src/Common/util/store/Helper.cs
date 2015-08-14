@@ -11,6 +11,7 @@ namespace asi.asicentral.util.store
     public static class Helper
     {
         public const string CARD_ON_FILE = "Card on file";
+        public const string NOT_FOUND = "NOT_FOUND";
 
         public static IList<SelectListItem> GetTitles()
         {

@@ -24,6 +24,7 @@ namespace asi.asicentral.model
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public string UpdateSource { get; set; }
         public int CompanyId { get; set; }
+        public string ExternalReference { get; set; }
         public string PasswordHint { get; set; }
         public string PasswordAnswer { get; set; }
         public string PasswordQuestionCode { get; set; }
@@ -44,6 +45,7 @@ namespace asi.asicentral.model
 
         public string AsiNumber { get; set; }
         public string CompanyName { get; set; }
+        public string CompanyPhone { get; set; }
         public string MemberStatus_CD { get; set; }
         public string MemberType_CD { get; set; }
         public int MemberTypeId { get; set; }
