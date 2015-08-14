@@ -57,7 +57,7 @@ namespace asi.asicentral.web.Controllers.forms
 			if (!string.IsNullOrEmpty(companyName)) viewModel.CompanyName = companyName;
 			viewModel.FormTab = formTab;
             viewModel.Forms = formInstanceQuery.OrderByDescending(form => form.CreateDate).ToList();
-			viewModel.FormTypes = StoreService.GetAll<FormType>(true).ToList();
+			viewModel.FormTypes = StoreService.GetAll<FormType>(true).Where(ft => !ft.IsObsolete).ToList();
 			return View("../Forms/Index", viewModel);
         }
 
