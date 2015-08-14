@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using asi.asicentral.services.PersonifyProxy;
 using asi.asicentral.model.timss;
+using asi.asicentral.util.store;
 
 namespace asi.asicentral.services
 {
@@ -35,7 +36,7 @@ namespace asi.asicentral.services
                 throw new ArgumentException("You must pass a valid order and the country codes");
             try
             {
-                var companyInfo = PersonifyClient.ReconcileCompany(order.Company, "UNKNOWN", countryCodes);
+                var companyInfo = PersonifyClient.ReconcileCompany(order.Company, "UNKNOWN", countryCodes, true);
                 log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
                 IList<CustomerInfo> individualInfos = PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo).ToList();
@@ -187,9 +188,8 @@ namespace asi.asicentral.services
 			//field used to map an order to a company before approval for non backoffice orders
 			order.ExternalReference = companyInfo.MasterCustomerId;
             //Add credit card to the company
-            string profile = PersonifyClient.GetCreditCardProfileId(order.GetASICompany(), companyInfo, creditCard);
-			//@todo CC Personify temporary measure, always add the credit card. No longer checking if (profile == string.Empty) 
-			profile = PersonifyClient.SaveCreditCard(order.GetASICompany(), companyInfo, creditCard);
+			//@todo CC Personify temporary measure, always add the credit card. No longer checking if (profile == string.Empty) from string profile = PersonifyClient.GetCreditCardProfileId(order.GetASICompany(), companyInfo, creditCard);
+			var profile = PersonifyClient.SaveCreditCard(order.GetASICompany(), companyInfo, creditCard);
             log.Debug(string.IsNullOrWhiteSpace(profile) ?
                 "Fail to save the credit." : string.Format("Saved credit profile id : {0}", profile));
             if (string.IsNullOrEmpty(profile)) throw new Exception("Credit card can't be saved to Personify.");
@@ -284,12 +284,30 @@ namespace asi.asicentral.services
             return lineItems;
         }
 
-        public virtual CompanyInformation AddCompany(CompanyInformation companyInformation)
+        public virtual CompanyInformation AddCompany(User user)
         {
+            // create Store CompanyInformation
+            var companyInformation = new CompanyInformation
+            {
+                CompanyId = user.CompanyId,
+                Name = user.CompanyName,
+                Phone = user.PhoneAreaCode + user.Phone,
+                Street1 = user.Street1,
+                Street2 = user.Street2,
+                City = user.City,
+                Zip = user.Zip,
+                State = user.State,
+                Country = user.CountryCode,
+                MemberTypeNumber = user.MemberTypeId,
+                ASINumber = user.AsiNumber
+            };
+
             //create equivalent store objects
             var company = new StoreCompany
             {
                 Name = companyInformation.Name,
+                Phone = companyInformation.Phone,
+                ASINumber = user.AsiNumber
             };
             var address = new StoreAddress
             {
@@ -298,7 +316,7 @@ namespace asi.asicentral.services
                 City = companyInformation.City,
                 State = companyInformation.State,
                 Country = companyInformation.Country,
-                Zip = companyInformation.Zip,
+                Zip = companyInformation.Zip
             };
             company.Addresses.Add(new StoreCompanyAddress
             {
@@ -306,14 +324,73 @@ namespace asi.asicentral.services
                 IsBilling = true,
                 IsShipping = true,
             });
+
+            company.Individuals.Add(new StoreIndividual()
+            { 
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Phone = user.PhoneAreaCode + user.Phone,
+                Address = address,
+                IsPrimary = true 
+            });
+
 			UpdateMemberType(companyInformation);
+            company.MemberType = companyInformation.MemberType;
+
 			if (companyInformation.MemberStatus == "ACTIVE") throw new Exception("We should not be creating an active company");
             //create company if not already there
-            var companyInfo = PersonifyClient.ReconcileCompany(company, companyInformation.MemberType, null);
+            var companyInfo = PersonifyClient.ReconcileCompany(company, companyInformation.MemberType, null, true);
             PersonifyClient.AddCustomerAddresses(company, companyInfo, null);
             PersonifyClient.AddPhoneNumber(companyInformation.Phone, GetCountryCode(companyInformation.Country), companyInfo);
-	        companyInformation = PersonifyClient.GetCompanyInfo(companyInfo);
+
+            // Add contact to personify
+            PersonifyClient.AddIndividualInfos(company, null, companyInfo);
+
+            companyInformation = PersonifyClient.GetCompanyInfo(companyInfo);
+            user.CompanyId = companyInformation.CompanyId;
+
             return companyInformation;
+        }
+
+        public virtual CompanyInformation CreateCompany(StoreCompany storeCompany, string storeType)
+        {
+            CompanyInformation company = null;
+
+            var countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
+            CustomerInfo customerInfo = PersonifyClient.CreateCompany(storeCompany, storeType, countryCodes);
+            if (customerInfo != null)
+            {
+                PersonifyClient.AddIndividualInfos(storeCompany, countryCodes, customerInfo);
+                company = PersonifyClient.GetCompanyInfo(customerInfo);
+            }
+
+            return company;
+        }
+
+        public virtual CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList, ref bool dnsFlag)
+        {
+            var startTime = DateTime.Now;
+            log.Debug(string.Format("FindCompanyInfo - start: Company {0} , phone {1}", company.Name, company.Phone));
+            var customerInfo = PersonifyClient.FindCustomerInfo(company, ref matchList);
+            CompanyInformation companyInfo = null;
+
+            if (customerInfo != null)
+            {
+                companyInfo = PersonifyClient.GetCompanyInfo(customerInfo);
+            }
+
+            log.Debug(string.Format("FindCompanyInfo - end: Company {0}, total matches: {1}; time: {2}",
+                                    company.Name,
+                                    matchList != null ? matchList.Count : 0,
+                                    DateTime.Now.Subtract(startTime).TotalMilliseconds));
+			//set dns flag
+            if (customerInfo != null)
+            {
+                dnsFlag = PersonifyClient.CompanyDoNotSolicitFlag(customerInfo.MasterCustomerId, customerInfo.SubCustomerId);
+            }
+
+            return companyInfo;
         }
 
         public virtual CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber)
@@ -328,6 +405,11 @@ namespace asi.asicentral.services
             var companyInfo = PersonifyClient.GetCompanyInfoByIdentifier(companyIdentifier);
 			UpdateMemberType(companyInfo);
             return companyInfo;
+        }
+
+        public virtual void AddActivity(StoreCompany company, string activityText, Activity activityType)
+        {
+            PersonifyClient.AddActivity(company, activityText, activityType);
         }
 
 		private static string GetMessageSuffix(string url)

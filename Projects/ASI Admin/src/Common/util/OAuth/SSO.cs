@@ -55,6 +55,9 @@ namespace asi.asicentral.oauth
             [Description("Prospective Decorator")]
             NM_DECORATOR,
 
+            [Description("Equipment")]
+            EQUIPMENT,
+
             [Description("End Buyer")]
             EDBY,
             [Description("End Buyer")]
@@ -93,7 +96,7 @@ namespace asi.asicentral.oauth
             REGION,
             [Description("Guest")]
             SHOWCONTRACT,
-            [Description("Guest")]
+            [Description("SGR Supplier")]
             SGR_SUPPLIER,
             [Description("Guest")]
             VIP
@@ -104,14 +107,29 @@ namespace asi.asicentral.oauth
             string rolename = GetMemberTypeDesciptionForRole<MemberType>(MemberType.UNKN.ToString());
             if (!string.IsNullOrEmpty(memberType) && !string.IsNullOrEmpty(memberStatus))
             {
-                if (ASIOAuthClient.IsActiveUser(memberStatus)) rolename = GetMemberTypeDesciptionForRole<MemberType>(memberType);
+                MemberType code = (MemberType)Enum.Parse(typeof(MemberType), memberType);
+                if (ASIOAuthClient.IsActiveUser(memberStatus)) 
+                {
+                    switch (code)
+                    {
+                        case MemberType.SGR_SUPPLIER:
+                            rolename = GetMemberTypeDesciptionForRole<MemberType>(MemberType.UNKN.ToString());
+                            break;
+                        case MemberType.EQUIPMENT:
+                            rolename = GetMemberTypeDesciptionForRole<MemberType>(MemberType.SUPPLIER.ToString());
+                            break;
+                        default:
+                            rolename = GetMemberTypeDesciptionForRole<MemberType>(memberType);
+                            break;
+                    }
+                }
                 else
                 {
-                    MemberType code = (MemberType)Enum.Parse(typeof(MemberType), memberType);
                     switch (code)
                     {
                         case MemberType.SUPPLIER:
                         case MemberType.SPLR:
+                        case MemberType.EQUIPMENT:
                             rolename = GetMemberTypeDesciptionForRole<MemberType>(MemberType.PROSSUPPLIER.ToString());
                             break;
                         case MemberType.DISTRIBUTOR:
@@ -125,6 +143,9 @@ namespace asi.asicentral.oauth
                         case MemberType.AFFILIATE:
                         case MemberType.AFFL:
                             rolename = GetMemberTypeDesciptionForRole<MemberType>(MemberType.PROSAFFILIATE.ToString());
+                            break;
+                        case MemberType.SGR_SUPPLIER:
+                            rolename = GetMemberTypeDesciptionForRole<MemberType>(MemberType.UNKN.ToString());
                             break;
                         default:
                             rolename = GetMemberTypeDesciptionForRole<MemberType>(MemberType.UNKN.ToString());

@@ -9,7 +9,8 @@ namespace asi.asicentral.model.store
         Pending = 0,
         Approved = 1,
         Rejected = 2,
-        PersonifyError = 3
+        PersonifyError = 3,
+        ValidationError = 4
     }
 
     public class StoreOrder

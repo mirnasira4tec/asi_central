@@ -133,13 +133,11 @@ namespace asi.asicentral.model.store
                                 break;
                             default:
                                 throw new Exception("Product type is required");
-                                break;
                         }
                     }
                     break;
                 default:
                     throw new Exception("Product id is required");
-                    break;
             }
             return result;
         }

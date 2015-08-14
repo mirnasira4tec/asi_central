@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,15 @@ namespace asi.asicentral.util
             var memInfo = type.GetMember(enumVal.ToString());
             var attributes = memInfo[0].GetCustomAttributes(typeof(T), false);
             return (attributes.Length > 0) ? (T)attributes[0] : null;
+        }
+
+        public static string GetDesciption<T>(string enumValue)
+        {
+            var code = (Enum)Enum.Parse(typeof(T), enumValue);
+            var attribute = asi.asicentral.util.EnumHelper.GetAttributeOfType<System.Attribute>(code);
+            if (attribute != null)
+                return ((DescriptionAttribute)(attribute)).Description;
+            else return null;
         }
     }
 }

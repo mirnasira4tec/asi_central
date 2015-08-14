@@ -10,6 +10,8 @@ using asi.asicentral.services.PersonifyProxy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using asi.asicentral.model.timss;
+using asi.asicentral.util.store;
+using PersonifySvcClient;
 
 namespace asi.asicentral.Tests
 {
@@ -49,8 +51,22 @@ namespace asi.asicentral.Tests
                 Country = "USA",
 				MemberTypeNumber = 6,
             };
-            IBackendService personify = new PersonifyService();
-            companyInfo = personify.AddCompany(companyInfo);
+            var accountInfo = new User
+            {
+                FirstName = "New First Name",
+                LastName =  "New Last Name",
+                Email = String.Format("user{0}@addCompany.com", tag),
+                CompanyName = "New Company1 " + tag,
+                Street1 = "4800 Street Rd",
+                City = "Trevose",
+                State = "PA",
+                Zip = "19053",
+                Country = "USA",
+                MemberTypeId  = 6,
+                CountryCode = "USA"
+            };
+            IBackendService personify = new PersonifyService(MockupStoreService());
+            companyInfo = personify.AddCompany(accountInfo);
             Assert.IsTrue(companyInfo.CompanyId > 0);
 			Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
 			Assert.AreEqual("ASICENTRAL", companyInfo.MemberStatus);
@@ -153,6 +169,282 @@ namespace asi.asicentral.Tests
 				Assert.IsTrue(false, "Could not find any credit cards for ASI# 33020");
 			}
 		}
+
+        [TestMethod]
+        public void CreatCompany()
+        {
+            var companyName = "Createcompany" + DateTime.Now.Ticks;
+            StoreCompany company = GetStoreCompany(companyName, "2122223333", "createCompany@unittest.com", "SUPPLIER");
+            IBackendService personify = new PersonifyService(MockupStoreService());
+            var companyInfo = personify.CreateCompany(company, "SUPPLIER");
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.AreEqual("SUPPLIER", companyInfo.MemberType);
+            Assert.AreEqual(companyName, companyInfo.Name);
+            Assert.IsTrue(!string.IsNullOrEmpty(company.ExternalReference));
+        }
+
+        #region FindCompanyInfo performance tests
+        // Companys and Employees: 
+        //      Reconcile Company Supplier 1, 2135555551, LEAD, 000010252975
+        //          Reconcile Individual1, 2135555551, 2135555552, individual1@reconcile.com, : 000010252976
+        //
+        //      Reconcile Company Supplier 2, 2135555561, LEAD, 000010252977
+        //          Reconcile Individual2, 2135555561, 2135555552, individual2@reconcile.com, : 000010252978
+        //
+        //      Reconcile Company Supplier 3, 2135555541, ASICENTRAL : 000010252985
+        //          Reconcile Individual5, 2135555541, 2135555552, individual5@reconcile.com, : 000010252986
+        //
+        //      Reconcile Company Distributor 1, 2135555571,      : 000010252979
+        //          Reconcile Individual3, 2135555571, 2135555552, individual3@reconcile.com, : 000010252980
+        //
+        //      Reconcile Company Distributor 2, 2135555501, LEAD : 000010252994
+        //          Reconcile Individual6, 2135555502, 2135555552, individual6@reconcile.com, : 000010252995
+        //
+        //      Reconcile Company Distributor 3, 2135555591, LEAD : 000010252996
+        //          Reconcile Individual7, 2135555592, 2135555552, individual7@reconcile.com, : 
+        //
+        //      Reconcile Company Decorator 1, 2135555581, LEAD  : 000010252982
+        //          Reconcile Individual4, 2135555581, 2135555552, individual4@reconcile.com, : 000010252984
+        //
+        //      Reconcile Company Decorator 2, 2135555511,      : 000010252998
+        //          Reconcile Individual8, 2135555512, 2135555553, individual8@reconcile.com, : 000010252999
+        //
+        //      Reconcile Company Decorator 3, 2135555531,      : 000010253000
+        //          Reconcile Individual9, 2135555532, 2135555553, individual9@reconcile.com, : 000010253001
+        //
+        [TestMethod]
+        public void ReconcileCompanyPerformance()
+        {
+            ReconcileCompanyMatchNameOnly();
+            ReconcileCompanyMatchNameOnly();
+            ReconcileCompanySupplierWithPhoneEmail();
+            ReconcileCompanyNonSupplierPhoneEmail();
+            ReconcileCompanyMultipleMatches();
+            ReconcileCompanySupplierNoMatch();
+        }
+
+        [TestMethod]
+        public void ReconcileCompanyMatchNameOnly()
+        {
+            var company = GetStoreCompany("Reconcile Company Distributor 1", 
+                                          "1110001111", 
+                                          "noMatch@reconcile.com", 
+                                          "DISTRIBUTOR");
+
+            IBackendService personify = new PersonifyService();
+            List<string> masterIdList = null;
+            bool dnsFlag = false;
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
+            Assert.AreEqual(companyInfo.Name, "Reconcile Company Distributor 1");
+
+            // company name with extra special characters
+            company.Name = ".Reconcile $@#?Company $@#?$!&,Distributor 1.";
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.AreEqual(companyInfo.Name, "Reconcile Company Distributor 1");
+            Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
+        }
+
+        [TestMethod]
+        public void ReconcileCompanySupplierWithPhoneEmail()
+        {
+            // match email only
+            var company = GetStoreCompany("Failed aaa Match",
+                                          "1110011100",
+                                          "individual1@reconcile.com",
+                                          "SUPPLIER");
+
+            IBackendService personify = new PersonifyService();
+            List<string> masterIdList = null;
+            bool dnsFlag = false;
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.AreEqual(companyInfo.Name, "Reconcile Company Supplier 1");
+
+            // match phone or email with LEAD matches
+            company.Phone = "2135555552";
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.IsTrue(companyInfo.MemberStatus.ToUpper() == "ASICENTRAL" ||
+                          companyInfo.MemberStatus.ToUpper() == "LEAD");
+
+            company.Phone = "2135555553";
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.IsTrue(companyInfo.MemberStatus.ToUpper() == "ASICENTRAL" ||
+                          companyInfo.MemberStatus.ToUpper() == "LEAD");
+
+            // phone or email without LEAD matches
+            company = GetStoreCompany("Failed aaa Match",
+                                      "2135555553",
+                                      "nommmmatch@reconcile.com",
+                                      "SUPPLIER"); ;
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.IsTrue(companyInfo.MemberStatus.ToUpper() != "ASICENTRAL" &&
+                          companyInfo.MemberStatus.ToUpper() != "LEAD");
+        }
+
+        [TestMethod]
+        public void ReconcileCompanyNonSupplierPhoneEmail()
+        {
+            //Distributor
+            var company = GetStoreCompany("No matchhhh",
+                                          "2135555571",
+                                          "individual3@reconcile.com",
+                                          "DISTRIBUTOR");
+
+            IBackendService personify = new PersonifyService();
+            List<string> masterIdList = null;
+            bool dnsFlag = false;
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.AreEqual(companyInfo.Name, "Reconcile Company Distributor 1");
+
+            //Decorator 
+            company = GetStoreCompany("No matchhhh",
+                                      "2135555553",
+                                      "individual8@reconcile.com",
+                                      "DECORATOR");
+
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.AreEqual(companyInfo.Name, "Reconcile Company Decorator 2");
+        }
+
+        [TestMethod]
+        public void ReconcileCompanyMultipleMatches()
+        {
+            //Distributor
+            var company = GetStoreCompany("Reconcile Company Distributor 1",
+                                          "2135555552",
+                                          "individual3@reconcile.com",
+                                          "DISTRIBUTOR");
+
+            IBackendService personify = new PersonifyService();
+            List<string> masterIdList = null;
+            bool dnsFlag = false;
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
+
+            //Decorator with LEAD
+            company = GetStoreCompany("Reconcile Company Decorator 1",
+                                      "2135555553",
+                                      "individual8@reconcile.com",
+                                      "DECORATOR");
+
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.AreEqual(companyInfo.Name, "Reconcile Company Decorator 1");
+            Assert.IsTrue(companyInfo.MemberStatus.ToUpper() == "ASICENTRAL" ||
+                          companyInfo.MemberStatus.ToUpper() == "LEAD");
+
+            //Decorator without LEAD
+            company = GetStoreCompany("Reconcile Company Decorator 2",
+                                      "2135555553",
+                                      "individual8@reconcile.com",
+                                      "DECORATOR");
+
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.IsTrue(companyInfo.MemberStatus.ToUpper() != "ASICENTRAL" &&
+                          companyInfo.MemberStatus.ToUpper() != "LEAD");
+        }
+
+        [TestMethod]
+        public void ReconcileCompanySupplierNoMatch()
+        {
+            var company = GetStoreCompany("Invalid XXX Name",
+                                          "1110011100",
+                                          "nomatch@reconcile.com",
+                                          "SUPPLIER");
+
+            IBackendService personify = new PersonifyService();
+            List<string> masterIdList = null;
+            bool dnsFlag = false;
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            Assert.AreEqual(companyInfo, null);
+        }
+
+        private StoreCompany GetStoreCompany(string name, string phone, string email, string memberType)
+        {
+            var company = new StoreCompany
+            {
+                Name = name,
+                Phone = phone,
+                MemberType = memberType
+            };
+            var address = new StoreAddress
+            {
+                Street1 = "4805 Street Rd",
+                City = "Trevose",
+                State = "PA",
+                Country = "USA",
+                Zip = "19053"
+            };
+            company.Addresses.Add(new StoreCompanyAddress
+            {
+                Address = address,
+                IsBilling = true,
+                IsShipping = true,
+            });
+
+            if (!string.IsNullOrEmpty(email))
+            {
+                company.Individuals = new List<StoreIndividual>();
+                company.Individuals.Add(new StoreIndividual() { Email = email, IsPrimary = true });
+            }
+            return company;
+        }
+
+        #endregion end FindCompanyInfo performance tests
+
+        [TestMethod]
+        public void AddActivity()
+        {
+            var company = GetStoreCompany("Reconcile Company Supplier 1",
+                                          "2135555552",
+                                          "individual4@reconcile.com",
+                                          "SUPPLIER");
+
+            IBackendService personify = new PersonifyService();
+            List<string> masterIdList = null;
+            bool dnsFlag = false;
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);            
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.IsTrue(masterIdList.Count > 0);
+            Assert.IsFalse(dnsFlag);
+
+            company.ExternalReference = string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+            company.MatchingCompanyIds = string.Join("|", masterIdList);
+
+            personify.AddActivity(company, 
+                                  "This company tried to purchase supplier membership from the store but was rejected because the DNS flag is set to true. ", 
+                                  Activity.Exception);
+        }
+
+        [TestMethod]
+        public void PersonifyAddActivity()
+        {
+            var activity = SvcClient.Create<CusActivity>();
+            activity.MasterCustomerId = "000010252985";
+            activity.SubCustomerId = 0;
+            activity.ActivityCode = "CONTACTTRACKING";
+            activity.CallTopicCode = "EXCEPTION";
+            activity.CallTopicSubcode = "VALIDATION";
+            activity.CallTypeCode = "STORE"; 
+            activity.ActivityDate = DateTime.Now;
+            activity.Subsystem = "MRM";
+            activity.ActivityText = "Test personify activity Type and Subject.";
+
+            var result = SvcClient.Save<CusActivity>(activity);
+            Assert.AreEqual(result.CallTopicCode, "EXCEPTION");
+            Assert.AreEqual(result.CallTopicSubcode, "VALIDATION");
+            Assert.AreEqual(result.CallTypeCode, "STORE");
+        }
 
         private IStoreService MockupStoreService()
         {
