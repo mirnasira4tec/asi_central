@@ -37,7 +37,7 @@ namespace asi.asicentral.database.mappings.show
                  .HasForeignKey(t => t.CompanyId)
                  .WillCascadeOnDelete();
 
-            HasMany(t => t.Address)
+            HasMany(t => t.CompanyAddress)
                   .WithOptional()
                   .HasForeignKey(t => t.CompanyId)
                   .WillCascadeOnDelete();

@@ -280,9 +280,12 @@
     <Compile Include="Controllers\forms\FormsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MediaController.cs" />
+    <Compile Include="Controllers\RedirectionSurfaceController.cs" />
     <Compile Include="Controllers\sgr\CategoryController.cs" />
     <Compile Include="Controllers\sgr\CompanyController.cs" />
     <Compile Include="Controllers\sgr\ProductController.cs" />
+    <Compile Include="Controllers\Show\ShowCompanyController.cs" />
+    <Compile Include="Controllers\Show\ShowController.cs" />
     <Compile Include="Controllers\Store\ApplicationController.cs" />
     <Compile Include="Controllers\Store\ContextController.cs" />
     <Compile Include="Controllers\Store\CouponController.cs" />
@@ -304,6 +307,10 @@
     <Compile Include="Models\sgr\ViewCategory.cs" />
     <Compile Include="Models\sgr\ViewCompany.cs" />
     <Compile Include="Models\sgr\ViewProduct.cs" />
+    <Compile Include="Models\Show\AddressModel.cs" />
+    <Compile Include="Models\Show\CompanyInformation.cs" />
+    <Compile Include="Models\Show\CompanyModel.cs" />
+    <Compile Include="Models\Show\ShowModel.cs" />
     <Compile Include="Models\Store\interfaces\IMembershipModel.cs" />
     <Compile Include="Models\Store\Order\CatalogAdvertisingApplicationModel.cs" />
     <Compile Include="Models\Store\Order\CatalogsApplicationModel.cs" />
@@ -474,6 +481,14 @@
     <Content Include="Views\TermsConditions\Edit.cshtml" />
     <EmbeddedResource Include="Views\Emails\TermsConditionsEmail.cshtml" />
     <Content Include="Views\TermsConditions\_statusMessagePartial.cshtml" />
+    <Content Include="Views\Company\CompanyList.cshtml" />
+    <Content Include="Views\Company\CompanyEdit.cshtml" />
+    <Content Include="Views\Show\Show.cshtml" />
+    <Content Include="Views\Shared\_ShowLayout.cshtml" />
+    <Content Include="Views\Show\Shared\Address.cshtml" />
+    <Content Include="Views\Company\CompanyInformation.cshtml" />
+    <Content Include="Views\Company\AddAddress.cshtml" />
+    <Content Include="Views\Company\AddEmployee.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

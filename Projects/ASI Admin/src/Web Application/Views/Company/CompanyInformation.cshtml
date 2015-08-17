@@ -1,0 +1,62 @@
+﻿@using asi.asicentral.web;
+@using asi.asicentral.model.show
+@using asi.asicentral.web.Models.Show
+@using asi.asicentral.Resources
+@using asi.asicentral.interfaces
+@model CompanyInformation
+@{
+    
+    Layout = "~/Views/Shared/_ShowLayout.cshtml";
+}
+<h3>
+    <a class="btn btn-small" href="@Url.Action("CompanyList", "ShowCompany")">
+        <i class="icon-backward"></i>
+    </a>
+    @Model.Name
+</h3>
+<div class="container-fluid">
+    <div class="row-fluid">
+      @*  <div>
+            <table class="table table-bordered table-condensed table-striped">
+                <thead>
+                    <tr>
+                        <th>Street</th>
+                        <th>City</th>
+                        <th>State</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var Address in @Model.CompanyAddress)
+                    {
+                        IQueryable<ShowAddress> address = ObjectService.GetAll<ShowAddress>().Where(item => item.Id == Address.Address.Id);
+                        foreach (var item in address)
+                        {
+                        <tr>
+                            <td style="width: 85px">@item.Street1</td>
+                            <td style="width: 85px">@item.City </td>
+                            <td style="width: 185px">@item.State</td>
+                        </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>*@
+        <div class="span3">
+            <a class="btn btn-small" href="@Url.Action("AddAddress", "../ShowCompany", new { CompanyID = Model.Id })">
+                <i class="icon-plus"></i>
+                Add Address
+            </a>
+        </div>
+        <div class="span3">
+            <a class="btn btn-small" href="@Url.Action("AddEmployee", "../ShowCompany", new { CompanyID = Model.Id })">
+                <i class="icon-plus"></i>
+                Add Employee
+            </a>
+        </div>
+    </div>
+
+</div>
+@section scripts
+{
+}

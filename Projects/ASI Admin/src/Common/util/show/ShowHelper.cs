@@ -1,4 +1,5 @@
 ﻿using asi.asicentral.database;
+using asi.asicentral.interfaces;
 using asi.asicentral.model.show;
 using asi.asicentral.services;
 using System;
@@ -11,7 +12,7 @@ namespace asi.asicentral.util.show
 {
    public static class ShowHelper
     {
-      public static ShowType CreateOrUpdateShowType(ObjectService objectService, ShowType objShowType)
+      public static ShowType CreateOrUpdateShowType(IObjectService objectService, ShowType objShowType)
         {
            if (objShowType == null) return null;
            ShowType showType = null;
@@ -34,7 +35,7 @@ namespace asi.asicentral.util.show
            return showType;
         }
 
-      public static Show CreateOrUpdateShow(ObjectService objectService, Show objShow)
+      public static Show CreateOrUpdateShow(IObjectService objectService, Show objShow)
       {
           if (objShow == null) return null;
           Show show = null;
@@ -61,7 +62,7 @@ namespace asi.asicentral.util.show
           return show;
       }
 
-      public static ShowAddress CreateOrUpdateAddress(ObjectService objectService, ShowAddress objAddress)
+      public static ShowAddress CreateOrUpdateAddress(IObjectService objectService, ShowAddress objAddress)
       {
           if (objAddress == null) return null;
           ShowAddress address = null;
@@ -76,19 +77,15 @@ namespace asi.asicentral.util.show
           else
           {
               address = objectService.GetAll<ShowAddress>().Where(ctxt => ctxt.Id == objAddress.Id).SingleOrDefault();
-              objectService.Update<ShowAddress>(address);
           }
           address.Phone = objAddress.Phone;
           address.PhoneAreaCode = objAddress.PhoneAreaCode;
-          address.Cell = objAddress.Cell;
           address.FaxAreaCode = objAddress.FaxAreaCode;
           address.Fax = objAddress.Fax;
-          address.Title = objAddress.Title;
           address.Street1 = objAddress.Street1;
           address.Street2 = objAddress.Street2;
           address.Zip = objAddress.Zip;
           address.State = objAddress.State;
-          address.CountryCode = objAddress.CountryCode;
           address.Country = objAddress.Country;
           address.City = objAddress.City;
           address.UpdateDate = DateTime.UtcNow;
@@ -96,7 +93,7 @@ namespace asi.asicentral.util.show
           return address;
       }
 
-      public static ShowEmployee CreateOrUpdateEmployee(ObjectService objectService, ShowEmployee objEmployee)
+      public static ShowEmployee CreateOrUpdateEmployee(IObjectService objectService, ShowEmployee objEmployee)
       {
           if (objEmployee == null) return null;
           ShowEmployee employee = null;
@@ -124,7 +121,7 @@ namespace asi.asicentral.util.show
           return employee;
       }
 
-      public static ShowCompany CreateOrUpdateCompany(ObjectService objectService, ShowCompany objCompany)
+      public static ShowCompany CreateOrUpdateCompany(IObjectService objectService, ShowCompany objCompany)
       {
           if (objCompany == null) return null;
           ShowCompany company = null;
@@ -143,13 +140,14 @@ namespace asi.asicentral.util.show
           }
           company.Name = objCompany.Name;
           company.WebUrl = objCompany.WebUrl;
+          company.MemberType = objCompany.MemberType;
           company.ASINumber = objCompany.ASINumber;
           company.UpdateDate = DateTime.UtcNow;
           company.UpdateSource = objCompany.UpdateSource;
           return company;
       }
 
-      public static ShowCompanyAddress CreateOrUpdateCompanyAddress(ObjectService objectService, ShowCompanyAddress objCompanyAddress)
+      public static ShowCompanyAddress CreateOrUpdateCompanyAddress(IObjectService objectService, ShowCompanyAddress objCompanyAddress)
       {
           if (objCompanyAddress == null) return null;
           ShowCompanyAddress companyAddress = null;
@@ -164,10 +162,9 @@ namespace asi.asicentral.util.show
           else
           {
               companyAddress = objectService.GetAll<ShowCompanyAddress>().Where(ctxt => ctxt.Id == objCompanyAddress.Id).SingleOrDefault();
-              objectService.Update<ShowCompanyAddress>(companyAddress);
           }
           companyAddress.CompanyId = objCompanyAddress.CompanyId;
-          companyAddress.AddressId = objCompanyAddress.AddressId;
+          companyAddress.Address = objCompanyAddress.Address;
           companyAddress.UpdateDate = DateTime.UtcNow;
           companyAddress.UpdateSource = objCompanyAddress.UpdateSource;
           return companyAddress;

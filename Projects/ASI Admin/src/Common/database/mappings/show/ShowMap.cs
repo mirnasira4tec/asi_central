@@ -41,9 +41,6 @@ namespace asi.asicentral.database.mappings.show
               .WithMany()
               .HasForeignKey(x => x.ShowTypeId);
 
-            HasRequired(x => x.Address)
-               .WithMany()
-               .HasForeignKey(x => x.AddressId);
         }
     }
 }

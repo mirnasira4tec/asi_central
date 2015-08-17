@@ -1,0 +1,56 @@
+﻿using asi.asicentral.interfaces;
+using asi.asicentral.model.show;
+using asi.asicentral.web.Models.Show;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace asi.asicentral.web.Controllers.Show
+{
+    public class ShowController : Controller
+    {
+        //
+        // GET: /Show/
+        public IObjectService ObjectService { get; set; }
+        [HttpGet]
+        public ActionResult Show()
+        {
+            ShowModel show = new ShowModel();
+            show.ShowType = GetShowType();
+            show.StartDate = DateTime.UtcNow;
+            show.EndDate = DateTime.UtcNow;
+            return View("../Show/Show", show);
+        }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Show(ShowModel show)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+                 
+
+
+        //    }
+        //}
+        private IList<SelectListItem> GetShowType()
+        {
+            IList<SelectListItem> typeList = null;
+            IList<ShowType> types = ObjectService.GetAll<ShowType>(true).ToList();
+            if (types != null && types.Count > 0)
+            {
+                typeList = new List<SelectListItem>();
+                string text = string.Empty;
+                foreach (ShowType type in types)
+                {
+                    text = type.Type;
+                    typeList.Add(new SelectListItem() { Text = text, Value = type.Id.ToString(), Selected = false });
+                }
+            }
+            return typeList;
+        }
+
+    }
+}
