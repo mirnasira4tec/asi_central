@@ -9,7 +9,7 @@ using asi.asicentral.model.show;
 
 namespace asi.asicentral.database.mappings.show
 {
-   public class ShowMap : EntityTypeConfiguration<Show>
+   public class ShowMap : EntityTypeConfiguration<ShowASI>
     {
        public ShowMap()
         {

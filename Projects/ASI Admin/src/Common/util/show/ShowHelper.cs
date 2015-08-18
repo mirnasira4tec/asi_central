@@ -35,27 +35,26 @@ namespace asi.asicentral.util.show
            return showType;
         }
 
-      public static Show CreateOrUpdateShow(IObjectService objectService, Show objShow)
+      public static ShowASI CreateOrUpdateShow(IObjectService objectService, ShowASI objShow)
       {
           if (objShow == null) return null;
-          Show show = null;
+          ShowASI show = null;
           if (objShow.Id == 0)
           {
-              show = new Show()
+              show = new ShowASI()
               {
                   CreateDate = DateTime.UtcNow,
               };
-              objectService.Add<Show>(show);
+              objectService.Add<ShowASI>(show);
           }
           else
           {
-              show = objectService.GetAll<Show>().Where(ctxt => ctxt.Id == objShow.Id).SingleOrDefault();
-              objectService.Update<Show>(show);
+              show = objectService.GetAll<ShowASI>().Where(ctxt => ctxt.Id == objShow.Id).SingleOrDefault();
           }
           show.Name = objShow.Name;
           show.StartDate = objShow.StartDate;
           show.EndDate = objShow.EndDate;
-          show.ShowType = objShow.ShowType;
+          show.ShowTypeId = objShow.ShowTypeId;
           show.Address = objShow.Address;
           show.UpdateDate = DateTime.UtcNow;
           show.UpdateSource = objShow.UpdateSource;
@@ -169,5 +168,7 @@ namespace asi.asicentral.util.show
           companyAddress.UpdateSource = objCompanyAddress.UpdateSource;
           return companyAddress;
       }
+
+
     }
 }

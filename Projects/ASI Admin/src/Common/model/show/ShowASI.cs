@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.model.show
 {
-    public class Show
+    public class ShowASI
     {
-        public Show()
+        public ShowASI()
         {
-            if (this.GetType() == typeof(Show))
+            if (this.GetType() == typeof(ShowASI))
             {
                 Attendee = new List<ShowAttendee>();
             }

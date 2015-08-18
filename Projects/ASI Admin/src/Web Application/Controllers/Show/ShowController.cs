@@ -1,5 +1,6 @@
 ﻿using asi.asicentral.interfaces;
 using asi.asicentral.model.show;
+using asi.asicentral.util.show;
 using asi.asicentral.web.Models.Show;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,6 @@ namespace asi.asicentral.web.Controllers.Show
 {
     public class ShowController : Controller
     {
-        //
-        // GET: /Show/
         public IObjectService ObjectService { get; set; }
         [HttpGet]
         public ActionResult Show()
@@ -24,17 +23,37 @@ namespace asi.asicentral.web.Controllers.Show
             return View("../Show/Show", show);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Show(ShowModel show)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-                 
+        [HttpPost]
+        public ActionResult Show(ShowModel show)
+        {
+            if (ModelState.IsValid)
+            {
+                ShowASI objShow = new ShowASI();
+                objShow.Name = show.Name;
+                objShow.Address = show.Address;
+                objShow.ShowTypeId = show.ShowTypeId;
+                objShow.StartDate = show.StartDate;
+                objShow.EndDate = show.EndDate;
+                objShow.UpdateSource = "ShowController - Show";
+                objShow = ShowHelper.CreateOrUpdateShow(ObjectService, objShow);
+                ObjectService.SaveChanges();
+                return RedirectToAction("ShowList");
+            }
+            else
+            {
+                if (show != null)
+                {
+                    show.ShowType = GetShowType();
+                }
+                return View("../Show/Show", show);
+            }
+        }
 
-
-        //    }
-        //}
+        public ActionResult ShowList()
+        {
+            IList<ShowASI> showList = ObjectService.GetAll<ShowASI>(true).ToList();
+            return View("../Show/ShowList", showList);
+        }
         private IList<SelectListItem> GetShowType()
         {
             IList<SelectListItem> typeList = null;

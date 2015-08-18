@@ -281,7 +281,6 @@
     <Compile Include="Controllers\forms\FormsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MediaController.cs" />
-    <Compile Include="Controllers\RedirectionSurfaceController.cs" />
     <Compile Include="Controllers\sgr\CategoryController.cs" />
     <Compile Include="Controllers\sgr\CompanyController.cs" />
     <Compile Include="Controllers\sgr\ProductController.cs" />
@@ -493,6 +492,7 @@
     <Content Include="Views\Company\CompanyInformation.cshtml" />
     <Content Include="Views\Company\AddAddress.cshtml" />
     <Content Include="Views\Company\AddEmployee.cshtml" />
+    <Content Include="Views\Show\ShowList.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

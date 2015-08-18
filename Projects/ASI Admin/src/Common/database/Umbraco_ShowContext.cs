@@ -16,7 +16,7 @@ namespace asi.asicentral.database
         public DbSet<ShowAttendee> Attendee { get; set; }
         public DbSet<ShowEmployee> Employee { get; set; }
         public DbSet<ShowEmployeeAttendee> EmployeeAttendee { get; set; }
-        public DbSet<Show> Show { get; set; }
+        public DbSet<ShowASI> Show { get; set; }
         public DbSet<ShowCompany> Company { get; set; }
         public DbSet<ShowType> ShowType { get; set; }
         public DbSet<ShowCompanyAddress> CompanyAddress { get; set; }

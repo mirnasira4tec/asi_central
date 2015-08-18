@@ -129,11 +129,10 @@
         var name = $("#Name").val();
             if (name) {
                 $.ajax({
-                    url: "/RedirectionSurface/IsValidCompany?name=" + name,
+                    url: "/ShowCompany/IsValidCompany?name=" + name,
                     type: 'POST',
                     success: function (data) {
-                        
-                        if (data != "") {
+                        if (data == true) {
                             $('span[data-valmsg-for="Name"]').html("Name already exists.");
                             $('span[data-valmsg-for="Name"]').attr("class", "field-validation-error");
                         }

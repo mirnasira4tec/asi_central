@@ -18,12 +18,12 @@
                 </div>
             
               <div class="control-group">
-                    @Html.LabelFor(model => model.Type, new { @class = "control-label" })
+                    @Html.LabelFor(model => model.ShowTypeId, new { @class = "control-label" })
                     <div class="controls"> @Html.DropDownListFor(model => model.ShowTypeId, Model.ShowType, "Select", new { @class = "span3" })@Html.ValidationMessageFor(model => model.ShowTypeId)</div>
                 </div>
                 <div class="control-group">
                     @Html.LabelFor(model => model.Address, new { @class = "control-label" })
-                    <div class="controls">@Html.EditorFor(model => model.Address)@Html.ValidationMessageFor(model => model.Address)</div>
+                    <div class="controls">@Html.TextAreaFor(model => model.Address, 5, 45, null)@Html.ValidationMessageFor(model => model.Address)</div>
                 </div>
                 
                 <div class="control-group">

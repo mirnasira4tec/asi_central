@@ -19,6 +19,7 @@ namespace asi.asicentral.web.Controllers.Show
     public class ShowCompanyController : Controller
     {
         public IObjectService ObjectService { get; set; }
+        IList<string> messages = new List<string>();
         public ActionResult Company()
         {
             return View();
@@ -93,17 +94,9 @@ namespace asi.asicentral.web.Controllers.Show
                     ObjectService.SaveChanges();
 
                 }
-                catch (DbEntityValidationException dbEx)
+                catch (Exception ex)
                 {
-                    foreach (var validationErrors in dbEx.EntityValidationErrors)
-                    {
-                        foreach (var validationError in validationErrors.ValidationErrors)
-                        {
-                            Trace.TraceInformation("Property: {0} Error: {1}",
-                                                    validationError.PropertyName,
-                                                    validationError.ErrorMessage);
-                        }
-                    }
+                    messages.Add("Error: " + ex.Message);
                 }
                 return RedirectToAction("CompanyList");
             }
@@ -147,22 +140,7 @@ namespace asi.asicentral.web.Controllers.Show
                 companyInformation.Name = company.Name;
                 companyInformation.Id = company.Id;
                 IQueryable<ShowCompanyAddress> companyAddress = ObjectService.GetAll<ShowCompanyAddress>().Where(item => item.CompanyId == id);
-
                 companyInformation.CompanyAddress = companyAddress.ToList();
-                //foreach (var add  in companyAddress )
-                // {
-
-                //    IQueryable<ShowAddress> address = ObjectService.GetAll<ShowAddress>().Where(item => item.Id == add.Address.Id);
-                //    companyInformation.Address = address.ToList();
-                //    //foreach (var item in address)
-                //    //{
-
-                //    //    companyInformation.Address1 = item.Street1;
-                //    //    companyInformation.City = item.City;
-                //    //    companyInformation.State = item.State;
-                //    //}
-                // }
-
             }
             return View("../Company/CompanyInformation", companyInformation);
         }
@@ -180,10 +158,8 @@ namespace asi.asicentral.web.Controllers.Show
         {
             try
             {
-                var errors = ModelState.Values.SelectMany(v => v.Errors);
                 if (ModelState.IsValid)
                 {
-
                     ShowAddress objAddress = new ShowAddress();
                     ShowCompanyAddress objCompanyAddress = new ShowCompanyAddress();
 
@@ -209,8 +185,6 @@ namespace asi.asicentral.web.Controllers.Show
                     ObjectService.Add<ShowCompanyAddress>(objCompanyAddress);
                     ObjectService.SaveChanges();
 
-
-
                     return RedirectToAction("CompanyList");
                 }
                 else
@@ -218,17 +192,9 @@ namespace asi.asicentral.web.Controllers.Show
                     return View("../Company/AddAddress", Address);
                 }
             }
-            catch (DbEntityValidationException dbEx)
+            catch (Exception ex)
             {
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        Trace.TraceInformation("Property: {0} Error: {1}",
-                                                validationError.PropertyName,
-                                                validationError.ErrorMessage);
-                    }
-                }
+                messages.Add("Error: " + ex.Message);
             }
              return View("../Company/CompanyEdit", Address);
         }
@@ -239,8 +205,23 @@ namespace asi.asicentral.web.Controllers.Show
             var model = new AddressModel();
             return View("../Company/AddEmployee", model);
         }
-
-
+        [HttpPost]
+        public ActionResult IsValidCompany(string name)
+        {
+            var company = new CompanyModel();
+            IQueryable<ShowCompany> companyList = ObjectService.GetAll<ShowCompany>(true);
+            companyList = companyList.Where(item => item.Name != null
+                 && item.Name.Contains(name));
+            company.company = companyList.ToList();
+            if (company.company.Any())
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json(false);
+            }
+        }
 
     }
 }

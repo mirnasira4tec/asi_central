@@ -53,7 +53,7 @@ namespace asi.asicentral.Tests
                 ShowType objShowType = ShowHelper.CreateOrUpdateShowType(objectContext, new ShowType { Type = "East", UpdateSource = "ShowServiceTest - ShowTypeTest1" });
                 objectContext.Add<ShowType>(objShowType);
               
-                Show objShow = ShowHelper.CreateOrUpdateShow(objectContext, new Show
+                ShowASI objShow = ShowHelper.CreateOrUpdateShow(objectContext, new ShowASI
                 {
                     Name = "Orlando",
                     Address = "Test",
@@ -62,7 +62,7 @@ namespace asi.asicentral.Tests
                     EndDate = DateTime.UtcNow,
                     UpdateSource = "ShowServiceTest - ShowTest"
                 });
-                objectContext.Add<Show>(objShow);
+                objectContext.Add<ShowASI>(objShow);
                 objectContext.SaveChanges();
                 Assert.IsNotNull(objShow);
                 Assert.AreNotEqual(objShow.Id, 0);
@@ -75,10 +75,10 @@ namespace asi.asicentral.Tests
                 Assert.IsNotNull(objShow);
                 Assert.AreEqual(objShow.Id, id);
                 Assert.AreEqual(objShow.Name, "Chicago");
-                objectContext.Delete<Show>(objShow);
+                objectContext.Delete<ShowASI>(objShow);
                 objectContext.Delete<ShowType>(objShowType);
                 objectContext.SaveChanges();
-                objShow = objectContext.GetAll<Show>().SingleOrDefault(ctxt => ctxt.Id == objShow.Id);
+                objShow = objectContext.GetAll<ShowASI>().SingleOrDefault(ctxt => ctxt.Id == objShow.Id);
                 Assert.IsNull(objShow);
             }
 
@@ -308,7 +308,7 @@ namespace asi.asicentral.Tests
                     UpdateSource = "ShowServiceTest - AddressTest"
                 });
                 objectContext.Add<ShowAddress>(objAddress);
-                Show objShow = ShowHelper.CreateOrUpdateShow(objectContext, new Show
+                ShowASI objShow = ShowHelper.CreateOrUpdateShow(objectContext, new ShowASI
                 {
                     Name = "Orlando",
                     Address = "test",
@@ -317,7 +317,7 @@ namespace asi.asicentral.Tests
                     EndDate = DateTime.UtcNow,
                     UpdateSource = "ShowServiceTest - ShowTest"
                 });
-                objectContext.Add<Show>(objShow);
+                objectContext.Add<ShowASI>(objShow);
 
                 objectContext.SaveChanges();
                 Assert.IsNotNull(objShow);
@@ -331,11 +331,11 @@ namespace asi.asicentral.Tests
                 Assert.IsNotNull(objShow);
                 Assert.AreEqual(objShow.Id, id);
                 Assert.AreEqual(objShow.Name, "Chicago");
-                objectContext.Delete<Show>(objShow);
+                objectContext.Delete<ShowASI>(objShow);
                 objectContext.Delete<ShowAddress>(objAddress);
                 objectContext.Delete<ShowType>(objShowType);
                 objectContext.SaveChanges();
-                objShow = objectContext.GetAll<Show>().SingleOrDefault(ctxt => ctxt.Id == objShow.Id);
+                objShow = objectContext.GetAll<ShowASI>().SingleOrDefault(ctxt => ctxt.Id == objShow.Id);
                 Assert.IsNull(objShow);
             }
 
