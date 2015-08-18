@@ -319,7 +319,7 @@
     <Compile Include="model\show\ShowCompany.cs" />
     <Compile Include="model\show\ShowEmployee.cs" />
     <Compile Include="model\show\ShowEmployeeAttendee.cs" />
-    <Compile Include="model\show\Show.cs" />
+    <Compile Include="model\show\ShowASI.cs" />
     <Compile Include="model\show\ShowType.cs" />
     <Compile Include="model\store\StoreDetailSpecialProductItem.cs" />
     <Compile Include="model\store\StoreSupplierRepresentativeInformation.cs" />

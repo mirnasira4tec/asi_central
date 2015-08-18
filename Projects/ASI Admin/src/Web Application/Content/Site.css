@@ -484,3 +484,34 @@ header#site-header {
 ul#tabs {
     clear:both;
 }
+
+    .hidden{
+	display:none;
+}
+    .form-horizontal .control-label {
+    float: left;
+    width: 160px;
+    padding-top: 5px;
+    text-align: right;
+}
+    .control-label input[type="checkbox"] {
+        margin-top: -8px;
+    }
+
+    .control-label input[type="radio"] {
+        margin-top: -2px;
+    }
+
+    .multiple-select-area .radio input[type="radio"],
+    .multiple-select-area .checkbox input[type="checkbox"] {
+        margin-left: 0px;
+        margin-right: 10px;
+    }
+
+    .form-horizontal .control-group {
+        margin-bottom: 10px;
+    }
+    .input-mid{
+    width: 123px;
+    margin-left: 9px;
+}

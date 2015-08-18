@@ -379,7 +379,7 @@ namespace asi.asicentral.database.mappings
             For<IRepository<ShowAttendee>>().Use<EFRepository<ShowAttendee>>()
                 .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
-            For<IRepository<Company>>().Use<EFRepository<Company>>()
+            For<IRepository<ShowCompany>>().Use<EFRepository<ShowCompany>>()
                 .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
             For<IRepository<ShowEmployee>>().Use<EFRepository<ShowEmployee>>()
@@ -388,14 +388,14 @@ namespace asi.asicentral.database.mappings
             For<IRepository<ShowEmployeeAttendee>>().Use<EFRepository<ShowEmployeeAttendee>>()
                 .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
-            For<IRepository<Show>>().Use<EFRepository<Show>>()
+            For<IRepository<ShowASI>>().Use<EFRepository<ShowASI>>()
                 .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
             For<IRepository<ShowType>>().Use<EFRepository<ShowType>>()
                 .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
-            //For<IRepository<CompanyAddress>>().Use<EFRepository<CompanyAddress>>()
-            //    .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+            For<IRepository<ShowCompanyAddress>>().Use<EFRepository<ShowCompanyAddress>>()
+                .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
             #endregion Umbraco_ShowContext
 

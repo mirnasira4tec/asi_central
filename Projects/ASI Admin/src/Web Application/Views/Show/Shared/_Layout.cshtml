@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "ASI Show";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@RenderBody()
+@section navigation { 
+    <nav id="admin-subnavigation">
+    <ul class="clearfix">
+        <li><a href="/ShowCompany/CompanyList">Company</a></li>
+    </ul>
+    </nav>    
+}
+@section scripts { @RenderSection("scripts", required: false)}

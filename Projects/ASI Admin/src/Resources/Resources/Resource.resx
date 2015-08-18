@@ -1899,4 +1899,13 @@
   <data name="FieldYearRequired" xml:space="preserve">
     <value>The Year field is required.</value>
   </data>
+  <data name="FieldInvalidFax" xml:space="preserve">
+    <value>Please enter a valid Fax number</value>
+  </data>
+  <data name="FieldInvalidFaxAreaCode" xml:space="preserve">
+    <value>Please enter a valid Fax areacode</value>
+  </data>
+  <data name="FieldInvalidPhoneAreaCode" xml:space="preserve">
+    <value>Please enter a valid phone areacode</value>
+  </data>
 </root>

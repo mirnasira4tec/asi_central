@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.model.show
 {
-    public class Show
+    public class ShowASI
     {
-        public Show()
+        public ShowASI()
         {
-            if (this.GetType() == typeof(Show))
+            if (this.GetType() == typeof(ShowASI))
             {
                 Attendee = new List<ShowAttendee>();
             }
@@ -25,8 +25,7 @@ namespace asi.asicentral.model.show
         public DateTime EndDate { get; set; }
         public int? ShowTypeId { get; set; }
         public ShowType ShowType { get; set; }
-        public int? AddressId { get; set; }
-        public ShowAddress Address { get; set; } 
+        public string Address { get; set; } 
         public virtual List<ShowAttendee> Attendee { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }

@@ -1,0 +1,149 @@
+﻿@model asi.asicentral.web.Models.Show.CompanyModel
+@using asi.asicentral.Resources
+@{
+    ViewBag.Title = "CompanyEdit";
+    Layout = "~/Views/Show/Shared/_Layout.cshtml";
+}
+
+<div>
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    
+    <div id="tabbasic" class="basic-information tab-pane fade in active">
+        <fieldset class="company-info-form">
+            <legend>Add Company</legend>
+            @Html.HiddenFor(model => model.Id)
+           
+                <div class="control-group" id="asinumber-product">
+                    @Html.LabelFor(model => model.ASINumber, new { @class = "control-label" })
+                    <div class="controls">@Html.EditorFor(model => model.ASINumber, new { @readonly = "readonly" }) @Html.ValidationMessageFor(model => model.ASINumber)</div>
+                </div>
+            
+                <label class="checkbox" for="IsNonUSAddress">@Html.EditorFor(model => model.IsNonUSAddress) @Html.Raw(Resource.IsNonUSAddress)</label>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+                    <div class="controls">@Html.EditorFor(model => model.Name, new { ID = "Name" }) @Html.ValidationMessageFor(model => model.Name)</div>
+                </div>
+                 <div class="control-group">
+                    @Html.LabelFor(model => model.Url, new { @class = "control-label" })
+                    <div class="controls">@Html.EditorFor(model => model.Url) @Html.ValidationMessageFor(model => model.Url)</div>
+                </div>
+              <div class="control-group">
+                    @Html.LabelFor(model => model.MemberType, new { @class = "control-label" })
+                    <div class="controls">@Html.DropDownListFor(model => model.MemberType, new SelectList(asi.asicentral.web.Models.Show.CompanyModel.GetMemberTypes(), "Value", "Text")) @Html.ValidationMessageFor(model => model.MemberType)</div>
+                </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.Address1, new { @class = "control-label" })
+                    <div class="controls">@Html.EditorFor(model => model.Address1)<span class="helper-text">(Please no P.O. boxes)</span>@Html.ValidationMessageFor(model => model.Address1)</div>
+                </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.Address2, new { @class = "control-label" })
+                    <div class="controls">@Html.EditorFor(model => model.Address2)<span class="helper-text">(optional)</span> @Html.ValidationMessageFor(model => model.Address2)</div>
+                </div>
+                 <div class="control-group">
+                    @Html.LabelFor(model => model.Zip, new { @class = "control-label" })
+                    <div class="controls">@Html.EditorFor(model => model.Zip) @Html.ValidationMessageFor(model => model.Zip)</div>
+                </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.City, new { @class = "control-label" })
+                    <div class="controls">@Html.EditorFor(model => model.City) @Html.ValidationMessageFor(model => model.City)</div>
+                </div>
+                <div id="state-div" class="control-group @Html.Raw(!Model.IsNonUSAddress ? string.Empty : "hidden")">
+                    @Html.LabelFor(model => model.State, new { @class = "control-label" })
+                    <div class="controls">@Html.DropDownListFor(model => model.State, asi.asicentral.util.HtmlHelper.GetStates()) @Html.ValidationMessageFor(model => model.State)</div>
+                </div>
+                <div id="international-state-div" class="control-group @Html.Raw(!Model.IsNonUSAddress ? "hidden" : string.Empty)">
+                @Html.LabelFor(model => model.InternationalState, new { @class = "control-label" })
+                <div class="controls">@Html.EditorFor(model => model.InternationalState) @Html.ValidationMessageFor(model => model.InternationalState)</div>
+            </div>
+                <div id="country-div" class="control-group @Html.Raw(!Model.IsNonUSAddress ? "hidden" : string.Empty)">
+                    @Html.LabelFor(model => model.Country, new { @class = "control-label" })
+                    <div class="controls">@Html.DropDownListFor(model => model.Country, asi.asicentral.util.HtmlHelper.GetCountries()) @Html.ValidationMessageFor(model => model.Country)</div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Phone, new { @class = "col-sm-4 control-label" })
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.PhoneAreaCode, new { @class = "controls input-mini" })
+                        @Html.TextBoxFor(model => model.Phone, new { @class = "controls  input-mid" })
+                    </div>
+                    
+                    <div class="col-sm-3 error_message">
+                        @Html.ValidationMessageFor(model => model.PhoneAreaCode)
+                        @Html.ValidationMessageFor(model => model.Phone)
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Fax, new { @class = "col-sm-4 control-label" })
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.FaxAreaCode, new { @class = "form-control input-mini" })
+                        @Html.TextBoxFor(model => model.Fax, new { @class = "form-control input-mid" })
+                        <span class="helper-text">(optional)</span>
+                    </div>
+                    
+                    <div class="col-sm-3 error_message">
+                        @Html.ValidationMessageFor(model => model.FaxAreaCode)
+                        @Html.ValidationMessageFor(model => model.Fax)
+                    </div>
+                    
+           
+
+        </fieldset>
+    </div>
+    <footer id="page-completion-navigation">
+        <nav>
+            <p class="navigate-back"><a href="../ShowCompany/CompanyList">Back to Company list</a></p>
+            <p class="next-step-button">
+                <input type="submit" class="command btn btn-primary" value="Save" />
+                 @Html.ActionLink(asi.asicentral.Resources.Resource.Cancel, "CompanyList")
+        </nav>
+    </footer>
+}
+@section Scripts {
+<script>
+    $("#IsNonUSAddress").change(function (evt) {
+        if ($("#country-div").attr("class").trim() == "control-group")
+            $("#country-div").attr("class", "control-group hidden");
+        else
+            $("#country-div").attr("class", "control-group");
+        if ($("#country-div").attr("class") == "control-group hidden") {
+            $("#Country").val("USA");
+            $("#State").val("");
+            $("#state-div").attr("class", "control-group");
+            $("#international-state-div").attr("class", "control-group hidden");
+            $("#InternationalState").val("N/A");
+        }
+        else {
+            $("#Country").val("");
+            $("#state-div").attr("class", "control-group hidden");
+            $("#State").val("AL");
+            $("#InternationalState").val("");
+            $("#international-state-div").attr("class", "control-group");
+        }
+    });
+
+    
+    $("#Name").blur(function () {
+        var name = $("#Name").val();
+            if (name) {
+                $.ajax({
+                    url: "/ShowCompany/IsValidCompany?name=" + name,
+                    type: 'POST',
+                    success: function (data) {
+                        if (data == true) {
+                            $('span[data-valmsg-for="Name"]').html("Name already exists.");
+                            $('span[data-valmsg-for="Name"]').attr("class", "field-validation-error");
+                        }
+                        else {
+                            $('span[data-valmsg-for="Name"]').html("");
+                            $('span[data-valmsg-for="Name"]').attr("class", "field-validation-valid");
+
+                        }
+                    }
+                });
+            }
+    });
+</script>
+}

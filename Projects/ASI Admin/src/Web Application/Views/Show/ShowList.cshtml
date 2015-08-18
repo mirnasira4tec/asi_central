@@ -1,0 +1,81 @@
+﻿@{
+    ViewBag.Title = "ShowList";
+    Layout = "~/Views/Show/Shared/_Layout.cshtml";
+}
+@using asi.asicentral.model.show;
+@using asi.asicentral.services;
+@using asi.asicentral.interfaces;
+@model  IList<asi.asicentral.model.show.ShowASI>
+
+<h2>List of Shows</h2>
+@using (Html.BeginForm())
+{
+   
+    <a href="/Show/ShowAdd" class="btn btn-primary">Add </a>
+    <br />
+    <br />
+    
+    <table class="table table-bordered table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td><a class="delete" id="@Model[i].Id" href="/store/Coupon/Delete?id=@Model[i].Id"><i class="icon-trash"></i></a></td>
+                    <td><a href="/store/Coupon/Edit?id=@Model[i].Id">@Model[i].Name</a></td>
+                    <td>
+                        @if (Model[i].ShowTypeId != null)
+                        {
+                            @GetMemberType(Model[i].ShowTypeId);
+                        }
+
+                    </td>
+                    <td>No of Companies= @GetNoOfCompany(Model[i].ShowTypeId): No of Attendee:
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @functions{
+        public IObjectService ObjectService { get; set; }
+        public string GetMemberType(int? id)
+        {
+            if (id != null)
+            {
+                ShowType type = ObjectService.GetAll<ShowType>(true).Where(detail => detail.Id == id).FirstOrDefault();
+                return type.Type;
+            }
+            return null;
+        }
+        public int GetNoOfCompany(int? id)
+        {
+            IList<ShowAttendee> Attendee = null;
+            if (id != null)
+            {
+            Attendee = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId != id).ToList();
+            }
+
+            return Attendee.Count();
+        }
+        }
+}
+
+
+@section scripts {
+    <script type="text/javascript">
+        $('a.delete').click(function () {
+            var confirms = confirm("Are you sure you want to delete the coupon?");
+            if (confirms)
+                return true
+            else
+                return false
+        });
+    </script>
+}

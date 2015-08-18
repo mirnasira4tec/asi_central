@@ -16,10 +16,10 @@ namespace asi.asicentral.database
         public DbSet<ShowAttendee> Attendee { get; set; }
         public DbSet<ShowEmployee> Employee { get; set; }
         public DbSet<ShowEmployeeAttendee> EmployeeAttendee { get; set; }
-        public DbSet<Show> Show { get; set; }
+        public DbSet<ShowASI> Show { get; set; }
         public DbSet<ShowCompany> Company { get; set; }
         public DbSet<ShowType> ShowType { get; set; }
-       // public DbSet<CompanyAddress> CompanyAddress { get; set; }
+        public DbSet<ShowCompanyAddress> CompanyAddress { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -36,8 +36,8 @@ namespace asi.asicentral.database
                 .Add(new ShowEmployeeAttendeeMap())
                 .Add(new ShowEmployeeMap())
                 .Add(new ShowMap())
-                .Add(new ShowTypeMap());
-                //.Add(new CompanyAddressMap())
+                .Add(new ShowTypeMap())
+                .Add(new ShowCompanyAddressMap());
     }
 }
 }

@@ -9,7 +9,7 @@ using asi.asicentral.model.show;
 
 namespace asi.asicentral.database.mappings.show
 {
-   public class ShowMap : EntityTypeConfiguration<Show>
+   public class ShowMap : EntityTypeConfiguration<ShowASI>
     {
        public ShowMap()
         {
@@ -41,9 +41,6 @@ namespace asi.asicentral.database.mappings.show
               .WithMany()
               .HasForeignKey(x => x.ShowTypeId);
 
-            HasRequired(x => x.Address)
-               .WithMany()
-               .HasForeignKey(x => x.AddressId);
         }
     }
 }
