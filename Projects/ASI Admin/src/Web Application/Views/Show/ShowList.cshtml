@@ -10,11 +10,9 @@
 <h2>List of Shows</h2>
 @using (Html.BeginForm())
 {
-   
     <a href="/Show/ShowAdd" class="btn btn-primary">Add </a>
     <br />
     <br />
-    
     <table class="table table-bordered table-condensed table-striped">
         <thead>
             <tr>
@@ -29,13 +27,12 @@
             {
                 <tr>
                     <td><a class="delete" id="@Model[i].Id" href="/store/Coupon/Delete?id=@Model[i].Id"><i class="icon-trash"></i></a></td>
-                    <td><a href="/store/Coupon/Edit?id=@Model[i].Id">@Model[i].Name</a></td>
+                    <td><a href="/ShowCompany/GetCompanyList?showId=@Model[i].Id">@Model[i].Name</a></td>
                     <td>
                         @if (Model[i].ShowTypeId != null)
                         {
                             @GetMemberType(Model[i].ShowTypeId);
                         }
-
                     </td>
                     <td>No of Companies= @GetNoOfCompany(Model[i].ShowTypeId): No of Attendee:
                     </td>
@@ -59,7 +56,7 @@
             IList<ShowAttendee> Attendee = null;
             if (id != null)
             {
-            Attendee = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId != id).ToList();
+                Attendee = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId != id).ToList();
             }
 
             return Attendee.Count();
