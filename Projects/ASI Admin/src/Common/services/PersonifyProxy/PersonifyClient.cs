@@ -958,25 +958,6 @@ namespace asi.asicentral.services.PersonifyProxy
                             customerInfo = GetIndividualInfo(customerInfoOutput.MasterCustomerId);
                             if (customerInfo != null) AddRelationship(customerInfo, companyInfo);
                         }
-
-                        //// Add address
-                        //if (storeIndividual.Address != null)
-                        //{
-                        //    var storeAddressInfo = new StoreAddressInfo()
-                        //    {
-                        //        CustuInfo = customerInfo,
-                        //        CountryCode = countryCode,
-                        //        StoreAddr = storeIndividual.Address,
-                        //        StoreIsPrimary = false,
-                        //        StoreIsBilling = false,
-                        //        StoreIsShipping = true,
-                        //        PersonifyIsBilling = false,
-                        //        PersonifyIsShipping = storeIndividual.IsPrimary,
-                        //        PersonifyAddr = null  
-                        //    };
-
-                        //    AddCustomerAddress(storeAddressInfo, null, customerInfo, string.Join(" ", storeIndividual.FirstName, storeIndividual.LastName));
-                        //}
                     }
                     else
                     {
