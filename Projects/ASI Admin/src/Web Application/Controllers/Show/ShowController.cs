@@ -14,17 +14,17 @@ namespace asi.asicentral.web.Controllers.Show
     {
         public IObjectService ObjectService { get; set; }
         [HttpGet]
-        public ActionResult Show()
+        public ActionResult ShowAdd()
         {
             ShowModel show = new ShowModel();
             show.ShowType = GetShowType();
             show.StartDate = DateTime.UtcNow;
             show.EndDate = DateTime.UtcNow;
-            return View("../Show/Show", show);
+            return View("../Show/ShowAdd", show);
         }
 
         [HttpPost]
-        public ActionResult Show(ShowModel show)
+        public ActionResult ShowAdd(ShowModel show)
         {
             if (ModelState.IsValid)
             {
@@ -45,7 +45,7 @@ namespace asi.asicentral.web.Controllers.Show
                 {
                     show.ShowType = GetShowType();
                 }
-                return View("../Show/Show", show);
+                return View("../Show/ShowAdd", show);
             }
         }
 
@@ -56,6 +56,7 @@ namespace asi.asicentral.web.Controllers.Show
         }
         private IList<SelectListItem> GetShowType()
         {
+            
             IList<SelectListItem> typeList = null;
             IList<ShowType> types = ObjectService.GetAll<ShowType>(true).ToList();
             if (types != null && types.Count > 0)
@@ -70,6 +71,7 @@ namespace asi.asicentral.web.Controllers.Show
             }
             return typeList;
         }
+        
 
     }
 }

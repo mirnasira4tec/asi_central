@@ -7,11 +7,11 @@
 @using asi.asicentral.interfaces;
 @model  IList<asi.asicentral.model.show.ShowASI>
 
-<h2>Shows</h2>
+<h2>List of Shows</h2>
 @using (Html.BeginForm())
 {
    
-    <a href="/Show/Show" class="btn btn-primary">Add </a>
+    <a href="/Show/ShowAdd" class="btn btn-primary">Add </a>
     <br />
     <br />
     
@@ -37,7 +37,7 @@
                         }
 
                     </td>
-                    <td class="center">Employee:
+                    <td>No of Companies= @GetNoOfCompany(Model[i].ShowTypeId): No of Attendee:
                     </td>
                 </tr>
             }
@@ -53,6 +53,16 @@
                 return type.Type;
             }
             return null;
+        }
+        public int GetNoOfCompany(int? id)
+        {
+            IList<ShowAttendee> Attendee = null;
+            if (id != null)
+            {
+            Attendee = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId != id).ToList();
+            }
+
+            return Attendee.Count();
         }
         }
 }

@@ -484,15 +484,15 @@
     <Content Include="Views\TermsConditions\Edit.cshtml" />
     <EmbeddedResource Include="Views\Emails\TermsConditionsEmail.cshtml" />
     <Content Include="Views\TermsConditions\_statusMessagePartial.cshtml" />
-    <Content Include="Views\Company\CompanyList.cshtml" />
-    <Content Include="Views\Company\CompanyEdit.cshtml" />
-    <Content Include="Views\Show\Show.cshtml" />
+    <Content Include="Views\Show\ShowAdd.cshtml" />
     <Content Include="Views\Shared\_ShowLayout.cshtml" />
     <Content Include="Views\Show\Shared\Address.cshtml" />
-    <Content Include="Views\Company\CompanyInformation.cshtml" />
-    <Content Include="Views\Company\AddAddress.cshtml" />
-    <Content Include="Views\Company\AddEmployee.cshtml" />
     <Content Include="Views\Show\ShowList.cshtml" />
+    <Content Include="Views\Show\Company\AddAddress.cshtml" />
+    <Content Include="Views\Show\Company\AddEmployee.cshtml" />
+    <Content Include="Views\Show\Company\CompanyEdit.cshtml" />
+    <Content Include="Views\Show\Company\CompanyInformation.cshtml" />
+    <Content Include="Views\Show\Company\CompanyList.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

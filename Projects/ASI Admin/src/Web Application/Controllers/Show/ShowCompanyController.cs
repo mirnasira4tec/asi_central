@@ -42,14 +42,14 @@ namespace asi.asicentral.web.Controllers.Show
 
             company.CompanyTab = companyTab;
             company.company = companyList.OrderByDescending(form => form.CreateDate).ToList();
-            return View("../Company/CompanyList", company);
+            return View("../Show/Company/CompanyList", company);
         }
 
         [HttpGet]
         public virtual ActionResult Add()
         {
             CompanyModel company = new CompanyModel();
-            return View("../Company/CompanyEdit", company);
+            return View("../Show/Company/CompanyEdit", company);
         }
 
         [HttpPost]
@@ -102,7 +102,7 @@ namespace asi.asicentral.web.Controllers.Show
             }
             else
             {
-                return View("../Company/CompanyEdit", company);
+                return View("../Show/Company/CompanyEdit", company);
             }
         }
 
@@ -115,7 +115,7 @@ namespace asi.asicentral.web.Controllers.Show
                 ShowCompany company = ObjectService.GetAll<ShowCompany>().Where(item => item.Id == id).FirstOrDefault();
                 updateCompany.Name = company.Name;
             }
-            return View("../Company/CompanyEdit", updateCompany);
+            return View("../Show/Company/CompanyEdit", updateCompany);
         }
 
         public ActionResult Delete(int id)
@@ -127,7 +127,7 @@ namespace asi.asicentral.web.Controllers.Show
                 ObjectService.SaveChanges();
             }
             IList<ShowCompany> companyList = ObjectService.GetAll<ShowCompany>(true).ToList();
-            return View("../Company/CompanyList", companyList);
+            return View("../Show/Company/CompanyList", companyList);
 
         }
 
@@ -142,7 +142,7 @@ namespace asi.asicentral.web.Controllers.Show
                 IQueryable<ShowCompanyAddress> companyAddress = ObjectService.GetAll<ShowCompanyAddress>().Where(item => item.CompanyId == id);
                 companyInformation.CompanyAddress = companyAddress.ToList();
             }
-            return View("../Company/CompanyInformation", companyInformation);
+            return View("../Show/Company/CompanyInformation", companyInformation);
         }
 
         [HttpGet]
@@ -150,7 +150,7 @@ namespace asi.asicentral.web.Controllers.Show
         {
             AddressModel Address = new AddressModel();
             Address.CompanyId = CompanyID;
-            return View("../Company/AddAddress", Address);
+            return View("../Show/Company/AddAddress", Address);
         }
         [HttpPost]
         [ValidateInput(true)]
@@ -189,21 +189,21 @@ namespace asi.asicentral.web.Controllers.Show
                 }
                 else
                 {
-                    return View("../Company/AddAddress", Address);
+                    return View("../Show/Company/AddAddress", Address);
                 }
             }
             catch (Exception ex)
             {
                 messages.Add("Error: " + ex.Message);
             }
-             return View("../Company/CompanyEdit", Address);
+            return View("../Show/Company/CompanyEdit", Address);
         }
 
         [HttpGet]
         public ActionResult AddEmployee(int CompanyID)
         {
             var model = new AddressModel();
-            return View("../Company/AddEmployee", model);
+            return View("../Show/Company/AddEmployee", model);
         }
         [HttpPost]
         public ActionResult IsValidCompany(string name)
