@@ -213,7 +213,8 @@ namespace asi.asicentral.services
             string newMemberType = string.Empty;
             if (order.IsNewMemberShip(ref newMemberType))
             { 
-                // create a new Personify company if Distributor is buying Decorator membership
+                //todo?? reconcile company based on the new member type
+                //create a new Personify company for new membership type
                 companyInfo = PersonifyClient.CreateCompany(order.Company, newMemberType, countryCodes);
                 order.Company.ExternalReference = string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
                 order.Company.MemberType = newMemberType;
@@ -458,14 +459,7 @@ namespace asi.asicentral.services
             return PersonifyClient.GetCompanyAsiNumber(masterCustomerId, subCustomerId);
         }
 
- 		private static string GetMessageSuffix(string url)
-		{
-			var s = "<br /><br />Thanks,<br /><br />ASICentral team";
-			if (!string.IsNullOrEmpty(url)) s = "<br /><br />" + url + s;
-			return s;
-		}
-
-		private static string GetCountryCode(string country)
+ 		private static string GetCountryCode(string country)
 		{
 			string result = null;
 			if (!string.IsNullOrWhiteSpace(country))
