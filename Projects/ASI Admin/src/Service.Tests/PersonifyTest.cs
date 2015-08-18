@@ -38,7 +38,7 @@ namespace asi.asicentral.Tests
         }
 
         [TestMethod]
-        public void PlaceOrderBundleTest()
+        public void PlaceBundleOrderTest()
         {
             IStoreService storeService = MockupStoreService();
             var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 5);
