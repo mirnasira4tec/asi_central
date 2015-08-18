@@ -12,6 +12,7 @@ using asi.asicentral.database.mappings;
 using asi.asicentral.interfaces;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
+using asi.asicentral.web.models.show;
 
 
 namespace asi.asicentral.web.Controllers.Show
@@ -152,6 +153,7 @@ namespace asi.asicentral.web.Controllers.Show
             Address.CompanyId = CompanyID;
             return View("../Show/Company/AddAddress", Address);
         }
+
         [HttpPost]
         [ValidateInput(true)]
         public virtual ActionResult AddAddress(AddressModel Address)
@@ -205,6 +207,7 @@ namespace asi.asicentral.web.Controllers.Show
             var model = new AddressModel();
             return View("../Show/Company/AddEmployee", model);
         }
+
         [HttpPost]
         public ActionResult IsValidCompany(string name)
         {
@@ -223,5 +226,28 @@ namespace asi.asicentral.web.Controllers.Show
             }
         }
 
+        [HttpGet]
+        public ActionResult GetCompanyList(int showId)
+        {
+            ShowCompaniesModel showCompanies = new ShowCompaniesModel();
+            IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>(true).Where(attendee => attendee.ShowId == showId).ToList();
+            foreach (ShowAttendee attendee in existingAttendees)
+            {
+                showCompanies.Show = attendee.Show;
+                showCompanies.ShowAttendees.Add(attendee);
+            }
+            if (showCompanies.Show == null) showCompanies.Show = ObjectService.GetAll<ShowASI>(true).SingleOrDefault(show => show.Id == showId);
+            IList<ShowCompany> companyList = ObjectService.GetAll<ShowCompany>(true).ToList();
+            foreach (ShowCompany company in companyList)
+            {
+                if (showCompanies.ShowAttendees.Where(item => item.CompanyId == company.Id).Count() == 0)
+                {
+                    ShowAttendee attendee = new ShowAttendee();
+                    attendee.Company = company;
+                    showCompanies.ShowAttendees.Add(attendee);
+                }
+            }
+            return View("../Show/ShowCompaniesList", showCompanies);
+        }
     }
 }

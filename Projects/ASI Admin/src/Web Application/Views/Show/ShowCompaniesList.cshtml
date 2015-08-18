@@ -1,0 +1,64 @@
+﻿@using asi.asicentral.web.models.show
+@using asi.asicentral.model.show
+@model ShowCompaniesModel
+@{
+    Layout = "~/Views/Show/Shared/_Layout.cshtml";
+}
+@if(Model.Show != null)
+{
+<h1>@Model.Show.Name @Model.Show.StartDate.Year.ToString() (@Model.Show.StartDate.ToString("MMM") @Model.Show.StartDate.Day.ToString() - @Model.Show.EndDate.ToString("MMM") @Model.Show.EndDate.Day.ToString())</h1>
+}
+<table class="table table-bordered table-condensed table-striped">
+    <thead>
+        <tr>
+            <th>ASI#</th>
+            <th>Company Name</th>
+            <th>Member Type</th>
+            <th>Is Attending</th>
+            <th>Is Sponsor</th>
+            <th>Exhibit Day</th>
+            <th>Booth Number</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (ShowAttendee showAttendee in Model.ShowAttendees)
+        {
+            <tr>
+                <td>@showAttendee.Company.ASINumber</td>
+                <td><a href="/ShowCompany/GetCompanyList?showId=@showAttendee.Id">@showAttendee.Company.Name</a></td>
+                <td>@showAttendee.Company.MemberType</td>
+                <td>
+                @if (showAttendee.IsAttending)
+                {
+                    <a class="icon-ok" />
+                }
+                else
+                {
+                    <a class="icon-remove" />
+                }
+                </td>
+                <td>
+                @if (showAttendee.IsSponsor)
+                {
+                    <a class="icon-ok" />
+                }
+                else
+                {
+                    <a class="icon-remove" />
+                }
+                </td>
+                <td>
+                @if (showAttendee.IsSponsor)
+                {
+                    <a class="icon-ok" />
+                }
+                else
+                {
+                    <a class="icon-remove" />
+                }
+                </td>
+                <td>@showAttendee.BoothNumber</td>
+           </tr>
+        }
+    </tbody>
+</table>
