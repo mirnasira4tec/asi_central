@@ -1,0 +1,53 @@
+﻿@using asi.asicentral.web.models.show
+@using asi.asicentral.model.show
+@model ShowCompaniesModel
+@{
+    Layout = "~/Views/Show/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("PostShowAttendeeInformation", "Show", FormMethod.Post, new { id = "showAttendee-form", @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Show.Id)
+    if (Model.ShowAttendees != null)
+    {
+        for(int count = 0; count < Model.ShowAttendees.Count; count++)
+        {
+    @Html.HiddenFor(model => model.ShowAttendees[count].CompanyId)
+    @Html.HiddenFor(model => model.ShowAttendees[count].ShowId)
+    @Html.HiddenFor(model => model.ShowAttendees[count].Id)
+    <h1>@Model.ShowAttendees[count].Company.Name</h1>
+    <section class="first-section">
+        <div class="control-group">
+            <label class="checkbox" for="IsAttending">@Html.EditorFor(model => model.ShowAttendees[count].IsAttending) Is Attending</label>
+            <label class="checkbox" for="IsSponsor">@Html.EditorFor(model => model.ShowAttendees[count].IsSponsor) Is Sponsor</label>
+            <label class="checkbox" for="IsExhibitDay">@Html.EditorFor(model => model.ShowAttendees[count].IsExhibitDay) Exhibit Day</label>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.ShowAttendees[count].BoothNumber, new { @class = "control-label" })
+            <div class="controls">@Html.EditorFor(model => model.ShowAttendees[count].BoothNumber) @Html.ValidationMessageFor(model => model.ShowAttendees[count].BoothNumber)</div>
+        </div>
+    </section>
+    <section class="second-section">
+        <h1>Who is attending "@Model.Show.Name @Model.Show.StartDate.Year.ToString() (@Model.Show.StartDate.ToString("MMM") @Model.Show.StartDate.Day.ToString() - @Model.Show.EndDate.ToString("MMM") @Model.Show.EndDate.Day.ToString())" show ?</h1>
+        @if (Model.ShowEmployees != null)
+        {
+            for (int empCnt = 0; empCnt < Model.ShowEmployees.Count; empCnt++)
+            {
+            @Html.HiddenFor(model => model.ShowEmployees[empCnt].Employee.Id)
+            @Html.HiddenFor(model => model.ShowEmployees[empCnt].Employee.AddressId)
+            <label class="checkbox" for="@Model.ShowEmployees[empCnt].IsAttending">@Html.EditorFor(model => model.ShowEmployees[empCnt].IsAttending) @Model.ShowEmployees[empCnt].Employee.FirstName @Model.ShowEmployees[empCnt].Employee.LastName</label>
+            }
+        }
+    </section>
+    <p class="next-step-button">
+        @{var submitText = (Model.ShowAttendees[count].Id == 0 ? "Add" : "Edit");}
+        <input type="submit" class="btn btn-primary" value="@submitText" />
+    </p>
+        }
+    }
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/form")
+    <script src="/Scripts/asi.js"></script>
+}

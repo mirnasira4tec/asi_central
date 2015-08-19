@@ -25,7 +25,7 @@
         {
             <tr>
                 <td>@showAttendee.Company.ASINumber</td>
-                <td><a href="/ShowCompany/GetCompanyList?showId=@showAttendee.Id">@showAttendee.Company.Name</a></td>
+                <td><a href="/ShowCompany/GetCompanyDetailsForShow?companyId=@showAttendee.Company.Id&showId=@(Model.Show != null ? Model.Show.Id : 0)">@showAttendee.Company.Name</a></td>
                 <td>@showAttendee.Company.MemberType</td>
                 <td>
                 @if (showAttendee.IsAttending)
@@ -48,7 +48,7 @@
                 }
                 </td>
                 <td>
-                @if (showAttendee.IsSponsor)
+                @if (showAttendee.IsExhibitDay)
                 {
                     <a class="icon-ok" />
                 }

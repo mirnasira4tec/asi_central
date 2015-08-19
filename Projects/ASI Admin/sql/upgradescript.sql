@@ -5,10 +5,11 @@ CREATE TABLE [dbo].[Company](
 	[CompanyId] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [nvarchar](50) NOT NULL,
 	[WebUrl] [nvarchar](50) NULL,
-	[ASINumber] [int] NULL,
+	[ASINumber] [nvarchar](10) NULL,
 	[CreateDateUTC] [datetime] NOT NULL,
 	[UpdateDateUTC] [datetime] NOT NULL,
 	[UpdateSource] [nvarchar](100) NOT NULL DEFAULT 'Not Specified',
+	[MemberType] [nvarchar](20) NULL,
  CONSTRAINT [PK_Company] PRIMARY KEY CLUSTERED 
 (
 	[CompanyId] ASC
@@ -24,15 +25,12 @@ CREATE TABLE [dbo].[Address](
 	[AddressId] [int] IDENTITY(1,1) NOT NULL,
 	[Phone] [nvarchar](50) NOT NULL,
 	[PhoneAreaCode] [nchar](10) NOT NULL,
-	[Cell] [nvarchar](50) NULL,
 	[FaxAreaCode] [nvarchar](50) NULL,
 	[Fax] [nvarchar](50) NULL,
-	[Title] [nvarchar](50) NULL,
 	[Street1] [nvarchar](50) NOT NULL,
 	[Street2] [nvarchar](50) NULL,
 	[Zip] [nvarchar](50) NOT NULL,
 	[State] [nvarchar](50) NOT NULL,
-	[CountryCode] [nvarchar](50) NOT NULL,
 	[Country] [nvarchar](50) NOT NULL,
 	[City] [nchar](10) NOT NULL,
 	[CreateDateUTC] [datetime] NOT NULL,
@@ -47,6 +45,9 @@ CREATE TABLE [dbo].[Address](
 GO
 
 
+--
+-- Table structure for table `CompanyAddress`
+--
 CREATE TABLE [dbo].[CompanyAddress](
 	[CompanyAddressId] [int] IDENTITY(1,1) NOT NULL,
 	[CompanyId] [int] NOT NULL,
@@ -141,10 +142,10 @@ CREATE TABLE [dbo].[Show](
 	[TypeId] [int] NOT NULL,
 	[StartDate] [datetime] NOT NULL,
 	[EndDate] [datetime] NOT NULL,
-	[AddressId] [int] NOT NULL,
 	[CreateDateUTC] [datetime] NOT NULL,
 	[UpdateDateUTC] [datetime] NOT NULL,
 	[UpdateSource] [nvarchar](100) NOT NULL DEFAULT 'Not Specified',
+	[Address] [nvarchar](500) NOT NULL,
  CONSTRAINT [PK_Show] PRIMARY KEY CLUSTERED 
 (
 	[ShowId] ASC
@@ -153,12 +154,6 @@ CREATE TABLE [dbo].[Show](
 
 GO
 
-ALTER TABLE [dbo].[Show]  WITH CHECK ADD  CONSTRAINT [FK_Show_Address] FOREIGN KEY([AddressId])
-REFERENCES [dbo].[Address] ([AddressId])
-GO
-
-ALTER TABLE [dbo].[Show] CHECK CONSTRAINT [FK_Show_Address]
-GO
 
 ALTER TABLE [dbo].[Show]  WITH CHECK ADD  CONSTRAINT [FK_Show_ShowType] FOREIGN KEY([TypeId])
 REFERENCES [dbo].[ShowType] ([ShowTypeId])
@@ -190,13 +185,6 @@ CREATE TABLE [dbo].[Attendee](
 
 GO
 
-ALTER TABLE [dbo].[Attendee]  WITH CHECK ADD  CONSTRAINT [FK_Attendee_Address] FOREIGN KEY([AddressId])
-REFERENCES [dbo].[Address] ([AddressId])
-GO
-
-ALTER TABLE [dbo].[Attendee] CHECK CONSTRAINT [FK_Attendee_Address]
-GO
-
 ALTER TABLE [dbo].[Attendee]  WITH CHECK ADD  CONSTRAINT [FK_Attendee_Company] FOREIGN KEY([CompanyId])
 REFERENCES [dbo].[Company] ([CompanyId])
 GO
@@ -216,7 +204,7 @@ GO
 --
 CREATE TABLE [dbo].[EmployeeAttendee](
 	[EmployeeAttendeeId] [int] IDENTITY(1,1) NOT NULL,
-	[AttendeesId] [int] NOT NULL,
+	[AttendeeId] [int] NOT NULL,
 	[EmployeeId] [int] NOT NULL,
 	[CreateDateUTC] [datetime] NOT NULL,
 	[UpdateDateUTC] [datetime] NOT NULL,
@@ -229,7 +217,7 @@ CREATE TABLE [dbo].[EmployeeAttendee](
 
 GO
 
-ALTER TABLE [dbo].[EmployeeAttendee]  WITH CHECK ADD  CONSTRAINT [FK_EmployeeAttendee_Attendee] FOREIGN KEY([AttendeesId])
+ALTER TABLE [dbo].[EmployeeAttendee]  WITH CHECK ADD  CONSTRAINT [FK_EmployeeAttendee_Attendee] FOREIGN KEY([AttendeeId])
 REFERENCES [dbo].[Attendee] ([AttendeeId])
 GO
 

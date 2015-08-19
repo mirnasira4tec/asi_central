@@ -249,5 +249,49 @@ namespace asi.asicentral.web.Controllers.Show
             }
             return View("../Show/ShowCompaniesList", showCompanies);
         }
+
+        [HttpGet]
+        public ActionResult GetCompanyDetailsForShow(int companyId, int showId)
+        {
+            ShowAttendee attendee = ObjectService.GetAll<ShowAttendee>(true).SingleOrDefault(sa => sa.ShowId == showId && sa.CompanyId == companyId);
+            IList<ShowEmployee> employees = ObjectService.GetAll<ShowEmployee>(true).Where(e => e.CompanyId == companyId).ToList();
+            ShowCompaniesModel showCompanies = new ShowCompaniesModel();
+            if (attendee != null)
+            {
+                showCompanies.ShowAttendees.Add(attendee);
+                showCompanies.Show = attendee.Show;
+                IList<ShowEmployeeAttendee> attendees = ObjectService.GetAll<ShowEmployeeAttendee>(true).Where(sea => sea.AttendeeId == attendee.Id).ToList();
+                foreach (ShowEmployee showEmployee in employees)
+                {
+                    EmployeeAttendance employeeAttendance = AddEmployeeAttandance(showEmployee, attendees.Where(a => a.EmployeeId == showEmployee.Id).Count() == 1);
+                    showCompanies.ShowEmployees.Add(employeeAttendance);
+                }
+            }
+            else
+            {
+                ShowCompany company = ObjectService.GetAll<ShowCompany>(true).SingleOrDefault(sc => sc.Id == companyId);
+                ShowASI show = ObjectService.GetAll<ShowASI>(true).SingleOrDefault(s => s.Id == showId);
+                ShowAttendee newAttendee = new ShowAttendee();
+                newAttendee.Company = company;
+                newAttendee.CompanyId = company.Id;
+                newAttendee.ShowId = show.Id;
+                showCompanies.ShowAttendees.Add(newAttendee);
+                foreach (ShowEmployee showEmployee in employees)
+                {
+                    EmployeeAttendance employeeAttendance = AddEmployeeAttandance(showEmployee, false);
+                    showCompanies.ShowEmployees.Add(employeeAttendance);
+                }
+                showCompanies.Show = show;
+            }
+            return View("../Show/AddCompanyAttendeesToShow", showCompanies);
+        }
+
+        private EmployeeAttendance AddEmployeeAttandance(ShowEmployee showEmployee, bool isAttending)
+        {
+            EmployeeAttendance employeeAttendance = new EmployeeAttendance();
+            employeeAttendance.Employee = showEmployee;
+            employeeAttendance.IsAttending = isAttending;
+            return employeeAttendance;
+        }
     }
 }

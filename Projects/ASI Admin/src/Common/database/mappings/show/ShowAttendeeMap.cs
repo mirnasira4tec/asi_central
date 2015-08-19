@@ -28,10 +28,13 @@ namespace asi.asicentral.database.mappings.show
                 .HasColumnName("UpdateDateUTC");
 
             //Relationships
-           
-            HasRequired(x => x.Address)
+            HasRequired(x => x.Company)
              .WithMany()
-             .HasForeignKey(x => x.AddressId);
+             .HasForeignKey(x => x.CompanyId);
+
+            HasRequired(x => x.Show)
+             .WithMany()
+             .HasForeignKey(x => x.ShowId);
         }
     }
 }
