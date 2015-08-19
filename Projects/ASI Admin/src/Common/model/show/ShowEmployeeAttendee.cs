@@ -9,7 +9,7 @@ namespace asi.asicentral.model.show
     public class ShowEmployeeAttendee
     {
         public int Id { get; set; }
-        public int AttendeesId { get; set; }
+        public int AttendeeId { get; set; }
         public int EmployeeId { get; set; }
         public ShowAttendee Attendee { get; set; }
         public ShowEmployee Employee { get; set; } 

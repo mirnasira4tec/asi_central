@@ -31,7 +31,7 @@ namespace asi.asicentral.database.mappings.show
 
             HasRequired(x => x.Attendee)
              .WithMany()
-             .HasForeignKey(x => x.AttendeesId);
+             .HasForeignKey(x => x.AttendeeId);
 
             HasRequired(x => x.Employee)
             .WithMany()

@@ -27,17 +27,17 @@ namespace asi.asicentral.database.mappings.show
             this.Property(t => t.UpdateDate)
                 .HasColumnName("UpdateDateUTC");
 
-            HasMany(t => t.Employee)
+            HasMany(t => t.Employees)
                 .WithOptional()
                 .HasForeignKey(t => t.CompanyId)
                 .WillCascadeOnDelete();
 
-            HasMany(t => t.Attendee)
+            HasMany(t => t.Attendees)
                  .WithOptional()
                  .HasForeignKey(t => t.CompanyId)
                  .WillCascadeOnDelete();
 
-            HasMany(t => t.CompanyAddress)
+            HasMany(t => t.CompanyAddresses)
                   .WithOptional()
                   .HasForeignKey(t => t.CompanyId)
                   .WillCascadeOnDelete();

@@ -1,6 +1,7 @@
 ﻿using asi.asicentral.interfaces;
 using asi.asicentral.model.show;
 using asi.asicentral.util.show;
+using asi.asicentral.web.models.show;
 using asi.asicentral.web.Models.Show;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace asi.asicentral.web.Controllers.Show
     public class ShowController : Controller
     {
         public IObjectService ObjectService { get; set; }
+
         [HttpGet]
         public ActionResult ShowAdd()
         {
@@ -49,14 +51,51 @@ namespace asi.asicentral.web.Controllers.Show
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PostShowAttendeeInformation(ShowCompaniesModel attendeeInfo)
+        {
+            ShowAttendee showAttendee = null;
+            int companyId = 0;
+            int showId = 0;
+            if (attendeeInfo != null && attendeeInfo.ShowAttendees != null && attendeeInfo.ShowAttendees.Count > 0)
+            {
+                showAttendee = attendeeInfo.ShowAttendees.ElementAt(0);
+                companyId = (showAttendee.CompanyId != null && showAttendee.CompanyId.HasValue) ? showAttendee.CompanyId.Value : 0;
+                showId = (showAttendee.ShowId != null && showAttendee.ShowId.HasValue) ? showAttendee.ShowId.Value : 0;
+            }
+            ShowAttendee existingAttendee = ObjectService.GetAll<ShowAttendee>().SingleOrDefault(attendee => attendee.ShowId == showId && attendee.CompanyId == companyId);
+            if (showAttendee != null)
+            {
+                if (existingAttendee == null) existingAttendee = new ShowAttendee();
+                existingAttendee.CompanyId = companyId;
+                existingAttendee.ShowId = showId;
+                existingAttendee.IsAttending = showAttendee.IsAttending;
+                existingAttendee.IsSponsor = showAttendee.IsSponsor;
+                existingAttendee.IsExhibitDay = showAttendee.IsExhibitDay;
+                existingAttendee.BoothNumber = showAttendee.BoothNumber;
+                existingAttendee.UpdateDate = DateTime.UtcNow;
+                existingAttendee.UpdateSource = "ShowController - PostShowAttendeeInformation";
+                ShowAttendee attendeeToSave = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, existingAttendee);
+
+                foreach (EmployeeAttendance employeeAttendance in attendeeInfo.ShowEmployees)
+                {
+                    bool isAdd = employeeAttendance.IsAttending;
+                    ShowHelper.AddOrDeleteShowEmployeeAttendance(ObjectService, attendeeToSave, employeeAttendance.Employee, isAdd, "ShowController - PostShowAttendeeInformation");
+                }
+                ObjectService.SaveChanges();
+            }
+            return new RedirectResult("/ShowCompany/GetCompanyList?showId=" + attendeeInfo.Show.Id);
+        }
+
         public ActionResult ShowList()
         {
             IList<ShowASI> showList = ObjectService.GetAll<ShowASI>(true).ToList();
             return View("../Show/ShowList", showList);
         }
+
         private IList<SelectListItem> GetShowType()
         {
-            
             IList<SelectListItem> typeList = null;
             IList<ShowType> types = ObjectService.GetAll<ShowType>(true).ToList();
             if (types != null && types.Count > 0)
@@ -71,7 +110,5 @@ namespace asi.asicentral.web.Controllers.Show
             }
             return typeList;
         }
-        
-
     }
 }

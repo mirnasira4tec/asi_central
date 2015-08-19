@@ -14,9 +14,17 @@ namespace asi.asicentral.web.models.show
         public ShowCompaniesModel()
         {
             ShowAttendees = new List<ShowAttendee>();
+            ShowEmployees = new List<EmployeeAttendance>();
         }
 
         public ShowASI Show { get; set; }
         public IList<ShowAttendee> ShowAttendees { get; set; }
+        public IList<EmployeeAttendance> ShowEmployees { get; set; }
+    }
+
+    public class EmployeeAttendance    
+    {
+        public ShowEmployee Employee { get; set; }
+        public bool IsAttending { get; set; }
     }
 }

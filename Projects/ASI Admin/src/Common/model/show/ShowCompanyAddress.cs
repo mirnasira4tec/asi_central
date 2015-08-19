@@ -11,7 +11,6 @@ namespace asi.asicentral.model.show
     {
         public int Id { get; set; }
         public int? CompanyId { get; set; }
-       // public int? AddressId { get; set; }
         public virtual ShowCompany Company { get; set; }
         public virtual ShowAddress Address { get; set; }
         public DateTime CreateDate { get; set; }
