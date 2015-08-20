@@ -1,10 +1,11 @@
-﻿@model asi.asicentral.web.Models.Show.ShowModel
+﻿@model asi.asicentral.web.models.show.ShowModel
 @using asi.asicentral.Resources
 @{
     Layout = "~/Views/Show/Shared/_Layout.cshtml";
 }
-@using (Html.BeginForm())
+@using (Html.BeginForm("AddShow", "Show", FormMethod.Post, new { id = "AddShow-form" }))
 {
+    @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
     
     <div id="tabbasic" class="basic-information tab-pane fade in active">
@@ -18,7 +19,7 @@
                 </div>
             
               <div class="control-group">
-                    @Html.LabelFor(model => model.ShowTypeId, new { @class = "control-label" })
+                    @Html.Label("ShowType")
                     <div class="controls"> @Html.DropDownListFor(model => model.ShowTypeId, Model.ShowType, "Select", new { @class = "span3" })@Html.ValidationMessageFor(model => model.ShowTypeId)</div>
                 </div>
                 <div class="control-group">
@@ -73,5 +74,6 @@
             startDate.setDate(startDate.getDate(new Date($('#StartDate').val())));
             $("#EndDate").datepicker('setStartDate', startDate);
         });
+        
     </script>
     }

@@ -7,7 +7,7 @@ using System.Web;
 using asi.asicentral.model.show;
 using System.Web.Mvc;
 
-namespace asi.asicentral.web.Models.Show
+namespace asi.asicentral.web.models.show
 {
     public class ShowModel
     {
@@ -16,17 +16,18 @@ namespace asi.asicentral.web.Models.Show
         public const String TAB_SHOWTYPE = "showType";
         public const String TAB_SHOWYEAR = "ShowYear";
         public String ShowTab { get; set; }
+       //[Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public int? ShowTypeId { get; set; }
-
+        public int? year { get; set; }
        
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string Name { get; set; }
 
-        
+
         //[Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         //[StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
-        //public string Type { get; set; }
+        public string Type { get; set; }
 
        
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
@@ -41,6 +42,7 @@ namespace asi.asicentral.web.Models.Show
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public DateTime EndDate { get; set; }
 
+         public IList<ShowASI> Show { set; get; }
          public IList<SelectListItem> ShowType { get; set; }
 
     }

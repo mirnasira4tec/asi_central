@@ -1,16 +1,53 @@
 ﻿@{
-    ViewBag.Title = "ShowList";
     Layout = "~/Views/Show/Shared/_Layout.cshtml";
 }
 @using asi.asicentral.model.show;
 @using asi.asicentral.services;
 @using asi.asicentral.interfaces;
-@model  IList<asi.asicentral.model.show.ShowASI>
+@using asi.asicentral.web.models.show;
+@model  ShowModel
 
 <h2>List of Shows</h2>
+<div class="tabbable tabs-below small">
+    <h5>Search by</h5>
+    <ul id="formtab" class="nav nav-tabs">
+        <li class="@(Model.ShowTab == ShowModel.TAB_SHOWTYPE ? "active" : string.Empty)"><a href="#@ShowModel.TAB_SHOWTYPE">Type</a></li>
+        <li class="@(Model.ShowTab == ShowModel.TAB_SHOWYEAR ? "active" : string.Empty)"><a href="#@ShowModel.TAB_SHOWYEAR">Year</a></li>
+    </ul>
+    <div class="tab-content" id="formtab-content">
+        <div class="tab-pane @(Model.ShowTab == ShowModel.TAB_SHOWTYPE ? "active" : string.Empty)" id="@ShowModel.TAB_SHOWTYPE">
+            <div class="well">
+                @using (Html.BeginForm("ShowList", "../Show/ShowList", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @ShowModel.TAB_SHOWTYPE }))
+                {                
+                    <div class="formField">
+                        <label for="showType">Show Type</label>
+                        @Html.DropDownListFor(model => model.ShowTypeId, Model.ShowType, "Select", new { name = "ShowTypeId", value="@Model.ShowTypeId"  })
+                    </div>
+                    <div class="formField">
+                        <input type="hidden" value="@ShowModel.TAB_SHOWTYPE" name="showTab" /><input type="submit" value="Search" class="btn" />
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="tab-pane @(Model.ShowTab == ShowModel.TAB_SHOWYEAR ? "active" : string.Empty)" id="@ShowModel.TAB_SHOWYEAR">
+            <div class="well">
+                @using (Html.BeginForm("ShowList", "../Show/ShowList", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @ShowModel.TAB_SHOWYEAR }))
+                {                
+                    <div class="formField">
+                        <label for="year">Year</label>
+                        <input name="year" type="text" id="year" value="@Model.year" />
+                    </div>
+                    <div class="formField">
+                        <input type="hidden" value="@ShowModel.TAB_SHOWYEAR" name="showTab" /><input type="submit" value="Search" class="btn" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
 @using (Html.BeginForm())
 {
-    <a href="/Show/ShowAdd" class="btn btn-primary">Add </a>
+    <a href="/Show/AddShow" class="btn btn-primary">Add </a>
     <br />
     <br />
     <table class="table table-bordered table-condensed table-striped">
@@ -23,20 +60,19 @@
             </tr>
         </thead>
         <tbody>
-            @for (int i = 0; i < Model.Count; i++)
-            {
-                <tr>
-                    <td><a class="delete" id="@Model[i].Id" href="/store/Coupon/Delete?id=@Model[i].Id"><i class="icon-trash"></i></a></td>
-                    <td><a href="/ShowCompany/GetCompanyList?showId=@Model[i].Id">@Model[i].Name</a></td>
-                    <td>
-                        @if (Model[i].ShowTypeId != null)
+            @foreach (var show in @Model.Show)
+            {  <tr>
+                <td><a class="delete" id="@show.Id" href="/Show/Delete?id=@show.Id"><i class="icon-trash"></i></a></td>
+                <td><a href="/ShowCompany/GetCompanyList?showId=@show.Id">@show.Name</a></td>
+                <td>
+                    @if (show.ShowTypeId != null)
                         {
-                            @GetMemberType(Model[i].ShowTypeId);
+                        @GetMemberType(show.ShowTypeId);
                         }
-                    </td>
-                    <td>No of Companies= @GetNoOfCompany(Model[i].ShowTypeId): No of Attendee:
-                    </td>
-                </tr>
+                </td>
+                <td>No of Companies: @GetNoOfCompany(show.ShowTypeId) No of Attendee:@GetNoOfAttendee(show.ShowTypeId)
+                </td>
+            </tr>
             }
         </tbody>
     </table>
@@ -56,23 +92,54 @@
             IList<ShowAttendee> Attendee = null;
             if (id != null)
             {
-                Attendee = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId != id).ToList();
+                Attendee = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == id).ToList();
             }
 
             return Attendee.Count();
         }
+        public int GetNoOfAttendee(int? id)
+        {
+            IList<ShowAttendee> Attendee = null;
+            IList<ShowEmployeeAttendee> EmployeeAttendee = null;
+            if (id != null)
+            {
+                Attendee = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == id).ToList();
+                if (Attendee.Any())
+                {
+                    foreach (var employeeAttendee in Attendee)
+                    {
+                        EmployeeAttendee = ObjectService.GetAll<ShowEmployeeAttendee>().Where(item => item.AttendeeId == employeeAttendee.Id).ToList();
+                        if (EmployeeAttendee.Any())
+                        {
+                            return EmployeeAttendee.Count();
+                        }
+                        else{ return 0;}
+                    }
+                }
+                else{return 0;}
+            }
+            return EmployeeAttendee.Count();
+            
         }
-}
+        }
+    }
 
 
-@section scripts {
-    <script type="text/javascript">
-        $('a.delete').click(function () {
-            var confirms = confirm("Are you sure you want to delete the coupon?");
-            if (confirms)
-                return true
-            else
-                return false
-        });
-    </script>
-}
+    @section scripts {
+        <script type="text/javascript">
+            $('ul[id*="formtab"] a').click(function (e) {
+                e.preventDefault();
+                var tabname = e.target.toString();
+                tabname = tabname.substr(tabname.indexOf("#") + 1);
+                $('input[name*="formtab"]').val(tabname);
+                $(this).tab('show');
+            });
+            $('a.delete').click(function () {
+                var confirms = confirm("Are you sure you want to delete the company?");
+                if (confirms)
+                    return true
+                else
+                    return false
+            });
+        </script>
+    }

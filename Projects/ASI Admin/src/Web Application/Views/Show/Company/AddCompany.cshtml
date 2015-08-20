@@ -1,13 +1,11 @@
-﻿@model asi.asicentral.web.Models.Show.CompanyModel
+﻿@model asi.asicentral.web.models.show.CompanyModel
 @using asi.asicentral.Resources
 @{
-    ViewBag.Title = "CompanyEdit";
     Layout = "~/Views/Show/Shared/_Layout.cshtml";
 }
-
-<div>
-@using (Html.BeginForm())
+@using (Html.BeginForm("AddCompany", "ShowCompany", FormMethod.Post, new { id = "Add-form" }))
 {
+    @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
     
     <div id="tabbasic" class="basic-information tab-pane fade in active">
@@ -31,10 +29,10 @@
                 </div>
               <div class="control-group">
                     @Html.LabelFor(model => model.MemberType, new { @class = "control-label" })
-                    <div class="controls">@Html.DropDownListFor(model => model.MemberType, new SelectList(asi.asicentral.web.Models.Show.CompanyModel.GetMemberTypes(), "Value", "Text")) @Html.ValidationMessageFor(model => model.MemberType)</div>
+                    <div class="controls">@Html.DropDownListFor(model => model.MemberType, new SelectList(asi.asicentral.web.models.show.CompanyModel.GetMemberTypes(), "Value", "Text")) @Html.ValidationMessageFor(model => model.MemberType)</div>
                 </div>
                 <div class="control-group">
-                    @Html.LabelFor(model => model.Address1, new { @class = "control-label" })
+                      @Html.Label("Address1")
                     <div class="controls">@Html.EditorFor(model => model.Address1)<span class="helper-text">(Please no P.O. boxes)</span>@Html.ValidationMessageFor(model => model.Address1)</div>
                 </div>
                 <div class="control-group">
@@ -102,6 +100,7 @@
     </footer>
 }
 @section Scripts {
+     @Scripts.Render("~/bundles/form")
 <script>
     $("#IsNonUSAddress").change(function (evt) {
         if ($("#country-div").attr("class").trim() == "control-group")

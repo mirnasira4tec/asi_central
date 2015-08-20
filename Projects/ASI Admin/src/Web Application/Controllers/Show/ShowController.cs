@@ -2,7 +2,6 @@
 using asi.asicentral.model.show;
 using asi.asicentral.util.show;
 using asi.asicentral.web.models.show;
-using asi.asicentral.web.Models.Show;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,17 +15,18 @@ namespace asi.asicentral.web.Controllers.Show
         public IObjectService ObjectService { get; set; }
 
         [HttpGet]
-        public ActionResult ShowAdd()
+        public ActionResult AddShow()
         {
             ShowModel show = new ShowModel();
             show.ShowType = GetShowType();
             show.StartDate = DateTime.UtcNow;
             show.EndDate = DateTime.UtcNow;
-            return View("../Show/ShowAdd", show);
+            return View("../Show/AddShow", show);
         }
 
         [HttpPost]
-        public ActionResult ShowAdd(ShowModel show)
+        [ValidateAntiForgeryToken]
+        public ActionResult AddShow(ShowModel show)
         {
             if (ModelState.IsValid)
             {
@@ -47,7 +47,7 @@ namespace asi.asicentral.web.Controllers.Show
                 {
                     show.ShowType = GetShowType();
                 }
-                return View("../Show/ShowAdd", show);
+                return View("../Show/AddShow", show);
             }
         }
 
@@ -88,10 +88,26 @@ namespace asi.asicentral.web.Controllers.Show
             return new RedirectResult("/ShowCompany/GetCompanyList?showId=" + attendeeInfo.Show.Id);
         }
 
-        public ActionResult ShowList()
+        public ActionResult ShowList(String showTab, int? ShowTypeId, int? year)
         {
-            IList<ShowASI> showList = ObjectService.GetAll<ShowASI>(true).ToList();
-            return View("../Show/ShowList", showList);
+            var show = new ShowModel();
+            show.ShowType = GetShowType();
+            IQueryable<ShowASI> showList = ObjectService.GetAll<ShowASI>(true);
+            if (string.IsNullOrEmpty(showTab)) showTab = ShowModel.TAB_SHOWTYPE;
+            if (showTab == ShowModel.TAB_SHOWTYPE && ShowTypeId != null)
+            {
+                showList = showList.Where(item => item.ShowTypeId != null
+                && item.ShowTypeId == ShowTypeId);
+            }
+            else if (showTab == ShowModel.TAB_SHOWYEAR && year != null)
+            {
+                showList = showList.Where(item => item.StartDate.Year != null
+                 && item.StartDate.Year == year);
+            }
+
+            show.ShowTab = showTab;
+            show.Show = showList.ToList();
+            return View("../Show/ShowList", show);
         }
 
         private IList<SelectListItem> GetShowType()
@@ -109,6 +125,40 @@ namespace asi.asicentral.web.Controllers.Show
                 }
             }
             return typeList;
+        }
+
+        public ActionResult Delete(int id)
+        {
+            ShowASI show = ObjectService.GetAll<ShowASI>().Where(item => item.Id == id).FirstOrDefault();
+            IList<ShowEmployeeAttendee> EmployeeAttendee = null;
+            if (show != null)
+            {
+                int attendeeCount = show.Attendee.Count();
+                if (attendeeCount > 0)
+                {
+                    for (int i = attendeeCount; i > 0; i--)
+                    {
+                        foreach (var employeeAttendee in show.Attendee)
+                        {
+                            EmployeeAttendee = ObjectService.GetAll<ShowEmployeeAttendee>().Where(item => item.AttendeeId == employeeAttendee.Id).ToList();
+                            int employeeAttendeeCount = EmployeeAttendee.Count();
+                            if (employeeAttendeeCount >0)
+                            {
+                                for (int j = employeeAttendeeCount; j > 0; j--)
+                                {
+                                    ObjectService.Delete<ShowEmployeeAttendee>(EmployeeAttendee.ElementAt(j - 1));
+                                }
+                            }
+
+                        }
+                        ObjectService.Delete<ShowAttendee>(show.Attendee.ElementAt(i - 1));
+                    }
+                }
+
+                ObjectService.Delete<ShowASI>(show);
+                ObjectService.SaveChanges();
+            }
+            return Redirect("ShowList");
         }
     }
 }
