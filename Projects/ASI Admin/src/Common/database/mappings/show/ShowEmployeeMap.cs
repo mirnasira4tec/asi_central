@@ -33,7 +33,7 @@ namespace asi.asicentral.database.mappings.show
                .WithMany()
                .HasForeignKey(t => t.CompanyId);
 
-            HasRequired(x => x.Address)
+            HasOptional(x => x.Address)
               .WithMany()
               .HasForeignKey(x => x.AddressId);
 

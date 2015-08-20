@@ -14,49 +14,47 @@
     </a>
     @Model.Name
 </h3>
-<div class="container-fluid">
-    <div class="row-fluid">
-      @*  <div>
-            <table class="table table-bordered table-condensed table-striped">
-                <thead>
-                    <tr>
-                        <th>Street</th>
-                        <th>City</th>
-                        <th>State</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    @foreach (var Address in @Model.CompanyAddress)
-                    {
-                        IQueryable<ShowAddress> address = ObjectService.GetAll<ShowAddress>().Where(item => item.Id == Address.Address.Id);
-                        foreach (var item in address)
-                        {
-                        <tr>
-                            <td style="width: 85px">@item.Street1</td>
-                            <td style="width: 85px">@item.City </td>
-                            <td style="width: 185px">@item.State</td>
-                        </tr>
-                        }
-                    }
-                </tbody>
-            </table>
-        </div>*@
-        <div class="span3">
-            <a class="btn btn-small" href="@Url.Action("AddAddress", "../ShowCompany", new { CompanyID = Model.Id })">
-                <i class="icon-plus"></i>
-                Add Address
-            </a>
-        </div>
-        <div class="span3">
-            <a class="btn btn-small" href="@Url.Action("AddEmployee", "../ShowCompany", new { CompanyID = Model.Id })">
-                <i class="icon-plus"></i>
-                Add Employee
-            </a>
-        </div>
-    </div>
-
+<div class=" span12 clearfix">
+    <div class="span6"><a class="btn btn-small" href="@Url.Action("AddAddress", "../ShowCompany", new { CompanyID = Model.Id })"><i class="icon-plus"></i>
+        Add Address
+        </a><table class="table table-bordered table-striped"">
+  <thead>
+    <tr>
+      <th>Street 1</th>
+      <th>State</th>
+      <th>Zip</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var address in @Model.CompanyAddress)
+    { <tr>
+                <td>@address.Address.Street1</td>
+                <td>@address.Address.State </td>
+                <td>@address.Address.Zip</td>
+            </tr>
+    
+    }
+  </tbody>
+</table></div>
+    <div class="span5"><a class="btn btn-small" href="@Url.Action("AddEmployee", "../ShowCompany", new { CompanyID = Model.Id })"><i class="icon-plus"></i>
+        Add Employee
+    </a><table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var employee in @Model.Employee)
+        {
+            <tr>
+                <td>@employee.FirstName</td>
+                <td>@employee.LastName </td>
+                <td>@employee.Email</td>
+            </tr>
+        }
+  </tbody>
+</table></div>
 </div>
-@section scripts
-{
-}

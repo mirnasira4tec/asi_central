@@ -9,13 +9,16 @@ using System.Web.Mvc;
 
 namespace asi.asicentral.web.Models.Show
 {
-    public class CompanyInformation : AddressModel
+    public class CompanyInformation
     {
         public string Name { get; set; }
 
         public int Id { get; set; }
         public IList<ShowCompanyAddress> CompanyAddress { set; get; }
+        public int CompanyId { get; set; }
         public IList<ShowAddress> Address { set; get; }
+        public IList<ShowEmployee> Employee { set; get; }
+        public bool HasAddress { get; set; }
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string FirstName { get; set; }
@@ -24,8 +27,8 @@ namespace asi.asicentral.web.Models.Show
         [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string LastName { get; set; }
 
-        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
-        [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
+        [Required]
+        [RegularExpression(@"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*", ErrorMessage = "Invalid email")]
         public string Email { get; set; }
     }
 }

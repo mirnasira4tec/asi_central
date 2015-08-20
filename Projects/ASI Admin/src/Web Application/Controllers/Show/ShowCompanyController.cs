@@ -142,6 +142,8 @@ namespace asi.asicentral.web.Controllers.Show
                 companyInformation.Id = company.Id;
                 IQueryable<ShowCompanyAddress> companyAddress = ObjectService.GetAll<ShowCompanyAddress>().Where(item => item.CompanyId == id);
                 companyInformation.CompanyAddress = companyAddress.ToList();
+                IQueryable<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>().Where(item => item.CompanyId == id);
+                companyInformation.Employee = employeeList.OrderByDescending(form => form.CreateDate).ToList();
             }
             return View("../Show/Company/CompanyInformation", companyInformation);
         }
@@ -187,7 +189,7 @@ namespace asi.asicentral.web.Controllers.Show
                     ObjectService.Add<ShowCompanyAddress>(objCompanyAddress);
                     ObjectService.SaveChanges();
 
-                    return RedirectToAction("CompanyList");
+                    return RedirectToAction("List", "ShowCompany", new { id = Address.CompanyId });
                 }
                 else
                 {
@@ -204,8 +206,57 @@ namespace asi.asicentral.web.Controllers.Show
         [HttpGet]
         public ActionResult AddEmployee(int CompanyID)
         {
-            var model = new AddressModel();
-            return View("../Show/Company/AddEmployee", model);
+            var objEmployee = new CompanyInformation();
+            objEmployee.CompanyId = CompanyID;
+            return View("../Show/Company/AddEmployee", objEmployee);
+        }
+
+        [HttpPost]
+        [ValidateInput(true)]
+        public virtual ActionResult AddEmployee(CompanyInformation employee)
+        {
+                try
+                {
+                    if (ModelState.IsValid)
+                    {
+                            ShowEmployee objEmployee = new ShowEmployee();
+                            objEmployee.FirstName = employee.FirstName;
+                            objEmployee.LastName = employee.LastName;
+                            objEmployee.Email = employee.Email;
+                            objEmployee.CompanyId = employee.CompanyId;
+                            objEmployee.UpdateSource = "ShowCompanyController - Add";
+                            objEmployee = ShowHelper.CreateOrUpdateEmployee(ObjectService, objEmployee);
+
+                            ObjectService.Add<ShowEmployee>(objEmployee);
+                            ObjectService.SaveChanges();
+
+                            return RedirectToAction("List","ShowCompany", new{ id = employee.CompanyId});
+                        }
+                    else
+                    {
+                        return View("../Show/Company/AddEmployee", employee);
+                    }
+            }
+            catch( Exception ex)
+                {
+                    messages.Add("Error: " + ex.Message);
+            }
+                return View("../Show/Company/AddEmployee", employee);
+
+        }
+
+        [HttpPost]
+        public ActionResult IsValidEmail(string Email)
+        {
+            IList<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>().Where(item => item.Email != null && item.Email.Contains(Email)).ToList();
+            if (employeeList.Any())
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json(false);
+            }
         }
 
         [HttpPost]
@@ -235,8 +286,7 @@ namespace asi.asicentral.web.Controllers.Show
             {
                 showCompanies.Show = attendee.Show;
                 showCompanies.ShowAttendees.Add(attendee);
-            }
-            if (showCompanies.Show == null) showCompanies.Show = ObjectService.GetAll<ShowASI>(true).SingleOrDefault(show => show.Id == showId);
+            } if (showCompanies.Show == null) showCompanies.Show = ObjectService.GetAll<ShowASI>(true).SingleOrDefault(show => show.Id == showId);
             IList<ShowCompany> companyList = ObjectService.GetAll<ShowCompany>(true).ToList();
             foreach (ShowCompany company in companyList)
             {
@@ -248,6 +298,17 @@ namespace asi.asicentral.web.Controllers.Show
                 }
             }
             return View("../Show/ShowCompaniesList", showCompanies);
+        }
+
+        public ActionResult EmployeeList(string FirstName, string LastName, string Email)
+        {
+            var employee = new CompanyInformation();
+            IQueryable<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>(true);
+
+
+
+            employee.Employee = employeeList.OrderByDescending(form => form.CreateDate).ToList();
+            return View("../Show/Company/CompanyList", employee);
         }
 
         [HttpGet]
