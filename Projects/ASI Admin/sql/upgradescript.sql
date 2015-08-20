@@ -168,7 +168,7 @@ GO
 CREATE TABLE [dbo].[Attendee](
 	[AttendeeId] [int] IDENTITY(1,1) NOT NULL,
 	[ShowId] [int] NULL,
-	[AddressId] [int] NOT NULL,
+	[AddressId] [int] NULL,
 	[CompanyId] [int] NOT NULL,
 	[IsAttending] [bit] NOT NULL DEFAULT '0',
 	[IsSponsor] [bit] NOT NULL DEFAULT '0',
