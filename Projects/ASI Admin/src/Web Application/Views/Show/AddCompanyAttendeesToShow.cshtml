@@ -15,21 +15,25 @@
     @Html.HiddenFor(model => model.ShowAttendees[count].CompanyId)
     @Html.HiddenFor(model => model.ShowAttendees[count].ShowId)
     @Html.HiddenFor(model => model.ShowAttendees[count].Id)
-    <h1>@Model.ShowAttendees[count].Company.Name</h1>
+    <div class="span3 box">
+    <h2>@Model.ShowAttendees[count].Company.Name</h2>
     <section class="first-section">
         <div class="control-group">
             <label class="checkbox" for="IsAttending">@Html.EditorFor(model => model.ShowAttendees[count].IsAttending) Is Attending</label>
             <label class="checkbox" for="IsSponsor">@Html.EditorFor(model => model.ShowAttendees[count].IsSponsor) Is Sponsor</label>
             <label class="checkbox" for="IsExhibitDay">@Html.EditorFor(model => model.ShowAttendees[count].IsExhibitDay) Exhibit Day</label>
-        </div>
-        <div class="control-group">
-            @Html.LabelFor(model => model.ShowAttendees[count].BoothNumber, new { @class = "control-label" })
-            <div class="controls">@Html.EditorFor(model => model.ShowAttendees[count].BoothNumber) @Html.ValidationMessageFor(model => model.ShowAttendees[count].BoothNumber)</div>
-        </div>
-    </section>
-    <section class="second-section">
-        <h1>Who is attending "@Model.Show.Name @Model.Show.StartDate.Year.ToString() (@Model.Show.StartDate.ToString("MMM") @Model.Show.StartDate.Day.ToString() - @Model.Show.EndDate.ToString("MMM") @Model.Show.EndDate.Day.ToString())" show ?</h1>
-        @if (Model.ShowEmployees != null)
+            
+        </div> 
+        <div>
+            @Html.LabelFor(model => model.ShowAttendees[count].BoothNumber )
+            <div class="input-mini">@Html.EditorFor(model => model.ShowAttendees[count].BoothNumber) @Html.ValidationMessageFor(model => model.ShowAttendees[count].BoothNumber)</div>
+        </div> 
+    </section><br>
+    </div>
+  
+    <section class="second-section span7 box" style="margin-left:10px;">
+        <h2>Who is attending "@Model.Show.Name @Model.Show.StartDate.Year.ToString() (@Model.Show.StartDate.ToString("MMM") @Model.Show.StartDate.Day.ToString() - @Model.Show.EndDate.ToString("MMM") @Model.Show.EndDate.Day.ToString())" show ?</h2>
+        <div style="max-height:200px; overflow-y:auto;">@if (Model.ShowEmployees != null)
         {
             for (int empCnt = 0; empCnt < Model.ShowEmployees.Count; empCnt++)
             {
@@ -38,11 +42,13 @@
             <label class="checkbox" for="@Model.ShowEmployees[empCnt].IsAttending">@Html.EditorFor(model => model.ShowEmployees[empCnt].IsAttending) @Model.ShowEmployees[empCnt].Employee.FirstName @Model.ShowEmployees[empCnt].Employee.LastName</label>
             }
         }
+            </div>
+      
     </section>
-    <p class="next-step-button">
+     <div class="text-center clearfix">
         @{var submitText = (Model.ShowAttendees[count].Id == 0 ? "Add" : "Save");}
-        <input type="submit" class="btn btn-primary" value="@submitText" />
-    </p>
+          <br/><input type="submit" class="btn btn-primary" value="@submitText" />
+    </div>
         }
     }
 }

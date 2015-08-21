@@ -515,3 +515,16 @@ ul#tabs {
     width: 123px;
     margin-left: 9px;
 }
+.box {
+	border: 1px solid #a8a8a8;
+	padding:1%;
+	background-color:#ececec;
+    min-height: 220px;
+}
+.clearfix {
+clear:both;
+
+}
+.bg_none {
+background:none !important;
+}

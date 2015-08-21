@@ -3,7 +3,7 @@
 @{
     Layout = "~/Views/Show/Shared/_Layout.cshtml";
 }
-@using (Html.BeginForm())
+@using (Html.BeginForm("AddCompany", "ShowCompany", FormMethod.Post, new { id = "AddShow-form", @class = "form-horizontal" }))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
@@ -32,7 +32,7 @@
                     <div class="controls">@Html.DropDownListFor(model => model.MemberType, new SelectList(asi.asicentral.web.models.show.CompanyModel.GetMemberTypes(), "Value", "Text")) @Html.ValidationMessageFor(model => model.MemberType)</div>
                 </div>
                 <div class="control-group">
-                      @Html.Label("Address1")
+                      @Html.LabelFor(model => model.Address1, new { @class = "control-label" })
                     <div class="controls">@Html.EditorFor(model => model.Address1)<span class="helper-text">(Please no P.O. boxes)</span>@Html.ValidationMessageFor(model => model.Address1)</div>
                 </div>
                 <div class="control-group">
@@ -60,11 +60,11 @@
                     <div class="controls">@Html.DropDownListFor(model => model.Country, asi.asicentral.util.HtmlHelper.GetCountries()) @Html.ValidationMessageFor(model => model.Country)</div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group control-group">
                     @Html.LabelFor(model => model.Phone, new { @class = "col-sm-4 control-label" })
-                    <div class="col-sm-2">
-                        @Html.TextBoxFor(model => model.PhoneAreaCode, new { @class = "controls input-mini" })
-                        @Html.TextBoxFor(model => model.Phone, new { @class = "controls  input-mid" })
+                    <div class="controls">
+                        @Html.TextBoxFor(model => model.PhoneAreaCode, new { @class = "input-mini" })
+                        @Html.TextBoxFor(model => model.Phone, new { @class = "input-mid" })
                     </div>
                     
                     <div class="col-sm-3 error_message">
@@ -73,9 +73,9 @@
                     </div>
 
                 </div>
-                <div class="form-group">
+                <div class="form-group control-group">
                     @Html.LabelFor(model => model.Fax, new { @class = "col-sm-4 control-label" })
-                    <div class="col-sm-2">
+                    <div class="controls">
                         @Html.TextBoxFor(model => model.FaxAreaCode, new { @class = "form-control input-mini" })
                         @Html.TextBoxFor(model => model.Fax, new { @class = "form-control input-mid" })
                         <span class="helper-text">(optional)</span>
@@ -85,7 +85,7 @@
                         @Html.ValidationMessageFor(model => model.FaxAreaCode)
                         @Html.ValidationMessageFor(model => model.Fax)
                     </div>
-                    
+                    </div>
            
 
         </fieldset>

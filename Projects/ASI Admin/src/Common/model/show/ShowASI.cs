@@ -13,7 +13,7 @@ namespace asi.asicentral.model.show
         {
             if (this.GetType() == typeof(ShowASI))
             {
-                Attendee = new List<ShowAttendee>();
+                Attendees = new List<ShowAttendee>();
             }
         }
         public int Id { get; set; }
@@ -24,9 +24,9 @@ namespace asi.asicentral.model.show
         [Required(ErrorMessage = "End Date is required")]
         public DateTime EndDate { get; set; }
         public int? ShowTypeId { get; set; }
-        public ShowType ShowType { get; set; }
+        public virtual ShowType ShowType { get; set; }
         public string Address { get; set; } 
-        public virtual List<ShowAttendee> Attendee { get; set; }
+        public virtual IList<ShowAttendee> Attendees { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }

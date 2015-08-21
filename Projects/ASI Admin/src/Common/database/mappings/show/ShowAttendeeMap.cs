@@ -35,6 +35,12 @@ namespace asi.asicentral.database.mappings.show
             HasRequired(x => x.Show)
              .WithMany()
              .HasForeignKey(x => x.ShowId);
+
+
+            HasMany(t => t.EmployeeAttendees)
+                  .WithOptional()
+                  .HasForeignKey(t => t.AttendeeId)
+                  .WillCascadeOnDelete();
         }
     }
 }

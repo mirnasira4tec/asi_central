@@ -21,7 +21,7 @@
                 {                
                     <div class="formField">
                         <label for="showType">Show Type</label>
-                        @Html.DropDownListFor(model => model.ShowTypeId, Model.ShowType, "Select", new { name = "ShowTypeId", value="@Model.ShowTypeId"  })
+                        @Html.DropDownListFor(model => model.ShowTypeId, Model.ShowType, "Select", new { name = "ShowTypeId", value = "@Model.ShowTypeId" })
                     </div>
                     <div class="formField">
                         <input type="hidden" value="@ShowModel.TAB_SHOWTYPE" name="showTab" /><input type="submit" value="Search" class="btn" />
@@ -57,93 +57,48 @@
                 <th>Name</th>
                 <th>Type</th>
                 <th>Details</th>
-                 <th>Start Date</th>
+                <th>Start Date</th>
                 <th>End Date</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var show in @Model.Show)
+            @foreach (var show in Model.Show)
             {  <tr>
                 <td><a class="delete" id="@show.Id" href="/Show/Delete?id=@show.Id"><i class="icon-trash"></i></a></td>
                 <td><a href="/ShowCompany/GetCompanyList?showId=@show.Id">@show.Name</a></td>
                 <td>
-                    @if (show.ShowTypeId != null)
-                        {
-                        @GetMemberType(show.ShowTypeId);
-                        }
+                    @show.ShowType.Type
                 </td>
-                <td>No of Companies: @GetNoOfCompany(show.ShowTypeId) No of Attendee:@GetNoOfAttendee(show.ShowTypeId)
+                @{ var noOfAttendees = 0;
+                   foreach (var showAttendee in show.Attendees)
+                   {
+                       noOfAttendees += showAttendee.EmployeeAttendees.Count();
+                   }
+                }
+                <td>No of Companies: @show.Attendees.Count() No of Attendee:@noOfAttendees
                 </td>
                 <td>@show.StartDate.ToString("dd-MMM-yyyy")</td>
-                    <td>@show.EndDate.ToString("dd-MMM-yyyy")</td>
+                <td>@show.EndDate.ToString("dd-MMM-yyyy")</td>
             </tr>
             }
         </tbody>
     </table>
-    @functions{
-        public IObjectService ObjectService { get; set; }
-        public string GetMemberType(int? id)
-        {
-            if (id != null)
-            {
-                ShowType type = ObjectService.GetAll<ShowType>(true).Where(detail => detail.Id == id).FirstOrDefault();
-                return type.Type;
-            }
-            return null;
-        }
-        public int GetNoOfCompany(int? id)
-        {
-            IList<ShowAttendee> Attendee = null;
-            if (id != null)
-            {
-                Attendee = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == id).ToList();
-            }
-
-            return Attendee.Count();
-        }
-        public int GetNoOfAttendee(int? id)
-        {
-            IList<ShowAttendee> Attendee = null;
-            IList<ShowEmployeeAttendee> EmployeeAttendee = null;
-            if (id != null)
-            {
-                Attendee = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == id).ToList();
-                if (Attendee.Any())
-                {
-                    foreach (var employeeAttendee in Attendee)
-                    {
-                        EmployeeAttendee = ObjectService.GetAll<ShowEmployeeAttendee>().Where(item => item.AttendeeId == employeeAttendee.Id).ToList();
-                        if (EmployeeAttendee.Any())
-                        {
-                            return EmployeeAttendee.Count();
-                        }
-                        else{ return 0;}
-                    }
-                }
-                else{return 0;}
-            }
-            return EmployeeAttendee.Count();
-            
-        }
-        }
-    }
-
-
-    @section scripts {
-        <script type="text/javascript">
-            $('ul[id*="formtab"] a').click(function (e) {
-                e.preventDefault();
-                var tabname = e.target.toString();
-                tabname = tabname.substr(tabname.indexOf("#") + 1);
-                $('input[name*="formtab"]').val(tabname);
-                $(this).tab('show');
-            });
-            $('a.delete').click(function () {
-                var confirms = confirm("Are you sure you want to delete the company?");
-                if (confirms)
-                    return true
-                else
-                    return false
-            });
-        </script>
-    }
+}
+@section scripts {
+    <script type="text/javascript">
+        $('ul[id*="formtab"] a').click(function (e) {
+            e.preventDefault();
+            var tabname = e.target.toString();
+            tabname = tabname.substr(tabname.indexOf("#") + 1);
+            $('input[name*="formtab"]').val(tabname);
+            $(this).tab('show');
+        });
+        $('a.delete').click(function () {
+            var confirms = confirm("Are you sure you want to delete the company?");
+            if (confirms)
+                return true
+            else
+                return false
+        });
+    </script>
+}
