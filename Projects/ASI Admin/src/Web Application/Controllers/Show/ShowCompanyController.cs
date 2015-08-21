@@ -210,6 +210,7 @@ namespace asi.asicentral.web.Controllers.Show
 
         [HttpPost]
         [ValidateInput(true)]
+        [ValidateAntiForgeryToken]
         public virtual ActionResult AddEmployee(CompanyInformation employee)
         {
                 try
@@ -243,6 +244,7 @@ namespace asi.asicentral.web.Controllers.Show
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult IsValidEmail(string Email)
         {
             IList<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>().Where(item => item.Email != null && item.Email.Contains(Email)).ToList();
@@ -257,6 +259,7 @@ namespace asi.asicentral.web.Controllers.Show
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult IsValidCompany(string name)
         {
             var company = new CompanyModel();
