@@ -4,35 +4,37 @@
 @using asi.asicentral.Resources
 @model AddressModel
 @{
+   
     Layout = "~/Views/Show/Shared/_Layout.cshtml";
 }
 
-<div>
-        @Html.Partial("../Show/Shared/Address", Model)
-</div>
+@using (Html.BeginForm())
+{
+    @Html.Partial("../Show/Shared/Address", Model)
+}
 @section Scripts {
      @Scripts.Render("~/bundles/form")
-<script>
-    $("#IsNonUSAddress").change(function (evt) {
-        if ($("#country-div").attr("class").trim() == "control-group")
-            $("#country-div").attr("class", "control-group hidden");
-        else
-            $("#country-div").attr("class", "control-group");
-        if ($("#country-div").attr("class") == "control-group hidden") {
-            $("#Country").val("USA");
-            $("#State").val("");
-            $("#state-div").attr("class", "control-group");
-            $("#international-state-div").attr("class", "control-group hidden");
-            $("#InternationalState").val("N/A");
-        }
-        else {
-            $("#Country").val("");
-            $("#state-div").attr("class", "control-group hidden");
-            $("#State").val("AL");
-            $("#InternationalState").val("");
-            $("#international-state-div").attr("class", "control-group");
-        }
-    });
+    <script>
+        $("#IsNonUSAddress").change(function (evt) {
+            if ($("#country-div").attr("class").trim() == "control-group")
+                $("#country-div").attr("class", "control-group hidden");
+            else
+                $("#country-div").attr("class", "control-group");
+            if ($("#country-div").attr("class") == "control-group hidden") {
+                $("#Country").val("USA");
+                $("#State").val("");
+                $("#state-div").attr("class", "control-group");
+                $("#international-state-div").attr("class", "control-group hidden");
+                $("#InternationalState").val("N/A");
+            }
+            else {
+                $("#Country").val("");
+                $("#state-div").attr("class", "control-group hidden");
+                $("#State").val("AL");
+                $("#InternationalState").val("");
+                $("#international-state-div").attr("class", "control-group");
+            }
+        });
 
-</script>
+    </script>
 }

@@ -113,7 +113,7 @@ namespace asi.asicentral.util.show
             employee.MiddleName = objEmployee.MiddleName;
             employee.LastName = objEmployee.LastName;
             employee.Email = objEmployee.Email;
-            employee.Company = objEmployee.Company;
+          employee.CompanyId = objEmployee.CompanyId;
             employee.Address = objEmployee.Address;
             employee.UpdateDate = DateTime.UtcNow;
             employee.UpdateSource = objEmployee.UpdateSource;

@@ -3,13 +3,13 @@
 @using asi.asicentral.Resources
 @model  AddressModel
 
-@using (Html.BeginForm())
-{
+
+<div id="tabbasic" class="basic-information tab-pane fade in active">
     @Html.AntiForgeryToken()
     <div id="tabbasic" class="basic-information tab-pane fade in active">
-        <fieldset class="company-info-form">
-            <legend>Add Address</legend>
-            @Html.HiddenFor(model => model.AdreessId)
+    <fieldset class="company-info-form">
+        <legend>Add Address</legend>
+        @Html.HiddenFor(model => model.AdreessId)
 
             <label class="checkbox" for="IsNonUSAddress">@Html.EditorFor(model => model.IsNonUSAddress) @Html.Raw(Resource.IsNonUSAddress)</label>
 
@@ -34,9 +34,9 @@
                 <div class="controls">@Html.DropDownListFor(model => model.State, asi.asicentral.util.HtmlHelper.GetStates()) @Html.ValidationMessageFor(model => model.State)</div>
             </div>
             <div id="international-state-div" class="control-group @Html.Raw(!Model.IsNonUSAddress ? "hidden" : string.Empty)">
-                @Html.LabelFor(model => model.InternationalState, new { @class = "control-label" })
-                <div class="controls">@Html.EditorFor(model => model.InternationalState) @Html.ValidationMessageFor(model => model.InternationalState)</div>
-            </div>
+            @Html.LabelFor(model => model.InternationalState, new { @class = "control-label" })
+            <div class="controls">@Html.EditorFor(model => model.InternationalState) @Html.ValidationMessageFor(model => model.InternationalState)</div>
+        </div>
             <div id="country-div" class="control-group @Html.Raw(!Model.IsNonUSAddress ? "hidden" : string.Empty)">
                 @Html.LabelFor(model => model.Country, new { @class = "control-label" })
                 <div class="controls">@Html.DropDownListFor(model => model.Country, asi.asicentral.util.HtmlHelper.GetCountries()) @Html.ValidationMessageFor(model => model.Country)</div>
@@ -67,17 +67,18 @@
                     @Html.ValidationMessageFor(model => model.FaxAreaCode)
                     @Html.ValidationMessageFor(model => model.Fax)
                 </div>
-        </fieldset>
-    </div>
+        </div>
+    </fieldset>
+</div>
     <footer id="page-completion-navigation">
         <nav>
             <p class="navigate-back"><a href="../ShowCompany/CompanyList">Back to Company list</a></p>
             <p class="next-step-button">
-                <input type="submit" class="command btn btn-primary" value="Save" />
+                <input type="submit" class="command btn btn-primary" value="Save" id="btnSave" />
             @Html.ActionLink(asi.asicentral.Resources.Resource.Cancel, "CompanyList")
         </nav>
-    </footer>
-}
+    </footer> 
+
 @section Scripts {
     <script>
         $("#IsNonUSAddress").change(function (evt) {

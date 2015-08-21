@@ -2,37 +2,42 @@
 @using asi.asicentral.model.show
 @using asi.asicentral.web.models.show
 @using asi.asicentral.Resources
-@model AddressModel
+@model CompanyInformation
 @{
    
     Layout = "~/Views/Show/Shared/_Layout.cshtml";
 }
-<form role="form" action="/wohoo" method="POST">
-  <label>Employee</label>
-    <div class="multi-field-wrapper">
-      <div class="multi-fields">
-        <div class="multi-field">
-          <input type="text" placeholder="First Name" name="stuff[]">
-              <input type="text" placeholder="Last Name" name="stuff[]">
-                  <input type="text" placeholder="Email" name="stuff[]">
-          <button type="button" class="remove-field">Remove</button>
-        </div>
-      </div>
-    <button type="button" class="add-field">Add field</button>
-  </div>
-</form>
 
-@section Scripts {
-    <script>
-        $('.multi-field-wrapper').each(function () {
-            var $wrapper = $('.multi-fields', this);
-            $(".add-field", $(this)).click(function (e) {
-                $('.multi-field:first-child', $wrapper).clone(true).appendTo($wrapper).find('input').val('').focus();
-            });
-            $('.multi-field .remove-field', $wrapper).click(function () {
-                if ($('.multi-field', $wrapper).length > 1)
-                    $(this).parent('.multi-field').remove();
-            });
-        });
-</script>
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    
+    <div id="tabbasic" class="basic-information tab-pane fade in active">
+        <fieldset class="company-info-form">
+            <legend>Add Employee</legend>
+            @Html.HiddenFor(model => model.Id)
+           
+                <div class="control-group" id="asinumber-product">
+                    @Html.LabelFor(model => model.FirstName, new { @class = "control-label" })
+                    <div class="controls">@Html.EditorFor(model => model.FirstName) @Html.ValidationMessageFor(model => model.FirstName)</div>
+                </div>
+            
+                <div class="control-group">
+                    @Html.LabelFor(model => model.LastName, new { @class = "control-label" })
+                    <div class="controls">@Html.EditorFor(model => model.LastName) @Html.ValidationMessageFor(model => model.LastName)</div>
+                </div>
+                 <div class="control-group">
+                    @Html.LabelFor(model => model.Email, new { @class = "control-label" })
+                    <div class="controls">@Html.EditorFor(model => model.Email) @Html.ValidationMessageFor(model => model.Email)</div>
+                </div>
+        </fieldset>
+    </div>
+    <footer id="page-completion-navigation">
+        <nav>
+            <p class="navigate-back"><a href="../ShowCompany/CompanyList">Back to Company list</a></p>
+            <p class="next-step-button">
+                <input type="submit" class="command btn btn-primary" value="Save" />
+                 @Html.ActionLink(asi.asicentral.Resources.Resource.Cancel, "CompanyList")
+        </nav>
+    </footer>
 }
