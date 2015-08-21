@@ -1,7 +1,7 @@
 ﻿using asi.asicentral.model.show;
 using asi.asicentral.services;
 using asi.asicentral.util.show;
-using asi.asicentral.web.Models.Show;
+using asi.asicentral.web.models.show;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +12,6 @@ using asi.asicentral.database.mappings;
 using asi.asicentral.interfaces;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
-using asi.asicentral.web.models.show;
-
 
 namespace asi.asicentral.web.Controllers.Show
 {
@@ -21,10 +19,7 @@ namespace asi.asicentral.web.Controllers.Show
     {
         public IObjectService ObjectService { get; set; }
         IList<string> messages = new List<string>();
-        public ActionResult Company()
-        {
-            return View();
-        }
+
         public ActionResult CompanyList(String companyTab, string companyName, string MemberType)
         {
             var company = new CompanyModel();
@@ -47,15 +42,15 @@ namespace asi.asicentral.web.Controllers.Show
         }
 
         [HttpGet]
-        public virtual ActionResult Add()
+        public virtual ActionResult AddCompany()
         {
             CompanyModel company = new CompanyModel();
-            return View("../Show/Company/CompanyEdit", company);
+            return View("../Show/Company/AddCompany", company);
         }
 
         [HttpPost]
-        [ValidateInput(true)]
-        public virtual ActionResult Add(CompanyModel company)
+        [ValidateAntiForgeryToken]
+        public virtual ActionResult AddCompany(CompanyModel company)
         {
             if (ModelState.IsValid)
             {
@@ -103,20 +98,8 @@ namespace asi.asicentral.web.Controllers.Show
             }
             else
             {
-                return View("../Show/Company/CompanyEdit", company);
+                return View("../Show/Company/AddCompany", company);
             }
-        }
-
-        [HttpGet]
-        public ActionResult Edit(int id)
-        {
-            CompanyModel updateCompany = new CompanyModel();
-            if (id != 0)
-            {
-                ShowCompany company = ObjectService.GetAll<ShowCompany>().Where(item => item.Id == id).FirstOrDefault();
-                updateCompany.Name = company.Name;
-            }
-            return View("../Show/Company/CompanyEdit", updateCompany);
         }
 
         public ActionResult Delete(int id)
@@ -124,11 +107,25 @@ namespace asi.asicentral.web.Controllers.Show
             ShowCompany company = ObjectService.GetAll<ShowCompany>().Where(item => item.Id == id).FirstOrDefault();
             if (company != null)
             {
+                int addressCount = company.CompanyAddresses.Count();
+                int employeeCount = company.Employees.Count();
+                int companyAttendeeCount = company.Attendees.Count();
+                for (int i = addressCount; i > 0; i--)
+                {
+                    ObjectService.Delete<ShowCompanyAddress>(company.CompanyAddresses.ElementAt(i - 1));
+                }
+                for (int i = employeeCount; i > 0; i--)
+                {
+                    ObjectService.Delete<ShowEmployee>(company.Employees.ElementAt(i - 1));
+                }
+                for (int i = companyAttendeeCount; i > 0; i--)
+                {
+                    ObjectService.Delete<ShowAttendee>(company.Attendees.ElementAt(i - 1));
+                }
                 ObjectService.Delete<ShowCompany>(company);
                 ObjectService.SaveChanges();
             }
-            IList<ShowCompany> companyList = ObjectService.GetAll<ShowCompany>(true).ToList();
-            return View("../Show/Company/CompanyList", companyList);
+            return Redirect("CompanyList");
 
         }
 
@@ -157,7 +154,7 @@ namespace asi.asicentral.web.Controllers.Show
         }
 
         [HttpPost]
-        [ValidateInput(true)]
+        [ValidateAntiForgeryToken]
         public virtual ActionResult AddAddress(AddressModel Address)
         {
             try
@@ -200,7 +197,7 @@ namespace asi.asicentral.web.Controllers.Show
             {
                 messages.Add("Error: " + ex.Message);
             }
-            return View("../Show/Company/CompanyEdit", Address);
+            return View("../Show/Company/AddCompany", Address);
         }
 
         [HttpGet]
