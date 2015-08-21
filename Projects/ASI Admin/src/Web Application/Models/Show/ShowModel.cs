@@ -16,20 +16,16 @@ namespace asi.asicentral.web.models.show
         public const String TAB_SHOWTYPE = "showType";
         public const String TAB_SHOWYEAR = "ShowYear";
         public String ShowTab { get; set; }
-       //[Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
+        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public int? ShowTypeId { get; set; }
         public int? year { get; set; }
-       
+
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string Name { get; set; }
 
-
-        //[Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
-        //[StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string Type { get; set; }
 
-       
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string Address { get; set; }
@@ -38,12 +34,12 @@ namespace asi.asicentral.web.models.show
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public DateTime StartDate { get; set; }
 
-         [DataType(DataType.Date)]
+        [DataType(DataType.Date)]
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public DateTime EndDate { get; set; }
 
-         public IList<ShowASI> Show { set; get; }
-         public IList<SelectListItem> ShowType { get; set; }
+        public IList<ShowASI> Show { set; get; }
+        public IList<SelectListItem> ShowType { get; set; }
 
     }
 }

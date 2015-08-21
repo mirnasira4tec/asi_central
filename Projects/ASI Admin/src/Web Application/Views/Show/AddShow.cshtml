@@ -3,7 +3,7 @@
 @{
     Layout = "~/Views/Show/Shared/_Layout.cshtml";
 }
-@using (Html.BeginForm("AddShow", "Show", FormMethod.Post, new { id = "AddShow-form" }))
+@using (Html.BeginForm("AddShow", "Show", FormMethod.Post, new { id = "AddShow-form", @class = "form-horizontal" }))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
@@ -19,7 +19,7 @@
                 </div>
             
               <div class="control-group">
-                    @Html.Label("ShowType")
+                    @Html.LabelFor(model => model.ShowType, new { @class = "control-label" })
                     <div class="controls"> @Html.DropDownListFor(model => model.ShowTypeId, Model.ShowType, "Select", new { @class = "span3" })@Html.ValidationMessageFor(model => model.ShowTypeId)</div>
                 </div>
                 <div class="control-group">
@@ -34,7 +34,7 @@
                 </div>
                 <div class="control-group">
                     @Html.LabelFor(model => model.EndDate, new { @class = "control-label" })
-                     @Html.EditorFor(model => model.EndDate, new { @class = "dateField" })  <i class="icon-remove date-clear" id="EndDate"></i><span id="span_Error_ValidDate" class="field-validation-error" style="display: none;">End date should be less than Start date.</span>
+                 <div class="controls">@Html.EditorFor(model => model.EndDate, new { @class = "dateField" })  <i class="icon-remove date-clear" id="EndDate"></i><span id="span_Error_ValidDate" class="field-validation-error" style="display: none;">End date should be less than Start date.</span></div>
                 </div>
            
 

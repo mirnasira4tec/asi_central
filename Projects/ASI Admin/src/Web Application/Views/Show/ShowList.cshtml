@@ -57,6 +57,8 @@
                 <th>Name</th>
                 <th>Type</th>
                 <th>Details</th>
+                 <th>Start Date</th>
+                <th>End Date</th>
             </tr>
         </thead>
         <tbody>
@@ -72,6 +74,8 @@
                 </td>
                 <td>No of Companies: @GetNoOfCompany(show.ShowTypeId) No of Attendee:@GetNoOfAttendee(show.ShowTypeId)
                 </td>
+                <td>@show.StartDate.ToString("dd-MMM-yyyy")</td>
+                    <td>@show.EndDate.ToString("dd-MMM-yyyy")</td>
             </tr>
             }
         </tbody>

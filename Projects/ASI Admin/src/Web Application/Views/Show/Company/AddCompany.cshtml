@@ -3,7 +3,7 @@
 @{
     Layout = "~/Views/Show/Shared/_Layout.cshtml";
 }
-@using (Html.BeginForm("AddCompany", "ShowCompany", FormMethod.Post, new { id = "Add-form" }))
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)

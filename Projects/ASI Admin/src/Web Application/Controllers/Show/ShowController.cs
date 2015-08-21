@@ -130,28 +130,28 @@ namespace asi.asicentral.web.Controllers.Show
         public ActionResult Delete(int id)
         {
             ShowASI show = ObjectService.GetAll<ShowASI>().Where(item => item.Id == id).FirstOrDefault();
-            IList<ShowEmployeeAttendee> EmployeeAttendee = null;
+            IList<ShowEmployeeAttendee> employeeAttendees = null;
             if (show != null)
             {
                 int attendeeCount = show.Attendee.Count();
                 if (attendeeCount > 0)
                 {
-                    for (int i = attendeeCount; i > 0; i--)
+                    for (int attendee = attendeeCount; attendee > 0; attendee--)
                     {
                         foreach (var employeeAttendee in show.Attendee)
                         {
-                            EmployeeAttendee = ObjectService.GetAll<ShowEmployeeAttendee>().Where(item => item.AttendeeId == employeeAttendee.Id).ToList();
-                            int employeeAttendeeCount = EmployeeAttendee.Count();
+                            employeeAttendees = ObjectService.GetAll<ShowEmployeeAttendee>().Where(item => item.AttendeeId == employeeAttendee.Id).ToList();
+                            int employeeAttendeeCount = employeeAttendees.Count();
                             if (employeeAttendeeCount >0)
                             {
-                                for (int j = employeeAttendeeCount; j > 0; j--)
+                                for (int employee = employeeAttendeeCount; employee > 0; employee--)
                                 {
-                                    ObjectService.Delete<ShowEmployeeAttendee>(EmployeeAttendee.ElementAt(j - 1));
+                                    ObjectService.Delete<ShowEmployeeAttendee>(employeeAttendees.ElementAt(employee - 1));
                                 }
                             }
 
                         }
-                        ObjectService.Delete<ShowAttendee>(show.Attendee.ElementAt(i - 1));
+                        ObjectService.Delete<ShowAttendee>(show.Attendee.ElementAt(attendee - 1));
                     }
                 }
 
