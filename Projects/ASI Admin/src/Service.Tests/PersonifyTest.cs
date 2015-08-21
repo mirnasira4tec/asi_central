@@ -46,6 +46,55 @@ namespace asi.asicentral.Tests
         }
 
         [TestMethod]
+        public void AddPersonifyCompanyForDualDecorator()
+        {
+            StoreCompany company = GetStoreCompany("NewMembership", 
+                                                   "151111222222", 
+                                                   "newMembershipPurchase@unittest.com", 
+                                                   "Distributor");
+
+            var companyInfo = PersonifyClient.ReconcileCompany(company, "DISTRIBUTOR", null, true);
+            var storeService = MockupStoreService();
+            IBackendService personify = new PersonifyService(storeService);
+
+            var order = new StoreOrder()
+            {
+                Company = company,
+                OrderRequestType = "Distributor",
+            };
+
+            var product = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 70);
+            order.OrderDetails.Add(new StoreOrderDetail() 
+                         {
+                             Id = 1,
+                             ApplicationCost = 0,
+                             Cost = 0,
+                             OptionId = 0,
+                             Quantity = 1,
+                             Product = product,
+                         });
+
+            var creditCard = new CreditCard()
+            {
+                Type = "Visa",
+                Number = "4111111111111111",
+                ExpirationDate = new DateTime(2018, 11, 15),
+                CardHolderName = "ASI Store",
+                Address = "Street",
+                City = "City",
+                State = "NJ",
+                Country = "USA",
+                PostalCode = "98123",
+            };
+
+            var profile = personify.SaveCreditCard(order, creditCard);
+            Assert.IsNotNull(profile);
+            Assert.AreNotEqual(string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId), 
+                               order.Company.ExternalReference);
+            Assert.AreNotEqual("distributor", order.Company.MemberType.ToLower());
+        }
+
+        [TestMethod]
         public void AddCompany()
         {
             var tag = DateTime.Now.Ticks;
@@ -469,12 +518,14 @@ namespace asi.asicentral.Tests
             products.Add(new ContextProduct { Id = 77, HasBackEndIntegration = true });
             products.Add(new ContextProduct { Id = 61, HasBackEndIntegration = true });
             products.Add(new ContextProduct { Id = 5, HasBackEndIntegration = true, Type = "Distributor Membership" });
+            products.Add(new ContextProduct { Id = 70, HasBackEndIntegration = true, Type = "Dual Distributor Decorator Membership" });
             var emailExpresses = new List<StoreDetailEmailExpress>();
             emailExpresses.Add(new StoreDetailEmailExpress { OrderDetailId = 1, ItemTypeId = 1 });
             var mappings = new List<PersonifyMapping>();
             mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 77, StoreOption = "0", PersonifyProduct = 14471, PersonifyRateCode = "STD", PersonifyRateStructure = "MEMBER" });
             mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 61, StoreOption = "1;1X", PersonifyProduct = 1587, PersonifyRateCode = "1X", PersonifyRateStructure = "MEMBER" });
             mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 5, PersonifyProduct = 1003113722, PersonifyRateCode = "FY_DISTMEM", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "DIST_MEM" });
+            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 70, PersonifyProduct = 1003113722, PersonifyRateCode = "", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "DIST_MEM" });
             var codes = new List<LookSendMyAdCountryCode>();
             codes.Add(new LookSendMyAdCountryCode { Alpha2 = "USA", Alpha3 = "USA", CountryName = "United States" });
 
