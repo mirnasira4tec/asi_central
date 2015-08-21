@@ -32,7 +32,7 @@ namespace asi.asicentral.database.mappings.show
 
             //relationship  
 
-            HasMany(t => t.Attendee)
+            HasMany(t => t.Attendees)
                 .WithOptional()
                 .HasForeignKey(t => t.ShowId)
                 .WillCascadeOnDelete();

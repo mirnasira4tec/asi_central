@@ -133,12 +133,12 @@ namespace asi.asicentral.web.Controllers.Show
             IList<ShowEmployeeAttendee> employeeAttendees = null;
             if (show != null)
             {
-                int attendeeCount = show.Attendee.Count();
+                int attendeeCount = show.Attendees.Count();
                 if (attendeeCount > 0)
                 {
                     for (int attendee = attendeeCount; attendee > 0; attendee--)
                     {
-                        foreach (var employeeAttendee in show.Attendee)
+                        foreach (var employeeAttendee in show.Attendees)
                         {
                             employeeAttendees = ObjectService.GetAll<ShowEmployeeAttendee>().Where(item => item.AttendeeId == employeeAttendee.Id).ToList();
                             int employeeAttendeeCount = employeeAttendees.Count();
@@ -151,7 +151,7 @@ namespace asi.asicentral.web.Controllers.Show
                             }
 
                         }
-                        ObjectService.Delete<ShowAttendee>(show.Attendee.ElementAt(attendee - 1));
+                        ObjectService.Delete<ShowAttendee>(show.Attendees.ElementAt(attendee - 1));
                     }
                 }
 
