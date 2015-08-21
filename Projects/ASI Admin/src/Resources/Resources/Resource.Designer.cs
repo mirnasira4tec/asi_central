@@ -3247,6 +3247,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Member Type.
+        /// </summary>
+        public static string MemberType {
+            get {
+                return ResourceManager.GetString("MemberType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Atlease 1 license should be entered.
         /// </summary>
         public static string MinLicenses {

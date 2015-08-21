@@ -1,75 +1,72 @@
-﻿@using asi.asicentral.web.Models.Show
+﻿@using asi.asicentral.web.models.show
 @using asi.asicentral.model.show;
 @using asi.asicentral.Resources
 @model  AddressModel
 
 @using (Html.BeginForm())
 {
-   @* @Html.ValidationSummary(true)
- *@<div id="tabbasic" class="basic-information tab-pane fade in active">
+    @Html.AntiForgeryToken()
+    <div id="tabbasic" class="basic-information tab-pane fade in active">
         <fieldset class="company-info-form">
             <legend>Add Address</legend>
             @Html.HiddenFor(model => model.AdreessId)
-           
-                <label class="checkbox" for="IsNonUSAddress">@Html.EditorFor(model => model.IsNonUSAddress) @Html.Raw(Resource.IsNonUSAddress)</label>
-                
-                <div class="control-group">
-                    @Html.LabelFor(model => model.Address1, new { @class = "control-label" })
-                    <div class="controls">@Html.EditorFor(model => model.Address1)<span class="helper-text">(Please no P.O. boxes)</span>@Html.ValidationMessageFor(model => model.Address1)</div>
-                </div>
-                <div class="control-group">
-                    @Html.LabelFor(model => model.Address2, new { @class = "control-label" })
-                    <div class="controls">@Html.EditorFor(model => model.Address2)<span class="helper-text">(optional)</span> @Html.ValidationMessageFor(model => model.Address2)</div>
-                </div>
-                 <div class="control-group">
-                    @Html.LabelFor(model => model.Zip, new { @class = "control-label" })
-                    <div class="controls">@Html.EditorFor(model => model.Zip) @Html.ValidationMessageFor(model => model.Zip)</div>
-                </div>
-                <div class="control-group">
-                    @Html.LabelFor(model => model.City, new { @class = "control-label" })
-                    <div class="controls">@Html.EditorFor(model => model.City) @Html.ValidationMessageFor(model => model.City)</div>
-                </div>
-                <div id="state-div" class="control-group @Html.Raw(!Model.IsNonUSAddress ? string.Empty : "hidden")">
-                    @Html.LabelFor(model => model.State, new { @class = "control-label" })
-                    <div class="controls">@Html.DropDownListFor(model => model.State, asi.asicentral.util.HtmlHelper.GetStates()) @Html.ValidationMessageFor(model => model.State)</div>
-                </div>
-                <div id="international-state-div" class="control-group @Html.Raw(!Model.IsNonUSAddress ? "hidden" : string.Empty)">
+
+            <label class="checkbox" for="IsNonUSAddress">@Html.EditorFor(model => model.IsNonUSAddress) @Html.Raw(Resource.IsNonUSAddress)</label>
+
+            <div class="control-group">
+                @Html.LabelFor(model => model.Address1, new { @class = "control-label" })
+                <div class="controls">@Html.EditorFor(model => model.Address1)<span class="helper-text">(Please no P.O. boxes)</span>@Html.ValidationMessageFor(model => model.Address1)</div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.Address2, new { @class = "control-label" })
+                <div class="controls">@Html.EditorFor(model => model.Address2)<span class="helper-text">(optional)</span> @Html.ValidationMessageFor(model => model.Address2)</div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.Zip, new { @class = "control-label" })
+                <div class="controls">@Html.EditorFor(model => model.Zip) @Html.ValidationMessageFor(model => model.Zip)</div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.City, new { @class = "control-label" })
+                <div class="controls">@Html.EditorFor(model => model.City) @Html.ValidationMessageFor(model => model.City)</div>
+            </div>
+            <div id="state-div" class="control-group @Html.Raw(!Model.IsNonUSAddress ? string.Empty : "hidden")">
+                @Html.LabelFor(model => model.State, new { @class = "control-label" })
+                <div class="controls">@Html.DropDownListFor(model => model.State, asi.asicentral.util.HtmlHelper.GetStates()) @Html.ValidationMessageFor(model => model.State)</div>
+            </div>
+            <div id="international-state-div" class="control-group @Html.Raw(!Model.IsNonUSAddress ? "hidden" : string.Empty)">
                 @Html.LabelFor(model => model.InternationalState, new { @class = "control-label" })
                 <div class="controls">@Html.EditorFor(model => model.InternationalState) @Html.ValidationMessageFor(model => model.InternationalState)</div>
             </div>
-                <div id="country-div" class="control-group @Html.Raw(!Model.IsNonUSAddress ? "hidden" : string.Empty)">
-                    @Html.LabelFor(model => model.Country, new { @class = "control-label" })
-                    <div class="controls">@Html.DropDownListFor(model => model.Country, asi.asicentral.util.HtmlHelper.GetCountries()) @Html.ValidationMessageFor(model => model.Country)</div>
+            <div id="country-div" class="control-group @Html.Raw(!Model.IsNonUSAddress ? "hidden" : string.Empty)">
+                @Html.LabelFor(model => model.Country, new { @class = "control-label" })
+                <div class="controls">@Html.DropDownListFor(model => model.Country, asi.asicentral.util.HtmlHelper.GetCountries()) @Html.ValidationMessageFor(model => model.Country)</div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Phone, new { @class = "col-sm-4 control-label" })
+                <div class="col-sm-2">
+                    @Html.TextBoxFor(model => model.PhoneAreaCode, new { @class = "controls input-mini" })
+                    @Html.TextBoxFor(model => model.Phone, new { @class = "controls  input-mid" })
                 </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Phone, new { @class = "col-sm-4 control-label" })
-                    <div class="col-sm-2">
-                        @Html.TextBoxFor(model => model.PhoneAreaCode, new { @class = "controls input-mini" })
-                        @Html.TextBoxFor(model => model.Phone, new { @class = "controls  input-mid" })
-                    </div>
-                    
-                    <div class="col-sm-3 error_message">
-                        @Html.ValidationMessageFor(model => model.PhoneAreaCode)
-                        @Html.ValidationMessageFor(model => model.Phone)
-                    </div>
-
+                <div class="col-sm-3 error_message">
+                    @Html.ValidationMessageFor(model => model.PhoneAreaCode)
+                    @Html.ValidationMessageFor(model => model.Phone)
                 </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Fax, new { @class = "col-sm-4 control-label" })
-                    <div class="col-sm-2">
-                        @Html.TextBoxFor(model => model.FaxAreaCode, new { @class = "form-control input-mini" })
-                        @Html.TextBoxFor(model => model.Fax, new { @class = "form-control input-mid" })
-                        <span class="helper-text">(optional)</span>
-                    </div>
-                    
-                    <div class="col-sm-3 error_message">
-                        @Html.ValidationMessageFor(model => model.FaxAreaCode)
-                        @Html.ValidationMessageFor(model => model.Fax)
-                    </div>
-                    
-           
 
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Fax, new { @class = "col-sm-4 control-label" })
+                <div class="col-sm-2">
+                    @Html.TextBoxFor(model => model.FaxAreaCode, new { @class = "form-control input-mini" })
+                    @Html.TextBoxFor(model => model.Fax, new { @class = "form-control input-mid" })
+                    <span class="helper-text">(optional)</span>
+                </div>
+
+                <div class="col-sm-3 error_message">
+                    @Html.ValidationMessageFor(model => model.FaxAreaCode)
+                    @Html.ValidationMessageFor(model => model.Fax)
+                </div>
         </fieldset>
     </div>
     <footer id="page-completion-navigation">
@@ -77,31 +74,31 @@
             <p class="navigate-back"><a href="../ShowCompany/CompanyList">Back to Company list</a></p>
             <p class="next-step-button">
                 <input type="submit" class="command btn btn-primary" value="Save" />
-                 @Html.ActionLink(asi.asicentral.Resources.Resource.Cancel, "CompanyList")
+            @Html.ActionLink(asi.asicentral.Resources.Resource.Cancel, "CompanyList")
         </nav>
     </footer>
 }
 @section Scripts {
-<script>
-    $("#IsNonUSAddress").change(function (evt) {
-        if ($("#country-div").attr("class").trim() == "control-group")
-            $("#country-div").attr("class", "control-group hidden");
-        else
-            $("#country-div").attr("class", "control-group");
-        if ($("#country-div").attr("class") == "control-group hidden") {
-            $("#Country").val("USA");
-            $("#State").val("");
-            $("#state-div").attr("class", "control-group");
-            $("#international-state-div").attr("class", "control-group hidden");
-            $("#InternationalState").val("N/A");
-        }
-        else {
-            $("#Country").val("");
-            $("#state-div").attr("class", "control-group hidden");
-            $("#State").val("AL");
-            $("#InternationalState").val("");
-            $("#international-state-div").attr("class", "control-group");
-        }
-    });
-</script>
+    <script>
+        $("#IsNonUSAddress").change(function (evt) {
+            if ($("#country-div").attr("class").trim() == "control-group")
+                $("#country-div").attr("class", "control-group hidden");
+            else
+                $("#country-div").attr("class", "control-group");
+            if ($("#country-div").attr("class") == "control-group hidden") {
+                $("#Country").val("USA");
+                $("#State").val("");
+                $("#state-div").attr("class", "control-group");
+                $("#international-state-div").attr("class", "control-group hidden");
+                $("#InternationalState").val("N/A");
+            }
+            else {
+                $("#Country").val("");
+                $("#state-div").attr("class", "control-group hidden");
+                $("#State").val("AL");
+                $("#InternationalState").val("");
+                $("#international-state-div").attr("class", "control-group");
+            }
+        });
+    </script>
 }

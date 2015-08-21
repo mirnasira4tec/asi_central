@@ -7,7 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace asi.asicentral.web.Models.Show
+namespace asi.asicentral.web.models.show
 {
     public class CompanyInformation : AddressModel
     {

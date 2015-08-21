@@ -6,8 +6,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using asi.asicentral.interfaces;
 
-namespace asi.asicentral.web.Models.Show
+namespace asi.asicentral.web.models.show
 {
     public class CompanyModel 
     {
@@ -65,14 +66,14 @@ namespace asi.asicentral.web.Models.Show
 
         [Display(ResourceType = typeof(Resource), Name = "PhoneAreaCode")]
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
-        //[RegularExpression(@"^[2-9][0-9]\d$", ErrorMessageResourceName = "FieldInvalidPhoneAreaCode", ErrorMessageResourceType = typeof(Resource))]
+        [RegularExpression(@"^[2-9][0-9]\d$", ErrorMessageResourceName = "FieldInvalidPhoneAreaCode", ErrorMessageResourceType = typeof(Resource))]
         public string PhoneAreaCode { get; set; }
 
-        //[RegularExpression(@"^[2-9]{1}[0-9]{6,6}$", ErrorMessageResourceName = "FieldInvalidFax", ErrorMessageResourceType = typeof(Resource))]
+        [RegularExpression(@"^[2-9]{1}[0-9]{6,6}$", ErrorMessageResourceName = "FieldInvalidFax", ErrorMessageResourceType = typeof(Resource))]
         public string Fax { get; set; }
 
         
-        //[RegularExpression(@"^[2-9][0-9]\d$", ErrorMessageResourceName = "FieldInvalidFaxAreaCode", ErrorMessageResourceType = typeof(Resource))]
+        [RegularExpression(@"^[2-9][0-9]\d$", ErrorMessageResourceName = "FieldInvalidFaxAreaCode", ErrorMessageResourceType = typeof(Resource))]
         public string FaxAreaCode { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "CompanyURL", Prompt = "CompanyURLPrompt")]
@@ -83,13 +84,15 @@ namespace asi.asicentral.web.Models.Show
         [RegularExpression(@"^[1-9][0-9]{3,5}$", ErrorMessageResourceName = "FieldInvalidASINumber", ErrorMessageResourceType = typeof(Resource))]
         public string ASINumber { set; get; }
 
+        [Display(ResourceType = typeof(Resource), Name = "MemberType")]
+        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public string MemberType { set; get; }
        
         public IList<ShowCompany> company { set; get; }
         public static IList<SelectListItem> GetMemberTypes()
         {
             IList<SelectListItem> selItems = new List<SelectListItem>();
-            selItems.Add(new SelectListItem() { Selected = true, Text = "Select ", Value = "0" });
+            selItems.Add(new SelectListItem() { Selected = true, Text = "Select ", Value ="" });
             selItems.Add(new SelectListItem() { Selected = false, Text = "Distributors", Value = "Distributors" });
             selItems.Add(new SelectListItem() { Selected = false, Text = "Suppliers", Value = "Suppliers" });
             selItems.Add(new SelectListItem() { Selected = false, Text = "Non-Member", Value = "Non-Member" });

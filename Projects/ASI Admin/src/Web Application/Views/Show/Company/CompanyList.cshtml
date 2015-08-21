@@ -1,10 +1,9 @@
 ﻿@using asi.asicentral.interfaces;
 @using asi.asicentral.model.show;
-@using asi.asicentral.web.Models.Show;
+@using asi.asicentral.web.models.show;
 @model CompanyModel
 @{
     Layout = "~/Views/Show/Shared/_Layout.cshtml";
-    ViewBag.Title = "Company List";
 }
 <h1>List of Companies</h1>
 <div class="tabbable tabs-below small">
@@ -34,7 +33,7 @@
                 {                
                     <div class="formField">
                         <label for="MemberType">Member Type</label>
-                        <input name="MemberType" type="text" id="MemberType" value="@Model.MemberType" />
+                        @Html.DropDownListFor(model => model.MemberType, new SelectList(asi.asicentral.web.models.show.CompanyModel.GetMemberTypes(), "Value", "Text"), new { name = "MemberType", value = "@Model.MemberType" })
                     </div>
                     <div class="formField">
                         <input type="hidden" value="@CompanyModel.TAB_MEMBERTYPE" name="companyTab" /><input type="submit" value="Search" class="btn" />
@@ -46,7 +45,7 @@
 </div>
 @using (Html.BeginForm())
 {
-    <a href="/showCompany/Add" class="btn btn-primary">Add </a>
+    <a href="/showCompany/AddCompany" class="btn btn-primary">Add </a>
     <br />
     <br />
      
@@ -66,17 +65,39 @@
           
                 <tr>
                     <td style="width: 45px"><a class="delete" id="@company.Id" href="/ShowCompany/Delete?id=@company.Id"><i class="icon-trash"></i></a></td>
-                    <td style="width: 85px">@*<a href="/ShowCompany/Edit?id=@company.Id">@company.Name</a>*@
-                        <a href="@Url.Action("List", "../ShowCompany", new CompanyInformation { Id = company.Id}, null)">@company.Name</a>
-                         @*@Html.ActionLink(company.Name, "List", "ShowCompany", new CompanyInformation { Id = company.Id}, null)*@
+                    <td style="width: 85px">
+                        <a href="@Url.Action("List", "../ShowCompany", new CompanyInformation { Id = company.Id })">@company.Name</a>
                     </td>
                     <td style="width: 85px">@company.ASINumber</td>
                     <td style="width: 85px">@company.MemberType </td>
-                    <td style="width: 185px">No of Address: No of Employee :</td>
+                    <td style="width: 185px">No of Address:@GetNoOfAddress(company.Id) No of Employee :@GetNoOfEmployee(company.Id)</td>
                 </tr>
             }
         </tbody>
     </table>
+    @functions{
+        public IObjectService ObjectService { get; set; }
+        public int GetNoOfAddress(int? id)
+        {
+            IList<ShowCompanyAddress> companyAddress = null;
+            if (id != null)
+            {
+                companyAddress = ObjectService.GetAll<ShowCompanyAddress>().Where(detail => detail.CompanyId == id).ToList();
+            }
+            return companyAddress.Count();
+
+        }
+        public int GetNoOfEmployee(int? id)
+        {
+            IList<ShowEmployee> employee = null;
+            if (id != null)
+            {
+                employee = ObjectService.GetAll<ShowEmployee>().Where(detail => detail.CompanyId == id).ToList();
+            }
+            return employee.Count();
+
+        }
+        }
 }
 @section scripts {
     <script type="text/javascript">

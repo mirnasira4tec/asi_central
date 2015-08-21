@@ -1908,4 +1908,7 @@
   <data name="FieldInvalidPhoneAreaCode" xml:space="preserve">
     <value>Please enter a valid phone areacode</value>
   </data>
+  <data name="MemberType" xml:space="preserve">
+    <value>Member Type</value>
+  </data>
 </root>
