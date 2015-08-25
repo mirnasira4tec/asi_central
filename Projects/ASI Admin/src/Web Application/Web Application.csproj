@@ -496,6 +496,7 @@
     <Content Include="Views\Show\Shared\_Layout.cshtml" />
     <Content Include="Views\Show\ShowCompaniesList.cshtml" />
     <Content Include="Views\Show\AddCompanyAttendeesToShow.cshtml" />
+    <Content Include="Views\Show\Attendees.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

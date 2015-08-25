@@ -27,8 +27,7 @@ namespace asi.asicentral.database.mappings.show
             this.Property(t => t.UpdateDate)
                 .HasColumnName("UpdateDateUTC");
 
-          //Relationships
-
+            //Relationships
             HasRequired(x => x.Attendee)
              .WithMany()
              .HasForeignKey(x => x.AttendeeId);
