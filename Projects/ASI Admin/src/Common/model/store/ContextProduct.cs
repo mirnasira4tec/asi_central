@@ -48,7 +48,8 @@ namespace asi.asicentral.model.store
 
         public bool IsMembership()
         {
-            return Name.ToLower().Contains("membership") || Type.ToLower().Contains("membership");
+            return !string.IsNullOrEmpty(Name) && Name.ToLower().Contains("membership") || 
+                   !string.IsNullOrEmpty(Type) && Type.ToLower().Contains("membership");
         }
 
         public override string ToString()
