@@ -64,7 +64,9 @@
         <tbody>
             @foreach (var show in Model.Show)
             {  <tr>
-                <td><a class="delete" id="@show.Id" href="/Show/Delete?id=@show.Id"><i class="icon-trash"></i></a></td>
+                <td><a class="delete" id="@show.Id" href="/Show/Delete?id=@show.Id"><i class="icon-trash"></i></a>
+                    <a rel="tooltip" data-placement="right" class="icon-pencil" href="@Url.Action("Edit", "Show", new { Id = @show.Id })"></a>
+                </td>
                 <td><a href="/ShowCompany/GetCompanyList?showId=@show.Id">@show.Name</a></td>
                 <td>
                     @show.ShowType.Type
