@@ -1150,7 +1150,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Someone will contact you shortly with your ASI Number.
+        ///   Looks up a localized string similar to Your ASI Number is.
         /// </summary>
         public static string ConfirmationASINumberMessage {
             get {
@@ -1186,11 +1186,11 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your ASI Number is.
+        ///   Looks up a localized string similar to Someone will contact you shortly with your ASI Number.
         /// </summary>
-        public static string ConfirmationConfirmationMessage {
+        public static string ConfirmationContactWithASINumberMessage {
             get {
-                return ResourceManager.GetString("ConfirmationConfirmationMessage", resourceCulture);
+                return ResourceManager.GetString("ConfirmationContactWithASINumberMessage", resourceCulture);
             }
         }
         
