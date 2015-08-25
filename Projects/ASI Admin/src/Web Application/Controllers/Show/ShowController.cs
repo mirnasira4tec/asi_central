@@ -160,5 +160,11 @@ namespace asi.asicentral.web.Controllers.Show
             }
             return Redirect("ShowList");
         }
+
+        public ActionResult AttendeeList()
+        {
+            IList<ShowEmployeeAttendee> attendees = ObjectService.GetAll<ShowEmployeeAttendee>(true).ToList();
+            return View("../Show/Attendees", attendees);
+        }
     }
 }
