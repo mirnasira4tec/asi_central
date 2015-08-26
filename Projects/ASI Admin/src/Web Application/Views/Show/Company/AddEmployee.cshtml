@@ -8,36 +8,115 @@
     Layout = "~/Views/Show/Shared/_Layout.cshtml";
 }
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("AddEmployee", "ShowCompany", FormMethod.Post))
 {
     @Html.ValidationSummary(true)
-    
+    <p class="navigate-back"><a href="/ShowCompany/List?id= @Model.CompanyId">Back to Employee list</a></p>
     <div id="tabbasic" class="basic-information tab-pane fade in active">
         <fieldset class="company-info-form">
-            <legend>Add Employee</legend>
+            <legend>Employee Details</legend>
             @Html.HiddenFor(model => model.Id)
-           
-                <div class="control-group" id="asinumber-product">
-                    @Html.LabelFor(model => model.FirstName, new { @class = "control-label" })
-                    <div class="controls">@Html.EditorFor(model => model.FirstName) @Html.ValidationMessageFor(model => model.FirstName)</div>
-                </div>
-            
-                <div class="control-group">
-                    @Html.LabelFor(model => model.LastName, new { @class = "control-label" })
-                    <div class="controls">@Html.EditorFor(model => model.LastName) @Html.ValidationMessageFor(model => model.LastName)</div>
-                </div>
-                 <div class="control-group">
-                    @Html.LabelFor(model => model.Email, new { @class = "control-label" })
-                    <div class="controls">@Html.EditorFor(model => model.Email) @Html.ValidationMessageFor(model => model.Email)</div>
-                </div>
+            @Html.HiddenFor(model => model.CompanyId)
+            @Html.HiddenFor(model => model.EmployeeId)
+            <div class="control-group" id="asinumber-product">
+                @Html.LabelFor(model => model.FirstName, new { @class = "control-label" })
+                <div class="controls">@Html.EditorFor(model => model.FirstName) @Html.ValidationMessageFor(model => model.FirstName)</div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.LastName, new { @class = "control-label" })
+                <div class="controls">@Html.EditorFor(model => model.LastName) @Html.ValidationMessageFor(model => model.LastName)</div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.Email, new { @class = "control-label" })
+                <div class="controls">@Html.EditorFor(model => model.Email, new { id = "Email" }) @Html.ValidationMessageFor(model => model.Email)</div>
+            </div>
+            <div class="control-group">
+                 @Html.CheckBoxFor(m => m.HasAddress, new {id = "hasAddress" })
+                Has Address
+            </div>
+              <div id="divPartial" >
+                @Html.Partial("../Show/Shared/Address", Model)
+            </div>
         </fieldset>
     </div>
     <footer id="page-completion-navigation">
         <nav>
-            <p class="navigate-back"><a href="../ShowCompany/CompanyList">Back to Company list</a></p>
             <p class="next-step-button">
-                <input type="submit" class="command btn btn-primary" value="Save" />
-                 @Html.ActionLink(asi.asicentral.Resources.Resource.Cancel, "CompanyList")
+            <input type="submit" class="command btn btn-primary" value="Save" />
+            @Html.ActionLink(asi.asicentral.Resources.Resource.Cancel, "CompanyList")
         </nav>
     </footer>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/form")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if ($('#hasAddress').prop('checked')) {
+                $('#divPartial').show();
+            }
+            else {
+                $('#divPartial').hide();
+            }
+            $('#hasAddress').change(function () {
+                if (this.checked) {
+                    $('#divPartial').show();
+                }
+                else {
+                    $('#divPartial').hide();
+                }
+            });
+
+            if ($("#IsNonUSAddress").prop('checked')) {
+                $("#country-div").attr("class", "control-group");
+                $("#state-div").attr("class", "control-group hidden");
+                $("#international-state-div").attr("class", "control-group");
+            }
+            else {
+                $("#country-div").attr("class", "control-group hidden");
+                $("#state-div").attr("class", "control-group");
+                $("#international-state-div").attr("class", "control-group hidden");
+            }
+        });
+
+        $("#IsNonUSAddress").change(function (evt) {
+            if ($("#country-div").attr("class").trim() == "control-group")
+                $("#country-div").attr("class", "control-group hidden");
+            else
+                $("#country-div").attr("class", "control-group");
+            if ($("#country-div").attr("class") == "control-group hidden") {
+                $("#Country").val("USA");
+                $("#State").val("");
+                $("#state-div").attr("class", "control-group");
+                $("#international-state-div").attr("class", "control-group hidden");
+                $("#InternationalState").val("N/A");
+            }
+            else {
+                $("#Country").val("");
+                $("#state-div").attr("class", "control-group hidden");
+                $("#State").val("AL");
+                $("#InternationalState").val("");
+                $("#international-state-div").attr("class", "control-group");
+            }
+        });
+
+        $("#Email").blur(function () {
+            var email = $("#Email").val();
+            if (email) {
+                $.ajax({
+                    url: "/ShowCompany/IsValidEmail?name=" + email,
+                    type: 'POST',
+                    success: function (data) {
+                        if (data == true) {
+                            $('span[data-valmsg-for="Email"]').html("Email already exists.");
+                            $('span[data-valmsg-for="Email"]').attr("class", "field-validation-error");
+                        }
+                        else {
+                            $('span[data-valmsg-for="Email"]').html("");
+                            $('span[data-valmsg-for="Email"]').attr("class", "field-validation-valid");
+                        }
+                    }
+                });
+            }
+        });
+    </script>
 }
