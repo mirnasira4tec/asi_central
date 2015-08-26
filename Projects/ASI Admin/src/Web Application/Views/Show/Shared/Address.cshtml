@@ -5,7 +5,7 @@
 
 @Html.AntiForgeryToken()
 @Html.ValidationSummary(true) 
-<div id="tabbasic" class="basic-information tab-pane fade in active"> 
+<div  class="basic-information tab-pane fade in active"> 
     <fieldset class="company-info-form">
         <legend>Address</legend>
         @Html.HiddenFor(model => model.AdreessId)
@@ -14,11 +14,11 @@
 
             <div class="control-group">
                 @Html.LabelFor(model => model.Address1, new { @class = "control-label" })
-                <div class="controls">@Html.EditorFor(model => model.Address1)<span class="helper-text">(Please no P.O. boxes)</span>@Html.ValidationMessageFor(model => model.Address1)</div>
+                <div class="controls">@Html.EditorFor(model => model.Address1)<span class="helper-text"> (Please no P.O. boxes)</span>@Html.ValidationMessageFor(model => model.Address1)</div>
             </div>
             <div class="control-group">
                 @Html.LabelFor(model => model.Address2, new { @class = "control-label" })
-                <div class="controls">@Html.EditorFor(model => model.Address2)<span class="helper-text">(optional)</span> @Html.ValidationMessageFor(model => model.Address2)</div>
+                <div class="controls">@Html.EditorFor(model => model.Address2)<span class="helper-text"> (optional)</span> @Html.ValidationMessageFor(model => model.Address2)</div>
             </div>
             <div class="control-group">
                 @Html.LabelFor(model => model.Zip, new { @class = "control-label" })
@@ -41,9 +41,9 @@
                 <div class="controls">@Html.DropDownListFor(model => model.Country, asi.asicentral.util.HtmlHelper.GetCountries()) @Html.ValidationMessageFor(model => model.Country)</div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group control-group">
                 @Html.LabelFor(model => model.Phone, new { @class = "col-sm-4 control-label" })
-                <div class="col-sm-2">
+                <div class="controls">
                     @Html.TextBoxFor(model => model.PhoneAreaCode, new { @class = "input-mini" })
                     @Html.TextBoxFor(model => model.Phone, new { @class = "input-mid" })
                 </div>
@@ -54,9 +54,9 @@
                 </div>
 
             </div>
-            <div class="form-group">
+            <div class="form-group control-group">
                 @Html.LabelFor(model => model.Fax, new { @class = "col-sm-4 control-label" })
-                <div class="col-sm-2">
+                <div class="controls">
                     @Html.TextBoxFor(model => model.FaxAreaCode, new { @class = "form-control input-mini" })
                     @Html.TextBoxFor(model => model.Fax, new { @class = "form-control input-mid" })
                     <span class="helper-text">(optional)</span>

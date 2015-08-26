@@ -8,7 +8,7 @@
     Layout = "~/Views/Show/Shared/_Layout.cshtml";
 }
 
-@using (Html.BeginForm("AddEmployee", "ShowCompany", FormMethod.Post))
+@using (Html.BeginForm("AddEmployee", "ShowCompany", FormMethod.Post, new { @class = "form-horizontal" }))
 {
     @Html.ValidationSummary(true)
     <p class="navigate-back"><a href="/ShowCompany/List?id= @Model.CompanyId">Back to Employee list</a></p>
@@ -42,7 +42,8 @@
     <footer id="page-completion-navigation">
         <nav>
             <p class="next-step-button">
-            <input type="submit" class="command btn btn-primary" value="Save" />
+             @{var submitText = (Model.EmployeeId == 0 ? "Add" : "Save");}
+             <input type="submit" class="command btn btn-primary" value="@submitText"/>
             @Html.ActionLink(asi.asicentral.Resources.Resource.Cancel, "CompanyList")
         </nav>
     </footer>

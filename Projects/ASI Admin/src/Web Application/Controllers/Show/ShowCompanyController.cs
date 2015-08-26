@@ -303,6 +303,7 @@ namespace asi.asicentral.web.Controllers.Show
                 ShowEmployee employeeModel = ObjectService.GetAll<ShowEmployee>().Where(item => item.Id == id).FirstOrDefault();
                 if (companyInfo != null)
                 {
+                    companyInfo.EmployeeId = id;
                     companyInfo.AdreessId = employeeModel.AddressId.HasValue ? employeeModel.AddressId.Value : 0;
                     companyInfo.FirstName = employeeModel.FirstName;
                     companyInfo.LastName = employeeModel.LastName;
