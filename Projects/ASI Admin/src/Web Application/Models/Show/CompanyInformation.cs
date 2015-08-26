@@ -9,13 +9,13 @@ using System.Web.Mvc;
 
 namespace asi.asicentral.web.models.show
 {
-    public class CompanyInformation
+    public class CompanyInformation : AddressModel
     {
         public string Name { get; set; }
 
         public int Id { get; set; }
         public IList<ShowCompanyAddress> CompanyAddress { set; get; }
-        public int CompanyId { get; set; }
+        public int EmployeeId { get; set; }
         public IList<ShowAddress> Address { set; get; }
         public IList<ShowEmployee> Employee { set; get; }
         public bool HasAddress { get; set; }

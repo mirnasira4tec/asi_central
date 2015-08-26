@@ -57,13 +57,13 @@ namespace asi.asicentral.web.models.show
 
         [Display(ResourceType = typeof(Resource), Name = "PhoneAreaCode")]
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
-        //[RegularExpression(@"^[2-9][0-9]\d$", ErrorMessageResourceName = "FieldInvalidPhoneAreaCode", ErrorMessageResourceType = typeof(Resource))]
+        [RegularExpression(@"^[2-9][0-9]\d$", ErrorMessageResourceName = "FieldInvalidPhoneAreaCode", ErrorMessageResourceType = typeof(Resource))]
         public string PhoneAreaCode { get; set; }
 
-        //[RegularExpression(@"^[2-9]{1}[0-9]{6,6}$", ErrorMessageResourceName = "FieldInvalidFax", ErrorMessageResourceType = typeof(Resource))]
+        [RegularExpression(@"^[2-9]{1}[0-9]{6,6}$", ErrorMessageResourceName = "FieldInvalidFax", ErrorMessageResourceType = typeof(Resource))]
         public string Fax { get; set; }
 
-        //[RegularExpression(@"^[2-9][0-9]\d$", ErrorMessageResourceName = "FieldInvalidFaxAreaCode", ErrorMessageResourceType = typeof(Resource))]
+        [RegularExpression(@"^[2-9][0-9]\d$", ErrorMessageResourceName = "FieldInvalidFaxAreaCode", ErrorMessageResourceType = typeof(Resource))]
         public string FaxAreaCode { get; set; }
 
        

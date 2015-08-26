@@ -14,12 +14,14 @@
     </a>
     @Model.Name
 </h3>
-<div class=" span12 clearfix">
-    <div class="span6"><a class="btn btn-small" href="@Url.Action("AddAddress", "../ShowCompany", new { CompanyID = Model.Id })"><i class="icon-plus"></i>
+<div class="clearfix">
+    <div class="well"><a class="btn btn-small" href="@Url.Action("AddAddress", "../ShowCompany", new { CompanyID = Model.Id })"><i class="icon-plus"></i>
         Add Address
         </a><table class="table table-bordered table-striped"">
   <thead>
     <tr>
+          <th>Edit</th>
+        <th>Delete</th>
       <th>Street 1</th>
       <th>State</th>
       <th>Zip</th>
@@ -27,7 +29,8 @@
   </thead>
   <tbody>
     @foreach (var address in @Model.CompanyAddress)
-    { <tr>
+    { <tr><td><a rel="tooltip" data-placement="right" class="icon-pencil" href="@Url.Action("EditAddress", "ShowCompany", new { Id = @address.Address.Id ,CompanyID = @address.CompanyId})"></a></td>
+        <td><a rel="tooltip" data-placement="right" class="delete" href="@Url.Action("DeleteAddress", "ShowCompany", new { Id = @address.Address.Id ,CompanyID = @address.CompanyId})"><i class="icon-trash"></i></a></td>
                 <td>@address.Address.Street1</td>
                 <td>@address.Address.State </td>
                 <td>@address.Address.Zip</td>
@@ -36,11 +39,14 @@
     }
   </tbody>
 </table></div>
-    <div class="span5"><a class="btn btn-small" href="@Url.Action("AddEmployee", "../ShowCompany", new { CompanyID = Model.Id })"><i class="icon-plus"></i>
+    <div class="well">
+        <a class="btn btn-small" href="@Url.Action("AddEmployee", "../ShowCompany", new { CompanyID = Model.Id })"><i class="icon-plus"></i>
         Add Employee
     </a><table class="table table-bordered table-striped">
   <thead>
     <tr>
+        <th>Edit</th>
+        <th>Delete</th>
       <th>First Name</th>
       <th>Last Name</th>
       <th>Email</th>
@@ -49,7 +55,8 @@
   <tbody>
     @foreach (var employee in @Model.Employee)
         {
-            <tr>
+            <tr><td><a rel="tooltip" data-placement="right" class="icon-pencil" href="@Url.Action("EditEmployee", "ShowCompany", new { Id = @employee.Id ,CompanyID = @employee.CompanyId})"></a></td>
+                <td><a data-placement="right" class="delete" id="@employee.Id" href="@Url.Action("DeleteEmployee", "ShowCompany", new { Id = @employee.Id,CompanyID = @employee.CompanyId})"><i class="icon-trash"></i></a></td>
                 <td>@employee.FirstName</td>
                 <td>@employee.LastName </td>
                 <td>@employee.Email</td>
@@ -58,3 +65,14 @@
   </tbody>
 </table></div>
 </div>
+@section scripts {
+    <script type="text/javascript">
+    $('a.delete').click(function () {
+            var confirms = confirm("Are you sure you want to delete?");
+            if (confirms)
+                return true
+            else
+                return false
+    });
+        </script>
+}
