@@ -19,7 +19,7 @@ namespace asi.asicentral.model.show
         public string Email { get; set; }
         public int? AddressId { get; set; }
         public int? CompanyId { get; set; }
-        public virtual ShowAddress Address { get; set; }
+        public ShowAddress Address { get; set; }
         public ShowCompany Company { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }

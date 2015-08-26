@@ -8,37 +8,13 @@
     Layout = "~/Views/Show/Shared/_Layout.cshtml";
 }
 
-@using (Html.BeginForm("AddAddress", "ShowCompany", FormMethod.Post, new { id = "AddAddress-form", @class = "form-horizontal" }))
+@using (Html.BeginForm())
 {
-    <p class="navigate-back"><a href="/ShowCompany/List?id= @Model.CompanyId">Back to Address list</a></p>
     @Html.Partial("../Show/Shared/Address", Model)
-
-    <footer id="page-completion-navigation">
-        <nav>
-            <p class="next-step-button">
-                <input type="submit" class="command btn btn-primary" value="Save" id="btnSave" />
-            @Html.ActionLink(asi.asicentral.Resources.Resource.Cancel, "CompanyList")
-        </nav>
-    </footer>
 }
 @section Scripts {
-
-    @Scripts.Render("~/bundles/form")
-
+     @Scripts.Render("~/bundles/form")
     <script>
-        $(document).ready(function () {
-            if ($("#IsNonUSAddress").prop('checked')) {
-                $("#country-div").attr("class", "control-group");
-                $("#state-div").attr("class", "control-group hidden");
-                $("#international-state-div").attr("class", "control-group");
-            }
-            else {
-                $("#country-div").attr("class", "control-group hidden");
-                $("#state-div").attr("class", "control-group");
-                $("#international-state-div").attr("class", "control-group hidden");
-            }
-        });
-
         $("#IsNonUSAddress").change(function (evt) {
             if ($("#country-div").attr("class").trim() == "control-group")
                 $("#country-div").attr("class", "control-group hidden");
@@ -59,6 +35,6 @@
                 $("#international-state-div").attr("class", "control-group");
             }
         });
-    </script>
 
+    </script>
 }
