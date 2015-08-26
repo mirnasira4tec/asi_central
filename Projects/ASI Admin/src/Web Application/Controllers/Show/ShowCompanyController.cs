@@ -126,7 +126,6 @@ namespace asi.asicentral.web.Controllers.Show
                 ObjectService.SaveChanges();
             }
             return Redirect("CompanyList");
-
         }
 
         public ActionResult List(int id)
@@ -193,14 +192,7 @@ namespace asi.asicentral.web.Controllers.Show
                         objCompanyAddress.UpdateSource = "ShowCompanyController - Add";
                         objCompanyAddress = ShowHelper.CreateOrUpdateCompanyAddress(ObjectService, objCompanyAddress);
                     }
-
-
-
-                    //ObjectService.Add<ShowAddress>(objAddress);
-                    //ObjectService.Add<ShowCompanyAddress>(objCompanyAddress);
-
                     ObjectService.SaveChanges();
-
                     return RedirectToAction("List", "ShowCompany", new { id = Address.CompanyId });
                 }
                 else
@@ -237,10 +229,10 @@ namespace asi.asicentral.web.Controllers.Show
         }
 
         [HttpGet]
-        public ActionResult AddEmployee(int CompanyID)
+        public ActionResult AddEmployee(int companyId)
         {
             var objEmployee = new CompanyInformation();
-            objEmployee.CompanyId = CompanyID;
+            objEmployee.CompanyId = companyId;
             return View("../Show/Company/AddEmployee", objEmployee);
         }
 
@@ -281,8 +273,6 @@ namespace asi.asicentral.web.Controllers.Show
                         objAddress.City = employee.City;
                         objAddress.UpdateSource = "ShowCompanyController - Add";
                         objAddress = ShowHelper.CreateOrUpdateAddress(ObjectService, objAddress);
-
-
                     }
                     ShowEmployee objEmployee = new ShowEmployee();
                     objEmployee.Id = employee.Id;
@@ -293,9 +283,7 @@ namespace asi.asicentral.web.Controllers.Show
                     objEmployee.Address = objAddress;
                     objEmployee.UpdateSource = "ShowCompanyController - Add";
                     objEmployee = ShowHelper.CreateOrUpdateEmployee(ObjectService, objEmployee);
-
                     ObjectService.SaveChanges();
-
                     return RedirectToAction("List", "ShowCompany", new { id = employee.CompanyId });
                 }
                 else
@@ -360,7 +348,7 @@ namespace asi.asicentral.web.Controllers.Show
         }
 
         [HttpGet]
-        public ActionResult EditAddress(int id, int CompanyId)
+        public ActionResult EditAddress(int id, int companyId)
         {
             AddressModel address = new AddressModel();
             if (id != 0)
@@ -377,7 +365,7 @@ namespace asi.asicentral.web.Controllers.Show
                     address.Address2 = addressModel.Street2;
                     address.Zip = addressModel.Zip;
                     address.City = addressModel.City;
-                    address.CompanyId = CompanyId;
+                    address.CompanyId = companyId;
                     address.IsNonUSAddress = addressModel.Country != "USA";
                     if (address.IsNonUSAddress)
                     {

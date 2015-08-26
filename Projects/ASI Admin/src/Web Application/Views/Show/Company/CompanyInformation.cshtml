@@ -15,7 +15,7 @@
     @Model.Name 
 </h3>
 <div class="clearfix">
-    <div class="well"><a class="btn btn-small" href="/ShowCompany/AddAddress?CompanyID= @Model.Id"><i class="icon-plus"></i>
+    <div class="well"><a class="btn btn-small" href="/ShowCompany/AddAddress?companyId= @Model.Id"><i class="icon-plus"></i>
         Add Address
         </a><table class="table table-bordered table-striped"">
   <thead>
@@ -30,8 +30,8 @@
   <tbody>
     @foreach (var address in @Model.CompanyAddress)
     { <tr>
-        <td><a rel="tooltip" data-placement="right" class="icon-pencil" href="/ShowCompany/EditAddress?id=@address.Address.Id&CompanyID=@address.CompanyId"></a></td>
-        <td><a rel="tooltip" data-placement="right" class="delete" href="/ShowCompany/DeleteAddress?id=@address.Address.Id&CompanyID=@address.CompanyId"><i class="icon-trash"></i></a></td>
+        <td><a rel="tooltip" data-placement="right" class="icon-pencil" href="/ShowCompany/EditAddress?id=@address.Address.Id&companyId=@address.CompanyId"></a></td>
+        <td><a rel="tooltip" data-placement="right" class="delete" href="/ShowCompany/DeleteAddress?id=@address.Address.Id&companyId=@address.CompanyId"><i class="icon-trash"></i></a></td>
                 <td>@address.Address.Street1</td>
                 <td>@address.Address.State </td>
                 <td>@address.Address.Zip</td>
@@ -41,7 +41,7 @@
   </tbody>
 </table></div>
     <div class="well">
-        <a class="btn btn-small" href="/ShowCompany/AddEmployee?CompanyID= @Model.Id"><i class="icon-plus"></i>
+        <a class="btn btn-small" href="/ShowCompany/AddEmployee?companyId= @Model.Id"><i class="icon-plus"></i>
         Add Employee
     </a><table class="table table-bordered table-striped">
   <thead>
