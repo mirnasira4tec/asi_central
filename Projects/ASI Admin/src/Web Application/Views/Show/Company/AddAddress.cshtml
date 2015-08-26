@@ -11,7 +11,8 @@
 @using (Html.BeginForm("AddAddress", "ShowCompany", FormMethod.Post, new { id = "AddAddress-form", @class = "form-horizontal" }))
 {
     <p class="navigate-back"><a href="/ShowCompany/List?id= @Model.CompanyId">Back to Address list</a></p>
-    @Html.Partial("../Show/Shared/Address", Model)
+    <div id="tabbasic">@Html.Partial("../Show/Shared/Address", Model)</div>
+    
 
     <footer id="page-completion-navigation">
         <nav>
