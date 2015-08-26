@@ -17,7 +17,7 @@
     <div class="tab-content" id="formtab-content">
         <div class="tab-pane @(Model.ShowTab == ShowModel.TAB_SHOWTYPE ? "active" : string.Empty)" id="@ShowModel.TAB_SHOWTYPE">
             <div class="well">
-                @using (Html.BeginForm("ShowList", "../Show/ShowList", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @ShowModel.TAB_SHOWTYPE }))
+                @using (Html.BeginForm("ShowList", "/Show/ShowList", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @ShowModel.TAB_SHOWTYPE }))
                 {                
                     <div class="formField">
                         <label for="showType">Show Type</label>
@@ -31,7 +31,7 @@
         </div>
         <div class="tab-pane @(Model.ShowTab == ShowModel.TAB_SHOWYEAR ? "active" : string.Empty)" id="@ShowModel.TAB_SHOWYEAR">
             <div class="well">
-                @using (Html.BeginForm("ShowList", "../Show/ShowList", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @ShowModel.TAB_SHOWYEAR }))
+                @using (Html.BeginForm("ShowList", "/Show/ShowList", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @ShowModel.TAB_SHOWYEAR }))
                 {                
                     <div class="formField">
                         <label for="year">Year</label>

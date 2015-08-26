@@ -30,16 +30,27 @@ namespace asi.asicentral.web.Controllers.Show
         {
             if (ModelState.IsValid)
             {
-                ShowASI objShow = new ShowASI();
-                objShow.Id = show.Id;
-                objShow.Name = show.Name;
-                objShow.Address = show.Address;
-                objShow.ShowTypeId = show.ShowTypeId;
-                objShow.StartDate = show.StartDate;
-                objShow.EndDate = show.EndDate;
-                objShow.UpdateSource = "ShowController - Show";
-                objShow = ShowHelper.CreateOrUpdateShow(ObjectService, objShow);
-                ObjectService.SaveChanges();
+                IQueryable<ShowASI> showName = ObjectService.GetAll<ShowASI>().Where(item => item.Name == show.Name
+                && item.StartDate == show.StartDate && item.EndDate == show.EndDate);
+                if (showName.Any())
+                {
+                    ModelState.AddModelError("Name", "Show name is already exist");
+                    show.ShowType = GetShowType();
+                    return View("../Show/AddShow", show);
+                }
+                else
+                {
+                    ShowASI objShow = new ShowASI();
+                    objShow.Id = show.Id;
+                    objShow.Name = show.Name;
+                    objShow.Address = show.Address;
+                    objShow.ShowTypeId = show.ShowTypeId;
+                    objShow.StartDate = show.StartDate;
+                    objShow.EndDate = show.EndDate;
+                    objShow.UpdateSource = "ShowController - AddShow";
+                    objShow = ShowHelper.CreateOrUpdateShow(ObjectService, objShow);
+                    ObjectService.SaveChanges();
+                }
                 return RedirectToAction("ShowList");
             }
             else
@@ -107,7 +118,7 @@ namespace asi.asicentral.web.Controllers.Show
             }
 
             show.ShowTab = showTab;
-            show.Show = showList.ToList();
+            show.Show = showList.OrderByDescending(form => form.CreateDate).ToList();
             return View("../Show/ShowList", show);
         }
 
@@ -138,6 +149,7 @@ namespace asi.asicentral.web.Controllers.Show
                 ShowASI ShowModel = ObjectService.GetAll<ShowASI>().Where(item => item.Id == id).FirstOrDefault();
                 if (show != null)
                 {
+                    show.Id = id;
                     show.Name = ShowModel.Name;
                     show.Address = ShowModel.Address;
                     show.StartDate = ShowModel.StartDate;
