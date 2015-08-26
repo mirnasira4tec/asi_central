@@ -8,11 +8,11 @@
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
     
+     <p class="navigate-back"><a href="/Show/ShowList">Back to Show list</a></p>
     <div id="tabbasic" class="basic-information tab-pane fade in active">
         <fieldset class="company-info-form">
-            <legend>Add Show</legend>
+            <legend>@ViewBag.Message</legend>
             @Html.HiddenFor(model => model.Id)
-           
                 <div class="control-group" id="asinumber-product">
                     @Html.LabelFor(model => model.Name, new { @class = "control-label" })
                     <div class="controls">@Html.EditorFor(model => model.Name) @Html.ValidationMessageFor(model => model.Name)</div>
@@ -42,10 +42,11 @@
     </div>
     <footer id="page-completion-navigation">
         <nav>
-            <p class="navigate-back"><a href="../Show/ShowList">Back to Show list</a></p>
+            
             <p class="next-step-button">
-                <input type="submit" class="command btn btn-primary" value="Save" />
-                 @Html.ActionLink(asi.asicentral.Resources.Resource.Cancel, "ShowList")
+                @{var submitText = (Model.Id == 0 ? "Save" : "Update");}
+                <input type="submit" class="command btn btn-primary" value="@submitText"/>
+                 <a href="/Show/ShowList">Cancel</a>
         </nav>
     </footer>
 }
