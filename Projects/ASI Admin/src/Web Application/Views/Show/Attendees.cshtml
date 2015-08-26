@@ -17,7 +17,7 @@
         @foreach (ShowEmployeeAttendee empAttendee in Model)
         {
             <tr>
-                <td>@empAttendee.Employee.FirstName @empAttendee.Employee.LastName </td>
+                <td><a href="/ShowCompany/EditEmployee?id=@empAttendee.Employee.Id">@empAttendee.Employee.FirstName @empAttendee.Employee.LastName</a></td>
                 <td>@empAttendee.Attendee.BoothNumber</td>
                 <td><a href="/ShowCompany/GetCompanyList?showId=@empAttendee.Attendee.Show.Id">@empAttendee.Attendee.Show.Name</a></td>
                 <td><a href="/ShowCompany/List/@empAttendee.Attendee.Company.Id">@empAttendee.Attendee.Company.Name</a></td>

@@ -312,12 +312,11 @@ namespace asi.asicentral.web.Controllers.Show
         }
 
         [HttpGet]
-        public ActionResult EditEmployee(int id, int companyId)
+        public ActionResult EditEmployee(int id)
         {
             CompanyInformation companyInfo = new CompanyInformation();
             if (id != 0)
             {
-                //address.State = asi.asicentral.util.HtmlHelper.GetStates();
                 ShowEmployee employeeModel = ObjectService.GetAll<ShowEmployee>().Where(item => item.Id == id).FirstOrDefault();
                 if (companyInfo != null)
                 {
@@ -326,7 +325,7 @@ namespace asi.asicentral.web.Controllers.Show
                     companyInfo.FirstName = employeeModel.FirstName;
                     companyInfo.LastName = employeeModel.LastName;
                     companyInfo.Email = employeeModel.Email;
-                    companyInfo.CompanyId = companyId;
+                    companyInfo.CompanyId = employeeModel.CompanyId.HasValue ? employeeModel.CompanyId.Value : 0;
                     companyInfo.HasAddress = employeeModel.Address != null;
                     
                     if (companyInfo.HasAddress)
@@ -361,7 +360,7 @@ namespace asi.asicentral.web.Controllers.Show
         }
 
         [HttpGet]
-        public ActionResult EditAddress(int id, int CompanyID)
+        public ActionResult EditAddress(int id, int CompanyId)
         {
             AddressModel address = new AddressModel();
             if (id != 0)
@@ -378,7 +377,7 @@ namespace asi.asicentral.web.Controllers.Show
                     address.Address2 = addressModel.Street2;
                     address.Zip = addressModel.Zip;
                     address.City = addressModel.City;
-                    address.CompanyId = CompanyID;
+                    address.CompanyId = CompanyId;
                     address.IsNonUSAddress = addressModel.Country != "USA";
                     if (address.IsNonUSAddress)
                     {
@@ -397,26 +396,42 @@ namespace asi.asicentral.web.Controllers.Show
             return View("../Show/Company/AddAddress", address);
         }
 
-        public ActionResult DeleteEmployee(int id, int CompanyID)
+        public ActionResult DeleteEmployee(int id)
         {
 
             ShowEmployee employee = ObjectService.GetAll<ShowEmployee>().Where(item => item.Id == id).FirstOrDefault();
+            var companyId = employee.CompanyId;
             ShowAddress addresss = ObjectService.GetAll<ShowAddress>().Where(item => item.Id == employee.AddressId).FirstOrDefault();
-
-            IList<ShowEmployeeAttendee> employeeAttendee = ObjectService.GetAll<ShowEmployeeAttendee>().Where(item => item.Employee.Id == employee.Id).ToList();
-            if (employeeAttendee.Any())
+            ShowEmployeeAttendee employeeAttendee = ObjectService.GetAll<ShowEmployeeAttendee>().Where(item => item.Employee.Id == employee.Id).FirstOrDefault();
+            if (employeeAttendee != null)
             {
-                //return Content("<script language='javascript' type='text/javascript'>alert('You cannot delete this employee as he/she is attending a show!');</script>");
+                ObjectService.Delete<ShowEmployeeAttendee>(employeeAttendee);
+                if (addresss != null)
+                {
+                    ObjectService.Delete<ShowAddress>(addresss);
+                    ObjectService.Delete<ShowEmployee>(employee);
+                }
+                else
+                {
+                    ObjectService.Delete<ShowEmployee>(employee);
+                }
             }
             else
             {
-                ObjectService.Delete<ShowAddress>(addresss);
-                ObjectService.Delete<ShowEmployee>(employee);
-                ObjectService.SaveChanges();
+                if (addresss != null)
+                {
+                    ObjectService.Delete<ShowAddress>(addresss);
+                    ObjectService.Delete<ShowEmployee>(employee);
+                }
+                else
+                {
+                    ObjectService.Delete<ShowEmployee>(employee);
+                }
             }
+            ObjectService.SaveChanges();
             return RedirectToAction("List", new
             {
-                ID = CompanyID
+                ID = companyId
             });
 
         }
