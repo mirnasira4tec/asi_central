@@ -17,7 +17,6 @@ namespace asi.asicentral.web.Controllers.Show
         [HttpGet]
         public ActionResult AddShow()
         {
-            ViewBag.Message = "Add Show";
             ShowModel show = new ShowModel();
             show.ShowType = GetShowType();
             show.StartDate = DateTime.UtcNow;
@@ -143,7 +142,6 @@ namespace asi.asicentral.web.Controllers.Show
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            ViewBag.Message = "Update Show";
             ShowModel show = new ShowModel();
             show.ShowType = GetShowType();
             if (id != 0)

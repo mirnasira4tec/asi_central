@@ -11,7 +11,7 @@
      <p class="navigate-back"><a href="/Show/ShowList">Back to Show list</a></p>
     <div id="tabbasic" class="basic-information tab-pane fade in active">
         <fieldset class="company-info-form">
-            <legend>@ViewBag.Message</legend>
+            <legend>@{var headerText = (Model.Id == 0 ? "Add Show" : "Update Show");}@headerText</legend>
             @Html.HiddenFor(model => model.Id)
                 <div class="control-group" id="asinumber-product">
                     @Html.LabelFor(model => model.Name, new { @class = "control-label" })
