@@ -31,6 +31,7 @@ namespace asi.asicentral.web.Controllers.Show
             if (ModelState.IsValid)
             {
                 ShowASI objShow = new ShowASI();
+                objShow.Id = show.Id;
                 objShow.Name = show.Name;
                 objShow.Address = show.Address;
                 objShow.ShowTypeId = show.ShowTypeId;
@@ -125,6 +126,31 @@ namespace asi.asicentral.web.Controllers.Show
                 }
             }
             return typeList;
+        }
+
+        [HttpGet]
+        public ActionResult Edit(int id)
+        {
+            ShowModel show = new ShowModel();
+            show.ShowType = GetShowType();
+            if (id != 0)
+            {
+                ShowASI ShowModel = ObjectService.GetAll<ShowASI>().Where(item => item.Id == id).FirstOrDefault();
+                if (show != null)
+                {
+                    show.Name = ShowModel.Name;
+                    show.Address = ShowModel.Address;
+                    show.StartDate = ShowModel.StartDate;
+                    show.EndDate = ShowModel.EndDate;
+                    show.ShowTypeId = ShowModel.ShowTypeId;
+                }
+            }
+            else
+            {
+                show.StartDate = DateTime.UtcNow;
+                show.EndDate = DateTime.UtcNow;
+            }
+            return View("../Show/AddShow", show);
         }
 
         public ActionResult Delete(int id)
