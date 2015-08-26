@@ -44,7 +44,7 @@
         <nav>
             
             <p class="next-step-button">
-                @{var submitText = (Model.Id == 0 ? "Save" : "Update");}
+                @{var submitText = (Model.Id == 0 ? "Add" : "Save");}
                 <input type="submit" class="command btn btn-primary" value="@submitText"/>
                  <a href="/Show/ShowList">Cancel</a>
         </nav>
