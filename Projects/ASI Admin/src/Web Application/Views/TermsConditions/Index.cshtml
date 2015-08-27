@@ -145,13 +145,16 @@
                     table.fnClearTable();
                     for (var i = 0; i < data.length; i++) {
                         var r = data[i];
-                        table.fnAddData(['<a class="edit" href="/TermsConditions/Edit?guid='+r.GUID+'"><i class="icon-pencil"></i></a>',
+                        var createDate = new Date(parseInt(r.CreateDate.substr(6))).toLocaleString(undefined, { second: "2-digit", minute: "2-digit", hour: "2-digit", year: 'numeric', day: "2-digit", month: "2-digit" }).replace(",", "");
+                        var dateAgreedOn = r.DateAgreedOn == null ? '' : new Date(parseInt(r.DateAgreedOn.substr(6))).toLocaleString(undefined, { second: "2-digit", minute: "2-digit", hour: "2-digit", year: 'numeric', day: "2-digit", month: "2-digit" }).replace(",", "");
+
+                        table.fnAddData(['<a class="edit" href="/TermsConditions/Edit?guid=' + r.GUID + '"><i class="icon-pencil"></i></a>',
                                          '<a id=' + r.TypeId + ' class="terms">' + r.TermsConditionsName + '</a>',
                                          r.CustomerName,
                                          r.CustomerEmail,
                                          r.CompanyName,
-                                         new Date(parseInt(r.CreateDate.substr(6))).toLocaleString().replace(",", ""),
-                                         r.DateAgreedOn == null ? '' : new Date(parseInt(r.DateAgreedOn.substr(6))).toLocaleString().replace(",", ""),
+                                         createDate,
+                                         dateAgreedOn,
                                          r.CreatedBy]);
                     }
                     table.fnDraw();
