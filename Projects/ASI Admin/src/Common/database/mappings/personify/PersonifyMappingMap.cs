@@ -15,45 +15,45 @@ namespace asi.asicentral.database.mappings.personify
 
             // Properties
             this.Property(t => t.Identifier)
-                .HasColumnName("Identifier")
+                .HasColumnName("IDENTIFIER")
                 .IsRequired();
 
             this.Property(t => t.StoreContext)
-                .HasColumnName("Store_Context");
+                .HasColumnName("STORE_CONTEXT");
 
             this.Property(t => t.StoreProduct)
-                .HasColumnName("Store_Product")
+                .HasColumnName("STORE_PRODUCT")
                 .IsRequired();
 
             this.Property(t => t.StoreOption)
-                .HasColumnName("Store_Option")
+                .HasColumnName("STORE_OPTION")
                 .IsRequired();
 
             this.Property(t => t.PersonifyProduct)
-                .HasColumnName("Pers_Product")
+                .HasColumnName("PRODUCT_ID")
                 .IsRequired();
 
             this.Property(t => t.PersonifyBundle)
-                .HasColumnName("Pers_Bundle");
+                .HasColumnName("BUNDLE");
 
             this.Property(t => t.PersonifyRateCode)
-                .HasColumnName("Pers_RateCode")
+                .HasColumnName("RATE_CODE")
                 .IsRequired();
 
             this.Property(t => t.PersonifyRateStructure)
-                .HasColumnName("Pers_RateStructure")
+                .HasColumnName("RATE_STRUCTURE")
                 .IsRequired();
             
             this.Property(t => t.CreateDateUTC)
-                .HasColumnName("CreateDateUTC")
+                .HasColumnName("CREATE_DATE_UTC")
                 .IsRequired();
 
             this.Property(t => t.UpdateDateUTC)
-                .HasColumnName("UpdateDateUTC")
+                .HasColumnName("UPDATE_DATE_UTC")
                 .IsRequired();
 
             this.Property(t => t.UpdateSource)
-                .HasColumnName("UpdateSource")
+                .HasColumnName("UPDATE_SOURCE")
                 .IsRequired();
         }
     }

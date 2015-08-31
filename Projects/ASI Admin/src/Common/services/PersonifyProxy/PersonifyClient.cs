@@ -101,8 +101,8 @@ namespace asi.asicentral.services.PersonifyProxy
                 BillAddressTypeCode = "CORPORATE",
                 RateStructure = mapping.PersonifyRateStructure,
                 
-                RateCode = "FP_ESPPMDLMORD14", //mapping.PersonifyRateCode, //"FY_DISTMEM", //,
-                BundleGroupName = "ESPP-MD-LM-ORD" //mapping.PersonifyBundle //"DIST_MEM" //
+                RateCode = mapping.PersonifyRateCode, //"FY_DISTMEM", //,"FP_ESPPMDLMORD14", //
+                BundleGroupName = mapping.PersonifyBundle //"DIST_MEM" //"ESPP-MD-LM-ORD" //
             };
 
             var bOutput = SvcClient.Post<ASICreateBundleOrderOutput>("ASICreateBundleOrder", bundleOrderInput);
@@ -141,7 +141,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 var linePriceInput = new ASIAddOrderLinewithPriceInput()
                 {
                     OrderNumber = bOutput.ASIBundleOrderNumber,
-                    ProductID = 160, //applicationFeeId, 
+                    ProductID = applicationFeeId, //160
                     Quantity = 1,
                     UserDefinedBoltOn = true,
                     RateStructure = "MEMBER",
