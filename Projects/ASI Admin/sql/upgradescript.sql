@@ -1,0 +1,1 @@
+ALTER TABLE FRM_Type ADD IsObsolete bit(1) NOT NULL DEFAULT b'0' AFTER IsASINumberFlag;
