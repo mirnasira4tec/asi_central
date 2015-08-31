@@ -1,5 +1,6 @@
 ﻿using asi.asicentral.interfaces;
 using asi.asicentral.model;
+using asi.asicentral.model.personify;
 using asi.asicentral.model.store;
 using asi.asicentral.PersonifyDataASI;
 using asi.asicentral.util.store;
@@ -75,6 +76,118 @@ namespace asi.asicentral.services.PersonifyProxy
             };
             var orderOutput = SvcClient.Post<CreateOrderOutput>("CreateOrder", createOrderInput);
             return orderOutput;
+        }
+
+        public static void CreateBundleOrder(StoreOrder storeOrder,
+                                            PersonifyMapping mapping,
+                                            CustomerInfo companyInfo,
+                                            CustomerInfo contactInfo,
+                                            AddressInfo billToAddress,
+                                            AddressInfo shipToAddress)
+        {
+            _log.Debug(string.Format("CreateBundleOrder - start: order {0} ", storeOrder));
+            DateTime startTime = DateTime.Now;
+
+            // create bundle
+            var bundleOrderInput = new ASICreateBundleOrderInput()
+            {
+                ShipMasterCustomerID = contactInfo.MasterCustomerId,
+                ShipSubCustomerID = 0,
+                ShipAddressID = (int)shipToAddress.CustomerAddressId,
+                ShipAddressTypeCode = "CORPORATE",
+                BillMasterCustomerID = companyInfo.MasterCustomerId,
+                BillSubCustomerID = 0,
+                BillAddressID = (int)billToAddress.CustomerAddressId,
+                BillAddressTypeCode = "CORPORATE",
+                RateStructure = mapping.PersonifyRateStructure,
+                
+                RateCode = mapping.PersonifyRateCode, //"FY_DISTMEM", //,"FP_ESPPMDLMORD14", //
+                BundleGroupName = mapping.PersonifyBundle //"DIST_MEM" //"ESPP-MD-LM-ORD" //
+            };
+
+            var bOutput = SvcClient.Post<ASICreateBundleOrderOutput>("ASICreateBundleOrder", bundleOrderInput);
+            storeOrder.BackendReference = bOutput.ASIBundleOrderNumber;
+
+            //payment schedule for bundle line items
+            var orderLineItems = SvcClient.Ctxt.OrderDetailInfos
+                                               .Where(c => c.OrderNumber == bOutput.ASIBundleOrderNumber && c.BaseTotalAmount > 0)
+                                               .ToList();
+            if (orderLineItems.Any())
+            {
+                var item = orderLineItems[0];
+                var iPaySchedual = new ASICreatePayScheduleInput()
+                {
+                    OrderNumber = item.OrderNumber,
+                    OrderLineNumber = (short)item.RelatedLineNumber,
+                    PayFrequency = "MONTHLY",
+                    PayStartDate = DateTime.Now,
+                    PayMethodCode = "CC",
+                    CCProfileId = Int32.Parse(storeOrder.CreditCard.ExternalReference),
+                    SyncPayScheduleFlag = true
+                };
+
+                SvcClient.Post<ASICreatePayScheduleOutput>("ASICreatePaySchedule", iPaySchedual);
+            }
+
+            //add membership application fee
+            long? applicationFeeId = null;
+            var memberType = storeOrder.OrderDetails[0].Product.Type;
+            if (!string.IsNullOrEmpty(memberType))
+                memberType = memberType.Trim().ToLower();
+
+            if (Helper.APPLICATION_FEE_IDS.Keys.Contains(memberType))
+            {
+                applicationFeeId = Helper.APPLICATION_FEE_IDS[memberType];
+                var linePriceInput = new ASIAddOrderLinewithPriceInput()
+                {
+                    OrderNumber = bOutput.ASIBundleOrderNumber,
+                    ProductID = applicationFeeId, //160
+                    Quantity = 1,
+                    UserDefinedBoltOn = true,
+                    RateStructure = "MEMBER",
+                    RateCode = "STD"
+                };
+
+                SvcClient.Post<OrderNumberParam>("ASIAddOrderLinewithPrice", linePriceInput);
+
+                //one time application fee payment
+                var appFeeLines =
+                    SvcClient.Ctxt.OrderDetailInfos.Where(c => c.OrderNumber == linePriceInput.OrderNumber && 
+                                                               c.ProductId == applicationFeeId).ToList();
+                if (appFeeLines.Any())
+                {
+                    var appFeeLineItem = appFeeLines[0];
+                    ASICustomerCreditCard creditCard = GetCreditCardByProfileId(companyInfo, storeOrder.CreditCard.ExternalReference);
+
+                    var payOrderInput = new PayOrderInput()
+                    {
+                        OrderNumber = linePriceInput.OrderNumber,
+                        OrderLineNumbers = appFeeLineItem.OrderLineNumber.ToString(),
+                        Amount = appFeeLineItem.ActualTotalAmount,
+                        AcceptPartialPayment = true,
+                        CurrencyCode = "USD",
+                        MasterCustomerId = companyInfo.MasterCustomerId,
+                        SubCustomerId = Convert.ToInt16(companyInfo.SubCustomerId),
+                        BillMasterCustomerId = companyInfo.MasterCustomerId,
+                        BillSubCustomerId = Convert.ToInt16(companyInfo.SubCustomerId),
+                        BillingAddressStreet = billToAddress.Address1,
+                        BillingAddressCity = billToAddress.City,
+                        BillingAddressState = billToAddress.State,
+                        BillingAddressCountryCode = billToAddress.CountryCode,
+                        BillingAddressPostalCode = billToAddress.PostalCode,
+                        UseCreditCardOnFile = true,
+                        CCProfileId = storeOrder.CreditCard.ExternalReference,
+                        CompanyNumber = creditCard.UserDefinedCompanyNumber
+                    };
+                    var resp = SvcClient.Post<PayOrderOutput>("PayOrder", payOrderInput);
+                    if (!(resp.Success ?? false))
+                    {
+                        throw new Exception(resp.ErrorMessage ?? "Error in paying order");
+                    }
+                }
+            }
+
+            _log.Debug(string.Format("CreateBundleOrder - end: order {0} ({1})", storeOrder, DateTime.Now.Subtract(startTime).TotalMilliseconds));
         }
 
         public static decimal GetOrderBalanceTotal(string orderNumber)
@@ -190,6 +303,12 @@ namespace asi.asicentral.services.PersonifyProxy
                 }).ToList();
             }
             return storeCompanyAddresses;
+        }
+
+        public static IEnumerable<AddressInfo> GetPersonifyAddresses(string masterCustomerId, int subCustomerId)
+        {
+            return SvcClient.Ctxt.AddressInfos.Where(a => a.MasterCustomerId == masterCustomerId && 
+                                                          a.SubCustomerId == subCustomerId).ToList();
         }
 
         private static IList<StoreAddressInfo> ProcessStoreAddresses(StoreCompany storeCompany, IEnumerable<LookSendMyAdCountryCode> countryCodes)
@@ -338,6 +457,30 @@ namespace asi.asicentral.services.PersonifyProxy
             var customers = SvcClient.Ctxt.ASICustomerInfos.Where(p => p.UserDefinedCustomerNumber == companyIdentifier).ToList();
             if (customers.Count == 0) return null;
             return GetCompanyInfo(customers[0]);
+        }
+
+        public static string GetCompanyStatus(string masterCustomerId, int subCustomerId)
+        {
+            string status = string.Empty;
+            var asiCustomers = SvcClient.Ctxt.ASICustomers.Where(c => c.MasterCustomerId == masterCustomerId && c.SubCustomerId == subCustomerId).ToList();
+            if( asiCustomers.Any() )
+                status = asiCustomers.ElementAt(0).UserDefinedMemberStatusString;
+
+            return status;
+        }
+
+        public static string GetCompanyAsiNumber(string masterCustomerId, int subCustomerId)
+        {
+            string asiNumber = string.Empty;
+            var asiCustomerInfos = SvcClient.Ctxt.ASICustomerInfos
+                                            .Where(c => c.MasterCustomerId == masterCustomerId && c.SubCustomerId == subCustomerId).ToList();
+
+            if (asiCustomerInfos.Any())
+            {
+                asiNumber = asiCustomerInfos.ElementAt(0).UserDefinedAsiNumber;
+            }
+
+            return asiNumber;
         }
 
         private static CompanyInformation GetCompanyInfo(ASICustomerInfo customerInfo)

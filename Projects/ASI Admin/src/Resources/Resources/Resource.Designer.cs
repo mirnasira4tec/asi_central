@@ -1150,6 +1150,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your ASI Number is.
+        /// </summary>
+        public static string ConfirmationASINumberMessage {
+            get {
+                return ResourceManager.GetString("ConfirmationASINumberMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Before you leave:.
         /// </summary>
         public static string ConfirmationBeforeYouLeave {
@@ -1177,11 +1186,11 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your order confirmation number (this is not your ASI Number) is.
+        ///   Looks up a localized string similar to Someone will contact you shortly with your ASI Number.
         /// </summary>
-        public static string ConfirmationConfirmationMessage {
+        public static string ConfirmationContactWithASINumberMessage {
             get {
-                return ResourceManager.GetString("ConfirmationConfirmationMessage", resourceCulture);
+                return ResourceManager.GetString("ConfirmationContactWithASINumberMessage", resourceCulture);
             }
         }
         
@@ -1227,6 +1236,24 @@ namespace asi.asicentral.Resources {
         public static string ConfirmationMethodsOfPrinting {
             get {
                 return ResourceManager.GetString("ConfirmationMethodsOfPrinting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your order has been created and it will be processed as soon as possible..
+        /// </summary>
+        public static string ConfirmationOrderCreatedMessage {
+            get {
+                return ResourceManager.GetString("ConfirmationOrderCreatedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your order confirmation number is.
+        /// </summary>
+        public static string ConfirmationOrderNumberMessage {
+            get {
+                return ResourceManager.GetString("ConfirmationOrderNumberMessage", resourceCulture);
             }
         }
         
