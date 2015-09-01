@@ -93,8 +93,8 @@ namespace asi.asicentral.web.models.show
         {
             IList<SelectListItem> selItems = new List<SelectListItem>();
             selItems.Add(new SelectListItem() { Selected = true, Text = "Select ", Value ="" });
-            selItems.Add(new SelectListItem() { Selected = false, Text = "Distributors", Value = "Distributors" });
-            selItems.Add(new SelectListItem() { Selected = false, Text = "Suppliers", Value = "Suppliers" });
+            selItems.Add(new SelectListItem() { Selected = false, Text = "Distributor", Value = "Distributor" });
+            selItems.Add(new SelectListItem() { Selected = false, Text = "Supplier", Value = "Supplier" });
             selItems.Add(new SelectListItem() { Selected = false, Text = "Non-Member", Value = "Non-Member" });
             return selItems;
         }

@@ -363,6 +363,7 @@
     <None Include="Properties\PublishProfiles\Local File.pubxml" />
     <None Include="Properties\PublishProfiles\Web App Deploy.pubxml" />
     <Content Include="Images\admin-asi-creditcard.gif" />
+    <Content Include="Images\admin-asi-show.gif" />
     <Content Include="Images\admin-asi-store.gif" />
     <Content Include="Images\admin-media-links.gif" />
     <Content Include="Images\admin-sgr.gif" />
@@ -496,7 +497,6 @@
     <Content Include="Views\Show\Shared\_Layout.cshtml" />
     <Content Include="Views\Show\ShowCompaniesList.cshtml" />
     <Content Include="Views\Show\AddCompanyAttendeesToShow.cshtml" />
-    <Content Include="Views\Show\Attendees.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

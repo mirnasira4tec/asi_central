@@ -27,6 +27,12 @@ namespace asi.asicentral.database.mappings.show
             this.Property(t => t.UpdateDate)
                 .HasColumnName("UpdateDateUTC");
 
+            this.Property(t => t.EPhone)
+               .HasColumnName("Phone");
+
+            this.Property(t => t.EPhoneAreaCode)
+              .HasColumnName("PhoneAreaCode");
+
              //Relationships
          
             HasOptional(t => t.Company)

@@ -17,6 +17,8 @@ namespace asi.asicentral.model.show
         public string LastName { get; set; }
         [Required(ErrorMessage = "Email is required")]
         public string Email { get; set; }
+        public string EPhoneAreaCode { get; set; }
+        public string EPhone { get; set; }
         public int? AddressId { get; set; }
         public int? CompanyId { get; set; }
         public virtual ShowAddress Address { get; set; }
