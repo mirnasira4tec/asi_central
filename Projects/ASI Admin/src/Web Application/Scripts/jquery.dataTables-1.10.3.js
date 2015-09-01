@@ -11767,7 +11767,7 @@
 		 *        ] } );
 		 *    } );
 		 */
-		"bSortable": true,
+		"bSortable": false,
 	
 	
 		/**
