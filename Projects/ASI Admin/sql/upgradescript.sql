@@ -1,3 +1,12 @@
+
+drop table [dbo].[EmployeeAttendee]
+drop table [dbo].[Attendee]
+drop table [dbo].[Show]
+drop table [dbo].[ShowType]
+drop table [dbo].[Employee]
+drop table [dbo].[CompanyAddress]
+drop table [dbo].[Address]
+drop table [dbo].[Company]
 --
 -- Table structure for table `Company`
 --
@@ -88,7 +97,9 @@ CREATE TABLE [dbo].[Employee](
 	[LastName] [nchar](10) NOT NULL,
 	[Email] [nvarchar](50) NOT NULL,
 	[CompanyId] [int] NOT NULL,
-	[AddressId] [int] NOT NULL,
+	[AddressId] [int] NULL,
+	[Phone] [nvarchar](50) NULL,
+	[PhoneAreaCode] [nchar](10) NULL,
 	[CreateDateUTC] [datetime] NOT NULL,
 	[UpdateDateUTC] [datetime] NOT NULL,
 	[UpdateSource] [nvarchar](100) NOT NULL DEFAULT 'Not Specified',
