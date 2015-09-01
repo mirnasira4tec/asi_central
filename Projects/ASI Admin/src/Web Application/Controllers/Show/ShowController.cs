@@ -34,7 +34,7 @@ namespace asi.asicentral.web.Controllers.Show
                 && item.StartDate == show.StartDate && item.EndDate == show.EndDate);
                 if (showName.Any())
                 {
-                    ModelState.AddModelError("Name", "Show name is already exist");
+                    ModelState.AddModelError("Name", "The show name already exists");
                     show.ShowType = GetShowType();
                     return View("../Show/AddShow", show);
                 }

@@ -27,8 +27,16 @@ namespace asi.asicentral.web.models.show
         [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string LastName { get; set; }
 
-        [Required]
+        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [RegularExpression(@"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*", ErrorMessage = "Invalid email")]
         public string Email { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "Phone")]
+        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidPhoneNumber", ErrorMessageResourceType = typeof(Resource))]
+        public string EPhone { get; set; }
+
+        [Display(ResourceType = typeof(Resource), Name = "PhoneAreaCode")]
+       [RegularExpression(@"^[2-9][0-9]\d$", ErrorMessageResourceName = "FieldInvalidPhoneAreaCode", ErrorMessageResourceType = typeof(Resource))]
+        public string EPhoneAreaCode { get; set; }
     }
 }

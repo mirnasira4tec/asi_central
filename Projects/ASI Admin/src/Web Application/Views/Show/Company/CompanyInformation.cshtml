@@ -15,65 +15,67 @@
     @Model.Name 
 </h3>
 <div class="clearfix">
-    <div class="well"><a class="btn btn-small" href="/ShowCompany/AddAddress?companyId= @Model.Id"><i class="icon-plus"></i>
-        Add Address
-        </a><table class="table table-bordered table-striped"">
+    <a href="/ShowCompany/AddAddress?companyId= @Model.Id" class="btn btn-primary">Add Address </a>
+    <br />
+    <br />
+        <table class="table table-bordered table-condensed table-striped">
   <thead>
     <tr>
-          <th>Edit</th>
-        <th>Delete</th>
-      <th>Street 1</th>
-      <th>State</th>
-      <th>Zip</th>
+       <th>&nbsp;</th>
+      <th>Address</th>
+      
     </tr>
   </thead>
   <tbody>
     @foreach (var address in @Model.CompanyAddress)
     { <tr>
-        <td><a rel="tooltip" data-placement="right" class="icon-pencil" href="/ShowCompany/EditAddress?id=@address.Address.Id&companyId=@address.CompanyId"></a></td>
-        <td><a rel="tooltip" data-placement="right" class="delete" href="/ShowCompany/DeleteAddress?id=@address.Address.Id&companyId=@address.CompanyId"><i class="icon-trash"></i></a></td>
-                <td>@address.Address.Street1</td>
-                <td>@address.Address.State </td>
-                <td>@address.Address.Zip</td>
+        <td>
+            <a rel="tooltip" data-placement="right" class="delete" href="/ShowCompany/DeleteAddress?id=@address.Address.Id&companyId=@address.CompanyId"><i class="icon-trash"></i></a>
+            <a rel="tooltip" data-placement="right" class="icon-pencil" href="/ShowCompany/EditAddress?id=@address.Address.Id&companyId=@address.CompanyId"></a>
+        </td>
+                <td>@address.Address.Street1 &nbsp; @address.Address.State &nbsp; @address.Address.Zip</td>
             </tr>
     
     }
   </tbody>
-</table></div>
-    <div class="well">
-        <a class="btn btn-small" href="/ShowCompany/AddEmployee?companyId= @Model.Id"><i class="icon-plus"></i>
-        Add Employee
-    </a><table class="table table-bordered table-striped">
+</table>
+     <a href="/ShowCompany/AddEmployee?companyId= @Model.Id" class="btn btn-primary">Add Employee </a>
+    <br />
+    <br />
+    <table class="table table-bordered table-condensed table-striped">
   <thead>
     <tr>
-        <th>Edit</th>
-        <th>Delete</th>
+      <th>&nbsp;</th>
       <th>First Name</th>
       <th>Last Name</th>
       <th>Email</th>
+      <th>Phone Number</th>
     </tr>
   </thead>
   <tbody>
     @foreach (var employee in @Model.Employee)
     {
-            <tr><td><a rel="tooltip" data-placement="right" class="icon-pencil" href="/ShowCompany/EditEmployee?id=@employee.Id"></a></td>
-                <td><a data-placement="right" class="delete" id="@employee.Id" href="/ShowCompany/DeleteEmployee?id=@employee.Id"><i class="icon-trash"></i></a></td>
+            <tr><td>
+                <a data-placement="right" class="delete" id="@employee.Id" href="/ShowCompany/DeleteEmployee?id=@employee.Id"><i class="icon-trash"></i></a>
+                <a rel="tooltip" data-placement="right" class="icon-pencil" href="/ShowCompany/EditEmployee?id=@employee.Id"></a>
+                </td>
                 <td>@employee.FirstName</td>
                 <td>@employee.LastName </td>
                 <td>@employee.Email</td>
+                <td>@employee.EPhoneAreaCode - @employee.EPhone</td>
             </tr>
-        }
+    }
   </tbody>
-</table></div>
+</table>
 </div>
 @section scripts {
     <script type="text/javascript">
-    $('a.delete').click(function () {
+        $('a.delete').click(function () {
             var confirms = confirm("Are you sure you want to delete?");
             if (confirms)
                 return true
             else
                 return false
-    });
+        });
         </script>
 }
