@@ -247,7 +247,7 @@ namespace asi.asicentral.web.Controllers.TermsConditions
             }
             catch (Exception) { }
 
-            return Json(termInstList);
+            return Json(termInstList.OrderByDescending(t => t.CreateDate));
         }
 
         public ActionResult OrderDetail(int id)
