@@ -74,15 +74,7 @@ namespace asi.asicentral.web.Controllers.Show
                     objCompany.Name = company.Name;
                     objCompany.WebUrl = company.Url;
                     objCompany.MemberType = company.MemberType;
-                    if (company.MemberType == "Non-Member")
-                    {
-                        objCompany.ASINumber = null;
-                    }
-                    else
-                    {
-                        objCompany.ASINumber = company.ASINumber;
-                    }
-
+                    objCompany.ASINumber = (company.MemberType == "Non-Member") ? null : company.ASINumber;
                     objCompany.UpdateSource = "ShowCompanyController - AddCompany";
                     objCompany = ShowHelper.CreateOrUpdateCompany(ObjectService, objCompany);
 
@@ -342,10 +334,7 @@ namespace asi.asicentral.web.Controllers.Show
                     if (ModelState.ContainsKey("Country")) ModelState["Country"].Errors.Clear();
                     if (ModelState.ContainsKey("City")) ModelState["City"].Errors.Clear();
                 }
-                if (employee.HasAddress && employee.IsNonUSAddress)
-                {
-                    if (ModelState.ContainsKey("State")) ModelState["State"].Errors.Clear();
-                }
+                if (employee.HasAddress && employee.IsNonUSAddress && ModelState.ContainsKey("State")) ModelState["State"].Errors.Clear();
                 if (ModelState.IsValid)
                 {
                     ShowAddress objAddress = null;
