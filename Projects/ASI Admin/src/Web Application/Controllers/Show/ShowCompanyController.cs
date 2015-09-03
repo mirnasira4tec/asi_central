@@ -25,16 +25,24 @@ namespace asi.asicentral.web.Controllers.Show
             var company = new CompanyModel();
             IQueryable<ShowCompany> companyList = ObjectService.GetAll<ShowCompany>(true);
             if (string.IsNullOrEmpty(companyTab)) companyTab = CompanyModel.TAB_COMPANYNAME;
-            if (companyTab == CompanyModel.TAB_COMPANYNAME && !string.IsNullOrEmpty(companyName))
+            if (!string.IsNullOrEmpty(MemberType) && !string.IsNullOrEmpty(companyName))
             {
-                companyList = companyList.Where(item => item.Name != null
-                 && item.Name.Contains(companyName));
+                companyList = companyList.Where(item => (item.Name != null
+                 && item.Name.Contains(companyName) && item.MemberType != null
+                 && item.MemberType.Contains(MemberType)));
             }
-            else if (companyTab == CompanyModel.TAB_MEMBERTYPE && !string.IsNullOrEmpty(MemberType))
+
+            else if (!string.IsNullOrEmpty(MemberType))
             {
                 companyList = companyList.Where(item => item.MemberType != null
                  && item.MemberType.Contains(MemberType));
             }
+            else if (!string.IsNullOrEmpty(companyName))
+            {
+                companyList = companyList.Where(item => item.Name != null
+                 && item.Name.Contains(companyName));
+            }
+
             company.CompanyTab = companyTab;
             company.company = companyList.OrderByDescending(form => form.CreateDate).ToList();
             return View("../Show/Company/CompanyList", company);
@@ -51,6 +59,7 @@ namespace asi.asicentral.web.Controllers.Show
         [ValidateAntiForgeryToken]
         public virtual ActionResult AddCompany(CompanyModel company)
         {
+            if (company.IsNonUSAddress && ModelState.ContainsKey("State")) ModelState["State"].Errors.Clear();
             if (ModelState.IsValid)
             {
                 try
@@ -58,15 +67,17 @@ namespace asi.asicentral.web.Controllers.Show
                     ShowCompany objCompany = new ShowCompany();
                     ShowAddress objAddress = new ShowAddress();
                     ShowCompanyAddress objCompanyAddress = new ShowCompanyAddress();
+                    objCompany.Id = company.Id;
                     objCompany.Name = company.Name;
                     objCompany.WebUrl = company.Url;
                     objCompany.MemberType = company.MemberType;
-                    objCompany.ASINumber = company.ASINumber;
-                    objCompany.UpdateSource = "ShowCompanyController - Add";
+                    objCompany.ASINumber = (company.MemberType == "Non-Member") ? null : company.ASINumber;
+                    objCompany.UpdateSource = "ShowCompanyController - AddCompany";
                     objCompany = ShowHelper.CreateOrUpdateCompany(ObjectService, objCompany);
 
+                    objAddress.Id = company.AddressId;
                     objAddress.Phone = company.Phone;
-                    objAddress.PhoneAreaCode = company.PhoneAreaCode;
+                    objAddress.PhoneAreaCode = company.PhoneAreaCode.Trim();
                     objAddress.FaxAreaCode = company.FaxAreaCode;
                     objAddress.Fax = company.Fax;
                     objAddress.Street1 = company.Address1;
@@ -75,17 +86,25 @@ namespace asi.asicentral.web.Controllers.Show
                     objAddress.State = company.IsNonUSAddress ? company.InternationalState : company.State;
                     objAddress.Country = company.IsNonUSAddress ? company.Country : "USA";
                     objAddress.City = company.City;
-                    objAddress.UpdateSource = "ShowCompanyController - Add";
+                    objAddress.UpdateSource = "ShowCompanyController - AddCompany";
                     objAddress = ShowHelper.CreateOrUpdateAddress(ObjectService, objAddress);
 
-                    objCompanyAddress.CompanyId = objCompany.Id;
-                    objCompanyAddress.Address = objAddress;
-                    objCompanyAddress.UpdateSource = "ShowCompanyController - Add";
-                    objCompanyAddress = ShowHelper.CreateOrUpdateCompanyAddress(ObjectService, objCompanyAddress);
-
-                    ObjectService.Add<ShowCompany>(objCompany);
-                    ObjectService.Add<ShowAddress>(objAddress);
-                    ObjectService.Add<ShowCompanyAddress>(objCompanyAddress);
+                    ShowCompanyAddress companyAddress = ObjectService.GetAll<ShowCompanyAddress>().Where(item => item.CompanyId == company.Id && item.Address.Id == company.AddressId).FirstOrDefault();
+                    if (companyAddress != null)
+                    {
+                        objCompanyAddress.Id = companyAddress.Id;
+                        objCompanyAddress.CompanyId = companyAddress.CompanyId;
+                        objCompanyAddress.Address = companyAddress.Address;
+                        objCompanyAddress.UpdateSource = "ShowCompanyController - AddCompany";
+                        objCompanyAddress = ShowHelper.CreateOrUpdateCompanyAddress(ObjectService, objCompanyAddress);
+                    }
+                    else
+                    {
+                        objCompanyAddress.CompanyId = objCompany.Id;
+                        objCompanyAddress.Address = objAddress;
+                        objCompanyAddress.UpdateSource = "ShowCompanyController - AddAddress";
+                        objCompanyAddress = ShowHelper.CreateOrUpdateCompanyAddress(ObjectService, objCompanyAddress);
+                    }
                     ObjectService.SaveChanges();
                 }
                 catch (Exception ex)
@@ -98,6 +117,64 @@ namespace asi.asicentral.web.Controllers.Show
             {
                 return View("../Show/Company/AddCompany", company);
             }
+        }
+
+        [HttpGet]
+        public ActionResult EditCompany(int id)
+        {
+            CompanyModel company = new CompanyModel();
+            AddressModel address = new AddressModel();
+
+            if (id != 0)
+            {
+                ShowCompany CompanyModel = ObjectService.GetAll<ShowCompany>().Where(item => item.Id == id).FirstOrDefault();
+                if (company != null)
+                {
+                    company.Id = id;
+                    company.Name = CompanyModel.Name;
+                    company.MemberType = CompanyModel.MemberType;
+                    if (CompanyModel.MemberType == "Non-Member")
+                    {
+                        company.ASINumber = null;
+                    }
+                    else
+                    {
+                        company.ASINumber = CompanyModel.ASINumber;
+                    }
+                    company.Url = CompanyModel.WebUrl;
+                    ShowCompanyAddress companyAddress = ObjectService.GetAll<ShowCompanyAddress>().Where(item => item.CompanyId == id).FirstOrDefault();
+                    if (companyAddress != null)
+                    {
+                        ShowAddress addressModel = ObjectService.GetAll<ShowAddress>().Where(item => item.Id == companyAddress.Address.Id).FirstOrDefault();
+                        if (addressModel != null)
+                        {
+                            company.AddressId = companyAddress.Address.Id;
+                            company.Phone = addressModel.Phone;
+                            company.PhoneAreaCode = addressModel.PhoneAreaCode.Trim();
+                            company.Fax = addressModel.Fax;
+                            company.FaxAreaCode = addressModel.FaxAreaCode;
+                            company.Address1 = addressModel.Street1;
+                            company.Address2 = addressModel.Street2;
+                            company.Zip = addressModel.Zip;
+                            company.City = addressModel.City;
+                            company.IsNonUSAddress = addressModel.Country != "USA";
+                            if (company.IsNonUSAddress)
+                            {
+                                company.IsNonUSAddress = true;
+                                company.InternationalState = addressModel.State;
+                                company.State = addressModel.State;
+                                company.Country = addressModel.Country;
+                            }
+                            else
+                            {
+                                company.State = addressModel.State;
+                                company.Country = "USA";
+                            }
+                        }
+                    }
+                }
+            }
+            return View("../Show/Company/AddCompany", company);
         }
 
         public ActionResult Delete(int id)
@@ -156,13 +233,17 @@ namespace asi.asicentral.web.Controllers.Show
         {
             try
             {
+                if (Address.IsNonUSAddress)
+                {
+                    if (ModelState.ContainsKey("State")) ModelState["State"].Errors.Clear();
+                }
                 if (ModelState.IsValid)
                 {
                     ShowAddress objAddress = new ShowAddress();
                     ShowCompanyAddress objCompanyAddress = new ShowCompanyAddress();
                     objAddress.Id = Address.AdreessId;
                     objAddress.Phone = Address.Phone;
-                    objAddress.PhoneAreaCode = Address.PhoneAreaCode;
+                    objAddress.PhoneAreaCode = Address.PhoneAreaCode.Trim();
                     objAddress.FaxAreaCode = Address.FaxAreaCode;
                     objAddress.Fax = Address.Fax;
                     objAddress.Street1 = Address.Address1;
@@ -180,14 +261,14 @@ namespace asi.asicentral.web.Controllers.Show
                         objCompanyAddress.Id = companyAddress.Id;
                         objCompanyAddress.CompanyId = companyAddress.CompanyId;
                         objCompanyAddress.Address = companyAddress.Address;
-                        objCompanyAddress.UpdateSource = "ShowCompanyController - Add";
+                        objCompanyAddress.UpdateSource = "ShowCompanyController - AddAddress";
                         objCompanyAddress = ShowHelper.CreateOrUpdateCompanyAddress(ObjectService, objCompanyAddress);
                     }
                     else
                     {
                         objCompanyAddress.CompanyId = Address.CompanyId;
                         objCompanyAddress.Address = objAddress;
-                        objCompanyAddress.UpdateSource = "ShowCompanyController - Add";
+                        objCompanyAddress.UpdateSource = "ShowCompanyController - AddAddress";
                         objCompanyAddress = ShowHelper.CreateOrUpdateCompanyAddress(ObjectService, objCompanyAddress);
                     }
                     ObjectService.SaveChanges();
@@ -250,6 +331,7 @@ namespace asi.asicentral.web.Controllers.Show
                     if (ModelState.ContainsKey("Country")) ModelState["Country"].Errors.Clear();
                     if (ModelState.ContainsKey("City")) ModelState["City"].Errors.Clear();
                 }
+                if (employee.HasAddress && employee.IsNonUSAddress && ModelState.ContainsKey("State")) ModelState["State"].Errors.Clear();
                 if (ModelState.IsValid)
                 {
                     ShowAddress objAddress = null;
@@ -258,7 +340,7 @@ namespace asi.asicentral.web.Controllers.Show
                         objAddress = new ShowAddress();
                         objAddress.Id = employee.AdreessId;
                         objAddress.Phone = employee.Phone;
-                        objAddress.PhoneAreaCode = employee.PhoneAreaCode;
+                        objAddress.PhoneAreaCode = employee.PhoneAreaCode.Trim();
                         objAddress.FaxAreaCode = employee.FaxAreaCode;
                         objAddress.Fax = employee.Fax;
                         objAddress.Street1 = employee.Address1;
@@ -315,7 +397,7 @@ namespace asi.asicentral.web.Controllers.Show
                         companyInfo.IsNonUSAddress = employeeModel.Address.Country != "USA";
                         companyInfo.HasAddress = true;
                         companyInfo.Phone = employeeModel.Address.Phone;
-                        companyInfo.PhoneAreaCode = employeeModel.Address.PhoneAreaCode;
+                        companyInfo.PhoneAreaCode = employeeModel.Address.PhoneAreaCode.Trim();
                         companyInfo.FaxAreaCode = employeeModel.Address.FaxAreaCode;
                         companyInfo.Fax = employeeModel.Address.Fax;
                         companyInfo.Address1 = employeeModel.Address.Street1;
@@ -350,7 +432,7 @@ namespace asi.asicentral.web.Controllers.Show
                 {
                     address.AdreessId = addressModel.Id;
                     address.Phone = addressModel.Phone;
-                    address.PhoneAreaCode = addressModel.PhoneAreaCode;
+                    address.PhoneAreaCode = addressModel.PhoneAreaCode.Trim();
                     address.Fax = addressModel.Fax;
                     address.FaxAreaCode = addressModel.FaxAreaCode;
                     address.Address1 = addressModel.Street1;
@@ -446,31 +528,26 @@ namespace asi.asicentral.web.Controllers.Show
                 return Json(false);
             }
         }
-
         [HttpGet]
-        public ActionResult GetCompanyList(int showId)
+        public ActionResult GetAttendeeCompany(int? showId, String companyTab, string companyName, string MemberType)
         {
             ShowCompaniesModel showCompanies = new ShowCompaniesModel();
-            IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>(true).Where(attendee => attendee.ShowId == showId).ToList();
-            foreach (ShowAttendee attendee in existingAttendees)
+            if (string.IsNullOrEmpty(companyTab)) companyTab = ShowCompaniesModel.TAB_COMPANYNAME;
+            showCompanies.CompanyTab = companyTab;
+            IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(attendee => (attendee.ShowId == showId && (attendee.IsAttending == true || attendee.IsExhibitDay == true))).ToList();
+            if (existingAttendees.Any())
             {
-                showCompanies.Show = attendee.Show;
-                showCompanies.ShowAttendees.Add(attendee);
-            } if (showCompanies.Show == null) showCompanies.Show = ObjectService.GetAll<ShowASI>(true).SingleOrDefault(show => show.Id == showId);
-            IList<ShowCompany> companyList = ObjectService.GetAll<ShowCompany>(true).ToList();
-            foreach (ShowCompany company in companyList)
-            {
-                if (showCompanies.ShowAttendees.Where(item => item.CompanyId == company.Id).Count() == 0)
+                foreach (ShowAttendee attendee in existingAttendees)
                 {
-                    ShowAttendee attendee = new ShowAttendee();
-                    attendee.Company = company;
+                    showCompanies.Show = attendee.Show;
                     showCompanies.ShowAttendees.Add(attendee);
                 }
             }
+            showCompanies.ShowId = showId.HasValue ? showId.Value : 0; 
             return View("../Show/ShowCompaniesList", showCompanies);
         }
 
-        public ActionResult EmployeeList(string FirstName, string LastName, string Email)
+        public ActionResult EmployeeList()
         {
             var employee = new CompanyInformation();
             IQueryable<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>(true);
@@ -520,6 +597,67 @@ namespace asi.asicentral.web.Controllers.Show
             employeeAttendance.Employee = showEmployee;
             employeeAttendance.IsAttending = isAttending;
             return employeeAttendance;
+        }
+
+        [HttpGet]
+        public virtual ActionResult AddCompaniesToShow(int? showId, String companyTab, string companyName, string MemberType)
+        {
+            ShowCompaniesModel showCompanies = new ShowCompaniesModel();
+            IList<ShowCompany> list = null;
+            if (string.IsNullOrEmpty(companyTab)) companyTab = ShowCompaniesModel.TAB_COMPANYNAME;
+            showCompanies.CompanyTab = companyTab;
+            IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => ((item.IsAttending == true || item.IsExhibitDay == true)  && item.ShowId == showId)).ToList();
+            if (existingAttendees.Any())
+            {
+                IList<ShowCompany> companyList = ObjectService.GetAll<ShowCompany>(true).ToList();
+                list = companyList.Where(p => !existingAttendees.Any(p2 => p2.CompanyId == p.Id)).ToList();
+            }
+            else
+            {
+                list = ObjectService.GetAll<ShowCompany>(true).ToList();
+            }
+            if (!string.IsNullOrEmpty(MemberType) && !string.IsNullOrEmpty(companyName))
+            {
+                list = list.Where(item => (item.Name != null
+                && item.Name.Contains(companyName) && item.MemberType != null
+                && item.MemberType.Contains(MemberType))).ToList();
+            }
+            else if (!string.IsNullOrEmpty(MemberType))
+            {
+                list = list.Where(item => item.MemberType != null
+                 && item.MemberType.Contains(MemberType)).ToList();
+            }
+            else if (!string.IsNullOrEmpty(companyName))
+            {
+                list = list.Where(item => item.Name != null
+                 && item.Name.Contains(companyName)).ToList();
+            }
+            showCompanies.ShowCompanies = list;
+            showCompanies.ShowId = showId.HasValue ? showId.Value : 0; 
+
+
+            return View("../Show/AddCompaniesToShow", showCompanies);
+        }
+
+
+        public ActionResult DeleteAttendeeCompany(int id, int showId)
+        {
+            ShowAttendee attendee = ObjectService.GetAll<ShowAttendee>().Where(item => item.Id == id).FirstOrDefault();
+            if (attendee != null)
+            {
+                int employeeAttendeeCount = attendee.EmployeeAttendees.Count();
+
+                for (int i = employeeAttendeeCount; i > 0; i--)
+                {
+                    ObjectService.Delete<ShowEmployeeAttendee>(attendee.EmployeeAttendees.ElementAt(i - 1));
+                }
+                ObjectService.Delete<ShowAttendee>(attendee);
+                ObjectService.SaveChanges();
+            }
+            return RedirectToAction("GetAttendeeCompany", new
+            {
+                showId = showId
+            });
         }
     }
 }

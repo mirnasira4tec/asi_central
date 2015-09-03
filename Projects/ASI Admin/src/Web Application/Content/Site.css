@@ -528,3 +528,6 @@ clear:both;
 .bg_none {
 background:none !important;
 }
+.select-company {
+    padding-bottom: 30px; background: #fff;
+}

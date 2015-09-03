@@ -48,7 +48,7 @@
                     @Html.TextBoxFor(model => model.Phone, new { @class = "input-mid" })
                 </div>
 
-                <div class="col-sm-3 error_message">
+                <div class="col-sm-3 error_message controls">
                     @Html.ValidationMessageFor(model => model.PhoneAreaCode)
                     @Html.ValidationMessageFor(model => model.Phone)
                 </div>
@@ -62,7 +62,7 @@
                     <span class="helper-text">(optional)</span>
                 </div>
 
-                <div class="col-sm-3 error_message">
+                <div class="col-sm-3 error_message controls">
                     @Html.ValidationMessageFor(model => model.FaxAreaCode)
                     @Html.ValidationMessageFor(model => model.Fax)
                 </div>

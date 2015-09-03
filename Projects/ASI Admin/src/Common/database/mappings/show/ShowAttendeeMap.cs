@@ -13,7 +13,7 @@ namespace asi.asicentral.database.mappings.show
     {
         public ShowAttendeeMap()
         {
-            this.ToTable("Attendee");
+            this.ToTable("ATT_Attendee");
             this.HasKey(t => t.Id);
 
             //Properties

@@ -1,0 +1,73 @@
+﻿@using asi.asicentral.web.models.show
+@using asi.asicentral.model.show
+@model ShowCompaniesModel
+@{
+    Layout = "~/Views/Show/Shared/_Layout.cshtml";
+}
+<div class="tabbable tabs-below small">
+    <h5>Search by</h5>
+ 
+    <ul id="formtab" class="nav nav-tabs">
+        <li class="@(Model.CompanyTab == ShowCompaniesModel.TAB_COMPANYNAME ? "active" : string.Empty)"><a href="#@ShowCompaniesModel.TAB_COMPANYNAME">Company</a></li>
+    </ul>
+    <div class="tab-content clearfix" id="formtab-content">
+        <div class="tab-pane @(Model.CompanyTab == ShowCompaniesModel.TAB_COMPANYNAME ? "active" : string.Empty)" id="@ShowCompaniesModel.TAB_COMPANYNAME">
+            <div class="well">
+                @using (Html.BeginForm("AddCompaniesToShow", "../ShowCompany/AddCompaniesToShow", FormMethod.Get, new { @class = "form-inline", showId = @Model.ShowId }))
+                {     
+                       <input name="showId" type="hidden" id="showId" value ="@Model.ShowId" />
+                    <div class="formField span5">
+                        <label for="MemberType">Member Type</label>
+                        @Html.DropDownListFor(model => model.MemberType, new SelectList(asi.asicentral.web.models.show.CompanyModel.GetMemberTypes(), "Value", "Text"), new { name = "MemberType", value = "@Model.MemberType" })
+                    </div>           
+                    <div class="formField span4">
+                        <label for="companyName">Name</label>
+                        <input name="companyName" type="text" id="companyName" />
+                    </div>
+                    
+                    <div class="formField">
+                        <input type="hidden" value="@ShowCompaniesModel.TAB_COMPANYNAME" name="companyTab" /><input type="submit" value="Search" class="btn" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.ShowId)
+    <table class="table table-bordered table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>ASI Number</th>
+                <th>Type</th>
+                <th>Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ShowCompany showCompany in Model.ShowCompanies)
+            {
+                <tr>
+                    
+                    <td style="width: 85px">
+                   <a href="/ShowCompany/GetCompanyDetailsForShow?companyId=@showCompany.Id&showId=@Model.ShowId">@showCompany.Name</a> 
+                    </td>
+                    <td style="width: 85px">@showCompany.ASINumber</td>
+                    <td style="width: 85px">@showCompany.MemberType </td>
+                    @if(@showCompany.CompanyAddresses.Count() > 0)
+                    {
+                        <td style="width: 185px">
+                    @foreach (var address in showCompany.CompanyAddresses)
+                    {
+                     @address.Address.City<span>&nbsp;</span>@address.Address.Street1<span>&nbsp;</span>@address.Address.State<br />
+                        
+                    }
+                    </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}

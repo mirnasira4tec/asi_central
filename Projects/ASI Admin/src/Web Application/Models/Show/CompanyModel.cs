@@ -15,8 +15,9 @@ namespace asi.asicentral.web.models.show
 
         public int Id { get; set; }
 
+        public int AddressId { get; set; }
+
         public const String TAB_COMPANYNAME = "companyName";
-        public const String TAB_MEMBERTYPE = "memberType";
         public String CompanyTab { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "IsNonUSAddress")]

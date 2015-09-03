@@ -14,7 +14,6 @@ namespace asi.asicentral.web.models.show
         public int Id { get; set; }
 
         public const String TAB_SHOWTYPE = "showType";
-        public const String TAB_SHOWYEAR = "ShowYear";
         public String ShowTab { get; set; }
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public int? ShowTypeId { get; set; }

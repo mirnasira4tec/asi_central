@@ -11,38 +11,30 @@
 <div class="tabbable tabs-below small">
     <h5>Search by</h5>
     <ul id="formtab" class="nav nav-tabs">
-        <li class="@(Model.ShowTab == ShowModel.TAB_SHOWTYPE ? "active" : string.Empty)"><a href="#@ShowModel.TAB_SHOWTYPE">Type</a></li>
-        <li class="@(Model.ShowTab == ShowModel.TAB_SHOWYEAR ? "active" : string.Empty)"><a href="#@ShowModel.TAB_SHOWYEAR">Year</a></li>
+        <li class="@(Model.ShowTab == ShowModel.TAB_SHOWTYPE ? "active" : string.Empty)"><a href="#@ShowModel.TAB_SHOWTYPE">Show</a></li>
     </ul>
     <div class="tab-content" id="formtab-content">
         <div class="tab-pane @(Model.ShowTab == ShowModel.TAB_SHOWTYPE ? "active" : string.Empty)" id="@ShowModel.TAB_SHOWTYPE">
             <div class="well">
                 @using (Html.BeginForm("ShowList", "/Show/ShowList", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @ShowModel.TAB_SHOWTYPE }))
                 {                
-                    <div class="formField">
+                    <div class="formField span5">
                         <label for="showType">Show Type</label>
                         @Html.DropDownListFor(model => model.ShowTypeId, Model.ShowType, "Select", new { name = "ShowTypeId", value = "@Model.ShowTypeId" })
                     </div>
+                    
+                    <div class="formField span4">
+                        <label for="year">Year</label>
+                        <input name="year" type="text" id="year" value="@Model.year" />
+                    </div>
+                
                     <div class="formField">
                         <input type="hidden" value="@ShowModel.TAB_SHOWTYPE" name="showTab" /><input type="submit" value="Search" class="btn" />
                     </div>
                 }
             </div>
         </div>
-        <div class="tab-pane @(Model.ShowTab == ShowModel.TAB_SHOWYEAR ? "active" : string.Empty)" id="@ShowModel.TAB_SHOWYEAR">
-            <div class="well">
-                @using (Html.BeginForm("ShowList", "/Show/ShowList", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @ShowModel.TAB_SHOWYEAR }))
-                {                
-                    <div class="formField">
-                        <label for="year">Year</label>
-                        <input name="year" type="text" id="year" value="@Model.year" />
-                    </div>
-                    <div class="formField">
-                        <input type="hidden" value="@ShowModel.TAB_SHOWYEAR" name="showTab" /><input type="submit" value="Search" class="btn" />
-                    </div>
-                }
-            </div>
-        </div>
+        
     </div>
 </div>
 @using (Html.BeginForm())
@@ -67,7 +59,7 @@
                 <td><a class="delete" id="@show.Id" href="/Show/Delete?id=@show.Id"><i class="icon-trash"></i></a>
                     <a rel="tooltip" data-placement="right" class="icon-pencil" href="@Url.Action("Edit", "Show", new { Id = @show.Id })"></a>
                 </td>
-                <td><a href="/ShowCompany/GetCompanyList?showId=@show.Id">@show.Name</a></td>
+                <td><a href="/ShowCompany/GetAttendeeCompany?showId=@show.Id">@show.Name</a></td>
                 <td>
                     @show.ShowType.Type
                 </td>
