@@ -15,7 +15,7 @@
     @Model.Name 
 </h3>
 <div class="clearfix">
-    <a href="/ShowCompany/AddAddress?companyId= @Model.Id" class="btn btn-primary">Add Address </a>
+    <a href="/ShowCompany/AddAddress?companyId=@Model.Id" class="btn btn-primary">Add Address </a>
     <br />
     <br />
         <table class="table table-bordered table-condensed table-striped">
@@ -33,13 +33,13 @@
             <a rel="tooltip" data-placement="right" class="delete" href="/ShowCompany/DeleteAddress?id=@address.Address.Id&companyId=@address.CompanyId"><i class="icon-trash"></i></a>
             <a rel="tooltip" data-placement="right" class="icon-pencil" href="/ShowCompany/EditAddress?id=@address.Address.Id&companyId=@address.CompanyId"></a>
         </td>
-                <td>@address.Address.Street1 &nbsp; @address.Address.State &nbsp; @address.Address.Zip</td>
+                <td>@address.Address.City &nbsp; @address.Address.Street1 &nbsp; @address.Address.State</td>
             </tr>
     
     }
   </tbody>
 </table>
-     <a href="/ShowCompany/AddEmployee?companyId= @Model.Id" class="btn btn-primary">Add Employee </a>
+     <a href="/ShowCompany/AddEmployee?companyId=@Model.Id" class="btn btn-primary">Add Employee </a>
     <br />
     <br />
     <table class="table table-bordered table-condensed table-striped">

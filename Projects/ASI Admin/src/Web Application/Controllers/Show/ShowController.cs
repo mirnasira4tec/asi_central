@@ -97,7 +97,7 @@ namespace asi.asicentral.web.Controllers.Show
                 }
                 ObjectService.SaveChanges();
             }
-            return new RedirectResult("/ShowCompany/GetCompanyList?showId=" + attendeeInfo.Show.Id);
+            return new RedirectResult("/ShowCompany/GetAttendeeCompany?showId=" + attendeeInfo.Show.Id);
         }
 
         public ActionResult ShowList(String showTab, int? ShowTypeId, int? year)
@@ -106,17 +106,17 @@ namespace asi.asicentral.web.Controllers.Show
             show.ShowType = GetShowType();
             IQueryable<ShowASI> showList = ObjectService.GetAll<ShowASI>(true);
             if (string.IsNullOrEmpty(showTab)) showTab = ShowModel.TAB_SHOWTYPE;
-            if (showTab == ShowModel.TAB_SHOWTYPE && ShowTypeId != null)
+            if (ShowTypeId != null && year != null)
             {
-                showList = showList.Where(item => item.ShowTypeId != null
-                && item.ShowTypeId == ShowTypeId);
+                showList = showList.Where(item => (item.StartDate.Year != null
+                && item.StartDate.Year == year && item.ShowTypeId != null && item.ShowTypeId == ShowTypeId));
             }
-            else if (showTab == ShowModel.TAB_SHOWYEAR && year != null)
+            else if (ShowTypeId != null || year != null )
             {
-                showList = showList.Where(item => item.StartDate.Year != null
-                 && item.StartDate.Year == year);
+                showList = showList.Where(item => (item.ShowTypeId != null 
+                && item.ShowTypeId == ShowTypeId) || ( item.StartDate.Year != null 
+                 && item.StartDate.Year == year));
             }
-
             show.ShowTab = showTab;
             show.Show = showList.OrderByDescending(form => form.CreateDate).ToList();
             return View("../Show/ShowList", show);

@@ -14,7 +14,7 @@ namespace asi.asicentral.database.mappings.show
     {
         public ShowTypeMap()
         {
-            this.ToTable("ShowType");
+            this.ToTable("ATT_ShowType");
             this.HasKey(t => t.Id);
 
             //Properties

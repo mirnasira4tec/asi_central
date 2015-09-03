@@ -13,7 +13,7 @@ namespace asi.asicentral.database.mappings.show
     {
         public ShowCompanyAddressMap()
         {
-            this.ToTable("CompanyAddress");
+            this.ToTable("ATT_CompanyAddress");
             this.HasKey(t => t.Id);
 
             //Properties
