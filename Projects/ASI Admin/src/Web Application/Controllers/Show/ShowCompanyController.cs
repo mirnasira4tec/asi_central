@@ -59,10 +59,7 @@ namespace asi.asicentral.web.Controllers.Show
         [ValidateAntiForgeryToken]
         public virtual ActionResult AddCompany(CompanyModel company)
         {
-            if (company.IsNonUSAddress)
-            {
-                if (ModelState.ContainsKey("State")) ModelState["State"].Errors.Clear();
-            }
+            if (company.IsNonUSAddress && ModelState.ContainsKey("State")) ModelState["State"].Errors.Clear();
             if (ModelState.IsValid)
             {
                 try
