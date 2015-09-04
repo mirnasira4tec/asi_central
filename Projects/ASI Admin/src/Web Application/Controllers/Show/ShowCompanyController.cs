@@ -495,7 +495,7 @@ namespace asi.asicentral.web.Controllers.Show
             });
         }
 
-        [HttpPost]
+     
         public ActionResult IsValidEmail(string Email)
         {
             IList<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>().Where(item => item.Email != null && item.Email.Equals(Email)).ToList();
@@ -509,7 +509,7 @@ namespace asi.asicentral.web.Controllers.Show
             }
         }
 
-        [HttpPost]
+      
         public ActionResult IsValidCompany(string name)
         {
             var company = new CompanyModel();
