@@ -4,8 +4,7 @@
 @model asi.asicentral.web.store.interfaces.IMembershipModel
 <div>
     @{
-        ViewBag.IsBackEnd = IsBackEnd();
-        ViewBag.MatchingCompanyIds = GetMatchingCompanyIds();
+        var isBackEnd = IsBackEnd();
     }
 
     @if (!string.IsNullOrEmpty(Model.ASINumber))
@@ -19,14 +18,14 @@
     @if (Model.TotalCost >= 0.0m)
     {
 	    <div><h3 class="order-status-header3">Order Status:</h3><div class="order-status">@Model.OrderStatus</div></div>
-        if ( ViewBag.IsBackEnd && Model.OrderStatus == OrderStatus.PersonifyError)
+        if (isBackEnd && Model.OrderStatus == OrderStatus.PersonifyError)
         {
         <div class="order-status">
             <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_RESUBMIT" /></div>
         }
         <div class="timms-info">
             <div class="span4">
-                @if (!ViewBag.IsBackEnd)
+                @if (!isBackEnd)
                 {
                     <label class="order-status-label" for="Timms_ID">Constituent ID:</label>
                     <div class="order-status-input">
@@ -40,7 +39,7 @@
                 }
             </div>
             <div class="status-btns">
-                @if (!ViewBag.IsBackEnd)
+                @if (!isBackEnd)
                 {
                     if (Model.IsCompleted && Model.OrderStatus != OrderStatus.Approved)
                     {
@@ -58,17 +57,21 @@
                     { @Html.ActionLink("Cancel", "../Orders") }
                 }
             </div>
-            @if (!ViewBag.IsBackEnd && !string.IsNullOrEmpty(Model.ExternalReference))
+            @if (!isBackEnd && !string.IsNullOrEmpty(Model.ExternalReference))
             {
                 <div class="span10">
                 <p>(Please contact ASICentral team if this is not the Constituent ID expected.)</p>
                 </div>
             }
-            @if (!string.IsNullOrEmpty(ViewBag.MatchingCompanyIds))
+            @if (!string.IsNullOrEmpty(Model.ExternalReference))
             {
-                <div style="display: none">
-                    Potential Matching Companys' Constituent IDs: @ViewBag.MatchingCompanyIds
-                </div>
+                var matchingIds = GetMatchingCompanyIds();
+                if( !string.IsNullOrEmpty(matchingIds))
+                {
+                    <div style="display: none">
+                        Potential Matching Companys' Constituent IDs: @matchingIds
+                    </div>
+                }
             }
         </div>
     }
