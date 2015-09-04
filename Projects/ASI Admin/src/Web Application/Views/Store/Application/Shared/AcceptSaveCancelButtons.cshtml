@@ -3,6 +3,11 @@
 @using asi.asicentral.interfaces;
 @model asi.asicentral.web.store.interfaces.IMembershipModel
 <div>
+    @{
+        ViewBag.IsBackEnd = IsBackEnd();
+        ViewBag.MatchingCompanyIds = GetMatchingCompanyIds();
+    }
+
     @if (!string.IsNullOrEmpty(Model.ASINumber))
     {
         <h3>ASI #: @Model.ASINumber</h3>
@@ -14,24 +19,28 @@
     @if (Model.TotalCost >= 0.0m)
     {
 	    <div><h3 class="order-status-header3">Order Status:</h3><div class="order-status">@Model.OrderStatus</div></div>
-	    if (IsBackEnd() && Model.OrderStatus == OrderStatus.PersonifyError)
+        if ( ViewBag.IsBackEnd && Model.OrderStatus == OrderStatus.PersonifyError)
         {
         <div class="order-status">
             <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_RESUBMIT" /></div>
         }
         <div class="timms-info">
-            <div class="span3">
-                @if (!IsBackEnd())
+            <div class="span4">
+                @if (!ViewBag.IsBackEnd)
                 {
-                    <label class="order-status-label" for="Timms_ID">Timms ID:</label>
+                    <label class="order-status-label" for="Timms_ID">Constituent ID:</label>
                     <div class="order-status-input">
                         @Html.EditorFor(m => m.ExternalReference, new { @class = "span2" })
                         <span id="timmsErrorMessage" data-type="errormessage" class="field-validation-error"></span>
                     </div>
                 }
+                else
+                {
+                    <label class="order-status-label" for="Timms_ID">Constituent ID: @Model.ExternalReference</label>
+                }
             </div>
             <div class="status-btns">
-                @if (!IsBackEnd())
+                @if (!ViewBag.IsBackEnd)
                 {
                     if (Model.IsCompleted && Model.OrderStatus != OrderStatus.Approved)
                     {
@@ -48,10 +57,13 @@
                     else
                     { @Html.ActionLink("Cancel", "../Orders") }
                 }
-
-
-
             </div>
+                @if (!string.IsNullOrEmpty(ViewBag.MatchingCompanyIds))
+                {
+                    <div class="span12">
+                    <p>( Potential Matching Companys' Constituent IDs: @ViewBag.MatchingCompanyIds )</p>
+                    </div>
+                }
         </div>
     }
     else
@@ -76,10 +88,19 @@
             {
                 useBackEndService = useBackEndService || BackendService.IsProcessUsingBackend(orderDetail);
                 if (useBackEndService) break;
-            }
+            }            
             return useBackEndService;
         }
         
+        public string GetMatchingCompanyIds()
+        {
+            var ids = string.Empty;
+            var order = StoreService.GetAll<StoreOrder>(true).FirstOrDefault(o => o.Id == Model.OrderId);
+            if (order != null && order.Company != null)
+                ids = order.Company.MatchingCompanyIds;
+
+            return ids;            
+        }
   }
 </div>
 
