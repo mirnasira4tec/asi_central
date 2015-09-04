@@ -1,24 +1,25 @@
+
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ATT_EmployeeAttendee]') )
-DROP TABLE [ATT_EmployeeAttendee]
+DROP TABLE [dbo].[ATT_EmployeeAttendee]
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ATT_Attendee]'))
-DROP TABLE [ATT_Attendee]
+DROP TABLE [dbo].[ATT_Attendee]
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ATT_Show]'))
-DROP TABLE [ATT_Show]
+DROP TABLE [dbo].[ATT_Show]
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ATT_ShowType]'))
-DROP TABLE [ATT_ShowType]
+DROP TABLE [dbo].[ATT_ShowType]
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ATT_Employee]'))
-DROP TABLE [ATT_Employee]
+DROP TABLE [dbo].[ATT_Employee]
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ATT_CompanyAddress]'))
-DROP TABLE [ATT_CompanyAddress]
+DROP TABLE [dbo].[ATT_CompanyAddress]
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ATT_Address]'))
-DROP TABLE [ATT_Address]
+DROP TABLE [dbo].[ATT_Address]
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ATT_Company]'))
-DROP TABLE [ATT_Company]
+DROP TABLE [dbo].[ATT_Company]
 
 --
 -- Table structure for table `ATT_Company`
 --
-CREATE TABLE [ATT_Company](
+CREATE TABLE [dbo].[ATT_Company](
 	[CompanyId] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [nvarchar](50) NOT NULL,
 	[WebUrl] [nvarchar](50) NULL,
@@ -38,7 +39,7 @@ GO
 --
 -- Table structure for table `ATT_Address`
 --
-CREATE TABLE [ATT_Address](
+CREATE TABLE [dbo].[ATT_Address](
 	[AddressId] [int] IDENTITY(1,1) NOT NULL,
 	[Phone] [nvarchar](50) NOT NULL,
 	[PhoneAreaCode] [nchar](10) NOT NULL,
@@ -64,7 +65,7 @@ GO
 --
 -- Table structure for table `ATT_CompanyAddress`
 --
-CREATE TABLE [ATT_CompanyAddress](
+CREATE TABLE [dbo].[ATT_CompanyAddress](
 	[CompanyAddressId] [int] IDENTITY(1,1) NOT NULL,
 	[CompanyId] [int] NOT NULL,
 	[AddressId] [int] NOT NULL,
@@ -79,24 +80,24 @@ CREATE TABLE [ATT_CompanyAddress](
 
 GO
 
-ALTER TABLE [ATT_CompanyAddress]  WITH CHECK ADD  CONSTRAINT [FK_CompanyAddress_Address] FOREIGN KEY([AddressId])
-REFERENCES [ATT_Address] ([AddressId])
+ALTER TABLE [dbo].[ATT_CompanyAddress]  WITH CHECK ADD  CONSTRAINT [FK_CompanyAddress_Address] FOREIGN KEY([AddressId])
+REFERENCES [dbo].[ATT_Address] ([AddressId])
 GO
 
-ALTER TABLE [ATT_CompanyAddress] CHECK CONSTRAINT [FK_CompanyAddress_Address]
+ALTER TABLE [dbo].[ATT_CompanyAddress] CHECK CONSTRAINT [FK_CompanyAddress_Address]
 GO
 
-ALTER TABLE [ATT_CompanyAddress]  WITH CHECK ADD  CONSTRAINT [FK_CompanyAddress_Company] FOREIGN KEY([CompanyId])
-REFERENCES [ATT_Company] ([CompanyId])
+ALTER TABLE [dbo].[ATT_CompanyAddress]  WITH CHECK ADD  CONSTRAINT [FK_CompanyAddress_Company] FOREIGN KEY([CompanyId])
+REFERENCES [dbo].[ATT_Company] ([CompanyId])
 GO
 
-ALTER TABLE [ATT_CompanyAddress] CHECK CONSTRAINT [FK_CompanyAddress_Company]
+ALTER TABLE [dbo].[ATT_CompanyAddress] CHECK CONSTRAINT [FK_CompanyAddress_Company]
 GO
 
 --
 -- Table structure for table `ATT_Employee`
 --
-CREATE TABLE [ATT_Employee](
+CREATE TABLE [dbo].[ATT_Employee](
 	[EmployeeId] [int] IDENTITY(1,1) NOT NULL,
 	[FirstName] [nvarchar](50) NOT NULL,
 	[MiddleName] [nvarchar](50) NULL,
@@ -117,24 +118,24 @@ CREATE TABLE [ATT_Employee](
 
 GO
 
-ALTER TABLE [ATT_Employee]  WITH CHECK ADD  CONSTRAINT [FK_Employee_Address] FOREIGN KEY([AddressId])
-REFERENCES [ATT_Address] ([AddressId])
+ALTER TABLE [dbo].[ATT_Employee]  WITH CHECK ADD  CONSTRAINT [FK_Employee_Address] FOREIGN KEY([AddressId])
+REFERENCES [dbo].[ATT_Address] ([AddressId])
 GO
 
-ALTER TABLE [ATT_Employee] CHECK CONSTRAINT [FK_Employee_Address]
+ALTER TABLE [dbo].[ATT_Employee] CHECK CONSTRAINT [FK_Employee_Address]
 GO
 
-ALTER TABLE [ATT_Employee]  WITH CHECK ADD  CONSTRAINT [FK_Employee_Company] FOREIGN KEY([CompanyId])
-REFERENCES [ATT_Company] ([CompanyId])
+ALTER TABLE [dbo].[ATT_Employee]  WITH CHECK ADD  CONSTRAINT [FK_Employee_Company] FOREIGN KEY([CompanyId])
+REFERENCES [dbo].[ATT_Company] ([CompanyId])
 GO
 
-ALTER TABLE [ATT_Employee] CHECK CONSTRAINT [FK_Employee_Company]
+ALTER TABLE [dbo].[ATT_Employee] CHECK CONSTRAINT [FK_Employee_Company]
 GO
 
 --
 -- Table structure for table `ATT_ShowType`
 --
-CREATE TABLE [ATT_ShowType](
+CREATE TABLE [dbo].[ATT_ShowType](
 	[ShowTypeId] [int] IDENTITY(1,1) NOT NULL,
 	[Type] [nvarchar](50) NOT NULL,
 	[CreateDateUTC] [datetime] NOT NULL,
@@ -146,14 +147,14 @@ CREATE TABLE [ATT_ShowType](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 80) ON [PRIMARY]
 ) ON [PRIMARY]
 
-Insert into [ATT_ShowType] (Type,CreateDateUTC,UpdateDateUTC) values ('Engage East' ,GETDATE(),GETDATE()), ('Engage West' ,GETDATE(),GETDATE())
+Insert into [dbo].[ATT_ShowType] (Type,CreateDateUTC,UpdateDateUTC) values ('Engage East' ,GETDATE(),GETDATE()), ('Engage West' ,GETDATE(),GETDATE())
 
 GO
 
 --
 -- Table structure for table `ATT_Show`
 --
-CREATE TABLE [ATT_Show](
+CREATE TABLE [dbo].[ATT_Show](
 	[ShowId] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [nvarchar](50) NOT NULL,
 	[TypeId] [int] NOT NULL,
@@ -171,17 +172,17 @@ CREATE TABLE [ATT_Show](
 
 GO
 
-ALTER TABLE [ATT_Show]  WITH CHECK ADD  CONSTRAINT [FK_Show_ShowType] FOREIGN KEY([TypeId])
-REFERENCES [ATT_ShowType] ([ShowTypeId])
+ALTER TABLE [dbo].[ATT_Show]  WITH CHECK ADD  CONSTRAINT [FK_Show_ShowType] FOREIGN KEY([TypeId])
+REFERENCES [dbo].[ATT_ShowType] ([ShowTypeId])
 GO
 
-ALTER TABLE [ATT_Show] CHECK CONSTRAINT [FK_Show_ShowType]
+ALTER TABLE [dbo].[ATT_Show] CHECK CONSTRAINT [FK_Show_ShowType]
 GO
 
 --
 -- Table structure for table `ATT_Attendee`
 --
-CREATE TABLE [ATT_Attendee](
+CREATE TABLE [dbo].[ATT_Attendee](
 	[AttendeeId] [int] IDENTITY(1,1) NOT NULL,
 	[ShowId] [int] NULL,
 	[AddressId] [int] NULL,
@@ -203,25 +204,25 @@ GO
 
 
 
-ALTER TABLE [ATT_Attendee]  WITH CHECK ADD  CONSTRAINT [FK_Attendee_Company] FOREIGN KEY([CompanyId])
-REFERENCES [ATT_Company] ([CompanyId])
+ALTER TABLE [dbo].[ATT_Attendee]  WITH CHECK ADD  CONSTRAINT [FK_Attendee_Company] FOREIGN KEY([CompanyId])
+REFERENCES [dbo].[ATT_Company] ([CompanyId])
 GO
 
-ALTER TABLE [ATT_Attendee] CHECK CONSTRAINT [FK_Attendee_Company]
+ALTER TABLE [dbo].[ATT_Attendee] CHECK CONSTRAINT [FK_Attendee_Company]
 GO
 
-ALTER TABLE [ATT_Attendee]  WITH CHECK ADD  CONSTRAINT [FK_Attendee_Show] FOREIGN KEY([ShowId])
-REFERENCES [ATT_Show] ([ShowId])
+ALTER TABLE [dbo].[ATT_Attendee]  WITH CHECK ADD  CONSTRAINT [FK_Attendee_Show] FOREIGN KEY([ShowId])
+REFERENCES [dbo].[ATT_Show] ([ShowId])
 GO
 
-ALTER TABLE [ATT_Attendee] CHECK CONSTRAINT [FK_Attendee_Show]
+ALTER TABLE [dbo].[ATT_Attendee] CHECK CONSTRAINT [FK_Attendee_Show]
 GO
 
 --
 -- Table structure for table `ATT_EmployeeAttendee`
 --
 
-CREATE TABLE [ATT_EmployeeAttendee](
+CREATE TABLE [dbo].[ATT_EmployeeAttendee](
 	[EmployeeAttendeeId] [int] IDENTITY(1,1) NOT NULL,
 	[AttendeeId] [int] NOT NULL,
 	[EmployeeId] [int] NOT NULL,
@@ -236,16 +237,16 @@ CREATE TABLE [ATT_EmployeeAttendee](
 
 GO
 
-ALTER TABLE [ATT_EmployeeAttendee]  WITH CHECK ADD  CONSTRAINT [FK_EmployeeAttendee_Attendee] FOREIGN KEY([AttendeeId])
-REFERENCES [ATT_Attendee] ([AttendeeId])
+ALTER TABLE [dbo].[ATT_EmployeeAttendee]  WITH CHECK ADD  CONSTRAINT [FK_EmployeeAttendee_Attendee] FOREIGN KEY([AttendeeId])
+REFERENCES [dbo].[ATT_Attendee] ([AttendeeId])
 GO
 
-ALTER TABLE [ATT_EmployeeAttendee] CHECK CONSTRAINT [FK_EmployeeAttendee_Attendee]
+ALTER TABLE [dbo].[ATT_EmployeeAttendee] CHECK CONSTRAINT [FK_EmployeeAttendee_Attendee]
 GO
 
-ALTER TABLE [ATT_EmployeeAttendee]  WITH CHECK ADD  CONSTRAINT [FK_EmployeeAttendee_Employee] FOREIGN KEY([EmployeeId])
-REFERENCES [ATT_Employee] ([EmployeeId])
+ALTER TABLE [dbo].[ATT_EmployeeAttendee]  WITH CHECK ADD  CONSTRAINT [FK_EmployeeAttendee_Employee] FOREIGN KEY([EmployeeId])
+REFERENCES [dbo].[ATT_Employee] ([EmployeeId])
 GO
 
-ALTER TABLE [ATT_EmployeeAttendee] CHECK CONSTRAINT [FK_EmployeeAttendee_Employee]
+ALTER TABLE [dbo].[ATT_EmployeeAttendee] CHECK CONSTRAINT [FK_EmployeeAttendee_Employee]
 GO
