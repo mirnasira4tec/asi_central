@@ -4,10 +4,12 @@
 @{
     Layout = "~/Views/Show/Shared/_Layout.cshtml";
 }
+<a href="/showCompany/AddCompaniesToShow?showId=@Model.ShowId" class="btn btn-primary pull-right">Add Attendees</a>
+ <br />
+ <br />
 @if (Model.Show != null)
 {
-    <h2>@Model.Show.Name @Model.Show.StartDate.Year.ToString() (@Model.Show.StartDate.ToString("MMM") @Model.Show.StartDate.Day.ToString() - @Model.Show.EndDate.ToString("MMM") @Model.Show.EndDate.Day.ToString())  <a href="/showCompany/AddCompaniesToShow?showId=@Model.ShowId" class="btn btn-primary pull-right">Add Attendees</a></h2>
-   <br />
+    <h2>@Model.Show.Name @Model.Show.StartDate.Year.ToString() (@Model.Show.StartDate.ToString("MMM") @Model.Show.StartDate.Day.ToString() - @Model.Show.EndDate.ToString("MMM") @Model.Show.EndDate.Day.ToString()) </h2>
 }
 <table class="table table-bordered table-condensed table-striped">
     <thead>
@@ -65,4 +67,14 @@
         }
     </tbody>
 </table>
-
+@section scripts {
+    <script type="text/javascript">
+        $('a.delete').click(function () {
+            var confirms = confirm("Are you sure you want to delete the company?");
+            if (confirms)
+                return true
+            else
+                return false
+        });
+    </script>
+}

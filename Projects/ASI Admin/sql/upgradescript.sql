@@ -1,11 +1,19 @@
-IF EXISTS(SELECT * FROM ATT_EmployeeAttendee)DROP TABLE ATT_EmployeeAttendee
-IF EXISTS(SELECT * FROM ATT_Attendee)DROP TABLE ATT_Attendee
-IF EXISTS(SELECT * FROM ATT_Show)DROP TABLE ATT_Show
-IF EXISTS(SELECT * FROM ATT_ShowType)DROP TABLE ATT_ShowType
-IF EXISTS(SELECT * FROM ATT_Employee)DROP TABLE ATT_Employee
-IF EXISTS(SELECT * FROM ATT_CompanyAddress)DROP TABLE ATT_CompanyAddress
-IF EXISTS(SELECT * FROM ATT_Address)DROP TABLE ATT_Address
-IF EXISTS(SELECT * FROM ATT_Company)DROP TABLE ATT_Company
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ATT_EmployeeAttendee]') )
+DROP TABLE [ATT_EmployeeAttendee]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ATT_Attendee]'))
+DROP TABLE [ATT_Attendee]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ATT_Show]'))
+DROP TABLE [ATT_Show]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ATT_ShowType]'))
+DROP TABLE [ATT_ShowType]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ATT_Employee]'))
+DROP TABLE [ATT_Employee]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ATT_CompanyAddress]'))
+DROP TABLE [ATT_CompanyAddress]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ATT_Address]'))
+DROP TABLE [ATT_Address]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ATT_Company]'))
+DROP TABLE [ATT_Company]
 
 --
 -- Table structure for table `ATT_Company`
@@ -17,7 +25,7 @@ CREATE TABLE [ATT_Company](
 	[ASINumber] [nvarchar](10) NULL,
 	[CreateDateUTC] [datetime] NOT NULL,
 	[UpdateDateUTC] [datetime] NOT NULL,
-	[UpdateSource] [varchar](128) NULL CONSTRAINT [DF_CUST_Company_UpdateSource] DEFAULT ((suser_sname()+' Proc=')+isnull(object_name(@@procid),''))
+	[UpdateSource] [varchar](128) NULL CONSTRAINT [ATT_Company_UpdateSource] DEFAULT ((suser_sname()+' Proc=')+isnull(object_name(@@procid),'')),
 	[MemberType] [nvarchar](20) NULL,
  CONSTRAINT [PK_Company] PRIMARY KEY CLUSTERED 
 (
@@ -44,7 +52,7 @@ CREATE TABLE [ATT_Address](
 	[City] [nchar](10) NOT NULL,
 	[CreateDateUTC] [datetime] NOT NULL,
 	[UpdateDateUTC] [datetime] NOT NULL,
-	[UpdateSource] [varchar](128) NULL CONSTRAINT [DF_CUST_Company_UpdateSource] DEFAULT ((suser_sname()+' Proc=')+isnull(object_name(@@procid),''))
+	[UpdateSource] [varchar](128) NULL CONSTRAINT [ATT_Address_UpdateSource] DEFAULT ((suser_sname()+' Proc=')+isnull(object_name(@@procid),''))
  CONSTRAINT [PK_Location] PRIMARY KEY CLUSTERED 
 (
 	[AddressId] ASC
@@ -62,7 +70,7 @@ CREATE TABLE [ATT_CompanyAddress](
 	[AddressId] [int] NOT NULL,
 	[CreateDateUTC] [datetime] NOT NULL,
 	[UpdateDateUTC] [datetime] NOT NULL,
-	[UpdateSource] [varchar](128) NULL CONSTRAINT [DF_CUST_Company_UpdateSource] DEFAULT ((suser_sname()+' Proc=')+isnull(object_name(@@procid),''))
+	[UpdateSource] [varchar](128) NULL CONSTRAINT [ATT_CompanyAddress_UpdateSource] DEFAULT ((suser_sname()+' Proc=')+isnull(object_name(@@procid),''))
  CONSTRAINT [PK_CompanyAddress] PRIMARY KEY CLUSTERED 
 (
 	[CompanyAddressId] ASC
@@ -100,7 +108,7 @@ CREATE TABLE [ATT_Employee](
 	[PhoneAreaCode] [nchar](10) NULL,
 	[CreateDateUTC] [datetime] NOT NULL,
 	[UpdateDateUTC] [datetime] NOT NULL,
-	[UpdateSource] [varchar](128) NULL CONSTRAINT [DF_CUST_Company_UpdateSource] DEFAULT ((suser_sname()+' Proc=')+isnull(object_name(@@procid),''))
+	[UpdateSource] [varchar](128) NULL CONSTRAINT [ATT_Employee_UpdateSource] DEFAULT ((suser_sname()+' Proc=')+isnull(object_name(@@procid),''))
  CONSTRAINT [PK_Employee] PRIMARY KEY CLUSTERED 
 (
 	[EmployeeId] ASC
@@ -131,7 +139,7 @@ CREATE TABLE [ATT_ShowType](
 	[Type] [nvarchar](50) NOT NULL,
 	[CreateDateUTC] [datetime] NOT NULL,
 	[UpdateDateUTC] [datetime] NOT NULL,
-	[UpdateSource] [varchar](128) NULL CONSTRAINT [DF_CUST_Company_UpdateSource] DEFAULT ((suser_sname()+' Proc=')+isnull(object_name(@@procid),''))
+	[UpdateSource] [varchar](128) NULL CONSTRAINT [ATT_ShowType_UpdateSource] DEFAULT ((suser_sname()+' Proc=')+isnull(object_name(@@procid),''))
  CONSTRAINT [PK_ShowType] PRIMARY KEY CLUSTERED 
 (
 	[ShowTypeId] ASC
@@ -153,7 +161,7 @@ CREATE TABLE [ATT_Show](
 	[EndDate] [datetime] NOT NULL,
 	[CreateDateUTC] [datetime] NOT NULL,
 	[UpdateDateUTC] [datetime] NOT NULL,
-	[UpdateSource] [varchar](128) NULL CONSTRAINT [DF_CUST_Company_UpdateSource] DEFAULT ((suser_sname()+' Proc=')+isnull(object_name(@@procid),''))
+	[UpdateSource] [varchar](128) NULL CONSTRAINT [ATT_Show_UpdateSource] DEFAULT ((suser_sname()+' Proc=')+isnull(object_name(@@procid),'')),
 	[Address] [nvarchar](500) NOT NULL,
  CONSTRAINT [PK_Show] PRIMARY KEY CLUSTERED 
 (
@@ -184,7 +192,7 @@ CREATE TABLE [ATT_Attendee](
 	[BoothNumber] [nvarchar](50) NULL,
 	[CreateDateUTC] [datetime] NOT NULL,
 	[UpdateDateUTC] [datetime] NOT NULL,
-	[UpdateSource] [varchar](128) NULL CONSTRAINT [DF_CUST_Company_UpdateSource] DEFAULT ((suser_sname()+' Proc=')+isnull(object_name(@@procid),''))
+	[UpdateSource] [varchar](128) NULL CONSTRAINT [ATT_Attendee_UpdateSource] DEFAULT ((suser_sname()+' Proc=')+isnull(object_name(@@procid),''))
  CONSTRAINT [PK_Attendees] PRIMARY KEY CLUSTERED 
 (
 	[AttendeeId] ASC
@@ -219,7 +227,7 @@ CREATE TABLE [ATT_EmployeeAttendee](
 	[EmployeeId] [int] NOT NULL,
 	[CreateDateUTC] [datetime] NOT NULL,
 	[UpdateDateUTC] [datetime] NOT NULL,
-	[UpdateSource] [varchar](128) NULL CONSTRAINT [DF_CUST_Company_UpdateSource] DEFAULT ((suser_sname()+' Proc=')+isnull(object_name(@@procid),''))
+	[UpdateSource] [varchar](128) NULL CONSTRAINT [ATT_EmployeeAttendee_UpdateSource] DEFAULT ((suser_sname()+' Proc=')+isnull(object_name(@@procid),''))
  CONSTRAINT [PK_EmployeeAttendee] PRIMARY KEY CLUSTERED 
 (
 	[EmployeeAttendeeId] ASC
@@ -236,7 +244,7 @@ ALTER TABLE [ATT_EmployeeAttendee] CHECK CONSTRAINT [FK_EmployeeAttendee_Attende
 GO
 
 ALTER TABLE [ATT_EmployeeAttendee]  WITH CHECK ADD  CONSTRAINT [FK_EmployeeAttendee_Employee] FOREIGN KEY([EmployeeId])
-REFERENCES [Employee] ([EmployeeId])
+REFERENCES [ATT_Employee] ([EmployeeId])
 GO
 
 ALTER TABLE [ATT_EmployeeAttendee] CHECK CONSTRAINT [FK_EmployeeAttendee_Employee]

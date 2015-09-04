@@ -212,7 +212,7 @@ namespace asi.asicentral.web.Controllers.Show
                 companyInformation.Name = company.Name;
                 companyInformation.Id = company.Id;
                 IQueryable<ShowCompanyAddress> companyAddress = ObjectService.GetAll<ShowCompanyAddress>().Where(item => item.CompanyId == id);
-                companyInformation.CompanyAddress = companyAddress.ToList();
+                companyInformation.CompanyAddress = companyAddress.OrderByDescending(form => form.CreateDate).ToList();
                 IQueryable<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>().Where(item => item.CompanyId == id);
                 companyInformation.Employee = employeeList.OrderByDescending(form => form.CreateDate).ToList();
             }
@@ -502,16 +502,15 @@ namespace asi.asicentral.web.Controllers.Show
             IList<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>().Where(item => item.Email != null && item.Email.Contains(Email)).ToList();
             if (employeeList.Any())
             {
-                return Json(true);
+                return Json(false);
             }
             else
             {
-                return Json(false);
+                return Json(true);
             }
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult IsValidCompany(string name)
         {
             var company = new CompanyModel();
@@ -521,11 +520,11 @@ namespace asi.asicentral.web.Controllers.Show
             company.company = companyList.ToList();
             if (company.company.Any())
             {
-                return Json(true);
+                return Json(false);
             }
             else
             {
-                return Json(false);
+                return Json(true);
             }
         }
         [HttpGet]
@@ -534,7 +533,7 @@ namespace asi.asicentral.web.Controllers.Show
             ShowCompaniesModel showCompanies = new ShowCompaniesModel();
             if (string.IsNullOrEmpty(companyTab)) companyTab = ShowCompaniesModel.TAB_COMPANYNAME;
             showCompanies.CompanyTab = companyTab;
-            IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(attendee => (attendee.ShowId == showId && (attendee.IsAttending == true || attendee.IsExhibitDay == true))).ToList();
+            IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(attendee => (attendee.ShowId == showId && (attendee.IsAttending == true || attendee.IsExhibitDay == true))).OrderBy(form => form.Company.Name).ToList();
             if (existingAttendees.Any())
             {
                 foreach (ShowAttendee attendee in existingAttendees)
@@ -610,11 +609,11 @@ namespace asi.asicentral.web.Controllers.Show
             if (existingAttendees.Any())
             {
                 IList<ShowCompany> companyList = ObjectService.GetAll<ShowCompany>(true).ToList();
-                list = companyList.Where(p => !existingAttendees.Any(p2 => p2.CompanyId == p.Id)).ToList();
+                list = companyList.Where(p => !existingAttendees.Any(p2 => p2.CompanyId == p.Id)).OrderBy(form => form.Name).ToList();
             }
             else
             {
-                list = ObjectService.GetAll<ShowCompany>(true).ToList();
+                list = ObjectService.GetAll<ShowCompany>(true).OrderBy(form => form.Name).ToList();
             }
             if (!string.IsNullOrEmpty(MemberType) && !string.IsNullOrEmpty(companyName))
             {
