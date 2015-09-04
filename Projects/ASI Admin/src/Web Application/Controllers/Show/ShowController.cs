@@ -118,7 +118,7 @@ namespace asi.asicentral.web.Controllers.Show
                  && item.StartDate.Year == year));
             }
             show.ShowTab = showTab;
-            show.Show = showList.OrderByDescending(form => form.CreateDate).ToList();
+            show.Show = showList.OrderByDescending(form => form.StartDate).ToList();
             return View("../Show/ShowList", show);
         }
 

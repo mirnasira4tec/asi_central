@@ -29,6 +29,7 @@ namespace asi.asicentral.web.models.show
 
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [RegularExpression(@"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*", ErrorMessage = "Invalid email")]
+        [Remote("IsValidEmail", "ShowCompany", HttpMethod = "POST", ErrorMessage = "Email already exists. Please enter a different Email.")]
         public string Email { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "Phone")]

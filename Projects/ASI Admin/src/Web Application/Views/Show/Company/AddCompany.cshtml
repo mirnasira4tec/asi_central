@@ -114,6 +114,14 @@
                 $("#state-div").attr("class", "control-group");
                 $("#international-state-div").attr("class", "control-group hidden");
             }
+
+            if ($('#MemberType').val() == "Non-Member") {
+                $('#ASINumber').prop('disabled', true);
+                $('#ASINumber').val("");
+            } else {
+                $('#ASINumber').prop('disabled', false);
+                $('#ASINumber').val("");
+            }
         });
         $("#IsNonUSAddress").change(function (evt) {
             if ($("#country-div").attr("class").trim() == "control-group")
@@ -149,25 +157,5 @@
             });
         });
 
-        $("#Name").blur(function () {
-            var name = $("#Name").val();
-            if (name) {
-                $.ajax({
-                    url: "/ShowCompany/IsValidCompany?name=" + name,
-                    type: 'POST',
-                    success: function (data) {
-                        if (data == true) {
-                            $('span[data-valmsg-for="Name"]').html("Name already exists.");
-                            $('span[data-valmsg-for="Name"]').attr("class", "field-validation-error");
-                        }
-                        else {
-                            $('span[data-valmsg-for="Name"]').html("");
-                            $('span[data-valmsg-for="Name"]').attr("class", "field-validation-valid");
-
-                        }
-                    }
-                });
-            }
-        });
     </script>
 }
