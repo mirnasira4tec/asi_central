@@ -496,7 +496,6 @@ namespace asi.asicentral.web.Controllers.Show
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult IsValidEmail(string Email)
         {
             IList<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>().Where(item => item.Email != null && item.Email.Contains(Email)).ToList();
