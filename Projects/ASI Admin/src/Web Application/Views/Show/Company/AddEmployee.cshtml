@@ -112,25 +112,5 @@
                 $("#international-state-div").attr("class", "control-group");
             }
         });
-
-        $("#Email").blur(function () {
-            var email = $("#Email").val();
-            if (email) {
-                $.ajax({
-                    url: "/ShowCompany/IsValidEmail?name=" + email,
-                    type: 'POST',
-                    success: function (data) {
-                        if (data == true) {
-                            $('span[data-valmsg-for="Email"]').html("Email already exists.");
-                            $('span[data-valmsg-for="Email"]').attr("class", "field-validation-error");
-                        }
-                        else {
-                            $('span[data-valmsg-for="Email"]').html("");
-                            $('span[data-valmsg-for="Email"]').attr("class", "field-validation-valid");
-                        }
-                    }
-                });
-            }
-        });
     </script>
 }
