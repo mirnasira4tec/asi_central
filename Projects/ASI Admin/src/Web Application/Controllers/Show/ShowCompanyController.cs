@@ -498,7 +498,7 @@ namespace asi.asicentral.web.Controllers.Show
         [HttpPost]
         public ActionResult IsValidEmail(string Email)
         {
-            IList<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>().Where(item => item.Email != null && item.Email.Contains(Email)).ToList();
+            IList<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>().Where(item => item.Email != null && item.Email.Equals(Email)).ToList();
             if (employeeList.Any())
             {
                 return Json(false);
@@ -515,7 +515,7 @@ namespace asi.asicentral.web.Controllers.Show
             var company = new CompanyModel();
             IQueryable<ShowCompany> companyList = ObjectService.GetAll<ShowCompany>(true);
             companyList = companyList.Where(item => item.Name != null
-                 && item.Name.Contains(name));
+                 && item.Name.Equals(name));
             company.company = companyList.ToList();
             if (company.company.Any())
             {
