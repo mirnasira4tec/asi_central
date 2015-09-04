@@ -236,16 +236,16 @@ CREATE TABLE [ATT_EmployeeAttendee](
 
 GO
 
-ALTER TABLE [dbo].[ATT_EmployeeAttendee]  WITH CHECK ADD  CONSTRAINT [FK_EmployeeAttendee_Attendee] FOREIGN KEY([AttendeeId])
-REFERENCES [dbo].[ATT_Attendee] ([AttendeeId])
+ALTER TABLE [ATT_EmployeeAttendee]  WITH CHECK ADD  CONSTRAINT [FK_EmployeeAttendee_Attendee] FOREIGN KEY([AttendeeId])
+REFERENCES [ATT_Attendee] ([AttendeeId])
 GO
 
-ALTER TABLE [dbo].[ATT_EmployeeAttendee] CHECK CONSTRAINT [FK_EmployeeAttendee_Attendee]
+ALTER TABLE [ATT_EmployeeAttendee] CHECK CONSTRAINT [FK_EmployeeAttendee_Attendee]
 GO
 
-ALTER TABLE [dbo].[ATT_EmployeeAttendee]  WITH CHECK ADD  CONSTRAINT [FK_EmployeeAttendee_Employee] FOREIGN KEY([EmployeeId])
-REFERENCES [dbo].[ATT_Employee] ([EmployeeId])
+ALTER TABLE [ATT_EmployeeAttendee]  WITH CHECK ADD  CONSTRAINT [FK_EmployeeAttendee_Employee] FOREIGN KEY([EmployeeId])
+REFERENCES [ATT_Employee] ([EmployeeId])
 GO
 
-ALTER TABLE [dbo].[ATT_EmployeeAttendee] CHECK CONSTRAINT [FK_EmployeeAttendee_Employee]
+ALTER TABLE [ATT_EmployeeAttendee] CHECK CONSTRAINT [FK_EmployeeAttendee_Employee]
 GO
