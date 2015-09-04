@@ -58,12 +58,18 @@
                     { @Html.ActionLink("Cancel", "../Orders") }
                 }
             </div>
-                @if (!string.IsNullOrEmpty(ViewBag.MatchingCompanyIds))
-                {
-                    <div class="span12">
-                    <p>( Potential Matching Companys' Constituent IDs: @ViewBag.MatchingCompanyIds )</p>
-                    </div>
-                }
+            @if (!ViewBag.IsBackEnd && !string.IsNullOrEmpty(Model.ExternalReference))
+            {
+                <div class="span10">
+                <p>(Please contact ASICentral team if this is not the company ID expected.)</p>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(ViewBag.MatchingCompanyIds))
+            {
+                <div style="display: none">
+                    Potential Matching Companys' Constituent IDs: @ViewBag.MatchingCompanyIds
+                </div>
+            }
         </div>
     }
     else
@@ -97,7 +103,7 @@
             var ids = string.Empty;
             var order = StoreService.GetAll<StoreOrder>(true).FirstOrDefault(o => o.Id == Model.OrderId);
             if (order != null && order.Company != null)
-                ids = order.Company.MatchingCompanyIds;
+                ids = order.Company.MatchingCompanyIds.Replace("|", " ");
 
             return ids;            
         }
