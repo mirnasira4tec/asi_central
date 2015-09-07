@@ -19,10 +19,12 @@ namespace asi.asicentral.web.models.show
         public IList<ShowAddress> Address { set; get; }
         public IList<ShowEmployee> Employee { set; get; }
         public bool HasAddress { get; set; }
+         [Display(ResourceType = typeof(Resource), Name = "FirstName")]
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string FirstName { get; set; }
 
+         [Display(ResourceType = typeof(Resource), Name = "LastName")]
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string LastName { get; set; }

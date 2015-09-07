@@ -4,12 +4,13 @@
 @{
     Layout = "~/Views/Show/Shared/_Layout.cshtml";
 }
+<h1>Company Attendee List</h1>
 <a href="/showCompany/AddCompaniesToShow?showId=@Model.ShowId" class="btn btn-primary pull-right">Add Attendees</a>
  <br />
  <br />
 @if (Model.Show != null)
 {
-    <h2>@Model.Show.Name @Model.Show.StartDate.Year.ToString() (@Model.Show.StartDate.ToString("MMM") @Model.Show.StartDate.Day.ToString() - @Model.Show.EndDate.ToString("MMM") @Model.Show.EndDate.Day.ToString()) </h2>
+    <h2>@Model.Show.Name (@Model.Show.StartDate.ToString("MMM") @Model.Show.StartDate.Day.ToString() - @Model.Show.EndDate.ToString("MMM") @Model.Show.EndDate.Day.ToString()) </h2>
 }
 <table class="table table-bordered table-condensed table-striped">
     <thead>
