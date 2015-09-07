@@ -4,6 +4,7 @@
 @{
     Layout = "~/Views/Show/Shared/_Layout.cshtml";
 }
+<h1>Add Attendees to the Show</h1>
 @using (Html.BeginForm("PostShowAttendeeInformation", "Show", FormMethod.Post, new { id = "showAttendee-form", @class = "form-horizontal" }))
 {
     @Html.AntiForgeryToken()
@@ -21,10 +22,9 @@
         <strong>@Model.ShowAttendees[count].Company.Name</strong>
         <section class="first-section">
             <div class="control-group">
-                <label class="checkbox" for="IsAttending">@Html.EditorFor(model => model.ShowAttendees[count].IsAttending) Is Attending</label>
-                <label class="checkbox" for="IsSponsor">@Html.EditorFor(model => model.ShowAttendees[count].IsSponsor) Is Sponsor</label>
-                <label class="checkbox" for="IsExhibitDay">@Html.EditorFor(model => model.ShowAttendees[count].IsExhibitDay) Exhibit Day</label>
-
+                <label class="checkbox" for="@Model.ShowAttendees[count].IsAttending">@Html.EditorFor(model => model.ShowAttendees[count].IsAttending) Is Attending</label>
+                <label class="checkbox" for="@Model.ShowAttendees[count].IsSponsor">@Html.EditorFor(model => model.ShowAttendees[count].IsSponsor) Is Sponsor</label>
+                <label class="checkbox" for="@Model.ShowAttendees[count].IsExhibitDay">@Html.EditorFor(model => model.ShowAttendees[count].IsExhibitDay) Exhibit Day</label>
             </div>
             <div>
                 @Html.LabelFor(model => model.ShowAttendees[count].BoothNumber)
@@ -35,7 +35,7 @@
     </div>
   
     <section class="second-section span7 box" style="margin-left: 10px;">
-        <strong>Who is attending "@Model.Show.Name @Model.Show.StartDate.Year.ToString() (@Model.Show.StartDate.ToString("MMM") @Model.Show.StartDate.Day.ToString() - @Model.Show.EndDate.ToString("MMM") @Model.Show.EndDate.Day.ToString())" show ?</strong>
+        <strong>Who is attending "@Model.Show.Name (@Model.Show.StartDate.ToString("MMM") @Model.Show.StartDate.Day.ToString() - @Model.Show.EndDate.ToString("MMM") @Model.Show.EndDate.Day.ToString())" show ?</strong>
         <div style="max-height: 200px; overflow-y: auto;">
             @if (Model.ShowEmployees != null)
             {
