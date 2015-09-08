@@ -8,7 +8,7 @@
     Layout = "~/Views/Show/Shared/_Layout.cshtml";
 }
 
-@using (Html.BeginForm("AddEmployee", "ShowCompany", FormMethod.Post, new { @class = "form-horizontal" }))
+@using (Html.BeginForm("AddEmployee", "ShowCompany", FormMethod.Post, new { id = "employee-form", @class = "form-horizontal" }))
 {
     @Html.ValidationSummary(true)
     <p class="navigate-back"><a href="/ShowCompany/List?id= @Model.CompanyId">Back to Company Details</a></p>
@@ -18,6 +18,7 @@
             @Html.HiddenFor(model => model.Id)
             @Html.HiddenFor(model => model.CompanyId)
             @Html.HiddenFor(model => model.EmployeeId)
+            
             <div class="control-group" id="asinumber-product">
                 @Html.LabelFor(model => model.FirstName, new { @class = "control-label" })
                 <div class="controls">@Html.EditorFor(model => model.FirstName) @Html.ValidationMessageFor(model => model.FirstName)</div>
@@ -27,6 +28,7 @@
                 <div class="controls">@Html.EditorFor(model => model.LastName) @Html.ValidationMessageFor(model => model.LastName)</div>
             </div>
             <div class="control-group">
+                @Html.Hidden("EmailBeforeChange", Model.Email)
                 @Html.LabelFor(model => model.Email, new { @class = "control-label" })
                 <div class="controls">@Html.EditorFor(model => model.Email, new { id = "Email" }) @Html.ValidationMessageFor(model => model.Email)</div>
             </div>
@@ -64,6 +66,11 @@
 @section Scripts {
     @Scripts.Render("~/bundles/form")
     <script type="text/javascript">
+        $("#employee-form").submit(function (evt) {
+            if ($("#Email").val() == $("#EmailBeforeChange").val()) {
+                $("#Email").rules("remove", "remote");
+            }
+        });
         $(document).ready(function () {
             if ($('#hasAddress').prop('checked')) {
                 $('#divPartial').show();
