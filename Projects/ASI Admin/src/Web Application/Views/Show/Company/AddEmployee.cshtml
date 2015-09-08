@@ -18,6 +18,7 @@
             @Html.HiddenFor(model => model.Id)
             @Html.HiddenFor(model => model.CompanyId)
             @Html.HiddenFor(model => model.EmployeeId)
+              @Html.Hidden("InitialEmail",Model.Email)
             <div class="control-group" id="asinumber-product">
                 @Html.LabelFor(model => model.FirstName, new { @class = "control-label" })
                 <div class="controls">@Html.EditorFor(model => model.FirstName) @Html.ValidationMessageFor(model => model.FirstName)</div>

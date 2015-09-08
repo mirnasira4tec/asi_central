@@ -495,13 +495,20 @@ namespace asi.asicentral.web.Controllers.Show
             });
         }
 
-     
-        public ActionResult IsValidEmail(string Email)
+
+        public ActionResult IsValidEmail(string Email, string initialEmail)
         {
             IList<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>().Where(item => item.Email != null && item.Email.Equals(Email)).ToList();
             if (employeeList.Any())
             {
-                return Json(false);
+                if (Email == initialEmail)
+                {
+                    return Json(true);
+                }
+                else
+                {
+                    return Json(false);
+                }
             }
             else
             {
@@ -509,8 +516,8 @@ namespace asi.asicentral.web.Controllers.Show
             }
         }
 
-      
-        public ActionResult IsValidCompany(string name)
+
+        public ActionResult IsValidCompany(string name, string initialName)
         {
             var company = new CompanyModel();
             IQueryable<ShowCompany> companyList = ObjectService.GetAll<ShowCompany>(true);
@@ -519,7 +526,14 @@ namespace asi.asicentral.web.Controllers.Show
             company.company = companyList.ToList();
             if (company.company.Any())
             {
-                return Json(false);
+                if (name == initialName)
+                {
+                    return Json(true);
+                }
+                else
+                {
+                    return Json(false);
+                }
             }
             else
             {
@@ -541,7 +555,7 @@ namespace asi.asicentral.web.Controllers.Show
                     showCompanies.ShowAttendees.Add(attendee);
                 }
             }
-            showCompanies.ShowId = showId.HasValue ? showId.Value : 0; 
+            showCompanies.ShowId = showId.HasValue ? showId.Value : 0;
             return View("../Show/ShowCompaniesList", showCompanies);
         }
 
@@ -604,7 +618,7 @@ namespace asi.asicentral.web.Controllers.Show
             IList<ShowCompany> list = null;
             if (string.IsNullOrEmpty(companyTab)) companyTab = ShowCompaniesModel.TAB_COMPANYNAME;
             showCompanies.CompanyTab = companyTab;
-            IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => ((item.IsAttending == true || item.IsExhibitDay == true)  && item.ShowId == showId)).ToList();
+            IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => ((item.IsAttending == true || item.IsExhibitDay == true) && item.ShowId == showId)).ToList();
             if (existingAttendees.Any())
             {
                 IList<ShowCompany> companyList = ObjectService.GetAll<ShowCompany>(true).ToList();
@@ -631,7 +645,7 @@ namespace asi.asicentral.web.Controllers.Show
                  && item.Name.Contains(companyName)).ToList();
             }
             showCompanies.ShowCompanies = list;
-            showCompanies.ShowId = showId.HasValue ? showId.Value : 0; 
+            showCompanies.ShowId = showId.HasValue ? showId.Value : 0;
 
 
             return View("../Show/AddCompaniesToShow", showCompanies);

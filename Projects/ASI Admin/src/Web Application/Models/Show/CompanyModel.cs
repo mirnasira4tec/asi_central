@@ -26,7 +26,7 @@ namespace asi.asicentral.web.models.show
         [Display(ResourceType = typeof(Resource), Name = "CompanyName")]
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
-        [Remote("IsValidCompany", "ShowCompany", HttpMethod = "POST", ErrorMessage = "The Name already exists.")]
+        [Remote("IsValidCompany", "ShowCompany", HttpMethod = "POST", ErrorMessage = "The Name already exists.", AdditionalFields = "InitialName")]
         public string Name { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "Address1")]

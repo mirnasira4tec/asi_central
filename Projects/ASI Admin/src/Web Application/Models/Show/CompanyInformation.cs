@@ -28,10 +28,10 @@ namespace asi.asicentral.web.models.show
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string LastName { get; set; }
-
+        
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [RegularExpression(@"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*", ErrorMessage = "Invalid email")]
-        [Remote("IsValidEmail", "ShowCompany", HttpMethod = "POST", ErrorMessage = "Email already exists. Please enter a different Email.")]
+        [Remote("IsValidEmail", "ShowCompany", HttpMethod = "POST", ErrorMessage = "Email already exists. Please enter a different Email.", AdditionalFields="InitialEmail")]
         public string Email { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "Phone")]

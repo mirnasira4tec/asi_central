@@ -13,7 +13,7 @@
             <legend>Add Company</legend>
             @Html.HiddenFor(model => model.Id)
                @Html.HiddenFor(model => model.AddressId)
-            
+             @Html.Hidden("InitialName",Model.Name)
             <label class="checkbox" for="IsNonUSAddress">@Html.EditorFor(model => model.IsNonUSAddress) @Html.Raw(Resource.IsNonUSAddress)</label>
             <div class="control-group">
                 @Html.LabelFor(model => model.Name, new { @class = "control-label" })
@@ -29,7 +29,7 @@
             </div>
             <div class="control-group">
                 @Html.LabelFor(model => model.Url, new { @class = "control-label" })
-                <div class="controls">@Html.EditorFor(model => model.Url) @Html.ValidationMessageFor(model => model.Url)</div>
+                <div class="controls">@Html.EditorFor(model => model.Url)<span class="helper-text"> (optional)</span> @Html.ValidationMessageFor(model => model.Url)</div>
             </div>
             <div id ="divAddress">
             <div class="control-group">
@@ -120,7 +120,6 @@
                 $('#ASINumber').val("");
             } else {
                 $('#ASINumber').prop('disabled', false);
-                $('#ASINumber').val("");
             }
         });
         $("#IsNonUSAddress").change(function (evt) {
