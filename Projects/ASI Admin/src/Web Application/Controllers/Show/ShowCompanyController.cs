@@ -496,19 +496,12 @@ namespace asi.asicentral.web.Controllers.Show
         }
 
 
-        public ActionResult IsValidEmail(string Email, string initialEmail)
+        public ActionResult IsValidEmail(string Email)
         {
             IList<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>().Where(item => item.Email != null && item.Email.Equals(Email)).ToList();
             if (employeeList.Any())
             {
-                if (Email == initialEmail)
-                {
-                    return Json(true);
-                }
-                else
-                {
-                    return Json(false);
-                }
+                return Json(false);
             }
             else
             {
@@ -517,7 +510,7 @@ namespace asi.asicentral.web.Controllers.Show
         }
 
 
-        public ActionResult IsValidCompany(string name, string initialName)
+        public ActionResult IsValidCompany(string name)
         {
             var company = new CompanyModel();
             IQueryable<ShowCompany> companyList = ObjectService.GetAll<ShowCompany>(true);
@@ -526,14 +519,7 @@ namespace asi.asicentral.web.Controllers.Show
             company.company = companyList.ToList();
             if (company.company.Any())
             {
-                if (name == initialName)
-                {
-                    return Json(true);
-                }
-                else
-                {
-                    return Json(false);
-                }
+               return Json(false);
             }
             else
             {
