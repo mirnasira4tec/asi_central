@@ -63,11 +63,9 @@ namespace asi.asicentral.web.models.show
 
         [Display(ResourceType = typeof(Resource), Name = "Phone")]
         [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidPhoneNumber", ErrorMessageResourceType = typeof(Resource))]
-        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public string Phone { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "PhoneAreaCode")]
-        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [RegularExpression(@"^[2-9][0-9]\d$", ErrorMessageResourceName = "FieldInvalidPhoneAreaCode", ErrorMessageResourceType = typeof(Resource))]
         public string PhoneAreaCode { get; set; }
 

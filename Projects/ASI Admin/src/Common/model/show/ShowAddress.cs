@@ -10,9 +10,7 @@ namespace asi.asicentral.model.show
     public class ShowAddress
     {
         public int Id { get; set; }
-        [Required(ErrorMessage = "Phone Area code is required")]
         public string PhoneAreaCode { get; set; }
-        [Required(ErrorMessage = "Phone is required")]
         public string Phone { get; set; }
         public string FaxAreaCode { get; set; }
         public string Fax { get; set; }

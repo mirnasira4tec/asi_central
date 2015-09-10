@@ -77,7 +77,7 @@ namespace asi.asicentral.web.Controllers.Show
 
                     objAddress.Id = company.AddressId;
                     objAddress.Phone = company.Phone;
-                    objAddress.PhoneAreaCode = company.PhoneAreaCode.Trim();
+                    objAddress.PhoneAreaCode = company.PhoneAreaCode;
                     objAddress.FaxAreaCode = company.FaxAreaCode;
                     objAddress.Fax = company.Fax;
                     objAddress.Street1 = company.Address1;
@@ -340,7 +340,7 @@ namespace asi.asicentral.web.Controllers.Show
                         objAddress = new ShowAddress();
                         objAddress.Id = employee.AdreessId;
                         objAddress.Phone = employee.Phone;
-                        objAddress.PhoneAreaCode = employee.PhoneAreaCode.Trim();
+                        objAddress.PhoneAreaCode = employee.PhoneAreaCode;
                         objAddress.FaxAreaCode = employee.FaxAreaCode;
                         objAddress.Fax = employee.Fax;
                         objAddress.Street1 = employee.Address1;
@@ -397,7 +397,7 @@ namespace asi.asicentral.web.Controllers.Show
                         companyInfo.IsNonUSAddress = employeeModel.Address.Country != "USA";
                         companyInfo.HasAddress = true;
                         companyInfo.Phone = employeeModel.Address.Phone;
-                        companyInfo.PhoneAreaCode = employeeModel.Address.PhoneAreaCode.Trim();
+                        companyInfo.PhoneAreaCode = employeeModel.Address.PhoneAreaCode;
                         companyInfo.FaxAreaCode = employeeModel.Address.FaxAreaCode;
                         companyInfo.Fax = employeeModel.Address.Fax;
                         companyInfo.Address1 = employeeModel.Address.Street1;
@@ -432,7 +432,7 @@ namespace asi.asicentral.web.Controllers.Show
                 {
                     address.AdreessId = addressModel.Id;
                     address.Phone = addressModel.Phone;
-                    address.PhoneAreaCode = addressModel.PhoneAreaCode.Trim();
+                    address.PhoneAreaCode = addressModel.PhoneAreaCode;
                     address.Fax = addressModel.Fax;
                     address.FaxAreaCode = addressModel.FaxAreaCode;
                     address.Address1 = addressModel.Street1;
