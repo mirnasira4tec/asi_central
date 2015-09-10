@@ -21,13 +21,13 @@ DROP TABLE [dbo].[ATT_Company]
 --
 CREATE TABLE [dbo].[ATT_Company](
 	[CompanyId] [int] IDENTITY(1,1) NOT NULL,
-	[Name] [nvarchar](50) NOT NULL,
+	[Name] [nvarchar](100) NOT NULL,
 	[WebUrl] [nvarchar](50) NULL,
 	[ASINumber] [nvarchar](10) NULL,
 	[CreateDateUTC] [datetime] NOT NULL,
 	[UpdateDateUTC] [datetime] NOT NULL,
 	[UpdateSource] [varchar](128) NULL CONSTRAINT [ATT_Company_UpdateSource] DEFAULT ((suser_sname()+' Proc=')+isnull(object_name(@@procid),'')),
-	[MemberType] [nvarchar](20) NULL,
+	[MemberType] [nvarchar](50) NULL,
  CONSTRAINT [PK_Company] PRIMARY KEY CLUSTERED 
 (
 	[CompanyId] ASC
@@ -42,15 +42,15 @@ GO
 CREATE TABLE [dbo].[ATT_Address](
 	[AddressId] [int] IDENTITY(1,1) NOT NULL,
 	[Phone] [nvarchar](50) NULL,
-	[PhoneAreaCode] [nchar](10) NULL,
+	[PhoneAreaCode] [nvarchar](50) NULL,
 	[FaxAreaCode] [nvarchar](50) NULL,
 	[Fax] [nvarchar](50) NULL,
-	[Street1] [nvarchar](50) NOT NULL,
-	[Street2] [nvarchar](50) NULL,
+	[Street1] [nvarchar](100) NOT NULL,
+	[Street2] [nvarchar](100) NULL,
 	[Zip] [nvarchar](50) NOT NULL,
-	[State] [nvarchar](50) NOT NULL,
-	[Country] [nvarchar](50) NOT NULL,
-	[City] [nvarchar](50) NOT NULL,
+	[State] [nvarchar](100) NOT NULL,
+	[Country] [nvarchar](100) NOT NULL,
+	[City] [nvarchar](100) NOT NULL,
 	[CreateDateUTC] [datetime] NOT NULL,
 	[UpdateDateUTC] [datetime] NOT NULL,
 	[UpdateSource] [varchar](128) NULL CONSTRAINT [ATT_Address_UpdateSource] DEFAULT ((suser_sname()+' Proc=')+isnull(object_name(@@procid),''))
@@ -99,14 +99,14 @@ GO
 --
 CREATE TABLE [dbo].[ATT_Employee](
 	[EmployeeId] [int] IDENTITY(1,1) NOT NULL,
-	[FirstName] [nvarchar](50) NOT NULL,
-	[MiddleName] [nvarchar](50) NULL,
-	[LastName] [nchar](10) NOT NULL,
+	[FirstName] [nvarchar](100) NOT NULL,
+	[MiddleName] [nvarchar](100) NULL,
+	[LastName] [nvarchar](100) NOT NULL,
 	[Email] [nvarchar](50) NOT NULL,
 	[CompanyId] [int] NOT NULL,
 	[AddressId] [int] NULL,
 	[Phone] [nvarchar](50) NULL,
-	[PhoneAreaCode] [nchar](10) NULL,
+	[PhoneAreaCode] [nvarchar](50) NULL,
 	[CreateDateUTC] [datetime] NOT NULL,
 	[UpdateDateUTC] [datetime] NOT NULL,
 	[UpdateSource] [varchar](128) NULL CONSTRAINT [ATT_Employee_UpdateSource] DEFAULT ((suser_sname()+' Proc=')+isnull(object_name(@@procid),''))
@@ -156,7 +156,7 @@ GO
 --
 CREATE TABLE [dbo].[ATT_Show](
 	[ShowId] [int] IDENTITY(1,1) NOT NULL,
-	[Name] [nvarchar](50) NOT NULL,
+	[Name] [nvarchar](100) NOT NULL,
 	[TypeId] [int] NOT NULL,
 	[StartDate] [datetime] NOT NULL,
 	[EndDate] [datetime] NOT NULL,
