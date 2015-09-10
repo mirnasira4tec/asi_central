@@ -41,8 +41,8 @@ GO
 --
 CREATE TABLE [dbo].[ATT_Address](
 	[AddressId] [int] IDENTITY(1,1) NOT NULL,
-	[Phone] [nvarchar](50) NOT NULL,
-	[PhoneAreaCode] [nchar](10) NOT NULL,
+	[Phone] [nvarchar](50) NULL,
+	[PhoneAreaCode] [nchar](10) NULL,
 	[FaxAreaCode] [nvarchar](50) NULL,
 	[Fax] [nvarchar](50) NULL,
 	[Street1] [nvarchar](50) NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE [dbo].[ATT_Address](
 	[Zip] [nvarchar](50) NOT NULL,
 	[State] [nvarchar](50) NOT NULL,
 	[Country] [nvarchar](50) NOT NULL,
-	[City] [nchar](10) NOT NULL,
+	[City] [nvarchar](50) NOT NULL,
 	[CreateDateUTC] [datetime] NOT NULL,
 	[UpdateDateUTC] [datetime] NOT NULL,
 	[UpdateSource] [varchar](128) NULL CONSTRAINT [ATT_Address_UpdateSource] DEFAULT ((suser_sname()+' Proc=')+isnull(object_name(@@procid),''))
