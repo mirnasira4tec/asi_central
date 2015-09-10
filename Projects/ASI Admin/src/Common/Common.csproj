@@ -235,6 +235,14 @@
     <Compile Include="database\mappings\memberdemogr\SupplierPolicyMap.cs" />
     <Compile Include="database\mappings\memberdemogr\SupplierRatingMap.cs" />
     <Compile Include="database\mappings\memberdemogr\SupplierSeadElectronicAddressMap.cs" />
+    <Compile Include="database\mappings\show\ShowAddressMap.cs" />
+    <Compile Include="database\mappings\show\ShowAttendeeMap.cs" />
+    <Compile Include="database\mappings\show\ShowCompanyAddressMap.cs" />
+    <Compile Include="database\mappings\show\ShowCompanyMap.cs" />
+    <Compile Include="database\mappings\show\ShowEmployeeAttendeeMap.cs" />
+    <Compile Include="database\mappings\show\ShowEmployeeMap.cs" />
+    <Compile Include="database\mappings\show\ShowMap.cs" />
+    <Compile Include="database\mappings\show\ShowTypeMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailSpecialProductItemMap.cs" />
     <Compile Include="database\mappings\store\StoreSupplierRepresentativeInformationMap.cs" />
     <Compile Include="database\mappings\store\StoreDetailEquipmentMembershipMap.cs" />
@@ -287,6 +295,7 @@
     <Compile Include="database\mappings\store\TermsConditionsTypeMap.cs" />
     <Compile Include="database\mappings\timss\PersonifyMappingMap.cs" />
     <Compile Include="database\MemberDemogrContext.cs" />
+    <Compile Include="database\Umbraco_ShowContext.cs" />
     <Compile Include="interfaces\ICreditCardService.cs" />
     <Compile Include="model\CompanyInformation.cs" />
     <Compile Include="model\DM_memberDemogr\CompanyASIRep.cs" />
@@ -304,6 +313,14 @@
     <Compile Include="model\OAuth\User.cs" />
     <Compile Include="model\ROI\Category.cs" />
     <Compile Include="model\ROI\Company.cs" />
+    <Compile Include="model\show\ShowAddress.cs" />
+    <Compile Include="model\show\ShowAttendee.cs" />
+    <Compile Include="model\show\ShowCompanyAddress.cs" />
+    <Compile Include="model\show\ShowCompany.cs" />
+    <Compile Include="model\show\ShowEmployee.cs" />
+    <Compile Include="model\show\ShowEmployeeAttendee.cs" />
+    <Compile Include="model\show\ShowASI.cs" />
+    <Compile Include="model\show\ShowType.cs" />
     <Compile Include="model\store\StoreDetailSpecialProductItem.cs" />
     <Compile Include="model\store\StoreSupplierRepresentativeInformation.cs" />
     <Compile Include="model\store\LookEquipmentType.cs" />
@@ -466,6 +483,7 @@
     <Compile Include="util\OAuth\CookiesHelper.cs" />
     <Compile Include="util\OAuth\EnumHelper.cs" />
     <Compile Include="util\OAuth\SSO.cs" />
+    <Compile Include="util\show\ShowHelper.cs" />
     <Compile Include="util\store\asismartsales\ASISmartSalesHelper.cs" />
     <Compile Include="util\store\catalogadvertising\CatalogAdvertisingHelper.cs" />
     <Compile Include="util\store\catalogadvertising\CatalogAdvertisingTieredProductPricing.cs" />
