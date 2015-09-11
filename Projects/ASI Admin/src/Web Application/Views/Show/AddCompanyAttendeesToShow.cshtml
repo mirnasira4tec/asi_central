@@ -1,0 +1,82 @@
+﻿@using asi.asicentral.web.models.show
+@using asi.asicentral.model.show
+@model ShowCompaniesModel
+@{
+    Layout = "~/Views/Show/Shared/_Layout.cshtml";
+}
+<h1>Add Attendees to the Show</h1>
+@using (Html.BeginForm("PostShowAttendeeInformation", "Show", FormMethod.Post, new { id = "showAttendee-form", @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Show.Id)
+
+
+    if (Model.ShowAttendees != null)
+    {
+        for (int count = 0; count < Model.ShowAttendees.Count; count++)
+        {
+    @Html.HiddenFor(model => model.ShowAttendees[count].CompanyId)
+    @Html.HiddenFor(model => model.ShowAttendees[count].ShowId)
+    @Html.HiddenFor(model => model.ShowAttendees[count].Id)
+    <div class="span3 box">
+        <strong>@Model.ShowAttendees[count].Company.Name</strong>
+        <section class="first-section">
+            <div class="control-group">
+                <label class="checkbox" for="@Model.ShowAttendees[count].IsAttending">@Html.EditorFor(model => model.ShowAttendees[count].IsAttending) Is Attending</label>
+                <label class="checkbox" for="@Model.ShowAttendees[count].IsSponsor">@Html.EditorFor(model => model.ShowAttendees[count].IsSponsor) Is Sponsor</label>
+                <label class="checkbox" for="@Model.ShowAttendees[count].IsExhibitDay">@Html.EditorFor(model => model.ShowAttendees[count].IsExhibitDay) Exhibit Day</label>
+            </div>
+            <div>
+                @Html.LabelFor(model => model.ShowAttendees[count].BoothNumber)
+                <div class="input-mini">@Html.EditorFor(model => model.ShowAttendees[count].BoothNumber) @Html.ValidationMessageFor(model => model.ShowAttendees[count].BoothNumber)</div>
+            </div>
+        </section>
+        <br>
+    </div>
+  
+    <section class="second-section span7 box" style="margin-left: 10px;">
+        <strong>Who is attending "@Model.Show.Name (@Model.Show.StartDate.ToString("MMM") @Model.Show.StartDate.Day.ToString() - @Model.Show.EndDate.ToString("MMM") @Model.Show.EndDate.Day.ToString())" show ?</strong>
+        <div style="max-height: 200px; overflow-y: auto;">
+            @if (Model.ShowEmployees != null)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone</th>
+                        </tr>
+                    </thead>
+                    @for (int empCnt = 0; empCnt < Model.ShowEmployees.Count; empCnt++)
+                    {
+                        @Html.HiddenFor(model => model.ShowEmployees[empCnt].Employee.Id)
+                        @Html.HiddenFor(model => model.ShowEmployees[empCnt].Employee.AddressId)
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <label class="checkbox" for="@Model.ShowEmployees[empCnt].IsAttending">@Html.EditorFor(model => model.ShowEmployees[empCnt].IsAttending) @Model.ShowEmployees[empCnt].Employee.FirstName @Model.ShowEmployees[empCnt].Employee.LastName
+                                    </label>
+                                </td>
+                                <td>@Model.ShowEmployees[empCnt].Employee.EPhoneAreaCode - @Model.ShowEmployees[empCnt].Employee.EPhone</td>
+                            </tr>
+                        </tbody>
+               
+               
+                    }
+                </table>
+            }
+        </div>
+    </section>
+    
+    <div class="text-center clearfix">
+        @{var submitText = (Model.ShowAttendees[count].Id == 0 ? "Add" : "Save");}
+        <br />
+        <input type="submit" class="btn btn-primary" value="@submitText" />
+    </div>
+        }
+    }
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/form")
+    <script src="/Scripts/asi.js"></script>
+}

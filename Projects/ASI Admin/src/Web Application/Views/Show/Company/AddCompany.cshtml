@@ -1,0 +1,163 @@
+﻿@model asi.asicentral.web.models.show.CompanyModel
+@using asi.asicentral.Resources
+@{
+    Layout = "~/Views/Show/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("AddCompany", "ShowCompany", FormMethod.Post, new { id = "company-form", @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <p class="navigate-back"><a href="/ShowCompany/CompanyList">Back to Company list</a></p>
+    <div id="tabbasic" class="basic-information tab-pane fade in active">
+        <fieldset class="company-info-form">
+            <legend>@{var headerText = (Model.Id == 0 ? "Add Company" : "Update Company");}@headerText </legend>
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.AddressId)
+            <label class="checkbox" for="IsNonUSAddress">@Html.EditorFor(model => model.IsNonUSAddress) @Html.Raw(Resource.IsNonUSAddress)</label>
+            <div class="control-group">
+               @Html.Hidden("NameBeforeChange", Model.Name)
+                @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+                <div class="controls">@Html.EditorFor(model => model.Name, new { ID = "Name" }) @Html.ValidationMessageFor(model => model.Name)</div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.MemberType, new { @class = "control-label" })
+                <div class="controls">@Html.DropDownListFor(model => model.MemberType, new SelectList(asi.asicentral.web.models.show.CompanyModel.GetMemberTypes(), "Value", "Text"), new { ID = "MemberType" }) @Html.ValidationMessageFor(model => model.MemberType)</div>
+            </div>
+            <div class="control-group" id="asinumber-product">
+                @Html.LabelFor(model => model.ASINumber, new { @class = "control-label" })
+                <div class="controls">@Html.EditorFor(model => model.ASINumber, new { ID = "ASINumber" }) @Html.ValidationMessageFor(model => model.ASINumber)</div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.Url, new { @class = "control-label" })
+                <div class="controls">@Html.EditorFor(model => model.Url)<span class="helper-text"> (optional)</span> @Html.ValidationMessageFor(model => model.Url)</div>
+            </div>
+            <div id="divAddress">
+                <div class="control-group">
+                    @Html.LabelFor(model => model.Address1, new { @class = "control-label" })
+                    <div class="controls">@Html.EditorFor(model => model.Address1)<span class="helper-text"> (Please no P.O. boxes)</span>@Html.ValidationMessageFor(model => model.Address1)</div>
+                </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.Address2, new { @class = "control-label" })
+                    <div class="controls">@Html.EditorFor(model => model.Address2)<span class="helper-text"> (optional)</span> @Html.ValidationMessageFor(model => model.Address2)</div>
+                </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.Zip, new { @class = "control-label" })
+                    <div class="controls">@Html.EditorFor(model => model.Zip) @Html.ValidationMessageFor(model => model.Zip)</div>
+                </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.City, new { @class = "control-label" })
+                    <div class="controls">@Html.EditorFor(model => model.City) @Html.ValidationMessageFor(model => model.City)</div>
+                </div>
+                <div id="state-div" class="control-group @Html.Raw(!Model.IsNonUSAddress ? string.Empty : "hidden")">
+                    @Html.LabelFor(model => model.State, new { @class = "control-label" })
+                    <div class="controls">@Html.DropDownListFor(model => model.State, asi.asicentral.util.HtmlHelper.GetStates()) @Html.ValidationMessageFor(model => model.State)</div>
+                </div>
+                <div id="international-state-div" class="control-group @Html.Raw(!Model.IsNonUSAddress ? "hidden" : string.Empty)">
+                    @Html.LabelFor(model => model.InternationalState, new { @class = "control-label" })
+                    <div class="controls">@Html.EditorFor(model => model.InternationalState) @Html.ValidationMessageFor(model => model.InternationalState)</div>
+                </div>
+                <div id="country-div" class="control-group @Html.Raw(!Model.IsNonUSAddress ? "hidden" : string.Empty)">
+                    @Html.LabelFor(model => model.Country, new { @class = "control-label" })
+                    <div class="controls">@Html.DropDownListFor(model => model.Country, asi.asicentral.util.HtmlHelper.GetCountries()) @Html.ValidationMessageFor(model => model.Country)</div>
+                </div>
+
+                <div class="form-group control-group">
+                    @Html.LabelFor(model => model.Phone, new { @class = "control-label " })
+                    <div class="controls">
+                        @Html.TextBoxFor(model => model.PhoneAreaCode, new { @class = "input-mini" })
+                        @Html.TextBoxFor(model => model.Phone, new { @class = "input-mid" })
+                    </div>
+
+                    <div class="col-sm-3 error_message controls">
+                        @Html.ValidationMessageFor(model => model.PhoneAreaCode)
+                        @Html.ValidationMessageFor(model => model.Phone)
+                    </div>
+
+                </div>
+                <div class="form-group control-group">
+                    @Html.LabelFor(model => model.Fax, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.TextBoxFor(model => model.FaxAreaCode, new { @class = "form-control input-mini" })
+                        @Html.TextBoxFor(model => model.Fax, new { @class = "form-control input-mid" })
+                        <span class="helper-text">(optional)</span>
+                    </div>
+
+                    <div class="col-sm-3 error_message controls">
+                        @Html.ValidationMessageFor(model => model.FaxAreaCode)
+                        @Html.ValidationMessageFor(model => model.Fax)
+                    </div>
+                </div>
+            </div>
+
+        </fieldset>
+    </div>
+    <footer id="page-completion-navigation">
+        <nav>
+            <p class="next-step-button">
+                @{var submitText = (Model.Id == 0 ? "Add" : "Save");}
+                <input type="submit" class="command btn btn-primary" value="@submitText"/>
+                <a href="/ShowCompany/CompanyList">Cancel</a>
+        </nav>
+    </footer>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/form")
+    <script>
+        $(document).ready(function () {
+            if ($("#IsNonUSAddress").prop('checked')) {
+                $("#country-div").attr("class", "control-group");
+                $("#state-div").attr("class", "control-group hidden");
+                $("#international-state-div").attr("class", "control-group");
+            }
+            else {
+                $("#country-div").attr("class", "control-group hidden");
+                $("#state-div").attr("class", "control-group");
+                $("#international-state-div").attr("class", "control-group hidden");
+            }
+
+            if ($('#MemberType').val() == "Non-Member") {
+                $('#ASINumber').prop('disabled', true);
+                $('#ASINumber').val("");
+            } else {
+                $('#ASINumber').prop('disabled', false);
+            }
+        });
+        $("#IsNonUSAddress").change(function (evt) {
+            if ($("#country-div").attr("class").trim() == "control-group")
+                $("#country-div").attr("class", "control-group hidden");
+            else
+                $("#country-div").attr("class", "control-group");
+            if ($("#country-div").attr("class") == "control-group hidden") {
+                $("#Country").val("USA");
+                $("#State").val("");
+                $("#state-div").attr("class", "control-group");
+                $("#international-state-div").attr("class", "control-group hidden");
+                $("#InternationalState").val("N/A");
+            }
+            else {
+                $("#Country").val("");
+                $("#state-div").attr("class", "control-group hidden");
+                $("#State").val("AL");
+                $("#InternationalState").val("");
+                $("#international-state-div").attr("class", "control-group");
+            }
+        });
+        $("#company-form").submit(function (evt) {
+            if ($("#Name").val() == $("#NameBeforeChange").val()) {
+                $("#Name").rules("remove", "remote");
+            }
+        });
+
+        $(function () {
+            $("#MemberType").change(function () {
+                if ($(this).val() == "Non-Member") {
+                    $('#ASINumber').prop('disabled', true);
+                    $('#ASINumber').val("");
+                } else {
+                    $('#ASINumber').prop('disabled', false);
+                }
+            });
+        });
+
+    </script>
+}

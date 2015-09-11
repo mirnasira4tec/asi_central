@@ -1,0 +1,81 @@
+﻿@using asi.asicentral.web;
+@using asi.asicentral.model.show
+@using asi.asicentral.web.models.show
+@using asi.asicentral.Resources
+@using asi.asicentral.interfaces
+@model CompanyInformation
+@{
+    
+    Layout = "~/Views/Show/Shared/_Layout.cshtml";
+}
+<h3>
+    <a class="btn btn-small" href="/ShowCompany/CompanyList">
+        <i class="icon-backward"></i>
+    </a>
+    @Model.Name 
+</h3>
+<div class="clearfix">
+    <a href="/ShowCompany/AddAddress?companyId=@Model.Id" class="btn btn-primary">Add Address </a>
+    <br />
+    <br />
+        <table class="table table-bordered table-condensed table-striped">
+  <thead>
+    <tr>
+       <th>&nbsp;</th>
+      <th>Address</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var address in @Model.CompanyAddress)
+    { <tr>
+        <td>
+            <a rel="tooltip" data-placement="right" class="delete" href="/ShowCompany/DeleteAddress?id=@address.Address.Id&companyId=@address.CompanyId"><i class="icon-trash"></i></a>
+            <a rel="tooltip" data-placement="right" class="icon-pencil" href="/ShowCompany/EditAddress?id=@address.Address.Id&companyId=@address.CompanyId"></a>
+        </td>
+                <td>@address.Address.City &nbsp; @address.Address.Street1 &nbsp; @address.Address.State</td>
+            </tr>
+    
+    }
+  </tbody>
+</table>
+     <a href="/ShowCompany/AddEmployee?companyId=@Model.Id" class="btn btn-primary">Add Employee </a>
+    <br />
+    <br />
+    <table class="table table-bordered table-condensed table-striped">
+  <thead>
+    <tr>
+      <th>&nbsp;</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Email</th>
+      <th>Phone Number</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var employee in @Model.Employee)
+    {
+            <tr><td>
+                <a data-placement="right" class="delete" id="@employee.Id" href="/ShowCompany/DeleteEmployee?id=@employee.Id"><i class="icon-trash"></i></a>
+                <a rel="tooltip" data-placement="right" class="icon-pencil" href="/ShowCompany/EditEmployee?id=@employee.Id"></a>
+                </td>
+                <td>@employee.FirstName</td>
+                <td>@employee.LastName </td>
+                <td>@employee.Email</td>
+                <td>@employee.EPhoneAreaCode - @employee.EPhone</td>
+            </tr>
+    }
+  </tbody>
+</table>
+</div>
+@section scripts {
+    <script type="text/javascript">
+        $('a.delete').click(function () {
+            var confirms = confirm("Are you sure you want to delete?");
+            if (confirms)
+                return true
+            else
+                return false
+        });
+        </script>
+}
