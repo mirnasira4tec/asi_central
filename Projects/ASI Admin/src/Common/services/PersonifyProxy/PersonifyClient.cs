@@ -78,12 +78,9 @@ namespace asi.asicentral.services.PersonifyProxy
             return orderOutput;
         }
 
-        public static void CreateBundleOrder(StoreOrder storeOrder,
-                                            PersonifyMapping mapping,
-                                            CustomerInfo companyInfo,
-                                            CustomerInfo contactInfo,
-                                            AddressInfo billToAddress,
-                                            AddressInfo shipToAddress)
+        public static void CreateBundleOrder(StoreOrder storeOrder, PersonifyMapping mapping, CustomerInfo companyInfo,
+                                             CustomerInfo contactInfo, AddressInfo billToAddress, AddressInfo shipToAddress,
+                                             bool waiveAppFee, bool firstMonthFree)
         {
             _log.Debug(string.Format("CreateBundleOrder - start: order {0} ", storeOrder));
             DateTime startTime = DateTime.Now;
@@ -101,32 +98,35 @@ namespace asi.asicentral.services.PersonifyProxy
                 BillAddressTypeCode = "CORPORATE",
                 RateStructure = mapping.PersonifyRateStructure,
                 
-                RateCode = mapping.PersonifyRateCode, //"FY_DISTMEM", //,"FP_ESPPMDLMORD14", //
-                BundleGroupName = mapping.PersonifyBundle //"DIST_MEM" //"ESPP-MD-LM-ORD" //
+                RateCode = mapping.PersonifyRateCode, //"FY_DISTMEM", "FP_ESPPMDLMORD14", //
+                BundleGroupName = mapping.PersonifyBundle //"DIST_MEM", "ESPP-MD-LM-ORD" //
             };
 
             var bOutput = SvcClient.Post<ASICreateBundleOrderOutput>("ASICreateBundleOrder", bundleOrderInput);
             storeOrder.BackendReference = bOutput.ASIBundleOrderNumber;
 
             //payment schedule for bundle line items
-            var orderLineItems = SvcClient.Ctxt.OrderDetailInfos
-                                               .Where(c => c.OrderNumber == bOutput.ASIBundleOrderNumber && c.BaseTotalAmount > 0)
-                                               .ToList();
-            if (orderLineItems.Any())
+            if ( !firstMonthFree )
             {
-                var item = orderLineItems[0];
-                var iPaySchedual = new ASICreatePayScheduleInput()
+                var orderLineItems = SvcClient.Ctxt.OrderDetailInfos
+                                                   .Where(c => c.OrderNumber == bOutput.ASIBundleOrderNumber && c.BaseTotalAmount > 0)
+                                                   .ToList();
+                if (orderLineItems.Any())
                 {
-                    OrderNumber = item.OrderNumber,
-                    OrderLineNumber = (short)item.RelatedLineNumber,
-                    PayFrequency = "MONTHLY",
-                    PayStartDate = DateTime.Now,
-                    PayMethodCode = "CC",
-                    CCProfileId = Int32.Parse(storeOrder.CreditCard.ExternalReference),
-                    SyncPayScheduleFlag = true
-                };
+                    var item = orderLineItems[0];
+                    var iPaySchedual = new ASICreatePayScheduleInput()
+                    {
+                        OrderNumber = item.OrderNumber,
+                        OrderLineNumber = (short)item.RelatedLineNumber,
+                        PayFrequency = "MONTHLY",
+                        PayStartDate = DateTime.Now,
+                        PayMethodCode = "CC",
+                        CCProfileId = Int32.Parse(storeOrder.CreditCard.ExternalReference),
+                        SyncPayScheduleFlag = true
+                    };
 
-                SvcClient.Post<ASICreatePayScheduleOutput>("ASICreatePaySchedule", iPaySchedual);
+                    SvcClient.Post<ASICreatePayScheduleOutput>("ASICreatePaySchedule", iPaySchedual);
+                }
             }
 
             //add membership application fee
@@ -141,48 +141,49 @@ namespace asi.asicentral.services.PersonifyProxy
                 var linePriceInput = new ASIAddOrderLinewithPriceInput()
                 {
                     OrderNumber = bOutput.ASIBundleOrderNumber,
-                    ProductID = applicationFeeId, //160
+                    ProductID = applicationFeeId,
                     Quantity = 1,
                     UserDefinedBoltOn = true,
                     RateStructure = "MEMBER",
-                    RateCode = "STD"
+                    RateCode = waiveAppFee ? "SPECIAL" : "STD"
                 };
 
                 SvcClient.Post<OrderNumberParam>("ASIAddOrderLinewithPrice", linePriceInput);
 
-                //one time application fee payment
-                var appFeeLines =
-                    SvcClient.Ctxt.OrderDetailInfos.Where(c => c.OrderNumber == linePriceInput.OrderNumber && 
-                                                               c.ProductId == applicationFeeId).ToList();
-                if (appFeeLines.Any())
+                //one time application fee payment if not waived
+                if (!waiveAppFee)
                 {
-                    var appFeeLineItem = appFeeLines[0];
-                    ASICustomerCreditCard creditCard = GetCreditCardByProfileId(companyInfo, storeOrder.CreditCard.ExternalReference);
+                    var appFeeLines = SvcClient.Ctxt.OrderDetailInfos.Where(c => c.OrderNumber == linePriceInput.OrderNumber && 
+                                                                                 c.ProductId == applicationFeeId).ToList();
+                    if (appFeeLines.Any() && appFeeLines[0].BaseTotalAmount > 0)
+                    {
+                        ASICustomerCreditCard creditCard = GetCreditCardByProfileId(companyInfo, storeOrder.CreditCard.ExternalReference);
 
-                    var payOrderInput = new PayOrderInput()
-                    {
-                        OrderNumber = linePriceInput.OrderNumber,
-                        OrderLineNumbers = appFeeLineItem.OrderLineNumber.ToString(),
-                        Amount = appFeeLineItem.ActualTotalAmount,
-                        AcceptPartialPayment = true,
-                        CurrencyCode = "USD",
-                        MasterCustomerId = companyInfo.MasterCustomerId,
-                        SubCustomerId = Convert.ToInt16(companyInfo.SubCustomerId),
-                        BillMasterCustomerId = companyInfo.MasterCustomerId,
-                        BillSubCustomerId = Convert.ToInt16(companyInfo.SubCustomerId),
-                        BillingAddressStreet = billToAddress.Address1,
-                        BillingAddressCity = billToAddress.City,
-                        BillingAddressState = billToAddress.State,
-                        BillingAddressCountryCode = billToAddress.CountryCode,
-                        BillingAddressPostalCode = billToAddress.PostalCode,
-                        UseCreditCardOnFile = true,
-                        CCProfileId = storeOrder.CreditCard.ExternalReference,
-                        CompanyNumber = creditCard.UserDefinedCompanyNumber
-                    };
-                    var resp = SvcClient.Post<PayOrderOutput>("PayOrder", payOrderInput);
-                    if (!(resp.Success ?? false))
-                    {
-                        throw new Exception(resp.ErrorMessage ?? "Error in paying order");
+                        var payOrderInput = new PayOrderInput()
+                        {
+                            OrderNumber = linePriceInput.OrderNumber,
+                            OrderLineNumbers = appFeeLines[0].OrderLineNumber.ToString(),
+                            Amount = appFeeLines[0].ActualTotalAmount,
+                            AcceptPartialPayment = true,
+                            CurrencyCode = "USD",
+                            MasterCustomerId = companyInfo.MasterCustomerId,
+                            SubCustomerId = Convert.ToInt16(companyInfo.SubCustomerId),
+                            BillMasterCustomerId = companyInfo.MasterCustomerId,
+                            BillSubCustomerId = Convert.ToInt16(companyInfo.SubCustomerId),
+                            BillingAddressStreet = billToAddress.Address1,
+                            BillingAddressCity = billToAddress.City,
+                            BillingAddressState = billToAddress.State,
+                            BillingAddressCountryCode = billToAddress.CountryCode,
+                            BillingAddressPostalCode = billToAddress.PostalCode,
+                            UseCreditCardOnFile = true,
+                            CCProfileId = storeOrder.CreditCard.ExternalReference,
+                            CompanyNumber = creditCard.UserDefinedCompanyNumber
+                        };
+                        var resp = SvcClient.Post<PayOrderOutput>("PayOrder", payOrderInput);
+                        if (!(resp.Success ?? false))
+                        {
+                            throw new Exception(resp.ErrorMessage ?? "Error in paying order");
+                        }
                     }
                 }
             }
