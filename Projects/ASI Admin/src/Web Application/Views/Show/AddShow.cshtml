@@ -1,0 +1,80 @@
+﻿@model asi.asicentral.web.models.show.ShowModel
+@using asi.asicentral.Resources
+@{
+    Layout = "~/Views/Show/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("AddShow", "Show", FormMethod.Post, new { id = "AddShow-form", @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    
+     <p class="navigate-back"><a href="/Show/ShowList">Back to Show list</a></p>
+    <div id="tabbasic" class="basic-information tab-pane fade in active">
+        <fieldset class="company-info-form">
+            <legend>@{var headerText = (Model.Id == 0 ? "Add Show" : "Update Show");}@headerText</legend>
+            @Html.HiddenFor(model => model.Id)
+                <div class="control-group" id="asinumber-product">
+                    @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+                    <div class="controls">@Html.EditorFor(model => model.Name) @Html.ValidationMessageFor(model => model.Name)</div>
+                </div>
+            
+              <div class="control-group">
+                    @Html.LabelFor(model => model.ShowType, new { @class = "control-label" })
+                    <div class="controls"> @Html.DropDownListFor(model => model.ShowTypeId, Model.ShowType, "Select", new { @class = "span3" })@Html.ValidationMessageFor(model => model.ShowTypeId)</div>
+                </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.Address, new { @class = "control-label" })
+                    <div class="controls">@Html.TextAreaFor(model => model.Address, 5, 45, null)@Html.ValidationMessageFor(model => model.Address)</div>
+                </div>
+                
+                <div class="control-group">
+                    @Html.LabelFor(model => model.StartDate, new { @class = "control-label" })
+                    <div class="controls">@Html.EditorFor(model => model.StartDate, new { @class = "dateField" }) <i class="icon-remove date-clear" id="StartDate"></i>
+                  <span id="span_Error_CurrDate" class="field-validation-error" style="display: none;">Start from date should be greater than current date</span></div>
+                </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.EndDate, new { @class = "control-label" })
+                 <div class="controls">@Html.EditorFor(model => model.EndDate, new { @class = "dateField" })  <i class="icon-remove date-clear" id="EndDate"></i><span id="span_Error_ValidDate" class="field-validation-error" style="display: none;">End date should be less than Start date.</span></div>
+                </div>
+           
+
+        </fieldset>
+    </div>
+    <footer id="page-completion-navigation">
+        <nav>
+            
+            <p class="next-step-button">
+                @{var submitText = (Model.Id == 0 ? "Add" : "Save");}
+                <input type="submit" class="command btn btn-primary" value="@submitText"/>
+                 <a href="/Show/ShowList">Cancel</a>
+        </nav>
+    </footer>
+}
+@section scripts {
+     @Scripts.Render("~/bundles/form")
+ <script>
+        var date = new Date();
+        date.setDate(date.getDate() - 1);
+
+         $("#StartDate").datepicker({
+            startDate: date
+        }).on('changeDate', function (selected) {
+            startDate = new Date(selected.date.valueOf());
+            startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
+            $("#EndDate").datepicker('setStartDate', startDate);
+        });
+
+        $('.date-clear').click(function () {
+            $("input[name='" + this.id + "']").val('');
+        });
+
+
+        $(document).ready(function () {
+
+            startDate = new Date($('#StartDate').val());
+            startDate.setDate(startDate.getDate(new Date($('#StartDate').val())));
+            $("#EndDate").datepicker('setStartDate', startDate);
+        });
+        
+    </script>
+    }
