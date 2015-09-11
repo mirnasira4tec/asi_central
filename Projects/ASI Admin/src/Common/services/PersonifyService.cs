@@ -36,7 +36,8 @@ namespace asi.asicentral.services
                 throw new ArgumentException("You must pass a valid order and the country codes");
             try
             {
-                var companyInfo = PersonifyClient.ReconcileCompany(order.Company, "UNKNOWN", countryCodes, true);
+                var memberType = string.IsNullOrEmpty(order.Company.MemberType) ? "UNKNOWN" : order.Company.MemberType;
+                var companyInfo = PersonifyClient.ReconcileCompany(order.Company, memberType, countryCodes, true);
 
                 log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
