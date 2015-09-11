@@ -30,16 +30,18 @@ namespace asi.asicentral.web.models.show
         public string LastName { get; set; }
         
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
+        [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength50")]
         [RegularExpression(@"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*", ErrorMessage = "Invalid email")]
         [Remote("IsValidEmail", "ShowCompany", HttpMethod = "POST", ErrorMessage = "Email already exists. Please enter a different Email.")]
         public string Email { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "Phone")]
+        [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength50")]
         [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidPhoneNumber", ErrorMessageResourceType = typeof(Resource))]
         public string EPhone { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "PhoneAreaCode")]
-       [RegularExpression(@"^[2-9][0-9]\d$", ErrorMessageResourceName = "FieldInvalidPhoneAreaCode", ErrorMessageResourceType = typeof(Resource))]
+        [RegularExpression(@"^[2-9][0-9]\d$", ErrorMessageResourceName = "FieldInvalidPhoneAreaCode", ErrorMessageResourceType = typeof(Resource))]
         public string EPhoneAreaCode { get; set; }
     }
 }
