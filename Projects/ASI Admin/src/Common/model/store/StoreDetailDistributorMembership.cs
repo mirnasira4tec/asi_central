@@ -12,7 +12,7 @@ namespace asi.asicentral.model.store
     {
         //In the below list of product id's 5 to 8, 81 are distributor products 
         //and 29 to 31 are Proforma products
-        public static int[] Identifiers = new int[] { 5, 6, 7, 8, 29, 30 , 31, 81 };
+        public static int[] Identifiers = new int[] { 5, 6, 7, 8, 81 };
         
         public StoreDetailDistributorMembership()
         {

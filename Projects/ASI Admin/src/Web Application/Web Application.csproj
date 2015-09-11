@@ -284,6 +284,8 @@
     <Compile Include="Controllers\sgr\CategoryController.cs" />
     <Compile Include="Controllers\sgr\CompanyController.cs" />
     <Compile Include="Controllers\sgr\ProductController.cs" />
+    <Compile Include="Controllers\Show\ShowCompanyController.cs" />
+    <Compile Include="Controllers\Show\ShowController.cs" />
     <Compile Include="Controllers\Store\ApplicationController.cs" />
     <Compile Include="Controllers\Store\ContextController.cs" />
     <Compile Include="Controllers\Store\CouponController.cs" />
@@ -305,6 +307,11 @@
     <Compile Include="Models\sgr\ViewCategory.cs" />
     <Compile Include="Models\sgr\ViewCompany.cs" />
     <Compile Include="Models\sgr\ViewProduct.cs" />
+    <Compile Include="Models\Show\AddressModel.cs" />
+    <Compile Include="Models\Show\CompanyInformation.cs" />
+    <Compile Include="Models\Show\CompanyModel.cs" />
+    <Compile Include="Models\Show\ShowCompaniesModel.cs" />
+    <Compile Include="Models\Show\ShowModel.cs" />
     <Compile Include="Models\Store\CompanyValidationsModel.cs" />
     <Compile Include="Models\Store\interfaces\IMembershipModel.cs" />
     <Compile Include="Models\Store\Order\CatalogAdvertisingApplicationModel.cs" />
@@ -356,6 +363,7 @@
     <None Include="Properties\PublishProfiles\Local File.pubxml" />
     <None Include="Properties\PublishProfiles\Web App Deploy.pubxml" />
     <Content Include="Images\admin-asi-creditcard.gif" />
+    <Content Include="Images\admin-asi-show.gif" />
     <Content Include="Images\admin-asi-store.gif" />
     <Content Include="Images\admin-media-links.gif" />
     <Content Include="Images\admin-sgr.gif" />
@@ -478,6 +486,18 @@
     <Content Include="Views\TermsConditions\Edit.cshtml" />
     <EmbeddedResource Include="Views\Emails\TermsConditionsEmail.cshtml" />
     <Content Include="Views\TermsConditions\_statusMessagePartial.cshtml" />
+    <Content Include="Views\Show\AddShow.cshtml" />
+    <Content Include="Views\Show\Shared\Address.cshtml" />
+    <Content Include="Views\Show\ShowList.cshtml" />
+    <Content Include="Views\Show\Company\AddAddress.cshtml" />
+    <Content Include="Views\Show\Company\AddEmployee.cshtml" />
+    <Content Include="Views\Show\Company\AddCompany.cshtml" />
+    <Content Include="Views\Show\Company\CompanyInformation.cshtml" />
+    <Content Include="Views\Show\Company\CompanyList.cshtml" />
+    <Content Include="Views\Show\Shared\_Layout.cshtml" />
+    <Content Include="Views\Show\ShowCompaniesList.cshtml" />
+    <Content Include="Views\Show\AddCompanyAttendeesToShow.cshtml" />
+    <Content Include="Views\Show\AddCompaniesToShow.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
