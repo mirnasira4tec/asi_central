@@ -58,17 +58,59 @@ namespace asi.asicentral.services
 
                 var companyAddresses = PersonifyClient.GetPersonifyAddresses(companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
                 var shipToAddr = GetAddressInfo(contactAddresses, AddressType.Shipping, order).PersonifyAddr;
-                var billToAddr = companyAddresses.FirstOrDefault(a => a.BillToFlag == true); ;
-                var orderDetail = order.OrderDetails[0];
+                var billToAddr = companyAddresses.FirstOrDefault(a => a.BillToFlag == true);
 
-                var mapping = storeService.GetAll<PersonifyMapping>(true)
-                                          .FirstOrDefault(map => map.StoreContext == orderDetail.Order.ContextId &&
-                                                                 map.StoreProduct == orderDetail.Product.Id &&
-                                                                 map.PersonifyRateStructure == "BUNDLE");
-                if( mapping != null)
+                var orderDetail = order.OrderDetails[0];
+                var mappings = storeService.GetAll<PersonifyMapping>(true)
+                                           .Where(map => map.StoreContext == order.ContextId &&
+                                                         map.StoreProduct == orderDetail.Product.Id &&
+                                                         map.PersonifyRateStructure == "BUNDLE").ToList();
+                if( mappings.Count > 0 )
                 {
-                    PersonifyClient.CreateBundleOrder(order, mapping, companyInfo, primaryContactInfo, billToAddr, shipToAddr);
+                    PersonifyMapping mapping = null;
+                    bool waiveAppFee = false;
+                    bool firstmonthFree = false;
+                    var coupon = orderDetail.Coupon;
+                    bool couponError = false;
+
+                    if( coupon != null && !string.IsNullOrEmpty(coupon.CouponCode) && coupon.CouponCode != "(Unknown)")
+                    {
+                        mapping = mappings.FirstOrDefault(m => m.StoreOption == coupon.CouponCode);
+
+                        var contextProduct = storeService.GetAll<ContextProduct>(true)
+                                                         .FirstOrDefault(p => p.Id == orderDetail.Product.Id );
+                        if( contextProduct != null && coupon.IsFixedAmount )
+                        {
+                            waiveAppFee = coupon.DiscountAmount >= contextProduct.ApplicationCost;
+                            firstmonthFree = mapping != null && coupon.DiscountAmount >= contextProduct.ApplicationCost + contextProduct.Cost;
+
+                            couponError = coupon.DiscountAmount != contextProduct.ApplicationCost &&
+                                          coupon.DiscountAmount != contextProduct.ApplicationCost + contextProduct.Cost;
+                        }
+                        else
+                            couponError = true; 
+                    }
+
+                    if (mapping == null)
+                    {
+                        mapping = mappings.FirstOrDefault(m => string.IsNullOrEmpty(m.StoreOption));
+                    }
+
+                    PersonifyClient.CreateBundleOrder(order, mapping, companyInfo, primaryContactInfo, billToAddr, shipToAddr, waiveAppFee, firstmonthFree);
                     ValidateOrderTotal(order, emailService, url);
+
+                    if( couponError)
+                    {   // send internal email 
+                        var data = new EmailData()
+                        {
+                            Subject = "There is a problem with coupon discount amount for an order from the store to Personify",
+                            EmailBody = string.Format("A new order created in the store ({0}) has been transferred to a Personify "
+                            + "order ({1}). There is problem with coupon discount {2}, the order needs to be looked at. {3}",
+                            order.Id.ToString(), order.BackendReference, coupon.IsFixedAmount ? coupon.DiscountAmount : coupon.DiscountPercentage, EmailData.GetMessageSuffix(url))
+                        };
+
+                        data.SendEmail(emailService);
+                    }
                 }
                 else
                 {
@@ -212,15 +254,18 @@ namespace asi.asicentral.services
             CustomerInfo companyInfo = null;
             string newMemberType = string.Empty;
             if (order.IsNewMemberShip(ref newMemberType))
-            { 
+            {
                 //todo?? reconcile company based on the new member type
                 //create a new Personify company for new membership type
                 companyInfo = PersonifyClient.CreateCompany(order.Company, newMemberType, countryCodes);
                 order.Company.ExternalReference = string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
                 order.Company.MemberType = newMemberType;
             }
-            else 
-                companyInfo = PersonifyClient.ReconcileCompany(company, "UNKNOWN", countryCodes);
+            else
+            {
+                var memberType = string.IsNullOrEmpty(company.MemberType) ? "UNKNOWN" : company.MemberType;
+                companyInfo = PersonifyClient.ReconcileCompany(company, memberType, countryCodes);
+            }
 
 			//field used to map an order to a company before approval for non backoffice orders
 			order.ExternalReference = companyInfo.MasterCustomerId;

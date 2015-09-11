@@ -41,8 +41,16 @@ namespace asi.asicentral.Tests
         public void PlaceBundleOrderTest()
         {
             IStoreService storeService = MockupStoreService();
-            var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 5);
-            PlaceOrderTest(string.Empty, storeService, new ContextProduct[] { distributor });
+            var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 7);
+            PlaceOrderTest("12345", storeService, new ContextProduct[] { distributor });
+        }
+
+        [TestMethod]
+        public void BundleOrderSupplierWaveFirstMonth()
+        {
+            IStoreService storeService = MockupStoreService();
+            var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 2);
+            PlaceOrderTest("12345", storeService, new ContextProduct[] { distributor });
         }
 
         [TestMethod]
@@ -518,7 +526,9 @@ namespace asi.asicentral.Tests
             products.Add(new ContextProduct { Id = 77, HasBackEndIntegration = true });
             products.Add(new ContextProduct { Id = 61, HasBackEndIntegration = true });
             products.Add(new ContextProduct { Id = 5, HasBackEndIntegration = true, Type = "Distributor Membership" });
+            products.Add(new ContextProduct { Id = 2, HasBackEndIntegration = true, Type = "Supplier Membership" });
             products.Add(new ContextProduct { Id = 70, HasBackEndIntegration = true, Type = "Dual Distributor Decorator Membership" });
+            products.Add(new ContextProduct { Id = 7, HasBackEndIntegration = true, Type = "Distributor Membership" });
             var emailExpresses = new List<StoreDetailEmailExpress>();
             emailExpresses.Add(new StoreDetailEmailExpress { OrderDetailId = 1, ItemTypeId = 1 });
             var mappings = new List<PersonifyMapping>();
@@ -526,6 +536,8 @@ namespace asi.asicentral.Tests
             mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 61, StoreOption = "1;1X", PersonifyProduct = 1587, PersonifyRateCode = "1X", PersonifyRateStructure = "MEMBER" });
             mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 5, PersonifyProduct = 1003113722, PersonifyRateCode = "FY_DISTMEM", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "DIST_MEM" });
             mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 70, PersonifyProduct = 1003113722, PersonifyRateCode = "", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "DIST_MEM" });
+            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 2, PersonifyProduct = 1003113955, StoreOption = "WAIVEFIRSTMONTH", PersonifyRateCode = "FP_SUPMEMSTDCON", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "SUPPLIERMEM_STD_CON" });
+            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 7, PersonifyProduct = 1003113722, PersonifyRateCode = "FP_ESPPMDLMORD14", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "ESPP-MD-LM-ORD" });
             var codes = new List<LookSendMyAdCountryCode>();
             codes.Add(new LookSendMyAdCountryCode { Alpha2 = "USA", Alpha3 = "USA", CountryName = "United States" });
 
