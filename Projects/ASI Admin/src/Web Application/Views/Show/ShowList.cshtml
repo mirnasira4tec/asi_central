@@ -1,0 +1,98 @@
+﻿@{
+    Layout = "~/Views/Show/Shared/_Layout.cshtml";
+}
+@using asi.asicentral.model.show;
+@using asi.asicentral.services;
+@using asi.asicentral.interfaces;
+@using asi.asicentral.web.models.show;
+@model  ShowModel
+
+<h2>List of Shows</h2>
+<div class="tabbable tabs-below small">
+    <h5>Search by</h5>
+    <ul id="formtab" class="nav nav-tabs">
+        <li class="@(Model.ShowTab == ShowModel.TAB_SHOWTYPE ? "active" : string.Empty)"><a href="#@ShowModel.TAB_SHOWTYPE">Show</a></li>
+    </ul>
+    <div class="tab-content" id="formtab-content">
+        <div class="tab-pane @(Model.ShowTab == ShowModel.TAB_SHOWTYPE ? "active" : string.Empty)" id="@ShowModel.TAB_SHOWTYPE">
+            <div class="well">
+                @using (Html.BeginForm("ShowList", "/Show/ShowList", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @ShowModel.TAB_SHOWTYPE }))
+                {                
+                    <div class="formField span5">
+                        <label for="showType">Show Type</label>
+                        @Html.DropDownListFor(model => model.ShowTypeId, Model.ShowType, "Select", new { name = "ShowTypeId", value = "@Model.ShowTypeId" })
+                    </div>
+                    
+                    <div class="formField span4">
+                        <label for="year">Year</label>
+                        <input name="year" type="text" id="year" value="@Model.year" />
+                    </div>
+                
+                    <div class="formField">
+                        <input type="hidden" value="@ShowModel.TAB_SHOWTYPE" name="showTab" /><input type="submit" value="Search" class="btn" />
+                    </div>
+                }
+            </div>
+        </div>
+        
+    </div>
+</div>
+@using (Html.BeginForm())
+{
+    <a href="/Show/AddShow" class="btn btn-primary">Add </a>
+    <br />
+    <br />
+    <table class="table table-bordered table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Details</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var show in Model.Show)
+            {  <tr>
+                <td><a class="delete" id="@show.Id" href="/Show/Delete?id=@show.Id"><i class="icon-trash"></i></a>
+                    <a rel="tooltip" data-placement="right" class="icon-pencil" href="@Url.Action("Edit", "Show", new { Id = @show.Id })"></a>
+                </td>
+                <td><a href="/ShowCompany/GetAttendeeCompany?showId=@show.Id">@show.Name</a></td>
+                <td>
+                    @show.ShowType.Type
+                </td>
+                @{ var noOfAttendees = 0;
+                   foreach (var showAttendee in show.Attendees)
+                   {
+                       noOfAttendees += showAttendee.EmployeeAttendees.Count();
+                   }
+                }
+                <td>No of Companies: @show.Attendees.Count() No of Attendee:@noOfAttendees
+                </td>
+                <td>@show.StartDate.ToString("dd-MMM-yyyy")</td>
+                <td>@show.EndDate.ToString("dd-MMM-yyyy")</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+@section scripts {
+    <script type="text/javascript">
+        $('ul[id*="formtab"] a').click(function (e) {
+            e.preventDefault();
+            var tabname = e.target.toString();
+            tabname = tabname.substr(tabname.indexOf("#") + 1);
+            $('input[name*="formtab"]').val(tabname);
+            $(this).tab('show');
+        });
+        $('a.delete').click(function () {
+            var confirms = confirm("Are you sure you want to delete the company?");
+            if (confirms)
+                return true
+            else
+                return false
+        });
+    </script>
+}
