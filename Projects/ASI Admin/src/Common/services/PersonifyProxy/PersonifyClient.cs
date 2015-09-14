@@ -85,6 +85,15 @@ namespace asi.asicentral.services.PersonifyProxy
             _log.Debug(string.Format("CreateBundleOrder - start: order {0} ", storeOrder));
             DateTime startTime = DateTime.Now;
 
+            if( mapping == null )
+            {
+                throw new Exception("Error getting personify bundle in mapping table");
+            }
+            else if (storeOrder == null || companyInfo == null || contactInfo == null || billToAddress == null || shipToAddress == null)
+            {
+                throw new Exception("Error processing personify bunddle order, one of the parameters is null!");
+            }
+
             // create bundle
             var bundleOrderInput = new ASICreateBundleOrderInput()
             {
