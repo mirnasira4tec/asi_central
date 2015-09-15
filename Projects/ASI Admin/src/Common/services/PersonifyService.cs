@@ -79,9 +79,10 @@ namespace asi.asicentral.services
                         mapping = mappings.FirstOrDefault(m => m.StoreOption == coupon.CouponCode);
                         firstmonthFree = mapping != null;
 
-                        var contextProduct = storeService.GetAll<ContextProduct>(true)
-                                                         .FirstOrDefault(p => p.Id == orderDetail.Product.Id );
-                        if( contextProduct != null && coupon.IsFixedAmount )
+                        var context = storeService.GetAll<Context>(true).FirstOrDefault(p => p.Id == order.ContextId);
+                        var contextProduct = context != null ? context.Products.FirstOrDefault(p => p.Product.Id == orderDetail.Product.Id) : null;
+
+                        if (contextProduct != null && coupon.IsFixedAmount)
                         {
                             waiveAppFee = !firstmonthFree && coupon.DiscountAmount >= contextProduct.ApplicationCost ||
                                           firstmonthFree && coupon.DiscountAmount >= contextProduct.ApplicationCost + contextProduct.Cost;
