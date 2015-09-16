@@ -43,13 +43,19 @@
             <span class="row">@Html.Raw("<strong>Options Information</strong>")</span>
             <span class="label-row span11">
                 @Html.LabelFor(m => m.Cover)
-				@Html.LabelFor(m => m.Area) 
+				@Html.LabelFor(m => m.Area)
+                @if(Model.ProductId != 111)
+                { 
                 @Html.LabelFor(m => m.Color) 
+                }
 			</span>
 			<span class="label-row">
                 @Html.DropDownListFor(model => model.Cover, Model.CoverOptions)
                 @Html.DropDownListFor(model => model.Area, Model.AreaOptions) 
+                @if(Model.ProductId != 111)
+                {
                 @Html.DropDownListFor(model => model.Color, Model.ColorOptions)
+                }
 			</span>
              <span class="label-row span11">
 				@Html.LabelFor(m => m.Imprint) 
