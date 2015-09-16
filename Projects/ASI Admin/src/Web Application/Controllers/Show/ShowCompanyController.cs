@@ -150,7 +150,7 @@ namespace asi.asicentral.web.Controllers.Show
                         {
                             company.AddressId = companyAddress.Address.Id;
                             company.Phone = addressModel.Phone;
-                            company.PhoneAreaCode = addressModel.PhoneAreaCode.Trim();
+                            company.PhoneAreaCode = addressModel.PhoneAreaCode;
                             company.Fax = addressModel.Fax;
                             company.FaxAreaCode = addressModel.FaxAreaCode;
                             company.Address1 = addressModel.Street1;
@@ -243,7 +243,7 @@ namespace asi.asicentral.web.Controllers.Show
                     ShowCompanyAddress objCompanyAddress = new ShowCompanyAddress();
                     objAddress.Id = Address.AdreessId;
                     objAddress.Phone = Address.Phone;
-                    objAddress.PhoneAreaCode = Address.PhoneAreaCode.Trim();
+                    objAddress.PhoneAreaCode = Address.PhoneAreaCode;
                     objAddress.FaxAreaCode = Address.FaxAreaCode;
                     objAddress.Fax = Address.Fax;
                     objAddress.Street1 = Address.Address1;
