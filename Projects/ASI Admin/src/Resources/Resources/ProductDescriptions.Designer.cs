@@ -286,7 +286,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Get access to new industry suppliers and a wide variety of exciting products. This catalog is a show stopper. Don’t miss out on the opportunity to WOW your end-buyers!.
+        ///   Looks up a localized string similar to Get access to new industry suppliers and a wide variety of exciting products. Don’t miss out on the opportunity to WOW your end-buyers!.
         /// </summary>
         public static string ProductPromoBook {
             get {
