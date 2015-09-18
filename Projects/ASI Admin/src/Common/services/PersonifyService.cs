@@ -100,7 +100,7 @@ namespace asi.asicentral.services
                     }
 
                     PersonifyClient.CreateBundleOrder(order, mapping, companyInfo, primaryContactInfo, billToAddr, shipToAddr, waiveAppFee, firstmonthFree);
-                    ValidateOrderTotal(order, emailService, url);
+                    ValidateOrderTotal(order, emailService, url, true, firstmonthFree);
 
                     if( couponError)
                     {   // send internal email 
@@ -172,24 +172,43 @@ namespace asi.asicentral.services
             }
         }
 
-        private decimal ValidateOrderTotal(StoreOrder order, IEmailService emailService, string url)
+        private decimal ValidateOrderTotal(StoreOrder order, IEmailService emailService, string url, 
+                                           bool bundleOrder = false, bool firstMonthFree = false)
         {
-            decimal orderTotal = PersonifyClient.GetOrderBalanceTotal(order.BackendReference);
-            log.Debug(string.Format("Got the order total {0} of for the order '{1}'.", orderTotal, order));
+            if (order == null)
+            {
+                throw new Exception("Order is null");
+            }
 
-            if (orderTotal != order.Total)
+            decimal backEndTotal = PersonifyClient.GetOrderBalanceTotal(order.BackendReference);
+            log.Debug(string.Format("Got the order total {0} of for the order '{1}'.", backEndTotal, order));
+
+            decimal orderTotal = 0;
+            if (!firstMonthFree)
+            {
+                if (!bundleOrder)
+                {
+                    orderTotal = order.Total;
+                }
+                else if (order.OrderDetails != null && order.OrderDetails.Count > 0)
+                    orderTotal = order.OrderDetails[0].Cost + order.OrderDetails[0].TaxCost;
+            }
+            else
+                orderTotal = order.AnnualizedTotal;
+
+            if (backEndTotal != orderTotal)
             {
                 var data = new EmailData()
                 {
                     Subject = "here is a price discrepancy for an order from the store to Personify",
                     EmailBody = string.Format("A new order created in the store ({0}) has been transferred to a Personify "
                     + "order ({1}). The prices do not match, the order needs to be looked at. The store price is {2:C} and "
-                    + "the Personify price is {3:C}.{4}", order.Id.ToString(), order.BackendReference, order.Total, orderTotal, EmailData.GetMessageSuffix(url))
+                    + "the Personify price is {3:C}.{4}", order.Id.ToString(), order.BackendReference, orderTotal, backEndTotal, EmailData.GetMessageSuffix(url))
                 };
                 data.SendEmail(emailService);
             }
 
-            return orderTotal;
+            return backEndTotal;
         }
 
         private StoreAddressInfo GetAddressInfo(IList<StoreAddressInfo> addresses, AddressType type, StoreOrder order)
@@ -465,16 +484,16 @@ namespace asi.asicentral.services
                 companyInfo = PersonifyClient.GetCompanyInfo(customerInfo);
             }
 
-            log.Debug(string.Format("FindCompanyInfo - end: Company {0}, total matches: {1}; time: {2}",
-                                    company.Name,
-                                    matchList != null ? matchList.Count : 0,
-                                    DateTime.Now.Subtract(startTime).TotalMilliseconds));
 			//set dns flag
             if (customerInfo != null)
             {
                 dnsFlag = PersonifyClient.CompanyDoNotSolicitFlag(customerInfo.MasterCustomerId, customerInfo.SubCustomerId);
             }
 
+            log.Debug(string.Format("FindCompanyInfo - end: Company {0}, total matches: {1}; time: {2}",
+                                    company.Name,
+                                    matchList != null ? matchList.Count : 0,
+                                    DateTime.Now.Subtract(startTime).TotalMilliseconds));
             return companyInfo;
         }
 

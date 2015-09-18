@@ -38,6 +38,7 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string RECORD_TYPE_CORPORATE = "C";
         private const string CUSTOMER_INFO_STATUS_DUPLICATE = "DUPL";
         private const int PHONE_NUMBER_LENGTH = 10;
+        private const string DNS_FLAG_TAG = "USR_DNS_FLAG";
 
 		private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
 		private static readonly IDictionary<string, string> ASIShowCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "SHOW AE" }, { "DISCOVER", "SHOW DISC" }, { "MASTERCARD", "SHOW MS" }, { "VISA", "SHOW VS" } };
@@ -599,9 +600,29 @@ namespace asi.asicentral.services.PersonifyProxy
 
         public static bool CompanyDoNotSolicitFlag(string masterCustomerId, int subCustomerId)
         {
-            //_log.Debug("CompanyDoNotCallFlag - start");
-            //_log.Debug(string.Format("CompanyDoNotCallFlag - end ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
-            return false;
+            _log.Debug("CompanyDoNotCallFlag - start");
+            DateTime startTime = DateTime.Now;
+
+            var ipSPParameterList = new DataServiceCollection<StoredProcedureParameter>(null, TrackingMode.None);
+            var parameter1 = new StoredProcedureParameter() { Name = "@ip_master_customer_id", Value = masterCustomerId, Direction = 1 };
+            var parameter2 = new StoredProcedureParameter() { Name = "@ip_sub_customer_id", Value = subCustomerId.ToString(), Direction = 1 };
+
+            ipSPParameterList.Add(parameter1);        
+            ipSPParameterList.Add(parameter2);
+
+            var spRequest = new StoredProcedureRequest()
+            {
+               StoredProcedureName = "USR_TEST_CUSTOMER_SEARCH_PROC",
+               IsUserDefinedFunction = false,
+               SPParameterList = ipSPParameterList
+            };
+
+            var response = SvcClient.Post<StoredProcedureOutput>("GetStoredProcedureDataXML", spRequest);
+            bool dnsFlag = response != null && !string.IsNullOrEmpty(response.Data) &&
+                           Regex.IsMatch(response.Data, string.Format("<{0}>\\s*Y\\s*</{0}>", DNS_FLAG_TAG), RegexOptions.IgnoreCase);
+
+            _log.Debug(string.Format("CompanyDoNotCallFlag - end ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
+            return dnsFlag;
         }
 
         public static void AddActivity(StoreCompany company, string activityText, Activity activityType)
