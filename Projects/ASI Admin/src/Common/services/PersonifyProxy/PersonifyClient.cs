@@ -35,6 +35,7 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string CUSTOMER_CLASS_INDIV = "INDIV";
         private const string RECORD_TYPE_INDIVIDUAL = "I";
         private const string RECORD_TYPE_CORPORATE = "C";
+        private const string CUSTOMER_INFO_STATUS_DUPLICATE = "DUPL";
         private const int PHONE_NUMBER_LENGTH = 10;
 
 		private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
@@ -497,10 +498,42 @@ namespace asi.asicentral.services.PersonifyProxy
                 Task.Factory.StartNew(() => MatchCompanyName(company, nameMatchList)),
                 Task.Factory.StartNew(() => MatchPhoneEmail(company, phoneEmailMatchList, matchBoth))
             };
-            Task.WaitAll(tasks);
 
-            matchList.AddRange(nameMatchList);
-            matchList.AddRange(phoneEmailMatchList);
+            // Find company matching name
+            Task.WaitAny(tasks[0]);
+            if (nameMatchList.Count == 1)
+            {
+                matchList.AddRange(nameMatchList);
+            }
+            else
+            {
+                // Get company matching phone/email
+                Task.WaitAny(tasks[1]);
+                if (nameMatchList.Count > 1)
+                {
+                    // find companies match both name and phone/email
+                    if( phoneEmailMatchList.Count > 0 )
+                    {
+                        foreach (var m in nameMatchList)
+                        {
+                            var matches = phoneEmailMatchList.FindAll(t => t == m);
+                            if (matches.Count > 0)
+                                matchList.AddRange(matches);
+                        }
+
+                        // no company matches both, get match-name list only
+                        if (matchList.Count < 1)
+                            matchList.AddRange(nameMatchList);
+                    }
+                    else
+                        matchList.AddRange(nameMatchList);
+                }
+                else
+                {
+                    matchList.AddRange(phoneEmailMatchList);
+                }
+            }
+
             matchList = matchList.Distinct().ToList();
             var companyInfo = GetCompanyWithLatestNote(matchList);
 
@@ -518,7 +551,8 @@ namespace asi.asicentral.services.PersonifyProxy
             _log.Debug(string.Format("MatchCompanyName - start: company name {0}", company.Name));
             var companys = SvcClient.Ctxt.ASICustomerInfos
                            .Where(p => p.RecordType == RECORD_TYPE_CORPORATE && p.SubCustomerId == 0 &&
-                                       string.Compare(p.LastName, company.Name) == 0).ToList();
+                                       string.Compare(p.LastName, company.Name) == 0 &&
+                                       string.Compare(p.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE) != 0).ToList();
 
             if (companys.Count < 1)
             {
@@ -530,8 +564,10 @@ namespace asi.asicentral.services.PersonifyProxy
                                            string.Compare(p.LastName, nameWithoutSpecialChars) == 0).ToList();
                 }
             }
-            if( companys.Count > 0 )
+            if (companys.Count > 0)
+            {
                 masterIdList.AddRange(companys.Select(c => c.MasterCustomerId).Distinct());
+            }
 
             _log.Debug(string.Format("MatchCompanyName - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
         }
@@ -611,27 +647,36 @@ namespace asi.asicentral.services.PersonifyProxy
                     string condition2 = null;
                     foreach (var info in customInfos)
                     {
-                        if (info.SubCustomerId == 0 && string.Equals(info.RecordType, RECORD_TYPE_CORPORATE, StringComparison.InvariantCultureIgnoreCase))
+                        if (!string.Equals(info.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            masterIdList.Add(info.MasterCustomerId);
-                        }
-                        else
-                        {  // it is an individual
-                            if (condition2 == null)
-                                condition2 = string.Format("(SubCustomerId eq 0 and RelatedMasterCustomerId eq '{0}' and RelatedSubCustomerId eq {1} and RelationshipType eq 'EMPLOYMENT')",
-                                                            info.MasterCustomerId, info.SubCustomerId);
+                            if (info.SubCustomerId == 0 && string.Equals(info.RecordType, RECORD_TYPE_CORPORATE, StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                masterIdList.Add(info.MasterCustomerId);
+                            }
                             else
-                                condition2 = string.Format("{0} or (SubCustomerId eq 0 and RelatedMasterCustomerId eq '{1}' and RelatedSubCustomerId eq {2} and RelationshipType eq 'EMPLOYMENT')",
-                                                            condition2, info.MasterCustomerId, info.SubCustomerId);
+                            {  // it is an individual
+                                if (condition2 == null)
+                                    condition2 = string.Format("(SubCustomerId eq 0 and RelatedMasterCustomerId eq '{0}' and RelatedSubCustomerId eq {1} and RelationshipType eq 'EMPLOYMENT')",
+                                                                info.MasterCustomerId, info.SubCustomerId);
+                                else
+                                    condition2 = string.Format("{0} or (SubCustomerId eq 0 and RelatedMasterCustomerId eq '{1}' and RelatedSubCustomerId eq {2} and RelationshipType eq 'EMPLOYMENT')",
+                                                                condition2, info.MasterCustomerId, info.SubCustomerId);
+                            }
                         }
                     }
 
                     // find company info for individuals
                     if (condition2 != null)
                     {
+                        var idList = new List<string>();
                         var cusRelations = SvcClient.Ctxt.CusRelationships.AddQueryOption("$filter", condition2);
                         foreach (var r in cusRelations)
-                            masterIdList.Add(r.MasterCustomerId);
+                        {
+                            idList.Add(r.MasterCustomerId);
+                        }
+
+                        RemoveSoftDeletedCompanies(idList);
+                        masterIdList.AddRange(idList);
                     }
                 }
             }
@@ -705,6 +750,33 @@ namespace asi.asicentral.services.PersonifyProxy
             _log.Debug(string.Format("GetCompanyWithLatestNote - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
 
             return companyInfo;
+        }
+
+        private static void RemoveSoftDeletedCompanies(List<string> masterIdList)
+        {
+            if (masterIdList.Count < 1)
+                return;
+
+            string condition = null;
+            foreach (var id in masterIdList)
+            {
+                if (condition == null)
+                    condition = string.Format("(MasterCustomerId eq '{0}' and SubCustomerId eq 0)", id);
+                else
+                    condition = string.Format("{0} or (MasterCustomerId eq '{1}' and SubCustomerId eq 0)",
+                                               condition, id);
+            }
+
+            var asiCustomers = SvcClient.Ctxt.ASICustomerInfos.AddQueryOption("$filter", condition).ToList();
+
+            // get rid of company with "DUPL" status
+            var deletedCustomers = asiCustomers.Where(c => string.Equals(c.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE, StringComparison.InvariantCultureIgnoreCase))
+                                       .ToList();
+
+            foreach (var c in deletedCustomers)
+            {
+                masterIdList.Remove(c.MasterCustomerId);
+            }
         }
 
         private static string IgnoreSpecialChars(string input)
