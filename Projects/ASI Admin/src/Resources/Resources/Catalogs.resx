@@ -154,7 +154,7 @@
     <value>Supported file formats (pdf, ai, eps, jpg, pjpeg)</value>
   </data>
   <data name="FileUplaod" xml:space="preserve">
-    <value>Please Select a file to continue further</value>
+    <value>Please select a file to continue further</value>
   </data>
   <data name="FrontCover" xml:space="preserve">
     <value>Front Cover</value>

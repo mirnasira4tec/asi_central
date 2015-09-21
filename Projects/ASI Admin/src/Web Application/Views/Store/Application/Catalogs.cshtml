@@ -33,14 +33,14 @@
             <legend>Catalogs Information</legend>	
             @if (Model.StoreDetailCatalog != null)
             {
-            <span class="row">@Html.Raw("<strong>Basic Information</strong>")</span>
+            <span class="label-row">@Html.Raw("<strong>Basic Information</strong>")</span>
             <span class="label-row span11">
 				@Html.LabelFor(m => m.Quantity) 
 			</span>
 			<span class="label-row">
 				@Html.EditorFor(m => m.Quantity) @Html.ValidationMessageFor(m => m.Quantity)
 		    </span>
-            <span class="row">@Html.Raw("<strong>Options Information</strong>")</span>
+            <span class="label-row">@Html.Raw("<strong>Options Information</strong>")</span>
             <span class="label-row span11">
                 @Html.LabelFor(m => m.Cover)
 				@Html.LabelFor(m => m.Area)
@@ -92,8 +92,8 @@
 	        </div>
             if(!string.IsNullOrEmpty(Model.LogoPath))
             {
-            <span class="row">@Html.Raw("<strong>Logo Information</strong>")</span>
-             <span class="label-row span11">
+            <span class="label-row ">@Html.Raw("<strong>Logo Information</strong>")</span>
+            <span class="label-row span11">
                 @Html.LabelFor(m => m.LogoPath) 
 			</span>
 			<span class="label-row">
@@ -101,7 +101,7 @@
 			</span>
             }
             <div id="frontCover">
-            <span class="row">@Html.Raw("<strong>New Copy - Standard Type</strong>")</span>
+            <span class="label-row ">@Html.Raw("<strong>New Copy - Standard Type</strong>")</span>
                 <span class="label-row span11">
 				    @Html.LabelFor(m => m.Line1) 
 				    @Html.LabelFor(m => m.Line2) 
