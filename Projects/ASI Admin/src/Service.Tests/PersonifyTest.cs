@@ -203,7 +203,7 @@ namespace asi.asicentral.Tests
         [TestMethod]
         public void AddPhoneNumberTest()
         {
-            CustomerInfo companyInfo = PersonifyClient.GetCustomerInfoByASINumber("33020");
+            var companyInfo = PersonifyClient.GetCustomerInfoByASINumber("33020");
 	        if (companyInfo != null)
 	        {
 		        PersonifyClient.AddPhoneNumber("2222222222", "USA", companyInfo);

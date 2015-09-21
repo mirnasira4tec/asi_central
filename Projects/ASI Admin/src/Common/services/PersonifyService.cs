@@ -41,7 +41,7 @@ namespace asi.asicentral.services
 
                 log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
-                IList<CustomerInfo> individualInfos = PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo).ToList();
+                var individualInfos = PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo).ToList();
                 if (!individualInfos.Any()) throw new Exception("Failed in creating individuald in Personify.");
                 log.Debug(string.Format("Added individuals to company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
@@ -49,7 +49,7 @@ namespace asi.asicentral.services
                 log.Debug(string.Format("Address added to individuals to the order '{0}'.", order));
 
                 StoreIndividual primaryContact = order.GetContact();
-                CustomerInfo primaryContactInfo = individualInfos.FirstOrDefault(c =>
+                var primaryContactInfo = individualInfos.FirstOrDefault(c =>
                     string.Equals(c.FirstName, primaryContact.FirstName, StringComparison.InvariantCultureIgnoreCase)
                     && string.Equals(c.LastName, primaryContact.LastName, StringComparison.InvariantCultureIgnoreCase));
                 if (primaryContactInfo == null && !string.IsNullOrEmpty(primaryContact.Email))
@@ -273,7 +273,7 @@ namespace asi.asicentral.services
             IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
             
             //create company if not already there
-            CustomerInfo companyInfo = null;
+            ASICustomerInfo companyInfo = null;
             string newMemberType = string.Empty;
             if (order.IsNewMemberShip(ref newMemberType))
             {
@@ -462,7 +462,7 @@ namespace asi.asicentral.services
             CompanyInformation company = null;
 
             var countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
-            CustomerInfo customerInfo = PersonifyClient.CreateCompany(storeCompany, storeType, countryCodes);
+            ASICustomerInfo customerInfo = PersonifyClient.CreateCompany(storeCompany, storeType, countryCodes);
             if (customerInfo != null)
             {
                 PersonifyClient.AddIndividualInfos(storeCompany, countryCodes, customerInfo);
