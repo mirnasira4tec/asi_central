@@ -146,7 +146,7 @@ namespace asi.asicentral.web.model.store
             if (this.StoreDetailCatalog.ImprintId == 21) this.ArtworkOption = this.StoreDetailCatalog.ArtworkOption;
 
             if (storeDetailCatalog.ImprintId != 18) this.IsArtworkToProof = storeDetailCatalog.IsArtworkToProof;
-            if ((storeDetailCatalog.AreaId == 8 || storeDetailCatalog.AreaId == 25) && (storeDetailCatalog.ImprintId == 20 || (storeDetailCatalog.ImprintId == 21 && storeDetailCatalog.ArtworkOption == "PRINT")))
+            if ((storeDetailCatalog.AreaId == 8 || storeDetailCatalog.AreaId == 25) && (storeDetailCatalog.ImprintId == 20 || storeDetailCatalog.ImprintId == 21))
             {
                 this.Line1 = storeDetailCatalog.Line1;
                 this.Line2 = storeDetailCatalog.Line2;
@@ -156,7 +156,7 @@ namespace asi.asicentral.web.model.store
                 this.Line6 = storeDetailCatalog.Line6;
             }
 
-            if ((storeDetailCatalog.AreaId == 9 || storeDetailCatalog.AreaId == 25) && (storeDetailCatalog.ImprintId == 20 || (storeDetailCatalog.ImprintId == 21 && storeDetailCatalog.ArtworkOption == "PRINT")))
+            if ((storeDetailCatalog.AreaId == 9 || storeDetailCatalog.AreaId == 25) && (storeDetailCatalog.ImprintId == 20 || storeDetailCatalog.ImprintId == 21))
             {
                 this.BackLine1 = storeDetailCatalog.BackLine1;
                 this.BackLine2 = storeDetailCatalog.BackLine2;
