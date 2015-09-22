@@ -254,9 +254,6 @@ namespace asi.asicentral.services
             }
         }
 
-       
-       
-
         /// <summary>
         /// Calculates the taxes in case shipping to the USA
         /// </summary>
