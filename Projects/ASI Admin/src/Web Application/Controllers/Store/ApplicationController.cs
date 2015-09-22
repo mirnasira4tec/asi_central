@@ -405,7 +405,13 @@ namespace asi.asicentral.web.Controllers.Store
                 if (application.ProductId == 39) storeDetailCatalog.SupplementId = Convert.ToInt32(application.Supplement);
                 if (storeDetailCatalog.ImprintId != 18) storeDetailCatalog.IsArtworkToProof = application.IsArtworkToProof;
 
-                if ((storeDetailCatalog.AreaId == 8 || storeDetailCatalog.AreaId == 25) && (storeDetailCatalog.ImprintId == 20 || (storeDetailCatalog.ImprintId == 21 && storeDetailCatalog.ArtworkOption == "PRINT")))
+                bool isFrontCover = false;
+                bool isBackCover = false;
+                if (storeDetailCatalog.AreaId == 8 && (storeDetailCatalog.ImprintId == 20 || storeDetailCatalog.ImprintId == 21)) isFrontCover = true;
+                if (storeDetailCatalog.AreaId == 9 && (storeDetailCatalog.ImprintId == 20 || storeDetailCatalog.ImprintId == 21)) isBackCover = true;
+                if (storeDetailCatalog.AreaId == 25 && (storeDetailCatalog.ImprintId == 20 || storeDetailCatalog.ImprintId == 21)) { isFrontCover = true; isBackCover = true; }
+
+                if (isFrontCover)
                 {
                     storeDetailCatalog.Line1 = application.Line1;
                     storeDetailCatalog.Line2 = application.Line2;
@@ -424,7 +430,7 @@ namespace asi.asicentral.web.Controllers.Store
                     storeDetailCatalog.Line6 = null;
                 }
 
-                if ((storeDetailCatalog.AreaId == 9 || storeDetailCatalog.AreaId == 25) && (storeDetailCatalog.ImprintId == 20 || (storeDetailCatalog.ImprintId == 21 && storeDetailCatalog.ArtworkOption == "PRINT")))
+                if (isBackCover)
                 {
                     storeDetailCatalog.BackLine1 = application.BackLine1;
                     storeDetailCatalog.BackLine2 = application.BackLine2;
