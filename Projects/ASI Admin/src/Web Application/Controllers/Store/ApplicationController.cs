@@ -389,6 +389,7 @@ namespace asi.asicentral.web.Controllers.Store
                 if (order == null) throw new Exception("Invalid reference to an order");
                 order.ExternalReference = application.ExternalReference;
                 order = UpdateCompanyInformation(application, order);
+                order.Company.WebURL = application.BillingWebUrl;
 
                 //Update Catalog Information
                 orderDetail.Quantity = Convert.ToInt32(application.Quantity);
@@ -999,6 +1000,7 @@ namespace asi.asicentral.web.Controllers.Store
                 order.Company.Phone = model.Phone;
                 order.Company.WebURL = model.BillingWebUrl;
                 order.Company.ASINumber = model.ASINumber;
+                order.Company.Email = model.CompanyEmail;
                 if (model.HasBankInformation)
                 {
                     order.Company.BankName = model.BankName;

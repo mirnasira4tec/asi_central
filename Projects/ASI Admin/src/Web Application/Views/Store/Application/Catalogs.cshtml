@@ -122,6 +122,14 @@
 				    @Html.EditorFor(m => m.Line5) @Html.ValidationMessageFor(m => m.Line5)
 				    @Html.EditorFor(m => m.Line6) @Html.ValidationMessageFor(m => m.Line6)
 			    </span>
+                <span class="label-row span11">
+				    @Html.LabelFor(m => m.BillingWebUrl) 
+				    @Html.LabelFor(m => m.CompanyEmail) 
+			    </span>
+			    <span class="label-row">
+				    @Html.TextBoxFor(m => m.BillingWebUrl, new { id= "webAddress", disabled= "disabled" } ) @Html.ValidationMessageFor(m => m.BillingWebUrl)
+				    @Html.TextBoxFor(m => m.CompanyEmail, new { id = "catalogEmail", disabled= "disabled" }) @Html.ValidationMessageFor(m => m.CompanyEmail)
+			    </span>
             </div>
             <div id="backCover">
                 <span class="row">@Html.Raw("<strong>Back Cover Imprint Area</strong>")</span>
