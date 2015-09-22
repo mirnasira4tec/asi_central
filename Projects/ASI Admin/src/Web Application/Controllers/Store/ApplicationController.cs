@@ -389,8 +389,7 @@ namespace asi.asicentral.web.Controllers.Store
                 if (order == null) throw new Exception("Invalid reference to an order");
                 order.ExternalReference = application.ExternalReference;
                 order = UpdateCompanyInformation(application, order);
-                order.Company.WebURL = application.BillingWebUrl;
-
+               
                 //Update Catalog Information
                 orderDetail.Quantity = Convert.ToInt32(application.Quantity);
                 orderDetail.ShippingMethod = application.ShippingMethod;
