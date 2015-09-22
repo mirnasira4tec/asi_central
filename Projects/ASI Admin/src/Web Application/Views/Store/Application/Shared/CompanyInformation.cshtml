@@ -2,7 +2,6 @@
 <div id="tabbasic" class="basic-information tab-pane fade in active">
 	<fieldset class="company-info-form">			
 		<legend>Company Information</legend>
-           
             <span class="label-row">
                 @if(!string.IsNullOrEmpty(Model.ASINumber))
                 {
@@ -47,6 +46,14 @@
                 }
 				@Html.EditorFor(m => m.Zip, new { @class = "span3" }) @Html.ValidationMessageFor(m => m.Zip)
 				@Html.DropDownListFor(m => m.Country, asi.asicentral.util.HtmlHelper.GetCountries(), new { @class = "span3 long" }) @Html.ValidationMessageFor(m => m.Country)
+			</span>
+            <span class="label-row">
+				@Html.Label("Email")
+				@Html.Label("Company Url")
+			</span>
+			<span class="label-row">
+				@Html.EditorFor(m => m.CompanyEmail) @Html.ValidationMessageFor(m => m.CompanyEmail)
+				@Html.EditorFor(m => m.BillingWebUrl) @Html.ValidationMessageFor(m => m.BillingWebUrl)
 			</span>
 	</fieldset>
     @Html.HiddenFor(m => m.HasBankInformation)
@@ -145,12 +152,6 @@
 			@Html.EditorFor(m => m.BillingPhone) @Html.ValidationMessageFor(m => m.BillingPhone)
 			@Html.EditorFor(m => m.BillingFax) @Html.ValidationMessageFor(m => m.BillingFax)
 			@Html.EditorFor(m => m.BillingEmail) @Html.ValidationMessageFor(m => m.BillingEmail)
-		</span>
-		<span class="label-row span11">
-			@Html.LabelFor(m => m.BillingWebUrl) 
-		</span>
-		<span class="label-row">
-			@Html.EditorFor(m => m.BillingWebUrl) @Html.ValidationMessageFor(m => m.BillingWebUrl)
 		</span>
 	</fieldset>                
     } 
