@@ -62,7 +62,13 @@
                     <td style="width: 85px">@company.MemberType </td>
                     <td style="width: 185px">No of Address :@company.CompanyAddresses.Count() No of Employee :@company.Employees.Count()</td>
                 </tr>
+               
             }
+             <tr>
+                    <td class="pager" colspan="5">
+                        @Html.Partial("../Show/Shared/_Pager", Model)
+                    </td>
+                </tr>
         </tbody>
     </table>
 }
