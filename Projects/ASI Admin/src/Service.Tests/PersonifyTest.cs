@@ -317,7 +317,7 @@ namespace asi.asicentral.Tests
         [TestMethod]
         public void ReconcileCompanyMultipleMatches()
         {
-            //Distributor
+            //Distributor matching both name and phone/email, one LEAD
             var company = GetStoreCompany("Reconcile Company Distributor 1",
                                           "2135555552",
                                           "individual3@reconcile.com",
@@ -329,20 +329,22 @@ namespace asi.asicentral.Tests
             var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
-
-            //Decorator with LEAD
-            company = GetStoreCompany("Reconcile Company Decorator 1",
-                                      "2135555553",
-                                      "individual8@reconcile.com",
-                                      "DECORATOR");
-
-            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
-            Assert.IsTrue(companyInfo.CompanyId > 0);
-            Assert.AreEqual(companyInfo.Name, "Reconcile Company Decorator 1");
             Assert.IsTrue(companyInfo.MemberStatus.ToUpper() == "ASICENTRAL" ||
                           companyInfo.MemberStatus.ToUpper() == "LEAD");
 
-            //Decorator without LEAD
+            //Supplier match both name and phone/email, multiple LEAD with the latest note
+            company = GetStoreCompany("Reconcile Company Supplier 1",
+                                      "2135555552",
+                                      "individual1@reconcile.com",
+                                      "Supplier");
+
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+            Assert.AreEqual(companyInfo.Name, "Reconcile Company Supplier 1");
+            Assert.IsTrue(companyInfo.MemberStatus.ToUpper() == "ASICENTRAL" ||
+                          companyInfo.MemberStatus.ToUpper() == "LEAD");
+
+            //Decorator matching name only
             company = GetStoreCompany("Reconcile Company Decorator 2",
                                       "2135555553",
                                       "individual8@reconcile.com",

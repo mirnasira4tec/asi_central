@@ -89,10 +89,10 @@ namespace asi.asicentral.web.Controllers.Show
                     objCompany = ShowHelper.CreateOrUpdateCompany(ObjectService, objCompany);
 
                     objAddress.Id = company.AddressId;
-                    objAddress.Phone = company.Phone;
-                    objAddress.PhoneAreaCode = company.PhoneAreaCode;
-                    objAddress.FaxAreaCode = company.FaxAreaCode;
-                    objAddress.Fax = company.Fax;
+                    objAddress.Phone = !String.IsNullOrEmpty(company.Phone) ? company.Phone.Trim() : null;
+                    objAddress.PhoneAreaCode = !String.IsNullOrEmpty(company.PhoneAreaCode) ? company.PhoneAreaCode.Trim() : null;
+                    objAddress.FaxAreaCode = !String.IsNullOrEmpty(company.FaxAreaCode) ? company.FaxAreaCode.Trim() : null;
+                    objAddress.Fax = !String.IsNullOrEmpty(company.Fax) ? company.Fax.Trim() : null;
                     objAddress.Street1 = company.Address1;
                     objAddress.Street2 = company.Address2;
                     objAddress.Zip = company.Zip;
@@ -162,10 +162,10 @@ namespace asi.asicentral.web.Controllers.Show
                         if (addressModel != null)
                         {
                             company.AddressId = companyAddress.Address.Id;
-                            company.Phone = addressModel.Phone;
-                            company.PhoneAreaCode = addressModel.PhoneAreaCode.Trim();
-                            company.Fax = addressModel.Fax;
-                            company.FaxAreaCode = addressModel.FaxAreaCode;
+                            company.Phone = !String.IsNullOrEmpty(addressModel.Phone) ? addressModel.Phone.Trim() : null;
+                            company.PhoneAreaCode = !String.IsNullOrEmpty(addressModel.PhoneAreaCode) ? addressModel.PhoneAreaCode.Trim() : null;
+                            company.Fax = !String.IsNullOrEmpty(addressModel.Fax) ? addressModel.Fax.Trim() : null;
+                            company.FaxAreaCode = !String.IsNullOrEmpty(addressModel.FaxAreaCode) ? addressModel.FaxAreaCode.Trim() : null;
                             company.Address1 = addressModel.Street1;
                             company.Address2 = addressModel.Street2;
                             company.Zip = addressModel.Zip;
@@ -255,10 +255,10 @@ namespace asi.asicentral.web.Controllers.Show
                     ShowAddress objAddress = new ShowAddress();
                     ShowCompanyAddress objCompanyAddress = new ShowCompanyAddress();
                     objAddress.Id = Address.AdreessId;
-                    objAddress.Phone = Address.Phone;
-                    objAddress.PhoneAreaCode = Address.PhoneAreaCode.Trim();
-                    objAddress.FaxAreaCode = Address.FaxAreaCode;
-                    objAddress.Fax = Address.Fax;
+                    objAddress.Phone = !String.IsNullOrEmpty(Address.Phone) ? Address.Phone.Trim() : null;
+                    objAddress.PhoneAreaCode = !String.IsNullOrEmpty(Address.PhoneAreaCode) ? Address.PhoneAreaCode.Trim() : null;
+                    objAddress.FaxAreaCode = !String.IsNullOrEmpty(Address.FaxAreaCode) ? Address.FaxAreaCode.Trim() : null;
+                    objAddress.Fax = !String.IsNullOrEmpty(Address.Fax) ? Address.Fax.Trim() : null;
                     objAddress.Street1 = Address.Address1;
                     objAddress.Street2 = Address.Address2;
                     objAddress.Zip = Address.Zip;
@@ -352,10 +352,10 @@ namespace asi.asicentral.web.Controllers.Show
                     {
                         objAddress = new ShowAddress();
                         objAddress.Id = employee.AdreessId;
-                        objAddress.Phone = employee.Phone;
-                        objAddress.PhoneAreaCode = employee.PhoneAreaCode;
-                        objAddress.FaxAreaCode = employee.FaxAreaCode;
-                        objAddress.Fax = employee.Fax;
+                        objAddress.Phone = !String.IsNullOrEmpty(employee.Phone) ? employee.Phone.Trim() : null;
+                        objAddress.PhoneAreaCode = !String.IsNullOrEmpty(employee.PhoneAreaCode) ? employee.PhoneAreaCode.Trim() : null;
+                        objAddress.FaxAreaCode = !String.IsNullOrEmpty(employee.FaxAreaCode) ? employee.FaxAreaCode.Trim() : null;
+                        objAddress.Fax = !String.IsNullOrEmpty(employee.Fax) ? employee.Fax.Trim() : null;
                         objAddress.Street1 = employee.Address1;
                         objAddress.Street2 = employee.Address2;
                         objAddress.Zip = employee.Zip;
@@ -409,10 +409,10 @@ namespace asi.asicentral.web.Controllers.Show
                     {
                         companyInfo.IsNonUSAddress = employeeModel.Address.Country != "USA";
                         companyInfo.HasAddress = true;
-                        companyInfo.Phone = employeeModel.Address.Phone;
-                        companyInfo.PhoneAreaCode = employeeModel.Address.PhoneAreaCode;
-                        companyInfo.FaxAreaCode = employeeModel.Address.FaxAreaCode;
-                        companyInfo.Fax = employeeModel.Address.Fax;
+                        companyInfo.Phone = !String.IsNullOrEmpty(employeeModel.Address.Phone) ? employeeModel.Address.Phone.Trim() : null;
+                        companyInfo.PhoneAreaCode = !String.IsNullOrEmpty(employeeModel.Address.PhoneAreaCode) ? employeeModel.Address.PhoneAreaCode.Trim() : null;
+                        companyInfo.FaxAreaCode = !String.IsNullOrEmpty(employeeModel.Address.FaxAreaCode) ? employeeModel.Address.FaxAreaCode.Trim() : null;
+                        companyInfo.Fax = !String.IsNullOrEmpty(employeeModel.Address.Fax) ? employeeModel.Address.Fax.Trim() : null;
                         companyInfo.Address1 = employeeModel.Address.Street1;
                         companyInfo.Address2 = employeeModel.Address.Street2;
                         companyInfo.Zip = employeeModel.Address.Zip;
@@ -444,10 +444,10 @@ namespace asi.asicentral.web.Controllers.Show
                 if (address != null)
                 {
                     address.AdreessId = addressModel.Id;
-                    address.Phone = addressModel.Phone;
-                    address.PhoneAreaCode = addressModel.PhoneAreaCode;
-                    address.Fax = addressModel.Fax;
-                    address.FaxAreaCode = addressModel.FaxAreaCode;
+                    address.Phone = !String.IsNullOrEmpty(addressModel.Phone) ? addressModel.Phone.Trim() : null;
+                    address.PhoneAreaCode = !String.IsNullOrEmpty(addressModel.PhoneAreaCode) ? addressModel.PhoneAreaCode.Trim() : null;
+                    address.Fax = !String.IsNullOrEmpty(addressModel.Fax) ? addressModel.Fax.Trim() : null;
+                    address.FaxAreaCode = !String.IsNullOrEmpty(addressModel.FaxAreaCode) ? addressModel.FaxAreaCode.Trim() : null;
                     address.Address1 = addressModel.Street1;
                     address.Address2 = addressModel.Street2;
                     address.Zip = addressModel.Zip;
