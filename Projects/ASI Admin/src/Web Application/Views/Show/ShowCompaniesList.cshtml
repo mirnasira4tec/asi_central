@@ -19,10 +19,9 @@
             <th>ASI#</th>
             <th>Company Name</th>
             <th>Member Type</th>
+            <th>Is Attending</th>
             <th>Is Sponsor</th>
             <th>Exhibit Day</th>
-            <th>Presentation</th>
-            <th>Round Table</th>
             <th>Booth Number</th>
         </tr>
     </thead>
@@ -35,6 +34,16 @@
                 <td><a href="/ShowCompany/GetCompanyDetailsForShow?companyId=@showAttendee.Company.Id&showId=@(Model.Show != null ? Model.Show.Id : 0)">@showAttendee.Company.Name</a></td>
                 <td>@showAttendee.Company.MemberType</td>
                 <td>
+                    @if (showAttendee.IsAttending)
+                    {
+                        <a class="icon-ok" />
+                    }
+                    else
+                    {
+                        <a class="icon-remove" />
+                    }
+                </td>
+                <td>
                     @if (showAttendee.IsSponsor)
                     {
                         <a class="icon-ok" />
@@ -46,26 +55,6 @@
                 </td>
                 <td>
                     @if (showAttendee.IsExhibitDay)
-                    {
-                        <a class="icon-ok" />
-                    }
-                    else
-                    {
-                        <a class="icon-remove" />
-                    }
-                </td>
-                <td>
-                    @if (showAttendee.IsPresentation)
-                    {
-                        <a class="icon-ok" />
-                    }
-                    else
-                    {
-                        <a class="icon-remove" />
-                    }
-                </td>
-                <td>
-                    @if (showAttendee.IsRoundTable)
                     {
                         <a class="icon-ok" />
                     }

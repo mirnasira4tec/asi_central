@@ -22,10 +22,9 @@
         <strong>@Model.ShowAttendees[count].Company.Name</strong>
         <section class="first-section">
             <div class="control-group">
+                <label class="checkbox" for="@Model.ShowAttendees[count].IsAttending">@Html.EditorFor(model => model.ShowAttendees[count].IsAttending) Is Attending</label>
                 <label class="checkbox" for="@Model.ShowAttendees[count].IsSponsor">@Html.EditorFor(model => model.ShowAttendees[count].IsSponsor) Is Sponsor</label>
                 <label class="checkbox" for="@Model.ShowAttendees[count].IsExhibitDay">@Html.EditorFor(model => model.ShowAttendees[count].IsExhibitDay) Exhibit Day</label>
-                <label class="checkbox" for="@Model.ShowAttendees[count].IsPresentation">@Html.EditorFor(model => model.ShowAttendees[count].IsPresentation) Presentations</label>
-                <label class="checkbox" for="@Model.ShowAttendees[count].IsRoundTable">@Html.EditorFor(model => model.ShowAttendees[count].IsRoundTable) Round Table</label>
             </div>
             <div>
                 @Html.LabelFor(model => model.ShowAttendees[count].BoothNumber)
