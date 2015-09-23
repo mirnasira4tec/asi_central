@@ -27,7 +27,7 @@ namespace asi.asicentral.web.Controllers.Store
         //products associated to StoreDetailESPAdvertising table
         public static readonly int[] SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS = { 48, 49, 50, 51, 52, 53};
         //products associated to StoreDetailCatalog table
-        public static readonly int[] DISTRIBUTOR_CATALOG_PRODUCT_IDS = { 35, 36, 37, 38, 39, 40, 41, 82 };
+        public static readonly int[] DISTRIBUTOR_CATALOG_PRODUCT_IDS = { 35, 36, 37, 38, 39, 40, 41, 82, 111 };
         //products associated to StoreDetailPayForPlacement table
         public static readonly int[] SUPPLIER_ESP_PAYFORPLACEMENT_PRODUCT_IDS = { 47, 63 };
         //products associated to StoreDetailEmailExpress table
@@ -389,7 +389,7 @@ namespace asi.asicentral.web.Controllers.Store
                 if (order == null) throw new Exception("Invalid reference to an order");
                 order.ExternalReference = application.ExternalReference;
                 order = UpdateCompanyInformation(application, order);
-
+               
                 //Update Catalog Information
                 orderDetail.Quantity = Convert.ToInt32(application.Quantity);
                 orderDetail.ShippingMethod = application.ShippingMethod;
@@ -405,7 +405,13 @@ namespace asi.asicentral.web.Controllers.Store
                 if (application.ProductId == 39) storeDetailCatalog.SupplementId = Convert.ToInt32(application.Supplement);
                 if (storeDetailCatalog.ImprintId != 18) storeDetailCatalog.IsArtworkToProof = application.IsArtworkToProof;
 
-                if ((storeDetailCatalog.AreaId == 8 || storeDetailCatalog.AreaId == 25) && (storeDetailCatalog.ImprintId == 20 || (storeDetailCatalog.ImprintId == 21 && storeDetailCatalog.ArtworkOption == "PRINT")))
+                bool isFrontCover = false;
+                bool isBackCover = false;
+                if (storeDetailCatalog.AreaId == 8 && (storeDetailCatalog.ImprintId == 20 || storeDetailCatalog.ImprintId == 21)) isFrontCover = true;
+                if (storeDetailCatalog.AreaId == 9 && (storeDetailCatalog.ImprintId == 20 || storeDetailCatalog.ImprintId == 21)) isBackCover = true;
+                if (storeDetailCatalog.AreaId == 25 && (storeDetailCatalog.ImprintId == 20 || storeDetailCatalog.ImprintId == 21)) { isFrontCover = true; isBackCover = true; }
+
+                if (isFrontCover)
                 {
                     storeDetailCatalog.Line1 = application.Line1;
                     storeDetailCatalog.Line2 = application.Line2;
@@ -424,7 +430,7 @@ namespace asi.asicentral.web.Controllers.Store
                     storeDetailCatalog.Line6 = null;
                 }
 
-                if ((storeDetailCatalog.AreaId == 9 || storeDetailCatalog.AreaId == 25) && (storeDetailCatalog.ImprintId == 20 || (storeDetailCatalog.ImprintId == 21 && storeDetailCatalog.ArtworkOption == "PRINT")))
+                if (isBackCover)
                 {
                     storeDetailCatalog.BackLine1 = application.BackLine1;
                     storeDetailCatalog.BackLine2 = application.BackLine2;
@@ -999,6 +1005,7 @@ namespace asi.asicentral.web.Controllers.Store
                 order.Company.Phone = model.Phone;
                 order.Company.WebURL = model.BillingWebUrl;
                 order.Company.ASINumber = model.ASINumber;
+                order.Company.Email = model.CompanyEmail;
                 if (model.HasBankInformation)
                 {
                     order.Company.BankName = model.BankName;
