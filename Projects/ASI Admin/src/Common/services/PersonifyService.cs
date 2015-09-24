@@ -41,7 +41,7 @@ namespace asi.asicentral.services
 
                 log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
-                var individualInfos = PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo).ToList();
+                var individualInfos = PersonifyClient.AddIndividualInfos(order.Company, countryCodes, companyInfo.MasterCustomerId, companyInfo.SubCustomerId).ToList();
                 if (!individualInfos.Any()) throw new Exception("Failed in creating individuald in Personify.");
                 log.Debug(string.Format("Added individuals to company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
@@ -99,7 +99,10 @@ namespace asi.asicentral.services
                         mapping = mappings.FirstOrDefault(m => string.IsNullOrEmpty(m.StoreOption));
                     }
 
-                    PersonifyClient.CreateBundleOrder(order, mapping, companyInfo, primaryContactInfo, billToAddr, shipToAddr, waiveAppFee, firstmonthFree);
+                    PersonifyClient.CreateBundleOrder(order, mapping, 
+                                                      companyInfo.MasterCustomerId, companyInfo.SubCustomerId, 
+                                                      primaryContactInfo.MasterCustomerId, primaryContactInfo.SubCustomerId, 
+                                                      billToAddr, shipToAddr, waiveAppFee, firstmonthFree);
                     ValidateOrderTotal(order, emailService, url, true, firstmonthFree);
 
                     if( couponError)
@@ -121,8 +124,10 @@ namespace asi.asicentral.services
                     log.Debug(string.Format("Retrieved the line items to the order '{0}'.", order.ToString()));
                     var orderOutput = PersonifyClient.CreateOrder(
                         order,
-                        companyInfo,
-                        primaryContactInfo,
+                        companyInfo.MasterCustomerId,
+                        companyInfo.SubCustomerId,
+                        primaryContactInfo.MasterCustomerId,
+                        primaryContactInfo.SubCustomerId,
                         billToAddr.CustomerAddressId,
                         shipToAddr.CustomerAddressId,
                         lineItems);
@@ -133,7 +138,8 @@ namespace asi.asicentral.services
 
                     try
                     {
-                        PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, billToAddr, companyInfo);
+                        PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, 
+                                                               billToAddr, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
                         log.Debug(string.Format("Payed the order '{0}'.", order));
                         log.Debug(string.Format("Place order End: {0}", order));
                     }
@@ -273,7 +279,7 @@ namespace asi.asicentral.services
             IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
             
             //create company if not already there
-            ASICustomerInfo companyInfo = null;
+            CompanyInformation companyInfo = null;
             string newMemberType = string.Empty;
             if (order.IsNewMemberShip(ref newMemberType))
             {
@@ -293,7 +299,7 @@ namespace asi.asicentral.services
 			order.ExternalReference = companyInfo.MasterCustomerId;
             //Add credit card to the company
 			//@todo CC Personify temporary measure, always add the credit card. No longer checking if (profile == string.Empty) from string profile = PersonifyClient.GetCreditCardProfileId(order.GetASICompany(), companyInfo, creditCard);
-			var profile = PersonifyClient.SaveCreditCard(order.GetASICompany(), companyInfo, creditCard);
+			var profile = PersonifyClient.SaveCreditCard(order.GetASICompany(), companyInfo.MasterCustomerId, companyInfo.SubCustomerId, creditCard);
             log.Debug(string.IsNullOrWhiteSpace(profile) ?
                 "Fail to save the credit." : string.Format("Saved credit profile id : {0}", profile));
             if (string.IsNullOrEmpty(profile)) throw new Exception("Credit card can't be saved to Personify.");
@@ -445,50 +451,34 @@ namespace asi.asicentral.services
 			if (companyInformation.MemberStatus == "ACTIVE") throw new Exception("We should not be creating an active company");
             //create company if not already there
             var companyInfo = PersonifyClient.ReconcileCompany(company, companyInformation.MemberType, null, true);
-            PersonifyClient.AddCustomerAddresses(company, companyInfo, null);
-            PersonifyClient.AddPhoneNumber(companyInformation.Phone, GetCountryCode(companyInformation.Country), companyInfo);
+            PersonifyClient.AddCustomerAddresses(company, companyInfo.MasterCustomerId, companyInfo.SubCustomerId, null);
+            PersonifyClient.AddPhoneNumber(companyInformation.Phone, GetCountryCode(companyInformation.Country), companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
 
             // Add contact to personify
-            PersonifyClient.AddIndividualInfos(company, null, companyInfo);
+            PersonifyClient.AddIndividualInfos(company, null, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
 
-            companyInformation = PersonifyClient.GetCompanyInfo(companyInfo);
-            user.CompanyId = companyInformation.CompanyId;
+            user.CompanyId = companyInfo.CompanyId;
 
-            return companyInformation;
+            return companyInfo;
         }
 
         public virtual CompanyInformation CreateCompany(StoreCompany storeCompany, string storeType)
         {
-            CompanyInformation company = null;
-
             var countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
-            ASICustomerInfo customerInfo = PersonifyClient.CreateCompany(storeCompany, storeType, countryCodes);
-            if (customerInfo != null)
+            var companyInfo = PersonifyClient.CreateCompany(storeCompany, storeType, countryCodes);
+            if (companyInfo != null)
             {
-                PersonifyClient.AddIndividualInfos(storeCompany, countryCodes, customerInfo);
-                company = PersonifyClient.GetCompanyInfo(customerInfo);
+                PersonifyClient.AddIndividualInfos(storeCompany, countryCodes, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
             }
 
-            return company;
+            return companyInfo;
         }
 
-        public virtual CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList, ref bool dnsFlag)
+        public virtual CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList)
         {
             var startTime = DateTime.Now;
             log.Debug(string.Format("FindCompanyInfo - start: Company {0} , phone {1}", company.Name, company.Phone));
-            var customerInfo = PersonifyClient.FindCustomerInfo(company, ref matchList);
-            CompanyInformation companyInfo = null;
-
-            if (customerInfo != null)
-            {
-                companyInfo = PersonifyClient.GetCompanyInfo(customerInfo);
-            }
-
-			//set dns flag
-            if (customerInfo != null)
-            {
-                dnsFlag = PersonifyClient.CompanyDoNotSolicitFlag(customerInfo.MasterCustomerId, customerInfo.SubCustomerId);
-            }
+            var companyInfo = PersonifyClient.FindCustomerInfo(company, ref matchList);
 
             log.Debug(string.Format("FindCompanyInfo - end: Company {0}, total matches: {1}; time: {2}",
                                     company.Name,
@@ -499,8 +489,13 @@ namespace asi.asicentral.services
 
         public virtual CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber)
         {
-            var companyInfo = PersonifyClient.GetCompanyInfoByASINumber(asiNumber);
-			UpdateMemberType(companyInfo);
+            CompanyInformation companyInfo = null;
+            var customerInfo = PersonifyClient.GetCompanyInfoByASINumber(asiNumber);
+            if (customerInfo != null)
+            {
+                companyInfo = PersonifyClient.GetCompanyInfo(customerInfo);
+                UpdateMemberType(companyInfo);
+            }
 			return companyInfo;
         }
 

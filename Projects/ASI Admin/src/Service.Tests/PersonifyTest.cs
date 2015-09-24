@@ -203,10 +203,10 @@ namespace asi.asicentral.Tests
         [TestMethod]
         public void AddPhoneNumberTest()
         {
-            var companyInfo = PersonifyClient.GetCustomerInfoByASINumber("33020");
+            var companyInfo = PersonifyClient.GetCompanyInfoByASINumber("33020");
 	        if (companyInfo != null)
 	        {
-		        PersonifyClient.AddPhoneNumber("2222222222", "USA", companyInfo);
+		        PersonifyClient.AddPhoneNumber("2222222222", "USA", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
 	        }
 	        else
 	        {
@@ -292,25 +292,27 @@ namespace asi.asicentral.Tests
         [TestMethod]
         public void ReconcileCompanyMatchNameOnly()
         {
-            var company = GetStoreCompany("Reconcile Company Distributor 1", 
-                                          "1110001111", 
-                                          "noMatch@reconcile.com", 
+            var company = GetStoreCompany("Reconcile Company Distributor 1",
+                                          "11000000",
+                                          "individual3@reconcile.com", 
                                           "DISTRIBUTOR");
 
             IBackendService personify = new PersonifyService();
             List<string> masterIdList = null;
             bool dnsFlag = false;
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
             Assert.AreEqual(companyInfo.Name, "Reconcile Company Distributor 1");
+            Assert.IsTrue(companyInfo.DNSFlag);
 
             // company name with extra special characters
             company.Name = ".Reconcile $@#?Company $@#?$!&,Distributor 1.";
-            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsTrue(companyInfo.CompanyId > 0);
-            Assert.AreEqual(companyInfo.Name, "Reconcile Company Distributor 1");
             Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
+            Assert.AreEqual(companyInfo.Name, "Reconcile Company Distributor 1");
+            Assert.IsTrue(companyInfo.DNSFlag);
         }
 
         [TestMethod]
@@ -325,32 +327,32 @@ namespace asi.asicentral.Tests
             IBackendService personify = new PersonifyService();
             List<string> masterIdList = null;
             bool dnsFlag = false;
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.AreEqual(companyInfo.Name, "Reconcile Company Supplier 1");
 
             // match phone or email with LEAD matches
             company.Phone = "2135555552";
-            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.IsTrue(companyInfo.MemberStatus.ToUpper() == "ASICENTRAL" ||
                           companyInfo.MemberStatus.ToUpper() == "LEAD");
 
             company.Phone = "2135555553";
-            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.IsTrue(companyInfo.MemberStatus.ToUpper() == "ASICENTRAL" ||
                           companyInfo.MemberStatus.ToUpper() == "LEAD");
 
             // phone or email without LEAD matches
             company = GetStoreCompany("Failed aaa Match",
-                                      "2135555553",
+                                      "2135555531",
                                       "nommmmatch@reconcile.com",
                                       "SUPPLIER"); ;
-            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsTrue(companyInfo.CompanyId > 0);
-            Assert.IsTrue(companyInfo.MemberStatus.ToUpper() != "ASICENTRAL" &&
-                          companyInfo.MemberStatus.ToUpper() != "LEAD");
+            Assert.IsTrue(string.IsNullOrEmpty(companyInfo.MemberStatus) || 
+                          ( companyInfo.MemberStatus.ToUpper() != "ASICENTRAL" && companyInfo.MemberStatus.ToUpper() != "LEAD"));
         }
 
         [TestMethod]
@@ -364,18 +366,17 @@ namespace asi.asicentral.Tests
 
             IBackendService personify = new PersonifyService();
             List<string> masterIdList = null;
-            bool dnsFlag = false;
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.AreEqual(companyInfo.Name, "Reconcile Company Distributor 1");
 
             //Decorator 
             company = GetStoreCompany("No matchhhh",
-                                      "2135555553",
+                                      "2135555511",
                                       "individual8@reconcile.com",
                                       "DECORATOR");
 
-            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.AreEqual(companyInfo.Name, "Reconcile Company Decorator 2");
         }
@@ -392,7 +393,7 @@ namespace asi.asicentral.Tests
             IBackendService personify = new PersonifyService();
             List<string> masterIdList = null;
             bool dnsFlag = false;
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
             Assert.IsTrue(companyInfo.MemberStatus.ToUpper() == "ASICENTRAL" ||
@@ -404,7 +405,7 @@ namespace asi.asicentral.Tests
                                       "individual1@reconcile.com",
                                       "Supplier");
 
-            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.AreEqual(companyInfo.Name, "Reconcile Company Supplier 1");
             Assert.IsTrue(companyInfo.MemberStatus.ToUpper() == "ASICENTRAL" ||
@@ -416,7 +417,7 @@ namespace asi.asicentral.Tests
                                       "individual8@reconcile.com",
                                       "DECORATOR");
 
-            companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.IsTrue(companyInfo.MemberStatus.ToUpper() != "ASICENTRAL" &&
                           companyInfo.MemberStatus.ToUpper() != "LEAD");
@@ -433,7 +434,7 @@ namespace asi.asicentral.Tests
             IBackendService personify = new PersonifyService();
             List<string> masterIdList = null;
             bool dnsFlag = false;
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.AreEqual(companyInfo, null);
         }
 
@@ -489,7 +490,7 @@ namespace asi.asicentral.Tests
             IBackendService personify = new PersonifyService();
             List<string> masterIdList = null;
             bool dnsFlag = false;
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList, ref dnsFlag);            
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);            
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.IsTrue(masterIdList.Count > 0);
             Assert.IsFalse(dnsFlag);
