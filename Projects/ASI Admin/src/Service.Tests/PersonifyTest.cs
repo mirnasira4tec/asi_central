@@ -489,11 +489,10 @@ namespace asi.asicentral.Tests
 
             IBackendService personify = new PersonifyService();
             List<string> masterIdList = null;
-            bool dnsFlag = false;
             var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);            
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.IsTrue(masterIdList.Count > 0);
-            Assert.IsFalse(dnsFlag);
+            Assert.IsTrue(companyInfo.DNSFlag);
 
             company.ExternalReference = string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
             company.MatchingCompanyIds = string.Join("|", masterIdList);

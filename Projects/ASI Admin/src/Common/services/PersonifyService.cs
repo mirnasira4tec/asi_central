@@ -45,7 +45,11 @@ namespace asi.asicentral.services
                 if (!individualInfos.Any()) throw new Exception("Failed in creating individuald in Personify.");
                 log.Debug(string.Format("Added individuals to company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
-                IList<StoreAddressInfo> contactAddresses = PersonifyClient.AddIndividualAddresses(order.Company, individualInfos, countryCodes).ToList();
+                var contactAddresses = individualInfos.SelectMany(i =>
+                                        {
+                                            return PersonifyClient.AddCustomerAddresses(order.Company, i.MasterCustomerId, i.SubCustomerId, countryCodes);
+                                        }).ToList();
+
                 log.Debug(string.Format("Address added to individuals to the order '{0}'.", order));
 
                 StoreIndividual primaryContact = order.GetContact();

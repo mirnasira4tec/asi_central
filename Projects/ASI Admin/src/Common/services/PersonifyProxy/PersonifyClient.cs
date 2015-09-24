@@ -287,7 +287,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     SvcClient.Save<ASICustomer>(customer);
                 }
 
-                customerInfo = GetCompanyInfo(result.MasterCustomerId, subCustomerId);
+                customerInfo = GetPersonifyCompanyInfo(result.MasterCustomerId, subCustomerId);
                 storeCompany.ExternalReference = customerInfo.MasterCustomerId + ";" + customerInfo.SubCustomerId;
                 AddCustomerAddresses(storeCompany, customerInfo.MasterCustomerId, customerInfo.SubCustomerId, countryCodes);
             }
@@ -508,7 +508,7 @@ namespace asi.asicentral.services.PersonifyProxy
 
         public static string GetCompanyAsiNumber(string masterCustomerId, int subCustomerId)
         {
-            var company = GetCompanyInfo(masterCustomerId, subCustomerId);
+            var company = GetPersonifyCompanyInfo(masterCustomerId, subCustomerId);
             return company != null ? company.AsiNumber : string.Empty;
         }
 
@@ -552,17 +552,8 @@ namespace asi.asicentral.services.PersonifyProxy
             return company;
         }
 
-        public static PersonifyCustomerInfo GetCompanyInfo(string masterCustomerId, int subCustomerId)
+        public static PersonifyCustomerInfo GetPersonifyCompanyInfo(string masterCustomerId, int subCustomerId)
         {
-            //ASICustomerInfo customerInfo = null;
-            ////First() or Single() are not supported
-            //var customerList = SvcClient.Ctxt.ASICustomerInfos.Where(
-            //        company => company.MasterCustomerId == masterCustomerId &&
-            //        company.SubCustomerId == subCustomerId &&
-            //        company.RecordType == RECORD_TYPE_CORPORATE).ToList();
-
-            //if (customerList.Count == 1) customerInfo = customerList[0];
-
             var customerInfos = GetCustomerInfoFromSP(SP_SEARCH_BY_CUSTOMER_ID, new List<string>() { masterCustomerId, subCustomerId.ToString() });
             return customerInfos.Any() ? customerInfos.FirstOrDefault(c => c.RecordType == RECORD_TYPE_CORPORATE) : null;
         }
@@ -586,7 +577,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 {
 				    string[] references = company.ExternalReference.Split(';');
 				    int subCustomerId = Int32.Parse(references[1]);
-				    companyInfo = GetCompanyInfo(references[0], subCustomerId);
+                    companyInfo = GetPersonifyCompanyInfo(references[0], subCustomerId);
                 }
 			}
 			else if (!string.IsNullOrEmpty(company.ASINumber))
@@ -719,18 +710,6 @@ namespace asi.asicentral.services.PersonifyProxy
                 if( nameWithoutSpecialChars != company.Name )
                     companyList = GetCustomerInfoFromSP(SP_SEARCH_BY_COMPANY_NAME, new List<string>() { nameWithoutSpecialChars });
             }
-
-            //startTime = DateTime.Now;
-            //var companys = SvcClient.Ctxt.ASICustomerInfos
-            //   .Where(p => p.RecordType == RECORD_TYPE_CORPORATE && p.SubCustomerId == 0 &&
-            //               string.Compare(p.LastName, company.Name) == 0 &&
-            //               string.Compare(p.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE) != 0).ToList();
-
-            //if (companys.Any())
-            //{
-            //    GetCompanyInfo(companys[0]);
-            //}
-            //_log.Debug(string.Format("MatchCompanyName - ASICustomerInfos end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
 
             _log.Debug(string.Format("MatchCompanyName - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
         }
@@ -874,33 +853,6 @@ namespace asi.asicentral.services.PersonifyProxy
             return companyInfo;
         }
 
-        //private static void RemoveSoftDeletedCompanies(List<string> masterIdList)
-        //{
-        //    if (masterIdList.Count < 1)
-        //        return;
-
-        //    string condition = null;
-        //    foreach (var id in masterIdList)
-        //    {
-        //        if (condition == null)
-        //            condition = string.Format("(MasterCustomerId eq '{0}' and SubCustomerId eq 0)", id);
-        //        else
-        //            condition = string.Format("{0} or (MasterCustomerId eq '{1}' and SubCustomerId eq 0)",
-        //                                       condition, id);
-        //    }
-
-        //    var asiCustomers = SvcClient.Ctxt.ASICustomerInfos.AddQueryOption("$filter", condition).ToList();
-
-        //    // get rid of company with "DUPL" status
-        //    var deletedCustomers = asiCustomers.Where(c => string.Equals(c.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE, StringComparison.InvariantCultureIgnoreCase))
-        //                               .ToList();
-
-        //    foreach (var c in deletedCustomers)
-        //    {
-        //        masterIdList.Remove(c.MasterCustomerId);
-        //    }
-        //}
-
         private static string IgnoreSpecialChars(string input)
         {
             return Regex.Replace(input.Trim(), @"[\.\$@&#\?,!]*", "");
@@ -1011,13 +963,13 @@ namespace asi.asicentral.services.PersonifyProxy
 
         public static IEnumerable<PersonifyCustomerInfo> AddIndividualInfos(StoreCompany storeCompany, 
                                                                       IList<LookSendMyAdCountryCode> countryCodes,
-                                                                      string masterCustomerId, int subCustomerId)
+                                                                      string companyMasterId, int companySubId)
         {
             if (storeCompany == null || storeCompany.Individuals == null)
             {
                 throw new Exception("Company and compnay contact can't be null.");
             }
-            if (string.IsNullOrEmpty(masterCustomerId))
+            if (string.IsNullOrEmpty(companyMasterId))
             {
                 throw new Exception("Company information is needed.");
             }
@@ -1050,19 +1002,19 @@ namespace asi.asicentral.services.PersonifyProxy
                     {
                         List<CusRelationship> relationships = SvcClient.Ctxt.CusRelationships
                             .Where(rel => rel.MasterCustomerId == customerInfo.MasterCustomerId
-                                          && rel.RelatedMasterCustomerId == masterCustomerId
-                                          && rel.RelatedSubCustomerId == subCustomerId).ToList();
+                                          && rel.RelatedMasterCustomerId == companyMasterId
+                                          && rel.RelatedSubCustomerId == companySubId).ToList();
                         if (relationships.Count == 0)
                         {
                             //also link this user to the company
-                            AddRelationship(customerInfo.MasterCustomerId, customerInfo.SubCustomerId, masterCustomerId, subCustomerId);
+                            AddRelationship(customerInfo.MasterCustomerId, customerInfo.SubCustomerId, companyMasterId, companySubId);
                         }
                     }
                     catch (Exception ex)
                     {
                         string s = string.Format("customerInfo.MasterCustomerId = {0}", customerInfo.MasterCustomerId)
-                                   + string.Format("\ncompanyInfo.MasterCustomerId = {0}", masterCustomerId)
-                                   + string.Format("\ncompanyInfo.SubCustomerId = {0}\n", subCustomerId)
+                                   + string.Format("\ncompanyInfo.MasterCustomerId = {0}", companyMasterId)
+                                   + string.Format("\ncompanyInfo.SubCustomerId = {0}\n", companySubId)
                                    + ex.Message
                                    + ex.StackTrace;
                         ILogService log = LogService.GetLog(typeof(PersonifyClient));
@@ -1073,7 +1025,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 else
                 {
                     //check if there is a contact with same name for same company already
-                    customerInfo = GetIndividualInfo(storeIndividual.FirstName, storeIndividual.LastName, masterCustomerId, subCustomerId);
+                    customerInfo = GetIndividualInfo(storeIndividual.FirstName, storeIndividual.LastName, companyMasterId, companySubId);
                     if (customerInfo == null)
                     {
                         //could not find him, add him
@@ -1086,11 +1038,11 @@ namespace asi.asicentral.services.PersonifyProxy
                         AddCusCommunicationInput(customerInfoInput, COMMUNICATION_INPUT_PHONE, storeIndividual.Phone, COMMUNICATION_LOCATION_CODE_WORK, countryCode);
                         AddCusCommunicationInput(customerInfoInput, COMMUNICATION_INPUT_EMAIL, storeIndividual.Email, COMMUNICATION_LOCATION_CODE_WORK);
                         var customerInfoOutput = SvcClient.Post<SaveCustomerOutput>("CreateIndividual", customerInfoInput);
-                        if (customerInfoOutput != null)
+                        if (customerInfoOutput != null )
                         {
                             customerInfo = GetIndividualInfo(customerInfoOutput.MasterCustomerId);
-                            if (customerInfo != null) 
-                                AddRelationship(customerInfo.MasterCustomerId, customerInfo.SubCustomerId, masterCustomerId, subCustomerId);
+                            if (customerInfo != null)
+                                AddRelationship(customerInfo.MasterCustomerId, customerInfo.SubCustomerId, companyMasterId, companySubId);
                         }
                     }
                     else
@@ -1127,17 +1079,17 @@ namespace asi.asicentral.services.PersonifyProxy
             SvcClient.Save<CusRelationship>(cusRelationship);
         }
 
-        public static PersonifyCustomerInfo GetIndividualInfo(string firstName, string lastName, string companyMasterCustomerId, int companySubCustomerId)
+        private static PersonifyCustomerInfo GetIndividualInfo(string firstName, string lastName, string companyMasterId, int companySubId)
         {
             PersonifyCustomerInfo customerInfo = null;
 
             if (!string.IsNullOrWhiteSpace(firstName) && !string.IsNullOrWhiteSpace(lastName)
-                && !string.IsNullOrWhiteSpace(companyMasterCustomerId))
+                && !string.IsNullOrWhiteSpace(companyMasterId))
             {
                 List<CusRelationship> oCusRltnshps = SvcClient.Ctxt.CusRelationships
                     .Where(a => a.RelatedName == string.Format("{0}, {1}", lastName, firstName)
-                                && a.MasterCustomerId == companyMasterCustomerId
-                                && a.SubCustomerId == companySubCustomerId).ToList();
+                                && a.MasterCustomerId == companyMasterId
+                                && a.SubCustomerId == companySubId).ToList();
                 CusRelationship oCusRltnshp = null;
                 if (oCusRltnshps.Count > 0)
                 {
@@ -1170,18 +1122,6 @@ namespace asi.asicentral.services.PersonifyProxy
             var individuals = GetCustomerInfoFromSP(SP_SEARCH_BY_COMMUNICATION, new List<string>() { emailAddress });
             PersonifyCustomerInfo customerInfo = individuals.Any() ? customerInfo = individuals.Find(i => i.RecordType.StartsWith(RECORD_TYPE_INDIVIDUAL)) : null;
             return customerInfo;
-        }
-
-        public static IEnumerable<StoreAddressInfo> AddIndividualAddresses(
-           StoreCompany storeCompany,
-           IEnumerable<PersonifyCustomerInfo> individualInfos,
-           IEnumerable<LookSendMyAdCountryCode> countryCodes)
-        {
-            var storeIndividualInfos = individualInfos.SelectMany(individual =>
-            {
-                return AddCustomerAddresses(storeCompany, individual.MasterCustomerId, individual.SubCustomerId, countryCodes);
-            });
-            return storeIndividualInfos;
         }
 
         private static IDictionary<AddressType, AddressInfo> AddressesToBeAdded(CustomerInfo contactInfo,
@@ -1455,23 +1395,6 @@ namespace asi.asicentral.services.PersonifyProxy
                 throw new Exception(m);
             }
             return resp.CreditCardProfileId;
-        }
-
-        public static string GetCreditCardProfileId(string asiCompany, string masterCustomerId, int subCustomerId, string cardType, string creditCardNumber)
-        {
-	        string creditCardType = CreditCardType[asiCompany][cardType];
-            if (string.IsNullOrEmpty(masterCustomerId)) throw new Exception("Could not find a company to assign the credit card to");
-            IEnumerable<ASICustomerCreditCard> oCreditCards = SvcClient.Ctxt.ASICustomerCreditCards
-                .Where(c => c.MasterCustomerId == masterCustomerId
-                         && c.SubCustomerId == subCustomerId
-                         && c.ReceiptTypeCodeString == creditCardType);
-            long? profileId = null;
-            if (oCreditCards.Any())
-            {
-                string ccReference = GetCreditCardReference(creditCardNumber);
-                profileId = oCreditCards.Where(c => c.CCReference == ccReference).Select(c => c.CustomerCreditCardProfileId).FirstOrDefault();
-            }
-            return profileId == null ? string.Empty : profileId.ToString();
         }
 
         public static ASICustomerCreditCard GetCreditCardByProfileId(string masterCustomerId, int subCustomerId, string profileId)
