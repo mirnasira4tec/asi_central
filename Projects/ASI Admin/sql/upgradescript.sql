@@ -1,7 +1,9 @@
-
 -- 
--- Added new column in `ATT_Attendee`
+-- Delete column in `ATT_Attendee`
 --
+ALTER TABLE [dbo].[ATT_Attendee] 
+DROP CONSTRAINT DF__ATT_Atten__IsAtt__65370702
+
 ALTER TABLE [dbo].[ATT_Attendee]
-ADD  [IsPresentation] [bit] NOT NULL DEFAULT ('0'),[IsRoundTable] [bit] NOT NULL DEFAULT ('0')
+DROP COLUMN IsAttending
 Go
