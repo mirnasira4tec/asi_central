@@ -9,10 +9,12 @@ using PersonifySvcClient;
 using System;
 using System.Collections.Generic;
 using System.Data.Services.Client;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace asi.asicentral.services.PersonifyProxy
 {
@@ -888,66 +890,24 @@ namespace asi.asicentral.services.PersonifyProxy
                     var response = SvcClient.Post<StoredProcedureOutput>("GetStoredProcedureDataXML", spRequest);
                     if (response != null && !string.IsNullOrEmpty(response.Data) && response.Data != "No Data Found")
                     {
-                        var xml = XDocument.Parse(response.Data);
+                        var data = @"<?xml version=""1.0"" encoding=""utf-16""?>" + response.Data;
+                        PersonifyCustomerInfos results = null;
 
-                        var list = xml.Root.Elements("Table").ToList();
-                        foreach (var com in list)
+                        var serializer = new XmlSerializer(typeof(PersonifyCustomerInfos));
+                        using (var reader = new StringReader(data))
                         {
-                            var customerInfo = new PersonifyCustomerInfo();
-                            foreach (var element in com.Elements())
-                            {
-                                var value = element.Value;
-                                switch (element.Name.ToString())
-                                {
-                                    case "USR_ASI_NUMBER":
-                                        customerInfo.AsiNumber = value;
-                                        break;
-                                    case "USR_CUSTOMER_NUMBER":
-                                        customerInfo.CustomerNumber = Int32.Parse(value);
-                                        break;
-                                    case "MASTER_CUSTOMER_ID":
-                                        customerInfo.MasterCustomerId = value;
-                                        break;
-                                    case "SUB_CUSTOMER_ID":
-                                        customerInfo.SubCustomerId = Int32.Parse(value);
-                                        break;
-                                    case "RECORD_TYPE":
-                                        customerInfo.RecordType = value;
-                                        break;
-                                    case "LAST_NAME":
-                                        customerInfo.LastName = value;
-                                        break;
-                                    case "FIRST_NAME":
-                                        customerInfo.FirstName = value;
-                                        break;
-                                    case "LABEL_NAME":
-                                        customerInfo.LabelName = value;
-                                        break;
-                                    case "CUSTOMER_STATUS_CODE":
-                                        customerInfo.CustomerStatusCode = value;
-                                        break;
-                                    case "USR_MEMBER_STATUS":
-                                        customerInfo.MemberStatus = value;
-                                        break;
-                                    case "PRIMARY_EMAIL_ADDRESS":
-                                        customerInfo.PrimaryEmail = value;
-                                        break;
-                                    case "CUSTOMER_CLASS_CODE":
-                                        customerInfo.CustomerClassCode = value;
-                                        break;
-                                    case "USR_SUB_CLASS":
-                                        customerInfo.SubClassCode = value;
-                                        break;
-                                    case "USR_DNS_FLAG":
-                                        customerInfo.DNSFlag = value.StartsWith("Y");
-                                        break;
-                                }
-                            }
+                            results = (PersonifyCustomerInfos)serializer.Deserialize(reader);
+                        } 
 
-                            if (customerInfo.RecordType == null || customerInfo.RecordType != RECORD_TYPE_CORPORATE ||
-                                customerInfo.CustomerStatusCode == null || customerInfo.CustomerStatusCode != CUSTOMER_INFO_STATUS_DUPLICATE)
+                        if (results != null && results.CustometInfoList != null)
+                        {
+                            foreach (var customerInfo in results.CustometInfoList)
                             {
-                                companyInfoList.Add(customerInfo);
+                                if (customerInfo.RecordType == null || customerInfo.RecordType != RECORD_TYPE_CORPORATE ||
+                                    customerInfo.CustomerStatusCode == null || customerInfo.CustomerStatusCode != CUSTOMER_INFO_STATUS_DUPLICATE)
+                                {
+                                    companyInfoList.Add(customerInfo);
+                                }
                             }
                         }
                     }
