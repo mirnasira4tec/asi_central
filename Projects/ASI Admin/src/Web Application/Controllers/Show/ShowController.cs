@@ -82,10 +82,11 @@ namespace asi.asicentral.web.Controllers.Show
                 if (existingAttendee == null) existingAttendee = new ShowAttendee();
                 existingAttendee.CompanyId = companyId;
                 existingAttendee.ShowId = showId;
-                existingAttendee.IsAttending = showAttendee.IsAttending;
                 existingAttendee.IsSponsor = showAttendee.IsSponsor;
                 existingAttendee.IsExhibitDay = showAttendee.IsExhibitDay;
                 existingAttendee.BoothNumber = showAttendee.BoothNumber;
+                existingAttendee.IsPresentation = showAttendee.IsPresentation;
+                existingAttendee.IsRoundTable = showAttendee.IsRoundTable;
                 existingAttendee.UpdateDate = DateTime.UtcNow;
                 existingAttendee.UpdateSource = "ShowController - PostShowAttendeeInformation";
                 ShowAttendee attendeeToSave = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, existingAttendee);

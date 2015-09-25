@@ -189,10 +189,11 @@ namespace asi.asicentral.util.show
             }
             showAttendee.CompanyId = objShowAttendee.CompanyId;
             showAttendee.ShowId = objShowAttendee.ShowId;
-            showAttendee.IsAttending = objShowAttendee.IsAttending;
             showAttendee.IsSponsor = objShowAttendee.IsSponsor;
             showAttendee.IsExhibitDay = objShowAttendee.IsExhibitDay;
             showAttendee.BoothNumber = objShowAttendee.BoothNumber;
+            showAttendee.IsPresentation = objShowAttendee.IsPresentation;
+            showAttendee.IsRoundTable = objShowAttendee.IsRoundTable;
             showAttendee.UpdateDate = DateTime.UtcNow;
             showAttendee.UpdateSource = objShowAttendee.UpdateSource;
             return showAttendee;
