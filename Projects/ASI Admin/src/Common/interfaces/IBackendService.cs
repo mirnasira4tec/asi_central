@@ -42,7 +42,7 @@ namespace asi.asicentral.interfaces
 
         CompanyInformation CreateCompany(StoreCompany storeCompany, string storeType);
 
-        CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList, ref bool dnsFlg);
+        CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList);
 
         string GetCompanyStatus(string masterCustomerId, int subCustomerId);
         string GetCompanyAsiNumber(string masterCustomerId, int subCustomerId);

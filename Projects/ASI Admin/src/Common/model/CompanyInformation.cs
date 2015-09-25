@@ -18,6 +18,7 @@ namespace asi.asicentral.model
 		public string MemberStatus { get; set; }
 		public int MemberTypeNumber { get; set; }
 		public string ASINumber { get; set; }
+        public bool DNSFlag { get; set; }
 		[Display(ResourceType = typeof(Resource), Name = "Street1")]
 		public string Street1 { get; set; }
 		[Display(ResourceType = typeof(Resource), Name = "Street2")]

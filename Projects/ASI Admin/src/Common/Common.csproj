@@ -474,6 +474,7 @@
     <Compile Include="services\PersonifyProxy\MemberTypeIDToCD.cs" />
     <Compile Include="services\PersonifyProxy\EmailData.cs" />
     <Compile Include="services\PersonifyProxy\PersonifyClient.cs" />
+    <Compile Include="services\PersonifyProxy\PersonifyCustomerInfo.cs" />
     <Compile Include="services\PersonifyProxy\StoreAddressInfo.cs" />
     <Compile Include="services\PersonifyProxy\SvcClient.cs" />
     <Compile Include="services\PersonifyService.cs" />
