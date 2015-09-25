@@ -299,7 +299,6 @@ namespace asi.asicentral.Tests
 
             IBackendService personify = new PersonifyService();
             List<string> masterIdList = null;
-            bool dnsFlag = false;
             var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
