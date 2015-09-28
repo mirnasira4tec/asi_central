@@ -20,6 +20,7 @@ namespace asi.asicentral.web.model.store
             get { return SupplierSpecialsHelper.GetPackagesOptions(); }
         }
         public string AcceptedByName { get; set; }
+        public bool IsBonus { get; set; }
 
         /// <summary>
         /// Required for MVC to rebuild the model
@@ -49,6 +50,7 @@ namespace asi.asicentral.web.model.store
                 ProductName += orderdetail.Product.Name;
                 ProductId = orderdetail.Product.Id;
                 Cost = orderdetail.Cost;
+                if (SpecialtyShoppesHelper.SPECIALTY_SHOPPES == ProductId) IsBonus = SpecialtyShoppesHelper.IsBonus(orderdetail.Cost, orderdetail.OptionId.Value);
             }
 
             ActionName = "Approve";

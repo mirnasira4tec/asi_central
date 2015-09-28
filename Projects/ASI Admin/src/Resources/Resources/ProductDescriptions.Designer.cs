@@ -313,6 +313,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Specialty Shoppes are polished, professional looking web stores that come pre-designed and already merchandised with promotional products that fit a theme, so they are ready to use immediately!.
+        /// </summary>
+        public static string ProductSpecialtyShoppes {
+            get {
+                return ResourceManager.GetString("ProductSpecialtyShoppes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;em&gt;Spectrum&lt;/em&gt; is your most indispensable and versatile selling tool. The wide range of products included in this convenient, digest-size catalog will give you the ability to satisfy a variety of your customers’ needs..
         /// </summary>
         public static string ProductSpectrum {
