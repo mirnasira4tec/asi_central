@@ -20,33 +20,48 @@ namespace asi.asicentral.web.Controllers.Show
         public IObjectService ObjectService { get; set; }
         IList<string> messages = new List<string>();
 
-        public ActionResult CompanyList(String companyTab, string companyName, string MemberType)
+        public ActionResult CompanyList(String companyTab, string companyName, string MemberType, int page = 1, int pageSize = 10)
         {
             var company = new CompanyModel();
-            IQueryable<ShowCompany> companyList = ObjectService.GetAll<ShowCompany>(true);
+            IList<ShowCompany> companyList = null;
+            company.CurrentPageIndex = page;
+            company.PageSize = pageSize;
+            company.TabCompanyName = companyName;
+            company.TabMemberType = MemberType;
+            var start = DateTime.Now;
+            DateTime end;
+            ILogService log = LogService.GetLog(this.GetType());
+            log.Debug("CompanyList.cshtml - Start");
+            companyList = ObjectService.GetAll<ShowCompany>(true).OrderByDescending(form => form.CreateDate).ToList();
             if (string.IsNullOrEmpty(companyTab)) companyTab = CompanyModel.TAB_COMPANYNAME;
             if (!string.IsNullOrEmpty(MemberType) && !string.IsNullOrEmpty(companyName))
             {
                 companyList = companyList.Where(item => (item.Name != null
                  && item.Name.Contains(companyName) && item.MemberType != null
-                 && item.MemberType.Contains(MemberType)));
+                 && item.MemberType.Contains(MemberType))).ToList();
             }
 
             else if (!string.IsNullOrEmpty(MemberType))
             {
                 companyList = companyList.Where(item => item.MemberType != null
-                 && item.MemberType.Contains(MemberType));
+                 && item.MemberType.Contains(MemberType)).ToList();
             }
             else if (!string.IsNullOrEmpty(companyName))
             {
                 companyList = companyList.Where(item => item.Name != null
-                 && item.Name.Contains(companyName));
+                 && item.Name.Contains(companyName)).ToList();
             }
-
+            company.TotalRecordCount = companyList.Count();
+            companyList = companyList.Skip((company.CurrentPageIndex - 1) * company.PageSize)
+                                            .Take(company.PageSize).ToList();
             company.CompanyTab = companyTab;
-            company.company = companyList.OrderByDescending(form => form.CreateDate).ToList();
+            company.company = companyList;
+            end = DateTime.Now;
+            log.Debug("CompanyList.cshtml - End " + (end - start));
             return View("../Show/Company/CompanyList", company);
+
         }
+
 
         [HttpGet]
         public virtual ActionResult AddCompany()
@@ -519,7 +534,7 @@ namespace asi.asicentral.web.Controllers.Show
             company.company = companyList.ToList();
             if (company.company.Any())
             {
-               return Json(false);
+                return Json(false);
             }
             else
             {

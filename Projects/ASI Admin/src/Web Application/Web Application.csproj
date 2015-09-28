@@ -498,6 +498,8 @@
     <Content Include="Views\Show\ShowCompaniesList.cshtml" />
     <Content Include="Views\Show\AddCompanyAttendeesToShow.cshtml" />
     <Content Include="Views\Show\AddCompaniesToShow.cshtml" />
+    <Content Include="Views\Show\Shared\_Pager.cshtml" />
+    <Content Include="Views\Show\Shared\_PagerLink.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
