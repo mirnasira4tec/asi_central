@@ -37,8 +37,7 @@
     <a href="/showCompany/AddCompany" class="btn btn-primary">Add </a>
     <br />
     <br />
-     
-    <table class="table table-bordered table-condensed table-striped">
+    <table id ="tblCompany" class="table table-bordered table-condensed table-striped">
         <thead>
             <tr>
                 <th>&nbsp;</th>
@@ -64,11 +63,14 @@
                 </tr>
                
             }
-             <tr>
+            @if (Model.TotalRecordCount > 10)
+            {
+                <tr>
                     <td class="pager" colspan="5">
                         @Html.Partial("../Show/Shared/_Pager", Model)
                     </td>
                 </tr>
+            }
         </tbody>
     </table>
 }
@@ -89,4 +91,9 @@
                 return false
         });
     </script>
+<script type="text/javascript">
+    $(function () {
+        window.location = '#tblCompany';
+    });
+</script>
 }

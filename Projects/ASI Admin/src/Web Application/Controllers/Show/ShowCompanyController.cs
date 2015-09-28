@@ -26,6 +26,8 @@ namespace asi.asicentral.web.Controllers.Show
             IList<ShowCompany> companyList = null;
             company.CurrentPageIndex = page;
             company.PageSize = pageSize;
+            company.TabCompanyName = companyName;
+            company.TabMemberType = MemberType;
             var start = DateTime.Now;
             DateTime end;
             ILogService log = LogService.GetLog(this.GetType());

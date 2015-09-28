@@ -5,21 +5,16 @@
 
 @{
     var razorWriter = ViewContext.Writer;
-    if ((bool)ViewData["Inactive"])
+    if (ViewData["Inactive"] != null ? (bool)ViewData["Inactive"] : false)
     {
         razorWriter.Write(string.Format("<span class=\"{0}\">{1}</span>", "pagerButtonDisabled", ViewData["Text"]));
     }
     else
     {
-        
-        var routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"].ToString() }, { "pageSize", Model.PageSize } };
 
-        // Add querystring parameters to the route collection
-
-        routeData.AddQueryStringParameters();
-
+        var routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize }, { "companyName", ViewData["CompanyName"] != null ? ViewData["CompanyName"].ToString() : null }, { "MemberType", ViewData["MemberType"] != null ? ViewData["MemberType"].ToString() : null } };
         var htmlAttributes = new Dictionary<string, object>();
-        if ((bool)ViewData["Selected"])
+        if (ViewData["Selected"] != null ? (bool)ViewData["Selected"] : false)
         {
             htmlAttributes.Add("class", "pagerButtonCurrentPage");
         }
@@ -29,7 +24,7 @@
         }
 
         var linkMarkup = Html.ActionLink(
-                ViewData["Text"].ToString(),                                    // Link Text
+                ViewData["Text"] != null ? ViewData["Text"].ToString() : null,  // Link Text
                 Html.ViewContext.RouteData.Values["action"].ToString(),         // Action
                 Html.ViewContext.RouteData.Values["controller"].ToString(),     // Controller
                 routeData,                                                      // Route data

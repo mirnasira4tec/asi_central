@@ -118,6 +118,8 @@ namespace asi.asicentral.web.models.show
             }
         }
         public int NumericPageCount { get; set; }
+        public string TabCompanyName { get; set; }
+        public string TabMemberType { get; set; }
 
     }
 }
