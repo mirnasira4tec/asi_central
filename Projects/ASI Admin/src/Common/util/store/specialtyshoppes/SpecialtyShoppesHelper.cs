@@ -28,5 +28,12 @@ namespace asi.asicentral.util.store
         {
             return SpecialtyShoppes_Cost[optionId];
         }
+
+        public static bool IsBonus(decimal total, int option)
+        {
+            if (option != 6 && total != SpecialtyShoppes_Cost[0]) return true;
+            if (option == 6 && total != SpecialtyShoppes_Cost[1]) return true;
+            return false;
+        }
     }
 }
