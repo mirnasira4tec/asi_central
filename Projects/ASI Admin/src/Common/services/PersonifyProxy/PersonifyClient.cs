@@ -490,18 +490,18 @@ namespace asi.asicentral.services.PersonifyProxy
             matchList = new List<string>();
             var nameMatchList = new List<string>();
             var phoneEmailMatchList = new List<string>();
-            bool matchBoth = !string.Equals(company.MemberType, "SUPPLIER", StringComparison.InvariantCultureIgnoreCase) &&
-                             !string.Equals(company.MemberType, "EQUIPMENT", StringComparison.InvariantCultureIgnoreCase);
+            bool isSupplier = string.Equals(company.MemberType, "SUPPLIER", StringComparison.InvariantCultureIgnoreCase) ||
+                              string.Equals(company.MemberType, "EQUIPMENT", StringComparison.InvariantCultureIgnoreCase);
 
             Task[] tasks = new Task[2]
             {
                 Task.Factory.StartNew(() => MatchCompanyName(company, nameMatchList)),
-                Task.Factory.StartNew(() => MatchPhoneEmail(company, phoneEmailMatchList, matchBoth))
+                Task.Factory.StartNew(() => MatchPhoneEmail(company, phoneEmailMatchList))
             };
 
             // Find company matching name
             Task.WaitAny(tasks[0]);
-            if (nameMatchList.Count == 1)
+            if (nameMatchList.Count == 1 && isSupplier)
             {
                 matchList.AddRange(nameMatchList);
             }
@@ -509,29 +509,39 @@ namespace asi.asicentral.services.PersonifyProxy
             {
                 // Get company matching phone/email
                 Task.WaitAny(tasks[1]);
-                if (nameMatchList.Count > 1)
+                if (isSupplier)
                 {
-                    // find companies match both name and phone/email
-                    if( phoneEmailMatchList.Count > 0 )
+                    if (nameMatchList.Count > 1)
                     {
-                        foreach (var m in nameMatchList)
+                        // find companies match both name and phone/email
+                        if (phoneEmailMatchList.Count > 0)
                         {
-                            var matches = phoneEmailMatchList.FindAll(t => t == m);
-                            if (matches.Count > 0)
-                                matchList.AddRange(matches);
+                            var matchBoth = nameMatchList.Intersect(phoneEmailMatchList);
+                            if (matchBoth.Count() > 0)
+                            {
+                                matchList.AddRange(matchBoth);
+                            }
+                            else // no company matches both, get match-name list only
+                            {
+                                matchList.AddRange(nameMatchList);
+                            }
                         }
-
-                        // no company matches both, get match-name list only
-                        if (matchList.Count < 1)
+                        else
                             matchList.AddRange(nameMatchList);
                     }
-                    else
-                        matchList.AddRange(nameMatchList);
                 }
-                else
+                else if (nameMatchList.Count > 0 && phoneEmailMatchList.Count > 0)
                 {
-                    matchList.AddRange(phoneEmailMatchList);
+                    var matchBoth = nameMatchList.Intersect(phoneEmailMatchList);
+                    if (matchBoth.Count() > 0)
+                    {
+                        matchList.AddRange(matchBoth);
+                    }
                 }
+
+                // no match found through name, get phone-email list if any
+                if (matchList.Count < 1 && phoneEmailMatchList.Count > 0)
+                    matchList.AddRange(phoneEmailMatchList);
             }
 
             matchList = matchList.Distinct().ToList();
@@ -572,7 +582,7 @@ namespace asi.asicentral.services.PersonifyProxy
             _log.Debug(string.Format("MatchCompanyName - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
         }
 
-        private static void MatchPhoneEmail(StoreCompany company, List<string> masterIdList, bool matchBoth)
+        private static void MatchPhoneEmail(StoreCompany company, List<string> masterIdList, bool matchBoth = false)
         {
             var startTime = DateTime.Now;
             _log.Debug(string.Format("MatchPhoneEmail - start: company name {0}", company.Name));
