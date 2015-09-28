@@ -10,6 +10,7 @@ namespace asi.asicentral.util.store
 {
     public class SpecialtyShoppesHelper
     {
+        public const int SPECIALTY_SHOPPES = 112;
         public static readonly decimal[] SpecialtyShoppes_Cost = { 49, 99 };
 
         public static IList<SelectListItem> GetQuantityOptions()

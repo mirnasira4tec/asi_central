@@ -497,6 +497,11 @@ namespace asi.asicentral.web.Controllers.Store
                             else
                                 orderDetail.Cost = CompanyStoreHelper.GetCost(1);
                             break;
+                        case 112:
+                            orderDetail.OptionId = application.OptionId;
+                            orderDetail.Cost = (application.OptionId != 6) ? Convert.ToDecimal(SpecialtyShoppesHelper.GetCost(0)) : orderDetail.Cost = CompanyStoreHelper.GetCost(1);
+                            if (application.IsBonus) orderDetail.Cost = orderDetail.Cost * 12m * 0.8m;
+                            break;
                         default:
                             int quantity = orderDetail.Quantity;
                             orderDetail.Quantity = Convert.ToInt32(application.Quantity);
