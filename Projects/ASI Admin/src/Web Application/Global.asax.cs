@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using asi.asicentral.views;
+using System.Web;
 
 namespace asi.asicentral.web
 {
@@ -12,6 +13,7 @@ namespace asi.asicentral.web
     {
         protected void Application_Start()
         {
+            log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo(HttpContext.Current.Server.MapPath("~/web.config")));
 			HostingEnvironment.RegisterVirtualPathProvider(new CustomVirtualPathProvider());
 			AreaRegistration.RegisterAllAreas();
             WebApiConfig.Register(GlobalConfiguration.Configuration);
