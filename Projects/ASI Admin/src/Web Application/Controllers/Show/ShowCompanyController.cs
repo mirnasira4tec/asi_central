@@ -547,7 +547,7 @@ namespace asi.asicentral.web.Controllers.Show
             ShowCompaniesModel showCompanies = new ShowCompaniesModel();
             if (string.IsNullOrEmpty(companyTab)) companyTab = ShowCompaniesModel.TAB_COMPANYNAME;
             showCompanies.CompanyTab = companyTab;
-            IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(attendee => (attendee.ShowId == showId && (attendee.IsAttending == true || attendee.IsExhibitDay == true))).OrderBy(form => form.Company.Name).ToList();
+            IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(attendee => attendee.ShowId == showId).OrderBy(form => form.Company.Name).ToList();
             if (existingAttendees.Any())
             {
                 foreach (ShowAttendee attendee in existingAttendees)
@@ -600,6 +600,13 @@ namespace asi.asicentral.web.Controllers.Show
                     showCompanies.ShowEmployees.Add(employeeAttendance);
                 }
                 showCompanies.Show = show;
+                ShowAttendee addAttendee = new ShowAttendee();
+                addAttendee.CompanyId = companyId;
+                addAttendee.ShowId = showId;
+                addAttendee.UpdateDate = DateTime.UtcNow;
+                addAttendee.UpdateSource = "ShowCompanyController - GetCompanyDetailsForShow";
+                addAttendee = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, addAttendee);
+                ObjectService.SaveChanges();
             }
             return View("../Show/AddCompanyAttendeesToShow", showCompanies);
         }
@@ -619,7 +626,7 @@ namespace asi.asicentral.web.Controllers.Show
             IList<ShowCompany> list = null;
             if (string.IsNullOrEmpty(companyTab)) companyTab = ShowCompaniesModel.TAB_COMPANYNAME;
             showCompanies.CompanyTab = companyTab;
-            IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => ((item.IsAttending == true || item.IsExhibitDay == true) && item.ShowId == showId)).ToList();
+            IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == showId).ToList();
             if (existingAttendees.Any())
             {
                 IList<ShowCompany> companyList = ObjectService.GetAll<ShowCompany>(true).ToList();
