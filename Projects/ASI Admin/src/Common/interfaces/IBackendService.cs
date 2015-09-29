@@ -47,6 +47,6 @@ namespace asi.asicentral.interfaces
         void AddActivity(StoreCompany company, string activityText, Activity activityType);
 
         // this function will be obsolete after EASI, need to be removed
-        void UpdateCompanyStatus(string masterCustomerId);
+        void MakeCompanyActive(string masterCustomerId);
     }
 }

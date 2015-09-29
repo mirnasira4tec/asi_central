@@ -115,7 +115,7 @@ namespace asi.asicentral.services.PersonifyProxy
         }
 
         // After EASI, revisit this function
-        public static void UpdateCompanyStatus(string masterCustomerId)
+        public static void MakeCompanyActive(string masterCustomerId)
         {
             var customers = SvcClient.Ctxt.ASICustomers.Where(
                     p => p.MasterCustomerId == masterCustomerId && p.SubCustomerId == 0).ToList();
