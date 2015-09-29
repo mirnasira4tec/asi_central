@@ -21,7 +21,7 @@ namespace asi.asicentral.util.store
             quantityOptions.Add(new SelectListItem() { Text = "Finance Store", Value = "3" });
             quantityOptions.Add(new SelectListItem() { Text = "Construction Store", Value = "4" });
             quantityOptions.Add(new SelectListItem() { Text = "Technology Store", Value = "5" });
-            quantityOptions.Add(new SelectListItem() { Text = "5 Pack of Stores", Value = "6" });
+            quantityOptions.Add(new SelectListItem() { Text = "5-Pack of Stores", Value = "6" });
             return quantityOptions;
         }
 
