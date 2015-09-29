@@ -412,6 +412,11 @@ namespace asi.asicentral.services
             PersonifyClient.AddActivity(company, activityText, activityType);
         }
 
+        public void UpdateCompanyStatus(string masterCustomerId)
+        {
+            PersonifyClient.UpdateCompanyStatus(masterCustomerId);
+        }
+
 		private static string GetMessageSuffix(string url)
 		{
 			var s = "<br /><br />Thanks,<br /><br />ASICentral team";

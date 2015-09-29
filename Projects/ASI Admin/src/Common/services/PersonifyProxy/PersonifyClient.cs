@@ -1,6 +1,7 @@
 ﻿using asi.asicentral.interfaces;
 using asi.asicentral.model;
 using asi.asicentral.model.store;
+using asi.asicentral.oauth;
 using asi.asicentral.PersonifyDataASI;
 using asi.asicentral.util.store;
 using asi.asicentral.util.store.companystore;
@@ -111,6 +112,22 @@ namespace asi.asicentral.services.PersonifyProxy
             }
 
             return customerInfo;
+        }
+
+        // After EASI, revisit this function
+        public static void UpdateCompanyStatus(string masterCustomerId)
+        {
+            var customers = SvcClient.Ctxt.ASICustomers.Where(
+                    p => p.MasterCustomerId == masterCustomerId && p.SubCustomerId == 0).ToList();
+            if (customers.Count > 0)
+            {
+                ASICustomer customer = customers[0];
+                if (customer.UserDefinedMemberStatusString == StatusCode.DELISTED.ToString())
+                {
+                    customer.UserDefinedMemberStatusString = StatusCode.ACTIVE.ToString();
+                    SvcClient.Save<ASICustomer>(customer);
+                }
+            }
         }
 
         public static CustomerInfo CreateCompany(StoreCompany storeCompany, string storeType, IList<LookSendMyAdCountryCode> countryCodes)

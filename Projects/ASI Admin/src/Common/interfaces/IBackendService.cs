@@ -45,5 +45,8 @@ namespace asi.asicentral.interfaces
         CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList, ref bool dnsFlg);
 
         void AddActivity(StoreCompany company, string activityText, Activity activityType);
+
+        // this function will be obsolete after EASI, need to be removed
+        void UpdateCompanyStatus(string masterCustomerId);
     }
 }
