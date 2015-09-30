@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using System.Web.Routing;
 
 namespace asi.asicentral.util.show
 {
@@ -189,10 +191,11 @@ namespace asi.asicentral.util.show
             }
             showAttendee.CompanyId = objShowAttendee.CompanyId;
             showAttendee.ShowId = objShowAttendee.ShowId;
-            showAttendee.IsAttending = objShowAttendee.IsAttending;
             showAttendee.IsSponsor = objShowAttendee.IsSponsor;
             showAttendee.IsExhibitDay = objShowAttendee.IsExhibitDay;
             showAttendee.BoothNumber = objShowAttendee.BoothNumber;
+            showAttendee.IsPresentation = objShowAttendee.IsPresentation;
+            showAttendee.IsRoundTable = objShowAttendee.IsRoundTable;
             showAttendee.UpdateDate = DateTime.UtcNow;
             showAttendee.UpdateSource = objShowAttendee.UpdateSource;
             return showAttendee;
@@ -219,5 +222,17 @@ namespace asi.asicentral.util.show
             }
             return showEmployeeAttendee;
         }
+
+        public static RouteValueDictionary AddQueryStringParameters(this RouteValueDictionary dict)
+        {
+            var querystring = HttpContext.Current.Request.QueryString;
+
+            foreach (var key in querystring.AllKeys)
+                if (!dict.ContainsKey(key))
+                    dict.Add(key, querystring.GetValues(key)[0]);
+
+            return dict;
+        }
+
     }
 }

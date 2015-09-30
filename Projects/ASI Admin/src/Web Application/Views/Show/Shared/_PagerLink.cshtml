@@ -1,0 +1,36 @@
+﻿@using asi.asicentral.web.models.show;
+@using asi.asicentral.util.show;
+@model CompanyModel
+
+
+@{
+    var razorWriter = ViewContext.Writer;
+    if (ViewData["Inactive"] != null ? (bool)ViewData["Inactive"] : false)
+    {
+        razorWriter.Write(string.Format("<span class=\"{0}\">{1}</span>", "pagerButtonDisabled", ViewData["Text"]));
+    }
+    else
+    {
+
+        var routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize }, { "companyName", ViewData["CompanyName"] != null ? ViewData["CompanyName"].ToString() : null }, { "MemberType", ViewData["MemberType"] != null ? ViewData["MemberType"].ToString() : null } };
+        var htmlAttributes = new Dictionary<string, object>();
+        if (ViewData["Selected"] != null ? (bool)ViewData["Selected"] : false)
+        {
+            htmlAttributes.Add("class", "pagerButtonCurrentPage");
+        }
+        else
+        {
+            htmlAttributes.Add("class", "pagerButton");
+        }
+
+        var linkMarkup = Html.ActionLink(
+                ViewData["Text"] != null ? ViewData["Text"].ToString() : null,  // Link Text
+                Html.ViewContext.RouteData.Values["action"].ToString(),         // Action
+                Html.ViewContext.RouteData.Values["controller"].ToString(),     // Controller
+                routeData,                                                      // Route data
+                htmlAttributes                                                  // HTML attributes to apply to hyperlink
+            ).ToHtmlString();
+
+        razorWriter.Write(linkMarkup);
+   }
+}
