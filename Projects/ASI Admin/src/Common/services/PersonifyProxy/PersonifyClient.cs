@@ -773,13 +773,13 @@ namespace asi.asicentral.services.PersonifyProxy
                 {
                     companyList.Add(match);
                 }
-                else if( filter.Contains("@") )
-                { // get company from primarey contact email
+                else
+                { // get company from contact phone/email
                     if (condition == string.Empty)
-                        condition = string.Format("(SubCustomerId eq 0 and RelatedMasterCustomerId eq '{0}' and RelatedSubCustomerId eq {1} and RelationshipType eq 'EMPLOYMENT')", // and PrimaryEmployerFlag eq true)",
+                        condition = string.Format("(SubCustomerId eq 0 and RelatedMasterCustomerId eq '{0}' and RelatedSubCustomerId eq {1} and RelationshipType eq 'EMPLOYMENT')", 
                                                     match.MasterCustomerId, match.SubCustomerId);
                     else
-                        condition = string.Format("{0} or (SubCustomerId eq 0 and RelatedMasterCustomerId eq '{1}' and RelatedSubCustomerId eq {2} and RelationshipType eq 'EMPLOYMENT')",// and PrimaryEmployerFlag eq true)",
+                        condition = string.Format("{0} or (SubCustomerId eq 0 and RelatedMasterCustomerId eq '{1}' and RelatedSubCustomerId eq {2} and RelationshipType eq 'EMPLOYMENT')",
                                                    condition, match.MasterCustomerId, match.SubCustomerId);
                 }
             }
