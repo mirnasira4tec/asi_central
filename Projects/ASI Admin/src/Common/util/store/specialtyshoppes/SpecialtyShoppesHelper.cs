@@ -10,7 +10,7 @@ namespace asi.asicentral.util.store
 {
     public class SpecialtyShoppesHelper
     {
-        public const int SPECIALTY_SHOPPES = 112;
+        public static readonly int[] SPECIALTY_SHOPPES_IDS = { 112, 113 };
         public static readonly decimal[] SpecialtyShoppes_Cost = { 49, 99 };
 
         public static IList<SelectListItem> GetQuantityOptions()
@@ -28,13 +28,6 @@ namespace asi.asicentral.util.store
         public static decimal GetCost(int optionId)
         {
             return SpecialtyShoppes_Cost[optionId];
-        }
-
-        public static bool IsBonus(decimal total, int option)
-        {
-            if (option != 6 && total != SpecialtyShoppes_Cost[0]) return true;
-            if (option == 6 && total != SpecialtyShoppes_Cost[1]) return true;
-            return false;
         }
     }
 }

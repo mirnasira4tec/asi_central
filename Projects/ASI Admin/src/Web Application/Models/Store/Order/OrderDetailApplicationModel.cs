@@ -50,7 +50,7 @@ namespace asi.asicentral.web.model.store
                 ProductName += orderdetail.Product.Name;
                 ProductId = orderdetail.Product.Id;
                 Cost = orderdetail.Cost;
-                if (SpecialtyShoppesHelper.SPECIALTY_SHOPPES == ProductId) IsBonus = SpecialtyShoppesHelper.IsBonus(orderdetail.Cost, orderdetail.OptionId.Value);
+                IsBonus = (SpecialtyShoppesHelper.SPECIALTY_SHOPPES_IDS[0] == ProductId);
             }
 
             ActionName = "Approve";
