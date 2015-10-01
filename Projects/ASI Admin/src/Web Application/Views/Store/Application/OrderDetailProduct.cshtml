@@ -128,6 +128,18 @@
                       </span>
                     }
                 break;
+                case 112:
+                case 113:
+                    <span class="label-row">
+			            @Html.Label("Select Store")
+                    </span>
+		            <span class="label-row">
+			            @Html.DropDownListFor(model => model.OptionId, asi.asicentral.util.store.SpecialtyShoppesHelper.GetQuantityOptions(), new { @class = "span3 long" }) @Html.ValidationMessageFor(model => model.OptionId)
+		            </span>
+                    <span class="checkbox-left">
+                        <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.IsBonus)">@Html.CheckBoxFor(m => m.IsBonus) <strong>BONUS:</strong> Receive an additional 20% off any store or package of stores when pre-paid for the year </label>
+		            </span>
+                break;
                 default:
                 <span class="label-row span11">
 			        @Html.LabelFor(m => m.Quantity) 
