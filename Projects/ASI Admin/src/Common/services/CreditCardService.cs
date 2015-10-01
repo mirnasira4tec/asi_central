@@ -45,7 +45,7 @@ namespace asi.asicentral.services
         {
             if ( creditCard != null && !string.IsNullOrEmpty(creditCard.ExternalReference))
                 return creditCard.ExternalReference;
-
+            
             string result;
             ILogService log = null;
 			//check for ASI #

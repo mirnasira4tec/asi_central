@@ -17,5 +17,17 @@ namespace asi.asicentral.services.PersonifyProxy
         public string CustomerClassCode { get; set; }
         public string SubClassCode { get; set; }
         public bool DNSFlag { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            var customerInfo = obj as PersonifyCustomerInfo;
+            return customerInfo != null && 
+                   MasterCustomerId == customerInfo.MasterCustomerId && SubCustomerId == customerInfo.SubCustomerId;
+        }
+
+        public override int GetHashCode()
+        {
+           return MasterCustomerId.GetHashCode();
+        }
     }
 }
