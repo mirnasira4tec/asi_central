@@ -3,6 +3,7 @@ using asi.asicentral.model;
 using asi.asicentral.model.personify;
 using asi.asicentral.model.store;
 using asi.asicentral.model.timss;
+using asi.asicentral.oauth;
 using asi.asicentral.PersonifyDataASI;
 using asi.asicentral.services.PersonifyProxy;
 using System;
@@ -101,6 +102,12 @@ namespace asi.asicentral.services
                     if (mapping == null)
                     {
                         mapping = mappings.FirstOrDefault(m => string.IsNullOrEmpty(m.StoreOption));
+                    }
+
+                    // update company status from Delisted to Active
+                    if (companyInfo.MemberStatus == StatusCode.DELISTED.ToString())
+                    {
+                        PersonifyClient.MakeCompanyActive(companyInfo.MasterCustomerId);
                     }
 
                     PersonifyClient.CreateBundleOrder(order, mapping, 

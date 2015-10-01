@@ -292,21 +292,24 @@ namespace asi.asicentral.Tests
         [TestMethod]
         public void ReconcileCompanyMatchNameOnly()
         {
-            var company = GetStoreCompany("Reconcile Company Distributor 1",
-                                          "11000000",
-                                          "individual3@reconcile.com", 
-                                          "DISTRIBUTOR");
-
             IBackendService personify = new PersonifyService();
             List<string> masterIdList = null;
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
-            Assert.IsTrue(companyInfo.CompanyId > 0);
-            Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
-            Assert.AreEqual(companyInfo.Name, "Reconcile Company Distributor 1");
-            Assert.IsTrue(companyInfo.DNSFlag);
 
-            // company name with extra special characters
-            company.Name = ".Reconcile $@#?Company $@#?$!&,Distributor 1.";
+            //match name only
+            var company = GetStoreCompany("Reconcile Company Distributor 1",
+                                          "11000000",
+                                          "noMatch@reconcile.com", 
+                                          "DISTRIBUTOR");
+
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
+            Assert.IsNull(companyInfo);
+
+            // match name with extra special characters and phone/email
+            company = GetStoreCompany(".Reconcile $@#?Company $@#?$!&,Distributor 1.",
+                                      "2135555571",
+                                      "individual3@reconcile.com",
+                                      "DISTRIBUTOR"); 
+
             companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
@@ -400,8 +403,8 @@ namespace asi.asicentral.Tests
 
             //Supplier match both name and phone/email, multiple LEAD with the latest note
             company = GetStoreCompany("Reconcile Company Supplier 1",
-                                      "2135555552",
-                                      "individual1@reconcile.com",
+                                      "2135555551",
+                                      "individual10@reconcile.com",
                                       "Supplier");
 
             companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
@@ -410,7 +413,7 @@ namespace asi.asicentral.Tests
             Assert.IsTrue(companyInfo.MemberStatus.ToUpper() == "ASICENTRAL" ||
                           companyInfo.MemberStatus.ToUpper() == "LEAD");
 
-            //Decorator matching name only
+            //Decorator matching name and email only
             company = GetStoreCompany("Reconcile Company Decorator 2",
                                       "2135555553",
                                       "individual8@reconcile.com",

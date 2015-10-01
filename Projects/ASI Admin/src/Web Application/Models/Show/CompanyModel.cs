@@ -13,6 +13,13 @@ namespace asi.asicentral.web.models.show
     public class CompanyModel 
     {
 
+        public CompanyModel()
+        {
+            // Define any default values here...
+            this.PageSize = 10;
+            this.NumericPageCount = 10;
+           
+        }
         public int Id { get; set; }
 
         public int AddressId { get; set; }
@@ -40,21 +47,21 @@ namespace asi.asicentral.web.models.show
 
         [Display(ResourceType = typeof(Resource), Name = "City")]
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
-        [StringLength(75, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
+        [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string City { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "State")]
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
-        [StringLength(40, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
+        [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string State { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "InternationalState")]
-        [StringLength(40, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
+        [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string InternationalState { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "Zip")]
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
-        [StringLength(15, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
+        [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength50")]
         public string Zip { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "Country")]
@@ -62,6 +69,7 @@ namespace asi.asicentral.web.models.show
         public string Country { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "Phone")]
+        [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength50")]
         [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidPhoneNumber", ErrorMessageResourceType = typeof(Resource))]
         public string Phone { get; set; }
 
@@ -72,12 +80,11 @@ namespace asi.asicentral.web.models.show
         [RegularExpression(@"^[2-9]{1}[0-9]{6,6}$", ErrorMessageResourceName = "FieldInvalidFax", ErrorMessageResourceType = typeof(Resource))]
         public string Fax { get; set; }
 
-        
         [RegularExpression(@"^[2-9][0-9]\d$", ErrorMessageResourceName = "FieldInvalidFaxAreaCode", ErrorMessageResourceType = typeof(Resource))]
         public string FaxAreaCode { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "CompanyURL", Prompt = "CompanyURLPrompt")]
-        [StringLength(256, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
+        [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength50")]
         public string Url { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "ASINumber")]
@@ -98,5 +105,21 @@ namespace asi.asicentral.web.models.show
             selItems.Add(new SelectListItem() { Selected = false, Text = "Non-Member", Value = "Non-Member" });
             return selItems;
         }
+
+        // Paging-related properties
+        public int CurrentPageIndex { get; set; }
+        public int PageSize { get; set; }
+        public int TotalRecordCount { get; set; }
+        public int PageCount
+        {
+            get
+            {
+                return Math.Max(this.TotalRecordCount / this.PageSize, 1);
+            }
+        }
+        public int NumericPageCount { get; set; }
+        public string TabCompanyName { get; set; }
+        public string TabMemberType { get; set; }
+        public int ShowId { get; set; }
     }
 }

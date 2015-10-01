@@ -2,6 +2,7 @@
 using asi.asicentral.model;
 using asi.asicentral.model.personify;
 using asi.asicentral.model.store;
+using asi.asicentral.oauth;
 using asi.asicentral.PersonifyDataASI;
 using asi.asicentral.util.store;
 using asi.asicentral.util.store.companystore;
@@ -252,6 +253,21 @@ namespace asi.asicentral.services.PersonifyProxy
             }
 
             return customerInfo ;
+        }
+
+        public static void MakeCompanyActive(string masterCustomerId)
+        {
+            var customers = SvcClient.Ctxt.ASICustomers.Where(
+                    p => p.MasterCustomerId == masterCustomerId && p.SubCustomerId == 0).ToList();
+            if (customers.Count > 0)
+            {
+                ASICustomer customer = customers[0];
+                if (customer.UserDefinedMemberStatusString == StatusCode.DELISTED.ToString())
+                {
+                    customer.UserDefinedMemberStatusString = StatusCode.ACTIVE.ToString();
+                    SvcClient.Save<ASICustomer>(customer);
+                }
+            }
         }
 
         public static CompanyInformation CreateCompany(StoreCompany storeCompany, string storeType, IList<LookSendMyAdCountryCode> countryCodes)
@@ -630,53 +646,76 @@ namespace asi.asicentral.services.PersonifyProxy
             var startTime = DateTime.Now;
             _log.Debug(string.Format("FindMatchingCompany - start: company name {0} ", company.Name));
             
+            PersonifyCustomerInfo matchCompany = null;
+            List<PersonifyCustomerInfo> nameMatchList = null;
+            var phoneMatchList = new List<PersonifyCustomerInfo>();
+            var emailMatchList = new List<PersonifyCustomerInfo>();
             var matchCompanyList = new List<PersonifyCustomerInfo>();
 
-            PersonifyCustomerInfo matchCompany = null;
+            var primaryContact = company.Individuals.Where(c => c.IsPrimary && !string.IsNullOrEmpty(c.Email)).FirstOrDefault();
+            var email = primaryContact != null ? primaryContact.Email.Trim() : string.Empty;
+            var phoneFilter = string.IsNullOrEmpty(company.Phone) ? string.Empty : IgnoreSpecialChars(company.Phone);
+            bool isSupplier = string.Equals(company.MemberType, "SUPPLIER", StringComparison.InvariantCultureIgnoreCase) ||
+                              string.Equals(company.MemberType, "EQUIPMENT", StringComparison.InvariantCultureIgnoreCase);
 
-            List<PersonifyCustomerInfo> nameMatchList = null;
-            List<PersonifyCustomerInfo> phoneEmailMatchList = null;
-            bool matchBoth = !string.Equals(company.MemberType, "SUPPLIER", StringComparison.InvariantCultureIgnoreCase) &&
-                             !string.Equals(company.MemberType, "EQUIPMENT", StringComparison.InvariantCultureIgnoreCase);
-
-            Task[] tasks = new Task[2]
+            var tasks = new Task[3]
             {
-                Task.Factory.StartNew(() => MatchCompanyName(company, ref nameMatchList)),
-                Task.Factory.StartNew(() => MatchPhoneEmail(company, ref phoneEmailMatchList, matchBoth))
+                Task.Factory.StartNew(() => MatchCompanyName(company, out nameMatchList)),
+                Task.Factory.StartNew(() => MatchPhoneEmail(phoneFilter, ref phoneMatchList)),
+                Task.Factory.StartNew(() => MatchPhoneEmail(email, ref emailMatchList))
             };
 
             // Find company matching name
             Task.WaitAny(tasks[0]);
-            if (nameMatchList.Count == 1)
+            if (nameMatchList != null && nameMatchList.Count == 1 && isSupplier)
             {
                 matchCompany = nameMatchList[0];
             }
             else
             {
                 // Get company matching phone/email
-                Task.WaitAny(tasks[1]);
-                if (nameMatchList.Count > 1)
+                Task.WaitAll(tasks[1], tasks[2]);
+                var matchPhoneOrEmail = phoneMatchList.Union(emailMatchList);
+
+                if (isSupplier)
                 {
-                    // find companies match both name and phone/email
-                    if( phoneEmailMatchList.Count > 0 )
+                    if (nameMatchList != null && nameMatchList.Count > 1)
                     {
-                        foreach (var m in nameMatchList)
+                        // find companies match both name and phone/email
+                        if (matchPhoneOrEmail.Count() > 0)
                         {
-                            var matches = phoneEmailMatchList.FindAll(t => t.MasterCustomerId == m.MasterCustomerId );
-                            if (matches.Count > 0)
-                                matchCompanyList.AddRange(matches);
+                            var matchBoth = nameMatchList.Intersect(matchPhoneOrEmail);
+                            if (matchBoth.Count() > 0)
+                            {
+                                matchCompanyList.AddRange(matchBoth);
+                            }
                         }
 
                         // no company matches both, get match-name list only
                         if (matchCompanyList.Count < 1)
                             matchCompanyList.AddRange(nameMatchList);
                     }
-                    else
-                        matchCompanyList.AddRange(nameMatchList);
+                    else if (matchPhoneOrEmail.Count() > 0)
+                        matchCompanyList.AddRange(matchPhoneOrEmail);
                 }
                 else
-                {
-                    matchCompanyList.AddRange(phoneEmailMatchList);
+                {  // non-supplier: match Name and Phone or Name and Email first, otherwise match phone and email
+                    if (nameMatchList != null && nameMatchList.Count > 0 && matchPhoneOrEmail.Count() > 0)
+                    {
+                        var matchBoth = nameMatchList.Intersect(matchPhoneOrEmail);
+                        if (matchBoth.Count() > 0)
+                        {
+                            matchCompanyList.AddRange(matchBoth);
+                        }
+                    }
+
+                    // no match found through name, match phone and email
+                    if (matchCompanyList.Count < 1 && phoneMatchList.Count > 0 && emailMatchList.Count > 0)
+                    {
+                        var matchPhoneAndEmail = phoneMatchList.Intersect(emailMatchList);
+                        if (matchPhoneAndEmail.Count() > 0)
+                            matchCompanyList.AddRange(matchPhoneAndEmail);
+                    }
                 }
             }
 
@@ -697,7 +736,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return matchCompany;
         }
 
-        private static void MatchCompanyName(StoreCompany company, ref List<PersonifyCustomerInfo> companyList)
+        private static void MatchCompanyName(StoreCompany company, out List<PersonifyCustomerInfo> companyList)
         {
             var startTime = DateTime.Now;
             _log.Debug(string.Format("MatchCompanyName - start: company name {0}", company.Name));
@@ -714,87 +753,48 @@ namespace asi.asicentral.services.PersonifyProxy
             _log.Debug(string.Format("MatchCompanyName - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
         }
 
-        private static void MatchPhoneEmail(StoreCompany company, ref List<PersonifyCustomerInfo> companyList, bool matchBoth)
+        private static void MatchPhoneEmail(string filter, ref List<PersonifyCustomerInfo> companyList)
         {
             var startTime = DateTime.Now;
-            _log.Debug(string.Format("MatchPhoneEmail - start: company name {0}", company.Name));
+            _log.Debug(string.Format("MatchPhoneEmail - start: filter {0}", filter));
 
-            companyList = new List<PersonifyCustomerInfo>();
-            
-            var primaryContact = company.Individuals.Where(c => c.IsPrimary && !string.IsNullOrEmpty(c.Email)).FirstOrDefault();
-            var email = primaryContact != null ? primaryContact.Email.Trim() : string.Empty;
-            if (matchBoth && (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(company.Phone)) )
+            if( companyList == null )
+                companyList = new List<PersonifyCustomerInfo>();
+
+            if (!string.IsNullOrEmpty(filter))
             {
-                return;
-            }
+                var matchList = GetCustomerInfoFromSP(SP_SEARCH_BY_COMMUNICATION, new List<string>() { filter });
 
-            var companysFromEmail = new List<PersonifyCustomerInfo>();
-            var companysFromPhone = new List<PersonifyCustomerInfo>();
-
-            Task[] tasks = new Task[2]
-                            {
-                                Task.Factory.StartNew(() => MatchCompanyPhoneEmail(IgnoreSpecialChars(company.Phone), companysFromPhone)),
-                                Task.Factory.StartNew(() => MatchCompanyPhoneEmail(email, companysFromEmail))
-                            };
-
-            Task.WaitAll(tasks);
-
-            if (matchBoth && companysFromEmail.Count > 0 && companysFromPhone.Count > 0)
-            {
-                foreach (var e in companysFromEmail)
+                var condition = string.Empty;
+                foreach (var match in matchList)
                 {
-                    if (companysFromPhone.FirstOrDefault(p => p.MasterCustomerId == e.MasterCustomerId ) != null)
+                    if (match.RecordType == RECORD_TYPE_CORPORATE)
                     {
-                        companyList.Add(e);
+                        companyList.Add(match);
+                    }
+                    else
+                    { // get company from contact phone/email
+                        if (condition == string.Empty)
+                            condition = string.Format("(SubCustomerId eq 0 and RelatedMasterCustomerId eq '{0}' and RelatedSubCustomerId eq {1} and RelationshipType eq 'EMPLOYMENT')",
+                                                        match.MasterCustomerId, match.SubCustomerId);
+                        else
+                            condition = string.Format("{0} or (SubCustomerId eq 0 and RelatedMasterCustomerId eq '{1}' and RelatedSubCustomerId eq {2} and RelationshipType eq 'EMPLOYMENT')",
+                                                       condition, match.MasterCustomerId, match.SubCustomerId);
+                    }
+                }
+
+                if (condition != string.Empty)
+                {
+                    var cusRelations = SvcClient.Ctxt.CusRelationships.AddQueryOption("$filter", condition);
+                    foreach (var r in cusRelations)
+                    {
+                        matchList = GetCustomerInfoFromSP(SP_SEARCH_BY_CUSTOMER_ID, new List<string>() { r.MasterCustomerId, r.SubCustomerId.ToString() });
+                        companyList.AddRange(matchList.FindAll(m => m.RecordType == RECORD_TYPE_CORPORATE));
                     }
                 }
             }
-            else if( !matchBoth)
-            {
-                // either phone or email matches is oK
-                companyList.AddRange(companysFromEmail);
-                companyList.AddRange(companysFromPhone);
-            }
 
             _log.Debug(string.Format("MatchPhoneEmail - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
-        }
-
-        // get company MasterCustomerIds for phone/email filter
-        private static void MatchCompanyPhoneEmail(string filter, List<PersonifyCustomerInfo> companyList)
-        {
-            _log.Debug(string.Format("GetMatchCompanys - start:"));
-            DateTime startTime = DateTime.Now;
-
-            var matchList = GetCustomerInfoFromSP(SP_SEARCH_BY_COMMUNICATION, new List<string>() { filter });
-            string condition = string.Empty;
-            foreach (var match in matchList)
-            {
-                if (match.RecordType == RECORD_TYPE_CORPORATE )
-                {
-                    companyList.Add(match);
-                }
-                else if( filter.Contains("@") )
-                { // get company from primarey contact email
-                    if (condition == string.Empty)
-                        condition = string.Format("(SubCustomerId eq 0 and RelatedMasterCustomerId eq '{0}' and RelatedSubCustomerId eq {1} and RelationshipType eq 'EMPLOYMENT')", // and PrimaryEmployerFlag eq true)",
-                                                    match.MasterCustomerId, match.SubCustomerId);
-                    else
-                        condition = string.Format("{0} or (SubCustomerId eq 0 and RelatedMasterCustomerId eq '{1}' and RelatedSubCustomerId eq {2} and RelationshipType eq 'EMPLOYMENT')",// and PrimaryEmployerFlag eq true)",
-                                                   condition, match.MasterCustomerId, match.SubCustomerId);
-                }
-            }
-
-            if( condition != string.Empty )
-            {
-                var cusRelations = SvcClient.Ctxt.CusRelationships.AddQueryOption("$filter", condition);
-                foreach (var r in cusRelations)
-                {
-                    matchList = GetCustomerInfoFromSP(SP_SEARCH_BY_CUSTOMER_ID, new List<string>() { r.MasterCustomerId, r.SubCustomerId.ToString()});
-                    companyList.AddRange(matchList.FindAll(m => m.RecordType == RECORD_TYPE_CORPORATE));
-                }
-            }
-
-            _log.Debug(string.Format("GetMatchCompanys - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
         }
 
         private static PersonifyCustomerInfo GetCompanyWithLatestNote(List<PersonifyCustomerInfo> matchCompanyList)

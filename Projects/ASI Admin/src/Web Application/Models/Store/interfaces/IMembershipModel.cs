@@ -18,6 +18,7 @@ namespace asi.asicentral.web.store.interfaces
         string Country { get; set; }
         string Phone { get; set; }
         string InternationalPhone { get; set; }
+        string CompanyEmail { get; set; }
         string ASINumber { get; set; }
         bool HasShipAddress { get; set; }
         bool HasBillAddress { get; set; }
