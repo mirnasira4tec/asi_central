@@ -16,7 +16,7 @@ namespace asi.asicentral.web.models.show
         public CompanyModel()
         {
             // Define any default values here...
-            this.PageSize = 10;
+            this.PageSize = 20;
             this.NumericPageCount = 10;
            
         }

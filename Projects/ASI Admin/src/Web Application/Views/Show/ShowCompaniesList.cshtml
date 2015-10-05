@@ -5,7 +5,7 @@
     Layout = "~/Views/Show/Shared/_Layout.cshtml";
 }
 <h1>Company Attendee List</h1>
-<a href="/showCompany/AddCompaniesToShow?showId=@Model.ShowId" class="btn btn-primary pull-right">Add Attendees</a>
+<div class="pull-right"><a href="/showCompany/AddCompaniesToShow?showId=@Model.ShowId" class="btn btn-primary"> Add Attendees </a> <a href="/Show/ShowList" class="btn"> Cancel </a> </div>
  <br />
  <br />
 @if (Model.Show != null)
