@@ -68,7 +68,7 @@ namespace asi.asicentral.services
 
                 var orderDetail = order.OrderDetails[0];
                 var mappings = storeService.GetAll<PersonifyMapping>(true)
-                                           .Where(map => map.StoreContext == order.ContextId &&
+                                           .Where(map => (order.ContextId == null || map.StoreContext == order.ContextId ) &&
                                                          map.StoreProduct == orderDetail.Product.Id &&
                                                          map.PersonifyRateStructure == "BUNDLE").ToList();
                 if( mappings.Count > 0 )
