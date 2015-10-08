@@ -492,6 +492,7 @@
     <Compile Include="util\store\catalogs\CatalogsHelper.cs" />
     <Compile Include="util\store\companystore\CompanyStoreHelper.cs" />
     <Compile Include="util\store\companystore\CountryCodeHelper.cs" />
+    <Compile Include="util\store\specialtyshoppes\SpecialtyShoppesHelper.cs" />
     <Compile Include="util\store\digitalmarketing\ASIBrandBuilderHelper.cs" />
     <Compile Include="util\store\digitalmarketing\TrafficBuilderHelper.cs" />
     <Compile Include="util\store\Forms\FormsHelper.cs" />

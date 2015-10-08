@@ -149,6 +149,7 @@ namespace asi.asicentral.model.store
 
         public bool IsNewMemberShip(ref string newMemberType)
         {
+            //todo?? return true if supplier is buying a different supplier membership
             bool newMembership = false;
             if (Company != null && !string.IsNullOrEmpty(Company.MemberType) && 
                 OrderDetails != null && OrderDetails.Any() && OrderDetails[0].Product != null)
