@@ -20,7 +20,7 @@ namespace asi.asicentral.web.Controllers.Show
         public IObjectService ObjectService { get; set; }
         IList<string> messages = new List<string>();
 
-        public ActionResult CompanyList(String companyTab, string companyName, string MemberType, int page = 1, int pageSize = 10)
+        public ActionResult CompanyList(String companyTab, string companyName, string MemberType, int page = 1, int pageSize = 20)
         {
             var company = new CompanyModel();
             IList<ShowCompany> companyList = null;
@@ -32,7 +32,7 @@ namespace asi.asicentral.web.Controllers.Show
             DateTime end;
             ILogService log = LogService.GetLog(this.GetType());
             log.Debug("CompanyList.cshtml - Start");
-            companyList = ObjectService.GetAll<ShowCompany>(true).OrderByDescending(form => form.CreateDate).ToList();
+            companyList = ObjectService.GetAll<ShowCompany>(true).OrderBy(form => form.Name).ToList();
             if (string.IsNullOrEmpty(companyTab)) companyTab = CompanyModel.TAB_COMPANYNAME;
             if (!string.IsNullOrEmpty(MemberType) && !string.IsNullOrEmpty(companyName))
             {
@@ -619,7 +619,7 @@ namespace asi.asicentral.web.Controllers.Show
         }
 
         [HttpGet]
-        public virtual ActionResult AddCompaniesToShow(int? showId, String companyTab, string companyName, string MemberType, int page = 1, int pageSize = 10)
+        public virtual ActionResult AddCompaniesToShow(int? showId, String companyTab, string companyName, string MemberType, int page = 1, int pageSize = 20)
         {
             var showCompanies = new ShowCompaniesModel();
             IList<ShowCompany> list = null;

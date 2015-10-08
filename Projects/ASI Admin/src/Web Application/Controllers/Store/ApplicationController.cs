@@ -23,7 +23,7 @@ namespace asi.asicentral.web.Controllers.Store
         public const string COMMAND_ACCEPT = "Accept";
         public const string COMMAND_RESUBMIT = "Resubmit";
         //products associated only to StoreOrderDetail table
-        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 29, 30, 31, 45, 46, 55, 56, 57, 58, 59, 60, 62, 70, 71, 77, 78, 96, 97, 98, 100, 101, 102, 104, 105, 106, 107, 108, 109 };
+        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 29, 30, 31, 45, 46, 55, 56, 57, 58, 59, 60, 62, 70, 71, 77, 78, 96, 97, 98, 100, 101, 102, 104, 105, 106, 107, 108, 109, 112, 113 };
         //products associated to StoreDetailESPAdvertising table
         public static readonly int[] SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS = { 48, 49, 50, 51, 52, 53};
         //products associated to StoreDetailCatalog table
@@ -496,6 +496,14 @@ namespace asi.asicentral.web.Controllers.Store
                                 orderDetail.Cost = Convert.ToDecimal(CompanyStoreHelper.GetCost(0) * application.OptionId);
                             else
                                 orderDetail.Cost = CompanyStoreHelper.GetCost(1);
+                            break;
+                        case 112:
+                        case 113:
+                            orderDetail.OptionId = application.OptionId;
+                            orderDetail.Cost = (application.OptionId != 6) ? Convert.ToDecimal(SpecialtyShoppesHelper.GetCost(0)) : orderDetail.Cost = CompanyStoreHelper.GetCost(1);
+                            if (application.IsBonus) orderDetail.Cost = orderDetail.Cost * 12m * 0.8m;
+                            var productId = (application.IsBonus) ? SpecialtyShoppesHelper.SPECIALTY_SHOPPES_IDS[0] :  SpecialtyShoppesHelper.SPECIALTY_SHOPPES_IDS[1];
+                            if (orderDetail.Product.Id != productId) orderDetail.Product = StoreService.GetAll<ContextProduct>().SingleOrDefault(p => p.Id == productId);
                             break;
                         default:
                             int quantity = orderDetail.Quantity;
