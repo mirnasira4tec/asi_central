@@ -1,6 +1,7 @@
 ﻿using asi.asicentral.interfaces;
 using asi.asicentral.model;
 using asi.asicentral.model.store;
+using asi.asicentral.oauth;
 using asi.asicentral.PersonifyDataASI;
 using asi.asicentral.util.store;
 using asi.asicentral.util.store.companystore;
@@ -111,6 +112,22 @@ namespace asi.asicentral.services.PersonifyProxy
             }
 
             return customerInfo;
+        }
+
+        // After EASI, revisit this function
+        public static void MakeCompanyActive(string masterCustomerId)
+        {
+            var customers = SvcClient.Ctxt.ASICustomers.Where(
+                    p => p.MasterCustomerId == masterCustomerId && p.SubCustomerId == 0).ToList();
+            if (customers.Count > 0)
+            {
+                ASICustomer customer = customers[0];
+                if (customer.UserDefinedMemberStatusString == StatusCode.DELISTED.ToString())
+                {
+                    customer.UserDefinedMemberStatusString = StatusCode.ACTIVE.ToString();
+                    SvcClient.Save<ASICustomer>(customer);
+                }
+            }
         }
 
         public static CustomerInfo CreateCompany(StoreCompany storeCompany, string storeType, IList<LookSendMyAdCountryCode> countryCodes)
@@ -486,51 +503,80 @@ namespace asi.asicentral.services.PersonifyProxy
         {
             var startTime = DateTime.Now;
             _log.Debug(string.Format("FindMatchingCompany - start: company name {0} ", company.Name));
-            
+
             matchList = new List<string>();
             var nameMatchList = new List<string>();
-            var phoneEmailMatchList = new List<string>();
-            bool matchBoth = !string.Equals(company.MemberType, "SUPPLIER", StringComparison.InvariantCultureIgnoreCase) &&
-                             !string.Equals(company.MemberType, "EQUIPMENT", StringComparison.InvariantCultureIgnoreCase);
+            var phoneMatchList = new List<string>();
+            var emailMatchList = new List<string>();
 
-            Task[] tasks = new Task[2]
+            var primaryContact = company.Individuals.Where(c => c.IsPrimary && !string.IsNullOrEmpty(c.Email)).FirstOrDefault();
+            var email = primaryContact != null ? primaryContact.Email.Trim() : string.Empty;
+            var phoneFilter = string.IsNullOrEmpty(company.Phone) ? string.Empty : IgnoreSpecialChars(company.Phone);
+            bool isSupplier = string.Equals(company.MemberType, "SUPPLIER", StringComparison.InvariantCultureIgnoreCase) ||
+                              string.Equals(company.MemberType, "EQUIPMENT", StringComparison.InvariantCultureIgnoreCase);
+
+            Task[] tasks = new Task[3]
             {
                 Task.Factory.StartNew(() => MatchCompanyName(company, nameMatchList)),
-                Task.Factory.StartNew(() => MatchPhoneEmail(company, phoneEmailMatchList, matchBoth))
+                Task.Factory.StartNew(() => MatchPhoneEmail(phoneFilter, phoneMatchList)),
+                Task.Factory.StartNew(() => MatchPhoneEmail(email, emailMatchList))
             };
 
             // Find company matching name
             Task.WaitAny(tasks[0]);
-            if (nameMatchList.Count == 1)
+            if (nameMatchList.Count == 1 && isSupplier)
             {
                 matchList.AddRange(nameMatchList);
             }
             else
             {
                 // Get company matching phone/email
-                Task.WaitAny(tasks[1]);
-                if (nameMatchList.Count > 1)
-                {
-                    // find companies match both name and phone/email
-                    if( phoneEmailMatchList.Count > 0 )
-                    {
-                        foreach (var m in nameMatchList)
-                        {
-                            var matches = phoneEmailMatchList.FindAll(t => t == m);
-                            if (matches.Count > 0)
-                                matchList.AddRange(matches);
-                        }
+                Task.WaitAll(tasks[1], tasks[2]);
+                var matchPhoneOrEmail = phoneMatchList.Union(emailMatchList);
 
-                        // no company matches both, get match-name list only
-                        if (matchList.Count < 1)
+                if (isSupplier)
+                {
+                    if (nameMatchList.Count > 1)
+                    {
+                        // find companies match both name and phone/email
+                        if (matchPhoneOrEmail.Count() > 0)
+                        {
+                            var matchBoth = nameMatchList.Intersect(matchPhoneOrEmail);
+                            if (matchBoth.Count() > 0)
+                            {
+                                matchList.AddRange(matchBoth);
+                            }
+                            else // no company matches both, get match-name list only
+                            {
+                                matchList.AddRange(nameMatchList);
+                            }
+                        }
+                        else
                             matchList.AddRange(nameMatchList);
                     }
-                    else
-                        matchList.AddRange(nameMatchList);
+                    else if (matchPhoneOrEmail.Count() > 0)
+                    {
+                        matchList.AddRange(matchPhoneOrEmail);
+                    }
                 }
                 else
-                {
-                    matchList.AddRange(phoneEmailMatchList);
+                {  // non-supplier: match Name and Phone or Name and Email first, otherwise match phone and email
+                    if (nameMatchList.Count > 0 && matchPhoneOrEmail.Count() > 0)
+                    {
+                        var matchBoth = nameMatchList.Intersect(matchPhoneOrEmail);
+                        if (matchBoth.Count() > 0)
+                        {
+                            matchList.AddRange(matchBoth);
+                        }
+                    }
+
+                    // no match found through name, match phone and email
+                    if (matchList.Count < 1 && phoneMatchList.Count > 0 && emailMatchList.Count > 0)
+                    {
+                        var matchPhoneAndEmail = phoneMatchList.Intersect(emailMatchList);
+                        if( matchPhoneAndEmail.Count() > 0 )
+                            matchList.AddRange(matchPhoneAndEmail);
+                    }
                 }
             }
 
@@ -572,64 +618,15 @@ namespace asi.asicentral.services.PersonifyProxy
             _log.Debug(string.Format("MatchCompanyName - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
         }
 
-        private static void MatchPhoneEmail(StoreCompany company, List<string> masterIdList, bool matchBoth)
+        private static void MatchPhoneEmail(string filter, List<string> masterIdList)
         {
             var startTime = DateTime.Now;
-            _log.Debug(string.Format("MatchPhoneEmail - start: company name {0}", company.Name));
-            
-            var primaryContact = company.Individuals.Where(c => c.IsPrimary && !string.IsNullOrEmpty(c.Email)).FirstOrDefault();
-            var email = primaryContact != null ? primaryContact.Email.Trim() : string.Empty;
-            if (matchBoth && (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(company.Phone)) )
-            {
-                return;
-            }
-
-            var idsFromEmail = new List<string>();
-            var idsFromPhone = new List<string>();
-            var phoneFilter = string.IsNullOrEmpty(company.Phone) ? string.Empty
-                                    : string.Format("SearchPhoneAddress eq '{0}'", IgnoreSpecialChars(company.Phone));
-            var emailFilter = string.IsNullOrEmpty(email) ? string.Empty
-                                    : string.Format("SearchPhoneAddress eq '{0}'", email);
-
-            Task[] tasks = new Task[2]
-                            {
-                                Task.Factory.StartNew(() => GetMatchCompanys(phoneFilter, idsFromEmail)),
-                                Task.Factory.StartNew(() => GetMatchCompanys(emailFilter, idsFromPhone))
-                            };
-
-            Task.WaitAll(tasks);
-
-            if (matchBoth && idsFromEmail.Count > 0 && idsFromPhone.Count > 0)
-            {
-                foreach (var e in idsFromEmail)
-                {
-                    if (idsFromPhone.FirstOrDefault(p => p == e) != null)
-                    {
-                        masterIdList.Add(e);
-                    }
-                }
-            }
-            else if( !matchBoth)
-            {
-                // either phone or email matches is oK
-                masterIdList.AddRange(idsFromEmail);
-                masterIdList.AddRange(idsFromPhone);
-            }
-
-            _log.Debug(string.Format("MatchPhoneEmail - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
-        }
-
-        // get company MasterCustomerIds for phone/email filter
-        private static void GetMatchCompanys(string filter, List<string> masterIdList)
-        {
-            _log.Debug(string.Format("GetMatchCompanys - start:"));
-            DateTime startTime = DateTime.Now;
+            _log.Debug(string.Format("MatchPhoneEmail - start: phone/email {0}", filter));
+           
             if (!string.IsNullOrEmpty(filter))
             {
                 string condition = null;
-                var cusCommunications = SvcClient.Ctxt.CusCommunications.AddQueryOption("$filter", filter).ToList();
-                _log.Debug(string.Format("SvcClient.Ctxt.CusCommunications: filter - {1}  ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds, filter));
-
+                var cusCommunications = SvcClient.Ctxt.CusCommunications.Where(c => c.SearchPhoneAddress == filter).ToList(); 
                 foreach (var cus in cusCommunications)
                 {
                     if (condition == null)
@@ -681,7 +678,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 }
             }
 
-            _log.Debug(string.Format("GetMatchCompanys - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
+            _log.Debug(string.Format("MatchPhoneEmail - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
         }
 
         private static CustomerInfo GetCompanyWithLatestNote(List<string> masterIdList)

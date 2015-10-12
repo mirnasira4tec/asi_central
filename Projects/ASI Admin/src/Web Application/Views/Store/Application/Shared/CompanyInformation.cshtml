@@ -83,7 +83,7 @@
                 if (Model.Contacts[i] != null)
                 {
                     @Html.HiddenFor(m => Model.Contacts[i].Id) @Html.HiddenFor(m => Model.Contacts[i].IsPrimary) 
-                    <span class="row">@(Model.Contacts[i].IsPrimary ? Html.Raw("<strong>Primary Contact</strong>") : Html.Raw("<strong>Secondary Contact</strong>"))</span>
+                    <span class="label-row">@(Model.Contacts[i].IsPrimary ? Html.Raw("<strong>Primary Contact</strong>") : Html.Raw("<strong>Secondary Contact</strong>"))</span>
                     <span class="label-row">
 					    @Html.LabelFor(m => Model.Contacts[i].FirstName)
                         @Html.LabelFor(m => Model.Contacts[i].LastName)

@@ -13,6 +13,13 @@ namespace asi.asicentral.web.models.show
     public class CompanyModel 
     {
 
+        public CompanyModel()
+        {
+            // Define any default values here...
+            this.PageSize = 20;
+            this.NumericPageCount = 10;
+           
+        }
         public int Id { get; set; }
 
         public int AddressId { get; set; }
@@ -98,5 +105,21 @@ namespace asi.asicentral.web.models.show
             selItems.Add(new SelectListItem() { Selected = false, Text = "Non-Member", Value = "Non-Member" });
             return selItems;
         }
+
+        // Paging-related properties
+        public int CurrentPageIndex { get; set; }
+        public int PageSize { get; set; }
+        public int TotalRecordCount { get; set; }
+        public int PageCount
+        {
+            get
+            {
+                return Math.Max(this.TotalRecordCount / this.PageSize, 1);
+            }
+        }
+        public int NumericPageCount { get; set; }
+        public string TabCompanyName { get; set; }
+        public string TabMemberType { get; set; }
+        public int ShowId { get; set; }
     }
 }
