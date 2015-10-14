@@ -45,6 +45,7 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string SP_SEARCH_BY_ASI_NUMBER = "USR_EASI_CUSTOMER_SEARCH_ASI_NO_PROC";
         private const string SP_SEARCH_BY_COMPANY_NAME = "USR_EASI_CUSTOMER_SEARCH_COMPANY_NAME_PROC";
         private const string SP_SEARCH_BY_COMMUNICATION = "USR_EASI_CUSTOMER_SEARCH_COMMUNICATION_PROC";
+        private const string SP_SEARCH_BY_COMPANY_IDENTIFIER = "USR_EASI_CUSTOMER_SEARCH_CUSTOMER_NO_PROC";
 
 		private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
 		private static readonly IDictionary<string, string> ASIShowCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "SHOW AE" }, { "DISCOVER", "SHOW DISC" }, { "MASTERCARD", "SHOW MS" }, { "VISA", "SHOW VS" } };
@@ -58,7 +59,8 @@ namespace asi.asicentral.services.PersonifyProxy
             {SP_SEARCH_BY_CUSTOMER_ID, new List<string>() { "@ip_master_customer_id", "@ip_sub_customer_id" }},
             {SP_SEARCH_BY_ASI_NUMBER, new List<string>() { "@ip_asi_number" }},
             {SP_SEARCH_BY_COMPANY_NAME, new List<string>() { "@ip_label_name" }},
-            {SP_SEARCH_BY_COMMUNICATION, new List<string>() { "@ip_search_phone_address" }}
+            {SP_SEARCH_BY_COMMUNICATION, new List<string>() { "@ip_search_phone_address" }},
+            {SP_SEARCH_BY_COMPANY_IDENTIFIER, new List<string>() { "@ip_customer_number" }}
         };
 
         public static CreateOrderOutput CreateOrder(StoreOrder storeOrder,
@@ -495,21 +497,14 @@ namespace asi.asicentral.services.PersonifyProxy
 
         public static CompanyInformation GetCompanyInfoByIdentifier(int companyIdentifier)
         {
-            var customers = SvcClient.Ctxt.ASICustomerInfos.Where(p => p.UserDefinedCustomerNumber == companyIdentifier).ToList();
-            if (customers.Count == 0) return null;
+            CompanyInformation companyInfo = null;
+            var customerInfos = GetCustomerInfoFromSP(SP_SEARCH_BY_COMPANY_IDENTIFIER, new List<string>() { companyIdentifier.ToString() });
+            if (customerInfos.Any())
+            {
+                companyInfo = GetCompanyInfo(customerInfos[0]);
+            };
 
-            var customerInfo = customers[0];
-            var company = new PersonifyCustomerInfo
-                {
-                    AsiNumber = customerInfo.UserDefinedAsiNumber,
-                    LabelName = customerInfo.LabelName,
-                    MasterCustomerId = customerInfo.MasterCustomerId,
-                    SubCustomerId = customerInfo.SubCustomerId,
-                    CustomerClassCode = customerInfo.CustomerClassCodeString,
-                    MemberStatus = customerInfo.UserDefinedMemberStatusString,
-                };
-
-            return GetCompanyInfo(company);
+            return companyInfo;
         }
 
         public static string GetCompanyStatus(string masterCustomerId, int subCustomerId)
@@ -541,6 +536,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     SubCustomerId = customerInfo.SubCustomerId,
                     MemberType = customerInfo.CustomerClassCode,
                     MemberStatus = customerInfo.MemberStatus,
+                    Phone = customerInfo.PrimaryPhone,
                     DNSFlag = customerInfo.DNSFlag,
                     CompanyId = customerInfo.CustomerNumber
                 };
@@ -931,6 +927,9 @@ namespace asi.asicentral.services.PersonifyProxy
                                         break;
                                     case "PRIMARY_EMAIL_ADDRESS":
                                         customerInfo.PrimaryEmail = value;
+                                        break;
+                                    case "PRIMARY_PHONE":
+                                        customerInfo.PrimaryPhone = value;
                                         break;
                                     case "CUSTOMER_CLASS_CODE":
                                         customerInfo.CustomerClassCode = value;

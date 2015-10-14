@@ -14,6 +14,7 @@ namespace asi.asicentral.services.PersonifyProxy
         public string CustomerStatusCode { get; set; }
         public string MemberStatus { get; set; }
         public string PrimaryEmail { get; set; }
+        public string PrimaryPhone { get; set; }
         public string CustomerClassCode { get; set; }
         public string SubClassCode { get; set; }
         public bool DNSFlag { get; set; }
