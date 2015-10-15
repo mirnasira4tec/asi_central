@@ -650,7 +650,7 @@ namespace asi.asicentral.services.PersonifyProxy
 
             var primaryContact = company.Individuals.Where(c => c.IsPrimary && !string.IsNullOrEmpty(c.Email)).FirstOrDefault();
             var email = primaryContact != null ? primaryContact.Email.Trim() : string.Empty;
-            var phoneFilter = string.IsNullOrEmpty(company.Phone) ? string.Empty : IgnoreSpecialChars(company.Phone);
+            var phoneFilter = string.IsNullOrEmpty(company.Phone) ? string.Empty : Regex.Replace(company.Phone, "[^0-9.]", "");
             bool isSupplier = string.Equals(company.MemberType, "SUPPLIER", StringComparison.InvariantCultureIgnoreCase) ||
                               string.Equals(company.MemberType, "EQUIPMENT", StringComparison.InvariantCultureIgnoreCase);
 
