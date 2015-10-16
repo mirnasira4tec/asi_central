@@ -104,16 +104,10 @@ namespace asi.asicentral.services
                         mapping = mappings.FirstOrDefault(m => string.IsNullOrEmpty(m.StoreOption));
                     }
 
-                    // update company status from Delisted to Active
-                    if (companyInfo.MemberStatus == StatusCode.DELISTED.ToString())
-                    {
-                        PersonifyClient.MakeCompanyActive(companyInfo.MasterCustomerId);
-                    }
-
-                    PersonifyClient.CreateBundleOrder(order, mapping, 
-                                                      companyInfo.MasterCustomerId, companyInfo.SubCustomerId, 
+                    PersonifyClient.CreateBundleOrder(order, mapping, companyInfo, 
                                                       primaryContactInfo.MasterCustomerId, primaryContactInfo.SubCustomerId, 
                                                       billToAddr, shipToAddr, waiveAppFee, firstmonthFree);
+
                     ValidateOrderTotal(order, emailService, url, true, firstmonthFree);
 
                     if( couponError)

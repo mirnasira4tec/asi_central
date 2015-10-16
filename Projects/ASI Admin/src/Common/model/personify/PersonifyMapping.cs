@@ -18,6 +18,8 @@ namespace asi.asicentral.model.personify
         public int? StoreContext { get; set; }
         public int? StoreProduct { get; set; }
         public string StoreOption { get; set; }
+        public string ClassCode { get; set; }
+        public string SubClassCode { get; set; }
         //public string StoreCouponId { get; set; }
         public int? PersonifyProduct { get; set; }
         public string PersonifyBundle { get; set; }

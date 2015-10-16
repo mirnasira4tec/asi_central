@@ -46,6 +46,7 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string SP_SEARCH_BY_COMPANY_NAME = "USR_EASI_CUSTOMER_SEARCH_COMPANY_NAME_PROC";
         private const string SP_SEARCH_BY_COMMUNICATION = "USR_EASI_CUSTOMER_SEARCH_COMMUNICATION_PROC";
         private const string SP_SEARCH_BY_COMPANY_IDENTIFIER = "USR_EASI_CUSTOMER_SEARCH_CUSTOMER_NO_PROC";
+        private const string SP_UPDATE_CUSTOMER_CLASS = "USR_EASI_CUSTOMER_UPDATE_CLASS";
 
 		private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
 		private static readonly IDictionary<string, string> ASIShowCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "SHOW AE" }, { "DISCOVER", "SHOW DISC" }, { "MASTERCARD", "SHOW MS" }, { "VISA", "SHOW VS" } };
@@ -60,7 +61,9 @@ namespace asi.asicentral.services.PersonifyProxy
             {SP_SEARCH_BY_ASI_NUMBER, new List<string>() { "@ip_asi_number" }},
             {SP_SEARCH_BY_COMPANY_NAME, new List<string>() { "@ip_label_name" }},
             {SP_SEARCH_BY_COMMUNICATION, new List<string>() { "@ip_search_phone_address" }},
-            {SP_SEARCH_BY_COMPANY_IDENTIFIER, new List<string>() { "@ip_customer_number" }}
+            {SP_SEARCH_BY_COMPANY_IDENTIFIER, new List<string>() { "@ip_customer_number" }},
+            {SP_UPDATE_CUSTOMER_CLASS, new List<string>(){"@ip_master_customer_id", "@ip_sub_customer_id", 
+                                                          "@upd_class_code", "@upd_sub_class", "@upd_user" }}
         };
 
         public static CreateOrderOutput CreateOrder(StoreOrder storeOrder,
@@ -97,8 +100,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return orderOutput;
         }
 
-        public static void CreateBundleOrder(StoreOrder storeOrder, PersonifyMapping mapping, 
-                                             string companyMasterCustomerId, int companySubCustomerId,
+        public static void CreateBundleOrder(StoreOrder storeOrder, PersonifyMapping mapping, CompanyInformation companyInfo,                                             
                                              string contactMasterCustomerId, int contactSubCustomerId, 
                                              AddressInfo billToAddress, AddressInfo shipToAddress,
                                              bool waiveAppFee, bool firstMonthFree)
@@ -110,11 +112,13 @@ namespace asi.asicentral.services.PersonifyProxy
             {
                 throw new Exception("Error getting personify bundle in mapping table");
             }
-            else if (storeOrder == null || string.IsNullOrEmpty(companyMasterCustomerId) || 
+            else if (storeOrder == null || string.IsNullOrEmpty(companyInfo.MasterCustomerId) || 
                      string.IsNullOrEmpty(contactMasterCustomerId) || billToAddress == null || shipToAddress == null)
             {
                 throw new Exception("Error processing personify bunddle order, one of the parameters is null!");
             }
+
+            UpdatePersonifyCompany(companyInfo, mapping);
 
             // create bundle
             var bundleOrderInput = new ASICreateBundleOrderInput()
@@ -123,8 +127,8 @@ namespace asi.asicentral.services.PersonifyProxy
                 ShipSubCustomerID = (short)contactSubCustomerId,
                 ShipAddressID = (int)shipToAddress.CustomerAddressId,
                 ShipAddressTypeCode = "CORPORATE",
-                BillMasterCustomerID = companyMasterCustomerId,
-                BillSubCustomerID = (short)companySubCustomerId,
+                BillMasterCustomerID = companyInfo.MasterCustomerId,
+                BillSubCustomerID = (short)companyInfo.SubCustomerId,
                 BillAddressID = (int)billToAddress.CustomerAddressId,
                 BillAddressTypeCode = "CORPORATE",
                 RateStructure = mapping.PersonifyRateStructure,
@@ -188,7 +192,9 @@ namespace asi.asicentral.services.PersonifyProxy
                                                                                  c.ProductId == applicationFeeId).ToList();
                     if (appFeeLines.Any() && appFeeLines[0].BaseTotalAmount > 0)
                     {
-                        ASICustomerCreditCard creditCard = GetCreditCardByProfileId(companyMasterCustomerId, companySubCustomerId, storeOrder.CreditCard.ExternalReference);
+                        ASICustomerCreditCard creditCard = GetCreditCardByProfileId(companyInfo.MasterCustomerId, 
+                                                                                    companyInfo.SubCustomerId, 
+                                                                                    storeOrder.CreditCard.ExternalReference);
 
                         var payOrderInput = new PayOrderInput()
                         {
@@ -197,10 +203,10 @@ namespace asi.asicentral.services.PersonifyProxy
                             Amount = appFeeLines[0].ActualTotalAmount,
                             AcceptPartialPayment = true,
                             CurrencyCode = "USD",
-                            MasterCustomerId = companyMasterCustomerId,
-                            SubCustomerId = Convert.ToInt16(companySubCustomerId),
-                            BillMasterCustomerId = companyMasterCustomerId,
-                            BillSubCustomerId = Convert.ToInt16(companySubCustomerId),
+                            MasterCustomerId = companyInfo.MasterCustomerId,
+                            SubCustomerId = Convert.ToInt16(companyInfo.SubCustomerId),
+                            BillMasterCustomerId = companyInfo.MasterCustomerId,
+                            BillSubCustomerId = Convert.ToInt16(companyInfo.SubCustomerId),
                             BillingAddressStreet = billToAddress.Address1,
                             BillingAddressCity = billToAddress.City,
                             BillingAddressState = billToAddress.State,
@@ -255,21 +261,6 @@ namespace asi.asicentral.services.PersonifyProxy
             }
 
             return customerInfo ;
-        }
-
-        public static void MakeCompanyActive(string masterCustomerId)
-        {
-            var customers = SvcClient.Ctxt.ASICustomers.Where(
-                    p => p.MasterCustomerId == masterCustomerId && p.SubCustomerId == 0).ToList();
-            if (customers.Count > 0)
-            {
-                ASICustomer customer = customers[0];
-                if (customer.UserDefinedMemberStatusString == StatusCode.DELISTED.ToString())
-                {
-                    customer.UserDefinedMemberStatusString = StatusCode.ACTIVE.ToString();
-                    SvcClient.Save<ASICustomer>(customer);
-                }
-            }
         }
 
         public static CompanyInformation CreateCompany(StoreCompany storeCompany, string storeType, IList<LookSendMyAdCountryCode> countryCodes)
@@ -624,6 +615,8 @@ namespace asi.asicentral.services.PersonifyProxy
                 activity.CallTypeCode = "STORE"; 
                 activity.ActivityDate = DateTime.Now;
                 activity.Subsystem = "MRM";
+                activity.ResolvedFlag = true;
+                activity.ResolvedDate = DateTime.Now;
 
                 if (!string.IsNullOrEmpty(company.MatchingCompanyIds))
                 {
@@ -854,12 +847,41 @@ namespace asi.asicentral.services.PersonifyProxy
             return Regex.Replace(input.Trim(), @"[\.\$@&#\?,!]*", "");
         }
 
-        private static List<PersonifyCustomerInfo> GetCustomerInfoFromSP(string spName, List<string> parameters)
+        private static void UpdatePersonifyCompany(CompanyInformation companyInfo, PersonifyMapping mapping)
         {
-            _log.Debug(string.Format("GetCustomerInfoFromSP - start: StoreProcedure name - {0})", spName));
+            // update company status from Delisted to Active
+            if (companyInfo.MemberStatus == StatusCode.DELISTED.ToString())
+            {
+                var customers = SvcClient.Ctxt.ASICustomers.Where(
+                        p => p.MasterCustomerId == companyInfo.MasterCustomerId && p.SubCustomerId == 0).ToList();
+                if (customers.Count > 0)
+                {
+                    ASICustomer customer = customers[0];
+                    if (customer.UserDefinedMemberStatusString == StatusCode.DELISTED.ToString())
+                    {
+                        customer.UserDefinedMemberStatusString = StatusCode.ACTIVE.ToString();
+                        SvcClient.Save<ASICustomer>(customer);
+                    }
+                }
+            }
+            // update company class/subclass if they are different from mapping table
+            else if ((companyInfo.MemberStatus.ToUpper() == "LEAD" || companyInfo.MemberStatus.ToUpper() == "ASICENTRAL") && 
+                 mapping.ClassCode.Trim().ToUpper() != companyInfo.MemberType.Trim().ToUpper() )
+            {
+                var response = ExecutePersonifySP(SP_UPDATE_CUSTOMER_CLASS, new List<string>{ companyInfo.MasterCustomerId,
+                                                                                              companyInfo.SubCustomerId.ToString(),
+                                                                                              mapping.ClassCode,
+                                                                                              mapping.SubClassCode,
+                                                                                              "WEBUSER"});
+            }
+        }
+
+        private static StoredProcedureOutput ExecutePersonifySP(string spName, List<string> parameters)
+        {
+            _log.Debug(string.Format("ExecutePersonifySP - start: StoreProcedure name - {0})", spName));
             var startTime = DateTime.Now;
 
-            var companyInfoList = new List<PersonifyCustomerInfo>();
+            StoredProcedureOutput response = null;
 
             if (PERSONIFY_STORED_PROCEDURE.Keys.Contains(spName))
             {
@@ -881,79 +903,88 @@ namespace asi.asicentral.services.PersonifyProxy
                         SPParameterList = ipSPParameterList
                     };
 
-                    var response = SvcClient.Post<StoredProcedureOutput>("GetStoredProcedureDataXML", spRequest);
-                    if (response != null && !string.IsNullOrEmpty(response.Data) && response.Data != "No Data Found")
+                    response = SvcClient.Post<StoredProcedureOutput>("GetStoredProcedureDataXML", spRequest);
+                }
+            }
+
+            _log.Debug(string.Format("ExecutePersonifySP - StoreProcedure end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
+
+            return response;
+        }
+
+        private static List<PersonifyCustomerInfo> GetCustomerInfoFromSP(string spName, List<string> parameters)
+        {
+            var companyInfoList = new List<PersonifyCustomerInfo>();
+
+            var response = ExecutePersonifySP(spName, parameters);
+            if (response != null && !string.IsNullOrEmpty(response.Data) && response.Data != "No Data Found")
+            {
+                var xml = XDocument.Parse(response.Data);
+
+                var list = xml.Root.Elements("Table").ToList();
+                foreach (var com in list)
+                {
+                    var customerInfo = new PersonifyCustomerInfo();
+                    foreach (var element in com.Elements())
                     {
-                        var xml = XDocument.Parse(response.Data);
-
-                        var list = xml.Root.Elements("Table").ToList();
-                        foreach (var com in list)
+                        var value = element.Value;
+                        switch (element.Name.ToString())
                         {
-                            var customerInfo = new PersonifyCustomerInfo();
-                            foreach (var element in com.Elements())
-                            {
-                                var value = element.Value;
-                                switch (element.Name.ToString())
-                                {
-                                    case "USR_ASI_NUMBER":
-                                        customerInfo.AsiNumber = value;
-                                        break;
-                                    case "USR_CUSTOMER_NUMBER":
-                                        customerInfo.CustomerNumber = Int32.Parse(value);
-                                        break;
-                                    case "MASTER_CUSTOMER_ID":
-                                        customerInfo.MasterCustomerId = value;
-                                        break;
-                                    case "SUB_CUSTOMER_ID":
-                                        customerInfo.SubCustomerId = Int32.Parse(value);
-                                        break;
-                                    case "RECORD_TYPE":
-                                        customerInfo.RecordType = value;
-                                        break;
-                                    case "LAST_NAME":
-                                        customerInfo.LastName = value;
-                                        break;
-                                    case "FIRST_NAME":
-                                        customerInfo.FirstName = value;
-                                        break;
-                                    case "LABEL_NAME":
-                                        customerInfo.LabelName = value;
-                                        break;
-                                    case "CUSTOMER_STATUS_CODE":
-                                        customerInfo.CustomerStatusCode = value;
-                                        break;
-                                    case "USR_MEMBER_STATUS":
-                                        customerInfo.MemberStatus = value;
-                                        break;
-                                    case "PRIMARY_EMAIL_ADDRESS":
-                                        customerInfo.PrimaryEmail = value;
-                                        break;
-                                    case "PRIMARY_PHONE":
-                                        customerInfo.PrimaryPhone = value;
-                                        break;
-                                    case "CUSTOMER_CLASS_CODE":
-                                        customerInfo.CustomerClassCode = value;
-                                        break;
-                                    case "USR_SUB_CLASS":
-                                        customerInfo.SubClassCode = value;
-                                        break;
-                                    case "USR_DNS_FLAG":
-                                        customerInfo.DNSFlag = value.StartsWith("Y");
-                                        break;
-                                }
-                            }
-
-                            if (customerInfo.RecordType == null || customerInfo.RecordType != RECORD_TYPE_CORPORATE ||
-                                customerInfo.CustomerStatusCode == null || customerInfo.CustomerStatusCode != CUSTOMER_INFO_STATUS_DUPLICATE)
-                            {
-                                companyInfoList.Add(customerInfo);
-                            }
+                            case "USR_ASI_NUMBER":
+                                customerInfo.AsiNumber = value;
+                                break;
+                            case "USR_CUSTOMER_NUMBER":
+                                customerInfo.CustomerNumber = Int32.Parse(value);
+                                break;
+                            case "MASTER_CUSTOMER_ID":
+                                customerInfo.MasterCustomerId = value;
+                                break;
+                            case "SUB_CUSTOMER_ID":
+                                customerInfo.SubCustomerId = Int32.Parse(value);
+                                break;
+                            case "RECORD_TYPE":
+                                customerInfo.RecordType = value;
+                                break;
+                            case "LAST_NAME":
+                                customerInfo.LastName = value;
+                                break;
+                            case "FIRST_NAME":
+                                customerInfo.FirstName = value;
+                                break;
+                            case "LABEL_NAME":
+                                customerInfo.LabelName = value;
+                                break;
+                            case "CUSTOMER_STATUS_CODE":
+                                customerInfo.CustomerStatusCode = value;
+                                break;
+                            case "USR_MEMBER_STATUS":
+                                customerInfo.MemberStatus = value;
+                                break;
+                            case "PRIMARY_EMAIL_ADDRESS":
+                                customerInfo.PrimaryEmail = value;
+                                break;
+                            case "PRIMARY_PHONE":
+                                customerInfo.PrimaryPhone = value;
+                                break;
+                            case "CUSTOMER_CLASS_CODE":
+                                customerInfo.CustomerClassCode = value;
+                                break;
+                            case "USR_SUB_CLASS":
+                                customerInfo.SubClassCode = value;
+                                break;
+                            case "USR_DNS_FLAG":
+                                customerInfo.DNSFlag = value.StartsWith("Y");
+                                break;
                         }
+                    }
+
+                    if (customerInfo.RecordType == null || customerInfo.RecordType != RECORD_TYPE_CORPORATE ||
+                        customerInfo.CustomerStatusCode == null || customerInfo.CustomerStatusCode != CUSTOMER_INFO_STATUS_DUPLICATE)
+                    {
+                        companyInfoList.Add(customerInfo);
                     }
                 }
             }
-            
-            _log.Debug(string.Format("MatchCompanyName - StoreProcedure end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
 
             return companyInfoList;
         }

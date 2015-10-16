@@ -29,6 +29,12 @@ namespace asi.asicentral.database.mappings.personify
                 .HasColumnName("STORE_OPTION")
                 .IsRequired();
 
+            this.Property(t => t.ClassCode)
+                .HasColumnName("CUSTOMER_CLASS_CODE");
+
+            this.Property(t => t.SubClassCode)
+                .HasColumnName("CUSTOMER_CLASS_SUBCODE");
+
             this.Property(t => t.PersonifyProduct)
                 .HasColumnName("PRODUCT_ID")
                 .IsRequired();
