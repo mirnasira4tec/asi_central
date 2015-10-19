@@ -108,7 +108,7 @@ namespace asi.asicentral.services.PersonifyProxy
             _log.Debug(string.Format("CreateBundleOrder - start: order {0} ", storeOrder));
             DateTime startTime = DateTime.Now;
 
-            if (mapping == null)
+            if( mapping == null)
             {
                 throw new Exception("Error getting personify bundle in mapping table");
             }
