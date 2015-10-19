@@ -526,16 +526,19 @@ namespace asi.asicentral.services.PersonifyProxy
                     MasterCustomerId = customerInfo.MasterCustomerId,
                     SubCustomerId = customerInfo.SubCustomerId,
                     MemberType = customerInfo.CustomerClassCode,
+                    CustomerClassCode = customerInfo.CustomerClassCode,
+                    SubClassCode = customerInfo.SubClassCode,
                     MemberStatus = customerInfo.MemberStatus,
                     Phone = customerInfo.PrimaryPhone,
                     DNSFlag = customerInfo.DNSFlag,
                     CompanyId = customerInfo.CustomerNumber
                 };
 
-                if (!string.IsNullOrEmpty(company.ASINumber) &&
-                    company.MemberType == "SUPPLIER" &&
+                if (!string.IsNullOrEmpty(company.ASINumber) && company.MemberType == "SUPPLIER" &&
                     int.Parse(company.ASINumber) > 10000 && int.Parse(company.ASINumber) < 20000)
+                {
                     company.MemberType = "EQUIPMENT";
+                }
 
                 //get the company primary address
                 var companyAddressInfos = SvcClient.Ctxt.AddressInfos.Where(
@@ -865,14 +868,22 @@ namespace asi.asicentral.services.PersonifyProxy
                 }
             }
             // update company class/subclass if they are different from mapping table
-            else if ((companyInfo.MemberStatus.ToUpper() == "LEAD" || companyInfo.MemberStatus.ToUpper() == "ASICENTRAL") && 
-                 mapping.ClassCode.Trim().ToUpper() != companyInfo.MemberType.Trim().ToUpper() )
+            else if (!string.IsNullOrEmpty(companyInfo.MemberStatus) && (companyInfo.MemberStatus.ToUpper() == "LEAD" || companyInfo.MemberStatus.ToUpper() == "ASICENTRAL")) 
             {
-                var response = ExecutePersonifySP(SP_UPDATE_CUSTOMER_CLASS, new List<string>{ companyInfo.MasterCustomerId,
-                                                                                              companyInfo.SubCustomerId.ToString(),
-                                                                                              mapping.ClassCode,
-                                                                                              mapping.SubClassCode,
-                                                                                              "WEBUSER"});
+                var mappedClassCode = !string.IsNullOrEmpty(mapping.ClassCode) ? mapping.ClassCode.Trim().ToUpper() : string.Empty;
+                var mappedSubClassCode = !string.IsNullOrEmpty(mapping.SubClassCode) ?  mapping.SubClassCode.Trim().ToUpper() : string.Empty;
+                var classCode = !string.IsNullOrEmpty(companyInfo.CustomerClassCode) ? companyInfo.CustomerClassCode.Trim().ToUpper() : string.Empty;
+                var subClassCode = !string.IsNullOrEmpty(companyInfo.SubClassCode) ? companyInfo.SubClassCode.Trim().ToUpper() : string.Empty;
+
+                if( mappedClassCode != classCode || ( mappedClassCode == "SUPPLIER" && mappedSubClassCode != subClassCode ) )
+                {
+                    ExecutePersonifySP(SP_UPDATE_CUSTOMER_CLASS, new List<string>{ companyInfo.MasterCustomerId,
+                                                                                   companyInfo.SubCustomerId.ToString(),
+                                                                                   mapping.ClassCode,
+                                                                                   mapping.SubClassCode,
+                                                                                   "WEBUSER"});
+
+                }
             }
         }
 
