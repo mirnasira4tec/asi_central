@@ -16,9 +16,9 @@ namespace asi.asicentral.util.store
         public static readonly Dictionary<string, int> APPLICATION_FEE_IDS = 
                                                     new Dictionary<string, int>()
                                                     {
-                                                        {"distributor membership", 160}, 
-                                                        {"supplier membership", 159},
-                                                        {"decorator membership", 4895}
+                                                        {"DISTRIBUTOR", 160}, 
+                                                        {"SUPPLIER", 159},
+                                                        {"DECORATOR", 4895}
                                                     };
 
         public static IList<SelectListItem> GetTitles()

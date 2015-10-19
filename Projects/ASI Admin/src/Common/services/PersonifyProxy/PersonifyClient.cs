@@ -108,11 +108,11 @@ namespace asi.asicentral.services.PersonifyProxy
             _log.Debug(string.Format("CreateBundleOrder - start: order {0} ", storeOrder));
             DateTime startTime = DateTime.Now;
 
-            if( mapping == null )
+            if (mapping == null)
             {
                 throw new Exception("Error getting personify bundle in mapping table");
             }
-            else if (storeOrder == null || string.IsNullOrEmpty(companyInfo.MasterCustomerId) || 
+            else if (storeOrder == null || string.IsNullOrEmpty(companyInfo.MasterCustomerId) ||
                      string.IsNullOrEmpty(contactMasterCustomerId) || billToAddress == null || shipToAddress == null)
             {
                 throw new Exception("Error processing personify bunddle order, one of the parameters is null!");
@@ -132,7 +132,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 BillAddressID = (int)billToAddress.CustomerAddressId,
                 BillAddressTypeCode = "CORPORATE",
                 RateStructure = mapping.PersonifyRateStructure,
-                
+
                 RateCode = mapping.PersonifyRateCode, //"FY_DISTMEM", "FP_ESPPMDLMORD14", //
                 BundleGroupName = mapping.PersonifyBundle //"DIST_MEM", "ESPP-MD-LM-ORD" //
             };
@@ -141,7 +141,7 @@ namespace asi.asicentral.services.PersonifyProxy
             storeOrder.BackendReference = bOutput.ASIBundleOrderNumber;
 
             //payment schedule for bundle line items
-            if ( !firstMonthFree )
+            if (!firstMonthFree)
             {
                 var orderLineItems = SvcClient.Ctxt.OrderDetailInfos
                                                    .Where(c => c.OrderNumber == bOutput.ASIBundleOrderNumber && c.BaseTotalAmount > 0)
@@ -165,14 +165,19 @@ namespace asi.asicentral.services.PersonifyProxy
             }
 
             //add membership application fee
-            long? applicationFeeId = null;
-            var memberType = storeOrder.OrderDetails[0].Product.Type;
-            if (!string.IsNullOrEmpty(memberType))
-                memberType = memberType.Trim().ToLower();
-
-            if (Helper.APPLICATION_FEE_IDS.Keys.Contains(memberType))
+            var classCode = mapping.ClassCode;
+            if( !string.IsNullOrEmpty(classCode) && !string.IsNullOrEmpty(mapping.SubClassCode) && mapping.SubClassCode == "DECORATOR")
             {
-                applicationFeeId = Helper.APPLICATION_FEE_IDS[memberType];
+                classCode = classCode.ToUpper();
+                if (classCode == "DISTRIBUTOR" || (classCode == "SUPPLIER" && !string.IsNullOrEmpty(companyInfo.ASINumber) && companyInfo.ASINumber.Length < 8) )
+                {  // existing supplier/distributor membership
+                    classCode = "DECORATOR";
+                }
+            }
+
+            if (Helper.APPLICATION_FEE_IDS.Keys.Contains(classCode))
+            {
+                long? applicationFeeId = Helper.APPLICATION_FEE_IDS[classCode];
                 var linePriceInput = new ASIAddOrderLinewithPriceInput()
                 {
                     OrderNumber = bOutput.ASIBundleOrderNumber,
@@ -188,12 +193,12 @@ namespace asi.asicentral.services.PersonifyProxy
                 //one time application fee payment if not waived
                 if (!waiveAppFee)
                 {
-                    var appFeeLines = SvcClient.Ctxt.OrderDetailInfos.Where(c => c.OrderNumber == linePriceInput.OrderNumber && 
+                    var appFeeLines = SvcClient.Ctxt.OrderDetailInfos.Where(c => c.OrderNumber == linePriceInput.OrderNumber &&
                                                                                  c.ProductId == applicationFeeId).ToList();
                     if (appFeeLines.Any() && appFeeLines[0].BaseTotalAmount > 0)
                     {
-                        ASICustomerCreditCard creditCard = GetCreditCardByProfileId(companyInfo.MasterCustomerId, 
-                                                                                    companyInfo.SubCustomerId, 
+                        ASICustomerCreditCard creditCard = GetCreditCardByProfileId(companyInfo.MasterCustomerId,
+                                                                                    companyInfo.SubCustomerId,
                                                                                     storeOrder.CreditCard.ExternalReference);
 
                         var payOrderInput = new PayOrderInput()
