@@ -57,7 +57,7 @@ namespace asi.asicentral.Tests
                 {
                     Name = "Orlando",
                     Address = "Test",
-                    ShowType = objShowType,
+                    ShowTypeId = objShowType.Id,
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow,
                     UpdateSource = "ShowServiceTest - ShowTest"
@@ -167,7 +167,7 @@ namespace asi.asicentral.Tests
                     MiddleName = "MiddleName",
                     LastName = "LastName",
                     Email = "email@email.com",
-                    Company = objCompany,
+                    CompanyId = objCompany.Id,
                     Address = objAddress,
                     CreateDate = DateTime.Now,
                     UpdateDate = DateTime.Now,
@@ -312,7 +312,7 @@ namespace asi.asicentral.Tests
                 {
                     Name = "Orlando",
                     Address = "test",
-                    ShowType = objShowType,
+                    ShowTypeId = objShowType.Id,
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow,
                     UpdateSource = "ShowServiceTest - ShowTest"
