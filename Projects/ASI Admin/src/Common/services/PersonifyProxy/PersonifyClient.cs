@@ -104,7 +104,7 @@ namespace asi.asicentral.services.PersonifyProxy
                                              string contactMasterCustomerId, int contactSubCustomerId, 
                                              AddressInfo billToAddress, AddressInfo shipToAddress,
                                              bool waiveAppFee, bool firstMonthFree)
-        {
+        {          
             _log.Debug(string.Format("CreateBundleOrder - start: order {0} ", storeOrder));
             DateTime startTime = DateTime.Now;
 
@@ -261,11 +261,11 @@ namespace asi.asicentral.services.PersonifyProxy
                     StoreAddress companyAddress = company.GetCompanyAddress();
                     string countryCode = countryCodes != null ? countryCodes.Alpha3Code(companyAddress.Country) : companyAddress.Country;
                     AddPhoneNumber(company.Phone, countryCode, customerInfo.MasterCustomerId, customerInfo.SubCustomerId);
-                    AddCustomerAddresses(company, customerInfo.MasterCustomerId, customerInfo.SubCustomerId, countryCodes);
+                    customerInfo.PersonifyAddresses = AddCustomerAddresses(company, customerInfo.MasterCustomerId, customerInfo.SubCustomerId, countryCodes);
                 }
             }
 
-            return customerInfo ;
+            return customerInfo;
         }
 
         public static CompanyInformation CreateCompany(StoreCompany storeCompany, string storeType, IList<LookSendMyAdCountryCode> countryCodes)
@@ -276,8 +276,10 @@ namespace asi.asicentral.services.PersonifyProxy
             PersonifyCustomerInfo customerInfo = null;
             StoreAddress companyAddress = storeCompany.GetCompanyAddress();
             string countryCode = countryCodes != null ? countryCodes.Alpha3Code(companyAddress.Country) : companyAddress.Country;
+            if (!string.IsNullOrEmpty(storeType) && storeType.ToUpper() == "EQUIPMENT")
+                storeType = "SUPPLIER";
 
-            var saveCustomerInput = new SaveCustomerInput { LastName = storeCompany.Name, CustomerClassCode = storeType };
+            var saveCustomerInput = new SaveCustomerInput { LastName = storeCompany.Name, CustomerClassCode = storeType  };
             AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_PHONE, storeCompany.Phone,
                 COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode);
             AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_FAX, storeCompany.Fax,
@@ -320,13 +322,16 @@ namespace asi.asicentral.services.PersonifyProxy
             {
                 throw new Exception("Store company and addresses, customer personify information and country codes are required");
             }
-            IList<AddressInfo> existingAddressInfos = SvcClient.Ctxt.AddressInfos.Where(
+
+            var existingAddressInfos = SvcClient.Ctxt.AddressInfos.Where(
                 a => a.MasterCustomerId == masterCustomerId && a.SubCustomerId == subCustomerId).ToList();
-            IEnumerable<StoreAddressInfo> storeCompanyAddresses = ProcessStoreAddresses(storeCompany, countryCodes);
+
+            var storeCompanyAddresses = ProcessStoreAddresses(storeCompany, countryCodes);
             storeCompanyAddresses = ProcessPersonifyAddresses(storeCompanyAddresses, existingAddressInfos);
+
             if (storeCompanyAddresses.Any(a => a.PersonifyAddr == null))
             {
-                AddressInfo existingPrimaryAddress = existingAddressInfos.FirstOrDefault(a => a.PrioritySeq == 0);
+                var existingPrimaryAddress = existingAddressInfos.FirstOrDefault(a => a.PrioritySeq == 0);
                 if (existingPrimaryAddress == null)
                 {
                     storeCompanyAddresses = storeCompanyAddresses.Select(addr =>
@@ -346,67 +351,58 @@ namespace asi.asicentral.services.PersonifyProxy
                     return addr;
                 }).ToList();
             }
+
             return storeCompanyAddresses;
         }
 
-        public static IEnumerable<AddressInfo> GetPersonifyAddresses(string masterCustomerId, int subCustomerId)
+        private static IEnumerable<StoreAddressInfo> ProcessStoreAddresses(StoreCompany storeCompany, IEnumerable<LookSendMyAdCountryCode> countryCodes)
         {
-            return SvcClient.Ctxt.AddressInfos.Where(a => a.MasterCustomerId == masterCustomerId && 
-                                                          a.SubCustomerId == subCustomerId).ToList();
-        }
+            var storeCompanyAddresses = new List<StoreAddressInfo>(3);
+            var primaryAddress = storeCompany.GetCompanyAddress();
+            var billToAddress = storeCompany.GetCompanyBillingAddress();
+            var shipToAdress = storeCompany.GetCompanyShippingAddress();
 
-        private static IList<StoreAddressInfo> ProcessStoreAddresses(StoreCompany storeCompany, IEnumerable<LookSendMyAdCountryCode> countryCodes)
-        {
-            IList<StoreAddressInfo> storeCompanyAddresses = new List<StoreAddressInfo>(3);
-            StoreAddress primaryAddress = storeCompany.GetCompanyAddress();
-            StoreAddress billToAddress = storeCompany.GetCompanyBillingAddress();
-            StoreAddress shipToAdress = storeCompany.GetCompanyShippingAddress();
-            var addr = new StoreAddressInfo()
+            var primaryIsBilling = primaryAddress.Equals(billToAddress);
+            var primaryIsShipping = primaryAddress.Equals(shipToAdress);
+            var billingIsShipping = billToAddress.Equals(shipToAdress);
+
+            storeCompanyAddresses.Add(new StoreAddressInfo()
             {
                 StoreAddr = primaryAddress,
-                StoreIsPrimary = true
-            };
-            if (primaryAddress.Equals(billToAddress))
-            {
-                addr.PersonifyIsBilling = true;
-                addr.StoreIsBilling = true;
-            }
-            if (primaryAddress.Equals(shipToAdress))
-            {
-                addr.PersonifyIsShipping = true;
-                addr.StoreIsShipping = true;
-            }
-            storeCompanyAddresses.Add(addr);
-            if (!billToAddress.Equals(primaryAddress))
-            {
-                addr = new StoreAddressInfo()
-                {
-                    StoreAddr = billToAddress,
-                    PersonifyIsBilling = true,
-                    StoreIsBilling = true
-                };
-                if (billToAddress.Equals(shipToAdress))
-                {
-                    addr.PersonifyIsShipping = true;
-                    addr.StoreIsShipping = true;
-                }
-                storeCompanyAddresses.Add(addr);
-            }
-            if (!shipToAdress.Equals(primaryAddress) && !shipToAdress.Equals(billToAddress))
+                StoreIsPrimary = true,
+                PersonifyIsBilling = primaryIsBilling,
+                StoreIsBilling = primaryIsBilling,
+                PersonifyIsShipping = primaryIsShipping,
+                StoreIsShipping = primaryIsShipping
+            });
+
+            if (!primaryIsBilling)
             {
                 storeCompanyAddresses.Add(new StoreAddressInfo()
                 {
-                    StoreAddr = shipToAdress,
-                    PersonifyIsShipping = true,
-                    StoreIsShipping = true
+                    StoreAddr = billToAddress,
+                    PersonifyIsBilling = true,
+                    StoreIsBilling = true,
+                    PersonifyIsShipping = billingIsShipping,
+                    StoreIsShipping = billingIsShipping
                 });
             }
-            storeCompanyAddresses = storeCompanyAddresses.Select(a =>
+
+            if (!primaryIsShipping && !billingIsShipping)
             {
-                a.CountryCode = countryCodes != null ? countryCodes.Alpha3Code(a.StoreAddr.Country) : a.StoreAddr.Country;
-                return a;
-            }).ToList();
-            return storeCompanyAddresses;
+                storeCompanyAddresses.Add(new StoreAddressInfo()
+                                            {
+                                                StoreAddr = shipToAdress,
+                                                PersonifyIsShipping = true,
+                                                StoreIsShipping = true
+                                            });
+            }
+
+            return storeCompanyAddresses.Select(a =>
+                        {
+                            a.CountryCode = countryCodes != null ? countryCodes.Alpha3Code(a.StoreAddr.Country) : a.StoreAddr.Country;
+                            return a;
+                        });
         }
 
         private static IEnumerable<StoreAddressInfo> ProcessPersonifyAddresses(
@@ -439,9 +435,9 @@ namespace asi.asicentral.services.PersonifyProxy
                 addr.PersonifyAddr =
                     existingAddressInfos.FirstOrDefault(
                         a => a.Address1 == addr.StoreAddr.Street1 && a.PostalCode == addr.StoreAddr.Zip);
-                //addr.CustuInfo = customerInfo;
                 return addr;
             });
+
             return customerAddresses;
         }
 

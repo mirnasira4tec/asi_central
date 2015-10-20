@@ -62,9 +62,8 @@ namespace asi.asicentral.services
                     primaryContactInfo = PersonifyClient.GetIndividualInfoByEmail(primaryContact.Email);
                 }
 
-                var companyAddresses = PersonifyClient.GetPersonifyAddresses(companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
                 var shipToAddr = GetAddressInfo(contactAddresses, AddressType.Shipping, order).PersonifyAddr;
-                var billToAddr = companyAddresses.FirstOrDefault(a => a.BillToFlag == true);
+                var billToAddr = companyInfo.PersonifyAddresses.FirstOrDefault(a => a.StoreIsBilling == true).PersonifyAddr;
 
                 var orderDetail = order.OrderDetails[0];
                 var mappings = storeService.GetAll<PersonifyMapping>(true)
