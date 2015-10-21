@@ -10,6 +10,11 @@ using asi.asicentral.interfaces;
 using StructureMap.Configuration.DSL;
 using asi.asicentral.database.mappings;
 using Moq;
+using System.Data.OleDb;
+using System.Data;
+using asi.asicentral.WebApplication;
+using asi.asicentral.web.Controllers.Show;
+using System.Web;
 
 namespace asi.asicentral.Tests
 {
@@ -340,8 +345,130 @@ namespace asi.asicentral.Tests
             }
 
         }
+        [TestMethod]
+        public void ExcelUploadTest()
+        {
+            IList<ShowASI> shows = new List<ShowASI>();
+            shows.Add(CreateShowData(2,"ENGAGE EAST 2016"));
+            shows.Add(CreateShowData(1, "ENGAGE WEST 2016"));
+
+            IList<ShowCompany> companies = new List<ShowCompany>();
+            companies.Add(CreateCompanyData(26424,"30208", "A P Specialties"));
+
+            IList<ShowAddress> addresses = new List<ShowAddress>();
+            addresses.Add(CreateAddressData(26426, "140 Calle Iglesia", "San Clemente", "CA", "92672-7502", "United States"));
+
+            IList<ShowAttendee> attendees = new List<ShowAttendee>();
+            attendees.Add(CreateAttendeeData(26424, 2, false, false, true, false, false));
 
 
+            Mock<IObjectService> mockObjectService = new Mock<IObjectService>();
+            mockObjectService.Setup(objectService => objectService.GetAll<ShowASI>(false)).Returns(shows.AsQueryable());
+            mockObjectService.Setup(objectService => objectService.GetAll<ShowCompany>(false)).Returns(companies.AsQueryable());
+            mockObjectService.Setup(objectService => objectService.GetAll<ShowAddress>(false)).Returns(addresses.AsQueryable());
+            mockObjectService.Setup(objectService => objectService.GetAll<ShowAttendee>(false)).Returns(attendees.AsQueryable());
 
+            ExcelUploadController objExcel = new ExcelUploadController();
+            objExcel.ObjectService = mockObjectService.Object;
+
+            var excelConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\"2016 Engage Exh 092415 FINAL.xlsx\";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
+            var dataset = GetDataset(0, excelConnectionString);
+            Assert.IsNotNull(dataset);
+            
+            var show = objExcel.ConvertDataAsShow(dataset);
+            Assert.AreEqual(shows.ElementAt(0).Name, show.Name);
+
+            var company = objExcel.ConvertDataAsShowCompany(dataset, 0);
+            Assert.AreEqual(companies.ElementAt(0).ASINumber, company.ASINumber);
+            Assert.AreEqual(companies.ElementAt(0).Name, company.Name);
+
+            var address = objExcel.ConvertDataAsShowAddress(dataset, company.Id,0);
+            Assert.AreEqual(addresses.ElementAt(0).Street1, address.Street1);
+            Assert.AreEqual(addresses.ElementAt(0).City, address.City);
+            Assert.AreEqual(addresses.ElementAt(0).Zip, address.Zip);
+
+            var attendee = objExcel.ConvertDataAsShowAttendee(dataset, show.Id, company.Id, 0);
+            Assert.AreEqual(attendees.ElementAt(0).CompanyId, attendee.CompanyId);
+            Assert.AreEqual(attendees.ElementAt(0).ShowId, attendee.ShowId);
+          
+        }
+
+        private DataSet GetDataset(int t, string conn)
+        {
+            DataSet ds = new DataSet();
+            //Create Connection to Excel work book and add oledb namespace
+            OleDbConnection excelConnection = new OleDbConnection(conn);
+            excelConnection.Open();
+            DataTable dt = new DataTable();
+            dt = excelConnection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+            if (dt == null)
+            {
+                return null;
+            }
+            String[] excelSheets = new String[dt.Rows.Count];
+
+            //excel data saves in temp file here.
+            foreach (DataRow row in dt.Rows)
+            {
+                excelSheets[t] = row["TABLE_NAME"].ToString();
+                OleDbConnection excelConnection1 = new OleDbConnection(conn);
+                string query = string.Format("Select * from [{0}]", excelSheets[t]);
+                using (OleDbDataAdapter dataAdapter = new OleDbDataAdapter(query, excelConnection1))
+                {
+                    dataAdapter.Fill(ds);
+                }
+            }
+            return ds;
+        }
+
+        private ShowASI CreateShowData(int id, string name)
+        {
+            ShowASI objShow = new ShowASI()
+            {
+                Id = id,
+                Name = name
+            };
+            return objShow;
+        }
+
+        private ShowCompany CreateCompanyData(int companyId, string asiNumber, string name)
+        {
+            ShowCompany objCompany = new ShowCompany()
+            {
+                Id = companyId,
+                ASINumber = asiNumber,
+                Name = name
+            };
+            return objCompany;
+        }
+
+        private ShowAddress CreateAddressData(int AddressId, string street1, string city, string state,string zip,string country)
+        {
+            ShowAddress objCompanyAddress = new ShowAddress()
+            {
+                Id = AddressId,
+                Street1 = street1,
+                City = city,
+                State = state,
+                Zip = zip,
+                Country = country
+            };
+            return objCompanyAddress;
+        }
+
+        private ShowAttendee CreateAttendeeData(int CompanyId, int showId, bool isSponsor, bool isPresentation, bool isRoundTable, bool isExhibitDay, bool isExisting)
+        {
+            ShowAttendee objShowAttendee = new ShowAttendee()
+            {
+                CompanyId = CompanyId,
+                ShowId = showId,
+                IsSponsor = isSponsor,
+                IsPresentation = isPresentation,
+                IsRoundTable = isRoundTable,
+                IsExhibitDay = isExhibitDay,
+                IsExisting = isExisting
+            };
+            return objShowAttendee;
+        }
     }
 }

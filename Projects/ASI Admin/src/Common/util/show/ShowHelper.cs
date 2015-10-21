@@ -4,6 +4,8 @@ using asi.asicentral.model.show;
 using asi.asicentral.services;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -138,7 +140,6 @@ namespace asi.asicentral.util.show
             else
             {
                 company = objectService.GetAll<ShowCompany>().Where(ctxt => ctxt.Id == objCompany.Id).SingleOrDefault();
-                objectService.Update<ShowCompany>(company);
             }
             company.Name = objCompany.Name;
             company.WebUrl = objCompany.WebUrl;
@@ -187,7 +188,6 @@ namespace asi.asicentral.util.show
             else
             {
                 showAttendee = objectService.GetAll<ShowAttendee>().Where(ctxt => ctxt.Id == objShowAttendee.Id).SingleOrDefault();
-                objectService.Update<ShowAttendee>(showAttendee);
             }
             showAttendee.CompanyId = objShowAttendee.CompanyId;
             showAttendee.ShowId = objShowAttendee.ShowId;
@@ -196,6 +196,7 @@ namespace asi.asicentral.util.show
             showAttendee.BoothNumber = objShowAttendee.BoothNumber;
             showAttendee.IsPresentation = objShowAttendee.IsPresentation;
             showAttendee.IsRoundTable = objShowAttendee.IsRoundTable;
+            showAttendee.IsExisting = objShowAttendee.IsExisting;
             showAttendee.UpdateDate = DateTime.UtcNow;
             showAttendee.UpdateSource = objShowAttendee.UpdateSource;
             return showAttendee;
@@ -223,16 +224,6 @@ namespace asi.asicentral.util.show
             return showEmployeeAttendee;
         }
 
-        public static RouteValueDictionary AddQueryStringParameters(this RouteValueDictionary dict)
-        {
-            var querystring = HttpContext.Current.Request.QueryString;
-
-            foreach (var key in querystring.AllKeys)
-                if (!dict.ContainsKey(key))
-                    dict.Add(key, querystring.GetValues(key)[0]);
-
-            return dict;
-        }
-
+       
     }
 }

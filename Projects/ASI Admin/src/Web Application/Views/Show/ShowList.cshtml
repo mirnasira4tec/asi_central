@@ -8,6 +8,15 @@
 @model  ShowModel
 
 <h2>List of Shows</h2>
+<div class="pull-right">
+    @using (Html.BeginForm("Index", "ExcelUpload", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    { 
+        <div>
+            <input type="file" name="file" />
+            <input type="submit" id="btnExcel" class="btn" value="Excel Import" />
+        </div>
+    }
+</div>
 <div class="tabbable tabs-below small">
     <h5>Search by</h5>
     <ul id="formtab" class="nav nav-tabs">
@@ -34,7 +43,7 @@
                 }
             </div>
         </div>
-        
+
     </div>
 </div>
 @using (Html.BeginForm())
@@ -94,5 +103,6 @@
             else
                 return false
         });
+     
     </script>
 }
