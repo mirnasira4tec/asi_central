@@ -284,6 +284,7 @@
     <Compile Include="Controllers\sgr\CategoryController.cs" />
     <Compile Include="Controllers\sgr\CompanyController.cs" />
     <Compile Include="Controllers\sgr\ProductController.cs" />
+    <Compile Include="Controllers\Show\ExcelUploadController.cs" />
     <Compile Include="Controllers\Show\ShowCompanyController.cs" />
     <Compile Include="Controllers\Show\ShowController.cs" />
     <Compile Include="Controllers\Store\ApplicationController.cs" />
@@ -360,6 +361,7 @@
     <Content Include="Content\multiselecteddatepicker.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Content\2016 Engage Exh 092415 FINAL.xlsx" />
     <None Include="Properties\PublishProfiles\Local File.pubxml" />
     <None Include="Properties\PublishProfiles\Web App Deploy.pubxml" />
     <Content Include="Images\admin-asi-creditcard.gif" />
@@ -519,6 +521,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
+    <Folder Include="Views\ExcelUpload\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
