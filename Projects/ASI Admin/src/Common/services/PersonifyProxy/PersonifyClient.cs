@@ -245,7 +245,8 @@ namespace asi.asicentral.services.PersonifyProxy
             return total;
         }
 
-        public static CompanyInformation ReconcileCompany(StoreCompany company, string customerClassCode, IList<LookSendMyAdCountryCode> countryCodes, bool update = false)
+        public static CompanyInformation ReconcileCompany(StoreCompany company, string customerClassCode, IList<LookSendMyAdCountryCode> countryCodes, 
+                                                          ref IEnumerable<StoreAddressInfo> storeAddress, bool update = false)
         {
             List<string> masterIdList = null;
             var customerInfo = FindCustomerInfo(company, ref masterIdList);
@@ -253,7 +254,7 @@ namespace asi.asicentral.services.PersonifyProxy
             {
                 customerInfo = CreateCompany(company, customerClassCode, countryCodes);
             }
-            else 
+            else
             {
                 company.ExternalReference = customerInfo.MasterCustomerId + ";" + customerInfo.SubCustomerId;
                 if (update)
@@ -261,7 +262,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     StoreAddress companyAddress = company.GetCompanyAddress();
                     string countryCode = countryCodes != null ? countryCodes.Alpha3Code(companyAddress.Country) : companyAddress.Country;
                     AddPhoneNumber(company.Phone, countryCode, customerInfo.MasterCustomerId, customerInfo.SubCustomerId);
-                    customerInfo.PersonifyAddresses = AddCustomerAddresses(company, customerInfo.MasterCustomerId, customerInfo.SubCustomerId, countryCodes);
+                    storeAddress = AddCustomerAddresses(company, customerInfo.MasterCustomerId, customerInfo.SubCustomerId, countryCodes);
                 }
             }
 

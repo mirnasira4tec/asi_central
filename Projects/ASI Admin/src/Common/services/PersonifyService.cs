@@ -37,8 +37,9 @@ namespace asi.asicentral.services
                 throw new ArgumentException("You must pass a valid order and the country codes");
             try
             {
+                IEnumerable<StoreAddressInfo> storeAddress = null;
                 var memberType = string.IsNullOrEmpty(order.Company.MemberType) ? "UNKNOWN" : order.Company.MemberType;
-                var companyInfo = PersonifyClient.ReconcileCompany(order.Company, memberType, countryCodes, true);
+                var companyInfo = PersonifyClient.ReconcileCompany(order.Company, memberType, countryCodes, ref storeAddress, true);
 
                 log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
@@ -63,7 +64,7 @@ namespace asi.asicentral.services
                 }
 
                 var shipToAddr = GetAddressInfo(contactAddresses, AddressType.Shipping, order).PersonifyAddr;
-                var billToAddr = companyInfo.PersonifyAddresses.FirstOrDefault(a => a.StoreIsBilling == true).PersonifyAddr;
+                var billToAddr = storeAddress.FirstOrDefault(a => a.StoreIsBilling == true).PersonifyAddr;
 
                 var orderDetail = order.OrderDetails[0];
                 var mappings = storeService.GetAll<PersonifyMapping>(true)
@@ -296,7 +297,8 @@ namespace asi.asicentral.services
             else
             {
                 var memberType = string.IsNullOrEmpty(company.MemberType) ? "UNKNOWN" : company.MemberType;
-                companyInfo = PersonifyClient.ReconcileCompany(company, memberType, countryCodes);
+                IEnumerable<StoreAddressInfo> storeAddress = null;
+                companyInfo = PersonifyClient.ReconcileCompany(company, memberType, countryCodes, ref storeAddress);
             }
 
 			//field used to map an order to a company before approval for non backoffice orders
@@ -454,10 +456,14 @@ namespace asi.asicentral.services
 
 			if (companyInformation.MemberStatus == "ACTIVE") throw new Exception("We should not be creating an active company");
             //create company if not already there
-            var companyInfo = PersonifyClient.ReconcileCompany(company, companyInformation.MemberType, null, true);
-            PersonifyClient.AddCustomerAddresses(company, companyInfo.MasterCustomerId, companyInfo.SubCustomerId, null);
-            PersonifyClient.AddPhoneNumber(companyInformation.Phone, GetCountryCode(companyInformation.Country), companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+            IEnumerable<StoreAddressInfo> storeAddress = null;
+            var companyInfo = PersonifyClient.ReconcileCompany(company, companyInformation.MemberType, null, ref storeAddress, true);
 
+            if (storeAddress == null) 
+            {
+                PersonifyClient.AddCustomerAddresses(company, companyInfo.MasterCustomerId, companyInfo.SubCustomerId, null);
+                PersonifyClient.AddPhoneNumber(companyInformation.Phone, GetCountryCode(companyInformation.Country), companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+            }
             // Add contact to personify
             PersonifyClient.AddIndividualInfos(company, null, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
 

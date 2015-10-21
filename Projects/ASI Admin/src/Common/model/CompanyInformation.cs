@@ -1,5 +1,4 @@
 ﻿using asi.asicentral.Resources;
-using asi.asicentral.services.PersonifyProxy;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -32,7 +31,5 @@ namespace asi.asicentral.model
 		public string Country { get; set; }
 		[Display(ResourceType = typeof(Resource), Name = "Phone")]
 		public string Phone { get; set; }
-
-        public IEnumerable<StoreAddressInfo> PersonifyAddresses { get; set; }
 	}
 }
