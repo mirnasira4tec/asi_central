@@ -61,7 +61,8 @@ namespace asi.asicentral.Tests
                                                    "newMembershipPurchase@unittest.com", 
                                                    "Distributor");
 
-            var companyInfo = PersonifyClient.ReconcileCompany(company, "DISTRIBUTOR", null, true);
+            IEnumerable<StoreAddressInfo> storeAddress = null; 
+            var companyInfo = PersonifyClient.ReconcileCompany(company, "DISTRIBUTOR", null, ref storeAddress, true);
             var storeService = MockupStoreService();
             IBackendService personify = new PersonifyService(storeService);
 
