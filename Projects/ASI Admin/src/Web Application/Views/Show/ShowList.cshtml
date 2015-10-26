@@ -7,14 +7,12 @@
 @using asi.asicentral.web.models.show;
 @model  ShowModel
 
-<h2>List of Shows</h2>
-<div class="pull-right">
+
+<div><h2 class="pull-left">List of Shows</h2>
     @using (Html.BeginForm("Index", "ExcelUpload", FormMethod.Post, new { enctype = "multipart/form-data" }))
     { 
-        <div>
-            <input type="file" name="file" />
-            <input type="submit" id="btnExcel" class="btn" value="Excel Import" />
-        </div>
+      <input type="submit" id="btnExcel" class="btn pull-right" value="Excel Import" />
+      <input type="file" name="file" class="upload pull-right">
     }
 </div>
 <div class="tabbable tabs-below small">
@@ -104,5 +102,7 @@
                 return false
         });
      
+        
     </script>
+    
 }
