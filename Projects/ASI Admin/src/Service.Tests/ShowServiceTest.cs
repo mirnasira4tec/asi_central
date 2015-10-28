@@ -31,12 +31,12 @@ namespace asi.asicentral.Tests
                 ShowType objShowType = ShowHelper.CreateOrUpdateShowType(objectContext, new ShowType { Type = "East", UpdateSource = "ShowServiceTest - ShowTypeTest1" });
                 objectContext.SaveChanges();
                 Assert.IsNotNull(objShowType);
-                Assert.AreNotEqual(objShowType.Id,0);
+                Assert.AreNotEqual(objShowType.Id, 0);
                 Assert.AreEqual(objShowType.Type, "East");
                 int id = objShowType.Id;
                 objShowType.Type = "West";
                 objShowType.UpdateSource = "ShowServiceTest - ShowTypeTest1";
-                objShowType = ShowHelper.CreateOrUpdateShowType(objectContext, objShowType );
+                objShowType = ShowHelper.CreateOrUpdateShowType(objectContext, objShowType);
                 objectContext.SaveChanges();
                 Assert.IsNotNull(objShowType);
                 Assert.AreEqual(objShowType.Id, id);
@@ -57,7 +57,7 @@ namespace asi.asicentral.Tests
             {
                 ShowType objShowType = ShowHelper.CreateOrUpdateShowType(objectContext, new ShowType { Type = "East", UpdateSource = "ShowServiceTest - ShowTypeTest1" });
                 objectContext.Add<ShowType>(objShowType);
-              
+
                 ShowASI objShow = ShowHelper.CreateOrUpdateShow(objectContext, new ShowASI
                 {
                     Name = "Orlando",
@@ -159,7 +159,7 @@ namespace asi.asicentral.Tests
                 {
                     Name = "ComapnyName",
                     WebUrl = "www.company.com",
-                   MemberType = "Distributor",
+                    MemberType = "Distributor",
                     ASINumber = "32456",
                     CreateDate = DateTime.Now,
                     UpdateDate = DateTime.Now,
@@ -349,11 +349,11 @@ namespace asi.asicentral.Tests
         public void ExcelUploadTest()
         {
             IList<ShowASI> shows = new List<ShowASI>();
-            shows.Add(CreateShowData(2,"ENGAGE EAST 2016"));
+            shows.Add(CreateShowData(2, "ENGAGE EAST 2016"));
             shows.Add(CreateShowData(1, "ENGAGE WEST 2016"));
 
             IList<ShowCompany> companies = new List<ShowCompany>();
-            companies.Add(CreateCompanyData(26424,"30208", "A P Specialties"));
+            companies.Add(CreateCompanyData(26424, "30208", "A P Specialties"));
 
             IList<ShowAddress> addresses = new List<ShowAddress>();
             addresses.Add(CreateAddressData(26426, "140 Calle Iglesia", "San Clemente", "CA", "92672-7502", "United States"));
@@ -371,26 +371,19 @@ namespace asi.asicentral.Tests
             ExcelUploadController objExcel = new ExcelUploadController();
             objExcel.ObjectService = mockObjectService.Object;
 
-            var excelConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\"2016 Engage Exh 092415 FINAL.xlsx\";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
+            var excelConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\"test.xlsx\";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
             var dataset = GetDataset(0, excelConnectionString);
             Assert.IsNotNull(dataset);
-            
-            var show = objExcel.ConvertDataAsShow(dataset);
-            Assert.AreEqual(shows.ElementAt(0).Name, show.Name);
 
             var company = objExcel.ConvertDataAsShowCompany(dataset, 0);
             Assert.AreEqual(companies.ElementAt(0).ASINumber, company.ASINumber);
             Assert.AreEqual(companies.ElementAt(0).Name, company.Name);
 
-            var address = objExcel.ConvertDataAsShowAddress(dataset, company.Id,0);
+            var address = objExcel.ConvertDataAsShowAddress(dataset, company.Id, 0);
             Assert.AreEqual(addresses.ElementAt(0).Street1, address.Street1);
             Assert.AreEqual(addresses.ElementAt(0).City, address.City);
             Assert.AreEqual(addresses.ElementAt(0).Zip, address.Zip);
 
-            var attendee = objExcel.ConvertDataAsShowAttendee(dataset, show.Id, company.Id, 0);
-            Assert.AreEqual(attendees.ElementAt(0).CompanyId, attendee.CompanyId);
-            Assert.AreEqual(attendees.ElementAt(0).ShowId, attendee.ShowId);
-          
         }
 
         private DataSet GetDataset(int t, string conn)
@@ -420,7 +413,7 @@ namespace asi.asicentral.Tests
             }
             return ds;
         }
-
+       
         private ShowASI CreateShowData(int id, string name)
         {
             ShowASI objShow = new ShowASI()
@@ -442,7 +435,7 @@ namespace asi.asicentral.Tests
             return objCompany;
         }
 
-        private ShowAddress CreateAddressData(int AddressId, string street1, string city, string state,string zip,string country)
+        private ShowAddress CreateAddressData(int AddressId, string street1, string city, string state, string zip, string country)
         {
             ShowAddress objCompanyAddress = new ShowAddress()
             {
