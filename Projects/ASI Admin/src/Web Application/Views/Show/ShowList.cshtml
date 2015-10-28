@@ -9,10 +9,6 @@
 
 
 <div><h2 class="pull-left">List of Shows</h2>
-     @if (Model.ExcelImport != null)
-       {
-           @Html.LabelFor(item => item.ExcelImport)
-       }
     @using (Html.BeginForm("Index", "ExcelUpload", FormMethod.Post, new { enctype = "multipart/form-data" }))
     { 
       <input type="submit" id="btnExcel" class="btn pull-right" value="Excel Import" disabled="disabled"/>
