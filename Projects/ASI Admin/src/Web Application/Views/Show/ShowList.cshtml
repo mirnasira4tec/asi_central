@@ -9,10 +9,14 @@
 
 
 <div><h2 class="pull-left">List of Shows</h2>
+     @if (Model.ExcelImport != null)
+       {
+           @Html.LabelFor(item => item.ExcelImport)
+       }
     @using (Html.BeginForm("Index", "ExcelUpload", FormMethod.Post, new { enctype = "multipart/form-data" }))
     { 
-      <input type="submit" id="btnExcel" class="btn pull-right" value="Excel Import" />
-      <input type="file" name="file" class="upload pull-right">
+      <input type="submit" id="btnExcel" class="btn pull-right" value="Excel Import" disabled="disabled"/>
+      <input type="file" id="fileUpload" name="file" class="upload pull-right" >
     }
 </div>
 <div class="tabbable tabs-below small">
@@ -103,6 +107,13 @@
         });
      
         
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#fileUpload").click(function () {
+                $("#btnExcel").attr('disabled', false);
+            });
+        });
     </script>
     
 }

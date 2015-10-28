@@ -2,12 +2,14 @@
 using asi.asicentral.model.show;
 using asi.asicentral.services;
 using asi.asicentral.util.show;
+using asi.asicentral.web.models.show;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.OleDb;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -22,40 +24,6 @@ namespace asi.asicentral.web.Controllers.Show
         public ActionResult Index()
         {
             return View();
-        }
-
-        public string stringConn()
-        {
-            string excelConnectionString = string.Empty;
-            if (Request.Files["file"].ContentLength > 0)
-            {
-                string fileExtension =
-                                     System.IO.Path.GetExtension(Request.Files["file"].FileName);
-                if (fileExtension == ".xls" || fileExtension == ".xlsx")
-                {
-                    string fileLocation = Server.MapPath("~/Content/") + Request.Files["file"].FileName;
-                    if (System.IO.File.Exists(fileLocation))
-                    {
-                        System.IO.File.Delete(fileLocation);
-                    }
-                    Request.Files["file"].SaveAs(fileLocation);
-
-                    excelConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fileLocation + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
-
-                    //connection String for xls file format.
-                    if (fileExtension == ".xls")
-                    {
-                        excelConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + fileLocation + ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=2\"";
-                    }
-                    //connection String for xlsx file format.
-                    else if (fileExtension == ".xlsx")
-                    {
-
-                        excelConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fileLocation + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
-                    }
-                }
-            }
-            return excelConnectionString;
         }
 
         public ShowAttendee ConvertDataAsShowAttendee(DataSet ds, int objShowId, int objCompanyId, int rowId)
@@ -75,22 +43,7 @@ namespace asi.asicentral.web.Controllers.Show
             objAttendee.IsExisting = true;
             objAttendee.UpdateSource = "ExcelUploadcontroller-Index";
             objAttendee = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, objAttendee);
-
             return objAttendee;
-        }
-
-        public ShowASI ConvertDataAsShow(DataSet ds)
-        {
-            var objShow = new ShowASI();
-            if (ds.Tables[0].Columns.Contains("ENGAGE EAST 2016"))
-            {
-                objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE EAST"));
-            }
-            else if (ds.Tables[0].Columns.Contains("ENGAGE WEST 2016"))
-            {
-                objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE WEST"));
-            }
-            return objShow;
         }
 
         public ShowAddress ConvertDataAsShowAddress(DataSet ds, int objCompanyId, int rowId)
@@ -135,22 +88,8 @@ namespace asi.asicentral.web.Controllers.Show
         public ShowCompany ConvertDataAsShowCompany(DataSet ds, int rowId)
         {
             var objCompany = new ShowCompany();
-            var name = string.Empty;
-            ShowASI objShow = ConvertDataAsShow(ds);
-            if (ds.Tables[0].Columns.Contains("ENGAGE EAST 2016"))
-            {
-                name = ds.Tables[0].Rows[rowId]["ENGAGE EAST 2016"].ToString();
-            }
-            else if (ds.Tables[0].Columns.Contains("ENGAGE WEST 2016"))
-            {
-                name = ds.Tables[0].Rows[rowId]["ENGAGE WEST 2016"].ToString();
-            }
-
-            //IList<ShowAttendee> attendeelist = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == objShow.Id).ToList();
-
             var asinumber = ds.Tables[0].Rows[rowId]["ASINO"].ToString();
-
-
+            var name = ds.Tables[0].Rows[rowId]["Company"].ToString();
             ShowCompany company = ObjectService.GetAll<ShowCompany>().FirstOrDefault(item => (item.ASINumber == asinumber || item.Name == name));
             if (company != null)
             {
@@ -167,10 +106,38 @@ namespace asi.asicentral.web.Controllers.Show
         [HttpPost]
         public ActionResult Index(HttpPostedFileBase file)
         {
+            var show = new ShowModel();
             DataSet ds = new DataSet();
-            string conn = stringConn();
+            string excelConnectionString = string.Empty;
+            var fileName = Path.GetFileName(file.FileName);
+            string tempPath = System.IO.Path.GetTempPath();   //Get Temporary File Path
+            string currFilePath = tempPath + fileName; //Get File Path after Uploading and Record to Former Declared Global Variable
+            string fileExtension =
+                                     System.IO.Path.GetExtension(Request.Files["file"].FileName);
+            if (fileExtension == ".xls" || fileExtension == ".xlsx")
+            {
+                if (System.IO.File.Exists(currFilePath))
+                {
+                    System.IO.File.Delete(currFilePath);
+                }
+                file.SaveAs(currFilePath);
+                excelConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + currFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
+
+                //connection String for xls file format.
+                if (fileExtension == ".xls")
+                {
+                    excelConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + currFilePath + ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=2\"";
+                }
+                //connection String for xlsx file format.
+                else if (fileExtension == ".xlsx")
+                {
+
+                    excelConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + currFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
+                }
+            }
+
             //Create Connection to Excel work book and add oledb namespace
-            OleDbConnection excelConnection = new OleDbConnection(conn);
+            OleDbConnection excelConnection = new OleDbConnection(excelConnectionString);
             excelConnection.Open();
             DataTable dt = new DataTable();
 
@@ -185,25 +152,31 @@ namespace asi.asicentral.web.Controllers.Show
             //excel data saves in temp file here.
             foreach (DataRow row in dt.Rows)
             {
+                var objShow = new ShowASI();
                 excelSheets[t] = row["TABLE_NAME"].ToString();
-                OleDbConnection excelConnection1 = new OleDbConnection(conn);
+                OleDbConnection excelConnection1 = new OleDbConnection(excelConnectionString);
                 string query = string.Format("Select * from [{0}]", excelSheets[t]);
+                if (excelSheets[t].Contains("ENGAGE EAST 2016"))
+                {
+                    objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE EAST"));
+                }
+                else if (excelSheets[t].Contains("ENGAGE WEST 2016"))
+                {
+                    objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE WEST"));
+                }
                 using (OleDbDataAdapter dataAdapter = new OleDbDataAdapter(query, excelConnection1))
                 {
                     dataAdapter.Fill(ds);
 
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        ShowASI objShow = ConvertDataAsShow(ds);
                         ShowCompany objCompany = ConvertDataAsShowCompany(ds, i);
                         ShowAddress objAddress = ConvertDataAsShowAddress(ds, objCompany.Id, i);
                         ShowCompanyAddress objCompanyAddress = ConvertDataAsShowCompanyAddress(ds, objCompany.Id, objAddress.Id, i);
                         ShowAttendee objShowAttendee = ConvertDataAsShowAttendee(ds, objShow.Id, objCompany.Id, i);
                         ObjectService.SaveChanges();
                     }
-                     var obj =  ConvertDataAsShow(ds);
-
-                    IList<ShowAttendee> deleteAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.IsExisting == false && item.ShowId == obj.Id).ToList();
+                     IList<ShowAttendee> deleteAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.IsExisting == false && item.ShowId == objShow.Id).ToList();
                     if (deleteAttendees != null)
                     {
                         foreach (var deleteAttendee in deleteAttendees)
@@ -213,7 +186,7 @@ namespace asi.asicentral.web.Controllers.Show
                         ObjectService.SaveChanges();
                     }
 
-                    IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == obj.Id).ToList();
+                    IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == objShow.Id).ToList();
                     if (existingAttendees != null)
                     {
                         foreach (var existingAttendee in existingAttendees)
