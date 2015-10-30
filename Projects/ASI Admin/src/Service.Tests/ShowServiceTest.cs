@@ -375,11 +375,11 @@ namespace asi.asicentral.Tests
             var dataset = GetDataset(0, excelConnectionString);
             Assert.IsNotNull(dataset);
 
-            var company = objExcel.ConvertDataAsShowCompany(dataset, 0);
+            var company = objExcel.ConvertDataAsShowCompany(dataset.Tables[0], 0);
             Assert.AreEqual(companies.ElementAt(0).ASINumber, company.ASINumber);
             Assert.AreEqual(companies.ElementAt(0).Name, company.Name);
 
-            var address = objExcel.ConvertDataAsShowAddress(dataset, company.Id, 0);
+            var address = objExcel.ConvertDataAsShowAddress(dataset.Tables[0], company.Id, 0);
             Assert.AreEqual(addresses.ElementAt(0).Street1, address.Street1);
             Assert.AreEqual(addresses.ElementAt(0).City, address.City);
             Assert.AreEqual(addresses.ElementAt(0).Zip, address.Zip);
