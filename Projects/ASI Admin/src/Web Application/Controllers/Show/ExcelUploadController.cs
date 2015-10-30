@@ -3,12 +3,12 @@ using asi.asicentral.model.show;
 using asi.asicentral.services;
 using asi.asicentral.util.show;
 using asi.asicentral.web.models.show;
+using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
-using System.Data.OleDb;
-using System.Data.SqlClient;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -26,7 +26,7 @@ namespace asi.asicentral.web.Controllers.Show
             return View();
         }
 
-        public ShowAttendee ConvertDataAsShowAttendee(DataSet ds, int objShowId, int objCompanyId, int rowId)
+        public ShowAttendee ConvertDataAsShowAttendee(DataTable ds, int objShowId, int objCompanyId, int rowId)
         {
             var objAttendee = new ShowAttendee();
             ShowAttendee attendee = ObjectService.GetAll<ShowAttendee>().FirstOrDefault(item => item.ShowId == objShowId && item.CompanyId == objCompanyId);
@@ -36,17 +36,17 @@ namespace asi.asicentral.web.Controllers.Show
             }
             objAttendee.CompanyId = objCompanyId;
             objAttendee.ShowId = objShowId;
-            objAttendee.IsSponsor = Convert.ToBoolean(ds.Tables[0].Rows[rowId]["Sponsor"].ToString().Contains('X')) ? true : false;
-            objAttendee.IsPresentation = Convert.ToBoolean(ds.Tables[0].Rows[rowId]["Presentation"].ToString().Contains('X')) ? true : false;
-            objAttendee.IsRoundTable = Convert.ToBoolean(ds.Tables[0].Rows[rowId]["Roundtable"].ToString().Contains('X')) ? true : false;
-            objAttendee.IsExhibitDay = Convert.ToBoolean(ds.Tables[0].Rows[rowId]["Exhibit Only"].ToString().Contains('X')) ? true : false;
+            objAttendee.IsSponsor = Convert.ToBoolean(ds.Rows[rowId]["Sponsor"].ToString().Contains('X')) ? true : false;
+            objAttendee.IsPresentation = Convert.ToBoolean(ds.Rows[rowId]["Presentation"].ToString().Contains('X')) ? true : false;
+            objAttendee.IsRoundTable = Convert.ToBoolean(ds.Rows[rowId]["Roundtable"].ToString().Contains('X')) ? true : false;
+            objAttendee.IsExhibitDay = Convert.ToBoolean(ds.Rows[rowId]["Exhibit Only"].ToString().Contains('X')) ? true : false;
             objAttendee.IsExisting = true;
             objAttendee.UpdateSource = "ExcelUploadcontroller-Index";
             objAttendee = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, objAttendee);
             return objAttendee;
         }
 
-        public ShowAddress ConvertDataAsShowAddress(DataSet ds, int objCompanyId, int rowId)
+        public ShowAddress ConvertDataAsShowAddress(DataTable ds, int objCompanyId, int rowId)
         {
             var objAddress = new ShowAddress();
             ShowCompanyAddress companyAddress = ObjectService.GetAll<ShowCompanyAddress>().FirstOrDefault(item => item.CompanyId == objCompanyId);
@@ -58,17 +58,17 @@ namespace asi.asicentral.web.Controllers.Show
                     objAddress.Id = address.Id;
                 }
             }
-            objAddress.Street1 = ds.Tables[0].Rows[rowId]["Address"].ToString();
-            objAddress.City = ds.Tables[0].Rows[rowId]["City"].ToString();
-            objAddress.State = ds.Tables[0].Rows[rowId]["State"].ToString();
-            objAddress.Zip = ds.Tables[0].Rows[rowId]["Zip Code"].ToString();
-            objAddress.Country = ds.Tables[0].Rows[rowId]["Country"].ToString();
+            objAddress.Street1 = ds.Rows[rowId]["Address"].ToString();
+            objAddress.City = ds.Rows[rowId]["City"].ToString();
+            objAddress.State = ds.Rows[rowId]["State"].ToString();
+            objAddress.Zip = ds.Rows[rowId]["Zip Code"].ToString();
+            objAddress.Country = ds.Rows[rowId]["Country"].ToString();
             objAddress.UpdateSource = "ExcelUploadcontroller-Index";
             objAddress = ShowHelper.CreateOrUpdateAddress(ObjectService, objAddress);
             return objAddress;
         }
 
-        public ShowCompanyAddress ConvertDataAsShowCompanyAddress(DataSet ds, int objCompanyId, int objAddressId, int rowId)
+        public ShowCompanyAddress ConvertDataAsShowCompanyAddress(DataTable ds, int objCompanyId, int objAddressId, int rowId)
         {
             var objCompanyAddress = new ShowCompanyAddress();
             ShowAddress objAddress = ConvertDataAsShowAddress(ds, objCompanyId, rowId);
@@ -85,11 +85,11 @@ namespace asi.asicentral.web.Controllers.Show
             return showCompanyAddress;
         }
 
-        public ShowCompany ConvertDataAsShowCompany(DataSet ds, int rowId)
+        public ShowCompany ConvertDataAsShowCompany(DataTable ds, int rowId)
         {
             var objCompany = new ShowCompany();
-            var asinumber = ds.Tables[0].Rows[rowId]["ASINO"].ToString();
-            var name = ds.Tables[0].Rows[rowId]["Company"].ToString();
+            var asinumber = ds.Rows[rowId]["ASINO"].ToString();
+            var name = ds.Rows[rowId]["Company"].ToString();
             ShowCompany company = ObjectService.GetAll<ShowCompany>().FirstOrDefault(item => (item.ASINumber == asinumber || item.Name == name));
             if (company != null)
             {
@@ -102,6 +102,20 @@ namespace asi.asicentral.web.Controllers.Show
 
             return objCompany;
         }
+        private DataTable ToDictionary(List<IDictionary<string, object>> list)
+        {
+            DataTable result = new DataTable();
+            if (list.Count == 0)
+                return result;
+
+            result.Columns.AddRange(
+                list.First().Select(r => new DataColumn(r.Key)).ToArray()
+            );
+
+            list.ForEach(r => result.Rows.Add(r.Select(c => c.Value).Cast<object>().ToArray()));
+
+            return result;
+        }
 
         [HttpPost]
         public ActionResult Index(HttpPostedFileBase file)
@@ -112,8 +126,7 @@ namespace asi.asicentral.web.Controllers.Show
             var fileName = Path.GetFileName(file.FileName);
             string tempPath = System.IO.Path.GetTempPath();   //Get Temporary File Path
             string currFilePath = tempPath + fileName; //Get File Path after Uploading and Record to Former Declared Global Variable
-            string fileExtension =
-                                     System.IO.Path.GetExtension(Request.Files["file"].FileName);
+            string fileExtension = System.IO.Path.GetExtension(Request.Files["file"].FileName);
             if (fileExtension == ".xls" || fileExtension == ".xlsx")
             {
                 if (System.IO.File.Exists(currFilePath))
@@ -121,92 +134,92 @@ namespace asi.asicentral.web.Controllers.Show
                     System.IO.File.Delete(currFilePath);
                 }
                 file.SaveAs(currFilePath);
-                excelConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + currFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
 
-                //connection String for xls file format.
-                if (fileExtension == ".xls")
+                FileInfo fi = new FileInfo(currFilePath);
+                //Open uploaded workbook
+                var workBook = new XLWorkbook(fi.FullName);
+                //Get the first sheet of workbook
+                int totalsheets = workBook.Worksheets.Count;
+                for (int sheetcount = 1; sheetcount <= totalsheets; sheetcount++)
                 {
-                    excelConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + currFilePath + ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=2\"";
-                }
-                //connection String for xlsx file format.
-                else if (fileExtension == ".xlsx")
-                {
+                    var worksheet = workBook.Worksheet(sheetcount);
 
-                    excelConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + currFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
-                }
-            }
-
-            //Create Connection to Excel work book and add oledb namespace
-            OleDbConnection excelConnection = new OleDbConnection(excelConnectionString);
-            excelConnection.Open();
-            DataTable dt = new DataTable();
-
-            dt = excelConnection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-            if (dt == null)
-            {
-                return null;
-            }
-
-            String[] excelSheets = new String[dt.Rows.Count];
-            int t = 0;
-            //excel data saves in temp file here.
-            foreach (DataRow row in dt.Rows)
-            {
-                var objShow = new ShowASI();
-                excelSheets[t] = row["TABLE_NAME"].ToString();
-                OleDbConnection excelConnection1 = new OleDbConnection(excelConnectionString);
-                string query = string.Format("Select * from [{0}]", excelSheets[t]);
-                if (excelSheets[t].Contains("ENGAGE EAST 2016"))
-                {
-                    objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE EAST"));
-                }
-                else if (excelSheets[t].Contains("ENGAGE WEST 2016"))
-                {
-                    objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE WEST"));
-                }
-                using (OleDbDataAdapter dataAdapter = new OleDbDataAdapter(query, excelConnection1))
-                {
-                    dataAdapter.Fill(ds);
-
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    var firstRowUsed = worksheet.FirstRowUsed();
+                    if (firstRowUsed != null)
                     {
-                        ShowCompany objCompany = ConvertDataAsShowCompany(ds, i);
-                        ShowAddress objAddress = ConvertDataAsShowAddress(ds, objCompany.Id, i);
-                        ShowCompanyAddress objCompanyAddress = ConvertDataAsShowCompanyAddress(ds, objCompany.Id, objAddress.Id, i);
-                        ShowAttendee objShowAttendee = ConvertDataAsShowAttendee(ds, objShow.Id, objCompany.Id, i);
-                        ObjectService.SaveChanges();
-                    }
-                     IList<ShowAttendee> deleteAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.IsExisting == false && item.ShowId == objShow.Id).ToList();
-                    if (deleteAttendees != null)
-                    {
-                        foreach (var deleteAttendee in deleteAttendees)
+                        var categoryRow = firstRowUsed.RowUsed();
+                        int coCategoryId = 1;
+                        //Get the column names from first row of excel
+                        Dictionary<int, string> keyValues = new Dictionary<int, string>();
+                        for (int cell = 1; cell <= categoryRow.CellCount(); cell++)
                         {
-                            ObjectService.Delete<ShowAttendee>(deleteAttendee);
+                            keyValues.Add(cell, categoryRow.Cell(cell).GetString());
                         }
-                        ObjectService.SaveChanges();
-                    }
 
-                    IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == objShow.Id).ToList();
-                    if (existingAttendees != null)
-                    {
-                        foreach (var existingAttendee in existingAttendees)
+                        categoryRow = categoryRow.RowBelow();
+                        var objShow = new ShowASI();
+                        if (worksheet.Name.Contains("ENGAGE EAST 2016"))
                         {
-                            var objexistingAttendee = new ShowAttendee();
-                            objexistingAttendee.Id = existingAttendee.Id;
-                            objexistingAttendee.CompanyId = existingAttendee.CompanyId;
-                            objexistingAttendee.ShowId = existingAttendee.ShowId;
-                            objexistingAttendee.IsSponsor = existingAttendee.IsSponsor;
-                            objexistingAttendee.IsRoundTable = existingAttendee.IsRoundTable;
-                            objexistingAttendee.IsExhibitDay = existingAttendee.IsExhibitDay;
-                            objexistingAttendee.IsPresentation = existingAttendee.IsPresentation;
-                            objexistingAttendee.IsExhibitDay = false;
-                            objexistingAttendee = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, objexistingAttendee);
+                            objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE EAST"));
+                        }
+                        else if (worksheet.Name.Contains("ENGAGE WEST 2016"))
+                        {
+                            objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE WEST"));
+                        }
+                        var parent = new List<IDictionary<string, object>>();
+                        while (!categoryRow.Cell(coCategoryId).IsEmpty())
+                        {
+                            int count = 1;
+                            var pc = new ExpandoObject();
+                            while (count <= categoryRow.CellCount())
+                            {
+                                var data = categoryRow.Cell(count).Value;
+                                ((IDictionary<string, object>)pc).Add(keyValues[count], data);
+                                count++;
+                            }
+
+                            categoryRow = categoryRow.RowBelow();
+                            parent.Add((IDictionary<string, object>)pc);
+                        }
+                        DataTable excelDataTable = ToDictionary(parent);
+                        for (int i = 0; i < excelDataTable.Rows.Count; i++)
+                        {
+                            ShowCompany objCompany = ConvertDataAsShowCompany(excelDataTable, i);
+                            ShowAddress objAddress = ConvertDataAsShowAddress(excelDataTable, objCompany.Id, i);
+                            ShowCompanyAddress objCompanyAddress = ConvertDataAsShowCompanyAddress(excelDataTable, objCompany.Id, objAddress.Id, i);
+                            ShowAttendee objShowAttendee = ConvertDataAsShowAttendee(excelDataTable, objShow.Id, objCompany.Id, i);
                             ObjectService.SaveChanges();
                         }
+                        IList<ShowAttendee> deleteAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.IsExisting == false && item.ShowId == objShow.Id).ToList();
+                        if (deleteAttendees != null)
+                        {
+                            foreach (var deleteAttendee in deleteAttendees)
+                            {
+                                ObjectService.Delete<ShowAttendee>(deleteAttendee);
+                            }
+                            ObjectService.SaveChanges();
+                        }
+
+                        IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == objShow.Id).ToList();
+                        if (existingAttendees != null)
+                        {
+                            foreach (var existingAttendee in existingAttendees)
+                            {
+                                var objexistingAttendee = new ShowAttendee();
+                                objexistingAttendee.Id = existingAttendee.Id;
+                                objexistingAttendee.CompanyId = existingAttendee.CompanyId;
+                                objexistingAttendee.ShowId = existingAttendee.ShowId;
+                                objexistingAttendee.IsSponsor = existingAttendee.IsSponsor;
+                                objexistingAttendee.IsRoundTable = existingAttendee.IsRoundTable;
+                                objexistingAttendee.IsExhibitDay = existingAttendee.IsExhibitDay;
+                                objexistingAttendee.IsPresentation = existingAttendee.IsPresentation;
+                                objexistingAttendee.IsExhibitDay = false;
+                                objexistingAttendee = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, objexistingAttendee);
+                                ObjectService.SaveChanges();
+                            }
+                        }
                     }
-                    ds.Reset();
                 }
-                t++;
             }
             return RedirectToAction("../Show/ShowList");
         }
