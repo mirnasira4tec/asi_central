@@ -15,6 +15,9 @@ using System.Data;
 using asi.asicentral.WebApplication;
 using asi.asicentral.web.Controllers.Show;
 using System.Web;
+using System.IO;
+using ClosedXML.Excel;
+using System.Dynamic;
 
 namespace asi.asicentral.Tests
 {
@@ -371,25 +374,97 @@ namespace asi.asicentral.Tests
             ExcelUploadController objExcel = new ExcelUploadController();
             objExcel.ObjectService = mockObjectService.Object;
 
-            var excelConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\"test.xlsx\";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
-            var dataset = GetDataset(0, excelConnectionString);
-            Assert.IsNotNull(dataset);
+            var dataTable = GetDataTable();
+            Assert.IsNotNull(dataTable);
 
-            var company = objExcel.ConvertDataAsShowCompany(dataset.Tables[0], 0);
+            var show = GetShowData();
+            Assert.AreEqual(shows.ElementAt(0).Name.ToLower(), show.Name.ToLower());
+
+            var company = objExcel.ConvertDataAsShowCompany(dataTable, 0);
             Assert.AreEqual(companies.ElementAt(0).ASINumber, company.ASINumber);
             Assert.AreEqual(companies.ElementAt(0).Name, company.Name);
 
-            var address = objExcel.ConvertDataAsShowAddress(dataset.Tables[0], company.Id, 0);
+            var address = objExcel.ConvertDataAsShowAddress(dataTable, company.Id, 0);
             Assert.AreEqual(addresses.ElementAt(0).Street1, address.Street1);
             Assert.AreEqual(addresses.ElementAt(0).City, address.City);
             Assert.AreEqual(addresses.ElementAt(0).Zip, address.Zip);
 
+            var attendee = objExcel.ConvertDataAsShowAttendee(dataTable, show.Id, company.Id, 0);
+            Assert.AreEqual(attendees.ElementAt(0).CompanyId, attendee.CompanyId);
+            Assert.AreEqual(attendees.ElementAt(0).ShowId, attendee.ShowId);
+
+        }
+        public DataTable GetDataTable()
+        {
+            ExcelUploadController objExcel = new ExcelUploadController();
+            DataTable dt = null;
+            string startupPath = System.AppDomain.CurrentDomain.BaseDirectory;
+            string currFilePath = startupPath + "\\test.xlsx";
+            FileInfo fi = new FileInfo(currFilePath);
+            var workBook = new XLWorkbook(fi.FullName);
+            int totalsheets = workBook.Worksheets.Count;
+            var worksheet = workBook.Worksheet(1);
+
+            var firstRowUsed = worksheet.FirstRowUsed();
+            if (firstRowUsed != null)
+            {
+                var categoryRow = firstRowUsed.RowUsed();
+                int coCategoryId = 1;
+                Dictionary<int, string> keyValues = new Dictionary<int, string>();
+                for (int cell = 1; cell <= categoryRow.CellCount(); cell++)
+                {
+                    keyValues.Add(cell, categoryRow.Cell(cell).GetString());
+                }
+                categoryRow = categoryRow.RowBelow();
+                var parent = new List<IDictionary<string, object>>();
+                while (!categoryRow.Cell(coCategoryId).IsEmpty())
+                {
+                    int count = 1;
+                    var pc = new ExpandoObject();
+                    while (count <= categoryRow.CellCount())
+                    {
+                        var data = categoryRow.Cell(count).Value;
+                        ((IDictionary<string, object>)pc).Add(keyValues[count], data);
+                        count++;
+                    }
+
+                    categoryRow = categoryRow.RowBelow();
+                    parent.Add((IDictionary<string, object>)pc);
+                }
+                dt = objExcel.ToDictionary(parent);
+            }
+            return dt;
+        }
+
+        public ShowASI GetShowData()
+        {
+            ExcelUploadController objExcel = new ExcelUploadController();
+            string startupPath = System.AppDomain.CurrentDomain.BaseDirectory;
+            string currFilePath = startupPath + "\\test.xlsx";
+            FileInfo fi = new FileInfo(currFilePath);
+            var workBook = new XLWorkbook(fi.FullName);
+            int totalsheets = workBook.Worksheets.Count;
+            var objShow = new ShowASI();
+            var worksheet = workBook.Worksheet(1);
+            Registry registry = new EFRegistry();
+            IContainer container = new Container(registry);
+            using (var objectContext = new ObjectService(container))
+            {
+                if (worksheet.Name.Contains("ENGAGE EAST 2016"))
+                {
+                    objShow = objectContext.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE EAST"));
+                }
+                else if (worksheet.Name.Contains("ENGAGE WEST 2016"))
+                {
+                    objShow = objectContext.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE WEST"));
+                }
+            }
+            return objShow;
         }
 
         private DataSet GetDataset(int t, string conn)
         {
             DataSet ds = new DataSet();
-            //Create Connection to Excel work book and add oledb namespace
             OleDbConnection excelConnection = new OleDbConnection(conn);
             excelConnection.Open();
             DataTable dt = new DataTable();
@@ -400,7 +475,6 @@ namespace asi.asicentral.Tests
             }
             String[] excelSheets = new String[dt.Rows.Count];
 
-            //excel data saves in temp file here.
             foreach (DataRow row in dt.Rows)
             {
                 excelSheets[t] = row["TABLE_NAME"].ToString();
@@ -413,7 +487,7 @@ namespace asi.asicentral.Tests
             }
             return ds;
         }
-       
+
         private ShowASI CreateShowData(int id, string name)
         {
             ShowASI objShow = new ShowASI()

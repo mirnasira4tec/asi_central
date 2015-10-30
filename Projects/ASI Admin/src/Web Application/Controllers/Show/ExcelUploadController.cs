@@ -102,7 +102,8 @@ namespace asi.asicentral.web.Controllers.Show
 
             return objCompany;
         }
-        private DataTable ToDictionary(List<IDictionary<string, object>> list)
+
+        public DataTable ToDictionary(List<IDictionary<string, object>> list)
         {
             DataTable result = new DataTable();
             if (list.Count == 0)
@@ -124,9 +125,9 @@ namespace asi.asicentral.web.Controllers.Show
             DataSet ds = new DataSet();
             string excelConnectionString = string.Empty;
             var fileName = Path.GetFileName(file.FileName);
-            string tempPath = System.IO.Path.GetTempPath();   //Get Temporary File Path
-            string currFilePath = tempPath + fileName; //Get File Path after Uploading and Record to Former Declared Global Variable
-            string fileExtension = System.IO.Path.GetExtension(Request.Files["file"].FileName);
+            string tempPath = Path.GetTempPath();
+            string currFilePath = tempPath + fileName; 
+            string fileExtension = Path.GetExtension(Request.Files["file"].FileName);
             if (fileExtension == ".xls" || fileExtension == ".xlsx")
             {
                 if (System.IO.File.Exists(currFilePath))
@@ -136,9 +137,7 @@ namespace asi.asicentral.web.Controllers.Show
                 file.SaveAs(currFilePath);
 
                 FileInfo fi = new FileInfo(currFilePath);
-                //Open uploaded workbook
                 var workBook = new XLWorkbook(fi.FullName);
-                //Get the first sheet of workbook
                 int totalsheets = workBook.Worksheets.Count;
                 for (int sheetcount = 1; sheetcount <= totalsheets; sheetcount++)
                 {
@@ -149,7 +148,6 @@ namespace asi.asicentral.web.Controllers.Show
                     {
                         var categoryRow = firstRowUsed.RowUsed();
                         int coCategoryId = 1;
-                        //Get the column names from first row of excel
                         Dictionary<int, string> keyValues = new Dictionary<int, string>();
                         for (int cell = 1; cell <= categoryRow.CellCount(); cell++)
                         {
