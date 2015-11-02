@@ -121,105 +121,112 @@ namespace asi.asicentral.web.Controllers.Show
         [HttpPost]
         public ActionResult Index(HttpPostedFileBase file)
         {
-            var show = new ShowModel();
-            DataSet ds = new DataSet();
-            string excelConnectionString = string.Empty;
-            var fileName = Path.GetFileName(file.FileName);
-            string tempPath = Path.GetTempPath();
-            string currFilePath = tempPath + fileName; 
-            string fileExtension = Path.GetExtension(Request.Files["file"].FileName);
-            if (fileExtension == ".xls" || fileExtension == ".xlsx")
+            if (file != null)
             {
-                if (System.IO.File.Exists(currFilePath))
+                var show = new ShowModel();
+                DataSet ds = new DataSet();
+                string excelConnectionString = string.Empty;
+                var fileName = Path.GetFileName(file.FileName);
+                string tempPath = Path.GetTempPath();
+                string currFilePath = tempPath + fileName;
+                string fileExtension = Path.GetExtension(Request.Files["file"].FileName);
+                if (fileExtension == ".xls" || fileExtension == ".xlsx")
                 {
-                    System.IO.File.Delete(currFilePath);
-                }
-                file.SaveAs(currFilePath);
-
-                FileInfo fi = new FileInfo(currFilePath);
-                var workBook = new XLWorkbook(fi.FullName);
-                int totalsheets = workBook.Worksheets.Count;
-                for (int sheetcount = 1; sheetcount <= totalsheets; sheetcount++)
-                {
-                    var worksheet = workBook.Worksheet(sheetcount);
-
-                    var firstRowUsed = worksheet.FirstRowUsed();
-                    if (firstRowUsed != null)
+                    if (System.IO.File.Exists(currFilePath))
                     {
-                        var categoryRow = firstRowUsed.RowUsed();
-                        int coCategoryId = 1;
-                        Dictionary<int, string> keyValues = new Dictionary<int, string>();
-                        for (int cell = 1; cell <= categoryRow.CellCount(); cell++)
-                        {
-                            keyValues.Add(cell, categoryRow.Cell(cell).GetString());
-                        }
+                        System.IO.File.Delete(currFilePath);
+                    }
+                    file.SaveAs(currFilePath);
 
-                        categoryRow = categoryRow.RowBelow();
-                        var objShow = new ShowASI();
-                        if (worksheet.Name.Contains("ENGAGE EAST 2016"))
+                    FileInfo fi = new FileInfo(currFilePath);
+                    var workBook = new XLWorkbook(fi.FullName);
+                    int totalsheets = workBook.Worksheets.Count;
+                    for (int sheetcount = 1; sheetcount <= totalsheets; sheetcount++)
+                    {
+                        var worksheet = workBook.Worksheet(sheetcount);
+
+                        var firstRowUsed = worksheet.FirstRowUsed();
+                        if (firstRowUsed != null)
                         {
-                            objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE EAST"));
-                        }
-                        else if (worksheet.Name.Contains("ENGAGE WEST 2016"))
-                        {
-                            objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE WEST"));
-                        }
-                        var parent = new List<IDictionary<string, object>>();
-                        while (!categoryRow.Cell(coCategoryId).IsEmpty())
-                        {
-                            int count = 1;
-                            var pc = new ExpandoObject();
-                            while (count <= categoryRow.CellCount())
+                            var categoryRow = firstRowUsed.RowUsed();
+                            int coCategoryId = 1;
+                            Dictionary<int, string> keyValues = new Dictionary<int, string>();
+                            for (int cell = 1; cell <= categoryRow.CellCount(); cell++)
                             {
-                                var data = categoryRow.Cell(count).Value;
-                                ((IDictionary<string, object>)pc).Add(keyValues[count], data);
-                                count++;
+                                keyValues.Add(cell, categoryRow.Cell(cell).GetString());
                             }
 
                             categoryRow = categoryRow.RowBelow();
-                            parent.Add((IDictionary<string, object>)pc);
-                        }
-                        DataTable excelDataTable = ToDictionary(parent);
-                        for (int i = 0; i < excelDataTable.Rows.Count; i++)
-                        {
-                            ShowCompany objCompany = ConvertDataAsShowCompany(excelDataTable, i);
-                            ShowAddress objAddress = ConvertDataAsShowAddress(excelDataTable, objCompany.Id, i);
-                            ShowCompanyAddress objCompanyAddress = ConvertDataAsShowCompanyAddress(excelDataTable, objCompany.Id, objAddress.Id, i);
-                            ShowAttendee objShowAttendee = ConvertDataAsShowAttendee(excelDataTable, objShow.Id, objCompany.Id, i);
-                            ObjectService.SaveChanges();
-                        }
-                        IList<ShowAttendee> deleteAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.IsExisting == false && item.ShowId == objShow.Id).ToList();
-                        if (deleteAttendees != null)
-                        {
-                            foreach (var deleteAttendee in deleteAttendees)
+                            var objShow = new ShowASI();
+                            if (worksheet.Name.Contains("ENGAGE EAST 2016"))
                             {
-                                ObjectService.Delete<ShowAttendee>(deleteAttendee);
+                                objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE EAST"));
                             }
-                            ObjectService.SaveChanges();
-                        }
-
-                        IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == objShow.Id).ToList();
-                        if (existingAttendees != null)
-                        {
-                            foreach (var existingAttendee in existingAttendees)
+                            else if (worksheet.Name.Contains("ENGAGE WEST 2016"))
                             {
-                                var objexistingAttendee = new ShowAttendee();
-                                objexistingAttendee.Id = existingAttendee.Id;
-                                objexistingAttendee.CompanyId = existingAttendee.CompanyId;
-                                objexistingAttendee.ShowId = existingAttendee.ShowId;
-                                objexistingAttendee.IsSponsor = existingAttendee.IsSponsor;
-                                objexistingAttendee.IsRoundTable = existingAttendee.IsRoundTable;
-                                objexistingAttendee.IsExhibitDay = existingAttendee.IsExhibitDay;
-                                objexistingAttendee.IsPresentation = existingAttendee.IsPresentation;
-                                objexistingAttendee.IsExhibitDay = false;
-                                objexistingAttendee = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, objexistingAttendee);
+                                objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE WEST"));
+                            }
+                            var parent = new List<IDictionary<string, object>>();
+                            while (!categoryRow.Cell(coCategoryId).IsEmpty())
+                            {
+                                int count = 1;
+                                var pc = new ExpandoObject();
+                                while (count <= categoryRow.CellCount())
+                                {
+                                    var data = categoryRow.Cell(count).Value;
+                                    ((IDictionary<string, object>)pc).Add(keyValues[count], data);
+                                    count++;
+                                }
+
+                                categoryRow = categoryRow.RowBelow();
+                                parent.Add((IDictionary<string, object>)pc);
+                            }
+                            DataTable excelDataTable = ToDictionary(parent);
+                            for (int i = 0; i < excelDataTable.Rows.Count; i++)
+                            {
+                                ShowCompany objCompany = ConvertDataAsShowCompany(excelDataTable, i);
+                                ShowAddress objAddress = ConvertDataAsShowAddress(excelDataTable, objCompany.Id, i);
+                                ShowCompanyAddress objCompanyAddress = ConvertDataAsShowCompanyAddress(excelDataTable, objCompany.Id, objAddress.Id, i);
+                                ShowAttendee objShowAttendee = ConvertDataAsShowAttendee(excelDataTable, objShow.Id, objCompany.Id, i);
                                 ObjectService.SaveChanges();
+                            }
+                            IList<ShowAttendee> deleteAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.IsExisting == false && item.ShowId == objShow.Id).ToList();
+                            if (deleteAttendees != null)
+                            {
+                                foreach (var deleteAttendee in deleteAttendees)
+                                {
+                                    ObjectService.Delete<ShowAttendee>(deleteAttendee);
+                                }
+                                ObjectService.SaveChanges();
+                            }
+
+                            IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == objShow.Id).ToList();
+                            if (existingAttendees != null)
+                            {
+                                foreach (var existingAttendee in existingAttendees)
+                                {
+                                    var objexistingAttendee = new ShowAttendee();
+                                    objexistingAttendee.Id = existingAttendee.Id;
+                                    objexistingAttendee.CompanyId = existingAttendee.CompanyId;
+                                    objexistingAttendee.ShowId = existingAttendee.ShowId;
+                                    objexistingAttendee.IsSponsor = existingAttendee.IsSponsor;
+                                    objexistingAttendee.IsRoundTable = existingAttendee.IsRoundTable;
+                                    objexistingAttendee.IsExhibitDay = existingAttendee.IsExhibitDay;
+                                    objexistingAttendee.IsPresentation = existingAttendee.IsPresentation;
+                                    objexistingAttendee.IsExhibitDay = false;
+                                    objexistingAttendee = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, objexistingAttendee);
+                                    ObjectService.SaveChanges();
+                                }
                             }
                         }
                     }
                 }
+                return RedirectToAction("../Show/ShowList");
             }
-            return RedirectToAction("../Show/ShowList");
+            else
+            {
+                return RedirectToAction("../Show/ShowList");
+            }
         }
     }
 }
