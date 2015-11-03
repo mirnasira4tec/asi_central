@@ -870,14 +870,24 @@ namespace asi.asicentral.services.PersonifyProxy
                 }
             }
             // update company class/subclass if they are different from mapping table
-            else if (!string.IsNullOrEmpty(companyInfo.MemberStatus) && (companyInfo.MemberStatus.ToUpper() == "LEAD" || companyInfo.MemberStatus.ToUpper() == "ASICENTRAL")) 
+            else
             {
                 var mappedClassCode = !string.IsNullOrEmpty(mapping.ClassCode) ? mapping.ClassCode.Trim().ToUpper() : string.Empty;
                 var mappedSubClassCode = !string.IsNullOrEmpty(mapping.SubClassCode) ?  mapping.SubClassCode.Trim().ToUpper() : string.Empty;
                 var classCode = !string.IsNullOrEmpty(companyInfo.CustomerClassCode) ? companyInfo.CustomerClassCode.Trim().ToUpper() : string.Empty;
                 var subClassCode = !string.IsNullOrEmpty(companyInfo.SubClassCode) ? companyInfo.SubClassCode.Trim().ToUpper() : string.Empty;
+                var needUpdate = false;
 
-                if( mappedClassCode != classCode || ( mappedClassCode == "SUPPLIER" && mappedSubClassCode != subClassCode ) )
+                if (!string.IsNullOrEmpty(companyInfo.MemberStatus) && (companyInfo.MemberStatus.ToUpper() == "LEAD" || companyInfo.MemberStatus.ToUpper() == "ASICENTRAL"))
+                {
+                    needUpdate = mappedClassCode != classCode || (mappedClassCode == "SUPPLIER" && mappedSubClassCode != subClassCode);
+                }
+                else
+                {
+                    needUpdate = mappedClassCode == "SUPPLIER" && mappedClassCode == classCode && string.IsNullOrEmpty(subClassCode) && !string.IsNullOrEmpty(mappedSubClassCode);
+                }
+
+                if( needUpdate )
                 {
                     ExecutePersonifySP(SP_UPDATE_CUSTOMER_CLASS, new List<string>{ companyInfo.MasterCustomerId,
                                                                                    companyInfo.SubCustomerId.ToString(),
