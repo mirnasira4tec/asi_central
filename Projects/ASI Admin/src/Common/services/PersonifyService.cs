@@ -110,6 +110,13 @@ namespace asi.asicentral.services
 
                     ValidateOrderTotal(order, emailService, url, true, firstmonthFree);
 
+                    // update company ASI#, to be included in the internal email
+                    var asiNumber = PersonifyClient.GetCompanyAsiNumber(companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+                    if ( !string.IsNullOrWhiteSpace(asiNumber) && asiNumber.Trim().Length < 7 )
+                    {
+                        order.Company.ASINumber = asiNumber;
+                    }
+
                     if( couponError)
                     {   // send internal email 
                         var data = new EmailData()
