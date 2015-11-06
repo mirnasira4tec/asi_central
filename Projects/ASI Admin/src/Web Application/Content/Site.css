@@ -653,8 +653,17 @@ a:hover, a:focus {
     -moz-border-radius: 4px;
     border-radius: 4px;
 }
-.table th, .table td {
-   border: 1px solid #D71D24!important;
+.table-bordered th, .table-bordered td {
+    border-left: 1px solid #D71D24 !important;
+}
+
+.table-bordered {
+    border-right: 1px solid #D71D24 !important;
+    border-top: 1px solid #D71D24 !important;
+    border-bottom: 1px solid #D71D24 !important;
+}
+ .table td {
+    border-top: 1px solid #D71D24;
 }
 
 
