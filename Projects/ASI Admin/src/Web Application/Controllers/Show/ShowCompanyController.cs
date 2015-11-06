@@ -542,12 +542,17 @@ namespace asi.asicentral.web.Controllers.Show
             }
         }
         [HttpGet]
-        public ActionResult GetAttendeeCompany(int? showId, String companyTab, string companyName, string MemberType)
+        public ActionResult GetAttendeeCompany(int? showId, String companyTab, string companyName, string MemberType, int page = 1, int pageSize = 10)
         {
             var showCompanies = new ShowCompaniesModel();
+            showCompanies.CurrentPageIndex = page;
+            showCompanies.PageSize = pageSize;
             if (string.IsNullOrEmpty(companyTab)) companyTab = ShowCompaniesModel.TAB_COMPANYNAME;
             showCompanies.CompanyTab = companyTab;
             IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(attendee => attendee.ShowId == showId).OrderBy(form => form.Company.Name).ToList();
+            showCompanies.TotalRecordCount = existingAttendees.Count();
+            existingAttendees = existingAttendees.Skip((showCompanies.CurrentPageIndex - 1) * showCompanies.PageSize)
+                                            .Take(showCompanies.PageSize).ToList();
             if (existingAttendees.Any())
             {
                 foreach (ShowAttendee attendee in existingAttendees)

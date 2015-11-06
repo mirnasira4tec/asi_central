@@ -8,8 +8,8 @@
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
     
-     <p class="navigate-back"><a href="/Show/ShowList">Back to Show list</a></p>
-    <div id="tabbasic" class="basic-information tab-pane fade in active">
+     <p class="navigate-back"><a href="/Show/ShowList"><i class="icon-backward"></i>  Back to Show list</a></p>
+     <div id="tabbasic" class="basic-information tab-pane fade in active">
         <fieldset class="company-info-form">
             <legend>@{var headerText = (Model.Id == 0 ? "Add Show" : "Update Show");}@headerText</legend>
             @Html.HiddenFor(model => model.Id)
@@ -45,8 +45,8 @@
             
             <p class="next-step-button">
                 @{var submitText = (Model.Id == 0 ? "Add" : "Save");}
-                <input type="submit" class="command btn btn-primary" value="@submitText"/>
-                 <a href="/Show/ShowList">Cancel</a>
+                <input type="submit" class="command btn btn-red" value="@submitText"/>
+                 <a class="red" href="/Show/ShowList">Cancel</a>
         </nav>
     </footer>
 }
