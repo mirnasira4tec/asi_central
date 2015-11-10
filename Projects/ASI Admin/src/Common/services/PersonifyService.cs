@@ -58,10 +58,14 @@ namespace asi.asicentral.services
                 var primaryContactInfo = individualInfos.FirstOrDefault(c =>
                     string.Equals(c.FirstName, primaryContact.FirstName, StringComparison.InvariantCultureIgnoreCase)
                     && string.Equals(c.LastName, primaryContact.LastName, StringComparison.InvariantCultureIgnoreCase));
+
                 if (primaryContactInfo == null && !string.IsNullOrEmpty(primaryContact.Email))
                 {
                     primaryContactInfo = PersonifyClient.GetIndividualInfoByEmail(primaryContact.Email);
                 }
+
+                var contactMasterId = primaryContactInfo != null ? primaryContactInfo.MasterCustomerId : individualInfos[0].MasterCustomerId;
+                var contactSubId = primaryContactInfo != null ? primaryContactInfo.SubCustomerId : individualInfos[0].SubCustomerId;
 
                 var shipToAddr = GetAddressInfo(contactAddresses, AddressType.Shipping, order).PersonifyAddr;
                 var billToAddr = storeAddress.FirstOrDefault(a => a.StoreIsBilling == true).PersonifyAddr;
@@ -104,8 +108,7 @@ namespace asi.asicentral.services
                         mapping = mappings.FirstOrDefault(m => string.IsNullOrEmpty(m.StoreOption));
                     }
 
-                    PersonifyClient.CreateBundleOrder(order, mapping, companyInfo, 
-                                                      primaryContactInfo.MasterCustomerId, primaryContactInfo.SubCustomerId, 
+                    PersonifyClient.CreateBundleOrder(order, mapping, companyInfo, contactMasterId, contactSubId, 
                                                       billToAddr, shipToAddr, waiveAppFee, firstmonthFree);
 
                     ValidateOrderTotal(order, emailService, url, true, firstmonthFree);
@@ -138,8 +141,8 @@ namespace asi.asicentral.services
                         order,
                         companyInfo.MasterCustomerId,
                         companyInfo.SubCustomerId,
-                        primaryContactInfo.MasterCustomerId,
-                        primaryContactInfo.SubCustomerId,
+                        contactMasterId, 
+                        contactSubId,
                         billToAddr.CustomerAddressId,
                         shipToAddr.CustomerAddressId,
                         lineItems);

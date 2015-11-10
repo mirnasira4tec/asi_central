@@ -971,8 +971,9 @@ namespace asi.asicentral.services.PersonifyProxy
                             case "LAST_NAME":
                                 customerInfo.LastName = value;
                                 break;
-                            case "FIRST_NAME":
-                                customerInfo.FirstName = value;
+                            case "LAST_FIRST_NAME":
+                                var names = value.Split(',');
+                                customerInfo.FirstName = names.ElementAt(names.Length - 1).Trim();
                                 break;
                             case "LABEL_NAME":
                                 customerInfo.LabelName = value;
