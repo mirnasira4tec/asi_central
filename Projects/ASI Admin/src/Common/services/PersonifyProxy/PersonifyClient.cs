@@ -41,7 +41,7 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string CUSTOMER_INFO_STATUS_DUPLICATE = "DUPL";
         private const int PHONE_NUMBER_LENGTH = 10;
         private const string DNS_FLAG_TAG = "USR_DNS_FLAG";
-        private const string SP_SEARCH_BY_CUSTOMER_ID = "USR_TEST_CUSTOMER_SEARCH_PROC";
+        private const string SP_SEARCH_BY_CUSTOMER_ID = "USR_EASI_CUSTOMER_SEARCH_MASTERCUSTOMER_PROC";
         private const string SP_SEARCH_BY_ASI_NUMBER = "USR_EASI_CUSTOMER_SEARCH_ASI_NO_PROC";
         private const string SP_SEARCH_BY_COMPANY_NAME = "USR_EASI_CUSTOMER_SEARCH_COMPANY_NAME_PROC";
         private const string SP_SEARCH_BY_COMMUNICATION = "USR_EASI_CUSTOMER_SEARCH_COMMUNICATION_PROC";
@@ -305,8 +305,11 @@ namespace asi.asicentral.services.PersonifyProxy
                 }
 
                 customerInfo = GetPersonifyCompanyInfo(result.MasterCustomerId, subCustomerId);
-                storeCompany.ExternalReference = customerInfo.MasterCustomerId + ";" + customerInfo.SubCustomerId;
-                AddCustomerAddresses(storeCompany, customerInfo.MasterCustomerId, customerInfo.SubCustomerId, countryCodes);
+                if (customerInfo != null)
+                {
+                    storeCompany.ExternalReference = customerInfo.MasterCustomerId + ";" + customerInfo.SubCustomerId;
+                    AddCustomerAddresses(storeCompany, customerInfo.MasterCustomerId, customerInfo.SubCustomerId, countryCodes);
+                }
             }
 
             _log.Debug(string.Format("CreateCompany - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
@@ -940,7 +943,7 @@ namespace asi.asicentral.services.PersonifyProxy
             var companyInfoList = new List<PersonifyCustomerInfo>();
 
             var response = ExecutePersonifySP(spName, parameters);
-            if (response != null && !string.IsNullOrEmpty(response.Data) && response.Data != "No Data Found")
+            if (response != null && !string.IsNullOrEmpty(response.Data) && response.Data.Trim().ToUpper() != "NO DATA FOUND")
             {
                 var xml = XDocument.Parse(response.Data);
 
