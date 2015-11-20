@@ -11,7 +11,7 @@
 @using (Html.BeginForm("AddEmployee", "ShowCompany", FormMethod.Post, new { id = "employee-form", @class = "form-horizontal" }))
 {
     @Html.ValidationSummary(true)
-    <p class="navigate-back"><a href="/ShowCompany/List?id= @Model.CompanyId">Back to Company Details</a></p>
+    <p class="navigate-back"><a class="red" href="/ShowCompany/List?id= @Model.CompanyId">Back to Company Details</a></p>
     <div id="tabbasic" class="basic-information tab-pane fade in active">
         <fieldset class="company-info-form">
             <legend>Employee Details</legend>
@@ -58,8 +58,8 @@
         <nav>
             <p class="next-step-button">
                 @{var submitText = (Model.EmployeeId == 0 ? "Add" : "Save");}
-                <input type="submit" class="command btn btn-primary" value="@submitText"/>
-            @Html.ActionLink(asi.asicentral.Resources.Resource.Cancel, "CompanyList")
+                <input type="submit" class="command btn btn-red" value="@submitText"/>
+                <a class="red" href="/ShowCompany/CompanyList">Cancel</a>
         </nav>
     </footer>
 }
