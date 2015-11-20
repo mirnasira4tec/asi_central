@@ -46,6 +46,35 @@ namespace asi.asicentral.web.Controllers.Show
             return objAttendee;
         }
 
+        public ShowEmployeeAttendee ConvertDataAsShowEmployeeAttendee(DataTable ds, int objCompanyId, int objAttendeeId, int objEmployeeId, int rowId)
+        {
+            var objEmployeeAttendee = new ShowEmployeeAttendee();
+            ShowAttendee objAttendee = ObjectService.GetAll<ShowAttendee>().FirstOrDefault(item => item.Id == objAttendeeId);
+            ShowEmployee objEmployee = ObjectService.GetAll<ShowEmployee>().FirstOrDefault(item => item.Id == objEmployeeId);
+            ShowEmployeeAttendee employeeAttendee = ObjectService.GetAll<ShowEmployeeAttendee>().FirstOrDefault(item => item.AttendeeId == objAttendeeId && item.Employee.Id == objEmployeeId);
+            if (employeeAttendee != null)
+            {
+                objEmployeeAttendee.Id = employeeAttendee.Id;
+            }
+            objEmployeeAttendee.Employee = objEmployee;
+            objEmployeeAttendee.AttendeeId = objAttendeeId;
+            objEmployeeAttendee.UpdateSource = "ExcelUploadcontroller-Index";
+            objEmployeeAttendee = ShowHelper.CreateOrUpdateEmployeeAttendee(ObjectService, objEmployeeAttendee);
+            return objEmployeeAttendee;
+
+        }
+
+        public ShowEmployee ConvertDataAsShowEmployee(DataTable ds, int objCompanyId, int rowId)
+        {
+            var objEmployee = new ShowEmployee();
+            objEmployee.CompanyId = objCompanyId;
+            objEmployee.FirstName = ds.Rows[rowId]["FirstName"].ToString();
+            objEmployee.LastName = ds.Rows[rowId]["LastName"].ToString();
+            objEmployee.UpdateSource = "ExcelUploadcontroller-Index";
+            objEmployee = ShowHelper.CreateOrUpdateEmployee(ObjectService, objEmployee);
+            return objEmployee;
+        }
+
         public ShowAddress ConvertDataAsShowAddress(DataTable ds, int objCompanyId, int rowId)
         {
             var objAddress = new ShowAddress();
@@ -90,13 +119,15 @@ namespace asi.asicentral.web.Controllers.Show
             var objCompany = new ShowCompany();
             var asinumber = ds.Rows[rowId]["ASINO"].ToString();
             var name = ds.Rows[rowId]["Company"].ToString();
-            ShowCompany company = ObjectService.GetAll<ShowCompany>().FirstOrDefault(item => (item.ASINumber == asinumber || item.Name == name));
+            var memberType = ds.Rows[rowId]["MemberType"].ToString();
+            ShowCompany company = ObjectService.GetAll<ShowCompany>().FirstOrDefault(item => (item.ASINumber == asinumber || (item.Name == name && item.MemberType == memberType)));
             if (company != null)
             {
                 objCompany.Id = company.Id;
             }
             objCompany.Name = name;
             objCompany.ASINumber = asinumber;
+            objCompany.MemberType = memberType;
             objCompany.UpdateSource = "ExcelUploadcontroller-Index";
             objCompany = ShowHelper.CreateOrUpdateCompany(ObjectService, objCompany);
 
@@ -188,7 +219,13 @@ namespace asi.asicentral.web.Controllers.Show
                                 ShowAddress objAddress = ConvertDataAsShowAddress(excelDataTable, objCompany.Id, i);
                                 ShowCompanyAddress objCompanyAddress = ConvertDataAsShowCompanyAddress(excelDataTable, objCompany.Id, objAddress.Id, i);
                                 ShowAttendee objShowAttendee = ConvertDataAsShowAttendee(excelDataTable, objShow.Id, objCompany.Id, i);
+                                if (objCompany.MemberType == "Distributor")
+                                {
+                                    ShowEmployee objEmployee = ConvertDataAsShowEmployee(excelDataTable, objCompany.Id, i);
+                                    ShowEmployeeAttendee objEmployeeAttendee = ConvertDataAsShowEmployeeAttendee(excelDataTable,objCompany.Id, objShowAttendee.Id, objEmployee.Id, i);
+                                }
                                 ObjectService.SaveChanges();
+                                
                             }
                             IList<ShowAttendee> deleteAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.IsExisting == false && item.ShowId == objShow.Id).ToList();
                             if (deleteAttendees != null)
