@@ -39,7 +39,7 @@ namespace asi.asicentral.web.Controllers.Show
             objAttendee.IsSponsor = Convert.ToBoolean(ds.Rows[rowId]["Sponsor"].ToString().Contains('X')) ? true : false;
             objAttendee.IsPresentation = Convert.ToBoolean(ds.Rows[rowId]["Presentation"].ToString().Contains('X')) ? true : false;
             objAttendee.IsRoundTable = Convert.ToBoolean(ds.Rows[rowId]["Roundtable"].ToString().Contains('X')) ? true : false;
-            objAttendee.IsExhibitDay = Convert.ToBoolean(ds.Rows[rowId]["Exhibit Only"].ToString().Contains('X')) ? true : false;
+            objAttendee.IsExhibitDay = Convert.ToBoolean(ds.Rows[rowId]["ExhibitOnly"].ToString().Contains('X')) ? true : false;
             objAttendee.IsExisting = true;
             objAttendee.UpdateSource = "ExcelUploadcontroller-Index";
             objAttendee = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, objAttendee);
@@ -67,6 +67,13 @@ namespace asi.asicentral.web.Controllers.Show
         public ShowEmployee ConvertDataAsShowEmployee(DataTable ds, int objCompanyId, int rowId)
         {
             var objEmployee = new ShowEmployee();
+            var firstName = ds.Rows[rowId]["FirstName"].ToString();
+            var lastName = ds.Rows[rowId]["LastName"].ToString();
+            ShowEmployee employee = ObjectService.GetAll<ShowEmployee>().FirstOrDefault(item => (item.FirstName == firstName && item.LastName == lastName && item.CompanyId == objCompanyId));
+            if (employee != null)
+            {
+                objEmployee.Id = employee.Id;
+            }
             objEmployee.CompanyId = objCompanyId;
             objEmployee.FirstName = ds.Rows[rowId]["FirstName"].ToString();
             objEmployee.LastName = ds.Rows[rowId]["LastName"].ToString();
@@ -222,16 +229,32 @@ namespace asi.asicentral.web.Controllers.Show
                                 if (objCompany.MemberType == "Distributor")
                                 {
                                     ShowEmployee objEmployee = ConvertDataAsShowEmployee(excelDataTable, objCompany.Id, i);
-                                    ShowEmployeeAttendee objEmployeeAttendee = ConvertDataAsShowEmployeeAttendee(excelDataTable,objCompany.Id, objShowAttendee.Id, objEmployee.Id, i);
+                                    ShowEmployeeAttendee objEmployeeAttendee = ConvertDataAsShowEmployeeAttendee(excelDataTable, objCompany.Id, objShowAttendee.Id, objEmployee.Id, i);
                                 }
                                 ObjectService.SaveChanges();
-                                
+
                             }
                             IList<ShowAttendee> deleteAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.IsExisting == false && item.ShowId == objShow.Id).ToList();
                             if (deleteAttendees != null)
                             {
                                 foreach (var deleteAttendee in deleteAttendees)
                                 {
+                                    IList<ShowEmployeeAttendee> deleteEmployeeAttendees = ObjectService.GetAll<ShowEmployeeAttendee>().Where(item => item.AttendeeId == deleteAttendee.Id).ToList();
+                                    {
+                                        if (deleteEmployeeAttendees != null)
+                                        {
+                                           
+                                            foreach (var deleteEmployeeAttendee in deleteEmployeeAttendees)
+                                            {
+                                                ObjectService.Delete<ShowEmployeeAttendee>(deleteEmployeeAttendee);
+                                                ShowEmployee deleteEmployee = ObjectService.GetAll<ShowEmployee>().SingleOrDefault(item => item.Id == deleteEmployeeAttendee.EmployeeId);
+                                                if (deleteEmployee != null)
+                                                {
+                                                    ObjectService.Delete<ShowEmployee>(deleteEmployee);
+                                                }
+                                            }
+                                        }
+                                    }
                                     ObjectService.Delete<ShowAttendee>(deleteAttendee);
                                 }
                                 ObjectService.SaveChanges();
@@ -250,7 +273,7 @@ namespace asi.asicentral.web.Controllers.Show
                                     objexistingAttendee.IsRoundTable = existingAttendee.IsRoundTable;
                                     objexistingAttendee.IsExhibitDay = existingAttendee.IsExhibitDay;
                                     objexistingAttendee.IsPresentation = existingAttendee.IsPresentation;
-                                    objexistingAttendee.IsExhibitDay = false;
+                                    objexistingAttendee.IsExisting = false;
                                     objexistingAttendee = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, objexistingAttendee);
                                     ObjectService.SaveChanges();
                                 }
