@@ -224,6 +224,27 @@ namespace asi.asicentral.util.show
             return showEmployeeAttendee;
         }
 
-       
+        public static ShowEmployeeAttendee CreateOrUpdateEmployeeAttendee(IObjectService objectService, ShowEmployeeAttendee objEmployeeAttendee)
+        {
+            if (objEmployeeAttendee == null) return null;
+            ShowEmployeeAttendee employeeAttendee = null;
+            if (objEmployeeAttendee.Id == 0)
+            {
+                employeeAttendee = new ShowEmployeeAttendee()
+                {
+                    CreateDate = DateTime.UtcNow,
+                };
+                objectService.Add<ShowEmployeeAttendee>(employeeAttendee);
+            }
+            else
+            {
+                employeeAttendee = objectService.GetAll<ShowEmployeeAttendee>().Where(ctxt => ctxt.Id == objEmployeeAttendee.Id).SingleOrDefault();
+            }
+            employeeAttendee.Employee = objEmployeeAttendee.Employee;
+            employeeAttendee.AttendeeId = objEmployeeAttendee.AttendeeId;
+            employeeAttendee.UpdateDate = DateTime.UtcNow;
+            employeeAttendee.UpdateSource = objEmployeeAttendee.UpdateSource;
+            return employeeAttendee;
+        }
     }
 }
