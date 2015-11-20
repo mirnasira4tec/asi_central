@@ -35,22 +35,25 @@
     </ul>
     <div class="tab-content" id="formtab-content">
         <div class="tab-pane @(Model.ShowTab == ShowModel.TAB_SHOWTYPE ? "active" : string.Empty)" id="@ShowModel.TAB_SHOWTYPE">
-            <div class="well">
-                @using (Html.BeginForm("ShowList", "/Show/ShowList", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @ShowModel.TAB_SHOWTYPE }))
+            <div class="well clearfix">
+                
+                @using (Html.BeginForm("ShowList", "/Show/ShowList", FormMethod.Get, new { @class = "form-inline clearfix", @id = "form-" + @ShowModel.TAB_SHOWTYPE }))
                 {                
-                    <div class="formField span5">
+                  
+                    <div class="span1 formField pull-left"><a href="/Show/AddShow" class="btn btn-red">Add </a></div><div class="formField span1 pull-right">
+                        <input type="hidden" value="@ShowModel.TAB_SHOWTYPE" name="showTab" /><input type="submit" value="Search" class="btn" />
+                    </div>
+<div class="formField span4 pull-right">
                         <label for="showType">Show Type</label>
                         @Html.DropDownListFor(model => model.ShowTypeId, Model.ShowType, "Select", new { name = "ShowTypeId", value = "@Model.ShowTypeId" })
                     </div>
                     
-                    <div class="formField span4">
+                    <div class="formField span4 pull-right">
                         <label for="year">Year</label>
                         <input name="year" type="text" id="year" value="@Model.year" />
                     </div>
                 
-                    <div class="formField">
-                        <input type="hidden" value="@ShowModel.TAB_SHOWTYPE" name="showTab" /><input type="submit" value="Search" class="btn" />
-                    </div>
+                    
                 }
             </div>
         </div>
@@ -59,14 +62,12 @@
 </div>
 @using (Html.BeginForm())
 {
-    <a href="/Show/AddShow" class="btn btn-primary">Add </a>
     <a href="#ImportExcel" class="modal-link" data-toggle="modal">
     <img src="/images/upload.png" title="Excel Import" /></a>
-    <br />
-    <br />
     <table class="table table-bordered table-condensed table-striped">
         <thead>
             <tr>
+                <th>&nbsp;</th>
                 <th>&nbsp;</th>
                 <th>Name</th>
                 <th>Type</th>
@@ -78,10 +79,10 @@
         <tbody>
             @foreach (var show in Model.Show)
             {  <tr>
-                <td><a class="delete" id="@show.Id" href="/Show/Delete?id=@show.Id"><i class="icon-trash"></i></a>
-                    <a rel="tooltip" data-placement="right" class="icon-pencil" href="@Url.Action("Edit", "Show", new { Id = @show.Id })"></a>
+                <td><a class="delete" id="@show.Id" href="/Show/Delete?id=@show.Id"><i class="icon-trash"></i></a></td>
+                 <td>   <a rel="tooltip" data-placement="right" class="icon-pencil" href="@Url.Action("Edit", "Show", new { Id = @show.Id })"></a>
                 </td>
-                <td><a href="/ShowCompany/GetAttendeeCompany?showId=@show.Id">@show.Name</a></td>
+                <td><a class="red" href="/ShowCompany/GetAttendeeCompany?showId=@show.Id">@show.Name</a></td>
                 <td>
                     @show.ShowType.Type
                 </td>
