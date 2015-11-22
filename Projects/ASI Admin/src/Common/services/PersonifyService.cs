@@ -82,21 +82,30 @@ namespace asi.asicentral.services
                     bool firstmonthFree = false;
                     var coupon = orderDetail.Coupon;
                     bool couponError = false;
+                    coupon.CouponCode = coupon.CouponCode.Trim();
 
                     if( coupon != null && !string.IsNullOrEmpty(coupon.CouponCode) && coupon.CouponCode != "(Unknown)")
                     {
-                        mapping = mappings.FirstOrDefault(m => m.StoreOption == coupon.CouponCode);
-                        firstmonthFree = mapping != null;
+                        mapping = mappings.FirstOrDefault(m => !string.IsNullOrEmpty(m.StoreOption) && m.StoreOption.Trim() == coupon.CouponCode);
 
                         var context = storeService.GetAll<Context>(true).FirstOrDefault(p => p.Id == order.ContextId);
                         var contextProduct = context != null ? context.Products.FirstOrDefault(p => p.Product.Id == orderDetail.Product.Id) : null;
 
                         if (contextProduct != null && coupon.IsFixedAmount)
                         {
-                            waiveAppFee = !firstmonthFree && coupon.DiscountAmount >= contextProduct.ApplicationCost ||
-                                          firstmonthFree && coupon.DiscountAmount >= contextProduct.ApplicationCost + contextProduct.Cost;
+                            if (coupon.DiscountAmount == contextProduct.Cost)
+                            {
+                                firstmonthFree = true;
+                            }
+                            else
+                            {
+                                waiveAppFee = coupon.DiscountAmount >= contextProduct.ApplicationCost;
+                                firstmonthFree = !waiveAppFee && coupon.DiscountAmount >= contextProduct.Cost ||
+                                                  waiveAppFee && coupon.DiscountAmount >= contextProduct.ApplicationCost + contextProduct.Cost;
+                            }
 
                             couponError = coupon.DiscountAmount != contextProduct.ApplicationCost &&
+                                          coupon.DiscountAmount != contextProduct.Cost &&
                                           coupon.DiscountAmount != contextProduct.ApplicationCost + contextProduct.Cost;
                         }
                         else
