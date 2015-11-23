@@ -7,7 +7,7 @@
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
-    <p class="navigate-back"><a href="/ShowCompany/CompanyList">Back to Company list</a></p>
+    <p class="navigate-back"><a class="red" href="/ShowCompany/CompanyList"><i class="icon-backward"></i> Back to Company list</a></p>
     <div id="tabbasic" class="basic-information tab-pane fade in active">
         <fieldset class="company-info-form">
             <legend>@{var headerText = (Model.Id == 0 ? "Add Company" : "Update Company");}@headerText </legend>
@@ -95,8 +95,8 @@
         <nav>
             <p class="next-step-button">
                 @{var submitText = (Model.Id == 0 ? "Add" : "Save");}
-                <input type="submit" class="command btn btn-primary" value="@submitText"/>
-                <a href="/ShowCompany/CompanyList">Cancel</a>
+                <input type="submit" class="command btn btn-red" value="@submitText"/>
+                <a class="red" href="/ShowCompany/CompanyList">Cancel</a>
         </nav>
     </footer>
 }

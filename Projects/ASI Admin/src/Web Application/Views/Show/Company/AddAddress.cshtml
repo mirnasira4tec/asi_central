@@ -10,15 +10,15 @@
 
 @using (Html.BeginForm("AddAddress", "ShowCompany", FormMethod.Post, new { id = "AddAddress-form", @class = "form-horizontal" }))
 {
-    <p class="navigate-back"><a href="/ShowCompany/List?id= @Model.CompanyId">Back to Address list</a></p>
+    <p class="navigate-back"><a href="/ShowCompany/List?id= @Model.CompanyId"><i class="icon-backward"></i> Back to Address list</a></p>
     <div id="tabbasic">@Html.Partial("../Show/Shared/Address", Model)</div>
     
 
     <footer id="page-completion-navigation">
         <nav>
             <p class="next-step-button">
-                <input type="submit" class="command btn btn-primary" value="Save" id="btnSave" />
-            @Html.ActionLink(asi.asicentral.Resources.Resource.Cancel, "CompanyList")
+                <input type="submit" class="command btn btn-red" value="Save" id="btnSave" />
+                 <a class="red" href="/ShowCompany/CompanyList">Cancel</a>
         </nav>
     </footer>
 }

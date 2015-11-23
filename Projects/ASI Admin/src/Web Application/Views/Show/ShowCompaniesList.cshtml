@@ -5,17 +5,20 @@
     Layout = "~/Views/Show/Shared/_Layout.cshtml";
 }
 <h1>Company Attendee List</h1>
-<div class="pull-right"><a href="/showCompany/AddCompaniesToShow?showId=@Model.ShowId" class="btn btn-primary"> Add Attendees </a> <a href="/Show/ShowList" class="btn"> Cancel </a> </div>
- <br />
- <br />
-@if (Model.Show != null)
-{
-    <h2>@Model.Show.Name (@Model.Show.StartDate.ToString("MMM") @Model.Show.StartDate.Day.ToString() - @Model.Show.EndDate.ToString("MMM") @Model.Show.EndDate.Day.ToString()) </h2>
-}
+<div>
+    @if (Model.Show != null)
+    {
+        <h2 class="pull-left">@Model.Show.Name (@Model.Show.StartDate.ToString("MMM") @Model.Show.StartDate.Day.ToString() - @Model.Show.EndDate.ToString("MMM") @Model.Show.EndDate.Day.ToString()) </h2>
+    }
+    <span class="pull-right"><a href="/showCompany/AddCompaniesToShow?showId=@Model.ShowId" class="btn btn-red">Add Attendees </a>  <a href="/Show/ShowList"> Cancel </a></span>
+</div>
+<br />
+<br />
+
 <table class="table table-bordered table-condensed table-striped">
     <thead>
         <tr>
-             <th>&nbsp;</th>
+            <th>&nbsp;</th>
             <th>ASI#</th>
             <th>Company Name</th>
             <th>Member Type</th>
@@ -32,49 +35,56 @@
             <tr>
                 <td><a class="delete" id="@showAttendee.Id" href="/ShowCompany/DeleteAttendeeCompany?id=@showAttendee.Id&showId=@Model.Show.Id"><i class="icon-trash"></i></a></td>
                 <td>@showAttendee.Company.ASINumber</td>
-                <td><a href="/ShowCompany/GetCompanyDetailsForShow?companyId=@showAttendee.Company.Id&showId=@(Model.Show != null ? Model.Show.Id : 0)">@showAttendee.Company.Name</a></td>
+                <td><a class="red" href="/ShowCompany/GetCompanyDetailsForShow?companyId=@showAttendee.Company.Id&showId=@(Model.Show != null ? Model.Show.Id : 0)">@showAttendee.Company.Name</a></td>
                 <td>@showAttendee.Company.MemberType</td>
                 <td>
                     @if (showAttendee.IsSponsor)
                     {
-                        <a class="icon-ok" />
+                        <a class=" buttonHolder button tick"></a>
                     }
                     else
-                    {
-                        <a class="icon-remove" />
+                    {  <a class="buttonHolder button cross"></a>
                     }
                 </td>
                 <td>
                     @if (showAttendee.IsExhibitDay)
                     {
-                        <a class="icon-ok" />
+                        <a class=" buttonHolder button tick"></a>
                     }
                     else
                     {
-                        <a class="icon-remove" />
+                        <a class="buttonHolder button cross"></a>
                     }
                 </td>
-                 <td>
+                <td>
                     @if (showAttendee.IsPresentation)
                     {
-                        <a class="icon-ok" />
+                        <a class=" buttonHolder button tick"></a>
                     }
                     else
                     {
-                        <a class="icon-remove" />
+                        <a class="buttonHolder button cross"></a>
                     }
                 </td>
-                 <td>
+                <td>
                     @if (showAttendee.IsRoundTable)
                     {
-                        <a class="icon-ok" />
+                        <a class=" buttonHolder button tick"></a>
                     }
                     else
                     {
-                        <a class="icon-remove" />
+                        <a class="buttonHolder button cross"></a>
                     }
                 </td>
                 <td>@showAttendee.BoothNumber</td>
+            </tr>
+        }
+        @if (Model.TotalRecordCount > 20)
+        {
+            <tr>
+                <td class="pager" colspan="9">
+                    @Html.Partial("../Show/Shared/_Pager", Model)
+                </td>
             </tr>
         }
     </tbody>
