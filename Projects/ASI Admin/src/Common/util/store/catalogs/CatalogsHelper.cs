@@ -118,7 +118,6 @@ namespace asi.asicentral.util.store
                             switch (productId)
                             {
                                 case 36:
-
                                 case 37:
                                 case 38:
                                 case 111:
