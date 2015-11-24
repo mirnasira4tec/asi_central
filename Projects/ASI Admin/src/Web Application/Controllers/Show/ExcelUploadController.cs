@@ -247,7 +247,7 @@ namespace asi.asicentral.web.Controllers.Show
                                             foreach (var deleteEmployeeAttendee in deleteEmployeeAttendees)
                                             {
                                                 ObjectService.Delete<ShowEmployeeAttendee>(deleteEmployeeAttendee);
-                                                ShowEmployee deleteEmployee = ObjectService.GetAll<ShowEmployee>().SingleOrDefault(item => item.Id == deleteEmployeeAttendee.EmployeeId);
+                                                ShowEmployee deleteEmployee = ObjectService.GetAll<ShowEmployee>().SingleOrDefault(item => item.Id == deleteEmployeeAttendee.Id);
                                                 if (deleteEmployee != null)
                                                 {
                                                     ObjectService.Delete<ShowEmployee>(deleteEmployee);
