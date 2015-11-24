@@ -117,14 +117,14 @@ namespace asi.asicentral.util.store
                         case 2:
                             switch (productId)
                             {
-                                case 35:
+                                case 36:
                                 case 37:
                                 case 38:
                                 case 111:
                                     if (CATALOG_AREA_PRODUCT_35_37_38.Contains(option.Id))
                                         selectedItems.Add(new SelectListItem() { Text = option.Name, Value = option.Id.ToString(), Selected = false });
                                     break;
-                                case 36:
+                                case 35:
                                 case 39:
                                 case 40:
                                 case 82:
