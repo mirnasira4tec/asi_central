@@ -82,10 +82,10 @@ namespace asi.asicentral.services
                     bool firstmonthFree = false;
                     var coupon = orderDetail.Coupon;
                     bool couponError = false;
-                    coupon.CouponCode = coupon.CouponCode.Trim();
 
                     if( coupon != null && !string.IsNullOrEmpty(coupon.CouponCode) && coupon.CouponCode != "(Unknown)")
                     {
+                        coupon.CouponCode = coupon.CouponCode.Trim();
                         mapping = mappings.FirstOrDefault(m => !string.IsNullOrEmpty(m.StoreOption) && m.StoreOption.Trim() == coupon.CouponCode);
 
                         var context = storeService.GetAll<Context>(true).FirstOrDefault(p => p.Id == order.ContextId);
