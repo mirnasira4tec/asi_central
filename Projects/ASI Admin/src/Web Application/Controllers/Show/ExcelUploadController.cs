@@ -51,7 +51,7 @@ namespace asi.asicentral.web.Controllers.Show
             var objEmployeeAttendee = new ShowEmployeeAttendee();
             ShowAttendee objAttendee = ObjectService.GetAll<ShowAttendee>().FirstOrDefault(item => item.Id == objAttendeeId);
             ShowEmployee objEmployee = ObjectService.GetAll<ShowEmployee>().FirstOrDefault(item => item.Id == objEmployeeId);
-            ShowEmployeeAttendee employeeAttendee = ObjectService.GetAll<ShowEmployeeAttendee>().FirstOrDefault(item => item.AttendeeId == objAttendeeId && item.Employee.Id == objEmployeeId);
+            ShowEmployeeAttendee employeeAttendee = ObjectService.GetAll<ShowEmployeeAttendee>().FirstOrDefault(item => item.AttendeeId == objAttendeeId && item.EmployeeId == objEmployeeId);
             if (employeeAttendee != null)
             {
                 objEmployeeAttendee.Id = employeeAttendee.Id;
