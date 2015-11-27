@@ -1,9 +1,6 @@
 -- 
--- Delete column in `ATT_Attendee`
+-- Allowing null for Email in ATT_Employee
 --
-ALTER TABLE [dbo].[ATT_Attendee] 
-DROP CONSTRAINT DF__ATT_Atten__IsAtt__65370702
-
-ALTER TABLE [dbo].[ATT_Attendee]
-DROP COLUMN IsAttending
+ALTER TABLE [dbo].[ATT_Employee] 
+ALTER COLUMN Email nvarchar(50) null
 Go
