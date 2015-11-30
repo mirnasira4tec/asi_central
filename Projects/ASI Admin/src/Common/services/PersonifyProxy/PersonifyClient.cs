@@ -1099,7 +1099,7 @@ namespace asi.asicentral.services.PersonifyProxy
                         {
                             customerInfo = GetIndividualInfo(customerInfoOutput.MasterCustomerId);
                             if (customerInfo != null)
-                                AddRelationship(customerInfo.MasterCustomerId, customerInfo.SubCustomerId, companyMasterId, companySubId);
+                                AddRelationship(customerInfo.MasterCustomerId, customerInfo.SubCustomerId, companyMasterId, companySubId, true);
                         }
                     }
                     else
@@ -1114,12 +1114,13 @@ namespace asi.asicentral.services.PersonifyProxy
             return allCustomers;
         }
 
-        private static void AddRelationship(string contactMasterId, int contactSubId, string companyMasterId, int companySubId)
+        private static void AddRelationship(string contactMasterId, int contactSubId, string companyMasterId, int companySubId, bool newContact = false)
         {
             if ( string.IsNullOrEmpty(contactMasterId) || string.IsNullOrEmpty(companyMasterId))
             {
                 throw new Exception("To add a relation between individual and company, information from both sides is required");
             }
+
             var cusRelationship = SvcClient.Create<CusRelationship>();
             cusRelationship.AddedBy = ADDED_OR_MODIFIED_BY;
             //Provide values and Save
@@ -1128,6 +1129,7 @@ namespace asi.asicentral.services.PersonifyProxy
 
             cusRelationship.RelationshipType = "EMPLOYMENT";
             cusRelationship.RelationshipCode = "Employee";
+            cusRelationship.PrimaryEmployerFlag = newContact;
 
             cusRelationship.RelatedMasterCustomerId = companyMasterId;
             cusRelationship.RelatedSubCustomerId = companySubId;
