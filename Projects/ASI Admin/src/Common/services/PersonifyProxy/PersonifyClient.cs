@@ -1121,18 +1121,6 @@ namespace asi.asicentral.services.PersonifyProxy
                 throw new Exception("To add a relation between individual and company, information from both sides is required");
             }
 
-            var isPrimary = false;
-
-            // new contact, check if the company is already the primary employer
-            if (newContact)
-            {
-                var primaryEmployer = SvcClient.Ctxt.CusRelationships.Where(c => c.RelatedMasterCustomerId == companyMasterId &&
-                                                                                 c.RelatedSubCustomerId == companySubId &&
-                                                                                 c.PrimaryEmployerFlag.Value == true).ToList();
-
-                isPrimary = primaryEmployer.Count < 1;
-            }
-
             var cusRelationship = SvcClient.Create<CusRelationship>();
             cusRelationship.AddedBy = ADDED_OR_MODIFIED_BY;
             //Provide values and Save
@@ -1141,7 +1129,7 @@ namespace asi.asicentral.services.PersonifyProxy
 
             cusRelationship.RelationshipType = "EMPLOYMENT";
             cusRelationship.RelationshipCode = "Employee";
-            cusRelationship.PrimaryEmployerFlag = isPrimary;
+            cusRelationship.PrimaryEmployerFlag = newContact;
 
             cusRelationship.RelatedMasterCustomerId = companyMasterId;
             cusRelationship.RelatedSubCustomerId = companySubId;
