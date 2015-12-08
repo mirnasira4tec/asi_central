@@ -9,6 +9,7 @@ using asi.asicentral.services.PersonifyProxy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace asi.asicentral.services
 {
@@ -117,10 +118,9 @@ namespace asi.asicentral.services
                         mapping = mappings.FirstOrDefault(m => string.IsNullOrEmpty(m.StoreOption));
                     }
 
-                    PersonifyClient.CreateBundleOrder(order, mapping, companyInfo, contactMasterId, contactSubId, 
-                                                      billToAddr, shipToAddr, waiveAppFee, firstmonthFree);
+                    PersonifyClient.CreateBundleOrder(order, mapping, companyInfo, contactMasterId, contactSubId, billToAddr, shipToAddr);
 
-                    ValidateOrderTotal(order, emailService, url, true, firstmonthFree);
+                    Task.Factory.StartNew(() => PostCreateBundleOrder(order, emailService, url, mapping, companyInfo, billToAddr, waiveAppFee, firstmonthFree));
 
                     // update company ASI#, to be included in the internal email
                     var asiNumber = PersonifyClient.GetCompanyAsiNumber(companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
@@ -198,6 +198,41 @@ namespace asi.asicentral.services
                     EmailBody = error1 + "<br /><br />" + error2 + EmailData.GetMessageSuffix(url)
                 };
                 data.SendEmail(emailService);
+                throw ex;
+            }
+        }
+
+        protected void PostCreateBundleOrder(StoreOrder storeOrder, IEmailService emailService, string url, PersonifyMapping mapping, 
+                                            CompanyInformation companyInfo, AddressInfo billToAddress, bool waiveAppFee, bool firstMonthFree)
+        {
+            if (storeOrder == null || mapping == null || companyInfo == null || billToAddress == null)
+            {
+                throw new Exception("Error post processing personify bunddle order, one of the parameters is null!");
+            }
+
+            try
+            {
+                PersonifyClient.PostCreateBundleOrder(storeOrder, mapping, companyInfo, billToAddress, waiveAppFee, firstMonthFree);
+                ValidateOrderTotal(storeOrder, emailService, url, true, firstMonthFree);
+            }
+            catch (Exception ex)
+            {
+                var error = string.Format("Unknown Error while post processing personify bundle order # {0}, store order # {1}: {2}{3}", 
+                                           storeOrder.BackendReference, storeOrder.Id, ex.Message, ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    error = string.Format("Unknown Error while post processing personify bundle order: {0}{1}\n{2}",
+                        ex.InnerException.Message, ex.InnerException.StackTrace, error);
+                }
+                log.Error(error);
+                var data = new EmailData()
+                {
+                    Subject = "Error while post processing personify bundle order " + storeOrder.BackendReference,
+                    EmailBody = error + EmailData.GetMessageSuffix(url)
+                };
+
+                data.SendEmail(emailService);
+
                 throw ex;
             }
         }
