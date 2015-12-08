@@ -110,7 +110,7 @@ namespace asi.asicentral.services
             }
             catch(Exception ex)
             {
-                throw new Exception("Error occurred during sending Email");
+                throw new Exception("Error occurred during sending Email : " + ex.Message);
             }
             
         }
