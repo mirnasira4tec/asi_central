@@ -1173,7 +1173,7 @@ namespace asi.asicentral.services.PersonifyProxy
 		    string masterCustomerId = string.Empty;
 		    int subCustomerId = 0;
 
-			if (!string.IsNullOrEmpty(company.ExternalReference))
+			if ( company.HasExternalReference())
 			{
 				string[] references = company.ExternalReference.Split(';');
 				subCustomerId = Int32.Parse(references[1]);
