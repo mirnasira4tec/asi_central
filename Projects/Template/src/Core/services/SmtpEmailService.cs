@@ -9,6 +9,7 @@ using System.Net.Mail;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
@@ -102,7 +103,16 @@ namespace asi.asicentral.services
                 SmtpServer.Credentials = new System.Net.NetworkCredential(username, password);
             }
             if (mail.From == null) mail.From = new MailAddress(from);
-            SmtpServer.Send(mail);
+
+            try
+            {
+                new Thread(() => SmtpServer.Send(mail)).Start();
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Error occurred during sending Email : " + ex.Message);
+            }
+            
         }
     }
 }
