@@ -4,11 +4,15 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net;
+using System.Net.Configuration;
 using System.Net.Mail;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
+using System.Web.Configuration;
 
 namespace asi.asicentral.services
 {
@@ -18,6 +22,8 @@ namespace asi.asicentral.services
         private int port = 25;
         private string smtpAddress = null;
         private string from = null;
+        private string username = null;
+        private string password = null;
 
         public SmtpEmailService()
         {
@@ -47,6 +53,21 @@ namespace asi.asicentral.services
 
         public virtual void SendMail(MailMessage mail)
         {
+            if (HttpContext.Current != null && (string.IsNullOrEmpty(smtpAddress) || string.IsNullOrEmpty(from)))
+            {
+                var config = WebConfigurationManager.OpenWebConfiguration(HttpContext.Current.Request.ApplicationPath);
+                var settings = (MailSettingsSectionGroup)config.GetSectionGroup("system.net/mailSettings");
+                if (settings != null && settings.Smtp != null && settings.Smtp.Network != null)
+                {
+                    smtpAddress = settings.Smtp.Network.Host;
+                    port = settings.Smtp.Network.Port;
+                    from = settings.Smtp.From;
+                    username = settings.Smtp.Network.UserName;
+                    password = settings.Smtp.Network.Password;
+                }
+            }
+
+            //load from individual app settings if address is not set in mail settings
             if (string.IsNullOrEmpty(smtpAddress) || string.IsNullOrEmpty(from))
             {
                 if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["SmtpServer"]))
@@ -68,16 +89,30 @@ namespace asi.asicentral.services
                     throw new Exception("The SmtpEmailService was not initialized properly");
                 }
             }
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                username = ConfigurationManager.AppSettings["smtpUserName"];
+                password = ConfigurationManager.AppSettings["smtpPassword"];
+            }
             
             SmtpClient SmtpServer = new SmtpClient(smtpAddress);
             SmtpServer.Port = port;
             SmtpServer.EnableSsl = ssl;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["smtpUserName"]) && !string.IsNullOrEmpty(ConfigurationManager.AppSettings["smtpPassword"]))
+            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
-                SmtpServer.Credentials = new System.Net.NetworkCredential(ConfigurationManager.AppSettings["smtpUserName"], ConfigurationManager.AppSettings["smtpPassword"]);
+                SmtpServer.Credentials = new System.Net.NetworkCredential(username, password);
             }
             if (mail.From == null) mail.From = new MailAddress(from);
-            SmtpServer.Send(mail);
+
+            try
+            {
+                new Thread(() => SmtpServer.Send(mail)).Start();
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Error occurred during sending Email : " + ex.Message);
+            }
+            
         }
     }
 }
