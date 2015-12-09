@@ -148,14 +148,13 @@
                             <input type="hidden" name="Form.Values[@count].Name" value="DPOR" />
 							<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 							<strong>OR</strong>
-						</label>.............	  
-							Graphics Central
+						</label>
                         @{count++;}
 						<label class="checkbox">
                             <input type="hidden" name="Form.Values[@count].Name" value="DPCH" />
 							<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
 							<strong>CH</strong>
-						</label>
+						</label> )
 					</strong></div>
 				</td>
 			</tr>
