@@ -200,12 +200,19 @@ namespace asi.asicentral.web.Controllers.Show
                 int addressCount = company.CompanyAddresses.Count();
                 int employeeCount = company.Employees.Count();
                 int companyAttendeeCount = company.Attendees.Count();
+                 
                 for (int i = addressCount; i > 0; i--)
                 {
                     ObjectService.Delete(company.CompanyAddresses.ElementAt(i - 1));
                 }
                 for (int i = employeeCount; i > 0; i--)
                 {
+                    var employeeId= company.Employees.ElementAt(i - 1).Id;
+                    ShowEmployeeAttendee employeeAttendee = ObjectService.GetAll<ShowEmployeeAttendee>().FirstOrDefault(item => item.EmployeeId == employeeId);
+                    if (employeeAttendee != null)
+                    {
+                        ObjectService.Delete<ShowEmployeeAttendee>(employeeAttendee);
+                    }
                     ObjectService.Delete(company.Employees.ElementAt(i - 1));
                 }
                 for (int i = companyAttendeeCount; i > 0; i--)
