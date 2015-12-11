@@ -8,7 +8,7 @@ namespace asi.asicentral.database.mappings.timss
     {
         public PersonifyMappingMap()
         {
-            this.ToTable("PERS_PRODUCT_MAPPING");
+            this.ToTable("PERS_PRODUCT_MAPPING_STORE");
             this.HasKey(t => new { t.Identifier });
             this.Ignore(t => t.ItemCount);
             this.Ignore(t => t.Quantity);
