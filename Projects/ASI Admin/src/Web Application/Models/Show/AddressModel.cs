@@ -30,27 +30,29 @@ namespace asi.asicentral.web.models.show
 
         [Display(ResourceType = typeof(Resource), Name = "City")]
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
-        [StringLength(75, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
+        [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string City { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "State")]
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
-        [StringLength(40, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
+        [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string State { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "InternationalState")]
-        [StringLength(40, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
+        [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string InternationalState { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "Zip")]
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
-        [StringLength(15, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
+        [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength50")]
         public string Zip { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "Country")]
+        [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string Country { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "Phone")]
+        [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength50")]
         [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidPhoneNumber", ErrorMessageResourceType = typeof(Resource))]
         public string Phone { get; set; }
 

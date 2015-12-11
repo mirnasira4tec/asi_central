@@ -33,23 +33,29 @@
             <legend>Catalogs Information</legend>	
             @if (Model.StoreDetailCatalog != null)
             {
-            <span class="row">@Html.Raw("<strong>Basic Information</strong>")</span>
+            <span class="label-row">@Html.Raw("<strong>Basic Information</strong>")</span>
             <span class="label-row span11">
 				@Html.LabelFor(m => m.Quantity) 
 			</span>
 			<span class="label-row">
 				@Html.EditorFor(m => m.Quantity) @Html.ValidationMessageFor(m => m.Quantity)
 		    </span>
-            <span class="row">@Html.Raw("<strong>Options Information</strong>")</span>
+            <span class="label-row">@Html.Raw("<strong>Options Information</strong>")</span>
             <span class="label-row span11">
                 @Html.LabelFor(m => m.Cover)
-				@Html.LabelFor(m => m.Area) 
+				@Html.LabelFor(m => m.Area)
+                @if(Model.ProductId != 111)
+                { 
                 @Html.LabelFor(m => m.Color) 
+                }
 			</span>
 			<span class="label-row">
                 @Html.DropDownListFor(model => model.Cover, Model.CoverOptions)
                 @Html.DropDownListFor(model => model.Area, Model.AreaOptions) 
+                @if(Model.ProductId != 111)
+                {
                 @Html.DropDownListFor(model => model.Color, Model.ColorOptions)
+                }
 			</span>
              <span class="label-row span11">
 				@Html.LabelFor(m => m.Imprint) 
@@ -86,8 +92,8 @@
 	        </div>
             if(!string.IsNullOrEmpty(Model.LogoPath))
             {
-            <span class="row">@Html.Raw("<strong>Logo Information</strong>")</span>
-             <span class="label-row span11">
+            <span class="label-row ">@Html.Raw("<strong>Logo Information</strong>")</span>
+            <span class="label-row span11">
                 @Html.LabelFor(m => m.LogoPath) 
 			</span>
 			<span class="label-row">
@@ -95,7 +101,7 @@
 			</span>
             }
             <div id="frontCover">
-            <span class="row">@Html.Raw("<strong>New Copy - Standard Type</strong>")</span>
+            <span class="label-row ">@Html.Raw("<strong>New Copy - Standard Type</strong>")</span>
                 <span class="label-row span11">
 				    @Html.LabelFor(m => m.Line1) 
 				    @Html.LabelFor(m => m.Line2) 
@@ -115,6 +121,14 @@
 				    @Html.EditorFor(m => m.Line4) @Html.ValidationMessageFor(m => m.Line4)
 				    @Html.EditorFor(m => m.Line5) @Html.ValidationMessageFor(m => m.Line5)
 				    @Html.EditorFor(m => m.Line6) @Html.ValidationMessageFor(m => m.Line6)
+			    </span>
+                <span class="label-row span11">
+				    @Html.LabelFor(m => m.BillingWebUrl) 
+				    @Html.LabelFor(m => m.CompanyEmail) 
+			    </span>
+			    <span class="label-row">
+				    @Html.TextBoxFor(m => m.BillingWebUrl, new { id= "webAddress", disabled= "disabled" } ) @Html.ValidationMessageFor(m => m.BillingWebUrl)
+				    @Html.TextBoxFor(m => m.CompanyEmail, new { id = "catalogEmail", disabled= "disabled" }) @Html.ValidationMessageFor(m => m.CompanyEmail)
 			    </span>
             </div>
             <div id="backCover">

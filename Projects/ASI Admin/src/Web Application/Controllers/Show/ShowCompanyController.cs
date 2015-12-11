@@ -20,38 +20,53 @@ namespace asi.asicentral.web.Controllers.Show
         public IObjectService ObjectService { get; set; }
         IList<string> messages = new List<string>();
 
-        public ActionResult CompanyList(String companyTab, string companyName, string MemberType)
+        public ActionResult CompanyList(String companyTab, string companyName, string MemberType, int page = 1, int pageSize = 20)
         {
             var company = new CompanyModel();
-            IQueryable<ShowCompany> companyList = ObjectService.GetAll<ShowCompany>(true);
+            IList<ShowCompany> companyList = null;
+            company.CurrentPageIndex = page;
+            company.PageSize = pageSize;
+            company.TabCompanyName = companyName;
+            company.TabMemberType = MemberType;
+            var start = DateTime.Now;
+            DateTime end;
+            ILogService log = LogService.GetLog(this.GetType());
+            log.Debug("CompanyList.cshtml - Start");
+            companyList = ObjectService.GetAll<ShowCompany>(true).OrderBy(form => form.Name).ToList();
             if (string.IsNullOrEmpty(companyTab)) companyTab = CompanyModel.TAB_COMPANYNAME;
             if (!string.IsNullOrEmpty(MemberType) && !string.IsNullOrEmpty(companyName))
             {
                 companyList = companyList.Where(item => (item.Name != null
                  && item.Name.Contains(companyName) && item.MemberType != null
-                 && item.MemberType.Contains(MemberType)));
+                 && item.MemberType.Contains(MemberType))).ToList();
             }
 
             else if (!string.IsNullOrEmpty(MemberType))
             {
                 companyList = companyList.Where(item => item.MemberType != null
-                 && item.MemberType.Contains(MemberType));
+                 && item.MemberType.Contains(MemberType)).ToList();
             }
             else if (!string.IsNullOrEmpty(companyName))
             {
                 companyList = companyList.Where(item => item.Name != null
-                 && item.Name.Contains(companyName));
+                 && item.Name.Contains(companyName)).ToList();
             }
-
+            company.TotalRecordCount = companyList.Count();
+            companyList = companyList.Skip((company.CurrentPageIndex - 1) * company.PageSize)
+                                            .Take(company.PageSize).ToList();
             company.CompanyTab = companyTab;
-            company.company = companyList.OrderByDescending(form => form.CreateDate).ToList();
+            company.company = companyList;
+            end = DateTime.Now;
+            log.Debug("CompanyList.cshtml - End " + (end - start));
             return View("../Show/Company/CompanyList", company);
+
         }
+
 
         [HttpGet]
         public virtual ActionResult AddCompany()
         {
-            CompanyModel company = new CompanyModel();
+            var company = new CompanyModel();
             return View("../Show/Company/AddCompany", company);
         }
 
@@ -64,9 +79,9 @@ namespace asi.asicentral.web.Controllers.Show
             {
                 try
                 {
-                    ShowCompany objCompany = new ShowCompany();
-                    ShowAddress objAddress = new ShowAddress();
-                    ShowCompanyAddress objCompanyAddress = new ShowCompanyAddress();
+                    var objCompany = new ShowCompany();
+                    var objAddress = new ShowAddress();
+                    var objCompanyAddress = new ShowCompanyAddress();
                     objCompany.Id = company.Id;
                     objCompany.Name = company.Name;
                     objCompany.WebUrl = company.Url;
@@ -76,10 +91,10 @@ namespace asi.asicentral.web.Controllers.Show
                     objCompany = ShowHelper.CreateOrUpdateCompany(ObjectService, objCompany);
 
                     objAddress.Id = company.AddressId;
-                    objAddress.Phone = company.Phone;
-                    objAddress.PhoneAreaCode = company.PhoneAreaCode;
-                    objAddress.FaxAreaCode = company.FaxAreaCode;
-                    objAddress.Fax = company.Fax;
+                    objAddress.Phone = !String.IsNullOrEmpty(company.Phone) ? company.Phone.Trim() : null;
+                    objAddress.PhoneAreaCode = !String.IsNullOrEmpty(company.PhoneAreaCode) ? company.PhoneAreaCode.Trim() : null;
+                    objAddress.FaxAreaCode = !String.IsNullOrEmpty(company.FaxAreaCode) ? company.FaxAreaCode.Trim() : null;
+                    objAddress.Fax = !String.IsNullOrEmpty(company.Fax) ? company.Fax.Trim() : null;
                     objAddress.Street1 = company.Address1;
                     objAddress.Street2 = company.Address2;
                     objAddress.Zip = company.Zip;
@@ -122,12 +137,12 @@ namespace asi.asicentral.web.Controllers.Show
         [HttpGet]
         public ActionResult EditCompany(int id)
         {
-            CompanyModel company = new CompanyModel();
-            AddressModel address = new AddressModel();
+            var company = new CompanyModel();
+            var address = new AddressModel();
 
             if (id != 0)
             {
-                ShowCompany CompanyModel = ObjectService.GetAll<ShowCompany>().Where(item => item.Id == id).FirstOrDefault();
+                ShowCompany CompanyModel = ObjectService.GetAll<ShowCompany>().FirstOrDefault(item => item.Id == id);
                 if (company != null)
                 {
                     company.Id = id;
@@ -142,17 +157,17 @@ namespace asi.asicentral.web.Controllers.Show
                         company.ASINumber = CompanyModel.ASINumber;
                     }
                     company.Url = CompanyModel.WebUrl;
-                    ShowCompanyAddress companyAddress = ObjectService.GetAll<ShowCompanyAddress>().Where(item => item.CompanyId == id).FirstOrDefault();
+                    ShowCompanyAddress companyAddress = ObjectService.GetAll<ShowCompanyAddress>().FirstOrDefault(item => item.CompanyId == id);
                     if (companyAddress != null)
                     {
-                        ShowAddress addressModel = ObjectService.GetAll<ShowAddress>().Where(item => item.Id == companyAddress.Address.Id).FirstOrDefault();
+                        ShowAddress addressModel = ObjectService.GetAll<ShowAddress>().FirstOrDefault(item => item.Id == companyAddress.Address.Id);
                         if (addressModel != null)
                         {
                             company.AddressId = companyAddress.Address.Id;
-                            company.Phone = addressModel.Phone;
-                            company.PhoneAreaCode = addressModel.PhoneAreaCode.Trim();
-                            company.Fax = addressModel.Fax;
-                            company.FaxAreaCode = addressModel.FaxAreaCode;
+                            company.Phone = !String.IsNullOrEmpty(addressModel.Phone) ? addressModel.Phone.Trim() : null;
+                            company.PhoneAreaCode = !String.IsNullOrEmpty(addressModel.PhoneAreaCode) ? addressModel.PhoneAreaCode.Trim() : null;
+                            company.Fax = !String.IsNullOrEmpty(addressModel.Fax) ? addressModel.Fax.Trim() : null;
+                            company.FaxAreaCode = !String.IsNullOrEmpty(addressModel.FaxAreaCode) ? addressModel.FaxAreaCode.Trim() : null;
                             company.Address1 = addressModel.Street1;
                             company.Address2 = addressModel.Street2;
                             company.Zip = addressModel.Zip;
@@ -179,7 +194,7 @@ namespace asi.asicentral.web.Controllers.Show
 
         public ActionResult Delete(int id)
         {
-            ShowCompany company = ObjectService.GetAll<ShowCompany>().Where(item => item.Id == id).FirstOrDefault();
+            ShowCompany company = ObjectService.GetAll<ShowCompany>().FirstOrDefault(item => item.Id == id);
             if (company != null)
             {
                 int addressCount = company.CompanyAddresses.Count();
@@ -187,15 +202,15 @@ namespace asi.asicentral.web.Controllers.Show
                 int companyAttendeeCount = company.Attendees.Count();
                 for (int i = addressCount; i > 0; i--)
                 {
-                    ObjectService.Delete<ShowCompanyAddress>(company.CompanyAddresses.ElementAt(i - 1));
+                    ObjectService.Delete(company.CompanyAddresses.ElementAt(i - 1));
                 }
                 for (int i = employeeCount; i > 0; i--)
                 {
-                    ObjectService.Delete<ShowEmployee>(company.Employees.ElementAt(i - 1));
+                    ObjectService.Delete(company.Employees.ElementAt(i - 1));
                 }
                 for (int i = companyAttendeeCount; i > 0; i--)
                 {
-                    ObjectService.Delete<ShowAttendee>(company.Attendees.ElementAt(i - 1));
+                    ObjectService.Delete(company.Attendees.ElementAt(i - 1));
                 }
                 ObjectService.Delete<ShowCompany>(company);
                 ObjectService.SaveChanges();
@@ -205,10 +220,10 @@ namespace asi.asicentral.web.Controllers.Show
 
         public ActionResult List(int id)
         {
-            CompanyInformation companyInformation = new CompanyInformation();
+            var companyInformation = new CompanyInformation();
             if (id != 0)
             {
-                ShowCompany company = ObjectService.GetAll<ShowCompany>().Where(item => item.Id == id).FirstOrDefault();
+                ShowCompany company = ObjectService.GetAll<ShowCompany>().FirstOrDefault(item => item.Id == id);
                 companyInformation.Name = company.Name;
                 companyInformation.Id = company.Id;
                 IQueryable<ShowCompanyAddress> companyAddress = ObjectService.GetAll<ShowCompanyAddress>().Where(item => item.CompanyId == id);
@@ -222,40 +237,40 @@ namespace asi.asicentral.web.Controllers.Show
         [HttpGet]
         public ActionResult AddAddress(int companyId)
         {
-            AddressModel Address = new AddressModel();
+            var Address = new AddressModel();
             Address.CompanyId = companyId;
             return View("../Show/Company/AddAddress", Address);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public virtual ActionResult AddAddress(AddressModel Address)
+        public virtual ActionResult AddAddress(AddressModel address)
         {
             try
             {
-                if (Address.IsNonUSAddress)
+                if (address.IsNonUSAddress)
                 {
                     if (ModelState.ContainsKey("State")) ModelState["State"].Errors.Clear();
                 }
                 if (ModelState.IsValid)
                 {
-                    ShowAddress objAddress = new ShowAddress();
-                    ShowCompanyAddress objCompanyAddress = new ShowCompanyAddress();
-                    objAddress.Id = Address.AdreessId;
-                    objAddress.Phone = Address.Phone;
-                    objAddress.PhoneAreaCode = Address.PhoneAreaCode.Trim();
-                    objAddress.FaxAreaCode = Address.FaxAreaCode;
-                    objAddress.Fax = Address.Fax;
-                    objAddress.Street1 = Address.Address1;
-                    objAddress.Street2 = Address.Address2;
-                    objAddress.Zip = Address.Zip;
-                    objAddress.State = Address.IsNonUSAddress ? Address.InternationalState : Address.State;
-                    objAddress.Country = Address.IsNonUSAddress ? Address.Country : "USA";
-                    objAddress.City = Address.City;
+                    var objAddress = new ShowAddress();
+                    var objCompanyAddress = new ShowCompanyAddress();
+                    objAddress.Id = address.AdreessId;
+                    objAddress.Phone = !String.IsNullOrEmpty(address.Phone) ? address.Phone.Trim() : null;
+                    objAddress.PhoneAreaCode = !String.IsNullOrEmpty(address.PhoneAreaCode) ? address.PhoneAreaCode.Trim() : null;
+                    objAddress.FaxAreaCode = !String.IsNullOrEmpty(address.FaxAreaCode) ? address.FaxAreaCode.Trim() : null;
+                    objAddress.Fax = !String.IsNullOrEmpty(address.Fax) ? address.Fax.Trim() : null;
+                    objAddress.Street1 = address.Address1;
+                    objAddress.Street2 = address.Address2;
+                    objAddress.Zip = address.Zip;
+                    objAddress.State = address.IsNonUSAddress ? address.InternationalState : address.State;
+                    objAddress.Country = address.IsNonUSAddress ? address.Country : "USA";
+                    objAddress.City = address.City;
                     objAddress.UpdateSource = "ShowCompanyController - AddAddress";
                     objAddress = ShowHelper.CreateOrUpdateAddress(ObjectService, objAddress);
 
-                    ShowCompanyAddress companyAddress = ObjectService.GetAll<ShowCompanyAddress>().Where(item => item.CompanyId == Address.CompanyId && item.Address.Id == objAddress.Id).FirstOrDefault();
+                    ShowCompanyAddress companyAddress = ObjectService.GetAll<ShowCompanyAddress>().FirstOrDefault(item => item.CompanyId == address.CompanyId && item.Address.Id == objAddress.Id);
                     if (companyAddress != null)
                     {
                         objCompanyAddress.Id = companyAddress.Id;
@@ -266,29 +281,29 @@ namespace asi.asicentral.web.Controllers.Show
                     }
                     else
                     {
-                        objCompanyAddress.CompanyId = Address.CompanyId;
+                        objCompanyAddress.CompanyId = address.CompanyId;
                         objCompanyAddress.Address = objAddress;
                         objCompanyAddress.UpdateSource = "ShowCompanyController - AddAddress";
                         objCompanyAddress = ShowHelper.CreateOrUpdateCompanyAddress(ObjectService, objCompanyAddress);
                     }
                     ObjectService.SaveChanges();
-                    return RedirectToAction("List", "ShowCompany", new { id = Address.CompanyId });
+                    return RedirectToAction("List", "ShowCompany", new { id = address.CompanyId });
                 }
                 else
                 {
-                    return View("../Show/Company/AddAddress", Address);
+                    return View("../Show/Company/AddAddress", address);
                 }
             }
             catch (Exception ex)
             {
                 messages.Add("Error: " + ex.Message);
             }
-            return View("../Show/Company/AddCompany", Address);
+            return View("../Show/Company/AddCompany", address);
         }
 
         public ActionResult DeleteAddress(int id, int companyId)
         {
-            ShowAddress address = ObjectService.GetAll<ShowAddress>().Where(item => item.Id == id).FirstOrDefault();
+            ShowAddress address = ObjectService.GetAll<ShowAddress>().FirstOrDefault(item => item.Id == id);
             IList<ShowCompanyAddress> companyAddress = ObjectService.GetAll<ShowCompanyAddress>().Where(item => item.Address.Id == id).ToList();
             int companyAddressCount = companyAddress.Count();
             if (companyAddressCount > 0)
@@ -339,10 +354,10 @@ namespace asi.asicentral.web.Controllers.Show
                     {
                         objAddress = new ShowAddress();
                         objAddress.Id = employee.AdreessId;
-                        objAddress.Phone = employee.Phone;
-                        objAddress.PhoneAreaCode = employee.PhoneAreaCode;
-                        objAddress.FaxAreaCode = employee.FaxAreaCode;
-                        objAddress.Fax = employee.Fax;
+                        objAddress.Phone = !String.IsNullOrEmpty(employee.Phone) ? employee.Phone.Trim() : null;
+                        objAddress.PhoneAreaCode = !String.IsNullOrEmpty(employee.PhoneAreaCode) ? employee.PhoneAreaCode.Trim() : null;
+                        objAddress.FaxAreaCode = !String.IsNullOrEmpty(employee.FaxAreaCode) ? employee.FaxAreaCode.Trim() : null;
+                        objAddress.Fax = !String.IsNullOrEmpty(employee.Fax) ? employee.Fax.Trim() : null;
                         objAddress.Street1 = employee.Address1;
                         objAddress.Street2 = employee.Address2;
                         objAddress.Zip = employee.Zip;
@@ -352,7 +367,7 @@ namespace asi.asicentral.web.Controllers.Show
                         objAddress.UpdateSource = "ShowCompanyController - Add";
                         objAddress = ShowHelper.CreateOrUpdateAddress(ObjectService, objAddress);
                     }
-                    ShowEmployee objEmployee = new ShowEmployee();
+                    var objEmployee = new ShowEmployee();
                     objEmployee.Id = employee.Id;
                     objEmployee.FirstName = employee.FirstName;
                     objEmployee.LastName = employee.LastName;
@@ -379,10 +394,10 @@ namespace asi.asicentral.web.Controllers.Show
         [HttpGet]
         public ActionResult EditEmployee(int id)
         {
-            CompanyInformation companyInfo = new CompanyInformation();
+            var companyInfo = new CompanyInformation();
             if (id != 0)
             {
-                ShowEmployee employeeModel = ObjectService.GetAll<ShowEmployee>().Where(item => item.Id == id).FirstOrDefault();
+                ShowEmployee employeeModel = ObjectService.GetAll<ShowEmployee>().FirstOrDefault(item => item.Id == id);
                 if (companyInfo != null)
                 {
                     companyInfo.EmployeeId = id;
@@ -396,10 +411,10 @@ namespace asi.asicentral.web.Controllers.Show
                     {
                         companyInfo.IsNonUSAddress = employeeModel.Address.Country != "USA";
                         companyInfo.HasAddress = true;
-                        companyInfo.Phone = employeeModel.Address.Phone;
-                        companyInfo.PhoneAreaCode = employeeModel.Address.PhoneAreaCode;
-                        companyInfo.FaxAreaCode = employeeModel.Address.FaxAreaCode;
-                        companyInfo.Fax = employeeModel.Address.Fax;
+                        companyInfo.Phone = !String.IsNullOrEmpty(employeeModel.Address.Phone) ? employeeModel.Address.Phone.Trim() : null;
+                        companyInfo.PhoneAreaCode = !String.IsNullOrEmpty(employeeModel.Address.PhoneAreaCode) ? employeeModel.Address.PhoneAreaCode.Trim() : null;
+                        companyInfo.FaxAreaCode = !String.IsNullOrEmpty(employeeModel.Address.FaxAreaCode) ? employeeModel.Address.FaxAreaCode.Trim() : null;
+                        companyInfo.Fax = !String.IsNullOrEmpty(employeeModel.Address.Fax) ? employeeModel.Address.Fax.Trim() : null;
                         companyInfo.Address1 = employeeModel.Address.Street1;
                         companyInfo.Address2 = employeeModel.Address.Street2;
                         companyInfo.Zip = employeeModel.Address.Zip;
@@ -424,17 +439,17 @@ namespace asi.asicentral.web.Controllers.Show
         [HttpGet]
         public ActionResult EditAddress(int id, int companyId)
         {
-            AddressModel address = new AddressModel();
+            var address = new AddressModel();
             if (id != 0)
             {
-                ShowAddress addressModel = ObjectService.GetAll<ShowAddress>().Where(item => item.Id == id).FirstOrDefault();
+                ShowAddress addressModel = ObjectService.GetAll<ShowAddress>().FirstOrDefault(item => item.Id == id);
                 if (address != null)
                 {
                     address.AdreessId = addressModel.Id;
-                    address.Phone = addressModel.Phone;
-                    address.PhoneAreaCode = addressModel.PhoneAreaCode;
-                    address.Fax = addressModel.Fax;
-                    address.FaxAreaCode = addressModel.FaxAreaCode;
+                    address.Phone = !String.IsNullOrEmpty(addressModel.Phone) ? addressModel.Phone.Trim() : null;
+                    address.PhoneAreaCode = !String.IsNullOrEmpty(addressModel.PhoneAreaCode) ? addressModel.PhoneAreaCode.Trim() : null;
+                    address.Fax = !String.IsNullOrEmpty(addressModel.Fax) ? addressModel.Fax.Trim() : null;
+                    address.FaxAreaCode = !String.IsNullOrEmpty(addressModel.FaxAreaCode) ? addressModel.FaxAreaCode.Trim() : null;
                     address.Address1 = addressModel.Street1;
                     address.Address2 = addressModel.Street2;
                     address.Zip = addressModel.Zip;
@@ -459,10 +474,10 @@ namespace asi.asicentral.web.Controllers.Show
 
         public ActionResult DeleteEmployee(int id)
         {
-            ShowEmployee employee = ObjectService.GetAll<ShowEmployee>().Where(item => item.Id == id).FirstOrDefault();
+            ShowEmployee employee = ObjectService.GetAll<ShowEmployee>().FirstOrDefault(item => item.Id == id);
             var companyId = employee.CompanyId;
-            ShowAddress addresss = ObjectService.GetAll<ShowAddress>().Where(item => item.Id == employee.AddressId).FirstOrDefault();
-            ShowEmployeeAttendee employeeAttendee = ObjectService.GetAll<ShowEmployeeAttendee>().Where(item => item.Employee.Id == employee.Id).FirstOrDefault();
+            ShowAddress addresss = ObjectService.GetAll<ShowAddress>().FirstOrDefault(item => item.Id == employee.AddressId);
+            ShowEmployeeAttendee employeeAttendee = ObjectService.GetAll<ShowEmployeeAttendee>().FirstOrDefault(item => item.Employee.Id == employee.Id);
             if (employeeAttendee != null)
             {
                 ObjectService.Delete<ShowEmployeeAttendee>(employeeAttendee);
@@ -498,7 +513,7 @@ namespace asi.asicentral.web.Controllers.Show
 
         public ActionResult IsValidEmail(string Email)
         {
-            IList<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>().Where(item => item.Email != null && item.Email.Equals(Email)).ToList();
+            IList<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>().Where(item => item.Email != null && item.Email.ToLower().Equals(Email.ToLower())).ToList();
             if (employeeList.Any())
             {
                 return Json(false);
@@ -515,11 +530,11 @@ namespace asi.asicentral.web.Controllers.Show
             var company = new CompanyModel();
             IQueryable<ShowCompany> companyList = ObjectService.GetAll<ShowCompany>(true);
             companyList = companyList.Where(item => item.Name != null
-                 && item.Name.Equals(name));
+                 && item.Name.ToLower().Equals(name.ToLower()));
             company.company = companyList.ToList();
             if (company.company.Any())
             {
-               return Json(false);
+                return Json(false);
             }
             else
             {
@@ -527,12 +542,17 @@ namespace asi.asicentral.web.Controllers.Show
             }
         }
         [HttpGet]
-        public ActionResult GetAttendeeCompany(int? showId, String companyTab, string companyName, string MemberType)
+        public ActionResult GetAttendeeCompany(int? showId, String companyTab, string companyName, string MemberType, int page = 1, int pageSize = 10)
         {
-            ShowCompaniesModel showCompanies = new ShowCompaniesModel();
+            var showCompanies = new ShowCompaniesModel();
+            showCompanies.CurrentPageIndex = page;
+            showCompanies.PageSize = pageSize;
             if (string.IsNullOrEmpty(companyTab)) companyTab = ShowCompaniesModel.TAB_COMPANYNAME;
             showCompanies.CompanyTab = companyTab;
-            IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(attendee => (attendee.ShowId == showId && (attendee.IsAttending == true || attendee.IsExhibitDay == true))).OrderBy(form => form.Company.Name).ToList();
+            IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(attendee => attendee.ShowId == showId).OrderBy(form => form.Company.Name).ToList();
+            showCompanies.TotalRecordCount = existingAttendees.Count();
+            existingAttendees = existingAttendees.Skip((showCompanies.CurrentPageIndex - 1) * showCompanies.PageSize)
+                                            .Take(showCompanies.PageSize).ToList();
             if (existingAttendees.Any())
             {
                 foreach (ShowAttendee attendee in existingAttendees)
@@ -548,8 +568,7 @@ namespace asi.asicentral.web.Controllers.Show
         public ActionResult EmployeeList()
         {
             var employee = new CompanyInformation();
-            IQueryable<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>(true);
-            employee.Employee = employeeList.OrderByDescending(form => form.CreateDate).ToList();
+            IList<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>().OrderByDescending(form => form.CreateDate).ToList();;
             return View("../Show/Company/CompanyList", employee);
         }
 
@@ -558,7 +577,7 @@ namespace asi.asicentral.web.Controllers.Show
         {
             ShowAttendee attendee = ObjectService.GetAll<ShowAttendee>(true).SingleOrDefault(sa => sa.ShowId == showId && sa.CompanyId == companyId);
             IList<ShowEmployee> employees = ObjectService.GetAll<ShowEmployee>(true).Where(e => e.CompanyId == companyId).ToList();
-            ShowCompaniesModel showCompanies = new ShowCompaniesModel();
+            var showCompanies = new ShowCompaniesModel();
             if (attendee != null)
             {
                 showCompanies.ShowAttendees.Add(attendee);
@@ -585,26 +604,37 @@ namespace asi.asicentral.web.Controllers.Show
                     showCompanies.ShowEmployees.Add(employeeAttendance);
                 }
                 showCompanies.Show = show;
+                ShowAttendee addAttendee = new ShowAttendee();
+                addAttendee.CompanyId = companyId;
+                addAttendee.ShowId = showId;
+                addAttendee.UpdateDate = DateTime.UtcNow;
+                addAttendee.UpdateSource = "ShowCompanyController - GetCompanyDetailsForShow";
+                addAttendee = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, addAttendee);
+                ObjectService.SaveChanges();
             }
             return View("../Show/AddCompanyAttendeesToShow", showCompanies);
         }
 
         private EmployeeAttendance AddEmployeeAttandance(ShowEmployee showEmployee, bool isAttending)
         {
-            EmployeeAttendance employeeAttendance = new EmployeeAttendance();
+            var employeeAttendance = new EmployeeAttendance();
             employeeAttendance.Employee = showEmployee;
             employeeAttendance.IsAttending = isAttending;
             return employeeAttendance;
         }
 
         [HttpGet]
-        public virtual ActionResult AddCompaniesToShow(int? showId, String companyTab, string companyName, string MemberType)
+        public virtual ActionResult AddCompaniesToShow(int? showId, String companyTab, string companyName, string MemberType, int page = 1, int pageSize = 20)
         {
-            ShowCompaniesModel showCompanies = new ShowCompaniesModel();
+            var showCompanies = new ShowCompaniesModel();
             IList<ShowCompany> list = null;
+            showCompanies.CurrentPageIndex = page;
+            showCompanies.PageSize = pageSize;
+            showCompanies.TabCompanyName = companyName;
+            showCompanies.TabMemberType = MemberType;
             if (string.IsNullOrEmpty(companyTab)) companyTab = ShowCompaniesModel.TAB_COMPANYNAME;
             showCompanies.CompanyTab = companyTab;
-            IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => ((item.IsAttending == true || item.IsExhibitDay == true) && item.ShowId == showId)).ToList();
+            IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == showId).ToList();
             if (existingAttendees.Any())
             {
                 IList<ShowCompany> companyList = ObjectService.GetAll<ShowCompany>(true).ToList();
@@ -630,7 +660,9 @@ namespace asi.asicentral.web.Controllers.Show
                 list = list.Where(item => item.Name != null
                  && item.Name.Contains(companyName)).ToList();
             }
-            showCompanies.ShowCompanies = list;
+            showCompanies.TotalRecordCount = list.Count();
+            showCompanies.ShowCompanies = list.Skip((showCompanies.CurrentPageIndex - 1) * showCompanies.PageSize)
+                                            .Take(showCompanies.PageSize).ToList();
             showCompanies.ShowId = showId.HasValue ? showId.Value : 0;
 
 
@@ -640,22 +672,19 @@ namespace asi.asicentral.web.Controllers.Show
 
         public ActionResult DeleteAttendeeCompany(int id, int showId)
         {
-            ShowAttendee attendee = ObjectService.GetAll<ShowAttendee>().Where(item => item.Id == id).FirstOrDefault();
+            ShowAttendee attendee = ObjectService.GetAll<ShowAttendee>().FirstOrDefault(item => item.Id == id);
             if (attendee != null)
             {
                 int employeeAttendeeCount = attendee.EmployeeAttendees.Count();
 
                 for (int i = employeeAttendeeCount; i > 0; i--)
                 {
-                    ObjectService.Delete<ShowEmployeeAttendee>(attendee.EmployeeAttendees.ElementAt(i - 1));
+                    ObjectService.Delete(attendee.EmployeeAttendees.ElementAt(i - 1));
                 }
                 ObjectService.Delete<ShowAttendee>(attendee);
                 ObjectService.SaveChanges();
             }
-            return RedirectToAction("GetAttendeeCompany", new
-            {
-                showId = showId
-            });
+            return RedirectToAction("GetAttendeeCompany", new {showId = showId });
         }
     }
 }

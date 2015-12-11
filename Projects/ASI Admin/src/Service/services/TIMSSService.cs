@@ -27,22 +27,29 @@ namespace asi.asicentral.services
 
         public virtual Guid Process(StoreOrder order, StoreDetailApplication application)
         {
-            if (order == null || order.BillingIndividual == null || order.CreditCard == null || string.IsNullOrEmpty(order.CreditCard.ExternalReference)) throw new InvalidOperationException("You must pass a valid Order for this method");
+            if (order == null) throw new InvalidOperationException("You must pass a valid Order for this method");
             
             TIMSSCompany company = new TIMSSCompany()
             {
                 DAPP_UserId = Guid.NewGuid(),
                 Name = order.Company.Name,
                 MasterCustomerId = order.ExternalReference,
-                BillAddress1 = order.BillingIndividual.Address.Street1,
-                BillAddress2 = order.BillingIndividual.Address.Street2,
-                BillCity = order.BillingIndividual.Address.City,
-                BillPostalCode = order.BillingIndividual.Address.Zip,
-                BillState = order.BillingIndividual.Address.State,
-                BillCountryCode = order.BillingIndividual.Address.Country,
                 Url = order.Company.WebURL,
-                PhoneNumber = order.BillingIndividual.Phone,
             };
+            if (order.BillingIndividual != null)
+            {
+                if(order.BillingIndividual.Address != null)
+                {
+                    company.BillAddress1 = order.BillingIndividual.Address.Street1;
+                    company.BillAddress2 = order.BillingIndividual.Address.Street2;
+                    company.BillCity = order.BillingIndividual.Address.City;
+                    company.BillPostalCode = order.BillingIndividual.Address.Zip;
+                    company.BillState = order.BillingIndividual.Address.State;
+                    company.BillCountryCode = order.BillingIndividual.Address.Country;
+                }
+                company.PhoneNumber = order.BillingIndividual.Phone;
+            }
+
             //find the shipping information if we have it
             if (order.Company != null) {
                 StoreCompanyAddress shippingCompanyAddress = order.Company.Addresses.Where(add => add.IsShipping).FirstOrDefault();
@@ -57,35 +64,38 @@ namespace asi.asicentral.services
                 }
             }
             _objectService.Add<TIMSSCompany>(company);
-			try
-			{
-				Guid extRef = new Guid(order.CreditCard.ExternalReference);
-				TIMSSCreditInfo credit = new TIMSSCreditInfo()
-				{
-					DAPP_UserId = company.DAPP_UserId,
-					Name = order.CreditCard.CardHolderName,
-					FirstName = GetNamePart(order.CreditCard.CardHolderName, true),
-					LastName = GetNamePart(order.CreditCard.CardHolderName, false),
-					ExpirationMonth = order.CreditCard.ExpMonth,
-					ExpirationYear = order.CreditCard.ExpYear,
-					Type = order.CreditCard.CardType,
-					Number = order.CreditCard.ExternalReference,
-					Street1 = order.BillingIndividual.Address.Street1,
-					Street2 = order.BillingIndividual.Address.Street2,
-					Zip = order.BillingIndividual.Address.Zip,
-					City = order.BillingIndividual.Address.City,
-					State = order.BillingIndividual.Address.State,
-					Country = order.BillingIndividual.Address.Country,
-					ExternalReference = extRef,
-					DateCreated = DateTime.Now,
-				};
-				_objectService.Add<TIMSSCreditInfo>(credit);
-			}
-			catch (Exception)
-			{
-				//with new process, external reference could be the profile id
-				//would not work but that is ok.
-			}
+            if (order.CreditCard != null && !string.IsNullOrEmpty(order.CreditCard.ExternalReference))
+            {
+			    try
+			    {
+                    Guid extRef = new Guid(order.CreditCard.ExternalReference);
+                    TIMSSCreditInfo credit = new TIMSSCreditInfo()
+                    {
+                        DAPP_UserId = company.DAPP_UserId,
+                        Name = order.CreditCard.CardHolderName,
+                        FirstName = GetNamePart(order.CreditCard.CardHolderName, true),
+                        LastName = GetNamePart(order.CreditCard.CardHolderName, false),
+                        ExpirationMonth = order.CreditCard.ExpMonth,
+                        ExpirationYear = order.CreditCard.ExpYear,
+                        Type = order.CreditCard.CardType,
+                        Number = order.CreditCard.ExternalReference,
+                        Street1 = order.BillingIndividual.Address.Street1,
+                        Street2 = order.BillingIndividual.Address.Street2,
+                        Zip = order.BillingIndividual.Address.Zip,
+                        City = order.BillingIndividual.Address.City,
+                        State = order.BillingIndividual.Address.State,
+                        Country = order.BillingIndividual.Address.Country,
+                        ExternalReference = extRef,
+                        DateCreated = DateTime.Now,
+                    };
+                    _objectService.Add<TIMSSCreditInfo>(credit);
+			    }
+			    catch (Exception)
+			    {
+				    //with new process, external reference could be the profile id
+				    //would not work but that is ok.
+			    }
+            }
             //add the contacts
             if (order.Company != null && order.Company.Individuals.Count > 0)
             {

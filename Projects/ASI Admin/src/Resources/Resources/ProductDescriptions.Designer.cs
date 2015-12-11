@@ -286,6 +286,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Get access to new industry suppliers and a wide variety of exciting products. Don’t miss out on the opportunity to WOW your end-buyers!.
+        /// </summary>
+        public static string ProductPromoBook {
+            get {
+                return ResourceManager.GetString("ProductPromoBook", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Catalogs product - Select.
         /// </summary>
         public static string ProductSelect {
@@ -300,6 +309,15 @@ namespace asi.asicentral.Resources {
         public static string ProductSGRAdvertising {
             get {
                 return ResourceManager.GetString("ProductSGRAdvertising", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specialty Shoppes are polished, professional-looking web stores that come pre-designed and already merchandised with promotional products that fit a theme, so they are ready to use immediately!.
+        /// </summary>
+        public static string ProductSpecialtyShoppes {
+            get {
+                return ResourceManager.GetString("ProductSpecialtyShoppes", resourceCulture);
             }
         }
         

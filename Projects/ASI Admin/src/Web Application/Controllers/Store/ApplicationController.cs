@@ -23,11 +23,11 @@ namespace asi.asicentral.web.Controllers.Store
         public const string COMMAND_ACCEPT = "Accept";
         public const string COMMAND_RESUBMIT = "Resubmit";
         //products associated only to StoreOrderDetail table
-        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 29, 30, 31, 45, 46, 55, 56, 57, 58, 59, 60, 62, 70, 71, 77, 78, 96, 97, 98, 100, 101, 102, 104, 105, 106, 107, 108, 109 };
+        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 29, 30, 31, 45, 46, 55, 56, 57, 58, 59, 60, 62, 70, 71, 77, 78, 96, 97, 98, 100, 101, 102, 104, 105, 106, 107, 108, 109, 112, 113 };
         //products associated to StoreDetailESPAdvertising table
         public static readonly int[] SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS = { 48, 49, 50, 51, 52, 53};
         //products associated to StoreDetailCatalog table
-        public static readonly int[] DISTRIBUTOR_CATALOG_PRODUCT_IDS = { 35, 36, 37, 38, 39, 40, 41, 82 };
+        public static readonly int[] DISTRIBUTOR_CATALOG_PRODUCT_IDS = { 35, 36, 37, 38, 39, 40, 41, 82, 111 };
         //products associated to StoreDetailPayForPlacement table
         public static readonly int[] SUPPLIER_ESP_PAYFORPLACEMENT_PRODUCT_IDS = { 47, 63 };
         //products associated to StoreDetailEmailExpress table
@@ -389,7 +389,7 @@ namespace asi.asicentral.web.Controllers.Store
                 if (order == null) throw new Exception("Invalid reference to an order");
                 order.ExternalReference = application.ExternalReference;
                 order = UpdateCompanyInformation(application, order);
-
+               
                 //Update Catalog Information
                 orderDetail.Quantity = Convert.ToInt32(application.Quantity);
                 orderDetail.ShippingMethod = application.ShippingMethod;
@@ -405,7 +405,13 @@ namespace asi.asicentral.web.Controllers.Store
                 if (application.ProductId == 39) storeDetailCatalog.SupplementId = Convert.ToInt32(application.Supplement);
                 if (storeDetailCatalog.ImprintId != 18) storeDetailCatalog.IsArtworkToProof = application.IsArtworkToProof;
 
-                if ((storeDetailCatalog.AreaId == 8 || storeDetailCatalog.AreaId == 25) && (storeDetailCatalog.ImprintId == 20 || (storeDetailCatalog.ImprintId == 21 && storeDetailCatalog.ArtworkOption == "PRINT")))
+                bool isFrontCover = false;
+                bool isBackCover = false;
+                if (storeDetailCatalog.AreaId == 8 && (storeDetailCatalog.ImprintId == 20 || storeDetailCatalog.ImprintId == 21)) isFrontCover = true;
+                if (storeDetailCatalog.AreaId == 9 && (storeDetailCatalog.ImprintId == 20 || storeDetailCatalog.ImprintId == 21)) isBackCover = true;
+                if (storeDetailCatalog.AreaId == 25 && (storeDetailCatalog.ImprintId == 20 || storeDetailCatalog.ImprintId == 21)) { isFrontCover = true; isBackCover = true; }
+
+                if (isFrontCover)
                 {
                     storeDetailCatalog.Line1 = application.Line1;
                     storeDetailCatalog.Line2 = application.Line2;
@@ -424,7 +430,7 @@ namespace asi.asicentral.web.Controllers.Store
                     storeDetailCatalog.Line6 = null;
                 }
 
-                if ((storeDetailCatalog.AreaId == 9 || storeDetailCatalog.AreaId == 25) && (storeDetailCatalog.ImprintId == 20 || (storeDetailCatalog.ImprintId == 21 && storeDetailCatalog.ArtworkOption == "PRINT")))
+                if (isBackCover)
                 {
                     storeDetailCatalog.BackLine1 = application.BackLine1;
                     storeDetailCatalog.BackLine2 = application.BackLine2;
@@ -490,6 +496,14 @@ namespace asi.asicentral.web.Controllers.Store
                                 orderDetail.Cost = Convert.ToDecimal(CompanyStoreHelper.GetCost(0) * application.OptionId);
                             else
                                 orderDetail.Cost = CompanyStoreHelper.GetCost(1);
+                            break;
+                        case 112:
+                        case 113:
+                            orderDetail.OptionId = application.OptionId;
+                            orderDetail.Cost = (application.OptionId != 6) ? Convert.ToDecimal(SpecialtyShoppesHelper.GetCost(0)) : orderDetail.Cost = CompanyStoreHelper.GetCost(1);
+                            if (application.IsBonus) orderDetail.Cost = orderDetail.Cost * 12m * 0.8m;
+                            var productId = (application.IsBonus) ? SpecialtyShoppesHelper.SPECIALTY_SHOPPES_IDS[0] :  SpecialtyShoppesHelper.SPECIALTY_SHOPPES_IDS[1];
+                            if (orderDetail.Product.Id != productId) orderDetail.Product = StoreService.GetAll<ContextProduct>().SingleOrDefault(p => p.Id == productId);
                             break;
                         default:
                             int quantity = orderDetail.Quantity;
@@ -999,6 +1013,7 @@ namespace asi.asicentral.web.Controllers.Store
                 order.Company.Phone = model.Phone;
                 order.Company.WebURL = model.BillingWebUrl;
                 order.Company.ASINumber = model.ASINumber;
+                order.Company.Email = model.CompanyEmail;
                 if (model.HasBankInformation)
                 {
                     order.Company.BankName = model.BankName;

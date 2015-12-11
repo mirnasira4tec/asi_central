@@ -2,6 +2,24 @@
   <edmx:DataServices xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" m:DataServiceVersion="1.0">
     <Schema Namespace="Personify.DataServices.EF.Model.ASI.DataModel" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
       <EntityContainer Name="PersonifyEntitiesASI" p7:LazyLoadingEnabled="true" m:IsDefaultEntityContainer="true" xmlns:p7="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <FunctionImport Name="SaveGuestCustomer" ReturnType="Edm.String" m:HttpMethod="POST">
+          <Parameter Name="SaveCustomerInput" Type="Edm.String" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="SaveShoppingCartOrder" ReturnType="Edm.String" m:HttpMethod="POST">
+          <Parameter Name="SaveShoppingCartOrderInput" Type="Edm.String" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="SendEmail" ReturnType="Edm.String" m:HttpMethod="POST">
+          <Parameter Name="SendEmailInput" Type="Edm.String" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="TransferCart" ReturnType="Edm.String" m:HttpMethod="POST">
+          <Parameter Name="TransferCartInput" Type="Edm.String" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="TransferReceipt" ReturnType="Edm.String" m:HttpMethod="POST">
+          <Parameter Name="TransferReceiptInput" Type="Edm.String" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="UpdateBoothInformation" ReturnType="Edm.String" m:HttpMethod="POST">
+          <Parameter Name="UpdateBoothInfoInput" Type="Edm.String" Mode="In" />
+        </FunctionImport>
         <FunctionImport Name="UpdateIndividual" ReturnType="Edm.String" m:HttpMethod="POST">
           <Parameter Name="SaveCustomerInput" Type="Edm.String" Mode="In" />
         </FunctionImport>
@@ -56,11 +74,29 @@
         <FunctionImport Name="AddListOfProductsToCart" ReturnType="Edm.String" m:HttpMethod="POST">
           <Parameter Name="AddListOfProductsToCartInput" Type="Edm.String" Mode="In" />
         </FunctionImport>
+        <FunctionImport Name="ASIAddOrderLinewithPrice" ReturnType="Edm.String" m:HttpMethod="POST">
+          <Parameter Name="ASIAddOrderLinewithPriceInput" Type="Edm.String" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="ASICreateBundleOrder" ReturnType="Edm.String" m:HttpMethod="POST">
+          <Parameter Name="ASICreateBundleOrderInput" Type="Edm.String" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="ASICreatePaySchedule" ReturnType="Edm.String" m:HttpMethod="POST">
+          <Parameter Name="ASICreatePayScheduleInput" Type="Edm.String" Mode="In" />
+        </FunctionImport>
         <FunctionImport Name="ASIGetInvoiceURL" ReturnType="Edm.String" m:HttpMethod="POST">
           <Parameter Name="ASIGetInvoiceURLInput" Type="Edm.String" Mode="In" />
         </FunctionImport>
+        <FunctionImport Name="ASIOrderStatusUpdate" ReturnType="Edm.String" m:HttpMethod="POST">
+          <Parameter Name="ASIOrderStatusUpdateInput" Type="Edm.String" Mode="In" />
+        </FunctionImport>
         <FunctionImport Name="ASIPayOpenOrder" ReturnType="Edm.String" m:HttpMethod="POST">
           <Parameter Name="ASIPayOpenOrderInput" Type="Edm.String" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="ASIUpdateIssueNumber" ReturnType="Edm.String" m:HttpMethod="POST">
+          <Parameter Name="ASIUpdateIssueNumberInput" Type="Edm.String" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="ASIUpdateLineStatus" ReturnType="Edm.String" m:HttpMethod="POST">
+          <Parameter Name="ASIUpdateLineStatusInput" Type="Edm.String" Mode="In" />
         </FunctionImport>
         <FunctionImport Name="ASIValidateCreditCard" ReturnType="Edm.String" m:HttpMethod="POST">
           <Parameter Name="ASIValidateCreditCardInput" Type="Edm.String" Mode="In" />
@@ -383,24 +419,6 @@
         <FunctionImport Name="SaveCustomerSubAuditInfo" ReturnType="Edm.String" m:HttpMethod="POST">
           <Parameter Name="SaveCustomerSubAuditInfoInput" Type="Edm.String" Mode="In" />
         </FunctionImport>
-        <FunctionImport Name="SaveGuestCustomer" ReturnType="Edm.String" m:HttpMethod="POST">
-          <Parameter Name="SaveCustomerInput" Type="Edm.String" Mode="In" />
-        </FunctionImport>
-        <FunctionImport Name="SaveShoppingCartOrder" ReturnType="Edm.String" m:HttpMethod="POST">
-          <Parameter Name="SaveShoppingCartOrderInput" Type="Edm.String" Mode="In" />
-        </FunctionImport>
-        <FunctionImport Name="SendEmail" ReturnType="Edm.String" m:HttpMethod="POST">
-          <Parameter Name="SendEmailInput" Type="Edm.String" Mode="In" />
-        </FunctionImport>
-        <FunctionImport Name="TransferCart" ReturnType="Edm.String" m:HttpMethod="POST">
-          <Parameter Name="TransferCartInput" Type="Edm.String" Mode="In" />
-        </FunctionImport>
-        <FunctionImport Name="TransferReceipt" ReturnType="Edm.String" m:HttpMethod="POST">
-          <Parameter Name="TransferReceiptInput" Type="Edm.String" Mode="In" />
-        </FunctionImport>
-        <FunctionImport Name="UpdateBoothInformation" ReturnType="Edm.String" m:HttpMethod="POST">
-          <Parameter Name="UpdateBoothInfoInput" Type="Edm.String" Mode="In" />
-        </FunctionImport>
         <EntitySet Name="AddListOfProductsToCartInputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.AddListOfProductsToCartInput" />
         <EntitySet Name="AddListOfProductsToCartOutputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.AddListOfProductsToCartOutput" />
         <EntitySet Name="AddressInfos" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.AddressInfo" />
@@ -414,6 +432,11 @@
         <EntitySet Name="ApplicationQuestionAnswers" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ApplicationQuestionAnswer" />
         <EntitySet Name="ApplicationSubcodes" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ApplicationSubcode" />
         <EntitySet Name="ApplicationTypes" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ApplicationType" />
+        <EntitySet Name="ASIAddOrderLinewithPriceInputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASIAddOrderLinewithPriceInput" />
+        <EntitySet Name="ASICreateBundleOrderInputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASICreateBundleOrderInput" />
+        <EntitySet Name="ASICreateBundleOrderOutputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASICreateBundleOrderOutput" />
+        <EntitySet Name="ASICreatePayScheduleInputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASICreatePayScheduleInput" />
+        <EntitySet Name="ASICreatePayScheduleOutputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASICreatePayScheduleOutput" />
         <EntitySet Name="ASICusCreditCardProfiles" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASICusCreditCardProfile" />
         <EntitySet Name="ASICustomers" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASICustomer" />
         <EntitySet Name="ASICustomerCreditCards" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASICustomerCreditCard" />
@@ -421,8 +444,12 @@
         <EntitySet Name="ASIGetInvoiceURLInputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASIGetInvoiceURLInput" />
         <EntitySet Name="ASIGetInvoiceURLOutputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASIGetInvoiceURLOutput" />
         <EntitySet Name="ASIOrderLines" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASIOrderLine" />
+        <EntitySet Name="ASIOrderStatusUpdateInputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASIOrderStatusUpdateInput" />
+        <EntitySet Name="ASIOrderUpdateOutputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASIOrderUpdateOutput" />
         <EntitySet Name="ASIPayOpenOrderInputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASIPayOpenOrderInput" />
         <EntitySet Name="ASIPayOpenOrderOutputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASIPayOpenOrderOutput" />
+        <EntitySet Name="ASIUpdateIssueNumberInputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASIUpdateIssueNumberInput" />
+        <EntitySet Name="ASIUpdateLineStatusInputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASIUpdateLineStatusInput" />
         <EntitySet Name="ASIValidateCreditCardInputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASIValidateCreditCardInput" />
         <EntitySet Name="ASIValidateCreditCardOutputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASIValidateCreditCardOutput" />
         <EntitySet Name="AuthorizePersonifyUserInputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.AuthorizePersonifyUserInput" />
@@ -1975,6 +2002,81 @@
         <Property Name="PrimaryCode" Type="Edm.String" Nullable="true" />
         <Property Name="ScreenRestriction" Type="Edm.String" Nullable="true" />
       </EntityType>
+      <EntityType Name="ASIAddOrderLinewithPriceInput">
+        <Key>
+          <PropertyRef Name="InternalKey" />
+        </Key>
+        <Property Name="InternalKey" Type="Edm.String" Nullable="false" />
+        <Property Name="NavigationKey" Type="Edm.String" Nullable="true" />
+        <Property Name="OrderNumber" Type="Edm.String" Nullable="true" />
+        <Property Name="ProductID" Type="Edm.Int64" Nullable="true" />
+        <Property Name="Quantity" Type="Edm.Int32" Nullable="true" />
+        <Property Name="MarketCode" Type="Edm.String" Nullable="true" />
+        <Property Name="ListCode" Type="Edm.String" Nullable="true" />
+        <Property Name="KeyCode" Type="Edm.String" Nullable="true" />
+        <Property Name="CouponCode" Type="Edm.String" Nullable="true" />
+        <Property Name="ParentProductID" Type="Edm.Int64" Nullable="true" />
+        <Property Name="RelatedLineNumber" Type="Edm.Int32" Nullable="true" />
+        <Property Name="Price" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="RateStructure" Type="Edm.String" Nullable="true" />
+        <Property Name="RateCode" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedBoltOn" Type="Edm.Boolean" Nullable="true" />
+      </EntityType>
+      <EntityType Name="ASICreateBundleOrderInput">
+        <Key>
+          <PropertyRef Name="InternalKey" />
+        </Key>
+        <Property Name="InternalKey" Type="Edm.String" Nullable="false" />
+        <Property Name="NavigationKey" Type="Edm.String" Nullable="true" />
+        <Property Name="ShipMasterCustomerID" Type="Edm.String" Nullable="true" />
+        <Property Name="ShipSubCustomerID" Type="Edm.Int16" Nullable="true" />
+        <Property Name="ShipAddressID" Type="Edm.Int32" Nullable="true" />
+        <Property Name="ShipAddressTypeCode" Type="Edm.String" Nullable="true" />
+        <Property Name="BillMasterCustomerID" Type="Edm.String" Nullable="true" />
+        <Property Name="BillSubCustomerID" Type="Edm.Int16" Nullable="true" />
+        <Property Name="BillAddressID" Type="Edm.Int32" Nullable="true" />
+        <Property Name="BillAddressTypeCode" Type="Edm.String" Nullable="true" />
+        <Property Name="RateStructure" Type="Edm.String" Nullable="true" />
+        <Property Name="RateCode" Type="Edm.String" Nullable="true" />
+        <Property Name="CouponCode" Type="Edm.String" Nullable="true" />
+        <Property Name="ShipViaCode" Type="Edm.String" Nullable="true" />
+        <Property Name="MarketCode" Type="Edm.String" Nullable="true" />
+        <Property Name="ListCode" Type="Edm.String" Nullable="true" />
+        <Property Name="KeyCode" Type="Edm.String" Nullable="true" />
+        <Property Name="AddedOrModifiedBy" Type="Edm.String" Nullable="true" />
+        <Property Name="BundleGroupName" Type="Edm.String" Nullable="true" />
+      </EntityType>
+      <EntityType Name="ASICreateBundleOrderOutput">
+        <Key>
+          <PropertyRef Name="InternalKey" />
+        </Key>
+        <Property Name="InternalKey" Type="Edm.String" Nullable="false" />
+        <Property Name="NavigationKey" Type="Edm.String" Nullable="true" />
+        <Property Name="ASIBundleOrderNumber" Type="Edm.String" Nullable="true" />
+        <Property Name="ValidationIssue" Type="Edm.String" Nullable="true" />
+      </EntityType>
+      <EntityType Name="ASICreatePayScheduleInput">
+        <Key>
+          <PropertyRef Name="InternalKey" />
+        </Key>
+        <Property Name="InternalKey" Type="Edm.String" Nullable="false" />
+        <Property Name="NavigationKey" Type="Edm.String" Nullable="true" />
+        <Property Name="OrderNumber" Type="Edm.String" Nullable="true" />
+        <Property Name="OrderLineNumber" Type="Edm.Int16" Nullable="true" />
+        <Property Name="PayFrequency" Type="Edm.String" Nullable="true" />
+        <Property Name="PayStartDate" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="PayMethodCode" Type="Edm.String" Nullable="true" />
+        <Property Name="CCProfileId" Type="Edm.Int32" Nullable="true" />
+        <Property Name="SyncPayScheduleFlag" Type="Edm.Boolean" Nullable="true" />
+      </EntityType>
+      <EntityType Name="ASICreatePayScheduleOutput">
+        <Key>
+          <PropertyRef Name="InternalKey" />
+        </Key>
+        <Property Name="InternalKey" Type="Edm.String" Nullable="false" />
+        <Property Name="NavigationKey" Type="Edm.String" Nullable="true" />
+        <Property Name="IsPaySchduleCreated" Type="Edm.Boolean" Nullable="true" />
+      </EntityType>
       <EntityType Name="ASICusCreditCardProfile">
         <Key>
           <PropertyRef Name="CustomerCreditCardProfileId" />
@@ -2136,6 +2238,24 @@
         <Property Name="Amount" Type="Edm.Decimal" Nullable="true" />
         <NavigationProperty Name="ApplyPaymentToASIOrderLines" Relationship="Personify.DataServices.EF.Model.ASI.DataModel.ASIPayOpenOrderInputApplyPaymentToASIOrderLinesToASIOrderLine" FromRole="ASIOrderLine" ToRole="ASIPayOpenOrderInput" />
       </EntityType>
+      <EntityType Name="ASIOrderStatusUpdateInput">
+        <Key>
+          <PropertyRef Name="InternalKey" />
+        </Key>
+        <Property Name="InternalKey" Type="Edm.String" Nullable="false" />
+        <Property Name="NavigationKey" Type="Edm.String" Nullable="true" />
+        <Property Name="OrderNumber" Type="Edm.String" Nullable="true" />
+        <Property Name="NewOrderStatus" Type="Edm.String" Nullable="true" />
+      </EntityType>
+      <EntityType Name="ASIOrderUpdateOutput">
+        <Key>
+          <PropertyRef Name="InternalKey" />
+        </Key>
+        <Property Name="InternalKey" Type="Edm.String" Nullable="false" />
+        <Property Name="NavigationKey" Type="Edm.String" Nullable="true" />
+        <Property Name="IsSuccessfulUpdate" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="ValidationIssue" Type="Edm.String" Nullable="true" />
+      </EntityType>
       <EntityType Name="ASIPayOpenOrderInput">
         <Key>
           <PropertyRef Name="InternalKey" />
@@ -2185,6 +2305,26 @@
         <Property Name="AuthorizationNumber" Type="Edm.String" Nullable="true" />
         <Property Name="Success" Type="Edm.Boolean" Nullable="true" />
         <Property Name="ErrorMessage" Type="Edm.String" Nullable="true" />
+      </EntityType>
+      <EntityType Name="ASIUpdateIssueNumberInput">
+        <Key>
+          <PropertyRef Name="InternalKey" />
+        </Key>
+        <Property Name="InternalKey" Type="Edm.String" Nullable="false" />
+        <Property Name="NavigationKey" Type="Edm.String" Nullable="true" />
+        <Property Name="OrderNumber" Type="Edm.String" Nullable="true" />
+        <Property Name="OrderLineNo" Type="Edm.Int32" Nullable="true" />
+        <Property Name="IssueNumber" Type="Edm.Int64" Nullable="true" />
+      </EntityType>
+      <EntityType Name="ASIUpdateLineStatusInput">
+        <Key>
+          <PropertyRef Name="InternalKey" />
+        </Key>
+        <Property Name="InternalKey" Type="Edm.String" Nullable="false" />
+        <Property Name="NavigationKey" Type="Edm.String" Nullable="true" />
+        <Property Name="OrderNumber" Type="Edm.String" Nullable="true" />
+        <Property Name="OrderLineNo" Type="Edm.Int32" Nullable="true" />
+        <Property Name="NewLineStatus" Type="Edm.String" Nullable="true" />
       </EntityType>
       <EntityType Name="ASIValidateCreditCardInput">
         <Key>

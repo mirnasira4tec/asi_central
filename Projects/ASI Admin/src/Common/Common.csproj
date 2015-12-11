@@ -212,6 +212,7 @@
     <Compile Include="database\ASIEmailBlastContext.cs" />
     <Compile Include="database\ASIInternetContext.cs" />
     <Compile Include="database\ASIPublicationContext.cs" />
+    <Compile Include="database\PersonifyContext.cs" />
     <Compile Include="database\CallContext.cs" />
     <Compile Include="database\DM_MemberDemogrContext.cs" />
     <Compile Include="database\mappings\asiemailblast\ClosedCampaignDateMap.cs" />
@@ -293,7 +294,7 @@
     <Compile Include="database\mappings\store\TaxRateMap.cs" />
     <Compile Include="database\mappings\store\TermsConditionsInstanceMap.cs" />
     <Compile Include="database\mappings\store\TermsConditionsTypeMap.cs" />
-    <Compile Include="database\mappings\timss\PersonifyMappingMap.cs" />
+    <Compile Include="database\mappings\personify\PersonifyMappingMap.cs" />
     <Compile Include="database\MemberDemogrContext.cs" />
     <Compile Include="database\Umbraco_ShowContext.cs" />
     <Compile Include="interfaces\ICreditCardService.cs" />
@@ -448,7 +449,7 @@
     <Compile Include="model\store\TaxRate.cs" />
     <Compile Include="model\store\TermsConditionsType.cs" />
     <Compile Include="model\store\TermsConditionsInstance.cs" />
-    <Compile Include="model\timss\PersonifyMapping.cs" />
+    <Compile Include="model\personify\PersonifyMapping.cs" />
     <Compile Include="model\timss\TIMSSAccountType.cs" />
     <Compile Include="model\timss\TIMSSAdditionalInfo.cs" />
     <Compile Include="model\timss\TIMSSCompany.cs" />
@@ -473,6 +474,7 @@
     <Compile Include="services\PersonifyProxy\MemberTypeIDToCD.cs" />
     <Compile Include="services\PersonifyProxy\EmailData.cs" />
     <Compile Include="services\PersonifyProxy\PersonifyClient.cs" />
+    <Compile Include="services\PersonifyProxy\PersonifyCustomerInfo.cs" />
     <Compile Include="services\PersonifyProxy\StoreAddressInfo.cs" />
     <Compile Include="services\PersonifyProxy\SvcClient.cs" />
     <Compile Include="services\PersonifyService.cs" />
@@ -490,6 +492,7 @@
     <Compile Include="util\store\catalogs\CatalogsHelper.cs" />
     <Compile Include="util\store\companystore\CompanyStoreHelper.cs" />
     <Compile Include="util\store\companystore\CountryCodeHelper.cs" />
+    <Compile Include="util\store\specialtyshoppes\SpecialtyShoppesHelper.cs" />
     <Compile Include="util\store\digitalmarketing\ASIBrandBuilderHelper.cs" />
     <Compile Include="util\store\digitalmarketing\TrafficBuilderHelper.cs" />
     <Compile Include="util\store\Forms\FormsHelper.cs" />
@@ -534,23 +537,9 @@
     <ServiceReferenceMetadataStorage Include="Service References\PersonifyDataASI\">
       <Type>datasvcmap</Type>
     </ServiceReferenceMetadataStorage>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\PersonifyDataASI\Reference.datasvcmap">
-      <Generator>DataServicesCoreClientGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ServiceReferenceMetadataStorage Include="Service References\PersonifyDataASI\">
       <Type>datasvcmap</Type>
     </ServiceReferenceMetadataStorage>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\PersonifyDataASI\Reference.datasvcmap">
-      <Generator>DataServicesCoreClientGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\web.CreditCardService\" />
@@ -574,6 +563,12 @@
     </None>
     <None Include="Service References\web.CreditCardService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\PersonifyDataASI\Reference.datasvcmap">
+      <Generator>DataServiceClientGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>

@@ -17,7 +17,7 @@ namespace asi.asicentral.web.Controllers.Show
         [HttpGet]
         public ActionResult AddShow()
         {
-            ShowModel show = new ShowModel();
+            var show = new ShowModel();
             show.ShowType = GetShowType();
             show.StartDate = DateTime.UtcNow;
             show.EndDate = DateTime.UtcNow;
@@ -40,7 +40,7 @@ namespace asi.asicentral.web.Controllers.Show
                 }
                 else
                 {
-                    ShowASI objShow = new ShowASI();
+                    var objShow = new ShowASI();
                     objShow.Id = show.Id;
                     objShow.Name = show.Name;
                     objShow.Address = show.Address;
@@ -82,10 +82,11 @@ namespace asi.asicentral.web.Controllers.Show
                 if (existingAttendee == null) existingAttendee = new ShowAttendee();
                 existingAttendee.CompanyId = companyId;
                 existingAttendee.ShowId = showId;
-                existingAttendee.IsAttending = showAttendee.IsAttending;
                 existingAttendee.IsSponsor = showAttendee.IsSponsor;
                 existingAttendee.IsExhibitDay = showAttendee.IsExhibitDay;
                 existingAttendee.BoothNumber = showAttendee.BoothNumber;
+                existingAttendee.IsPresentation = showAttendee.IsPresentation;
+                existingAttendee.IsRoundTable = showAttendee.IsRoundTable;
                 existingAttendee.UpdateDate = DateTime.UtcNow;
                 existingAttendee.UpdateSource = "ShowController - PostShowAttendeeInformation";
                 ShowAttendee attendeeToSave = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, existingAttendee);
@@ -104,21 +105,19 @@ namespace asi.asicentral.web.Controllers.Show
         {
             var show = new ShowModel();
             show.ShowType = GetShowType();
-            IQueryable<ShowASI> showList = ObjectService.GetAll<ShowASI>(true);
+            IList<ShowASI> showList = ObjectService.GetAll<ShowASI>().OrderByDescending(form => form.StartDate).ToList();
             if (string.IsNullOrEmpty(showTab)) showTab = ShowModel.TAB_SHOWTYPE;
             if (ShowTypeId != null && year != null)
             {
-                showList = showList.Where(item => (item.StartDate.Year != null
-                && item.StartDate.Year == year && item.ShowTypeId != null && item.ShowTypeId == ShowTypeId));
+                showList = showList.Where(item => (item.StartDate.Year == year && item.ShowTypeId != null && item.ShowTypeId == ShowTypeId)).ToList();
             }
             else if (ShowTypeId != null || year != null )
             {
                 showList = showList.Where(item => (item.ShowTypeId != null 
-                && item.ShowTypeId == ShowTypeId) || ( item.StartDate.Year != null 
-                 && item.StartDate.Year == year));
+                && item.ShowTypeId == ShowTypeId) || (item.StartDate.Year == year)).ToList();
             }
             show.ShowTab = showTab;
-            show.Show = showList.OrderByDescending(form => form.StartDate).ToList();
+            show.Show = showList;
             return View("../Show/ShowList", show);
         }
 
@@ -142,11 +141,11 @@ namespace asi.asicentral.web.Controllers.Show
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            ShowModel show = new ShowModel();
+            var show = new ShowModel();
             show.ShowType = GetShowType();
             if (id != 0)
             {
-                ShowASI ShowModel = ObjectService.GetAll<ShowASI>().Where(item => item.Id == id).FirstOrDefault();
+                ShowASI ShowModel = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Id == id);
                 if (show != null)
                 {
                     show.Id = id;
@@ -167,7 +166,7 @@ namespace asi.asicentral.web.Controllers.Show
 
         public ActionResult Delete(int id)
         {
-            ShowASI show = ObjectService.GetAll<ShowASI>().Where(item => item.Id == id).FirstOrDefault();
+            ShowASI show = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Id == id);
             IList<ShowEmployeeAttendee> employeeAttendees = null;
             if (show != null)
             {
@@ -184,12 +183,12 @@ namespace asi.asicentral.web.Controllers.Show
                             {
                                 for (int employee = employeeAttendeeCount; employee > 0; employee--)
                                 {
-                                    ObjectService.Delete<ShowEmployeeAttendee>(employeeAttendees.ElementAt(employee - 1));
+                                    ObjectService.Delete(employeeAttendees.ElementAt(employee - 1));
                                 }
                             }
 
                         }
-                        ObjectService.Delete<ShowAttendee>(show.Attendees.ElementAt(attendee - 1));
+                        ObjectService.Delete(show.Attendees.ElementAt(attendee - 1));
                     }
                 }
 
