@@ -12,7 +12,7 @@ namespace asi.asicentral.web.models.show
     public class ShowModel
     {
         public int Id { get; set; }
-
+        public string Path { get; set; }
         public const String TAB_SHOWTYPE = "showType";
         public String ShowTab { get; set; }
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
