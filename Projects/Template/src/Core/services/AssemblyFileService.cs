@@ -15,6 +15,14 @@ namespace asi.asicentral.services
     public class AssemblyFileService : IFileSystemService
     {
         private Assembly _baseAssembly;
+        private Assembly _commonAssembly;
+        private bool _useCommon;
+
+        public AssemblyFileService(Assembly assembly, Assembly commonAssembly)
+        {
+            _baseAssembly = assembly;
+            _commonAssembly = commonAssembly;
+        }
 
         public AssemblyFileService(Assembly assembly)
         {
@@ -25,7 +33,9 @@ namespace asi.asicentral.services
         {
             string content = string.Empty;
 
-            using (Stream stream = _baseAssembly.GetManifestResourceStream(fileName))
+            var assembly = _useCommon ? _commonAssembly : _baseAssembly;
+
+            using (Stream stream = assembly.GetManifestResourceStream(fileName))
             using (TextReader reader = new StreamReader(stream))
             {
                 content = reader.ReadToEnd();
@@ -35,7 +45,16 @@ namespace asi.asicentral.services
 
         public virtual bool Exists(string fileName)
         {
-            return _baseAssembly.GetManifestResourceNames().Contains(fileName);
+            var exist = _baseAssembly.GetManifestResourceNames().Contains(fileName);
+            _useCommon = false;  // need to reset everytime for singleton
+
+            if (!exist && _commonAssembly != null)
+            {
+                _useCommon = _commonAssembly.GetManifestResourceNames().Contains(fileName);
+                exist = _useCommon;
+            }
+
+            return exist;
         }
     }
 }

@@ -1,5 +1,5 @@
 @using System.Configuration
-@model   asi.asicentral.web.Models.TermsConditions.TermsConditionsInstanceVM
+@model asi.asicentral.model.store.TermsConditionsInstance
 <!DOCTYPE html>
 <html>
 <head>
@@ -60,16 +60,29 @@ html {
                         </td>
                         
                     </tr>
-	                <tr>
-		                <td colspan="2">
-			                <p>
-				                @Model.Messages
-			                </p>
-		                </td>
-	                </tr>
+                    @if( !string.IsNullOrEmpty(@Model.Messages))
+                    {
 	                <tr>
 		                <td>
-							<p><a href="@ConfigurationManager.AppSettings["StoreURL"]/Store/TermsConditions/Accept/@Model.GUID"><strong>CLICK HERE </strong></a> to accept the Terms and Conditions.</p>		                
+			                <p>@Model.Messages</p>
+		                </td>
+	                </tr>
+                    }
+	                <tr>
+		                <td>
+                            @{
+                                var storeUrl = ConfigurationManager.AppSettings["StoreURL"];
+                                var url = "/Store/TermsConditions/Accept/" + Model.GUID; 
+                                if( string.IsNullOrEmpty(storeUrl) )
+                                {
+                                    url = System.Web.HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + url;
+                                }
+                                else
+                                {
+                                    url = storeUrl + url;
+                                }
+                            }
+							<p><a href="@url"><strong>CLICK HERE </strong></a> to accept the Terms and Conditions.</p>		                
 						</td>
 	                </tr>
                 </table>

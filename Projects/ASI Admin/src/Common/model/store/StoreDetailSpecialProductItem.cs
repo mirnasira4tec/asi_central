@@ -15,7 +15,9 @@ namespace asi.asicentral.model.store
         [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
         public string ServiceTypeOther { get; set; }
 		public string ASIContactName { get; set; }
-		public int Quantity { get; set; }
+        public string ASIContactEmail { get; set; }
+        public string CustomerEmail { get; set; }
+        public int Quantity { get; set; }
         public decimal Price { get; set; }
         public decimal OfferPrice { get; set; }
         public bool IsSetupCharges { get; set; }

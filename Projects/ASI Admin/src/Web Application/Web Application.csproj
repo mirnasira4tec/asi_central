@@ -489,7 +489,6 @@
     <Content Include="Views\TermsConditions\_TermsLayout.cshtml" />
     <Content Include="Views\TermsConditions\Types.cshtml" />
     <Content Include="Views\TermsConditions\Edit.cshtml" />
-    <EmbeddedResource Include="Views\Emails\TermsConditionsEmail.cshtml" />
     <Content Include="Views\TermsConditions\_statusMessagePartial.cshtml" />
     <Content Include="Views\Show\AddShow.cshtml" />
     <Content Include="Views\Show\Shared\Address.cshtml" />
