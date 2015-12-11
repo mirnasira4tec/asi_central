@@ -110,6 +110,11 @@ namespace asi.asicentral.web.Models.TermsConditions
                     UpdateDate = DateTime.Now,
                     UpdateSource = viewModel.UpdateSource
                 };
+
+                if (string.IsNullOrEmpty(dataModel.Messages))
+                {
+                    dataModel.Messages = "Please review and agree to the Terms and Conditions of the purchase you made with us recently. If you have any question, feel free to contact us.";
+                }
             }
             else
                 dataModel = new TermsConditionsInstance();

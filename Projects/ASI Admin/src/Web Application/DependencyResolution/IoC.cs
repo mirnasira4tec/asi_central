@@ -79,8 +79,9 @@ namespace asi.asicentral.web.DependencyResolution
                     x.For<IFileSystemService>()
                         .Singleton()
                         .Use<AssemblyFileService>()
-                        .EnrichWith(fileService => proxyGenerator.CreateClassProxyWithTarget(fileService.GetType(), fileService, new object[] { Assembly.GetAssembly(typeof(IoC)) }, new IInterceptor[] { new LogInterceptor(fileService.GetType()) }))
-                        .Ctor<Assembly>().Is(Assembly.GetAssembly(typeof(IoC)));
+                        .EnrichWith(fileService => proxyGenerator.CreateClassProxyWithTarget(fileService.GetType(), fileService, new object[] { Assembly.GetAssembly(typeof(IoC)), Assembly.GetAssembly(typeof(PersonifyService)) }, new IInterceptor[] { new LogInterceptor(fileService.GetType()) }))
+                        .Ctor<Assembly>("assembly").Is(Assembly.GetAssembly(typeof(IoC)))
+                        .Ctor<Assembly>("commonAssembly").Is(Assembly.GetAssembly(typeof(PersonifyService)));
 
                     x.For<ITemplateService>()
                        .Singleton()
