@@ -10,6 +10,14 @@ using asi.asicentral.interfaces;
 using StructureMap.Configuration.DSL;
 using asi.asicentral.database.mappings;
 using Moq;
+using System.Data.OleDb;
+using System.Data;
+using asi.asicentral.WebApplication;
+using asi.asicentral.web.Controllers.Show;
+using System.Web;
+using System.IO;
+using ClosedXML.Excel;
+using System.Dynamic;
 
 namespace asi.asicentral.Tests
 {
@@ -26,12 +34,12 @@ namespace asi.asicentral.Tests
                 ShowType objShowType = ShowHelper.CreateOrUpdateShowType(objectContext, new ShowType { Type = "East", UpdateSource = "ShowServiceTest - ShowTypeTest1" });
                 objectContext.SaveChanges();
                 Assert.IsNotNull(objShowType);
-                Assert.AreNotEqual(objShowType.Id,0);
+                Assert.AreNotEqual(objShowType.Id, 0);
                 Assert.AreEqual(objShowType.Type, "East");
                 int id = objShowType.Id;
                 objShowType.Type = "West";
                 objShowType.UpdateSource = "ShowServiceTest - ShowTypeTest1";
-                objShowType = ShowHelper.CreateOrUpdateShowType(objectContext, objShowType );
+                objShowType = ShowHelper.CreateOrUpdateShowType(objectContext, objShowType);
                 objectContext.SaveChanges();
                 Assert.IsNotNull(objShowType);
                 Assert.AreEqual(objShowType.Id, id);
@@ -52,7 +60,7 @@ namespace asi.asicentral.Tests
             {
                 ShowType objShowType = ShowHelper.CreateOrUpdateShowType(objectContext, new ShowType { Type = "East", UpdateSource = "ShowServiceTest - ShowTypeTest1" });
                 objectContext.Add<ShowType>(objShowType);
-              
+
                 ShowASI objShow = ShowHelper.CreateOrUpdateShow(objectContext, new ShowASI
                 {
                     Name = "Orlando",
@@ -154,7 +162,7 @@ namespace asi.asicentral.Tests
                 {
                     Name = "ComapnyName",
                     WebUrl = "www.company.com",
-                   MemberType = "Distributor",
+                    MemberType = "Distributor",
                     ASINumber = "32456",
                     CreateDate = DateTime.Now,
                     UpdateDate = DateTime.Now,
@@ -340,8 +348,256 @@ namespace asi.asicentral.Tests
             }
 
         }
+        [TestMethod]
+        public void ExcelUploadTest()
+        {
+            IList<ShowASI> shows = new List<ShowASI>();
+            shows.Add(CreateShowData(2, "ENGAGE EAST 2016"));
+            shows.Add(CreateShowData(1, "ENGAGE WEST 2016"));
+
+            IList<ShowCompany> supplierCompanies = new List<ShowCompany>();
+            supplierCompanies.Add(CreateCompanyData(26458, "30208", "A P Specialties"));
+
+            IList<ShowAddress> supplierCompanyAddresses = new List<ShowAddress>();
+            supplierCompanyAddresses.Add(CreateAddressData(26494, "140 Calle Iglesia", "San Clemente", "CA", "92672-7502", "United States"));
+
+            IList<ShowCompany> distributorCompanies = new List<ShowCompany>();
+            distributorCompanies.Add(CreateCompanyData(26514, "181369", "Diverse Printing & Graphics"));
+
+            IList<ShowAddress> distributorCompanyAddresses = new List<ShowAddress>();
+            distributorCompanyAddresses.Add(CreateAddressData(26609, "1500 NE 131st St test", "North Miami", "FL", "33161-4426", "United States"));
+
+            IList<ShowAttendee> attendees = new List<ShowAttendee>();
+            attendees.Add(CreateAttendeeData(964, 26514, 2, false, false, true, false, false));
+
+            IList<ShowEmployee> employees = new List<ShowEmployee>();
+            employees.Add(CreateEmployeeData(159, 26514, "Rohan", "Kathe"));
+
+            IList<ShowEmployeeAttendee> employeeAttendees = new List<ShowEmployeeAttendee>();
+            employeeAttendees.Add(CreateEmployeeAttendeeData(144, 964, 159));
 
 
+            Mock<IObjectService> mockObjectService = new Mock<IObjectService>();
+            mockObjectService.Setup(objectService => objectService.GetAll<ShowASI>(false)).Returns(shows.AsQueryable());
+            mockObjectService.Setup(objectService => objectService.GetAll<ShowCompany>(false)).Returns(supplierCompanies.AsQueryable());
+            mockObjectService.Setup(objectService => objectService.GetAll<ShowAddress>(false)).Returns(supplierCompanyAddresses.AsQueryable());
+            mockObjectService.Setup(objectService => objectService.GetAll<ShowCompany>(false)).Returns(distributorCompanies.AsQueryable());
+            mockObjectService.Setup(objectService => objectService.GetAll<ShowAddress>(false)).Returns(distributorCompanyAddresses.AsQueryable());
+            mockObjectService.Setup(objectService => objectService.GetAll<ShowAttendee>(false)).Returns(attendees.AsQueryable());
+            mockObjectService.Setup(objectService => objectService.GetAll<ShowEmployee>(false)).Returns(employees.AsQueryable());
+            mockObjectService.Setup(objectService => objectService.GetAll<ShowEmployeeAttendee>(false)).Returns(employeeAttendees.AsQueryable());
 
+            ExcelUploadController objExcel = new ExcelUploadController();
+            objExcel.ObjectService = mockObjectService.Object;
+
+            var dataTable = GetDataTable();
+            Assert.IsNotNull(dataTable);
+
+            var show = GetShowData();
+            Assert.AreEqual(shows.ElementAt(0).Name.ToLower(), show.Name.ToLower());
+
+            var supplierCompany = objExcel.ConvertDataAsShowCompany(dataTable, 0);
+            Assert.AreEqual(supplierCompanies.ElementAt(0).ASINumber, supplierCompany.ASINumber);
+            Assert.AreEqual(supplierCompanies.ElementAt(0).Name, supplierCompany.Name);
+
+            var distributorCompany = objExcel.ConvertDataAsShowCompany(dataTable, 1);
+            Assert.AreEqual(distributorCompanies.ElementAt(0).ASINumber, distributorCompany.ASINumber);
+            Assert.AreEqual(distributorCompanies.ElementAt(0).Name, distributorCompany.Name);
+
+            var supplierCompanyAddress = objExcel.ConvertDataAsShowAddress(dataTable, supplierCompany.Id, 0);
+            Assert.AreEqual(supplierCompanyAddresses.ElementAt(0).Street1, supplierCompanyAddress.Street1);
+            Assert.AreEqual(supplierCompanyAddresses.ElementAt(0).City, supplierCompanyAddress.City);
+            Assert.AreEqual(supplierCompanyAddresses.ElementAt(0).Zip, supplierCompanyAddress.Zip);
+
+            var distributorCompanyAddress = objExcel.ConvertDataAsShowAddress(dataTable, distributorCompany.Id, 1);
+            Assert.AreEqual(distributorCompanyAddresses.ElementAt(0).Street1, distributorCompanyAddress.Street1);
+            Assert.AreEqual(distributorCompanyAddresses.ElementAt(0).City, distributorCompanyAddress.City);
+            Assert.AreEqual(distributorCompanyAddresses.ElementAt(0).Zip, distributorCompanyAddress.Zip);
+
+            var attendee = objExcel.ConvertDataAsShowAttendee(dataTable, show.Id, distributorCompany.Id, 0);
+            Assert.AreEqual(attendees.ElementAt(0).CompanyId, attendee.CompanyId);
+            Assert.AreEqual(attendees.ElementAt(0).ShowId, attendee.ShowId);
+
+            var distributorAttendee = objExcel.ConvertDataAsShowAttendee(dataTable, show.Id, distributorCompany.Id, 1);
+            Assert.AreEqual(attendees.ElementAt(0).CompanyId, distributorAttendee.CompanyId);
+            Assert.AreEqual(attendees.ElementAt(0).ShowId, distributorAttendee.ShowId);
+
+            var employee = objExcel.ConvertDataAsShowEmployee(dataTable, distributorCompany.Id, 1);
+            Assert.AreEqual(employees.ElementAt(0).Id, employee.Id);
+            Assert.AreEqual(employees.ElementAt(0).FirstName, employee.FirstName);
+            Assert.AreEqual(employees.ElementAt(0).LastName, employee.LastName);
+
+            var employeeAttendee = objExcel.ConvertDataAsShowEmployeeAttendee(dataTable, distributorCompany.Id, distributorAttendee.Id, employee.Id, 1);
+            Assert.AreEqual(employeeAttendees.ElementAt(0).EmployeeId, employeeAttendee.EmployeeId);
+            Assert.AreEqual(employeeAttendees.ElementAt(0).AttendeeId, employeeAttendee.AttendeeId);
+
+        }
+        public DataTable GetDataTable()
+        {
+            ExcelUploadController objExcel = new ExcelUploadController();
+            DataTable dt = null;
+            string startupPath = System.AppDomain.CurrentDomain.BaseDirectory;
+            string currFilePath = startupPath + "\\test.xlsx";
+            FileInfo fi = new FileInfo(currFilePath);
+            var workBook = new XLWorkbook(fi.FullName);
+            int totalsheets = workBook.Worksheets.Count;
+            var worksheet = workBook.Worksheet(1);
+
+            var firstRowUsed = worksheet.FirstRowUsed();
+            if (firstRowUsed != null)
+            {
+                var categoryRow = firstRowUsed.RowUsed();
+                int coCategoryId = 1;
+                Dictionary<int, string> keyValues = new Dictionary<int, string>();
+                for (int cell = 1; cell <= categoryRow.CellCount(); cell++)
+                {
+                    keyValues.Add(cell, categoryRow.Cell(cell).GetString());
+                }
+                categoryRow = categoryRow.RowBelow();
+                var parent = new List<IDictionary<string, object>>();
+                while (!categoryRow.Cell(coCategoryId).IsEmpty())
+                {
+                    int count = 1;
+                    var pc = new ExpandoObject();
+                    while (count <= categoryRow.CellCount())
+                    {
+                        var data = categoryRow.Cell(count).Value;
+                        ((IDictionary<string, object>)pc).Add(keyValues[count], data);
+                        count++;
+                    }
+
+                    categoryRow = categoryRow.RowBelow();
+                    parent.Add((IDictionary<string, object>)pc);
+                }
+                dt = objExcel.ToDictionary(parent);
+            }
+            return dt;
+        }
+
+        public ShowASI GetShowData()
+        {
+            ExcelUploadController objExcel = new ExcelUploadController();
+            string startupPath = System.AppDomain.CurrentDomain.BaseDirectory;
+            string currFilePath = startupPath + "\\test.xlsx";
+            FileInfo fi = new FileInfo(currFilePath);
+            var workBook = new XLWorkbook(fi.FullName);
+            int totalsheets = workBook.Worksheets.Count;
+            var objShow = new ShowASI();
+            var worksheet = workBook.Worksheet(1);
+            Registry registry = new EFRegistry();
+            IContainer container = new Container(registry);
+            using (var objectContext = new ObjectService(container))
+            {
+                if (worksheet.Name.Contains("ENGAGE EAST 2016"))
+                {
+                    objShow = objectContext.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE EAST"));
+                }
+                else if (worksheet.Name.Contains("ENGAGE WEST 2016"))
+                {
+                    objShow = objectContext.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE WEST"));
+                }
+            }
+            return objShow;
+        }
+
+        private DataSet GetDataset(int t, string conn)
+        {
+            DataSet ds = new DataSet();
+            OleDbConnection excelConnection = new OleDbConnection(conn);
+            excelConnection.Open();
+            DataTable dt = new DataTable();
+            dt = excelConnection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+            if (dt == null)
+            {
+                return null;
+            }
+            String[] excelSheets = new String[dt.Rows.Count];
+
+            foreach (DataRow row in dt.Rows)
+            {
+                excelSheets[t] = row["TABLE_NAME"].ToString();
+                OleDbConnection excelConnection1 = new OleDbConnection(conn);
+                string query = string.Format("Select * from [{0}]", excelSheets[t]);
+                using (OleDbDataAdapter dataAdapter = new OleDbDataAdapter(query, excelConnection1))
+                {
+                    dataAdapter.Fill(ds);
+                }
+            }
+            return ds;
+        }
+
+        private ShowASI CreateShowData(int id, string name)
+        {
+            ShowASI objShow = new ShowASI()
+            {
+                Id = id,
+                Name = name
+            };
+            return objShow;
+        }
+
+        private ShowCompany CreateCompanyData(int companyId, string asiNumber, string name)
+        {
+            ShowCompany objCompany = new ShowCompany()
+            {
+                Id = companyId,
+                ASINumber = asiNumber,
+                Name = name
+            };
+            return objCompany;
+        }
+
+        private ShowAddress CreateAddressData(int AddressId, string street1, string city, string state, string zip, string country)
+        {
+            ShowAddress objCompanyAddress = new ShowAddress()
+            {
+                Id = AddressId,
+                Street1 = street1,
+                City = city,
+                State = state,
+                Zip = zip,
+                Country = country
+            };
+            return objCompanyAddress;
+        }
+
+        private ShowAttendee CreateAttendeeData(int attendeeId, int CompanyId, int showId, bool isSponsor, bool isPresentation, bool isRoundTable, bool isExhibitDay, bool isExisting)
+        {
+            ShowAttendee objShowAttendee = new ShowAttendee()
+            {
+                Id = attendeeId,
+                CompanyId = CompanyId,
+                ShowId = showId,
+                IsSponsor = isSponsor,
+                IsPresentation = isPresentation,
+                IsRoundTable = isRoundTable,
+                IsExhibitDay = isExhibitDay,
+                IsExisting = isExisting
+            };
+            return objShowAttendee;
+        }
+
+        private ShowEmployee CreateEmployeeData(int employeeId, int CompanyId, string firstName, string lastName)
+        {
+            ShowEmployee objShowEmployee = new ShowEmployee()
+            {
+                Id = employeeId,
+                CompanyId = CompanyId,
+                FirstName = firstName,
+                LastName = lastName
+            };
+            return objShowEmployee;
+        }
+
+        private ShowEmployeeAttendee CreateEmployeeAttendeeData(int employeeAttendeeId, int AttendeeId, int EmployeeId)
+        {
+            ShowEmployeeAttendee objShowEmployeeAttendee = new ShowEmployeeAttendee()
+            {
+                Id = employeeAttendeeId,
+                AttendeeId = AttendeeId,
+                EmployeeId = EmployeeId
+            };
+            return objShowEmployeeAttendee;
+        }
     }
 }

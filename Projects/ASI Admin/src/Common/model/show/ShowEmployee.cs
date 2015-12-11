@@ -15,7 +15,6 @@ namespace asi.asicentral.model.show
         public string MiddleName { get; set; }
         [Required(ErrorMessage = "LastName is required")]
         public string LastName { get; set; }
-        [Required(ErrorMessage = "Email is required")]
         public string Email { get; set; }
         public string EPhoneAreaCode { get; set; }
         public string EPhone { get; set; }
