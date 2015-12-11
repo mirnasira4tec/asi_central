@@ -14,44 +14,46 @@ namespace asi.asicentral.services
     /// </summary>
     public class AssemblyFileService : IFileSystemService
     {
-        private Assembly _baseAssembly;
-        private Assembly _commonAssembly;
-        private bool _useCommon;
+        private Assembly[] _baseAssemblies;
+        private int _activeAssembly;
 
-        public AssemblyFileService(Assembly assembly, Assembly commonAssembly)
+        public AssemblyFileService(Assembly[] assemblies)
         {
-            _baseAssembly = assembly;
-            _commonAssembly = commonAssembly;
+            _baseAssemblies = assemblies;
         }
 
         public AssemblyFileService(Assembly assembly)
         {
-            _baseAssembly = assembly;
+            _baseAssemblies = new Assembly[] { assembly };
         }
 
         public virtual string ReadContent(string fileName)
         {
             string content = string.Empty;
 
-            var assembly = _useCommon ? _commonAssembly : _baseAssembly;
-
-            using (Stream stream = assembly.GetManifestResourceStream(fileName))
-            using (TextReader reader = new StreamReader(stream))
+            if (_activeAssembly < _baseAssemblies.Length)
             {
-                content = reader.ReadToEnd();
+                using (Stream stream = _baseAssemblies[_activeAssembly].GetManifestResourceStream(fileName))
+                using (TextReader reader = new StreamReader(stream))
+                {
+                    content = reader.ReadToEnd();
+                }
             }
             return content;
         }
 
         public virtual bool Exists(string fileName)
         {
-            var exist = _baseAssembly.GetManifestResourceNames().Contains(fileName);
-            _useCommon = false;  // need to reset everytime for singleton
-
-            if (!exist && _commonAssembly != null)
+            _activeAssembly = 0;
+            var exist = false;
+            for (int i = 0; i < _baseAssemblies.Length; i++)
             {
-                _useCommon = _commonAssembly.GetManifestResourceNames().Contains(fileName);
-                exist = _useCommon;
+                exist = _baseAssemblies[i].GetManifestResourceNames().Contains(fileName);
+                if( exist )
+                {
+                    _activeAssembly = i;
+                    break;
+                }
             }
 
             return exist;
