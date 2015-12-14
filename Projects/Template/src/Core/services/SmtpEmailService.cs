@@ -50,7 +50,7 @@ namespace asi.asicentral.services
             SendMail(mailObject);
         }
 
-        public void SendMailSmtp(MailMessage mail)
+        private void SendMailSmtp(MailMessage mail)
         {
             
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
