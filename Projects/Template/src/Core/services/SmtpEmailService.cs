@@ -24,9 +24,12 @@ namespace asi.asicentral.services
         private string from = null;
         private string username = null;
         private string password = null;
+        private log4net.ILog log;
 
         public SmtpEmailService()
         {
+
+            log = log4net.LogManager.GetLogger(GetType());
             //required to avoid the issue with "The remote certificate is invalid according to the validation procedure"
             ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
         }
@@ -118,7 +121,7 @@ namespace asi.asicentral.services
             }
             catch (Exception ex)
             {
-                throw new Exception("Error occurred during sending Email : " + ex.Message);
+                log.Error("Error occured while sending mail : " + ex.Message);
             }
         }
     }
