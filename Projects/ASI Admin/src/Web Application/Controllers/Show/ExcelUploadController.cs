@@ -252,7 +252,6 @@ namespace asi.asicentral.web.Controllers.Show
                                         ObjectService.SaveChanges();
                                     }
                                 }
-                                ObjectService.SaveChanges();
                             }
 
                             IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == objShow.Id).ToList();
