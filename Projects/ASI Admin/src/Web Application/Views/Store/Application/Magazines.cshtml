@@ -148,9 +148,23 @@
 				                @Html.LabelFor(m => m.Subscriptions[i].Contact.Address.Country)
 			                </span>
 			                <span class="label-row">
+                                @if (Model.Subscriptions[i].Contact.Address.Country == "USA")
+                                {
 				                @Html.DropDownListFor(m => m.Subscriptions[i].Contact.Address.State, new SelectList(asi.asicentral.util.HtmlHelper.GetStates(), "Value", "Text", Model.Subscriptions[i].Contact.Address.State)) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.State)
+                                }
+                                else
+                                {
+                                @Html.EditorFor(m => m.Subscriptions[i].Contact.Address.State)  @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.State)
+                                }
 				                @Html.EditorFor(m => m.Subscriptions[i].Contact.Address.Zip) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.Zip)
-				                @Html.DropDownListFor(m => m.Subscriptions[i].Contact.Address.Country, new SelectList(asi.asicentral.util.HtmlHelper.GetCountries(), "Value", "Text", Model.Subscriptions[i].Contact.Address.Country)) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.Country)
+                                @if (!Model.IsHallmarkProduct || (Model.IsHallmarkProduct && Model.Subscriptions[i].Contact.Address.Country == "USA"))
+                                {
+                                @Html.DropDownListFor(m => m.Subscriptions[i].Contact.Address.Country, new SelectList(asi.asicentral.util.HtmlHelper.GetCountries(), "Value", "Text", Model.Subscriptions[i].Contact.Address.Country)) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.Country)
+                                }
+                                else
+                                {
+				                @Html.DropDownListFor(m => m.Subscriptions[i].Contact.Address.Country, new SelectList(asi.asicentral.util.store.MagazinesHelper.GetCountriesForWearables(), "Value", "Text", Model.Subscriptions[i].Contact.Address.Country)) @Html.ValidationMessageFor(m => m.Subscriptions[i].Contact.Address.Country)
+                                }
 			                </span>
                             }
                     }
