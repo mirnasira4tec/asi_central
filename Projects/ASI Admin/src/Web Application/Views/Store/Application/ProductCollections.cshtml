@@ -95,6 +95,27 @@
                         $("#timmsErrorMessage").text("TIMMS ID must contain only numbers.");
                         e.preventDefault();
                     }
+                    else {
+                        var pendingTerms = false;
+                        var orderId = $('#OrderId').val();
+                        $.ajax({
+                            type: 'POST',
+                            contentType: 'application/json',
+                            dataType: 'json',
+                            url: '/Application/HasPendingTerms?orderId=' + orderId,
+                            async: false,
+                            success: function (data) {
+                                pendingTerms = data.HasPendingTerms;
+                            }
+                        });
+
+                        if (pendingTerms) {
+                            var confirm = window.confirm('This order has pending Terms and Conditions. Are you sure to accept the order?');
+                            if (!confirm) {
+                                e.preventDefault();
+                            }
+                        }
+                    }
                 }
             }
         });

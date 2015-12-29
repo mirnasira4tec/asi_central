@@ -939,6 +939,23 @@ namespace asi.asicentral.web.Controllers.Store
 			return View("../Store/Application/SalesForm", application);
 		}
 
+        [HttpPost]
+        public JsonResult HasPendingTerms(string orderId)
+        {
+            var hasPendingTerms = false;
+            var id = 0;
+            if (!string.IsNullOrEmpty(orderId) && int.TryParse(orderId, out id))
+            {
+                var pendingTerms = StoreService.GetAll<TermsConditionsInstance>()
+                                               .Where(t => t.OrderId.Value == id && t.DateAgreedOn == null && string.IsNullOrEmpty(t.AcceptedBy))
+                                               .ToList();
+
+                hasPendingTerms = pendingTerms != null && pendingTerms.Count() > 0;
+            }
+
+            return Json( new { HasPendingTerms = hasPendingTerms });
+        }
+
         /// <summary>
         /// Common code between Edit supplier and distributor
         /// </summary>
