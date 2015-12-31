@@ -1,0 +1,373 @@
+﻿@using System.Web.Mvc.Html
+@using asi.asicentral.model.store;
+@inherits System.Web.Mvc.WebViewPage<FormInstance>
+@{
+    var count = 0;
+    if (Model.Values == null || Model.Values.Count == 0)
+    {
+        for (int i = 0; i < 42; i++)
+        {
+            Model.Values.Add(new FormValue());
+        }
+    }
+}
+<div class="container-fluid-store">
+    <header>
+        <img src="https://store.asicentral.com/media/Forms/RoadShow2016Exhibitor-Header.jpg" alt="ASI Roadshow 2016 Form">
+    </header>
+    <table id="Roadshow-schedule-form">
+        <thead>
+            <tr>
+                <td colspan="4">THE 2016 ASI ROADSHOW SCHEDULE</td>
+                <td><small>EXHIBIT</small></td>
+                <td><small>BUS/<br />
+                    CARGO</small></td>
+                <td><small>CARGO<br />
+                    ONLY</small></td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="gray-bg">
+                <td>1</td>
+                <td>SOUTHEAST</td>
+                <td>JANUARY 25- 28</td>
+                <td>RALEIGH, CHARLOTTE, ATLANTA, NASHVILLE</td>
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="EXHIBIT1" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="BUSORCARGO1" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="CARGOONLY1" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>PACIFIC<br />
+                    NORTHWEST</td>
+                <td>FEBRUARY 22- 25</td>
+                <td>SEATTLE, PORTLAND, <i class="icon-plane"></i>SACRAMENTO, SAN JOSE</td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="EXHIBIT2" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="BUSORCARGO2" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="CARGOONLY2" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+            </tr>
+            <tr class="gray-bg">
+                <td>3</td>
+                <td>CANADA EAST</td>
+                <td>MARCH 30- APRIL 1</td>
+                <td>TORONTO, BURLINGTON, LONDON</td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="EXHIBIT3" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+                <td>
+                    <label>NA</label></td>
+                <td>
+                    <label>NA</label></td>
+
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>MIDWEST I</td>
+                <td>APRIL 11- 15</td>
+                <td>MINNEAPOLIS, DES MOINES, OMAHA, KANSAS CITY, ST. LOUIS</td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="EXHIBIT4" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="BUSORCARGO4" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="CARGOONLY4" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+            </tr>
+            <tr class="gray-bg">
+                <td>5</td>
+                <td>MIDWEST II</td>
+                <td>APRIL 25- 28</td>
+                <td>DETROIT, CLEVELAND, INDIANAPOLIS, CHICAGO</td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="EXHIBIT5" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="BUSORCARGO5" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="CARGOONLY5" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>GREAT WEST</td>
+                <td>MAY 23- 26</td>
+                <td>SALT LAKE CITY, <i class="icon-plane"></i>DENVER, <i class="icon-plane"></i>ALBUQUERQUE, <i class="icon-plane"></i>PHOENIX</td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="EXHIBIT6" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="BUSORCARGO6" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="CARGOONLY6" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+            </tr>
+            <tr class="gray-bg">
+                <td>7</td>
+                <td>CANADA WEST</td>
+                <td>JUNE 6- 9</td>
+                <td>VANCOUVER, TRAVEL DAY, <i class="icon-plane"></i>CALGARY, EDMONTON</td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="EXHIBIT7" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="BUSORCARGO7" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="CARGOONLY7" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>NORTHEAST</td>
+                <td>AUG. 29- SEPT. 2</td>
+                <td>BOSTON, LONG ISLAND, NJ, PHILADELPHIA, BALTIMORE</td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="EXHIBIT8" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="BUSORCARGO8" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="CARGOONLY8" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+            </tr>
+            <tr class="gray-bg">
+                <td>9</td>
+                <td>FLORIDA</td>
+                <td>SEPTEMBER 12- 15</td>
+                <td>ORLANDO, TAMPA, SARASOTA, FT. LAUDERDALE</td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="EXHIBIT9" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="BUSORCARGO9" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="CARGOONLY9" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>SOUTH</td>
+                <td>SEPTEMBER 26-29</td>
+                <td>SAN ANTONIO, HOUSTON, BATON ROUGE, NEW ORLEANS</td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="EXHIBIT10" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="BUSORCARGO10" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+                @{count++;}
+                <td>
+                    <input type="hidden" name="Form.Values[@count].Name" value="CARGOONLY10" />
+                    <input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="7" class="red-bar"></td>
+            </tr>
+        </tbody>
+    </table>
+    <table id="pricing" class="roadshow-small-tables">
+        <thead>
+            <tr>
+                <td colspan="2">PRICING:</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div>
+                        @{count++;}
+                        <label>
+                            5-day Roadshow Week.......... $1,399 
+                            <input type="hidden" name="Form.Values[@count].Name" value="SEBP1" />
+                            <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
+                            @{count++;}
+                            x $1,399 per week = 
+							<input type="hidden" name="Form.Values[@count].Name" value="SEBPTOTAL1" />
+                            <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
+                        </label>
+                    </div>
+                    <div>
+                        @{count++;}
+                        <label>
+                            4-day Roadshow Week.......... $1,120
+							<input type="hidden" name="Form.Values[@count].Name" value="SEBP2" />
+                            <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
+                            @{count++;}
+                            x $1,120 per week =
+							<input type="hidden" name="Form.Values[@count].Name" value="SEBPTOTAL2" />
+                            <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
+                        </label>
+                    </div>
+                    <div>
+                        @{count++;}
+                        <label>
+                            3-day Roadshow Week..............$840
+							<input type="hidden" name="Form.Values[@count].Name" value="SEBP3" />
+                            <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
+                            @{count++;}
+                            x $840 per week =&nbsp;&nbsp;
+							<input type="hidden" name="Form.Values[@count].Name" value="SEBPTOTAL3" />
+                            <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
+                        </label>
+                    </div>
+                    <div>
+                        @{count++;}
+                        <label>
+                            $499 for an additional table&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<input type="hidden" name="Form.Values[@count].Name" value="SEBP4" />
+                            <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
+                            @{count++;}
+                            x $499 per week =&nbsp;&nbsp;&nbsp;
+							<input type="hidden" name="Form.Values[@count].Name" value="SEBPTOTAL4" />
+                            <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
+                        </label>
+                    </div>
+                    <div>
+                        @{count++;}
+                        <label>
+                            $499 one city option <small>(vs. entire week)&nbsp;&nbsp;&nbsp;&nbsp;</small>
+                            <input type="hidden" name="Form.Values[@count].Name" value="SEBP5" />
+                            <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
+                            @{count++;}
+                            x $499 per week =&nbsp;&nbsp;&nbsp;
+							<input type="hidden" name="Form.Values[@count].Name" value="SEBPTOTAL5" />
+                            <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
+                        </label>
+                    </div>
+                    <div>
+                        @{count++;}
+                        <label>
+                            Extra Charges: <small>Bus/Cargo Service: $599; Cargo Only: $499; Electricity: $60 =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</small>
+                            <input type="hidden" name="Form.Values[@count].Name" value="SEBPEXTRAS" />
+                            <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
+                        </label>
+                    </div>
+                    <div>
+                        @{count++;}
+                        <label>
+                            <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TOTAL =
+						<input type="hidden" name="Form.Values[@count].Name" value="SEBPGRANDTOTAL" />
+                                <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/></h1>
+                        </label>
+                    </div>
+                    <div>
+                        <h2>EXHIBITOR FEE INCLUDES: 8’ TABLE, LIGHT SNACKS AND ATTENDEE LIST VIA EMAIL.</h2>
+                        <p>(The contact information may be used only by exhibiting company and cannot be transferred to another person or entity. Any misuse of this information will result in a $1,500 fine. Attendee list only available to ASI supplier members.) Prices and dates are subject to change.</p>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table id="contact" class="roadshow-small-tables">
+        <thead>
+            <tr>
+                <td>CONTACT INFORMATION:</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    @{count++;}
+                    <label>
+                        Line Name:   
+                        <input type="hidden" name="Form.Values[@count].Name" value="LineName" />
+                        <input type="text"  class="input-large" name="Form.Values[@count].Value" value="@Model.Values[count].Value" />
+                    </label>
+                    @{count++;}
+                    <label>
+                        Rep Name:
+						<input type="hidden" name="Form.Values[@count].Name" value="RepName" />
+                        <input type="text" class="input-md" name="Form.Values[@count].Value" value="@Model.Values[count].Value" />
+                    </label>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table id="payment" class="roadshow-small-tables">
+        <thead>
+            <tr>
+                <td colspan="2">PAYMENT METHOD:</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <p>A minimum deposit of $250 per show week is due with registration. The deposit must be paid by the discount deadline to take a discount. The balance is due 60 days prior to show week. Discount does not apply to extra services. By using a credit card, I authorize <em>The ASI Show</em> to charge the balance when due on my credit card for ASI Roadshow weeks. Payment must be US dollars.</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!--End Container-->
