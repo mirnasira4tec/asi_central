@@ -213,6 +213,7 @@
                         });
 
                         if (pendingTerms) {
+                            $("#termsWarningMessage").text('This order has pending Terms and Conditions.');
                             var confirm = window.confirm('This order has pending Terms and Conditions. Are you sure to accept the order?');
                             if (!confirm) {
                                 e.preventDefault();

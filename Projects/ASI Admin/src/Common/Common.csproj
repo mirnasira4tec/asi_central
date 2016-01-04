@@ -524,6 +524,8 @@
     <EmbeddedResource Include="views\store\SpaceDrawForm2016July2015.cshtml" />
     <EmbeddedResource Include="views\email\TermsConditionsEmail.cshtml" />
     <EmbeddedResource Include="views\store\OnSiteExhibitorAgreement2017.cshtml" />
+    <EmbeddedResource Include="views\store\Roadshow2016Exhibitor-MLR.cshtml" />
+    <EmbeddedResource Include="views\store\Roadshow2016ExhibitorAgreement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

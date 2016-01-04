@@ -25,8 +25,8 @@
             { "Decorator Membership - Plus", "DECM-99.99", "Decorator Membership" }, 
             { "Decorator Membership - Pro", "DECM-149.99", "Decorator Membership" } };
 
-		public static readonly string[,] FEES = { { "Application Fee", "APPF-150" }, { "Set Up Fee", "STPF-199" }, 
-             { "Custom Package Pro", "CPRO-299" }, { "Custom Package Master", "CPMT-599" },  { "Custom Package Genius", "CPGE-999" } };
+		public static readonly string[,] FEES = { { "Application Fee", "APPF-150", "" }, { "Set Up Fee", "STPF-199", "" }, 
+             { "Custom Package Pro", "CPRO-299", "Custom Websites Pro" }, { "Custom Package Master", "CPMT-599", "Custom Websites Master" },  { "Custom Package Genius", "CPGE-999", "Custom Websites Genius" } };
 
         public static readonly int SALES_FORM_PRODUCT_ID = 99;
 

@@ -57,6 +57,7 @@
                     { @Html.ActionLink("Cancel", "../Orders") }
                 }
             </div>
+            <div id="termsWarningMessage" data-type="errormessage" class="field-validation-error span10"></div>
             @if (!isBackEnd && !string.IsNullOrEmpty(Model.ExternalReference))
             {
                 <div class="span10">
