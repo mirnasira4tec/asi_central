@@ -10,17 +10,17 @@ namespace asi.asicentral.util.store
 {
     public class ESPAdvertisingHelper
     {
-        public static readonly string[] ESPAdvertising_BANNER_TILE_TOWER_COST = { "900","600","995","195","95","165"};
+        public static readonly string[] ESPAdvertising_BANNER_TILE_TOWER_COST = { "20","10","995","95;200","45;100","85;170"};
         public static readonly decimal[] ESPAdvertising_CLEARANCE_COST = { 0.00M, 125.00M };
         public static readonly decimal[] ESPAdvertising_NEW_COST = { 0.00M, 125.00M };
         public static readonly decimal[] ESPAdvertising_RUSH_COST = { 0.00M, 125.00M };
-        public static readonly decimal[] ESPAdvertising_Video_COST = { 41.58M, 6.58M };
+        public static readonly decimal[] ESPAdvertising_Video_COST = { 50M, 6.58M };
         public static readonly string[] ESPAdvertising_PROMO_CAFE_COST = { "750", "199", "450" };
         public static readonly decimal[] ESPAdvertising_PFP_COST = { 295.00M, 280.00M, 265.00M, 245.00M, 235.00M, 225.00M, 215.00M, 210.00M };
         public static readonly decimal ESPAdvertising_LoginScreen_COST = 250M;
 
         //Login Screen - Prices
-        public static int LoginScreenWeekendPrice = 250;
+        public static int LoginScreenWeekendPrice = 175;
         public static int LoginScreenWeekDayPrice = 1050;
 
         //BANNER_TILE_TOWER_Options
