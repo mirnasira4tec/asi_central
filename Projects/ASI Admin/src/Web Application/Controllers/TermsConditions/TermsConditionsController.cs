@@ -5,6 +5,7 @@ using asi.asicentral.web.Models.TermsConditions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
@@ -28,7 +29,7 @@ namespace asi.asicentral.web.Controllers.TermsConditions
                 var startDate = DateTime.Now.AddDays(-7);
                 var modelList = StoreService.GetAll<TermsConditionsInstance>(true)
                                             .Where(t => t.CreateDate >= startDate && t.DateAgreedOn == null)
-                                            .ToList(); //ToList is necessary here to get TermsConditionsType object
+                                            .ToList().OrderByDescending(t => t.UpdateDate); 
                 foreach (var model in modelList)
                 {
                     viewModelList.Add(model.ToViewModel());
@@ -150,7 +151,7 @@ namespace asi.asicentral.web.Controllers.TermsConditions
                     // send email to customer
                     if (btnSubmit == "Send" && emailTermsList.Count > 0)
                     {
-                        string emailBody = TemplateService.Render("asi.asicentral.web.Views.Emails.TermsConditionsEmail.cshtml", model);
+                        string emailBody = TemplateService.Render("asi.asicentral.views.email.TermsConditionsEmail.cshtml", emailTermsList[0]);
                         var mail = new MailMessage();
                         mail.Subject = "You have Terms and Conditions to be accepted";
                         mail.Body = emailBody;
@@ -247,7 +248,7 @@ namespace asi.asicentral.web.Controllers.TermsConditions
             }
             catch (Exception) { }
 
-            return Json(termInstList.OrderByDescending(t => t.CreateDate));
+            return Json(termInstList.OrderByDescending(t => t.UpdateDate));
         }
 
         public ActionResult OrderDetail(int id)

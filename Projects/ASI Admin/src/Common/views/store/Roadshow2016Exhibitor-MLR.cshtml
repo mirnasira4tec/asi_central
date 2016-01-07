@@ -13,7 +13,7 @@
 }
 <div class="container-fluid-store">
     <header>
-        <img src="https://store.asicentral.com/media/Forms/roadshow-exhibitor-header-2016.jpg" alt="ASI Roadshow 2016 Form">
+        <img src="https://store.asicentral.com/media/Forms/Roadshow2016Exhibitor-MLR-Header.jpg" alt="ASI Roadshow 2016 Form - MLR">
     </header>
     <table id="Roadshow-schedule-form">
         <thead>
@@ -83,7 +83,6 @@
                     <label>NA</label></td>
                 <td>
                     <label>NA</label></td>
-
             </tr>
             <tr>
                 <td>4</td>
@@ -240,7 +239,7 @@
     <table id="pricing" class="roadshow-small-tables">
         <thead>
             <tr>
-                <td colspan="2">SPECIAL EARLY BIRD PRICING (VALID UNTIL NOVEMBER 20, 2015):</td>
+                <td colspan="2">PRICING:</td>
             </tr>
         </thead>
         <tbody>
@@ -249,11 +248,11 @@
                     <div>
                         @{count++;}
                         <label>
-                            5-day Roadshow Week.......... $1,200 
+                            5-day Roadshow Week.......... $1,399
                             <input type="hidden" name="Form.Values[@count].Name" value="SEBP1" />
                             <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
-                            @{count++;}
-                            x $1,200 per week = 
+                            @{count++;}                            
+                            x $1,399 per week =&nbsp;&nbsp;&nbsp;
 							<input type="hidden" name="Form.Values[@count].Name" value="SEBPTOTAL1" />
                             <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
                         </label>
@@ -261,11 +260,11 @@
                     <div>
                         @{count++;}
                         <label>
-                            4-day Roadshow Week..............$960
+                            4-day Roadshow Week.......... $1,120
 							<input type="hidden" name="Form.Values[@count].Name" value="SEBP2" />
                             <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
-                            @{count++;}
-                            x $960 per week =&nbsp;&nbsp;&nbsp;
+                            @{count++;}                              
+                            x $1,120 per week =&nbsp;&nbsp;&nbsp;
 							<input type="hidden" name="Form.Values[@count].Name" value="SEBPTOTAL2" />
                             <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
                         </label>
@@ -273,11 +272,11 @@
                     <div>
                         @{count++;}
                         <label>
-                            3-day Roadshow Week..............$720
+                            3-day Roadshow Week..............$840
 							<input type="hidden" name="Form.Values[@count].Name" value="SEBP3" />
                             <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
-                            @{count++;}
-                            x $720 per week =&nbsp;&nbsp;&nbsp;
+                            @{count++;}                              
+                            x $840 per week =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							<input type="hidden" name="Form.Values[@count].Name" value="SEBPTOTAL3" />
                             <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
                         </label>
@@ -289,7 +288,7 @@
 							<input type="hidden" name="Form.Values[@count].Name" value="SEBP4" />
                             <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
                             @{count++;}
-                            x $499 per week =&nbsp;&nbsp;&nbsp;
+                            x $499 per week =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							<input type="hidden" name="Form.Values[@count].Name" value="SEBPTOTAL4" />
                             <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
                         </label>
@@ -300,8 +299,8 @@
                             $499 one city option <small>(vs. entire week)&nbsp;&nbsp;&nbsp;&nbsp;</small>
                             <input type="hidden" name="Form.Values[@count].Name" value="SEBP5" />
                             <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
-                            @{count++;}
-                            x $499 per week =&nbsp;&nbsp;&nbsp;
+                            @{count++;}                              
+                            x $499 per week =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							<input type="hidden" name="Form.Values[@count].Name" value="SEBPTOTAL5" />
                             <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
                         </label>
@@ -309,7 +308,7 @@
                     <div>
                         @{count++;}
                         <label>
-                            Extra Charges: <small>Bus/Cargo Service: $599; Cargo Only: $499; Electricity: $60 =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</small>
+                            Extra Charges: <small>Bus/Cargo Service: $599; Cargo Only: $499; Electricity: $60 =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</small>
                             <input type="hidden" name="Form.Values[@count].Name" value="SEBPEXTRAS" />
                             <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/>
                         </label>
@@ -317,13 +316,13 @@
                     <div>
                         @{count++;}
                         <label>
-                            <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TOTAL =
+                            <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TOTAL =
 						<input type="hidden" name="Form.Values[@count].Name" value="SEBPGRANDTOTAL" />
                                 <input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value"/></h1>
                         </label>
                     </div>
                     <div>
-                        <h2>EXHIBITOR FEE INCLUDES: 8’ TABLE, LIGHT SNACKS AND ATTENDEE LIST VIA EMAIL.</h2>
+                        <h2>MULTI-LINE REP EXHIBITOR FEE INCLUDES: TWO 8’ TABLE, LIGHT SNACKS AND ATTENDEE LIST VIA EMAIL.</h2>
                         <p>(The contact information may be used only by exhibiting company and cannot be transferred to another person or entity. Any misuse of this information will result in a $1,500 fine. Attendee list only available to ASI supplier members.) Prices and dates are subject to change.</p>
                     </div>
                 </td>
