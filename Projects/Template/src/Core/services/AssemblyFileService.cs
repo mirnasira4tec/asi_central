@@ -14,28 +14,49 @@ namespace asi.asicentral.services
     /// </summary>
     public class AssemblyFileService : IFileSystemService
     {
-        private Assembly _baseAssembly;
+        private Assembly[] _baseAssemblies;
+        private int _activeAssembly;
+
+        public AssemblyFileService(Assembly[] assemblies)
+        {
+            _baseAssemblies = assemblies;
+        }
 
         public AssemblyFileService(Assembly assembly)
         {
-            _baseAssembly = assembly;
+            _baseAssemblies = new Assembly[] { assembly };
         }
 
         public virtual string ReadContent(string fileName)
         {
             string content = string.Empty;
 
-            using (Stream stream = _baseAssembly.GetManifestResourceStream(fileName))
-            using (TextReader reader = new StreamReader(stream))
+            if (_activeAssembly < _baseAssemblies.Length)
             {
-                content = reader.ReadToEnd();
+                using (Stream stream = _baseAssemblies[_activeAssembly].GetManifestResourceStream(fileName))
+                using (TextReader reader = new StreamReader(stream))
+                {
+                    content = reader.ReadToEnd();
+                }
             }
             return content;
         }
 
         public virtual bool Exists(string fileName)
         {
-            return _baseAssembly.GetManifestResourceNames().Contains(fileName);
+            _activeAssembly = 0;
+            var exist = false;
+            for (int i = 0; i < _baseAssemblies.Length; i++)
+            {
+                exist = _baseAssemblies[i].GetManifestResourceNames().Contains(fileName);
+                if( exist )
+                {
+                    _activeAssembly = i;
+                    break;
+                }
+            }
+
+            return exist;
         }
     }
 }

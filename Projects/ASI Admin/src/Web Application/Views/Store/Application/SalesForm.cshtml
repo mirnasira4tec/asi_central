@@ -28,10 +28,25 @@
 	    <div id="tabproduct" class="product-information tab-pane fade">
 			@if (Model.SpecialProductItems != null && Model.SpecialProductItems.Any())
 			{
-		    <fieldset>
-			    <legend>Sales Representative</legend>
-				<span>@Model.SpecialProductItems.First().ASIContactName</span>
-		    </fieldset>
+                var item = Model.SpecialProductItems.First();
+		        <fieldset>
+			        <legend>Sales Representative</legend>
+				    <span>@item.ASIContactName</span>
+		        </fieldset>
+                if( !string.IsNullOrEmpty(item.ASIContactEmail))
+                {
+		            <fieldset>
+			            <legend>Sales Representative Email</legend>
+				        <span>@item.ASIContactEmail</span>
+		            </fieldset>
+                }
+                if( !string.IsNullOrEmpty(item.CustomerEmail))
+                {
+		            <fieldset>
+			            <legend>Customer Email</legend>
+				        <span>@item.CustomerEmail</span>
+		            </fieldset>
+                }
 			}
 		    @if(!string.IsNullOrEmpty(Model.OrderDetailComments))
 		    {
@@ -44,7 +59,7 @@
 			    <legend>Order Details</legend>
 		    </fieldset>
 		    @if (Model.SpecialProductItems != null && Model.SpecialProductItems.Any())
-	  {
+	        {
 			    <table class="table">
 				    <thead>
 					    <tr>
@@ -57,7 +72,7 @@
 				    </thead>
 				    <tbody >
 					    @foreach (var item in Model.SpecialProductItems)
-		 {
+		                {
 						    <tr>
 							    <td>@asi.asicentral.util.store.SalesFormHelper.GetProductDescription(item.ServiceType)</td>
 							    <td>@Html.Raw(item.IsSetupCharges ? "<i class=\"icon-ok\"></i>" : "&nbsp;")</td>
@@ -65,10 +80,10 @@
 							    <td>@item.Price</td>
 							    <td>@item.OfferPrice</td>
 						    </tr>
-		 }
+		                 }
 				    </tbody>
 			    </table>
-	  }
+	        }
 	  else
 	  {
 			    <text>No data was associated with this order</text>

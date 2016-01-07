@@ -239,25 +239,19 @@ namespace asi.asicentral.web.Controllers.Show
                             {
                                 foreach (var deleteAttendee in deleteAttendees)
                                 {
-                                    IList<ShowEmployeeAttendee> deleteEmployeeAttendees = ObjectService.GetAll<ShowEmployeeAttendee>().Where(item => item.AttendeeId == deleteAttendee.Id).ToList();
+                                    ShowAttendee attendee = ObjectService.GetAll<ShowAttendee>().FirstOrDefault(item => item.Id == deleteAttendee.Id);
+                                    if (attendee != null)
                                     {
-                                        if (deleteEmployeeAttendees != null)
+                                        int employeeAttendeeCount = attendee.EmployeeAttendees.Count();
+
+                                        for (int i = employeeAttendeeCount; i > 0; i--)
                                         {
-                                           
-                                            foreach (var deleteEmployeeAttendee in deleteEmployeeAttendees)
-                                            {
-                                                ObjectService.Delete<ShowEmployeeAttendee>(deleteEmployeeAttendee);
-                                                ShowEmployee deleteEmployee = ObjectService.GetAll<ShowEmployee>().SingleOrDefault(item => item.Id == deleteEmployeeAttendee.Id);
-                                                if (deleteEmployee != null)
-                                                {
-                                                    ObjectService.Delete<ShowEmployee>(deleteEmployee);
-                                                }
-                                            }
+                                            ObjectService.Delete(attendee.EmployeeAttendees.ElementAt(i - 1));
                                         }
+                                        ObjectService.Delete<ShowAttendee>(attendee);
+                                        ObjectService.SaveChanges();
                                     }
-                                    ObjectService.Delete<ShowAttendee>(deleteAttendee);
                                 }
-                                ObjectService.SaveChanges();
                             }
 
                             IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == objShow.Id).ToList();

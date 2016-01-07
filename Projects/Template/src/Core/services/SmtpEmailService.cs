@@ -24,11 +24,14 @@ namespace asi.asicentral.services
         private string from = null;
         private string username = null;
         private string password = null;
+        private log4net.ILog log;
 
         public SmtpEmailService()
         {
+
+            log = log4net.LogManager.GetLogger(GetType());
             //required to avoid the issue with "The remote certificate is invalid according to the validation procedure"
-            ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; }; 
+            ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
         }
 
         public static SmtpEmailService GetService(string smtpAddress, int port, string from, bool ssl)
@@ -50,6 +53,28 @@ namespace asi.asicentral.services
             SendMail(mailObject);
         }
 
+        private void SendMailSmtp(MailMessage mail)
+        {
+            
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                username = ConfigurationManager.AppSettings["smtpUserName"];
+                password = ConfigurationManager.AppSettings["smtpPassword"];
+            }
+
+            SmtpClient SmtpServer = new SmtpClient(smtpAddress);
+            SmtpServer.Port = port;
+            SmtpServer.EnableSsl = ssl;
+            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
+            {
+                SmtpServer.Credentials = new System.Net.NetworkCredential(username, password);
+            }
+            if (mail.From == null) mail.From = new MailAddress(from);
+
+            SmtpServer.Send(mail);
+
+
+        }
 
         public virtual void SendMail(MailMessage mail)
         {
@@ -89,30 +114,15 @@ namespace asi.asicentral.services
                     throw new Exception("The SmtpEmailService was not initialized properly");
                 }
             }
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-            {
-                username = ConfigurationManager.AppSettings["smtpUserName"];
-                password = ConfigurationManager.AppSettings["smtpPassword"];
-            }
-            
-            SmtpClient SmtpServer = new SmtpClient(smtpAddress);
-            SmtpServer.Port = port;
-            SmtpServer.EnableSsl = ssl;
-            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
-            {
-                SmtpServer.Credentials = new System.Net.NetworkCredential(username, password);
-            }
-            if (mail.From == null) mail.From = new MailAddress(from);
 
             try
             {
-                new Thread(() => SmtpServer.Send(mail)).Start();
+                new Thread(() => SendMailSmtp(mail)).Start();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception("Error occurred during sending Email : " + ex.Message);
+                log.Error("Error occured while sending mail : " + ex.Message);
             }
-            
         }
     }
 }

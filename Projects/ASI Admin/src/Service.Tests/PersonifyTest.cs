@@ -43,6 +43,15 @@ namespace asi.asicentral.Tests
             IStoreService storeService = MockupStoreService();
             var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 7);
             PlaceOrderTest("12345", storeService, new ContextProduct[] { distributor }, "PlaceBundleOrderTest");
+            //PlaceOrderTest("12345", storeService, new ContextProduct[] { distributor }, "PlaceBundleOrderTest");
+        }
+
+        [TestMethod]
+        public void BundleOrderDistributorFirstMonthFree()
+        {
+            var storeService = MockupStoreService();
+            var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 7);
+            PlaceOrderTest("12345", storeService, new ContextProduct[] { distributor }, "PlaceBundleOrderTest");
         }
 
         [TestMethod]
@@ -201,6 +210,28 @@ namespace asi.asicentral.Tests
             personify.PlaceOrder(order, new Mock<IEmailService>().Object, null);
         }
 
+        private void CreateBundleOrder(string asiNumber, IStoreService storeService, ContextProduct[] products, string testName, string couponCode)
+        {
+            IBackendService personify = new PersonifyService(storeService);
+            StoreOrder order = CreateOrder(asiNumber, products, testName);
+
+           //simulate the store process by first processing the credit card
+            ICreditCardService cardService = new CreditCardService(new PersonifyService(storeService));
+            var cc = new CreditCard
+            {
+                Address = "",
+                CardHolderName = order.CreditCard.CardHolderName,
+                Type = order.CreditCard.CardType,
+                Number = order.CreditCard.CardNumber,
+                ExpirationDate = new DateTime(int.Parse(order.CreditCard.ExpYear), int.Parse(order.CreditCard.ExpMonth), 1),
+            };
+            Assert.IsTrue(cardService.Validate(cc));
+            var profileIdentifier = cardService.Store(order, cc, true);
+            Assert.IsNotNull(profileIdentifier);
+            Assert.IsNotNull(order.Company.ExternalReference);
+            order.CreditCard.ExternalReference = profileIdentifier;
+            personify.PlaceOrder(order, new Mock<IEmailService>().Object, null);
+        }
         [TestMethod]
         public void AddPhoneNumberTest()
         {
@@ -545,6 +576,7 @@ namespace asi.asicentral.Tests
             mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 2, PersonifyProduct = 1003113955, StoreOption = string.Empty, PersonifyRateCode = "FP_SUPMEMSTDCON", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "SUPPLIERMEM_STD_CON", ClassCode = "SUPPLIER" });
             mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 2, PersonifyProduct = 1003113955, StoreOption = string.Empty, PersonifyRateCode = "STD_SUPMEMSTD", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "SUPPLIERMEM_STD", ClassCode = "SUPPLIER" });
             mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 7, PersonifyProduct = 1003113722, PersonifyRateCode = "FP_ESPPMDLMORD14", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "ESPP-MD-LM-ORD", ClassCode = "DISTRIBUTOR" });
+            //mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 7, PersonifyRateCode = "TRIAL1000_ESPPMDLMORD15", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "ESPP-MD-LM-ORD", ClassCode = "DISTRIBUTOR" });
             var codes = new List<LookSendMyAdCountryCode>();
             codes.Add(new LookSendMyAdCountryCode { Alpha2 = "USA", Alpha3 = "USA", CountryName = "United States" });
 
@@ -556,7 +588,7 @@ namespace asi.asicentral.Tests
             return mockObjectService.Object;
         }
 
-        private static StoreOrder CreateOrder(string asiNumber, ContextProduct[] products, string testName)
+        private static StoreOrder CreateOrder(string asiNumber, ContextProduct[] products, string testName, string couponCode=null)
         {
             var tag = DateTime.Now.Ticks;
             var address1 = new StoreAddress()
@@ -613,9 +645,10 @@ namespace asi.asicentral.Tests
                 CardType = "Visa",
                 CardNumber = "4111111111111111",
                 ExpMonth = "11",
-                ExpYear = "2015",
+                ExpYear = "2017",
                 CardHolderName = "ASI Store",
             };
+
             var orderDetails = new List<StoreOrderDetail>();
             var order = new StoreOrder()
             {
@@ -625,21 +658,28 @@ namespace asi.asicentral.Tests
                 BillingIndividual = person,
                 OrderDetails = orderDetails,
                 OrderRequestType = "Supplier",
-                CreditCard = creditCard,
+                CreditCard = creditCard
             };
             foreach (var product in products)
             {
+                Coupon coupon = null;
+                if( string.IsNullOrEmpty(couponCode))
+                {
+                    coupon = new Coupon() { ProductId = product.Id, CouponCode = couponCode, IsFixedAmount = true, DiscountAmount = product.ApplicationCost  };
+                }
+
                 var orderDetail = new StoreOrderDetail()
                 {
                     Id = 1,
-                    ApplicationCost = 0,
-                    Cost = 0,
+                    ApplicationCost = product.ApplicationCost,
+                    Cost = product.Cost,
                     OptionId = 0,
-                    Quantity = 2,
+                    Quantity = 1,
                     IsSubscription = true,
                     Product = product,
                     Order = order,
                     DateOption = DateTime.Now.AddDays(2),
+                    Coupon = coupon
                 };
                 orderDetails.Add(orderDetail);
             }
