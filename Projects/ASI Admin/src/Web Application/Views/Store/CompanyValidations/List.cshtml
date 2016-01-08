@@ -10,6 +10,7 @@
     var endBuyers = Model.CompanyValidations.Where(li => li.Type == CompanyValidation.END_BUYERS_KEYWORDS).ToList();
     var registeredTrademarks = Model.CompanyValidations.Where(li => li.Type == CompanyValidation.REGISTERED_TRADEMARKS).ToList();
     var emailDomains = Model.CompanyValidations.Where(li => li.Type == CompanyValidation.EMAIL_DOMAINS).ToList();
+    var forbiddenWords = Model.CompanyValidations.Where(li => li.Type == CompanyValidation.FORBIDDEN_WORDS).ToList();
 }
 
 <h2>Company Validations</h2>
@@ -42,6 +43,7 @@
         <li class="active"><a href="#tabEndBuyers" data-toggle="tab">@CompanyValidation.END_BUYERS_KEYWORDS</a></li>
         <li><a href="#tabRegisteredTrademarks" data-toggle="tab">@CompanyValidation.REGISTERED_TRADEMARKS</a></li>
         <li><a href="#tabEmailDomains" data-toggle="tab">@CompanyValidation.EMAIL_DOMAINS</a></li>
+        <li><a href="#tabForbiddenWords" data-toggle="tab">@CompanyValidation.FORBIDDEN_WORDS</a></li>
     </ul>   
     <div id="tabEndBuyers" class="product-details tab-pane fade in active">
         <div id="endBuyers">
@@ -58,6 +60,12 @@
     <div id="tabEmailDomains" class="product-details tab-pane fade">
         <div id="emailDomains">
          @Html.Partial("../Store/CompanyValidations/GroupByType", emailDomains)
+       </div>
+    </div>
+
+    <div id="tabForbiddenWords" class="product-details tab-pane fade">
+        <div id="forbiddenWords">
+         @Html.Partial("../Store/CompanyValidations/GroupByType", forbiddenWords)
        </div>
     </div>
 
@@ -110,19 +118,29 @@
                 $("#endBuyers").show();
                 $("#registeredTrademarks").hide();
                 $("#emailDomains").hide();
+                $("#forbiddenWords").hide();
                 type = '@CompanyValidation.END_BUYERS_KEYWORDS';
             }
             else if (index == 1) {
                 $("#endBuyers").hide();
                 $("#registeredTrademarks").show();
                 $("#emailDomains").hide();
+                $("#forbiddenWords").hide();
                 type = '@CompanyValidation.REGISTERED_TRADEMARKS';
             }
             else if (index == 2) {
                 $("#endBuyers").hide();
                 $("#registeredTrademarks").hide();
                 $("#emailDomains").show();
+                $("#forbiddenWords").hide();
                 type = '@CompanyValidation.EMAIL_DOMAINS';
+            }
+            else if (index == 3) {
+                $("#endBuyers").hide();
+                $("#registeredTrademarks").hide();
+                $("#emailDomains").hide();
+                $("#forbiddenWords").show();
+                type = '@CompanyValidation.FORBIDDEN_WORDS';
             }
             $("#Type").val(type);
         })
@@ -140,6 +158,8 @@
             $('a[href="#tabRegisteredTrademarks"]').tab('show');
         else if (index == 2)
             $('a[href="#tabEmailDomains"]').tab('show');
-    }
+        else if (index == 3)
+            $('a[href="#tabForbiddenWords"]').tab('show');
+}
     </script>
 }
