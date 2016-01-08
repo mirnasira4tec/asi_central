@@ -112,37 +112,16 @@
         });
 
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-            var index = $(e.target).closest('li').index();
-            var type = "";
-            if (index == 0) {
-                $("#endBuyers").show();
-                $("#registeredTrademarks").hide();
-                $("#emailDomains").hide();
-                $("#forbiddenWords").hide();
-                type = '@CompanyValidation.END_BUYERS_KEYWORDS';
+            var tabs = ["endBuyers", "registeredTrademarks", "emailDomains", "forbiddenWords"];
+            var target = $($($(e.target).attr('href')).children()[0]).attr('id');
+
+            for (var i = 0; i < tabs.length; i++) {
+                if (tabs[i] == target)
+                    $('#' + tabs[i]).show();
+                else
+                    $('#' + tabs[i]).hide();
             }
-            else if (index == 1) {
-                $("#endBuyers").hide();
-                $("#registeredTrademarks").show();
-                $("#emailDomains").hide();
-                $("#forbiddenWords").hide();
-                type = '@CompanyValidation.REGISTERED_TRADEMARKS';
-            }
-            else if (index == 2) {
-                $("#endBuyers").hide();
-                $("#registeredTrademarks").hide();
-                $("#emailDomains").show();
-                $("#forbiddenWords").hide();
-                type = '@CompanyValidation.EMAIL_DOMAINS';
-            }
-            else if (index == 3) {
-                $("#endBuyers").hide();
-                $("#registeredTrademarks").hide();
-                $("#emailDomains").hide();
-                $("#forbiddenWords").show();
-                type = '@CompanyValidation.FORBIDDEN_WORDS';
-            }
-            $("#Type").val(type);
+            $("#Type").val($(e.target).text());
         })
     });
 
