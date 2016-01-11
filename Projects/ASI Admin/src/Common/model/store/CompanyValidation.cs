@@ -11,6 +11,7 @@ namespace asi.asicentral.model.store
         public const string END_BUYERS_KEYWORDS = "End Buyer Keywords";
         public const string REGISTERED_TRADEMARKS = "Registered Trademarks";
         public const string EMAIL_DOMAINS = "Email Domains";
+        public const string FORBIDDEN_WORDS = "Forbidden Words";
 
         public int Id { get; set; }
         public string Type { get; set; }
