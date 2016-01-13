@@ -886,6 +886,8 @@ namespace asi.asicentral.services.PersonifyProxy
                     {
                         customer.UserDefinedMemberStatusString = StatusCode.ACTIVE.ToString();
                         SvcClient.Save<ASICustomer>(customer);
+
+                        companyInfo.MemberStatus = customer.UserDefinedMemberStatusString;
                     }
                 }
             }
@@ -915,6 +917,8 @@ namespace asi.asicentral.services.PersonifyProxy
                                                                                    mapping.SubClassCode,
                                                                                    "WEBUSER"});
 
+                    companyInfo.CustomerClassCode = mapping.ClassCode;
+                    companyInfo.SubClassCode = mapping.SubClassCode;
                 }
             }
         }

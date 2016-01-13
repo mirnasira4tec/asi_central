@@ -1,4 +1,5 @@
-﻿using asi.asicentral.Resources;
+﻿using asi.asicentral.oauth;
+using asi.asicentral.Resources;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -31,5 +32,7 @@ namespace asi.asicentral.model
 		public string Country { get; set; }
 		[Display(ResourceType = typeof(Resource), Name = "Phone")]
 		public string Phone { get; set; }
+
+        public bool IsTerminated() { return MemberStatus == StatusCode.TERMINATED.ToString() || MemberStatus == StatusCode.TRMN.ToString(); }
 	}
 }

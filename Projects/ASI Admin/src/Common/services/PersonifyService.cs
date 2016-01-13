@@ -30,8 +30,9 @@ namespace asi.asicentral.services
             this.storeService = storeService;
         }
 
-        public virtual void PlaceOrder(StoreOrder order, IEmailService emailService, string url)
+        public virtual CompanyInformation PlaceOrder(StoreOrder order, IEmailService emailService, string url)
         {
+            CompanyInformation companyInfo = null;
             log.Debug(string.Format("Place order Start : {0}", order));
             IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
             if (order == null || order.Company == null || order.Company.Individuals == null || countryCodes == null)
@@ -40,7 +41,13 @@ namespace asi.asicentral.services
             {
                 IEnumerable<StoreAddressInfo> storeAddress = null;
                 var memberType = string.IsNullOrEmpty(order.Company.MemberType) ? "UNKNOWN" : order.Company.MemberType;
-                var companyInfo = PersonifyClient.ReconcileCompany(order.Company, memberType, countryCodes, ref storeAddress, true);
+                companyInfo = PersonifyClient.ReconcileCompany(order.Company, memberType, countryCodes, ref storeAddress, true);
+
+                // do not place order for terminated company
+                if ( companyInfo.IsTerminated())
+                {
+                    return companyInfo;
+                }
 
                 log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
@@ -200,6 +207,8 @@ namespace asi.asicentral.services
                 data.SendEmail(emailService);
                 throw ex;
             }
+
+            return companyInfo;
         }
 
         protected void PostCreateBundleOrder(StoreOrder storeOrder, IEmailService emailService, string url, PersonifyMapping mapping, 
