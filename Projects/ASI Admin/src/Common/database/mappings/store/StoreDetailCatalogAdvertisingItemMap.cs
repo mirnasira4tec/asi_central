@@ -18,6 +18,7 @@ namespace asi.asicentral.database.mappings.store
             Property(t => t.Id)
                 .HasColumnName("AdItemId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            Property(t => t.ProductTypeStringValue).HasColumnName("ProductType");
             Property(t => t.OrderDetailId).IsRequired();
             Property(t => t.AdSize).IsRequired();
             Property(t => t.CreateDate)

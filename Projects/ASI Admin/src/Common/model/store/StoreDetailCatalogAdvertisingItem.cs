@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using asi.asicentral.util.store.catalogadvertising;
 using asi.asicentral.util.store.magazinesadvertising;
 using ASI.EntityModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace asi.asicentral.model.store
 {
@@ -21,7 +22,20 @@ namespace asi.asicentral.model.store
         public int Id { get; set; }
         public int OrderDetailId { get; set; }
 
+        [NotMapped]
         public CatalogAdvertisingUpload ProductType { get; set; }
+
+        public string ProductTypeStringValue
+        { 
+            get { return ProductType.ToString("d"); }
+            set 
+            {
+                CatalogAdvertisingUpload type;
+                if( Enum.TryParse<CatalogAdvertisingUpload>(value, out type) )
+                    ProductType = type;
+            }
+        }
+
         public string AdSize { get; set; }
         public string ProductDescription { get; set; }
         public string ProductPricing { get; set; }
