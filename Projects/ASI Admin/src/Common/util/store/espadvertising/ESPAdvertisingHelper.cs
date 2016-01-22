@@ -10,7 +10,7 @@ namespace asi.asicentral.util.store
 {
     public class ESPAdvertisingHelper
     {
-        public static readonly string[] ESPAdvertising_BANNER_TILE_TOWER_COST = { "20","10","995","95;200","45;100","85;170"};
+        public static readonly string[] ESPAdvertising_BANNER_TILE_TOWER_COST = { "20","10","995","95","45","85"};
         public static readonly decimal[] ESPAdvertising_CLEARANCE_COST = { 0.00M, 125.00M };
         public static readonly decimal[] ESPAdvertising_NEW_COST = { 0.00M, 125.00M };
         public static readonly decimal[] ESPAdvertising_RUSH_COST = { 0.00M, 125.00M };
