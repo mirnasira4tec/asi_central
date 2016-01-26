@@ -528,6 +528,7 @@
     <EmbeddedResource Include="views\store\OnSiteExhibitorAgreement2017.cshtml" />
     <EmbeddedResource Include="views\store\Roadshow2016Exhibitor-MLR.cshtml" />
     <EmbeddedResource Include="views\store\Roadshow2016ExhibitorAgreement.cshtml" />
+    <EmbeddedResource Include="views\store\SpaceDrawForm2017.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
