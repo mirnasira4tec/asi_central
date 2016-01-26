@@ -10,7 +10,8 @@ namespace asi.asicentral.model.store
         Approved = 1,
         Rejected = 2,
         PersonifyError = 3,
-        ValidationError = 4
+        ValidationError = 4,
+        ErrorOverride = 5
     }
 
     public class StoreOrder

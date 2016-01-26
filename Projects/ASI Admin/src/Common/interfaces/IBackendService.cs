@@ -22,6 +22,8 @@ namespace asi.asicentral.interfaces
         /// <returns></returns>
         bool IsProcessUsingBackend(StoreOrderDetail orderDetail);
 
+        CompanyInformation UpdateCompanyStatus(StoreCompany storeCompany, asi.asicentral.oauth.StatusCode status);
+
 	    bool ValidateCreditCard(CreditCard creditCard);
 
 		string SaveCreditCard(StoreOrder order, CreditCard creditCard);
