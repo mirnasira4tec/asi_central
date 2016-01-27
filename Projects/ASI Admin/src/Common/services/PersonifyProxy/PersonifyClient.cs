@@ -872,6 +872,27 @@ namespace asi.asicentral.services.PersonifyProxy
             return Regex.Replace(input.Trim(), @"[\.\$@&#\?,!]*", "");
         }
 
+        public static CompanyInformation UpdateCompanyStatus(StoreCompany company, StatusCode status)
+        {
+            var matchList = new List<string>();
+            var companyInfo = FindCustomerInfo(company, ref matchList);
+            var customers = SvcClient.Ctxt.ASICustomers.Where(
+                    p => p.MasterCustomerId == companyInfo.MasterCustomerId && p.SubCustomerId == 0).ToList();
+            if (customers.Count > 0)
+            {
+                ASICustomer customer = customers[0];
+                if (customer.UserDefinedMemberStatusString != status.ToString())
+                {
+                    customer.UserDefinedMemberStatusString = status.ToString();
+                    SvcClient.Save<ASICustomer>(customer);
+
+                    companyInfo.MemberStatus = customer.UserDefinedMemberStatusString;
+                }
+            }
+
+            return companyInfo;
+        }
+
         private static void UpdatePersonifyCompany(CompanyInformation companyInfo, PersonifyMapping mapping)
         {
             // update company status from Delisted to Active

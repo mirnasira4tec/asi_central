@@ -329,6 +329,14 @@ namespace asi.asicentral.services
             return processUsingBackend;
         }
 
+        public virtual CompanyInformation UpdateCompanyStatus(StoreCompany storeCompany, StatusCode status)
+        {
+            log.Debug(string.Format("Start UpdateCompanyStatus {0}, {1} ).", storeCompany.Name, status.ToString()));
+            var companyInfo = PersonifyClient.UpdateCompanyStatus(storeCompany, status);
+            log.Debug(string.Format("End UpdateCompanyStatus {0}, {1}).", storeCompany.Name, status.ToString()));
+            return companyInfo;
+        }
+
         public virtual bool ValidateCreditCard(CreditCard creditCard)
         {
 

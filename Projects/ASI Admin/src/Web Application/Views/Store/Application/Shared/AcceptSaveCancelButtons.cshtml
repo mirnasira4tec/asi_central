@@ -56,6 +56,12 @@
                     else
                     { @Html.ActionLink("Cancel", "../Orders") }
                 }
+                
+                @if( Model.OrderStatus == OrderStatus.ErrorOverride)
+                {
+                    <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_OVERRIDE" />
+                }
+
             </div>
             @if (!isBackEnd && !string.IsNullOrEmpty(Model.ExternalReference))
             {

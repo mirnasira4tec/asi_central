@@ -22,6 +22,7 @@ namespace asi.asicentral.web.Controllers.Store
         public const string COMMAND_REJECT = "Reject";
         public const string COMMAND_ACCEPT = "Accept";
         public const string COMMAND_RESUBMIT = "Resubmit";
+        public const string COMMAND_OVERRIDE = "Override";
         //products associated only to StoreOrderDetail table
         public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 29, 30, 31, 45, 46, 55, 56, 57, 58, 59, 60, 62, 70, 71, 77, 78, 96, 97, 98, 100, 101, 102, 104, 105, 106, 107, 108, 109, 112, 113 };
         //products associated to StoreDetailESPAdvertising table
@@ -974,10 +975,15 @@ namespace asi.asicentral.web.Controllers.Store
                 order.ProcessStatus = OrderStatus.Rejected;
                
             }
-            else if (command == ApplicationController.COMMAND_RESUBMIT)
+            else if (command == ApplicationController.COMMAND_RESUBMIT || command == ApplicationController.COMMAND_OVERRIDE )
             {
                 try
                 {
+                    if (command == ApplicationController.COMMAND_OVERRIDE)
+                    {
+                        BackendService.UpdateCompanyStatus(order.Company, oauth.StatusCode.ACTIVE);
+                    }
+
                     BackendService.PlaceOrder(order, EmailService, null);
                     order.ProcessStatus = OrderStatus.Approved;
                     order.ApprovedDate = DateTime.UtcNow;
@@ -986,7 +992,12 @@ namespace asi.asicentral.web.Controllers.Store
                         if (System.Web.HttpContext.Current.User.Identity as System.Security.Principal.WindowsIdentity != null)
                             order.ApprovedBy = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
                     }
-                   
+
+                    if (command == ApplicationController.COMMAND_OVERRIDE)
+                    {
+                        order.CompletedStep = 4;
+                        order.IsCompleted = true;
+                    }                   
                 }
                 catch(Exception ex)
                 {
