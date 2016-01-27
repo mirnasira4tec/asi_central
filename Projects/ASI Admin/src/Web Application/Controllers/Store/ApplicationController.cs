@@ -986,14 +986,18 @@ namespace asi.asicentral.web.Controllers.Store
 
                     BackendService.PlaceOrder(order, EmailService, null);
                     order.ProcessStatus = OrderStatus.Approved;
-                    order.CompletedStep = 4;
                     order.ApprovedDate = DateTime.UtcNow;
                     if (System.Web.HttpContext.Current != null)
                     {
                         if (System.Web.HttpContext.Current.User.Identity as System.Security.Principal.WindowsIdentity != null)
                             order.ApprovedBy = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
                     }
-                   
+
+                    if (command == ApplicationController.COMMAND_OVERRIDE)
+                    {
+                        order.CompletedStep = 4;
+                        order.IsCompleted = true;
+                    }                   
                 }
                 catch(Exception ex)
                 {
