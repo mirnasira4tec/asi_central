@@ -986,6 +986,7 @@ namespace asi.asicentral.web.Controllers.Store
 
                     BackendService.PlaceOrder(order, EmailService, null);
                     order.ProcessStatus = OrderStatus.Approved;
+                    order.CompletedStep = 4;
                     order.ApprovedDate = DateTime.UtcNow;
                     if (System.Web.HttpContext.Current != null)
                     {
