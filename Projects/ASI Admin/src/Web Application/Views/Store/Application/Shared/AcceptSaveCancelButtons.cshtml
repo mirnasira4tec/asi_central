@@ -5,6 +5,7 @@
 <div>
     @{
         var isBackEnd = IsBackEnd();
+        var hasPendingTerms = HasPendingTerms();
     }
 
     @if (!string.IsNullOrEmpty(Model.ASINumber))
@@ -38,6 +39,10 @@
                     <label class="order-status-label" for="Timms_ID">Constituent ID: @Model.ExternalReference</label>
                 }
             </div>
+            @if (hasPendingTerms)
+            {
+                <input data-type="boolean" id="hasPendingTerms" type="hidden" value="true" />
+            }
             <div class="status-btns">
                 @if (!isBackEnd)
                 {
@@ -63,6 +68,7 @@
                 }
 
             </div>
+            <div id="termsWarningMessage" data-type="errormessage" class="field-validation-error span10"></div>
             @if (!isBackEnd && !string.IsNullOrEmpty(Model.ExternalReference))
             {
                 <div class="span10">
@@ -115,6 +121,15 @@
                 ids = order.Company.MatchingCompanyIds.Replace("|", " ");
 
             return ids;            
+        }
+        
+        public bool HasPendingTerms()
+        {
+            var pendingTerms = StoreService.GetAll<TermsConditionsInstance>()
+                                            .Where(t => t.OrderId.Value == Model.OrderId && t.DateAgreedOn == null && string.IsNullOrEmpty(t.AcceptedBy))
+                                            .ToList();
+
+            return pendingTerms != null && pendingTerms.Count() > 0;
         }
   }
 </div>
