@@ -1,0 +1,93 @@
+﻿@using asi.asicentral.interfaces
+@using asi.asicentral.model.store
+@model asi.asicentral.web.store.interfaces.IMembershipModel
+@{
+    var termsInsts = GetOrderTerms(Model.OrderId);
+    var hasTerms = termsInsts != null && termsInsts.Count > 0;
+    var termsTypes = GetTermsTypes();
+}
+<div id="termsConditions-modal" class="modal fade">
+<div id="modal-container"></div>
+</div>
+<div id="tabterms" class="basic-information tab-pane fade in active">
+   <fieldset>
+        <legend>Terms and Conditions</legend>
+        @if (hasTerms)
+        {
+            foreach (var t in termsInsts)
+            {
+                var termName = termsTypes.Find(type => type.Id == t.TypeId);
+                <span><a id="@t.TypeId" class="terms label-row">@termName.Name</a></span>
+            }
+        }
+    </fieldset>
+    <fieldset>
+        <legend>Acceptance Information</legend>
+        @if (hasTerms)
+        {
+            var terms = termsInsts[0];
+            <span class="label-row">
+            <label>Customer Name:</label> 
+            <label>Customer Email:</label> 
+        </span>
+            <span class="label-row">
+            @Html.TextBoxFor(m => terms.CompanyName, new { @readonly = "readonly" }) 
+            @Html.TextBoxFor(m => terms.CustomerEmail, new { @readonly = "readonly" })
+		</span>
+            <span class="label-row">
+            <label>Accepted By:</label> 
+            <label>Acceptance Date:</label> 
+            <label>IP Address:</label> 
+        </span>
+            <span class="label-row">
+            @Html.TextBoxFor(m => terms.AcceptedBy, new { @readonly = "readonly" }) 
+            @Html.TextBoxFor(m => terms.DateAgreedOn, new { @readonly = "readonly" })
+            @Html.TextBoxFor(m => terms.IPAddress, new { @readonly = "readonly" })
+		</span>
+        }
+    </fieldset>
+    <fieldset>
+        <legend>Signature</legend>
+        @if (hasTerms && !string.IsNullOrEmpty(termsInsts[0].SignatureUrl))
+        {
+            <div class="label-row"><img src="@termsInsts[0].SignatureUrl"/>
+            </div>
+        }
+    </fieldset>
+    <fieldset>
+        <legend>Messages</legend>
+        @if (hasTerms)
+        {
+            <div class="label-row">
+                @Html.TextAreaFor(m => termsInsts[0].Messages, new {@readonly = "readonly", style = "width: 90%; height: 100px"})
+            </div>
+        }
+    </fieldset>
+
+    @functions{
+        public IStoreService StoreService { get; set; }
+
+        public List<TermsConditionsInstance> GetOrderTerms(int orderId)
+        {
+            return StoreService.GetAll<TermsConditionsInstance>(true).Where(t => t.OrderId.Value == orderId).ToList();
+        }
+
+        public List<TermsConditionsType> GetTermsTypes()
+        {
+            return StoreService.GetAll<TermsConditionsType>(true).ToList();
+        }
+
+    }
+</div><!-- END #basic-information -->
+<script>
+    window.onload = function() {
+        $(".terms").on("click", function() {
+            var id = $(this).attr('id');
+            var url = "/TermsConditions/Type?id=" + id;
+            $.get(url, function(data) {
+                $("#modal-container").html(data);
+                $("#termsConditions-modal").modal("show");
+            });
+        });
+    }
+</script>
