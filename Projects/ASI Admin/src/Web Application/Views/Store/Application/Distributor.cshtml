@@ -18,12 +18,14 @@
 		<ul class="nav nav-tabs" id="tabs">
 			<li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
 			<li><a href="#tabproduct" data-toggle="tab">Product Information</a></li>
-			<li><a href="#tabaccount" data-toggle="tab">Account Information</a></li>
+		    <li><a href="#tabaccount" data-toggle="tab">Account Information</a></li>
+			<li><a href="#tabterms" data-toggle="tab">Terms and Conditions</a></li>
 		</ul>
 	</nav>
 
 	<div class="tab-content">
 		@Html.Partial("../Store/Application/Shared/CompanyInformation", Model)
+		@Html.Partial("../Store/Application/Shared/OrderT&Cs", Model)
 <!------------------------------------product-information---------------------------------->					
 		<div id="tabproduct" class="product-information tab-pane fade">
 			<fieldset class="primary-business-revenue">
@@ -241,8 +243,8 @@
 					</label>
 				</span>
 			  </fieldset>
-		</div><!-- END #account-information -->	
-		
+	</div><!-- END #account-information -->
+
 	</div><!-- END .tab-content -->    
 }
 
