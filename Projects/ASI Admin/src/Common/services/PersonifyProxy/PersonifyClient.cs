@@ -346,7 +346,7 @@ namespace asi.asicentral.services.PersonifyProxy
 
         public static CompanyInformation GetCompanyInfo(CustomerInfo customerInfo)
         {
-            var customers = SvcClient.Ctxt.ASICustomerInfos.Where(p => p.MasterCustomerId == customerInfo.MasterCustomerId && p.SubCustomerId == customerInfo.SubCustomerId).ToList();
+            var customers = SvcClient.Ctxt.ASICustomerInfos.Where(p => p.MasterCustomerId == customerInfo.MasterCustomerId && p.SubCustomerId == customerInfo.SubCustomerId && p.UserDefinedMemberStatusString != StatusCode.MMS_LOAD.ToString()).ToList();
             if (customers.Count == 0) return null;
             return GetCompanyInfo(customers[0]);
         }
