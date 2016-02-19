@@ -699,6 +699,8 @@ namespace asi.asicentral.services.PersonifyProxy
                 }
 
                 var asiCustomers = SvcClient.Ctxt.ASICustomers.AddQueryOption("$filter", condition).ToList();
+                var mmsLoadCustomers = asiCustomers.Where(c => c != null && !string.IsNullOrEmpty(c.UserDefinedMemberStatusString) && c.UserDefinedMemberStatusString == StatusCode.MMS_LOAD.ToString()).ToList();
+                asiCustomers = asiCustomers.Where(c => !mmsLoadCustomers.Any(mmslc => c != null && mmslc != null && c.MasterCustomerId == mmslc.MasterCustomerId)).ToList();
                 var leadCustomers = asiCustomers.Where(c => string.Equals(c.UserDefinedMemberStatusString, "ASICENTRAL", StringComparison.InvariantCultureIgnoreCase) ||
                                                             string.Equals(c.UserDefinedMemberStatusString, "LEAD", StringComparison.InvariantCultureIgnoreCase)).ToList();
                 if (leadCustomers.Count > 1)
@@ -721,6 +723,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 if ( matchMasterId == null)
                 {
                     var cusActivities = SvcClient.Ctxt.CusActivities.AddQueryOption("$filter", condition).ToList();
+                    cusActivities = cusActivities.Where(ca => !mmsLoadCustomers.Any(mmslc => ca.MasterCustomerId == mmslc.MasterCustomerId)).ToList();
                     var result = cusActivities.OrderByDescending(c => c.ActivityDate).FirstOrDefault();
                     if (result != null)
                     {

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using asi.asicentral.services.PersonifyProxy;
 using asi.asicentral.model.timss;
 using asi.asicentral.util.store;
+using asi.asicentral.oauth;
 
 namespace asi.asicentral.services
 {
@@ -378,6 +379,7 @@ namespace asi.asicentral.services
             if (customerInfo != null)
             {
                 companyInfo = PersonifyClient.GetCompanyInfo(customerInfo);
+                companyInfo = (companyInfo != null && companyInfo.MemberStatus == StatusCode.MMS_LOAD.ToString()) ? null : companyInfo;
             }
 
             log.Debug(string.Format("FindCompanyInfo - end: Company {0}, total matches: {1}; time: {2}",
