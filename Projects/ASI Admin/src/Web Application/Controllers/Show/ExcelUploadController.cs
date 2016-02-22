@@ -3,7 +3,6 @@ using asi.asicentral.model.show;
 using asi.asicentral.services;
 using asi.asicentral.util.show;
 using asi.asicentral.web.models.show;
-using asi.asicentral.web.Models.Show;
 using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
