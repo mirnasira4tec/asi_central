@@ -101,7 +101,7 @@ namespace asi.asicentral.services.PersonifyProxy
 
         public static void CreateBundleOrder(StoreOrder storeOrder, PersonifyMapping mapping, CompanyInformation companyInfo,                                             
                                              string contactMasterCustomerId, int contactSubCustomerId, 
-                                             AddressInfo billToAddress, AddressInfo shipToAddress)
+                                             AddressInfo billToAddress, AddressInfo shipToAddress, bool waiveAppFee, bool firstMonthFree)
         {          
             _log.Debug(string.Format("CreateBundleOrder - start: order {0} ", storeOrder));
             DateTime startTime = DateTime.Now;
@@ -137,6 +137,8 @@ namespace asi.asicentral.services.PersonifyProxy
 
             var bOutput = SvcClient.Post<ASICreateBundleOrderOutput>("ASICreateBundleOrder", bundleOrderInput);
             storeOrder.BackendReference = bOutput.ASIBundleOrderNumber;
+
+            PostCreateBundleOrder(storeOrder, mapping, companyInfo, billToAddress, waiveAppFee, firstMonthFree);
 
             _log.Debug(string.Format("CreateBundleOrder - end: order {0} ({1})", storeOrder, DateTime.Now.Subtract(startTime).TotalMilliseconds));
         }

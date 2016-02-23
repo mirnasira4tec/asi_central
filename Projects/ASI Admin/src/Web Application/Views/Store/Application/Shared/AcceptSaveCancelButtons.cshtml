@@ -102,7 +102,7 @@
             IList<StoreOrderDetail> OrderDetails = StoreService.GetAll<StoreOrderDetail>(true).Where(detail => detail.Order.Id == Model.OrderId).ToList();
             foreach (var orderDetail in OrderDetails)
             {
-                useBackEndService = useBackEndService || BackendService.IsProcessUsingBackend(orderDetail);
+                useBackEndService = (useBackEndService || BackendService.IsProcessUsingBackend(orderDetail)) && !orderDetail.Product.IsMembership();
                 if (useBackEndService) break;
             }            
             return useBackEndService;

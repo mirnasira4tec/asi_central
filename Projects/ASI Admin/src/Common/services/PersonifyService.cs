@@ -125,9 +125,8 @@ namespace asi.asicentral.services
                         mapping = mappings.FirstOrDefault(m => string.IsNullOrEmpty(m.StoreOption));
                     }
 
-                    PersonifyClient.CreateBundleOrder(order, mapping, companyInfo, contactMasterId, contactSubId, billToAddr, shipToAddr);
-
-                    Task.Factory.StartNew(() => PostCreateBundleOrder(order, emailService, url, mapping, companyInfo, billToAddr, waiveAppFee, firstmonthFree));
+                    PersonifyClient.CreateBundleOrder(order, mapping, companyInfo, contactMasterId, contactSubId, billToAddr, shipToAddr, waiveAppFee, firstmonthFree);
+                    ValidateOrderTotal(order, emailService, url, true, firstmonthFree);
 
                     // update company ASI#, to be included in the internal email
                     var asiNumber = PersonifyClient.GetCompanyAsiNumber(companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
