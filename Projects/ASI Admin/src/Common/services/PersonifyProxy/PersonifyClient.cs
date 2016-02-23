@@ -37,6 +37,7 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string RECORD_TYPE_INDIVIDUAL = "I";
         private const string RECORD_TYPE_CORPORATE = "C";
         private const string CUSTOMER_INFO_STATUS_DUPLICATE = "DUPL";
+        private const string CUSTOMER_INFO_STATUS_MMSLOAD = "MMS_LOAD";
         private const int PHONE_NUMBER_LENGTH = 10;
 
 		private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
@@ -598,7 +599,8 @@ namespace asi.asicentral.services.PersonifyProxy
             var companys = SvcClient.Ctxt.ASICustomerInfos
                            .Where(p => p.RecordType == RECORD_TYPE_CORPORATE && p.SubCustomerId == 0 &&
                                        string.Compare(p.LastName, company.Name) == 0 &&
-                                       string.Compare(p.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE) != 0).ToList();
+                                       string.Compare(p.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE) != 0 &&
+                                       string.Compare(p.UserDefinedMemberStatusString, CUSTOMER_INFO_STATUS_MMSLOAD) != 0).ToList();
 
             if (companys.Count < 1)
             {
@@ -644,7 +646,8 @@ namespace asi.asicentral.services.PersonifyProxy
                     string condition2 = null;
                     foreach (var info in customInfos)
                     {
-                        if (!string.Equals(info.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE, StringComparison.InvariantCultureIgnoreCase))
+                        if (!string.Equals(info.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE, StringComparison.InvariantCultureIgnoreCase) &&
+                            !string.Equals(info.UserDefinedMemberStatusString, CUSTOMER_INFO_STATUS_MMSLOAD, StringComparison.InvariantCultureIgnoreCase))
                         {
                             if (info.SubCustomerId == 0 && string.Equals(info.RecordType, RECORD_TYPE_CORPORATE, StringComparison.InvariantCultureIgnoreCase))
                             {
@@ -669,10 +672,11 @@ namespace asi.asicentral.services.PersonifyProxy
                         var cusRelations = SvcClient.Ctxt.CusRelationships.AddQueryOption("$filter", condition2);
                         foreach (var r in cusRelations)
                         {
-                            idList.Add(r.MasterCustomerId);
+                            if( !idList.Contains(r.MasterCustomerId))
+                                idList.Add(r.MasterCustomerId);
                         }
 
-                        RemoveSoftDeletedCompanies(idList);
+                        RemoveUnqualifiedCompanies(idList);
                         masterIdList.AddRange(idList);
                     }
                 }
@@ -699,8 +703,6 @@ namespace asi.asicentral.services.PersonifyProxy
                 }
 
                 var asiCustomers = SvcClient.Ctxt.ASICustomers.AddQueryOption("$filter", condition).ToList();
-                var mmsLoadCustomers = asiCustomers.Where(c => c != null && !string.IsNullOrEmpty(c.UserDefinedMemberStatusString) && c.UserDefinedMemberStatusString == StatusCode.MMS_LOAD.ToString()).ToList();
-                asiCustomers = asiCustomers.Where(c => !mmsLoadCustomers.Any(mmslc => c != null && mmslc != null && c.MasterCustomerId == mmslc.MasterCustomerId)).ToList();
                 var leadCustomers = asiCustomers.Where(c => string.Equals(c.UserDefinedMemberStatusString, "ASICENTRAL", StringComparison.InvariantCultureIgnoreCase) ||
                                                             string.Equals(c.UserDefinedMemberStatusString, "LEAD", StringComparison.InvariantCultureIgnoreCase)).ToList();
                 if (leadCustomers.Count > 1)
@@ -723,7 +725,6 @@ namespace asi.asicentral.services.PersonifyProxy
                 if ( matchMasterId == null)
                 {
                     var cusActivities = SvcClient.Ctxt.CusActivities.AddQueryOption("$filter", condition).ToList();
-                    cusActivities = cusActivities.Where(ca => !mmsLoadCustomers.Any(mmslc => ca.MasterCustomerId == mmslc.MasterCustomerId)).ToList();
                     var result = cusActivities.OrderByDescending(c => c.ActivityDate).FirstOrDefault();
                     if (result != null)
                     {
@@ -752,7 +753,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return companyInfo;
         }
 
-        private static void RemoveSoftDeletedCompanies(List<string> masterIdList)
+        private static void RemoveUnqualifiedCompanies(List<string> masterIdList)
         {
             if (masterIdList.Count < 1)
                 return;
@@ -769,11 +770,11 @@ namespace asi.asicentral.services.PersonifyProxy
 
             var asiCustomers = SvcClient.Ctxt.ASICustomerInfos.AddQueryOption("$filter", condition).ToList();
 
-            // get rid of company with "DUPL" status
-            var deletedCustomers = asiCustomers.Where(c => string.Equals(c.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE, StringComparison.InvariantCultureIgnoreCase))
-                                       .ToList();
+            // get rid of company with "DUPL" and "MMS Datafeed" status
+            var unQualifiedCustomers = asiCustomers.Where(c => string.Equals(c.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE, StringComparison.InvariantCultureIgnoreCase) ||
+                                                               string.Equals(c.UserDefinedMemberStatusString, CUSTOMER_INFO_STATUS_MMSLOAD, StringComparison.InvariantCultureIgnoreCase)).ToList();
 
-            foreach (var c in deletedCustomers)
+            foreach (var c in unQualifiedCustomers)
             {
                 masterIdList.Remove(c.MasterCustomerId);
             }
