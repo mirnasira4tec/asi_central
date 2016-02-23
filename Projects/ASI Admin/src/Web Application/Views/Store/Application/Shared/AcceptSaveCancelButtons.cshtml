@@ -61,11 +61,6 @@
                     else
                     { @Html.ActionLink("Cancel", "../Orders") }
                 }
-                
-                @if( Model.OrderStatus == OrderStatus.ErrorOverride)
-                {
-                    <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_OVERRIDE" />
-                }
 
             </div>
             <div id="termsWarningMessage" data-type="errormessage" class="field-validation-error span10"></div>

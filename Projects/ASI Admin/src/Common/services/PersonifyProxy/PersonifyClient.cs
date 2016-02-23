@@ -40,7 +40,6 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string RECORD_TYPE_CORPORATE = "C";
         private const string CUSTOMER_INFO_STATUS_DUPLICATE = "DUPL";
         private const int PHONE_NUMBER_LENGTH = 10;
-        private const string DNS_FLAG_TAG = "USR_DNS_FLAG";
         private const string SP_SEARCH_BY_CUSTOMER_ID = "USR_EASI_CUSTOMER_SEARCH_MASTERCUSTOMER_PROC";
         private const string SP_SEARCH_BY_ASI_NUMBER = "USR_EASI_CUSTOMER_SEARCH_ASI_NO_PROC";
         private const string SP_SEARCH_BY_COMPANY_NAME = "USR_EASI_CUSTOMER_SEARCH_COMPANY_NAME_PROC";
@@ -1047,8 +1046,9 @@ namespace asi.asicentral.services.PersonifyProxy
                         }
                     }
 
-                    if (customerInfo.RecordType == null || customerInfo.RecordType != RECORD_TYPE_CORPORATE ||
-                        customerInfo.CustomerStatusCode == null || customerInfo.CustomerStatusCode != CUSTOMER_INFO_STATUS_DUPLICATE)
+                    if( (customerInfo.RecordType == null || customerInfo.RecordType != RECORD_TYPE_CORPORATE ) &&
+                        (customerInfo.CustomerStatusCode == null || customerInfo.CustomerStatusCode != CUSTOMER_INFO_STATUS_DUPLICATE) && 
+                        (customerInfo.MemberStatus == null || customerInfo.MemberStatus != StatusCode.MMS_LOAD.ToString()))
                     {
                         companyInfoList.Add(customerInfo);
                     }

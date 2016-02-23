@@ -414,6 +414,21 @@ namespace asi.asicentral.Tests
         }
 
         [TestMethod]
+        public void ReconcileCompanyWithPhoneEmailForMMSLoad()
+        {
+            // match email only
+            var company = GetStoreCompany("11x17 Inc",
+                                          "9035410100",
+                                          "jrw@11x17.com",
+                                          "MMS_LOAD");
+
+            IBackendService personify = new PersonifyService();
+            List<string> masterIdList = null;
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
+            Assert.IsNull(companyInfo);
+        }
+
+        [TestMethod]
         public void ReconcileCompanyNonSupplierPhoneEmail()
         {
             //Distributor
