@@ -1046,9 +1046,9 @@ namespace asi.asicentral.services.PersonifyProxy
                         }
                     }
 
-                    if( (customerInfo.RecordType == null || customerInfo.RecordType != RECORD_TYPE_CORPORATE ) &&
-                        (customerInfo.CustomerStatusCode == null || customerInfo.CustomerStatusCode != CUSTOMER_INFO_STATUS_DUPLICATE) && 
-                        (customerInfo.MemberStatus == null || customerInfo.MemberStatus != StatusCode.MMS_LOAD.ToString()))
+                    if( customerInfo.RecordType == null || customerInfo.RecordType != RECORD_TYPE_CORPORATE ||
+                        ((customerInfo.CustomerStatusCode == null || customerInfo.CustomerStatusCode != CUSTOMER_INFO_STATUS_DUPLICATE) && 
+                         (customerInfo.MemberStatus == null || customerInfo.MemberStatus != StatusCode.MMS_LOAD.ToString())))
                     {
                         companyInfoList.Add(customerInfo);
                     }
