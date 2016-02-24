@@ -34,7 +34,7 @@
     {
 	<div id="tabsubscription" class="product-information tab-pane fade">
 		<fieldset class="company-info-form">
-            <legend>@Model.ProductName Information</legend>	
+            <legend>@Html.Raw(Model.ProductName) Information</legend>	
             @switch (Model.ProductId)
             {
                 case 46:
@@ -78,7 +78,7 @@
                         <div class="controls">
                             @foreach (var option in Model.Options)
                             {
-                                <label class="radio">@Html.RadioButtonFor(model => model.OptionId, option.Value, new { @disabled="true" }) @Html.Raw(option.Text) </label>
+                                <label class="radio">@Html.RadioButtonFor(model => model.OptionId, option.Value, new { @disabled = "true" }) @Html.Raw(option.Text) </label>
                             }
                         </div>
                     </div>
@@ -100,9 +100,9 @@
                         @Html.Label("Google AdWords Cost")
 		            </span>
 		            <span class="label-row">
-                    @if(Model.OptionId.HasValue && Model.OptionId.Value != 0)
+                    @if (Model.OptionId.HasValue && Model.OptionId.Value != 0)
                     {
-			             @Html.DropDownListFor(model => model.OptionId, asi.asicentral.util.store.ASIBrandBuilderHelper.GetGoogleAdWordOptions(), new { @class = "tab1", @disabled="true" }) @Html.ValidationMessageFor(model => model.OptionId)
+			             @Html.DropDownListFor(model => model.OptionId, asi.asicentral.util.store.ASIBrandBuilderHelper.GetGoogleAdWordOptions(), new { @class = "tab1", @disabled = "true" }) @Html.ValidationMessageFor(model => model.OptionId)
                     }
                     else
                     {
@@ -111,23 +111,23 @@
 		            </span>
                     break;
                 case 104:
-                    if(Model.OptionId.HasValue && Model.OptionId.Value != 0)
+                    if (Model.OptionId.HasValue && Model.OptionId.Value != 0)
                     {
                     <span class="label-row span11">
                         @Html.Label("Monthly Budget:")
 		            </span>
 		            <span class="label-row">
-			             @Html.TextBoxFor(model => model.OptionId, new { @class = "tab1", @disabled="true" }) @Html.ValidationMessageFor(model => model.OptionId)
+			             @Html.TextBoxFor(model => model.OptionId, new { @class = "tab1", @disabled = "true" }) @Html.ValidationMessageFor(model => model.OptionId)
 		            </span>
                     <span class="label-row span11">
                         @Html.Label("Selected Package:")
 		            </span>
 		            <span class="label-row">
                          @{ string productName = asi.asicentral.util.store.TrafficBuilderHelper.GetProductName(Model.OptionId.Value); }
-			             @Html.TextBoxFor(model => productName, new { @class = "tab1", @disabled="true" }) @Html.ValidationMessageFor(model => model.AcceptedByName)
+			             @Html.TextBoxFor(model => productName, new { @class = "tab1", @disabled = "true" }) @Html.ValidationMessageFor(model => model.AcceptedByName)
                       </span>
                     }
-                break;
+                    break;
                 case 112:
                 case 113:
                     <span class="label-row">
@@ -139,7 +139,7 @@
                     <span class="checkbox-left">
                         <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.IsBonus)">@Html.CheckBoxFor(m => m.IsBonus) <strong>BONUS:</strong> Receive an additional 20% off any store or package of stores when pre-paid for the year </label>
 		            </span>
-                break;
+                    break;
                 default:
                 <span class="label-row span11">
 			        @Html.LabelFor(m => m.Quantity) 
@@ -147,7 +147,7 @@
 		        <span class="label-row">
 			        @Html.TextBoxFor(m => m.Quantity, new { @class = "tab1", @disabled = "true" }) @Html.ValidationMessageFor(m => m.Quantity)
 		        </span>
-                break;
+                    break;
             }
 		</fieldset>    
 	</div><!-- END #orderdetail-information -->	
