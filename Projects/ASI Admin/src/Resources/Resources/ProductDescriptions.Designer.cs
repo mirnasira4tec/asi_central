@@ -241,6 +241,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The newest addition to ASI’s search engine marketing suite, ASI’s Local SEO will make your business stand out in front of prospects ready to buy your products and services..
+        /// </summary>
+        public static string ProductLocalSEO {
+            get {
+                return ResourceManager.GetString("ProductLocalSEO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Make the first impression on all distributors logging into ESP Online&lt;sup&gt;&amp;trade;&lt;/sup&gt; by placing your advertisement on the login screen. This valuable ad space can be filled with a static or animated gif..
         /// </summary>
         public static string ProductLoginScreenAd {

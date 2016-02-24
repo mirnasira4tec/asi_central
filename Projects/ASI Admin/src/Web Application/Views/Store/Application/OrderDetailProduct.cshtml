@@ -24,7 +24,7 @@
         <li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
         @if (Model.ProductId != 70)
         {
-		<li><a href="#tabsubscription" data-toggle="tab">@Model.ProductName Information</a></li>
+		<li><a href="#tabsubscription" data-toggle="tab">@Html.Raw(Model.ProductName) Information</a></li>
         }
 	</ul>
 </nav>
