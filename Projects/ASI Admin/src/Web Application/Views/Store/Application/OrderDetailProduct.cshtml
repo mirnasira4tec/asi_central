@@ -7,10 +7,10 @@
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
 }
 
-<h1>@string.Format(Model.ProductName) (#@Model.OrderId)</h1>
+<h1>@Html.Raw(Model.ProductName) (#@Model.OrderId)</h1>
 @if (Model.Price > 0.0m)
 {
-<p>@Model.ProductName product purchase fee is @Model.Price.ToString("C")</p>
+<p>@Html.Raw(Model.ProductName) product purchase fee is @Model.Price.ToString("C")</p>
 }
 @Html.Partial("../Store/Application/Shared/OrderSummary", Model)
 @using (Html.BeginForm("EditOrderDetailProduct", "Application"))
