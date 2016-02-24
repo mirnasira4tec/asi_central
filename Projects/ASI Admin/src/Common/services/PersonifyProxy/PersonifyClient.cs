@@ -3,7 +3,6 @@ using asi.asicentral.model;
 using asi.asicentral.model.store;
 using asi.asicentral.oauth;
 using asi.asicentral.PersonifyDataASI;
-using asi.asicentral.util.store;
 using asi.asicentral.util.store.companystore;
 using PersonifySvcClient;
 using System;
@@ -37,7 +36,6 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string RECORD_TYPE_INDIVIDUAL = "I";
         private const string RECORD_TYPE_CORPORATE = "C";
         private const string CUSTOMER_INFO_STATUS_DUPLICATE = "DUPL";
-        private const string CUSTOMER_INFO_STATUS_MMSLOAD = "MMS_LOAD";
         private const int PHONE_NUMBER_LENGTH = 10;
 
 		private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
@@ -599,8 +597,8 @@ namespace asi.asicentral.services.PersonifyProxy
             var companys = SvcClient.Ctxt.ASICustomerInfos
                            .Where(p => p.RecordType == RECORD_TYPE_CORPORATE && p.SubCustomerId == 0 &&
                                        string.Compare(p.LastName, company.Name) == 0 &&
-                                       string.Compare(p.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE) != 0 &&
-                                       string.Compare(p.UserDefinedMemberStatusString, CUSTOMER_INFO_STATUS_MMSLOAD) != 0).ToList();
+                                       string.Compare(p.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE, StringComparison.CurrentCultureIgnoreCase) != 0 &&
+                                       string.Compare(p.UserDefinedMemberStatusString, StatusCode.MMS_LOAD.ToString(), StringComparison.CurrentCultureIgnoreCase) != 0).ToList();
 
             if (companys.Count < 1)
             {
@@ -647,7 +645,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     foreach (var info in customInfos)
                     {
                         if (!string.Equals(info.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE, StringComparison.InvariantCultureIgnoreCase) &&
-                            !string.Equals(info.UserDefinedMemberStatusString, CUSTOMER_INFO_STATUS_MMSLOAD, StringComparison.InvariantCultureIgnoreCase))
+                            !string.Equals(info.UserDefinedMemberStatusString, StatusCode.MMS_LOAD.ToString(), StringComparison.InvariantCultureIgnoreCase))
                         {
                             if (info.SubCustomerId == 0 && string.Equals(info.RecordType, RECORD_TYPE_CORPORATE, StringComparison.InvariantCultureIgnoreCase))
                             {
@@ -772,7 +770,7 @@ namespace asi.asicentral.services.PersonifyProxy
 
             // get rid of company with "DUPL" and "MMS Datafeed" status
             var unQualifiedCustomers = asiCustomers.Where(c => string.Equals(c.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE, StringComparison.InvariantCultureIgnoreCase) ||
-                                                               string.Equals(c.UserDefinedMemberStatusString, CUSTOMER_INFO_STATUS_MMSLOAD, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                                                               string.Equals(c.UserDefinedMemberStatusString, StatusCode.MMS_LOAD.ToString(), StringComparison.InvariantCultureIgnoreCase)).ToList();
 
             foreach (var c in unQualifiedCustomers)
             {
