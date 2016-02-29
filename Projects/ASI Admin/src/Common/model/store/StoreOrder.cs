@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using asi.asicentral.oauth;
 
 namespace asi.asicentral.model.store
 {
@@ -149,15 +150,29 @@ namespace asi.asicentral.model.store
 
         public bool IsNewMemberShip(ref string newMemberType)
         {
-            //todo?? return true if supplier is buying a different supplier membership
-            bool newMembership = false;
-            if (Company != null && !string.IsNullOrEmpty(Company.MemberType) && 
-                OrderDetails != null && OrderDetails.Any() && OrderDetails[0].Product != null)
+            var newMembership = false;
+            if( Company != null && !string.IsNullOrEmpty(Company.MemberType) && OrderDetails != null &&
+                OrderDetails.Any() && OrderDetails[0].Product != null && !string.IsNullOrEmpty(Company.MemberStatus) )
             {
-                newMembership = Company.MemberType.ToUpper() == "DISTRIBUTOR" && 
-                                (OrderDetails[0].Product.Id == 70 || OrderDetails[0].Product.Id == 66);
-                if( newMembership )
-                    newMemberType = "Decorator";
+                var status = Company.MemberStatus.ToUpper();
+                if ( status != StatusCode.TERMINATED.ToString())
+                {
+                    if( Company.MemberType.ToUpper() == "DISTRIBUTOR" && 
+                       (OrderDetails[0].Product.Id == 70 || OrderDetails[0].Product.Id == 66))
+                    {
+                        newMembership = true;
+                        newMemberType = "Decorator";
+                    }
+                    else if (OrderDetails[0].Product.Type != null)
+                    {
+                        if( string.Compare(Company.MemberType, OrderRequestType, StringComparison.CurrentCultureIgnoreCase) != 0  ||
+                            (status == StatusCode.ACTIVE.ToString() && Company.MemberType.ToUpper() == "SUPPLIER"))
+                        {
+                            newMembership = true;
+                            newMemberType = OrderRequestType.ToUpper();
+                        }
+                    }
+                }
             }
 
             return newMembership;

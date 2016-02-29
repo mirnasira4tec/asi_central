@@ -656,7 +656,7 @@ namespace asi.asicentral.services.PersonifyProxy
         }
 
         #region matching company with name, email or phone
-        private static PersonifyCustomerInfo FindMatchingCompany(StoreCompany company, ref List<string> matchIdList)
+        private static PersonifyCustomerInfo FindMatchingCompany(StoreCompany company, ref List<string> matchedList)
         {
             var startTime = DateTime.Now;
             _log.Debug(string.Format("FindMatchingCompany - start: company name {0} ", company.Name));
@@ -736,14 +736,18 @@ namespace asi.asicentral.services.PersonifyProxy
 
             if (matchCompany == null && matchCompanyList.Count > 0)
             {
-                matchCompany = GetCompanyWithLatestNote(matchCompanyList);
+                matchCompany = GetMatchCompanyFromList(matchCompanyList, company.MemberType);
 
-                if( matchIdList == null )
-                    matchIdList = new List<string>();
+                if (matchedList == null)
+                    matchedList = new List<string>();
 
-                matchIdList.AddRange(matchCompanyList.Select(m => m.MasterCustomerId));
-                matchIdList.Remove(matchCompany.MasterCustomerId);
-                matchIdList = matchIdList.Distinct().ToList();
+                foreach (var c in matchCompanyList.Distinct().ToList())
+                {
+                    if (c.MasterCustomerId != matchCompany.MasterCustomerId )
+                    {
+                        matchedList.Add(string.Format("{0}:{1}:{2}", c.MasterCustomerId, c.MemberStatus, c.CustomerClassCode ));
+                    }
+                }
             }
 
             _log.Debug(string.Format("FindMatchingCompany - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
@@ -812,7 +816,7 @@ namespace asi.asicentral.services.PersonifyProxy
             _log.Debug(string.Format("MatchPhoneEmail - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
         }
 
-        private static PersonifyCustomerInfo GetCompanyWithLatestNote(List<PersonifyCustomerInfo> matchCompanyList)
+        private static PersonifyCustomerInfo GetMatchCompanyFromList(List<PersonifyCustomerInfo> matchCompanyList, string memberType)
         {
             _log.Debug("GetCompanyWithLatestNote - start: ");
             var startTime = DateTime.Now;
@@ -826,16 +830,25 @@ namespace asi.asicentral.services.PersonifyProxy
                 }
                 else
                 {
-                    var searchList = matchCompanyList;
-                    var leadCompanys = matchCompanyList.FindAll(m => m.MemberStatus != null && (m.MemberStatus.ToUpper() == "ASICENTRAL" || m.MemberStatus.ToUpper() == "LEAD"));
+                    // find company from terminated/deliested/active companies, first the same memberType, then All MemberTypes
+                    var searchList = SelectCompanies(matchCompanyList.FindAll(c => c.CustomerClassCode.ToUpper() == memberType).ToList());
 
-                    if (leadCompanys.Count > 1)
-                    {  // find company from Lead companys only
-                        searchList = leadCompanys;
+                    if (searchList.Count < 1)
+                        searchList = SelectCompanies(matchCompanyList);
+
+                    // no match company is TERMINATED, ACTIVE and DELISTED, match from LEAD companies
+                    if (searchList.Count < 1)
+                    {
+                        searchList = matchCompanyList.FindAll(m => m.MemberStatus != null && (m.MemberStatus.ToUpper() == "LEAD" || m.MemberStatus.ToUpper() == "ASICENTRAL"));
                     }
-                    else if ( leadCompanys.Count == 1)
-                    {  // one lead company, no more searching
-                        companyInfo = leadCompanys[0];
+
+                    if (searchList.Count < 1)
+                    {  // find company from the original list
+                        searchList = matchCompanyList;
+                    }
+                    else if (searchList.Count == 1)
+                    {  // one selected company, no more searching
+                        companyInfo = searchList[0];
                     }
 
                     if (companyInfo == null && searchList.Count > 0 )
@@ -867,6 +880,23 @@ namespace asi.asicentral.services.PersonifyProxy
             _log.Debug(string.Format("GetCompanyWithLatestNote - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
             return companyInfo;
         }
+
+	    private static List<PersonifyCustomerInfo> SelectCompanies(List<PersonifyCustomerInfo> matchCompanyList)
+	    {
+	        var selectedCompanies = matchCompanyList.FindAll(m => m.MemberStatus != null && m.MemberStatus.ToUpper() == "TERMINATED");
+
+            if (selectedCompanies.Count < 1)
+            {
+                selectedCompanies = matchCompanyList.FindAll(m => m.MemberStatus != null && m.MemberStatus.ToUpper() == "DELISTED");
+            }
+
+            if (selectedCompanies.Count < 1)
+            {
+                selectedCompanies = matchCompanyList.FindAll(m => m.MemberStatus != null && m.MemberStatus.ToUpper() == "ACTIVE");
+            }
+
+            return selectedCompanies;
+	    }
 
         private static string IgnoreSpecialChars(string input)
         {

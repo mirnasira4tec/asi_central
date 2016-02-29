@@ -9,6 +9,7 @@ using asi.asicentral.services.PersonifyProxy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace asi.asicentral.services
@@ -354,15 +355,39 @@ namespace asi.asicentral.services
             IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
             
             //create company if not already there
+		    List<string> matchList = null;
             CompanyInformation companyInfo = null;
             string newMemberType = string.Empty;
             if (order.IsNewMemberShip(ref newMemberType))
             {
-                //todo?? reconcile company based on the new member type
-                //create a new Personify company for new membership type
-                companyInfo = PersonifyClient.CreateCompany(order.Company, newMemberType, countryCodes);
-                order.Company.ExternalReference = string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
-                order.Company.MemberType = newMemberType;
+                //check if the matchList have lead company already created
+                var matchIdList = order.Company.MatchingCompanyIds;
+                if (!string.IsNullOrEmpty(matchIdList))
+                {
+                    var matches = Regex.Matches(matchIdList, @"(\d+):(LEAD|ASICENTRAL):\w+\|?");
+
+                    if (matches.Count > 0)
+                    {
+                        var personifyCompany = PersonifyClient.GetPersonifyCompanyInfo(matches[0].Groups[1].Value, 0);
+                        companyInfo = PersonifyClient.GetCompanyInfo(personifyCompany);
+
+                        order.Company.MatchingCompanyIds = matchIdList.Replace(matches[0].Value, "");
+                    }
+                }
+
+                if (companyInfo == null)
+                {
+                    //create a new Personify company for new membership type
+                    companyInfo = PersonifyClient.CreateCompany(order.Company, newMemberType, countryCodes);
+                }
+
+                if (company.HasExternalReference())
+                {
+                    company.MatchingCompanyIds += string.Format("|{0}:{1}:{2}", company.ExternalReference.Split(';')[0], company.MemberStatus, company.MemberType);
+                }
+
+                company.ExternalReference = string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+                company.MemberType = newMemberType;
             }
             else
             {
