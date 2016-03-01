@@ -831,7 +831,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 else
                 {
                     // find company from terminated/deliested/active companies, first the same memberType, then All MemberTypes
-                    var searchList = SelectCompanies(matchCompanyList.FindAll(c => c.CustomerClassCode.ToUpper() == memberType).ToList());
+                    var searchList = SelectCompanies(matchCompanyList.FindAll(c => c.CustomerClassCode.ToUpper() == memberType.ToUpper()).ToList());
 
                     if (searchList.Count < 1)
                         searchList = SelectCompanies(matchCompanyList);

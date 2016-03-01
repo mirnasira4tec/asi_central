@@ -155,15 +155,17 @@ namespace asi.asicentral.model.store
                 OrderDetails.Any() && OrderDetails[0].Product != null && !string.IsNullOrEmpty(Company.MemberStatus) )
             {
                 var status = Company.MemberStatus.ToUpper();
-                if ( status != StatusCode.TERMINATED.ToString())
+                var product = OrderDetails[0].Product;
+                // new membership only if not terminated and not supplier-decorator
+                if ( status != StatusCode.TERMINATED.ToString() && (Company.MemberType.ToUpper() != "SUPPLIER" || (product.Id != 69 && product.Id != 78)) )
                 {
                     if( Company.MemberType.ToUpper() == "DISTRIBUTOR" && 
-                       (OrderDetails[0].Product.Id == 70 || OrderDetails[0].Product.Id == 66))
+                       (product.Id == 70 || product.Id == 66))
                     {
                         newMembership = true;
                         newMemberType = "Decorator";
                     }
-                    else if (OrderDetails[0].Product.Type != null)
+                    else if ( product.Type != null)
                     {
                         if( string.Compare(Company.MemberType, OrderRequestType, StringComparison.CurrentCultureIgnoreCase) != 0  ||
                             (status == StatusCode.ACTIVE.ToString() && Company.MemberType.ToUpper() == "SUPPLIER"))
