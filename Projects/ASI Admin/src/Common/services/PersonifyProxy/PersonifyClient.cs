@@ -745,7 +745,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 {
                     if (c.MasterCustomerId != matchCompany.MasterCustomerId )
                     {
-                        matchedList.Add(string.Format("{0}:{1}:{2}", c.MasterCustomerId, c.MemberStatus, c.CustomerClassCode ));
+                        matchedList.Add(string.Format("{0},{1},{2}", c.MasterCustomerId, c.MemberStatus, c.CustomerClassCode ));
                     }
                 }
             }
@@ -883,17 +883,22 @@ namespace asi.asicentral.services.PersonifyProxy
 
 	    private static List<PersonifyCustomerInfo> SelectCompanies(List<PersonifyCustomerInfo> matchCompanyList)
 	    {
-	        var selectedCompanies = matchCompanyList.FindAll(m => m.MemberStatus != null && m.MemberStatus.ToUpper() == "TERMINATED");
+	        var selectedCompanies = matchCompanyList;
 
-            if (selectedCompanies.Count < 1)
-            {
-                selectedCompanies = matchCompanyList.FindAll(m => m.MemberStatus != null && m.MemberStatus.ToUpper() == "DELISTED");
-            }
+	        if (selectedCompanies != null && selectedCompanies.Any())
+	        {
+                selectedCompanies = matchCompanyList.FindAll(m => m.MemberStatus != null && m.MemberStatus.ToUpper() == "TERMINATED");
 
-            if (selectedCompanies.Count < 1)
-            {
-                selectedCompanies = matchCompanyList.FindAll(m => m.MemberStatus != null && m.MemberStatus.ToUpper() == "ACTIVE");
-            }
+                if (selectedCompanies.Count < 1)
+                {
+                    selectedCompanies = matchCompanyList.FindAll(m => m.MemberStatus != null && m.MemberStatus.ToUpper() == "DELISTED");
+                }
+
+                if (selectedCompanies.Count < 1)
+                {
+                    selectedCompanies = matchCompanyList.FindAll(m => m.MemberStatus != null && m.MemberStatus.ToUpper() == "ACTIVE");
+                }	            
+	        }
 
             return selectedCompanies;
 	    }

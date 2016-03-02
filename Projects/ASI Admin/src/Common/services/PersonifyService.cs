@@ -355,7 +355,6 @@ namespace asi.asicentral.services
             IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
             
             //create company if not already there
-		    List<string> matchList = null;
             CompanyInformation companyInfo = null;
             string newMemberType = string.Empty;
             if (order.IsNewMemberShip(ref newMemberType))
@@ -364,7 +363,7 @@ namespace asi.asicentral.services
                 var matchIdList = order.Company.MatchingCompanyIds;
                 if (!string.IsNullOrEmpty(matchIdList))
                 {
-                    var matches = Regex.Matches(matchIdList, @"(\d+):(LEAD|ASICENTRAL):\w+\|?");
+                    var matches = Regex.Matches(matchIdList, @"(\d+),(LEAD|ASICENTRAL),\w+\|?");
 
                     if (matches.Count > 0)
                     {
@@ -372,6 +371,39 @@ namespace asi.asicentral.services
                         companyInfo = PersonifyClient.GetCompanyInfo(personifyCompany);
 
                         order.Company.MatchingCompanyIds = matchIdList.Replace(matches[0].Value, "");
+                    }
+                }
+                else if( !order.IsGuestLogin ) //login user
+                {
+                    var matchCompany = new StoreCompany()
+                    {
+                        Name = company.Name,
+                        Phone = company.Phone,
+                        Individuals = company.Individuals,
+                        MemberType = newMemberType
+                    };
+
+                    List<string> matchList = null;
+                    var personifyCompany = PersonifyClient.FindCustomerInfo(matchCompany, ref matchList);
+                    if (personifyCompany != null)
+                    {
+                        if (string.Compare(personifyCompany.MemberStatus, "LEAD", StringComparison.CurrentCulture) != 0 &&
+                            string.Compare(personifyCompany.MemberStatus, "ASICENTRAL", StringComparison.CurrentCulture) != 0 )
+                        {
+                            foreach (var m in matchList)
+                            {
+                                var match = Regex.Match(m, @"(\d+),(LEAD|ASICENTRAL),\w+");
+                                if (match.Success)
+                                {
+                                    var leadCompany = PersonifyClient.GetPersonifyCompanyInfo(match.Groups[1].Value, 0);
+                                    if (leadCompany != null)
+                                    {
+                                        companyInfo = PersonifyClient.GetCompanyInfo(leadCompany);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -382,8 +414,14 @@ namespace asi.asicentral.services
                 }
 
                 if (company.HasExternalReference())
-                {
-                    company.MatchingCompanyIds += string.Format("|{0}:{1}:{2}", company.ExternalReference.Split(';')[0], company.MemberStatus, company.MemberType);
+                { // add current matched company to matchIds
+                    var newMatches = string.Format("{0},{1},{2}", company.ExternalReference.Split(';')[0],company.MemberStatus, company.MemberType);
+                    if (string.IsNullOrEmpty(company.MatchingCompanyIds))
+                        company.MatchingCompanyIds = newMatches;
+                    else
+                    {
+                        company.MatchingCompanyIds = newMatches + "|" + company.MatchingCompanyIds;
+                    }
                 }
 
                 company.ExternalReference = string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);

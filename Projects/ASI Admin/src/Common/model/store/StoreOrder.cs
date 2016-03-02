@@ -159,13 +159,17 @@ namespace asi.asicentral.model.store
                 // new membership only if not terminated and not supplier-decorator
                 if ( status != StatusCode.TERMINATED.ToString() && (Company.MemberType.ToUpper() != "SUPPLIER" || (product.Id != 69 && product.Id != 78)) )
                 {
-                    if( Company.MemberType.ToUpper() == "DISTRIBUTOR" && 
-                       (product.Id == 70 || product.Id == 66))
+                    if( Company.MemberType.ToUpper() == "DISTRIBUTOR" && (product.Id == 70 || product.Id == 66 ))
                     {
                         newMembership = true;
                         newMemberType = "Decorator";
                     }
-                    else if ( product.Type != null)
+                    else if( Company.MemberType.ToUpper() == "DECORATOR" && product.Id == 69 )
+                    {
+                        newMembership = true;
+                        newMemberType = "Supplier";
+                    }
+                    else if (product.Type != null)
                     {
                         if( string.Compare(Company.MemberType, OrderRequestType, StringComparison.CurrentCultureIgnoreCase) != 0  ||
                             (status == StatusCode.ACTIVE.ToString() && Company.MemberType.ToUpper() == "SUPPLIER"))
