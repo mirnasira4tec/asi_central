@@ -426,6 +426,7 @@ namespace asi.asicentral.services
 
                 company.ExternalReference = string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
                 company.MemberType = newMemberType;
+                company.MemberStatus = companyInfo.MemberStatus;
             }
             else
             {
