@@ -1920,4 +1920,7 @@
   <data name="MemberType" xml:space="preserve">
     <value>Member Type</value>
   </data>
+  <data name="Tax_Shipping_Disclaimer" xml:space="preserve">
+    <value>Price may vary based on tax and shipping.</value>
+  </data>
 </root>

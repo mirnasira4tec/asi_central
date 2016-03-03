@@ -346,6 +346,62 @@ namespace asi.asicentral.Tests
         }
 
         [TestMethod]
+        public void TestIsNewMembership()
+        {
+
+            IStoreService storeService = MockupStoreService();
+
+            // test active distributor is buying supplier membership
+            var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 5);
+            var order = CreateOrder("10275773", new ContextProduct[] { distributor }, "TestIsNewMembership");
+            //order.OrderRequestType = "Distributor";
+
+            order.Company = GetStoreCompany("Create Company Dist",
+                              "2152220001",
+                              "newDist001@gmail.com",
+                              "DISTRIBUTOR");
+
+            IBackendService personify = new PersonifyService(storeService);
+            List<string> masterIdList = null;
+            var companyInfo = personify.FindCompanyInfo(order.Company, ref masterIdList);
+            //if (companyInfo == null)
+            //{
+            //    companyInfo = personify.CreateCompany(order.Company, "DISTRIBUTOR");
+            //    companyInfo = personify.CreateCompany(order.Company, "DISTRIBUTOR");
+            //}
+
+            //companyInfo = personify.FindCompanyInfo(order.Company, ref masterIdList);
+            Assert.IsNotNull(companyInfo);
+            //Assert.AreEqual(companyInfo.MemberStatus, "ACTIVE");
+
+            order.Company.MemberStatus = companyInfo.MemberStatus;
+            order.Company.MemberType = companyInfo.MemberType;
+
+            order.Company.MatchingCompanyIds = string.Join("|", masterIdList);
+            var newMemberType = string.Empty;
+            var isNewMembership = order.IsNewMemberShip(ref newMemberType);
+            Assert.IsTrue(isNewMembership);
+
+            var creditCard = new CreditCard()
+            {
+                Type = "Visa",
+                Number = "4111111111111111",
+                ExpirationDate = new DateTime(2018, 11, 15),
+                CardHolderName = "ASI Store",
+                Address = "Street",
+                City = "City",
+                State = "NJ",
+                Country = "USA",
+                PostalCode = "98123",
+            };
+            var profile = personify.SaveCreditCard(order, creditCard);
+
+            Assert.IsNotNull(profile);
+
+            // Test Supplier is buying supplier membership
+        }
+
+        [TestMethod]
         public void ReconcileCompanyMatchNameOnly()
         {
             IBackendService personify = new PersonifyService();
@@ -411,6 +467,21 @@ namespace asi.asicentral.Tests
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.IsTrue(string.IsNullOrEmpty(companyInfo.MemberStatus) || 
                           ( companyInfo.MemberStatus.ToUpper() != "ASICENTRAL" && companyInfo.MemberStatus.ToUpper() != "LEAD"));
+        }
+
+        [TestMethod]
+        public void ReconcileCompanyWithPhoneEmailForMMSLoad()
+        {
+            // match email only
+            var company = GetStoreCompany("11x17 Inc",
+                                          "9035410100",
+                                          "jrw@11x17.com",
+                                          "MMS_LOAD");
+
+            IBackendService personify = new PersonifyService();
+            List<string> masterIdList = null;
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
+            Assert.IsNull(companyInfo);
         }
 
         [TestMethod]

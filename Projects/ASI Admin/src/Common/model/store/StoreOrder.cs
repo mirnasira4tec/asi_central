@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using asi.asicentral.oauth;
 
 namespace asi.asicentral.model.store
 {
@@ -10,8 +11,7 @@ namespace asi.asicentral.model.store
         Approved = 1,
         Rejected = 2,
         PersonifyError = 3,
-        ValidationError = 4,
-        ErrorOverride = 5
+        ValidationError = 4
     }
 
     public class StoreOrder
@@ -150,15 +150,35 @@ namespace asi.asicentral.model.store
 
         public bool IsNewMemberShip(ref string newMemberType)
         {
-            //todo?? return true if supplier is buying a different supplier membership
-            bool newMembership = false;
-            if (Company != null && !string.IsNullOrEmpty(Company.MemberType) && 
-                OrderDetails != null && OrderDetails.Any() && OrderDetails[0].Product != null)
+            var newMembership = false;
+            if( Company != null && !string.IsNullOrEmpty(Company.MemberType) && OrderDetails != null &&
+                OrderDetails.Any() && OrderDetails[0].Product != null && !string.IsNullOrEmpty(Company.MemberStatus) )
             {
-                newMembership = Company.MemberType.ToUpper() == "DISTRIBUTOR" && 
-                                (OrderDetails[0].Product.Id == 70 || OrderDetails[0].Product.Id == 66);
-                if( newMembership )
-                    newMemberType = "Decorator";
+                var status = Company.MemberStatus.ToUpper();
+                var product = OrderDetails[0].Product;
+                // new membership only if not terminated and not supplier-decorator
+                if ( status != StatusCode.TERMINATED.ToString() && (Company.MemberType.ToUpper() != "SUPPLIER" || (product.Id != 69 && product.Id != 78)) )
+                {
+                    if( Company.MemberType.ToUpper() == "DISTRIBUTOR" && (product.Id == 70 || product.Id == 66 ))
+                    {
+                        newMembership = true;
+                        newMemberType = "Decorator";
+                    }
+                    else if( Company.MemberType.ToUpper() == "DECORATOR" && product.Id == 69 )
+                    {
+                        newMembership = true;
+                        newMemberType = "Supplier";
+                    }
+                    else if (product.Type != null)
+                    {
+                        if( string.Compare(Company.MemberType, OrderRequestType, StringComparison.CurrentCultureIgnoreCase) != 0  ||
+                            (status == StatusCode.ACTIVE.ToString() && Company.MemberType.ToUpper() == "SUPPLIER"))
+                        {
+                            newMembership = true;
+                            newMemberType = OrderRequestType.ToUpper();
+                        }
+                    }
+                }
             }
 
             return newMembership;

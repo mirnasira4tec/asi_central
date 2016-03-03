@@ -9,6 +9,7 @@ using asi.asicentral.services.PersonifyProxy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace asi.asicentral.services
@@ -125,9 +126,8 @@ namespace asi.asicentral.services
                         mapping = mappings.FirstOrDefault(m => string.IsNullOrEmpty(m.StoreOption));
                     }
 
-                    PersonifyClient.CreateBundleOrder(order, mapping, companyInfo, contactMasterId, contactSubId, billToAddr, shipToAddr);
-
-                    Task.Factory.StartNew(() => PostCreateBundleOrder(order, emailService, url, mapping, companyInfo, billToAddr, waiveAppFee, firstmonthFree));
+                    PersonifyClient.CreateBundleOrder(order, mapping, companyInfo, contactMasterId, contactSubId, billToAddr, shipToAddr, waiveAppFee, firstmonthFree);
+                    ValidateOrderTotal(order, emailService, url, true, firstmonthFree);
 
                     // update company ASI#, to be included in the internal email
                     var asiNumber = PersonifyClient.GetCompanyAsiNumber(companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
@@ -359,11 +359,74 @@ namespace asi.asicentral.services
             string newMemberType = string.Empty;
             if (order.IsNewMemberShip(ref newMemberType))
             {
-                //todo?? reconcile company based on the new member type
-                //create a new Personify company for new membership type
-                companyInfo = PersonifyClient.CreateCompany(order.Company, newMemberType, countryCodes);
-                order.Company.ExternalReference = string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
-                order.Company.MemberType = newMemberType;
+                //check if the matchList have lead company already created
+                var matchIdList = order.Company.MatchingCompanyIds;
+                if (!string.IsNullOrEmpty(matchIdList))
+                {
+                    var matches = Regex.Matches(matchIdList, @"(\d+),(LEAD|ASICENTRAL),\w+\|?");
+
+                    if (matches.Count > 0)
+                    {
+                        var personifyCompany = PersonifyClient.GetPersonifyCompanyInfo(matches[0].Groups[1].Value, 0);
+                        companyInfo = PersonifyClient.GetCompanyInfo(personifyCompany);
+
+                        order.Company.MatchingCompanyIds = matchIdList.Replace(matches[0].Value, "");
+                    }
+                }
+                else if( !order.IsGuestLogin ) //login user
+                {
+                    var matchCompany = new StoreCompany()
+                    {
+                        Name = company.Name,
+                        Phone = company.Phone,
+                        Individuals = company.Individuals,
+                        MemberType = newMemberType
+                    };
+
+                    List<string> matchList = null;
+                    var personifyCompany = PersonifyClient.FindCustomerInfo(matchCompany, ref matchList);
+                    if (personifyCompany != null)
+                    {
+                        if (string.Compare(personifyCompany.MemberStatus, "LEAD", StringComparison.CurrentCulture) != 0 &&
+                            string.Compare(personifyCompany.MemberStatus, "ASICENTRAL", StringComparison.CurrentCulture) != 0 )
+                        {
+                            foreach (var m in matchList)
+                            {
+                                var match = Regex.Match(m, @"(\d+),(LEAD|ASICENTRAL),\w+");
+                                if (match.Success)
+                                {
+                                    var leadCompany = PersonifyClient.GetPersonifyCompanyInfo(match.Groups[1].Value, 0);
+                                    if (leadCompany != null)
+                                    {
+                                        companyInfo = PersonifyClient.GetCompanyInfo(leadCompany);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (companyInfo == null)
+                {
+                    //create a new Personify company for new membership type
+                    companyInfo = PersonifyClient.CreateCompany(order.Company, newMemberType, countryCodes);
+                }
+
+                if (company.HasExternalReference())
+                { // add current matched company to matchIds
+                    var newMatches = string.Format("{0},{1},{2}", company.ExternalReference.Split(';')[0],company.MemberStatus, company.MemberType);
+                    if (string.IsNullOrEmpty(company.MatchingCompanyIds))
+                        company.MatchingCompanyIds = newMatches;
+                    else
+                    {
+                        company.MatchingCompanyIds = newMatches + "|" + company.MatchingCompanyIds;
+                    }
+                }
+
+                company.ExternalReference = string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+                company.MemberType = newMemberType;
+                company.MemberStatus = companyInfo.MemberStatus;
             }
             else
             {
