@@ -326,6 +326,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 if (customerInfo != null)
                 {
                     storeCompany.ExternalReference = customerInfo.MasterCustomerId + ";" + customerInfo.SubCustomerId;
+                    storeCompany.MemberStatus = customerInfo.MemberStatus;
                     AddCustomerAddresses(storeCompany, customerInfo.MasterCustomerId, customerInfo.SubCustomerId, countryCodes);
                 }
             }

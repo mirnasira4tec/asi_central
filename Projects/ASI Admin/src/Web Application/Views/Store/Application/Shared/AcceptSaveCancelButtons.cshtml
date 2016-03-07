@@ -12,6 +12,10 @@
     {
         <h3>ASI #: @Model.ASINumber</h3>
     }
+    @if (!string.IsNullOrEmpty(Model.CompanyStatus))
+    {
+        <h3>Status: @Model.CompanyStatus</h3>
+    }
 	@if (Model.OrderStatus == OrderStatus.Approved && !string.IsNullOrEmpty(Model.BackendReference))
 	{
 		<h3>Personify Order#: @Model.BackendReference</h3>
