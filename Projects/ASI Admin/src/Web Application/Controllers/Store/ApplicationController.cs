@@ -12,6 +12,8 @@ using asi.asicentral.services;
 using asi.asicentral.util.store;
 using ASI.EntityModel;
 using asi.asicentral.web.store.interfaces;
+using System.Net.Mail;
+using System.Text;
 
 namespace asi.asicentral.web.Controllers.Store
 {
@@ -40,6 +42,7 @@ namespace asi.asicentral.web.Controllers.Store
         public ICreditCardService CreditCardService { get; set; }
         public IBackendService BackendService { get; set; }
         public IEmailService EmailService { get; set; }
+        public ITemplateService TemplateService { get; set; }
 
         [HttpGet]
         public virtual ActionResult Edit(int id)
@@ -960,19 +963,49 @@ namespace asi.asicentral.web.Controllers.Store
                 bool success = int.TryParse(order.ExternalReference, out num);
                 if (!success) throw new Exception("Timms id must be numbers only.");
 
-                if (order.OrderDetails[0].Product.HasBackEndIntegration && order.OrderDetails[0].Product.IsMembership())
-                {
-                    BackendService.PlaceOrder(order, EmailService, null);
-                }
-
-                fulfilmentService.Process(order, application);
-                order.ProcessStatus = OrderStatus.Approved;
-                order.ApprovedDate = DateTime.UtcNow;
                 if (System.Web.HttpContext.Current != null)
                 {
                     if (System.Web.HttpContext.Current.User.Identity as System.Security.Principal.WindowsIdentity != null)
                         order.ApprovedBy = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
                 }
+
+                var product = order.OrderDetails[0].Product;
+                if ( product.HasBackEndIntegration && product.IsMembership())
+                {
+                    try
+                    {
+                        var companyInfo = BackendService.PlaceOrder(order, EmailService, null);
+
+                        // send internal email
+                        var emailBody = TemplateService.Render("asi.asicentral.web.Views.Emails.OrderApprovalEmail.cshtml", order);
+                        var mail = new MailMessage();
+                        if (!string.IsNullOrEmpty(product.NotificationEmails))
+                        {
+                            var tos = product.NotificationEmails.Split(';');
+                            foreach (string to in tos) 
+                                mail.To.Add(new MailAddress(to));
+
+                            mail.Subject = string.Format("{0} Membership Approved for '{1}', Order {2} by '{3}' ", order.OrderRequestType, order.Company.Name, order.Id.ToString(), order.ApprovedBy);
+                            mail.Body = emailBody;
+                            mail.BodyEncoding = Encoding.UTF8;
+                            mail.IsBodyHtml = true;
+                            EmailService.SendMail(mail);
+                        }
+
+                        // update company member status status
+                        order.Company.MemberStatus = companyInfo.MemberStatus;
+                    }
+                    catch (Exception ex)
+                    {
+                        LogService log = LogService.GetLog(this.GetType());
+                        log.Error(ex.Message);
+                        throw ex;
+                    }
+                }
+
+                fulfilmentService.Process(order, application);
+                order.ProcessStatus = OrderStatus.Approved;
+                order.ApprovedDate = DateTime.UtcNow;
             }
             else if (command == ApplicationController.COMMAND_REJECT)
             {
@@ -1014,6 +1047,7 @@ namespace asi.asicentral.web.Controllers.Store
             if (model.Company != null && order.Company != null)
             {
                 order.Company.Name = model.Company;
+                order.Company.MemberStatus = model.CompanyStatus;
                 order.Company.Phone = model.Phone;
                 order.Company.WebURL = model.BillingWebUrl;
                 order.Company.ASINumber = model.ASINumber;
