@@ -3,7 +3,6 @@ using asi.asicentral.model;
 using asi.asicentral.model.store;
 using asi.asicentral.oauth;
 using asi.asicentral.PersonifyDataASI;
-using asi.asicentral.util.store;
 using asi.asicentral.util.store.companystore;
 using PersonifySvcClient;
 using System;
@@ -598,7 +597,8 @@ namespace asi.asicentral.services.PersonifyProxy
             var companys = SvcClient.Ctxt.ASICustomerInfos
                            .Where(p => p.RecordType == RECORD_TYPE_CORPORATE && p.SubCustomerId == 0 &&
                                        string.Compare(p.LastName, company.Name) == 0 &&
-                                       string.Compare(p.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE) != 0).ToList();
+                                       string.Compare(p.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE, StringComparison.CurrentCultureIgnoreCase) != 0 &&
+                                       string.Compare(p.UserDefinedMemberStatusString, StatusCode.MMS_LOAD.ToString(), StringComparison.CurrentCultureIgnoreCase) != 0).ToList();
 
             if (companys.Count < 1)
             {
@@ -644,7 +644,8 @@ namespace asi.asicentral.services.PersonifyProxy
                     string condition2 = null;
                     foreach (var info in customInfos)
                     {
-                        if (!string.Equals(info.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE, StringComparison.InvariantCultureIgnoreCase))
+                        if (!string.Equals(info.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE, StringComparison.InvariantCultureIgnoreCase) &&
+                            !string.Equals(info.UserDefinedMemberStatusString, StatusCode.MMS_LOAD.ToString(), StringComparison.InvariantCultureIgnoreCase))
                         {
                             if (info.SubCustomerId == 0 && string.Equals(info.RecordType, RECORD_TYPE_CORPORATE, StringComparison.InvariantCultureIgnoreCase))
                             {
@@ -669,10 +670,11 @@ namespace asi.asicentral.services.PersonifyProxy
                         var cusRelations = SvcClient.Ctxt.CusRelationships.AddQueryOption("$filter", condition2);
                         foreach (var r in cusRelations)
                         {
-                            idList.Add(r.MasterCustomerId);
+                            if( !idList.Contains(r.MasterCustomerId))
+                                idList.Add(r.MasterCustomerId);
                         }
 
-                        RemoveSoftDeletedCompanies(idList);
+                        RemoveUnqualifiedCompanies(idList);
                         masterIdList.AddRange(idList);
                     }
                 }
@@ -749,7 +751,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return companyInfo;
         }
 
-        private static void RemoveSoftDeletedCompanies(List<string> masterIdList)
+        private static void RemoveUnqualifiedCompanies(List<string> masterIdList)
         {
             if (masterIdList.Count < 1)
                 return;
@@ -766,11 +768,11 @@ namespace asi.asicentral.services.PersonifyProxy
 
             var asiCustomers = SvcClient.Ctxt.ASICustomerInfos.AddQueryOption("$filter", condition).ToList();
 
-            // get rid of company with "DUPL" status
-            var deletedCustomers = asiCustomers.Where(c => string.Equals(c.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE, StringComparison.InvariantCultureIgnoreCase))
-                                       .ToList();
+            // get rid of company with "DUPL" and "MMS Datafeed" status
+            var unQualifiedCustomers = asiCustomers.Where(c => string.Equals(c.CustomerStatusCodeString, CUSTOMER_INFO_STATUS_DUPLICATE, StringComparison.InvariantCultureIgnoreCase) ||
+                                                               string.Equals(c.UserDefinedMemberStatusString, StatusCode.MMS_LOAD.ToString(), StringComparison.InvariantCultureIgnoreCase)).ToList();
 
-            foreach (var c in deletedCustomers)
+            foreach (var c in unQualifiedCustomers)
             {
                 masterIdList.Remove(c.MasterCustomerId);
             }
