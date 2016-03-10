@@ -976,7 +976,7 @@ namespace asi.asicentral.web.Controllers.Store
                 {
                     try
                     {
-                        var companyInfo = BackendService.PlaceOrder(order, EmailService, null);
+                        BackendService.PlaceOrder(order, EmailService, null);
 
                         // send internal email
                         if (!string.IsNullOrEmpty(OrderApprovalNotificationEmails))
@@ -993,9 +993,6 @@ namespace asi.asicentral.web.Controllers.Store
                             mail.IsBodyHtml = true;
                             EmailService.SendMail(mail);
                         }
-
-                        // update company member status status
-                        order.Company.MemberStatus = companyInfo.MemberStatus;
                     }
                     catch (Exception ex)
                     {
