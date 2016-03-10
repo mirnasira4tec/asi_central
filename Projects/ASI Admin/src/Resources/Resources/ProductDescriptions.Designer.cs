@@ -160,6 +160,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Thank you for participating in the ESP Open House. We’re so glad you’ve decided to streamline your business with ESP, saving you time and money every day. And because you’re adding ESP now, you’ll receive CRM &amp;amp; Orders &lt;strong&gt;absolutely free!&lt;/strong&gt;..
+        /// </summary>
+        public static string ProductESPOpenHouse {
+            get {
+                return ResourceManager.GetString("ProductESPOpenHouse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ESP Websites are everything that a website should be – functional, user friendly, attractive and revenue generating. Powered by ESP, the websites create a realistic retail experience for your customers, motivating them to stay, enjoy and shop. And with secure online payment, you get paid faster than ever..
         /// </summary>
         public static string ProductESPWebsites {
