@@ -20,6 +20,8 @@ namespace asi.asicentral.web.Controllers.Store
     [Authorize]
     public class ApplicationController : Controller
     {
+        private static readonly string OrderApprovalNotificationEmails = System.Configuration.ConfigurationManager.AppSettings["OrderApprovalEmail"];
+
         public const string COMMAND_SAVE = "Save";
         public const string COMMAND_REJECT = "Reject";
         public const string COMMAND_ACCEPT = "Accept";
@@ -36,7 +38,7 @@ namespace asi.asicentral.web.Controllers.Store
         public static readonly int SUPPLIER_EMAIL_EXPRESS_PRODUCT_ID= 61;
         //products associated to StoreDetailProductCollection table
         public static readonly int SUPPLIER_ESP_WEBSITES_PRODUCT_COLLECTIONS_ID = 64;
-       
+
         public IStoreService StoreService { get; set; }
         public IFulfilmentService FulfilmentService { get; set; }
         public ICreditCardService CreditCardService { get; set; }
@@ -977,12 +979,12 @@ namespace asi.asicentral.web.Controllers.Store
                         var companyInfo = BackendService.PlaceOrder(order, EmailService, null);
 
                         // send internal email
-                        var emailBody = TemplateService.Render("asi.asicentral.web.Views.Emails.OrderApprovalEmail.cshtml", order);
-                        var mail = new MailMessage();
-                        if (!string.IsNullOrEmpty(product.NotificationEmails))
+                        if (!string.IsNullOrEmpty(OrderApprovalNotificationEmails))
                         {
-                            var tos = product.NotificationEmails.Split(';');
-                            foreach (string to in tos) 
+                            var emailBody = TemplateService.Render("asi.asicentral.web.Views.Emails.OrderApprovalEmail.cshtml", order);
+                            var mail = new MailMessage();
+                            var tos = OrderApprovalNotificationEmails.Split(';');
+                            foreach (string to in tos)
                                 mail.To.Add(new MailAddress(to));
 
                             mail.Subject = string.Format("{0} Membership Approved for '{1}', Order {2} by '{3}' ", order.OrderRequestType, order.Company.Name, order.Id.ToString(), order.ApprovedBy);

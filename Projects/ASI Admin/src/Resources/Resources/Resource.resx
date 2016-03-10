@@ -474,9 +474,6 @@
   <data name="ConfirmationCallusProformaMessage" xml:space="preserve">
     <value>Call us at 800-546-1350 x318 to speak with an ASI representative to check the status of your application.</value>
   </data>
-  <data name="ConfirmationASINumberMessage" xml:space="preserve">
-    <value>Your ASI Number is</value>
-  </data>
   <data name="ConfirmationDistributorsCantFind" xml:space="preserve">
     <value>Distributors can't find your products</value>
   </data>
@@ -1900,13 +1897,13 @@
     <value>The Year field is required.</value>
   </data>
   <data name="ConfirmationContactWithASINumberMessage" xml:space="preserve">
-    <value>Someone will contact you shortly with your ASI Number</value>
+    <value>Welcome to ASI®! You are on your way to becoming one of our amazing members! &lt;br /&gt;Your new Account Representative will be contacting you shortly.</value>
   </data>
   <data name="ConfirmationOrderCreatedMessage" xml:space="preserve">
     <value>Your order has been created and it will be processed as soon as possible.</value>
   </data>
   <data name="ConfirmationOrderNumberMessage" xml:space="preserve">
-    <value>Your order confirmation number is</value>
+    <value>For your records, your order confirmation number is</value>
   </data>
   <data name="FieldInvalidFax" xml:space="preserve">
     <value>Please enter a valid Fax number</value>
