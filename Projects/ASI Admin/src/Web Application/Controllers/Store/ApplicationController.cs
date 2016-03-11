@@ -976,8 +976,6 @@ namespace asi.asicentral.web.Controllers.Store
                 {
                     try
                     {
-                        BackendService.PlaceOrder(order, EmailService, null);
-
                         // send internal email
                         if (!string.IsNullOrEmpty(OrderApprovalNotificationEmails))
                         {
@@ -993,6 +991,8 @@ namespace asi.asicentral.web.Controllers.Store
                             mail.IsBodyHtml = true;
                             EmailService.SendMail(mail);
                         }
+
+                        BackendService.PlaceOrder(order, EmailService, null);
                     }
                     catch (Exception ex)
                     {
