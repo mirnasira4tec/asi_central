@@ -439,6 +439,7 @@
         <EntitySet Name="ASICreatePayScheduleOutputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASICreatePayScheduleOutput" />
         <EntitySet Name="ASICusCreditCardProfiles" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASICusCreditCardProfile" />
         <EntitySet Name="ASICustomers" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASICustomer" />
+        <EntitySet Name="ASICustomer2s" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASICustomer2" />
         <EntitySet Name="ASICustomerCreditCards" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASICustomerCreditCard" />
         <EntitySet Name="ASICustomerInfos" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASICustomerInfo" />
         <EntitySet Name="ASIGetInvoiceURLInputs" EntityType="Personify.DataServices.EF.Model.ASI.DataModel.ASIGetInvoiceURLInput" />
@@ -2158,6 +2159,196 @@
         <Property Name="UserDefinedMinorityOwnedString" Type="Edm.String" Nullable="true" />
         <Property Name="UserDefinedMinorityownershipinformation" Type="Edm.String" Nullable="true" />
       </EntityType>
+      <EntityType Name="ASICustomer2">
+        <Key>
+          <PropertyRef Name="MasterCustomerId" />
+          <PropertyRef Name="SubcustomerId" />
+        </Key>
+        <Property Name="EntityGUID" Type="Edm.String" Nullable="true" />
+        <Property Name="MasterCustomerId" Type="Edm.String" Nullable="false" />
+        <Property Name="SubcustomerId" Type="Edm.Int32" Nullable="false" />
+        <Property Name="AddedBy" Type="Edm.String" Nullable="true" />
+        <Property Name="ChangedBy" Type="Edm.String" Nullable="true" />
+        <Property Name="AddedOn" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="ChangedOn" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="ConcurrencyId" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="ProspectId" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedAllowSgrMemberContact" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedApplicationRecvdMarketingCodeString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedApplicationRecvdMembershipCodeString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedApplicationSource" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedApplicationType" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedApplique" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedArtworkComments" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedAsicentralId" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedAsiwebBranchId" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedAssembler" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedAssociations" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedBankCity" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedBankName" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedBankPhone" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedBankrupt2String" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedBankState" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedBookedYearSpendingamount" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedBookedYtdSpendingamount" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedBusinessModelDefinitionString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedCatCover" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedClassCodeStatus" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedCompanySalesAmountChangedBy" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedCompanySalesAmountChangedOn" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedCompanySalesRange" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedCurrBusModDefinitionChangedBy" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedCurrBusModDefinitionChangedOn" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedDateAppsReceived2" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedDateoflastupdate2" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedDeboss" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedDecals" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedDieCast" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedDieStamp" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedDigital" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedDirectEmbroidery" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedDirectImprint" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedDirectRep" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedDnsChangedBy" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedDnsChangedOn" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedDnsFlag" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedDnsTypeString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedEmail" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedEmboss" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedEmbroidedEmblem" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedEndUserSalesChangedBy" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedEndUserSalesChangedOn" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedEndUserSalesString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedEngagement" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedEnglishSpeaking" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedEngraving" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedEntryDate2" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedEntryMarketingCodeString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedEntryMembershipCodeString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedEspWebsiteStatus" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedEtching" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedFacilities" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedFoilStamping" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedFourColorProcess" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedFullColorProcess" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedFullTimeContractorsChangedBy" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedFullTimeContractorsChangedOn" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedFullTimeSalesRepsChangedBy" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedFullTimeSalesRepsChangedOn" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedGeneralCompanyComments" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedHotStamping" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedImporter" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedImprinter" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedInterestLevel" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedJobFunctionCode" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedJobTitle" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedLabels" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedLanguagePreferenceString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedLaser" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedLaserEngraved" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedLaserStamped" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedLastDataUpdated" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedLeadScoringDate" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedLeadTypeString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedLetterpress" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedLithography" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedLithoOffset" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMacUser" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMacUserChangedBy" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMacUserChangedOn" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedMainBusiness" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedManufacturer" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedMarketingComments" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMarketingPolicy" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMc8A" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMcDbe" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMcDvbe" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMcHub" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMcMbe" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMcOther" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMcSdb" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMcWbe" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMemberSegmentString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMissionStatement" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMlrepServices" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMlrepTerritory" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMmsSsoSignonId" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedMmsSsoSignonstatus" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedMolded" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedMpRetail" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedNbrEmpAtBillingAddr" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedNbrEmpOutsideNa" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedNorthAmericanCompanyString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedOffset" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedOracleId" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedOther" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedOtherNote" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedPadPrint" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedPosition" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedPpaCategory" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedPpaJoinDate" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedPpaRenewalDate" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedPrevBusModDefinition" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedPrevBusModDefinitionChangedBy" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedPrevBusModDefinitionChangedOn" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedPriBusOtherDescription" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedPriBusRevSrcString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedPrimaryRole" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedProdSafetyTestProcString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedProdTimeMax" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedProdTimeMin" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedProfile" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedPromoProductsAre" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedPublishUnder2" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedPuffScreening" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedRawMaterial" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedRebateAmount" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedReinstatedDate" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedReinstatedReasString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedRetail" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedRushTimeMax" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedRushTimeMin" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedRushTimeString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedSageUser" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedSageUserChangedBy" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedSageUserChangedOn" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedSandblastCarving" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedScreenPrinting" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedSellingPromoProducts" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedShareEmpWithOtherEntitiesString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedSilkscreen" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedSlsVolunteerAdvertising" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedSlsVolunteerCat" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedSlsVolunteerExhibition" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedSlsVolunteerInventory" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedSlsVolunteerMeeting" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedSlsVolunteerMembership" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedSlsVolunteerMisc" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedSlsVolunteerOther" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedSlsVolunteerSubscription" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedSlsVolunteerTot" Type="Edm.Decimal" Nullable="true" />
+        <Property Name="UserDefinedSolicitedStatus" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedSonicFusion" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedSource" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedSpecialtySalesAmountChangedBy" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedSpecialtySalesAmountChangedOn" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedSpecialtySalesRange" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedSpotColor" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedSublimation" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedTerminatedDate2" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedTerminatedReasString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedThresholdDate" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedThresholdString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedTransfer" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedTrialDate" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedUnionMadeAvailString" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedUpdateNewsBulletinDate" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="UserDefinedUsCanPriceSame" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedWholesaler" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedWoven" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="UserDefinedYearEstablishedChangedBy" Type="Edm.String" Nullable="true" />
+        <Property Name="UserDefinedYearEstablishedChangedOn" Type="Edm.DateTime" Nullable="true" />
+      </EntityType>
       <EntityType Name="ASICustomerCreditCard">
         <Key>
           <PropertyRef Name="MasterCustomerId" />
@@ -2187,6 +2378,8 @@
         <Property Name="UserDefinedComments" Type="Edm.String" Nullable="true" />
         <Property Name="UserDefinedDefaultFlag" Type="Edm.Boolean" Nullable="true" />
         <Property Name="UserDefinedOriginalCCReference" Type="Edm.String" Nullable="true" />
+        <Property Name="CCExpirationDate" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="CCName" Type="Edm.String" Nullable="true" />
       </EntityType>
       <EntityType Name="ASICustomerInfo">
         <Key>
@@ -2314,7 +2507,9 @@
         <Property Name="NavigationKey" Type="Edm.String" Nullable="true" />
         <Property Name="OrderNumber" Type="Edm.String" Nullable="true" />
         <Property Name="OrderLineNo" Type="Edm.Int32" Nullable="true" />
-        <Property Name="IssueNumber" Type="Edm.Int64" Nullable="true" />
+        <Property Name="IssueNumber" Type="Edm.Int32" Nullable="true" />
+        <Property Name="OrgId" Type="Edm.String" Nullable="true" />
+        <Property Name="OrgUnitId" Type="Edm.String" Nullable="true" />
       </EntityType>
       <EntityType Name="ASIUpdateLineStatusInput">
         <Key>
