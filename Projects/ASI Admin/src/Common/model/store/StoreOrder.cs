@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using asi.asicentral.oauth;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace asi.asicentral.model.store
 {
@@ -48,6 +49,9 @@ namespace asi.asicentral.model.store
         public string UpdateSource { get; set; }
         public DateTime? ApprovedDate { get; set; }
         public string ApprovedBy { get; set; }
+
+        [NotMapped]
+        public Uri RequestUrl { get; set; }
 
         public virtual StoreCompany Company { get; set; }
         public virtual StoreCreditCard CreditCard { get; set; }

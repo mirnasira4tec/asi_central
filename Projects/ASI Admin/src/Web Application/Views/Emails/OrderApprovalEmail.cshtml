@@ -1,7 +1,7 @@
 ﻿@model asi.asicentral.model.store.StoreOrder
 @{
     var company = Model.Company;
-    var baseUrl = "http://localhost:13793";//Request != null ? string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~")) : "";
+    var baseUrl = Model.RequestUrl != null ? string.Format("{0}://{1}", Model.RequestUrl.Scheme, Model.RequestUrl.Authority) : "";
     var memberStatus = string.IsNullOrEmpty(company.MemberStatus) ? "LEAD" : company.MemberStatus;
     var orderDetail = Model.OrderDetails.ElementAt(0);
     var constituentId = company.HasExternalReference() ? company.ExternalReference.Split(';')[0] : string.Empty;
