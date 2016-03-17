@@ -972,13 +972,25 @@ namespace asi.asicentral.web.Controllers.Store
                 }
 
                 var product = order.OrderDetails[0].Product;
+                var orderPlaced = true;
                 if ( product.HasBackEndIntegration && product.IsMembership())
                 {
                     try
                     {
-                        // send internal email
+                        BackendService.PlaceOrder(order, EmailService, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogService log = LogService.GetLog(this.GetType());
+                        log.Error(ex.Message);
+                    }
+
+                    // send internal email only if order is created in personfiy
+                    if (!string.IsNullOrEmpty(order.BackendReference))
+                    {
                         if (!string.IsNullOrEmpty(OrderApprovalNotificationEmails))
                         {
+                            order.RequestUrl = Request != null ? Request.Url : null;
                             var emailBody = TemplateService.Render("asi.asicentral.web.Views.Emails.OrderApprovalEmail.cshtml", order);
                             var mail = new MailMessage();
                             var tos = OrderApprovalNotificationEmails.Split(';');
@@ -991,20 +1003,20 @@ namespace asi.asicentral.web.Controllers.Store
                             mail.IsBodyHtml = true;
                             EmailService.SendMail(mail);
                         }
-
-                        BackendService.PlaceOrder(order, EmailService, null);
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        LogService log = LogService.GetLog(this.GetType());
-                        log.Error(ex.Message);
-                        throw ex;
+                        orderPlaced = false;
+                        order.ProcessStatus = OrderStatus.PersonifyError;
                     }
                 }
 
-                fulfilmentService.Process(order, application);
-                order.ProcessStatus = OrderStatus.Approved;
-                order.ApprovedDate = DateTime.UtcNow;
+                if (orderPlaced)
+                {
+                    fulfilmentService.Process(order, application);
+                    order.ProcessStatus = OrderStatus.Approved;
+                    order.ApprovedDate = DateTime.UtcNow;
+                }
             }
             else if (command == ApplicationController.COMMAND_REJECT)
             {
