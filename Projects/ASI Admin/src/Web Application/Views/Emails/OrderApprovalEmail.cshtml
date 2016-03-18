@@ -4,6 +4,7 @@
     var baseUrl = Model.RequestUrl != null ? string.Format("{0}://{1}", Model.RequestUrl.Scheme, Model.RequestUrl.Authority) : "";
     var memberStatus = string.IsNullOrEmpty(company.MemberStatus) ? "LEAD" : company.MemberStatus;
     var orderDetail = Model.OrderDetails.ElementAt(0);
+    var orderTotal = orderDetail.Cost;
     var constituentId = company.HasExternalReference() ? company.ExternalReference.Split(';')[0] : string.Empty;
     var compAddress = company.Addresses.Count > 0 ? company.Addresses[0].Address : null;
     var address = compAddress != null ? string.Format("{0} {1} {2}, {3} {4}", compAddress.Street1, compAddress.Street2 ?? string.Empty, compAddress.City, compAddress.State, compAddress.Zip)
@@ -52,16 +53,34 @@
             <tr><td>&nbsp;</td></tr>
             <tr><td>A new membership order was approved.</td></tr>
             <tr><td>&nbsp;</td></tr>
-            <tr><td>Order Number:&nbsp;<a href="@baseUrl/Store/Application/Edit/@orderDetail.Id">@Model.Id</a></td></tr>
-            <tr><td>Membership Type:&nbsp;@orderDetail.Product.Type </td></tr>
-            <tr><td>Package Type, Total:&nbsp;@orderDetail.Product.Name,&nbsp;@Model.AnnualizedTotal</td></tr>
-            <tr><td>Constituent ID:&nbsp;@constituentId </td></tr>
-            <tr><td>Company Name:&nbsp;@company.Name </td></tr>
-            <tr><td>Company Address:&nbsp;@address</td></tr>
-            <tr><td>Company Phone:&nbsp;@company.Phone </td></tr>
-            <tr><td>Primary Contact Name, Phone:&nbsp;@company.GetCompanyContact().FirstName @company.GetCompanyContact().LastName, &nbsp;@company.GetCompanyContact().Phone</td></tr>
-            <tr><td>Membership Status:&nbsp;@memberStatus</td></tr>
-            <tr><td>Sales Rep/Manager:&nbsp;@Model.ApprovedBy</td></tr>
+            <tr><td><strong>Order Number:</strong>&nbsp;<a href="@baseUrl/Store/Application/Edit/@orderDetail.Id">@Model.Id</a></td></tr>
+            <tr><td><strong>Membership Type:</strong>&nbsp;@orderDetail.Product.Type </td></tr>
+            <tr><td><strong>Package Type:</strong>&nbsp;@orderDetail.Product.Name</td></tr>
+            <tr><td><strong>Order Details:</strong></td></tr>
+            <tr><td>&nbsp;&nbsp;- Item Subtotal: $@orderDetail.Cost.ToString("F")</td></tr>
+            @if (orderDetail.ApplicationCost > 0)
+            {
+                orderTotal += orderDetail.ApplicationCost;
+                <tr><td>&nbsp;&nbsp;- Application Fee: $@orderDetail.ApplicationCost.ToString("F")</td></tr>
+            }
+            @if (orderDetail.TaxCost > 0)
+            {
+                orderTotal += orderDetail.TaxCost;
+                <tr><td>&nbsp;&nbsp;- Tax: $@orderDetail.TaxCost.ToString("F")</td></tr>
+            }
+            @if (orderDetail.ShippingCost > 0)
+            {
+                orderTotal += orderDetail.ShippingCost;
+                <tr><td>&nbsp;&nbsp;- Shipping &amp; Handling: $@orderDetail.ShippingCost.ToString("F")</td></tr>
+            }
+            <tr><td>&nbsp;&nbsp;- Order Total: $@orderTotal.ToString("F")</td></tr>
+            <tr><td><strong>Constituent ID:</strong>&nbsp;@constituentId </td></tr>
+            <tr><td><strong>Company Name:</strong>&nbsp;@company.Name </td></tr>
+            <tr><td><strong>Company Address:</strong>&nbsp;@address</td></tr>
+            <tr><td><strong>Company Phone:</strong>&nbsp;@company.Phone </td></tr>
+            <tr><td><strong>Primary Contact Name, Phone:</strong>&nbsp;@company.GetCompanyContact().FirstName @company.GetCompanyContact().LastName, &nbsp;@company.GetCompanyContact().Phone</td></tr>
+            <tr><td><strong>Membership Status:</strong>&nbsp;@memberStatus</td></tr>
+            <tr><td><strong>Sales Rep/Manager:</strong>&nbsp;@Model.ApprovedBy</td></tr>
             <tr><td>&nbsp;</td></tr>
             <tr><td>Please contact the appropriate person or department. </td></tr>
         </tbody>
