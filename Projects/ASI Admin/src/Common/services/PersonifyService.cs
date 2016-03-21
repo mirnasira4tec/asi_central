@@ -387,8 +387,12 @@ namespace asi.asicentral.services
                     var personifyCompany = PersonifyClient.FindCustomerInfo(matchCompany, ref matchList);
                     if (personifyCompany != null)
                     {
-                        if (string.Compare(personifyCompany.MemberStatus, "LEAD", StringComparison.CurrentCulture) != 0 &&
-                            string.Compare(personifyCompany.MemberStatus, "ASICENTRAL", StringComparison.CurrentCulture) != 0 )
+                        if (string.Compare(personifyCompany.MemberStatus, "LEAD", StringComparison.CurrentCulture) == 0 ||
+                            string.Compare(personifyCompany.MemberStatus, "ASICENTRAL", StringComparison.CurrentCulture) == 0 )
+                        {
+                            companyInfo = personifyCompany;
+                        }
+                        else if ( matchList != null && matchList.Count > 0 )
                         {
                             foreach (var m in matchList)
                             {
