@@ -160,8 +160,9 @@ namespace asi.asicentral.model.store
             {
                 var status = Company.MemberStatus.ToUpper();
                 var product = OrderDetails[0].Product;
-                // new membership only if not terminated and not supplier-decorator
-                if ( status != StatusCode.TERMINATED.ToString() && (Company.MemberType.ToUpper() != "SUPPLIER" || (product.Id != 69 && product.Id != 78)) )
+                // new membership only if not terminated/Lead/asicentral and not supplier-decorator
+                if ( status != StatusCode.TERMINATED.ToString() && status != StatusCode.LEAD.ToString() && status != StatusCode.ASICENTRAL.ToString() &&
+                     (Company.MemberType.ToUpper() != "SUPPLIER" || (product.Id != 69 && product.Id != 78)))
                 {
                     if( Company.MemberType.ToUpper() == "DISTRIBUTOR" && (product.Id == 70 || product.Id == 66 ))
                     {
