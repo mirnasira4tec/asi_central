@@ -1,10 +1,14 @@
 ﻿@using asi.asicentral.web.Controllers.Store
 @using asi.asicentral.model.store;
 @using asi.asicentral.interfaces;
+@using asi.asicentral.oauth
+@using asi.asicentral.util
 @model asi.asicentral.web.store.interfaces.IMembershipModel
 <div>
     @{
-        var isBackEnd = IsBackEnd();
+        var errMsg = string.Empty;
+        var isBackEnd = IsBackEnd(ref errMsg);
+        var orderStatus = string.IsNullOrEmpty(errMsg) ? Model.OrderStatus : OrderStatus.PersonifyError;
         var hasPendingTerms = HasPendingTerms();
     }
 
@@ -22,12 +26,20 @@
 	}
     @if (Model.TotalCost >= 0.0m)
     {
-	    <div><h3 class="order-status-header3">Order Status:</h3><div class="order-status">@Model.OrderStatus</div></div>
+	    <div><h3 class="order-status-header3">Order Status:</h3><div class="order-status">@orderStatus</div></div>
         if (isBackEnd && Model.OrderStatus == OrderStatus.PersonifyError)
         {
         <div class="order-status">
             <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_RESUBMIT" /></div>
         }
+        
+        if (!string.IsNullOrEmpty(errMsg) )
+        {
+            <div class="span10">
+                <p>(@errMsg)</p>
+            </div>                
+        }
+
         <div class="timms-info">
             <div class="span4">
                 @if (!isBackEnd)
@@ -50,7 +62,7 @@
             <div class="status-btns">
                 @if (!isBackEnd)
                 {
-                    if (Model.IsCompleted && Model.OrderStatus != OrderStatus.Approved)
+                    if (Model.IsCompleted && Model.OrderStatus != OrderStatus.Approved && string.IsNullOrEmpty(errMsg))
                     {
                     <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
                     }
@@ -100,15 +112,40 @@
     @functions{
         public IStoreService StoreService { get; set; }
         public IBackendService BackendService { get; set; }
-        public bool IsBackEnd()
+        public bool IsBackEnd(ref string errMsg)
         {
             bool useBackEndService = false;
-            IList<StoreOrderDetail> OrderDetails = StoreService.GetAll<StoreOrderDetail>(true).Where(detail => detail.Order.Id == Model.OrderId).ToList();
-            foreach (var orderDetail in OrderDetails)
+            var orderDetail = StoreService.GetAll<StoreOrderDetail>(true).FirstOrDefault(detail => detail.Order.Id == Model.OrderId);
+            var order = StoreService.GetAll<StoreOrder>(true).FirstOrDefault(o => o.Id == Model.OrderId);
+            if( order != null && orderDetail != null)
             {
-                useBackEndService = (useBackEndService || BackendService.IsProcessUsingBackend(orderDetail)) && !orderDetail.Product.IsMembership();
-                if (useBackEndService) break;
-            }            
+                var product = orderDetail.Product;
+                if( product.IsMembership() && Model.OrderStatus == OrderStatus.Pending)
+                {
+                    List<string> matchList = null;
+                    var companyInfo = BackendService.FindCompanyInfo(order.Company, ref matchList);
+                    if (companyInfo != null)
+                    {
+                        order.Company.MemberStatus = companyInfo.MemberStatus;
+                        Model.CompanyStatus = companyInfo.MemberStatus;
+
+                        if (ASIOAuthClient.IsActiveUser(order.Company.MemberStatus))
+                        {
+                            if( companyInfo.MemberType.ToUpper() != "SUPPLIER" || !string.IsNullOrEmpty(companyInfo.SubClassCode) ||
+                                ( product.Id != 69 && !product.Type.ToUpper().Contains("EQUIPMENT") ))
+                            {
+                                var activeMembership = string.IsNullOrEmpty(companyInfo.SubClassCode) ? companyInfo.MemberType
+                                    : string.Format("{0} {1}", companyInfo.MemberType, companyInfo.SubClassCode);
+                                errMsg = string.Format("This company already has an active \'{0}\' membership", activeMembership);
+                            }                                
+                        }
+                    }
+                }
+                else
+                {
+                    useBackEndService = BackendService.IsProcessUsingBackend(orderDetail) && !product.IsMembership();
+                }
+            }
             return useBackEndService;
         }
         
