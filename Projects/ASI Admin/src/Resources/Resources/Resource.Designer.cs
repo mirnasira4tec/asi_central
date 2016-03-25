@@ -2437,6 +2437,24 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string Form_No {
+            get {
+                return ResourceManager.GetString("Form_No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Form_Yes {
+            get {
+                return ResourceManager.GetString("Form_Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Four Color Process.
         /// </summary>
         public static string FourColourProcess {

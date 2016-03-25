@@ -56,6 +56,16 @@ namespace asi.asicentral.model.store
         public virtual IList<LookDistributorAccountType> AccountTypes{ get; set; }
         public virtual IList<LookProductLine> ProductLines { get; set; }
 
+        public bool? IsAuthorizedToBindCompany { get; set; }
+        public bool? IsForResale { get; set; }
+        public bool? IsOnlyProfitReseller { get; set; }
+        public bool? IsDetailsProvider { get; set; }
+        public bool? IsApplyingForMembership { get; set; }
+        public bool? IsChangesInformed { get; set; }
+        public bool? IsDataCertified { get; set; }
+        public string OtherCompanyName { get; set; }
+        public string ApprovedSignature { get; set; }
+
         public override string ToString()
         {
             return "Distributor Membership " + OrderDetailId;
