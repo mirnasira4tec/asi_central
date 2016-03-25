@@ -1914,4 +1914,10 @@
   <data name="Tax_Shipping_Disclaimer" xml:space="preserve">
     <value>Price may vary based on tax and shipping.</value>
   </data>
+  <data name="Form_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Form_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
 </root>
