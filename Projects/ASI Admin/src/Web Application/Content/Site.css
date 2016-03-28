@@ -665,5 +665,8 @@ a:hover, a:focus {
  .table td {
     border-top: 1px solid #D71D24;
 }
+input[type="text"] {
+    padding:4px 3px !important;
+}
 
 
