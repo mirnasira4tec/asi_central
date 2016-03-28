@@ -35,21 +35,28 @@ namespace asi.asicentral.web.model.store
         public Decimal Total { get; set; }
         public IList<SelectListItem> campaign { get; set; }
 
-        public OrderPageModel(IStoreService storeService, IEncryptionService encryptionService, IList<StoreOrderDetail> orderDetails, bool isShowForm = false) 
+        public OrderPageModel(IStoreService storeService, IEncryptionService encryptionService, IList<StoreOrderDetail> orderDetails)
         {
             Orders = new List<OrderModel>();
             if (orderDetails != null && storeService != null)
             {
-                string contactEmail = string.Empty;
                 foreach (StoreOrderDetail orderDetail in orderDetails)
                 {
-                    if (isShowForm)
+                    Orders.Add(OrderModel.CreateOrder(storeService, encryptionService, orderDetail));
+                }
+            }
+        }
+        public OrderPageModel(IStoreService storeService, IEncryptionService encryptionService, IList<StoreOrderDetail> orderDetails, string contactEmail)
+        {
+            Orders = new List<OrderModel>();
+            if (orderDetails != null && storeService != null)
+            {
+                foreach (StoreOrderDetail orderDetail in orderDetails)
+                {
+                    StoreDetailSpecialProductItem specialProductItem = storeService.GetAll<StoreDetailSpecialProductItem>(true).FirstOrDefault(detail => detail.OrderDetailId == orderDetail.Id);
+                    if (specialProductItem != null)
                     {
-                        StoreDetailSpecialProductItem specialProductItem = storeService.GetAll<StoreDetailSpecialProductItem>(true).FirstOrDefault(detail => detail.OrderDetailId == orderDetail.Id);
-                        if (specialProductItem != null)
-                        {
-                            contactEmail = specialProductItem.ASIContactEmail;
-                        }
+                        contactEmail = specialProductItem.ASIContactEmail;
                     }
                     Orders.Add(OrderModel.CreateOrder(storeService, encryptionService, orderDetail, contactEmail));
                 }

@@ -75,7 +75,7 @@ namespace asi.asicentral.web.Controllers.Store
             //query has been constructed - get the data
             IList<StoreOrderDetail> orderDetails = orderDetailQuery.OrderByDescending(detail => detail.Order.Id).ToList();
 
-            OrderPageModel viewModel = new OrderPageModel(StoreService, EncryptionService, orderDetails, true);
+            OrderPageModel viewModel = new OrderPageModel(StoreService, EncryptionService, orderDetails,string.Empty);
             //pass the search values back into the page model so they can be displayed again
             viewModel.Total = orderDetails.Sum(item => item.Order.Total);
             viewModel.campaign = GetCampaign();
