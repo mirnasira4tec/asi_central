@@ -224,41 +224,40 @@ namespace asi.asicentral.web.Controllers.Show
                             var objErrors = new ErrorModel();
                             bool isZipPresent,isCompanyPresent,isAsiNoPresent, isMemberTypePresent, isAddressPresent, isCityPresent, isStatePresent, isCountryPresent, isFNamePresent, isLNamePresent;
                                  isZipPresent = isCompanyPresent=isAsiNoPresent = isMemberTypePresent = isAddressPresent = isCityPresent = isStatePresent = isCountryPresent = isFNamePresent = isLNamePresent= false;
-                                for (int i = 0; i < excelDataTable.Rows.Count; i++)
-                                {
-                                    if (excelDataTable.Rows[i]["Company"].ToString() == "" && isCompanyPresent == false) { ModelState.AddModelError("CustomError", "Company cannot be empty."); isCompanyPresent = true; }
-                                    if (excelDataTable.Rows[i]["Zip Code"].ToString() == "" && isZipPresent == false){ ModelState.AddModelError("CustomError", "Zip Code cannot be empty.");isZipPresent = true;}
-                                    if (excelDataTable.Rows[i]["ASINO"].ToString() == "" && isAsiNoPresent == false) { ModelState.AddModelError("CustomError", "ASI Number cannot be empty."); isAsiNoPresent = true; }
-                                    if (excelDataTable.Rows[i]["MemberType"].ToString() == "" && isMemberTypePresent == false) { ModelState.AddModelError("CustomError", "MemberType cannot be empty."); isMemberTypePresent = true; }
-                                    if (excelDataTable.Rows[i]["Address"].ToString() == "" && isAddressPresent == false) { ModelState.AddModelError("CustomError", "Address cannot be empty."); isAddressPresent = true; }
-                                    if (excelDataTable.Rows[i]["City"].ToString() == "" && isCityPresent == false) { ModelState.AddModelError("CustomError", "City cannot be empty."); isCityPresent = true; }
-                                    if (excelDataTable.Rows[i]["State"].ToString() == "" && isStatePresent == false) { ModelState.AddModelError("CustomError", "State Code cannot be empty."); isStatePresent = true; }
-                                    if (excelDataTable.Rows[i]["Country"].ToString() == "" && isCountryPresent == false) { ModelState.AddModelError("CustomError", "Country Code cannot be empty."); isCountryPresent = true; }
+                            for (int i = 0; i < excelDataTable.Rows.Count; i++)
+                            {
+                                if (excelDataTable.Rows[i]["Company"].ToString() == "" && isCompanyPresent == false) { ModelState.AddModelError("CustomError", "Company cannot be empty."); isCompanyPresent = true; }
+                                if (excelDataTable.Rows[i]["Zip Code"].ToString() == "" && isZipPresent == false){ ModelState.AddModelError("CustomError", "Zip Code cannot be empty.");isZipPresent = true;}
+                                if (excelDataTable.Rows[i]["ASINO"].ToString() == "" && isAsiNoPresent == false) { ModelState.AddModelError("CustomError", "ASI Number cannot be empty."); isAsiNoPresent = true; }
+                                if (excelDataTable.Rows[i]["MemberType"].ToString() == "" && isMemberTypePresent == false) { ModelState.AddModelError("CustomError", "MemberType cannot be empty."); isMemberTypePresent = true; }
+                                if (excelDataTable.Rows[i]["Address"].ToString() == "" && isAddressPresent == false) { ModelState.AddModelError("CustomError", "Address cannot be empty."); isAddressPresent = true; }
+                                if (excelDataTable.Rows[i]["City"].ToString() == "" && isCityPresent == false) { ModelState.AddModelError("CustomError", "City cannot be empty."); isCityPresent = true; }
+                                if (excelDataTable.Rows[i]["State"].ToString() == "" && isStatePresent == false) { ModelState.AddModelError("CustomError", "State Code cannot be empty."); isStatePresent = true; }
+                                if (excelDataTable.Rows[i]["Country"].ToString() == "" && isCountryPresent == false) { ModelState.AddModelError("CustomError", "Country Code cannot be empty."); isCountryPresent = true; }
                                    
-                                    ShowCompany objCompany = ConvertDataAsShowCompany(excelDataTable, i);
-                                    ShowAddress objAddress = ConvertDataAsShowAddress(excelDataTable, objCompany.Id, i);
-                                    ShowCompanyAddress objCompanyAddress = ConvertDataAsShowCompanyAddress(excelDataTable, objCompany.Id, objAddress.Id, i);
-                                    ShowAttendee objShowAttendee = ConvertDataAsShowAttendee(excelDataTable, objShow.Id, objCompany.Id, i);
-                                    if (objCompany.MemberType == "Distributor")
-                                    {
-                                        if (excelDataTable.Rows[i]["FirstName"].ToString() == "" && isFNamePresent == false) { ModelState.AddModelError("CustomError", "First Name cannot be empty."); isFNamePresent = true; }
-                                        if (excelDataTable.Rows[i]["LastName"].ToString() == "" && isLNamePresent == false) { ModelState.AddModelError("CustomError", "Last Name cannot be empty."); isLNamePresent = true; }
-                                        ShowEmployee objEmployee = ConvertDataAsShowEmployee(excelDataTable, objCompany.Id, i);
-                                        ShowEmployeeAttendee objEmployeeAttendee = ConvertDataAsShowEmployeeAttendee(excelDataTable, objCompany.Id, objShowAttendee.Id, objEmployee.Id, i);
-                                    }
+                                ShowCompany objCompany = ConvertDataAsShowCompany(excelDataTable, i);
+                                ShowAddress objAddress = ConvertDataAsShowAddress(excelDataTable, objCompany.Id, i);
+                                ShowCompanyAddress objCompanyAddress = ConvertDataAsShowCompanyAddress(excelDataTable, objCompany.Id, objAddress.Id, i);
+                                ShowAttendee objShowAttendee = ConvertDataAsShowAttendee(excelDataTable, objShow.Id, objCompany.Id, i);
+                                if (objCompany.MemberType == "Distributor")
+                                {
+                                    if (excelDataTable.Rows[i]["FirstName"].ToString() == "" && isFNamePresent == false) { ModelState.AddModelError("CustomError", "First Name cannot be empty."); isFNamePresent = true; }
+                                    if (excelDataTable.Rows[i]["LastName"].ToString() == "" && isLNamePresent == false) { ModelState.AddModelError("CustomError", "Last Name cannot be empty."); isLNamePresent = true; }
+                                    ShowEmployee objEmployee = ConvertDataAsShowEmployee(excelDataTable, objCompany.Id, i);
+                                    ShowEmployeeAttendee objEmployeeAttendee = ConvertDataAsShowEmployeeAttendee(excelDataTable, objCompany.Id, objShowAttendee.Id, objEmployee.Id, i);
                                 }
-                                    
-                                    if (!ModelState.IsValid)
-                                    {
-                                        objErrors.Error = string.Join(",",
-                          ModelState.Values.Where(E => E.Errors.Count > 0)
-                          .SelectMany(E => E.Errors)
-                          .Select(E => E.ErrorMessage)
-                          .ToArray());
+                                if (!ModelState.IsValid)
+                                {
+                                    objErrors.Error = string.Join(",",
+                                        ModelState.Values.Where(E => E.Errors.Count > 0)
+                                        .SelectMany(E => E.Errors)
+                                        .Select(E => E.ErrorMessage)
+                                        .ToArray());
 
-                                        return View("../Show/ViewError", objErrors);
-                                    }
-                                    ObjectService.SaveChanges();
+                                    return View("../Show/ViewError", objErrors);
+                                }
+                                ObjectService.SaveChanges();
+                            }
                            
                             IList<ShowAttendee> deleteAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.IsExisting == false && item.ShowId == objShow.Id).ToList();
                             if (deleteAttendees != null)
