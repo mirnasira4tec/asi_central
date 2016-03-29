@@ -160,7 +160,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thank you for participating in the ESP Open House. We’re so glad you’ve decided to streamline your business with ESP, saving you time and money every day. And because you’re adding ESP now, you’ll receive CRM &amp;amp; Orders &lt;strong&gt;absolutely free!&lt;/strong&gt;..
+        ///   Looks up a localized string similar to Thank you for participating in the ESP Open House. We’re so glad you’ve decided to streamline your business with ESP, saving you time and money every day. And, as a valued member, if you buy ESP during with this exclusive offer, we’ll upgrade your license to include ESP CRM and Orders Manager &lt;strong&gt;absolutely free!&lt;/strong&gt;.
         /// </summary>
         public static string ProductESPOpenHouse {
             get {
