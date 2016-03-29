@@ -1,6 +1,7 @@
 ﻿@using asi.asicentral.web
 @using asi.asicentral.model.store
 @using asi.asicentral.web.Controllers.Store;
+@using asi.asicentral.Resources;
 @model asi.asicentral.web.model.store.DistributorApplicationModel
 @{
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
@@ -19,6 +20,7 @@
 			<li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
 			<li><a href="#tabproduct" data-toggle="tab">Product Information</a></li>
 			<li><a href="#tabaccount" data-toggle="tab">Account Information</a></li>
+            <li><a href="#tabquestions" data-toggle="tab">Requird Questions</a></li>
 		</ul>
 	</nav>
 
@@ -242,6 +244,59 @@
 				</span>
 			  </fieldset>
 		</div><!-- END #account-information -->	
+
+        <!------------------------------------required-questions---------------------------------->
+        <div id="tabquestions" class="account-information tab-pane fade">
+			<fieldset class="primary-business-revenue">
+				<legend>Required Questions</legend>
+                <label>
+					@Html.Raw(Resource.IsAuthorizedToBindCompany)
+					@(Model.IsAuthorizedToBindCompany != null ? Resource.Form_Yes : Resource.Form_No)
+				</label>
+                <label>
+					@Html.Raw(Resource.ApprovedSignature)
+					@(Model.ApprovedSignature):
+				</label>
+                 <br />
+                <label>
+					@Html.Raw(Resource.IsForResale)
+					@(Model.IsForResale != null ? Resource.Form_Yes : Resource.Form_No)
+				</label>
+                <br />
+                <label>
+					@Html.Raw(Resource.IsOnlyProfitReseller)
+					@(Model.IsOnlyProfitReseller != null ? Resource.Form_Yes : Resource.Form_No)
+				</label>
+                <br />
+                <label>
+					@Html.Raw(Resource.IsDetailsProvider)
+					@(Model.IsDetailsProvider != null ? Resource.Form_Yes : Resource.Form_No)
+				</label>
+                <br />
+                <label>
+					@Html.Raw(Resource.IsApplyingForMembership)
+					@(Model.IsApplyingForMembership != null ? Resource.Form_Yes : Resource.Form_No)
+				</label>
+                @if(Model.IsApplyingForMembership != null != null && !Model.IsApplyingForMembership.Value)
+                {
+                <label>
+					@Html.Raw(Resource.OtherCompanyName)
+					@(Model.OtherCompanyName != null ? Resource.Form_Yes : Resource.Form_No)
+				</label>
+                }
+                <br />
+                <label>
+					@Html.Raw(Resource.IsChangesInformed)
+					@(Model.IsChangesInformed != null ? Resource.Form_Yes : Resource.Form_No)
+				</label>
+                <br />
+                <label>
+					@Html.Raw(Resource.IsDataCertified)
+					@(Model.IsDataCertified != null ? Resource.Form_Yes : Resource.Form_No)
+				</label>
+            </fieldset>
+		</div>	
+        <!-- END #required-questions -->		
 		
 	</div><!-- END .tab-content -->    
 }
