@@ -1,0 +1,131 @@
+﻿@using asi.asicentral.web.model.store
+@model OrderPageModel
+
+@{
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+    ViewBag.BodyClass = "max";
+}
+<h1>Store Orders</h1>
+<div class="tabbable tabs-below small">
+    <h5>Search by</h5>
+    <ul id="formtab" class="nav nav-tabs">
+        <li class="@(Model.FormTab == OrderPageModel.TAB_NAME ? "active" : string.Empty)"><a href="#@OrderPageModel.TAB_NAME">Show</a></li>
+    </ul>
+    <div class="tab-content" id="formtab-content">
+        <div class="tab-pane @(Model.FormTab == OrderPageModel.TAB_NAME ? "active" : string.Empty)" id="@OrderPageModel.TAB_NAME">
+            <div class="well">
+                @using (Html.BeginForm("List", "../store/ShowForms", FormMethod.Get, new { @class = "form-inline clearfix", @id = "form-" + @OrderPageModel.TAB_NAME }))
+                {                
+                    <div class="formField">
+                        <label for="nameid">Show</label>
+                        @Html.DropDownListFor(model => model.Name, Model.campaign, "Select", new { name = "Name", value = "@Model.Name" })
+                        @Html.Partial("../Store/Admin/Shared/SearchDates", Model)
+                        <label for="emailid">Email</label>
+                        <input name="email" type="text" value="@Model.ASIContactEmail"/>
+                        <input type="hidden" value="@OrderPageModel.TAB_NAME" name="formtab" />
+                        <input type="hidden" value="@Model.OrderTab" name="ordertab" />
+                        <br />
+                        @Html.Partial("../Store/Admin/Shared/SearchHasContactInfo", Model)
+                       
+                    </div>
+                    <div class="clearfix pull-right">
+                     <input type="submit" value="Search" class="btn" />
+                        </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@if (ViewBag.Message != null || ViewBag.Message == "")
+{   <div class="alert">@ViewBag.Message</div>   }
+<div class="tabbable tabls-below">
+    <ul id="ordertab" class="nav nav-tabs">
+        <li class="@(Model.OrderTab == OrderPageModel.ORDER_COMPLETED ? "active" : string.Empty)"><a href="#@OrderPageModel.ORDER_COMPLETED">Completed Orders</a></li>
+        <li class="@(Model.OrderTab == OrderPageModel.ORDER_INCOMPLETE ? "active" : string.Empty)"><a href="#@OrderPageModel.ORDER_INCOMPLETE">Incomplete Orders</a></li>
+        <li class="@(Model.OrderTab == OrderPageModel.ORDER_PENDING ? "active" : string.Empty)"><a href="#@OrderPageModel.ORDER_PENDING">Orders to Approve</a></li>
+    </ul>
+    <div class="tab-content">
+        <div id="@Model.OrderTab" class="tab-pane active" >
+            @if (Model.Orders != null && Model.Orders.Count > 0)
+            {
+                <div> <br /><span class="badge badge-important">Total : $@Model.Total</span></div><br />
+                
+                <table class="table table-bordered table-condensed table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>ASI Contact Email</th>
+                            <th>Application</th>
+                            <th>Company</th>
+                            <th>Show</th>
+                            <th>Price</th>
+                            <th>Application Price</th>
+                            <th>Billing Information</th>
+                            <th>CreditCard</th>
+                            <th>@asi.asicentral.Resources.Resource.StoreDateOrderCreated</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (OrderModel order in Model.Orders)
+                        {
+                            <tr>
+                                <td>@order.Name</td>
+                                <td>@order.ASIContactEmail</td>
+                                <td><a href="@Url.Action("Edit", "Application", new { Id = order.OrderDetailId })">Application</a></td>
+                                <td>@order.Company</td>
+                                <td>@order.Campaign</td>
+                                <td>$@order.Price</td>
+                                <td>$@order.ApplicationPrice</td>
+                                <td>@order.Billing</td>
+                                <td>@order.CreditCard</td>
+                                <td>@order.DateOrderCreated.ToString("MM/dd/yy")</td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>Sorry, there is no data matching your criteria.</p>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/form")
+    <script src="/Scripts/asi.js"></script>
+    <script>
+        $('input[data-type*="date"]').datepicker();
+
+        $('ul[id*="formtab"] a').click(function (e) {
+            e.preventDefault();
+            var tabname = e.target.toString();
+            tabname = tabname.substr(tabname.indexOf("#") + 1);
+            $('input[name*="formtab"]').val(tabname);
+            $(this).tab('show');
+        });
+
+        $('input[name*="chkHasAddress"]').change(function (e) {
+            e.preventDefault();
+            if ($(e.target)[0].checked)
+                $('input[name*="HasAddress"]').val("true");
+            else
+                $('input[name*="HasAddress"]').val("false");
+        });
+
+        $('ul[id*="ordertab"] a').click(function (e) {
+            e.preventDefault();
+            var tabname = e.target.toString();
+            tabname = tabname.substr(tabname.indexOf("#") + 1);
+            $('input[name*="ordertab"]').val(tabname);
+            //find the current active form
+            var tab = $('div[id*="formtab-content"] div.active')[0].id;
+            $('form[id="form-' + tab + '"] input[name=ordertab]').val(tabname);
+            $('form[id="form-' + tab + '"]').submit();
+        });
+    </script>
+}
+
