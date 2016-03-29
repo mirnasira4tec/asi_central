@@ -277,6 +277,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;strong&gt;Approved signatures&lt;/strong&gt;.
+        /// </summary>
+        public static string ApprovedSignature {
+            get {
+                return ResourceManager.GetString("ApprovedSignature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Area.
         /// </summary>
         public static string Area {
@@ -2653,11 +2662,56 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;strong&gt;5. I work solely for the company applying for membership.&lt;/strong&gt;.
+        /// </summary>
+        public static string IsApplyingForMembership {
+            get {
+                return ResourceManager.GetString("IsApplyingForMembership", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Artwork to Proof.
         /// </summary>
         public static string IsArtworkToProof {
             get {
                 return ResourceManager.GetString("IsArtworkToProof", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;strong&gt;1. I am authorized to bind the Company to the following terms and conditions.&lt;/strong&gt;.
+        /// </summary>
+        public static string IsAuthorizedToBindCompany {
+            get {
+                return ResourceManager.GetString("IsAuthorizedToBindCompany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;strong&gt;6. If the above conditions should change, I will inform ASI of the change.&lt;/strong&gt;.
+        /// </summary>
+        public static string IsChangesInformed {
+            get {
+                return ResourceManager.GetString("IsChangesInformed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;strong&gt;I certify that the answers I have provided above are true and accurate.  If ASI determines otherwise, I understand that ASI, in it sole discretion, may de-list my company as an ASI member.&lt;/strong&gt;.
+        /// </summary>
+        public static string IsDataCertified {
+            get {
+                return ResourceManager.GetString("IsDataCertified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;strong&gt;4. I agree that upon request, I will provide the number of invoices and other information ASI requests in order to demonstrate that I am a re-seller of advertising specialties or related items, such as printed promotional items, trophies, awards, imprinted apparel, screen-printed or embroidered items, signs and other related items consistent with membership requirements. I understand that a failure to do so may result in the de-listing of the company as an ASI member.&lt;/strong&gt;.
+        /// </summary>
+        public static string IsDetailsProvider {
+            get {
+                return ResourceManager.GetString("IsDetailsProvider", resourceCulture);
             }
         }
         
@@ -2676,6 +2730,15 @@ namespace asi.asicentral.Resources {
         public static string IsForProfit {
             get {
                 return ResourceManager.GetString("IsForProfit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;strong&gt;2. The majority (51%) of the advertising specialties the company plans to buy are for re-sale and not for my company nor for any person or a company affiliated with my company (other than as a paying customer).&lt;/strong&gt;.
+        /// </summary>
+        public static string IsForResale {
+            get {
+                return ResourceManager.GetString("IsForResale", resourceCulture);
             }
         }
         
@@ -2730,6 +2793,15 @@ namespace asi.asicentral.Resources {
         public static string IsNonUSAddress {
             get {
                 return ResourceManager.GetString("IsNonUSAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;strong&gt;3. My company is a for-profit re-seller of advertising specialties, or related items, such as printed promotional items, trophies, awards, imprinted apparel, screen-printed or embroidered items, signs and other related items.&lt;/strong&gt;.
+        /// </summary>
+        public static string IsOnlyProfitReseller {
+            get {
+                return ResourceManager.GetString("IsOnlyProfitReseller", resourceCulture);
             }
         }
         
@@ -3585,6 +3657,15 @@ namespace asi.asicentral.Resources {
         public static string OtherBusinessRevenue {
             get {
                 return ResourceManager.GetString("OtherBusinessRevenue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the name of the other company you work for?.
+        /// </summary>
+        public static string OtherCompanyName {
+            get {
+                return ResourceManager.GetString("OtherCompanyName", resourceCulture);
             }
         }
         

@@ -56,14 +56,23 @@ namespace asi.asicentral.model.store
         public virtual IList<LookDistributorAccountType> AccountTypes{ get; set; }
         public virtual IList<LookProductLine> ProductLines { get; set; }
 
+        [Display(ResourceType = typeof(Resource), Name = "IsAuthorizedToBindCompany")]
         public bool? IsAuthorizedToBindCompany { get; set; }
+        [Display(ResourceType = typeof(Resource), Name = "IsForResale")]
         public bool? IsForResale { get; set; }
+        [Display(ResourceType = typeof(Resource), Name = "IsOnlyProfitReseller")]
         public bool? IsOnlyProfitReseller { get; set; }
+        [Display(ResourceType = typeof(Resource), Name = "IsDetailsProvider")]
         public bool? IsDetailsProvider { get; set; }
+        [Display(ResourceType = typeof(Resource), Name = "IsApplyingForMembership")]
         public bool? IsApplyingForMembership { get; set; }
+        [Display(ResourceType = typeof(Resource), Name = "IsChangesInformed")]
         public bool? IsChangesInformed { get; set; }
+        [Display(ResourceType = typeof(Resource), Name = "IsDataCertified")]
         public bool? IsDataCertified { get; set; }
+        [Display(ResourceType = typeof(Resource), Name = "OtherCompanyName")]
         public string OtherCompanyName { get; set; }
+        [Display(ResourceType = typeof(Resource), Name = "ApprovedSignature")]
         public string ApprovedSignature { get; set; }
 
         public override string ToString()
