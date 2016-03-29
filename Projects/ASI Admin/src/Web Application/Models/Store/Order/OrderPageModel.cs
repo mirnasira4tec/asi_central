@@ -35,6 +35,10 @@ namespace asi.asicentral.web.model.store
         public Decimal Total { get; set; }
         public IList<SelectListItem> campaign { get; set; }
 
+        public OrderPageModel()
+        {
+        }
+
         public OrderPageModel(IStoreService storeService, IEncryptionService encryptionService, IList<StoreOrderDetail> orderDetails)
         {
             Orders = new List<OrderModel>();
@@ -46,11 +50,12 @@ namespace asi.asicentral.web.model.store
                 }
             }
         }
-        public OrderPageModel(IStoreService storeService, IEncryptionService encryptionService, IList<StoreOrderDetail> orderDetails, string contactEmail)
+        public void ShowFormsOrderPageModel(IStoreService storeService, IEncryptionService encryptionService, IList<StoreOrderDetail> orderDetails )
         {
             Orders = new List<OrderModel>();
             if (orderDetails != null && storeService != null)
             {
+                string contactEmail = string.Empty;
                 foreach (StoreOrderDetail orderDetail in orderDetails)
                 {
                     StoreDetailSpecialProductItem specialProductItem = storeService.GetAll<StoreDetailSpecialProductItem>(true).FirstOrDefault(detail => detail.OrderDetailId == orderDetail.Id);
