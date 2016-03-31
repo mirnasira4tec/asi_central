@@ -313,4 +313,8 @@ Everyone will be checking out the newly designed issue for promotional products 
   <data name="ProductESPOpenHouse" xml:space="preserve">
     <value>Thank you for participating in the ESP Open House. We’re so glad you’ve decided to streamline your business with ESP, saving you time and money every day. And, as a valued member, if you buy ESP during with this exclusive offer, we’ll upgrade your license to include ESP CRM and Orders Manager &lt;strong&gt;absolutely free!&lt;/strong&gt;</value>
   </data>
+  <data name="ProductSGR" xml:space="preserve">
+    <value>Our Supplier Global Resource™ (SGR) readers think globally and act locally.</value>
+    <comment>1</comment>
+  </data>
 </root>
