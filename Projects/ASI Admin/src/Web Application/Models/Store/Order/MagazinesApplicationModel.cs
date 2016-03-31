@@ -118,7 +118,7 @@ namespace asi.asicentral.web.model.store
                                 else 
                                     IsSecondaryEditable = false;
 
-                                if (order.BillingIndividual.Id == individual.Id)
+                                if (order.BillingIndividual != null && order.BillingIndividual.Id == individual.Id)
                                     IsBillingContactEditable = false;
                             }
                         }
