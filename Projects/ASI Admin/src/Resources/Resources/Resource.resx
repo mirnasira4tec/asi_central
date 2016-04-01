@@ -1921,7 +1921,7 @@
     <value>Yes</value>
   </data>
   <data name="ApprovedSignature" xml:space="preserve">
-    <value>&lt;strong&gt;Approved signatures&lt;/strong&gt;</value>
+    <value>&lt;strong&gt;Approved signature&lt;/strong&gt;</value>
   </data>
   <data name="IsApplyingForMembership" xml:space="preserve">
     <value>&lt;strong&gt;5. I work solely for the company applying for membership.&lt;/strong&gt;</value>

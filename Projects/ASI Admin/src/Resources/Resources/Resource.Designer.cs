@@ -277,7 +277,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;strong&gt;Approved signatures&lt;/strong&gt;.
+        ///   Looks up a localized string similar to &lt;strong&gt;Approved signature&lt;/strong&gt;.
         /// </summary>
         public static string ApprovedSignature {
             get {

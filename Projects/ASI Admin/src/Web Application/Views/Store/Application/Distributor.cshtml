@@ -20,7 +20,7 @@
 			<li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
 			<li><a href="#tabproduct" data-toggle="tab">Product Information</a></li>
 			<li><a href="#tabaccount" data-toggle="tab">Account Information</a></li>
-            <li><a href="#tabquestions" data-toggle="tab">Requird Questions</a></li>
+            <li><a href="#tabquestions" data-toggle="tab">Required Questions</a></li>
 		</ul>
 	</nav>
 
@@ -251,48 +251,48 @@
 				<legend>Required Questions</legend>
                 <label>
 					@Html.Raw(Resource.IsAuthorizedToBindCompany)
-					@(Model.IsAuthorizedToBindCompany != null ? Resource.Form_Yes : Resource.Form_No)
+					@(Model.IsAuthorizedToBindCompany != null && Model.IsAuthorizedToBindCompany.Value ? Resource.Form_Yes : Resource.Form_No)
 				</label>
                 <label>
-					@Html.Raw(Resource.ApprovedSignature)
-					@(Model.ApprovedSignature):
+					@Html.Raw(Resource.ApprovedSignature):
+					@(Model.ApprovedSignature)
 				</label>
                  <br />
                 <label>
 					@Html.Raw(Resource.IsForResale)
-					@(Model.IsForResale != null ? Resource.Form_Yes : Resource.Form_No)
+					@(Model.IsForResale != null && Model.IsForResale.Value ? Resource.Form_Yes : Resource.Form_No)
 				</label>
                 <br />
                 <label>
 					@Html.Raw(Resource.IsOnlyProfitReseller)
-					@(Model.IsOnlyProfitReseller != null ? Resource.Form_Yes : Resource.Form_No)
+					@(Model.IsOnlyProfitReseller != null && Model.IsOnlyProfitReseller.Value ? Resource.Form_Yes : Resource.Form_No)
 				</label>
                 <br />
                 <label>
 					@Html.Raw(Resource.IsDetailsProvider)
-					@(Model.IsDetailsProvider != null ? Resource.Form_Yes : Resource.Form_No)
+					@(Model.IsDetailsProvider != null && Model.IsDetailsProvider.Value ? Resource.Form_Yes : Resource.Form_No)
 				</label>
                 <br />
                 <label>
 					@Html.Raw(Resource.IsApplyingForMembership)
-					@(Model.IsApplyingForMembership != null ? Resource.Form_Yes : Resource.Form_No)
+					@(Model.IsApplyingForMembership != null && Model.IsApplyingForMembership.Value ? Resource.Form_Yes : Resource.Form_No)
 				</label>
                 @if(Model.IsApplyingForMembership != null != null && !Model.IsApplyingForMembership.Value)
                 {
                 <label>
 					@Html.Raw(Resource.OtherCompanyName)
-					@(Model.OtherCompanyName != null ? Resource.Form_Yes : Resource.Form_No)
+					@(!string.IsNullOrEmpty(Model.OtherCompanyName) ? Model.OtherCompanyName : string.Empty)
 				</label>
                 }
                 <br />
                 <label>
 					@Html.Raw(Resource.IsChangesInformed)
-					@(Model.IsChangesInformed != null ? Resource.Form_Yes : Resource.Form_No)
+					@(Model.IsChangesInformed != null && Model.IsChangesInformed.Value ? Resource.Form_Yes : Resource.Form_No)
 				</label>
                 <br />
                 <label>
 					@Html.Raw(Resource.IsDataCertified)
-					@(Model.IsDataCertified != null ? Resource.Form_Yes : Resource.Form_No)
+					@(Model.IsDataCertified != null && Model.IsDataCertified.Value ? Resource.Form_Yes : Resource.Form_No)
 				</label>
             </fieldset>
 		</div>	
