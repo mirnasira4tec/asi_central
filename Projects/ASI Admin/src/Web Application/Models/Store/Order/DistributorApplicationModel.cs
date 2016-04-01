@@ -227,7 +227,7 @@ namespace asi.asicentral.web.model.store
             IsOnlyProfitReseller = application.IsOnlyProfitReseller.Value;
             IsDetailsProvider = application.IsDetailsProvider.Value;
             IsApplyingForMembership = application.IsApplyingForMembership.Value;
-            IsChangesInformed = application.IsApplyingForMembership.Value;
+            IsChangesInformed = application.IsChangesInformed.Value;
             IsDataCertified = application.IsDataCertified.Value;
             OtherCompanyName = application.OtherCompanyName;
             ApprovedSignature = application.ApprovedSignature;
