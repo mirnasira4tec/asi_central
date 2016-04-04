@@ -156,7 +156,7 @@ namespace asi.asicentral.model.store
         {
             var newMembership = false;
             if( Company != null && !string.IsNullOrEmpty(Company.MemberType) && OrderDetails != null &&
-                OrderDetails.Any() && OrderDetails[0].Product != null && !string.IsNullOrEmpty(Company.MemberStatus) )
+                OrderDetails.Any() && OrderDetails[0].Product != null && OrderDetails[0].Product.IsMembership() && !string.IsNullOrEmpty(Company.MemberStatus))
             {
                 var status = Company.MemberStatus.ToUpper();
                 var product = OrderDetails[0].Product;
