@@ -2698,7 +2698,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;strong&gt;I certify that the answers I have provided above are true and accurate.  If ASI determines otherwise, I understand that ASI, in it sole discretion, may de-list my company as an ASI member.&lt;/strong&gt;.
+        ///   Looks up a localized string similar to &lt;strong&gt;I certify that the answers I have provided above are true and accurate.  If ASI determines otherwise, I understand that ASI, in its sole discretion, may de-list my company as an ASI member.&lt;/strong&gt;.
         /// </summary>
         public static string IsDataCertified {
             get {
