@@ -277,7 +277,7 @@
 					@Html.Raw(Resource.IsApplyingForMembership)
 					@(Model.IsApplyingForMembership != null && Model.IsApplyingForMembership.Value ? Resource.Form_Yes : Resource.Form_No)
 				</label>
-                @if(Model.IsApplyingForMembership != null != null && !Model.IsApplyingForMembership.Value)
+                @if(Model.IsApplyingForMembership != null && !Model.IsApplyingForMembership.Value)
                 {
                 <label>
 					@Html.Raw(Resource.OtherCompanyName)
