@@ -223,6 +223,15 @@ namespace asi.asicentral.web.model.store
             OrderStatus = order.ProcessStatus;
             IsCompleted = order.IsCompleted;
             Price = order.Total;
+            if (application.IsAuthorizedToBindCompany != null) IsAuthorizedToBindCompany = application.IsAuthorizedToBindCompany.Value;
+            if (application.IsForResale != null) IsForResale = application.IsForResale.Value;
+            if (application.IsOnlyProfitReseller != null) IsOnlyProfitReseller = application.IsOnlyProfitReseller.Value;
+            if (application.IsDetailsProvider != null) IsDetailsProvider = application.IsDetailsProvider.Value;
+            if (application.IsApplyingForMembership != null) IsApplyingForMembership = application.IsApplyingForMembership.Value;
+            if (application.IsChangesInformed != null) IsChangesInformed = application.IsChangesInformed.Value;
+            if (application.IsDataCertified != null) IsDataCertified = application.IsDataCertified.Value;
+            OtherCompanyName = application.OtherCompanyName;
+            ApprovedSignature = application.ApprovedSignature;
             MonthlyPrice = (order.Total - order.AnnualizedTotal) / 11;
             MembershipModelHelper.PopulateModel(this, orderDetail);
         }
