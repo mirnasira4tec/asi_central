@@ -131,8 +131,8 @@
 
                         if (ASIOAuthClient.IsActiveUser(order.Company.MemberStatus))
                         {
-                            if( companyInfo.MemberType.ToUpper() != "SUPPLIER" || !string.IsNullOrEmpty(companyInfo.SubClassCode) ||
-                                ( product.Id != 69 && !product.Type.ToUpper().Contains("EQUIPMENT") ))
+                            if( companyInfo.MemberType.ToUpper() != "SUPPLIER" || !string.IsNullOrEmpty(companyInfo.SubClassCode) || product.Id != 69 )
+                                
                             {
                                 var activeMembership = string.IsNullOrEmpty(companyInfo.SubClassCode) ? companyInfo.MemberType
                                     : string.Format("{0} {1}", companyInfo.MemberType, companyInfo.SubClassCode);
