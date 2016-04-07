@@ -1914,6 +1914,12 @@
   <data name="Tax_Shipping_Disclaimer" xml:space="preserve">
     <value>Price may vary based on tax and shipping.</value>
   </data>
+  <data name="MagazineSGRDescription" xml:space="preserve">
+    <value>Our Supplier Global Resource™ (SGR) readers think globally and act locally.</value>
+  </data>
+  <data name="MagazineSGRURL" xml:space="preserve">
+    <value>https://mydigitalpublication.com/reports/getCover.php?m=21604</value>
+  </data>
   <data name="Form_No" xml:space="preserve">
     <value>No</value>
   </data>
