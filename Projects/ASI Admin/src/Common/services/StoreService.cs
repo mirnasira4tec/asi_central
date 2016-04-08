@@ -206,7 +206,7 @@ namespace asi.asicentral.services
 
                         //tax calculated based on full amount except shipping
                         if (orderDetail.Product.HasTax)
-                            tax = CalculateTaxes(address, costForTax + (orderDetail.Product.IsMembership() ? 0 : orderDetail.ApplicationCost));
+                            tax = CalculateTaxes(address, costForTax + orderDetail.ApplicationCost);
 
                         if (string.IsNullOrEmpty(orderDetail.ShippingMethod)) orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity);
                         else
@@ -236,7 +236,7 @@ namespace asi.asicentral.services
                         tax = 0;
                         if (orderDetail.Product.HasTax)
                         {
-                            var appFeeTax = orderDetail.Product.IsMembership() ? 0 : CalculateTaxes(address, orderDetail.ApplicationCost);
+                            var appFeeTax = CalculateTaxes(address, orderDetail.ApplicationCost);
                             if (orderDetail.Coupon != null && orderDetail.Coupon.IsSubscription)
                                 tax = CalculateTaxes(address, (orderDetail.Cost - orderDetail.DiscountAmount)) * 12 + appFeeTax;
                             else
