@@ -69,6 +69,8 @@ namespace asi.asicentral.web.Controllers
                     return 1;
                 case CompanyValidation.EMAIL_DOMAINS:
                     return 2;
+                case CompanyValidation.FORBIDDEN_WORDS:
+                    return 3;
                 default:
                     return 0;
             }

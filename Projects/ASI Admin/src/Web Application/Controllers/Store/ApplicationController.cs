@@ -12,18 +12,22 @@ using asi.asicentral.services;
 using asi.asicentral.util.store;
 using ASI.EntityModel;
 using asi.asicentral.web.store.interfaces;
+using System.Net.Mail;
+using System.Text;
 
 namespace asi.asicentral.web.Controllers.Store
 {
     [Authorize]
     public class ApplicationController : Controller
     {
+        private static readonly string OrderApprovalNotificationEmails = System.Configuration.ConfigurationManager.AppSettings["OrderApprovalEmail"];
+
         public const string COMMAND_SAVE = "Save";
         public const string COMMAND_REJECT = "Reject";
         public const string COMMAND_ACCEPT = "Accept";
         public const string COMMAND_RESUBMIT = "Resubmit";
         //products associated only to StoreOrderDetail table
-        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 29, 30, 31, 45, 46, 55, 56, 57, 58, 59, 60, 62, 70, 71, 77, 78, 96, 97, 98, 100, 101, 102, 104, 105, 106, 107, 108, 109, 112, 113, 116, 117 };
+        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 29, 30, 31, 45, 46, 55, 56, 57, 58, 59, 60, 62, 70, 71, 77, 78, 96, 97, 98, 100, 101, 102, 104, 105, 106, 107, 108, 109, 112, 113, 114, 115, 116, 117 };
         //products associated to StoreDetailESPAdvertising table
         public static readonly int[] SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS = { 48, 49, 50, 51, 52, 53};
         //products associated to StoreDetailCatalog table
@@ -34,12 +38,13 @@ namespace asi.asicentral.web.Controllers.Store
         public static readonly int SUPPLIER_EMAIL_EXPRESS_PRODUCT_ID= 61;
         //products associated to StoreDetailProductCollection table
         public static readonly int SUPPLIER_ESP_WEBSITES_PRODUCT_COLLECTIONS_ID = 64;
-       
+
         public IStoreService StoreService { get; set; }
         public IFulfilmentService FulfilmentService { get; set; }
         public ICreditCardService CreditCardService { get; set; }
         public IBackendService BackendService { get; set; }
         public IEmailService EmailService { get; set; }
+        public ITemplateService TemplateService { get; set; }
 
         [HttpGet]
         public virtual ActionResult Edit(int id)
@@ -960,13 +965,57 @@ namespace asi.asicentral.web.Controllers.Store
                 bool success = int.TryParse(order.ExternalReference, out num);
                 if (!success) throw new Exception("Timms id must be numbers only.");
 
-                fulfilmentService.Process(order, application);
-                order.ProcessStatus = OrderStatus.Approved;
-                order.ApprovedDate = DateTime.UtcNow;
                 if (System.Web.HttpContext.Current != null)
                 {
                     if (System.Web.HttpContext.Current.User.Identity as System.Security.Principal.WindowsIdentity != null)
                         order.ApprovedBy = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
+                }
+
+                var product = order.OrderDetails[0].Product;
+                var orderPlaced = true;
+                if ( product.HasBackEndIntegration && product.IsMembership())
+                {
+                    try
+                    {
+                        BackendService.PlaceOrder(order, EmailService, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogService log = LogService.GetLog(this.GetType());
+                        log.Error(ex.Message);
+                    }
+
+                    // send internal email only if order is created in personfiy
+                    if (!string.IsNullOrEmpty(order.BackendReference))
+                    {
+                        if (!string.IsNullOrEmpty(OrderApprovalNotificationEmails))
+                        {
+                            order.RequestUrl = Request != null ? Request.Url : null;
+                            var emailBody = TemplateService.Render("asi.asicentral.web.Views.Emails.OrderApprovalEmail.cshtml", order);
+                            var mail = new MailMessage();
+                            var tos = OrderApprovalNotificationEmails.Split(';');
+                            foreach (string to in tos)
+                                mail.To.Add(new MailAddress(to));
+
+                            mail.Subject = string.Format("{0} Membership Approved for '{1}', Order {2} by '{3}' ", order.OrderRequestType, order.Company.Name, order.Id.ToString(), order.ApprovedBy);
+                            mail.Body = emailBody;
+                            mail.BodyEncoding = Encoding.UTF8;
+                            mail.IsBodyHtml = true;
+                            EmailService.SendMail(mail);
+                        }
+                    }
+                    else
+                    {
+                        orderPlaced = false;
+                        order.ProcessStatus = OrderStatus.PersonifyError;
+                    }
+                }
+
+                if (orderPlaced)
+                {
+                    fulfilmentService.Process(order, application);
+                    order.ProcessStatus = OrderStatus.Approved;
+                    order.ApprovedDate = DateTime.UtcNow;
                 }
             }
             else if (command == ApplicationController.COMMAND_REJECT)
@@ -974,7 +1023,7 @@ namespace asi.asicentral.web.Controllers.Store
                 order.ProcessStatus = OrderStatus.Rejected;
                
             }
-            else if (command == ApplicationController.COMMAND_RESUBMIT)
+            else if (command == ApplicationController.COMMAND_RESUBMIT )
             {
                 try
                 {
@@ -986,7 +1035,6 @@ namespace asi.asicentral.web.Controllers.Store
                         if (System.Web.HttpContext.Current.User.Identity as System.Security.Principal.WindowsIdentity != null)
                             order.ApprovedBy = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
                     }
-                   
                 }
                 catch(Exception ex)
                 {
@@ -1010,6 +1058,7 @@ namespace asi.asicentral.web.Controllers.Store
             if (model.Company != null && order.Company != null)
             {
                 order.Company.Name = model.Company;
+                order.Company.MemberStatus = model.CompanyStatus;
                 order.Company.Phone = model.Phone;
                 order.Company.WebURL = model.BillingWebUrl;
                 order.Company.ASINumber = model.ASINumber;

@@ -506,6 +506,7 @@
     <Content Include="Views\Show\Shared\_Pager.cshtml" />
     <Content Include="Views\Show\Shared\_PagerLink.cshtml" />
     <Content Include="Views\Show\ViewError.cshtml" />
+    <EmbeddedResource Include="Views\Emails\OrderApprovalEmail.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

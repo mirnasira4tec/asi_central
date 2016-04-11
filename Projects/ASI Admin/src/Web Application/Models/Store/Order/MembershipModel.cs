@@ -14,8 +14,9 @@ namespace asi.asicentral.web.model.store
 {
     public class MembershipModel : IMembershipModel
     {
-        [Display(ResourceType = typeof(Resource), Name = "CompanyName")]
+        [Display(ResourceType = typeof (Resource), Name = "CompanyName")]
         public string Company { get; set; }
+        public string CompanyStatus { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "Street1")]
         public string Address1 { get; set; }
         [Display(ResourceType = typeof(Resource), Name = "Street2")]

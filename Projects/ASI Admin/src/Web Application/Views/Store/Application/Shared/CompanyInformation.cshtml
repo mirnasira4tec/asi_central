@@ -9,6 +9,7 @@
                 }
                 @Html.LabelFor(m => m.Company) 
                 @Html.LabelFor(m => m.Phone) 
+                @Html.HiddenFor(m => m.CompanyStatus)
             </span>
             <span class="label-row">
                 @if(!string.IsNullOrEmpty(Model.ASINumber))
