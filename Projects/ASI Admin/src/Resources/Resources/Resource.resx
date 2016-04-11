@@ -1914,4 +1914,43 @@
   <data name="Tax_Shipping_Disclaimer" xml:space="preserve">
     <value>Price may vary based on tax and shipping.</value>
   </data>
+  <data name="MagazineSGRDescription" xml:space="preserve">
+    <value>Our Supplier Global Resource™ (SGR) readers think globally and act locally.</value>
+  </data>
+  <data name="MagazineSGRURL" xml:space="preserve">
+    <value>https://mydigitalpublication.com/reports/getCover.php?m=21604</value>
+  </data>
+  <data name="Form_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Form_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="ApprovedSignature" xml:space="preserve">
+    <value>&lt;strong&gt;Approved signature&lt;/strong&gt;</value>
+  </data>
+  <data name="IsApplyingForMembership" xml:space="preserve">
+    <value>&lt;strong&gt;5. I work solely for the company applying for membership.&lt;/strong&gt;</value>
+  </data>
+  <data name="IsAuthorizedToBindCompany" xml:space="preserve">
+    <value>&lt;strong&gt;1. I am authorized to bind the Company to the following terms and conditions.&lt;/strong&gt;</value>
+  </data>
+  <data name="IsChangesInformed" xml:space="preserve">
+    <value>&lt;strong&gt;6. If the above conditions should change, I will inform ASI of the change.&lt;/strong&gt;</value>
+  </data>
+  <data name="IsDataCertified" xml:space="preserve">
+    <value>&lt;strong&gt;I certify that the answers I have provided above are true and accurate.  If ASI determines otherwise, I understand that ASI, in its sole discretion, may de-list my company as an ASI member.&lt;/strong&gt;</value>
+  </data>
+  <data name="IsDetailsProvider" xml:space="preserve">
+    <value>&lt;strong&gt;4. I agree that upon request, I will provide the number of invoices and other information ASI requests in order to demonstrate that I am a re-seller of advertising specialties or related items, such as printed promotional items, trophies, awards, imprinted apparel, screen-printed or embroidered items, signs and other related items consistent with membership requirements. I understand that a failure to do so may result in the de-listing of the company as an ASI member.&lt;/strong&gt;</value>
+  </data>
+  <data name="IsForResale" xml:space="preserve">
+    <value>&lt;strong&gt;2. The majority (51%) of the advertising specialties the company plans to buy are for re-sale and not for my company nor for any person or a company affiliated with my company (other than as a paying customer).&lt;/strong&gt;</value>
+  </data>
+  <data name="IsOnlyProfitReseller" xml:space="preserve">
+    <value>&lt;strong&gt;3. My company is a for-profit re-seller of advertising specialties, or related items, such as printed promotional items, trophies, awards, imprinted apparel, screen-printed or embroidered items, signs and other related items.&lt;/strong&gt;</value>
+  </data>
+  <data name="OtherCompanyName" xml:space="preserve">
+    <value>What is the name of the other company you work for?</value>
+  </data>
 </root>
