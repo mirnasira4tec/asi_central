@@ -22,6 +22,7 @@ namespace asi.asicentral.web.model.store
             {
                 model.Company = order.Company.Name;
                 model.CompanyEmail = order.Company.Email;
+                model.CompanyStatus = order.Company.MemberStatus;
                 model.HasShipAddress = order.Company.HasShipAddress;
                 model.Phone = order.Company.Phone;
                 model.BillingWebUrl = order.Company.WebURL;

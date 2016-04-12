@@ -43,7 +43,7 @@ namespace asi.asicentral.services
 
 		public virtual string Store(StoreOrder order, CreditCard creditCard, bool backendIntegration)
         {
-            if (creditCard != null && !string.IsNullOrEmpty(creditCard.ExternalReference))
+            if ( creditCard != null && !string.IsNullOrEmpty(creditCard.ExternalReference))
                 return creditCard.ExternalReference;
             
             string result;

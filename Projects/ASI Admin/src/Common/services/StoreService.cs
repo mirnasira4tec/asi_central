@@ -236,10 +236,11 @@ namespace asi.asicentral.services
                         tax = 0;
                         if (orderDetail.Product.HasTax)
                         {
+                            var appFeeTax = CalculateTaxes(address, orderDetail.ApplicationCost);
                             if (orderDetail.Coupon != null && orderDetail.Coupon.IsSubscription)
-                                tax = CalculateTaxes(address, (orderDetail.Cost - orderDetail.DiscountAmount)) * 12 + CalculateTaxes(address, orderDetail.ApplicationCost);
+                                tax = CalculateTaxes(address, (orderDetail.Cost - orderDetail.DiscountAmount)) * 12 + appFeeTax;
                             else
-                                tax = CalculateTaxes(address, (orderDetail.Cost - orderDetail.DiscountAmount)) + (CalculateTaxes(address, orderDetail.Cost) * 11) + CalculateTaxes(address, orderDetail.ApplicationCost);
+                                tax = CalculateTaxes(address, (orderDetail.Cost - orderDetail.DiscountAmount)) + (CalculateTaxes(address, orderDetail.Cost) * 11) + appFeeTax;
                         }
 
                         //this would be the total cost over a year for a subscription

@@ -10,6 +10,7 @@ namespace asi.asicentral.web.store.interfaces
     public interface IMembershipModel
     {
         string Company { get; set; }
+        string CompanyStatus { get; set; }
         string Address1 { get; set; }
         string Address2 { get; set; }
         string City { get; set; }
