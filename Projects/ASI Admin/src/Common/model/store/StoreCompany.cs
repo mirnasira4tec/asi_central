@@ -23,6 +23,7 @@ namespace asi.asicentral.model.store
         public int Id { get; set; }
         public string Name { get; set; }
         public string MemberType { get; set; }
+        public string MemberStatus { get; set; }
         [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
         [Display(ResourceType = typeof(Resource), Name = "Phone")]
         public string Phone { get; set; }

@@ -13,7 +13,7 @@ namespace asi.asicentral.interfaces
 
     public interface IBackendService
     {
-        void PlaceOrder(StoreOrder storeOrder, IEmailService emailService, string url);
+        CompanyInformation PlaceOrder(StoreOrder storeOrder, IEmailService emailService, string url);
 
         /// <summary>
         /// Used to identify where the order detail is processed through backend
@@ -21,6 +21,8 @@ namespace asi.asicentral.interfaces
         /// <param name="orderDetail"></param>
         /// <returns></returns>
         bool IsProcessUsingBackend(StoreOrderDetail orderDetail);
+
+        CompanyInformation UpdateCompanyStatus(StoreCompany storeCompany, asi.asicentral.oauth.StatusCode status);
 
 	    bool ValidateCreditCard(CreditCard creditCard);
 
@@ -42,11 +44,11 @@ namespace asi.asicentral.interfaces
 
         CompanyInformation CreateCompany(StoreCompany storeCompany, string storeType);
 
-        CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList, ref bool dnsFlg);
+        CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList);
+
+        string GetCompanyStatus(string masterCustomerId, int subCustomerId);
+        string GetCompanyAsiNumber(string masterCustomerId, int subCustomerId);
 
         void AddActivity(StoreCompany company, string activityText, Activity activityType);
-
-        // this function will be obsolete after EASI, need to be removed
-        void MakeCompanyActive(string masterCustomerId);
     }
 }
