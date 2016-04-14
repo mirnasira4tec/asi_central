@@ -104,7 +104,11 @@ namespace asi.asicentral.services
 
                             if (contextProduct != null && coupon.IsFixedAmount)
                             {
-                                if (coupon.DiscountAmount == contextProduct.Cost)
+                                if (coupon.DiscountAmount == contextProduct.ApplicationCost)
+                                {
+                                    waiveAppFee = true;
+                                }
+                                else if (coupon.DiscountAmount == contextProduct.Cost)
                                 {
                                     firstmonthFree = true;
                                 }
