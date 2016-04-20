@@ -1,4 +1,5 @@
 ﻿using asi.asicentral.interfaces;
+using ASI.Contracts.Messages.Email;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -13,19 +14,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
+using ASI.Services.Messaging;
 
 namespace asi.asicentral.services
 {
     public class SmtpEmailService : IEmailService
     {
-        private bool ssl = true;
-        private int port = 25;
-        private string smtpAddress = null;
-        private string from = null;
-        private string username = null;
-        private string password = null;
         private log4net.ILog log;
-
         public SmtpEmailService()
         {
 
@@ -34,95 +29,53 @@ namespace asi.asicentral.services
             ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
         }
 
-        public static SmtpEmailService GetService(string smtpAddress, int port, string from, bool ssl)
-        {
-            SmtpEmailService emailService = new SmtpEmailService();
-            emailService.smtpAddress = smtpAddress;
-            emailService.port = port;
-            emailService.from = from;
-            emailService.ssl = ssl;
-            return emailService;
-        }
-
-        public virtual void SendMail(model.Mail mail)
+        public virtual bool SendMail(model.Mail mail)
         {
             MailMessage mailObject = new MailMessage();
             mailObject.To.Add(mail.To);
             mailObject.Subject = mail.Subject;
             mailObject.Body = mail.Body;
-            SendMail(mailObject);
+            return SendMail(mailObject);
         }
 
-        private void SendMailSmtp(MailMessage mail)
+        private bool SendMailSmtp(MailMessage mail)
         {
-            
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            if (mail == null) throw new Exception("Invalid mail details");
+            bool result = false;
+            var content = new ContentEmailMessage();
+
+            content.Subject = mail.Subject;
+            content.Body = mail.Body;
+            if(mail.From != null) content.FromEmail = string.Format("{0}|{1}", mail.From.Address, mail.From.DisplayName);
+            if (string.IsNullOrEmpty(content.FromEmail) && ConfigurationManager.AppSettings["SmtpFrom"] != null && !string.IsNullOrEmpty(ConfigurationManager.AppSettings["SmtpFrom"]))
             {
-                username = ConfigurationManager.AppSettings["smtpUserName"];
-                password = ConfigurationManager.AppSettings["smtpPassword"];
+                content.FromEmail = ConfigurationManager.AppSettings["SmtpFrom"];
             }
-
-            SmtpClient SmtpServer = new SmtpClient(smtpAddress);
-            SmtpServer.Port = port;
-            SmtpServer.EnableSsl = ssl;
-            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
+            if(mail.To != null) 
             {
-                SmtpServer.Credentials = new System.Net.NetworkCredential(username, password);
-            }
-            if (mail.From == null) mail.From = new MailAddress(from);
-
-            SmtpServer.Send(mail);
-
-
-        }
-
-        public virtual void SendMail(MailMessage mail)
-        {
-            if (HttpContext.Current != null && (string.IsNullOrEmpty(smtpAddress) || string.IsNullOrEmpty(from)))
-            {
-                var config = WebConfigurationManager.OpenWebConfiguration(HttpContext.Current.Request.ApplicationPath);
-                var settings = (MailSettingsSectionGroup)config.GetSectionGroup("system.net/mailSettings");
-                if (settings != null && settings.Smtp != null && settings.Smtp.Network != null)
+                if(mail.To.Any())
                 {
-                    smtpAddress = settings.Smtp.Network.Host;
-                    port = settings.Smtp.Network.Port;
-                    from = settings.Smtp.From;
-                    username = settings.Smtp.Network.UserName;
-                    password = settings.Smtp.Network.Password;
-                }
-            }
-
-            //load from individual app settings if address is not set in mail settings
-            if (string.IsNullOrEmpty(smtpAddress) || string.IsNullOrEmpty(from))
-            {
-                if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["SmtpServer"]))
-                {
-                    try
-                    {
-                        smtpAddress = ConfigurationManager.AppSettings["SmtpServer"];
-                        if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["SmtpPort"]))
-                            port = Int32.Parse(ConfigurationManager.AppSettings["SmtpPort"]);
-                        from = ConfigurationManager.AppSettings["SmtpFrom"];
-                    }
-                    catch (Exception exception)
-                    {
-                        throw new Exception("Could not initialize the class: " + exception.Message);
+                    content.ToEmailList = new List<string>();
+                    foreach(var to in mail.To){
+                        content.ToEmailList.Add(to.Address);
                     }
                 }
-                else
-                {
-                    throw new Exception("The SmtpEmailService was not initialized properly");
-                }
             }
-
             try
             {
-                new Thread(() => SendMailSmtp(mail)).Start();
+                result = content.SendAck();
             }
             catch (Exception ex)
             {
-                log.Error("Error occured while sending mail : " + ex.Message);
+                result = false;
+                log.Error(string.Format("Failed email sending in SmtpEmailService-SendMailSmtp(): {0}", ex.Message));
             }
+            return result;
+        }
+
+        public virtual bool SendMail(MailMessage mail)
+        {
+            return SendMailSmtp(mail);
         }
     }
 }
