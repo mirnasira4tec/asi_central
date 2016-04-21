@@ -41,7 +41,8 @@ namespace asi.asicentral.web.model.store
                 }
             }
         }
-
+        public string ASIContactEmail { get; set; }
+        public string Campaign { get; set; }
         public String Name
         {
             get
@@ -93,6 +94,13 @@ namespace asi.asicentral.web.model.store
                 return Math.Round(orderDetail.Cost, 2);
             }
         }
+        public Decimal ApplicationPrice
+        {
+            get
+            {
+                return Math.Round(orderDetail.ApplicationCost, 2);
+            }
+        }
 
         public String Billing
         {
@@ -135,10 +143,12 @@ namespace asi.asicentral.web.model.store
 
         public StoreDetailApplication Application { private set; get; }
 
-        public static OrderModel CreateOrder(IStoreService storeService, IEncryptionService encryptionService, StoreOrderDetail orderDetail)
+        public static OrderModel CreateOrder(IStoreService storeService, IEncryptionService encryptionService, StoreOrderDetail orderDetail, string asiContactEmail = null)
         {
             OrderModel order = new OrderModel();
             order.orderDetail = orderDetail;
+            order.ASIContactEmail = string.IsNullOrEmpty(asiContactEmail) ? string.Empty : asiContactEmail;
+            order.Campaign = orderDetail.Order.Campaign;
             order.CompletedStep = orderDetail.Order.CompletedStep.ToString();
             order.Application = storeService.GetApplication(orderDetail);
             bool isShowIcons = orderDetail.Order != null && orderDetail.Order.ProcessStatus == OrderStatus.Pending && orderDetail.Order.IsCompleted;

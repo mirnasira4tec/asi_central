@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace asi.asicentral.web.model.store
 {
@@ -24,14 +25,21 @@ namespace asi.asicentral.web.model.store
         public String OrderTab { get; set; }
         public string StartDate { get; set; }
         public string EndDate { get; set; }
+        public string ASIContactEmail { get; set; }
         public bool chkHasAddress { get; set; }
         public string HasAddress { get; set; }
         public string Product { get; set; }
         public int? Identifier { get; set; }
         public string Name { get; set; }
         public string CompanyName { get; set; }
+        public Decimal Total { get; set; }
+        public IList<SelectListItem> campaign { get; set; }
 
-        public OrderPageModel(IStoreService storeService, IEncryptionService encryptionService, IList<StoreOrderDetail> orderDetails) 
+        public OrderPageModel()
+        {
+        }
+
+        public OrderPageModel(IStoreService storeService, IEncryptionService encryptionService, IList<StoreOrderDetail> orderDetails)
         {
             Orders = new List<OrderModel>();
             if (orderDetails != null && storeService != null)
@@ -39,6 +47,23 @@ namespace asi.asicentral.web.model.store
                 foreach (StoreOrderDetail orderDetail in orderDetails)
                 {
                     Orders.Add(OrderModel.CreateOrder(storeService, encryptionService, orderDetail));
+                }
+            }
+        }
+        public void ShowFormsOrderPageModel(IStoreService storeService, IEncryptionService encryptionService, IList<StoreOrderDetail> orderDetails )
+        {
+            Orders = new List<OrderModel>();
+            if (orderDetails != null && storeService != null)
+            {
+                string contactEmail = string.Empty;
+                foreach (StoreOrderDetail orderDetail in orderDetails)
+                {
+                    StoreDetailSpecialProductItem specialProductItem = storeService.GetAll<StoreDetailSpecialProductItem>(true).FirstOrDefault(detail => detail.OrderDetailId == orderDetail.Id);
+                    if (specialProductItem != null)
+                    {
+                        contactEmail = specialProductItem.ASIContactEmail;
+                    }
+                    Orders.Add(OrderModel.CreateOrder(storeService, encryptionService, orderDetail, contactEmail));
                 }
             }
         }
