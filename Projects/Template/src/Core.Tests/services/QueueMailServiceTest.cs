@@ -1,10 +1,10 @@
 ﻿using System;
+using ASI.Contracts.Messages.Email;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.services;
 using asi.asicentral.interfaces;
 using System.Net.Mail;
 using System.Net.Configuration;
-using ASI.Contracts.Messages.Email;
 using System.Collections.Generic;
 using ASI.Services.Messaging;
 using asi.asicentral.model;
@@ -13,7 +13,7 @@ using System.Threading;
 namespace Core.Tests
 {
 	[TestClass]
-    public class SmtpEmailServiceTest
+    public class QueueMailServiceTest
 	{
 		[TestMethod]
 		public void TestSendMail()
@@ -28,7 +28,7 @@ namespace Core.Tests
             //contentEmailMessage.Attachments = new List<String>() { @"C:\TestMailAttachment.txt" };
             //contentEmailMessage.Attachments = new List<String>() { @"C:\TestMailAttachment.txt", @"C:\UniqueProductsWithID1.txt" };
             //contentEmailMessage.Attachments = new List<String>() { @"C:\UniqueProductsWithID1.txt" };
-            SmtpEmailService smtpEmailService = new SmtpEmailService();
+            QueueMailService smtpEmailService = new QueueMailService();
             var result = smtpEmailService.SendMail(mail);
             Assert.IsTrue(result);
             
@@ -57,7 +57,7 @@ namespace Core.Tests
             mail.Body = "This is Test Mail";
             mail.To.Add(new MailAddress("pkumar@asicentral.com"));
 
-            SmtpEmailService smtpEmailService = new SmtpEmailService();
+            QueueMailService smtpEmailService = new QueueMailService();
             bool result = smtpEmailService.SendMail(mail);
             Assert.IsTrue(result);
         }
@@ -69,7 +69,7 @@ namespace Core.Tests
             mail.To = "pkumar@asicentral.com";
             mail.Subject = "Mail from asi.asicetral.model.Mail object";
             mail.Body = "Body - Mail from asi.asicetral.model.Mail object";
-            SmtpEmailService smtpEmailService = new SmtpEmailService();
+            QueueMailService smtpEmailService = new QueueMailService();
             bool result = smtpEmailService.SendMail(mail);
             Assert.IsTrue(result);
         }

@@ -1,5 +1,4 @@
 ﻿using asi.asicentral.interfaces;
-using ASI.Contracts.Messages.Email;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -14,19 +13,35 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
-using ASI.Services.Messaging;
 
 namespace asi.asicentral.services
 {
     public class SmtpEmailService : IEmailService
     {
+        private bool ssl = true;
+        private int port = 25;
+        private string smtpAddress = null;
+        private string from = null;
+        private string username = null;
+        private string password = null;
         private log4net.ILog log;
+
         public SmtpEmailService()
         {
 
             log = log4net.LogManager.GetLogger(GetType());
             //required to avoid the issue with "The remote certificate is invalid according to the validation procedure"
             ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
+        }
+
+        public static SmtpEmailService GetService(string smtpAddress, int port, string from, bool ssl)
+        {
+            SmtpEmailService emailService = new SmtpEmailService();
+            emailService.smtpAddress = smtpAddress;
+            emailService.port = port;
+            emailService.from = from;
+            emailService.ssl = ssl;
+            return emailService;
         }
 
         public virtual bool SendMail(model.Mail mail)
@@ -38,44 +53,78 @@ namespace asi.asicentral.services
             return SendMail(mailObject);
         }
 
-        private bool SendMailSmtp(MailMessage mail)
+        private void SendMailSmtp(MailMessage mail)
         {
-            if (mail == null) throw new Exception("Invalid mail details");
-            bool result = false;
-            var content = new ContentEmailMessage();
+            
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                username = ConfigurationManager.AppSettings["smtpUserName"];
+                password = ConfigurationManager.AppSettings["smtpPassword"];
+            }
 
-            content.Subject = mail.Subject;
-            content.Body = mail.Body;
-            if(mail.From != null) content.FromEmail = string.Format("{0}|{1}", mail.From.Address, mail.From.DisplayName);
-            if (string.IsNullOrEmpty(content.FromEmail) && ConfigurationManager.AppSettings["SmtpFrom"] != null && !string.IsNullOrEmpty(ConfigurationManager.AppSettings["SmtpFrom"]))
+            SmtpClient SmtpServer = new SmtpClient(smtpAddress);
+            SmtpServer.Port = port;
+            SmtpServer.EnableSsl = ssl;
+            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
-                content.FromEmail = ConfigurationManager.AppSettings["SmtpFrom"];
+                SmtpServer.Credentials = new System.Net.NetworkCredential(username, password);
             }
-            if(mail.To != null) 
-            {
-                if(mail.To.Any())
-                {
-                    content.ToEmailList = new List<string>();
-                    foreach(var to in mail.To){
-                        content.ToEmailList.Add(to.Address);
-                    }
-                }
-            }
-            try
-            {
-                result = content.SendAck();
-            }
-            catch (Exception ex)
-            {
-                result = false;
-                log.Error(string.Format("Failed email sending in SmtpEmailService-SendMailSmtp(): {0}", ex.Message));
-            }
-            return result;
+            if (mail.From == null) mail.From = new MailAddress(from);
+
+            SmtpServer.Send(mail);
+
+
         }
 
         public virtual bool SendMail(MailMessage mail)
         {
-            return SendMailSmtp(mail);
+            if (HttpContext.Current != null && (string.IsNullOrEmpty(smtpAddress) || string.IsNullOrEmpty(from)))
+            {
+                var config = WebConfigurationManager.OpenWebConfiguration(HttpContext.Current.Request.ApplicationPath);
+                var settings = (MailSettingsSectionGroup)config.GetSectionGroup("system.net/mailSettings");
+                if (settings != null && settings.Smtp != null && settings.Smtp.Network != null)
+                {
+                    smtpAddress = settings.Smtp.Network.Host;
+                    port = settings.Smtp.Network.Port;
+                    from = settings.Smtp.From;
+                    username = settings.Smtp.Network.UserName;
+                    password = settings.Smtp.Network.Password;
+                }
+            }
+
+            //load from individual app settings if address is not set in mail settings
+            if (string.IsNullOrEmpty(smtpAddress) || string.IsNullOrEmpty(from))
+            {
+                if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["SmtpServer"]))
+                {
+                    try
+                    {
+                        smtpAddress = ConfigurationManager.AppSettings["SmtpServer"];
+                        if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["SmtpPort"]))
+                            port = Int32.Parse(ConfigurationManager.AppSettings["SmtpPort"]);
+                        from = ConfigurationManager.AppSettings["SmtpFrom"];
+                    }
+                    catch (Exception exception)
+                    {
+                        throw new Exception("Could not initialize the class: " + exception.Message);
+                    }
+                }
+                else
+                {
+                    throw new Exception("The SmtpEmailService was not initialized properly");
+                }
+            }
+
+            try
+            {
+                new Thread(() => SendMailSmtp(mail)).Start();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error occured while sending mail : " + ex.Message);
+                return false;
+            }
         }
     }
 }
