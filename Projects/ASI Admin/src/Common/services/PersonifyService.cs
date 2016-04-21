@@ -95,8 +95,6 @@ namespace asi.asicentral.services
                     if( coupon != null && !string.IsNullOrEmpty(coupon.CouponCode) && coupon.CouponCode != "(Unknown)")
                     {
                         coupon.CouponCode = coupon.CouponCode.Trim();
-                        mapping = mappings.FirstOrDefault(m => !string.IsNullOrEmpty(m.StoreOption) && m.StoreOption.Trim() == coupon.CouponCode);
-
                         var context = storeService.GetAll<Context>(true).FirstOrDefault(p => p.Id == order.ContextId);
                         var contextProduct = context != null ? context.Products.FirstOrDefault(p => p.Product.Id == orderDetail.Product.Id) : null;
 
@@ -116,9 +114,15 @@ namespace asi.asicentral.services
                             couponError = coupon.DiscountAmount != contextProduct.ApplicationCost &&
                                           coupon.DiscountAmount != contextProduct.Cost &&
                                           coupon.DiscountAmount != contextProduct.ApplicationCost + contextProduct.Cost;
+
+                            if (firstmonthFree)
+                            {
+                                mapping = mappings.FirstOrDefault(m => !string.IsNullOrEmpty(m.StoreOption) && m.StoreOption.Trim() == coupon.CouponCode);
+                            }
                         }
                         else
-                            couponError = true; 
+                            couponError = true;
+
                     }
 
                     if (mapping == null)
@@ -209,41 +213,6 @@ namespace asi.asicentral.services
             }
 
             return companyInfo;
-        }
-
-        protected void PostCreateBundleOrder(StoreOrder storeOrder, IEmailService emailService, string url, PersonifyMapping mapping, 
-                                            CompanyInformation companyInfo, AddressInfo billToAddress, bool waiveAppFee, bool firstMonthFree)
-        {
-            if (storeOrder == null || mapping == null || companyInfo == null || billToAddress == null)
-            {
-                throw new Exception("Error post processing personify bunddle order, one of the parameters is null!");
-            }
-
-            try
-            {
-                PersonifyClient.PostCreateBundleOrder(storeOrder, mapping, companyInfo, billToAddress, waiveAppFee, firstMonthFree);
-                ValidateOrderTotal(storeOrder, emailService, url, true, firstMonthFree);
-            }
-            catch (Exception ex)
-            {
-                var error = string.Format("Unknown Error while post processing personify bundle order # {0}, store order # {1}: {2}{3}", 
-                                           storeOrder.BackendReference, storeOrder.Id, ex.Message, ex.StackTrace);
-                if (ex.InnerException != null)
-                {
-                    error = string.Format("Unknown Error while post processing personify bundle order: {0}{1}\n{2}",
-                        ex.InnerException.Message, ex.InnerException.StackTrace, error);
-                }
-                log.Error(error);
-                var data = new EmailData()
-                {
-                    Subject = "Error while post processing personify bundle order " + storeOrder.BackendReference,
-                    EmailBody = error + EmailData.GetMessageSuffix(url)
-                };
-
-                data.SendEmail(emailService);
-
-                throw ex;
-            }
         }
 
         private decimal ValidateOrderTotal(StoreOrder order, IEmailService emailService, string url, 
