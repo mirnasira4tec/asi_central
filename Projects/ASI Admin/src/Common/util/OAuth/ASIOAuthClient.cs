@@ -541,7 +541,7 @@ namespace asi.asicentral.oauth
                 {
                     entityUser.Addresses = new List<Address>();
                     address = new Address();
-                    address.IsDefault = true;
+                    address.IsPrimary = true;
                     address.UsageCode = UsageCode.GNRL.ToString();
                     entityUser.Addresses.Add(address);
                 }
@@ -632,15 +632,14 @@ namespace asi.asicentral.oauth
                     company.Contacts.Add(contact);
                 }
 
-                if (company.Types != null && company.Types.Count > 0)
+                if (!string.IsNullOrEmpty(company.Type))
                 {
-                    string membertype = company.Types.ElementAt(0);
+                    string membertype = company.Type;
                     membertype = user.MemberType_CD;
                 }
                 else
                 {
-                    company.Types = new List<string>();
-                    company.Types.Add(user.MemberType_CD);
+                    company.Type = user.MemberType_CD;
                 }
 
                 contact.Title = user.Title;
@@ -649,7 +648,7 @@ namespace asi.asicentral.oauth
                 ASI.EntityModel.Address address = null;
                 if (company.Addresses != null && company.Addresses.Count > 0)
                 {
-                    address = company.Addresses.Where(add => add.IsDefault).SingleOrDefault();
+                    address = company.Addresses.Where(add => add.IsPrimary).SingleOrDefault();
                 }
                 else
                 {
@@ -784,8 +783,8 @@ namespace asi.asicentral.oauth
                                     user.Title = contact.Title;
                                     user.Suffix = contact.Suffix;
                                 }
-                                if (entityCompany.Types != null && entityCompany.Types.Count > 0)
-                                    user.MemberType_CD = entityCompany.Types.ElementAt(0);
+                                if (!string.IsNullOrEmpty(entityCompany.Type))
+                                    user.MemberType_CD = entityCompany.Type;
                             }
                         }
                     }
