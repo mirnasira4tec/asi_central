@@ -12,6 +12,7 @@ using System.Threading;
 
 namespace Core.Tests
 {
+    [Ignore]
 	[TestClass]
     public class QueueMailServiceTest
 	{
