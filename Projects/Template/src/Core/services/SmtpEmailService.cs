@@ -44,13 +44,13 @@ namespace asi.asicentral.services
             return emailService;
         }
 
-        public virtual void SendMail(model.Mail mail)
+        public virtual bool SendMail(model.Mail mail)
         {
             MailMessage mailObject = new MailMessage();
             mailObject.To.Add(mail.To);
             mailObject.Subject = mail.Subject;
             mailObject.Body = mail.Body;
-            SendMail(mailObject);
+            return SendMail(mailObject);
         }
 
         private void SendMailSmtp(MailMessage mail)
@@ -76,7 +76,7 @@ namespace asi.asicentral.services
 
         }
 
-        public virtual void SendMail(MailMessage mail)
+        public virtual bool SendMail(MailMessage mail)
         {
             if (HttpContext.Current != null && (string.IsNullOrEmpty(smtpAddress) || string.IsNullOrEmpty(from)))
             {
@@ -118,10 +118,12 @@ namespace asi.asicentral.services
             try
             {
                 new Thread(() => SendMailSmtp(mail)).Start();
+                return true;
             }
             catch (Exception ex)
             {
                 log.Error("Error occured while sending mail : " + ex.Message);
+                return false;
             }
         }
     }

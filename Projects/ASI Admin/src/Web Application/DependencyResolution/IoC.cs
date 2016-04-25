@@ -89,7 +89,7 @@ namespace asi.asicentral.web.DependencyResolution
                        .Ctor<IFileSystemService>();
 
                     x.For<IEmailService>()
-                       .Use<SmtpEmailService>()
+                       .Use<QueueMailService>()
                        .EnrichWith(emailService => proxyGenerator.CreateClassProxyWithTarget(emailService.GetType(), emailService, new IInterceptor[] { new LogInterceptor(emailService.GetType()) }));
                        
 
