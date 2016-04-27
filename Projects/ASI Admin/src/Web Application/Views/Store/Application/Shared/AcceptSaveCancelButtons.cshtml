@@ -64,7 +64,7 @@
                 {
                     if (Model.IsCompleted && Model.OrderStatus != OrderStatus.Approved && string.IsNullOrEmpty(errMsg))
                     {
-                    <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
+                    <input class="command btn-primary" type="submit" id="btnAcceptOrder" value="@ApplicationController.COMMAND_ACCEPT" />
                     }
                     if (Model.IsCompleted && (Model.OrderStatus == OrderStatus.Pending || Model.OrderStatus == OrderStatus.Approved) )
                     { 
