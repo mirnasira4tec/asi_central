@@ -15,6 +15,7 @@ namespace Core.Tests.OAuth
     [TestClass]
     public class ASIOAuthClientTests
     {
+        [Ignore]
         [TestMethod]
         public void UserTestScenarios()
         {
