@@ -275,7 +275,8 @@ namespace asi.asicentral.services
                 {
                     taxRate = taxRateRecord.Rate;
                 }
-                else
+                
+                if( !string.IsNullOrEmpty(address.Zip) )
                 {
                     int zipCode = 0;
                     int.TryParse(address.Zip, out zipCode);
@@ -283,7 +284,7 @@ namespace asi.asicentral.services
                     {
                         //look for a state/zip record
                         taxRateRecord = this.GetAll<TaxRate>().SingleOrDefault(taxRecord => taxRecord.State == address.State && taxRecord.Zip == zipCode);
-                        if (taxRateRecord != null) taxRate = taxRateRecord.Rate;
+                        if (taxRateRecord != null) taxRate += taxRateRecord.Rate;
                     }
                 }
                 if (taxRate > 0) tax = (amount.Value * taxRate) / 100m;
