@@ -99,8 +99,8 @@ namespace asi.asicentral.services.PersonifyProxy
             return orderOutput;
         }
 
-        public static void CreateBundleOrder(StoreOrder storeOrder, PersonifyMapping mapping, CompanyInformation companyInfo,                                             
-                                             string contactMasterCustomerId, int contactSubCustomerId, 
+        public static void CreateBundleOrder(StoreOrder storeOrder, PersonifyMapping mapping, List<PersonifyMapping> extraLineItems, 
+                                             CompanyInformation companyInfo, string contactMasterCustomerId, int contactSubCustomerId, 
                                              AddressInfo billToAddress, AddressInfo shipToAddress, bool waiveAppFee, bool firstMonthFree)
         {          
             _log.Debug(string.Format("CreateBundleOrder - start: order {0} ", storeOrder));
@@ -138,13 +138,13 @@ namespace asi.asicentral.services.PersonifyProxy
             var bOutput = SvcClient.Post<ASICreateBundleOrderOutput>("ASICreateBundleOrder", bundleOrderInput);
             storeOrder.BackendReference = bOutput.ASIBundleOrderNumber;
 
-            PostCreateBundleOrder(storeOrder, mapping, companyInfo, billToAddress, waiveAppFee, firstMonthFree);
+            PostCreateBundleOrder(storeOrder, mapping, extraLineItems, companyInfo, billToAddress, waiveAppFee, firstMonthFree);
 
             _log.Debug(string.Format("CreateBundleOrder - end: order {0} ({1})", storeOrder, DateTime.Now.Subtract(startTime).TotalMilliseconds));
         }
 
-        public static void PostCreateBundleOrder(StoreOrder storeOrder, PersonifyMapping mapping, CompanyInformation companyInfo,
-                                                 AddressInfo billToAddress, bool waiveAppFee, bool firstMonthFree)
+        public static void PostCreateBundleOrder(StoreOrder storeOrder, PersonifyMapping mapping, List<PersonifyMapping> extraLineItems, 
+                                                 CompanyInformation companyInfo, AddressInfo billToAddress, bool waiveAppFee, bool firstMonthFree)
         {
             _log.Debug(string.Format("PostCreateBundleOrder - start: order {0} ", storeOrder));
             DateTime startTime = DateTime.Now;
@@ -161,6 +161,25 @@ namespace asi.asicentral.services.PersonifyProxy
             //payment schedule for bundle line items
             if (!firstMonthFree)
             {
+                var scheduleLineItems = extraLineItems.Where(item => item.PaySchedule.HasValue && item.PaySchedule.Value).ToList();
+                if (scheduleLineItems.Any())
+                {
+                    foreach (var item in scheduleLineItems)
+                    {
+                        var linePriceInput = new ASIAddOrderLinewithPriceInput()
+                        {
+                            OrderNumber = storeOrder.BackendReference,
+                            ProductID = item.PersonifyProduct,
+                            Quantity = 1,
+                            UserDefinedBoltOn = true,
+                            RateStructure = "MEMBER",
+                            RateCode = "STD"
+                        };
+
+                        SvcClient.Post<OrderNumberParam>("ASIAddOrderLinewithPrice", linePriceInput);                        
+                    }
+                }
+
                 var orderLineItems = SvcClient.Ctxt.OrderDetailInfos
                                                    .Where(c => c.OrderNumber == storeOrder.BackendReference && c.BaseTotalAmount > 0)
                                                    .ToList();
@@ -179,6 +198,26 @@ namespace asi.asicentral.services.PersonifyProxy
                     };
 
                     SvcClient.Post<ASICreatePayScheduleOutput>("ASICreatePaySchedule", iPaySchedual);
+                }
+            }
+
+            // add non-scheduled line items
+            var nonScheduleLineItems = extraLineItems.Where(item => item.PaySchedule.HasValue && !item.PaySchedule.Value).ToList();
+            if (nonScheduleLineItems.Any())
+            {
+                foreach (var item in nonScheduleLineItems)
+                {
+                    var linePriceInput = new ASIAddOrderLinewithPriceInput()
+                    {
+                        OrderNumber = storeOrder.BackendReference,
+                        ProductID = item.PersonifyProduct,
+                        Quantity = 1,
+                        UserDefinedBoltOn = true,
+                        RateStructure = "MEMBER",
+                        RateCode = "STD"
+                    };
+
+                    SvcClient.Post<OrderNumberParam>("ASIAddOrderLinewithPrice", linePriceInput);
                 }
             }
 
