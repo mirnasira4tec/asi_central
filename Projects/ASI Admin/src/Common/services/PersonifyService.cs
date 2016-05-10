@@ -144,10 +144,15 @@ namespace asi.asicentral.services
                     {
                         extraLineItems = storeService.GetAll<PersonifyMapping>(true)
                             .Where(map => (map.StoreContext == null || map.StoreContext == order.ContextId) &&
-                                          map.StoreProduct == orderDetail.Product.Id && map.PersonifyProduct != null 
+                                          map.StoreProduct == orderDetail.Product.Id && map.PersonifyProduct != null
                                           && map.PaySchedule != null && map.PersonifyRateStructure == "MEMBER")
-                            .OrderByDescending(m => m.StoreContext)
-                            .ToList();
+                            .OrderByDescending(m => m.StoreContext).ToList();
+
+                        if (extraLineItems.Any())
+                        {
+                            extraLineItems = string.IsNullOrEmpty(mapping.StoreOption) ? extraLineItems.FindAll(m => m.StoreOption == null)
+                                : extraLineItems.FindAll(m => m.StoreOption != null && m.StoreOption.Trim() == mapping.StoreOption.Trim());
+                        }
                     }
 
                     PersonifyClient.CreateBundleOrder(order, mapping, extraLineItems, companyInfo, contactMasterId, contactSubId, billToAddr, shipToAddr, waiveAppFee, firstmonthFree);
@@ -203,8 +208,7 @@ namespace asi.asicentral.services
                         string s = string.Format("Failed to pay the order '{0} {3}'. Error is {2}{1}", order, e.StackTrace, e.Message, orderOutput.OrderNumber);
                         log.Error(s);
                         var data = new EmailData()
-                        {
-                            Subject = "order failed to be charged",
+                        {Subject = "order failed to be charged",
                             EmailBody = s + EmailData.GetMessageSuffix(url)
                         };
                         data.SendEmail(emailService);

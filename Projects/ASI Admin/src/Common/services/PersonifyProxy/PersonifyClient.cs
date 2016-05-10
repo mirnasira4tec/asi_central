@@ -159,8 +159,7 @@ namespace asi.asicentral.services.PersonifyProxy
             }
 
             // add extra line items for the bundles
-            var scheduleLineItems = string.IsNullOrEmpty(storeOrder.CouponCode) ? extraLineItems.FindAll(item => item.PaySchedule.HasValue && item.PaySchedule.Value && item.StoreOption == null)
-                         : extraLineItems.FindAll(item => item.PaySchedule.HasValue && item.PaySchedule.Value && item.StoreOption != null && item.StoreOption == storeOrder.CouponCode);
+            var scheduleLineItems = extraLineItems.FindAll(item => item.PaySchedule.HasValue && item.PaySchedule.Value);
 
             if (scheduleLineItems.Any())
             {
@@ -205,7 +204,7 @@ namespace asi.asicentral.services.PersonifyProxy
             }
 
             // add non-scheduled line items
-            var nonScheduleLineItems = extraLineItems.Where(item => item.PaySchedule.HasValue && !item.PaySchedule.Value).ToList();
+            var nonScheduleLineItems = extraLineItems.FindAll(item => item.PaySchedule.HasValue && !item.PaySchedule.Value);
             if (nonScheduleLineItems.Any())
             {
                 foreach (var item in nonScheduleLineItems)
@@ -216,8 +215,8 @@ namespace asi.asicentral.services.PersonifyProxy
                         ProductID = item.PersonifyProduct,
                         Quantity = 1,
                         UserDefinedBoltOn = true,
-                        RateStructure = "MEMBER",
-                        RateCode = "STD"
+                        RateStructure = item.PersonifyRateStructure,
+                        RateCode = item.PersonifyRateCode
                     };
 
                     SvcClient.Post<OrderNumberParam>("ASIAddOrderLinewithPrice", linePriceInput);
