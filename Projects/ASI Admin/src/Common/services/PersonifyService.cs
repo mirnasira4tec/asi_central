@@ -208,7 +208,8 @@ namespace asi.asicentral.services
                         string s = string.Format("Failed to pay the order '{0} {3}'. Error is {2}{1}", order, e.StackTrace, e.Message, orderOutput.OrderNumber);
                         log.Error(s);
                         var data = new EmailData()
-                        {Subject = "order failed to be charged",
+                        {
+                            Subject = "order failed to be charged",
                             EmailBody = s + EmailData.GetMessageSuffix(url)
                         };
                         data.SendEmail(emailService);
