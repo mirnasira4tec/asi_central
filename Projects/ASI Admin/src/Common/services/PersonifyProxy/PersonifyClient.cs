@@ -158,28 +158,31 @@ namespace asi.asicentral.services.PersonifyProxy
                 throw new Exception("Error processing personify bunddle order, one of the parameters is null!");
             }
 
+            // add extra line items for the bundles
+            var scheduleLineItems = string.IsNullOrEmpty(storeOrder.CouponCode) ? extraLineItems.FindAll(item => item.PaySchedule.HasValue && item.PaySchedule.Value && item.StoreOption == null)
+                         : extraLineItems.FindAll(item => item.PaySchedule.HasValue && item.PaySchedule.Value && item.StoreOption != null && item.StoreOption == storeOrder.CouponCode);
+
+            if (scheduleLineItems.Any())
+            {
+                foreach (var item in scheduleLineItems)
+                {
+                    var linePriceInput = new ASIAddOrderLinewithPriceInput()
+                    {
+                        OrderNumber = storeOrder.BackendReference,
+                        ProductID = item.PersonifyProduct,
+                        Quantity = 1,
+                        UserDefinedBoltOn = true,
+                        RateStructure = item.PersonifyRateStructure,
+                        RateCode = item.PersonifyRateCode
+                    };
+
+                    SvcClient.Post<OrderNumberParam>("ASIAddOrderLinewithPrice", linePriceInput);
+                }
+            }
+
             //payment schedule for bundle line items
             if (!firstMonthFree)
             {
-                var scheduleLineItems = extraLineItems.Where(item => item.PaySchedule.HasValue && item.PaySchedule.Value).ToList();
-                if (scheduleLineItems.Any())
-                {
-                    foreach (var item in scheduleLineItems)
-                    {
-                        var linePriceInput = new ASIAddOrderLinewithPriceInput()
-                        {
-                            OrderNumber = storeOrder.BackendReference,
-                            ProductID = item.PersonifyProduct,
-                            Quantity = 1,
-                            UserDefinedBoltOn = true,
-                            RateStructure = "MEMBER",
-                            RateCode = "STD"
-                        };
-
-                        SvcClient.Post<OrderNumberParam>("ASIAddOrderLinewithPrice", linePriceInput);                        
-                    }
-                }
-
                 var orderLineItems = SvcClient.Ctxt.OrderDetailInfos
                                                    .Where(c => c.OrderNumber == storeOrder.BackendReference && c.BaseTotalAmount > 0)
                                                    .ToList();
