@@ -93,6 +93,7 @@ namespace asi.asicentral.services
                     var couponError = false;
                     var context = storeService.GetAll<Context>(true).FirstOrDefault(p => p.Id == order.ContextId);
                     var contextProduct = context != null ? context.Products.FirstOrDefault(p => p.Product.Id == orderDetail.Product.Id) : null;
+                    List<PersonifyMapping> extraLineItems = null;
 
                     if (contextProduct != null)
                     {
@@ -139,7 +140,22 @@ namespace asi.asicentral.services
                         mapping = mappings.FirstOrDefault(m => string.IsNullOrEmpty(m.StoreOption));
                     }
 
-                    PersonifyClient.CreateBundleOrder(order, mapping, companyInfo, contactMasterId, contactSubId, billToAddr, shipToAddr, waiveAppFee, firstmonthFree);
+                    if (mapping != null)
+                    {
+                        extraLineItems = storeService.GetAll<PersonifyMapping>(true)
+                            .Where(map => (map.StoreContext == null || map.StoreContext == order.ContextId) &&
+                                          map.StoreProduct == orderDetail.Product.Id && map.PersonifyProduct != null
+                                          && map.PaySchedule != null && map.PersonifyRateStructure == "MEMBER")
+                            .OrderByDescending(m => m.StoreContext).ToList();
+
+                        if (extraLineItems.Any())
+                        {
+                            extraLineItems = string.IsNullOrEmpty(mapping.StoreOption) ? extraLineItems.FindAll(m => m.StoreOption == null)
+                                : extraLineItems.FindAll(m => m.StoreOption != null && m.StoreOption.Trim() == mapping.StoreOption.Trim());
+                        }
+                    }
+
+                    PersonifyClient.CreateBundleOrder(order, mapping, extraLineItems, companyInfo, contactMasterId, contactSubId, billToAddr, shipToAddr, waiveAppFee, firstmonthFree);
                     ValidateOrderTotal(order, emailService, url, true, firstmonthFree);
 
                     // update company ASI#, to be included in the internal email
