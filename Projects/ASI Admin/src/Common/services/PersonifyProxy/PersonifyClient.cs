@@ -101,7 +101,7 @@ namespace asi.asicentral.services.PersonifyProxy
         }
 
         public static void CreateBundleOrder(StoreOrder storeOrder, PersonifyMapping mapping, CompanyInformation companyInfo, string contactMasterCustomerId, 
-                                             int contactSubCustomerId, AddressInfo billToAddress, AddressInfo shipToAddress, bool waiveAppFee, bool firstMonthFree)
+                                             int contactSubCustomerId, AddressInfo billToAddress, AddressInfo shipToAddress)
         {          
             _log.Debug(string.Format("CreateBundleOrder - start: order {0} ", storeOrder));
             DateTime startTime = DateTime.Now;
@@ -137,9 +137,6 @@ namespace asi.asicentral.services.PersonifyProxy
 
             var bOutput = SvcClient.Post<ASICreateBundleOrderOutput>("ASICreateBundleOrder", bundleOrderInput);
             storeOrder.BackendReference = bOutput.ASIBundleOrderNumber;
-
-            PostCreateBundleOrder(storeOrder, mapping, companyInfo, billToAddress, waiveAppFee, firstMonthFree);
-
             _log.Debug(string.Format("CreateBundleOrder - end: order {0} ({1})", storeOrder, DateTime.Now.Subtract(startTime).TotalMilliseconds));
         }
 
@@ -291,6 +288,41 @@ namespace asi.asicentral.services.PersonifyProxy
 
             _log.Debug(string.Format("PostCreateBundleOrder - end: order {0} ({1})", storeOrder, DateTime.Now.Subtract(startTime).TotalMilliseconds));
         }
+
+        //public static void AddApplicationFee(StoreOrder storeOrder, bool waiveAppFee)
+        //{
+        //    //add membership application fee
+        //    if (storeOrder != null && storeOrder.OrderDetails != null && storeOrder.OrderDetails.Any() &&
+        //        storeOrder.OrderDetails[0].Product != null && storeOrder.OrderDetails[0].Product.IsMembership())
+        //    {
+        //        var classCode = mapping.ClassCode;
+        //        if( !string.IsNullOrEmpty(classCode) && !string.IsNullOrEmpty(mapping.SubClassCode) && mapping.SubClassCode == "DECORATOR")
+        //        {
+        //            classCode = classCode.ToUpper();
+        //            if (classCode == "DISTRIBUTOR" || (classCode == "SUPPLIER" && !string.IsNullOrEmpty(companyInfo.ASINumber) && companyInfo.ASINumber.Length < 8) )
+        //            {  // existing supplier/distributor membership
+        //                classCode = "DECORATOR";
+        //            }
+        //        }
+
+        //        if (Helper.APPLICATION_FEE_IDS.Keys.Contains(classCode))
+        //        {
+        //            long? applicationFeeId = Helper.APPLICATION_FEE_IDS[classCode];
+        //            var linePriceInput = new ASIAddOrderLinewithPriceInput()
+        //            {
+        //                OrderNumber = storeOrder.BackendReference,
+        //                ProductID = applicationFeeId,
+        //                Quantity = 1,
+        //                UserDefinedBoltOn = true,
+        //                RateStructure = "MEMBER",
+        //                RateCode = waiveAppFee ? "SPECIAL" : "STD"
+        //            };
+
+        //            SvcClient.Post<OrderNumberParam>("ASIAddOrderLinewithPrice", linePriceInput);
+        //        }	            
+        //    }
+
+        //}
 
 	    public static void AddLineItemToOrder(StoreOrder order, int productId, string rateStructure, string rateCode, 
                                                 bool boltOn = true, int quantity = 1)
@@ -1664,7 +1696,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     string.Format("Billto address and company information are required for order {0}", orderNumber));
             }
             ASICustomerCreditCard credirCard = GetCreditCardByProfileId(masterCustomerId, subCustomerId, ccProfileid);
-            var orderLineNumbers = string.IsNullOrEmpty(payOrderLineNumbers) ? GetOrderLinesByOrderId(orderNumber) : payOrderLineNumbers;
+            var orderLineNumbers = string.IsNullOrEmpty(payOrderLineNumbers) ? GetOrderLinesByOrderId(orderNumber, ref amount) : payOrderLineNumbers;
             var payOrderInput = new PayOrderInput()
             {
                 OrderNumber = orderNumber,
@@ -1693,14 +1725,23 @@ namespace asi.asicentral.services.PersonifyProxy
             return resp;
         }
 
-        public static string GetOrderLinesByOrderId(string orderId)
+        public static string GetOrderLinesByOrderId(string orderId, ref decimal amount, List<PersonifyMapping> requestedProducts = null )
         {
-            IEnumerable<OrderDetailInfo> oOrderLines =
-                SvcClient.Ctxt.OrderDetailInfos.Where(c => c.OrderNumber == orderId).ToList();
-            string result = null;
-            if (oOrderLines.Any())
+            var orderLines = SvcClient.Ctxt.OrderDetailInfos.Where(c => c.OrderNumber == orderId).ToList();
+
+            if (requestedProducts != null && requestedProducts.Any())
             {
-                result = string.Join(",", oOrderLines.Select(o => o.OrderLineNumber));
+                orderLines = orderLines.FindAll(o => requestedProducts.Find(p => p.PersonifyProduct.HasValue && p.PersonifyProduct == o.ProductId 
+                                                                                   && o.ActualTotalAmount.HasValue && o.ActualTotalAmount.Value > 0) != null);
+            }
+
+            string result = null;
+            if (orderLines.Any())
+            {
+                result = string.Join(",", orderLines.Select(o => o.OrderLineNumber));
+                var payOrderSum = orderLines.Sum(o => o.ActualTotalAmount);
+                if (payOrderSum != null)
+                    amount = payOrderSum.Value;
             }
             return result;
         }
