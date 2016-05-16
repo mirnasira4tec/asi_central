@@ -290,10 +290,7 @@ namespace asi.asicentral.services
                         else option += "1X";
                     }
                     mapping = orderProducts.Single(map => map.StoreOption == option);
-                        //storeService.GetAll<PersonifyMapping>(true)
-                        //    .Single(map => (map.StoreContext ?? -1) == (orderDetail.Order.ContextId ?? -1) &&
-                        //                   map.StoreProduct == orderDetail.Product.Id &&
-                        //                   map.StoreOption == option);
+
                     //need to create a new line item for each one rather than one for all quantity
                     for (int i = 0; i < orderDetail.Quantity; i++)
                     {
