@@ -118,7 +118,7 @@ namespace asi.asicentral.services
                 // get all non-bundle products
                 var mappedProducts = allMappings.FindAll(map => map.PersonifyRateStructure == "MEMBER" && map.PersonifyProduct != null);
 
-                if (mappedProducts.Count > 1)
+                if (mappedProducts.Count > 1 && orderDetail.Product.Id != 61 && orderDetail.Product.Id != 77)
                 {
                     // remove potential duplicated product Ids if any, 
                     // always get the products in the leading place, which match both context and product id
