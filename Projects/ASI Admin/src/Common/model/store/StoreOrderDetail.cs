@@ -16,12 +16,13 @@ namespace asi.asicentral.model.store
             }
         }
 
+        private decimal _cost;
         public int Id { get; set; }
         public int? LegacyProductId { get; set; }
         public int? CouponId { get; set; }
         public int Quantity { get; set; }
         public decimal ApplicationCost { get; set; }
-        public decimal Cost { get; set; }
+        public decimal OrigCost { get; set; }
         public decimal ShippingCost { get; set; }
         public string ShippingMethod { get; set; }
         public decimal TaxCost { get; set; }
@@ -34,6 +35,24 @@ namespace asi.asicentral.model.store
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
         public string Comments { get; set; }
+
+        public decimal Cost
+        {
+            get { return _cost; }
+            set
+            {
+                OrigCost = value;
+                if( Coupon != null && Coupon.MonthlyCost > 0)
+                {
+                    _cost = Coupon.MonthlyCost;
+                }
+                else
+                {
+                    _cost = value;
+                }
+            }
+        }
+
         public virtual StoreOrder Order { get; set; }
         public virtual ContextProduct Product { get; set; }
         public virtual Coupon Coupon { get; set; }
