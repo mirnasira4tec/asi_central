@@ -22,7 +22,6 @@ namespace asi.asicentral.model.store
         public int? CouponId { get; set; }
         public int Quantity { get; set; }
         public decimal ApplicationCost { get; set; }
-        public decimal OrigCost { get; set; }
         public decimal ShippingCost { get; set; }
         public string ShippingMethod { get; set; }
         public decimal TaxCost { get; set; }
@@ -41,7 +40,6 @@ namespace asi.asicentral.model.store
             get { return _cost; }
             set
             {
-                OrigCost = value;
                 if( Coupon != null && Coupon.MonthlyCost > 0)
                 {
                     _cost = Coupon.MonthlyCost;

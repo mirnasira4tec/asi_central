@@ -8,7 +8,6 @@
 @model  IList<asi.asicentral.model.store.Coupon>
 
 <h2>Coupons</h2>
-
 @using (Html.BeginForm())
 {
    
@@ -22,11 +21,11 @@
                 <th>&nbsp;</th>
                 <th>Code</th>
                 <th>Type</th>
-                <th>Product/Context</th>
-                <th>Discount</th>
+                <th>Application Fee Discount</th>
+                <th>Product Discount</th>
+                <th>Subscription Cost</th>
                 <th>Valid From</th>
                 <th>Valid To</th>
-                <th>Once?</th>
             </tr>
         </thead>
         <tbody>
@@ -34,9 +33,24 @@
             {
                 <tr>
                     <td><a class="delete" id="@Model[i].CouponCode" href="/store/Coupon/Delete?id=@Model[i].Id"><i class="icon-trash"></i></a></td>
-                    <td><a href="/store/Coupon/Edit?id=@Model[i].Id">@Model[i].CouponCode</a></td>
+                    <td ><a href="/store/Coupon/Edit?id=@Model[i].Id" data-toggle="tooltip" data-placement="right" title="@if (Model[i].ContextId != null && Model[i].ProductId != null)
+                        {
+                         <text>Context: </text>@GetContextName(Model[i].ContextId); <text>Product: </text>@GetProductName(Model[i].ProductId);
+                        }
+                        else if (Model[i].ContextId != null)
+                        {
+                            @GetContextName(Model[i].ContextId);
+                        }
+                        else if (Model[i].ProductId != null)
+                        {
+                            @GetProductName(Model[i].ProductId);
+                        }">@Model[i].CouponCode</a></td>
                     <td>
-                        @if (Model[i].ContextId != null)
+                        @if (Model[i].ContextId != null && Model[i].ProductId != null)
+                        {
+                            <span>Context/Product</span>
+                        }
+                        else if (Model[i].ContextId != null)
                         {
                             <span>Context</span>
                         }
@@ -45,30 +59,15 @@
                             <span>Product</span>
                         }
                     </td>
-                    <td>
-                        @if (Model[i].ContextId != null)
-                        {
-                            @GetContextName(Model[i].ContextId);
-                        }
-                        else if (Model[i].ProductId != null)
-                        {
-                            @GetProductName(Model[i].ProductId);
-                        }
-                    </td>
-                    <td class="center">
-                        @(Model[i].IsFixedAmount ? "$" + Model[i].DiscountAmount : @Model[i].DiscountPercentage + "%")
+                    <td>@Model[i].AppFeeDiscount</td>
+                    <td>@Model[i].ProductDiscount</td>
+                    <td>@if (Model[i].MonthlyCost == 0){
+                            <span>N/A</span>  }
+                        else{
+                        @Model[i].MonthlyCost}
                     </td>
                     <td style="width:85px">@Model[i].ValidFrom.ToString("dd-MMM-yyyy")</td>
                     <td style="width:85px">@Model[i].ValidUpto.ToString("dd-MMM-yyyy")</td>
-                    <td class="center">
-                        @if(!Model[i].IsSubscription)
-                        {
-                            <i class="icon-ok"></i>
-                        }
-                        else {
-                            <i class="icon-remove"></i>
-                        }
-                    </td>
                 </tr>
             }
         </tbody>
@@ -100,6 +99,9 @@
 
 @section scripts {
     <script type="text/javascript">
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
         $('a.delete').click(function () {
            var confirms = confirm("Are you sure you want to delete the coupon?");
            if (confirms) 

@@ -22,6 +22,12 @@ namespace asi.asicentral.model.store
         [StringLength(1000, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
         public string Description { get; set; }
 
+        [RegularExpression(@"^[0-9]\d*(\.\d+)?$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
+        public string MonthlyCost { get; set; }
+        [RegularExpression(@"^[0-9]\d*(\.\d+)?$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
+        public string AppFeeDiscount { get; set; }
+        [RegularExpression(@"^[0-9]\d*(\.\d+)?$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
+        public string ProductDiscount { get; set; }
         public bool IsSubscription { get; set; }
         public bool IsFixedAmount { get; set; }
         [RegularExpression(@"^[0-9]\d*(\.\d+)?$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
