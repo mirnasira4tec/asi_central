@@ -114,7 +114,9 @@ namespace asi.asicentral.web.model.store
         public decimal SubscriptionCost { get; set; }
         public string SubscriptionFrequency { get; set; }
         public int Quantity { get; set; }
-        public decimal PromotionalDiscount { get; set; }
+        public decimal AppFeeDiscount { get; set; }
+        public decimal ProductDiscount { get; set; }
+        public decimal SubscriptionDiscount { get; set; }
         #endregion
 
         #region Bank information

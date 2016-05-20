@@ -79,7 +79,12 @@ namespace asi.asicentral.web.model.store
             model.ApplicationFeeCost = orderDetail.ApplicationCost;
             model.TaxCost = orderDetail.TaxCost;
             model.ShippingCost = orderDetail.ShippingCost;
-            model.PromotionalDiscount = orderDetail.DiscountAmount;
+            if (orderDetail.Coupon != null)
+            {
+                model.AppFeeDiscount = orderDetail.Coupon.AppFeeDiscount;
+                model.ProductDiscount = orderDetail.Coupon.ProductDiscount;
+                model.SubscriptionDiscount = orderDetail.Product.Cost - orderDetail.Cost;
+            }
             model.TotalCost = order.Total;
             model.OptionId = (orderDetail.OptionId.HasValue) ? orderDetail.OptionId.Value : 0;
 
