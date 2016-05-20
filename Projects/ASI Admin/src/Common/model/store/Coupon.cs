@@ -18,6 +18,9 @@ namespace asi.asicentral.model.store
         public bool IsFixedAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         public int DiscountPercentage { get; set; }
+        public decimal MonthlyCost { get; set; }
+        public decimal AppFeeDiscount { get; set; }
+        public decimal ProductDiscount { get; set; }
         [DataType(DataType.Date)]
         public DateTime ValidFrom { get; set; }
         [DataType(DataType.Date)]
