@@ -90,7 +90,6 @@ namespace asi.asicentral.services
                     var waiveAppFee = false;
                     var firstmonthFree = false;
                     var coupon = orderDetail.Coupon;
-                    var couponError = false;
                     var context = storeService.GetAll<Context>(true).FirstOrDefault(p => p.Id == order.ContextId);
                     var contextProduct = context != null ? context.Products.FirstOrDefault(p => p.Product.Id == orderDetail.Product.Id) : null;
 
@@ -102,35 +101,23 @@ namespace asi.asicentral.services
                         {
                             coupon.CouponCode = coupon.CouponCode.Trim();
 
-                            if (contextProduct != null && coupon.IsFixedAmount)
+                            if (contextProduct != null )
                             {
-                                if (coupon.DiscountAmount == contextProduct.ApplicationCost)
+                                if (coupon.AppFeeDiscount == contextProduct.ApplicationCost)
                                 {
                                     waiveAppFee = true;
                                 }
-                                else if (coupon.DiscountAmount == contextProduct.Cost)
+                                
+                                if (coupon.ProductDiscount == contextProduct.Cost)
                                 {
                                     firstmonthFree = true;
                                 }
-                                else
-                                {
-                                    waiveAppFee = coupon.DiscountAmount >= contextProduct.ApplicationCost;
-                                    firstmonthFree = !waiveAppFee && coupon.DiscountAmount >= contextProduct.Cost ||
-                                                      waiveAppFee && coupon.DiscountAmount >= contextProduct.ApplicationCost + contextProduct.Cost;
-                                }
-
-                                couponError = coupon.DiscountAmount != contextProduct.ApplicationCost &&
-                                              coupon.DiscountAmount != contextProduct.Cost &&
-                                              coupon.DiscountAmount != contextProduct.ApplicationCost + contextProduct.Cost;
 
                                 if (firstmonthFree)
                                 {
                                     mapping = mappings.FirstOrDefault(m => !string.IsNullOrEmpty(m.StoreOption) && m.StoreOption.Trim() == coupon.CouponCode);
                                 }
                             }
-                            else
-                                couponError = true;
-
                         }
                     }
 
@@ -147,19 +134,6 @@ namespace asi.asicentral.services
                     if ( !string.IsNullOrWhiteSpace(asiNumber) && asiNumber.Trim().Length < 7 )
                     {
                         order.Company.ASINumber = asiNumber;
-                    }
-
-                    if( couponError)
-                    {   // send internal email 
-                        var data = new EmailData()
-                        {
-                            Subject = "There is a problem with coupon discount amount for an order from the store to Personify",
-                            EmailBody = string.Format("A new order created in the store ({0}) has been transferred to a Personify "
-                            + "order ({1}). There is problem with coupon discount {2}, the order needs to be looked at. {3}",
-                            order.Id.ToString(), order.BackendReference, coupon.IsFixedAmount ? coupon.DiscountAmount : coupon.DiscountPercentage, EmailData.GetMessageSuffix(url))
-                        };
-
-                        data.SendEmail(emailService);
                     }
                 }
                 else

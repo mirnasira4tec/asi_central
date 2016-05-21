@@ -57,7 +57,6 @@ namespace asi.asicentral.web.Controllers.Store
                     }
                     productToUpdate.CouponCode = couponModel.CouponCode;
                     productToUpdate.Description = couponModel.Description;
-                    productToUpdate.IsSubscription = couponModel.IsSubscription;
                     productToUpdate.ValidFrom = couponModel.ValidFrom;
                     productToUpdate.ValidUpto = couponModel.ValidUpto;
                     productToUpdate.ProductId = couponModel.ProductId;
