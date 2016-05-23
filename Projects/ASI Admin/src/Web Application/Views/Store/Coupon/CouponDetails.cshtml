@@ -17,7 +17,7 @@
     <div id="tabbasic" class="basic-information tab-pane fade in active">
         <fieldset class="company-info-form">
             <legend>Edit/Add Coupons</legend>
-           <span class="field-validation-error"> @Html.ValidationSummary()</span>
+            <span class="field-validation-error">@Html.ValidationSummary()</span>
             @Html.HiddenFor(model => model.Id)
             <span class="label-row">
                 @Html.Label("Coupon Code")
@@ -29,7 +29,7 @@
             </span>
             <span class="label-row" id="trAppFeeDiscount">
                 @Html.Label("Application Discount")
-                @Html.EditorFor(model => model.AppFeeDiscount)<span class="span2 pull-right">@Html.ValidationMessageFor(model => model.AppFeeDiscount)</span>
+                @Html.EditorFor(model => model.AppFeeDiscount)@Html.ValidationMessageFor(model => model.AppFeeDiscount)
             </span>
             <span class="label-row" id="trProductDiscount">
                 @Html.Label("Product Discount")
@@ -37,7 +37,7 @@
             </span>
             <span class="label-row" id="trMonthlyCost">
                 @Html.Label("Monthly subscription Cost")
-                @Html.EditorFor(model => model.MonthlyCost, new { ID = "monthlyCost" })@Html.ValidationMessageFor(model => model.MonthlyCost)
+                @Html.EditorFor(model => model.MonthlyCost)@Html.ValidationMessageFor(model => model.MonthlyCost)
             </span>
             <span class="label-row">
                 @Html.Label("Valid From")
@@ -50,7 +50,7 @@
             </span>
             <span id="Product" class="label-row">
                 @Html.Label("Products")
-                @Html.DropDownListFor(model => model.ProductId, Model.Products, "None", new { @class = "span3", id="Products" })@Html.ValidationMessageFor(model => model.ProductId)
+                @Html.DropDownListFor(model => model.ProductId, Model.Products, "None", new { @class = "span3", id = "Products" })@Html.ValidationMessageFor(model => model.ProductId)
             </span>
             <span id="Context" class="label-row">
                 @Html.Label("Context")
@@ -97,9 +97,9 @@
             startDate = new Date($('#ValidFrom').val());
             startDate.setDate(startDate.getDate(new Date($('#ValidFrom').val())));
             $("#ValidUpto").datepicker('setStartDate', startDate);
-            if ($('#MonthlyCost').val() == '0.00' || $('#MonthlyCost').val() == "") {
+            if (($('#MonthlyCost').val() == '0.00' || $('#MonthlyCost').val() == "") && $('#Id').val() == 0) {
                 $('#MonthlyCost').prop('disabled', true);
-                $('#MonthlyCost').val("");
+                $('#MonthlyCost').val('0.00');
             }
         });
         $(function () {
@@ -116,7 +116,7 @@
                             $('#MonthlyCost').prop('disabled', false);
                         } else {
                             $('#MonthlyCost').prop('disabled', true);
-                            $('#MonthlyCost').val("");
+                            $('#MonthlyCost').val('0.00');
                         }
                     }
                 });
