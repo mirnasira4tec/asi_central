@@ -23,11 +23,11 @@ namespace asi.asicentral.model.store
         public string Description { get; set; }
 
         [RegularExpression(@"^[0-9]\d*(\.\d+)?$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
-        public string MonthlyCost { get; set; }
+        public decimal MonthlyCost { get; set; }
         [RegularExpression(@"^[0-9]\d*(\.\d+)?$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
-        public string AppFeeDiscount { get; set; }
+        public decimal AppFeeDiscount { get; set; }
         [RegularExpression(@"^[0-9]\d*(\.\d+)?$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
-        public string ProductDiscount { get; set; }
+        public decimal ProductDiscount { get; set; }
         public bool IsSubscription { get; set; }
         public bool IsFixedAmount { get; set; }
         [RegularExpression(@"^[0-9]\d*(\.\d+)?$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]

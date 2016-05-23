@@ -50,20 +50,15 @@ namespace asi.asicentral.web.Controllers.Store
                 Coupon couponModel = StoreService.GetAll<Coupon>().Where(item => item.Id == id).FirstOrDefault();
                 if (productToUpdate != null)
                 {
-                    if (Convert.ToDecimal(couponModel.MonthlyCost) + Convert.ToDecimal(couponModel.AppFeeDiscount) + Convert.ToDecimal(couponModel.ProductDiscount) <= 0)
-                    {
-                        ModelState.AddModelError(" ", "Please fill any one of Application Fee Discount, Product Discount and Monthly Subscription Cost fields");
-                        return View("../Store/Coupon/CouponDetails", couponModel);
-                    }
                     productToUpdate.CouponCode = couponModel.CouponCode;
                     productToUpdate.Description = couponModel.Description;
                     productToUpdate.ValidFrom = couponModel.ValidFrom;
                     productToUpdate.ValidUpto = couponModel.ValidUpto;
                     productToUpdate.ProductId = couponModel.ProductId;
                     productToUpdate.ContextId = couponModel.ContextId;
-                    productToUpdate.MonthlyCost = couponModel.MonthlyCost.ToString();
-                    productToUpdate.AppFeeDiscount = couponModel.AppFeeDiscount.ToString();
-                    productToUpdate.ProductDiscount = couponModel.ProductDiscount.ToString();
+                    productToUpdate.MonthlyCost = couponModel.MonthlyCost;
+                    productToUpdate.AppFeeDiscount = couponModel.AppFeeDiscount;
+                    productToUpdate.ProductDiscount = couponModel.ProductDiscount;
                 }
             }
             else
@@ -125,9 +120,18 @@ namespace asi.asicentral.web.Controllers.Store
             if (couponModel.ActionName == "Cancel") return List();
             if (ModelState.IsValid)
             {
-                if ((Convert.ToDecimal(couponModel.MonthlyCost) + Convert.ToDecimal(couponModel.AppFeeDiscount) + Convert.ToDecimal(couponModel.ProductDiscount) <= 0))
+                if (couponModel.MonthlyCost + couponModel.AppFeeDiscount + couponModel.ProductDiscount <= 0)
                 {
-                    ModelState.AddModelError(" ", "Please fill any one of Application Fee Discount, Product Discount and Monthly Subscription Cost fields");
+                    ModelState.AddModelError(" ", "Please fill out at least one of Application Fee Discount, Product Discount and Monthly Subscription Cost");
+                    couponModel.Products = GetSelectedProductList();
+                    couponModel.Contexts = GetSelectedContextList();
+                    couponModel.ValidFrom = DateTime.UtcNow;
+                    couponModel.ValidUpto = DateTime.UtcNow;
+                    return View("../Store/Coupon/CouponDetails", couponModel);
+                }
+                else if (couponModel.ContextId == null &&  couponModel.ProductId == null )
+                {
+                    ModelState.AddModelError(" ", "Please select at least one out of Product and Context");
                     couponModel.Products = GetSelectedProductList();
                     couponModel.Contexts = GetSelectedContextList();
                     couponModel.ValidFrom = DateTime.UtcNow;
@@ -151,9 +155,9 @@ namespace asi.asicentral.web.Controllers.Store
                     coupon.ValidUpto = couponModel.ValidUpto;
                     coupon.ProductId = couponModel.ProductId;
                     coupon.ContextId = couponModel.ContextId;
-                    coupon.MonthlyCost = Convert.ToDecimal(couponModel.MonthlyCost);
-                    coupon.AppFeeDiscount = Convert.ToDecimal(couponModel.AppFeeDiscount);
-                    coupon.ProductDiscount = Convert.ToDecimal(couponModel.ProductDiscount);
+                    coupon.MonthlyCost = couponModel.MonthlyCost;
+                    coupon.AppFeeDiscount = couponModel.AppFeeDiscount;
+                    coupon.ProductDiscount = couponModel.ProductDiscount;
                     coupon.UpdateDate = DateTime.UtcNow;
                     coupon.UpdateSource = "CouponController - SaveCouponDetails";
                     StoreService.SaveChanges();
@@ -181,7 +185,7 @@ namespace asi.asicentral.web.Controllers.Store
                 StoreService.SaveChanges();
             }
 
-            IList<Coupon> couponList = StoreService.GetAll<Coupon>(true).ToList();
+            IList<Coupon> couponList = StoreService.GetAll<Coupon>(true).OrderByDescending(x => x.CreateDate).ToList();
             return View("../Store/Coupon/CouponList", couponList);
 
         }
