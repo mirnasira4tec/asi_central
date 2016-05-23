@@ -40,9 +40,9 @@ namespace asi.asicentral.model.store
             get { return _cost; }
             set
             {
-                if( Coupon != null && Coupon.MonthlyCost > 0)
+                if( Coupon != null && Coupon.MonthlyCost.HasValue )
                 {
-                    _cost = Coupon.MonthlyCost;
+                    _cost = Coupon.MonthlyCost.Value;
                 }
                 else
                 {

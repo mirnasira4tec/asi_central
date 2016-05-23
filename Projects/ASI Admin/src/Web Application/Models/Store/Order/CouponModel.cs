@@ -23,17 +23,14 @@ namespace asi.asicentral.model.store
         public string Description { get; set; }
 
         [RegularExpression(@"^[0-9]\d*(\.\d+)?$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
-        public decimal MonthlyCost { get; set; }
+        public decimal? MonthlyCost { get; set; }
         [RegularExpression(@"^[0-9]\d*(\.\d+)?$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
         public decimal AppFeeDiscount { get; set; }
         [RegularExpression(@"^[0-9]\d*(\.\d+)?$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
         public decimal ProductDiscount { get; set; }
-        public bool IsSubscription { get; set; }
-        public bool IsFixedAmount { get; set; }
-        [RegularExpression(@"^[0-9]\d*(\.\d+)?$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
-        public string DiscountAmount { get; set; }
-        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
-        public string DiscountPercentage { get; set; }
+        public string RateStructure { get; set; }
+        public string GroupName { get; set; }
+        public string RateCode { get; set; }
         [DataType(DataType.Date)]
         public DateTime ValidFrom { get; set; }
         [DataType(DataType.Date)]

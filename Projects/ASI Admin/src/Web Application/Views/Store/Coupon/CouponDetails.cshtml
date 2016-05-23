@@ -27,6 +27,14 @@
                 @Html.Label("Description")
                 @Html.TextAreaFor(model => model.Description) @Html.ValidationMessageFor(model => model.Description)
             </span>
+            <span id="Product" class="label-row">
+                @Html.Label("Products")
+                @Html.DropDownListFor(model => model.ProductId, Model.Products, "None" )@Html.ValidationMessageFor(model => model.ProductId)
+            </span>
+            <span id="Context" class="label-row">
+                @Html.Label("Context")
+                @Html.DropDownListFor(model => model.ContextId, Model.Contexts, "None" )@Html.ValidationMessageFor(model => model.ContextId)
+            </span>
             <span class="label-row" id="trAppFeeDiscount">
                 @Html.Label("Application Discount")
                 @Html.EditorFor(model => model.AppFeeDiscount)@Html.ValidationMessageFor(model => model.AppFeeDiscount)
@@ -46,16 +54,21 @@
             </span>
             <span class="label-row">
                 @Html.Label("Valid To")
-                @Html.EditorFor(model => model.ValidUpto, new { @class = "dateField" })  <i class="icon-remove date-clear" id="ValidUpto"></i><span id="span_Error_ValidDate" class="field-validation-error" style="display: none;">Valid From date should be less than Valid to date.</span>
+                @Html.EditorFor(model => model.ValidUpto, new {@class = "dateField"})  <i class="icon-remove date-clear" id="ValidUpto"></i><span id="span_Error_ValidDate" class="field-validation-error" style="display: none;">Valid From date should be less than Valid to date.</span>
             </span>
-            <span id="Product" class="label-row">
-                @Html.Label("Products")
-                @Html.DropDownListFor(model => model.ProductId, Model.Products, "None", new { @class = "span3", id = "Products" })@Html.ValidationMessageFor(model => model.ProductId)
+            <span class="label-row" id="rateStructure">
+                @Html.Label("Personify Rate Structure")
+                @Html.EditorFor(model => model.RateStructure)
             </span>
-            <span id="Context" class="label-row">
-                @Html.Label("Context")
-                @Html.DropDownListFor(model => model.ContextId, Model.Contexts, "None", new { @class = "span3" })@Html.ValidationMessageFor(model => model.ContextId)
+            <span class="label-row" id="groupName">
+                @Html.Label("Personify Bundle Name")
+                @Html.EditorFor(model => model.GroupName)
             </span>
+            <span class="label-row" id="rateCode">
+                @Html.Label("Personify Rate Code")
+                @Html.EditorFor(model => model.RateCode)
+            </span>
+
         </fieldset>
     </div>
     <footer id="page-completion-navigation">
