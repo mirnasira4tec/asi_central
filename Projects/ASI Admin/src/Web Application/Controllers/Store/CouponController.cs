@@ -1,4 +1,5 @@
 ﻿using asi.asicentral.interfaces;
+using asi.asicentral.model.personify;
 using asi.asicentral.model.store;
 using asi.asicentral.services;
 using StructureMap.Query;
@@ -24,7 +25,7 @@ namespace asi.asicentral.web.Controllers.Store
 
         public ActionResult List()
         {
-            IList<Coupon> couponList = StoreService.GetAll<Coupon>(true).OrderByDescending(x => x.CreateDate).ToList(); 
+            IList<Coupon> couponList = StoreService.GetAll<Coupon>(true).OrderByDescending(x => x.UpdateDate).ToList();
 
             return View("../Store/Coupon/CouponList", couponList);
         }
@@ -59,6 +60,9 @@ namespace asi.asicentral.web.Controllers.Store
                     productToUpdate.MonthlyCost = couponModel.MonthlyCost;
                     productToUpdate.AppFeeDiscount = couponModel.AppFeeDiscount;
                     productToUpdate.ProductDiscount = couponModel.ProductDiscount;
+                    productToUpdate.RateStructure = couponModel.RateStructure;
+                    productToUpdate.GroupName = couponModel.GroupName;
+                    productToUpdate.RateCode = couponModel.RateCode;
                 }
             }
             else
@@ -80,7 +84,7 @@ namespace asi.asicentral.web.Controllers.Store
                 foreach (Context product in contexts)
                 {
                     text = product.Id.ToString() + "-" + product.Name;
-                    contextList.Add(new SelectListItem() { Text = text, Value = product.Id.ToString(), Selected = false });
+                    contextList.Add(new SelectListItem() {Text = text, Value = product.Id.ToString(), Selected = false});
                 }
             }
             return contextList;
@@ -97,88 +101,114 @@ namespace asi.asicentral.web.Controllers.Store
                 foreach (ContextProduct product in products)
                 {
                     text = product.Id.ToString() + "-" + product.Name;
-                    productList.Add(new SelectListItem() { Text = text, Value = product.Id.ToString(), Selected = false });
+                    productList.Add(new SelectListItem() {Text = text, Value = product.Id.ToString(), Selected = false});
                 }
             }
             return productList;
         }
+
         [HttpPost]
-        public JsonResult GetProductName(int id)
+        public JsonResult GetProductName(int productId, int contextId = 0)
         {
-            if (id != 0)
+            JsonResult result = null;
+            if (productId != 0)
             {
-                ContextProduct product = StoreService.GetAll<ContextProduct>(true).Where(detail => detail.Id == id).FirstOrDefault();
-                if(product.IsSubscription)
-                 return Json(true);
+                var product = StoreService.GetAll<ContextProduct>(true).FirstOrDefault(detail => detail.Id == productId);
+                if (product != null)
+                {
+                    result = new JsonResult
+                    {
+                        Data = new
+                        {
+                            IsSubscription = product.IsSubscription,
+                            HasBackEndIntegration = product.HasBackEndIntegration,
+                            ApplicationCost = product.ApplicationCost,
+                            Cost = product.Cost
+                        }
+                    };
+                }
             }
-            return Json(false);
+
+            return result;
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult SaveCouponDetails(CouponModel couponModel)
         {
             if (couponModel.ActionName == "Cancel") return List();
+
+            ContextProduct product = null;
+
             if (ModelState.IsValid)
             {
-                if (couponModel.MonthlyCost + couponModel.AppFeeDiscount + couponModel.ProductDiscount <= 0)
+                if (!couponModel.MonthlyCost.HasValue && couponModel.AppFeeDiscount + couponModel.ProductDiscount <= 0)
                 {
-                    ModelState.AddModelError(" ", "Please fill out at least one of Application Fee Discount, Product Discount and Monthly Subscription Cost");
-                    couponModel.Products = GetSelectedProductList();
-                    couponModel.Contexts = GetSelectedContextList();
-                    couponModel.ValidFrom = DateTime.UtcNow;
-                    couponModel.ValidUpto = DateTime.UtcNow;
-                    return View("../Store/Coupon/CouponDetails", couponModel);
+                    ModelState.AddModelError("Error",
+                        "Please fill out at least one of Application Fee Discount, Product Discount and Monthly Subscription Cost");
                 }
-                else if (couponModel.ContextId == null &&  couponModel.ProductId == null )
+                else if (couponModel.ContextId == null && couponModel.ProductId == null)
                 {
-                    ModelState.AddModelError(" ", "Please select at least one out of Product and Context");
-                    couponModel.Products = GetSelectedProductList();
-                    couponModel.Contexts = GetSelectedContextList();
-                    couponModel.ValidFrom = DateTime.UtcNow;
-                    couponModel.ValidUpto = DateTime.UtcNow;
-                    return View("../Store/Coupon/CouponDetails", couponModel);
+                    ModelState.AddModelError("Error", "Please select at least one out of Product and Context");
                 }
-                else
+                else if (couponModel.ProductId.HasValue && couponModel.ProductId.Value != 0)
                 {
-                    Coupon coupon = StoreService.GetAll<Coupon>().Where(item => item.Id == couponModel.Id).FirstOrDefault();
-                    if (coupon == null)
+                    product =
+                        StoreService.GetAll<ContextProduct>(true)
+                            .FirstOrDefault(detail => detail.Id == couponModel.ProductId.Value);
+                    if (product != null && product.HasBackEndIntegration)
                     {
-                        coupon = new Coupon();
-                        coupon.CreateDate = DateTime.UtcNow;
-                        StoreService.Add<Coupon>(coupon);
+                        if (
+                            !ValidatePersonifyRateCode(couponModel.RateStructure, couponModel.GroupName,
+                                couponModel.RateCode))
+                        {
+                            ModelState.AddModelError("Error", "Invalid Rate Structure, Group Name or Rate Code");
+                        }
                     }
-
-
-                    coupon.CouponCode = couponModel.CouponCode;
-                    coupon.Description = couponModel.Description;
-                    coupon.ValidFrom = couponModel.ValidFrom;
-                    coupon.ValidUpto = couponModel.ValidUpto;
-                    coupon.ProductId = couponModel.ProductId;
-                    coupon.ContextId = couponModel.ContextId;
-                    coupon.MonthlyCost = couponModel.MonthlyCost;
-                    coupon.AppFeeDiscount = couponModel.AppFeeDiscount;
-                    coupon.ProductDiscount = couponModel.ProductDiscount;
-                    coupon.UpdateDate = DateTime.UtcNow;
-                    coupon.UpdateSource = "CouponController - SaveCouponDetails";
-                    StoreService.SaveChanges();
-                    IList<Coupon> couponList = StoreService.GetAll<Coupon>(true).OrderByDescending(x => x.CreateDate).ToList();
-                    return View("../Store/Coupon/CouponList", couponList);
                 }
+            }
+
+            if (!ModelState.IsValid || ModelState.Values.SelectMany(m => m.Errors).ToList().Any())
+            {
+                couponModel.Products = GetSelectedProductList();
+                couponModel.Contexts = GetSelectedContextList();
             }
             else
             {
-                if (couponModel != null)
+                var coupon = StoreService.GetAll<Coupon>().FirstOrDefault(item => item.Id == couponModel.Id);
+                if (coupon == null)
                 {
-                    couponModel.Products = GetSelectedProductList();
-                    couponModel.Contexts = GetSelectedContextList();
+                    coupon = new Coupon();
+                    coupon.CreateDate = DateTime.UtcNow;
+                    StoreService.Add(coupon);
                 }
-                return View("../Store/Coupon/CouponDetails", couponModel);
+
+                coupon.CouponCode = couponModel.CouponCode.Trim();
+                coupon.Description = couponModel.Description;
+                coupon.ValidFrom = couponModel.ValidFrom;
+                coupon.ValidUpto = couponModel.ValidUpto;
+                coupon.ProductId = couponModel.ProductId;
+                coupon.ContextId = couponModel.ContextId;
+                coupon.MonthlyCost = couponModel.MonthlyCost;
+                coupon.AppFeeDiscount = couponModel.AppFeeDiscount;
+                coupon.ProductDiscount = couponModel.ProductDiscount;
+                coupon.RateStructure = couponModel.RateStructure.Trim();
+                coupon.GroupName = couponModel.GroupName.Trim();
+                coupon.RateCode = couponModel.RateCode.Trim();
+                coupon.UpdateDate = DateTime.UtcNow;
+                coupon.UpdateSource = "CouponController - SaveCouponDetails";
+                StoreService.SaveChanges();
+                UpdatePersonifyMappingTbl(coupon, product);
+                var couponList = StoreService.GetAll<Coupon>(true).OrderByDescending(x => x.UpdateDate).ToList();
+                return View("../Store/Coupon/CouponList", couponList);
             }
+
+            return View("../Store/Coupon/CouponDetails", couponModel);
         }
 
         public ActionResult Delete(int id)
         {
-            Coupon coupon = StoreService.GetAll<Coupon>().Where(item => item.Id == id).FirstOrDefault();
+            Coupon coupon = StoreService.GetAll<Coupon>().FirstOrDefault(item => item.Id == id);
             if (coupon != null)
             {
                 StoreService.Delete<Coupon>(coupon);
@@ -187,9 +217,65 @@ namespace asi.asicentral.web.Controllers.Store
 
             IList<Coupon> couponList = StoreService.GetAll<Coupon>(true).OrderByDescending(x => x.CreateDate).ToList();
             return View("../Store/Coupon/CouponList", couponList);
-
         }
 
+        private bool ValidatePersonifyRateCode(string rateStructure, string groupName, string rateCode)
+        {
+            var isValid = string.IsNullOrEmpty(rateStructure) || string.IsNullOrEmpty(groupName) ||
+                          string.IsNullOrEmpty(rateCode);
+            if (isValid)
+            {
+                // validate against Personify WS
+            }
 
+            return isValid;
+        }
+
+        private void UpdatePersonifyMappingTbl(Coupon coupon, ContextProduct product)
+        {
+            if (string.IsNullOrEmpty(coupon.RateStructure))
+                return;
+
+            var mappings = StoreService.GetAll<PersonifyMapping>()
+                .Where( map => map.StoreContext == null && map.StoreProduct == coupon.ProductId && map.StoreOption == null).ToList();
+
+            if (mappings.Any())
+            {
+                var existMappings = StoreService.GetAll<PersonifyMapping>()
+                    .Where(map => map.StoreOption == coupon.CouponCode).ToList();
+
+                // delete existing rows
+                for (int i = 0; i < existMappings.Count; i++)
+                {
+                    StoreService.Delete(existMappings[i]);
+                }
+
+                // need to find out all rows needed for the product
+                foreach (var m in mappings)
+                {
+                    var productMapping = new PersonifyMapping()
+                    {
+                        StoreContext = coupon.ContextId,
+                        StoreProduct = coupon.ProductId,
+                        StoreOption = coupon.CouponCode,
+                        PersonifyProduct = m.PersonifyProduct,
+                        CreateDateUTC = DateTime.UtcNow,
+                        UpdateDateUTC = DateTime.UtcNow,
+                        UpdateSource = "Asicentral.store"
+                    };
+
+                    if (m.PersonifyRateStructure == "Bundle" || !string.IsNullOrEmpty(m.PersonifyBundle))
+                    {
+                        productMapping.PersonifyBundle = coupon.GroupName;
+                        productMapping.PersonifyRateStructure = coupon.RateStructure;
+                        productMapping.PersonifyRateCode = coupon.RateCode;
+                    }
+                    else if(product.IsMembership() )
+                    {
+                        
+                    }
+                }
+            }
+        }
     }
 }
