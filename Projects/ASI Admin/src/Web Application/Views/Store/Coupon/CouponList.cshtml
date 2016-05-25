@@ -5,9 +5,29 @@
 @using asi.asicentral.model.store;
 @using asi.asicentral.services;
 @using asi.asicentral.interfaces;
-@model  IList<asi.asicentral.model.store.Coupon>
+@model CouponModel
 
-<h2>Coupons</h2>
+<h1>List of Coupons</h1>
+<div class="tabbable tabs-below small">
+    <h5>Search by</h5>
+    <div class="tab-content" id="formtab-content">
+            <div class="well">
+                @using (Html.BeginForm("List", "../Coupon/List", FormMethod.Get, new { @class = "form-inline row-fluid well" }))
+                {     
+                    <div>
+                        <label for="couponCode">Coupon Code</label>
+                        <input name="couponCode" type="text" id="couponCode" value="@Model.CouponCode" />
+                         <label for="MemberType">Member Type</label>
+                        @Html.DropDownListFor(model => model.MemberType, new SelectList(asi.asicentral.model.store.CouponModel.GetMemberTypes(), "Value", "Text"), new { name = "MemberType", value = "@Model.MemberType" })
+                    <div class="span2 pull-right"> <input type="submit" value="Search" class="btn"></div>
+                        <div class="clearfix"></div><br/>
+                         <input name="chkValidCoupon" type="checkbox"  checked="@Model.chkValidCoupon" />
+                        <label for="HasValidCoupon">Valid Coupon Only</label>
+                    </div>
+                }
+        </div>
+    </div>
+</div>
 @using (Html.BeginForm())
 {
    
@@ -29,47 +49,49 @@
             </tr>
         </thead>
         <tbody>
-            @for (int i = 0; i < Model.Count; i++)
-            {
+             @foreach (var coupon in Model.Coupons)
+             {
                 <tr>
-                    <td><a class="delete" id="@Model[i].CouponCode" href="/store/Coupon/Delete?id=@Model[i].Id"><i class="icon-trash"></i></a></td>
-                    <td ><a href="/store/Coupon/Edit?id=@Model[i].Id" data-toggle="tooltip" data-placement="right" title="@if (Model[i].ContextId != null && Model[i].ProductId != null)
-                        {
-                         <text>Context: </text>@GetContextName(Model[i].ContextId); <text>Product: </text>@GetProductName(Model[i].ProductId);
-                        }
-                        else if (Model[i].ContextId != null)
-                        {
-                            @GetContextName(Model[i].ContextId);
-                        }
-                        else if (Model[i].ProductId != null)
-                        {
-                            @GetProductName(Model[i].ProductId);
-                        }">@Model[i].CouponCode</a></td>
+                    <td><a class="delete" id="@coupon.CouponCode" href="/store/Coupon/Delete?id=@coupon.Id"><i class="icon-trash"></i></a></td>
+                    <td ><a href="/store/Coupon/Edit?id=@coupon.Id" data-toggle="tooltip" data-placement="right" title="@if (coupon.ContextId != null && coupon.ProductId != null)
+                          {
+                         <text>Context: </text>@GetContextName(coupon.ContextId); <text>Product: </text>@GetProductName(coupon.ProductId);
+                          }
+                          else if (coupon.ContextId != null)
+                          {
+                            @GetContextName(coupon.ContextId);
+                          }
+                          else if (coupon.ProductId != null)
+                          {
+                            @GetProductName(coupon.ProductId);
+                          }">@coupon.CouponCode</a></td>
                     <td>
-                        @if (Model[i].ContextId != null && Model[i].ProductId != null)
+                        @if (coupon.ContextId != null && coupon.ProductId != null)
                         {
                             <span>Context/Product</span>
                         }
-                        else if (Model[i].ContextId != null)
+                        else if (coupon.ContextId != null)
                         {
                             <span>Context</span>
                         }
-                        else if (Model[i].ProductId != null)
+                        else if (coupon.ProductId != null)
                         {
                             <span>Product</span>
                         }
                     </td>
-                    <td>@Model[i].AppFeeDiscount</td>
-                    <td>@Model[i].ProductDiscount</td>
-                    <td>@if (Model[i].MonthlyCost == 0){
+                    <td>@coupon.AppFeeDiscount</td>
+                    <td>@coupon.ProductDiscount</td>
+                    <td>@if (coupon.MonthlyCost == 0)
+                        {
                             <span>N/A</span>  }
-                        else{
-                        @Model[i].MonthlyCost}
+                        else
+                        {
+                        @coupon.MonthlyCost}
                     </td>
-                    <td style="width:85px">@Model[i].ValidFrom.ToString("dd-MMM-yyyy")</td>
-                    <td style="width:85px">@Model[i].ValidUpto.ToString("dd-MMM-yyyy")</td>
+                    <td style="width:85px">@coupon.ValidFrom.ToString("dd-MMM-yyyy")</td>
+                    <td style="width:85px">@coupon.ValidUpto.ToString("dd-MMM-yyyy")</td>
                 </tr>
-            }
+             }
         </tbody>
     </table>
     @functions{
