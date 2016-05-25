@@ -28,8 +28,11 @@ namespace asi.asicentral.model.store
         public decimal AppFeeDiscount { get; set; }
         [RegularExpression(@"^[0-9]\d*(\.\d+)?$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
         public decimal ProductDiscount { get; set; }
+        [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
         public string RateStructure { get; set; }
+        [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
         public string GroupName { get; set; }
+        [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength")]
         public string RateCode { get; set; }
         [DataType(DataType.Date)]
         public DateTime ValidFrom { get; set; }

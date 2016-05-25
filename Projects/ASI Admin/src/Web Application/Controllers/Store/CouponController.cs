@@ -2,6 +2,7 @@
 using asi.asicentral.model.personify;
 using asi.asicentral.model.store;
 using asi.asicentral.services;
+using asi.asicentral.util.store;
 using StructureMap.Query;
 using System;
 using System.Collections.Generic;
@@ -108,28 +109,44 @@ namespace asi.asicentral.web.Controllers.Store
         }
 
         [HttpPost]
-        public JsonResult GetProductName(int productId, int contextId = 0)
+        public JsonResult GetProductInfo(int productId, int contextId)
         {
-            JsonResult result = null;
+            var isSubscription = false;
+            var hasBackEndIntegration = false;
+            var applicationCost = 0M;
+            var cost = 0M;
+
             if (productId != 0)
             {
-                var product = StoreService.GetAll<ContextProduct>(true).FirstOrDefault(detail => detail.Id == productId);
+                var product = StoreService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == productId );
                 if (product != null)
                 {
-                    result = new JsonResult
-                    {
-                        Data = new
-                        {
-                            IsSubscription = product.IsSubscription,
-                            HasBackEndIntegration = product.HasBackEndIntegration,
-                            ApplicationCost = product.ApplicationCost,
-                            Cost = product.Cost
-                        }
-                    };
+                    isSubscription = product.IsSubscription;
+                    hasBackEndIntegration = product.HasBackEndIntegration;
+                    applicationCost = product.ApplicationCost;
+                    cost = product.Cost;
                 }
             }
 
-            return result;
+            if (contextId != 0)
+            {
+                var context = StoreService.GetAll<Context>(true)
+                                                 .FirstOrDefault(c => c.Id == contextId );
+                if (context != null)
+                {
+                    var contextProduct = context.Products.FirstOrDefault(p => p.Product.Id == productId);
+                    if (contextProduct != null)
+                    {
+                        applicationCost = contextProduct.ApplicationCost;
+                        cost = contextProduct.Cost;
+                    }
+                }
+            }
+
+           return new JsonResult{   
+                                   Data = new {  IsSubscription = isSubscription, HasBackEndIntegration = hasBackEndIntegration,
+                                                 ApplicationCost = applicationCost, Cost = cost } 
+                                };
         }
 
         [HttpPost]
@@ -221,8 +238,8 @@ namespace asi.asicentral.web.Controllers.Store
 
         private bool ValidatePersonifyRateCode(string rateStructure, string groupName, string rateCode)
         {
-            var isValid = string.IsNullOrEmpty(rateStructure) || string.IsNullOrEmpty(groupName) ||
-                          string.IsNullOrEmpty(rateCode);
+            var isValid = !string.IsNullOrEmpty(rateStructure) && !string.IsNullOrEmpty(groupName) &&
+                          !string.IsNullOrEmpty(rateCode);
             if (isValid)
             {
                 // validate against Personify WS
@@ -236,6 +253,7 @@ namespace asi.asicentral.web.Controllers.Store
             if (string.IsNullOrEmpty(coupon.RateStructure))
                 return;
 
+            // get all personify bundle/products for the product
             var mappings = StoreService.GetAll<PersonifyMapping>()
                 .Where( map => map.StoreContext == null && map.StoreProduct == coupon.ProductId && map.StoreOption == null).ToList();
 
@@ -259,22 +277,38 @@ namespace asi.asicentral.web.Controllers.Store
                         StoreProduct = coupon.ProductId,
                         StoreOption = coupon.CouponCode,
                         PersonifyProduct = m.PersonifyProduct,
+                        PersonifyRateStructure = m.PersonifyRateStructure,
+                        PersonifyRateCode = m.PersonifyRateCode,
+                        PersonifyBundle = m.PersonifyBundle,
                         CreateDateUTC = DateTime.UtcNow,
                         UpdateDateUTC = DateTime.UtcNow,
-                        UpdateSource = "Asicentral.store"
+                        UpdateSource = "Store"
                     };
 
                     if (m.PersonifyRateStructure == "Bundle" || !string.IsNullOrEmpty(m.PersonifyBundle))
-                    {
+                    {   // membership bundle or package
                         productMapping.PersonifyBundle = coupon.GroupName;
-                        productMapping.PersonifyRateStructure = coupon.RateStructure;
                         productMapping.PersonifyRateCode = coupon.RateCode;
                     }
-                    else if(product.IsMembership() )
+                    else if( m.PersonifyProduct.HasValue)
                     {
-                        
+                        if (Helper.FREE_MONTH_RATECODES.Keys.Contains(m.PersonifyProduct.Value) &&
+                            (coupon.MonthlyCost.HasValue && coupon.ProductDiscount == coupon.MonthlyCost.Value) ||
+                            (!coupon.MonthlyCost.HasValue && coupon.ProductDiscount == product.Cost))
+                        { // bolt on products
+                            productMapping.PersonifyRateCode = Helper.FREE_MONTH_RATECODES[m.PersonifyProduct.Value];
+                        }
+                        else if (Helper.WAIVE_APP_FEE_RATECODES.Keys.Contains(m.PersonifyProduct.Value) &&
+                                 coupon.AppFeeDiscount == product.ApplicationCost)
+                        {
+                            productMapping.PersonifyRateCode = Helper.WAIVE_APP_FEE_RATECODES[m.PersonifyProduct.Value];
+                        }
                     }
+
+                    StoreService.Add(m);
                 }
+
+                StoreService.SaveChanges();
             }
         }
     }

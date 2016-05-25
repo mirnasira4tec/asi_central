@@ -29,7 +29,7 @@
             </span>
             <span id="Product" class="label-row">
                 @Html.Label("Products")
-                @Html.DropDownListFor(model => model.ProductId, Model.Products, "None", new {id = "Products"})@Html.ValidationMessageFor(model => model.ProductId)
+                @Html.DropDownListFor(model => model.ProductId, Model.Products, "None")@Html.ValidationMessageFor(model => model.ProductId)
             </span>
             <span id="Context" class="label-row">
                 @Html.Label("Context")
@@ -62,17 +62,14 @@
                 <span class="label-row" id="rateStructure">
                     @Html.Label("Personify Rate Structure")
                     @Html.EditorFor(model => model.RateStructure)
-                    <span id="span_Error_rateStructure" class="field-validation-error personifyError" style="display: none;">Required</span>
                 </span>
                 <span class="label-row" id="groupName">
                     @Html.Label("Personify Bundle Name")
                     @Html.EditorFor(model => model.GroupName)
-                    <span id="span_Error_groupName" class="field-validation-error personifyError" style="display: none;">Required</span>
                 </span>
                 <span class="label-row" id="rateCode">
                     @Html.Label("Personify Rate Code")
                     @Html.EditorFor(model => model.RateCode)
-                    <span id="span_Error_rateCode" class="field-validation-error personifyError" style="display: none;">Required</span>
                 </span>
             </div>
         </fieldset>
@@ -120,10 +117,12 @@
             updateProductInfo();
         });
 
-        $(function() {
-            $("#Products").change(function() {
-                updateProductInfo();
-            });
+        $("#ProductId").change(function() {
+            updateProductInfo();
+        });
+
+        $("#ContextId").change(function() {
+            updateProductInfo();
         });
 
         $('#AppFeeDiscount').on('input', function() {
@@ -148,17 +147,19 @@
             if( $('.field-validation-error:visible').length) {
                 e.preventDefault();
             }
+
         });
 
         function updateProductInfo() {
-            var productId = $('#Products').val();
+            var productId = $('#ProductId').val();
+            var contextId = $('#ContextId').val();
             var isSubscription = false;
             var hasBackendFlag = 'false';
             var appFee = '0';
             var cost = '0';
             if (productId != '0' || contextId != '0') {
                 $.ajax({
-                    url: '/Coupon/GetProductName?id=' + productId,
+                    url: '/Coupon/GetProductInfo?productId=' + productId + '&contextId=' + contextId,
                     dataType: 'json',
                     type: "POST",
                     async: false,
