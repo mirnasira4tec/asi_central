@@ -621,6 +621,11 @@ namespace asi.asicentral.services
             return PersonifyClient.GetCompanyAsiNumber(masterCustomerId, subCustomerId);
         }
 
+        public bool ValidateRateCode(string groupName, string rateStructure, string rateCode)
+        {
+            return PersonifyClient.ValidateRateCode(groupName, rateStructure, rateCode);
+        }
+
  		private static string GetCountryCode(string country)
 		{
 			string result = null;

@@ -48,6 +48,7 @@
             <span class="label-row" id="trMonthlyCost">
                 @Html.Label("Monthly subscription Cost")
                 @Html.EditorFor(model => model.MonthlyCost, new {id = "monthlyCost"})@Html.ValidationMessageFor(model => model.MonthlyCost)
+                <span id="span_Error_monthlyCost" class="field-validation-error" style="display: none;">Amount exceeds original cost</span>
             </span>
             <span class="label-row">
                 @Html.Label("Valid From")
@@ -61,7 +62,7 @@
             <div id="personifyCtrl">
                 <span class="label-row" id="rateStructure">
                     @Html.Label("Personify Rate Structure")
-                    @Html.EditorFor(model => model.RateStructure)
+                    @Html.TextBoxFor(model => model.RateStructure, new { @readonly = "readonly" })
                 </span>
                 <span class="label-row" id="groupName">
                     @Html.Label("Personify Bundle Name")
@@ -136,18 +137,33 @@
 
         $('#ProductDiscount').on('input', function() {
             var discount = $(this).val();
-            if (discount > $('#productInfo').data('productCost')) {
+            var actualCost = $('#productInfo').data('productCost');
+            if ($('#MonthlyCost:visible').length && $('#MonthlyCost').val().length ) {
+                actualCost = $('#MonthlyCost').val();
+            }
+
+            if (discount > actualCost ) {
                 $('#span_Error_productDiscount').show();
             } else {
                 $('#span_Error_productDiscount').hide();
             }
+            updatePersonifyCtr();
+        });
+
+        $('#MonthlyCost').on('input', function () {
+            var monthlyCost = $(this).val();
+            if (monthlyCost > $('#productInfo').data('productCost')) {
+                $('#span_Error_monthlyCost').show();
+            } else {
+                $('#span_Error_monthlyCost').hide();
+            }
+            updatePersonifyCtr();
         });
 
         $('#couponForm').on('submit', function (e) {
             if( $('.field-validation-error:visible').length) {
                 e.preventDefault();
             }
-
         });
 
         function updateProductInfo() {
@@ -157,6 +173,8 @@
             var hasBackendFlag = 'false';
             var appFee = '0';
             var cost = '0';
+            if (productId == '') productId = 0;
+            if (contextId == '') contextId = 0;
             if (productId != '0' || contextId != '0') {
                 $.ajax({
                     url: '/Coupon/GetProductInfo?productId=' + productId + '&contextId=' + contextId,
@@ -175,21 +193,41 @@
 
             $('#MonthlyCost').prop('disabled', !isSubscription);
             $('#AppFeeDiscount').prop('disabled', appFee <= 0);
-            $('#RateStructure').prop('disabled', !hasBackendFlag);
-            $('#GroupName').prop('disabled', !hasBackendFlag);
-            $('#RateCode').prop('disabled', !hasBackendFlag);
 
             if (!isSubscription) {
                 $('#MonthlyCost').val("");
             }
-            if (!hasBackendFlag) {
-                $('#RateStructure').val("");
-                $('#GroupName').val("");
-                $('#RateCode').val("");
-            }
+
+            $('#productInfo').data('isSubscription', isSubscription);
             $('#productInfo').data('hasBackendFlag', hasBackendFlag);
             $('#productInfo').data('applicationCost', appFee);
             $('#productInfo').data('productCost', cost);
+
+            updatePersonifyCtr();
+        }
+
+        function updatePersonifyCtr() {
+            var enable = $('#productInfo').data('hasBackendFlag');
+            if (enable) {
+                var productDiscount = $('#ProductDiscount').val();
+                var monthlyCost = $('#MonthlyCost').val();
+
+                if (monthlyCost != '') {
+                    enable = monthlyCost < $('#productInfo').data('productCost') || monthlyCost == productDiscount;
+                } else if( productDiscount != '') {
+                    enable = productDiscount == $('#productInfo').data('productCost');
+                }
+
+            } else {
+                $('#GroupName').val("");
+                $('#RateCode').val("");
+            }
+
+            if (enable) {
+                $('#personifyCtrl').show();
+            } else {
+                $('#personifyCtrl').hide();
+            }
         }
     </script>
 }

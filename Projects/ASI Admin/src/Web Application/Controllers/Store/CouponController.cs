@@ -15,12 +15,11 @@ namespace asi.asicentral.web.Controllers.Store
     public class CouponController : Controller
     {
         public IStoreService StoreService { get; set; }
-        //
-        // GET: /Coupon/
+        public IBackendService BackendService { get; set; }
 
         public ActionResult Index()
         {
-            return View();
+            return List();
         }
 
 
@@ -34,6 +33,7 @@ namespace asi.asicentral.web.Controllers.Store
         public ActionResult Add()
         {
             CouponModel productToUpdate = new CouponModel();
+            productToUpdate.RateStructure = "BUNDLE";
             productToUpdate.Products = GetSelectedProductList();
             productToUpdate.Contexts = GetSelectedContextList();
             productToUpdate.ValidFrom = DateTime.UtcNow;
@@ -61,7 +61,7 @@ namespace asi.asicentral.web.Controllers.Store
                     productToUpdate.MonthlyCost = couponModel.MonthlyCost;
                     productToUpdate.AppFeeDiscount = couponModel.AppFeeDiscount;
                     productToUpdate.ProductDiscount = couponModel.ProductDiscount;
-                    productToUpdate.RateStructure = couponModel.RateStructure;
+                    productToUpdate.RateStructure = !string.IsNullOrEmpty(couponModel.RateStructure) ? couponModel.RateStructure : "BUNDLE";
                     productToUpdate.GroupName = couponModel.GroupName;
                     productToUpdate.RateCode = couponModel.RateCode;
                 }
@@ -170,16 +170,16 @@ namespace asi.asicentral.web.Controllers.Store
                 }
                 else if (couponModel.ProductId.HasValue && couponModel.ProductId.Value != 0)
                 {
-                    product =
-                        StoreService.GetAll<ContextProduct>(true)
-                            .FirstOrDefault(detail => detail.Id == couponModel.ProductId.Value);
-                    if (product != null && product.HasBackEndIntegration)
+                    product = StoreService.GetAll<ContextProduct>(true)
+                                          .FirstOrDefault(detail => detail.Id == couponModel.ProductId.Value);
+                    if (product != null && product.HasBackEndIntegration && 
+                        ( couponModel.MonthlyCost.HasValue || couponModel.ProductDiscount == product.Cost) )
                     {
                         if (
                             !ValidatePersonifyRateCode(couponModel.RateStructure, couponModel.GroupName,
                                 couponModel.RateCode))
                         {
-                            ModelState.AddModelError("Error", "Invalid Rate Structure, Group Name or Rate Code");
+                            ModelState.AddModelError("Error", "Empty or Invalid Rate Structure, Group Name or Rate Code");
                         }
                     }
                 }
@@ -242,7 +242,7 @@ namespace asi.asicentral.web.Controllers.Store
                           !string.IsNullOrEmpty(rateCode);
             if (isValid)
             {
-                // validate against Personify WS
+                isValid = BackendService.ValidateRateCode(groupName, rateStructure, rateCode);
             }
 
             return isValid;
@@ -253,62 +253,78 @@ namespace asi.asicentral.web.Controllers.Store
             if (string.IsNullOrEmpty(coupon.RateStructure))
                 return;
 
-            // get all personify bundle/products for the product
-            var mappings = StoreService.GetAll<PersonifyMapping>()
-                .Where( map => map.StoreContext == null && map.StoreProduct == coupon.ProductId && map.StoreOption == null).ToList();
-
-            if (mappings.Any())
+            try
             {
-                var existMappings = StoreService.GetAll<PersonifyMapping>()
-                    .Where(map => map.StoreOption == coupon.CouponCode).ToList();
+                // get all personify bundle/products for the product
+                var mappings = StoreService.GetAll<PersonifyMapping>()
+                    .Where(map => map.StoreContext == null && map.StoreProduct == coupon.ProductId).ToList();
 
-                // delete existing rows
-                for (int i = 0; i < existMappings.Count; i++)
-                {
-                    StoreService.Delete(existMappings[i]);
-                }
+                mappings = mappings.FindAll(m => string.IsNullOrEmpty(m.StoreOption));
 
-                // need to find out all rows needed for the product
-                foreach (var m in mappings)
+                if (mappings.Any())
                 {
-                    var productMapping = new PersonifyMapping()
+                    var existMappings = StoreService.GetAll<PersonifyMapping>()
+                        .Where(map => map.StoreOption == coupon.CouponCode).ToList();
+
+                    // delete existing rows
+                    for (int i = 0; i < existMappings.Count; i++)
                     {
-                        StoreContext = coupon.ContextId,
-                        StoreProduct = coupon.ProductId,
-                        StoreOption = coupon.CouponCode,
-                        PersonifyProduct = m.PersonifyProduct,
-                        PersonifyRateStructure = m.PersonifyRateStructure,
-                        PersonifyRateCode = m.PersonifyRateCode,
-                        PersonifyBundle = m.PersonifyBundle,
-                        CreateDateUTC = DateTime.UtcNow,
-                        UpdateDateUTC = DateTime.UtcNow,
-                        UpdateSource = "Store"
-                    };
-
-                    if (m.PersonifyRateStructure == "Bundle" || !string.IsNullOrEmpty(m.PersonifyBundle))
-                    {   // membership bundle or package
-                        productMapping.PersonifyBundle = coupon.GroupName;
-                        productMapping.PersonifyRateCode = coupon.RateCode;
+                        StoreService.Delete(existMappings[i]);
                     }
-                    else if( m.PersonifyProduct.HasValue)
+
+                    // need to find out all rows needed for the product
+                    foreach (var m in mappings)
                     {
-                        if (Helper.FREE_MONTH_RATECODES.Keys.Contains(m.PersonifyProduct.Value) &&
-                            (coupon.MonthlyCost.HasValue && coupon.ProductDiscount == coupon.MonthlyCost.Value) ||
-                            (!coupon.MonthlyCost.HasValue && coupon.ProductDiscount == product.Cost))
-                        { // bolt on products
-                            productMapping.PersonifyRateCode = Helper.FREE_MONTH_RATECODES[m.PersonifyProduct.Value];
-                        }
-                        else if (Helper.WAIVE_APP_FEE_RATECODES.Keys.Contains(m.PersonifyProduct.Value) &&
-                                 coupon.AppFeeDiscount == product.ApplicationCost)
+                        var productMapping = new PersonifyMapping()
                         {
-                            productMapping.PersonifyRateCode = Helper.WAIVE_APP_FEE_RATECODES[m.PersonifyProduct.Value];
+                            Identifier = Guid.NewGuid(),
+                            StoreContext = coupon.ContextId,
+                            StoreOption = coupon.CouponCode,
+                            StoreProduct = m.StoreProduct,
+                            PaySchedule = m.PaySchedule,
+                            ClassCode = m.ClassCode,
+                            PersonifyProduct = m.PersonifyProduct,
+                            PersonifyRateStructure = m.PersonifyRateStructure,
+                            PersonifyRateCode = m.PersonifyRateCode,
+                            PersonifyBundle = m.PersonifyBundle,
+                            CreateUserUTC = "Store",
+                            ESBSendGlag = m.ESBSendGlag,
+                            NewAsiNumFlag = m.NewAsiNumFlag,
+                            NotifyByEmailFlag = m.NotifyByEmailFlag,
+                            CreateDateUTC = DateTime.UtcNow,
+                            UpdateDateUTC = DateTime.UtcNow,
+                            UpdateSource = "Store"
+                        };
+
+                        if (m.PersonifyRateStructure == "Bundle" || !string.IsNullOrEmpty(m.PersonifyBundle))
+                        {   // membership bundle or package
+                            productMapping.PersonifyBundle = coupon.GroupName;
+                            productMapping.PersonifyRateCode = coupon.RateCode;
                         }
+                        else if (m.PersonifyProduct.HasValue)
+                        {
+                            if (Helper.FREE_MONTH_RATECODES.Keys.Contains(m.PersonifyProduct.Value) &&
+                                (coupon.MonthlyCost.HasValue && coupon.ProductDiscount == coupon.MonthlyCost.Value) ||
+                                (!coupon.MonthlyCost.HasValue && coupon.ProductDiscount == product.Cost))
+                            { // bolt on products
+                                productMapping.PersonifyRateCode = Helper.FREE_MONTH_RATECODES[m.PersonifyProduct.Value];
+                            }
+                            else if (Helper.WAIVE_APP_FEE_RATECODES.Keys.Contains(m.PersonifyProduct.Value) &&
+                                     coupon.AppFeeDiscount == product.ApplicationCost)
+                            {
+                                productMapping.PersonifyRateCode = Helper.WAIVE_APP_FEE_RATECODES[m.PersonifyProduct.Value];
+                            }
+                        }
+
+                        StoreService.Add(productMapping);
                     }
 
-                    StoreService.Add(m);
+                    StoreService.SaveChanges();
                 }
-
-                StoreService.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
             }
         }
     }
