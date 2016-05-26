@@ -5,7 +5,7 @@
 @using asi.asicentral.model.store;
 @using asi.asicentral.services;
 @using asi.asicentral.interfaces;
-@model CouponModel
+@model CouponListModel
 
 <h1>List of Coupons</h1>
 <div class="tabbable tabs-below small">
@@ -18,11 +18,11 @@
                         <label for="couponCode">Coupon Code</label>
                         <input name="couponCode" type="text" id="couponCode" value="@Model.CouponCode" />
                          <label for="MemberType">Member Type</label>
-                        @Html.DropDownListFor(model => model.MemberType, new SelectList(asi.asicentral.model.store.CouponModel.GetMemberTypes(), "Value", "Text"), new { name = "MemberType", value = "@Model.MemberType" })
+                        @Html.DropDownListFor(model => model.MemberType, new SelectList(asi.asicentral.model.store.CouponListModel.GetMemberTypes(), "Value", "Text"), new { name = "MemberType", value = "@Model.MemberType" })
                     <div class="span2 pull-right"> <input type="submit" value="Search" class="btn"></div>
                         <div class="clearfix"></div><br/>
-                         <input name="chkValidCoupon" type="checkbox"  checked="@Model.chkValidCoupon" />
-                        <label for="HasValidCoupon">Valid Coupon Only</label>
+                         <input name="showValidOnly" type="checkbox"  checked="@Model.showValidOnly" value="true" />
+                        <label for="showValidOnly">Valid Coupon Only</label>
                     </div>
                 }
         </div>
