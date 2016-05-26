@@ -164,23 +164,23 @@
 
         $('#couponForm').on('submit', function (e) {
             e.preventDefault();
-            var preventDefault = false;
+            var submit = true;
             if ($('.field-validation-error:visible').length) {
-                preventDefault = true;
+                submit = false;
             }
             if ($('#personifyCtrl:visible').length) {
                 if( $('#GroupName').val() == '' )
                 {
                     $('#Error_GroupName').show();
-                    preventDefault = true;
+                    submit = false;
                 }
                 if ($('#RateCode').val() == '') {
                     $('#Error_RateCode').show();
-                    preventDefault = true;
+                    submit = false;
                 }
             }
 
-            if (!preventDefault) {
+            if (submit) {
                 $(this).closest('form')[0].submit();
             }
         });
