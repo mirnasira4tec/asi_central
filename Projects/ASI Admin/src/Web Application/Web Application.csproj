@@ -323,6 +323,7 @@
     <Compile Include="Models\Store\interfaces\IMembershipModel.cs" />
     <Compile Include="Models\Store\Order\CatalogAdvertisingApplicationModel.cs" />
     <Compile Include="Models\Store\Order\CatalogsApplicationModel.cs" />
+    <Compile Include="Models\Store\Order\CouponListModel.cs" />
     <Compile Include="Models\Store\Order\SalesFormApplicationModel.cs" />
     <Compile Include="Models\Store\Order\EquipmentApplicationModel.cs" />
     <Compile Include="Models\Store\Order\FormsModel.cs" />
