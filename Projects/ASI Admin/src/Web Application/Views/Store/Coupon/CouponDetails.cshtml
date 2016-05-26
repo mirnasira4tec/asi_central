@@ -67,10 +67,12 @@
                 <span class="label-row" id="groupName">
                     @Html.Label("Personify Bundle Name")
                     @Html.EditorFor(model => model.GroupName)
+                    <span id="Error_GroupName" class="field-validation-error" style="display: none;">Required</span>
                 </span>
                 <span class="label-row" id="rateCode">
                     @Html.Label("Personify Rate Code")
                     @Html.EditorFor(model => model.RateCode)
+                    <span id="Error_RateCode" class="field-validation-error" style="display: none;">Required</span>
                 </span>
             </div>
         </fieldset>
@@ -161,8 +163,25 @@
         });
 
         $('#couponForm').on('submit', function (e) {
-            if( $('.field-validation-error:visible').length) {
-                e.preventDefault();
+            e.preventDefault();
+            var preventDefault = false;
+            if ($('.field-validation-error:visible').length) {
+                preventDefault = true;
+            }
+            if ($('#personifyCtrl:visible').length) {
+                if( $('#GroupName').val() == '' )
+                {
+                    $('#Error_GroupName').show();
+                    preventDefault = true;
+                }
+                if ($('#RateCode').val() == '') {
+                    $('#Error_RateCode').show();
+                    preventDefault = true;
+                }
+            }
+
+            if (!preventDefault) {
+                $(this).closest('form')[0].submit();
             }
         });
 
@@ -218,15 +237,14 @@
                     enable = productDiscount == $('#productInfo').data('productCost');
                 }
 
-            } else {
-                $('#GroupName').val("");
-                $('#RateCode').val("");
-            }
+            } 
 
             if (enable) {
                 $('#personifyCtrl').show();
             } else {
                 $('#personifyCtrl').hide();
+                $('#GroupName').val("");
+                $('#RateCode').val("");
             }
         }
     </script>

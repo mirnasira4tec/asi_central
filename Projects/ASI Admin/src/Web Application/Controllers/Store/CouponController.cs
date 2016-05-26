@@ -2,12 +2,10 @@
 using asi.asicentral.model.personify;
 using asi.asicentral.model.store;
 using asi.asicentral.services;
-using asi.asicentral.util.store;
-using StructureMap.Query;
+using asi.asicentral.util.store.coupon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace asi.asicentral.web.Controllers.Store
@@ -179,7 +177,7 @@ namespace asi.asicentral.web.Controllers.Store
                             !ValidatePersonifyRateCode(couponModel.RateStructure, couponModel.GroupName,
                                 couponModel.RateCode))
                         {
-                            ModelState.AddModelError("Error", "Empty or Invalid Rate Structure, Group Name or Rate Code");
+                            ModelState.AddModelError("Error", "Invalid Rate Structure, Group Name or Rate Code");
                         }
                     }
                 }
@@ -250,12 +248,12 @@ namespace asi.asicentral.web.Controllers.Store
 
         private void UpdatePersonifyMappingTbl(Coupon coupon, ContextProduct product)
         {
-            if (string.IsNullOrEmpty(coupon.RateStructure))
+            if (string.IsNullOrEmpty(coupon.RateStructure) || string.IsNullOrEmpty(coupon.GroupName) || string.IsNullOrEmpty(coupon.RateCode))
                 return;
 
             try
             {
-                // get all personify bundle/products for the product
+                // get baseline personify bundle/products for the product
                 var mappings = StoreService.GetAll<PersonifyMapping>()
                     .Where(map => map.StoreContext == null && map.StoreProduct == coupon.ProductId).ToList();
 
@@ -263,16 +261,16 @@ namespace asi.asicentral.web.Controllers.Store
 
                 if (mappings.Any())
                 {
+                    // delete existing rows for the coupon
                     var existMappings = StoreService.GetAll<PersonifyMapping>()
                         .Where(map => map.StoreOption == coupon.CouponCode).ToList();
 
-                    // delete existing rows
                     for (int i = 0; i < existMappings.Count; i++)
                     {
                         StoreService.Delete(existMappings[i]);
                     }
 
-                    // need to find out all rows needed for the product
+                    // use product baseline to add rows for coupon
                     foreach (var m in mappings)
                     {
                         var productMapping = new PersonifyMapping()
@@ -303,16 +301,16 @@ namespace asi.asicentral.web.Controllers.Store
                         }
                         else if (m.PersonifyProduct.HasValue)
                         {
-                            if (Helper.FREE_MONTH_RATECODES.Keys.Contains(m.PersonifyProduct.Value) &&
+                            if (CouponHelper.FREE_MONTH_RATECODES.Keys.Contains(m.PersonifyProduct.Value) &&
                                 (coupon.MonthlyCost.HasValue && coupon.ProductDiscount == coupon.MonthlyCost.Value) ||
                                 (!coupon.MonthlyCost.HasValue && coupon.ProductDiscount == product.Cost))
                             { // bolt on products
-                                productMapping.PersonifyRateCode = Helper.FREE_MONTH_RATECODES[m.PersonifyProduct.Value];
+                                productMapping.PersonifyRateCode = CouponHelper.FREE_MONTH_RATECODES[m.PersonifyProduct.Value][1];
                             }
-                            else if (Helper.WAIVE_APP_FEE_RATECODES.Keys.Contains(m.PersonifyProduct.Value) &&
+                            else if (CouponHelper.WAIVE_APP_FEE_RATECODES.Keys.Contains(m.PersonifyProduct.Value) &&
                                      coupon.AppFeeDiscount == product.ApplicationCost)
                             {
-                                productMapping.PersonifyRateCode = Helper.WAIVE_APP_FEE_RATECODES[m.PersonifyProduct.Value];
+                                productMapping.PersonifyRateCode = CouponHelper.WAIVE_APP_FEE_RATECODES[m.PersonifyProduct.Value][1];
                             }
                         }
 
@@ -324,7 +322,8 @@ namespace asi.asicentral.web.Controllers.Store
             }
             catch (Exception ex)
             {
-                var msg = ex.Message;
+                var log = LogService.GetLog(this.GetType());
+                log.Debug(string.Format("Exception occurred when updating Personify mapping table for coupon '{0}', message : {1}", coupon.CouponCode, ex.Message));
             }
         }
     }

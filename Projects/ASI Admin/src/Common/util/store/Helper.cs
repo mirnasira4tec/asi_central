@@ -21,21 +21,6 @@ namespace asi.asicentral.util.store
                                                         {"DECORATOR", 4895}
                                                     };
 
-        public static readonly Dictionary<int, string> WAIVE_APP_FEE_RATECODES =
-                                                    new Dictionary<int, string>()
-                                                    {
-                                                        {160, "SPECIAL"}, 
-                                                        {159, "SPECIAL"},
-                                                        {4896, "SPECIAL"}
-                                                    };
-
-        public static readonly Dictionary<int, string> FREE_MONTH_RATECODES =
-                                            new Dictionary<int, string>()
-                                                    {
-                                                        {1003113981, "TRIAL_13"}
-                                                    };
-
-
         public static IList<SelectListItem> GetTitles()
         {
             IList<SelectListItem> titles = new List<SelectListItem>();

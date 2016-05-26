@@ -665,8 +665,12 @@ namespace asi.asicentral.services.PersonifyProxy
 	        if (isValid)
 	        {
                 var response = ExecutePersonifySP(SP_GET_BUNDLE_PRODUCT_DETAILS, new List<string>(){groupName, rateStructure, rateCode});
-	        
-                isValid = response != null && !string.IsNullOrEmpty(response.Data) && response.Data.Trim().ToUpper() != "NO DATA FOUND";
+
+	            if (response != null && !string.IsNullOrEmpty(response.Data) && response.Data.Trim().ToUpper() != "NO DATA FOUND")
+	            {
+	                var xml = XDocument.Parse(response.Data);
+	                isValid = xml.Root.Elements("Table").ToList().Any();
+	            }
 	        }
 
 	        return isValid;
