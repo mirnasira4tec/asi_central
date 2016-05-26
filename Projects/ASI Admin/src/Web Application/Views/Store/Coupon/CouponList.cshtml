@@ -16,13 +16,13 @@
                 {     
                     <div>
                         <label for="couponCode">Coupon Code</label>
-                        <input name="couponCode" type="text" id="couponCode" value="@Model.CouponCode" />
+                        @Html.TextBoxFor(model => model.CouponCode)
                          <label for="MemberType">Member Type</label>
-                        @Html.DropDownListFor(model => model.MemberType, new SelectList(asi.asicentral.model.store.CouponListModel.GetMemberTypes(), "Value", "Text"), new { name = "MemberType", value = "@Model.MemberType" })
+                        @Html.DropDownListFor(model => model.MemberType, new SelectList(CouponListModel.GetMemberTypes(), "Value", "Text"), new { name = "MemberType", value = "@Model.MemberType" })
                     <div class="span2 pull-right"> <input type="submit" value="Search" class="btn"></div>
                         <div class="clearfix"></div><br/>
-                         <input name="showValidOnly" type="checkbox"  checked="@Model.showValidOnly" value="true" />
-                        <label for="showValidOnly">Valid Coupon Only</label>
+                         @Html.CheckBoxFor(model => model.ShowValidOnly)
+                        <label for="ShowValidOnly">Valid Coupon Only</label>
                     </div>
                 }
         </div>

@@ -22,12 +22,10 @@ namespace asi.asicentral.database.mappings.personify
                 .HasColumnName("STORE_CONTEXT");
 
             this.Property(t => t.StoreProduct)
-                .HasColumnName("STORE_PRODUCT")
-                .IsRequired();
+                .HasColumnName("STORE_PRODUCT");
 
             this.Property(t => t.StoreOption)
-                .HasColumnName("STORE_OPTION")
-                .IsRequired();
+                .HasColumnName("STORE_OPTION");
 
             this.Property(t => t.ClassCode)
                 .HasColumnName("CUSTOMER_CLASS_CODE");
@@ -36,19 +34,29 @@ namespace asi.asicentral.database.mappings.personify
                 .HasColumnName("CUSTOMER_CLASS_SUBCODE");
 
             this.Property(t => t.PersonifyProduct)
-                .HasColumnName("PRODUCT_ID")
-                .IsRequired();
+                .HasColumnName("PRODUCT_ID");
 
             this.Property(t => t.PersonifyBundle)
                 .HasColumnName("BUNDLE");
 
             this.Property(t => t.PersonifyRateCode)
-                .HasColumnName("RATE_CODE")
-                .IsRequired();
+                .HasColumnName("RATE_CODE");
 
             this.Property(t => t.PersonifyRateStructure)
                 .HasColumnName("RATE_STRUCTURE")
                 .IsRequired();
+
+            this.Property(t => t.ESBSendGlag)
+                .HasColumnName("ESB_SEND_FLAG");
+
+            this.Property(t => t.NewAsiNumFlag)
+                .HasColumnName("NEW_ASI_NUM_FLAG");
+
+            this.Property(t => t.NotifyByEmailFlag)
+                .HasColumnName("NOTIFY_BY_EMAIL_FLAG");
+
+            this.Property(t => t.CreateUserUTC)
+                .HasColumnName("CREATE_USER_UTC");
             
             this.Property(t => t.CreateDateUTC)
                 .HasColumnName("CREATE_DATE_UTC")

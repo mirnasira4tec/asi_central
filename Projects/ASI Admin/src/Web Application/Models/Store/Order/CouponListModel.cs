@@ -9,7 +9,7 @@ namespace asi.asicentral.model.store
     public class CouponListModel
     {
         public string CouponCode { get; set; }
-        public bool showValidOnly { get; set; }
+        public bool ShowValidOnly { get; set; }
         public IList<Coupon> Coupons { set; get; }
         public string MemberType { set; get; }
         public static IList<SelectListItem> GetMemberTypes()

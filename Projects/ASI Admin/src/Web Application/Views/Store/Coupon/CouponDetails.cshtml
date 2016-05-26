@@ -9,7 +9,7 @@
 @using asi.asicentral.interfaces;
 @model  asi.asicentral.model.store.CouponModel
 
-@using (Html.BeginForm("SaveCouponDetails", "Coupon", FormMethod.Post, new { id = "couponform" }))
+@using (Html.BeginForm("SaveCouponDetails", "Coupon", FormMethod.Post, new { id = "couponForm" }))
 {
     @Html.HiddenFor(model => model.ActionName)
     @Html.AntiForgeryToken()
@@ -27,42 +27,62 @@
                 @Html.Label("Description")
                 @Html.TextAreaFor(model => model.Description) @Html.ValidationMessageFor(model => model.Description)
             </span>
+            <span id="Product" class="label-row">
+                @Html.Label("Products")
+                @Html.DropDownListFor(model => model.ProductId, Model.Products, "None")@Html.ValidationMessageFor(model => model.ProductId)
+            </span>
+            <span id="Context" class="label-row">
+                @Html.Label("Context")
+                @Html.DropDownListFor(model => model.ContextId, Model.Contexts, "None")@Html.ValidationMessageFor(model => model.ContextId)
+            </span>
             <span class="label-row" id="trAppFeeDiscount">
                 @Html.Label("Application Discount")
                 @Html.EditorFor(model => model.AppFeeDiscount)@Html.ValidationMessageFor(model => model.AppFeeDiscount)
+                <span id="span_Error_appFeeDiscount" class="field-validation-error" style="display: none;">Discount exceeds application fee</span>
             </span>
             <span class="label-row" id="trProductDiscount">
                 @Html.Label("Product Discount")
                 @Html.EditorFor(model => model.ProductDiscount)@Html.ValidationMessageFor(model => model.ProductDiscount)
+                <span id="span_Error_productDiscount" class="field-validation-error" style="display: none;">Discount exceeds actual cost</span>
             </span>
             <span class="label-row" id="trMonthlyCost">
                 @Html.Label("Monthly subscription Cost")
-                @Html.EditorFor(model => model.MonthlyCost)@Html.ValidationMessageFor(model => model.MonthlyCost)
+                @Html.EditorFor(model => model.MonthlyCost, new {id = "monthlyCost"})@Html.ValidationMessageFor(model => model.MonthlyCost)
+                <span id="span_Error_monthlyCost" class="field-validation-error" style="display: none;">Amount exceeds original cost</span>
             </span>
             <span class="label-row">
                 @Html.Label("Valid From")
-                @Html.EditorFor(model => model.ValidFrom, new { @class = "dateField" }) <i class="icon-remove date-clear" id="ValidFrom"></i>
+                @Html.EditorFor(model => model.ValidFrom, new {@class = "dateField"}) <i class="icon-remove date-clear" id="ValidFrom"></i>
                 <span id="span_Error_CurrDate" class="field-validation-error" style="display: none;">Valid from date should be greater than current date</span>
             </span>
             <span class="label-row">
                 @Html.Label("Valid To")
-                @Html.EditorFor(model => model.ValidUpto, new { @class = "dateField" })  <i class="icon-remove date-clear" id="ValidUpto"></i><span id="span_Error_ValidDate" class="field-validation-error" style="display: none;">Valid From date should be less than Valid to date.</span>
+                @Html.EditorFor(model => model.ValidUpto, new {@class = "dateField"})  <i class="icon-remove date-clear" id="ValidUpto"></i><span id="span_Error_ValidDate" class="field-validation-error" style="display: none;">Valid From date should be less than Valid to date.</span>
             </span>
-            <span id="Product" class="label-row">
-                @Html.Label("Products")
-                @Html.DropDownListFor(model => model.ProductId, Model.Products, "None", new { @class = "span3", id = "Products" })@Html.ValidationMessageFor(model => model.ProductId)
-            </span>
-            <span id="Context" class="label-row">
-                @Html.Label("Context")
-                @Html.DropDownListFor(model => model.ContextId, Model.Contexts, "None", new { @class = "span3" })@Html.ValidationMessageFor(model => model.ContextId)
-            </span>
+            <div id="personifyCtrl">
+                <span class="label-row" id="rateStructure">
+                    @Html.Label("Personify Rate Structure")
+                    @Html.TextBoxFor(model => model.RateStructure, new { @readonly = "readonly" })
+                </span>
+                <span class="label-row" id="groupName">
+                    @Html.Label("Personify Bundle Name")
+                    @Html.EditorFor(model => model.GroupName)
+                    <span id="Error_GroupName" class="field-validation-error" style="display: none;">Required</span>
+                </span>
+                <span class="label-row" id="rateCode">
+                    @Html.Label("Personify Rate Code")
+                    @Html.EditorFor(model => model.RateCode)
+                    <span id="Error_RateCode" class="field-validation-error" style="display: none;">Required</span>
+                </span>
+            </div>
         </fieldset>
+        <div id='productInfo'></div>
     </div>
     <footer id="page-completion-navigation">
         <nav>
             <p class="navigate-back"><a href="/store/Coupon/List">Back to Coupon list</a></p>
             <p class="next-step-button">
-                <input type="submit" class="command btn btn-primary" value="Save" />
+                <input type="submit" class="command btn btn-primary" id="saveBtn" value="Save" />
         </nav>
     </footer>
 }
@@ -74,54 +94,158 @@
 
         $("#ValidFrom").datepicker({
             startDate: date
-        }).on('changeDate', function (selected) {
+        }).on('changeDate', function(selected) {
             startDate = new Date(selected.date.valueOf());
             startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
             $("#ValidUpto").datepicker('setStartDate', startDate);
         });
 
-        $('.date-clear').click(function () {
+        $('.date-clear').click(function() {
             $("input[name='" + this.id + "']").val('');
         });
 
     </script>
     <script type="text/javascript">
-        $(function () {
-            $('input.command').click(function (e) {
+        $(function() {
+            $('input.command').click(function(e) {
                 if (e.target.value == "Cancel")
                     window.location.href = "/store/Coupon/List";
                 $('#ActionName').val(e.target.value);
             });
         });
-        $(document).ready(function () {
+        $(document).ready(function() {
             startDate = new Date($('#ValidFrom').val());
             startDate.setDate(startDate.getDate(new Date($('#ValidFrom').val())));
             $("#ValidUpto").datepicker('setStartDate', startDate);
-            if (($('#MonthlyCost').val() == '0.00' || $('#MonthlyCost').val() == "") && $('#Id').val() == 0) {
-                $('#MonthlyCost').prop('disabled', true);
-                $('#MonthlyCost').val('0.00');
+            updateProductInfo();
+        });
+
+        $("#ProductId").change(function() {
+            updateProductInfo();
+        });
+
+        $("#ContextId").change(function() {
+            updateProductInfo();
+        });
+
+        $('#AppFeeDiscount').on('input', function() {
+            var discount = $(this).val();
+            if (discount > $('#productInfo').data('applicationCost')) {
+                $('#span_Error_appFeeDiscount').show();
+            } else {
+                $('#span_Error_appFeeDiscount').hide();
             }
         });
-        $(function () {
-            $("#Products").change(function () {
-                var id = $(this).val();
+
+        $('#ProductDiscount').on('input', function() {
+            var discount = $(this).val();
+            var actualCost = $('#productInfo').data('productCost');
+            if ($('#MonthlyCost:visible').length && $('#MonthlyCost').val().length ) {
+                actualCost = $('#MonthlyCost').val();
+            }
+
+            if (discount > actualCost ) {
+                $('#span_Error_productDiscount').show();
+            } else {
+                $('#span_Error_productDiscount').hide();
+            }
+            updatePersonifyCtr();
+        });
+
+        $('#MonthlyCost').on('input', function () {
+            var monthlyCost = $(this).val();
+            if (monthlyCost > $('#productInfo').data('productCost')) {
+                $('#span_Error_monthlyCost').show();
+            } else {
+                $('#span_Error_monthlyCost').hide();
+            }
+            updatePersonifyCtr();
+        });
+
+        $('#couponForm').on('submit', function (e) {
+            e.preventDefault();
+            var submit = true;
+            if ($('.field-validation-error:visible').length) {
+                submit = false;
+            }
+            if ($('#personifyCtrl:visible').length) {
+                if( $('#GroupName').val() == '' )
+                {
+                    $('#Error_GroupName').show();
+                    submit = false;
+                }
+                if ($('#RateCode').val() == '') {
+                    $('#Error_RateCode').show();
+                    submit = false;
+                }
+            }
+
+            if (submit) {
+                $(this).closest('form')[0].submit();
+            }
+        });
+
+        function updateProductInfo() {
+            var productId = $('#ProductId').val();
+            var contextId = $('#ContextId').val();
+            var isSubscription = false;
+            var hasBackendFlag = 'false';
+            var appFee = '0';
+            var cost = '0';
+            if (productId == '') productId = 0;
+            if (contextId == '') contextId = 0;
+            if (productId != '0' || contextId != '0') {
                 $.ajax({
-                    url: '@Url.Action("GetProductName", "Coupon")',
+                    url: '/Coupon/GetProductInfo?productId=' + productId + '&contextId=' + contextId,
                     dataType: 'json',
-                    data: '{"id":' + id + '}',
                     type: "POST",
+                    async: false,
                     contentType: 'application/json',
-                    success: function (data) {
-                        if (data == true) {
-                            $('#MonthlyCost').prop('disabled', false);
-                        } else {
-                            $('#MonthlyCost').prop('disabled', true);
-                            $('#MonthlyCost').val('0.00');
-                        }
+                    success: function(data) {
+                        isSubscription = data.IsSubscription;
+                        hasBackendFlag = data.HasBackEndIntegration;
+                        appFee = data.ApplicationCost;
+                        cost = data.Cost;
                     }
                 });
-            });
-        });
-    </script>
+            }
 
+            $('#MonthlyCost').prop('disabled', !isSubscription);
+            $('#AppFeeDiscount').prop('disabled', appFee <= 0);
+
+            if (!isSubscription) {
+                $('#MonthlyCost').val("");
+            }
+
+            $('#productInfo').data('isSubscription', isSubscription);
+            $('#productInfo').data('hasBackendFlag', hasBackendFlag);
+            $('#productInfo').data('applicationCost', appFee);
+            $('#productInfo').data('productCost', cost);
+
+            updatePersonifyCtr();
+        }
+
+        function updatePersonifyCtr() {
+            var enable = $('#productInfo').data('hasBackendFlag');
+            if (enable) {
+                var productDiscount = $('#ProductDiscount').val();
+                var monthlyCost = $('#MonthlyCost').val();
+
+                if (monthlyCost != '') {
+                    enable = monthlyCost < $('#productInfo').data('productCost') || monthlyCost == productDiscount;
+                } else if( productDiscount != '') {
+                    enable = productDiscount == $('#productInfo').data('productCost');
+                }
+
+            } 
+
+            if (enable) {
+                $('#personifyCtrl').show();
+            } else {
+                $('#personifyCtrl').hide();
+                $('#GroupName').val("");
+                $('#RateCode').val("");
+            }
+        }
+    </script>
 }

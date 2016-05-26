@@ -16,7 +16,10 @@ namespace asi.asicentral.model.store
         public string Description { get; set; }
         public decimal AppFeeDiscount { get; set; }
         public decimal ProductDiscount { get; set; }
-        public decimal MonthlyCost { get; set; }
+        public decimal? MonthlyCost { get; set; }
+        public string RateStructure { get; set; }
+        public string GroupName { get; set; }
+        public string RateCode { get; set; }
         [DataType(DataType.Date)]
         public DateTime ValidFrom { get; set; }
         [DataType(DataType.Date)]
