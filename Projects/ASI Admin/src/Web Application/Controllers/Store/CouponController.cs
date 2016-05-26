@@ -22,13 +22,34 @@ namespace asi.asicentral.web.Controllers.Store
         }
 
 
-        public ActionResult List()
+        public ActionResult List(string couponCode, string memberType, bool showValidOnly = false)
         {
-            IList<Coupon> couponList = StoreService.GetAll<Coupon>(true).OrderByDescending(x => x.CreateDate).ToList(); 
-
-            return View("../Store/Coupon/CouponList", couponList);
+            var coupon = new CouponListModel();
+            IList<Coupon> couponList = null;
+            couponList = StoreService.GetAll<Coupon>(true).OrderByDescending(x => x.UpdateDate).ToList();
+            if (!string.IsNullOrEmpty(couponCode))
+            {
+                couponList = couponList.Where(item => item.CouponCode != null
+                 && item.CouponCode.Contains(couponCode)).ToList();
+            }
+            if (!string.IsNullOrEmpty(memberType))
+            {
+                if (memberType == "Others")
+                    couponList = couponList.Where(item => item.Product != null && item.Product.Type != "Distributor Membership" && item.Product.Type != "Supplier Membership" && item.Product.Type != "Decorator Membership").ToList();
+                else
+                    couponList = couponList.Where(item => item.Product != null && item.Product.Type == memberType).ToList();
+            }
+            if (showValidOnly)
+            {
+                couponList = couponList.Where(item => item.ValidUpto != null
+                  && item.ValidUpto.Date >= DateTime.Now.Date).ToList();
+                coupon.showValidOnly = true;
+            }
+            coupon.Coupons = couponList;
+            coupon.CouponCode = couponCode;
+            
+            return View("../Store/Coupon/CouponList", coupon);
         }
-
         public ActionResult Add()
         {
             CouponModel productToUpdate = new CouponModel();
@@ -108,8 +129,8 @@ namespace asi.asicentral.web.Controllers.Store
             if (id != 0)
             {
                 ContextProduct product = StoreService.GetAll<ContextProduct>(true).Where(detail => detail.Id == id).FirstOrDefault();
-                if(product.IsSubscription)
-                 return Json(true);
+                if (product.IsSubscription)
+                    return Json(true);
             }
             return Json(false);
         }
@@ -117,7 +138,7 @@ namespace asi.asicentral.web.Controllers.Store
         [ValidateAntiForgeryToken]
         public ActionResult SaveCouponDetails(CouponModel couponModel)
         {
-            if (couponModel.ActionName == "Cancel") return List();
+            if (couponModel.ActionName == "Cancel") return List(null, null,false);
             if (ModelState.IsValid)
             {
                 if (couponModel.MonthlyCost + couponModel.AppFeeDiscount + couponModel.ProductDiscount <= 0)
@@ -129,7 +150,7 @@ namespace asi.asicentral.web.Controllers.Store
                     couponModel.ValidUpto = DateTime.UtcNow;
                     return View("../Store/Coupon/CouponDetails", couponModel);
                 }
-                else if (couponModel.ContextId == null &&  couponModel.ProductId == null )
+                else if (couponModel.ContextId == null && couponModel.ProductId == null)
                 {
                     ModelState.AddModelError(" ", "Please select at least one out of Product and Context");
                     couponModel.Products = GetSelectedProductList();
@@ -161,7 +182,7 @@ namespace asi.asicentral.web.Controllers.Store
                     coupon.UpdateDate = DateTime.UtcNow;
                     coupon.UpdateSource = "CouponController - SaveCouponDetails";
                     StoreService.SaveChanges();
-                    IList<Coupon> couponList = StoreService.GetAll<Coupon>(true).OrderByDescending(x => x.CreateDate).ToList();
+                    IList<Coupon> couponList = StoreService.GetAll<Coupon>(true).OrderByDescending(x => x.UpdateDate).ToList();
                     return View("../Store/Coupon/CouponList", couponList);
                 }
             }
@@ -185,7 +206,7 @@ namespace asi.asicentral.web.Controllers.Store
                 StoreService.SaveChanges();
             }
 
-            IList<Coupon> couponList = StoreService.GetAll<Coupon>(true).OrderByDescending(x => x.CreateDate).ToList();
+            IList<Coupon> couponList = StoreService.GetAll<Coupon>(true).OrderByDescending(x => x.UpdateDate).ToList();
             return View("../Store/Coupon/CouponList", couponList);
 
         }
