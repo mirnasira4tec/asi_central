@@ -6,7 +6,8 @@
 @model asi.asicentral.web.store.interfaces.IMembershipModel
 <div>
     @{
-        var errMsg = CheckBackEnd();
+        var errMsg = string.Empty;
+        var isBackEnd = IsBackEnd(ref errMsg);
         var orderStatus = string.IsNullOrEmpty(errMsg) ? Model.OrderStatus : OrderStatus.PersonifyError;
         var hasPendingTerms = HasPendingTerms();
     }
@@ -26,6 +27,11 @@
     @if (Model.TotalCost >= 0.0m)
     {
 	    <div><h3 class="order-status-header3">Order Status:</h3><div class="order-status">@orderStatus</div></div>
+        if (isBackEnd && Model.OrderStatus == OrderStatus.PersonifyError)
+        {
+        <div class="order-status">
+            <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_RESUBMIT" /></div>
+        }
         
         if (!string.IsNullOrEmpty(errMsg) )
         {
@@ -36,36 +42,45 @@
 
         <div class="timms-info">
             <div class="span4">
-                <label class="order-status-label" for="Timms_ID">Constituent ID:</label>
-                <div class="order-status-input">
-                    @Html.EditorFor(m => m.ExternalReference, new { @class = "span2" })
-                    <span id="timmsErrorMessage" data-type="errormessage" class="field-validation-error"></span>
-                </div>
+                @if (!isBackEnd)
+                {
+                    <label class="order-status-label" for="Timms_ID">Constituent ID:</label>
+                    <div class="order-status-input">
+                        @Html.EditorFor(m => m.ExternalReference, new { @class = "span2" })
+                        <span id="timmsErrorMessage" data-type="errormessage" class="field-validation-error"></span>
+                    </div>
+                }
+                else
+                {
+                    <label class="order-status-label" for="Timms_ID">Constituent ID: @Model.ExternalReference</label>
+                }
             </div>
             @if (hasPendingTerms)
             {
                 <input data-type="boolean" id="hasPendingTerms" type="hidden" value="true" />
             }
             <div class="status-btns">
-                @{
+                @if (!isBackEnd)
+                {
                     if (Model.IsCompleted && Model.OrderStatus != OrderStatus.Approved && string.IsNullOrEmpty(errMsg))
                     {
-                    <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT"/>
+                    <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT" />
                     }
                     if (Model.IsCompleted && (Model.OrderStatus == OrderStatus.Pending || Model.OrderStatus == OrderStatus.Approved) )
-                    {
-                    <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT"/>
+                    { 
+                    <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT" />
                     }
-                    <input class="command btn-primary save" type="submit" value="@ApplicationController.COMMAND_SAVE"/>
+                    <input class="command btn-primary save" type="submit" value="@ApplicationController.COMMAND_SAVE" />
 
                     if (Model.OrderStatus == OrderStatus.Approved)
                     { @Html.ActionLink("Close", "../Orders") }
                     else
                     { @Html.ActionLink("Cancel", "../Orders") }
                 }
+
             </div>
             <div id="termsWarningMessage" data-type="errormessage" class="field-validation-error span10"></div>
-            @if (!string.IsNullOrEmpty(Model.ExternalReference))
+            @if (!isBackEnd && !string.IsNullOrEmpty(Model.ExternalReference))
             {
                 <div class="span10">
                 <p>(Please contact ASICentral team if this is not the Constituent ID expected.)</p>
@@ -97,9 +112,9 @@
     @functions{
         public IStoreService StoreService { get; set; }
         public IBackendService BackendService { get; set; }
-        public string CheckBackEnd()
+        public bool IsBackEnd(ref string errMsg)
         {
-            var errMsg = string.Empty;
+            bool useBackEndService = false;
             var orderDetail = StoreService.GetAll<StoreOrderDetail>(true).FirstOrDefault(detail => detail.Order.Id == Model.OrderId);
             var order = StoreService.GetAll<StoreOrder>(true).FirstOrDefault(o => o.Id == Model.OrderId);
             if( order != null && orderDetail != null)
@@ -126,8 +141,12 @@
                         }
                     }
                 }
+                else
+                {
+                    useBackEndService = BackendService.IsProcessUsingBackend(orderDetail) && !product.IsMembership();
+                }
             }
-            return errMsg;
+            return useBackEndService;
         }
         
         public string GetMatchingCompanyIds()
