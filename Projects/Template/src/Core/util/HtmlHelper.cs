@@ -262,6 +262,9 @@ namespace asi.asicentral.util
                             case "expect":
                                 request.Headers.ExpectContinue = Convert.ToBoolean(headerParam[key]);
                                 break;
+                            case "authorization":
+                                request.Headers.Authorization = new AuthenticationHeaderValue(headerParam[key]);
+                                break;
                         }
                     }
                 }

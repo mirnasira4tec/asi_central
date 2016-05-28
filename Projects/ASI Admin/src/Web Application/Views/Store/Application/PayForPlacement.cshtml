@@ -75,44 +75,12 @@
 @section Scripts {
     @Scripts.Render("~/bundles/form")
     <script src="/Scripts/asi.js"></script>
+    <script src="/Scripts/orders.js"></script>
     <script>
       
         $('.dateField').datepicker()
         $('.date-clear').click(function () {
             $("input[name='" + this.id + "']").val('');
-        });
-    
-        $('input.command').click(function (e) {
-            $('#ActionName').val(e.target.value);
-            if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
-                //make sure we have Timms value
-                if (!$('#ExternalReference').val()) {
-                    asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
-                    $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
-                    $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
-                    e.preventDefault();
-                }
-                else {
-                    var isnum = /^\d+$/.test($('#ExternalReference').val());
-                    if (!isnum) {
-                        asi.modal.confirm('Error', 'TIMMS ID must contain only numbers.', null, "#hide", "Close");
-                        $("#ExternalReference").attr("class", "text-box single-line input-validation-error");
-                        $("#timmsErrorMessage").text("TIMMS ID must contain only numbers.");
-                        e.preventDefault();
-                    }
-                    else if ($('#hasPendingTerms').length > 0) {
-                        $("#termsWarningMessage").text('This order has pending Terms and Conditions.');
-                        var confirm = window.confirm('This order has pending Terms and Conditions. Are you sure to accept the order?');
-                        if (!confirm) {
-                            e.preventDefault();
-                        }
-                    }
-                }
-            }
-        });
-        $('[rel*="isprimary"]').change(function () {
-            $('[rel*="isprimary"]').attr("checked", false);
-            this.checked = true;
         });
     </script>
     <script type="text/javascript">

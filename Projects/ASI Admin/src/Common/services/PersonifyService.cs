@@ -81,48 +81,57 @@ namespace asi.asicentral.services
 
                 var orderDetail = order.OrderDetails[0];
                 var mappings = storeService.GetAll<PersonifyMapping>(true)
-                                           .Where(map => (order.ContextId == null || map.StoreContext == order.ContextId ) &&
+                                           .Where(map => (map.StoreContext == null || map.StoreContext == order.ContextId ) &&
                                                          map.StoreProduct == orderDetail.Product.Id &&
-                                                         map.PersonifyRateStructure == "BUNDLE").ToList();
+                                                         map.PersonifyRateStructure == "BUNDLE").OrderByDescending(m => m.StoreContext).ToList();
                 if( mappings.Count > 0 )
                 {
                     PersonifyMapping mapping = null;
-                    bool waiveAppFee = false;
-                    bool firstmonthFree = false;
+                    var waiveAppFee = false;
+                    var firstmonthFree = false;
                     var coupon = orderDetail.Coupon;
-                    bool couponError = false;
+                    var couponError = false;
+                    var context = storeService.GetAll<Context>(true).FirstOrDefault(p => p.Id == order.ContextId);
+                    var contextProduct = context != null ? context.Products.FirstOrDefault(p => p.Product.Id == orderDetail.Product.Id) : null;
 
-                    if( coupon != null && !string.IsNullOrEmpty(coupon.CouponCode) && coupon.CouponCode != "(Unknown)")
+                    if (contextProduct != null)
                     {
-                        coupon.CouponCode = coupon.CouponCode.Trim();
-                        var context = storeService.GetAll<Context>(true).FirstOrDefault(p => p.Id == order.ContextId);
-                        var contextProduct = context != null ? context.Products.FirstOrDefault(p => p.Product.Id == orderDetail.Product.Id) : null;
+                        waiveAppFee = contextProduct.ApplicationCost == 0;
 
-                        if (contextProduct != null && coupon.IsFixedAmount)
+                        if (coupon != null && !string.IsNullOrEmpty(coupon.CouponCode) && coupon.CouponCode != "(Unknown)")
                         {
-                            if (coupon.DiscountAmount == contextProduct.Cost)
+                            coupon.CouponCode = coupon.CouponCode.Trim();
+
+                            if (contextProduct != null && coupon.IsFixedAmount)
                             {
-                                firstmonthFree = true;
+                                if (coupon.DiscountAmount == contextProduct.ApplicationCost)
+                                {
+                                    waiveAppFee = true;
+                                }
+                                else if (coupon.DiscountAmount == contextProduct.Cost)
+                                {
+                                    firstmonthFree = true;
+                                }
+                                else
+                                {
+                                    waiveAppFee = coupon.DiscountAmount >= contextProduct.ApplicationCost;
+                                    firstmonthFree = !waiveAppFee && coupon.DiscountAmount >= contextProduct.Cost ||
+                                                      waiveAppFee && coupon.DiscountAmount >= contextProduct.ApplicationCost + contextProduct.Cost;
+                                }
+
+                                couponError = coupon.DiscountAmount != contextProduct.ApplicationCost &&
+                                              coupon.DiscountAmount != contextProduct.Cost &&
+                                              coupon.DiscountAmount != contextProduct.ApplicationCost + contextProduct.Cost;
+
+                                if (firstmonthFree)
+                                {
+                                    mapping = mappings.FirstOrDefault(m => !string.IsNullOrEmpty(m.StoreOption) && m.StoreOption.Trim() == coupon.CouponCode);
+                                }
                             }
                             else
-                            {
-                                waiveAppFee = coupon.DiscountAmount >= contextProduct.ApplicationCost;
-                                firstmonthFree = !waiveAppFee && coupon.DiscountAmount >= contextProduct.Cost ||
-                                                  waiveAppFee && coupon.DiscountAmount >= contextProduct.ApplicationCost + contextProduct.Cost;
-                            }
+                                couponError = true;
 
-                            couponError = coupon.DiscountAmount != contextProduct.ApplicationCost &&
-                                          coupon.DiscountAmount != contextProduct.Cost &&
-                                          coupon.DiscountAmount != contextProduct.ApplicationCost + contextProduct.Cost;
-
-                            if (firstmonthFree)
-                            {
-                                mapping = mappings.FirstOrDefault(m => !string.IsNullOrEmpty(m.StoreOption) && m.StoreOption.Trim() == coupon.CouponCode);
-                            }
                         }
-                        else
-                            couponError = true;
-
                     }
 
                     if (mapping == null)
