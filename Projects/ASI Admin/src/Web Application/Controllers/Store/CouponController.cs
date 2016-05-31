@@ -238,6 +238,7 @@ namespace asi.asicentral.web.Controllers.Store
                 coupon.UpdateSource = "CouponController - SaveCouponDetails";
                 StoreService.SaveChanges();
                 UpdatePersonifyMappingTbl(coupon, product);
+                ModelState.Clear();
 
                 return List();
             }
