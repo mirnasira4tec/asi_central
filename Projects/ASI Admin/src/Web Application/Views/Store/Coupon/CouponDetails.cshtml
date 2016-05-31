@@ -162,6 +162,14 @@
             updatePersonifyCtr();
         });
 
+        $('#GroupName').on('input', function () {
+           $('#Error_GroupName').hide();
+        });
+
+        $('#RateCode').on('input', function () {
+            $('#Error_RateCode').hide();
+        });
+
         $('#couponForm').on('submit', function (e) {
             e.preventDefault();
             var submit = true;
