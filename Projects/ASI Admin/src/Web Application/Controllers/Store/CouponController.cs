@@ -227,9 +227,13 @@ namespace asi.asicentral.web.Controllers.Store
                 coupon.MonthlyCost = couponModel.MonthlyCost;
                 coupon.AppFeeDiscount = couponModel.AppFeeDiscount;
                 coupon.ProductDiscount = couponModel.ProductDiscount;
-                coupon.RateStructure = couponModel.RateStructure.Trim();
-                coupon.GroupName = couponModel.GroupName.Trim();
-                coupon.RateCode = couponModel.RateCode.Trim();
+                if (!string.IsNullOrEmpty(coupon.RateStructure) && !string.IsNullOrEmpty(coupon.GroupName) &&
+                    !string.IsNullOrEmpty(coupon.RateCode))
+                {
+                    coupon.RateStructure = couponModel.RateStructure.Trim();
+                    coupon.GroupName = couponModel.GroupName.Trim();
+                    coupon.RateCode = couponModel.RateCode.Trim();
+                }
                 coupon.UpdateDate = DateTime.UtcNow;
                 coupon.UpdateSource = "CouponController - SaveCouponDetails";
                 StoreService.SaveChanges();
