@@ -56,7 +56,7 @@ namespace asi.asicentral.web.Controllers.Store
             productToUpdate.Products = GetSelectedProductList();
             productToUpdate.Contexts = GetSelectedContextList();
             productToUpdate.ValidFrom = DateTime.UtcNow;
-            productToUpdate.ValidUpto = DateTime.UtcNow;
+            productToUpdate.ValidUpto = DateTime.UtcNow.AddYears(5);
             return View("../Store/Coupon/CouponDetails", productToUpdate);
         }
 
@@ -88,7 +88,7 @@ namespace asi.asicentral.web.Controllers.Store
             else
             {
                 productToUpdate.ValidFrom = DateTime.UtcNow;
-                productToUpdate.ValidUpto = DateTime.UtcNow;
+                productToUpdate.ValidUpto = DateTime.UtcNow.AddYears(5);
             }
             return View("../Store/Coupon/CouponDetails", productToUpdate);
         }
@@ -226,9 +226,13 @@ namespace asi.asicentral.web.Controllers.Store
                 coupon.MonthlyCost = couponModel.MonthlyCost;
                 coupon.AppFeeDiscount = couponModel.AppFeeDiscount;
                 coupon.ProductDiscount = couponModel.ProductDiscount;
-                coupon.RateStructure = couponModel.RateStructure.Trim();
-                coupon.GroupName = couponModel.GroupName.Trim();
-                coupon.RateCode = couponModel.RateCode.Trim();
+                if (!string.IsNullOrEmpty(coupon.RateStructure) && !string.IsNullOrEmpty(coupon.GroupName) &&
+                    !string.IsNullOrEmpty(coupon.RateCode))
+                {
+                    coupon.RateStructure = couponModel.RateStructure.Trim();
+                    coupon.GroupName = couponModel.GroupName.Trim();
+                    coupon.RateCode = couponModel.RateCode.Trim();
+                }
                 coupon.UpdateDate = DateTime.UtcNow;
                 coupon.UpdateSource = "CouponController - SaveCouponDetails";
                 StoreService.SaveChanges();
