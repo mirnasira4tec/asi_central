@@ -28,7 +28,7 @@
                 @Html.TextAreaFor(model => model.Description) @Html.ValidationMessageFor(model => model.Description)
             </span>
             <span id="Product" class="label-row">
-                @Html.Label("Products")
+                @Html.Label("Product")
                 @Html.DropDownListFor(model => model.ProductId, Model.Products, "None")@Html.ValidationMessageFor(model => model.ProductId)
             </span>
             <span id="Context" class="label-row">
@@ -36,17 +36,17 @@
                 @Html.DropDownListFor(model => model.ContextId, Model.Contexts, "None")@Html.ValidationMessageFor(model => model.ContextId)
             </span>
             <span class="label-row" id="trAppFeeDiscount">
-                @Html.Label("Application Discount")
+                @Html.Label("Application Fee Discount")
                 @Html.EditorFor(model => model.AppFeeDiscount)@Html.ValidationMessageFor(model => model.AppFeeDiscount)
                 <span id="span_Error_appFeeDiscount" class="field-validation-error" style="display: none;">Discount exceeds application fee</span>
             </span>
             <span class="label-row" id="trProductDiscount">
-                @Html.Label("Product Discount")
+                @Html.Label("One Time Product Discount")
                 @Html.EditorFor(model => model.ProductDiscount)@Html.ValidationMessageFor(model => model.ProductDiscount)
                 <span id="span_Error_productDiscount" class="field-validation-error" style="display: none;">Discount exceeds actual cost</span>
             </span>
             <span class="label-row" id="trMonthlyCost">
-                @Html.Label("Monthly subscription Cost")
+                @Html.Label("Monthly Subscription Cost")
                 @Html.EditorFor(model => model.MonthlyCost, new {id = "monthlyCost"})@Html.ValidationMessageFor(model => model.MonthlyCost)
                 <span id="span_Error_monthlyCost" class="field-validation-error" style="display: none;">Amount exceeds original cost</span>
             </span>
@@ -197,7 +197,7 @@
             var productId = $('#ProductId').val();
             var contextId = $('#ContextId').val();
             var isSubscription = false;
-            var hasBackendFlag = 'false';
+            var hasBackendFlag = false;
             var appFee = '0';
             var cost = '0';
             if (productId == '') productId = 0;
