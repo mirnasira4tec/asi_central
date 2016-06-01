@@ -1,6 +1,7 @@
 ﻿@using asi.asicentral.web.model.store
 @using asi.asicentral.Resources
 @using asi.asicentral.model.store
+@using asi.asicentral.web.Helpers ;
 @model OrderPageModel
 
 @{
@@ -28,7 +29,7 @@
                         @Html.Partial("../Store/Admin/Shared/SearchDates", Model)
                         <input type="hidden" value="@OrderPageModel.TAB_DATE" name="formtab" />
                         <input type="hidden" value="@Model.OrderTab" name="ordertab" />
-                         @Html.Partial("../Store/Admin/Shared/SearchHasContactInfo", Model)
+                        @Html.Partial("../Store/Admin/Shared/SearchHasContactInfo", Model)
                         <input type="submit" value="Search" class="btn" />
                     </div>
                 }
@@ -43,7 +44,7 @@
                         <label for="orderid">Order Id</label>
                         <input name="id" type="text" value="@Model.Identifier" />
                         <input type="hidden" value="@OrderPageModel.TAB_ORDER" name="formtab" />
-                         @Html.Partial("../Store/Admin/Shared/SearchHasContactInfo", Model)
+                        @Html.Partial("../Store/Admin/Shared/SearchHasContactInfo", Model)
                         <input type="hidden" value="@Model.OrderTab" name="ordertab" />
                         <input type="submit" value="Search" class="btn" />
                     </div>
@@ -78,7 +79,7 @@
                     </div>
                     <div class="formField">
                         @Html.Partial("../Store/Admin/Shared/SearchDates", Model)
-                         @Html.Partial("../Store/Admin/Shared/SearchHasContactInfo", Model)
+                        @Html.Partial("../Store/Admin/Shared/SearchHasContactInfo", Model)
                         <input type="hidden" value="@OrderPageModel.TAB_NAME" name="formtab" />
                         <input type="hidden" value="@Model.OrderTab" name="ordertab" />
                         <input type="submit" value="Search" class="btn" />
@@ -108,7 +109,7 @@
                     <div class="formField">
                         <label for="timmsid">Company Name</label>
                         <input id="companyname" name="CompanyName" type="text" value="@Model.CompanyName" />
-                         @Html.Partial("../Store/Admin/Shared/SearchHasContactInfo", Model)
+                        @Html.Partial("../Store/Admin/Shared/SearchHasContactInfo", Model)
                         <input type="hidden" value="@OrderPageModel.COMPANY_NAME" name="formtab" />
                         <input type="hidden" value="@Model.OrderTab" name="ordertab" />
                         <input type="submit" value="Search" class="btn" />
@@ -152,18 +153,26 @@
                         {
                             <tr>
                                 <td width="80px">
-                                @if (order.ShowIcons)
-                                { 
-                                    <a id="@order.OrderId" rel="tooltip" data-placement="top" data-type="reject" title="Click here to reject the order" href="#"><i class="icon-remove"></i></a>
-                                    <a rel="tooltip" data-placement="top" title="Click here to accept the order" href="@Url.Action("Edit", "Application", new { Id = order.OrderDetailId })"><i data-orderid="@order.OrderId" class="icon-ok"></i></a> 
-                                }
-                                else if( order.ApprovalStatus == OrderStatus.Approved)
-                                {
-                                    <a id="@order.OrderId" rel="tooltip" data-placement="top" data-type="reject" title="Click here to reject the order" href="#"><i class="icon-remove"></i></a>
-                                }
-                                else
-                                { <img src="/images/transparent.gif" style="height: 1px; width: 33px" /> }
-                                    @order.OrderId</td>
+                                    @if (Authorized.IsAuthorizedUser())
+                                    {
+                                        if (order.ShowIcons)
+                                        { 
+                                        <a id="@order.OrderId" rel="tooltip" data-placement="top" data-type="reject" title="Click here to reject the order" href="#"><i class="icon-remove"></i></a>
+                                        <a rel="tooltip" data-placement="top" title="Click here to accept the order" href="@Url.Action("Edit", "Application", new { Id = order.OrderDetailId })"><i data-orderid="@order.OrderId" class="icon-ok"></i></a> 
+                                        }
+                                        else if (order.ApprovalStatus == OrderStatus.Approved)
+                                        {
+                                        <a id="@order.OrderId" rel="tooltip" data-placement="top" data-type="reject" title="Click here to reject the order" href="#"><i class="icon-remove"></i></a>
+                                        }
+                                        else
+                                        { <img src="/images/transparent.gif" style="height: 1px; width: 33px" /> }
+                                        @order.OrderId
+                                    }
+                                    else
+                                    {
+                                        @order.OrderId
+                                    }
+                                </td>
                                 <td>@order.Name</td>
                                 <td>@order.Email</td>
                                 @if (!string.IsNullOrEmpty(order.ContextType) && !order.IsProduct)
@@ -174,7 +183,7 @@
                                 {
                                     <td><a href="#" class="productRef" data-id="@Server.UrlEncode(order.Item)">@Html.Raw(order.Item)</a></td>
                                 }
-                                <td><a href="@Url.Action("Edit", "Application", new { Id = order.OrderDetailId })">Application</a></td> 
+                                <td><a href="@Url.Action("Edit", "Application", new { Id = order.OrderDetailId })">Application</a></td>
                                 <td>@order.CompletedStep</td>
                                 <td>@order.Quantity</td>
                                 <td>$@order.Price</td>
@@ -241,7 +250,7 @@
                         type: "POST",
                         url: '@Url.Action("Reject")',
                         data: { 'id': e.target.parentElement.id },
-                        
+
                     }).done(function (status) {
                         if (status.Success) {
                             //refresh the page
