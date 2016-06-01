@@ -1,7 +1,7 @@
 ﻿@using asi.asicentral.web.model.store
 @using asi.asicentral.Resources
 @using asi.asicentral.model.store
-@using asi.asicentral.web;
+@using asi.asicentral.web.Helpers;
 @model OrderPageModel
 
 @{
@@ -153,9 +153,7 @@
                         {
                             <tr>
                                 <td width="80px">
-                                    @{Authorized authorizeduser = new Authorized();
-                        }
-                                    @if (authorizeduser.IsAuthorizedUser())
+                                    @if (Authorized.IsAuthorizedUser())
                                     {
                                         if (order.ShowIcons)
                                         { 

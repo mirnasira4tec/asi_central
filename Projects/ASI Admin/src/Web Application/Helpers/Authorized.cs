@@ -6,14 +6,13 @@ using System.Linq;
 using System.Security.Principal;
 using System.Web;
 
-namespace asi.asicentral.web
+namespace asi.asicentral.web.Helpers
 {
     public class Authorized
     {
-        private readonly string[] allowedusers = ConfigurationManager.AppSettings["AuthorizedUsers"].Split(';');
-
-        public bool IsAuthorizedUser()
+        public static bool IsAuthorizedUser()
         {
+            string[] allowedusers = ConfigurationManager.AppSettings["AuthorizedUsers"].Split(';');
             WindowsIdentity identity = HttpContext.Current.Request.LogonUserIdentity;
             var Name = identity.Name;
             var AuthorizedUser = false;

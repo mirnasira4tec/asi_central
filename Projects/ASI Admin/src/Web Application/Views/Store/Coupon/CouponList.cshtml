@@ -5,7 +5,7 @@
 @using asi.asicentral.model.store;
 @using asi.asicentral.services;
 @using asi.asicentral.interfaces;
-@using asi.asicentral.web;
+@using asi.asicentral.web.Helpers;
 @model CouponListModel
 
 <h1>List of Coupons</h1>
@@ -34,8 +34,7 @@
 </div>
 @using (Html.BeginForm())
 {
-    Authorized authorizeduser=new Authorized();
-    if (authorizeduser.IsAuthorizedUser())
+    if (Authorized.IsAuthorizedUser())
     {
     <a href="/store/Coupon/Add" class="btn btn-primary">Add </a>
     <br />
@@ -66,7 +65,7 @@
             {
                 <tr>
                     <td><a class="delete" id="@coupon.CouponCode" href="/store/Coupon/Delete?id=@coupon.Id"><i class="icon-trash"></i></a></td>
-                    @if (authorizeduser.IsAuthorizedUser())
+                    @if (Authorized.IsAuthorizedUser())
                     {
                         <td><a href="/store/Coupon/Edit?id=@coupon.Id" data-toggle="tooltip" data-placement="right" title="@if (coupon.ContextId != null
                                                                                                                                && coupon.ProductId != null)

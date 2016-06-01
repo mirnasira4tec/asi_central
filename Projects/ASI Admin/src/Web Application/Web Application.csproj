@@ -280,7 +280,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Helpers\AuthorizedUser.cs" />
+    <Compile Include="Helpers\Authorized.cs" />
     <Compile Include="Controllers\asicentral\CallQueueController.cs" />
     <Compile Include="Controllers\CompanyValidationsController.cs" />
     <Compile Include="Controllers\forms\FormsController.cs" />
