@@ -1,7 +1,7 @@
 ﻿@using asi.asicentral.web.model.store
 @using asi.asicentral.Resources
 @using asi.asicentral.model.store
-@using asi.asicentral.web.Helpers;
+@using asi.asicentral.web.Helpers ;
 @model OrderPageModel
 
 @{
@@ -183,7 +183,15 @@
                                 {
                                     <td><a href="#" class="productRef" data-id="@Server.UrlEncode(order.Item)">@Html.Raw(order.Item)</a></td>
                                 }
-                                <td><a href="@Url.Action("Edit", "Application", new { Id = order.OrderDetailId })">Application</a></td>
+                                <td>
+                                @if (Authorized.IsAuthorizedUser())
+                                {
+                                <a href="@Url.Action("Edit", "Application", new { Id = order.OrderDetailId })">Application</a>
+                                }
+                                else
+                                {
+                                    <a href="#">Application</a>
+                                }</td>
                                 <td>@order.CompletedStep</td>
                                 <td>@order.Quantity</td>
                                 <td>$@order.Price</td>
