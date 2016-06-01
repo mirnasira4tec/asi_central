@@ -12,7 +12,7 @@ namespace asi.asicentral.util.Tests
     public class HtmlHelperTests
     {
 
-        private string url = "http://stage-store.asicentral.com/Store/Supplier/Package/9";
+        private string url = "https://stage-store.asicentral.com/Store/Supplier/Package/9";
 
         [TestMethod()]
         public void SubmitWebRequest_Get_Test()
