@@ -10,7 +10,7 @@ namespace asi.asicentral.services.PersonifyProxy
 {
     public class StoreAddressInfo
     {
-        public CustomerInfo CustuInfo { get; set; }
+        //public ASICustomerInfo CustuInfo { get; set; }
         public string CountryCode { get; set; }
         public StoreAddress StoreAddr { get; set; }
         public bool StoreIsPrimary { get; set; }

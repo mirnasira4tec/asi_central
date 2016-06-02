@@ -1,13 +1,16 @@
-﻿using System.Linq;
-using asi.asicentral.interfaces;
-using asi.asicentral.model.store;
-using asi.asicentral.PersonifyDataASI;
+﻿using asi.asicentral.interfaces;
 using asi.asicentral.model;
+using asi.asicentral.model.personify;
+using asi.asicentral.model.store;
+using asi.asicentral.model.timss;
+using asi.asicentral.oauth;
+using asi.asicentral.PersonifyDataASI;
+using asi.asicentral.services.PersonifyProxy;
 using System;
 using System.Collections.Generic;
-using asi.asicentral.services.PersonifyProxy;
-using asi.asicentral.model.timss;
-using asi.asicentral.util.store;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace asi.asicentral.services
 {
@@ -28,78 +31,174 @@ namespace asi.asicentral.services
             this.storeService = storeService;
         }
 
-        public virtual void PlaceOrder(StoreOrder order, IEmailService emailService, string url)
+        public virtual CompanyInformation PlaceOrder(StoreOrder order, IEmailService emailService, string url)
         {
+            CompanyInformation companyInfo = null;
             log.Debug(string.Format("Place order Start : {0}", order));
             IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
             if (order == null || order.Company == null || order.Company.Individuals == null || countryCodes == null)
                 throw new ArgumentException("You must pass a valid order and the country codes");
             try
             {
-                var companyInfo = PersonifyClient.ReconcileCompany(order.Company, "UNKNOWN", countryCodes, true);
+                IEnumerable<StoreAddressInfo> storeAddress = null;
+                var memberType = string.IsNullOrEmpty(order.Company.MemberType) ? "UNKNOWN" : order.Company.MemberType;
+                companyInfo = PersonifyClient.ReconcileCompany(order.Company, memberType, countryCodes, ref storeAddress, true);
+
+                // do not place order for terminated company
+                if ( companyInfo.IsTerminated())
+                {
+                    return companyInfo;
+                }
+
                 log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
-                IList<CustomerInfo> individualInfos = PersonifyClient.AddIndividualInfos(order, countryCodes, companyInfo).ToList();
+                var individualInfos = PersonifyClient.AddIndividualInfos(order.Company, countryCodes, companyInfo.MasterCustomerId, companyInfo.SubCustomerId).ToList();
                 if (!individualInfos.Any()) throw new Exception("Failed in creating individuald in Personify.");
                 log.Debug(string.Format("Added individuals to company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
-                IList<StoreAddressInfo> addresses2 = PersonifyClient.AddIndividualAddresses(order.Company, individualInfos, countryCodes).ToList();
+                var contactAddresses = individualInfos.SelectMany(i =>
+                                        {
+                                            return PersonifyClient.AddCustomerAddresses(order.Company, i.MasterCustomerId, i.SubCustomerId, countryCodes);
+                                        }).ToList();
+
                 log.Debug(string.Format("Address added to individuals to the order '{0}'.", order));
 
                 StoreIndividual primaryContact = order.GetContact();
-                CustomerInfo primaryContactInfo = individualInfos.FirstOrDefault(c =>
+                var primaryContactInfo = individualInfos.FirstOrDefault(c =>
                     string.Equals(c.FirstName, primaryContact.FirstName, StringComparison.InvariantCultureIgnoreCase)
                     && string.Equals(c.LastName, primaryContact.LastName, StringComparison.InvariantCultureIgnoreCase));
+
                 if (primaryContactInfo == null && !string.IsNullOrEmpty(primaryContact.Email))
                 {
                     primaryContactInfo = PersonifyClient.GetIndividualInfoByEmail(primaryContact.Email);
                 }
 
-                var shipToAddr = GetAddressInfo(addresses2, AddressType.Shipping, order);
-                var billToAddr = GetAddressInfo(addresses2, AddressType.Billing, order);
-                var lineItems = GetPersonifyLineInputs(order, shipToAddr.PersonifyAddr.CustomerAddressId);
-                log.Debug(string.Format("Retrieved the line items to the order '{0}'.", order.ToString()));
-                var orderOutput = PersonifyClient.CreateOrder(
-                    order,
-                    companyInfo,
-                    primaryContactInfo,
-                    billToAddr.PersonifyAddr.CustomerAddressId,
-                    shipToAddr.PersonifyAddr.CustomerAddressId,
-                    lineItems);
-                log.Debug(string.Format("The order '{0}' has been created in Personify.", order));
+                var contactMasterId = primaryContactInfo != null ? primaryContactInfo.MasterCustomerId : individualInfos[0].MasterCustomerId;
+                var contactSubId = primaryContactInfo != null ? primaryContactInfo.SubCustomerId : individualInfos[0].SubCustomerId;
 
-                order.BackendReference = orderOutput.OrderNumber;
-                decimal orderTotal = PersonifyClient.GetOrderBalanceTotal(orderOutput.OrderNumber);
-                log.Debug(string.Format("Got the order total {0} of for the order '{1}'.", orderTotal, order));
+                var shipToAddr = GetAddressInfo(contactAddresses, AddressType.Shipping, order).PersonifyAddr;
+                var billToAddr = storeAddress.FirstOrDefault(a => a.StoreIsBilling == true).PersonifyAddr;
 
-                if (orderTotal != order.Total)
+                var orderDetail = order.OrderDetails[0];
+                var mappings = storeService.GetAll<PersonifyMapping>(true)
+                                           .Where(map => (map.StoreContext == null || map.StoreContext == order.ContextId ) &&
+                                                         map.StoreProduct == orderDetail.Product.Id &&
+                                                         map.PersonifyRateStructure == "BUNDLE").OrderByDescending(m => m.StoreContext).ToList();
+                if( mappings.Count > 0 )
                 {
-                    var data = new EmailData()
+                    PersonifyMapping mapping = null;
+                    var waiveAppFee = false;
+                    var firstmonthFree = false;
+                    var coupon = orderDetail.Coupon;
+                    var couponError = false;
+                    var context = storeService.GetAll<Context>(true).FirstOrDefault(p => p.Id == order.ContextId);
+                    var contextProduct = context != null ? context.Products.FirstOrDefault(p => p.Product.Id == orderDetail.Product.Id) : null;
+
+                    if (contextProduct != null)
                     {
-                        Subject = "here is a price discrepancy for an order from the store to Personify",
-                        EmailBody = string.Format("A new order created in the store ({0}) has been transferred to a Personify "
-                        + "order ({1}). The prices do not match, the order needs to be looked at. The store price is {2:C} and "
-                        + "the Personify price is {3:C}.{4}", order.Id.ToString(), orderOutput.OrderNumber, order.Total, orderTotal, GetMessageSuffix(url))
-                    };
-                    data.SendEmail(emailService);
-                }
-                try
-                {
-                    PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, billToAddr.PersonifyAddr, companyInfo);
-                    log.Debug(string.Format("Payed the order '{0}'.", order));
-                    log.Debug(string.Format("Place order End: {0}", order));
-                }
-                catch (Exception e)
-                {
-                    string s = string.Format("Failed to pay the order '{0} {3}'. Error is {2}{1}", order, e.StackTrace, e.Message, orderOutput.OrderNumber);
-                    log.Error(s);
-                    var data = new EmailData()
+                        waiveAppFee = contextProduct.ApplicationCost == 0;
+
+                        if (coupon != null && !string.IsNullOrEmpty(coupon.CouponCode) && coupon.CouponCode != "(Unknown)")
+                        {
+                            coupon.CouponCode = coupon.CouponCode.Trim();
+
+                            if (contextProduct != null && coupon.IsFixedAmount)
+                            {
+                                if (coupon.DiscountAmount == contextProduct.ApplicationCost)
+                                {
+                                    waiveAppFee = true;
+                                }
+                                else if (coupon.DiscountAmount == contextProduct.Cost)
+                                {
+                                    firstmonthFree = true;
+                                }
+                                else
+                                {
+                                    waiveAppFee = coupon.DiscountAmount >= contextProduct.ApplicationCost;
+                                    firstmonthFree = !waiveAppFee && coupon.DiscountAmount >= contextProduct.Cost ||
+                                                      waiveAppFee && coupon.DiscountAmount >= contextProduct.ApplicationCost + contextProduct.Cost;
+                                }
+
+                                couponError = coupon.DiscountAmount != contextProduct.ApplicationCost &&
+                                              coupon.DiscountAmount != contextProduct.Cost &&
+                                              coupon.DiscountAmount != contextProduct.ApplicationCost + contextProduct.Cost;
+
+                                if (firstmonthFree)
+                                {
+                                    mapping = mappings.FirstOrDefault(m => !string.IsNullOrEmpty(m.StoreOption) && m.StoreOption.Trim() == coupon.CouponCode);
+                                }
+                            }
+                            else
+                                couponError = true;
+
+                        }
+                    }
+
+                    if (mapping == null)
                     {
-                        Subject = "order failed to be charged",
-                        EmailBody = s + GetMessageSuffix(url)
-                    };
-                    data.SendEmail(emailService);
-                    log.Debug(string.Format("Place order End: {0}", order));
+                        mapping = mappings.FirstOrDefault(m => string.IsNullOrEmpty(m.StoreOption));
+                    }
+
+                    PersonifyClient.CreateBundleOrder(order, mapping, companyInfo, contactMasterId, contactSubId, billToAddr, shipToAddr, waiveAppFee, firstmonthFree);
+                    ValidateOrderTotal(order, emailService, url, true, firstmonthFree);
+
+                    // update company ASI#, to be included in the internal email
+                    var asiNumber = PersonifyClient.GetCompanyAsiNumber(companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+                    if ( !string.IsNullOrWhiteSpace(asiNumber) && asiNumber.Trim().Length < 7 )
+                    {
+                        order.Company.ASINumber = asiNumber;
+                    }
+
+                    if( couponError)
+                    {   // send internal email 
+                        var data = new EmailData()
+                        {
+                            Subject = "There is a problem with coupon discount amount for an order from the store to Personify",
+                            EmailBody = string.Format("A new order created in the store ({0}) has been transferred to a Personify "
+                            + "order ({1}). There is problem with coupon discount {2}, the order needs to be looked at. {3}",
+                            order.Id.ToString(), order.BackendReference, coupon.IsFixedAmount ? coupon.DiscountAmount : coupon.DiscountPercentage, EmailData.GetMessageSuffix(url))
+                        };
+
+                        data.SendEmail(emailService);
+                    }
+                }
+                else
+                {
+                    var lineItems = GetPersonifyLineInputs(order, shipToAddr.CustomerAddressId);
+                    log.Debug(string.Format("Retrieved the line items to the order '{0}'.", order.ToString()));
+                    var orderOutput = PersonifyClient.CreateOrder(
+                        order,
+                        companyInfo.MasterCustomerId,
+                        companyInfo.SubCustomerId,
+                        contactMasterId, 
+                        contactSubId,
+                        billToAddr.CustomerAddressId,
+                        shipToAddr.CustomerAddressId,
+                        lineItems);
+                    log.Debug(string.Format("The order '{0}' has been created in Personify.", order));
+
+                    order.BackendReference = orderOutput.OrderNumber;
+                    decimal orderTotal = ValidateOrderTotal(order, emailService, url);
+
+                    try
+                    {
+                        PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, 
+                                                               billToAddr, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+                        log.Debug(string.Format("Payed the order '{0}'.", order));
+                        log.Debug(string.Format("Place order End: {0}", order));
+                    }
+                    catch (Exception e)
+                    {
+                        string s = string.Format("Failed to pay the order '{0} {3}'. Error is {2}{1}", order, e.StackTrace, e.Message, orderOutput.OrderNumber);
+                        log.Error(s);
+                        var data = new EmailData()
+                        {
+                            Subject = "order failed to be charged",
+                            EmailBody = s + EmailData.GetMessageSuffix(url)
+                        };
+                        data.SendEmail(emailService);
+                        log.Debug(string.Format("Place order End: {0}", order));
+                    }
                 }
             }
             catch (Exception ex)
@@ -116,11 +215,52 @@ namespace asi.asicentral.services
                 var data = new EmailData()
                 {
                     Subject = error2,
-                    EmailBody = error1 + "<br /><br />" + error2 + GetMessageSuffix(url)
+                    EmailBody = error1 + "<br /><br />" + error2 + EmailData.GetMessageSuffix(url)
                 };
                 data.SendEmail(emailService);
                 throw ex;
             }
+
+            return companyInfo;
+        }
+
+        private decimal ValidateOrderTotal(StoreOrder order, IEmailService emailService, string url, 
+                                           bool bundleOrder = false, bool firstMonthFree = false)
+        {
+            if (order == null)
+            {
+                throw new Exception("Order is null");
+            }
+
+            decimal backEndTotal = PersonifyClient.GetOrderBalanceTotal(order.BackendReference);
+            log.Debug(string.Format("Got the order total {0} of for the order '{1}'.", backEndTotal, order));
+
+            decimal orderTotal = 0;
+            if (!firstMonthFree)
+            {
+                if (!bundleOrder)
+                {
+                    orderTotal = order.Total;
+                }
+                else if (order.OrderDetails != null && order.OrderDetails.Count > 0)
+                    orderTotal = order.OrderDetails[0].Cost + order.OrderDetails[0].TaxCost;
+            }
+            else
+                orderTotal = order.AnnualizedTotal;
+
+            if (backEndTotal != orderTotal)
+            {
+                var data = new EmailData()
+                {
+                    Subject = "here is a price discrepancy for an order from the store to Personify",
+                    EmailBody = string.Format("A new order created in the store ({0}) has been transferred to a Personify "
+                    + "order ({1}). The prices do not match, the order needs to be looked at. The store price is {2:C} and "
+                    + "the Personify price is {3:C}.{4}", order.Id.ToString(), order.BackendReference, orderTotal, backEndTotal, EmailData.GetMessageSuffix(url))
+                };
+                data.SendEmail(emailService);
+            }
+
+            return backEndTotal;
         }
 
         private StoreAddressInfo GetAddressInfo(IList<StoreAddressInfo> addresses, AddressType type, StoreOrder order)
@@ -167,6 +307,14 @@ namespace asi.asicentral.services
             return processUsingBackend;
         }
 
+        public virtual CompanyInformation UpdateCompanyStatus(StoreCompany storeCompany, StatusCode status)
+        {
+            log.Debug(string.Format("Start UpdateCompanyStatus {0}, {1} ).", storeCompany.Name, status.ToString()));
+            var companyInfo = PersonifyClient.UpdateCompanyStatus(storeCompany, status);
+            log.Debug(string.Format("End UpdateCompanyStatus {0}, {1}).", storeCompany.Name, status.ToString()));
+            return companyInfo;
+        }
+
         public virtual bool ValidateCreditCard(CreditCard creditCard)
         {
 
@@ -183,13 +331,97 @@ namespace asi.asicentral.services
             //assuming credit card is valid already
             if (company == null || creditCard == null) throw new ArgumentException("Invalid parameters");
             IList<LookSendMyAdCountryCode> countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
+            
             //create company if not already there
-            var companyInfo = PersonifyClient.ReconcileCompany(company, "UNKNOWN", countryCodes);
+            CompanyInformation companyInfo = null;
+            string newMemberType = string.Empty;
+            if (order.IsNewMemberShip(ref newMemberType))
+            {
+                //check if the matchList have lead company already created
+                var matchIdList = order.Company.MatchingCompanyIds;
+                if (!string.IsNullOrEmpty(matchIdList))
+                {
+                    var matches = Regex.Matches(matchIdList, @"(\d+),(LEAD|ASICENTRAL),\w+\|?");
+
+                    if (matches.Count > 0)
+                    {
+                        var personifyCompany = PersonifyClient.GetPersonifyCompanyInfo(matches[0].Groups[1].Value, 0);
+                        companyInfo = PersonifyClient.GetCompanyInfo(personifyCompany);
+
+                        order.Company.MatchingCompanyIds = matchIdList.Replace(matches[0].Value, "");
+                    }
+                }
+                else if( !order.IsGuestLogin ) //login user
+                {
+                    var matchCompany = new StoreCompany()
+                    {
+                        Name = company.Name,
+                        Phone = company.Phone,
+                        Individuals = company.Individuals,
+                        MemberType = newMemberType
+                    };
+
+                    List<string> matchList = null;
+                    var personifyCompany = PersonifyClient.FindCustomerInfo(matchCompany, ref matchList);
+                    if (personifyCompany != null)
+                    {
+                        if (string.Compare(personifyCompany.MemberStatus, "LEAD", StringComparison.CurrentCulture) == 0 ||
+                            string.Compare(personifyCompany.MemberStatus, "ASICENTRAL", StringComparison.CurrentCulture) == 0 )
+                        {
+                            companyInfo = personifyCompany;
+                        }
+                        else if ( matchList != null && matchList.Count > 0 )
+                        {
+                            foreach (var m in matchList)
+                            {
+                                var match = Regex.Match(m, @"(\d+),(LEAD|ASICENTRAL),\w+");
+                                if (match.Success)
+                                {
+                                    var leadCompany = PersonifyClient.GetPersonifyCompanyInfo(match.Groups[1].Value, 0);
+                                    if (leadCompany != null)
+                                    {
+                                        companyInfo = PersonifyClient.GetCompanyInfo(leadCompany);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (companyInfo == null)
+                {
+                    //create a new Personify company for new membership type
+                    companyInfo = PersonifyClient.CreateCompany(order.Company, newMemberType, countryCodes);
+                }
+
+                if (company.HasExternalReference())
+                { // add current matched company to matchIds
+                    var newMatches = string.Format("{0},{1},{2}", company.ExternalReference.Split(';')[0],company.MemberStatus, company.MemberType);
+                    if (string.IsNullOrEmpty(company.MatchingCompanyIds))
+                        company.MatchingCompanyIds = newMatches;
+                    else
+                    {
+                        company.MatchingCompanyIds = newMatches + "|" + company.MatchingCompanyIds;
+                    }
+                }
+
+                company.ExternalReference = string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+                company.MemberType = newMemberType;
+                company.MemberStatus = companyInfo.MemberStatus;
+            }
+            else
+            {
+                var memberType = string.IsNullOrEmpty(company.MemberType) ? "UNKNOWN" : company.MemberType;
+                IEnumerable<StoreAddressInfo> storeAddress = null;
+                companyInfo = PersonifyClient.ReconcileCompany(company, memberType, countryCodes, ref storeAddress);
+            }
+
 			//field used to map an order to a company before approval for non backoffice orders
 			order.ExternalReference = companyInfo.MasterCustomerId;
             //Add credit card to the company
 			//@todo CC Personify temporary measure, always add the credit card. No longer checking if (profile == string.Empty) from string profile = PersonifyClient.GetCreditCardProfileId(order.GetASICompany(), companyInfo, creditCard);
-			var profile = PersonifyClient.SaveCreditCard(order.GetASICompany(), companyInfo, creditCard);
+			var profile = PersonifyClient.SaveCreditCard(order.GetASICompany(), companyInfo.MasterCustomerId, companyInfo.SubCustomerId, creditCard);
             log.Debug(string.IsNullOrWhiteSpace(profile) ?
                 "Fail to save the credit." : string.Format("Saved credit profile id : {0}", profile));
             if (string.IsNullOrEmpty(profile)) throw new Exception("Credit card can't be saved to Personify.");
@@ -199,7 +431,7 @@ namespace asi.asicentral.services
 	    public virtual IEnumerable<StoreCreditCard> GetCompanyCreditCards(StoreCompany company, string asiCompany)
 	    {
 		    return PersonifyClient.GetCompanyCreditCards(company, asiCompany);
-	    } 
+	    }
 
         private IList<CreateOrderLineInput> GetPersonifyLineInputs(StoreOrder order, long shipAddressId)
         {
@@ -213,7 +445,7 @@ namespace asi.asicentral.services
                         var startDate = (orderDetail.DateOption.HasValue ? orderDetail.DateOption.Value : DateTime.Now).ToString("MM/dd/yyyy");
                         var endDate = (orderDetail.DateOption.HasValue ? orderDetail.DateOption.Value : DateTime.Now).AddMonths(1).ToString("MM/dd/yyyy");
                         var option = orderDetail.OptionId.ToString();
-                        var mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => Equals(map.StoreContext, orderDetail.Order.ContextId) &&
+                        var mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => (map.StoreContext ?? -1) == (orderDetail.Order.ContextId ?? -1) &&
                             map.StoreProduct == orderDetail.Product.Id &&
                             map.StoreOption == option);
                         mapping.Quantity = orderDetail.Quantity;
@@ -244,7 +476,7 @@ namespace asi.asicentral.services
                             else if (orderDetail.Quantity >= 3) option += "3X";
                             else option += "1X";
                         }
-                        mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => Equals(map.StoreContext, orderDetail.Order.ContextId) &&
+                        mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => (map.StoreContext ?? -1) == (orderDetail.Order.ContextId ?? -1) &&
                             map.StoreProduct == orderDetail.Product.Id &&
                             map.StoreOption == option);
                         //need to create a new line item for each one rather than one for all quantity
@@ -265,7 +497,7 @@ namespace asi.asicentral.services
                         mapping.Quantity = 1;
                         break;
                     default:
-                        mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => Equals(map.StoreContext, orderDetail.Order.ContextId) &&
+                        mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => (map.StoreContext ?? -1) == (orderDetail.Order.ContextId ?? -1) &&
                             map.StoreProduct == orderDetail.Product.Id);
 
                         lineItem = new CreateOrderLineInput
@@ -340,63 +572,56 @@ namespace asi.asicentral.services
 
 			if (companyInformation.MemberStatus == "ACTIVE") throw new Exception("We should not be creating an active company");
             //create company if not already there
-            var companyInfo = PersonifyClient.ReconcileCompany(company, companyInformation.MemberType, null, true);
-            PersonifyClient.AddCustomerAddresses(company, companyInfo, null);
-            PersonifyClient.AddPhoneNumber(companyInformation.Phone, GetCountryCode(companyInformation.Country), companyInfo);
+            IEnumerable<StoreAddressInfo> storeAddress = null;
+            var companyInfo = PersonifyClient.ReconcileCompany(company, companyInformation.MemberType, null, ref storeAddress, true);
 
+            if (storeAddress == null) 
+            {
+                PersonifyClient.AddCustomerAddresses(company, companyInfo.MasterCustomerId, companyInfo.SubCustomerId, null);
+                PersonifyClient.AddPhoneNumber(companyInformation.Phone, GetCountryCode(companyInformation.Country), companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+            }
             // Add contact to personify
-            PersonifyClient.AddIndividualInfos(company, null, companyInfo);
+            PersonifyClient.AddIndividualInfos(company, null, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
 
-            companyInformation = PersonifyClient.GetCompanyInfo(companyInfo);
-            user.CompanyId = companyInformation.CompanyId;
+            user.CompanyId = companyInfo.CompanyId;
 
-            return companyInformation;
+            return companyInfo;
         }
 
         public virtual CompanyInformation CreateCompany(StoreCompany storeCompany, string storeType)
         {
-            CompanyInformation company = null;
-
             var countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
-            CustomerInfo customerInfo = PersonifyClient.CreateCompany(storeCompany, storeType, countryCodes);
-            if (customerInfo != null)
+            var companyInfo = PersonifyClient.CreateCompany(storeCompany, storeType, countryCodes);
+            if (companyInfo != null)
             {
-                PersonifyClient.AddIndividualInfos(storeCompany, countryCodes, customerInfo);
-                company = PersonifyClient.GetCompanyInfo(customerInfo);
-            }
-
-            return company;
-        }
-
-        public virtual CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList, ref bool dnsFlag)
-        {
-            var startTime = DateTime.Now;
-            log.Debug(string.Format("FindCompanyInfo - start: Company {0} , phone {1}", company.Name, company.Phone));
-            var customerInfo = PersonifyClient.FindCustomerInfo(company, ref matchList);
-            CompanyInformation companyInfo = null;
-
-            if (customerInfo != null)
-            {
-                companyInfo = PersonifyClient.GetCompanyInfo(customerInfo);
-            }
-
-            log.Debug(string.Format("FindCompanyInfo - end: Company {0}, total matches: {1}; time: {2}",
-                                    company.Name,
-                                    matchList != null ? matchList.Count : 0,
-                                    DateTime.Now.Subtract(startTime).TotalMilliseconds));
-			//set dns flag
-            if (customerInfo != null)
-            {
-                dnsFlag = PersonifyClient.CompanyDoNotSolicitFlag(customerInfo.MasterCustomerId, customerInfo.SubCustomerId);
+                PersonifyClient.AddIndividualInfos(storeCompany, countryCodes, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
             }
 
             return companyInfo;
         }
 
+        public virtual CompanyInformation FindCompanyInfo(StoreCompany company, ref List<string> matchList)
+        {
+            var startTime = DateTime.Now;
+            log.Debug(string.Format("FindCompanyInfo - start: Company {0} , phone {1}", company.Name, company.Phone));
+            var companyInfo = PersonifyClient.FindCustomerInfo(company, ref matchList);
+
+            log.Debug(string.Format("FindCompanyInfo - end: Company {0}, total matches: {1}; time: {2}",
+                                    company.Name,
+                                    matchList != null ? matchList.Count : 0,
+                                    DateTime.Now.Subtract(startTime).TotalMilliseconds));
+            return companyInfo;
+        }
+
         public virtual CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber)
         {
-            var companyInfo = PersonifyClient.GetCompanyInfoByASINumber(asiNumber);
-			UpdateMemberType(companyInfo);
+            CompanyInformation companyInfo = null;
+            var customerInfo = PersonifyClient.GetCompanyInfoByASINumber(asiNumber);
+            if (customerInfo != null)
+            {
+                companyInfo = PersonifyClient.GetCompanyInfo(customerInfo);
+                UpdateMemberType(companyInfo);
+            }
 			return companyInfo;
         }
 
@@ -412,19 +637,17 @@ namespace asi.asicentral.services
             PersonifyClient.AddActivity(company, activityText, activityType);
         }
 
-        public void MakeCompanyActive(string masterCustomerId)
+        public string GetCompanyStatus(string masterCustomerId, int subCustomerId)
         {
-            PersonifyClient.MakeCompanyActive(masterCustomerId);
+            return PersonifyClient.GetCompanyStatus(masterCustomerId, subCustomerId);
         }
 
-		private static string GetMessageSuffix(string url)
-		{
-			var s = "<br /><br />Thanks,<br /><br />ASICentral team";
-			if (!string.IsNullOrEmpty(url)) s = "<br /><br />" + url + s;
-			return s;
-		}
+        public string GetCompanyAsiNumber(string masterCustomerId, int subCustomerId)
+        {
+            return PersonifyClient.GetCompanyAsiNumber(masterCustomerId, subCustomerId);
+        }
 
-		private static string GetCountryCode(string country)
+ 		private static string GetCountryCode(string country)
 		{
 			string result = null;
 			if (!string.IsNullOrWhiteSpace(country))
