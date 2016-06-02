@@ -20,8 +20,11 @@ namespace asi.asicentral.web.Helpers
             {
                 for (int i = 0; i < allowedusers.Count(); i++)
                 {
-                    if (Name.Equals(allowedusers[i]))
-                        AuthorizedUser = true; 
+                    if (Name.ToLower().Equals(allowedusers[i].ToLower()))
+                    {
+                        AuthorizedUser = true;
+                        break;
+                    }
                     else
                         AuthorizedUser = false;
                 }
