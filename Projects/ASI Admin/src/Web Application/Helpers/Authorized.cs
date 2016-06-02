@@ -25,8 +25,6 @@ namespace asi.asicentral.web.Helpers
                         AuthorizedUser = true;
                         break;
                     }
-                    else
-                        AuthorizedUser = false;
                 }
             }
             return AuthorizedUser;
