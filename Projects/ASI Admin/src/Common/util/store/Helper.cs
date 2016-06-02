@@ -13,6 +13,14 @@ namespace asi.asicentral.util.store
         public const string CARD_ON_FILE = "Card on file";
         public const string NOT_FOUND = "NOT_FOUND";
 
+        public static readonly Dictionary<string, int> APPLICATION_FEE_IDS = 
+                                                    new Dictionary<string, int>()
+                                                    {
+                                                        {"DISTRIBUTOR", 160}, 
+                                                        {"SUPPLIER", 159},
+                                                        {"DECORATOR", 4895}
+                                                    };
+
         public static IList<SelectListItem> GetTitles()
         {
             IList<SelectListItem> titles = new List<SelectListItem>();

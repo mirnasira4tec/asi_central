@@ -217,7 +217,7 @@ namespace asi.asicentral.util
         /// <param name="post"></param>
         /// <param name="returnContent">wether to process the result</param>
         /// <returns></returns>
-        public static string SubmitWebRequest(string url, IDictionary<string, string> headerParam, string content, bool post = true, bool returnContent = true)
+        public static string SubmitWebRequest(string url, IDictionary<string, string> headerParam, string content, bool post = true, bool returnContent = true, string contentType = null)
         {
             StringBuilder resultContent = new StringBuilder();
             ILogService logService = LogService.GetLog(typeof(HtmlHelper));
@@ -233,7 +233,8 @@ namespace asi.asicentral.util
                     UTF8Encoding encoding = new UTF8Encoding();
                     byte[] postBytes = encoding.GetBytes(content);
                     request.Content = new StreamContent(new MemoryStream(postBytes));
-                    request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+                    if(contentType == null) request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+                    else request.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
                 }
                 request.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.168 Safari/535.19");
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
@@ -241,6 +242,7 @@ namespace asi.asicentral.util
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/html"));
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/xml"));
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xhtml+xml"));
+               
                 if (headerParam != null)
                 {
                     foreach (string key in headerParam.Keys)
@@ -261,6 +263,12 @@ namespace asi.asicentral.util
                                 break;
                             case "expect":
                                 request.Headers.ExpectContinue = Convert.ToBoolean(headerParam[key]);
+                                break;
+                            case "authorization":
+                                request.Headers.Authorization = new AuthenticationHeaderValue(headerParam[key]);
+                                break;
+                            default:
+                                request.Headers.Add(key, headerParam[key]);
                                 break;
                         }
                     }

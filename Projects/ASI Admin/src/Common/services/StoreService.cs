@@ -200,13 +200,15 @@ namespace asi.asicentral.services
                             else if (!orderDetail.Coupon.IsFixedAmount && orderDetail.Coupon.DiscountPercentage > 0)
                                 discountAmount = ((costForTax * orderDetail.Coupon.DiscountPercentage) / 100);
 
-                            costForTax = costForTax - discountAmount;
+                            if ( !orderDetail.Product.IsMembership() || orderDetail.Product.ApplicationCost > discountAmount )
+                                costForTax = costForTax - discountAmount;
+
                             orderDetail.DiscountAmount = discountAmount;
                         }
 
                         //tax calculated based on full amount except shipping
                         if (orderDetail.Product.HasTax)
-                            tax = CalculateTaxes(address, costForTax + orderDetail.ApplicationCost);
+                            tax = CalculateTaxes(address, costForTax + (orderDetail.Product.IsMembership() ? 0 : orderDetail.ApplicationCost));
 
                         if (string.IsNullOrEmpty(orderDetail.ShippingMethod)) orderDetail.ShippingCost = GetShippingCost(orderDetail.Product, address.Country, orderDetail.Quantity);
                         else
@@ -236,10 +238,11 @@ namespace asi.asicentral.services
                         tax = 0;
                         if (orderDetail.Product.HasTax)
                         {
+                            var appFeeTax = orderDetail.Product.IsMembership() ? 0 : CalculateTaxes(address, orderDetail.ApplicationCost);
                             if (orderDetail.Coupon != null && orderDetail.Coupon.IsSubscription)
-                                tax = CalculateTaxes(address, (orderDetail.Cost - orderDetail.DiscountAmount)) * 12 + CalculateTaxes(address, orderDetail.ApplicationCost);
+                                tax = CalculateTaxes(address, (orderDetail.Cost - orderDetail.DiscountAmount)) * 12 + appFeeTax;
                             else
-                                tax = CalculateTaxes(address, (orderDetail.Cost - orderDetail.DiscountAmount)) + (CalculateTaxes(address, orderDetail.Cost) * 11) + CalculateTaxes(address, orderDetail.ApplicationCost);
+                                tax = CalculateTaxes(address, (orderDetail.Cost - orderDetail.DiscountAmount)) + (CalculateTaxes(address, orderDetail.Cost) * 11) + appFeeTax;
                         }
 
                         //this would be the total cost over a year for a subscription
@@ -272,7 +275,8 @@ namespace asi.asicentral.services
                 {
                     taxRate = taxRateRecord.Rate;
                 }
-                else
+                
+                if( !string.IsNullOrEmpty(address.Zip) )
                 {
                     int zipCode = 0;
                     int.TryParse(address.Zip, out zipCode);
@@ -280,7 +284,7 @@ namespace asi.asicentral.services
                     {
                         //look for a state/zip record
                         taxRateRecord = this.GetAll<TaxRate>().SingleOrDefault(taxRecord => taxRecord.State == address.State && taxRecord.Zip == zipCode);
-                        if (taxRateRecord != null) taxRate = taxRateRecord.Rate;
+                        if (taxRateRecord != null) taxRate += taxRateRecord.Rate;
                     }
                 }
                 if (taxRate > 0) tax = (amount.Value * taxRate) / 100m;

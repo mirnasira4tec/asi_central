@@ -1,6 +1,7 @@
 ﻿@using asi.asicentral.web
 @using asi.asicentral.model.store
 @using asi.asicentral.web.Controllers.Store;
+@using asi.asicentral.Resources;
 @model asi.asicentral.web.model.store.DistributorApplicationModel
 @{
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
@@ -19,7 +20,8 @@
 			<li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
 			<li><a href="#tabproduct" data-toggle="tab">Product Information</a></li>
 		    <li><a href="#tabaccount" data-toggle="tab">Account Information</a></li>
-			<li><a href="#tabterms" data-toggle="tab">Terms and Conditions</a></li>
+		    <li><a href="#tabterms" data-toggle="tab">Terms and Conditions</a></li>
+            <li><a href="#tabquestions" data-toggle="tab">Required Questions</a></li>
 		</ul>
 	</nav>
 
@@ -245,45 +247,67 @@
 			  </fieldset>
 	</div><!-- END #account-information -->
 
+        <!------------------------------------required-questions---------------------------------->
+        <div id="tabquestions" class="account-information tab-pane fade">
+			<fieldset class="primary-business-revenue">
+				<legend>Required Questions</legend>
+                <label>
+					@Html.Raw(Resource.IsAuthorizedToBindCompany)
+					@(Model.IsAuthorizedToBindCompany != null && Model.IsAuthorizedToBindCompany.Value ? Resource.Form_Yes : Resource.Form_No)
+				</label>
+                <label>
+					@Html.Raw(Resource.ApprovedSignature):
+					@(Model.ApprovedSignature)
+				</label>
+                 <br />
+                <label>
+					@Html.Raw(Resource.IsForResale)
+					@(Model.IsForResale != null && Model.IsForResale.Value ? Resource.Form_Yes : Resource.Form_No)
+				</label>
+                <br />
+                <label>
+					@Html.Raw(Resource.IsOnlyProfitReseller)
+					@(Model.IsOnlyProfitReseller != null && Model.IsOnlyProfitReseller.Value ? Resource.Form_Yes : Resource.Form_No)
+				</label>
+                <br />
+                <label>
+					@Html.Raw(Resource.IsDetailsProvider)
+					@(Model.IsDetailsProvider != null && Model.IsDetailsProvider.Value ? Resource.Form_Yes : Resource.Form_No)
+				</label>
+                <br />
+                <label>
+					@Html.Raw(Resource.IsApplyingForMembership)
+					@(Model.IsApplyingForMembership != null && Model.IsApplyingForMembership.Value ? Resource.Form_Yes : Resource.Form_No)
+				</label>
+                @if(Model.IsApplyingForMembership != null && !Model.IsApplyingForMembership.Value)
+                {
+                <label>
+					@Html.Raw(Resource.OtherCompanyName)
+					@(!string.IsNullOrEmpty(Model.OtherCompanyName) ? Model.OtherCompanyName : string.Empty)
+				</label>
+                }
+                <br />
+                <label>
+					@Html.Raw(Resource.IsChangesInformed)
+					@(Model.IsChangesInformed != null && Model.IsChangesInformed.Value ? Resource.Form_Yes : Resource.Form_No)
+				</label>
+                <br />
+                <label>
+					@Html.Raw(Resource.IsDataCertified)
+					@(Model.IsDataCertified != null && Model.IsDataCertified.Value ? Resource.Form_Yes : Resource.Form_No)
+				</label>
+            </fieldset>
+		</div>	
+        <!-- END #required-questions -->		
+		
 	</div><!-- END .tab-content -->    
 }
 
 @section Scripts {
     @Scripts.Render("~/bundles/form")
     <script src="/Scripts/asi.js"></script>
+    <script src="/Scripts/orders.js"></script>
     <script>
-        $('input.command').click(function (e) {
-            $('#ActionName').val(e.target.value);
-            if ($('#ActionName').val() == '@ApplicationController.COMMAND_ACCEPT') {
-                //make sure we have Timms value
-                if (!$('#ExternalReference').val()) {
-                    asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
-                    $("#ExternalReference").attr("class", "text-box single-line input-validation-error span2");
-                    $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
-                    e.preventDefault();
-                }
-                else {
-                    var isnum = /^\d+$/.test($('#ExternalReference').val());
-                    if (!isnum) {
-                        asi.modal.confirm('Error', 'TIMMS ID must contain only numbers.', null, "#hide", "Close");
-                        $("#ExternalReference").attr("class", "text-box single-line input-validation-error span2");
-                        $("#timmsErrorMessage").text("TIMMS ID must contain only numbers.");
-                        e.preventDefault();
-                    }
-                    else if ($('#hasPendingTerms').length > 0) {
-                        $("#termsWarningMessage").text('This order has pending Terms and Conditions.');
-                        var confirm = window.confirm('This order has pending Terms and Conditions. Are you sure to accept the order?');
-                        if (!confirm) {
-                            e.preventDefault();
-                        }
-                    }
-                }
-            }
-        });
-        $('[rel*="isprimary"]').change(function () {
-            $('[rel*="isprimary"]').attr("checked", false);
-            this.checked = true;
-        });
         $(".radio").change(function (evt) {
             if ($(evt.target).val() == "Other") $("#OtherBusinessRevenue").attr("class", "input-medium");
             else {

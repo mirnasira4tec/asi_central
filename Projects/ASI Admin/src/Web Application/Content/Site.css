@@ -358,7 +358,7 @@ header#site-header {
 }
 
 /*--------------------body--------------*/
-#tabbasic, #tabproduct, #tabaccount, #tabsubscription, #tabterms{
+#tabbasic, #tabproduct, #tabaccount, #tabsubscription, #tabterms, #tabquestions{
 	border-bottom: 1px solid #a8a8a8;
 	border-left: 1px solid #a8a8a8;
 	border-right: 1px solid #a8a8a8;
@@ -664,6 +664,9 @@ a:hover, a:focus {
 }
  .table td {
     border-top: 1px solid #D71D24;
+}
+input[type="text"] {
+    padding:4px 3px !important;
 }
 
 

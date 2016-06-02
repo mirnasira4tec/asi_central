@@ -23,6 +23,12 @@ namespace asi.asicentral.services.PersonifyProxy
         public EmailData()
         {
             log = LogService.GetLog(this.GetType());
+            MailTo = GetMailTo();
+        }
+
+        public string[] GetMailTo()
+        {
+            MailTo = null;
             var em = ConfigurationManager.AppSettings["CreateOrderInPersonifyErrorEmail"];
             if (!string.IsNullOrEmpty(em))
             {
@@ -30,37 +36,54 @@ namespace asi.asicentral.services.PersonifyProxy
             }
             else
             {
-                log.Debug("Entry of \"CreateOrderInPersonifyErrorEmail\" in configuration file isn't configured.");
+                log.Debug("Entry of \"CreateOrderInPersonifyErrorEmail\" doesn't exist in configuration file.");
             }
+
+            return MailTo;
         }
 
         public void SendEmail(IEmailService emailService)
         {
-            if (MailTo == null)
+            try
             {
-                if (!string.IsNullOrEmpty(Subject))
+                if (MailTo == null)
                 {
-                    log.Debug(Subject);
+                    log.Error("MailTo is null");
+                    if (!string.IsNullOrEmpty(Subject))
+                    {
+                        log.Debug(Subject);
+                    }
+                    if (!string.IsNullOrEmpty(EmailBody))
+                    {
+                        log.Debug(EmailBody);
+                    }
+                    return;
                 }
-                if (!string.IsNullOrEmpty(EmailBody))
+                MailMessage mail = new MailMessage();
+                mail.BodyEncoding = Encoding.UTF8;
+                mail.IsBodyHtml = true;
+                foreach (var a in MailTo)
                 {
-                    log.Debug(EmailBody);
+                    if (!string.IsNullOrWhiteSpace(a))
+                    {
+                        mail.To.Add(new MailAddress(a.Trim()));
+                    }
                 }
-                return;
+                mail.Subject = Subject;
+                mail.Body = EmailBody;
+                emailService.SendMail(mail);
             }
-            MailMessage mail = new MailMessage();
-            mail.BodyEncoding = Encoding.UTF8;
-            mail.IsBodyHtml = true;
-            foreach (var a in MailTo)
+            catch (Exception ex)
             {
-                if (!string.IsNullOrWhiteSpace(a))
-                {
-                    mail.To.Add(new MailAddress(a.Trim()));
-                }
+                log.Error(string.Format("Error in sending email: {0} {1}", ex.Message, ex.StackTrace));
             }
-            mail.Subject = Subject;
-            mail.Body = EmailBody;
-            emailService.SendMail(mail);
+        }
+
+        public static string GetMessageSuffix(string url)
+        {
+            var s = "<br /><br />Thanks,<br /><br />ASICentral team";
+            if (!string.IsNullOrEmpty(url)) s = "<br /><br />" + url + s;
+            return s;
         }
     }
 }
