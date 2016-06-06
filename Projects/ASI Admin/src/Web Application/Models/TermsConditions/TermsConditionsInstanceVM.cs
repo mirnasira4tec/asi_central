@@ -37,6 +37,8 @@ namespace asi.asicentral.web.Models.TermsConditions
         public string Messages { get; set; }
         [Display(Name = "Accepted By")]
         public string AcceptedBy { get; set; }
+        public string Signaure { get; set; }
+
 
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
@@ -69,6 +71,7 @@ namespace asi.asicentral.web.Models.TermsConditions
                      LastUpdatedBy = model.LastUpdatedBy,
                      NotificationEmail = model.NotificationEmail,
                      Messages = model.Messages,
+                     Signaure = model.SignatureUrl,
                      AcceptedBy = model.AcceptedBy,
                      CreateDate = model.CreateDate,
                      UpdateDate = model.UpdateDate,

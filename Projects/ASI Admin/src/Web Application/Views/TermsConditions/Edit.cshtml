@@ -132,9 +132,21 @@
                             @Html.TextBoxFor(model => model.IPAddress, new { @readonly = "readonly"})
 				        </div>
 			        </div>
+
+                     @if (!string.IsNullOrEmpty(Model.Signaure))
+                     {
+			            <div class="span4">
+				            <div class="form-group" >
+					            @Html.LabelFor(model => model.Signaure)
+                                <div class="form-group">
+                                    <img src="@Model.Signaure"/>
+                                </div>
+				            </div>
+			            </div>
+                     }
 		        </div>
-                <br />
-           }
+                <br/>
+            }
         }        
 		<div class="row">
             <div class="span8">
