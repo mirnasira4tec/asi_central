@@ -973,8 +973,7 @@ namespace asi.asicentral.web.Controllers.Store
 
                 var product = order.OrderDetails[0].Product;
                 var orderPlaced = true;
-                var newOrder = DateTime.Compare(order.CreateDate, new DateTime(2016, 4, 9, 0, 0, 0)) > 0;
-                if (product.HasBackEndIntegration && product.IsMembership() && newOrder)
+                if (product.HasBackEndIntegration)
                 {
                     try
                     {
