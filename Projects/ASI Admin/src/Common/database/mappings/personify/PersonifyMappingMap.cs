@@ -49,6 +49,9 @@ namespace asi.asicentral.database.mappings.personify
             this.Property(t => t.PersonifyRateStructure)
                 .HasColumnName("RATE_STRUCTURE")
                 .IsRequired();
+
+            this.Property(t => t.PaySchedule)
+                .HasColumnName("PAYSCHEDULE");
             
             this.Property(t => t.CreateDateUTC)
                 .HasColumnName("CREATE_DATE_UTC")
