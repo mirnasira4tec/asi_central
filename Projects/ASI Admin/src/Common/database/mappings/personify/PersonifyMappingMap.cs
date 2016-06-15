@@ -57,6 +57,9 @@ namespace asi.asicentral.database.mappings.personify
 
             this.Property(t => t.CreateUserUTC)
                 .HasColumnName("CREATE_USER_UTC");
+
+            this.Property(t => t.PaySchedule)
+                .HasColumnName("PAYSCHEDULE");
             
             this.Property(t => t.CreateDateUTC)
                 .HasColumnName("CREATE_DATE_UTC")
