@@ -103,7 +103,7 @@ namespace asi.asicentral.web.Controllers.Store
                 string text = string.Empty;
                 foreach (Context product in contexts)
                 {
-                    text = product.Id.ToString() + "-" + product.Name;
+                    text = product.Id + "-" + product.Name;
                     contextList.Add(new SelectListItem() {Text = text, Value = product.Id.ToString(), Selected = false});
                 }
             }
@@ -183,7 +183,8 @@ namespace asi.asicentral.web.Controllers.Store
                     ModelState.AddModelError("Error",
                         "Please fill out at least one of Application Fee Discount, Product Discount and Monthly Subscription Cost");
                 }
-                else if (couponModel.ContextId == null && couponModel.ProductId == null)
+                
+                if (couponModel.ContextId == null && couponModel.ProductId == null)
                 {
                     ModelState.AddModelError("Error", "Please select at least one out of Product and Context");
                 }
