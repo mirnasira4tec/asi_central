@@ -227,8 +227,8 @@ namespace asi.asicentral.web.Controllers.Store
                 coupon.MonthlyCost = couponModel.MonthlyCost;
                 coupon.AppFeeDiscount = couponModel.AppFeeDiscount;
                 coupon.ProductDiscount = couponModel.ProductDiscount;
-                if (!string.IsNullOrEmpty(coupon.RateStructure) && !string.IsNullOrEmpty(coupon.GroupName) &&
-                    !string.IsNullOrEmpty(coupon.RateCode))
+                if (!string.IsNullOrEmpty(couponModel.RateStructure) && !string.IsNullOrEmpty(couponModel.GroupName) &&
+                    !string.IsNullOrEmpty(couponModel.RateCode))
                 {
                     coupon.RateStructure = couponModel.RateStructure.Trim();
                     coupon.GroupName = couponModel.GroupName.Trim();
