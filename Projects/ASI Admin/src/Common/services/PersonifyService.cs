@@ -109,7 +109,7 @@ namespace asi.asicentral.services
                 #endregion mapping items from mapping table
 
                 // handle bundles first if any
-                var mappedBundles = allMappings.FindAll(m => m.PersonifyRateStructure == "BUNDLE");
+                var mappedBundles = allMappings.FindAll(m => m.PersonifyRateStructure == "BUNDLE" || m.PersonifyRateStructure == "MANAGER");
                 if (mappedBundles.Any())
                 {
                     PersonifyClient.CreateBundleOrder(order, mappedBundles[0], companyInfo, contactMasterId, contactSubId, billToAddr, shipToAddr);

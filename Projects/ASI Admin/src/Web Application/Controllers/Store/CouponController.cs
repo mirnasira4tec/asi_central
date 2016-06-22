@@ -320,6 +320,7 @@ namespace asi.asicentral.web.Controllers.Store
 
                         if (m.PersonifyRateStructure == "Bundle" || !string.IsNullOrEmpty(m.PersonifyBundle))
                         {   // membership bundle or package
+                            productMapping.PersonifyRateStructure = coupon.RateStructure;
                             productMapping.PersonifyBundle = coupon.GroupName;
                             productMapping.PersonifyRateCode = coupon.RateCode;
                         }
