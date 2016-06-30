@@ -85,6 +85,7 @@ namespace asi.asicentral.web.Controllers.Show
                     objCompany.Id = company.Id;
                     objCompany.Name = company.Name;
                     objCompany.WebUrl = company.Url;
+                    objCompany.IsCatalog = company.IsCatalog;
                     objCompany.MemberType = company.MemberType;
                     objCompany.ASINumber = (company.MemberType == "Non-Member") ? null : company.ASINumber;
                     objCompany.UpdateSource = "ShowCompanyController - AddCompany";
@@ -148,6 +149,7 @@ namespace asi.asicentral.web.Controllers.Show
                     company.Id = id;
                     company.Name = CompanyModel.Name;
                     company.MemberType = CompanyModel.MemberType;
+                    company.IsCatalog = CompanyModel.IsCatalog;
                     if (CompanyModel.MemberType == "Non-Member")
                     {
                         company.ASINumber = null;
