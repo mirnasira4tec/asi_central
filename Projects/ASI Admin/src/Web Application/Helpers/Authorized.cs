@@ -12,22 +12,26 @@ namespace asi.asicentral.web.Helpers
     {
         public static bool IsAuthorizedUser()
         {
-            string[] allowedusers = ConfigurationManager.AppSettings["AuthorizedUsers"].Split(';');
-            WindowsIdentity identity = HttpContext.Current.Request.LogonUserIdentity;
-            var Name = identity.Name;
-            var AuthorizedUser = false;
-            if (allowedusers.Any())
+            var authorizedUser = false;
+            var users = ConfigurationManager.AppSettings["AuthorizedUsers"];
+            if (!string.IsNullOrEmpty(users))
             {
-                for (int i = 0; i < allowedusers.Count(); i++)
+                string[] allowedusers = users.Split(';');
+                WindowsIdentity identity = HttpContext.Current.Request.LogonUserIdentity;
+                var Name = identity.Name;
+                if (allowedusers.Any())
                 {
-                    if (Name.ToLower().Equals(allowedusers[i].ToLower()))
+                    for (int i = 0; i < allowedusers.Count(); i++)
                     {
-                        AuthorizedUser = true;
-                        break;
+                        if (Name.ToLower().Equals(allowedusers[i].ToLower()))
+                        {
+                            authorizedUser = true;
+                            break;
+                        }
                     }
                 }
             }
-            return AuthorizedUser;
+            return authorizedUser;
         }
     }
 }
