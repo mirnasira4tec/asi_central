@@ -376,15 +376,6 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;strong&gt;Inspire more sales with Top Sellers!&lt;/strong&gt; Top Sellers™ is the latest catalog from ASI® and puts all the best-selling items, annual favorites and products from top-tier suppliers at your customers’ finger tips. Get the creativity flowing by showing your clients all of the inspiring product ideas available to them!.
-        /// </summary>
-        public static string ProductSpectrumCelebration {
-            get {
-                return ResourceManager.GetString("ProductSpectrumCelebration", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Introducing the &lt;strong&gt;NEW&lt;/strong&gt; Spectrum Celebration - a large, grander format completely redesigned to give your products twice the advertising space..
         /// </summary>
         public static string ProductSpectrumCelebrationAdvertising {
@@ -555,6 +546,15 @@ namespace asi.asicentral.Resources {
         public static string ProductTheProfessionalBuyersGuideAdvertising2 {
             get {
                 return ResourceManager.GetString("ProductTheProfessionalBuyersGuideAdvertising2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;strong&gt;Inspire more sales with Top Sellers!&lt;/strong&gt; Top Sellers™ is the latest catalog from ASI® and puts all the best-selling items, annual favorites and products from top-tier suppliers at your customers’ finger tips. Get the creativity flowing by showing your clients all of the inspiring product ideas available to them!.
+        /// </summary>
+        public static string ProductTopSellers {
+            get {
+                return ResourceManager.GetString("ProductTopSellers", resourceCulture);
             }
         }
         
