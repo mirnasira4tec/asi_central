@@ -30,9 +30,11 @@ namespace asi.asicentral.web.models.show
         [Display(ResourceType = typeof(Resource), Name = "IsNonUSAddress")]
         public bool IsNonUSAddress { get; set; }
 
+        public bool IsCatalog { get; set; }
+
         [Display(ResourceType = typeof(Resource), Name = "CompanyName")]
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
-        [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
+        [StringLength(500, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength500")]
         [Remote("IsValidCompany", "ShowCompany", HttpMethod = "POST", ErrorMessage = "The Name already exists.")]
         public string Name { get; set; }
 
