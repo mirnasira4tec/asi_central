@@ -280,6 +280,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Helpers\Authorized.cs" />
     <Compile Include="Controllers\asicentral\CallQueueController.cs" />
     <Compile Include="Controllers\CompanyValidationsController.cs" />
     <Compile Include="Controllers\forms\FormsController.cs" />
@@ -323,6 +324,7 @@
     <Compile Include="Models\Store\interfaces\IMembershipModel.cs" />
     <Compile Include="Models\Store\Order\CatalogAdvertisingApplicationModel.cs" />
     <Compile Include="Models\Store\Order\CatalogsApplicationModel.cs" />
+    <Compile Include="Models\Store\Order\CouponListModel.cs" />
     <Compile Include="Models\Store\Order\SalesFormApplicationModel.cs" />
     <Compile Include="Models\Store\Order\EquipmentApplicationModel.cs" />
     <Compile Include="Models\Store\Order\FormsModel.cs" />

@@ -2,7 +2,8 @@
 @using asi.asicentral.model.store;
 @using asi.asicentral.interfaces;
 @using asi.asicentral.oauth
-@using asi.asicentral.util
+@using asi.asicentral.util.store.coupon
+@using asi.asicentral.web.Helpers
 @model asi.asicentral.web.store.interfaces.IMembershipModel
 <div>
     @{
@@ -48,6 +49,8 @@
             }
             <div class="status-btns">
                 @{
+                    if(Authorized.IsAuthorizedUser())
+                    {
                     if (Model.IsCompleted && Model.OrderStatus != OrderStatus.Approved && string.IsNullOrEmpty(errMsg))
                     {
                     <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT"/>
@@ -55,6 +58,18 @@
                     if (Model.IsCompleted && (Model.OrderStatus == OrderStatus.Pending || Model.OrderStatus == OrderStatus.Approved) )
                     {
                     <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT"/>
+                    }
+                    }
+                    else
+                    {
+                        if (Model.IsCompleted && Model.OrderStatus != OrderStatus.Approved && string.IsNullOrEmpty(errMsg))
+                    {
+                    <input class="command btn-primary" type="submit" disabled="disabled" value="@ApplicationController.COMMAND_ACCEPT" />
+                    }
+                    if (Model.IsCompleted && (Model.OrderStatus == OrderStatus.Pending || Model.OrderStatus == OrderStatus.Approved) )
+                    { 
+                    <input class="command btn-primary" type="submit" disabled="disabled" value="@ApplicationController.COMMAND_REJECT" />
+                    }
                     }
                     <input class="command btn-primary save" type="submit" value="@ApplicationController.COMMAND_SAVE"/>
 
@@ -126,6 +141,12 @@
                         }
                     }
                 }
+                }
+                
+                // confirm coupon in Personify mapping table
+                if (orderDetail.Coupon != null && !CouponHelper.IsValidCoupon(StoreService, orderDetail.Coupon))
+                {
+                    errMsg = string.Format("Unable to find coupon '{0}' for Personify order", orderDetail.Coupon.CouponCode);
             }
             return errMsg;
         }
