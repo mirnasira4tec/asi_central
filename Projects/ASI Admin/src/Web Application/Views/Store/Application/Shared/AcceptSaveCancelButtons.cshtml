@@ -49,8 +49,6 @@
             }
             <div class="status-btns">
                 @{
-                    if(Authorized.IsAuthorizedUser())
-                    {
                     if (Model.IsCompleted && Model.OrderStatus != OrderStatus.Approved && string.IsNullOrEmpty(errMsg))
                     {
                     <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT"/>
@@ -59,18 +57,7 @@
                     {
                     <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT"/>
                     }
-                    }
-                    else
-                    {
-                        if (Model.IsCompleted && Model.OrderStatus != OrderStatus.Approved && string.IsNullOrEmpty(errMsg))
-                    {
-                    <input class="command btn-primary" type="submit" disabled="disabled" value="@ApplicationController.COMMAND_ACCEPT" />
-                    }
-                    if (Model.IsCompleted && (Model.OrderStatus == OrderStatus.Pending || Model.OrderStatus == OrderStatus.Approved) )
-                    { 
-                    <input class="command btn-primary" type="submit" disabled="disabled" value="@ApplicationController.COMMAND_REJECT" />
-                    }
-                    }
+
                     <input class="command btn-primary save" type="submit" value="@ApplicationController.COMMAND_SAVE"/>
 
                     if (Model.OrderStatus == OrderStatus.Approved)
