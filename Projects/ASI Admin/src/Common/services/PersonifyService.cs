@@ -109,14 +109,13 @@ namespace asi.asicentral.services
                 #endregion mapping items from mapping table
 
                 // handle bundles first if any
-                var mappedBundles = allMappings.FindAll(m => m.PersonifyRateStructure == "BUNDLE");
+                var mappedBundles = allMappings.FindAll(m => m.PersonifyBundle != null );
                 if (mappedBundles.Any())
                 {
                     PersonifyClient.CreateBundleOrder(order, mappedBundles[0], companyInfo, contactMasterId, contactSubId, billToAddr, shipToAddr);
                 }
-
                 // get all non-bundle products
-                var mappedProducts = allMappings.FindAll(map => map.PersonifyRateStructure == "MEMBER" && map.PersonifyProduct != null);
+                var mappedProducts = allMappings.FindAll(map => map.PersonifyProduct != null && map.PersonifyBundle == null);
 
                 if (mappedProducts.Count > 1 && orderDetail.Product.Id != 61 && orderDetail.Product.Id != 77)
                 {
@@ -667,6 +666,11 @@ namespace asi.asicentral.services
         public string GetCompanyAsiNumber(string masterCustomerId, int subCustomerId)
         {
             return PersonifyClient.GetCompanyAsiNumber(masterCustomerId, subCustomerId);
+        }
+
+        public bool ValidateRateCode(string groupName, string rateStructure, string rateCode)
+        {
+            return PersonifyClient.ValidateRateCode(groupName, rateStructure, rateCode);
         }
 
  		private static string GetCountryCode(string country)

@@ -64,7 +64,9 @@ namespace asi.asicentral.web.store.interfaces
         decimal SubscriptionCost { get; set; }
         string SubscriptionFrequency { get; set; }
         int Quantity { get; set; }
-        decimal PromotionalDiscount { get; set; }
+        decimal AppFeeDiscount { get; set; }
+        decimal ProductDiscount { get; set; }
+        decimal SubscriptionDiscount { get; set; }
         #endregion
 
         #region OrderInformation

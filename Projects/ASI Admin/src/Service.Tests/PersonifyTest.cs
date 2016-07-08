@@ -772,7 +772,7 @@ namespace asi.asicentral.Tests
                 Coupon coupon = null;
                 if( !string.IsNullOrEmpty(couponCode) && discountAmount > 0 && context != null)
                 {
-                    coupon = new Coupon() { ProductId = product.Id, CouponCode = couponCode, IsFixedAmount = true, DiscountAmount = discountAmount };
+                    coupon = new Coupon() { ProductId = product.Id, CouponCode = couponCode, AppFeeDiscount = discountAmount };
                     order.ContextId = context.Id;
                 }
 
