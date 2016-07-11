@@ -358,13 +358,30 @@ header#site-header {
 }
 
 /*--------------------body--------------*/
-#tabbasic, #tabproduct, #tabaccount, #tabsubscription, #tabquestions{
+#tabbasic, #tabproduct, #tabaccount, #tabsubscription, #tabterms, #tabquestions{
 	border-bottom: 1px solid #a8a8a8;
 	border-left: 1px solid #a8a8a8;
 	border-right: 1px solid #a8a8a8;
 	padding:2%;
 	background-color:#ececec;
 }
+#no-tabform{
+	border: 1px solid #a8a8a8;
+	padding:2%;
+	background-color:#ececec;
+}
+	#no-tabform .label-row input{
+		width:62%;
+		margin-left: 1%;
+	}
+	#no-tabform select{
+		width:63%;
+		margin-left: 1%;
+	}
+	#no-tabform .label-row textarea{
+		width:61%;
+		margin-left: 1%;
+	}
 /*-----------------basic information-------------*/
 .label-row {
 	width:98%;
@@ -668,5 +685,4 @@ a:hover, a:focus {
 input[type="text"] {
     padding:4px 3px !important;
 }
-
 

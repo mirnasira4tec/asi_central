@@ -243,4 +243,7 @@
   <data name="TheApparelCatalogNEWFORFALL2015" xml:space="preserve">
     <value>Dedicated to apparel, the most popular product category in the promotional products industry!</value>
   </data>
+  <data name="IdeaShowcaseFallDescription" xml:space="preserve">
+    <value>Give your customers tons of verity with this compact catalog.</value>
+  </data>
 </root>

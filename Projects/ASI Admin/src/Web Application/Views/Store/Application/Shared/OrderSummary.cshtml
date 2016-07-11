@@ -19,12 +19,28 @@
         <td>$@Model.ApplicationFeeCost.ToString("F")</td>
     </tr>
     }
-    @if (Model.PromotionalDiscount > 0)
+    @if (Model.AppFeeDiscount > 0)
     {
     <tr>
-        <td> Promotional Discount:</td>
+        <td> Application Fee Discount:</td>
         <td>-</td> 
-        <td> $@Model.PromotionalDiscount.ToString("F")</td>
+        <td> $@Model.AppFeeDiscount.ToString("F")</td>
+    </tr>
+    }
+    @if (Model.ProductDiscount > 0)
+    {
+    <tr>
+        <td> Product Discount:</td>
+        <td>-</td> 
+        <td> $@Model.ProductDiscount.ToString("F")</td>
+    </tr>
+    }
+    @if (Model.SubscriptionDiscount > 0)
+    {
+    <tr>
+        <td> Subscription Discount:</td>
+        <td>-</td> 
+        <td> $@Model.SubscriptionDiscount.ToString("F")</td>
     </tr>
     }
     @if (Model.TaxCost > 0)

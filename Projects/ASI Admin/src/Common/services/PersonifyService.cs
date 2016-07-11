@@ -80,116 +80,129 @@ namespace asi.asicentral.services
                 var billToAddr = storeAddress.FirstOrDefault(a => a.StoreIsBilling == true).PersonifyAddr;
 
                 var orderDetail = order.OrderDetails[0];
-                var mappings = storeService.GetAll<PersonifyMapping>(true)
-                                           .Where(map => (map.StoreContext == null || map.StoreContext == order.ContextId ) &&
-                                                         map.StoreProduct == orderDetail.Product.Id &&
-                                                         map.PersonifyRateStructure == "BUNDLE").OrderByDescending(m => m.StoreContext).ToList();
-                if( mappings.Count > 0 )
+                var coupon = orderDetail.Coupon;
+
+                // processing coupon
+                if (coupon != null && !string.IsNullOrEmpty(coupon.CouponCode) )
                 {
-                    PersonifyMapping mapping = null;
-                    var waiveAppFee = false;
-                    var firstmonthFree = false;
-                    var coupon = orderDetail.Coupon;
-                    var couponError = false;
-                    var context = storeService.GetAll<Context>(true).FirstOrDefault(p => p.Id == order.ContextId);
-                    var contextProduct = context != null ? context.Products.FirstOrDefault(p => p.Product.Id == orderDetail.Product.Id) : null;
+                    coupon.CouponCode = coupon.CouponCode.Trim();
+                    if (coupon.CouponCode == "(Unknown)")
+                        coupon.CouponCode = string.Empty;
+                }
 
-                    if (contextProduct != null)
+                #region mapping items from mapping table
+                var allMappings = storeService.GetAll<PersonifyMapping>(true)
+                                              .Where(map => (map.StoreContext == null || map.StoreContext == order.ContextId) && map.StoreProduct == orderDetail.Product.Id)
+                                              .OrderByDescending(m => m.StoreContext).ToList();
+
+                if (orderDetail.Product.Id != 61 && orderDetail.Product.Id != 77)
+                {
+                    if (coupon != null && !string.IsNullOrEmpty(coupon.CouponCode))
                     {
-                        waiveAppFee = contextProduct.ApplicationCost == 0;
+                        allMappings = allMappings.FindAll(m => m.StoreOption != null && m.StoreOption.Trim() == coupon.CouponCode);
+                    }
+                    else
+                    {
+                        allMappings = allMappings.FindAll(m => m.StoreOption == null);
+                    }
+                }
+                #endregion mapping items from mapping table
 
-                        if (coupon != null && !string.IsNullOrEmpty(coupon.CouponCode) && coupon.CouponCode != "(Unknown)")
+                // handle bundles first if any
+                var mappedBundles = allMappings.FindAll(m => m.PersonifyBundle != null );
+                if (mappedBundles.Any())
+                {
+                    PersonifyClient.CreateBundleOrder(order, mappedBundles[0], companyInfo, contactMasterId, contactSubId, billToAddr, shipToAddr);
+                }
+                // get all non-bundle products
+                var mappedProducts = allMappings.FindAll(map => map.PersonifyProduct != null && map.PersonifyBundle == null);
+
+                if (mappedProducts.Count > 1 && orderDetail.Product.Id != 61 && orderDetail.Product.Id != 77)
+                {
+                    // remove potential duplicated product Ids if any, 
+                    // always get the products in the leading place, which match both context and product id
+                    var productIds = new List<int>();
+                    for (var i = 0; i < mappedProducts.Count; i++)
+                    {
+                        var product = mappedProducts[i];
+                        if ( productIds.Contains(product.PersonifyProduct.Value))
                         {
-                            coupon.CouponCode = coupon.CouponCode.Trim();
-
-                            if (contextProduct != null && coupon.IsFixedAmount)
-                            {
-                                if (coupon.DiscountAmount == contextProduct.ApplicationCost)
-                                {
-                                    waiveAppFee = true;
-                                }
-                                else if (coupon.DiscountAmount == contextProduct.Cost)
-                                {
-                                    firstmonthFree = true;
-                                }
-                                else
-                                {
-                                    waiveAppFee = coupon.DiscountAmount >= contextProduct.ApplicationCost;
-                                    firstmonthFree = !waiveAppFee && coupon.DiscountAmount >= contextProduct.Cost ||
-                                                      waiveAppFee && coupon.DiscountAmount >= contextProduct.ApplicationCost + contextProduct.Cost;
-                                }
-
-                                couponError = coupon.DiscountAmount != contextProduct.ApplicationCost &&
-                                              coupon.DiscountAmount != contextProduct.Cost &&
-                                              coupon.DiscountAmount != contextProduct.ApplicationCost + contextProduct.Cost;
-
-                                if (firstmonthFree)
-                                {
-                                    mapping = mappings.FirstOrDefault(m => !string.IsNullOrEmpty(m.StoreOption) && m.StoreOption.Trim() == coupon.CouponCode);
-                                }
-                            }
-                            else
-                                couponError = true;
-
+                            mappedProducts.Remove(product);
+                            i--;
+                        }
+                        else
+                        {
+                            productIds.Add(product.PersonifyProduct.Value);
                         }
                     }
+                }
 
-                    if (mapping == null)
+                #region scheduled products
+                var scheduledProducts = mappedProducts.FindAll(m => m.PaySchedule.HasValue && m.PaySchedule.Value);
+                if (scheduledProducts.Any() )
+                {
+                    // create an order if there isn't one existing
+                    if (string.IsNullOrEmpty(order.BackendReference))
                     {
-                        mapping = mappings.FirstOrDefault(m => string.IsNullOrEmpty(m.StoreOption));
+                        CreateProductOrder(order, companyInfo, scheduledProducts, contactMasterId, contactSubId, billToAddr, shipToAddr);
                     }
+                    else
+                    { // add scheduled products to the existing order
+                        foreach (var item in scheduledProducts)
+                        {
+                            PersonifyClient.AddLineItemToOrder(order, item.PersonifyProduct.Value, item.PersonifyRateStructure, item.PersonifyRateCode);
+                        }
+                    }
+                }
 
-                    PersonifyClient.CreateBundleOrder(order, mapping, companyInfo, contactMasterId, contactSubId, billToAddr, shipToAddr, waiveAppFee, firstmonthFree);
-                    ValidateOrderTotal(order, emailService, url, true, firstmonthFree);
-
-                    // update company ASI#, to be included in the internal email
+                // get ASI# and schedule payment for all the lineItems added to the order already so far
+                if (!string.IsNullOrEmpty(order.BackendReference))
+                {
                     var asiNumber = PersonifyClient.GetCompanyAsiNumber(companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
-                    if ( !string.IsNullOrWhiteSpace(asiNumber) && asiNumber.Trim().Length < 7 )
+                    if (!string.IsNullOrWhiteSpace(asiNumber) && asiNumber.Trim().Length < 7)
                     {
                         order.Company.ASINumber = asiNumber;
                     }
-
-                    if( couponError)
-                    {   // send internal email 
-                        var data = new EmailData()
-                        {
-                            Subject = "There is a problem with coupon discount amount for an order from the store to Personify",
-                            EmailBody = string.Format("A new order created in the store ({0}) has been transferred to a Personify "
-                            + "order ({1}). There is problem with coupon discount {2}, the order needs to be looked at. {3}",
-                            order.Id.ToString(), order.BackendReference, coupon.IsFixedAmount ? coupon.DiscountAmount : coupon.DiscountPercentage, EmailData.GetMessageSuffix(url))
-                        };
-
-                        data.SendEmail(emailService);
-                    }
+                    PersonifyClient.ScheduleOrderPayment(order);
                 }
-                else
+                #endregion scheduled products
+
+                #region non-scheduled products
+                var nonScheduledOrderLineNumbers = string.Empty;
+                var nonScheduledProducts = mappedProducts.FindAll(m => !m.PaySchedule.HasValue || !m.PaySchedule.Value);
+                decimal payAmount = 0;
+                if (nonScheduledProducts.Any())
                 {
-                    var lineItems = GetPersonifyLineInputs(order, shipToAddr.CustomerAddressId);
-                    log.Debug(string.Format("Retrieved the line items to the order '{0}'.", order.ToString()));
-                    var orderOutput = PersonifyClient.CreateOrder(
-                        order,
-                        companyInfo.MasterCustomerId,
-                        companyInfo.SubCustomerId,
-                        contactMasterId, 
-                        contactSubId,
-                        billToAddr.CustomerAddressId,
-                        shipToAddr.CustomerAddressId,
-                        lineItems);
-                    log.Debug(string.Format("The order '{0}' has been created in Personify.", order));
+                    if (string.IsNullOrEmpty(order.BackendReference))
+                    {
+                        CreateProductOrder(order, companyInfo, nonScheduledProducts, contactMasterId, contactSubId, billToAddr, shipToAddr);
+                    }
+                    else
+                    {   // add scheduled products to the existing order
+                        foreach (var item in nonScheduledProducts)
+                        {
+                            PersonifyClient.AddLineItemToOrder(order, item.PersonifyProduct.Value, item.PersonifyRateStructure, item.PersonifyRateCode);
+                        }
+                    }
+                
+                    nonScheduledOrderLineNumbers = PersonifyClient.GetOrderLinesByOrderId(order.BackendReference, ref payAmount, nonScheduledProducts);
+                }
 
-                    order.BackendReference = orderOutput.OrderNumber;
-                    decimal orderTotal = ValidateOrderTotal(order, emailService, url);
+                // validate order total before any payment
+                ValidateOrderTotal(order, emailService, url);
 
+                if (!string.IsNullOrEmpty(nonScheduledOrderLineNumbers) && payAmount > 0)
+                {
                     try
                     {
-                        PersonifyClient.PayOrderWithCreditCard(orderOutput.OrderNumber, orderTotal, order.CreditCard.ExternalReference, 
-                                                               billToAddr, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+                        PersonifyClient.PayOrderWithCreditCard(order.BackendReference, payAmount, order.CreditCard.ExternalReference, billToAddr, 
+                                                               companyInfo.MasterCustomerId, companyInfo.SubCustomerId, nonScheduledOrderLineNumbers);
                         log.Debug(string.Format("Payed the order '{0}'.", order));
                         log.Debug(string.Format("Place order End: {0}", order));
                     }
                     catch (Exception e)
                     {
-                        string s = string.Format("Failed to pay the order '{0} {3}'. Error is {2}{1}", order, e.StackTrace, e.Message, orderOutput.OrderNumber);
+                        string s = string.Format("Failed to pay the order '{0} {3}'. Error is {2}{1}", order, e.StackTrace, e.Message, order.BackendReference);
                         log.Error(s);
                         var data = new EmailData()
                         {
@@ -200,6 +213,7 @@ namespace asi.asicentral.services
                         log.Debug(string.Format("Place order End: {0}", order));
                     }
                 }
+                #endregion non-scheduled products
             }
             catch (Exception ex)
             {
@@ -224,8 +238,111 @@ namespace asi.asicentral.services
             return companyInfo;
         }
 
-        private decimal ValidateOrderTotal(StoreOrder order, IEmailService emailService, string url, 
-                                           bool bundleOrder = false, bool firstMonthFree = false)
+        private CreateOrderOutput CreateProductOrder(StoreOrder order, CompanyInformation companyInfo, List<PersonifyMapping> orderProducts, 
+                                        string contactMasterId, int contactSubId, AddressInfo billToAddr, AddressInfo shipToAddr)
+        {
+            if (order == null || order.Company == null || order.Company.Individuals == null || order.OrderDetails == null || !order.OrderDetails.Any())
+                return null;
+
+            var orderDetail = order.OrderDetails[0];
+            var lineItems = new List<CreateOrderLineInput>();
+
+            switch (orderDetail.Product.Id)
+            {
+                case 77: //supplier specials
+                    var startDate =
+                        (orderDetail.DateOption.HasValue ? orderDetail.DateOption.Value : DateTime.Now).ToString(
+                            "MM/dd/yyyy");
+                    var endDate =
+                        (orderDetail.DateOption.HasValue ? orderDetail.DateOption.Value : DateTime.Now).AddMonths(1)
+                            .ToString("MM/dd/yyyy");
+                    var option = orderDetail.OptionId.ToString();
+                    var mapping = orderProducts.Single(map => map.StoreOption == option);
+                    mapping.Quantity = orderDetail.Quantity;
+                    var lineItem = new CreateOrderLineInput
+                    {
+                        ProductId = mapping.PersonifyProduct,
+                        RateCode = mapping.PersonifyRateCode,
+                        RateStructure = mapping.PersonifyRateStructure,
+                        ShipAddressID = Convert.ToInt32(shipToAddr.CustomerAddressId),
+                        Quantity = Convert.ToInt16(orderDetail.Quantity),
+                        BeginDate = startDate,
+                        EndDate = endDate,
+                        DiscountCode = "0"
+                    };
+                    lineItems.Add(lineItem);
+                    break;
+                case 61: //email express
+                    var emailexpressdetails =
+                        storeService.GetAll<StoreDetailEmailExpress>(true)
+                            .Single(details => details.OrderDetailId == orderDetail.Id);
+                    option = emailexpressdetails.ItemTypeId.ToString();
+                    if (option == "1" || option == "2")
+                    {
+                        option += ";";
+                        if (orderDetail.Quantity >= 120) option += "120X";
+                        else if (orderDetail.Quantity >= 52) option += "52X";
+                        else if (orderDetail.Quantity >= 26) option += "26X";
+                        else if (orderDetail.Quantity >= 12) option += "12X";
+                        else if (orderDetail.Quantity >= 6) option += "6X";
+                        else if (orderDetail.Quantity >= 3) option += "3X";
+                        else option += "1X";
+                    }
+                    mapping = orderProducts.Single(map => map.StoreOption == option);
+
+                    //need to create a new line item for each one rather than one for all quantity
+                    for (int i = 0; i < orderDetail.Quantity; i++)
+                    {
+                        lineItem = new CreateOrderLineInput
+                        {
+                            ProductId = mapping.PersonifyProduct,
+                            RateCode = mapping.PersonifyRateCode,
+                            RateStructure = mapping.PersonifyRateStructure,
+                            ShipAddressID = Convert.ToInt32(shipToAddr.CustomerAddressId),
+                            Quantity = 1,
+                            DiscountCode = "0"
+                        };
+                        lineItems.Add(lineItem);
+                    }
+                    mapping.ItemCount = orderDetail.Quantity;
+                    mapping.Quantity = 1;
+                    break;
+                default:
+                    foreach (var m in orderProducts)
+                    {
+                        var item = new CreateOrderLineInput
+                        {
+                            ProductId = m.PersonifyProduct,
+                            RateCode = m.PersonifyRateCode,
+                            RateStructure = m.PersonifyRateStructure,
+                            ShipAddressID = Convert.ToInt32(shipToAddr.CustomerAddressId),
+                            Quantity = Convert.ToInt16(orderDetail.Quantity),
+                            DiscountCode = "0"
+                        };
+                        lineItems.Add(item);
+                    }
+                    break;
+            }
+
+            var output = PersonifyClient.CreateOrder(
+                order,
+                companyInfo.MasterCustomerId,
+                companyInfo.SubCustomerId,
+                contactMasterId,
+                contactSubId,
+                billToAddr.CustomerAddressId,
+                shipToAddr.CustomerAddressId,
+                lineItems);
+
+            log.Debug(string.Format("The order '{0}' has been created in Personify.", order));
+
+            if( output != null )
+                order.BackendReference = output.OrderNumber;
+
+            return output;
+        }
+ 
+        private decimal ValidateOrderTotal(StoreOrder order, IEmailService emailService, string url)
         {
             if (order == null)
             {
@@ -235,27 +352,14 @@ namespace asi.asicentral.services
             decimal backEndTotal = PersonifyClient.GetOrderBalanceTotal(order.BackendReference);
             log.Debug(string.Format("Got the order total {0} of for the order '{1}'.", backEndTotal, order));
 
-            decimal orderTotal = 0;
-            if (!firstMonthFree)
-            {
-                if (!bundleOrder)
-                {
-                    orderTotal = order.Total;
-                }
-                else if (order.OrderDetails != null && order.OrderDetails.Count > 0)
-                    orderTotal = order.OrderDetails[0].Cost + order.OrderDetails[0].TaxCost;
-            }
-            else
-                orderTotal = order.AnnualizedTotal;
-
-            if (backEndTotal != orderTotal)
+            if (backEndTotal != order.Total)
             {
                 var data = new EmailData()
                 {
                     Subject = "here is a price discrepancy for an order from the store to Personify",
                     EmailBody = string.Format("A new order created in the store ({0}) has been transferred to a Personify "
                     + "order ({1}). The prices do not match, the order needs to be looked at. The store price is {2:C} and "
-                    + "the Personify price is {3:C}.{4}", order.Id.ToString(), order.BackendReference, orderTotal, backEndTotal, EmailData.GetMessageSuffix(url))
+                    + "the Personify price is {3:C}.{4}", order.Id.ToString(), order.BackendReference, order.Total, backEndTotal, EmailData.GetMessageSuffix(url))
                 };
                 data.SendEmail(emailService);
             }
@@ -433,89 +537,6 @@ namespace asi.asicentral.services
 		    return PersonifyClient.GetCompanyCreditCards(company, asiCompany);
 	    }
 
-        private IList<CreateOrderLineInput> GetPersonifyLineInputs(StoreOrder order, long shipAddressId)
-        {
-            log.Debug(string.Format("Create personify order line input for order {0} with shipping address id {1}", order.ToString(), shipAddressId));
-            var lineItems = new List<CreateOrderLineInput>();
-            foreach (var orderDetail in order.OrderDetails)
-            {
-                switch (orderDetail.Product.Id)
-                {
-                    case 77: //supplier specials
-                        var startDate = (orderDetail.DateOption.HasValue ? orderDetail.DateOption.Value : DateTime.Now).ToString("MM/dd/yyyy");
-                        var endDate = (orderDetail.DateOption.HasValue ? orderDetail.DateOption.Value : DateTime.Now).AddMonths(1).ToString("MM/dd/yyyy");
-                        var option = orderDetail.OptionId.ToString();
-                        var mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => (map.StoreContext ?? -1) == (orderDetail.Order.ContextId ?? -1) &&
-                            map.StoreProduct == orderDetail.Product.Id &&
-                            map.StoreOption == option);
-                        mapping.Quantity = orderDetail.Quantity;
-                        var lineItem = new CreateOrderLineInput
-                        {
-                            ProductId = mapping.PersonifyProduct,
-                            RateCode = mapping.PersonifyRateCode,
-                            RateStructure = mapping.PersonifyRateStructure,
-                            ShipAddressID = Convert.ToInt32(shipAddressId),
-                            Quantity = Convert.ToInt16(orderDetail.Quantity),
-                            BeginDate = startDate,
-                            EndDate = endDate,
-                            DiscountCode = "0"
-                        };
-                        lineItems.Add(lineItem);
-                        break;
-                    case 61: //email express
-                        var emailexpressdetails = storeService.GetAll<StoreDetailEmailExpress>(true).Single(details => details.OrderDetailId == orderDetail.Id);
-                        option = emailexpressdetails.ItemTypeId.ToString();
-                        if (option == "1" || option == "2")
-                        {
-                            option += ";";
-                            if (orderDetail.Quantity >= 120) option += "120X";
-                            else if (orderDetail.Quantity >= 52) option += "52X";
-                            else if (orderDetail.Quantity >= 26) option += "26X";
-                            else if (orderDetail.Quantity >= 12) option += "12X";
-                            else if (orderDetail.Quantity >= 6) option += "6X";
-                            else if (orderDetail.Quantity >= 3) option += "3X";
-                            else option += "1X";
-                        }
-                        mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => (map.StoreContext ?? -1) == (orderDetail.Order.ContextId ?? -1) &&
-                            map.StoreProduct == orderDetail.Product.Id &&
-                            map.StoreOption == option);
-                        //need to create a new line item for each one rather than one for all quantity
-                        for (int i = 0; i < orderDetail.Quantity; i++)
-                        {
-                            lineItem = new CreateOrderLineInput
-                            {
-                                ProductId = mapping.PersonifyProduct,
-                                RateCode = mapping.PersonifyRateCode,
-                                RateStructure = mapping.PersonifyRateStructure,
-                                ShipAddressID = Convert.ToInt32(shipAddressId),
-                                Quantity = 1,
-                                DiscountCode = "0"
-                            };
-                            lineItems.Add(lineItem);
-                        }
-                        mapping.ItemCount = orderDetail.Quantity;
-                        mapping.Quantity = 1;
-                        break;
-                    default:
-                        mapping = storeService.GetAll<PersonifyMapping>(true).Single(map => (map.StoreContext ?? -1) == (orderDetail.Order.ContextId ?? -1) &&
-                            map.StoreProduct == orderDetail.Product.Id);
-
-                        lineItem = new CreateOrderLineInput
-                        {
-                            ProductId = mapping.PersonifyProduct,
-                            RateCode = mapping.PersonifyRateCode,
-                            RateStructure = mapping.PersonifyRateStructure,
-                            ShipAddressID = Convert.ToInt32(shipAddressId),
-                            Quantity = Convert.ToInt16(orderDetail.Quantity),
-                            DiscountCode = "0"
-                        };
-                        lineItems.Add(lineItem);
-                        break;
-                }
-            }
-            return lineItems;
-        }
-
         public virtual CompanyInformation AddCompany(User user)
         {
             // create Store CompanyInformation
@@ -645,6 +666,11 @@ namespace asi.asicentral.services
         public string GetCompanyAsiNumber(string masterCustomerId, int subCustomerId)
         {
             return PersonifyClient.GetCompanyAsiNumber(masterCustomerId, subCustomerId);
+        }
+
+        public bool ValidateRateCode(string groupName, string rateStructure, string rateCode)
+        {
+            return PersonifyClient.ValidateRateCode(groupName, rateStructure, rateCode);
         }
 
  		private static string GetCountryCode(string country)
