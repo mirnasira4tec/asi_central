@@ -32,7 +32,7 @@
         public static readonly string[,] FEES = {
             { "Application Fee", "APPF-150", "" },
             { "Set Up Fee", "STPF-199", "" },
-            { "Custom Package Pro", "CPRO-699", "" },
+            { "Custom Package Pro", "CPRO-599", "" },
             { "Custom Package Genius", "CPGE-999", "" },
             { "Custom Package Prodigy", "CPRD-1499", "" },
             { "Custom Package Virtuoso", "CPGE-1899", "" } };
