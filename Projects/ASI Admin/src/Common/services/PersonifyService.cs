@@ -668,9 +668,9 @@ namespace asi.asicentral.services
             return PersonifyClient.GetCompanyAsiNumber(masterCustomerId, subCustomerId);
         }
 
-        public bool ValidateRateCode(string groupName, string rateStructure, string rateCode)
+        public bool ValidateRateCode(string groupName, string rateStructure, string rateCode, ref int persProductId)
         {
-            return PersonifyClient.ValidateRateCode(groupName, rateStructure, rateCode);
+            return PersonifyClient.ValidateRateCode(groupName, rateStructure, rateCode, ref persProductId);
         }
 
  		private static string GetCountryCode(string country)
