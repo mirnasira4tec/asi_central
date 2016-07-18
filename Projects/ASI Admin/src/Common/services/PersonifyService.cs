@@ -108,12 +108,15 @@ namespace asi.asicentral.services
                 }
                 #endregion mapping items from mapping table
 
+                #region ******* need to revisit and remove after packages ******
                 // handle bundles first if any
                 var mappedBundles = allMappings.FindAll(m => m.PersonifyBundle != null );
                 if (mappedBundles.Any())
                 {
                     PersonifyClient.CreateBundleOrder(order, mappedBundles[0], companyInfo, contactMasterId, contactSubId, billToAddr, shipToAddr);
                 }
+                #endregion ******* need to revisit and remove after packages *******
+
                 // get all non-bundle products
                 var mappedProducts = allMappings.FindAll(map => map.PersonifyProduct != null && map.PersonifyBundle == null);
 

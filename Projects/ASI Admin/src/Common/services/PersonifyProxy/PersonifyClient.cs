@@ -601,14 +601,13 @@ namespace asi.asicentral.services.PersonifyProxy
 	        {
                 var response = ExecutePersonifySP(SP_GET_PRODUCT_DETAILS, new List<string>() { "ASI_PRODUCTS", groupName, rateStructure, rateCode });
 
-	            if (response != null && !string.IsNullOrEmpty(response.Data) && response.Data.Trim().ToUpper() != "NO DATA FOUND")
+	            if (response != null && !string.IsNullOrEmpty(response.Data) )
 	            {
-	                var xml = XDocument.Parse(response.Data);
-	                var list = xml.Root.Elements("Table").ToList();
-	                if (list.Any() && list[0].Elements().Any())
+	                var responseData = response.Data.Trim();
+	                if (responseData.ToUpper() != "NO DATA FOUND")
 	                {
-	                    var result = list[0].Elements().ElementAt(0);
-	                    if (result != null && Int32.TryParse(result.Value, out persProductId))
+	                    var match = Regex.Match(responseData, @"<PRODUCT_ID>(.*?)</PRODUCT_ID>");
+	                    if (match.Success && Int32.TryParse(match.Groups[1].Value.Trim(), out persProductId))
 	                    {
 	                        isValid = true;
 	                    }
