@@ -108,12 +108,15 @@ namespace asi.asicentral.services
                 }
                 #endregion mapping items from mapping table
 
+                #region ******* need to revisit and remove after packages ******
                 // handle bundles first if any
                 var mappedBundles = allMappings.FindAll(m => m.PersonifyBundle != null );
                 if (mappedBundles.Any())
                 {
                     PersonifyClient.CreateBundleOrder(order, mappedBundles[0], companyInfo, contactMasterId, contactSubId, billToAddr, shipToAddr);
                 }
+                #endregion ******* need to revisit and remove after packages *******
+
                 // get all non-bundle products
                 var mappedProducts = allMappings.FindAll(map => map.PersonifyProduct != null && map.PersonifyBundle == null);
 
@@ -668,9 +671,9 @@ namespace asi.asicentral.services
             return PersonifyClient.GetCompanyAsiNumber(masterCustomerId, subCustomerId);
         }
 
-        public bool ValidateRateCode(string groupName, string rateStructure, string rateCode)
+        public bool ValidateRateCode(string groupName, string rateStructure, string rateCode, ref int persProductId)
         {
-            return PersonifyClient.ValidateRateCode(groupName, rateStructure, rateCode);
+            return PersonifyClient.ValidateRateCode(groupName, rateStructure, rateCode, ref persProductId);
         }
 
  		private static string GetCountryCode(string country)

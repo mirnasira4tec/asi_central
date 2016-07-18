@@ -23,6 +23,7 @@ namespace asi.asicentral.model.personify
         public string SubClassCode { get; set; }
         //public string StoreCouponId { get; set; }
         public int? PersonifyProduct { get; set; }
+        public string ProductCode { get; set; }
         public bool? PaySchedule { get; set; }
         public string PersonifyBundle { get; set; }
         public string PersonifyRateCode { get; set; }
