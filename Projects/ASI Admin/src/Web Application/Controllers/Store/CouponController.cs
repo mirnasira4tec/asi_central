@@ -52,7 +52,7 @@ namespace asi.asicentral.web.Controllers.Store
         public ActionResult Add()
         {
             CouponModel productToUpdate = new CouponModel();
-            productToUpdate.RateStructure = "BUNDLE";
+            productToUpdate.RateStructure = "MEMBER";
             productToUpdate.Products = GetSelectedProductList();
             productToUpdate.Contexts = GetSelectedContextList();
             productToUpdate.ValidFrom = DateTime.UtcNow;
