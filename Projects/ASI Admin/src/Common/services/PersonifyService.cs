@@ -305,6 +305,7 @@ namespace asi.asicentral.services
                             Quantity = 1,
                             DiscountCode = "0"
                         };
+
                         lineItems.Add(lineItem);
                     }
                     mapping.ItemCount = orderDetail.Quantity;
@@ -323,6 +324,13 @@ namespace asi.asicentral.services
                             DiscountCode = "0"
                         };
                         lineItems.Add(item);
+                        
+                        // membership purchase
+                        if ( !string.IsNullOrEmpty(m.ProductCode) && !string.IsNullOrEmpty(m.PersonifyRateCode) && 
+                             !string.IsNullOrEmpty(m.ClassCode) && orderDetail.Product.IsMembership())
+                        {
+                            PersonifyClient.UpdatePersonifyCompany(companyInfo, m);
+                        }
                     }
                     break;
             }
