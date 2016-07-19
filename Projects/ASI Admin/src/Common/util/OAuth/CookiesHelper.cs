@@ -1,5 +1,4 @@
-﻿using ASI.Jade.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +7,11 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Configuration;
 using System.Web.Security;
-using ASI.Jade.UserManagement.DataObjects;
 using Newtonsoft.Json.Linq;
 using asi.asicentral.services;
 using asi.asicentral.interfaces;
+using ASI.Services.Http.Security;
+using ASI.Services.Http.SmartLink;
 
 namespace asi.asicentral.oauth
 {
@@ -80,28 +80,16 @@ namespace asi.asicentral.oauth
                 string cookie = GetCookieValue(request, response, FormsAuthentication.FormsCookieName);
                 if (!string.IsNullOrEmpty(cookie))
                 {
-                    var extraData = GetLatestTokens(request, response, cookie, domainName, userCookieName);
-                    if (extraData != null)
+                    var redirectParams = GetLatestTokens(request, response, cookie, domainName, userCookieName, toAppCode: appCode.ToString());
+                    if (redirectParams != null)
                     {
-                        var redirectParams = new CrossApplication.RedirectParams();
-                        redirectParams.AccessToken = extraData.AccessToken;
-                        redirectParams.RefreshToken = extraData.RefreshToken;
-                        redirectParams.TokenExpirationTime = (extraData.TokenExpirationTime.HasValue &&
-                                                              extraData.TokenExpirationTime.Value > DateTime.Now)
-                            ? extraData.TokenExpirationTime.Value
-                            : DateTime.Now.Add(new TimeSpan(2, 0, 0));
                         if (ApplicationCodes.WESP == appCode)
                         {
-                            var session = new ASI.Jade.UserManagement.Session();
-                            var sessionData = new Session(GetId(false, request, response, "CMPSSO"), ApplicationCodes.ASIC.ToString(),
-                                "1.0.0", HttpContext.Current.Request.UserHostAddress);
-                            string sessionId = session.Create(sessionData);
-                            if (!string.IsNullOrEmpty(sessionId)) redirectParams.ExtGuid = sessionId;
                             redirectParams.FromApplicationVer = "1.0.0";
                         }
                         else if (ApplicationCodes.UPSIDE == appCode)
                         {
-                            string encryptedToken = EncriptToken(extraData.AccessToken);
+                            string encryptedToken = EncriptToken(redirectParams.AccessToken);
                             var Lmsurl = ConfigurationManager.AppSettings["LMSRedirectUrl"];
                             redirectUrl = string.Format("{0}learnerssologin.jsp?tokenid={1}", Lmsurl, HttpUtility.UrlEncode(encryptedToken));
                         }
@@ -113,7 +101,7 @@ namespace asi.asicentral.oauth
                         if (ApplicationCodes.UPSIDE != appCode)
                         {
                             redirectParams.ToApplicationCode = appCode.ToString();
-                            redirectParams.FromApplicationCode = ApplicationCodes.ASIC.ToString();
+                            redirectParams.FromApplicationCode = ApplicationCodes.ASCT.ToString();
                             var url = ConfigurationManager.AppSettings["RedirectUrl"];
                             redirectUrl = CrossApplication.GetDashboardRedirectorUrl(url, redirectParams);
                         }
@@ -144,43 +132,75 @@ namespace asi.asicentral.oauth
             return redirectUrl;
         }
 
-        private static CrossApplication.RedirectParams GetLatestTokens(HttpRequestBase request, HttpResponseBase response, string cookie, string domainName, string userCookieName = "Name")
+        private static ASI.Services.Http.Security.CrossApplication.RedirectParams GetLatestTokens(string accessToken, string toAppCode)
+        {
+            ASI.Services.Http.Security.CrossApplication.RedirectParams redirectParams = null;
+            var host = ConfigurationManager.AppSettings["SecurityHost"];
+            if(!string.IsNullOrEmpty(host))
+            {
+                OAuth2Client oAuth2Client = new OAuth2Client(host);
+                var authenticatedUser = ASIOAuthClient.GetAuthenticatedUser(accessToken);
+                if(authenticatedUser != null && authenticatedUser.Token != null)
+                {
+                    string sessionId = authenticatedUser.Token .Value;
+                    var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
+                    var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
+                    if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
+                    {
+                        var responseMessage = oAuth2Client.CrossApplication(asiOAuthClientId, asiOAuthClientSecret, sessionId, toAppCode).Result;
+                        if (responseMessage != null)
+                        {
+                            redirectParams = new CrossApplication.RedirectParams();
+                            redirectParams.AccessToken = responseMessage.AccessToken;
+                            redirectParams.RefreshToken = responseMessage.RefreshToken;
+                            redirectParams.TokenExpirationTime = Convert.ToDateTime(responseMessage.ExpiresIn);
+                        }
+                    }
+                }
+            }
+            return redirectParams;
+        }
+
+        private static ASI.Services.Http.Security.CrossApplication.RedirectParams GetLatestTokens(HttpRequestBase request, HttpResponseBase response, string cookie, string domainName, string userCookieName = "Name", string toAppCode = null)
         {
             ILogService log = LogService.GetLog(typeof(CookiesHelper));
             log.Debug("GetLatestTokens - Start");
             var hashedTicket = FormsAuthentication.Decrypt(cookie);
             var extraData = JsonConvert.DeserializeObject<CrossApplication.RedirectParams>(hashedTicket.UserData,
                 new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
-            log.Debug("GetLatestTokens - Refresh token - " + (!string.IsNullOrEmpty(extraData.RefreshToken) ? extraData.RefreshToken : "No Refresh token"));
-            log.Debug("GetLatestTokens - TokenExpirationTime - " + extraData.TokenExpirationTime);
-            if (extraData != null && !string.IsNullOrEmpty(extraData.RefreshToken)
-                && (extraData.TokenExpirationTime != null && extraData.TokenExpirationTime.HasValue && extraData.TokenExpirationTime < DateTime.Now)
-                && !string.IsNullOrEmpty(extraData.AccessToken)
-                && !ASIOAuthClient.IsValidAccessToken(extraData.AccessToken))
-            {
-                log.Debug("GetLatestTokens - Requesting a new token");
-                var tokens = ASIOAuthClient.RefreshToken(extraData.RefreshToken);
-                if (tokens != null && tokens.Count > 0)
-                {
-                    foreach (var key in tokens.Keys)
-                    {
-                        log.Debug("GetLatestTokens - RefreshToken - " + key + " " + tokens[key]);
-                    }
-                    var user = new model.User();
-                    if (tokens.ContainsKey("AuthToken")) user.AccessToken = tokens["AuthToken"];
-                    if (tokens.ContainsKey("RefreshToken")) user.RefreshToken = tokens["RefreshToken"];
-                    user.FirstName = HttpContext.Current.User.Identity.Name;
-                    SetFormsAuthenticationCookie(request, response, user, false, userCookieName, domainName);
-                    extraData.AccessToken = user.AccessToken;
-                    extraData.RefreshToken = user.RefreshToken;
-                }
-                else
-                {
-                    log.Error("GetLatestTokens - RefreshToken - did not get a new token");
-                }
-            }
-            if (extraData != null) log.Debug("GetLatestTokens - End: " + extraData.AccessToken);
-            return extraData;
+            if (extraData != null && !string.IsNullOrEmpty(extraData.AccessToken))
+                return GetLatestTokens(extraData.AccessToken, toAppCode);
+            return null;
+            //log.Debug("GetLatestTokens - Refresh token - " + (!string.IsNullOrEmpty(extraData.RefreshToken) ? extraData.RefreshToken : "No Refresh token"));
+            //log.Debug("GetLatestTokens - TokenExpirationTime - " + extraData.TokenExpirationTime);
+            //if (extraData != null && !string.IsNullOrEmpty(extraData.RefreshToken)
+            //    && (extraData.TokenExpirationTime != null && extraData.TokenExpirationTime.HasValue && extraData.TokenExpirationTime < DateTime.Now)
+            //    && !string.IsNullOrEmpty(extraData.AccessToken)
+            //    && !ASIOAuthClient.IsValidAccessToken(extraData.AccessToken))
+            //{
+            //    log.Debug("GetLatestTokens - Requesting a new token");
+            //    var tokens = ASIOAuthClient.RefreshToken(extraData.RefreshToken);
+            //    if (tokens != null && tokens.Count > 0)
+            //    {
+            //        foreach (var key in tokens.Keys)
+            //        {
+            //            log.Debug("GetLatestTokens - RefreshToken - " + key + " " + tokens[key]);
+            //        }
+            //        var user = new model.User();
+            //        if (tokens.ContainsKey("AuthToken")) user.AccessToken = tokens["AuthToken"];
+            //        if (tokens.ContainsKey("RefreshToken")) user.RefreshToken = tokens["RefreshToken"];
+            //        user.FirstName = HttpContext.Current.User.Identity.Name;
+            //        SetFormsAuthenticationCookie(request, response, user, false, userCookieName, domainName);
+            //        extraData.AccessToken = user.AccessToken;
+            //        extraData.RefreshToken = user.RefreshToken;
+            //    }
+            //    else
+            //    {
+            //        log.Error("GetLatestTokens - RefreshToken - did not get a new token");
+            //    }
+            //}
+            //if (extraData != null) log.Debug("GetLatestTokens - End: " + extraData.AccessToken);
+            //return extraData;
         }
 
         private static string EncriptToken(string accessToken)
@@ -200,9 +220,9 @@ namespace asi.asicentral.oauth
             string cookie = GetCookieValue(request, response, FormsAuthentication.FormsCookieName);
             if (!string.IsNullOrEmpty(cookie))
             {
-                var extraData = GetLatestTokens(request, response, cookie, domainName, userCookieName: userCookieName);
-                if (extraData != null)
-                    lmsToken = EncriptToken(extraData.AccessToken);
+                var redirectParms = GetLatestTokens(request, response, cookie, domainName, userCookieName: userCookieName, toAppCode: appCode.ToString());
+                if (redirectParms != null && !string.IsNullOrEmpty(redirectParms.AccessToken))
+                    lmsToken = EncriptToken(redirectParms.AccessToken);
             }
             return lmsToken;
         }

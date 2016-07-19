@@ -1,16 +1,22 @@
 ﻿using asi.asicentral.model;
-using ASI.Jade.OAuth2;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Configuration;
-using ASI.Jade.Utilities;
-using ASI.Jade.v2;
 using ASI.EntityModel;
 using System.Threading.Tasks;
 using asi.asicentral.services;
 using asi.asicentral.interfaces;
 using System.ComponentModel;
+using System.Net;
+using ASI.Services.Http.SmartLink;
+using ASI.Contracts.Messages.UserMgmt;
+using ASI.Barista.Plugins.Messaging;
+using ASI.Services.Http.Security;
+using System.Security.Claims;
+using ASI.Contracts.Messages.UserMgmt.User;
+using ASI.Contracts.Messages.MemberMgmt;
 
 namespace asi.asicentral.oauth
 {
@@ -70,81 +76,45 @@ namespace asi.asicentral.oauth
 
     public enum ApplicationCodes
     {
-        ASIC, //For ASI Central
+        ASCT, //For ASI Central
         EMES, //For Email-express
         WESP, //For ESP Web
-        UPSIDE //for upsidelms
+        UPSIDE, //For upsidelms
+        ASST // For ASI Store
     }
     
     public class ASIOAuthClient
     {
-        private static ASI.Jade.UserManagement.User _juser { get; set; }
-        private static ASI.Jade.UserManagement.User JUser
-        {
-            get
-            {
-                if (_juser == null)
-                {
-                    _juser = new ASI.Jade.UserManagement.User();
-                    return _juser;
-                }
-                else { return _juser; }
-            }
-        }
-
         public static bool IsValidAccessToken(string accessToken)
         {
-            ILogService log = LogService.GetLog(typeof(ASIOAuthClient));
-            if (!string.IsNullOrEmpty(accessToken))
-            {
-                var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
-                var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
-                if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
-                {
-                    ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
-                    try
-                    {
-                        var userDetails = webServerClient.GetUserDetails(accessToken);
-                        return (userDetails != null && userDetails.Count > 0);
-                    }
-                    catch (Exception ex)
-                    {
-                        log.Error(ex.Message);
-                        return false;
-                    }
-                }
-            }
-            else log.Error("IsValidAccessToken : given access token is empty");
-            return false;
+            if (string.IsNullOrEmpty(accessToken)) return false;
+            var authenticatedUser = GetAuthenticatedUser(accessToken);
+            return (authenticatedUser != null);
+        }
+
+        public static AuthenticatedUser GetAuthenticatedUser(string accessToken)
+        {
+            IList<Claim> claims = new List<Claim>();
+            var claimsPrincipal = Token.Validate(accessToken, out claims);
+            return claimsPrincipal.Identity as AuthenticatedUser;
         }
 
         public static asi.asicentral.model.User GetUser(string token)
         {
+            if (string.IsNullOrEmpty(token)) return null;
             asi.asicentral.model.User user = null;
             try
             {
-                ASI.Jade.Utilities.CrossApplication.RedirectParams redirectParams = CrossApplication.ParseTokenUrl(token);
-                if (redirectParams != null && !string.IsNullOrEmpty(redirectParams.AccessToken))
+                var authenticatedUser = GetAuthenticatedUser(token);
+
+                if (authenticatedUser != null)
                 {
-                    IDictionary<string, string> userDetails = null;
-                    var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
-                    var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
-                    if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
-                    {
-                        ASI.Jade.OAuth2.WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
-                        userDetails = webServerClient.GetUserDetails(redirectParams.AccessToken);
-                    }
-                    if (userDetails != null && userDetails.Count > 0)
-                    {
-                        int SSOId = Convert.ToInt32(userDetails["sign_in_id"]);
-                        user = GetUser(SSOId);
-                        if (redirectParams != null)
-                        {
-                            user.AccessToken = redirectParams.AccessToken;
-                            user.RefreshToken = redirectParams.RefreshToken;
-                        }
-                    }
+                    int SSOId = Convert.ToInt32(authenticatedUser.UserId);
+                    user = GetUser(SSOId);
+                    user.AccessToken = token;
+                    //user.RefreshToken = redirectParams.RefreshToken;
                 }
+                
             }
             catch (Exception ex)
             {
@@ -158,44 +128,62 @@ namespace asi.asicentral.oauth
         public static asi.asicentral.model.User GetUser(int sso)
         {
             model.User user = null;
+            ASI.EntityModel.User entityUser = GetEntityUser(sso);
+            if(entityUser != null) user = MapEntityModelUserToASIUser(entityUser, user);
+            return user;
+        }
+
+        private static ASI.EntityModel.User GetEntityUser(int sso)
+        {
             try
             {
-                ASI.EntityModel.User entityUser = Task.Factory.StartNew(() => UMS.UserSearch(sso).Result, TaskCreationOptions.LongRunning).Result;
-                user = MapEntityModelUserToASIUser(entityUser, user);
+                var requestMessage = new ASI.Contracts.Messages.UserMgmt.User.RequestMessage() { RequestType = RequestType.Retrieve, SearchFilter = new SearchFilter() { Id = sso } };
+                var rpcClient = new RpcClient<RequestMessage, ResponseMessage>();
+
+                //Act
+                var responseMessage = rpcClient.Request(requestMessage);
+
+                //ASSERT
+                if (responseMessage.Users != null && responseMessage.Users.Count > 0)
+                    return responseMessage.Users.FirstOrDefault();
             }
             catch (Exception ex)
             {
                 LogService log = LogService.GetLog(typeof(ASIOAuthClient));
                 log.Error(ex.Message);
             }
-            return user;
+            return null;
         }
 
-        public static IDictionary<string, string> RefreshToken(string refreshToken)
+        public static IDictionary<string, string> RefreshToken(string refreshToken, string appCode = null, string appVersion = null)
         {
-			ILogService log = LogService.GetLog(typeof(ASIOAuthClient));
-			log.Debug("RefreshToken - Start");
-			IDictionary<string, string> tokens = null;
+            ILogService log = LogService.GetLog(typeof(ASIOAuthClient));
+            log.Debug("RefreshToken - Start");
+            IDictionary<string, string> tokens = null;
             if (!string.IsNullOrEmpty(refreshToken))
             {
                 var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
                 var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
-                if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
+                var relativePath = ConfigurationManager.AppSettings["RelativePath"];
+                var host = ConfigurationManager.AppSettings["SecurityHost"];
+                if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret)
+                    && !string.IsNullOrEmpty(host) && !string.IsNullOrEmpty(relativePath))
                 {
-					log.Debug("RefreshToken - Get Client");
-					var webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
-					log.Debug("RefreshToken - Client created - " + webServerClient.AuthorizationServer.AuthorizationEndpoint);
-					try
+                    try
                     {
-						log.Debug("RefreshToken - Calling refresh with " + refreshToken);
-						tokens = webServerClient.RefreshToken(refreshToken);
-	                    if (tokens != null)
-	                    {
-							foreach (var key in tokens.Keys)
-							{
-								log.Debug("RefreshToken - RefreshToken - " + key + " " + tokens[key]);
-							}
-						}
+                        log.Debug("RefreshToken - Get Client");
+                        OAuth2Client oAuth2Client = new OAuth2Client(host, relativePath: relativePath);
+                        
+                        var oauth2Response = oAuth2Client.Refresh(asiOAuthClientId, asiOAuthClientSecret, refreshToken, appCode, appVersion).Result;
+                        if (oauth2Response != null)
+                        {
+                            log.Debug("Login_FetchUserDetails - Login - AccessToken " + oauth2Response.AccessToken);
+                            log.Debug("Login_FetchUserDetails - Login - RefreshToken " + oauth2Response.RefreshToken);
+                            tokens = new Dictionary<string, string>();
+
+                            tokens.Add("AuthToken", oauth2Response.AccessToken);
+                            tokens.Add("RefreshToken", oauth2Response.RefreshToken);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -203,30 +191,20 @@ namespace asi.asicentral.oauth
                     }
                 }
             }
-			log.Debug("RefreshToken - End");
-			return tokens;
+            log.Debug("RefreshToken - End");
+            return tokens;
         }
 
         //When ever you call this API, you need to reset the ssoid in the cookie using
         public static IDictionary<string, string> IsValidUser(string userName, string password)
         {
-            IDictionary<string, string> tokens = null;
-            var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
-            var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
-            if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
+            var tokens = Login_FetchUserDetails(userName, password);
+            if(tokens != null && !string.IsNullOrEmpty(tokens["AuthToken"]))
             {
-                WebServerClient webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
-                try
-                {
-                    tokens = webServerClient.Login(userName, password);
-                }
-                catch (Exception ex)
-                {
-                    LogService log = LogService.GetLog(typeof(ASIOAuthClient));
-                    log.Error(ex.Message);
-                }
+                var authenticatedUser = GetAuthenticatedUser(tokens["AuthToken"]);
+                return (authenticatedUser != null) ? tokens : null;
             }
-            return tokens;
+            return null;
         }
 
         public static IDictionary<string, string> Login_FetchUserDetails(string userName, string password)
@@ -236,40 +214,27 @@ namespace asi.asicentral.oauth
 			IDictionary<string, string> tokens = null;
             var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
             var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
-            if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
+            var relativePath = ConfigurationManager.AppSettings["RelativePath"];
+            var host = ConfigurationManager.AppSettings["SecurityHost"];
+            if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret) &&
+                !string.IsNullOrEmpty(host) && !string.IsNullOrEmpty(relativePath))
             {
-                var webServerClient = new WebServerClient(asiOAuthClientId, asiOAuthClientSecret);
-				log.Debug("Login_FetchUserDetails - Client created - " + webServerClient.AuthorizationServer.AuthorizationEndpoint);
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true; 
+				log.Debug("Login_FetchUserDetails - ServerCertificateValidationCallback created");
 				try
                 {
 					log.Debug("Login_FetchUserDetails - Login");
-					tokens = webServerClient.Login(userName, password);
-					if (tokens != null && tokens.Count > 0)
+                    OAuth2Client oauth2Client = new OAuth2Client(host, relativePath: relativePath);
+                    var oauth2Response = oauth2Client.Login(asiOAuthClientId, asiOAuthClientSecret, userName, password, scope: "AsiNumberOptional").Result;
+                    if (oauth2Response != null)
                     {
-						foreach (var key in tokens.Keys)
-						{
-							log.Debug("Login_FetchUserDetails - Login - " + key + " " + tokens[key]);
-						}
-						string accessToken = string.Empty;
-                        string refreshToken = string.Empty;
-                        if (tokens.ContainsKey("AuthToken")) accessToken = tokens["AuthToken"];
-                        if (tokens.ContainsKey("RefreshToken")) refreshToken = tokens["RefreshToken"];
-                        tokens = null;
-                        if (!string.IsNullOrEmpty(accessToken))
-                        {
-							log.Debug("Login_FetchUserDetails - GetUserDetails");
-							tokens = webServerClient.GetUserDetails(accessToken);
-                            if (tokens != null && tokens.Count > 0)
-                            {
-	                            foreach (var key in tokens.Keys)
-	                            {
-									log.Debug("Login_FetchUserDetails - GetUserDetails - " + key + " " + tokens[key]);
-	                            }
-                                tokens.Add("AuthToken", accessToken);
-                                tokens.Add("RefreshToken", refreshToken);
-                            }
-                        }
-                    }
+                        log.Debug("Login_FetchUserDetails - Login - AccessToken " + oauth2Response.AccessToken);
+                        log.Debug("Login_FetchUserDetails - Login - RefreshToken " + oauth2Response.RefreshToken);
+                        tokens = new Dictionary<string, string>();
+						
+						tokens.Add("AuthToken", oauth2Response.AccessToken);
+                        tokens.Add("RefreshToken", oauth2Response.RefreshToken);
+                     }
                 }
                 catch (Exception ex)
                 {
@@ -287,9 +252,8 @@ namespace asi.asicentral.oauth
             {
                 try
                 {
-                    List<ASI.EntityModel.User> entityUsers = Task.Factory.StartNew(() => UMS.UserSearch(new UMS.UserSearchCriteria { EMail = email }).Result, TaskCreationOptions.LongRunning).Result;
-                    if(entityUsers != null && entityUsers.Count > 0 && FilterUserWithEmail(entityUsers, email) != null)
-                        isValidUser = true;
+                    model.User user = GetUserByEmail(email);
+                    isValidUser = (user != null && user.Email.ToLower() == email);
                 }
                 catch (Exception ex)
                 {
@@ -308,15 +272,27 @@ namespace asi.asicentral.oauth
             {
                 try
                 {
-                    List<ASI.EntityModel.User> entityUsers = Task.Factory.StartNew(() => UMS.UserSearch(new UMS.UserSearchCriteria { EMail = email }).Result, TaskCreationOptions.LongRunning).Result;
-                    if(entityUsers == null || entityUsers.Count == 0) return null;
-                    ASI.EntityModel.User entityUser = FilterUserWithEmail(entityUsers, email);
-                    if (entityUser != null)
+                    //Arrange
+                    var requestMessage = new RequestMessage() { RequestType = RequestType.Retrieve, SearchFilter = new SearchFilter() { Email = email } };
+                    var rpcClient = new RpcClient<RequestMessage, ResponseMessage>();
+
+                    //Act
+                    var responseMessage = rpcClient.Request(requestMessage);
+
+                   
+                    if(responseMessage.Users != null && responseMessage.Users.Count > 0)
                     {
-                        user = MapEntityModelUserToASIUser(entityUser, user);
-                        return user;
+                        List<ASI.EntityModel.User> entityUsers = responseMessage.Users.Where(u => u.StatusCode == StatusCode.ACTV.ToString()).ToList();
+                    
+                        if (entityUsers == null || entityUsers.Count == 0) return null;
+                        ASI.EntityModel.User entityUser = FilterUserWithEmail(entityUsers, email);
+                        if (entityUser != null)
+                        {
+                            user = MapEntityModelUserToASIUser(entityUser, user);
+                            return user;
+                        }
+                        else return null;
                     }
-                    else return null;
                 }
                 catch (Exception ex)
                 {
@@ -354,7 +330,13 @@ namespace asi.asicentral.oauth
                         }
                     }
                     entityUser = MapASIUserToEntityModelUser(user, entityUser, true);
-                    ssoId = Task.Factory.StartNew(() => UMS.UserCreate(entityUser).Result, TaskCreationOptions.LongRunning).Result;
+                    //ARRANGE
+                    var requestMessage = new RequestMessage() { RequestType = RequestType.Create, AuditTrail = new AuditTrail() { LoggedInUserId = 1 }, User = entityUser };
+                    var rpcClient = new RpcClient<RequestMessage, ResponseMessage>();
+
+                    //ACT
+                    var responseMessage = rpcClient.Request(requestMessage);
+                    ssoId = (responseMessage != null && responseMessage.Users != null && responseMessage.Users.Count > 0 && responseMessage.Users[0] != null && responseMessage.Users[0].Id > 0) ? responseMessage.Users[0].Id.ToString() : null;
                 }
                 catch (Exception ex)
                 {
@@ -398,7 +380,7 @@ namespace asi.asicentral.oauth
             return user;
         }
 
-        public static bool UpdateUser(asi.asicentral.model.User user)
+        public static bool UpdateUser(asi.asicentral.model.User user, bool isPasswordReset = false)
         {
             bool isUserUpdated = false;
             if (user != null)
@@ -408,9 +390,14 @@ namespace asi.asicentral.oauth
                     ASI.EntityModel.User entityUser = null;
                     ASI.EntityModel.Company entityCompany = null;
                     entityCompany = MapASIUserCompanyToEntityModelCompany(user, entityCompany, false);
-                    entityUser = MapASIUserToEntityModelUser(user, entityUser, false);
-                    var result = Task.Factory.StartNew(() => UMS.UserUpdate(entityUser).Result, TaskCreationOptions.LongRunning).Result;
-                    isUserUpdated = true;
+                    entityUser = MapASIUserToEntityModelUser(user, entityUser, isCreate: false, isPasswordReset: isPasswordReset);
+
+                    var requestMessage = new RequestMessage() { RequestType = RequestType.Update, AuditTrail = new AuditTrail() { LoggedInUserId = 1 }, User = entityUser };
+                    var rpcClient = new RpcClient<RequestMessage, ResponseMessage>();
+                   
+                    //Act
+                    var updResponseMessage = rpcClient.Request(requestMessage);
+                    isUserUpdated = (updResponseMessage != null && updResponseMessage.Users != null && updResponseMessage.Users.Count > 0 && updResponseMessage.Users.FirstOrDefault() !=  null) ? true : false;
                 }
                 catch (Exception ex)
                 {
@@ -429,15 +416,12 @@ namespace asi.asicentral.oauth
             {
                 try
                 {
-                    ASI.Jade.UserManagement.DataObjects.Security jadeSecurity = new ASI.Jade.UserManagement.DataObjects.Security();
-                    if(MapASISecurityToJadeSecurity(security, jadeSecurity) != null)
-                        isPasswordChanged = JUser.ChangeSecurity(ssoid, jadeSecurity);
-                    if (isPasswordChanged)
-                    {
-                        asicentral.model.User user = GetUser(ssoid);
-                        user.PasswordResetRequired = passwordResetRequired;
-                        UpdateUser(user);
-                    }
+                    asicentral.model.User user = GetUser(ssoid);
+                    user.Password = security.Password;
+                    user.PasswordAnswer = security.Password;
+                    user.TelephonePassword = security.Password;
+                    user.PasswordResetRequired = passwordResetRequired;
+                    isPasswordChanged = UpdateUser(user, true);
                 }
                 catch (Exception ex)
                 {
@@ -479,8 +463,7 @@ namespace asi.asicentral.oauth
 
         private static ASI.EntityModel.User FilterUserWithEmail(IList<ASI.EntityModel.User> entityUsers, string email)
         {
-            if (entityUsers != null
-                        && entityUsers.Count > 0)
+            if (entityUsers != null && entityUsers.Count > 0)
             {
                 foreach (ASI.EntityModel.User entityUser in entityUsers)
                 {
@@ -494,11 +477,11 @@ namespace asi.asicentral.oauth
             return null;
         }
 
-        private static ASI.EntityModel.User MapASIUserToEntityModelUser(asi.asicentral.model.User user, ASI.EntityModel.User entityUser, bool isCreate)
+        private static ASI.EntityModel.User MapASIUserToEntityModelUser(asi.asicentral.model.User user, ASI.EntityModel.User entityUser, bool isCreate, bool isPasswordReset = false)
         {
             if (user != null)
             {
-                if (entityUser == null && user.SSOId != 0) entityUser = Task.Factory.StartNew(() => UMS.UserSearch(user.SSOId).Result, TaskCreationOptions.LongRunning).Result;
+                if (entityUser == null && user.SSOId != 0) entityUser = GetEntityUser(user.SSOId);
                 else entityUser = new ASI.EntityModel.User();
                             
                 if(!string.IsNullOrEmpty(user.Email))
@@ -524,9 +507,12 @@ namespace asi.asicentral.oauth
                 if (isCreate)
                 {
                     entityUser.UserName = user.Email;
+                    entityUser.StatusCode = StatusCode.ACTV.ToString();
+                }
+                if (isCreate || isPasswordReset)
+                {
                     entityUser.Password = user.Password;
                     entityUser.PasswordHint = user.Password;
-                    entityUser.StatusCode = StatusCode.ACTV.ToString();
                     entityUser.PasswordResetRequired = "N";
                 }
                 entityUser.FirstName = user.FirstName;
@@ -541,7 +527,7 @@ namespace asi.asicentral.oauth
                 {
                     entityUser.Addresses = new List<Address>();
                     address = new Address();
-                    address.IsDefault = true;
+                    address.IsPrimary = true;
                     address.UsageCode = UsageCode.GNRL.ToString();
                     entityUser.Addresses.Add(address);
                 }
@@ -632,24 +618,20 @@ namespace asi.asicentral.oauth
                     company.Contacts.Add(contact);
                 }
 
-                if (company.Types != null && company.Types.Count > 0)
+                if (!string.IsNullOrEmpty(company.Type))
                 {
-                    string membertype = company.Types.ElementAt(0);
+                    string membertype = company.Type;
                     membertype = user.MemberType_CD;
                 }
-                else
-                {
-                    company.Types = new List<string>();
-                    company.Types.Add(user.MemberType_CD);
-                }
-
+                else company.Type = user.MemberType_CD;
+                
                 contact.Title = user.Title;
                 contact.Suffix = user.Suffix;
                 
                 ASI.EntityModel.Address address = null;
                 if (company.Addresses != null && company.Addresses.Count > 0)
                 {
-                    address = company.Addresses.Where(add => add.IsDefault).SingleOrDefault();
+                    address = company.Addresses.Where(add => add.IsPrimary).SingleOrDefault();
                 }
                 else
                 {
@@ -668,19 +650,6 @@ namespace asi.asicentral.oauth
                 address.City = user.City;
             }
             return company;
-        }
-
-        private static ASI.Jade.UserManagement.DataObjects.Security MapASISecurityToJadeSecurity(asi.asicentral.model.Security security, ASI.Jade.UserManagement.DataObjects.Security jadeSecurity)
-        {
-            if (security != null)
-            {
-                if (jadeSecurity == null) jadeSecurity = new ASI.Jade.UserManagement.DataObjects.Security();
-                jadeSecurity.Password = security.Password;
-                jadeSecurity.PasswordAnswer = security.Password;
-                jadeSecurity.PasswordHint = security.PasswordHint;
-                jadeSecurity.PasswordQuestion = security.PasswordQuestion;
-            }
-            return jadeSecurity;
         }
 
         private static asi.asicentral.model.User MapEntityModelUserToASIUser(ASI.EntityModel.User entityUser, asi.asicentral.model.User user)
@@ -770,24 +739,24 @@ namespace asi.asicentral.oauth
                                 }
                             }
                         }
-                        else
-                        {
-                            Company entityCompany = ASI.Jade.Company.Retriever.Get(entityUser.CompanyId);
-                            if (entityCompany != null)
-                            {
-                                user.CompanyName = entityCompany.Name;
-                                user.CompanyId = entityCompany.Id;
-                                user.AsiNumber = entityCompany.AsiNumber;
-                                if (entityCompany.Contacts != null && entityCompany.Contacts.Count > 0)
-                                {
-                                    Contact contact = entityCompany.Contacts.ElementAt(0);
-                                    user.Title = contact.Title;
-                                    user.Suffix = contact.Suffix;
-                                }
-                                if (entityCompany.Types != null && entityCompany.Types.Count > 0)
-                                    user.MemberType_CD = entityCompany.Types.ElementAt(0);
-                            }
-                        }
+                        //else
+                        //{
+                        //    Company entityCompany = ASI.Jade.Company.Retriever.Get(entityUser.CompanyId);
+                        //    if (entityCompany != null)
+                        //    {
+                        //        user.CompanyName = entityCompany.Name;
+                        //        user.CompanyId = entityCompany.Id;
+                        //        user.AsiNumber = entityCompany.AsiNumber;
+                        //        if (entityCompany.Contacts != null && entityCompany.Contacts.Count > 0)
+                        //        {
+                        //            Contact contact = entityCompany.Contacts.ElementAt(0);
+                        //            user.Title = contact.Title;
+                        //            user.Suffix = contact.Suffix;
+                        //        }
+                        //        if (entityCompany.Types != null && entityCompany.Types.Count > 0)
+                        //            user.MemberType_CD = entityCompany.Types.ElementAt(0);
+                        //    }
+                        //}
                     }
                 }
                 if (!IsActiveUser(user.MemberStatus_CD)) user.AsiNumber = null;
