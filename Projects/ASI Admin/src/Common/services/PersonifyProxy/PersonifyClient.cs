@@ -892,7 +892,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return companyInfo;
         }
 
-        private static void UpdatePersonifyCompany(CompanyInformation companyInfo, PersonifyMapping mapping)
+        public static void UpdatePersonifyCompany(CompanyInformation companyInfo, PersonifyMapping mapping)
         {
             // update company status from Delisted to Active
             if (companyInfo.MemberStatus == StatusCode.DELISTED.ToString())
