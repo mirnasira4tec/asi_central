@@ -208,7 +208,7 @@ namespace Core.Tests.OAuth
         [TestMethod]
         public void RefreshTokenTest()
         {
-            var tokens = ASIOAuthClient.Login_FetchUserDetails("ad68507velo", "password2");
+            var tokens = ASIOAuthClient.Login_FetchUserDetails("pkumar@asicentral.com", "password1");
             Assert.IsNotNull(tokens);
             Assert.IsNotNull(tokens["AuthToken"]);
             Assert.IsNotNull(tokens["RefreshToken"]);
