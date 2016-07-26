@@ -206,51 +206,51 @@ namespace asi.asicentral.web.Controllers.Show
                             {
                                 objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE WEST") && item.EndDate.Year == DateTime.Now.Year);
                             }
-                            else if (worksheet.Name.Contains("WEEK 1"))
+                            else if (worksheet.Name.Contains("WEEK 1-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 1 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
                             }
-                            else if (worksheet.Name.Contains("WEEK 2"))
+                            else if (worksheet.Name.Contains("WEEK 2-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 2 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
                             }
-                            else if (worksheet.Name.Contains("WEEK 3"))
+                            else if (worksheet.Name.Contains("WEEK 3-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 3 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
                             }
-                            else if (worksheet.Name.Contains("WEEK 4"))
+                            else if (worksheet.Name.Contains("WEEK 4-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 4 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item =>item.EndDate).ToList();
                             }
-                            else if (worksheet.Name.Contains("WEEK 5"))
+                            else if (worksheet.Name.Contains("WEEK 5-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 5 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
                             }
-                            else if (worksheet.Name.Contains("WEEK 6"))
+                            else if (worksheet.Name.Contains("WEEK 6-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 6 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
                             }
-                            else if (worksheet.Name.Contains("WEEK 7"))
+                            else if (worksheet.Name.Contains("WEEK 7-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 7 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
                             }
-                            else if (worksheet.Name.Contains("WEEK 8"))
+                            else if (worksheet.Name.Contains("WEEK 8-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 8 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
                             }
-                            else if (worksheet.Name.Contains("WEEK 9"))
+                            else if (worksheet.Name.Contains("WEEK 9-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 9 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
                             }
-                            else if (worksheet.Name.Contains("WEEK 10"))
+                            else if (worksheet.Name.Contains("WEEK 10-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 10 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
                             }
-                            else if (worksheet.Name.Contains("WEEK 11"))
+                            else if (worksheet.Name.Contains("WEEK 11-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 11 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
                             }
-                            else if (worksheet.Name.Contains("WEEK 12"))
+                            else if (worksheet.Name.Contains("WEEK 12-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 12 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
                             }
