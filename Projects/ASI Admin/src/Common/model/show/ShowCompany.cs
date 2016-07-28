@@ -24,7 +24,6 @@ namespace asi.asicentral.model.show
         public string WebUrl { get; set; }
         public string MemberType { get; set; }
         public string ASINumber { get; set; }
-        public bool IsCatalog { get; set; }
         public virtual IList<ShowCompanyAddress> CompanyAddresses { get; set; }
         public virtual IList<ShowEmployee> Employees { get; set; }
         public virtual IList<ShowAttendee> Attendees { get; set; }

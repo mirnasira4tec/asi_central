@@ -1,1 +1,1 @@
-Alter table [dbo].[ATT_Company] Add IsCatalog [bit] NOT NULL DEFAULT ('0') 
+Alter table [dbo].[ATT_Attendee] Add IsCatalog [bit] NOT NULL DEFAULT ('0') 
