@@ -145,7 +145,6 @@ namespace asi.asicentral.util.show
             company.WebUrl = objCompany.WebUrl;
             company.MemberType = objCompany.MemberType;
             company.ASINumber = objCompany.ASINumber;
-            company.IsCatalog = objCompany.IsCatalog;
             company.UpdateDate = DateTime.UtcNow;
             company.UpdateSource = objCompany.UpdateSource;
             return company;
@@ -198,6 +197,7 @@ namespace asi.asicentral.util.show
             showAttendee.IsPresentation = objShowAttendee.IsPresentation;
             showAttendee.IsRoundTable = objShowAttendee.IsRoundTable;
             showAttendee.IsExisting = objShowAttendee.IsExisting;
+            showAttendee.IsCatalog = objShowAttendee.IsCatalog;
             showAttendee.UpdateDate = DateTime.UtcNow;
             showAttendee.UpdateSource = objShowAttendee.UpdateSource;
             return showAttendee;

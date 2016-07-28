@@ -40,6 +40,7 @@ namespace asi.asicentral.web.Controllers.Show
             objAttendee.IsPresentation = Convert.ToBoolean(ds.Rows[rowId]["Presentation"].ToString().Contains('X')) ? true : false;
             objAttendee.IsRoundTable = Convert.ToBoolean(ds.Rows[rowId]["Roundtable"].ToString().Contains('X')) ? true : false;
             objAttendee.IsExhibitDay = Convert.ToBoolean(ds.Rows[rowId]["ExhibitOnly"].ToString().Contains('X')) ? true : false;
+            objAttendee.IsExhibitDay = Convert.ToBoolean(ds.Rows[rowId]["IsCatalog"].ToString().Contains('X')) ? true : false;
             objAttendee.IsExisting = true;
             objAttendee.UpdateSource = "ExcelUploadcontroller-Index";
             objAttendee = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, objAttendee);
@@ -135,7 +136,6 @@ namespace asi.asicentral.web.Controllers.Show
             objCompany.Name = name;
             objCompany.ASINumber = asinumber;
             objCompany.MemberType = memberType;
-            objCompany.IsCatalog = Convert.ToBoolean(ds.Rows[rowId]["IsCatalog"].ToString().Contains('X')) ? true : false;
             objCompany.UpdateSource = "ExcelUploadcontroller-Index";
             objCompany = ShowHelper.CreateOrUpdateCompany(ObjectService, objCompany);
 
@@ -349,6 +349,7 @@ namespace asi.asicentral.web.Controllers.Show
                                     objexistingAttendee.IsRoundTable = existingAttendee.IsRoundTable;
                                     objexistingAttendee.IsExhibitDay = existingAttendee.IsExhibitDay;
                                     objexistingAttendee.IsPresentation = existingAttendee.IsPresentation;
+                                    objexistingAttendee.IsCatalog = existingAttendee.IsCatalog;
                                     objexistingAttendee.IsExisting = false;
                                     objexistingAttendee = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, objexistingAttendee);
                                     ObjectService.SaveChanges();
