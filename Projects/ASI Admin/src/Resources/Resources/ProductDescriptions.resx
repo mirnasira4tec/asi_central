@@ -193,7 +193,7 @@ Everyone will be checking out the newly designed issue for promotional products 
   <data name="ProductSpectrumCelebrationAdvertising" xml:space="preserve">
     <value>Introducing the &lt;strong&gt;NEW&lt;/strong&gt; Spectrum Celebration - a large, grander format completely redesigned to give your products twice the advertising space.</value>
   </data>
-  <data name="ProductSpectrumCelebration" xml:space="preserve">
+  <data name="ProductTopSellers" xml:space="preserve">
     <value>&lt;strong&gt;Inspire more sales with Top Sellers!&lt;/strong&gt; Top Sellers™ is the latest catalog from ASI® and puts all the best-selling items, annual favorites and products from top-tier suppliers at your customers’ finger tips. Get the creativity flowing by showing your clients all of the inspiring product ideas available to them!</value>
   </data>
   <data name="ProductSpectrumAdvertising2" xml:space="preserve">
@@ -316,5 +316,11 @@ Everyone will be checking out the newly designed issue for promotional products 
   <data name="ProductSGR" xml:space="preserve">
     <value>Our Supplier Global Resource™ (SGR) readers think globally and act locally.</value>
     <comment>1</comment>
+  </data>
+  <data name="ProductCompanyReviews" xml:space="preserve">
+    <value>Online reviews are an important piece of a company’s identity – and they can really affect your bottom line. Put your best foot forward with prospective customers by letting ASI polish your online reputation.</value>
+  </data>
+  <data name="ProductPayPerClick" xml:space="preserve">
+    <value>ASI’s automated platform is a best-in-breed paid search solution for capturing prospective customers on all the major search engines, not just Google. With Pay-Per-Click Advertising, we will track keywords and automatically optimize to conversions so you get true pay-for-performance advertising.</value>
   </data>
 </root>

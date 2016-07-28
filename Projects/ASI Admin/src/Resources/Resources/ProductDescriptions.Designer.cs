@@ -115,6 +115,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Online reviews are an important piece of a company’s identity – and they can really affect your bottom line. Put your best foot forward with prospective customers by letting ASI polish your online reputation..
+        /// </summary>
+        public static string ProductCompanyReviews {
+            get {
+                return ResourceManager.GetString("ProductCompanyReviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company Stores™ - powered by ESP Websites™ - is the unique eCommerce solution designed as a stand-alone online shop for special events, niche markets, holidays or your top customers – the possibilities are virtually endless!.
         /// </summary>
         public static string ProductCompanyStore {
@@ -295,6 +304,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ASI’s automated platform is a best-in-breed paid search solution for capturing prospective customers on all the major search engines, not just Google. With Pay-Per-Click Advertising, we will track keywords and automatically optimize to conversions so you get true pay-for-performance advertising..
+        /// </summary>
+        public static string ProductPayPerClick {
+            get {
+                return ResourceManager.GetString("ProductPayPerClick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Themed Product Niche Catalogs will promote the products you’d like to feature on ESP Website’s home page. .
         /// </summary>
         public static string ProductProductCollections {
@@ -372,15 +390,6 @@ namespace asi.asicentral.Resources {
         public static string ProductSpectrumAdvertising2 {
             get {
                 return ResourceManager.GetString("ProductSpectrumAdvertising2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;strong&gt;Inspire more sales with Top Sellers!&lt;/strong&gt; Top Sellers™ is the latest catalog from ASI® and puts all the best-selling items, annual favorites and products from top-tier suppliers at your customers’ finger tips. Get the creativity flowing by showing your clients all of the inspiring product ideas available to them!.
-        /// </summary>
-        public static string ProductSpectrumCelebration {
-            get {
-                return ResourceManager.GetString("ProductSpectrumCelebration", resourceCulture);
             }
         }
         
@@ -555,6 +564,15 @@ namespace asi.asicentral.Resources {
         public static string ProductTheProfessionalBuyersGuideAdvertising2 {
             get {
                 return ResourceManager.GetString("ProductTheProfessionalBuyersGuideAdvertising2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;strong&gt;Inspire more sales with Top Sellers!&lt;/strong&gt; Top Sellers™ is the latest catalog from ASI® and puts all the best-selling items, annual favorites and products from top-tier suppliers at your customers’ finger tips. Get the creativity flowing by showing your clients all of the inspiring product ideas available to them!.
+        /// </summary>
+        public static string ProductTopSellers {
+            get {
+                return ResourceManager.GetString("ProductTopSellers", resourceCulture);
             }
         }
         
