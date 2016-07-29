@@ -11,7 +11,6 @@ namespace asi.asicentral.util.Tests
     [TestClass()]
     public class HtmlHelperTests
     {
-
         private string url = "https://stage-store.asicentral.com/Store/Supplier/Package/9";
 
         [TestMethod()]
