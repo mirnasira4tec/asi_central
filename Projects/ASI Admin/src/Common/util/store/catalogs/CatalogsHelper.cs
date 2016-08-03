@@ -17,14 +17,15 @@ namespace asi.asicentral.util.store
         public static readonly int[] CATALOG_COVER_PRODUCT_35 = { 6 };
         public static readonly int[] CATALOG_COVER_PRODUCT_120 = { 1 };
         public static readonly int[] CATALOG_COVER_PRODUCT_36_38_82 = { 1 };
-        public static readonly int[] CATALOG_COVER_PRODUCT_37 = { 1, 7 };
-        public static readonly int[] CATALOG_COVER_PRODUCT_39_40 = { 1, 2, 3, 4 ,5 };
+        public static readonly int[] CATALOG_COVER_PRODUCT_37 = { 27, 28 };
+        public static readonly int[] CATALOG_COVER_PRODUCT_39_40 = { 1, 2, 3, 4, 5 };
         public static readonly int[] CATALOG_COVER_PRODUCT_111 = { 1 };
         //Area options
         public static readonly int[] CATALOG_AREA_PRODUCT_35_37_38_120 = { 8 };
         public static readonly int[] CATALOG_AREA_PRODUCT_36_39_40_82 = { 8, 9, 25 };
         //color options
-        public static readonly int[] CATALOG_COLOR_PRODUCT_35_36_37_38_39_40_82_120 = { 11, 26 };
+        public static readonly int[] CATALOG_COLOR_PRODUCT_37 = { 29, 26 };
+        public static readonly int[] CATALOG_COLOR_PRODUCT_35_36_38_39_40_82_120 = { 11, 26 };
         public static readonly int[] CATALOG_IMPRINT_PRODUCT_35_36_37_38_39_40_82_120 = { 18, 19, 20, 21 };
 
         private IStoreService storeService;
@@ -114,7 +115,7 @@ namespace asi.asicentral.util.store
                                         selectedItems.Add(new SelectListItem() { Text = option.Name, Value = option.Id.ToString(), Selected = false });
                                     break;
                                 case 111:
-                                    if(CATALOG_COVER_PRODUCT_111.Contains(option.Id))
+                                    if (CATALOG_COVER_PRODUCT_111.Contains(option.Id))
                                         selectedItems.Add(new SelectListItem() { Text = option.Name, Value = option.Id.ToString(), Selected = false });
                                     break;
                             }
@@ -145,12 +146,15 @@ namespace asi.asicentral.util.store
                                 case 35:
                                 case 120:
                                 case 36:
-                                case 37:
                                 case 38:
                                 case 39:
                                 case 40:
                                 case 82:
-                                    if (CATALOG_COLOR_PRODUCT_35_36_37_38_39_40_82_120.Contains(option.Id))
+                                    if (CATALOG_COLOR_PRODUCT_35_36_38_39_40_82_120.Contains(option.Id))
+                                        selectedItems.Add(new SelectListItem() { Text = option.Name, Value = option.Id.ToString(), Selected = false });
+                                    break;
+                                case 37:
+                                    if (CATALOG_COLOR_PRODUCT_37.Contains(option.Id))
                                         selectedItems.Add(new SelectListItem() { Text = option.Name, Value = option.Id.ToString(), Selected = false });
                                     break;
                             }
