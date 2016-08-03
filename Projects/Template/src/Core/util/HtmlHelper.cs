@@ -94,7 +94,7 @@ namespace asi.asicentral.util
             states.Add(new SelectListItem() { Text = "Alabama", Value = "AL" });
             states.Add(new SelectListItem() { Text = "Alaska", Value = "AK" });
             states.Add(new SelectListItem() { Text = "Arizona", Value = "AZ" });
-            states.Add(new SelectListItem() { Text = "Arkansas", Value = "AK" });
+            states.Add(new SelectListItem() { Text = "Arkansas", Value = "AR" });
             states.Add(new SelectListItem() { Text = "California", Value = "CA" });
             states.Add(new SelectListItem() { Text = "Colorado", Value = "CO" });
             states.Add(new SelectListItem() { Text = "Connecticut", Value = "CT" });
