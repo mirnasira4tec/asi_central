@@ -317,4 +317,10 @@ Everyone will be checking out the newly designed issue for promotional products 
     <value>Our Supplier Global Resource™ (SGR) readers think globally and act locally.</value>
     <comment>1</comment>
   </data>
+  <data name="ProductCompanyReviews" xml:space="preserve">
+    <value>Online reviews are an important piece of a company’s identity – and they can really affect your bottom line. Put your best foot forward with prospective customers by letting ASI polish your online reputation.</value>
+  </data>
+  <data name="ProductPayPerClick" xml:space="preserve">
+    <value>ASI’s automated platform is a best-in-breed paid search solution for capturing prospective customers on all the major search engines, not just Google. With Pay-Per-Click Advertising, we will track keywords and automatically optimize to conversions so you get true pay-for-performance advertising.</value>
+  </data>
 </root>

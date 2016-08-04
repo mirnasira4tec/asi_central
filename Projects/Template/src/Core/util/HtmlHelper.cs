@@ -94,7 +94,7 @@ namespace asi.asicentral.util
             states.Add(new SelectListItem() { Text = "Alabama", Value = "AL" });
             states.Add(new SelectListItem() { Text = "Alaska", Value = "AK" });
             states.Add(new SelectListItem() { Text = "Arizona", Value = "AZ" });
-            states.Add(new SelectListItem() { Text = "Arkansas", Value = "AK" });
+            states.Add(new SelectListItem() { Text = "Arkansas", Value = "AR" });
             states.Add(new SelectListItem() { Text = "California", Value = "CA" });
             states.Add(new SelectListItem() { Text = "Colorado", Value = "CO" });
             states.Add(new SelectListItem() { Text = "Connecticut", Value = "CT" });
@@ -217,9 +217,9 @@ namespace asi.asicentral.util
         /// <param name="post"></param>
         /// <param name="returnContent">wether to process the result</param>
         /// <returns></returns>
-        public static string SubmitWebRequest(string url, IDictionary<string, string> headerParam, string content, bool post = true, bool returnContent = true, string contentType = null)
+        public static string SubmitWebRequest(string url, IDictionary<string, string> headerParam, string content, bool post = true, bool returnContent = true)
         {
-            StringBuilder resultContent = new StringBuilder();
+            string resultContent = string.Empty;
             ILogService logService = LogService.GetLog(typeof(HtmlHelper));
             using (HttpClient client = new HttpClient(new HttpClientHandler { ClientCertificateOptions = ClientCertificateOption.Automatic }))
             using (HttpRequestMessage request = new HttpRequestMessage())
@@ -233,8 +233,7 @@ namespace asi.asicentral.util
                     UTF8Encoding encoding = new UTF8Encoding();
                     byte[] postBytes = encoding.GetBytes(content);
                     request.Content = new StreamContent(new MemoryStream(postBytes));
-                    if(contentType == null) request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-                    else request.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+                    request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
                 }
                 request.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.168 Safari/535.19");
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
@@ -242,7 +241,7 @@ namespace asi.asicentral.util
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/html"));
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/xml"));
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xhtml+xml"));
-               
+
                 if (headerParam != null)
                 {
                     foreach (string key in headerParam.Keys)
@@ -278,34 +277,11 @@ namespace asi.asicentral.util
                 if (System.Net.ServicePointManager.Expect100Continue) System.Net.ServicePointManager.Expect100Continue = false;
                 using (HttpResponseMessage response = client.SendAsync(request).Result)
                 {
-                    response.EnsureSuccessStatusCode();
                     logService.Debug("Submit Form - Checking return: " + response.StatusCode);
-                    if (response.StatusCode != HttpStatusCode.OK) throw new Exception(string.Format("The web request was not successfully completed: (code {0})", response.StatusCode));
-                    if (returnContent)
-                    {
-                        using (StreamReader sr = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8))
-                        {
-                            // used on each read operation
-                            char[] buf = new char[256];
-                            int count = 0;
-                            do
-                            {
-                                // fill the buffer with data
-                                count = sr.Read(buf, 0, buf.Length);
-                                // make sure we read some data
-                                if (count != 0)
-                                {
-                                    // translate from bytes to ASCII text
-                                    string tempString = new String(buf, 0, count);
-                                    // continue building the string
-                                    resultContent.Append(tempString);
-                                }
-                            }
-                            while (count > 0); // any more data to read?
-                            logService.Debug("Submit Form - Read return content: " + resultContent);
-                        }
-                    }
-                    return resultContent.ToString();
+                    if (returnContent) resultContent = response.Content.ReadAsStringAsync().Result;
+                    if (response.IsSuccessStatusCode) return resultContent.ToString();
+                    else if (string.IsNullOrEmpty(resultContent)) throw new Exception(string.Format("The web request was not successfully completed: (code {0})", response.StatusCode));
+                    else throw new Exception(string.Format("The web request was not successfully completed: (code {0}) with error {1}", response.StatusCode, resultContent));
                 }
             }
         }
