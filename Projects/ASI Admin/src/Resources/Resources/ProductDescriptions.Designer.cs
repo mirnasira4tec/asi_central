@@ -115,6 +115,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Online reviews are an important piece of a company’s identity – and they can really affect your bottom line. Put your best foot forward with prospective customers by letting ASI polish your online reputation..
+        /// </summary>
+        public static string ProductCompanyReviews {
+            get {
+                return ResourceManager.GetString("ProductCompanyReviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company Stores™ - powered by ESP Websites™ - is the unique eCommerce solution designed as a stand-alone online shop for special events, niche markets, holidays or your top customers – the possibilities are virtually endless!.
         /// </summary>
         public static string ProductCompanyStore {
@@ -291,6 +300,15 @@ namespace asi.asicentral.Resources {
         public static string ProductPayForPlacement1 {
             get {
                 return ResourceManager.GetString("ProductPayForPlacement1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ASI’s automated platform is a best-in-breed paid search solution for capturing prospective customers on all the major search engines, not just Google. With Pay-Per-Click Advertising, we will track keywords and automatically optimize to conversions so you get true pay-for-performance advertising..
+        /// </summary>
+        public static string ProductPayPerClick {
+            get {
+                return ResourceManager.GetString("ProductPayPerClick", resourceCulture);
             }
         }
         
