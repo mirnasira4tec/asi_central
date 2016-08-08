@@ -207,9 +207,8 @@ namespace asi.asicentral.util
             );
             return isTablet;
         }
-
         /// <summary>
-        /// Submits a web request and reads the result into a string
+        /// Submits a web request and reads the result into a string synchronously
         /// </summary>
         /// <param name="url">where to send the request</param>
         /// <param name="headerParam">way to overide some of the request headers</param>
@@ -218,6 +217,21 @@ namespace asi.asicentral.util
         /// <param name="returnContent">wether to process the result</param>
         /// <returns></returns>
         public static string SubmitWebRequest(string url, IDictionary<string, string> headerParam, string content, bool post = true, bool returnContent = true, string contentType = null)
+        {
+            var result = SubmitWebRequestAsync(url, headerParam, content, post, returnContent, contentType).Result;
+            return result;
+        }
+
+        /// <summary>
+        /// Submits a web request and reads the result into a string asynchronously
+        /// </summary>
+        /// <param name="url">where to send the request</param>
+        /// <param name="headerParam">way to overide some of the request headers</param>
+        /// <param name="content">The content to post for the web request</param>
+        /// <param name="post"></param>
+        /// <param name="returnContent">wether to process the result</param>
+        /// <returns></returns>
+        public async static Task<string> SubmitWebRequestAsync(string url, IDictionary<string, string> headerParam, string content, bool post = true, bool returnContent = true, string contentType = null)
         {
             StringBuilder resultContent = new StringBuilder();
             ILogService logService = LogService.GetLog(typeof(HtmlHelper));
@@ -275,8 +289,9 @@ namespace asi.asicentral.util
                 }
 
                 // Execute the request
-                if (System.Net.ServicePointManager.Expect100Continue) System.Net.ServicePointManager.Expect100Continue = false;
-                using (HttpResponseMessage response = client.SendAsync(request).Result)
+                if (ServicePointManager.Expect100Continue) System.Net.ServicePointManager.Expect100Continue = false;  
+                              
+                using (var response = await client.SendAsync(request))
                 {
                     response.EnsureSuccessStatusCode();
                     logService.Debug("Submit Form - Checking return: " + response.StatusCode);
