@@ -36,6 +36,9 @@ namespace asi.asicentral.database.mappings.personify
             this.Property(t => t.PersonifyProduct)
                 .HasColumnName("PRODUCT_ID");
 
+            this.Property(t => t.ProductCode)
+                .HasColumnName("PRODUCT_CODE");
+
             this.Property(t => t.PersonifyBundle)
                 .HasColumnName("BUNDLE");
 
