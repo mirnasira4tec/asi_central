@@ -47,6 +47,7 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string SP_SEARCH_BY_COMPANY_IDENTIFIER = "USR_EASI_CUSTOMER_SEARCH_CUSTOMER_NO_PROC";
         private const string SP_UPDATE_CUSTOMER_CLASS = "USR_EASI_CUSTOMER_UPDATE_CLASS";
         private const string SP_GET_BUNDLE_PRODUCT_DETAILS = "ASI_GetBundleProductDetails_SP";
+	    private const string SP_GET_PRODUCT_DETAILS = "USR_PRODUCT_VALIDATION_PROC";
 
 		private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
 		private static readonly IDictionary<string, string> ASIShowCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "SHOW AE" }, { "DISCOVER", "SHOW DISC" }, { "MASTERCARD", "SHOW MS" }, { "VISA", "SHOW VS" } };
@@ -64,7 +65,8 @@ namespace asi.asicentral.services.PersonifyProxy
             {SP_SEARCH_BY_COMPANY_IDENTIFIER, new List<string>() { "@ip_customer_number" }},
             {SP_UPDATE_CUSTOMER_CLASS, new List<string>(){"@ip_master_customer_id", "@ip_sub_customer_id", 
                                                           "@upd_class_code", "@upd_sub_class", "@upd_user" }},
-            {SP_GET_BUNDLE_PRODUCT_DETAILS, new List<string>() { "@ip_Bundle_Group_Name ", "@ip_Rate_Structure", "@ip_Rate_Code" }}
+            {SP_GET_BUNDLE_PRODUCT_DETAILS, new List<string>() { "@ip_Bundle_Group_Name ", "@ip_Rate_Structure", "@ip_Rate_Code" }},
+            {SP_GET_PRODUCT_DETAILS, new List<string>() { "@ip_parent_product", "@ip_product_code", "@ip_Rate_Structure", "@ip_Rate_Code" }}
         };
 
         public static CreateOrderOutput CreateOrder(StoreOrder storeOrder,
@@ -592,18 +594,24 @@ namespace asi.asicentral.services.PersonifyProxy
             }
         }
 
-	    public static bool ValidateRateCode(string groupName, string rateStructure, string rateCode)
+        public static bool ValidateRateCode(string groupName, string rateStructure, string rateCode, ref int persProductId)
 	    {
-	        var isValid = !string.IsNullOrEmpty(groupName) && !string.IsNullOrEmpty(rateStructure) &&
-	                      !string.IsNullOrEmpty(rateCode);
-	        if (isValid)
+	        var isValid = false;
+            if (!string.IsNullOrEmpty(groupName) && !string.IsNullOrEmpty(rateStructure) && !string.IsNullOrEmpty(rateCode))
 	        {
-                var response = ExecutePersonifySP(SP_GET_BUNDLE_PRODUCT_DETAILS, new List<string>(){groupName, rateStructure, rateCode});
+                var response = ExecutePersonifySP(SP_GET_PRODUCT_DETAILS, new List<string>() { "ASI_PRODUCTS", groupName, rateStructure, rateCode });
 
-	            if (response != null && !string.IsNullOrEmpty(response.Data) && response.Data.Trim().ToUpper() != "NO DATA FOUND")
+	            if (response != null && !string.IsNullOrEmpty(response.Data) )
 	            {
-	                var xml = XDocument.Parse(response.Data);
-	                isValid = xml.Root.Elements("Table").ToList().Any();
+	                var responseData = response.Data.Trim();
+	                if (responseData.ToUpper() != "NO DATA FOUND")
+	                {
+	                    var match = Regex.Match(responseData, @"<PRODUCT_ID>(.*?)</PRODUCT_ID>");
+	                    if (match.Success && Int32.TryParse(match.Groups[1].Value.Trim(), out persProductId))
+	                    {
+	                        isValid = true;
+	                    }
+	                }
 	            }
 	        }
 
@@ -884,7 +892,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return companyInfo;
         }
 
-        private static void UpdatePersonifyCompany(CompanyInformation companyInfo, PersonifyMapping mapping)
+        public static void UpdatePersonifyCompany(CompanyInformation companyInfo, PersonifyMapping mapping)
         {
             // update company status from Delisted to Active
             if (companyInfo.MemberStatus == StatusCode.DELISTED.ToString())
