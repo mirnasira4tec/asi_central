@@ -184,8 +184,6 @@ namespace Core.Tests.OAuth
         [TestMethod]
         public void IsValidUserByTrueCredentials()
         {
-            //IDictionary<string, string> result = ASIOAuthClient.IsValidUser("yperrin", "asiCentral5");
-            //IDictionary<string, string> result = ASIOAuthClient.IsValidUser("ad68507velo", "password2");
             IDictionary<string, string> result = ASIOAuthClient.IsValidUser("pkumar@asicentral.com", "password1");
             Assert.IsNotNull(result);
             Assert.IsNotNull(result["AuthToken"]);
