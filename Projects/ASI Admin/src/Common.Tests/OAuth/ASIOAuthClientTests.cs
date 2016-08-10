@@ -125,6 +125,7 @@ namespace Core.Tests.OAuth
         {
             var result1 = ASIOAuthClient.GetUser(4419);
             Assert.IsNotNull(result1);
+            Assert.AreEqual(result1.SSOId, 4419);
         }
 
         [TestMethod]
@@ -184,9 +185,11 @@ namespace Core.Tests.OAuth
         public void IsValidUserByTrueCredentials()
         {
             //IDictionary<string, string> result = ASIOAuthClient.IsValidUser("yperrin", "asiCentral5");
-            IDictionary<string, string> result = ASIOAuthClient.IsValidUser("ad68507velo", "password2");
-            //IDictionary<string, string> result = ASIOAuthClient.IsValidUser("pkumar@asicentral.com", "password1");
+            //IDictionary<string, string> result = ASIOAuthClient.IsValidUser("ad68507velo", "password2");
+            IDictionary<string, string> result = ASIOAuthClient.IsValidUser("pkumar@asicentral.com", "password1");
             Assert.IsNotNull(result);
+            Assert.IsNotNull(result["AuthToken"]);
+            Assert.IsNotNull(result["RefreshToken"]);
 		}
                 
         [TestMethod]
@@ -199,7 +202,7 @@ namespace Core.Tests.OAuth
         [TestMethod]
         public void LoginTest()
         {
-            var tokens = ASIOAuthClient.Login_FetchUserDetails("ad68507velo", "password2");
+            var tokens = ASIOAuthClient.Login_FetchUserDetails("pkumar@asicentral.com", "password1");
             Assert.IsNotNull(tokens);
             Assert.IsNotNull(tokens["AuthToken"]);
             Assert.IsNotNull(tokens["RefreshToken"]);

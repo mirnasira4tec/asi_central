@@ -15,7 +15,7 @@ using ASI.Contracts.Messages.UserMgmt;
 using ASI.Barista.Plugins.Messaging;
 using ASI.Services.Http.Security;
 using System.Security.Claims;
-using ASI.Contracts.Messages.UserMgmt.User;
+using ASI.Services.Messaging;
 using ASI.Contracts.Messages.MemberMgmt;
 
 namespace asi.asicentral.oauth
@@ -135,24 +135,23 @@ namespace asi.asicentral.oauth
 
         private static ASI.EntityModel.User GetEntityUser(int sso)
         {
+            ASI.EntityModel.User user = null;
             try
             {
-                var requestMessage = new ASI.Contracts.Messages.UserMgmt.User.RequestMessage() { RequestType = RequestType.Retrieve, SearchFilter = new SearchFilter() { Id = sso } };
-                var rpcClient = new RpcClient<RequestMessage, ResponseMessage>();
-
+                //Arrange
+                var userRequest = new UserRequest() { UserRequestType = UserRequestType.Retrieve, UserSearchCriteria = new UserSearchCriteria() { Id = sso } };
                 //Act
-                var responseMessage = rpcClient.Request(requestMessage);
-
-                //ASSERT
-                if (responseMessage.Users != null && responseMessage.Users.Count > 0)
-                    return responseMessage.Users.FirstOrDefault();
+                userRequest.TalkAndWait<UserRequest, UserResponse>(userResponse =>
+                {
+                    if (userResponse.Users != null && userResponse.Users.Count > 0) user = userResponse.Users.FirstOrDefault();
+                });
             }
             catch (Exception ex)
             {
                 LogService log = LogService.GetLog(typeof(ASIOAuthClient));
                 log.Error(ex.Message);
             }
-            return null;
+            return user;
         }
 
         public static IDictionary<string, string> RefreshToken(string refreshToken, string appCode = null, string appVersion = null)
@@ -273,26 +272,27 @@ namespace asi.asicentral.oauth
                 try
                 {
                     //Arrange
-                    var requestMessage = new RequestMessage() { RequestType = RequestType.Retrieve, SearchFilter = new SearchFilter() { Email = email } };
-                    var rpcClient = new RpcClient<RequestMessage, ResponseMessage>();
+                    var userRequest = new UserRequest() { UserRequestType = UserRequestType.Retrieve, UserSearchCriteria = new UserSearchCriteria() { Email = email } };
 
                     //Act
-                    var responseMessage = rpcClient.Request(requestMessage);
-
-                   
-                    if(responseMessage.Users != null && responseMessage.Users.Count > 0)
+                    userRequest.TalkAndWait<UserRequest, UserResponse>(responseMessage =>
                     {
-                        List<ASI.EntityModel.User> entityUsers = responseMessage.Users.Where(u => u.StatusCode == StatusCode.ACTV.ToString()).ToList();
-                    
-                        if (entityUsers == null || entityUsers.Count == 0) return null;
-                        ASI.EntityModel.User entityUser = FilterUserWithEmail(entityUsers, email);
-                        if (entityUser != null)
+                        if (responseMessage.Users != null && responseMessage.Users.Count > 0)
                         {
-                            user = MapEntityModelUserToASIUser(entityUser, user);
-                            return user;
+                            List<ASI.EntityModel.User> entityUsers = responseMessage.Users.Where(u => u.StatusCode == StatusCode.ACTV.ToString()).ToList();
+
+                            if (entityUsers == null || entityUsers.Count == 0) user = null;
+                            else
+                            {
+                                ASI.EntityModel.User entityUser = FilterUserWithEmail(entityUsers, email);
+                                if (entityUser != null)
+                                {
+                                    user = MapEntityModelUserToASIUser(entityUser, user);
+                                }
+                                else user = null;
+                            }
                         }
-                        else return null;
-                    }
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -300,7 +300,7 @@ namespace asi.asicentral.oauth
                     log.Error(ex.Message);
                 }
             }
-            return null;
+            return user;
         }
 
         public static string CreateUser(asi.asicentral.model.User user)
@@ -331,12 +331,13 @@ namespace asi.asicentral.oauth
                     }
                     entityUser = MapASIUserToEntityModelUser(user, entityUser, true);
                     //ARRANGE
-                    var requestMessage = new RequestMessage() { RequestType = RequestType.Create, AuditTrail = new AuditTrail() { LoggedInUserId = 1 }, User = entityUser };
-                    var rpcClient = new RpcClient<RequestMessage, ResponseMessage>();
+                    var userRequest = new UserRequest() { UserRequestType = UserRequestType.Create, AuditTrail = new AuditTrail() { LoggedInUserId = 1 }, User = entityUser };
 
                     //ACT
-                    var responseMessage = rpcClient.Request(requestMessage);
-                    ssoId = (responseMessage != null && responseMessage.Users != null && responseMessage.Users.Count > 0 && responseMessage.Users[0] != null && responseMessage.Users[0].Id > 0) ? responseMessage.Users[0].Id.ToString() : null;
+                    userRequest.TalkAndWait<UserRequest, UserResponse>(responseMessage =>
+                    {
+                        ssoId = (responseMessage != null && responseMessage.Users != null && responseMessage.Users.Count > 0 && responseMessage.Users[0] != null && responseMessage.Users[0].Id > 0) ? responseMessage.Users[0].Id.ToString() : null;
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -392,12 +393,11 @@ namespace asi.asicentral.oauth
                     entityCompany = MapASIUserCompanyToEntityModelCompany(user, entityCompany, false);
                     entityUser = MapASIUserToEntityModelUser(user, entityUser, isCreate: false, isPasswordReset: isPasswordReset);
 
-                    var requestMessage = new RequestMessage() { RequestType = RequestType.Update, AuditTrail = new AuditTrail() { LoggedInUserId = 1 }, User = entityUser };
-                    var rpcClient = new RpcClient<RequestMessage, ResponseMessage>();
-                   
-                    //Act
-                    var updResponseMessage = rpcClient.Request(requestMessage);
-                    isUserUpdated = (updResponseMessage != null && updResponseMessage.Users != null && updResponseMessage.Users.Count > 0 && updResponseMessage.Users.FirstOrDefault() !=  null) ? true : false;
+                    var userRequest = new UserRequest() { UserRequestType = UserRequestType.Update, AuditTrail = new AuditTrail() { LoggedInUserId = 1 }, User = entityUser };
+                    userRequest.TalkAndWait<UserRequest, UserResponse>(updResponseMessage =>
+                    {
+                        isUserUpdated = (updResponseMessage != null && updResponseMessage.Users != null && updResponseMessage.Users.Count > 0 && updResponseMessage.Users.FirstOrDefault() != null) ? true : false;
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -739,24 +739,27 @@ namespace asi.asicentral.oauth
                                 }
                             }
                         }
-                        //else
-                        //{
-                        //    Company entityCompany = ASI.Jade.Company.Retriever.Get(entityUser.CompanyId);
-                        //    if (entityCompany != null)
-                        //    {
-                        //        user.CompanyName = entityCompany.Name;
-                        //        user.CompanyId = entityCompany.Id;
-                        //        user.AsiNumber = entityCompany.AsiNumber;
-                        //        if (entityCompany.Contacts != null && entityCompany.Contacts.Count > 0)
-                        //        {
-                        //            Contact contact = entityCompany.Contacts.ElementAt(0);
-                        //            user.Title = contact.Title;
-                        //            user.Suffix = contact.Suffix;
-                        //        }
-                        //        if (entityCompany.Types != null && entityCompany.Types.Count > 0)
-                        //            user.MemberType_CD = entityCompany.Types.ElementAt(0);
-                        //    }
-                        //}
+                        else
+                        {
+                            var companyRequest = new CompanyRequest() { CompanySearchCriteria = new CompanySearchCriteria() { Id = entityUser.CompanyId } };
+                            companyRequest.TalkAndWait<CompanyRequest, CompanyResponse>(companyResponse =>
+                            {
+                                if (companyResponse.Companies != null && companyResponse.Companies.Count > 0)
+                                {
+                                    var company = companyResponse.Companies.FirstOrDefault();
+                                    user.CompanyName = company.Name;
+                                    user.CompanyId = company.Id;
+                                    user.AsiNumber = company.AsiNumber;
+                                    user.MemberType_CD = company.Type;
+                                    if (company.Contacts != null && company.Contacts.Count > 0)
+                                    {
+                                        Contact contact = company.Contacts.ElementAt(0);
+                                        user.Title = contact.Title;
+                                        user.Suffix = contact.Suffix;
+                                    }
+                                }
+                            });
+                        }
                     }
                 }
                 if (!IsActiveUser(user.MemberStatus_CD)) user.AsiNumber = null;

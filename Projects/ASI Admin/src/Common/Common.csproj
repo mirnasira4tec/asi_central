@@ -48,17 +48,18 @@
   <ItemGroup>
     <Reference Include="asi.asicentral.Core">
       <HintPath>..\..\library\asi.asicentral.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="ASI.Barista.Plugins, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Barista.Plugins.2.0.0-beta944\lib\ASI.Barista.Plugins.dll</HintPath>
+      <HintPath>..\packages\ASI.Barista.Plugins.2.0.0-beta950\lib\ASI.Barista.Plugins.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ASI.Barista.Plugins.Messaging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Barista.Plugins.Messaging.2.0.0-beta058\lib\ASI.Barista.Plugins.Messaging.dll</HintPath>
+      <HintPath>..\packages\ASI.Barista.Plugins.Messaging.2.0.0-beta069\lib\ASI.Barista.Plugins.Messaging.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ASI.Contracts, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Contracts.1.2.0-beta975\lib\ASI.Contracts.dll</HintPath>
+      <HintPath>..\packages\ASI.Contracts.1.2.0-beta979\lib\ASI.Contracts.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ASI.EntityModel, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -66,15 +67,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="ASI.Services.Http, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Services.Http.1.9.0-beta920\lib\ASI.Services.Http.dll</HintPath>
+      <HintPath>..\packages\ASI.Services.Http.1.9.0-beta922\lib\ASI.Services.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ASI.Services.Messaging, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Services.Messaging.2.0.0-beta960\lib\ASI.Services.Messaging.dll</HintPath>
+      <HintPath>..\packages\ASI.Services.Messaging.2.0.0-beta966\lib\ASI.Services.Messaging.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ASI.Sugar, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Sugar.2.0.0-beta931\lib\ASI.Sugar.dll</HintPath>
+      <HintPath>..\packages\ASI.Sugar.2.0.0-beta932\lib\ASI.Sugar.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
@@ -181,8 +182,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\net45\System.Net.Http.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.30506.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.Primitives, Version=4.2.22.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -199,6 +201,10 @@
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
