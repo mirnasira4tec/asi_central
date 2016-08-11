@@ -2311,6 +2311,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This field cannot be more than 500 characters..
+        /// </summary>
+        public static string FieldLength500 {
+            get {
+                return ResourceManager.GetString("FieldLength500", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This is not a valid {0} ASI #.
         /// </summary>
         public static string FieldLengthASI {
