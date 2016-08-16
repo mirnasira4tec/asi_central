@@ -52,7 +52,7 @@ namespace asi.asicentral.web.Controllers.Store
         public ActionResult Add()
         {
             CouponModel productToUpdate = new CouponModel();
-            productToUpdate.RateStructure = "BUNDLE";
+            productToUpdate.RateStructure = "MEMBER";
             productToUpdate.Products = GetSelectedProductList();
             productToUpdate.Contexts = GetSelectedContextList();
             productToUpdate.ValidFrom = DateTime.UtcNow;
@@ -175,6 +175,7 @@ namespace asi.asicentral.web.Controllers.Store
             if (couponModel.ActionName == "Cancel") return List();
 
             ContextProduct product = null;
+            var persProductId = 0;
 
             if (ModelState.IsValid)
             {
@@ -195,9 +196,9 @@ namespace asi.asicentral.web.Controllers.Store
                     if (product != null && product.HasBackEndIntegration && 
                         ( couponModel.MonthlyCost.HasValue || couponModel.ProductDiscount == product.Cost) )
                     {
-                        if (!ValidatePersonifyRateCode(couponModel.RateStructure, couponModel.GroupName, couponModel.RateCode))
+                        if (!ValidatePersonifyRateCode(couponModel.RateStructure, couponModel.GroupName, couponModel.RateCode, ref persProductId))
                         {
-                            ModelState.AddModelError("Error", "Invalid Rate Structure, Group Name or Rate Code");
+                            ModelState.AddModelError("Error", "Invalid Rate Structure, Product Code or Rate Code");
                         }
                     }
                 }
@@ -237,7 +238,7 @@ namespace asi.asicentral.web.Controllers.Store
                 coupon.UpdateDate = DateTime.UtcNow;
                 coupon.UpdateSource = "CouponController - SaveCouponDetails";
                 StoreService.SaveChanges();
-                UpdatePersonifyMappingTbl(coupon, product);
+                UpdatePersonifyMappingTbl(coupon, product, persProductId);
                 ModelState.Clear();
 
                 return List();
@@ -258,21 +259,21 @@ namespace asi.asicentral.web.Controllers.Store
             return List();
         }
 
-        private bool ValidatePersonifyRateCode(string rateStructure, string groupName, string rateCode)
+        private bool ValidatePersonifyRateCode(string rateStructure, string groupName, string rateCode, ref int persProductId)
         {
             var isValid = !string.IsNullOrEmpty(rateStructure) && !string.IsNullOrEmpty(groupName) &&
                           !string.IsNullOrEmpty(rateCode);
             if (isValid)
             {
-                isValid = BackendService.ValidateRateCode(groupName, rateStructure, rateCode);
+                isValid = BackendService.ValidateRateCode(groupName, rateStructure, rateCode, ref persProductId);
             }
 
             return isValid;
         }
 
-        private void UpdatePersonifyMappingTbl(Coupon coupon, ContextProduct product)
+        private void UpdatePersonifyMappingTbl(Coupon coupon, ContextProduct product, int personifyProductId)
         {
-            if (string.IsNullOrEmpty(coupon.RateStructure) || string.IsNullOrEmpty(coupon.GroupName) || string.IsNullOrEmpty(coupon.RateCode))
+            if (string.IsNullOrEmpty(coupon.RateStructure) || string.IsNullOrEmpty(coupon.GroupName) || string.IsNullOrEmpty(coupon.RateCode) || personifyProductId == 0 )
                 return;
 
             try
@@ -309,6 +310,7 @@ namespace asi.asicentral.web.Controllers.Store
                             PersonifyRateStructure = m.PersonifyRateStructure,
                             PersonifyRateCode = m.PersonifyRateCode,
                             PersonifyBundle = m.PersonifyBundle,
+                            ProductCode = m.ProductCode,
                             CreateUserUTC = "Store",
                             ESBSendGlag = m.ESBSendGlag,
                             NewAsiNumFlag = m.NewAsiNumFlag,
@@ -318,11 +320,12 @@ namespace asi.asicentral.web.Controllers.Store
                             UpdateSource = "Store"
                         };
 
-                        if (m.PersonifyRateStructure == "Bundle" || !string.IsNullOrEmpty(m.PersonifyBundle))
-                        {   // membership bundle or package
+                        if ( !string.IsNullOrEmpty(m.PersonifyRateCode) && !string.IsNullOrEmpty(m.ProductCode))
+                        {   // membership package
                             productMapping.PersonifyRateStructure = coupon.RateStructure;
-                            productMapping.PersonifyBundle = coupon.GroupName;
+                            productMapping.ProductCode = coupon.GroupName;
                             productMapping.PersonifyRateCode = coupon.RateCode;
+                            productMapping.PersonifyProduct = personifyProductId;
                         }
                         else if (m.PersonifyProduct.HasValue)
                         {
