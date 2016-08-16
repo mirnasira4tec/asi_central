@@ -94,7 +94,7 @@ namespace asi.asicentral.util
             states.Add(new SelectListItem() { Text = "Alabama", Value = "AL" });
             states.Add(new SelectListItem() { Text = "Alaska", Value = "AK" });
             states.Add(new SelectListItem() { Text = "Arizona", Value = "AZ" });
-            states.Add(new SelectListItem() { Text = "Arkansas", Value = "AK" });
+            states.Add(new SelectListItem() { Text = "Arkansas", Value = "AR" });
             states.Add(new SelectListItem() { Text = "California", Value = "CA" });
             states.Add(new SelectListItem() { Text = "Colorado", Value = "CO" });
             states.Add(new SelectListItem() { Text = "Connecticut", Value = "CT" });
@@ -207,9 +207,8 @@ namespace asi.asicentral.util
             );
             return isTablet;
         }
-
         /// <summary>
-        /// Submits a web request and reads the result into a string
+        /// Submits a web request and reads the result into a string synchronously
         /// </summary>
         /// <param name="url">where to send the request</param>
         /// <param name="headerParam">way to overide some of the request headers</param>
@@ -217,9 +216,24 @@ namespace asi.asicentral.util
         /// <param name="post"></param>
         /// <param name="returnContent">wether to process the result</param>
         /// <returns></returns>
-        public static string SubmitWebRequest(string url, IDictionary<string, string> headerParam, string content, bool post = true, bool returnContent = true)
+        public static string SubmitWebRequest(string url, IDictionary<string, string> headerParam, string content, bool post = true, bool returnContent = true, string contentType = null)
         {
-            string resultContent = string.Empty;
+            var result = SubmitWebRequestAsync(url, headerParam, content, post, returnContent, contentType).Result;
+            return result;
+        }
+
+        /// <summary>
+        /// Submits a web request and reads the result into a string asynchronously
+        /// </summary>
+        /// <param name="url">where to send the request</param>
+        /// <param name="headerParam">way to overide some of the request headers</param>
+        /// <param name="content">The content to post for the web request</param>
+        /// <param name="post"></param>
+        /// <param name="returnContent">wether to process the result</param>
+        /// <returns></returns>
+        public async static Task<string> SubmitWebRequestAsync(string url, IDictionary<string, string> headerParam, string content, bool post = true, bool returnContent = true, string contentType = null)
+        {
+            var resultContent = string.Empty;
             ILogService logService = LogService.GetLog(typeof(HtmlHelper));
             using (HttpClient client = new HttpClient(new HttpClientHandler { ClientCertificateOptions = ClientCertificateOption.Automatic }))
             using (HttpRequestMessage request = new HttpRequestMessage())
@@ -274,11 +288,12 @@ namespace asi.asicentral.util
                 }
 
                 // Execute the request
-                if (System.Net.ServicePointManager.Expect100Continue) System.Net.ServicePointManager.Expect100Continue = false;
-                using (HttpResponseMessage response = client.SendAsync(request).Result)
+                if (ServicePointManager.Expect100Continue) ServicePointManager.Expect100Continue = false;  
+                              
+                using (var response = await client.SendAsync(request))
                 {
                     logService.Debug("Submit Form - Checking return: " + response.StatusCode);
-                    if (returnContent) resultContent = response.Content.ReadAsStringAsync().Result;
+                    if (returnContent) resultContent = await response.Content.ReadAsStringAsync();
                     if (response.IsSuccessStatusCode) return resultContent.ToString();
                     else if (string.IsNullOrEmpty(resultContent)) throw new Exception(string.Format("The web request was not successfully completed: (code {0})", response.StatusCode));
                     else throw new Exception(string.Format("The web request was not successfully completed: (code {0}) with error {1}", response.StatusCode, resultContent));
