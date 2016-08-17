@@ -87,7 +87,7 @@ namespace asi.asicentral.oauth
                         {
                             redirectParams.FromApplicationVer = "1.0.0";
                         }
-                        else if (ApplicationCodes.UPSIDE == appCode)
+                        else if (ApplicationCodes.ASED == appCode)
                         {
                             string encryptedToken = EncriptToken(redirectParams.AccessToken);
                             var Lmsurl = ConfigurationManager.AppSettings["LMSRedirectUrl"];
@@ -98,7 +98,7 @@ namespace asi.asicentral.oauth
                             redirectParams.ExtGuid = string.Empty;
                             redirectParams.FromApplicationVer = "1";
                         }
-                        if (ApplicationCodes.UPSIDE != appCode)
+                        if (ApplicationCodes.ASED != appCode)
                         {
                             redirectParams.ToApplicationCode = appCode.ToString();
                             redirectParams.FromApplicationCode = ApplicationCodes.ASCT.ToString();
@@ -116,7 +116,7 @@ namespace asi.asicentral.oauth
                     case ApplicationCodes.WESP:
                         redirectUrl = "http://espweb.asicentral.com/";
                         break;
-                    case ApplicationCodes.UPSIDE:
+                    case ApplicationCodes.ASED:
                         redirectUrl = string.Format("{0}lr_login.jsp", ConfigurationManager.AppSettings["LMSRedirectUrl"]);
                         break;
                 }
@@ -126,7 +126,7 @@ namespace asi.asicentral.oauth
             {
                 if (ApplicationCodes.WESP == appCode && !string.IsNullOrEmpty(ConfigurationManager.AppSettings["RedirectUrl"]))
                     redirectUrl = ConfigurationManager.AppSettings["RedirectUrl"];
-                else if (ApplicationCodes.UPSIDE == appCode && !string.IsNullOrEmpty(ConfigurationManager.AppSettings["LMSRedirectUrl"]))
+                else if (ApplicationCodes.ASED == appCode && !string.IsNullOrEmpty(ConfigurationManager.AppSettings["LMSRedirectUrl"]))
                     redirectUrl = string.Format("{0}lr_login.jsp", ConfigurationManager.AppSettings["LMSRedirectUrl"]);
             }
             return redirectUrl;
@@ -136,9 +136,10 @@ namespace asi.asicentral.oauth
         {
             ASI.Services.Http.Security.CrossApplication.RedirectParams redirectParams = null;
             var host = ConfigurationManager.AppSettings["SecurityHost"];
-            if(!string.IsNullOrEmpty(host))
+            var relativePath = ConfigurationManager.AppSettings["RelativePath"];
+            if (!string.IsNullOrEmpty(host) && !string.IsNullOrEmpty(relativePath))
             {
-                OAuth2Client oAuth2Client = new OAuth2Client(host);
+                OAuth2Client oAuth2Client = new OAuth2Client(host, relativePath: relativePath);
                 var authenticatedUser = ASIOAuthClient.GetAuthenticatedUser(accessToken);
                 if(authenticatedUser != null && authenticatedUser.Token != null)
                 {
