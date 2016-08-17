@@ -79,6 +79,7 @@ namespace asi.asicentral.oauth
         ASCT, //For ASI Central
         EMES, //For Email-express
         WESP, //For ESP Web
+        ASED, //new code for education
         UPSIDE, //For upsidelms
         ASST // For ASI Store
     }
