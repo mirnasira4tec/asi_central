@@ -67,7 +67,7 @@ namespace Core.Tests.OAuth
         {
             var tag = DateTime.Now.Ticks;
             asi.asicentral.model.User user = new asi.asicentral.model.User();
-            user.Email = string.Format("pkumar@asicentral.com");
+            user.Email = string.Format("pkumartest8@test.com");
             user.FirstName = "Phani";
             user.LastName = "Kumar";
             //Title
@@ -97,6 +97,11 @@ namespace Core.Tests.OAuth
 
             string result = ASIOAuthClient.CreateUser(user);
             Assert.AreNotEqual(Convert.ToInt32(result), 0);
+
+            var tokens = ASIOAuthClient.Login_FetchUserDetails("pkumartest8@test.com", "password1");
+            Assert.IsNotNull(tokens);
+            Assert.IsNotNull(tokens["AuthToken"]);
+            Assert.IsNotNull(tokens["RefreshToken"]);
         }
 
         [TestMethod]
