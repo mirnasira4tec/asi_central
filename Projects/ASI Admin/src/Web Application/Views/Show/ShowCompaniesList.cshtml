@@ -10,7 +10,7 @@
     {
         <h2 class="pull-left">@Model.Show.Name (@Model.Show.StartDate.ToString("MMM") @Model.Show.StartDate.Day.ToString() - @Model.Show.EndDate.ToString("MMM") @Model.Show.EndDate.Day.ToString()) </h2>
     }
-    <span class="pull-right"><a href="/showCompany/AddCompaniesToShow?showId=@Model.ShowId" class="btn btn-red">Add Attendees </a>  <a href="/Show/ShowList"> Cancel </a></span>
+    <span class="pull-right"><a href="/showCompany/AddCompaniesToShow?showId=@Model.ShowId" class="btn btn-red">Add Attendees </a><a href="/Show/ShowList">Cancel </a></span>
 </div>
 <br />
 <br />
@@ -26,6 +26,7 @@
             <th>Exhibit Day</th>
             <th>Presentation</th>
             <th>Round Table</th>
+            <th>Is Catalog</th>
             <th>Booth Number</th>
         </tr>
     </thead>
@@ -76,13 +77,23 @@
                         <a class="buttonHolder button cross"></a>
                     }
                 </td>
+                <td>
+                    @if (showAttendee.IsCatalog)
+                    {
+                        <a class=" buttonHolder button tick"></a>
+                    }
+                    else
+                    {
+                        <a class="buttonHolder button cross"></a>
+                    }
+                </td>
                 <td>@showAttendee.BoothNumber</td>
             </tr>
         }
         @if (Model.TotalRecordCount > 20)
         {
             <tr>
-                <td class="pager" colspan="9">
+                <td class="pager" colspan="10">
                     @Html.Partial("../Show/Shared/_Pager", Model)
                 </td>
             </tr>

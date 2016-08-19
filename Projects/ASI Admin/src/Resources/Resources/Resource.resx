@@ -1959,4 +1959,7 @@
   <data name="OtherCompanyName" xml:space="preserve">
     <value>What is the name of the other company you work for?</value>
   </data>
+  <data name="FieldLength500" xml:space="preserve">
+    <value>This field cannot be more than 500 characters.</value>
+  </data>
 </root>

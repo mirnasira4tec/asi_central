@@ -323,4 +323,10 @@ Everyone will be checking out the newly designed issue for promotional products 
   <data name="ProductPayPerClick" xml:space="preserve">
     <value>ASI’s automated platform is a best-in-breed paid search solution for capturing prospective customers on all the major search engines, not just Google. With Pay-Per-Click Advertising, we will track keywords and automatically optimize to conversions so you get true pay-for-performance advertising.</value>
   </data>
+  <data name="ProductLocalBoost" xml:space="preserve">
+    <value>Package Includes : Local SEO and Company Reviews.</value>
+  </data>
+  <data name="ProductPowerBoost" xml:space="preserve">
+    <value>Package Includes : Local SEO, Company Reviews and Pay-Per-Click.</value>
+  </data>
 </root>

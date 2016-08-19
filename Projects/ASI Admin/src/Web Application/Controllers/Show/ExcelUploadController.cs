@@ -40,6 +40,7 @@ namespace asi.asicentral.web.Controllers.Show
             objAttendee.IsPresentation = Convert.ToBoolean(ds.Rows[rowId]["Presentation"].ToString().Contains('X')) ? true : false;
             objAttendee.IsRoundTable = Convert.ToBoolean(ds.Rows[rowId]["Roundtable"].ToString().Contains('X')) ? true : false;
             objAttendee.IsExhibitDay = Convert.ToBoolean(ds.Rows[rowId]["ExhibitOnly"].ToString().Contains('X')) ? true : false;
+            objAttendee.IsCatalog = Convert.ToBoolean(ds.Rows[rowId]["IsCatalog"].ToString().Contains('X')) ? true : false;
             objAttendee.IsExisting = true;
             objAttendee.UpdateSource = "ExcelUploadcontroller-Index";
             objAttendee = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, objAttendee);
@@ -179,10 +180,10 @@ namespace asi.asicentral.web.Controllers.Show
                     FileInfo fi = new FileInfo(currFilePath);
                     var workBook = new XLWorkbook(fi.FullName);
                     int totalsheets = workBook.Worksheets.Count;
+                    int weekCount = 0;
                     for (int sheetcount = 1; sheetcount <= totalsheets; sheetcount++)
                     {
                         var worksheet = workBook.Worksheet(sheetcount);
-
                         var firstRowUsed = worksheet.FirstRowUsed();
                         if (firstRowUsed != null)
                         {
@@ -195,15 +196,71 @@ namespace asi.asicentral.web.Controllers.Show
                             }
 
                             categoryRow = categoryRow.RowBelow();
+                            IList<ShowASI> objShows = null;
                             var objShow = new ShowASI();
-                            if (worksheet.Name.Contains("ENGAGE EAST 2016"))
+                            if (worksheet.Name.Contains("ENGAGE EAST"))
                             {
-                                objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE EAST"));
+                                objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE EAST") && item.EndDate.Year == DateTime.Now.Year);
                             }
-                            else if (worksheet.Name.Contains("ENGAGE WEST 2016"))
+                            else if (worksheet.Name.Contains("ENGAGE WEST"))
                             {
-                                objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE WEST"));
+                                objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE WEST") && item.EndDate.Year == DateTime.Now.Year);
                             }
+                            else if (worksheet.Name.Contains("WEEK 1-"))
+                            {
+                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 1 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                            }
+                            else if (worksheet.Name.Contains("WEEK 2-"))
+                            {
+                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 2 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                            }
+                            else if (worksheet.Name.Contains("WEEK 3-"))
+                            {
+                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 3 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                            }
+                            else if (worksheet.Name.Contains("WEEK 4-"))
+                            {
+                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 4 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item =>item.EndDate).ToList();
+                            }
+                            else if (worksheet.Name.Contains("WEEK 5-"))
+                            {
+                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 5 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                            }
+                            else if (worksheet.Name.Contains("WEEK 6-"))
+                            {
+                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 6 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                            }
+                            else if (worksheet.Name.Contains("WEEK 7-"))
+                            {
+                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 7 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                            }
+                            else if (worksheet.Name.Contains("WEEK 8-"))
+                            {
+                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 8 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                            }
+                            else if (worksheet.Name.Contains("WEEK 9-"))
+                            {
+                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 9 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                            }
+                            else if (worksheet.Name.Contains("WEEK 10-"))
+                            {
+                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 10 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                            }
+                            else if (worksheet.Name.Contains("WEEK 11-"))
+                            {
+                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 11 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                            }
+                            else if (worksheet.Name.Contains("WEEK 12-"))
+                            {
+                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 12 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                            }
+                            if (objShows != null)
+                            {
+                                objShow = objShows[weekCount];
+                                if( weekCount +1 == objShows.Count())
+                                    weekCount = -1;
+                            }
+
                             var parent = new List<IDictionary<string, object>>();
                             while (!categoryRow.Cell(coCategoryId).IsEmpty())
                             {
@@ -222,19 +279,19 @@ namespace asi.asicentral.web.Controllers.Show
 
                             DataTable excelDataTable = ToDictionary(parent);
                             var objErrors = new ErrorModel();
-                            bool isZipPresent,isCompanyPresent,isAsiNoPresent, isMemberTypePresent, isAddressPresent, isCityPresent, isStatePresent, isCountryPresent, isFNamePresent, isLNamePresent;
-                                 isZipPresent = isCompanyPresent=isAsiNoPresent = isMemberTypePresent = isAddressPresent = isCityPresent = isStatePresent = isCountryPresent = isFNamePresent = isLNamePresent= false;
+                            bool isZipPresent, isCompanyPresent, isAsiNoPresent, isMemberTypePresent, isAddressPresent, isCityPresent, isStatePresent, isCountryPresent, isFNamePresent, isLNamePresent;
+                            isZipPresent = isCompanyPresent = isAsiNoPresent = isMemberTypePresent = isAddressPresent = isCityPresent = isStatePresent = isCountryPresent = isFNamePresent = isLNamePresent = false;
                             for (int i = 0; i < excelDataTable.Rows.Count; i++)
                             {
                                 if (excelDataTable.Rows[i]["Company"].ToString() == "" && isCompanyPresent == false) { ModelState.AddModelError("CustomError", "Company cannot be empty."); isCompanyPresent = true; }
-                                if (excelDataTable.Rows[i]["Zip Code"].ToString() == "" && isZipPresent == false){ ModelState.AddModelError("CustomError", "Zip Code cannot be empty.");isZipPresent = true;}
+                                if (excelDataTable.Rows[i]["Zip Code"].ToString() == "" && isZipPresent == false) { ModelState.AddModelError("CustomError", "Zip Code cannot be empty."); isZipPresent = true; }
                                 if (excelDataTable.Rows[i]["ASINO"].ToString() == "" && isAsiNoPresent == false) { ModelState.AddModelError("CustomError", "ASI Number cannot be empty."); isAsiNoPresent = true; }
                                 if (excelDataTable.Rows[i]["MemberType"].ToString() == "" && isMemberTypePresent == false) { ModelState.AddModelError("CustomError", "MemberType cannot be empty."); isMemberTypePresent = true; }
                                 if (excelDataTable.Rows[i]["Address"].ToString() == "" && isAddressPresent == false) { ModelState.AddModelError("CustomError", "Address cannot be empty."); isAddressPresent = true; }
                                 if (excelDataTable.Rows[i]["City"].ToString() == "" && isCityPresent == false) { ModelState.AddModelError("CustomError", "City cannot be empty."); isCityPresent = true; }
                                 if (excelDataTable.Rows[i]["State"].ToString() == "" && isStatePresent == false) { ModelState.AddModelError("CustomError", "State Code cannot be empty."); isStatePresent = true; }
                                 if (excelDataTable.Rows[i]["Country"].ToString() == "" && isCountryPresent == false) { ModelState.AddModelError("CustomError", "Country Code cannot be empty."); isCountryPresent = true; }
-                                   
+
                                 ShowCompany objCompany = ConvertDataAsShowCompany(excelDataTable, i);
                                 ShowAddress objAddress = ConvertDataAsShowAddress(excelDataTable, objCompany.Id, i);
                                 ShowCompanyAddress objCompanyAddress = ConvertDataAsShowCompanyAddress(excelDataTable, objCompany.Id, objAddress.Id, i);
@@ -258,7 +315,7 @@ namespace asi.asicentral.web.Controllers.Show
                                 }
                                 ObjectService.SaveChanges();
                             }
-                           
+
                             IList<ShowAttendee> deleteAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.IsExisting == false && item.ShowId == objShow.Id).ToList();
                             if (deleteAttendees != null)
                             {
@@ -292,12 +349,14 @@ namespace asi.asicentral.web.Controllers.Show
                                     objexistingAttendee.IsRoundTable = existingAttendee.IsRoundTable;
                                     objexistingAttendee.IsExhibitDay = existingAttendee.IsExhibitDay;
                                     objexistingAttendee.IsPresentation = existingAttendee.IsPresentation;
+                                    objexistingAttendee.IsCatalog = existingAttendee.IsCatalog;
                                     objexistingAttendee.IsExisting = false;
                                     objexistingAttendee = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, objexistingAttendee);
                                     ObjectService.SaveChanges();
                                 }
                             }
                         }
+                        weekCount++;
                     }
                 }
                 return RedirectToAction("../Show/ShowList");

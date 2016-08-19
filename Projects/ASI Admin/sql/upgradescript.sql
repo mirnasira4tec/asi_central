@@ -1,0 +1,1 @@
+Alter table [dbo].[ATT_Attendee] Add IsCatalog [bit] NOT NULL DEFAULT ('0') 
