@@ -1,1 +1,1 @@
-Alter table [dbo].[ATT_Attendee] Add IsCatalog [bit] NOT NULL DEFAULT ('0') 
+Insert Into [dbo].[ATT_ShowType] (Type, CreateDateUTC,UpdateDateUTC,UpdateSource) values ('Show',GETDATE(),GETDATE(),'ShowController')
