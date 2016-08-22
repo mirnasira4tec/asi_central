@@ -4138,6 +4138,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PSI Number.
+        /// </summary>
+        public static string PSINumber {
+            get {
+                return ResourceManager.GetString("PSINumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This page allows the user to add a new Publication.
         /// </summary>
         public static string PublicationAddDescription {
