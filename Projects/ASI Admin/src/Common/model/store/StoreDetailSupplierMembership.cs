@@ -143,6 +143,9 @@ namespace asi.asicentral.model.store
         [Display(ResourceType = typeof(Resource), Name = "BusinessHours")]
         public string BusinessHours { get; set; }
 
+        [Display(ResourceType = typeof(Resource), Name = "PSINumber")]
+        public string PSINumber { get; set; }
+
         public virtual IList<LookSupplierDecoratingType> DecoratingTypes { get; set; }
 
         public override string ToString()
