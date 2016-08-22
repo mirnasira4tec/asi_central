@@ -278,7 +278,10 @@ namespace asi.asicentral.util
                                 request.Headers.ExpectContinue = Convert.ToBoolean(headerParam[key]);
                                 break;
                             case "authorization":
-                                request.Headers.Authorization = new AuthenticationHeaderValue(headerParam[key]);
+                                request.Headers.Authorization = new AuthenticationHeaderValue(headerParam["Authorization-scheme"], headerParam[key]);
+                                break;
+                            case "authorization-scheme":
+                                //ignored, can only be used with authorization
                                 break;
                             default:
                                 request.Headers.Add(key, headerParam[key]);
