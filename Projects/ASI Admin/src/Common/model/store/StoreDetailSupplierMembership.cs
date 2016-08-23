@@ -211,6 +211,7 @@ namespace asi.asicentral.model.store
             supplier.UPSState = UPSState;
             supplier.UPSZip = UPSZip;
             supplier.WomanOwned = WomanOwned;
+            supplier.PSINumber = PSINumber;
             supplier.YearEnteredAdvertising = YearEnteredAdvertising;
             supplier.YearEstablished = YearEstablished;
         }
