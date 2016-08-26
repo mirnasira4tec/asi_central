@@ -259,6 +259,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Package Includes : Local SEO and Company Reviews..
+        /// </summary>
+        public static string ProductLocalBoost {
+            get {
+                return ResourceManager.GetString("ProductLocalBoost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The newest addition to ASI’s search engine marketing suite, ASI’s Local SEO will make your business stand out in front of prospects ready to buy your products and services..
         /// </summary>
         public static string ProductLocalSEO {
@@ -309,6 +318,15 @@ namespace asi.asicentral.Resources {
         public static string ProductPayPerClick {
             get {
                 return ResourceManager.GetString("ProductPayPerClick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package Includes : Local SEO, Company Reviews and Pay-Per-Click..
+        /// </summary>
+        public static string ProductPowerBoost {
+            get {
+                return ResourceManager.GetString("ProductPowerBoost", resourceCulture);
             }
         }
         
