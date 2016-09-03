@@ -80,7 +80,7 @@ namespace asi.asicentral.web.Controllers.Store
                     productToUpdate.MonthlyCost = couponModel.MonthlyCost;
                     productToUpdate.AppFeeDiscount = couponModel.AppFeeDiscount;
                     productToUpdate.ProductDiscount = couponModel.ProductDiscount;
-                    productToUpdate.RateStructure = !string.IsNullOrEmpty(couponModel.RateStructure) ? couponModel.RateStructure : "BUNDLE";
+                    productToUpdate.RateStructure = !string.IsNullOrEmpty(couponModel.RateStructure) ? couponModel.RateStructure : "MEMBER";
                     productToUpdate.GroupName = couponModel.GroupName;
                     productToUpdate.RateCode = couponModel.RateCode;
                 }
