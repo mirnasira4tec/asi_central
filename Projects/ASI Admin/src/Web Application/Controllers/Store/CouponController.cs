@@ -252,6 +252,7 @@ namespace asi.asicentral.web.Controllers.Store
             Coupon coupon = StoreService.GetAll<Coupon>().FirstOrDefault(item => item.Id == id);
             if (coupon != null)
             {
+                DeleteMappingTblCoupon(coupon);
                 StoreService.Delete<Coupon>(coupon);
                 StoreService.SaveChanges();
             }
@@ -273,9 +274,6 @@ namespace asi.asicentral.web.Controllers.Store
 
         private void UpdatePersonifyMappingTbl(Coupon coupon, ContextProduct product, int personifyProductId)
         {
-            if (string.IsNullOrEmpty(coupon.RateStructure) || string.IsNullOrEmpty(coupon.GroupName) || string.IsNullOrEmpty(coupon.RateCode) || personifyProductId == 0 )
-                return;
-
             try
             {
                 // get baseline personify bundle/products for the product
@@ -287,13 +285,7 @@ namespace asi.asicentral.web.Controllers.Store
                 if (mappings.Any())
                 {
                     // delete existing rows for the coupon
-                    var existMappings = StoreService.GetAll<PersonifyMapping>()
-                        .Where(map => map.StoreOption == coupon.CouponCode).ToList();
-
-                    for (int i = 0; i < existMappings.Count; i++)
-                    {
-                        StoreService.Delete(existMappings[i]);
-                    }
+                    DeleteMappingTblCoupon(coupon);
 
                     // use product baseline to add rows for coupon
                     foreach (var m in mappings)
@@ -320,7 +312,8 @@ namespace asi.asicentral.web.Controllers.Store
                             UpdateSource = "Store"
                         };
 
-                        if ( !string.IsNullOrEmpty(m.PersonifyRateCode) && !string.IsNullOrEmpty(m.ProductCode))
+                        if ( !string.IsNullOrEmpty(m.PersonifyRateCode) && !string.IsNullOrEmpty(m.ProductCode) && 
+                             !string.IsNullOrEmpty(coupon.GroupName) && !string.IsNullOrEmpty(coupon.RateCode))
                         {   // membership package
                             productMapping.PersonifyRateStructure = coupon.RateStructure;
                             productMapping.ProductCode = coupon.GroupName;
@@ -353,6 +346,22 @@ namespace asi.asicentral.web.Controllers.Store
                 var log = LogService.GetLog(this.GetType());
                 log.Debug(string.Format("Exception occurred when updating Personify mapping table for coupon '{0}', message : {1}", coupon.CouponCode, ex.Message));
             }
+        }
+
+        private void DeleteMappingTblCoupon(Coupon coupon)
+        {
+            // delete existing rows for the coupon
+            var existMappings = StoreService.GetAll<PersonifyMapping>()
+                .Where(map => map.StoreOption == coupon.CouponCode &&
+                              Nullable.Compare(map.StoreContext, coupon.ContextId) == 0 &&
+                              map.StoreProduct == coupon.ProductId).ToList();
+
+            for (int i = 0; i < existMappings.Count; i++)
+            {
+                StoreService.Delete(existMappings[i]);
+            }
+
+            StoreService.SaveChanges();
         }
     }
 }
