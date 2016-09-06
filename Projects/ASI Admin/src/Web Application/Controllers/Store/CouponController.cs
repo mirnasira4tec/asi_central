@@ -249,12 +249,20 @@ namespace asi.asicentral.web.Controllers.Store
 
         public ActionResult Delete(int id)
         {
-            Coupon coupon = StoreService.GetAll<Coupon>().FirstOrDefault(item => item.Id == id);
+            var coupon = StoreService.GetAll<Coupon>().FirstOrDefault(item => item.Id == id);
             if (coupon != null)
             {
-                DeleteMappingTblCoupon(coupon);
-                StoreService.Delete<Coupon>(coupon);
-                StoreService.SaveChanges();
+                try
+                {
+                    DeleteMappingTblCoupon(coupon);
+                    StoreService.Delete<Coupon>(coupon);
+                    StoreService.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    var log = LogService.GetLog(this.GetType());
+                    log.Debug(string.Format("Exception occurred when deleting coupon '{0}', message : {1}", coupon.CouponCode, ex.Message));
+                }
             }
 
             return List();
@@ -351,17 +359,20 @@ namespace asi.asicentral.web.Controllers.Store
         private void DeleteMappingTblCoupon(Coupon coupon)
         {
             // delete existing rows for the coupon
-            var existMappings = StoreService.GetAll<PersonifyMapping>()
-                .Where(map => map.StoreOption == coupon.CouponCode &&
-                              Nullable.Compare(map.StoreContext, coupon.ContextId) == 0 &&
-                              map.StoreProduct == coupon.ProductId).ToList();
-
-            for (int i = 0; i < existMappings.Count; i++)
+            if (coupon != null && !string.IsNullOrEmpty(coupon.CouponCode))
             {
-                StoreService.Delete(existMappings[i]);
-            }
+                var existMappings = StoreService.GetAll<PersonifyMapping>()
+                    .Where(map => map.StoreOption == coupon.CouponCode &&
+                                  Nullable.Compare(map.StoreContext, coupon.ContextId) == 0 &&
+                                  map.StoreProduct == coupon.ProductId).ToList();
 
-            StoreService.SaveChanges();
+                for (int i = 0; i < existMappings.Count; i++)
+                {
+                    StoreService.Delete(existMappings[i]);
+                }
+
+                StoreService.SaveChanges();
+            }
         }
     }
 }
