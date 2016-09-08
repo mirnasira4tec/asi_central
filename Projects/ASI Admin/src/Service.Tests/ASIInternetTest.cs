@@ -5,6 +5,7 @@ using asi.asicentral.model.sgr;
 using asi.asicentral.model.store;
 using System;
 using System.Collections.Generic;
+using asi.asicentral.model.excit;
 
 namespace asi.asicentral.Tests
 {
@@ -183,6 +184,48 @@ namespace asi.asicentral.Tests
                 Assert.IsNotNull(application.PrimaryBusinessRevenueId);
                 Assert.AreEqual(2, application.AccountTypes.Count);
                 Assert.AreEqual(2, application.ProductLines.Count);
+            }
+        }
+
+        [TestMethod]
+        public void SupplierUpdateRequestTest()
+        {
+            using (var context = new ASIInternetContext())
+            {
+                //retrieve update field
+                var fields = context.SupplierUpdateFields.Where(s => s.IsObsolete.HasValue ).ToList();
+                Assert.IsNotNull(fields);
+
+                var updateRequest = new SupUpdateRequest()
+                {
+                    CompanyId = 1234,
+                    RequestedBy = "mzhang_unit",
+                    Status = SupRequestStatus.Pending,
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    UpdateSource = "Initial Unit Tests"
+                };
+
+                context.SupplierUpdateRequests.Add(updateRequest);
+                context.SaveChanges();
+
+                var updateRequest = context.SupplierUpdateRequests.FirstOrDefault(r => r.CompanyId == 1234);
+                if (updateRequest != null)
+                {
+                    var requestDetails = new SupUpdateRequestDetail()
+                    {
+                        SupUpdateRequestId = updateRequest.Id, 
+                        SupUpdateFieldId = 1, 
+                        UpdateValue = "http://testInventory.com/svc", 
+                        OrigValue = "origiValue", 
+                        CreateDate = DateTime.Now, 
+                        UpdateDate = DateTime.Now,
+                        UpdateSource = "Unit Test"
+                    };
+
+                    context.SupplierUpdateRequestDetails.Add(requestDetails);
+                    context.SaveChanges();
+                }
             }
         }
     }
