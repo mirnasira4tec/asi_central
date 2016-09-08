@@ -208,24 +208,25 @@ namespace asi.asicentral.Tests
 
                 context.SupplierUpdateRequests.Add(updateRequest);
                 context.SaveChanges();
+                updateRequest = context.SupplierUpdateRequests.Where(r => r.CompanyId == 1234).OrderByDescending(r => r.Id).FirstOrDefault();
+                Assert.IsNotNull(updateRequest);
 
-                var updateRequest = context.SupplierUpdateRequests.FirstOrDefault(r => r.CompanyId == 1234);
-                if (updateRequest != null)
+                var requestDetails = new SupUpdateRequestDetail()
                 {
-                    var requestDetails = new SupUpdateRequestDetail()
-                    {
-                        SupUpdateRequestId = updateRequest.Id, 
-                        SupUpdateFieldId = 1, 
-                        UpdateValue = "http://testInventory.com/svc", 
-                        OrigValue = "origiValue", 
-                        CreateDate = DateTime.Now, 
-                        UpdateDate = DateTime.Now,
-                        UpdateSource = "Unit Test"
-                    };
+                    SupUpdateRequestId = updateRequest.Id, 
+                    SupUpdateFieldId = 1, 
+                    UpdateValue = "http://testInventory.com/svc", 
+                    OrigValue = "origiValue", 
+                    CreateDate = DateTime.Now, 
+                    UpdateDate = DateTime.Now,
+                    UpdateSource = "Unit Test"
+                };
 
-                    context.SupplierUpdateRequestDetails.Add(requestDetails);
-                    context.SaveChanges();
-                }
+                context.SupplierUpdateRequestDetails.Add(requestDetails);
+                context.SaveChanges();
+
+                var detail = context.SupplierUpdateRequestDetails.FirstOrDefault(d => d.UpdateValue.Equals("http://testInventory.com/svc"));
+                Assert.IsNotNull(detail);
             }
         }
     }
