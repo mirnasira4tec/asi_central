@@ -76,6 +76,8 @@ namespace asi.asicentral.model.store
                     return OrderStep.PlaceOrder;
                 case 5:
                     return OrderStep.PlaceOrder;
+                case 6:
+                    return OrderStep.PostOrder;
                 default:
                     return OrderStep.Initial;
             }
