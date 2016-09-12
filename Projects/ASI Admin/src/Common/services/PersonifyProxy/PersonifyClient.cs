@@ -1402,12 +1402,20 @@ namespace asi.asicentral.services.PersonifyProxy
             CusCommunication cusCommRecord = null;
             if (!cusCommRecords.Any())
             {
-                var commType = "CORPORATE";
+                var commType = COMMUNICATION_LOCATION_CODE_CORPORATE;
                 var existingEmails = GetCusCommunications(companyInfo.MasterCustomerId, companyInfo.SubCustomerId, COMMUNICATION_INPUT_EMAIL);
                 if (existingEmails.Any())
                 {
-                    var curEmailTypes = existingEmails.Select(t => t.CommLocationCodeString).ToList();
-                    commType = new string[] { "BUSINESS", "WORK", "CORPORATE" }.FirstOrDefault(c => !curEmailTypes.Contains(c));
+                    var commLocTypes = existingEmails.Select(c => c.CommLocationCodeString).ToList();
+                    if (commLocTypes.Contains(commType))
+                    {
+                        var emailCnt = 1;
+                        while (commLocTypes.Contains(COMMUNICATION_LOCATION_CODE_CORPORATE + emailCnt))
+                        {
+                            emailCnt++;
+                        }
+                        commType = COMMUNICATION_LOCATION_CODE_CORPORATE + emailCnt;
+                    }
                 }
 
                 if (!string.IsNullOrEmpty(commType))
