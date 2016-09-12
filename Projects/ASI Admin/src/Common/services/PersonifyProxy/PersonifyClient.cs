@@ -34,6 +34,7 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string COMMUNICATION_INPUT_WEB = "WEB";
         private const string COMMUNICATION_INPUT_EMAIL = "EMAIL";
         private const string COMMUNICATION_LOCATION_CODE_CORPORATE = "CORPORATE";
+        private const string COMMUNICATION_LOCATION_CODE_BUSINESS = "BUSINESS";
         private const string COMMUNICATION_LOCATION_CODE_WORK = "WORK";
         private const string CUSTOMER_CLASS_INDIV = "INDIV";
         private const string RECORD_TYPE_INDIVIDUAL = "I";
@@ -1402,22 +1403,35 @@ namespace asi.asicentral.services.PersonifyProxy
             CusCommunication cusCommRecord = null;
             if (!cusCommRecords.Any())
             {
-                var commType = COMMUNICATION_LOCATION_CODE_CORPORATE;
                 var existingEmails = GetCusCommunications(companyInfo.MasterCustomerId, companyInfo.SubCustomerId, COMMUNICATION_INPUT_EMAIL);
+                var commType = COMMUNICATION_LOCATION_CODE_CORPORATE;
                 if (existingEmails.Any())
                 {
-                    var commLocTypes = existingEmails.Select(c => c.CommLocationCodeString).ToList();
-                    if (commLocTypes.Contains(commType))
+                    var curLocTypes = existingEmails.Select(c => c.CommLocationCodeString).ToList();
+                    commType = new string[] {COMMUNICATION_LOCATION_CODE_BUSINESS, COMMUNICATION_LOCATION_CODE_CORPORATE}.FirstOrDefault(c => !curLocTypes.Contains(c));
+                    // already having both BUSINESS and CORPORATE emails
+                    if (string.IsNullOrEmpty(commType))
                     {
-                        var emailCnt = 1;
-                        while (commLocTypes.Contains(COMMUNICATION_LOCATION_CODE_CORPORATE + emailCnt))
+                        if (curLocTypes.Count(c => c.Contains(COMMUNICATION_LOCATION_CODE_CORPORATE)) < 10)
                         {
-                            emailCnt++;
+                            commType = COMMUNICATION_LOCATION_CODE_CORPORATE;
                         }
-                        commType = COMMUNICATION_LOCATION_CODE_CORPORATE + emailCnt;
+                        else if (curLocTypes.Count(c => c.Contains(COMMUNICATION_LOCATION_CODE_BUSINESS)) < 10)
+                        {
+                            commType = COMMUNICATION_LOCATION_CODE_BUSINESS;
+                        }
+
+                        if ( !string.IsNullOrEmpty(commType))
+                        {
+                            var emailCnt = 1;
+                            while (curLocTypes.Contains(COMMUNICATION_LOCATION_CODE_CORPORATE + emailCnt))
+                            {
+                                emailCnt++;
+                            }
+                            commType += emailCnt;
+                        }
                     }
                 }
-
                 if (!string.IsNullOrEmpty(commType))
                 {
                     try
@@ -1435,10 +1449,11 @@ namespace asi.asicentral.services.PersonifyProxy
                     catch (Exception ex)
                     {
                         _log.Error(string.Format("Faild to add email '{0}' to company '{1}' in Personify; error message: {2}",
-                                   email, companyInfo.Name, ex.Message));
+                                    email, companyInfo.Name, ex.Message));
                     }
-                }
+                }                    
             }
+
             return cusCommRecord;
         }
 
