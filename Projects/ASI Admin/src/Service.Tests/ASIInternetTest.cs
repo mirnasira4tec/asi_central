@@ -199,6 +199,7 @@ namespace asi.asicentral.Tests
                 var updateRequest = new SupUpdateRequest()
                 {
                     CompanyId = 1234,
+                    CompanyName = "Supplier Config Update Request",
                     RequestedBy = "mzhang_unit",
                     Status = SupRequestStatus.Pending,
                     CreateDate = DateTime.Now,
