@@ -14,6 +14,7 @@ namespace asi.asicentral.model.excit
     {
         public int Id { get; set; }
         public int CompanyId { get; set; }
+        public string CompanyName { get; set; }
         public string RequestedBy { get; set; }
         public string ApprovedBy { get; set; }
         public SupRequestStatus Status { get; set; }

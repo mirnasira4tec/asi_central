@@ -24,6 +24,7 @@ GO
 CREATE TABLE [dbo].[EXCT_SupUpdateRequest](
 	[SupUpdateRequestId] [int] IDENTITY(26,1) NOT NULL,
 	[CompanyId] [int] NOT NULL,
+	[CompanyName] [nvarchar](250) NULL DEFAULT (NULL),
 	[RequestedBy] [nvarchar](250) NOT NULL,
 	[ApprovedBy] [nvarchar](250) NULL DEFAULT (NULL),
 	[Status] [int] NULL DEFAULT (NULL),
