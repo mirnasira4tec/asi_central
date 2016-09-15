@@ -27,7 +27,7 @@ namespace asi.asicentral.web.Controllers.Store
         public const string COMMAND_ACCEPT = "Accept";
         public const string COMMAND_RESUBMIT = "Resubmit";
         //products associated only to StoreOrderDetail table
-        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 29, 30, 31, 45, 46, 55, 56, 57, 58, 59, 60, 62, 70, 71, 77, 78, 96, 97, 98, 100, 101, 102, 104, 105, 106, 107, 108, 109, 112, 113, 116, 117, 121, 122 };
+        public static readonly int[] ORDERDETAIL_PRODUCT_IDS = { 29, 30, 31, 45, 46, 55, 56, 57, 58, 59, 60, 62, 70, 71, 77, 78, 96, 97, 98, 100, 101, 102, 104, 105, 106, 107, 108, 109, 112, 113, 116, 117, 121, 122, 123, 124 };
         //products associated to StoreDetailESPAdvertising table
         public static readonly int[] SUPPLIER_ESP_ADVERTISING_PRODUCT_IDS = { 48, 49, 50, 51, 52, 53};
         //products associated to StoreDetailCatalog table
@@ -85,7 +85,6 @@ namespace asi.asicentral.web.Controllers.Store
                     StoreDetailEmailExpress detailEmailExpress = StoreService.GetAll<StoreDetailEmailExpress>().Where(emailexpress => emailexpress.OrderDetailId == orderDetail.Id).SingleOrDefault();
                     return View("../Store/Application/EmailExpress", new EmailExpressModel(orderDetail, detailEmailExpress, StoreService));
                 }
-                else if (ORDERDETAIL_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/OrderDetailProduct", new OrderDetailApplicationModel(orderDetail));
                 else if (SUPPLIER_ESP_WEBSITES_PRODUCT_COLLECTIONS_ID == orderDetail.Product.Id) return View("../Store/Application/ProductCollections", new ProductCollectionsModel(orderDetail, StoreService));
                 else if (FormsHelper.FORMS_ASSOCIATED_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/FormProduct", new FormsModel(orderDetail, StoreService));
                 else if (StoreDetailCatalogAdvertisingItem.SUPPLIER_CATALOG_ADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
@@ -97,6 +96,10 @@ namespace asi.asicentral.web.Controllers.Store
                 {
                     var specialProducItems = StoreService.GetAll<StoreDetailSpecialProductItem>().Where(item => item.OrderDetailId == orderDetail.Id).ToList();
                     return View("../Store/Application/SalesForm", new SalesFormApplicationModel(orderDetail, specialProducItems, StoreService));
+                }
+                else //products associated only to StoreOrderDetail table
+                {
+                    return View("../Store/Application/OrderDetailProduct", new OrderDetailApplicationModel(orderDetail));
                 }
             }
             throw new Exception("Retieved an unknown type of application");

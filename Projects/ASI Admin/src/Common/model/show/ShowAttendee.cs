@@ -23,6 +23,7 @@ namespace asi.asicentral.model.show
         public bool IsPresentation { get; set; }
         public bool IsRoundTable { get; set; }
         public bool IsExisting { get; set; }
+        public bool IsCatalog { get; set; }
         public string BoothNumber { get; set; }
         public virtual ShowASI Show { get; set; }
         public virtual ShowCompany Company { get; set; }

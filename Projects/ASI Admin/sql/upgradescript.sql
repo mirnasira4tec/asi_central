@@ -1,0 +1,1 @@
+Insert Into [dbo].[ATT_ShowType] (Type, CreateDateUTC,UpdateDateUTC,UpdateSource) values ('Show',GETDATE(),GETDATE(),'ShowController')

@@ -2311,6 +2311,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This field cannot be more than 500 characters..
+        /// </summary>
+        public static string FieldLength500 {
+            get {
+                return ResourceManager.GetString("FieldLength500", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This is not a valid {0} ASI #.
         /// </summary>
         public static string FieldLengthASI {
@@ -2644,6 +2653,24 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Company name should not be the same as contact name or email.
+        /// </summary>
+        public static string InvalidCompanyName {
+            get {
+                return ResourceManager.GetString("InvalidCompanyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contact name should not be the same as company name or email.
+        /// </summary>
+        public static string InvalidContactName {
+            get {
+                return ResourceManager.GetString("InvalidContactName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This is not a valid code..
         /// </summary>
         public static string InvalidCouponCode {
@@ -2667,6 +2694,24 @@ namespace asi.asicentral.Resources {
         public static string InvalidOrUnauthorizedUserMessage {
             get {
                 return ResourceManager.GetString("InvalidOrUnauthorizedUserMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone number should be a 10-digit number.
+        /// </summary>
+        public static string InvalidPhoneNumber {
+            get {
+                return ResourceManager.GetString("InvalidPhoneNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The zip code is invalid.
+        /// </summary>
+        public static string InvalidZipCode {
+            get {
+                return ResourceManager.GetString("InvalidZipCode", resourceCulture);
             }
         }
         
