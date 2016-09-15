@@ -219,7 +219,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     StoreAddress companyAddress = company.GetCompanyAddress();
                     string countryCode = countryCodes != null ? countryCodes.Alpha3Code(companyAddress.Country) : companyAddress.Country;
                     AddPhoneNumber(company.Phone, countryCode, customerInfo.MasterCustomerId, customerInfo.SubCustomerId);
-                    AddCompanyEmail(company.Email, customerInfo);
+                    AddCompanyEmail(company, customerInfo);
                     storeAddress = AddCustomerAddresses(company, customerInfo.MasterCustomerId, customerInfo.SubCustomerId, countryCodes);
                 }
             }
@@ -243,8 +243,14 @@ namespace asi.asicentral.services.PersonifyProxy
                 COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode);
             AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_FAX, storeCompany.Fax,
                 COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode);
-            AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_EMAIL, storeCompany.Email,
-                COMMUNICATION_LOCATION_CODE_CORPORATE);
+            // add company email only if it is not the same as contact email
+            if (!string.IsNullOrEmpty(storeCompany.Email) && 
+                 (storeCompany.Individuals == null || !storeCompany.Individuals.Any() || string.IsNullOrEmpty(storeCompany.Individuals[0].Email) || 
+                  string.Compare(storeCompany.Individuals[0].Email, storeCompany.Email, StringComparison.CurrentCultureIgnoreCase) != 0))
+            {
+                AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_EMAIL, storeCompany.Email,
+                    COMMUNICATION_LOCATION_CODE_CORPORATE);
+            }
             AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_WEB, storeCompany.WebURL,
                 COMMUNICATION_LOCATION_CODE_CORPORATE);
 
@@ -1392,13 +1398,20 @@ namespace asi.asicentral.services.PersonifyProxy
             return respSave;
         }
 
-        public static CusCommunication AddCompanyEmail(string email, CompanyInformation companyInfo)
+        public static CusCommunication AddCompanyEmail(StoreCompany company, CompanyInformation companyInfo)
         {
-            if (string.IsNullOrEmpty(email) || companyInfo == null ) 
+            if (company == null || string.IsNullOrEmpty(company.Email) || companyInfo == null ) 
                 return null;
 
+            // check if the email is the same as contact email
+            if (company.Individuals != null && company.Individuals.Any() && 
+                string.Compare(company.Email, company.Individuals[0].Email, StringComparison.CurrentCultureIgnoreCase) == 0)
+            {
+                return null;
+            }
+
             var cusCommRecords = SvcClient.Ctxt.CusCommunications.Where(c => c.CommTypeCodeString == COMMUNICATION_INPUT_EMAIL
-                                                              && string.Compare(c.SearchPhoneAddress, email, StringComparison.CurrentCultureIgnoreCase) == 0).ToList();
+                                                              && string.Compare(c.SearchPhoneAddress, company.Email, StringComparison.CurrentCultureIgnoreCase) == 0).ToList();
 
             CusCommunication cusCommRecord = null;
             if (!cusCommRecords.Any())
@@ -1442,14 +1455,14 @@ namespace asi.asicentral.services.PersonifyProxy
                         cusEmail.CommTypeCodeString = COMMUNICATION_INPUT_EMAIL;
                         cusEmail.PrimaryFlag = string.IsNullOrEmpty(companyInfo.Email) ? true : false;
                         cusEmail.CommLocationCodeString = commType;
-                        cusEmail.FormattedPhoneAddress = email;
+                        cusEmail.FormattedPhoneAddress = company.Email;
 
                         cusCommRecord = SvcClient.Save<CusCommunication>(cusEmail);
                     }
                     catch (Exception ex)
                     {
                         _log.Error(string.Format("Faild to add email '{0}' to company '{1}' in Personify; error message: {2}",
-                                    email, companyInfo.Name, ex.Message));
+                                    company.Email, companyInfo.Name, ex.Message));
                     }
                 }                    
             }
