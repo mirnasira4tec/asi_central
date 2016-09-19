@@ -165,6 +165,7 @@ namespace asi.asicentral.web.Controllers.Show
             {
                 var show = new ShowModel();
                 DataSet ds = new DataSet();
+                var objErrors = new ErrorModel();
                 string excelConnectionString = string.Empty;
                 var fileName = Path.GetFileName(file.FileName);
                 string tempPath = Path.GetTempPath();
@@ -195,7 +196,27 @@ namespace asi.asicentral.web.Controllers.Show
                             {
                                 keyValues.Add(cell, categoryRow.Cell(cell).GetString());
                             }
+                            string[] columnNameList = new string[] { "ASINO", "Company", "Sponsor", "Presentation", "Roundtable", "ExhibitOnly", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName","LastName","BoothNumber" };
+                            if (keyValues.Count() != columnNameList.Count())
+                            {
+                                for (int j = 0; j < columnNameList.Count(); j++)
+                                {
+                                    if (!keyValues.ContainsValue(columnNameList[j].ToString()))
+                                    {
+                                        ModelState.AddModelError("CustomError", "Please add " + columnNameList[j].ToString() + " column in spreadsheet");
+                                    }
+                                }
+                                if (!ModelState.IsValid)
+                                {
+                                    objErrors.Error = string.Join(",",
+                                        ModelState.Values.Where(E => E.Errors.Count > 0)
+                                        .SelectMany(E => E.Errors)
+                                        .Select(E => E.ErrorMessage)
+                                        .ToArray());
 
+                                    return View("../Show/ViewError", objErrors);
+                                }
+                            }
                             categoryRow = categoryRow.RowBelow();
                             IList<ShowASI> objShows = null;
                             var objShow = new ShowASI();
@@ -299,7 +320,7 @@ namespace asi.asicentral.web.Controllers.Show
                             }
 
                             DataTable excelDataTable = ToDictionary(parent);
-                            var objErrors = new ErrorModel();
+                           
                             bool isZipPresent, isCompanyPresent, isAsiNoPresent, isMemberTypePresent, isAddressPresent, isCityPresent, isStatePresent, isCountryPresent, isFNamePresent, isLNamePresent;
                             isZipPresent = isCompanyPresent = isAsiNoPresent = isMemberTypePresent = isAddressPresent = isCityPresent = isStatePresent = isCountryPresent = isFNamePresent = isLNamePresent = false;
                             for (int i = 0; i < excelDataTable.Rows.Count; i++)
