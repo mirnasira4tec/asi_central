@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Configuration;
 using System.Web.Security;
+using System.Web.SessionState;
 using Newtonsoft.Json.Linq;
 using asi.asicentral.services;
 using asi.asicentral.interfaces;
@@ -80,13 +81,12 @@ namespace asi.asicentral.oauth
                 string cookie = GetCookieValue(request, response, FormsAuthentication.FormsCookieName);
                 if (!string.IsNullOrEmpty(cookie))
                 {
-                    var redirectParams = GetLatestTokens(request, response, cookie, domainName, userCookieName, toAppCode: appCode.ToString());
+                    var redirectParams = GetLatestTokens(request, response, cookie, domainName, userCookieName, toAppCode: appCode);
                     if (redirectParams != null)
                     {
                         if (ApplicationCodes.WESP == appCode)
                         {
                             redirectParams.FromApplicationVer = "1.0.0";
-                            redirectParams.ExtGuid = string.Empty;
                         }
                         else if (ApplicationCodes.ASED == appCode)
                         {
@@ -96,7 +96,6 @@ namespace asi.asicentral.oauth
                         }
                         else
                         {
-                            redirectParams.ExtGuid = string.Empty;
                             redirectParams.FromApplicationVer = "1";
                         }
                         if (ApplicationCodes.ASED != appCode)
@@ -133,38 +132,46 @@ namespace asi.asicentral.oauth
             return redirectUrl;
         }
 
-        private static CrossApplication.RedirectParams GetLatestTokens(string accessToken, string toAppCode)
+        private static CrossApplication.RedirectParams GetCrossAppTokens(CrossApplication.RedirectParams redirectParams, ApplicationCodes toAppCode)
         {
-            CrossApplication.RedirectParams redirectParams = null;
-            var host = ConfigurationManager.AppSettings["SecurityHost"];
-            var relativePath = ConfigurationManager.AppSettings["RelativePath"];
-            if (!string.IsNullOrEmpty(host) && !string.IsNullOrEmpty(relativePath))
+            if (redirectParams != null && !string.IsNullOrEmpty(redirectParams.AccessToken))
             {
-                var oAuth2Client = new OAuth2Client(host, relativePath: relativePath);
-                var authenticatedUser = ASIOAuthClient.GetAuthenticatedUser(accessToken);
-                if(authenticatedUser != null && authenticatedUser.Token != null)
+                var accessToken = redirectParams.AccessToken;
+                var host = ConfigurationManager.AppSettings["SecurityHost"];
+                var relativePath = ConfigurationManager.AppSettings["RelativePath"];
+                if (!string.IsNullOrEmpty(host) && !string.IsNullOrEmpty(relativePath))
                 {
-                    var sessionId = authenticatedUser.Token.Value;
-                    var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
-                    var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
-                    if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
+                    var oAuth2Client = new OAuth2Client(host, relativePath: relativePath);
+                    var authenticatedUser = ASIOAuthClient.GetAuthenticatedUser(accessToken);
+                    if(authenticatedUser != null && authenticatedUser.Token != null)
                     {
-                        var responseMessage = oAuth2Client.CrossApplication(asiOAuthClientId, asiOAuthClientSecret, sessionId, toAppCode).Result;
-                        if (responseMessage != null)
+                        var sessionId = authenticatedUser.Token.Value;
+                        if (toAppCode == ApplicationCodes.ASED)
                         {
-                            redirectParams = new CrossApplication.RedirectParams()
+                            var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
+                            var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
+                            if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
                             {
-                                AccessToken = responseMessage.AccessToken,
-                                RefreshToken = responseMessage.RefreshToken,
-                            };
+                                var responseMessage = oAuth2Client.CrossApplication(asiOAuthClientId, asiOAuthClientSecret, sessionId, toAppCode.ToString()).Result;
+                                if (responseMessage != null)
+                                {
+                                    redirectParams.AccessToken = responseMessage.AccessToken;
+                                    redirectParams.RefreshToken = responseMessage.RefreshToken;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            redirectParams.ExtGuid = sessionId;
                         }
                     }
-                }
+                }                
             }
+
             return redirectParams;
         }
 
-        private static CrossApplication.RedirectParams GetLatestTokens(HttpRequestBase request, HttpResponseBase response, string cookie, string domainName, string userCookieName = "Name", string toAppCode = null)
+        private static CrossApplication.RedirectParams GetLatestTokens(HttpRequestBase request, HttpResponseBase response, string cookie, string domainName, string userCookieName = "Name", ApplicationCodes toAppCode = ApplicationCodes.ASCT)
         {
             ILogService log = LogService.GetLog(typeof(CookiesHelper));
             log.Debug("GetLatestTokens - Start");
@@ -201,11 +208,7 @@ namespace asi.asicentral.oauth
                 }
             }
 
-            if (extraData != null && !string.IsNullOrEmpty(extraData.AccessToken) && 
-                toAppCode.Equals(ApplicationCodes.ASED.ToString(), StringComparison.CurrentCultureIgnoreCase))
-            {
-                 extraData = GetLatestTokens(extraData.AccessToken, toAppCode);
-            }
+            extraData = GetCrossAppTokens(extraData, toAppCode);
 
             if (extraData != null) log.Debug("GetLatestTokens - End: " + extraData.AccessToken);
             return extraData;
@@ -228,7 +231,7 @@ namespace asi.asicentral.oauth
             string cookie = GetCookieValue(request, response, FormsAuthentication.FormsCookieName);
             if (!string.IsNullOrEmpty(cookie))
             {
-                var redirectParms = GetLatestTokens(request, response, cookie, domainName, userCookieName: userCookieName, toAppCode: appCode.ToString());
+                var redirectParms = GetLatestTokens(request, response, cookie, domainName, userCookieName: userCookieName, toAppCode: appCode);
                 if (redirectParms != null && !string.IsNullOrEmpty(redirectParms.AccessToken))
                     lmsToken = EncriptToken(redirectParms.AccessToken);
             }
