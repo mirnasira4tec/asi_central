@@ -75,37 +75,45 @@ namespace asi.asicentral.oauth
 
         public static string GetApplicationUrl(HttpRequestBase request, HttpResponseBase response, ApplicationCodes appCode, string domainName, string userCookieName = "Name")
         {
-            string redirectUrl = string.Empty;
+            var redirectUrl = string.Empty;
             if (SSO.IsLoggedIn())
             {
-                string cookie = GetCookieValue(request, response, FormsAuthentication.FormsCookieName);
-                if (!string.IsNullOrEmpty(cookie))
+                try
                 {
-                    var redirectParams = GetLatestTokens(request, response, cookie, domainName, userCookieName, toAppCode: appCode);
-                    if (redirectParams != null)
+                    var cookie = GetCookieValue(request, response, FormsAuthentication.FormsCookieName);
+                    if (!string.IsNullOrEmpty(cookie))
                     {
-                        if (ApplicationCodes.WESP == appCode)
+                        var redirectParams = GetLatestTokens(request, response, cookie, domainName, userCookieName, toAppCode: appCode);
+                        if (redirectParams != null)
                         {
-                            redirectParams.FromApplicationVer = "1.0.0";
-                        }
-                        else if (ApplicationCodes.ASED == appCode)
-                        {
-                            string encryptedToken = EncriptToken(redirectParams.AccessToken);
-                            var Lmsurl = ConfigurationManager.AppSettings["LMSRedirectUrl"];
-                            redirectUrl = string.Format("{0}learnerssologin.jsp?tokenid={1}", Lmsurl, HttpUtility.UrlEncode(encryptedToken));
-                        }
-                        else
-                        {
-                            redirectParams.FromApplicationVer = "1";
-                        }
-                        if (ApplicationCodes.ASED != appCode)
-                        {
-                            redirectParams.ToApplicationCode = appCode.ToString();
-                            redirectParams.FromApplicationCode = ApplicationCodes.ASCT.ToString();
-                            var url = ConfigurationManager.AppSettings["RedirectUrl"];
-                            redirectUrl = CrossApplication.GetDashboardRedirectorUrl(url, redirectParams);
+                            if (ApplicationCodes.WESP == appCode)
+                            {
+                                redirectParams.FromApplicationVer = "1.0.0";
+                            }
+                            else if (ApplicationCodes.ASED == appCode)
+                            {
+                                string encryptedToken = EncriptToken(redirectParams.AccessToken);
+                                var Lmsurl = ConfigurationManager.AppSettings["LMSRedirectUrl"];
+                                redirectUrl = string.Format("{0}learnerssologin.jsp?tokenid={1}", Lmsurl, HttpUtility.UrlEncode(encryptedToken));
+                            }
+                            else
+                            {
+                                redirectParams.FromApplicationVer = "1";
+                            }
+                            if (ApplicationCodes.ASED != appCode)
+                            {
+                                redirectParams.ToApplicationCode = appCode.ToString();
+                                redirectParams.FromApplicationCode = ApplicationCodes.ASCT.ToString();
+                                var url = ConfigurationManager.AppSettings["RedirectUrl"];
+                                redirectUrl = CrossApplication.GetDashboardRedirectorUrl(url, redirectParams);
+                            }
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    var log = LogService.GetLog(typeof(CookiesHelper));
+                    log.Debug(string.Format("GetApplicationUrl - exception: {0}; StackTrace : {1}", ex.Message, ex.StackTrace));
                 }
             }
             else
