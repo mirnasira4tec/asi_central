@@ -235,13 +235,21 @@ namespace asi.asicentral.oauth
 
         public static string GetLMSToken(HttpRequestBase request, HttpResponseBase response, ApplicationCodes appCode, string domainName, string userCookieName = "Name")
         {
-            string lmsToken = string.Empty;
-            string cookie = GetCookieValue(request, response, FormsAuthentication.FormsCookieName);
-            if (!string.IsNullOrEmpty(cookie))
+            var lmsToken = string.Empty;
+            try
             {
-                var redirectParms = GetLatestTokens(request, response, cookie, domainName, userCookieName: userCookieName, toAppCode: appCode);
-                if (redirectParms != null && !string.IsNullOrEmpty(redirectParms.AccessToken))
-                    lmsToken = EncriptToken(redirectParms.AccessToken);
+                var cookie = GetCookieValue(request, response, FormsAuthentication.FormsCookieName);
+                if (!string.IsNullOrEmpty(cookie))
+                {
+                    var redirectParms = GetLatestTokens(request, response, cookie, domainName, userCookieName: userCookieName, toAppCode: appCode);
+                    if (redirectParms != null && !string.IsNullOrEmpty(redirectParms.AccessToken))
+                        lmsToken = EncriptToken(redirectParms.AccessToken);
+                }
+            }
+            catch (Exception ex)
+            {
+                var log = LogService.GetLog(typeof(CookiesHelper));
+                log.Debug(string.Format("GetLMSToken - exception: {0}; StackTrace : {1}", ex.Message, ex.StackTrace));
             }
             return lmsToken;
         }
