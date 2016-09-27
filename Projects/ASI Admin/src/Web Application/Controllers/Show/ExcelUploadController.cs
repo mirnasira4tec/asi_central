@@ -36,12 +36,30 @@ namespace asi.asicentral.web.Controllers.Show
             }
             objAttendee.CompanyId = objCompanyId;
             objAttendee.ShowId = objShowId;
-            objAttendee.IsSponsor = Convert.ToBoolean(ds.Rows[rowId]["Sponsor"].ToString().Contains('X')) ? true : false;
-            objAttendee.IsPresentation = Convert.ToBoolean(ds.Rows[rowId]["Presentation"].ToString().Contains('X')) ? true : false;
-            objAttendee.IsRoundTable = Convert.ToBoolean(ds.Rows[rowId]["Roundtable"].ToString().Contains('X')) ? true : false;
-            objAttendee.IsExhibitDay = Convert.ToBoolean(ds.Rows[rowId]["ExhibitOnly"].ToString().Contains('X')) ? true : false;
-            objAttendee.IsCatalog = Convert.ToBoolean(ds.Rows[rowId]["IsCatalog"].ToString().Contains('X')) ? true : false;
-            objAttendee.BoothNumber = ds.Rows[rowId]["BoothNumber"].ToString();
+            if (ds.Columns.Contains("Sponsor"))
+            {
+                objAttendee.IsSponsor = Convert.ToBoolean(ds.Rows[rowId]["Sponsor"].ToString().Contains('X')) ? true : false;
+            }
+            if (ds.Columns.Contains("Presentation"))
+            {
+                objAttendee.IsPresentation = Convert.ToBoolean(ds.Rows[rowId]["Presentation"].ToString().Contains('X')) ? true : false;
+            }
+            if (ds.Columns.Contains("Roundtable"))
+            {
+                objAttendee.IsRoundTable = Convert.ToBoolean(ds.Rows[rowId]["Roundtable"].ToString().Contains('X')) ? true : false;
+            }
+            if (ds.Columns.Contains("ExhibitOnly"))
+            {
+                objAttendee.IsExhibitDay = Convert.ToBoolean(ds.Rows[rowId]["ExhibitOnly"].ToString().Contains('X')) ? true : false;
+            }
+            if (ds.Columns.Contains("IsCatalog"))
+            {
+                objAttendee.IsCatalog = Convert.ToBoolean(ds.Rows[rowId]["IsCatalog"].ToString().Contains('X')) ? true : false;
+            }
+            if (ds.Columns.Contains("BoothNumber"))
+            {
+                objAttendee.BoothNumber = ds.Rows[rowId]["BoothNumber"].ToString();
+            }
             objAttendee.IsExisting = true;
             objAttendee.UpdateSource = "ExcelUploadcontroller-Index";
             objAttendee = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, objAttendee);
@@ -165,6 +183,7 @@ namespace asi.asicentral.web.Controllers.Show
             {
                 var show = new ShowModel();
                 DataSet ds = new DataSet();
+                var objErrors = new ErrorModel();
                 string excelConnectionString = string.Empty;
                 var fileName = Path.GetFileName(file.FileName);
                 string tempPath = Path.GetTempPath();
@@ -195,7 +214,6 @@ namespace asi.asicentral.web.Controllers.Show
                             {
                                 keyValues.Add(cell, categoryRow.Cell(cell).GetString());
                             }
-
                             categoryRow = categoryRow.RowBelow();
                             IList<ShowASI> objShows = null;
                             var objShow = new ShowASI();
@@ -299,7 +317,40 @@ namespace asi.asicentral.web.Controllers.Show
                             }
 
                             DataTable excelDataTable = ToDictionary(parent);
-                            var objErrors = new ErrorModel();
+                            string[] columnNameList = null;
+                            if (worksheet.Name.Contains("Show"))
+                            {
+                                columnNameList = new string[] { "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
+                            }
+                            if (worksheet.Name.Contains("ENGAGE"))
+                            {
+                                columnNameList = new string[] { "ASINO", "Company", "Sponsor", "Presentation", "Roundtable", "ExhibitOnly", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
+                            }
+                            if(worksheet.Name.Contains("WEEK"))
+                            {
+                                 columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
+                            }
+                            var containsAll = columnNameList.Where(x => keyValues.Values.Any(d => d.Contains(x))).ToList();
+                            if (containsAll.Count() != columnNameList.Count())
+                            {
+                                for (int j = 0; j < columnNameList.Count(); j++)
+                                {
+                                    if (!keyValues.ContainsValue(columnNameList[j].ToString()))
+                                    {
+                                        ModelState.AddModelError("CustomError", "Please add " + columnNameList[j].ToString() + " column in spreadsheet");
+                                    }
+                                }
+                                if (!ModelState.IsValid)
+                                {
+                                    objErrors.Error = string.Join(",",
+                                        ModelState.Values.Where(E => E.Errors.Count > 0)
+                                        .SelectMany(E => E.Errors)
+                                        .Select(E => E.ErrorMessage)
+                                        .ToArray());
+
+                                    return View("../Show/ViewError", objErrors);
+                                }
+                            }
                             bool isZipPresent, isCompanyPresent, isAsiNoPresent, isMemberTypePresent, isAddressPresent, isCityPresent, isStatePresent, isCountryPresent, isFNamePresent, isLNamePresent;
                             isZipPresent = isCompanyPresent = isAsiNoPresent = isMemberTypePresent = isAddressPresent = isCityPresent = isStatePresent = isCountryPresent = isFNamePresent = isLNamePresent = false;
                             for (int i = 0; i < excelDataTable.Rows.Count; i++)
