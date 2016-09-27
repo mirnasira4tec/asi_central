@@ -5,18 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Configuration;
 using ASI.EntityModel;
-using System.Threading.Tasks;
 using asi.asicentral.services;
 using asi.asicentral.interfaces;
 using System.ComponentModel;
-using System.Net;
 using ASI.Services.Http.SmartLink;
 using ASI.Contracts.Messages.UserMgmt;
-using ASI.Barista.Plugins.Messaging;
 using ASI.Services.Http.Security;
 using System.Security.Claims;
 using ASI.Services.Messaging;
-using ASI.Contracts.Messages.MemberMgmt;
+using System.Net;
 
 namespace asi.asicentral.oauth
 {
@@ -95,15 +92,27 @@ namespace asi.asicentral.oauth
 
         public static AuthenticatedUser GetAuthenticatedUser(string accessToken)
         {
-            IList<Claim> claims = new List<Claim>();
-            var claimsPrincipal = Token.Validate(accessToken, out claims);
-            return claimsPrincipal.Identity as AuthenticatedUser;
+            AuthenticatedUser user = null;
+            try
+            {
+                IList<Claim> claims = new List<Claim>();
+                var claimsPrincipal = Token.Validate(accessToken, out claims);
+                if( claimsPrincipal != null)
+                    user = claimsPrincipal.Identity as AuthenticatedUser;
+            }
+            catch (Exception ex)
+            {
+                var log = LogService.GetLog(typeof(ASIOAuthClient));
+                log.Error(string.Format("GetAuthenticatedUser - exception: {0}", ex.Message));
+            }
+
+            return user;
         }
 
-        public static asi.asicentral.model.User GetUser(string token)
+        public static model.User GetUser(string token)
         {
             if (string.IsNullOrEmpty(token)) return null;
-            asi.asicentral.model.User user = null;
+            model.User user = null;
             try
             {
                 var authenticatedUser = GetAuthenticatedUser(token);
@@ -120,8 +129,7 @@ namespace asi.asicentral.oauth
             catch (Exception ex)
             {
                 LogService log = LogService.GetLog(typeof(ASIOAuthClient));
-                log.Error(ex.Message);
-                return null;
+                log.Error(string.Format("GetUser - exception: {0}", ex.Message));
             }
             return user;
         }
@@ -173,7 +181,8 @@ namespace asi.asicentral.oauth
                     {
                         log.Debug("RefreshToken - Get Client");
                         OAuth2Client oAuth2Client = new OAuth2Client(host, relativePath: relativePath);
-                        
+
+                        //ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true; // ignor Certificate for testing
                         var oauth2Response = oAuth2Client.Refresh(asiOAuthClientId, asiOAuthClientSecret, refreshToken, appCode, appVersion).Result;
                         if (oauth2Response != null)
                         {
@@ -219,7 +228,7 @@ namespace asi.asicentral.oauth
             if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret) &&
                 !string.IsNullOrEmpty(host) && !string.IsNullOrEmpty(relativePath))
             {
-                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true; 
+                //ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true; // ignor Certificate for testing
 				log.Debug("Login_FetchUserDetails - ServerCertificateValidationCallback created");
 				try
                 {
@@ -252,7 +261,7 @@ namespace asi.asicentral.oauth
             {
                 try
                 {
-                    model.User user = GetUserByEmail(email);
+                    var user = GetUserByEmail(email);
                     isValidUser = (user != null && user.Email.ToLower() == email);
                 }
                 catch (Exception ex)
@@ -265,7 +274,7 @@ namespace asi.asicentral.oauth
             return isValidUser;
         }
 
-        public static asi.asicentral.model.User GetUserByEmail(string email)
+        public static model.User GetUserByEmail(string email)
         {
             model.User user = null;
             if (!string.IsNullOrEmpty(email))

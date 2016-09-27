@@ -149,29 +149,37 @@ namespace asi.asicentral.oauth
                 var relativePath = ConfigurationManager.AppSettings["RelativePath"];
                 if (!string.IsNullOrEmpty(host) && !string.IsNullOrEmpty(relativePath))
                 {
-                    var oAuth2Client = new OAuth2Client(host, relativePath: relativePath);
-                    var authenticatedUser = ASIOAuthClient.GetAuthenticatedUser(accessToken);
-                    if(authenticatedUser != null && authenticatedUser.Token != null)
+                    try
                     {
-                        var sessionId = authenticatedUser.Token.Value;
-                        if (toAppCode == ApplicationCodes.ASED)
+                        var oAuth2Client = new OAuth2Client(host, relativePath: relativePath);
+                        var authenticatedUser = ASIOAuthClient.GetAuthenticatedUser(accessToken);
+                        if(authenticatedUser != null && authenticatedUser.Token != null)
                         {
-                            var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
-                            var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
-                            if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
+                            var sessionId = authenticatedUser.Token.Value;
+                            if (toAppCode == ApplicationCodes.ASED)
                             {
-                                var responseMessage = oAuth2Client.CrossApplication(asiOAuthClientId, asiOAuthClientSecret, sessionId, toAppCode.ToString()).Result;
-                                if (responseMessage != null)
+                                var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
+                                var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
+                                if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
                                 {
-                                    redirectParams.AccessToken = responseMessage.AccessToken;
-                                    redirectParams.RefreshToken = responseMessage.RefreshToken;
+                                    var responseMessage = oAuth2Client.CrossApplication(asiOAuthClientId, asiOAuthClientSecret, sessionId, toAppCode.ToString()).Result;
+                                    if (responseMessage != null)
+                                    {
+                                        redirectParams.AccessToken = responseMessage.AccessToken;
+                                        redirectParams.RefreshToken = responseMessage.RefreshToken;
+                                    }
                                 }
                             }
+                            else
+                            {
+                                redirectParams.ExtGuid = sessionId;
+                            }
                         }
-                        else
-                        {
-                            redirectParams.ExtGuid = sessionId;
-                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        var log = LogService.GetLog(typeof(CookiesHelper));
+                        log.Debug(string.Format("GetLatestTokens - exception: {0}", ex.Message));
                     }
                 }                
             }
@@ -188,35 +196,42 @@ namespace asi.asicentral.oauth
                 new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
             log.Debug("GetLatestTokens - Refresh token - " + (!string.IsNullOrEmpty(extraData.RefreshToken) ? extraData.RefreshToken : "No Refresh token"));
             log.Debug("GetLatestTokens - TokenExpirationTime - " + extraData.TokenExpirationTime);
-            if (extraData != null && !string.IsNullOrEmpty(extraData.RefreshToken)
-                && (extraData.TokenExpirationTime != null && extraData.TokenExpirationTime.HasValue && extraData.TokenExpirationTime < DateTime.Now)
-                && !string.IsNullOrEmpty(extraData.AccessToken)
-                && !ASIOAuthClient.IsValidAccessToken(extraData.AccessToken))
+            try
             {
-                log.Debug("GetLatestTokens - Requesting a new token");
-                var tokens = ASIOAuthClient.RefreshToken(extraData.RefreshToken);
-                if (tokens != null && tokens.Count > 0)
+                if (extraData != null && !string.IsNullOrEmpty(extraData.RefreshToken)
+                    && (extraData.TokenExpirationTime != null && extraData.TokenExpirationTime.HasValue && extraData.TokenExpirationTime < DateTime.Now)
+                    && !string.IsNullOrEmpty(extraData.AccessToken)
+                    && !ASIOAuthClient.IsValidAccessToken(extraData.AccessToken))
                 {
-                    foreach (var key in tokens.Keys)
-                    {
-                        log.Debug("GetLatestTokens - RefreshToken - " + key + " " + tokens[key]);
-                    }
-                    var user = new model.User();
-                    if (tokens.ContainsKey("AuthToken")) user.AccessToken = tokens["AuthToken"];
-                    if (tokens.ContainsKey("RefreshToken")) user.RefreshToken = tokens["RefreshToken"];
-                    user.FirstName = HttpContext.Current.User.Identity.Name;
-                    SetFormsAuthenticationCookie(request, response, user, false, userCookieName, domainName);
+                    log.Debug("GetLatestTokens - Requesting a new token");
+                        var tokens = ASIOAuthClient.RefreshToken(extraData.RefreshToken);
+                        if (tokens != null && tokens.Count > 0)
+                        {
+                            foreach (var key in tokens.Keys)
+                            {
+                                log.Debug("GetLatestTokens - RefreshToken - " + key + " " + tokens[key]);
+                            }
+                            var user = new model.User();
+                            if (tokens.ContainsKey("AuthToken")) user.AccessToken = tokens["AuthToken"];
+                            if (tokens.ContainsKey("RefreshToken")) user.RefreshToken = tokens["RefreshToken"];
+                            user.FirstName = HttpContext.Current.User.Identity.Name;
+                            SetFormsAuthenticationCookie(request, response, user, false, userCookieName, domainName);
 
-                    extraData.AccessToken = user.AccessToken;
-                    extraData.RefreshToken = user.RefreshToken;
+                            extraData.AccessToken = user.AccessToken;
+                            extraData.RefreshToken = user.RefreshToken;
+                        }
+                        else
+                        {
+                            log.Error("GetLatestTokens - RefreshToken - did not get a new token");
+                        }
                 }
-                else
-                {
-                    log.Error("GetLatestTokens - RefreshToken - did not get a new token");
-                }
+
+                extraData = GetCrossAppTokens(extraData, toAppCode);
             }
-
-            extraData = GetCrossAppTokens(extraData, toAppCode);
+            catch (Exception ex)
+            {
+                log.Debug(string.Format("GetLatestTokens - exception: {0}", ex.Message));
+            }
 
             if (extraData != null) log.Debug("GetLatestTokens - End: " + extraData.AccessToken);
             return extraData;
