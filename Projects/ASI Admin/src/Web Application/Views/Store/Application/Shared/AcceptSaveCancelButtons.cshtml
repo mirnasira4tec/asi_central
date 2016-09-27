@@ -128,12 +128,12 @@
                         }
                     }
                 }
-                }
                 
                 // confirm coupon in Personify mapping table
-                if (orderDetail.Coupon != null && !CouponHelper.IsValidCoupon(StoreService, orderDetail.Coupon))
+                if (orderDetail.Coupon != null && !CouponHelper.IsValidCoupon(StoreService, orderDetail.Coupon, product.Id, order.ContextId))
                 {
                     errMsg = string.Format("Unable to find coupon '{0}' for Personify order", orderDetail.Coupon.CouponCode);
+                }
             }
             return errMsg;
         }
