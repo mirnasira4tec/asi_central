@@ -217,81 +217,101 @@ namespace asi.asicentral.web.Controllers.Show
                             categoryRow = categoryRow.RowBelow();
                             IList<ShowASI> objShows = null;
                             var objShow = new ShowASI();
+                            string[] columnNameList = null;
                             if (worksheet.Name.Contains("ENGAGE EAST"))
                             {
                                 objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE EAST") && item.EndDate.Year == DateTime.Now.Year);
+                                columnNameList = new string[] { "ASINO", "Company", "Sponsor", "Presentation", "Roundtable", "ExhibitOnly", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                             }
                             else if (worksheet.Name.Contains("ENGAGE WEST"))
                             {
                                 objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE WEST") && item.EndDate.Year == DateTime.Now.Year);
+                                columnNameList = new string[] { "ASINO", "Company", "Sponsor", "Presentation", "Roundtable", "ExhibitOnly", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                             }
                             else if (worksheet.Name.Contains("Orlando Show"))
                             {
                                 objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("Orlando Show"));
+                                columnNameList = new string[] { "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
                             }
                             else if (worksheet.Name.Contains("Dallas Show"))
                             {
                                 objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("Dallas Show"));
+                                columnNameList = new string[] { "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
                             }
                             else if (worksheet.Name.Contains("Long Beach Show"))
                             {
                                 objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("Long Beach Show"));
+                                columnNameList = new string[] { "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
                             }
                             else if (worksheet.Name.Contains("New York Show"))
                             {
                                 objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("New York Show"));
+                                columnNameList = new string[] { "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
                             }
                             else if (worksheet.Name.Contains("Chicago Show"))
                             {
                                 objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("Chicago Show"));
+                                columnNameList = new string[] { "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
                             }
                             else if (worksheet.Name.Contains("WEEK 1-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 1 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                             }
                             else if (worksheet.Name.Contains("WEEK 2-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 2 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                             }
                             else if (worksheet.Name.Contains("WEEK 3-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 3 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                             }
                             else if (worksheet.Name.Contains("WEEK 4-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 4 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item =>item.EndDate).ToList();
+                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                             }
                             else if (worksheet.Name.Contains("WEEK 5-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 5 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                             }
                             else if (worksheet.Name.Contains("WEEK 6-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 6 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                             }
                             else if (worksheet.Name.Contains("WEEK 7-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 7 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                             }
                             else if (worksheet.Name.Contains("WEEK 8-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 8 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                             }
                             else if (worksheet.Name.Contains("WEEK 9-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 9 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                             }
                             else if (worksheet.Name.Contains("WEEK 10-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 10 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                             }
                             else if (worksheet.Name.Contains("WEEK 11-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 11 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                             }
                             else if (worksheet.Name.Contains("WEEK 12-"))
                             {
                                 objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 12 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
+                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                             }
                             if (objShows != null)
                             {
@@ -299,7 +319,24 @@ namespace asi.asicentral.web.Controllers.Show
                                 if( weekCount +1 == objShows.Count())
                                     weekCount = -1;
                             }
+                            var containsAll = columnNameList.Where(x => keyValues.Values.Any(d => d.Contains(x))).ToList();
+                            if (containsAll.Count() != columnNameList.Count())
+                            {
+                                if (!keyValues.ContainsValue(columnNameList.ToString()))
+                                {
+                                    ModelState.AddModelError("CustomError", "Please add column in spreadsheet");
+                                }
+                                if (!ModelState.IsValid)
+                                {
+                                    objErrors.Error = string.Join(",",
+                                        ModelState.Values.Where(E => E.Errors.Count > 0)
+                                        .SelectMany(E => E.Errors)
+                                        .Select(E => E.ErrorMessage)
+                                        .ToArray());
 
+                                    return View("../Show/ViewError", objErrors);
+                                }
+                            }
                             var parent = new List<IDictionary<string, object>>();
                             while (!categoryRow.Cell(coCategoryId).IsEmpty())
                             {
@@ -317,40 +354,6 @@ namespace asi.asicentral.web.Controllers.Show
                             }
 
                             DataTable excelDataTable = ToDictionary(parent);
-                            string[] columnNameList = null;
-                            if (worksheet.Name.Contains("Show"))
-                            {
-                                columnNameList = new string[] { "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
-                            }
-                            if (worksheet.Name.Contains("ENGAGE"))
-                            {
-                                columnNameList = new string[] { "ASINO", "Company", "Sponsor", "Presentation", "Roundtable", "ExhibitOnly", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
-                            }
-                            if(worksheet.Name.Contains("WEEK"))
-                            {
-                                 columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
-                            }
-                            var containsAll = columnNameList.Where(x => keyValues.Values.Any(d => d.Contains(x))).ToList();
-                            if (containsAll.Count() != columnNameList.Count())
-                            {
-                                for (int j = 0; j < columnNameList.Count(); j++)
-                                {
-                                    if (!keyValues.ContainsValue(columnNameList[j].ToString()))
-                                    {
-                                        ModelState.AddModelError("CustomError", "Please add " + columnNameList[j].ToString() + " column in spreadsheet");
-                                    }
-                                }
-                                if (!ModelState.IsValid)
-                                {
-                                    objErrors.Error = string.Join(",",
-                                        ModelState.Values.Where(E => E.Errors.Count > 0)
-                                        .SelectMany(E => E.Errors)
-                                        .Select(E => E.ErrorMessage)
-                                        .ToArray());
-
-                                    return View("../Show/ViewError", objErrors);
-                                }
-                            }
                             bool isZipPresent, isCompanyPresent, isAsiNoPresent, isMemberTypePresent, isAddressPresent, isCityPresent, isStatePresent, isCountryPresent, isFNamePresent, isLNamePresent;
                             isZipPresent = isCompanyPresent = isAsiNoPresent = isMemberTypePresent = isAddressPresent = isCityPresent = isStatePresent = isCountryPresent = isFNamePresent = isLNamePresent = false;
                             for (int i = 0; i < excelDataTable.Rows.Count; i++)
