@@ -15,7 +15,7 @@ namespace asi.asicentral.util.store
         public readonly int[] CATALOG_SUPPLEMENT_PRODUCT_39 = { 23, 24 };
         //Cover options
         public static readonly int[] CATALOG_COVER_PRODUCT_35 = { 6 };
-        public static readonly int[] CATALOG_COVER_PRODUCT_120 = { 1 };
+        public static readonly int[] CATALOG_COVER_PRODUCT_120 = { 1,30 };
         public static readonly int[] CATALOG_COVER_PRODUCT_36_38_82 = { 1 };
         public static readonly int[] CATALOG_COVER_PRODUCT_37 = { 27, 28 };
         public static readonly int[] CATALOG_COVER_PRODUCT_39_40 = { 1, 2, 3, 4, 5 };
