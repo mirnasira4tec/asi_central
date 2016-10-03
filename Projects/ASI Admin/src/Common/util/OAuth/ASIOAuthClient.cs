@@ -121,10 +121,12 @@ namespace asi.asicentral.oauth
                 {
                     int SSOId = Convert.ToInt32(authenticatedUser.UserId);
                     user = GetUser(SSOId);
-                    user.AccessToken = token;
+                    if (user != null)
+                    {
+                        user.AccessToken = token;
+                    }
                     //user.RefreshToken = redirectParams.RefreshToken;
                 }
-                
             }
             catch (Exception ex)
             {
@@ -138,7 +140,7 @@ namespace asi.asicentral.oauth
         {
             model.User user = null;
             ASI.EntityModel.User entityUser = GetEntityUser(sso);
-            if(entityUser != null) user = MapEntityModelUserToASIUser(entityUser, user);
+            if(entityUser != null) user = MapEntityModelUserToASIUser(entityUser);
             return user;
         }
 
@@ -289,17 +291,15 @@ namespace asi.asicentral.oauth
                     {
                         if (responseMessage.Users != null && responseMessage.Users.Count > 0)
                         {
-                            List<ASI.EntityModel.User> entityUsers = responseMessage.Users.Where(u => u.StatusCode == StatusCode.ACTV.ToString()).ToList();
+                            var entityUsers = responseMessage.Users.Where(u => u.StatusCode == StatusCode.ACTV.ToString()).ToList();
 
-                            if (entityUsers == null || entityUsers.Count == 0) user = null;
-                            else
+                            if (entityUsers != null && entityUsers.Count > 0)
                             {
                                 ASI.EntityModel.User entityUser = FilterUserWithEmail(entityUsers, email);
                                 if (entityUser != null)
                                 {
-                                    user = MapEntityModelUserToASIUser(entityUser, user);
+                                    user = MapEntityModelUserToASIUser(entityUser);
                                 }
-                                else user = null;
                             }
                         }
                     });
@@ -491,8 +491,11 @@ namespace asi.asicentral.oauth
         {
             if (user != null)
             {
-                if (entityUser == null && user.SSOId != 0) entityUser = GetEntityUser(user.SSOId);
-                else entityUser = new ASI.EntityModel.User();
+                if (entityUser == null && user.SSOId != 0) 
+                    entityUser = GetEntityUser(user.SSOId);
+
+                if( entityUser == null)
+                    entityUser = new ASI.EntityModel.User();
                             
                 if(!string.IsNullOrEmpty(user.Email))
                 {
@@ -662,8 +665,9 @@ namespace asi.asicentral.oauth
             return company;
         }
 
-        private static asi.asicentral.model.User MapEntityModelUserToASIUser(ASI.EntityModel.User entityUser, asi.asicentral.model.User user)
+        private static asi.asicentral.model.User MapEntityModelUserToASIUser(ASI.EntityModel.User entityUser)
         {
+            model.User user = null;
             try
             {
                 if (entityUser != null)
