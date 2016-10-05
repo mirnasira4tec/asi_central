@@ -1962,7 +1962,10 @@
   <data name="FieldLength500" xml:space="preserve">
     <value>This field cannot be more than 500 characters.</value>
   </data>
-    <data name="InvalidCompanyName" xml:space="preserve">
+  <data name="PSINumber" xml:space="preserve">
+    <value>PSI Number</value>
+  </data>
+  <data name="InvalidCompanyName" xml:space="preserve">
     <value>Company name should not be the same as contact name or email</value>
   </data>
   <data name="InvalidContactName" xml:space="preserve">
