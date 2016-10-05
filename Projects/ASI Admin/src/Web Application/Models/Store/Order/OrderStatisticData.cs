@@ -44,15 +44,16 @@ namespace asi.asicentral.web.model.store.order
     {
         public Group()
         {
-            Data = new GroupData[8];
+            Data = new GroupData[9];
             Data[0] = new GroupData() { Name = "Clicked on the link Only", Amount = 0, Count = 0 };
             Data[1] = new GroupData() { Name = "Selected a product", Amount = 0, Count = 0 };
             Data[2] = new GroupData() { Name = "Entered Company information", Amount = 0, Count = 0 };
-            Data[3] = new GroupData() { Name = "Entered billing/shipping information", Amount = 0, Count = 0 };
-            Data[4] = new GroupData() { Name = "Confirmed the order", Amount = 0, Count = 0 };
-            Data[5] = new GroupData() { Name = "Rejected", Amount = 0, Count = 0 };
-            Data[6] = new GroupData() { Name = "Pending Approval", Amount = 0, Count = 0 };
-            Data[7] = new GroupData() { Name = "Total", Amount = 0, Count = 0 };
+            Data[3] = new GroupData() { Name = "Entered Demographic information", Amount = 0, Count = 0 };
+            Data[4] = new GroupData() { Name = "Entered billing/shipping information", Amount = 0, Count = 0 };
+            Data[5] = new GroupData() { Name = "Confirmed the order", Amount = 0, Count = 0 };
+            Data[6] = new GroupData() { Name = "Rejected", Amount = 0, Count = 0 };
+            Data[7] = new GroupData() { Name = "Pending Approval", Amount = 0, Count = 0 };
+            Data[8] = new GroupData() { Name = "Total", Amount = 0, Count = 0 };
         }
         public string Name { get; set; }
         public GroupData[] Data { get; set; }

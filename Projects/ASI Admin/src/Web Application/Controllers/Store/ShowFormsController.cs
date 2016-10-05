@@ -62,12 +62,12 @@ namespace asi.asicentral.web.Controllers.Store
                 if (HasAddress != null)
                 {
                     if (HasAddress.Value)
-                        orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false && detail.Order.CompletedStep > 1);
+                        orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false && detail.Order.CompletedStep > OrderStep.ProductInfo);
                     else
                         orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false);
                 }
                 else
-                    orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false && detail.Order.CompletedStep > 1);
+                    orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false && detail.Order.CompletedStep > OrderStep.ProductInfo);
             }
             else if (orderTab == OrderPageModel.ORDER_PENDING)
                 orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == true && detail.Order.ProcessStatus == OrderStatus.Pending);
