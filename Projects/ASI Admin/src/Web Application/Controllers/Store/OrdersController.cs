@@ -82,12 +82,12 @@ namespace asi.asicentral.web.Controllers.Store
                 if (HasAddress != null)
                 {
                     if (HasAddress.Value)
-                        orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false && detail.Order.CompletedStep > 1);
+                        orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false && detail.Order.CompletedStep > OrderStep.ProductInfo);
                     else
                         orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false);
                 }
                 else
-                    orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false && detail.Order.CompletedStep > 1);
+                    orderDetailQuery = orderDetailQuery.Where(detail => detail.Order.IsCompleted == false && detail.Order.CompletedStep > OrderStep.ProductInfo);
 
             }
             else if (orderTab == OrderPageModel.ORDER_PENDING)
@@ -293,23 +293,24 @@ namespace asi.asicentral.web.Controllers.Store
                 Group group = new Group() { Name = type };
                 foreach (var item in typeData)
                 {
-                    int index = item.CompletedStep >= 4 ? 4 : item.CompletedStep;
+                    var completedStep = item.CompletedStep >= OrderStep.PlaceOrder ? OrderStep.PlaceOrder : item.CompletedStep;
+                    var index = (int) completedStep;
                     //anything after Place order counts as place order
                     group.Data[index].Count += item.Count;
                     group.Data[index].Amount += item.Amount;
                 }
                 //combine the total
-                for (int i = 3; i >= 0; i--) group.Data[i].Count += group.Data[i + 1].Count;
+                for (int i = 4; i >= 0; i--) group.Data[i].Count += group.Data[i + 1].Count;
                 //check rejected
-                group.Data[5].Count = orders.Where(order => order.ProcessStatus == OrderStatus.Rejected).Count();
-                group.Data[5].Amount = orders.Where(order => order.ProcessStatus == OrderStatus.Rejected).Sum(order => order.Total);
+                group.Data[6].Count = orders.Where(order => order.ProcessStatus == OrderStatus.Rejected).Count();
+                group.Data[6].Amount = orders.Where(order => order.ProcessStatus == OrderStatus.Rejected).Sum(order => order.Total);
                 //check pending approval
-                group.Data[6].Count = orders.Where(order => order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Count();
-                group.Data[6].Amount = orders.Where(order => order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Sum(order => order.Total);
+                group.Data[7].Count = orders.Where(order => order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Count();
+                group.Data[7].Amount = orders.Where(order => order.ProcessStatus == OrderStatus.Pending && order.IsCompleted).Sum(order => order.Total);
                 //check approved
-                group.Data[7].Count = orders.Where(order => order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Count();
-                group.Data[7].Amount = orders.Where(order => order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.Total);
-                group.Data[7].AnnualizedAmount = orders.Where(order => order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.AnnualizedTotal);
+                group.Data[8].Count = orders.Where(order => order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Count();
+                group.Data[8].Amount = orders.Where(order => order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.Total);
+                group.Data[8].AnnualizedAmount = orders.Where(order => order.IsCompleted && order.ProcessStatus == OrderStatus.Approved).Sum(order => order.AnnualizedTotal);
 
                 groups.Add(group);
             }

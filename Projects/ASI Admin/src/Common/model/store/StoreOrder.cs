@@ -15,6 +15,17 @@ namespace asi.asicentral.model.store
         ValidationError = 4
     }
 
+    public enum OrderStep
+    {
+        Initial = 0,
+        ProductInfo = 1,
+        CompanyInfo = 2,
+        DemographicInfo = 3,
+        BillingInfo = 4,
+        PlaceOrder = 5,
+        PostOrder = 6
+    }
+
     public class StoreOrder
     {
         public StoreOrder()
@@ -30,7 +41,7 @@ namespace asi.asicentral.model.store
         public string UserId { get; set; }
         public bool IsCompleted { get; set; }
         public OrderStatus ProcessStatus { get; set; }
-        public int CompletedStep { get; set; }
+        public OrderStep CompletedStep { get; set; }
         public int? ContextId { get; set; }
         public bool IsStoreRequest { get; set; }
 		public bool IsGuestLogin { get; set; }
