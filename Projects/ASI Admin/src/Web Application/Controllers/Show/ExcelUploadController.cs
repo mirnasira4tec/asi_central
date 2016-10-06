@@ -158,9 +158,10 @@ namespace asi.asicentral.web.Controllers.Show
             objCompany.UpdateSource = "ExcelUploadcontroller-Index";
             objCompany = ShowHelper.CreateOrUpdateCompany(ObjectService, objCompany);
 
+
+
             return objCompany;
         }
-
         public DataTable ToDictionary(List<IDictionary<string, object>> list)
         {
             DataTable result = new DataTable();
@@ -192,167 +193,174 @@ namespace asi.asicentral.web.Controllers.Show
                 string excelConnectionString = string.Empty;
                 log.Debug("Index - get the file name");
                 var fileName = Path.GetFileName(file.FileName);
-                end = DateTime.Now;
-                log.Debug("Index - end get the file name - " + (end - start));
-                log.Debug("Index - get the file path");
+
                 string tempPath = Path.GetTempPath();
-                end = DateTime.Now;
-                log.Debug("Index - end the file path - " + (end - start));
                 string currFilePath = tempPath + fileName;
                 string fileExtension = Path.GetExtension(Request.Files["file"].FileName);
-               
                 if (fileExtension == ".xls" || fileExtension == ".xlsx")
                 {
                     if (System.IO.File.Exists(currFilePath))
                     {
-                        log.Debug("Index - Delete file if exists");
                         System.IO.File.Delete(currFilePath);
-                        end = DateTime.Now;
-                        log.Debug("Index - end Delete file if exists - " + (end - start));
                     }
-                    log.Debug("Index - save the file");
                     file.SaveAs(currFilePath);
-                    end = DateTime.Now;
-                    log.Debug("Index - end save the file - " + (end - start));
-                    log.Debug("Index - read the file");
                     FileInfo fi = new FileInfo(currFilePath);
                     var workBook = new XLWorkbook(fi.FullName);
-                    end = DateTime.Now;
-                    log.Debug("Index - read the file - " + (end - start));
+                    log.Debug("Index - end get the file name - " + (DateTime.Now - start).TotalMilliseconds);
                     int totalsheets = workBook.Worksheets.Count;
                     int weekCount = 0;
                     log.Debug("Index - Start main for loop for sheets");
                     for (int sheetcount = 1; sheetcount <= totalsheets; sheetcount++)
                     {
-                        var worksheet = workBook.Worksheet(sheetcount);
-                        var firstRowUsed = worksheet.FirstRowUsed();
-                        if (firstRowUsed != null)
+                        using (var worksheet = workBook.Worksheet(sheetcount))
                         {
-                            var categoryRow = firstRowUsed.RowUsed();
-                            int coCategoryId = 1;
-                            Dictionary<int, string> keyValues = new Dictionary<int, string>();
-                            log.Debug("Index - start looping for adding each cell");
-                            for (int cell = 1; cell <= categoryRow.CellCount(); cell++)
+                            var firstRowUsed = worksheet.FirstRowUsed();
+                            if (firstRowUsed != null)
                             {
-                                keyValues.Add(cell, categoryRow.Cell(cell).GetString());
-                            }
-                            end = DateTime.Now;
-                            log.Debug("Index - end looping for adding each cell - " + (end - start));
-                            categoryRow = categoryRow.RowBelow();
-                            IList<ShowASI> objShows = null;
-                            var objShow = new ShowASI();
-                            string[] columnNameList = null;
-                            log.Debug("Index - start checking for each sheets name");
-                            if (worksheet.Name.Contains("ENGAGE EAST"))
-                            {
-                                objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE EAST") && item.EndDate.Year == DateTime.Now.Year);
-                                columnNameList = new string[] { "ASINO", "Company", "Sponsor", "Presentation", "Roundtable", "ExhibitOnly", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
-                            }
-                            else if (worksheet.Name.Contains("ENGAGE WEST"))
-                            {
-                                objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE WEST") && item.EndDate.Year == DateTime.Now.Year);
-                                columnNameList = new string[] { "ASINO", "Company", "Sponsor", "Presentation", "Roundtable", "ExhibitOnly", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
-                            }
-                            else if (worksheet.Name.Contains("Orlando Show"))
-                            {
-                                objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("Orlando Show"));
-                                columnNameList = new string[] { "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
-                            }
-                            else if (worksheet.Name.Contains("Dallas Show"))
-                            {
-                                objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("Dallas Show"));
-                                columnNameList = new string[] { "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
-                            }
-                            else if (worksheet.Name.Contains("Long Beach Show"))
-                            {
-                                objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("Long Beach Show"));
-                                columnNameList = new string[] { "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
-                            }
-                            else if (worksheet.Name.Contains("New York Show"))
-                            {
-                                objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("New York Show"));
-                                columnNameList = new string[] { "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
-                            }
-                            else if (worksheet.Name.Contains("Chicago Show"))
-                            {
-                                objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("Chicago Show"));
-                                columnNameList = new string[] { "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
-                            }
-                            else if (worksheet.Name.Contains("WEEK 1-"))
-                            {
-                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 1 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
-                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
-                            }
-                            else if (worksheet.Name.Contains("WEEK 2-"))
-                            {
-                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 2 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
-                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
-                            }
-                            else if (worksheet.Name.Contains("WEEK 3-"))
-                            {
-                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 3 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
-                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
-                            }
-                            else if (worksheet.Name.Contains("WEEK 4-"))
-                            {
-                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 4 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item =>item.EndDate).ToList();
-                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
-                            }
-                            else if (worksheet.Name.Contains("WEEK 5-"))
-                            {
-                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 5 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
-                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
-                            }
-                            else if (worksheet.Name.Contains("WEEK 6-"))
-                            {
-                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 6 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
-                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
-                            }
-                            else if (worksheet.Name.Contains("WEEK 7-"))
-                            {
-                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 7 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
-                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
-                            }
-                            else if (worksheet.Name.Contains("WEEK 8-"))
-                            {
-                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 8 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
-                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
-                            }
-                            else if (worksheet.Name.Contains("WEEK 9-"))
-                            {
-                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 9 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
-                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
-                            }
-                            else if (worksheet.Name.Contains("WEEK 10-"))
-                            {
-                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 10 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
-                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
-                            }
-                            else if (worksheet.Name.Contains("WEEK 11-"))
-                            {
-                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 11 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
-                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
-                            }
-                            else if (worksheet.Name.Contains("WEEK 12-"))
-                            {
-                                objShows = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 12 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList();
-                                columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
-                            }
-                            end = DateTime.Now;
-                            log.Debug("Index - end checking for each sheets name - " + (end - start));
-                            if (objShows != null)
-                            {
-                                objShow = objShows[weekCount];
-                                if( weekCount +1 == objShows.Count())
-                                    weekCount = -1;
-                            }
-                            log.Debug("Index - start looping for checking column name null");
-                            var containsAll = columnNameList.Where(x => keyValues.Values.Any(d => d.Contains(x))).ToList();
-                            if (containsAll.Count() != columnNameList.Count())
-                            {
-                                if (!keyValues.ContainsValue(columnNameList.ToString()))
+                                var categoryRow = firstRowUsed.RowUsed();
+                                int coCategoryId = 1;
+                                Dictionary<int, string> keyValues = new Dictionary<int, string>();
+                                log.Debug("Index - start looping for adding each cell");
+                                for (int cell = 1; cell <= categoryRow.CellCount(); cell++)
                                 {
-                                    ModelState.AddModelError("CustomError", "Please add column in spreadsheet");
+                                    keyValues.Add(cell, categoryRow.Cell(cell).GetString());
+                                }
+                                end = DateTime.Now;
+                                log.Debug("Index - end looping for adding each cell - " + (end - start));
+                                categoryRow = categoryRow.RowBelow();
+                                #region checking for each sheets name
+                                IList<ShowASI> objShows = null;
+                                var objShow = new ShowASI();
+                                string[] columnNameList = null;
+                                log.Debug("Index - start checking for each sheets name");
+                                Dictionary<string, IList<ShowASI>> dictionaryRoadshow = new Dictionary<string, IList<ShowASI>>();
+                                dictionaryRoadshow.Add("WEEK 1-", ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 1 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList());
+                                dictionaryRoadshow.Add("WEEK 2-", ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 2 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList());
+                                dictionaryRoadshow.Add("WEEK 3-", ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 3 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList());
+                                dictionaryRoadshow.Add("WEEK 4-", ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 4 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList());
+                                dictionaryRoadshow.Add("WEEK 5-", ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 5 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList());
+                                dictionaryRoadshow.Add("WEEK 6-", ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 6 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList());
+                                dictionaryRoadshow.Add("WEEK 7-", ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 7 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList());
+                                dictionaryRoadshow.Add("WEEK 8-", ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 8 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList());
+                                dictionaryRoadshow.Add("WEEK 9-", ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 9 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList());
+                                dictionaryRoadshow.Add("WEEK 10-", ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 10 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList());
+                                dictionaryRoadshow.Add("WEEK 11-", ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 11 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList());
+                                dictionaryRoadshow.Add("WEEK 12-", ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains("WEEK 12 -") && item.EndDate.Year == DateTime.Now.Year).OrderBy(item => item.EndDate).ToList());
+                                foreach (KeyValuePair<string, IList<ShowASI>> pair in dictionaryRoadshow)
+                                {
+                                    if (worksheet.Name.Contains(pair.Key))
+                                    {
+                                        objShows = pair.Value;
+                                        columnNameList = new string[] { "ASINO", "Company", "Sponsor", "Presentation", "Roundtable", "ExhibitOnly", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
+                                    }
+
+                                }
+                                Dictionary<string, ShowASI> dictionaryShowEngage = new Dictionary<string, ShowASI>();
+                                dictionaryShowEngage.Add("ENGAGE EAST", ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE EAST") && item.EndDate.Year == DateTime.Now.Year));
+                                dictionaryShowEngage.Add("ENGAGE WEST", ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE WEST") && item.EndDate.Year == DateTime.Now.Year));
+                                dictionaryShowEngage.Add("Orlando Show", ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("Orlando Show")));
+                                dictionaryShowEngage.Add("Dallas Show", ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("Dallas Show")));
+                                dictionaryShowEngage.Add("Long Beach Show", ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("Long Beach Show")));
+                                dictionaryShowEngage.Add("New York Show", ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("New York Show")));
+                                dictionaryShowEngage.Add("Chicago Show", ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("Chicago Show")));
+                                foreach (KeyValuePair<string, ShowASI> pair in dictionaryShowEngage)
+                                {
+                                    if (worksheet.Name.Contains(pair.Key))
+                                    {
+                                        objShow = pair.Value;
+                                        if (pair.Key == "Engage")
+                                            columnNameList = new string[] { "ASINO", "Company", "Sponsor", "Presentation", "Roundtable", "ExhibitOnly", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
+                                        else if (pair.Key == "Show")
+                                            columnNameList = new string[] { "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
+                                    }
+
+                                }
+                                log.Debug("Index - end checking for each sheets name - " + (DateTime.Now - start));
+                                #endregion
+                                if (objShows != null)
+                                {
+                                    objShow = objShows[weekCount];
+                                    if (weekCount + 1 == objShows.Count())
+                                        weekCount = -1;
+                                }
+                                #region checking column name is null or not 
+                                log.Debug("Index - start looping for checking column name null");
+                                var containsAll = columnNameList.Where(x => keyValues.Values.Any(d => d.Contains(x))).ToList();
+                                if (containsAll.Count() != columnNameList.Count())
+                                {
+                                    if (!keyValues.ContainsValue(columnNameList.ToString()))
+                                    {
+                                        ModelState.AddModelError("CustomError", "Please add column in spreadsheet");
+                                    }
+                                    if (!ModelState.IsValid)
+                                    {
+                                        objErrors.Error = string.Join(",",
+                                            ModelState.Values.Where(E => E.Errors.Count > 0)
+                                            .SelectMany(E => E.Errors)
+                                            .Select(E => E.ErrorMessage)
+                                            .ToArray());
+
+                                        return View("../Show/ViewError", objErrors);
+                                    }
+                                }
+                                log.Debug("Index - end looping for checking column name null - " + (DateTime.Now - start));
+                                #endregion
+                                #region adding each cell in dictionary
+                                var parent = new List<IDictionary<string, object>>();
+                                log.Debug("Index - start looping for adding each cell in dictionary");
+                                while (!categoryRow.Cell(coCategoryId).IsEmpty())
+                                {
+                                    int count = 1;
+                                    var pc = new ExpandoObject();
+                                    while (count <= categoryRow.CellCount())
+                                    {
+                                        var data = categoryRow.Cell(count).Value;
+                                        ((IDictionary<string, object>)pc).Add(keyValues[count], data);
+                                        count++;
+                                    }
+
+                                    categoryRow = categoryRow.RowBelow();
+                                    parent.Add((IDictionary<string, object>)pc);
+                                }
+                                log.Debug("Index - end looping for adding each cell in dictionary - " + (DateTime.Now - start));
+                                #endregion
+                                log.Debug("Index - start converting dictionary data to data table");
+                                DataTable excelDataTable = ToDictionary(parent);
+                                log.Debug("Index - end converting dictionary data to data table - " + (DateTime.Now - start));
+                                #region adding each row in database
+                                bool isZipPresent, isCompanyPresent, isAsiNoPresent, isMemberTypePresent, isAddressPresent, isCityPresent, isStatePresent, isCountryPresent, isFNamePresent, isLNamePresent;
+                                isZipPresent = isCompanyPresent = isAsiNoPresent = isMemberTypePresent = isAddressPresent = isCityPresent = isStatePresent = isCountryPresent = isFNamePresent = isLNamePresent = false;
+                                log.Debug("Index - start adding each row in database");
+                                for (int i = 0; i < excelDataTable.Rows.Count; i++)
+                                {
+                                    if (excelDataTable.Rows[i]["Company"].ToString() == "" && isCompanyPresent == false) { ModelState.AddModelError("CustomError", "Company cannot be empty in " + i + " rows."); isCompanyPresent = true; }
+                                    if (excelDataTable.Rows[i]["Zip Code"].ToString() == "" && isZipPresent == false) { ModelState.AddModelError("CustomError", "Zip Code cannot be empty in " + i + " rows."); isZipPresent = true; }
+                                    if (excelDataTable.Rows[i]["ASINO"].ToString() == "" && isAsiNoPresent == false) { ModelState.AddModelError("CustomError", "ASI Number cannot be empty in " + i + " rows."); isAsiNoPresent = true; }
+                                    if (excelDataTable.Rows[i]["MemberType"].ToString() == "" && isMemberTypePresent == false) { ModelState.AddModelError("CustomError", "MemberType cannot be empty in " + i + " rows."); isMemberTypePresent = true; }
+                                    if (excelDataTable.Rows[i]["Address"].ToString() == "" && isAddressPresent == false) { ModelState.AddModelError("CustomError", "Address cannot be empty in " + i + " rows."); isAddressPresent = true; }
+                                    if (excelDataTable.Rows[i]["City"].ToString() == "" && isCityPresent == false) { ModelState.AddModelError("CustomError", "City cannot be empty in " + i + " rows."); isCityPresent = true; }
+                                    if (excelDataTable.Rows[i]["State"].ToString() == "" && isStatePresent == false) { ModelState.AddModelError("CustomError", "State Code cannot be empty in " + i + " rows."); isStatePresent = true; }
+                                    if (excelDataTable.Rows[i]["Country"].ToString() == "" && isCountryPresent == false) { ModelState.AddModelError("CustomError", "Country Code cannot be empty in " + i + " rows."); isCountryPresent = true; }
+
+                                    log.Debug("Index - start adding company row in database");
+                                    ShowCompany objCompany = ConvertDataAsShowCompany(excelDataTable, i);
+                                    log.Debug("Index - end adding company row in database - " + (DateTime.Now - start));
+                                    log.Debug("Index - start adding address row in database");
+                                    ShowAddress objAddress = ConvertDataAsShowAddress(excelDataTable, objCompany.Id, i);
+                                    ShowCompanyAddress objCompanyAddress = ConvertDataAsShowCompanyAddress(excelDataTable, objCompany.Id, objAddress.Id, i);
+                                    log.Debug("Index - end adding address row in database - " + (DateTime.Now - start));
+                                    log.Debug("Index - start adding Attendee row in database");
+                                    ShowAttendee objShowAttendee = ConvertDataAsShowAttendee(excelDataTable, objShow.Id, objCompany.Id, i);
+                                    log.Debug("Index - end adding Attendee row in database - " + (DateTime.Now - start));
+                                    if (objCompany.MemberType == "Distributor")
+                                    {
+                                        if (excelDataTable.Rows[i]["FirstName"].ToString() == "" && isFNamePresent == false) { ModelState.AddModelError("CustomError", "First Name cannot be empty in " + i + " rows."); isFNamePresent = true; }
+                                        if (excelDataTable.Rows[i]["LastName"].ToString() == "" && isLNamePresent == false) { ModelState.AddModelError("CustomError", "Last Name cannot be empty in " + i + " rows."); isLNamePresent = true; }
+                                        log.Debug("Index - start adding Employee attendee row in database");
+                                        ShowEmployee objEmployee = ConvertDataAsShowEmployee(excelDataTable, objCompany.Id, i);
+                                        ShowEmployeeAttendee objEmployeeAttendee = ConvertDataAsShowEmployeeAttendee(excelDataTable, objCompany.Id, objShowAttendee.Id, objEmployee.Id, i);
+                                        log.Debug("Index - end adding Employee attendee row in database - " + (DateTime.Now - start));
+                                    }
                                 }
                                 if (!ModelState.IsValid)
                                 {
@@ -364,141 +372,69 @@ namespace asi.asicentral.web.Controllers.Show
 
                                     return View("../Show/ViewError", objErrors);
                                 }
-                            }
-                            end = DateTime.Now;
-                            log.Debug("Index - end looping for checking column name null - " + (end - start));
-                            var parent = new List<IDictionary<string, object>>();
-                            log.Debug("Index - start looping for adding each cell in dictionary");
-                            while (!categoryRow.Cell(coCategoryId).IsEmpty())
-                            {
-                                int count = 1;
-                                var pc = new ExpandoObject();
-                                while (count <= categoryRow.CellCount())
-                                {
-                                    var data = categoryRow.Cell(count).Value;
-                                    ((IDictionary<string, object>)pc).Add(keyValues[count], data);
-                                    count++;
-                                }
+                                ObjectService.SaveChanges();
+                                log.Debug("Index - end adding each row in database - " + (DateTime.Now - start));
+                                #endregion
 
-                                categoryRow = categoryRow.RowBelow();
-                                parent.Add((IDictionary<string, object>)pc);
-                            }
-                            end = DateTime.Now;
-                            log.Debug("Index - end looping for adding each cell in dictionary - " + (end - start));
-                            log.Debug("Index - start converting dictionary data to data table");
-                            DataTable excelDataTable = ToDictionary(parent);
-                            end = DateTime.Now;
-                            log.Debug("Index - end converting dictionary data to data table - " + (end - start));
-                            bool isZipPresent, isCompanyPresent, isAsiNoPresent, isMemberTypePresent, isAddressPresent, isCityPresent, isStatePresent, isCountryPresent, isFNamePresent, isLNamePresent;
-                            isZipPresent = isCompanyPresent = isAsiNoPresent = isMemberTypePresent = isAddressPresent = isCityPresent = isStatePresent = isCountryPresent = isFNamePresent = isLNamePresent = false;
-                            log.Debug("Index - start adding each row in database");
-                            for (int i = 0; i < excelDataTable.Rows.Count; i++)
-                            {
-                                if (excelDataTable.Rows[i]["Company"].ToString() == "" && isCompanyPresent == false) { ModelState.AddModelError("CustomError", "Company cannot be empty in " + i + " rows."); isCompanyPresent = true; }
-                                if (excelDataTable.Rows[i]["Zip Code"].ToString() == "" && isZipPresent == false) { ModelState.AddModelError("CustomError", "Zip Code cannot be empty in " + i + " rows."); isZipPresent = true; }
-                                if (excelDataTable.Rows[i]["ASINO"].ToString() == "" && isAsiNoPresent == false) { ModelState.AddModelError("CustomError", "ASI Number cannot be empty in " + i + " rows."); isAsiNoPresent = true; }
-                                if (excelDataTable.Rows[i]["MemberType"].ToString() == "" && isMemberTypePresent == false) { ModelState.AddModelError("CustomError", "MemberType cannot be empty in " + i + " rows."); isMemberTypePresent = true; }
-                                if (excelDataTable.Rows[i]["Address"].ToString() == "" && isAddressPresent == false) { ModelState.AddModelError("CustomError", "Address cannot be empty in " + i + " rows."); isAddressPresent = true; }
-                                if (excelDataTable.Rows[i]["City"].ToString() == "" && isCityPresent == false) { ModelState.AddModelError("CustomError", "City cannot be empty in " + i + " rows."); isCityPresent = true; }
-                                if (excelDataTable.Rows[i]["State"].ToString() == "" && isStatePresent == false) { ModelState.AddModelError("CustomError", "State Code cannot be empty in " + i + " rows."); isStatePresent = true; }
-                                if (excelDataTable.Rows[i]["Country"].ToString() == "" && isCountryPresent == false) { ModelState.AddModelError("CustomError", "Country Code cannot be empty in " + i + " rows."); isCountryPresent = true; }
-
-                                log.Debug("Index - start adding company row in database");
-                                ShowCompany objCompany = ConvertDataAsShowCompany(excelDataTable, i);
-                                end = DateTime.Now;
-                                log.Debug("Index - end adding company row in database - " + (end - start));
-                                log.Debug("Index - start adding address row in database");
-                                ShowAddress objAddress = ConvertDataAsShowAddress(excelDataTable, objCompany.Id, i);
-                                ShowCompanyAddress objCompanyAddress = ConvertDataAsShowCompanyAddress(excelDataTable, objCompany.Id, objAddress.Id, i);
-                                end = DateTime.Now;
-                                log.Debug("Index - end adding address row in database - " + (end - start));
-                                log.Debug("Index - start adding Attendee row in database");
-                                ShowAttendee objShowAttendee = ConvertDataAsShowAttendee(excelDataTable, objShow.Id, objCompany.Id, i);
-                                end = DateTime.Now;
-                                log.Debug("Index - end adding Attendee row in database - " + (end - start));
-                                if (objCompany.MemberType == "Distributor")
+                                # region delete the data from attendee table for isExisitng = false
+                                log.Debug("Index - start getting attendee data for delete");
+                                IList<ShowAttendee> deleteAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.IsExisting == false && item.ShowId == objShow.Id).ToList();
+                                log.Debug("Index - end getting attendee data for delete - " + (DateTime.Now - start));
+                                log.Debug("Index - start looping for deleting Attendee data");
+                                if (deleteAttendees != null)
                                 {
-                                    if (excelDataTable.Rows[i]["FirstName"].ToString() == "" && isFNamePresent == false) { ModelState.AddModelError("CustomError", "First Name cannot be empty in " + i + " rows."); isFNamePresent = true; }
-                                    if (excelDataTable.Rows[i]["LastName"].ToString() == "" && isLNamePresent == false) { ModelState.AddModelError("CustomError", "Last Name cannot be empty in " + i + " rows."); isLNamePresent = true; }
-                                    log.Debug("Index - start adding Employee attendee row in database");
-                                    ShowEmployee objEmployee = ConvertDataAsShowEmployee(excelDataTable, objCompany.Id, i);
-                                    ShowEmployeeAttendee objEmployeeAttendee = ConvertDataAsShowEmployeeAttendee(excelDataTable, objCompany.Id, objShowAttendee.Id, objEmployee.Id, i);
-                                    end = DateTime.Now;
-                                    log.Debug("Index - end adding Employee attendee row in database - " + (end - start));
-                                }
-                            }
-                            if (!ModelState.IsValid)
-                            {
-                                objErrors.Error = string.Join(",",
-                                    ModelState.Values.Where(E => E.Errors.Count > 0)
-                                    .SelectMany(E => E.Errors)
-                                    .Select(E => E.ErrorMessage)
-                                    .ToArray());
-
-                                return View("../Show/ViewError", objErrors);
-                            }
-                            ObjectService.SaveChanges();
-                            end = DateTime.Now;
-                            log.Debug("Index - end adding each row in database - " + (end - start));
-                            log.Debug("Index - start getting attendee data for delete");
-                            IList<ShowAttendee> deleteAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.IsExisting == false && item.ShowId == objShow.Id).ToList();
-                            end = DateTime.Now;
-                            log.Debug("Index - end getting attendee data for delete - " + (end - start));
-                            log.Debug("Index - start looping for deleting Attendee data");
-                            if (deleteAttendees != null)
-                            {
-                                foreach (var deleteAttendee in deleteAttendees)
-                                {
-                                    ShowAttendee attendee = ObjectService.GetAll<ShowAttendee>().FirstOrDefault(item => item.Id == deleteAttendee.Id);
-                                    if (attendee != null)
+                                    foreach (var deleteAttendee in deleteAttendees)
                                     {
-                                        int employeeAttendeeCount = attendee.EmployeeAttendees.Count();
-
-                                        for (int i = employeeAttendeeCount; i > 0; i--)
+                                        ShowAttendee attendee = ObjectService.GetAll<ShowAttendee>().FirstOrDefault(item => item.Id == deleteAttendee.Id);
+                                        if (attendee != null)
                                         {
-                                            ObjectService.Delete(attendee.EmployeeAttendees.ElementAt(i - 1));
+                                            int employeeAttendeeCount = attendee.EmployeeAttendees.Count();
+
+                                            for (int i = employeeAttendeeCount; i > 0; i--)
+                                            {
+                                                ObjectService.Delete(attendee.EmployeeAttendees.ElementAt(i - 1));
+                                            }
+                                            ObjectService.Delete<ShowAttendee>(attendee);
+                                            ObjectService.SaveChanges();
                                         }
-                                        ObjectService.Delete<ShowAttendee>(attendee);
+                                    }
+                                }
+                                log.Debug("Index - end looping for deleting Attendee data - " + (DateTime.Now - start));
+                                #endregion
+
+                                #region  setting IsExisting = false for all data 
+                                log.Debug("Index - start getting existing attendee list");
+                                IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == objShow.Id).ToList();
+                                log.Debug("Index - end getting existing attendee list - " + (DateTime.Now - start));
+                                log.Debug("Index - start looping for setting isExisting false");
+                                if (existingAttendees != null)
+                                {
+                                    foreach (var existingAttendee in existingAttendees)
+                                    {
+                                        var objexistingAttendee = new ShowAttendee();
+                                        objexistingAttendee.Id = existingAttendee.Id;
+                                        objexistingAttendee.CompanyId = existingAttendee.CompanyId;
+                                        objexistingAttendee.ShowId = existingAttendee.ShowId;
+                                        objexistingAttendee.IsSponsor = existingAttendee.IsSponsor;
+                                        objexistingAttendee.IsRoundTable = existingAttendee.IsRoundTable;
+                                        objexistingAttendee.IsExhibitDay = existingAttendee.IsExhibitDay;
+                                        objexistingAttendee.IsPresentation = existingAttendee.IsPresentation;
+                                        objexistingAttendee.IsCatalog = existingAttendee.IsCatalog;
+                                        objexistingAttendee.BoothNumber = existingAttendee.BoothNumber;
+                                        objexistingAttendee.IsExisting = false;
+                                        objexistingAttendee = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, objexistingAttendee);
                                         ObjectService.SaveChanges();
                                     }
                                 }
+                                log.Debug("Index - end looping for setting isExisting false - " + (DateTime.Now - start));
+                                #endregion
                             }
-                            end = DateTime.Now;
-                            log.Debug("Index - end looping for deleting Attendee data - " + (end - start));
-                            log.Debug("Index - start getting existing attendee list");
-                            IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == objShow.Id).ToList();
-                            end = DateTime.Now;
-                            log.Debug("Index - end getting existing attendee list - " + (end - start));
-                            log.Debug("Index - start looping for setting isExisting false");
-                            if (existingAttendees != null)
-                            {
-                                foreach (var existingAttendee in existingAttendees)
-                                {
-                                    var objexistingAttendee = new ShowAttendee();
-                                    objexistingAttendee.Id = existingAttendee.Id;
-                                    objexistingAttendee.CompanyId = existingAttendee.CompanyId;
-                                    objexistingAttendee.ShowId = existingAttendee.ShowId;
-                                    objexistingAttendee.IsSponsor = existingAttendee.IsSponsor;
-                                    objexistingAttendee.IsRoundTable = existingAttendee.IsRoundTable;
-                                    objexistingAttendee.IsExhibitDay = existingAttendee.IsExhibitDay;
-                                    objexistingAttendee.IsPresentation = existingAttendee.IsPresentation;
-                                    objexistingAttendee.IsCatalog = existingAttendee.IsCatalog;
-                                    objexistingAttendee.BoothNumber = existingAttendee.BoothNumber;
-                                    objexistingAttendee.IsExisting = false;
-                                    objexistingAttendee = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, objexistingAttendee);
-                                    ObjectService.SaveChanges();
-                                }
-                            }
-                            end = DateTime.Now;
-                            log.Debug("Index - end looping for setting isExisting false - " + (end - start));
                         }
                         weekCount++;
                     }
-                    end = DateTime.Now;
-                    log.Debug("Index - end main for loop for sheets - " + (end - start));
+                    log.Debug("Index - end main for loop for sheets - " + (DateTime.Now - start));
                 }
-               DateTime enddate = DateTime.Now;
-               log.Debug("Index - end process - " + (enddate - startdate));
+                log.Debug("Index - end process - " + (DateTime.Now - startdate));
                 return RedirectToAction("../Show/ShowList");
             }
             else
