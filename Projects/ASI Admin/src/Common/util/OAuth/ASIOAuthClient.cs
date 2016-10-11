@@ -14,6 +14,7 @@ using ASI.Services.Http.Security;
 using System.Security.Claims;
 using ASI.Services.Messaging;
 using System.Net;
+using System.Web;
 
 namespace asi.asicentral.oauth
 {
@@ -185,7 +186,7 @@ namespace asi.asicentral.oauth
                         OAuth2Client oAuth2Client = new OAuth2Client(host, relativePath: relativePath);
 
                         //ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true; // ignor Certificate for testing
-                        var oauth2Response = oAuth2Client.Refresh(asiOAuthClientId, asiOAuthClientSecret, refreshToken, appCode, appVersion).Result;
+                        var oauth2Response = oAuth2Client.Refresh(asiOAuthClientId, asiOAuthClientSecret, refreshToken, appCode, appVersion, userHostAddress: HttpContext.Current.Request.UserHostAddress).Result;
                         if (oauth2Response != null)
                         {
                             log.Debug("Login_FetchUserDetails - Login - AccessToken " + oauth2Response.AccessToken);
@@ -236,7 +237,7 @@ namespace asi.asicentral.oauth
                 {
 					log.Debug("Login_FetchUserDetails - Login");
                     OAuth2Client oauth2Client = new OAuth2Client(host, relativePath: relativePath);
-                    var oauth2Response = oauth2Client.Login(asiOAuthClientId, asiOAuthClientSecret, userName, password, scope: "AsiNumberOptional").Result;
+                    var oauth2Response = oauth2Client.Login(asiOAuthClientId, asiOAuthClientSecret, userName, password, scope: "AsiNumberOptional", userHostAddress: HttpContext.Current.Request.UserHostAddress).Result;
                     if (oauth2Response != null)
                     {
                         log.Debug("Login_FetchUserDetails - Login - AccessToken " + oauth2Response.AccessToken);
