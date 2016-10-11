@@ -13,6 +13,7 @@ using asi.asicentral.services;
 using asi.asicentral.interfaces;
 using ASI.Services.Http.Security;
 using ASI.Services.Http.SmartLink;
+using System.Net;
 
 namespace asi.asicentral.oauth
 {
@@ -98,18 +99,7 @@ namespace asi.asicentral.oauth
                                 var Lmsurl = ConfigurationManager.AppSettings["LMSRedirectUrl"];
                                 redirectUrl = string.Format("{0}learnerssologin.jsp?tokenid={1}", Lmsurl, HttpUtility.UrlEncode(encryptedToken));
                             }
-                            //else
-                            //{
-                            //    redirectParams.FromApplicationVer = "1";
-                            //}
-                            //if (ApplicationCodes.ASED != appCode)
-                            //{
-                            //    redirectParams.ToApplicationCode = appCode.ToString();
-                            //    redirectParams.FromApplicationCode = ApplicationCodes.ASCT.ToString();
-                            //    var url = ConfigurationManager.AppSettings["RedirectUrl"];
-                            //    redirectUrl = CrossApplication.GetDashboardRedirectorUrl(url, redirectParams);
-                            //}
-                        }
+                         }
                     }
                 }
                 catch (Exception ex)
@@ -153,30 +143,29 @@ namespace asi.asicentral.oauth
                 {
                     try
                     {
+                        if (HttpContext.Current != null && HttpContext.Current.Request != null && HttpContext.Current.Request.Url != null &&
+                            !string.IsNullOrEmpty(HttpContext.Current.Request.Url.Authority) && HttpContext.Current.Request.Url.Authority.Contains("localhost"))
+                        {
+                            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true; // ignor Certificate for testing
+                        }
+
                         var oAuth2Client = new OAuth2Client(host, relativePath: relativePath);
                         var authenticatedUser = ASIOAuthClient.GetAuthenticatedUser(accessToken);
                         if(authenticatedUser != null && authenticatedUser.Token != null)
                         {
                             var sessionId = authenticatedUser.Token.Value;
-                            //if (toAppCode == ApplicationCodes.ASED)
+                            var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
+                            var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
+                            if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
                             {
-                                var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
-                                var asiOAuthClientSecret = ConfigurationManager.AppSettings["AsiOAuthClientSecret"];
-                                if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret))
+                                var responseMessage = oAuth2Client.CrossApplication(asiOAuthClientId, asiOAuthClientSecret, sessionId, toAppCode.ToString(), userHostAddress: HttpContext.Current.Request.UserHostAddress).Result;
+                                if (responseMessage != null)
                                 {
-                                    var responseMessage = oAuth2Client.CrossApplication(asiOAuthClientId, asiOAuthClientSecret, sessionId, toAppCode.ToString(), userHostAddress: HttpContext.Current.Request.UserHostAddress).Result;
-                                    if (responseMessage != null)
-                                    {
-                                        redirectParams.AccessToken = responseMessage.AccessToken;
-                                        redirectParams.RefreshToken = responseMessage.RefreshToken;
-                                        redirectParams.ExtGuid = sessionId;
-                                    }
+                                    redirectParams.AccessToken = responseMessage.AccessToken;
+                                    redirectParams.RefreshToken = responseMessage.RefreshToken;
+                                    redirectParams.ExtGuid = sessionId;
                                 }
                             }
-                            //else
-                            //{
-                            //    redirectParams.ExtGuid = sessionId;
-                            //}
                         }
                     }
                     catch (Exception ex)
@@ -199,14 +188,6 @@ namespace asi.asicentral.oauth
                 new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
             log.Debug("GetLatestTokens - Refresh token - " + (!string.IsNullOrEmpty(extraData.RefreshToken) ? extraData.RefreshToken : "No Refresh token"));
             log.Debug("GetLatestTokens - TokenExpirationTime - " + extraData.TokenExpirationTime);
-            
-            //// check for old token
-            //if (extraData == null || !extraData.AccessToken.Contains("."))
-            //{
-            //    FormsAuthentication.SignOut();
-            //    SSO.ClearUserCookies(request, response, FormsAuthentication.FormsCookieName);
-            //    return null;
-            //}
 
             try
             {
