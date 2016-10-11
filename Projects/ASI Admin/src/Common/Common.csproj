@@ -520,6 +520,7 @@
     <Compile Include="util\OAuth\CookiesHelper.cs" />
     <Compile Include="util\OAuth\EnumHelper.cs" />
     <Compile Include="util\OAuth\SSO.cs" />
+    <Compile Include="util\OAuth\TokenMonitorModule.cs" />
     <Compile Include="util\show\ShowHelper.cs" />
     <Compile Include="util\store\asismartsales\ASISmartSalesHelper.cs" />
     <Compile Include="util\store\catalogadvertising\CatalogAdvertisingHelper.cs" />
