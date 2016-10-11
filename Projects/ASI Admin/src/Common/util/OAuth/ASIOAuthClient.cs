@@ -186,7 +186,7 @@ namespace asi.asicentral.oauth
                         OAuth2Client oAuth2Client = new OAuth2Client(host, relativePath: relativePath);
 
                         //ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true; // ignor Certificate for testing
-                        var oauth2Response = oAuth2Client.Refresh(asiOAuthClientId, asiOAuthClientSecret, refreshToken, appCode, appVersion).Result;
+                        var oauth2Response = oAuth2Client.Refresh(asiOAuthClientId, asiOAuthClientSecret, refreshToken, appCode, appVersion, userHostAddress: HttpContext.Current.Request.UserHostAddress).Result;
                         if (oauth2Response != null)
                         {
                             log.Debug("Login_FetchUserDetails - Login - AccessToken " + oauth2Response.AccessToken);

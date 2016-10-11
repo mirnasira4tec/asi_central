@@ -67,7 +67,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="ASI.Services.Http, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Services.Http.1.9.0-beta927\lib\ASI.Services.Http.dll</HintPath>
+      <HintPath>..\packages\ASI.Services.Http.1.9.0-beta928\lib\ASI.Services.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ASI.Services.Messaging, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
