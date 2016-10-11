@@ -182,10 +182,14 @@ namespace asi.asicentral.oauth
                 {
                     try
                     {
-                        log.Debug("RefreshToken - Get Client");
-                        OAuth2Client oAuth2Client = new OAuth2Client(host, relativePath: relativePath);
+                        if (HttpContext.Current != null && HttpContext.Current.Request != null && HttpContext.Current.Request.Url != null &&
+                            !string.IsNullOrEmpty(HttpContext.Current.Request.Url.Authority) && HttpContext.Current.Request.Url.Authority.Contains("localhost"))
+                        {
+                            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true; // ignor Certificate for testing
+                        }
 
-                        //ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true; // ignor Certificate for testing
+                        log.Debug("RefreshToken - Get Client");
+                        OAuth2Client oAuth2Client = new OAuth2Client(host, relativePath: relativePath);                        
                         var oauth2Response = oAuth2Client.Refresh(asiOAuthClientId, asiOAuthClientSecret, refreshToken, appCode, appVersion, userHostAddress: HttpContext.Current.Request.UserHostAddress).Result;
                         if (oauth2Response != null)
                         {
@@ -231,7 +235,12 @@ namespace asi.asicentral.oauth
             if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret) &&
                 !string.IsNullOrEmpty(host) && !string.IsNullOrEmpty(relativePath))
             {
-                //ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true; // ignor Certificate for testing
+                if (HttpContext.Current != null && HttpContext.Current.Request != null && HttpContext.Current.Request.Url != null &&
+                    !string.IsNullOrEmpty(HttpContext.Current.Request.Url.Authority) && HttpContext.Current.Request.Url.Authority.Contains("localhost"))
+                {
+                    ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true; // ignor Certificate for testing
+                }
+
 				log.Debug("Login_FetchUserDetails - ServerCertificateValidationCallback created");
 				try
                 {

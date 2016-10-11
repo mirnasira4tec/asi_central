@@ -288,13 +288,14 @@ namespace asi.asicentral.oauth
         {
             if (HttpContext.Current != null && HttpContext.Current.Request != null)
             {
-                HttpRequestBase request = GetHttpRequestBase(HttpContext.Current.Request);
+                var request = GetHttpRequestBase(HttpContext.Current.Request);
+                var response = GetHttpResponseBase(HttpContext.Current.Response);
+                var company = CookiesHelper.GetCookieValue(request, response, COOKIES_CMPSSO);
                 bool loggedIn = request != null && request.Cookies != null &&
                                 HttpContext.Current.User != null &&
                                 HttpContext.Current.User.Identity != null &&
                                 HttpContext.Current.User.Identity.IsAuthenticated &&
-                                request.Cookies[COOKIES_USERNAME] != null &&
-                                !string.IsNullOrEmpty(request.Cookies[COOKIES_USERNAME].Value);
+                                !string.IsNullOrEmpty(company);
                 return loggedIn;
             }
             else return false;
