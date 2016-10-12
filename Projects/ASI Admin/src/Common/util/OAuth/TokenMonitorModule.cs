@@ -17,8 +17,8 @@ namespace asi.asicentral.util.OAuth
         {
             var httpApp = (HttpApplication)sender;
             var request = httpApp.Request;
-            var filePattern = @"/.*?\..*?";
-            if (!Regex.IsMatch(request.AppRelativeCurrentExecutionFilePath, filePattern))
+            var requestPath = request.AppRelativeCurrentExecutionFilePath;
+            if (!Regex.IsMatch(requestPath, @"/.*?\..*?") || Regex.IsMatch(requestPath, @"\.aspx?"))
             {
                 var cookieValue = CookiesHelper.GetCookieValue(new HttpRequestWrapper(request), new HttpResponseWrapper(httpApp.Response), FormsAuthentication.FormsCookieName);
                 if (!string.IsNullOrEmpty(cookieValue))
