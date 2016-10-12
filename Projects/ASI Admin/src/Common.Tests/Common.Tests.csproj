@@ -51,11 +51,11 @@
       <HintPath>..\..\library\asi.asicentral.Core.dll</HintPath>
     </Reference>
     <Reference Include="ASI.Barista.Plugins, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Barista.Plugins.2.0.0-beta950\lib\ASI.Barista.Plugins.dll</HintPath>
+      <HintPath>..\packages\ASI.Barista.Plugins.2.0.0-beta952\lib\ASI.Barista.Plugins.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ASI.Barista.Plugins.Messaging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Barista.Plugins.Messaging.2.0.0-beta069\lib\ASI.Barista.Plugins.Messaging.dll</HintPath>
+      <HintPath>..\packages\ASI.Barista.Plugins.Messaging.2.0.0-beta075\lib\ASI.Barista.Plugins.Messaging.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ASI.Contracts, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -63,7 +63,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="ASI.EntityModel, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.EntityModel.1.2.0-beta15\lib\ASI.EntityModel.dll</HintPath>
+      <HintPath>..\packages\ASI.EntityModel.1.2.0-beta16\lib\ASI.EntityModel.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ASI.Services.Http, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -71,11 +71,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="ASI.Services.Messaging, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Services.Messaging.2.0.0-beta966\lib\ASI.Services.Messaging.dll</HintPath>
+      <HintPath>..\packages\ASI.Services.Messaging.2.0.0-beta970\lib\ASI.Services.Messaging.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ASI.Sugar, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Sugar.2.0.0-beta932\lib\ASI.Sugar.dll</HintPath>
+      <HintPath>..\packages\ASI.Sugar.2.0.0-beta935\lib\ASI.Sugar.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
