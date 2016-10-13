@@ -18,6 +18,7 @@ namespace asi.asicentral.oauth
     {
         public const string COOKIES_CMPSSO = "CMPSSO";
         public const string COOKIES_USERNAME = "Name";
+        public const string COOKIES_DOMAIN = ".asicentral.com";
         public const string COOKIES_MEMBERTYPE_CODE = "MemberType";
         public const string COOKIES_ASP_NET_SESSION_ID = "ASP.NET_SessionId";
 
