@@ -31,7 +31,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             information.Description = "testDescription";
             information.IsProduct = true;
             information.ProductId = 3;
-            information.MonthlyCost = 50;
+            //information.MonthlyCost = 50;
 
             CouponController controller = new CouponController();
             controller.StoreService = mockObjectService.Object;
