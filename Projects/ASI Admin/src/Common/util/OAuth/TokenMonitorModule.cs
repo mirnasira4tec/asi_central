@@ -32,8 +32,8 @@ namespace asi.asicentral.util.OAuth
                             var accessToken = match.Groups[1].Value;
                             if (!string.IsNullOrEmpty(accessToken) && !accessToken.Contains("."))
                             {
-                                FormsAuthentication.SignOut(); 
-                                CookiesHelper.SetCookieValue(new HttpRequestWrapper(request), new HttpResponseWrapper(httpApp.Response), SSO.COOKIES_CMPSSO, "");
+                                FormsAuthentication.SignOut();
+                                CookiesHelper.SetCookieValue(new HttpRequestWrapper(request), new HttpResponseWrapper(httpApp.Response), SSO.COOKIES_CMPSSO, string.Empty, false, domainName : SSO.COOKIES_DOMAIN);
                             }
                         }
                     }
