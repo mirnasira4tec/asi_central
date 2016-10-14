@@ -33,7 +33,6 @@ namespace asi.asicentral.web.Controllers.Show
         public ShowCompany UpdateShowCompanyData(DataTable ds, int rowId, int showId = 0)
         { 
             var show = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Id == showId);
-
             var asinumber = ds.Rows[rowId]["ASINO"].ToString();
             var name = ds.Rows[rowId]["Company"].ToString();
             var memberType = ds.Rows[rowId]["MemberType"].ToString();
@@ -203,174 +202,192 @@ namespace asi.asicentral.web.Controllers.Show
             log.Debug("Index - start process");
             if (file != null)
             {
-                log.Debug("Index - start Process the file");
-                var start = DateTime.Now;
-                var show = new ShowModel();
-                DataSet ds = new DataSet();
-                var objErrors = new ErrorModel();
-                string excelConnectionString = string.Empty;
-                var fileName = Path.GetFileName(file.FileName);
-                string tempPath = Path.GetTempPath();
-                string currFilePath = tempPath + fileName;
-                string fileExtension = Path.GetExtension(Request.Files["file"].FileName);
-                log.Debug("Index - end process the file - " + (DateTime.Now - start).TotalMilliseconds);
-               
-                if (fileExtension == ".xls" || fileExtension == ".xlsx")
+                try
                 {
-                    if (System.IO.File.Exists(currFilePath))
-                    {
-                        log.Debug("Index - Delete file if exists");
-                        System.IO.File.Delete(currFilePath);
-                        log.Debug("Index - end Delete file if exists - " + (DateTime.Now - start));
-                    }
-                    file.SaveAs(currFilePath);
-                    FileInfo fi = new FileInfo(currFilePath);
-                    var workBook = new XLWorkbook(fi.FullName);
-                    int totalsheets = workBook.Worksheets.Count;
-                    var startLoop = DateTime.Now;
-                    log.Debug("Index - Start main for loop for sheets");
-                    for (int sheetcount = 1; sheetcount <= totalsheets; sheetcount++)
-                    {
-                        log.Debug("Index - start processing one sheet");
-                        start = DateTime.Now;
-                        var worksheet = workBook.Worksheet(sheetcount);
-                        var firstRowUsed = worksheet.FirstRowUsed();
-                        if (firstRowUsed != null)
-                        {
-                            var categoryRow = firstRowUsed.RowUsed();
-                            int coCategoryId = 1;
-                            Dictionary<int, string> keyValues = new Dictionary<int, string>();
-                            for (int cell = 1; cell <= categoryRow.CellCount(); cell++)
-                            {
-                                keyValues.Add(cell, categoryRow.Cell(cell).GetString());
-                            }
-                            categoryRow = categoryRow.RowBelow();
-                            IList<ShowASI> objShows = null;
-                            var objShow = new ShowASI();
-                            string[] columnNameList = null;
+                    log.Debug("Index - start Process the file");
+                    var start = DateTime.Now;
+                    var show = new ShowModel();
+                    DataSet ds = new DataSet();
+                    var objErrors = new ErrorModel();
+                    string excelConnectionString = string.Empty;
+                    var fileName = Path.GetFileName(file.FileName);
+                    string tempPath = Path.GetTempPath();
+                    string currFilePath = tempPath + fileName;
+                    string fileExtension = Path.GetExtension(Request.Files["file"].FileName);
+                    log.Debug("Index - end process the file - " + (DateTime.Now - start).TotalMilliseconds);
 
-                            foreach(var showName in _engageShows)
+                    if (fileExtension == ".xls" || fileExtension == ".xlsx")
+                    {
+                        if (System.IO.File.Exists(currFilePath))
+                        {
+                            log.Debug("Index - Delete file if exists");
+                            System.IO.File.Delete(currFilePath);
+                            log.Debug("Index - end Delete file if exists - " + (DateTime.Now - start));
+                        }
+                        file.SaveAs(currFilePath);
+                        FileInfo fi = new FileInfo(currFilePath);
+                        var workBook = new XLWorkbook(fi.FullName);
+                        int totalsheets = workBook.Worksheets.Count;
+                        var startLoop = DateTime.Now;
+                        log.Debug("Index - Start main for loop for sheets");
+                        for (int sheetcount = 1; sheetcount <= totalsheets; sheetcount++)
+                        {
+                            log.Debug("Index - start processing one sheet");
+                            start = DateTime.Now;
+                            var worksheet = workBook.Worksheet(sheetcount);
+                            var firstRowUsed = worksheet.FirstRowUsed();
+                            if (firstRowUsed != null)
                             {
-                                if (worksheet.Name.Contains(showName))
+                                var categoryRow = firstRowUsed.RowUsed();
+                                int coCategoryId = 1;
+                                Dictionary<int, string> keyValues = new Dictionary<int, string>();
+                                for (int cell = 1; cell <= categoryRow.CellCount(); cell++)
                                 {
-                                    objShow = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains(showName)).OrderByDescending(s => s.StartDate).FirstOrDefault();
-                                    columnNameList = new string[] { "ASINO", "Company", "Sponsor", "Presentation", "Roundtable", "ExhibitOnly", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
-                                    break;
+                                    keyValues.Add(cell, categoryRow.Cell(cell).GetString());
                                 }
-                            }
-                            if( columnNameList == null )
-                            {
-                                foreach (var showName in _singleShows)
+                                categoryRow = categoryRow.RowBelow();
+                                IList<ShowASI> objShows = null;
+                                var objShow = new ShowASI();
+                                string[] columnNameList = null;
+
+                                foreach (var showName in _engageShows)
                                 {
                                     if (worksheet.Name.Contains(showName))
                                     {
-                                        objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains(showName));
-                                        columnNameList = new string[] { "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
+                                        objShow = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains(showName)).OrderByDescending(s => s.StartDate).FirstOrDefault();
+                                        columnNameList = new string[] { "ASINO", "Company", "Sponsor", "Presentation", "Roundtable", "ExhibitOnly", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                                         break;
                                     }
                                 }
-                            }
-                            if( columnNameList == null )
-                            {
-                                var matchShow = Regex.Match(worksheet.Name, @"^\s*WEEK\s+\d+\s*-\s*", RegexOptions.IgnoreCase);
-                                if (matchShow.Success)
+                                if (columnNameList == null)
                                 {
-                                    var weekNum = matchShow.Value.Trim();
-                                    var address = worksheet.Name.Substring(matchShow.Value.Length);
-                                    objShow = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains(weekNum.Replace("-", " -")) && item.Address.Contains(address.Trim()))
-                                                                             .OrderByDescending(s => s.StartDate).FirstOrDefault(); 
-                                    columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
+                                    foreach (var showName in _singleShows)
+                                    {
+                                        if (worksheet.Name.Contains(showName))
+                                        {
+                                            objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains(showName));
+                                            columnNameList = new string[] { "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
+                                            break;
+                                        }
+                                    }
                                 }
-                            }
-
-                            var containsAll = columnNameList.Where(x => keyValues.Values.Any(d => d.Contains(x))).ToList();
-                            if (containsAll.Count() != columnNameList.Count())
-                            {
-                                if (!keyValues.ContainsValue(columnNameList.ToString()))
+                                if (columnNameList == null)
                                 {
-                                    ModelState.AddModelError("CustomError", "Please add column in spreadsheet");
-                                }
-                                if (!ModelState.IsValid)
-                                {
-                                    objErrors.Error = string.Join(",",
-                                        ModelState.Values.Where(E => E.Errors.Count > 0)
-                                        .SelectMany(E => E.Errors)
-                                        .Select(E => E.ErrorMessage)
-                                        .ToArray());
-
-                                    return View("../Show/ViewError", objErrors);
-                                }
-                            }
-                            var parent = new List<IDictionary<string, object>>();
-                            while (!categoryRow.Cell(coCategoryId).IsEmpty())
-                            {
-                                int count = 1;
-                                var pc = new ExpandoObject();
-                                while (count <= categoryRow.CellCount())
-                                {
-                                    var data = categoryRow.Cell(count).Value;
-                                    ((IDictionary<string, object>)pc).Add(keyValues[count], data);
-                                    count++;
+                                    var matchShow = Regex.Match(worksheet.Name, @"^\s*WEEK\s+\d+\s*-\s*", RegexOptions.IgnoreCase);
+                                    if (matchShow.Success)
+                                    {
+                                        var weekNum = matchShow.Value.Trim();
+                                        var address = worksheet.Name.Substring(matchShow.Value.Length);
+                                        objShow = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains(weekNum.Replace("-", " -")) && item.Address.Contains(address.Trim()))
+                                                                                 .OrderByDescending(s => s.StartDate).FirstOrDefault();
+                                        columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
+                                    }
                                 }
 
-                                categoryRow = categoryRow.RowBelow();
-                                parent.Add((IDictionary<string, object>)pc);
-                            }
-                            DataTable excelDataTable = ToDictionary(parent);
-                            for (int i = 0; i < excelDataTable.Rows.Count; i++)
-                            {
-                                var memberType = excelDataTable.Rows[i]["MemberType"].ToString();
-                                if (excelDataTable.Rows[i]["Company"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("Company cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
-                                if (excelDataTable.Rows[i]["Zip Code"].ToString() == "" ) { ModelState.AddModelError("CustomError", string.Format("Zip Code cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
-                                if (excelDataTable.Rows[i]["ASINO"].ToString() == "" ) { ModelState.AddModelError("CustomError", string.Format("ASI Number cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
-                                if (string.IsNullOrEmpty(memberType)) { ModelState.AddModelError("CustomError", string.Format("MemberType cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
-                                if (excelDataTable.Rows[i]["Address"].ToString() == "" ) { ModelState.AddModelError("CustomError", string.Format("Address cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
-                                if (excelDataTable.Rows[i]["City"].ToString() == "" ) { ModelState.AddModelError("CustomError", string.Format("City cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
-                                if (excelDataTable.Rows[i]["State"].ToString() == "" ) { ModelState.AddModelError("CustomError", string.Format("State Code cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
-                                if (excelDataTable.Rows[i]["Country"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("Country Code cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
-                                
-                                if ( memberType.Equals("Distributor", StringComparison.CurrentCultureIgnoreCase ))
+                                var containsAll = columnNameList.Where(x => keyValues.Values.Any(d => d.Contains(x))).ToList();
+                                if (containsAll.Count() != columnNameList.Count())
                                 {
-                                    if (string.IsNullOrEmpty(excelDataTable.Rows[i]["FirstName"].ToString())) { ModelState.AddModelError("CustomError", string.Format("Distributor First Name cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
-                                    if (string.IsNullOrEmpty(excelDataTable.Rows[i]["LastName"].ToString())) { ModelState.AddModelError("CustomError", string.Format("Distributor Last Name cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
+                                    if (!keyValues.ContainsValue(columnNameList.ToString()))
+                                    {
+                                        ModelState.AddModelError("CustomError", "Please add column in spreadsheet");
+                                    }
+                                    if (!ModelState.IsValid)
+                                    {
+                                        objErrors.Error = string.Join(",",
+                                            ModelState.Values.Where(E => E.Errors.Count > 0)
+                                            .SelectMany(E => E.Errors)
+                                            .Select(E => E.ErrorMessage)
+                                            .ToArray());
+
+                                        return View("../Show/ViewError", objErrors);
+                                    }
                                 }
-                                
-                                if (!ModelState.IsValid)
+                                var parent = new List<IDictionary<string, object>>();
+                                while (!categoryRow.Cell(coCategoryId).IsEmpty())
                                 {
-                                    objErrors.Error = string.Join(",",
-                                        ModelState.Values.Where(E => E.Errors.Count > 0)
-                                        .SelectMany(E => E.Errors)
-                                        .Select(E => E.ErrorMessage)
-                                        .ToArray());
+                                    int count = 1;
+                                    var pc = new ExpandoObject();
+                                    while (count <= categoryRow.CellCount())
+                                    {
+                                        var data = categoryRow.Cell(count).Value;
+                                        ((IDictionary<string, object>)pc).Add(keyValues[count], data);
+                                        count++;
+                                    }
 
-                                    return View("../Show/ViewError", objErrors);
+                                    categoryRow = categoryRow.RowBelow();
+                                    parent.Add((IDictionary<string, object>)pc);
+                                }
+                                DataTable excelDataTable = ToDictionary(parent);
+                                for (int i = 0; i < excelDataTable.Rows.Count; i++)
+                                {
+                                    var memberType = excelDataTable.Rows[i]["MemberType"].ToString();
+                                    if (excelDataTable.Rows[i]["Company"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("Company cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
+                                    if (excelDataTable.Rows[i]["Zip Code"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("Zip Code cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
+                                    if (excelDataTable.Rows[i]["ASINO"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("ASI Number cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
+                                    if (string.IsNullOrEmpty(memberType)) { ModelState.AddModelError("CustomError", string.Format("MemberType cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
+                                    if (excelDataTable.Rows[i]["Address"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("Address cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
+                                    if (excelDataTable.Rows[i]["City"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("City cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
+                                    if (excelDataTable.Rows[i]["State"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("State Code cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
+                                    if (excelDataTable.Rows[i]["Country"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("Country Code cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
+
+                                    if (memberType.Equals("Distributor", StringComparison.CurrentCultureIgnoreCase))
+                                    {
+                                        if (string.IsNullOrEmpty(excelDataTable.Rows[i]["FirstName"].ToString())) { ModelState.AddModelError("CustomError", string.Format("Distributor First Name cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
+                                        if (string.IsNullOrEmpty(excelDataTable.Rows[i]["LastName"].ToString())) { ModelState.AddModelError("CustomError", string.Format("Distributor Last Name cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
+                                    }
+
+                                    if (!ModelState.IsValid)
+                                    {
+                                        objErrors.Error = string.Join(",",
+                                            ModelState.Values.Where(E => E.Errors.Count > 0)
+                                            .SelectMany(E => E.Errors)
+                                            .Select(E => E.ErrorMessage)
+                                            .ToArray());
+
+                                        return View("../Show/ViewError", objErrors);
+                                    }
+
+                                    UpdateShowCompanyData(excelDataTable, i, objShow.Id);
                                 }
 
-                                UpdateShowCompanyData(excelDataTable, i, objShow.Id);
-                            }
-                            
-                            ObjectService.SaveChanges();
+                                ObjectService.SaveChanges();
 
-                            // delete attendees in DB not in the excel sheet for the show
-                            var postAddingStart = DateTime.Now;
-                            log.Debug("Index - start updating attendee data");
-                            var showAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == objShow.Id).ToList();
-                            var attendeesToBeDeleted = showAttendees.Where(attendee => attendee.IsExisting == false);
-                            foreach (var attendee in attendeesToBeDeleted)
-                            {
-                                ObjectService.Delete<ShowAttendee>(attendee);
-                            }
-                            showAttendees.ForEach( a => a.IsExisting = false );
-                            ObjectService.SaveChanges();
-                            log.Debug("Index - end updating attendee data - " + (DateTime.Now - postAddingStart).TotalMilliseconds);
+                                // delete attendees in DB not in the excel sheet for the show
+                                var postAddingStart = DateTime.Now;
+                                log.Debug("Index - start updating attendee data");
+                                var showAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == objShow.Id).ToList();
+                                var attendeesToBeDeleted = showAttendees.Where(attendee => attendee.IsExisting == false).ToList();
+                                for (var i = attendeesToBeDeleted.Count() - 1; i >= 0; i--)
+                                {
+                                    var attendee = attendeesToBeDeleted[i];
+                                    if (attendee.EmployeeAttendees != null && attendee.EmployeeAttendees.Any())
+                                    {
+                                        for (var j = attendee.EmployeeAttendees.Count() - 1; j >= 0; j--)
+                                        {
+                                            ObjectService.Delete<ShowEmployeeAttendee>(attendee.EmployeeAttendees[j]);
+                                        }
+                                    }
 
+                                    ObjectService.Delete<ShowAttendee>(attendee);
+                                }
+
+                                showAttendees.ForEach(a => a.IsExisting = false);
+                                ObjectService.SaveChanges();
+                                log.Debug("Index - end updating attendee data - " + (DateTime.Now - postAddingStart).TotalMilliseconds);
+
+                            }
+                            log.Debug("Index - end processing one sheet - " + (DateTime.Now - start).TotalMilliseconds);
                         }
-                        log.Debug("Index - end processing one sheet - " + (DateTime.Now - start).TotalMilliseconds);
+                        log.Debug("Index - end main for loop for sheets - " + (DateTime.Now - startLoop).TotalMilliseconds);
                     }
-                    log.Debug("Index - end main for loop for sheets - " + (DateTime.Now - startLoop).TotalMilliseconds);
-                }
 
-                log.Debug("Index - end process - " + (DateTime.Now - startdate).TotalMilliseconds);
+                    log.Debug("Index - end process - " + (DateTime.Now - startdate).TotalMilliseconds);
+                }
+                catch (Exception ex)
+                {
+                    log.Debug("Exception while importing the file, exception message: " + ex.Message);
+                    return View("../Show/ViewError", new ErrorModel() { Error = ex.Message } );
+                }
                 return RedirectToAction("../Show/ShowList");
             }
             else
