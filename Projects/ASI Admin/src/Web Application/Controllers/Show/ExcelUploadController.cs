@@ -22,8 +22,6 @@ namespace asi.asicentral.web.Controllers.Show
     {
         private readonly static List<string> _engageShows = new List<string>() { "ENGAGE EAST", "ENGAGE WEST"};
         private readonly static List<string> _singleShows = new List<string>() {"Orlando Show", "Dallas Show", "Long Beach Show", "New York Show", "Chicago Show"};
-        private readonly static List<string> _weekShows = new List<string>() { "WEEK 1-", "WEEK 2-", "WEEK 3-", "WEEK 4-", "WEEK 5-", "WEEK 6-",
-                                                                   "WEEK 7-", "WEEK 8-", "WEEK 9-", "WEEK 10-", "WEEK 11-", "WEEK 12-",};
         
         public IObjectService ObjectService { get; set; }
 
@@ -71,7 +69,6 @@ namespace asi.asicentral.web.Controllers.Show
                 {
                     CreateDate = DateTime.UtcNow,
                 };
-                //ObjectService.Add<ShowAddress>(address);
 
                 var showCompanyAddress = new ShowCompanyAddress() 
                 { 
@@ -82,7 +79,6 @@ namespace asi.asicentral.web.Controllers.Show
                     UpdateDate = DateTime.UtcNow
                 };
                 company.CompanyAddresses.Add(showCompanyAddress);
-                //ObjectService.Add<ShowCompanyAddress>(showCompanyAddress);
             }
 
             address.Street1 = ds.Rows[rowId]["Address"].ToString();
@@ -100,7 +96,6 @@ namespace asi.asicentral.web.Controllers.Show
             {
                 attendee = new ShowAttendee() { CreateDate = DateTime.UtcNow };
                 company.Attendees.Add(attendee);
-                //ObjectService.Add<ShowAttendee>(attendee);
             }
 
             attendee.CompanyId = company.Id;
@@ -356,6 +351,7 @@ namespace asi.asicentral.web.Controllers.Show
                             
                             ObjectService.SaveChanges();
 
+                            // delete attendees in DB not in the excel sheet for the show
                             var postAddingStart = DateTime.Now;
                             log.Debug("Index - start updating attendee data");
                             var showAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == objShow.Id).ToList();
