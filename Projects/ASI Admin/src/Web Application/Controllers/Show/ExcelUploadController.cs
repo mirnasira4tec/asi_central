@@ -283,6 +283,10 @@ namespace asi.asicentral.web.Controllers.Show
                                         columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                                     }
                                 }
+                                if (objShow == null)
+                                {
+                                    continue;
+                                }
 
                                 var containsAll = columnNameList.Where(x => keyValues.Values.Any(d => d.Contains(x))).ToList();
                                 if (containsAll.Count() != columnNameList.Count())
