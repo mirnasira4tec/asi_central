@@ -34,6 +34,7 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string COMMUNICATION_INPUT_WEB = "WEB";
         private const string COMMUNICATION_INPUT_EMAIL = "EMAIL";
         private const string COMMUNICATION_LOCATION_CODE_CORPORATE = "CORPORATE";
+        private const string COMMUNICATION_LOCATION_CODE_BUSINESS = "BUSINESS";
         private const string COMMUNICATION_LOCATION_CODE_WORK = "WORK";
         private const string CUSTOMER_CLASS_INDIV = "INDIV";
         private const string RECORD_TYPE_INDIVIDUAL = "I";
@@ -218,6 +219,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     StoreAddress companyAddress = company.GetCompanyAddress();
                     string countryCode = countryCodes != null ? countryCodes.Alpha3Code(companyAddress.Country) : companyAddress.Country;
                     AddPhoneNumber(company.Phone, countryCode, customerInfo.MasterCustomerId, customerInfo.SubCustomerId);
+                    AddCompanyEmail(company, customerInfo);
                     storeAddress = AddCustomerAddresses(company, customerInfo.MasterCustomerId, customerInfo.SubCustomerId, countryCodes);
                 }
             }
@@ -241,8 +243,14 @@ namespace asi.asicentral.services.PersonifyProxy
                 COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode);
             AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_FAX, storeCompany.Fax,
                 COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode);
-            AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_EMAIL, storeCompany.Email,
-                COMMUNICATION_LOCATION_CODE_CORPORATE);
+            // add company email only if it is not the same as contact email
+            if (!string.IsNullOrEmpty(storeCompany.Email) && 
+                 (storeCompany.Individuals == null || !storeCompany.Individuals.Any() || string.IsNullOrEmpty(storeCompany.Individuals[0].Email) || 
+                  string.Compare(storeCompany.Individuals[0].Email, storeCompany.Email, StringComparison.CurrentCultureIgnoreCase) != 0))
+            {
+                AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_EMAIL, storeCompany.Email,
+                    COMMUNICATION_LOCATION_CODE_CORPORATE);
+            }
             AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_WEB, storeCompany.WebURL,
                 COMMUNICATION_LOCATION_CODE_CORPORATE);
 
@@ -492,6 +500,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     SubClassCode = customerInfo.SubClassCode,
                     MemberStatus = customerInfo.MemberStatus,
                     Phone = customerInfo.PrimaryPhone,
+                    Email = customerInfo.PrimaryEmail,
                     DNSFlag = customerInfo.DNSFlag,
                     CompanyId = customerInfo.CustomerNumber
                 };
@@ -1387,6 +1396,78 @@ namespace asi.asicentral.services.PersonifyProxy
                 }
             }
             return respSave;
+        }
+
+        public static CusCommunication AddCompanyEmail(StoreCompany company, CompanyInformation companyInfo)
+        {
+            if (company == null || string.IsNullOrEmpty(company.Email) || companyInfo == null ) 
+                return null;
+
+            // check if the email is the same as contact email
+            if (company.Individuals != null && company.Individuals.Any() && 
+                string.Compare(company.Email, company.Individuals[0].Email, StringComparison.CurrentCultureIgnoreCase) == 0)
+            {
+                return null;
+            }
+
+            var cusCommRecords = SvcClient.Ctxt.CusCommunications.Where(c => c.CommTypeCodeString == COMMUNICATION_INPUT_EMAIL
+                                                              && string.Compare(c.SearchPhoneAddress, company.Email, StringComparison.CurrentCultureIgnoreCase) == 0).ToList();
+
+            CusCommunication cusCommRecord = null;
+            if (!cusCommRecords.Any())
+            {
+                var existingEmails = GetCusCommunications(companyInfo.MasterCustomerId, companyInfo.SubCustomerId, COMMUNICATION_INPUT_EMAIL);
+                var commType = COMMUNICATION_LOCATION_CODE_CORPORATE;
+                if (existingEmails.Any())
+                {
+                    var curLocTypes = existingEmails.Select(c => c.CommLocationCodeString).ToList();
+                    commType = new string[] {COMMUNICATION_LOCATION_CODE_BUSINESS, COMMUNICATION_LOCATION_CODE_CORPORATE}.FirstOrDefault(c => !curLocTypes.Contains(c));
+                    // already having both BUSINESS and CORPORATE emails
+                    if (string.IsNullOrEmpty(commType))
+                    {
+                        if (curLocTypes.Count(c => c.Contains(COMMUNICATION_LOCATION_CODE_CORPORATE)) < 10)
+                        {
+                            commType = COMMUNICATION_LOCATION_CODE_CORPORATE;
+                        }
+                        else if (curLocTypes.Count(c => c.Contains(COMMUNICATION_LOCATION_CODE_BUSINESS)) < 10)
+                        {
+                            commType = COMMUNICATION_LOCATION_CODE_BUSINESS;
+                        }
+
+                        if ( !string.IsNullOrEmpty(commType))
+                        {
+                            var emailCnt = 1;
+                            while (curLocTypes.Contains(COMMUNICATION_LOCATION_CODE_CORPORATE + emailCnt))
+                            {
+                                emailCnt++;
+                            }
+                            commType += emailCnt;
+                        }
+                    }
+                }
+                if (!string.IsNullOrEmpty(commType))
+                {
+                    try
+                    {
+                        var cusEmail = SvcClient.Create<CusCommunication>();
+                        cusEmail.MasterCustomerId = companyInfo.MasterCustomerId;
+                        cusEmail.SubCustomerId = companyInfo.SubCustomerId;
+                        cusEmail.CommTypeCodeString = COMMUNICATION_INPUT_EMAIL;
+                        cusEmail.PrimaryFlag = string.IsNullOrEmpty(companyInfo.Email) ? true : false;
+                        cusEmail.CommLocationCodeString = commType;
+                        cusEmail.FormattedPhoneAddress = company.Email;
+
+                        cusCommRecord = SvcClient.Save<CusCommunication>(cusEmail);
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.Error(string.Format("Faild to add email '{0}' to company '{1}' in Personify; error message: {2}",
+                                    company.Email, companyInfo.Name, ex.Message));
+                    }
+                }                    
+            }
+
+            return cusCommRecord;
         }
 
          private static IList<CusCommunication> GetCusCommunications(string masterCustomerId, int subCustomerId, string cusCommType)

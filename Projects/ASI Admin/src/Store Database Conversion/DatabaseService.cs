@@ -125,7 +125,7 @@ namespace Store_Database_Conversion
                         UserReference = Guid.NewGuid().ToString(),
                         ApprovedDate = creationDate,
                         Campaign = order.Campaign,
-                        CompletedStep = order.CompletedStep,
+                        CompletedStep = order.GetOrderCompletedStep(),
                         ContextId = order.ContextId,
                         ExternalReference = order.ExternalReference,
                         IPAdd = order.IPAdd,
@@ -314,18 +314,19 @@ namespace Store_Database_Conversion
                     }
                     //populate some of the new columns based on legacy data
                     newOrder.IsStoreRequest = true;
-                    newOrder.CompletedStep = 1;
-                    if (order.OrderDetails != null && order.OrderDetails.Count > 0 && newOrder.CompletedStep < 1) newOrder.CompletedStep = 1;
-                    if (newOrder.Company != null && newOrder.CompletedStep < 2) newOrder.CompletedStep = 2;
-                    if (newOrder.CreditCard != null && newOrder.CompletedStep < 3) newOrder.CompletedStep = 3;
+                    newOrder.CompletedStep = OrderStep.ProductInfo;
+                    if (order.OrderDetails != null && order.OrderDetails.Count > 0 && newOrder.CompletedStep < OrderStep.ProductInfo) newOrder.CompletedStep = OrderStep.ProductInfo;
+                    if (newOrder.Company != null && newOrder.CompletedStep < OrderStep.CompanyInfo) newOrder.CompletedStep = OrderStep.CompanyInfo;
+                    if (newOrder.CreditCard != null && newOrder.CompletedStep < OrderStep.BillingInfo) newOrder.CompletedStep = OrderStep.BillingInfo;
+                    //need to step for demographic 
                     if (order.Status.HasValue && order.Status.Value)
                     {
-                        newOrder.CompletedStep = 4;
+                        newOrder.CompletedStep = OrderStep.PlaceOrder;
                         newOrder.IsCompleted = true;
                         newOrder.ProcessStatus = OrderStatus.Approved;
                     }
                     //catch all
-                    if (!newOrder.IsCompleted && newOrder.CompletedStep < 4) newOrder.ProcessStatus = OrderStatus.Pending;
+                    if (!newOrder.IsCompleted && newOrder.CompletedStep < OrderStep.PlaceOrder) newOrder.ProcessStatus = OrderStatus.Pending;
                 }
                 else
                 {

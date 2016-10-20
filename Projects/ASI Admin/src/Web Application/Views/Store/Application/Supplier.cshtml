@@ -98,10 +98,12 @@
 				<span class="label-row">
                     @Html.LabelFor(m => m.AffiliateASINumber)
                     @Html.LabelFor(m => m.UPSAddress)
+                    @Html.LabelFor(m => m.PSINumber)
 				</span>
 				<span class="label-row">
                     @Html.EditorFor(m => m.AffiliateASINumber) @Html.ValidationMessageFor(m => m.AffiliateASINumber)
                     @Html.EditorFor(m => m.UPSAddress) @Html.ValidationMessageFor(m => m.UPSAddress)
+                    @Html.EditorFor(m => m.PSINumber)
 				</span>
 				<span class="label-row">
                     @Html.LabelFor(m => m.FedTaxId)

@@ -223,7 +223,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Give your customers tons of verity with this compact catalog..
+        ///   Looks up a localized string similar to Give your customers tons of variety with this compact catalog..
         /// </summary>
         public static string IdeaShowcaseFallDescription {
             get {
