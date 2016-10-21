@@ -48,7 +48,7 @@
       <HintPath>..\packages\ASI.Contracts.1.2.0-beta953\lib\ASI.Contracts.dll</HintPath>
       <Private>True</Private>
     </Reference>
-   <Reference Include="ASI.EntityModel, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ASI.EntityModel, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ASI.EntityModel.1.2.0-beta16\lib\ASI.EntityModel.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -60,7 +60,7 @@
       <HintPath>..\packages\ASI.Services.Messaging.2.0.0-beta947\lib\ASI.Services.Messaging.dll</HintPath>
       <Private>True</Private>
     </Reference>
-     <Reference Include="ASI.Sugar, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ASI.Sugar, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ASI.Sugar.2.0.0-beta935\lib\ASI.Sugar.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -204,7 +204,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.0.0\lib\net45\System.Web.Razor.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
