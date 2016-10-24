@@ -32,6 +32,8 @@ namespace asi.asicentral.model
 		public string Country { get; set; }
 		[Display(ResourceType = typeof(Resource), Name = "Phone")]
 		public string Phone { get; set; }
+        [Display(ResourceType = typeof(Resource), Name = "Email")]
+        public string Email { get; set; }
 
         public bool IsTerminated() { return MemberStatus == StatusCode.TERMINATED.ToString() || MemberStatus == StatusCode.TRMN.ToString(); }
 	}

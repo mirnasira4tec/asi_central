@@ -85,7 +85,6 @@ namespace asi.asicentral.web.Controllers.Store
                     StoreDetailEmailExpress detailEmailExpress = StoreService.GetAll<StoreDetailEmailExpress>().Where(emailexpress => emailexpress.OrderDetailId == orderDetail.Id).SingleOrDefault();
                     return View("../Store/Application/EmailExpress", new EmailExpressModel(orderDetail, detailEmailExpress, StoreService));
                 }
-                else if (ORDERDETAIL_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/OrderDetailProduct", new OrderDetailApplicationModel(orderDetail));
                 else if (SUPPLIER_ESP_WEBSITES_PRODUCT_COLLECTIONS_ID == orderDetail.Product.Id) return View("../Store/Application/ProductCollections", new ProductCollectionsModel(orderDetail, StoreService));
                 else if (FormsHelper.FORMS_ASSOCIATED_PRODUCT_IDS.Contains(orderDetail.Product.Id)) return View("../Store/Application/FormProduct", new FormsModel(orderDetail, StoreService));
                 else if (StoreDetailCatalogAdvertisingItem.SUPPLIER_CATALOG_ADVERTISING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
@@ -97,6 +96,10 @@ namespace asi.asicentral.web.Controllers.Store
                 {
                     var specialProducItems = StoreService.GetAll<StoreDetailSpecialProductItem>().Where(item => item.OrderDetailId == orderDetail.Id).ToList();
                     return View("../Store/Application/SalesForm", new SalesFormApplicationModel(orderDetail, specialProducItems, StoreService));
+                }
+                else //products associated only to StoreOrderDetail table
+                {
+                    return View("../Store/Application/OrderDetailProduct", new OrderDetailApplicationModel(orderDetail));
                 }
             }
             throw new Exception("Retieved an unknown type of application");
