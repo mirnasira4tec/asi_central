@@ -49,6 +49,7 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string SP_UPDATE_CUSTOMER_CLASS = "USR_EASI_CUSTOMER_UPDATE_CLASS";
         private const string SP_GET_BUNDLE_PRODUCT_DETAILS = "ASI_GetBundleProductDetails_SP";
 	    private const string SP_GET_PRODUCT_DETAILS = "USR_PRODUCT_VALIDATION_PROC";
+        private const string SP_EEX_EMAIL_USAGE_UPDATE = "USR_EEX_EMAIL_USAGE_UPDATE";
 
 		private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
 		private static readonly IDictionary<string, string> ASIShowCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "SHOW AE" }, { "DISCOVER", "SHOW DISC" }, { "MASTERCARD", "SHOW MS" }, { "VISA", "SHOW VS" } };
@@ -67,7 +68,15 @@ namespace asi.asicentral.services.PersonifyProxy
             {SP_UPDATE_CUSTOMER_CLASS, new List<string>(){"@ip_master_customer_id", "@ip_sub_customer_id", 
                                                           "@upd_class_code", "@upd_sub_class", "@upd_user" }},
             {SP_GET_BUNDLE_PRODUCT_DETAILS, new List<string>() { "@ip_Bundle_Group_Name ", "@ip_Rate_Structure", "@ip_Rate_Code" }},
-            {SP_GET_PRODUCT_DETAILS, new List<string>() { "@ip_parent_product", "@ip_product_code", "@ip_Rate_Structure", "@ip_Rate_Code" }}
+            {SP_GET_PRODUCT_DETAILS, new List<string>() { "@ip_parent_product", "@ip_product_code", "@ip_Rate_Structure", "@ip_Rate_Code" }},
+            {SP_EEX_EMAIL_USAGE_UPDATE, new List<string>() { "@email_address", "@usage_code", "@unsubscribe", "@is_globally_suppressed" }}
+        };
+
+        private static readonly IDictionary<string, List<string>> EEX_USAGE_CODES = new Dictionary<string, List<string>>()
+        {
+            {"DISTRIBUTOR", new List<string>() { "EEX_WEEKLY" }},
+            {"SUPPLIER", new List<string>() { "EEX_SGR" }},
+            {"DECORATOR", new List<string>() { "EEX_WEARABLES" }}
         };
 
         public static CreateOrderOutput CreateOrder(StoreOrder storeOrder,
@@ -952,7 +961,75 @@ namespace asi.asicentral.services.PersonifyProxy
             }
         }
 
-        private static StoredProcedureOutput ExecutePersonifySP(string spName, List<string> parameters)
+	    public static CompanyInformation AddEEXSubscription(StoreCompany company, User user, IList<LookSendMyAdCountryCode> countryCodes, bool isBusinessAddress)
+	    {
+	        CompanyInformation companyInfo = null;
+            IEnumerable<StoreAddressInfo> storeAddress = null;
+
+	        if (user != null && company != null)
+	        {
+	            try
+	            {
+	                companyInfo = ReconcileCompany(company, user.MemberType_CD, countryCodes, ref storeAddress, false);
+
+	                if (companyInfo != null)
+	                {
+	                    // Add contact to personify
+	                    var customerInfos = AddIndividualInfos(company, countryCodes, companyInfo.MasterCustomerId,
+	                        companyInfo.SubCustomerId);
+	                    if (customerInfos != null && customerInfos.Any())
+	                    {
+	                        var indivInfo = customerInfos.ElementAt(0);
+	                        // save address to personify
+	                        if (indivInfo != null)
+	                        {
+	                            var countryCode = countryCodes != null
+	                                ? countryCodes.Alpha3Code(user.Country)
+	                                : user.Country;
+	                            var saveAddressInput = new SaveAddressInput()
+	                            {
+	                                MasterCustomerId = indivInfo.MasterCustomerId,
+	                                SubCustomerId = indivInfo.SubCustomerId,
+	                                AddressTypeCode = isBusinessAddress ? "OFFICE" : "HOME",
+	                                Address1 = user.Street1,
+	                                City = user.City,
+	                                State = user.State,
+	                                PostalCode = user.Zip,
+	                                CountryCode = countryCode,
+	                                DirectoryFlag = true,
+	                                WebMobileDirectory = false,
+	                                CreateNewAddressIfOrdersExist = true,
+	                                OverrideAddressValidation = true,
+	                                ShipToFlag = true,
+	                                BillToFlag = true,
+	                                AddedOrModifiedBy = ADDED_OR_MODIFIED_BY
+	                            };
+
+	                            SvcClient.Post<SaveAddressOutput>("CreateOrUpdateAddress", saveAddressInput);
+	                        }
+
+	                        var memberType = user.MemberType_CD.ToUpper();
+	                        if (EEX_USAGE_CODES.Keys.Contains(memberType))
+	                        {
+	                            foreach (var code in EEX_USAGE_CODES[memberType])
+	                            {
+	                                ExecutePersonifySP(SP_EEX_EMAIL_USAGE_UPDATE,
+	                                    new List<string>() {user.Email, code, "N", "N"});
+	                            }
+	                        }
+	                    }
+	                }
+	            }
+	            catch (Exception ex)
+	            {
+	                _log.Debug("PersonifyClient.AddEEXSubscription - exception when update EmailExpress Subscription, messages " + ex.Message);
+	            }
+	        }
+
+	        return companyInfo;
+	    }
+
+	    private static StoredProcedureOutput ExecutePersonifySP(string spName, List<string> parameters)
         {
             _log.Debug(string.Format("ExecutePersonifySP - start: StoreProcedure name - {0})", spName));
             var startTime = DateTime.Now;
