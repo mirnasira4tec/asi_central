@@ -51,5 +51,7 @@ namespace asi.asicentral.interfaces
 
         void AddActivity(StoreCompany company, string activityText, Activity activityType);
         bool ValidateRateCode(string groupName, string rateStructure, string rateCode, ref int persProductId);
+
+        CompanyInformation AddEEXSubscription(User user, bool isBusinessAddress);
     }
 }
