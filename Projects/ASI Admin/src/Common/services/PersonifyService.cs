@@ -106,6 +106,13 @@ namespace asi.asicentral.services
                         allMappings = allMappings.FindAll(m => m.StoreOption == null);
                     }
                 }
+
+                if (!allMappings.Any())
+                {
+                    var orderContext = order.Context != null ? string.Format(", context - {0}", order.Context.Id): string.Empty;
+                    var orderOption = coupon != null && !string.IsNullOrEmpty(coupon.CouponCode) ? string.Format(", coupon - '{0}'", coupon.CouponCode) : string.Empty;
+                    throw new Exception(string.Format("No record found in mapping table for: product - {0}{1}{2}", orderDetail.Product.Id, orderContext, orderOption));
+                }
                 #endregion mapping items from mapping table
 
                 #region ******* need to revisit and remove after packages ******
@@ -358,6 +365,11 @@ namespace asi.asicentral.services
             if (order == null)
             {
                 throw new Exception("Order is null");
+            }
+
+            if (string.IsNullOrEmpty(order.BackendReference))
+            {
+                throw new Exception("No Personify Order has been generated");
             }
 
             decimal backEndTotal = PersonifyClient.GetOrderBalanceTotal(order.BackendReference);

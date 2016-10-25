@@ -32,7 +32,7 @@ namespace asi.asicentral.web.Controllers.Show
             {
                 IQueryable<ShowASI> showName = ObjectService.GetAll<ShowASI>().Where(item => item.Name == show.Name
                 && item.StartDate == show.StartDate && item.EndDate == show.EndDate);
-                if (showName.Any())
+                if (show.Id == 0 && showName.Any())
                 {
                     ModelState.AddModelError("Name", "The show name already exists");
                     show.ShowType = GetShowType();

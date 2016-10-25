@@ -61,5 +61,26 @@ namespace asi.asicentral.model.store
         {
             return Id.GetHashCode();
         }
+
+        public OrderStep GetOrderCompletedStep()
+        {
+            switch (CompletedStep)
+            {
+                case 1:
+                    return OrderStep.ProductInfo;
+                case 2:
+                    return OrderStep.Initial;
+                case 3:
+                    return OrderStep.BillingInfo;
+                case 4:
+                    return OrderStep.PlaceOrder;
+                case 5:
+                    return OrderStep.PlaceOrder;
+                case 6:
+                    return OrderStep.PostOrder;
+                default:
+                    return OrderStep.Initial;
+            }
+        }
     }
 }
