@@ -1,4 +1,5 @@
-﻿using asi.asicentral.interfaces;
+﻿using System;
+using asi.asicentral.interfaces;
 using asi.asicentral.model.personify;
 using asi.asicentral.model.store;
 using System.Collections.Generic;
@@ -24,10 +25,12 @@ namespace asi.asicentral.util.store.coupon
                                                         {1003113981,new List<string>(){"STD", "TRIAL_13"}}
                                                     };
 
-        public static bool IsValidCoupon(IStoreService storeService, Coupon coupon)
+        public static bool IsValidCoupon(IStoreService storeService, Coupon coupon, int productId, int? contextId = null)
         {
             var mappings = storeService.GetAll<PersonifyMapping>()
-                                 .Where(map => map.StoreOption == coupon.CouponCode).ToList();
+                                       .Where(map => map.StoreOption == coupon.CouponCode && 
+                                                   ( map.StoreProduct == null || map.StoreProduct == productId ) &&
+                                                   ( map.StoreContext == null || Nullable.Compare(contextId, map.StoreContext) == 0) ).ToList();
 
             return mappings.Any();
         }
