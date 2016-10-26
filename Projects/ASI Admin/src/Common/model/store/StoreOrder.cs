@@ -45,6 +45,7 @@ namespace asi.asicentral.model.store
         public int? ContextId { get; set; }
         public bool IsStoreRequest { get; set; }
 		public bool IsGuestLogin { get; set; }
+        public bool IsShowOrder { get; set; }
 		public string OrderRequestType { get; set; }
         public string Campaign { get; set; }
         public string ExternalReference { get; set; }
