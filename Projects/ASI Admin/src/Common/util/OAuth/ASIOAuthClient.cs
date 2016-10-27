@@ -331,6 +331,7 @@ namespace asi.asicentral.oauth
                 try
                 {
                     ASI.EntityModel.User entityUser = null;
+                    var skipValidateCompany = false;
                     if (user.CompanyId == 0)
                     {
                         var usePersonifyServices = ConfigurationManager.AppSettings["UsePersonifyServices"];
@@ -339,7 +340,8 @@ namespace asi.asicentral.oauth
                             PersonifyService personifyService = new PersonifyService();
                             try
                             {
-                                personifyService.AddCompany(user);
+                                var company = personifyService.AddCompany(user);
+                                skipValidateCompany = company != null && !string.IsNullOrEmpty(company.MasterCustomerId);
                             }
                             catch (Exception ex)
                             {
@@ -351,12 +353,13 @@ namespace asi.asicentral.oauth
                     }
                     entityUser = MapASIUserToEntityModelUser(user, entityUser, true);
                     //ARRANGE
-                    var userRequest = new UserRequest() { UserRequestType = UserRequestType.Create, AuditTrail = new AuditTrail() { LoggedInUserId = 1 }, User = entityUser };
+                    var userRequest = new UserRequest() { UserRequestType = UserRequestType.Create, AuditTrail = new AuditTrail() { LoggedInUserId = 1 }, User = entityUser, SkipCompanyValidation = skipValidateCompany };
 
                     //ACT
                     userRequest.TalkAndWait<UserRequest, UserResponse>(responseMessage =>
                     {
-                        ssoId = (responseMessage != null && responseMessage.Users != null && responseMessage.Users.Count > 0 && responseMessage.Users[0] != null && responseMessage.Users[0].Id > 0) ? responseMessage.Users[0].Id.ToString() : null;
+                        ssoId = (responseMessage != null && responseMessage.Users != null && responseMessage.Users.Count > 0 && responseMessage.Users[0] != null && responseMessage.Users[0].Id > 0) ? responseMessage.Users[0].Id.ToString() 
+                            : (responseMessage != null && !responseMessage.IsSuccess && responseMessage.Error != null ? responseMessage.Error.ErrorMessage : null);
                     });
                 }
                 catch (Exception ex)
