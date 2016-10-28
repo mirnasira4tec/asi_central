@@ -191,9 +191,7 @@ namespace asi.asicentral.oauth
 
             try
             {
-                if (extraData != null && !string.IsNullOrEmpty(extraData.RefreshToken)
-                    && ( (extraData.TokenExpirationTime != null && extraData.TokenExpirationTime.HasValue && extraData.TokenExpirationTime < DateTime.Now)
-                         || (!string.IsNullOrEmpty(extraData.AccessToken) && !ASIOAuthClient.IsValidAccessToken(extraData.AccessToken)) ) )
+                if ( extraData != null && !string.IsNullOrEmpty(extraData.RefreshToken))
                 {
                     log.Debug("GetLatestTokens - Requesting a new token");
                         var tokens = ASIOAuthClient.RefreshToken(extraData.RefreshToken);
