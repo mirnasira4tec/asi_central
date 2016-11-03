@@ -164,6 +164,7 @@ namespace asi.asicentral.Tests
                     WebUrl = "www.company.com",
                     MemberType = "Distributor",
                     ASINumber = "32456",
+                    LogoUrl = "/logo/logo.jpg",
                     CreateDate = DateTime.Now,
                     UpdateDate = DateTime.Now,
                     UpdateSource = "ShowServiceTest - EmployeeTest"
@@ -215,6 +216,7 @@ namespace asi.asicentral.Tests
                     WebUrl = "www.company.com",
                     MemberType = "Supplier",
                     ASINumber = "32456",
+                    LogoUrl = "/logo/logo.jpg",
                     CreateDate = DateTime.Now,
                     UpdateDate = DateTime.Now,
                     UpdateSource = "ShowServiceTest - ShowCompanyTest"
@@ -289,7 +291,6 @@ namespace asi.asicentral.Tests
             }
         }
 
-
         [TestMethod]
         public void Test()
         {
@@ -356,13 +357,13 @@ namespace asi.asicentral.Tests
             shows.Add(CreateShowData(1, "ENGAGE WEST 2016"));
 
             IList<ShowCompany> supplierCompanies = new List<ShowCompany>();
-            supplierCompanies.Add(CreateCompanyData(26458, "30208", "A P Specialties"));
+            supplierCompanies.Add(CreateCompanyData(26458, "30208", "A P Specialties","/logo/logo.jpg"));
 
             IList<ShowAddress> supplierCompanyAddresses = new List<ShowAddress>();
             supplierCompanyAddresses.Add(CreateAddressData(26494, "140 Calle Iglesia", "San Clemente", "CA", "92672-7502", "United States"));
 
             IList<ShowCompany> distributorCompanies = new List<ShowCompany>();
-            distributorCompanies.Add(CreateCompanyData(26514, "181369", "Diverse Printing & Graphics"));
+            distributorCompanies.Add(CreateCompanyData(26514, "181369", "Diverse Printing & Graphics", "/logo/logo.jpg"));
 
             IList<ShowAddress> distributorCompanyAddresses = new List<ShowAddress>();
             distributorCompanyAddresses.Add(CreateAddressData(26609, "1500 NE 131st St test", "North Miami", "FL", "33161-4426", "United States"));
@@ -399,10 +400,12 @@ namespace asi.asicentral.Tests
             var supplierCompany = objExcel.UpdateShowCompanyData (dataTable, 0);
             Assert.AreEqual(supplierCompanies.ElementAt(0).ASINumber, supplierCompany.ASINumber);
             Assert.AreEqual(supplierCompanies.ElementAt(0).Name, supplierCompany.Name);
+            Assert.AreEqual(supplierCompanies.ElementAt(0).LogoUrl, supplierCompany.LogoUrl);
 
             var distributorCompany = objExcel.UpdateShowCompanyData(dataTable, 1);
             Assert.AreEqual(distributorCompanies.ElementAt(0).ASINumber, distributorCompany.ASINumber);
             Assert.AreEqual(distributorCompanies.ElementAt(0).Name, distributorCompany.Name);
+            Assert.AreEqual(distributorCompanies.ElementAt(0).LogoUrl, distributorCompany.LogoUrl);
 
             //var supplierCompanyAddress = objExcel.ConvertDataAsShowAddress(dataTable, supplierCompany.Id, 0);
             //Assert.AreEqual(supplierCompanyAddresses.ElementAt(0).Street1, supplierCompanyAddress.Street1);
@@ -536,13 +539,14 @@ namespace asi.asicentral.Tests
             return objShow;
         }
 
-        private ShowCompany CreateCompanyData(int companyId, string asiNumber, string name)
+        private ShowCompany CreateCompanyData(int companyId, string asiNumber, string name, string logoUrl)
         {
             ShowCompany objCompany = new ShowCompany()
             {
                 Id = companyId,
                 ASINumber = asiNumber,
-                Name = name
+                Name = name,
+                LogoUrl =logoUrl
             };
             return objCompany;
         }
