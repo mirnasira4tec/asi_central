@@ -17,8 +17,8 @@ namespace Core.Tests.OAuth
     [TestClass]
     public class ASIOAuthClientTests
     {
-        [TestMethod]
         [Ignore]
+        [TestMethod]
         public void UserTestScenarios()
         {
             var tag = DateTime.Now.Ticks;
