@@ -249,27 +249,5 @@ namespace asi.asicentral.util.show
             return employeeAttendee;
         }
 
-        public static ShowDistShowLogo CreateOrUpdateDistShowLogo(IObjectService objectService, ShowDistShowLogo objDistShowLogo)
-        {
-            if (objDistShowLogo == null) return null;
-            ShowDistShowLogo distShowLogo = null;
-            if (objDistShowLogo.Id == 0)
-            {
-                distShowLogo = new ShowDistShowLogo()
-                {
-                    CreateDate = DateTime.UtcNow,
-                };
-                objectService.Add<ShowDistShowLogo>(distShowLogo);
-            }
-            else
-            {
-                distShowLogo = objectService.GetAll<ShowDistShowLogo>().Where(ctxt => ctxt.Id == objDistShowLogo.Id).SingleOrDefault();
-            }
-            distShowLogo.AttendeeId = objDistShowLogo.AttendeeId;
-            distShowLogo.LogoImageUrl = objDistShowLogo.LogoImageUrl;
-            distShowLogo.UpdateDate = DateTime.UtcNow;
-            distShowLogo.UpdateSource = objDistShowLogo.UpdateSource;
-            return distShowLogo;
-        }
     }
 }

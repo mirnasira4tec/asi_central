@@ -247,6 +247,7 @@
     <Compile Include="database\ASIEmailBlastContext.cs" />
     <Compile Include="database\ASIInternetContext.cs" />
     <Compile Include="database\ASIPublicationContext.cs" />
+    <Compile Include="database\mappings\show\ShowDistShowLogoMap.cs" />
     <Compile Include="database\PersonifyContext.cs" />
     <Compile Include="database\CallContext.cs" />
     <Compile Include="database\DM_MemberDemogrContext.cs" />
@@ -344,6 +345,7 @@
     <Compile Include="model\call\CallQueue.cs" />
     <Compile Include="model\call\CallRequests.cs" />
     <Compile Include="model\CreditCard.cs" />
+    <Compile Include="model\show\ShowDistShowLogo.cs" />
     <Compile Include="model\store\CompanyValidation.cs" />
     <Compile Include="model\OAuth\Security.cs" />
     <Compile Include="model\OAuth\User.cs" />
