@@ -116,9 +116,6 @@ namespace asi.asicentral.util.store
                                             selectedItems.Add(new SelectListItem() { Text = option.Name, Value = option.Id.ToString(), Selected = false });
                                         break;
                                     case 39:
-                                        if (CATALOG_COVER_PRODUCT_39_40.Contains(option.Id))
-                                            selectedItems.Add(new SelectListItem() { Text = option.Name, Value = option.Id.ToString(), Selected = false });
-                                        break;
                                     case 40:
                                         if (CATALOG_COVER_PRODUCT_39_40.Contains(option.Id))
                                             selectedItems.Add(new SelectListItem() { Text = option.Name, Value = option.Id.ToString(), Selected = false });
