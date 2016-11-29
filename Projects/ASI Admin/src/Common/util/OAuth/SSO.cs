@@ -34,6 +34,8 @@ namespace asi.asicentral.oauth
             NM_DISTRIBUTOR,
 
             [Description("MultiLineRep")]
+            MLRP,
+            [Description("MultiLineRep")]
             MULTILINE_REP,
             [Description("MultiLineRep")]
             MULTI_LINE_REP,
@@ -105,10 +107,19 @@ namespace asi.asicentral.oauth
 
         public static string GetRoleName(string memberType, string memberStatus)
         {
+            var log = LogService.GetLog(typeof(SSO));
             string rolename = GetMemberTypeDesciptionForRole<MemberType>(MemberType.UNKN.ToString());
             if (!string.IsNullOrEmpty(memberType) && !string.IsNullOrEmpty(memberStatus))
             {
-                MemberType code = (MemberType)Enum.Parse(typeof(MemberType), memberType);
+                MemberType code = MemberType.UNKN;
+                try
+                {
+                    code = (MemberType)Enum.Parse(typeof(MemberType), memberType);
+                }
+                catch (Exception ex)
+                {
+                    log.Error(string.Format("GetRoleName - exception: {0}", ex.Message));
+                }
                 if (ASIOAuthClient.IsActiveUser(memberStatus)) 
                 {
                     switch (code)
@@ -120,7 +131,14 @@ namespace asi.asicentral.oauth
                             rolename = GetMemberTypeDesciptionForRole<MemberType>(MemberType.SUPPLIER.ToString());
                             break;
                         default:
-                            rolename = GetMemberTypeDesciptionForRole<MemberType>(memberType);
+                            try
+                            {
+                                rolename = GetMemberTypeDesciptionForRole<MemberType>(memberType);
+                            }
+                            catch (Exception ex)
+                            {
+                                log.Error(string.Format("GetRoleName - exception: {0}", ex.Message));
+                            }
                             break;
                     }
                 }
