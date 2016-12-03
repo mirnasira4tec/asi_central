@@ -696,7 +696,33 @@ namespace asi.asicentral.services
             return PersonifyClient.ValidateRateCode(groupName, rateStructure, rateCode, ref persProductId);
         }
 
- 		private static string GetCountryCode(string country)
+        public CompanyInformation AddEEXSubscription(User user, bool isBusinessAddress)
+        {
+            CompanyInformation companyInfo = null;
+            if (user != null && !string.IsNullOrEmpty(user.Email) && !string.IsNullOrEmpty(user.CompanyName) && !string.IsNullOrEmpty(user.MemberType_CD))
+            {
+                //create equivalent store objects
+                var company = new StoreCompany { Name = user.CompanyName, Phone = user.Phone, ASINumber = user.AsiNumber };
+                var address = new StoreAddress { Street1 = user.Street1,  Street2 = user.Street2, City = user.City, State = user.State,  Country = user.Country, Zip = user.Zip };
+                company.Addresses.Add(new StoreCompanyAddress { Address = address });
+
+                company.Individuals.Add(new StoreIndividual()
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Phone = user.PhoneAreaCode + user.Phone,
+                    Address = address
+                });
+
+                var countryCodes = storeService != null ? storeService.GetAll<LookSendMyAdCountryCode>(true).ToList() : null;
+                companyInfo = PersonifyClient.AddEEXSubscription(company, user, countryCodes, isBusinessAddress);
+            }
+
+            return companyInfo;
+        }
+
+        private static string GetCountryCode(string country)
 		{
 			string result = null;
 			if (!string.IsNullOrWhiteSpace(country))
