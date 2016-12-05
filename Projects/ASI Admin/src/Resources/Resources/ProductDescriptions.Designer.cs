@@ -106,6 +106,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Package Includes : Company Reviews and Pay-Per-Click..
+        /// </summary>
+        public static string ProductBrandBoost {
+            get {
+                return ResourceManager.GetString("ProductBrandBoost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Make a massive impression on all distributors searching ESP Online&lt;sup&gt;&amp;trade;&lt;/sup&gt;..
         /// </summary>
         public static string ProductClearanceNewRush {
