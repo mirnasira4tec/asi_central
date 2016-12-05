@@ -589,6 +589,7 @@
     <WCFMetadataStorage Include="Service References\web.CreditCardService\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\DataSources\asi.asicentral.PersonifyDataASI.PersonifyEntitiesASI.datasource" />
     <None Include="Service References\PersonifyDataASI\service.edmx" />
     <None Include="Service References\web.CreditCardService\configuration91.svcinfo" />
   </ItemGroup>
