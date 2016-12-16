@@ -53,5 +53,8 @@ namespace asi.asicentral.interfaces
         bool ValidateRateCode(string groupName, string rateStructure, string rateCode, ref int persProductId);
 
         CompanyInformation AddEEXSubscription(User user, bool isBusinessAddress);
+
+        StoreDetailApplication GetDemographicData(StoreOrderDetail orderDetail);
+        void UpdateDemographicData(StoreDetailApplication storeDetailApp);
     }
 }

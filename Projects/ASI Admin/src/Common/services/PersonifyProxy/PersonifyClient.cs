@@ -50,6 +50,12 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string SP_GET_BUNDLE_PRODUCT_DETAILS = "ASI_GetBundleProductDetails_SP";
 	    private const string SP_GET_PRODUCT_DETAILS = "USR_PRODUCT_VALIDATION_PROC";
         private const string SP_EEX_EMAIL_USAGE_UPDATE = "USR_EEX_EMAIL_USAGE_UPDATE";
+	    private const string SP_GET_SUPPLIER_MEMBER_QUESTRIONS = "USR_ASI_CENTRAL_MQ_SELECT_SUPPLIER_PROC";
+        private const string SP_GET_DISTRIBUTOR_MEMBER_QUESTRIONS = "USR_ASI_CENTRAL_MQ_SELECT_DISTRIBUTOR_PROC";
+        private const string SP_GET_DECORATOR_MEMBER_QUESTRIONS = "USR_ASI_CENTRAL_MQ_SELECT_DECORATOR_PROC";
+        private const string SP_UPDATE_DISTRIBUTOR_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_DISTRIBUTOR_PROC";
+        private const string SP_UPDATE_SUPPLIER_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_SUPPLIER_PROC";
+        private const string SP_UPDATE_DECORATOR_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_DECORATOR_PROC";
 
 		private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
 		private static readonly IDictionary<string, string> ASIShowCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "SHOW AE" }, { "DISCOVER", "SHOW DISC" }, { "MASTERCARD", "SHOW MS" }, { "VISA", "SHOW VS" } };
@@ -69,7 +75,63 @@ namespace asi.asicentral.services.PersonifyProxy
                                                           "@upd_class_code", "@upd_sub_class", "@upd_user" }},
             {SP_GET_BUNDLE_PRODUCT_DETAILS, new List<string>() { "@ip_Bundle_Group_Name ", "@ip_Rate_Structure", "@ip_Rate_Code" }},
             {SP_GET_PRODUCT_DETAILS, new List<string>() { "@ip_parent_product", "@ip_product_code", "@ip_Rate_Structure", "@ip_Rate_Code" }},
-            {SP_EEX_EMAIL_USAGE_UPDATE, new List<string>() { "@email_address", "@usage_code", "@unsubscribe", "@is_globally_suppressed" }}
+            {SP_EEX_EMAIL_USAGE_UPDATE, new List<string>() { "@email_address", "@usage_code", "@unsubscribe", "@is_globally_suppressed" }},
+            {SP_GET_SUPPLIER_MEMBER_QUESTRIONS, new List<string>(){"@ip_master_customer_id", "@ip_sub_customer_id"}},
+            {SP_GET_DISTRIBUTOR_MEMBER_QUESTRIONS, new List<string>(){"@ip_master_customer_id", "@ip_sub_customer_id"}},
+            {SP_GET_DECORATOR_MEMBER_QUESTRIONS, new List<string>(){"@ip_master_customer_id", "@ip_sub_customer_id"}},
+            {SP_UPDATE_DISTRIBUTOR_MEMBER_QUESTIONS, new List<string>{ "@ip_master_customer_id", 
+                                                                        "@ip_sub_customer_id",
+                                                                        "@ip_usr_year_established",
+                                                                        "@ip_usr_facilitiesinformation",
+                                                                        "@ip_usr_total_sales_force",
+                                                                        "@ip_usr_specialty_sales_amount",
+                                                                        "@ip_usr_company_sales_amount",
+                                                                        "@ip_usr_pri_bus_rev_src",
+                                                                        "@ip_usr_pri_bus_other_desc",
+                                                                        "@ip_product_line",
+                                                                        "@ip_types_accounts",
+                                                                        "@ip_user" }},  
+            {SP_UPDATE_SUPPLIER_MEMBER_QUESTIONS, new List<string> {"@ip_master_customer_id", 
+                                                                    "@ip_sub_customer_id", 
+                                                                    "@ip_usr_year_established", 
+                                                                    "@ip_usr_selling_promo_products", 
+                                                                    "@ip_product_line", 
+                                                                    "@ip_usr_owner_gender", 
+                                                                    "@ip_usr_minority_owned", 
+                                                                    "@ip_usr_facilitiesinformation", 
+                                                                    "@ip_usr_north_american_company", 
+                                                                    "@ip_usr_office_hours", 
+                                                                    "@ip_usr_prod_time_min", 
+                                                                    "@ip_usr_prod_time_max", 
+                                                                    "@ip_usr_rush_time", 
+                                                                    "@ip_usr_imprinter", 
+                                                                    "@ip_usr_retail", 
+                                                                    "@ip_usr_importer", 
+                                                                    "@ip_usr_wholesaler", 
+                                                                    "@ip_usr_manufacturer", 
+                                                                    "@ip_usr_etching", 
+                                                                    "@ip_usr_pad_print", 
+                                                                    "@ip_usr_lithography", 
+                                                                    "@ip_usr_engraving", 
+                                                                    "@ip_usr_transfer", 
+                                                                    "@ip_usr_other_note", 
+                                                                    "@ip_usr_hot_stamping", 
+                                                                    "@ip_usr_direct_embroidery", 
+                                                                    "@ip_usr_sublimation", 
+                                                                    "@ip_usr_laser", 
+                                                                    "@ip_usr_full_color_process", 
+                                                                    "@ip_usr_silkscreen", 
+                                                                    "@ip_usr_foil_stamping", 
+                                                                    "@ip_usr_four_color_process", 
+                                                                    "@ip_usr_offset", 
+                                                                    "@ip_usr_die_stamp", 
+                                                                    "@ip_user" }},
+            {SP_UPDATE_DECORATOR_MEMBER_QUESTIONS, new List<string>{"@ip_master_customer_id", 
+                                                                    "@ip_sub_customer_id",
+                                                                    "@ip_usr_organization",
+                                                                    "@ip_imprinting",
+                                                                    "@ip_usr_union_label_flag",
+                                                                    "@ip_user" }}
         };
 
         private static readonly IDictionary<string, List<string>> EEX_USAGE_CODES = new Dictionary<string, List<string>>()
@@ -1029,7 +1091,206 @@ namespace asi.asicentral.services.PersonifyProxy
 	        return companyInfo;
 	    }
 
-	    private static StoredProcedureOutput ExecutePersonifySP(string spName, List<string> parameters)
+        public static StoreDetailApplication GetDemographicData(IStoreService storeService, StoreOrderDetail orderDetail)
+        {
+            var storeDetailApp = storeService.GetApplication(orderDetail);
+            if (orderDetail.Order != null && orderDetail.Order.Company != null &&
+                orderDetail.Product.IsMembership() && orderDetail.Order.Company.HasExternalReference())
+            {
+                switch (orderDetail.Order.OrderRequestType.ToUpper())
+                {
+                    case "DISTRIBUTOR":
+                        storeDetailApp = GetDistributorDemograpic((StoreDetailDistributorMembership)storeDetailApp, orderDetail.Order.Company.ExternalReference);
+                        break;
+                    case "SUPPLIER":
+                        storeDetailApp = GetSupplierDemograpic((StoreDetailSupplierMembership)storeDetailApp, orderDetail.Order.Company.ExternalReference);
+                        break;
+                    case "DECORATOR":
+                        storeDetailApp = GetDecoratorDemograpic((StoreDetailDecoratorMembership)storeDetailApp, storeService, orderDetail.Order.Company.ExternalReference);
+                        break;
+                }
+            }
+
+            return storeDetailApp;
+        }
+
+        public static void UpdateDemographicData(StoreDetailApplication storeDetailApp)
+        {
+
+        }
+
+        private static StoreDetailDecoratorMembership GetDecoratorDemograpic(StoreDetailDecoratorMembership memberData, IStoreService storeService, string masterCustomerId)
+        {
+            if (memberData == null)
+                memberData = new StoreDetailDecoratorMembership();
+
+            var response = ExecutePersonifySP(SP_GET_DECORATOR_MEMBER_QUESTRIONS, new List<string>() { masterCustomerId, "0" });
+            if (storeService != null && response != null && !string.IsNullOrEmpty(response.Data) && 
+                response.Data.Trim().ToUpper() != "NO DATA FOUND")
+            {
+                var xml = XDocument.Parse(response.Data);
+                var data = xml.Root.Elements("Table").FirstOrDefault();
+                if (data != null)
+                {
+                    var imprintingTypes = storeService.GetAll<LookDecoratorImprintingType>(false).ToList();
+                    LookDecoratorImprintingType imprintType = null;
+                    foreach (var element in data.Elements())
+                    {
+                        int value = 0;
+                        Int32.TryParse(element.Value, out value);
+                        if (value == 0)
+                            continue;
+
+                        switch (element.Name.ToString())
+                        {
+                            case "USR_ORGANIZATION":
+                                memberData.BestDescribesOption = value;
+                                break;
+                            case "Digitizing":
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.Description == LookDecoratorImprintingType.IMPRINT_DIGITIZING);
+                                if (imprintType != null)
+                                    memberData.ImprintTypes.Add(new LookDecoratorImprintingType() { Id = imprintType.Id, Description = LookDecoratorImprintingType.IMPRINT_DIGITIZING });
+                                break;
+                            case "Embroidery":
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.Description == LookDecoratorImprintingType.IMPRINT_EMBROIDERY);
+                                if (imprintType != null)
+                                    memberData.ImprintTypes.Add(new LookDecoratorImprintingType() { Id = imprintType.Id, Description = LookDecoratorImprintingType.IMPRINT_EMBROIDERY });
+                                break;
+                            case "Engraving":
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.Description == LookDecoratorImprintingType.IMPRINT_ENGRAVING);
+                                if (imprintType != null)
+                                    memberData.ImprintTypes.Add(new LookDecoratorImprintingType() { Id = imprintType.Id, Description = LookDecoratorImprintingType.IMPRINT_ENGRAVING });
+                                break;
+                            case "Heat_x0020_Transfer":
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.Description == LookDecoratorImprintingType.IMPRINT_HEATTRANSFER);
+                                if (imprintType != null)
+                                    memberData.ImprintTypes.Add(new LookDecoratorImprintingType() { Id = imprintType.Id, Description = LookDecoratorImprintingType.IMPRINT_HEATTRANSFER });
+                                break;
+                            case "Monogramming":
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.Description == LookDecoratorImprintingType.IMPRINT_MONOGRAMMING);
+                                if (imprintType != null)
+                                    memberData.ImprintTypes.Add(new LookDecoratorImprintingType() { Id = imprintType.Id, Description = LookDecoratorImprintingType.IMPRINT_MONOGRAMMING });
+                                break;
+                            case "Screen_x0020_Printing":
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.Description == LookDecoratorImprintingType.IMPRINT_SCREENPRINTING);
+                                if (imprintType != null)
+                                    memberData.ImprintTypes.Add(new LookDecoratorImprintingType() { Id = imprintType.Id, Description = LookDecoratorImprintingType.IMPRINT_SCREENPRINTING });
+                                break;
+                            case "Sublimation":
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.Description == LookDecoratorImprintingType.IMPRINT_SUBLIMINATION);
+                                if (imprintType != null)
+                                    memberData.ImprintTypes.Add(new LookDecoratorImprintingType() { Id = imprintType.Id, Description = LookDecoratorImprintingType.IMPRINT_SUBLIMINATION });
+                                break;
+                            case "Union_LabeL_Flag":
+                                memberData.IsUnionMember = true;
+                                break;                        
+                        }
+                    }
+                }
+            }
+
+            return memberData;
+        }
+
+        private static StoreDetailSupplierMembership GetSupplierDemograpic(StoreDetailSupplierMembership memberData, string masterCustomerId)
+        {
+            if (memberData == null)
+                memberData = new StoreDetailSupplierMembership();
+
+            var response = ExecutePersonifySP(SP_GET_SUPPLIER_MEMBER_QUESTRIONS, new List<string>() { masterCustomerId, "0" });
+            if (response != null && !string.IsNullOrEmpty(response.Data) && response.Data.Trim().ToUpper() != "NO DATA FOUND")
+            {
+                var xml = XDocument.Parse(response.Data);
+                var data = xml.Root.Elements("Table").FirstOrDefault();
+                if (data != null)
+                {
+                    foreach (var element in data.Elements())
+                    {
+                        var value = element.Value;
+                        switch (element.Name.ToString())
+                        {
+                            case "USR_YEAR_ESTABLISHED":
+                                break;
+                        }
+                    }
+                }
+            }
+
+            return memberData;
+        }
+
+        private static StoreDetailDistributorMembership GetDistributorDemograpic(StoreDetailDistributorMembership memberData, string masterCustomerId)
+        {
+            if (memberData == null)
+                memberData = new StoreDetailDistributorMembership();
+
+            var response = ExecutePersonifySP(SP_GET_DISTRIBUTOR_MEMBER_QUESTRIONS, new List<string>() { masterCustomerId, "0" });
+	        if (response != null && !string.IsNullOrEmpty(response.Data) &&
+	            response.Data.Trim().ToUpper() != "NO DATA FOUND")
+	        {
+                var xml = XDocument.Parse(response.Data);
+
+                var data = xml.Root.Elements("Table").FirstOrDefault();
+	            if (data != null)
+	            {
+	                foreach (var element in data.Elements())
+	                {
+	                    var value = element.Value;
+	                    switch (element.Name.ToString())
+	                    {
+	                        case "USR_YEAR_ESTABLISHED":
+	                            int year;
+	                            Int32.TryParse(value, out year);
+	                            memberData.EstablishedDate = new DateTime(year, 1, 1);
+	                            break;
+	                        //                case "USR_TOTAL_SALES_FORCE":
+	                        //                    memberData. = value;
+	                        //                    break;
+	                        //                case "USR_SPECIALTY_SALES_AMOUNT":
+	                        //                    memberData. = value;
+	                        //                    break;
+	                        //                case "USR_COMPANY_SALES_AMOUNT":
+	                        //                    memberData. = value;
+	                        //                    break;
+	                        //                case "USR_PRI_BUS_REV_SRC":
+	                        //                    memberData. = value;
+	                        //                    break;
+	                        //                case "USR_PRI_BUS_OTHER_DESC":
+	                        //                    memberData. = value;
+	                        //                    break;
+	                        //                case "USR_TOTAL_SALES_FORCE":
+	                        //                    memberData. = value;
+	                        //                    break;
+	                        //                case "USR_TOTAL_SALES_FORCE":
+	                        //                    memberData. = value;
+	                        //                    break;
+	                        //                case "USR_TOTAL_SALES_FORCE":
+	                        //                    memberData. = value;
+	                        //                    break;
+	                        //                case "USR_TOTAL_SALES_FORCE":
+	                        //                    memberData. = value;
+	                        //                    break;
+	                        //                case "USR_TOTAL_SALES_FORCE":
+	                        //                    memberData. = value;
+	                        //                    break;
+	                        //                case "USR_TOTAL_SALES_FORCE":
+	                        //                    memberData. = value;
+	                        //                    break;
+	                        //                case "USR_TOTAL_SALES_FORCE":
+	                        //                    memberData. = value;
+	                        //                    break;
+	                        //                case "USR_TOTAL_SALES_FORCE":
+	                        //                    memberData. = value;
+	                        //                    break;
+	                    }
+	                }
+                }
+	        }
+
+            return memberData;
+        }
+
+        public static StoredProcedureOutput ExecutePersonifySP(string spName, List<string> parameters)
         {
             _log.Debug(string.Format("ExecutePersonifySP - start: StoreProcedure name - {0})", spName));
             var startTime = DateTime.Now;

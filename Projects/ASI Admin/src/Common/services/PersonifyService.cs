@@ -722,6 +722,16 @@ namespace asi.asicentral.services
             return companyInfo;
         }
 
+        public virtual StoreDetailApplication GetDemographicData(StoreOrderDetail orderDetail)
+        {
+            return PersonifyClient.GetDemographicData(storeService, orderDetail);
+        }
+
+        public virtual void UpdateDemographicData(StoreDetailApplication storeDetailApp)
+        {
+            PersonifyClient.UpdateDemographicData(storeDetailApp);
+        }
+
         private static string GetCountryCode(string country)
 		{
 			string result = null;
