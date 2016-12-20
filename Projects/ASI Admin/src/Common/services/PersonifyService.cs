@@ -224,6 +224,9 @@ namespace asi.asicentral.services
                     }
                 }
                 #endregion non-scheduled products
+
+                // update demographic questions
+                PersonifyClient.UpdateDemographicData(storeService, orderDetail); ;
             }
             catch (Exception ex)
             {
@@ -725,11 +728,6 @@ namespace asi.asicentral.services
         public virtual StoreDetailApplication GetDemographicData(StoreOrderDetail orderDetail)
         {
             return PersonifyClient.GetDemographicData(storeService, orderDetail);
-        }
-
-        public virtual void UpdateDemographicData(StoreDetailApplication storeDetailApp)
-        {
-            PersonifyClient.UpdateDemographicData(storeDetailApp);
         }
 
         private static string GetCountryCode(string country)

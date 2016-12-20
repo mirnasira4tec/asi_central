@@ -55,6 +55,5 @@ namespace asi.asicentral.interfaces
         CompanyInformation AddEEXSubscription(User user, bool isBusinessAddress);
 
         StoreDetailApplication GetDemographicData(StoreOrderDetail orderDetail);
-        void UpdateDemographicData(StoreDetailApplication storeDetailApp);
     }
 }

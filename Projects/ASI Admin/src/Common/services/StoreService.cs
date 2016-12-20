@@ -87,7 +87,7 @@ namespace asi.asicentral.services
         /// </summary>
         /// <param name="orderDetail"></param>
         /// <returns></returns>
-        public StoreDetailApplication CreateApplication(StoreOrderDetail orderDetail)
+        public StoreDetailApplication CreateApplication(StoreOrderDetail orderDetail, IBackendService backendService = null)
         {
             StoreDetailApplication application = null;
             bool added = false;
@@ -152,6 +152,9 @@ namespace asi.asicentral.services
                     application.UpdateDate = DateTime.UtcNow;
                     application.UpdateSource = "StoreService - CreateApplication";
                 }
+
+                if (backendService != null)
+                    backendService.GetDemographicData(orderDetail);
             }
             return application;
         }
