@@ -174,7 +174,7 @@ namespace asi.asicentral.web.model.store
                 catalogsHelper = new CatalogsHelper(storeService, this.ProductId, this.catalogOptions);
             }
 
-            this.coverOptions = catalogsHelper.GetOptionsByCategory(1);
+            this.coverOptions = catalogsHelper.GetOptionsByCategory(1, this.Cover);
             this.areaOptions = catalogsHelper.GetOptionsByCategory(2);
             this.colorOptions = catalogsHelper.GetOptionsByCategory(3);
             this.imprintOptions = catalogsHelper.GetOptionsByCategory(4);

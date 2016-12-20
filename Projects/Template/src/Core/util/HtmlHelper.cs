@@ -291,9 +291,9 @@ namespace asi.asicentral.util
                 }
 
                 // Execute the request
-                if (ServicePointManager.Expect100Continue) ServicePointManager.Expect100Continue = false;  
-                              
-                using (var response = await client.SendAsync(request))
+                if (ServicePointManager.Expect100Continue) ServicePointManager.Expect100Continue = false;
+
+                using (var response = await client.SendAsync(request).ConfigureAwait(false))
                 {
                     logService.Debug("Submit Form - Checking return: " + response.StatusCode);
                     if (returnContent) resultContent = await response.Content.ReadAsStringAsync();
