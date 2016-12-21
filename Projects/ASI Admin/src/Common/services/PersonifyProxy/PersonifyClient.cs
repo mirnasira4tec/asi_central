@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using DocumentFormat.OpenXml.Drawing;
 
 namespace asi.asicentral.services.PersonifyProxy
 {
@@ -1094,29 +1095,83 @@ namespace asi.asicentral.services.PersonifyProxy
         public static StoreDetailApplication GetDemographicData(IStoreService storeService, StoreOrderDetail orderDetail)
         {
             var storeDetailApp = storeService.GetApplication(orderDetail);
-            if (orderDetail.Order != null && orderDetail.Order.Company != null &&
-                orderDetail.Product.IsMembership() && orderDetail.Order.Company.HasExternalReference())
+            try
             {
-                switch (orderDetail.Order.OrderRequestType.ToUpper())
+                if (orderDetail.Order != null && orderDetail.Order.Company != null && orderDetail.Order.Company.HasExternalReference())
                 {
-                    case "DISTRIBUTOR":
-                        storeDetailApp = GetDistributorDemograpic((StoreDetailDistributorMembership)storeDetailApp, orderDetail.Order.Company.ExternalReference);
-                        break;
-                    case "SUPPLIER":
-                        storeDetailApp = GetSupplierDemograpic((StoreDetailSupplierMembership)storeDetailApp, orderDetail.Order.Company.ExternalReference);
-                        break;
-                    case "DECORATOR":
-                        storeDetailApp = GetDecoratorDemograpic((StoreDetailDecoratorMembership)storeDetailApp, storeService, orderDetail.Order.Company.ExternalReference);
-                        break;
+                    var masterId = orderDetail.Order.Company.ExternalReference.Split(';')[0];
+                    if (StoreDetailSupplierMembership.Identifiers.Contains(orderDetail.Product.Id))
+                    {
+                        storeDetailApp = GetSupplierDemograpic((StoreDetailSupplierMembership)storeDetailApp, storeService, masterId);
+                    }
+                    else if (StoreDetailDistributorMembership.Identifiers.Contains(orderDetail.Product.Id))
+                    {
+                        storeDetailApp = GetDistributorDemograpic((StoreDetailDistributorMembership)storeDetailApp, storeService, masterId);
+                    }
+                    else if(StoreDetailDecoratorMembership.Identifiers.Contains(orderDetail.Product.Id))
+                    {
+                        storeDetailApp = GetDecoratorDemograpic((StoreDetailDecoratorMembership)storeDetailApp, storeService, masterId);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                _log.Debug("PersonifyClient.GetDemographicData exception, message: " + ex.Message);
             }
 
             return storeDetailApp;
         }
 
-        public static void UpdateDemographicData(StoreDetailApplication storeDetailApp)
+        public static void UpdateDemographicData(IStoreService storeService, StoreOrderDetail orderDetail)
         {
+            var storeDetailApp = storeService.GetApplication(orderDetail);
+            if (storeDetailApp != null && orderDetail.Order != null && orderDetail.Order.Company != null && 
+                orderDetail.Order.Company.HasExternalReference())
+            {
+                try
+                {
+                    if (StoreDetailSupplierMembership.Identifiers.Contains(orderDetail.Product.Id))
+                    {
+                        ;
+                    }
+                    else if (StoreDetailDistributorMembership.Identifiers.Contains(orderDetail.Product.Id))
+                    {
+                        ;
+                    }
+                    else if (StoreDetailDecoratorMembership.Identifiers.Contains(orderDetail.Product.Id))
+                    {
+                        UpdateDecoratorDemograpic((StoreDetailDecoratorMembership)storeDetailApp, orderDetail.Order);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _log.Debug("PersonifyClient.UpdateDemographicData exception: " + ex.Message);
+                }
+            }
+        }
 
+        private static void UpdateDecoratorDemograpic(StoreDetailDecoratorMembership memberData, StoreOrder order)
+        {
+            if (memberData == null || order == null || order.Company == null || string.IsNullOrEmpty(order.ExternalReference) )
+                return;
+
+            var imprinting = string.Join("", memberData.ImprintTypes.Select(m => m.Id.ToString()));
+            var user = string.Empty;
+
+            if (order.Company.Individuals != null && order.Company.Individuals.Count > 0)
+            {
+                user = order.Company.Individuals[0].Email;
+            }
+            
+            if( string.IsNullOrEmpty(user))
+            {
+                user = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
+            }
+
+            ExecutePersonifySP(SP_UPDATE_DECORATOR_MEMBER_QUESTIONS, new List<string>
+                               { order.ExternalReference, "0", 
+                                memberData.BestDescribesOption != null ?  memberData.BestDescribesOption.Value.ToString() : "", 
+                                imprinting, memberData.IsUnionMember ? "Y" : "N", user });
         }
 
         private static StoreDetailDecoratorMembership GetDecoratorDemograpic(StoreDetailDecoratorMembership memberData, IStoreService storeService, string masterCustomerId)
@@ -1138,52 +1193,44 @@ namespace asi.asicentral.services.PersonifyProxy
                     {
                         int value = 0;
                         Int32.TryParse(element.Value, out value);
-                        if (value == 0)
-                            continue;
-
                         switch (element.Name.ToString())
                         {
                             case "USR_ORGANIZATION":
                                 memberData.BestDescribesOption = value;
                                 break;
                             case "Digitizing":
-                                imprintType = imprintingTypes.FirstOrDefault(t => t.Description == LookDecoratorImprintingType.IMPRINT_DIGITIZING);
-                                if (imprintType != null)
-                                    memberData.ImprintTypes.Add(new LookDecoratorImprintingType() { Id = imprintType.Id, Description = LookDecoratorImprintingType.IMPRINT_DIGITIZING });
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.SubCode == "D");
                                 break;
                             case "Embroidery":
-                                imprintType = imprintingTypes.FirstOrDefault(t => t.Description == LookDecoratorImprintingType.IMPRINT_EMBROIDERY);
-                                if (imprintType != null)
-                                    memberData.ImprintTypes.Add(new LookDecoratorImprintingType() { Id = imprintType.Id, Description = LookDecoratorImprintingType.IMPRINT_EMBROIDERY });
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.SubCode == "A");
                                 break;
                             case "Engraving":
-                                imprintType = imprintingTypes.FirstOrDefault(t => t.Description == LookDecoratorImprintingType.IMPRINT_ENGRAVING);
-                                if (imprintType != null)
-                                    memberData.ImprintTypes.Add(new LookDecoratorImprintingType() { Id = imprintType.Id, Description = LookDecoratorImprintingType.IMPRINT_ENGRAVING });
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.SubCode == "E");
                                 break;
                             case "Heat_x0020_Transfer":
-                                imprintType = imprintingTypes.FirstOrDefault(t => t.Description == LookDecoratorImprintingType.IMPRINT_HEATTRANSFER);
-                                if (imprintType != null)
-                                    memberData.ImprintTypes.Add(new LookDecoratorImprintingType() { Id = imprintType.Id, Description = LookDecoratorImprintingType.IMPRINT_HEATTRANSFER });
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.SubCode == "C");
                                 break;
                             case "Monogramming":
-                                imprintType = imprintingTypes.FirstOrDefault(t => t.Description == LookDecoratorImprintingType.IMPRINT_MONOGRAMMING);
-                                if (imprintType != null)
-                                    memberData.ImprintTypes.Add(new LookDecoratorImprintingType() { Id = imprintType.Id, Description = LookDecoratorImprintingType.IMPRINT_MONOGRAMMING });
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.SubCode == "G");
                                 break;
                             case "Screen_x0020_Printing":
-                                imprintType = imprintingTypes.FirstOrDefault(t => t.Description == LookDecoratorImprintingType.IMPRINT_SCREENPRINTING);
-                                if (imprintType != null)
-                                    memberData.ImprintTypes.Add(new LookDecoratorImprintingType() { Id = imprintType.Id, Description = LookDecoratorImprintingType.IMPRINT_SCREENPRINTING });
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.SubCode == "B");
                                 break;
                             case "Sublimation":
-                                imprintType = imprintingTypes.FirstOrDefault(t => t.Description == LookDecoratorImprintingType.IMPRINT_SUBLIMINATION);
-                                if (imprintType != null)
-                                    memberData.ImprintTypes.Add(new LookDecoratorImprintingType() { Id = imprintType.Id, Description = LookDecoratorImprintingType.IMPRINT_SUBLIMINATION });
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.SubCode == "F");
                                 break;
                             case "Union_LabeL_Flag":
                                 memberData.IsUnionMember = true;
                                 break;                        
+                        }
+
+                        if ( imprintType != null)
+                        {
+                            var existing = memberData.ImprintTypes.FirstOrDefault(p => p.Id == imprintType.Id);
+                            if (value == 1 && existing == null)
+                                memberData.ImprintTypes.Add(imprintType);
+                            else if (element.Value == "0" && existing != null)
+                                memberData.ImprintTypes.Remove(existing);
                         }
                     }
                 }
@@ -1192,7 +1239,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return memberData;
         }
 
-        private static StoreDetailSupplierMembership GetSupplierDemograpic(StoreDetailSupplierMembership memberData, string masterCustomerId)
+        private static StoreDetailSupplierMembership GetSupplierDemograpic(StoreDetailSupplierMembership memberData, IStoreService storeService, string masterCustomerId)
         {
             if (memberData == null)
                 memberData = new StoreDetailSupplierMembership();
@@ -1202,16 +1249,131 @@ namespace asi.asicentral.services.PersonifyProxy
             {
                 var xml = XDocument.Parse(response.Data);
                 var data = xml.Root.Elements("Table").FirstOrDefault();
+                var productionTimeMin = string.Empty;
+                var productionTimeMax = string.Empty;
+                var decoratorTypes = storeService.GetAll<LookSupplierDecoratingType>(true).ToList();
                 if (data != null)
                 {
                     foreach (var element in data.Elements())
                     {
-                        var value = element.Value;
+                        int intValue = 0;
+                        Int32.TryParse(element.Value, out intValue);
+                        LookSupplierDecoratingType type = null;
                         switch (element.Name.ToString())
                         {
                             case "USR_YEAR_ESTABLISHED":
+                                memberData.YearEstablished = intValue;
                                 break;
+                            case "USR_SELLING_PROMO_PRODUCTS":
+                                memberData.YearEnteredAdvertising = intValue;
+                                break;
+                            case "USR_OWNER_GENDER":
+                                memberData.WomanOwned = element.Value == "F";
+                                break;
+                            case "USR_MINORITY_OWNED":
+                                memberData.IsMinorityOwned = intValue == 1;
+                                break;
+                            case "USR_FACILITIESINFORMATION":
+                                memberData.NumberOfEmployee = element.Value;
+                                break;
+                            case "USR_NORTH_AMERICAN_COMPANY":
+                                memberData.HasAmericanProducts = intValue == 1;
+                                break;
+                            case "USR_OFFICE_HOURS":
+                                memberData.BusinessHours = element.Value;
+                                break;
+                            case "USR_PROD_TIME_MIN":
+                                productionTimeMin = element.Value;
+                                break;
+                            case "USR_PROD_TIME_MAX":
+                                productionTimeMax = element.Value;
+                                break;
+                            case "USR_RUSH_TIME":
+                                memberData.IsRushServiceAvailable = intValue == 1;
+                                break;
+                            case "USR_IMPRINTER":
+                                memberData.IsImprinterVsDecorator = intValue == 1;
+                                break;
+                            case "USR_RETAIL":
+                                memberData.IsRetailer = intValue == 1;
+                                break;
+                            case "USR_IMPORTER":
+                                memberData.IsImporter = intValue == 1;
+                                break;
+                            case "USR_WHOLESALER":
+                                memberData.IsWholesaler = intValue == 1;
+                                break;
+                            #region decorator types
+                            case "USR_ETCHING":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_ETCHING);
+                                break;
+                            case "USR_PAD_PRINT":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_PADPRINT);
+                                break;
+                            case "USR_LITHOGRAPHY":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_LITHOGRAPHY);
+                                break;
+                            case "USR_ENGRAVING":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_ENGRAVING);
+                                break;
+                            case "USR_TRANSFER":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_TRANSFER);
+                                break;
+                            case "USR_HOT_STAMPING":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_HOTSTAMPING);
+                                break;
+                            case "USR_DIRECT_EMBROIDERY":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_DIRECTEMBROIDERY);
+                                break;
+                            case "USR_SUBLIMATION":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_SUBLIMINATION);
+                                break;
+                            case "USR_LASER":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_LASER);
+                                break;
+                            case "USR_FULL_COLOR_PROCESS":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_FULLCOLOR);
+                                break;
+                            case "USR_SILKSCREEN":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_SILKSCREEN);
+                                break;
+                            case "USR_FOIL_STAMPING":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_FOILSTAMPING);
+                                break;
+                            case "USR_FOUR_COLOR_PROCESS":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_FOURCOLOR);
+                                break;
+                            case "USR_OFFSET":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_OFFSET);
+                                break;
+                            case "USR_DIE_STAMP":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_DIESTAMP);
+                                break;
+                            #endregion decorator types
                         }
+
+                        if (type != null)
+                        {
+                            var existing = memberData.DecoratingTypes.FirstOrDefault(t => t.Id == type.Id);
+                            if (element.Value == "1" && existing == null)
+                                memberData.DecoratingTypes.Add(type);
+                            else if (element.Value == "0" && existing != null)
+                                memberData.DecoratingTypes.Remove(existing);
+                        }
+                    }
+
+                    memberData.ProductionTime = productionTimeMin;
+                    if (productionTimeMax != productionTimeMin)
+                    {
+                        memberData.ProductionTime += " - " + productionTimeMax;
+                    }
+
+                    var productLines = GetProductLines(storeService, data.Elements());
+                    memberData.LineNames = string.Join(";", productLines.Select(p => p.Description));
+                    if (memberData.LineNames.Length > 500)
+                    {
+                        var index = memberData.LineNames.LastIndexOf(';', 499);
+                        memberData.LineNames = memberData.LineNames.Substring(0, index + 1);
                     }
                 }
             }
@@ -1219,7 +1381,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return memberData;
         }
 
-        private static StoreDetailDistributorMembership GetDistributorDemograpic(StoreDetailDistributorMembership memberData, string masterCustomerId)
+	    private static StoreDetailDistributorMembership GetDistributorDemograpic(StoreDetailDistributorMembership memberData, IStoreService storeService, string masterCustomerId)
         {
             if (memberData == null)
                 memberData = new StoreDetailDistributorMembership();
@@ -1233,55 +1395,56 @@ namespace asi.asicentral.services.PersonifyProxy
                 var data = xml.Root.Elements("Table").FirstOrDefault();
 	            if (data != null)
 	            {
-	                foreach (var element in data.Elements())
+	                memberData.ProductLines = GetProductLines(storeService, data.Elements(), memberData.ProductLines);
+	                memberData.AccountTypes = GetDistAccountTypes(storeService, data.Elements(), memberData.AccountTypes);
+	                var businessTypes = storeService.GetAll<LookDistributorRevenueType>(true).ToList();
+                    foreach (var element in data.Elements())
 	                {
-	                    var value = element.Value;
+	                    int intValue = 0;
+                        Int32.TryParse(element.Value, out intValue);
 	                    switch (element.Name.ToString())
 	                    {
 	                        case "USR_YEAR_ESTABLISHED":
-	                            int year;
-	                            Int32.TryParse(value, out year);
-	                            memberData.EstablishedDate = new DateTime(year, 1, 1);
+	                            if( intValue != 0 ) memberData.EstablishedDate = new DateTime(intValue, 1, 1);
 	                            break;
-	                        //                case "USR_TOTAL_SALES_FORCE":
-	                        //                    memberData. = value;
-	                        //                    break;
-	                        //                case "USR_SPECIALTY_SALES_AMOUNT":
-	                        //                    memberData. = value;
-	                        //                    break;
-	                        //                case "USR_COMPANY_SALES_AMOUNT":
-	                        //                    memberData. = value;
-	                        //                    break;
-	                        //                case "USR_PRI_BUS_REV_SRC":
-	                        //                    memberData. = value;
-	                        //                    break;
-	                        //                case "USR_PRI_BUS_OTHER_DESC":
-	                        //                    memberData. = value;
-	                        //                    break;
-	                        //                case "USR_TOTAL_SALES_FORCE":
-	                        //                    memberData. = value;
-	                        //                    break;
-	                        //                case "USR_TOTAL_SALES_FORCE":
-	                        //                    memberData. = value;
-	                        //                    break;
-	                        //                case "USR_TOTAL_SALES_FORCE":
-	                        //                    memberData. = value;
-	                        //                    break;
-	                        //                case "USR_TOTAL_SALES_FORCE":
-	                        //                    memberData. = value;
-	                        //                    break;
-	                        //                case "USR_TOTAL_SALES_FORCE":
-	                        //                    memberData. = value;
-	                        //                    break;
-	                        //                case "USR_TOTAL_SALES_FORCE":
-	                        //                    memberData. = value;
-	                        //                    break;
-	                        //                case "USR_TOTAL_SALES_FORCE":
-	                        //                    memberData. = value;
-	                        //                    break;
-	                        //                case "USR_TOTAL_SALES_FORCE":
-	                        //                    memberData. = value;
-	                        //                    break;
+	                        case "USR_FACILITIESINFORMATION":
+	                            if( intValue > 0 )  memberData.NumberOfEmployee = intValue;
+	                            break;
+	                        case "USR_TOTAL_SALES_FORCE":
+	                            if( intValue > 0 )  memberData.NumberOfSalesEmployee = intValue;
+	                            break;
+	                        case "USR_SPECIALTY_SALES_AMOUNT":
+	                            memberData.AnnualSalesVolumeASP = element.Value;
+	                            break;
+	                        case "USR_COMPANY_SALES_AMOUNT":
+	                            memberData.AnnualSalesVolume = element.Value;
+	                            break;
+	                        case "USR_PRI_BUS_REV_SRC":
+	                            if (!string.IsNullOrEmpty(element.Value))
+	                            {
+	                                switch( element.Value.ToLower())
+	                                {
+	                                    case "signs":
+	                                        memberData.PrimaryBusinessRevenue = businessTypes.FirstOrDefault(t => t.Id == 1);
+	                                        break;
+                                        case "trophy & awards":
+                                            memberData.PrimaryBusinessRevenue = businessTypes.FirstOrDefault(t => t.Id == 2);
+                                            break;
+                                        case "printing":
+                                            memberData.PrimaryBusinessRevenue = businessTypes.FirstOrDefault(t => t.Id == 3);
+                                            break;
+                                        case "screen printing":
+                                            memberData.PrimaryBusinessRevenue = businessTypes.FirstOrDefault(t => t.Id == 4);
+                                            break;
+                                        case "promotional products":
+                                            memberData.PrimaryBusinessRevenue = businessTypes.FirstOrDefault(t => t.Id == 5);
+                                            break;
+                                    }
+	                            }
+	                            break;
+	                        case "USR_PRI_BUS_OTHER_DESC":
+	                            memberData.OtherBusinessRevenue = element.Value;
+	                            break;
 	                    }
 	                }
                 }
@@ -1290,6 +1453,236 @@ namespace asi.asicentral.services.PersonifyProxy
             return memberData;
         }
 
+        private static IList<LookProductLine> GetProductLines(IStoreService storeService, IEnumerable<XElement> elements, IList<LookProductLine> productLines = null)
+        {
+            if (elements != null && elements.Count() > 1)
+            {
+                productLines = productLines ?? new List<LookProductLine>();
+                var prodLines = storeService.GetAll<LookProductLine>(true).ToList();
+                foreach (var element in elements)
+                {
+                    LookProductLine type = null;
+                    switch (element.Name.ToString())
+                    {
+                        case "Auto_x0020_accessories":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "A");
+                            break;
+                        case "Awards_x0020_trophies_x0020__x0026__x0020_plaques":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "B");
+                            break;
+                        case "Badges_x0020_buttons":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "C");
+                            break;
+                        case "Bags":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "1");
+                            break;
+                        case "Calendars_x0020__x0026__x0020_timepieces":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "D");
+                            break;
+                        case "Cards":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "O");
+                            break;
+                        case "Cups_x0020_and_x0020_mugs":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "Y");
+                            break;
+                        case "Decals_x0020_transfers_x0020_emblems":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "Z");
+                            break;
+                        case "Electronic_x002F_computer_x0020_products":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "L");
+                            break;
+                        case "Emblematic_x0020_jewelry":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "G");
+                            break;
+                        case "Food_x0020_Edibles":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "F");
+                            break;
+                        case "Glass_x0020_and_x0020_ceramics_x0020_products":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "I");
+                            break;
+                        case "Health_x0020_safety_x0020_and_x0020_environmental_x0020_products":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "V");
+                            break;
+                        case "Housewares_x0020_and_x0020_home_x0020_products":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "J");
+                            break;
+                        case "Industrial_x0020_and_x0020_safety_x0020_items":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "H");
+                            break;
+                        case "Inflatables":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "K");
+                            break;
+                        case "Key_x0020_tags":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "U");
+                            break;
+                        case "Magnetic_x0020_products":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "X");
+                            break;
+                        case "Office_x0020_and_x0020_desk_x0020_products":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "M");
+                            break;
+                        case "Other_x0020_Product_x0020_Line":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "");
+                            break;
+                        case "Paper_x0020_Products":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "N");
+                            break;
+                        case "Party_x0020_Products":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "3");
+                            break;
+                        case "Personal_x0020_Care":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "4");
+                            break;
+                        case "Phone_x0020_Calling_x0020_cards":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "5");
+                            break;
+                        case "Plastic":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "E");
+                            break;
+                        case "Sports_x0020_Accessories":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "P");
+                            break;
+                        case "Toys_x0020__x0026__x0020_Stuffed_x0020_Animal":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "Q");
+                            break;
+                        case "Travel_x0020_products":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "W");
+                            break;
+                        case "Umbrellas":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "2");
+                            break;
+                        case "Vinyls":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "R");
+                            break;
+                        case "Wearables":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "S");
+                            break;
+                        case "Writing_x0020_Instruments":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "T");
+                            break;
+                    }
+                    if (type != null)
+                    {
+                        var existing = productLines.FirstOrDefault(p => p.Id == type.Id);
+                        if (element.Value == "1" && existing == null)
+                            productLines.Add(type);
+                        else if (element.Value == "0" && existing != null)
+                            productLines.Remove(existing);
+                    }
+                }
+            }
+
+            return productLines;
+        }
+
+        private static IList<LookDistributorAccountType> GetDistAccountTypes(IStoreService storeService, IEnumerable<XElement> elements, IList<LookDistributorAccountType> accountTypes)
+        {
+            if (elements != null && elements.Count() > 1)
+            {
+                accountTypes = accountTypes ?? new List<LookDistributorAccountType>();
+                var types = storeService.GetAll<LookDistributorAccountType>(true).ToList();
+                foreach (var element in elements)
+                {
+                    LookDistributorAccountType type = null;
+                    switch (element.Name.ToString())
+                    {
+                        case "Agriculture_x0020__x0026__x0020_Farming":
+                            type = types.FirstOrDefault(t => t.SubCode == "A");
+                            break;
+                        case "Automotive_x0020_dealers_x0020__x0026__x0020_mfgs":
+                            type = types.FirstOrDefault(t => t.SubCode == "V");
+                            break;
+                        case "Chemical_x0020_and_x0020_Pharmaceutical_x0020_companies":
+                            type = types.FirstOrDefault(t => t.SubCode == "K");
+                            break;
+                        case "Clothing_x0020_Appliances_x0020_Soft_x0020_goods_x0020_Mfgs":
+                            type = types.FirstOrDefault(t => t.SubCode == "I");
+                            break;
+                        case "Clubs_x0020_Associations_x0020_Civic_x0020_Groups_x0020_nonprofits":
+                            type = types.FirstOrDefault(t => t.SubCode == "B");
+                            break;
+                        case "Construction_x0020_companies":
+                            type = types.FirstOrDefault(t => t.SubCode == "S");
+                            break;
+                        case "Financial":
+                            type = types.FirstOrDefault(t => t.SubCode == "C");
+                            break;
+                        case "Food_x0020_Tobacco_x0020_Sundries":
+                            type = types.FirstOrDefault(t => t.SubCode == "J");
+                            break;
+                        case "Government_x0020_Agencies":
+                            type = types.FirstOrDefault(t => t.SubCode == "D");
+                            break;
+                        case "Health_x0020_and_x0020_medical":
+                            type = types.FirstOrDefault(t => t.SubCode == "T");
+                            break;
+                        case "Hospitality":
+                            type = types.FirstOrDefault(t => t.SubCode == "W");
+                            break;
+                        case "Industrial_x0020_Products":
+                            type = types.FirstOrDefault(t => t.SubCode == "H");
+                            break;
+                        case "Insurance_x0020_companies_x0020_and_x0020_agencies":
+                            type = types.FirstOrDefault(t => t.SubCode == "F");
+                            break;
+                        case "Manufacturing":
+                            type = types.FirstOrDefault(t => t.SubCode == "X");
+                            break;
+                        case "Marketing_x0020_Services":
+                            type = types.FirstOrDefault(t => t.SubCode == "O");
+                           break;
+                        case "Media":
+                            type = types.FirstOrDefault(t => t.SubCode == "Y");
+                            break;
+                        case "Political_x0020_parties_x0020_and_x0020_candidates":
+                            type = types.FirstOrDefault(t => t.SubCode == "L");
+                            break;
+                        case "Professional_x0020_Offices":
+                            type = types.FirstOrDefault(t => t.SubCode == "N");
+                            break;
+                        case "Recreation":
+                            type = types.FirstOrDefault(t => t.SubCode == "U");
+                            break;
+                        case "Retail":
+                            type = types.FirstOrDefault(t => t.SubCode == "M");
+                            break;
+                        case "Schools_x0020_colleges_x0020_universities":
+                            type = types.FirstOrDefault(t => t.SubCode == "E");
+                            break;
+                        case "Service_x0020_Businesses":
+                            type = types.FirstOrDefault(t => t.SubCode == "P");
+                            break;
+                        case "Sports-Related":
+                            type = types.FirstOrDefault(t => t.SubCode == "Z");
+                            break;
+                        case "Technology":
+                            type = types.FirstOrDefault(t => t.SubCode == "1");
+                            break;
+                        case "Transportation":
+                            type = types.FirstOrDefault(t => t.SubCode == "Q");
+                            break;
+                        case "Utilities":
+                            type = types.FirstOrDefault(t => t.SubCode == "G");
+                            break;
+                        case "Wholesalers":
+                            type = types.FirstOrDefault(t => t.SubCode == "R");
+                            break;
+                    }
+
+                    if (type != null)
+                    {
+                        var existing = accountTypes.FirstOrDefault(p => p.Id == type.Id);
+                        if (element.Value == "1" && existing == null)
+                            accountTypes.Add(type);
+                        else if (element.Value == "0" && existing != null)
+                            accountTypes.Remove(existing);
+                    }
+                }
+            }
+
+            return accountTypes;
+        }
+        
         public static StoredProcedureOutput ExecutePersonifySP(string spName, List<string> parameters)
         {
             _log.Debug(string.Format("ExecutePersonifySP - start: StoreProcedure name - {0})", spName));

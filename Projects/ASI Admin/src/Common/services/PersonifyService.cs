@@ -727,7 +727,10 @@ namespace asi.asicentral.services
 
         public virtual StoreDetailApplication GetDemographicData(StoreOrderDetail orderDetail)
         {
-            return PersonifyClient.GetDemographicData(storeService, orderDetail);
+            var storeDetailApp = PersonifyClient.GetDemographicData(storeService, orderDetail);
+            storeService.SaveChanges();
+
+            return storeDetailApp;
         }
 
         private static string GetCountryCode(string country)

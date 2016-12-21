@@ -14,7 +14,7 @@ namespace asi.asicentral.interfaces
         /// </summary>
         /// <param name="orderDetail"></param>
         /// <returns></returns>
-        StoreDetailApplication CreateApplication(StoreOrderDetail orderDetail, IBackendService backendService);
+        StoreDetailApplication CreateApplication(StoreOrderDetail orderDetail);
 
         /// <summary>
         /// Retrieves the application associated with the order detail
