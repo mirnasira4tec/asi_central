@@ -1130,17 +1130,87 @@ namespace asi.asicentral.services.PersonifyProxy
             {
                 try
                 {
+                    var company = orderDetail.Order.Company;
+                    var user = string.Empty;
+
+                    if (company.Individuals != null && company.Individuals.Count > 0)
+                    {
+                        user = company.Individuals[0].Email;
+                    }
+
+                    if (string.IsNullOrEmpty(user))
+                    {
+                        user = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
+                    }
+
                     if (StoreDetailSupplierMembership.Identifiers.Contains(orderDetail.Product.Id))
                     {
-                        ;
+                        var memberData = (StoreDetailSupplierMembership)storeDetailApp;
+                        var decoTypes = memberData.DecoratingTypes;
+                        ExecutePersonifySP(SP_UPDATE_DISTRIBUTOR_MEMBER_QUESTIONS, new List<string>
+                        {
+                            orderDetail.Order.ExternalReference, "0",
+                            memberData.YearEstablished.HasValue ? memberData.YearEstablished.Value.ToString() : string.Empty,
+                            memberData.YearEnteredAdvertising.HasValue ? memberData.YearEnteredAdvertising.Value.ToString() : string.Empty,
+                            memberData.LineNames,
+                            memberData.WomanOwned.HasValue && memberData.WomanOwned.Value ? "F" : "M",
+                            memberData.IsMinorityOwned.HasValue && memberData.IsMinorityOwned.Value ? "1" : "0",
+                            memberData.NumberOfSalesEmployee,
+                            memberData.HasAmericanProducts.HasValue && memberData.HasAmericanProducts.Value ? "1" : "0",
+                            memberData.BusinessHours,
+                            memberData.ProductionTime,
+                            memberData.IsRushServiceAvailable.HasValue && memberData.IsRushServiceAvailable.Value ? "1" : "0",
+                            memberData.IsImprinterVsDecorator.HasValue && memberData.IsMinorityOwned.Value ? "1" : "0",
+                            memberData.IsRetailer.HasValue && memberData.IsRetailer.Value ? "1" : "0",
+                            memberData.IsImporter.HasValue && memberData.IsImporter.Value ? "1" : "0",
+                            memberData.IsWholesaler.HasValue && memberData.IsWholesaler.Value ? "1" : "0",
+                            memberData.IsManufacturer.HasValue && memberData.IsMinorityOwned.Value ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_ETCHING) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_PADPRINT) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_LITHOGRAPHY) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_ENGRAVING) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_TRANSFER) != null ? "1" : "0",
+                            memberData.OtherDec,
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_HOTSTAMPING) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_DIRECTEMBROIDERY) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_SUBLIMINATION) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_LASER) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_FULLCOLOR) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_SILKSCREEN) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_FOILSTAMPING) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_FOURCOLOR) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_OFFSET) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_DIESTAMP) != null ? "1" : "0",
+                            user
+                        });
                     }
                     else if (StoreDetailDistributorMembership.Identifiers.Contains(orderDetail.Product.Id))
                     {
-                        ;
+                        var memberData = (StoreDetailDistributorMembership)storeDetailApp;
+                        ExecutePersonifySP(SP_UPDATE_DISTRIBUTOR_MEMBER_QUESTIONS, new List<string>
+                        {
+                            orderDetail.Order.ExternalReference, "0",
+                            memberData.EstablishedDate.HasValue ? memberData.EstablishedDate.Value.Year.ToString() : string.Empty,
+                            memberData.NumberOfEmployee.ToString(),
+                            memberData.NumberOfSalesEmployee.HasValue ? memberData.NumberOfSalesEmployee.Value.ToString() : string.Empty,
+                            memberData.AnnualSalesVolumeASP,
+                            memberData.AnnualSalesVolume,
+                            memberData.PrimaryBusinessRevenue.Id.ToString(),
+                            memberData.OtherBusinessRevenue,
+                            string.Join("", memberData.ProductLines.Select(p => p.SubCode).ToList()),
+                            string.Join("", memberData.AccountTypes.Select(p => p.SubCode).ToList()),
+                            user
+                        });
                     }
                     else if (StoreDetailDecoratorMembership.Identifiers.Contains(orderDetail.Product.Id))
                     {
-                        UpdateDecoratorDemograpic((StoreDetailDecoratorMembership)storeDetailApp, orderDetail.Order);
+                        var memberData = (StoreDetailDecoratorMembership)storeDetailApp;
+                        var imprinting = string.Join("", memberData.ImprintTypes.Select(m => m.Id.ToString()));
+
+                        ExecutePersonifySP(SP_UPDATE_DECORATOR_MEMBER_QUESTIONS, new List<string>
+                                           { orderDetail.Order.ExternalReference, "0", 
+                                            memberData.BestDescribesOption != null ?  memberData.BestDescribesOption.Value.ToString() : "", 
+                                            imprinting, memberData.IsUnionMember ? "Y" : "N", user });
                     }
                 }
                 catch (Exception ex)
@@ -1148,30 +1218,6 @@ namespace asi.asicentral.services.PersonifyProxy
                     _log.Debug("PersonifyClient.UpdateDemographicData exception: " + ex.Message);
                 }
             }
-        }
-
-        private static void UpdateDecoratorDemograpic(StoreDetailDecoratorMembership memberData, StoreOrder order)
-        {
-            if (memberData == null || order == null || order.Company == null || string.IsNullOrEmpty(order.ExternalReference) )
-                return;
-
-            var imprinting = string.Join("", memberData.ImprintTypes.Select(m => m.Id.ToString()));
-            var user = string.Empty;
-
-            if (order.Company.Individuals != null && order.Company.Individuals.Count > 0)
-            {
-                user = order.Company.Individuals[0].Email;
-            }
-            
-            if( string.IsNullOrEmpty(user))
-            {
-                user = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
-            }
-
-            ExecutePersonifySP(SP_UPDATE_DECORATOR_MEMBER_QUESTIONS, new List<string>
-                               { order.ExternalReference, "0", 
-                                memberData.BestDescribesOption != null ?  memberData.BestDescribesOption.Value.ToString() : "", 
-                                imprinting, memberData.IsUnionMember ? "Y" : "N", user });
         }
 
         private static StoreDetailDecoratorMembership GetDecoratorDemograpic(StoreDetailDecoratorMembership memberData, IStoreService storeService, string masterCustomerId)
