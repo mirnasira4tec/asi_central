@@ -20,9 +20,9 @@ namespace asi.asicentral.web.Controllers.Show
 {
     public class ExcelUploadController : Controller
     {
-        private readonly static List<string> _engageShows = new List<string>() { "ENGAGE EAST", "ENGAGE WEST"};
-        private readonly static List<string> _singleShows = new List<string>() {"Orlando Show", "Dallas Show", "Long Beach Show", "New York Show", "Chicago Show"};
-        
+        private readonly static List<string> _engageShows = new List<string>() { "ENGAGE EAST", "ENGAGE WEST" };
+        private readonly static List<string> _singleShows = new List<string>() { "Orlando Show", "Dallas Show", "Long Beach Show", "New York Show", "Chicago Show" };
+
         public IObjectService ObjectService { get; set; }
 
         public ActionResult Index()
@@ -30,8 +30,8 @@ namespace asi.asicentral.web.Controllers.Show
             return View();
         }
 
-        public ShowCompany UpdateShowCompanyData(DataTable ds, int rowId, int showId = 0)
-        { 
+        public ShowCompany UpdateShowCompanyData(DataTable ds, int rowId, int showId = 0,bool fasiliateFlag = false)
+        {
             var show = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Id == showId);
             var asinumber = ds.Rows[rowId]["ASINO"].ToString();
             var name = ds.Rows[rowId]["Company"].ToString();
@@ -50,9 +50,9 @@ namespace asi.asicentral.web.Controllers.Show
             company.ASINumber = asinumber;
             company.MemberType = memberType;
             company.UpdateSource = "ExcelUploadcontroller-Index";
-            company.UpdateDate = DateTime.UtcNow;  
-         
-            if( company.Id == 0 )
+            company.UpdateDate = DateTime.UtcNow;
+
+            if (company.Id == 0)
                 ObjectService.SaveChanges();  // need to have the new companyId later
 
             #region update company Address
@@ -62,17 +62,17 @@ namespace asi.asicentral.web.Controllers.Show
                 address = company.CompanyAddresses.FirstOrDefault().Address;
             }
 
-            if( address == null)
+            if (address == null)
             {
                 address = new ShowAddress()
                 {
                     CreateDate = DateTime.UtcNow,
                 };
 
-                var showCompanyAddress = new ShowCompanyAddress() 
-                { 
-                    Address = address, 
-                    Company = company, 
+                var showCompanyAddress = new ShowCompanyAddress()
+                {
+                    Address = address,
+                    Company = company,
                     CompanyId = company.Id,
                     CreateDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow
@@ -90,8 +90,8 @@ namespace asi.asicentral.web.Controllers.Show
             #endregion
 
             #region update attendees
-            var attendee = company.Attendees != null ? company.Attendees.FirstOrDefault(a => a.ShowId == showId ) : null;
-            if( attendee == null )
+            var attendee = company.Attendees != null ? company.Attendees.FirstOrDefault(a => a.ShowId == showId) : null;
+            if (attendee == null)
             {
                 attendee = new ShowAttendee() { CreateDate = DateTime.UtcNow };
                 company.Attendees.Add(attendee);
@@ -129,21 +129,65 @@ namespace asi.asicentral.web.Controllers.Show
 
             #endregion
             #region update distributor data
-            if (company.MemberType == "Distributor")
+            if (company.MemberType == "Distributor" || fasiliateFlag == true)
             {
                 // update showEmployee
                 var firstName = ds.Rows[rowId]["FirstName"].ToString();
                 var lastName = ds.Rows[rowId]["LastName"].ToString();
+                string phone = string.Empty;
+                string email = string.Empty;
+                if (ds.Columns.Contains("Phone"))
+                {
+                    phone = ds.Rows[rowId]["Phone"].ToString();
+                }
+                if (ds.Columns.Contains("Email Address"))
+                {
+                    email = ds.Rows[rowId]["Email Address"].ToString();
+                }
                 if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName))
                 {
                     var employee = company.Employees.FirstOrDefault(item => (item.FirstName == firstName && item.LastName == lastName));
                     if (employee == null)
                     {
+                        ShowAddress employeeAddress = null;
+                        employeeAddress = new ShowAddress()
+                        {
+                            CreateDate = DateTime.UtcNow,
+                        };
+                        if (ds.Columns.Contains("Shipping Address 1"))
+                        {
+                            employeeAddress.Street1 = ds.Rows[rowId]["Shipping Address 1"].ToString();
+                        }
+                        if (ds.Columns.Contains("Shipping Address 2"))
+                        {
+                            employeeAddress.Street2 = ds.Rows[rowId]["Shipping Address 2"].ToString();
+                        }
+                        if (ds.Columns.Contains("Shipping City"))
+                        {
+                            employeeAddress.City = ds.Rows[rowId]["Shipping City"].ToString();
+                        }
+                        if (ds.Columns.Contains("Shipping State"))
+                        {
+                            employeeAddress.State = ds.Rows[rowId]["Shipping State"].ToString();
+                        }
+                        if (ds.Columns.Contains("Shipping Zip Code"))
+                        {
+                            employeeAddress.Zip = ds.Rows[rowId]["Shipping Zip Code"].ToString();
+                        }
+                        if (ds.Columns.Contains("Shipping Country"))
+                        {
+                            employeeAddress.Country = ds.Rows[rowId]["Shipping Country"].ToString();
+                        }
+                        employeeAddress.UpdateSource = "ExcelUploadcontroller-Index";
+                        employeeAddress.UpdateDate = DateTime.UtcNow;
                         employee = new ShowEmployee()
                         {
+                            Address = employeeAddress,
                             CompanyId = company.Id,
                             FirstName = firstName,
                             LastName = lastName,
+                            EPhone = phone,
+                            Email = email,
                             CreateDate = DateTime.UtcNow,
                             UpdateDate = DateTime.UtcNow,
                             UpdateSource = "ExcelUploadcontroller-Index"
@@ -151,11 +195,11 @@ namespace asi.asicentral.web.Controllers.Show
                         company.Employees.Add(employee);
                     }
 
-                    if( employee.Id == 0 || attendee.Id == 0 )
+                    if (employee.Id == 0 || attendee.Id == 0)
                         ObjectService.SaveChanges();
-                
+
                     // update employeeAttendee
-                    var employeeAttendee = attendee.EmployeeAttendees.FirstOrDefault( item => item.EmployeeId == employee.Id);
+                    var employeeAttendee = attendee.EmployeeAttendees.FirstOrDefault(item => item.EmployeeId == employee.Id);
                     if (employeeAttendee == null)
                     {
                         employeeAttendee = new ShowEmployeeAttendee()
@@ -172,7 +216,7 @@ namespace asi.asicentral.web.Controllers.Show
 
                         attendee.EmployeeAttendees.Add(employeeAttendee);
                     }
-                } 
+                }
             }
             #endregion update distributor data
 
@@ -232,6 +276,7 @@ namespace asi.asicentral.web.Controllers.Show
                         log.Debug("Index - Start main for loop for sheets");
                         for (int sheetcount = 1; sheetcount <= totalsheets; sheetcount++)
                         {
+                            bool fasiliateFlag = false;
                             log.Debug("Index - start processing one sheet");
                             start = DateTime.Now;
                             var worksheet = workBook.Worksheet(sheetcount);
@@ -281,6 +326,19 @@ namespace asi.asicentral.web.Controllers.Show
                                         objShow = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains(weekNum.Replace("-", " -")) && item.Address.Contains(address.Trim()))
                                                                                  .OrderByDescending(s => s.StartDate).FirstOrDefault();
                                         columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
+                                    }
+                                }
+                                if (columnNameList == null)
+                                {
+                                    var matchShow = Regex.Match(worksheet.Name, @"^\s*Fasi\s+\d+\s*-\s*", RegexOptions.IgnoreCase);
+                                    if (matchShow.Success)
+                                    {
+                                       fasiliateFlag = true;
+                                       var fasi = matchShow.Value.Trim();
+                                       var address = worksheet.Name.Substring(matchShow.Value.Length);
+                                       objShow = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains(fasi) && item.Address.Contains(address.Trim()))
+                                                                                .OrderByDescending(s => s.StartDate).FirstOrDefault();
+                                        columnNameList = new string[] { "ASINO", "MemberType", "Company", "FirstName", "LastName", "Address", "City", "State", "Zip Code", "Country", "Shipping Address 1", "Shipping Address 2", "Shipping City", "Shipping State", "Shipping Zip Code", "Shipping Country", "Phone", "Email Address" };
                                     }
                                 }
                                 if (objShow == null)
@@ -334,10 +392,18 @@ namespace asi.asicentral.web.Controllers.Show
                                     if (excelDataTable.Rows[i]["State"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("State Code cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
                                     if (excelDataTable.Rows[i]["Country"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("Country Code cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
 
-                                    if (memberType.Equals("Distributor", StringComparison.CurrentCultureIgnoreCase))
+                                    if (memberType.Equals("Distributor", StringComparison.CurrentCultureIgnoreCase) || fasiliateFlag == true)
                                     {
                                         if (string.IsNullOrEmpty(excelDataTable.Rows[i]["FirstName"].ToString())) { ModelState.AddModelError("CustomError", string.Format("Distributor First Name cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
                                         if (string.IsNullOrEmpty(excelDataTable.Rows[i]["LastName"].ToString())) { ModelState.AddModelError("CustomError", string.Format("Distributor Last Name cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
+                                        if (fasiliateFlag == true)
+                                        {
+                                            if (excelDataTable.Rows[i]["Shipping Address 1"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("Shipping Address 1 cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
+                                            if (excelDataTable.Rows[i]["Shipping City"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("Shipping City cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
+                                            if (excelDataTable.Rows[i]["Shipping State"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("Shipping State Code cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
+                                            if (excelDataTable.Rows[i]["Shipping Country"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("Shipping Country Code cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
+                                            if (excelDataTable.Rows[i]["Shipping Zip Code"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("Shipping Zip Code cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }
+                                        }
                                     }
 
                                     if (!ModelState.IsValid)
@@ -351,7 +417,7 @@ namespace asi.asicentral.web.Controllers.Show
                                         return View("../Show/ViewError", objErrors);
                                     }
 
-                                    UpdateShowCompanyData(excelDataTable, i, objShow.Id);
+                                    UpdateShowCompanyData(excelDataTable, i, objShow.Id, fasiliateFlag);
                                 }
 
                                 ObjectService.SaveChanges();
@@ -390,7 +456,7 @@ namespace asi.asicentral.web.Controllers.Show
                 catch (Exception ex)
                 {
                     log.Debug("Exception while importing the file, exception message: " + ex.Message);
-                    return View("../Show/ViewError", new ErrorModel() { Error = ex.Message } );
+                    return View("../Show/ViewError", new ErrorModel() { Error = ex.Message });
                 }
                 return RedirectToAction("../Show/ShowList");
             }
