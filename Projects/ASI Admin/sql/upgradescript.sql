@@ -78,7 +78,7 @@ SET IDENTITY_INSERT EXCT_SupUpdateField ON
 INSERT INTO EXCT_SupUpdateField (SupUpdateFieldId, Name, Description, CreateDateUTC, UpdateDateUTC, UpdateSource)
 VALUES
 (1, 'InventoryUrlTest', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(2, 'LoginValidateUUrlTest', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(2, 'LoginValidateUrlTest', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
 (3, 'OrderCreateUrlTest', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
 (4, 'OrderStatusUrlTest', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
 (5, 'AccountNoTest', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
@@ -86,7 +86,7 @@ VALUES
 (7, 'PasswordTest', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
 (8, 'EmailTest', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
 (11, 'InventoryUrlProd', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(12, 'LoginValidateUUrlProd', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(12, 'LoginValidateUrlProd', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
 (13, 'OrderCreateUrlProd', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
 (14, 'OrderStatusUrlProd', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
 (15, 'AccountNoProd', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
