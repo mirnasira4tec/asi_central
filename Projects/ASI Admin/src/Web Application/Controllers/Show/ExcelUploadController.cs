@@ -30,7 +30,7 @@ namespace asi.asicentral.web.Controllers.Show
             return View();
         }
 
-        public ShowCompany UpdateShowCompanyData(DataTable ds, int rowId, int showId = 0,bool fasiliateFlag = false)
+        public ShowCompany UpdateShowCompanyData(DataTable ds, int rowId, int showId = 0, bool fasiliateFlag = false)
         {
             var asinumber = ds.Rows[rowId]["ASINO"].ToString();
             var name = ds.Rows[rowId]["Company"].ToString();
@@ -128,7 +128,7 @@ namespace asi.asicentral.web.Controllers.Show
 
             #endregion
             #region update employee data for distributors or fasilitate
-            if (company.MemberType == "Distributor" || fasiliateFlag )
+            if (company.MemberType == "Distributor" || fasiliateFlag)
             {
                 // update showEmployee
                 var firstName = ds.Rows[rowId]["FirstName"].ToString();
@@ -145,24 +145,27 @@ namespace asi.asicentral.web.Controllers.Show
                 }
                 if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName))
                 {
-                    var employee = company.Employees.FirstOrDefault(item => (item.FirstName == firstName && item.LastName == lastName));
+                    ShowEmployee employee = null;
+                    employee = company.Employees.FirstOrDefault(item => (item.FirstName == firstName && item.LastName == lastName));
                     if (employee == null)
                     {
                         employee = new ShowEmployee()
                         {
-                            CompanyId = company.Id,
-                            FirstName = firstName,
-                            LastName = lastName,
-                            EPhone = phone,
-                            Email = email,
                             CreateDate = DateTime.UtcNow,
-                            UpdateDate = DateTime.UtcNow,
-                            UpdateSource = "ExcelUploadcontroller-Index"
                         };
                         company.Employees.Add(employee);
                     }
+                    employee.CompanyId = company.Id;
+                    employee.FirstName = firstName;
+                    employee.LastName = lastName;
+                    employee.EPhone = phone;
+                    employee.Email = email;
+                    employee.CreateDate = DateTime.UtcNow;
+                    employee.UpdateDate = DateTime.UtcNow;
+                    employee.UpdateSource = "ExcelUploadcontroller-Index";
 
-                    if( fasiliateFlag )
+
+                    if (fasiliateFlag)
                     {
                         var street1 = ds.Rows[rowId]["Shipping Address 1"].ToString();
                         var city = ds.Rows[rowId]["Shipping City"].ToString();
@@ -171,7 +174,7 @@ namespace asi.asicentral.web.Controllers.Show
                         var country = ds.Rows[rowId]["Shipping Country"].ToString();
                         if (!string.IsNullOrEmpty(street1) && !string.IsNullOrEmpty(city) && !string.IsNullOrEmpty(zip) && !string.IsNullOrEmpty(state))
                         {
-                            employee.Address = employee.Address ?? new ShowAddress() { CreateDate = DateTime.UtcNow,UpdateDate = DateTime.UtcNow };
+                            employee.Address = employee.Address ?? new ShowAddress() { CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow };
                             employee.Address.Street1 = street1;
                             employee.Address.Street2 = ds.Rows[rowId]["Shipping Address 2"].ToString();
                             employee.Address.City = city;
@@ -318,8 +321,8 @@ namespace asi.asicentral.web.Controllers.Show
                                                                                 .OrderByDescending(s => s.StartDate).FirstOrDefault();
                                     if (objShow != null && objShow.ShowTypeId == 5)
                                     {
-                                       fasiliateFlag = true;
-                                       columnNameList = new string[] { "ASINO", "MemberType", "Company", "FirstName", "LastName", "Address", "City", "State", "Zip Code", "Country", "Shipping Address 1", "Shipping Address 2", "Shipping City", "Shipping State", "Shipping Zip Code", "Shipping Country", "Phone", "Email Address" };
+                                        fasiliateFlag = true;
+                                        columnNameList = new string[] { "ASINO", "MemberType", "Company", "FirstName", "LastName", "Address", "City", "State", "Zip Code", "Country", "Shipping Address 1", "Shipping Address 2", "Shipping City", "Shipping State", "Shipping Zip Code", "Shipping Country", "Phone", "Email Address" };
                                     }
                                 }
 
