@@ -1195,7 +1195,7 @@ namespace asi.asicentral.services.PersonifyProxy
                             memberData.NumberOfSalesEmployee.HasValue ? memberData.NumberOfSalesEmployee.Value.ToString() : string.Empty,
                             memberData.AnnualSalesVolumeASP,
                             memberData.AnnualSalesVolume,
-                            memberData.PrimaryBusinessRevenue.Id.ToString(),
+                            memberData.PrimaryBusinessRevenue.Name.ToString(),
                             memberData.OtherBusinessRevenue,
                             string.Join("", memberData.ProductLines.Select(p => p.SubCode).ToList()),
                             string.Join("", memberData.AccountTypes.Select(p => p.SubCode).ToList()),
