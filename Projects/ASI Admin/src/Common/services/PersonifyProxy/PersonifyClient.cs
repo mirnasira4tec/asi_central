@@ -1147,7 +1147,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     {
                         var memberData = (StoreDetailSupplierMembership)storeDetailApp;
                         var decoTypes = memberData.DecoratingTypes;
-                        ExecutePersonifySP(SP_UPDATE_DISTRIBUTOR_MEMBER_QUESTIONS, new List<string>
+                        ExecutePersonifySP(SP_UPDATE_SUPPLIER_MEMBER_QUESTIONS, new List<string>
                         {
                             orderDetail.Order.ExternalReference, "0",
                             memberData.YearEstablished.HasValue ? memberData.YearEstablished.Value.ToString() : string.Empty,
@@ -1155,9 +1155,10 @@ namespace asi.asicentral.services.PersonifyProxy
                             memberData.LineNames,
                             memberData.WomanOwned.HasValue && memberData.WomanOwned.Value ? "F" : "M",
                             memberData.IsMinorityOwned.HasValue && memberData.IsMinorityOwned.Value ? "1" : "0",
-                            memberData.NumberOfSalesEmployee,
+                            memberData.NumberOfEmployee,
                             memberData.HasAmericanProducts.HasValue && memberData.HasAmericanProducts.Value ? "1" : "0",
                             memberData.BusinessHours,
+                            memberData.ProductionTime,
                             memberData.ProductionTime,
                             memberData.IsRushServiceAvailable.HasValue && memberData.IsRushServiceAvailable.Value ? "1" : "0",
                             memberData.IsImprinterVsDecorator.HasValue && memberData.IsMinorityOwned.Value ? "1" : "0",
