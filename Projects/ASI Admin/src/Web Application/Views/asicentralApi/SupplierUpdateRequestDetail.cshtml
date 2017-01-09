@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "SupplierUpdateRequestDetail";
+    Layout = "~/Views/Shared/_CentralApiLayout.cshtml";
+}
+@using asi.asicentral.model.excit;
+@model  IList<SupUpdateRequestDetail>
+<h2>Supplier Update Request Detail for</h2>
+<div class="status-btns">
+    @using (Html.BeginForm("EditServicesData", "asicentralApi"))
+    {
+        int supUpdateRequestId = 0;
+        if (Model.Count > 0)
+        {
+            supUpdateRequestId = Model[0].SupUpdateRequestId;
+        }
+        <input  type ="hidden" value="@supUpdateRequestId" name="supUpdateRequestId"/>
+        <input class="command btn-primary" type="submit" value="Accept" name="command">
+        <input class="command btn-primary" type="submit" value="Reject" name="command">
+        <a href="/asicentralApi/SupplierUpdateRequestList">Cancel</a>
+    }
+</div>
+<br />
+<br />
+<table class="table table-bordered table-condensed table-striped">
+    <thead>
+        <tr>
+            <th>Configuration Description</th>
+            <th>Original Value</th>
+            <th>Updated Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            if (!item.UpdateField.Name.Contains("Test") && !item.UpdateField.Name.Contains("Prod"))
+            {
+            <tr>
+                <td>@item.UpdateField.Description</td>
+                <td>@item.OrigValue</td>
+                <td>@item.UpdateValue</td>
+            </tr>
+            }
+        }
+        @foreach (var item in Model)
+        {
+            if (item.UpdateField.Name.Contains("Test"))
+            {
+            <tr>
+                <th colspan="3" style="text-align: center; border-top: 1px solid #D71D24;">Stage (Test) Environment</th>
+            </tr>
+            <tr>
+                <td>@item.UpdateField.Description</td>
+                <td>@item.OrigValue</td>
+                <td>@item.UpdateValue</td>
+            </tr>
+            }
+        }
+        @foreach (var item in Model)
+        {
+            if (item.UpdateField.Name.Contains("Prod"))
+            {
+            <tr>
+                <th colspan="3" style="text-align: center; border-top: 1px solid #D71D24;">Production Environment </th>
+            </tr>
+            <tr>
+                <td>@item.UpdateField.Description</td>
+                <td>@item.OrigValue</td>
+                <td>@item.UpdateValue</td>
+            </tr>
+            }
+        }
+    </tbody>
+</table>

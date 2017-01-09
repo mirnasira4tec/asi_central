@@ -281,6 +281,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\asicentralApi\asicentralApiController.cs" />
     <Compile Include="Helpers\Authorized.cs" />
     <Compile Include="Controllers\asicentral\CallQueueController.cs" />
     <Compile Include="Controllers\CompanyValidationsController.cs" />
@@ -514,6 +515,9 @@
     <Content Include="Views\Show\ViewError.cshtml" />
     <Content Include="Views\Store\Admin\ShowForms.cshtml" />
     <EmbeddedResource Include="Views\Emails\OrderApprovalEmail.cshtml" />
+    <Content Include="Views\Shared\_CentralApiLayout.cshtml" />
+    <Content Include="Views\asicentralApi\SupplierUpdateRequestList.cshtml" />
+    <Content Include="Views\asicentralApi\SupplierUpdateRequestDetail.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
