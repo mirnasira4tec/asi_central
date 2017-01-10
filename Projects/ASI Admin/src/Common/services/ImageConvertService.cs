@@ -6,11 +6,16 @@ using System.IO;
 
 namespace asi.asicentral.services
 {
-    public class ImageConvertService
+    public class ImageConvertService : IImageConvertService
     {
-        private static readonly ILogService _log = LogService.GetLog(typeof(ImageConvertService));
+        private ILogService _log { get; set; }
 
-        public static bool ConvertImage(string inputFilePath, string targetFilePath, bool isBackgroundTransparent = true)
+        public ImageConvertService()
+        {
+            _log = LogService.GetLog(this.GetType());
+        }
+
+        public bool ConvertImage(string inputFilePath, string targetFilePath, bool isBackgroundTransparent = true)
         {
             var success = false;
             var imageConvertSrvPath = ConfigurationManager.AppSettings["ImageConversionSrvPath"];
