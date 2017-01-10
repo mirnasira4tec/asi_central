@@ -38,6 +38,14 @@
             { "Custom Package Prodigy", "CPRD-1499", "" },
             { "Custom Package Virtuoso", "CPGE-1899", "" } };
 
+        public static readonly string[,] OLD_PRODUCTS = {
+            { "Website Maintenance 1 hr","WEBM-120",""},
+            { "Website Maintenance 2 hr","WEBM-240",""},
+            { "Website Maintenance 3 hr","WEBM-360",""},
+            { "Website Maintenance 4 hr","WEBM-480",""},
+            { "Website Maintenance 6 hr","WEBM-720",""},
+            { "Website Maintenance 12 hr","WEBM-1440",""}};
+
         public static readonly int SALES_FORM_PRODUCT_ID = 99;
 
         public static string GetProductDescription(string code)
@@ -51,13 +59,24 @@
                     break;
                 }
             }
-            if (description.Equals(string.Empty))
+            if (string.IsNullOrEmpty(description))
             {
                 for (var i = 0; i < FEES.GetLength(0); i++)
                 {
                     if (FEES[i, 1].Equals(code))
                     {
                         description = FEES[i, 0];
+                        break;
+                    }
+                }
+            }
+            if (string.IsNullOrEmpty(description))
+            {
+                for (var i = 0; i < OLD_PRODUCTS.GetLength(0); i++)
+                {
+                    if (OLD_PRODUCTS[i, 1].Equals(code))
+                    {
+                        description = OLD_PRODUCTS[i, 0];
                         break;
                     }
                 }
