@@ -82,6 +82,9 @@ namespace asi.asicentral.services
                 var orderDetail = order.OrderDetails[0];
                 var coupon = orderDetail.Coupon;
 
+                // update demographic questions
+                PersonifyClient.UpdateDemographicData(storeService, orderDetail);
+
                 // processing coupon
                 if (coupon != null && !string.IsNullOrEmpty(coupon.CouponCode) )
                 {
@@ -224,9 +227,6 @@ namespace asi.asicentral.services
                     }
                 }
                 #endregion non-scheduled products
-
-                // update demographic questions
-                PersonifyClient.UpdateDemographicData(storeService, orderDetail); ;
             }
             catch (Exception ex)
             {

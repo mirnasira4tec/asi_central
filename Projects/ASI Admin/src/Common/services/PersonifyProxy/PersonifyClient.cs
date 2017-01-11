@@ -96,7 +96,6 @@ namespace asi.asicentral.services.PersonifyProxy
                                                                     "@ip_sub_customer_id", 
                                                                     "@ip_usr_year_established", 
                                                                     "@ip_usr_selling_promo_products", 
-                                                                    "@ip_product_line", 
                                                                     "@ip_usr_owner_gender", 
                                                                     "@ip_usr_minority_owned", 
                                                                     "@ip_usr_facilitiesinformation", 
@@ -1152,7 +1151,6 @@ namespace asi.asicentral.services.PersonifyProxy
                             orderDetail.Order.ExternalReference, "0",
                             memberData.YearEstablished.HasValue ? memberData.YearEstablished.Value.ToString() : string.Empty,
                             memberData.YearEnteredAdvertising.HasValue ? memberData.YearEnteredAdvertising.Value.ToString() : string.Empty,
-                            memberData.LineNames,
                             memberData.WomanOwned.HasValue && memberData.WomanOwned.Value ? "F" : "M",
                             memberData.IsMinorityOwned.HasValue && memberData.IsMinorityOwned.Value ? "1" : "0",
                             memberData.NumberOfEmployee,
@@ -1416,11 +1414,9 @@ namespace asi.asicentral.services.PersonifyProxy
                     }
 
                     var productLines = GetProductLines(storeService, data.Elements());
-                    memberData.LineNames = string.Join(";", productLines.Select(p => p.Description));
-                    if (memberData.LineNames.Length > 500)
-                    {
-                        var index = memberData.LineNames.LastIndexOf(';', 499);
-                        memberData.LineNames = memberData.LineNames.Substring(0, index + 1);
+                    if (productLines != null && productLines.Any())
+                    {  // get first line
+                        memberData.LineNames = productLines[0].Description;
                     }
                 }
             }
