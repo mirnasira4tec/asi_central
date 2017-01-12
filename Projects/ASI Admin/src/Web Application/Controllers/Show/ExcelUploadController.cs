@@ -417,7 +417,15 @@ namespace asi.asicentral.web.Controllers.Show
                                     {
                                         for (var j = attendee.EmployeeAttendees.Count() - 1; j >= 0; j--)
                                         {
-                                            ObjectService.Delete<ShowEmployeeAttendee>(attendee.EmployeeAttendees[j]);
+                                            ObjectService.Delete(attendee.EmployeeAttendees[j]);
+                                        }
+                                    }
+
+                                    if (attendee.DistShowLogos != null && attendee.DistShowLogos.Any())
+                                    {
+                                        for (var j = attendee.DistShowLogos.Count() - 1; j >= 0; j--)
+                                        {
+                                            ObjectService.Delete(attendee.DistShowLogos[j]);
                                         }
                                     }
 
