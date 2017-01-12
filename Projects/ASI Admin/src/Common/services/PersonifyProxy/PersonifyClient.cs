@@ -1726,7 +1726,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return accountTypes;
         }
         
-        public static StoredProcedureOutput ExecutePersonifySP(string spName, List<string> parameters)
+        private static StoredProcedureOutput ExecutePersonifySP(string spName, List<string> parameters)
         {
             _log.Debug(string.Format("ExecutePersonifySP - start: StoreProcedure name - {0})", spName));
             var startTime = DateTime.Now;
