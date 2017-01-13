@@ -51,6 +51,7 @@ namespace asi.asicentral.model.store
         [StringLength(250, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength250")]
         [Display(ResourceType = typeof(Resource), Name = "OtherBusinessRevenue")]
         public string OtherBusinessRevenue { get; set; }
+        [Display(ResourceType = typeof(Resource), Name = "YearEst")]
         public Nullable<DateTime> EstablishedDate { get; set; }
         public virtual LookDistributorRevenueType PrimaryBusinessRevenue { get; set; }
         public virtual IList<LookDistributorAccountType> AccountTypes{ get; set; }

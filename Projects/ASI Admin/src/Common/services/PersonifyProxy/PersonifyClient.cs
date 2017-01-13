@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using DocumentFormat.OpenXml.Drawing;
 
 namespace asi.asicentral.services.PersonifyProxy
 {
@@ -50,6 +51,12 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string SP_GET_BUNDLE_PRODUCT_DETAILS = "ASI_GetBundleProductDetails_SP";
 	    private const string SP_GET_PRODUCT_DETAILS = "USR_PRODUCT_VALIDATION_PROC";
         private const string SP_EEX_EMAIL_USAGE_UPDATE = "USR_EEX_EMAIL_USAGE_UPDATE";
+	    private const string SP_GET_SUPPLIER_MEMBER_QUESTRIONS = "USR_ASI_CENTRAL_MQ_SELECT_SUPPLIER_PROC";
+        private const string SP_GET_DISTRIBUTOR_MEMBER_QUESTRIONS = "USR_ASI_CENTRAL_MQ_SELECT_DISTRIBUTOR_PROC";
+        private const string SP_GET_DECORATOR_MEMBER_QUESTRIONS = "USR_ASI_CENTRAL_MQ_SELECT_DECORATOR_PROC";
+        private const string SP_UPDATE_DISTRIBUTOR_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_DISTRIBUTOR_PROC";
+        private const string SP_UPDATE_SUPPLIER_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_SUPPLIER_PROC";
+        private const string SP_UPDATE_DECORATOR_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_DECORATOR_PROC";
 
 		private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
 		private static readonly IDictionary<string, string> ASIShowCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "SHOW AE" }, { "DISCOVER", "SHOW DISC" }, { "MASTERCARD", "SHOW MS" }, { "VISA", "SHOW VS" } };
@@ -69,7 +76,62 @@ namespace asi.asicentral.services.PersonifyProxy
                                                           "@upd_class_code", "@upd_sub_class", "@upd_user" }},
             {SP_GET_BUNDLE_PRODUCT_DETAILS, new List<string>() { "@ip_Bundle_Group_Name ", "@ip_Rate_Structure", "@ip_Rate_Code" }},
             {SP_GET_PRODUCT_DETAILS, new List<string>() { "@ip_parent_product", "@ip_product_code", "@ip_Rate_Structure", "@ip_Rate_Code" }},
-            {SP_EEX_EMAIL_USAGE_UPDATE, new List<string>() { "@email_address", "@usage_code", "@unsubscribe", "@is_globally_suppressed" }}
+            {SP_EEX_EMAIL_USAGE_UPDATE, new List<string>() { "@email_address", "@usage_code", "@unsubscribe", "@is_globally_suppressed" }},
+            {SP_GET_SUPPLIER_MEMBER_QUESTRIONS, new List<string>(){"@ip_master_customer_id", "@ip_sub_customer_id"}},
+            {SP_GET_DISTRIBUTOR_MEMBER_QUESTRIONS, new List<string>(){"@ip_master_customer_id", "@ip_sub_customer_id"}},
+            {SP_GET_DECORATOR_MEMBER_QUESTRIONS, new List<string>(){"@ip_master_customer_id", "@ip_sub_customer_id"}},
+            {SP_UPDATE_DISTRIBUTOR_MEMBER_QUESTIONS, new List<string>{ "@ip_master_customer_id", 
+                                                                        "@ip_sub_customer_id",
+                                                                        "@ip_usr_year_established",
+                                                                        "@ip_usr_facilitiesinformation",
+                                                                        "@ip_usr_total_sales_force",
+                                                                        "@ip_usr_specialty_sales_amount",
+                                                                        "@ip_usr_company_sales_amount",
+                                                                        "@ip_usr_pri_bus_rev_src",
+                                                                        "@ip_usr_pri_bus_other_desc",
+                                                                        "@ip_product_line",
+                                                                        "@ip_types_accounts",
+                                                                        "@ip_user" }},  
+            {SP_UPDATE_SUPPLIER_MEMBER_QUESTIONS, new List<string> {"@ip_master_customer_id", 
+                                                                    "@ip_sub_customer_id", 
+                                                                    "@ip_usr_year_established", 
+                                                                    "@ip_usr_selling_promo_products", 
+                                                                    "@ip_usr_owner_gender", 
+                                                                    "@ip_usr_minority_owned", 
+                                                                    "@ip_usr_facilitiesinformation", 
+                                                                    "@ip_usr_north_american_company", 
+                                                                    "@ip_usr_office_hours", 
+                                                                    "@ip_usr_prod_time_min", 
+                                                                    "@ip_usr_prod_time_max", 
+                                                                    "@ip_usr_rush_time", 
+                                                                    "@ip_usr_imprinter", 
+                                                                    "@ip_usr_retail", 
+                                                                    "@ip_usr_importer", 
+                                                                    "@ip_usr_wholesaler", 
+                                                                    "@ip_usr_manufacturer", 
+                                                                    "@ip_usr_etching", 
+                                                                    "@ip_usr_pad_print", 
+                                                                    "@ip_usr_lithography", 
+                                                                    "@ip_usr_engraving", 
+                                                                    "@ip_usr_transfer", 
+                                                                    "@ip_usr_other_note", 
+                                                                    "@ip_usr_hot_stamping", 
+                                                                    "@ip_usr_direct_embroidery", 
+                                                                    "@ip_usr_sublimation", 
+                                                                    "@ip_usr_laser", 
+                                                                    "@ip_usr_full_color_process", 
+                                                                    "@ip_usr_silkscreen", 
+                                                                    "@ip_usr_foil_stamping", 
+                                                                    "@ip_usr_four_color_process", 
+                                                                    "@ip_usr_offset", 
+                                                                    "@ip_usr_die_stamp", 
+                                                                    "@ip_user" }},
+            {SP_UPDATE_DECORATOR_MEMBER_QUESTIONS, new List<string>{"@ip_master_customer_id", 
+                                                                    "@ip_sub_customer_id",
+                                                                    "@ip_usr_organization",
+                                                                    "@ip_imprinting",
+                                                                    "@ip_usr_union_label_flag",
+                                                                    "@ip_user" }}
         };
 
         private static readonly IDictionary<string, List<string>> EEX_USAGE_CODES = new Dictionary<string, List<string>>()
@@ -1029,7 +1091,642 @@ namespace asi.asicentral.services.PersonifyProxy
 	        return companyInfo;
 	    }
 
-	    private static StoredProcedureOutput ExecutePersonifySP(string spName, List<string> parameters)
+        public static StoreDetailApplication GetDemographicData(IStoreService storeService, StoreOrderDetail orderDetail)
+        {
+            var storeDetailApp = storeService.GetApplication(orderDetail);
+            try
+            {
+                if (orderDetail.Order != null && orderDetail.Order.Company != null && orderDetail.Order.Company.HasExternalReference())
+                {
+                    var masterId = orderDetail.Order.Company.ExternalReference.Split(';')[0];
+                    if (StoreDetailSupplierMembership.Identifiers.Contains(orderDetail.Product.Id))
+                    {
+                        storeDetailApp = GetSupplierDemograpic((StoreDetailSupplierMembership)storeDetailApp, storeService, masterId);
+                    }
+                    else if (StoreDetailDistributorMembership.Identifiers.Contains(orderDetail.Product.Id))
+                    {
+                        storeDetailApp = GetDistributorDemograpic((StoreDetailDistributorMembership)storeDetailApp, storeService, masterId);
+                    }
+                    else if(StoreDetailDecoratorMembership.Identifiers.Contains(orderDetail.Product.Id))
+                    {
+                        storeDetailApp = GetDecoratorDemograpic((StoreDetailDecoratorMembership)storeDetailApp, storeService, masterId);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Debug("PersonifyClient.GetDemographicData exception, message: " + ex.Message);
+            }
+
+            return storeDetailApp;
+        }
+
+        public static void UpdateDemographicData(IStoreService storeService, StoreOrderDetail orderDetail)
+        {
+            var storeDetailApp = storeService.GetApplication(orderDetail);
+            if (storeDetailApp != null && orderDetail.Order != null && orderDetail.Order.Company != null && 
+                orderDetail.Order.Company.HasExternalReference())
+            {
+                try
+                {
+                    var company = orderDetail.Order.Company;
+                    var user = string.Empty;
+
+                    if (company.Individuals != null && company.Individuals.Count > 0)
+                    {
+                        user = company.Individuals[0].Email;
+                    }
+
+                    if (string.IsNullOrEmpty(user))
+                    {
+                        user = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
+                    }
+
+                    if (StoreDetailSupplierMembership.Identifiers.Contains(orderDetail.Product.Id))
+                    {
+                        var memberData = (StoreDetailSupplierMembership)storeDetailApp;
+                        var decoTypes = memberData.DecoratingTypes;
+                        ExecutePersonifySP(SP_UPDATE_SUPPLIER_MEMBER_QUESTIONS, new List<string>
+                        {
+                            orderDetail.Order.ExternalReference, "0",
+                            memberData.YearEstablished.HasValue ? memberData.YearEstablished.Value.ToString() : string.Empty,
+                            memberData.YearEnteredAdvertising.HasValue ? memberData.YearEnteredAdvertising.Value.ToString() : string.Empty,
+                            memberData.WomanOwned.HasValue && memberData.WomanOwned.Value ? "F" : "M",
+                            memberData.IsMinorityOwned.HasValue && memberData.IsMinorityOwned.Value ? "1" : "0",
+                            memberData.NumberOfEmployee,
+                            memberData.HasAmericanProducts.HasValue && memberData.HasAmericanProducts.Value ? "1" : "0",
+                            memberData.BusinessHours,
+                            memberData.ProductionTime,
+                            memberData.ProductionTime,
+                            memberData.IsRushServiceAvailable.HasValue && memberData.IsRushServiceAvailable.Value ? "1" : "0",
+                            memberData.IsImprinterVsDecorator.HasValue && memberData.IsMinorityOwned.Value ? "1" : "0",
+                            memberData.IsRetailer.HasValue && memberData.IsRetailer.Value ? "1" : "0",
+                            memberData.IsImporter.HasValue && memberData.IsImporter.Value ? "1" : "0",
+                            memberData.IsWholesaler.HasValue && memberData.IsWholesaler.Value ? "1" : "0",
+                            memberData.IsManufacturer.HasValue && memberData.IsMinorityOwned.Value ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_ETCHING) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_PADPRINT) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_LITHOGRAPHY) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_ENGRAVING) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_TRANSFER) != null ? "1" : "0",
+                            memberData.OtherDec,
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_HOTSTAMPING) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_DIRECTEMBROIDERY) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_SUBLIMINATION) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_LASER) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_FULLCOLOR) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_SILKSCREEN) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_FOILSTAMPING) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_FOURCOLOR) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_OFFSET) != null ? "1" : "0",
+                            decoTypes.FirstOrDefault(d => d.Description == LookSupplierDecoratingType.DECORATION_DIESTAMP) != null ? "1" : "0",
+                            user
+                        });
+                    }
+                    else if (StoreDetailDistributorMembership.Identifiers.Contains(orderDetail.Product.Id))
+                    {
+                        var memberData = (StoreDetailDistributorMembership)storeDetailApp;
+                        ExecutePersonifySP(SP_UPDATE_DISTRIBUTOR_MEMBER_QUESTIONS, new List<string>
+                        {
+                            orderDetail.Order.ExternalReference, "0",
+                            memberData.EstablishedDate.HasValue ? memberData.EstablishedDate.Value.Year.ToString() : string.Empty,
+                            memberData.NumberOfEmployee.ToString(),
+                            memberData.NumberOfSalesEmployee.HasValue ? memberData.NumberOfSalesEmployee.Value.ToString() : string.Empty,
+                            memberData.AnnualSalesVolumeASP,
+                            memberData.AnnualSalesVolume,
+                            memberData.PrimaryBusinessRevenue.Name.ToString(),
+                            memberData.OtherBusinessRevenue,
+                            string.Join("", memberData.ProductLines.Select(p => p.SubCode).ToList()),
+                            string.Join("", memberData.AccountTypes.Select(p => p.SubCode).ToList()),
+                            user
+                        });
+                    }
+                    else if (StoreDetailDecoratorMembership.Identifiers.Contains(orderDetail.Product.Id))
+                    {
+                        var memberData = (StoreDetailDecoratorMembership)storeDetailApp;
+                        var imprinting = string.Join("", memberData.ImprintTypes.Select(m => m.Id.ToString()));
+
+                        ExecutePersonifySP(SP_UPDATE_DECORATOR_MEMBER_QUESTIONS, new List<string>
+                                           { orderDetail.Order.ExternalReference, "0", 
+                                            memberData.BestDescribesOption != null ?  memberData.BestDescribesOption.Value.ToString() : "", 
+                                            imprinting, memberData.IsUnionMember ? "Y" : "N", user });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _log.Debug("PersonifyClient.UpdateDemographicData exception: " + ex.Message);
+                }
+            }
+        }
+
+        private static StoreDetailDecoratorMembership GetDecoratorDemograpic(StoreDetailDecoratorMembership memberData, IStoreService storeService, string masterCustomerId)
+        {
+            if (memberData == null)
+                memberData = new StoreDetailDecoratorMembership();
+
+            var response = ExecutePersonifySP(SP_GET_DECORATOR_MEMBER_QUESTRIONS, new List<string>() { masterCustomerId, "0" });
+            if (storeService != null && response != null && !string.IsNullOrEmpty(response.Data) && 
+                response.Data.Trim().ToUpper() != "NO DATA FOUND")
+            {
+                var xml = XDocument.Parse(response.Data);
+                var data = xml.Root.Elements("Table").FirstOrDefault();
+                if (data != null)
+                {
+                    var imprintingTypes = storeService.GetAll<LookDecoratorImprintingType>(false).ToList();
+                    LookDecoratorImprintingType imprintType = null;
+                    foreach (var element in data.Elements())
+                    {
+                        int value = 0;
+                        Int32.TryParse(element.Value, out value);
+                        switch (element.Name.ToString())
+                        {
+                            case "USR_ORGANIZATION":
+                                memberData.BestDescribesOption = value;
+                                break;
+                            case "Digitizing":
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.SubCode == "D");
+                                break;
+                            case "Embroidery":
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.SubCode == "A");
+                                break;
+                            case "Engraving":
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.SubCode == "E");
+                                break;
+                            case "Heat_x0020_Transfer":
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.SubCode == "C");
+                                break;
+                            case "Monogramming":
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.SubCode == "G");
+                                break;
+                            case "Screen_x0020_Printing":
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.SubCode == "B");
+                                break;
+                            case "Sublimation":
+                                imprintType = imprintingTypes.FirstOrDefault(t => t.SubCode == "F");
+                                break;
+                            case "Union_LabeL_Flag":
+                                memberData.IsUnionMember = true;
+                                break;                        
+                        }
+
+                        if ( imprintType != null)
+                        {
+                            var existing = memberData.ImprintTypes.FirstOrDefault(p => p.Id == imprintType.Id);
+                            if (value == 1 && existing == null)
+                                memberData.ImprintTypes.Add(imprintType);
+                            else if (element.Value == "0" && existing != null)
+                                memberData.ImprintTypes.Remove(existing);
+                        }
+                    }
+                }
+            }
+
+            return memberData;
+        }
+
+        private static StoreDetailSupplierMembership GetSupplierDemograpic(StoreDetailSupplierMembership memberData, IStoreService storeService, string masterCustomerId)
+        {
+            if (memberData == null)
+                memberData = new StoreDetailSupplierMembership();
+
+            var response = ExecutePersonifySP(SP_GET_SUPPLIER_MEMBER_QUESTRIONS, new List<string>() { masterCustomerId, "0" });
+            if (response != null && !string.IsNullOrEmpty(response.Data) && response.Data.Trim().ToUpper() != "NO DATA FOUND")
+            {
+                var xml = XDocument.Parse(response.Data);
+                var data = xml.Root.Elements("Table").FirstOrDefault();
+                var productionTimeMin = string.Empty;
+                var productionTimeMax = string.Empty;
+                var decoratorTypes = storeService.GetAll<LookSupplierDecoratingType>(true).ToList();
+                if (data != null)
+                {
+                    foreach (var element in data.Elements())
+                    {
+                        int intValue = 0;
+                        Int32.TryParse(element.Value, out intValue);
+                        LookSupplierDecoratingType type = null;
+                        switch (element.Name.ToString())
+                        {
+                            case "USR_YEAR_ESTABLISHED":
+                                memberData.YearEstablished = intValue;
+                                break;
+                            case "USR_SELLING_PROMO_PRODUCTS":
+                                memberData.YearEnteredAdvertising = intValue;
+                                break;
+                            case "USR_OWNER_GENDER":
+                                memberData.WomanOwned = element.Value == "F";
+                                break;
+                            case "USR_MINORITY_OWNED":
+                                memberData.IsMinorityOwned = intValue == 1;
+                                break;
+                            case "USR_FACILITIESINFORMATION":
+                                memberData.NumberOfEmployee = element.Value;
+                                break;
+                            case "USR_NORTH_AMERICAN_COMPANY":
+                                memberData.HasAmericanProducts = intValue == 1;
+                                break;
+                            case "USR_OFFICE_HOURS":
+                                memberData.BusinessHours = element.Value;
+                                break;
+                            case "USR_PROD_TIME_MIN":
+                                productionTimeMin = element.Value;
+                                break;
+                            case "USR_PROD_TIME_MAX":
+                                productionTimeMax = element.Value;
+                                break;
+                            case "USR_RUSH_TIME":
+                                memberData.IsRushServiceAvailable = intValue == 1;
+                                break;
+                            case "USR_IMPRINTER":
+                                memberData.IsImprinterVsDecorator = intValue == 1;
+                                break;
+                            case "USR_RETAIL":
+                                memberData.IsRetailer = intValue == 1;
+                                break;
+                            case "USR_IMPORTER":
+                                memberData.IsImporter = intValue == 1;
+                                break;
+                            case "USR_WHOLESALER":
+                                memberData.IsWholesaler = intValue == 1;
+                                break;
+                            #region decorator types
+                            case "USR_ETCHING":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_ETCHING);
+                                break;
+                            case "USR_PAD_PRINT":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_PADPRINT);
+                                break;
+                            case "USR_LITHOGRAPHY":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_LITHOGRAPHY);
+                                break;
+                            case "USR_ENGRAVING":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_ENGRAVING);
+                                break;
+                            case "USR_TRANSFER":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_TRANSFER);
+                                break;
+                            case "USR_HOT_STAMPING":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_HOTSTAMPING);
+                                break;
+                            case "USR_DIRECT_EMBROIDERY":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_DIRECTEMBROIDERY);
+                                break;
+                            case "USR_SUBLIMATION":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_SUBLIMINATION);
+                                break;
+                            case "USR_LASER":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_LASER);
+                                break;
+                            case "USR_FULL_COLOR_PROCESS":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_FULLCOLOR);
+                                break;
+                            case "USR_SILKSCREEN":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_SILKSCREEN);
+                                break;
+                            case "USR_FOIL_STAMPING":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_FOILSTAMPING);
+                                break;
+                            case "USR_FOUR_COLOR_PROCESS":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_FOURCOLOR);
+                                break;
+                            case "USR_OFFSET":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_OFFSET);
+                                break;
+                            case "USR_DIE_STAMP":
+                                type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_DIESTAMP);
+                                break;
+                            #endregion decorator types
+                        }
+
+                        if (type != null)
+                        {
+                            var existing = memberData.DecoratingTypes.FirstOrDefault(t => t.Id == type.Id);
+                            if (element.Value == "1" && existing == null)
+                                memberData.DecoratingTypes.Add(type);
+                            else if (element.Value == "0" && existing != null)
+                                memberData.DecoratingTypes.Remove(existing);
+                        }
+                    }
+
+                    memberData.ProductionTime = productionTimeMin;
+                    if (productionTimeMax != productionTimeMin)
+                    {
+                        memberData.ProductionTime += " - " + productionTimeMax;
+                    }
+
+                    var productLines = GetProductLines(storeService, data.Elements());
+                    if (productLines != null && productLines.Any())
+                    {  // get first line
+                        memberData.LineNames = productLines[0].Description;
+                    }
+                }
+            }
+
+            return memberData;
+        }
+
+	    private static StoreDetailDistributorMembership GetDistributorDemograpic(StoreDetailDistributorMembership memberData, IStoreService storeService, string masterCustomerId)
+        {
+            if (memberData == null)
+                memberData = new StoreDetailDistributorMembership();
+
+            var response = ExecutePersonifySP(SP_GET_DISTRIBUTOR_MEMBER_QUESTRIONS, new List<string>() { masterCustomerId, "0" });
+	        if (response != null && !string.IsNullOrEmpty(response.Data) &&
+	            response.Data.Trim().ToUpper() != "NO DATA FOUND")
+	        {
+                var xml = XDocument.Parse(response.Data);
+
+                var data = xml.Root.Elements("Table").FirstOrDefault();
+	            if (data != null)
+	            {
+	                memberData.ProductLines = GetProductLines(storeService, data.Elements(), memberData.ProductLines);
+	                memberData.AccountTypes = GetDistAccountTypes(storeService, data.Elements(), memberData.AccountTypes);
+	                var businessTypes = storeService.GetAll<LookDistributorRevenueType>(true).ToList();
+                    foreach (var element in data.Elements())
+	                {
+	                    int intValue = 0;
+                        Int32.TryParse(element.Value, out intValue);
+	                    switch (element.Name.ToString())
+	                    {
+	                        case "USR_YEAR_ESTABLISHED":
+	                            if( intValue != 0 ) memberData.EstablishedDate = new DateTime(intValue, 1, 1);
+	                            break;
+	                        case "USR_FACILITIESINFORMATION":
+	                            if( intValue > 0 )  memberData.NumberOfEmployee = intValue;
+	                            break;
+	                        case "USR_TOTAL_SALES_FORCE":
+	                            if( intValue > 0 )  memberData.NumberOfSalesEmployee = intValue;
+	                            break;
+	                        case "USR_SPECIALTY_SALES_AMOUNT":
+	                            memberData.AnnualSalesVolumeASP = element.Value;
+	                            break;
+	                        case "USR_COMPANY_SALES_AMOUNT":
+	                            memberData.AnnualSalesVolume = element.Value;
+	                            break;
+	                        case "USR_PRI_BUS_REV_SRC":
+	                            if (!string.IsNullOrEmpty(element.Value))
+	                            {
+	                                switch( element.Value.ToLower())
+	                                {
+	                                    case "signs":
+	                                        memberData.PrimaryBusinessRevenue = businessTypes.FirstOrDefault(t => t.Id == 1);
+	                                        break;
+                                        case "trophy & awards":
+                                            memberData.PrimaryBusinessRevenue = businessTypes.FirstOrDefault(t => t.Id == 2);
+                                            break;
+                                        case "printing":
+                                            memberData.PrimaryBusinessRevenue = businessTypes.FirstOrDefault(t => t.Id == 3);
+                                            break;
+                                        case "screen printing":
+                                            memberData.PrimaryBusinessRevenue = businessTypes.FirstOrDefault(t => t.Id == 4);
+                                            break;
+                                        case "promotional products":
+                                            memberData.PrimaryBusinessRevenue = businessTypes.FirstOrDefault(t => t.Id == 5);
+                                            break;
+                                    }
+	                            }
+	                            break;
+	                        case "USR_PRI_BUS_OTHER_DESC":
+	                            memberData.OtherBusinessRevenue = element.Value;
+	                            break;
+	                    }
+	                }
+                }
+	        }
+
+            return memberData;
+        }
+
+        private static IList<LookProductLine> GetProductLines(IStoreService storeService, IEnumerable<XElement> elements, IList<LookProductLine> productLines = null)
+        {
+            if (elements != null && elements.Count() > 1)
+            {
+                productLines = productLines ?? new List<LookProductLine>();
+                var prodLines = storeService.GetAll<LookProductLine>(true).ToList();
+                foreach (var element in elements)
+                {
+                    LookProductLine type = null;
+                    switch (element.Name.ToString())
+                    {
+                        case "Auto_x0020_accessories":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "A");
+                            break;
+                        case "Awards_x0020_trophies_x0020__x0026__x0020_plaques":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "B");
+                            break;
+                        case "Badges_x0020_buttons":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "C");
+                            break;
+                        case "Bags":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "1");
+                            break;
+                        case "Calendars_x0020__x0026__x0020_timepieces":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "D");
+                            break;
+                        case "Cards":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "O");
+                            break;
+                        case "Cups_x0020_and_x0020_mugs":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "Y");
+                            break;
+                        case "Decals_x0020_transfers_x0020_emblems":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "Z");
+                            break;
+                        case "Electronic_x002F_computer_x0020_products":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "L");
+                            break;
+                        case "Emblematic_x0020_jewelry":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "G");
+                            break;
+                        case "Food_x0020_Edibles":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "F");
+                            break;
+                        case "Glass_x0020_and_x0020_ceramics_x0020_products":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "I");
+                            break;
+                        case "Health_x0020_safety_x0020_and_x0020_environmental_x0020_products":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "V");
+                            break;
+                        case "Housewares_x0020_and_x0020_home_x0020_products":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "J");
+                            break;
+                        case "Industrial_x0020_and_x0020_safety_x0020_items":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "H");
+                            break;
+                        case "Inflatables":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "K");
+                            break;
+                        case "Key_x0020_tags":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "U");
+                            break;
+                        case "Magnetic_x0020_products":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "X");
+                            break;
+                        case "Office_x0020_and_x0020_desk_x0020_products":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "M");
+                            break;
+                        case "Other_x0020_Product_x0020_Line":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "");
+                            break;
+                        case "Paper_x0020_Products":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "N");
+                            break;
+                        case "Party_x0020_Products":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "3");
+                            break;
+                        case "Personal_x0020_Care":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "4");
+                            break;
+                        case "Phone_x0020_Calling_x0020_cards":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "5");
+                            break;
+                        case "Plastic":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "E");
+                            break;
+                        case "Sports_x0020_Accessories":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "P");
+                            break;
+                        case "Toys_x0020__x0026__x0020_Stuffed_x0020_Animal":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "Q");
+                            break;
+                        case "Travel_x0020_products":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "W");
+                            break;
+                        case "Umbrellas":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "2");
+                            break;
+                        case "Vinyls":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "R");
+                            break;
+                        case "Wearables":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "S");
+                            break;
+                        case "Writing_x0020_Instruments":
+                            type = prodLines.FirstOrDefault(t => t.SubCode == "T");
+                            break;
+                    }
+                    if (type != null)
+                    {
+                        var existing = productLines.FirstOrDefault(p => p.Id == type.Id);
+                        if (element.Value == "1" && existing == null)
+                            productLines.Add(type);
+                        else if (element.Value == "0" && existing != null)
+                            productLines.Remove(existing);
+                    }
+                }
+            }
+
+            return productLines;
+        }
+
+        private static IList<LookDistributorAccountType> GetDistAccountTypes(IStoreService storeService, IEnumerable<XElement> elements, IList<LookDistributorAccountType> accountTypes)
+        {
+            if (elements != null && elements.Count() > 1)
+            {
+                accountTypes = accountTypes ?? new List<LookDistributorAccountType>();
+                var types = storeService.GetAll<LookDistributorAccountType>(true).ToList();
+                foreach (var element in elements)
+                {
+                    LookDistributorAccountType type = null;
+                    switch (element.Name.ToString())
+                    {
+                        case "Agriculture_x0020__x0026__x0020_Farming":
+                            type = types.FirstOrDefault(t => t.SubCode == "A");
+                            break;
+                        case "Automotive_x0020_dealers_x0020__x0026__x0020_mfgs":
+                            type = types.FirstOrDefault(t => t.SubCode == "V");
+                            break;
+                        case "Chemical_x0020_and_x0020_Pharmaceutical_x0020_companies":
+                            type = types.FirstOrDefault(t => t.SubCode == "K");
+                            break;
+                        case "Clothing_x0020_Appliances_x0020_Soft_x0020_goods_x0020_Mfgs":
+                            type = types.FirstOrDefault(t => t.SubCode == "I");
+                            break;
+                        case "Clubs_x0020_Associations_x0020_Civic_x0020_Groups_x0020_nonprofits":
+                            type = types.FirstOrDefault(t => t.SubCode == "B");
+                            break;
+                        case "Construction_x0020_companies":
+                            type = types.FirstOrDefault(t => t.SubCode == "S");
+                            break;
+                        case "Financial":
+                            type = types.FirstOrDefault(t => t.SubCode == "C");
+                            break;
+                        case "Food_x0020_Tobacco_x0020_Sundries":
+                            type = types.FirstOrDefault(t => t.SubCode == "J");
+                            break;
+                        case "Government_x0020_Agencies":
+                            type = types.FirstOrDefault(t => t.SubCode == "D");
+                            break;
+                        case "Health_x0020_and_x0020_medical":
+                            type = types.FirstOrDefault(t => t.SubCode == "T");
+                            break;
+                        case "Hospitality":
+                            type = types.FirstOrDefault(t => t.SubCode == "W");
+                            break;
+                        case "Industrial_x0020_Products":
+                            type = types.FirstOrDefault(t => t.SubCode == "H");
+                            break;
+                        case "Insurance_x0020_companies_x0020_and_x0020_agencies":
+                            type = types.FirstOrDefault(t => t.SubCode == "F");
+                            break;
+                        case "Manufacturing":
+                            type = types.FirstOrDefault(t => t.SubCode == "X");
+                            break;
+                        case "Marketing_x0020_Services":
+                            type = types.FirstOrDefault(t => t.SubCode == "O");
+                           break;
+                        case "Media":
+                            type = types.FirstOrDefault(t => t.SubCode == "Y");
+                            break;
+                        case "Political_x0020_parties_x0020_and_x0020_candidates":
+                            type = types.FirstOrDefault(t => t.SubCode == "L");
+                            break;
+                        case "Professional_x0020_Offices":
+                            type = types.FirstOrDefault(t => t.SubCode == "N");
+                            break;
+                        case "Recreation":
+                            type = types.FirstOrDefault(t => t.SubCode == "U");
+                            break;
+                        case "Retail":
+                            type = types.FirstOrDefault(t => t.SubCode == "M");
+                            break;
+                        case "Schools_x0020_colleges_x0020_universities":
+                            type = types.FirstOrDefault(t => t.SubCode == "E");
+                            break;
+                        case "Service_x0020_Businesses":
+                            type = types.FirstOrDefault(t => t.SubCode == "P");
+                            break;
+                        case "Sports-Related":
+                            type = types.FirstOrDefault(t => t.SubCode == "Z");
+                            break;
+                        case "Technology":
+                            type = types.FirstOrDefault(t => t.SubCode == "1");
+                            break;
+                        case "Transportation":
+                            type = types.FirstOrDefault(t => t.SubCode == "Q");
+                            break;
+                        case "Utilities":
+                            type = types.FirstOrDefault(t => t.SubCode == "G");
+                            break;
+                        case "Wholesalers":
+                            type = types.FirstOrDefault(t => t.SubCode == "R");
+                            break;
+                    }
+
+                    if (type != null)
+                    {
+                        var existing = accountTypes.FirstOrDefault(p => p.Id == type.Id);
+                        if (element.Value == "1" && existing == null)
+                            accountTypes.Add(type);
+                        else if (element.Value == "0" && existing != null)
+                            accountTypes.Remove(existing);
+                    }
+                }
+            }
+
+            return accountTypes;
+        }
+        
+        private static StoredProcedureOutput ExecutePersonifySP(string spName, List<string> parameters)
         {
             _log.Debug(string.Format("ExecutePersonifySP - start: StoreProcedure name - {0})", spName));
             var startTime = DateTime.Now;
