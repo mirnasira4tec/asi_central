@@ -12,33 +12,29 @@
     <h5>Search by</h5>
     @{var listItems = new List<ListItem>
     {
+          new ListItem { Text = "Select", Value="Select" },
           new ListItem { Text = "Pending", Value="0" },
           new ListItem { Text = "Approved", Value="1" },
           new ListItem { Text = "Rejected", Value="2" },
           new ListItem { Text = "Cancelled", Value="3" }
     };
     }
-    <div class="well clearfix">
-
+    <div class="well">
         @using (Html.BeginForm("SupplierUpdateRequestList", "/asicentralApi/SupplierUpdateRequestList", FormMethod.Get))
-        {                
-            <div class="span1 formField pull-left">
+        {               
+            <div class="formField form-inline">
                 <label for="requestStatus">Request Status</label>
-                @Html.DropDownList("requestStatus", new SelectList(listItems, "Value", "Text"), new {@name ="requestStatus"})
+                @Html.DropDownList("requestStatus", new SelectList(listItems, "Value", "Text"), new { @name = "requestStatus" })
+                <input type="submit" value="Search" class="btn" />
             </div>
-            <div  class="span4 formField pull-left">
-            <input type="submit" value="Search" class="btn pull-right" />
-                </div>
         }
     </div>
-
 </div>
 <table class="table table-bordered table-condensed table-striped">
     <thead>
         <tr>
-            <th>Request Id</th>
-            <th>Supplier Company ID</th>
-            <th>Request Status</th>
+            <th>Company Name</th>
+            <th>Status</th>
             <th>Requested By</th>
             <th>Approved By</th>
             <th>Date Created</th>
@@ -53,18 +49,15 @@
                 @if (item.Status != SupRequestStatus.Cancelled)
                 {
                     <td>
-                        <a class="red" href="/asicentralApi/SupplierUpdateRequestDetail?id=@item.Id">@item.Id</a>
+                        <a class="red" title="@item.CompanyId" href="/asicentralApi/SupplierUpdateRequestDetail?id=@item.Id">@item.CompanyName</a>
                     </td>
                 }
                 else
                 {
                     <td>
-                        @item.Id
+                        @item.CompanyName
                     </td>
                 }
-                <td>
-                    @item.CompanyId
-                </td>
                 <td>
                     @item.Status
                 </td>
