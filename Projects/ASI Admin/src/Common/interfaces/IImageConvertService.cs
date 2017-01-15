@@ -2,6 +2,6 @@
 {
     public interface IImageConvertService
     {
-        bool ConvertImage(string inputFilePath, string targetFilePath, bool isBackgroundTransparent);
+        void ConvertImage(string inputFilePath, string targetFilePath, bool isBackgroundTransparent);
     }
 }

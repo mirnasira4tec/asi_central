@@ -3,6 +3,7 @@ using asi.asicentral.interfaces;
 using System.Configuration;
 using System.Net;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace asi.asicentral.services
 {
@@ -15,14 +16,13 @@ namespace asi.asicentral.services
             _log = LogService.GetLog(this.GetType());
         }
 
-        public bool ConvertImage(string inputFilePath, string targetFilePath, bool isBackgroundTransparent = true)
+        public virtual void ConvertImage(string inputFilePath, string targetFilePath, bool isBackgroundTransparent = true)
         {
-            var success = false;
             var imageConvertSrvPath = ConfigurationManager.AppSettings["ImageConversionSrvPath"];
             if (string.IsNullOrEmpty(imageConvertSrvPath) || string.IsNullOrEmpty(inputFilePath) || string.IsNullOrEmpty(targetFilePath))
             {
-                _log.Debug(string.Format("No image conversion service, or invalid input/target file name. Input: {0}; target: {1}", inputFilePath, targetFilePath));
-                return success;
+                var errMsg = string.Format("ImageConvertService.ConvertImage: No image conversion service, or invalid input/target file name. Input: {0}; target: {1}", inputFilePath, targetFilePath);
+                throw new InvalidOperationException(errMsg);
             }
 
             var inputExt = Path.GetExtension(inputFilePath);
@@ -30,8 +30,7 @@ namespace asi.asicentral.services
 
             if (string.IsNullOrEmpty(inputExt) || string.IsNullOrEmpty(targetExt) || string.Compare(inputExt, targetExt, StringComparison.CurrentCultureIgnoreCase) == 0)
             {
-                _log.Debug(string.Format("Invalid or same input/target file extension. Input: {0}; target: {1}", inputFilePath, targetFilePath));
-                return success;
+                throw new InvalidOperationException(string.Format("Invalid or same input/target file extension. Input: {0}; target: {1}", inputFilePath, targetFilePath));
             }
 
             try
@@ -46,20 +45,15 @@ namespace asi.asicentral.services
                     var wsResp = webClient.DownloadString(url);
                     if (string.IsNullOrEmpty(wsResp) || !wsResp.Equals("true"))
                     {
-                        _log.Error("ImageConvertService ConvertImage failed, url: " + url);
-                    }
-                    else
-                    {
-                        success = true;
+                        throw new InvalidOperationException("ImageConvertService ConvertImage failed, url: " + url);
                     }
                 }
             }
             catch (Exception ex)
             {
                 _log.Error("ImageConvertService ConvertImage Exception: " + ex.Message);
+                throw ex;
             }
-
-            return success;
         }
     }
 }
