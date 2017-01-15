@@ -16,7 +16,7 @@ namespace asi.asicentral.services
             _log = LogService.GetLog(this.GetType());
         }
 
-        public virtual void ConvertImage(string inputFilePath, string targetFilePath, bool isBackgroundTransparent = true)
+        public virtual async Task ConvertImageAsync(string inputFilePath, string targetFilePath, bool isBackgroundTransparent = true)
         {
             var imageConvertSrvPath = ConfigurationManager.AppSettings["ImageConversionSrvPath"];
             if (string.IsNullOrEmpty(imageConvertSrvPath) || string.IsNullOrEmpty(inputFilePath) || string.IsNullOrEmpty(targetFilePath))
