@@ -18,8 +18,7 @@ namespace asi.asicentral.web.Controllers.asicentralApi
         public IObjectService ObjectService { get; set; }
         public ActionResult SupplierUpdateRequestList(string requestStatus)
         {
-            IList<SupUpdateRequest> objList = new List<SupUpdateRequest>();
-            objList = ObjectService.GetAll<SupUpdateRequest>().OrderByDescending(item => item.CreateDate).ToList();
+            IList<SupUpdateRequest> objList = ObjectService.GetAll<SupUpdateRequest>().OrderByDescending(item => item.CreateDate).ToList();
             if (!string.IsNullOrEmpty(requestStatus))
             {
                 SupRequestStatus status = requestStatus == "0" ? SupRequestStatus.Pending : requestStatus == "1" ? SupRequestStatus.Approved : requestStatus == "2" ? SupRequestStatus.Rejected : requestStatus == "3" ? SupRequestStatus.Cancelled : SupRequestStatus.Pending;
@@ -30,17 +29,15 @@ namespace asi.asicentral.web.Controllers.asicentralApi
         [HttpGet]
         public ActionResult SupplierUpdateRequestDetail(int id)
         {
-            SupUpdateRequest objSupUpdateRequest = new SupUpdateRequest();
-            objSupUpdateRequest = ObjectService.GetAll<SupUpdateRequest>().FirstOrDefault(item => item.Id == id);
+            SupUpdateRequest objSupUpdateRequest = ObjectService.GetAll<SupUpdateRequest>().FirstOrDefault(item => item.Id == id);
             return View(objSupUpdateRequest);
         }
-    
+
         [HttpPost]
         public ActionResult EditServicesData(string command, int supUpdateRequestId, SupUpdateRequest model)
         {
             SupUpdateRequest supUpdateRequest = null;
-            var excitUrl = ConfigurationManager.AppSettings["ExcitUrl"];
-            var excitUrlProd = ConfigurationManager.AppSettings["ExcitUrlProd"];
+            var isProduction = ConfigurationManager.AppSettings["IsProduction"];
             if (supUpdateRequestId != 0)
             {
                 supUpdateRequest = ObjectService.GetAll<SupUpdateRequest>().FirstOrDefault(detail => detail.Id == supUpdateRequestId);
@@ -53,83 +50,11 @@ namespace asi.asicentral.web.Controllers.asicentralApi
                     {
                         if (supUpdateRequest != null)
                         {
-                            var url = string.Format("{0}v1/Suppliers/{1}/config?client=QA", excitUrl, supUpdateRequest.CompanyId);
-                            var urlProd = string.Format("{0}v1/Suppliers/{1}/config?client=QA", excitUrlProd, supUpdateRequest.CompanyId);
-                            var headerParams = new Dictionary<string, string>();
-                            headerParams.Add("contenttype", "application/json");
-
-                            var stageConfig = JsonConvert.DeserializeObject<ASI.Contracts.Excit.Supplier.Version1.Configuration>(await asi.asicentral.util.HtmlHelper.SubmitWebRequestAsync(url, headerParams, null, false, true));
-                            var prodConfig = JsonConvert.DeserializeObject<ASI.Contracts.Excit.Supplier.Version1.Configuration>(await asi.asicentral.util.HtmlHelper.SubmitWebRequestAsync(urlProd, headerParams, null, false, true));
-                            IList<SupUpdateRequestDetail> supUpdateRequestDetails = ObjectService.GetAll<SupUpdateRequestDetail>().Where(item => item.SupUpdateRequestId == supUpdateRequest.Id).ToList();
-                            foreach (var item in supUpdateRequestDetails)
+                            await UpdateStageConfigValue(supUpdateRequest);
+                            if (string.IsNullOrEmpty(isProduction) &&  isProduction == "true")
                             {
-                                if (item.UpdateField.Name == "AccountNoTest")
-                                {
-                                    stageConfig.AccountNumber = item.UpdateValue ?? item.OrigValue;
-                                }
-                                else if (item.UpdateField.Name == "UserNameTest")
-                                {
-                                    stageConfig.Username = item.UpdateValue ?? item.OrigValue;
-                                }
-                                else if (item.UpdateField.Name == "PasswordTest")
-                                {
-                                    stageConfig.Password = item.UpdateValue ?? item.OrigValue;
-                                }
-                                else if (item.UpdateField.Name == "InventoryUrlTest")
-                                {
-                                    stageConfig.Services[ASI.Contracts.Excit.Supplier.Version1.Configuration.API.Inventory].Url = item.UpdateValue;
-                                }
-                                else if (item.UpdateField.Name == "LoginValidateUrlTest")
-                                {
-                                    stageConfig.Services[ASI.Contracts.Excit.Supplier.Version1.Configuration.API.LoginValidate].Url = item.UpdateValue;
-                                }
-                                else if (item.UpdateField.Name == "OrderCreateUrlTest")
-                                {
-                                    stageConfig.Services[ASI.Contracts.Excit.Supplier.Version1.Configuration.API.OrderCreation].Url = item.UpdateValue;
-                                }
-                                else if (item.UpdateField.Name == "OrderStatusUrlTest")
-                                {
-                                    stageConfig.Services[ASI.Contracts.Excit.Supplier.Version1.Configuration.API.OrderStatus].Url = item.UpdateValue;
-                                }
-                                if (item.UpdateField.Name == "AccountNoProd")
-                                {
-                                    prodConfig.AccountNumber = item.UpdateValue ?? item.OrigValue;
-                                }
-                                else if (item.UpdateField.Name == "UserNameProd")
-                                {
-                                    prodConfig.Username = item.UpdateValue ?? item.OrigValue;
-                                }
-                                else if (item.UpdateField.Name == "PasswordProd")
-                                {
-                                    prodConfig.Password = item.UpdateValue ?? item.OrigValue;
-                                }
-                                else if (item.UpdateField.Name == "InventoryUrlProd")
-                                {
-                                    prodConfig.Services[ASI.Contracts.Excit.Supplier.Version1.Configuration.API.Inventory].Url = item.UpdateValue;
-                                }
-                                else if (item.UpdateField.Name == "LoginValidateUrlProd")
-                                {
-                                    prodConfig.Services[ASI.Contracts.Excit.Supplier.Version1.Configuration.API.LoginValidate].Url = item.UpdateValue;
-                                }
-                                else if (item.UpdateField.Name == "OrderCreateUrlProd")
-                                {
-                                    prodConfig.Services[ASI.Contracts.Excit.Supplier.Version1.Configuration.API.OrderCreation].Url = item.UpdateValue;
-                                }
-                                else if (item.UpdateField.Name == "OrderStatusUrlProd")
-                                {
-                                    prodConfig.Services[ASI.Contracts.Excit.Supplier.Version1.Configuration.API.OrderStatus].Url = item.UpdateValue;
-                                }
-                                else if (item.UpdateField.Name == "LoginInstructionTest")
-                                {
-                                    stageConfig.LoginInstruction = item.UpdateValue ?? item.OrigValue;
-                                }
-                                else if (item.UpdateField.Name == "LoginInstructionProd")
-                                {
-                                    prodConfig.LoginInstruction = item.UpdateValue ?? item.OrigValue;
-                                }
+                                await UpdateProdConfigValue(supUpdateRequest);
                             }
-                            asi.asicentral.util.HtmlHelper.SubmitWebRequest(url, headerParams, Newtonsoft.Json.JsonConvert.SerializeObject(stageConfig), true, true);
-                            //await asi.asicentral.util.HtmlHelper.SubmitWebRequestAsync(urlProd, headerParams, Newtonsoft.Json.JsonConvert.SerializeObject(prodConfig), true, true);
                         }
                     }).Wait();
                 }
@@ -137,17 +62,21 @@ namespace asi.asicentral.web.Controllers.asicentralApi
                 {
                     if (model != null)
                     {
+                        IList<SupUpdateRequestDetail> requestFields = ObjectService.GetAll<SupUpdateRequestDetail>().ToList();
                         foreach (var item in model.RequestDetails)
                         {
-                            var requestField = ObjectService.GetAll<SupUpdateRequestDetail>().FirstOrDefault(m => m.Id == item.Id);
-                            requestField.UpdateValue = item.UpdateValue;
+                            var requestField = requestFields.FirstOrDefault(m => m.Id == item.Id);
+                            if (requestField != null)
+                            {
+                                requestField.UpdateValue = item.UpdateValue;
+                            }
                         }
                         ObjectService.SaveChanges();
                     }
                     return RedirectToAction("SupplierUpdateRequestDetail", new
                     {
                         id = supUpdateRequestId
-                    }); 
+                    });
                 }
 
             }
@@ -164,6 +93,100 @@ namespace asi.asicentral.web.Controllers.asicentralApi
                 ObjectService.SaveChanges();
             }
             return RedirectToAction("SupplierUpdateRequestList");
+        }
+
+        private async Task UpdateStageConfigValue(SupUpdateRequest supUpdateRequest)
+        {
+            var excitUrlTest = ConfigurationManager.AppSettings["ExcitUrlTest"];
+            var url = string.Format("{0}v1/Suppliers/{1}/config?client=QA", excitUrlTest, supUpdateRequest.CompanyId);
+            var headerParams = new Dictionary<string, string>();
+            headerParams.Add("contenttype", "application/json");
+
+            var stageConfig = JsonConvert.DeserializeObject<ASI.Contracts.Excit.Supplier.Version1.Configuration>(await asi.asicentral.util.HtmlHelper.SubmitWebRequestAsync(url, headerParams, null, false, true));
+            IList<SupUpdateRequestDetail> supUpdateRequestDetails = ObjectService.GetAll<SupUpdateRequestDetail>().Where(item => item.SupUpdateRequestId == supUpdateRequest.Id).ToList();
+            foreach (var item in supUpdateRequestDetails)
+            {
+                if (item.UpdateField.Name == "AccountNoTest")
+                {
+                    stageConfig.AccountNumber = item.UpdateValue ?? item.OrigValue;
+                }
+                else if (item.UpdateField.Name == "UserNameTest")
+                {
+                    stageConfig.Username = item.UpdateValue ?? item.OrigValue;
+                }
+                else if (item.UpdateField.Name == "PasswordTest")
+                {
+                    stageConfig.Password = item.UpdateValue ?? item.OrigValue;
+                }
+                else if (item.UpdateField.Name == "InventoryUrlTest")
+                {
+                    stageConfig.Services[ASI.Contracts.Excit.Supplier.Version1.Configuration.API.Inventory].Url = item.UpdateValue;
+                }
+                else if (item.UpdateField.Name == "LoginValidateUrlTest")
+                {
+                    stageConfig.Services[ASI.Contracts.Excit.Supplier.Version1.Configuration.API.LoginValidate].Url = item.UpdateValue;
+                }
+                else if (item.UpdateField.Name == "OrderCreateUrlTest")
+                {
+                    stageConfig.Services[ASI.Contracts.Excit.Supplier.Version1.Configuration.API.OrderCreation].Url = item.UpdateValue;
+                }
+                else if (item.UpdateField.Name == "OrderStatusUrlTest")
+                {
+                    stageConfig.Services[ASI.Contracts.Excit.Supplier.Version1.Configuration.API.OrderStatus].Url = item.UpdateValue;
+                }
+                else if (item.UpdateField.Name == "LoginInstructionTest")
+                {
+                    stageConfig.LoginInstruction = item.UpdateValue ?? item.OrigValue;
+                }
+            }
+            asi.asicentral.util.HtmlHelper.SubmitWebRequest(url, headerParams, Newtonsoft.Json.JsonConvert.SerializeObject(stageConfig), true, true);
+        }
+
+        private async Task UpdateProdConfigValue(SupUpdateRequest supUpdateRequest)
+        {
+            var excitUrlProd = ConfigurationManager.AppSettings["ExcitUrlProd"];
+            var urlProd = string.Format("{0}v1/Suppliers/{1}/config?client=QA", excitUrlProd, supUpdateRequest.CompanyId);
+            var headerParams = new Dictionary<string, string>();
+            headerParams.Add("contenttype", "application/json");
+
+            var prodConfig = JsonConvert.DeserializeObject<ASI.Contracts.Excit.Supplier.Version1.Configuration>(await asi.asicentral.util.HtmlHelper.SubmitWebRequestAsync(urlProd, headerParams, null, false, true));
+            IList<SupUpdateRequestDetail> supUpdateRequestDetails = ObjectService.GetAll<SupUpdateRequestDetail>().Where(item => item.SupUpdateRequestId == supUpdateRequest.Id).ToList();
+            foreach (var item in supUpdateRequestDetails)
+            {
+                if (item.UpdateField.Name == "AccountNoProd")
+                {
+                    prodConfig.AccountNumber = item.UpdateValue ?? item.OrigValue;
+                }
+                else if (item.UpdateField.Name == "UserNameProd")
+                {
+                    prodConfig.Username = item.UpdateValue ?? item.OrigValue;
+                }
+                else if (item.UpdateField.Name == "PasswordProd")
+                {
+                    prodConfig.Password = item.UpdateValue ?? item.OrigValue;
+                }
+                else if (item.UpdateField.Name == "InventoryUrlProd")
+                {
+                    prodConfig.Services[ASI.Contracts.Excit.Supplier.Version1.Configuration.API.Inventory].Url = item.UpdateValue;
+                }
+                else if (item.UpdateField.Name == "LoginValidateUrlProd")
+                {
+                    prodConfig.Services[ASI.Contracts.Excit.Supplier.Version1.Configuration.API.LoginValidate].Url = item.UpdateValue;
+                }
+                else if (item.UpdateField.Name == "OrderCreateUrlProd")
+                {
+                    prodConfig.Services[ASI.Contracts.Excit.Supplier.Version1.Configuration.API.OrderCreation].Url = item.UpdateValue;
+                }
+                else if (item.UpdateField.Name == "OrderStatusUrlProd")
+                {
+                    prodConfig.Services[ASI.Contracts.Excit.Supplier.Version1.Configuration.API.OrderStatus].Url = item.UpdateValue;
+                }
+                else if (item.UpdateField.Name == "LoginInstructionProd")
+                {
+                    prodConfig.LoginInstruction = item.UpdateValue ?? item.OrigValue;
+                }
+            }
+            asi.asicentral.util.HtmlHelper.SubmitWebRequestAsync(urlProd, headerParams, Newtonsoft.Json.JsonConvert.SerializeObject(prodConfig), true, true);
         }
     }
 }

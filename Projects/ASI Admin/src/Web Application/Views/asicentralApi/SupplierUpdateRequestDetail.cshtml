@@ -35,15 +35,15 @@
             @for (int i = 0; i < Model.RequestDetails.Count(); i++)
             {
                 <tr>
-                    <td>@Model.RequestDetails[i].UpdateField.Description</td>
-                    <td>@Model.RequestDetails[i].OrigValue</td>
+                    <td style="width:30%;">@Model.RequestDetails[i].UpdateField.Description</td>
+                    <td style="width:30%;">@Model.RequestDetails[i].OrigValue</td>
                     @if (Model.RequestDetails[i].UpdateField.Name == "LoginInstructionTest" || Model.RequestDetails[i].UpdateField.Name == "LoginInstructionProd")
                     {
-                        <td>@Html.TextAreaFor(x => x.RequestDetails[i].UpdateValue)</td>
+                        <td style="width:30%;">@Html.TextAreaFor(x => x.RequestDetails[i].UpdateValue, new {style="width:95%;height:100%"})</td>
                     }
                     else
                     {
-                        <td>@Html.TextBoxFor(x => x.RequestDetails[i].UpdateValue)</td>
+                        <td style="width:30%;">@Html.TextBoxFor(x => x.RequestDetails[i].UpdateValue)</td>
                     }
                     @Html.HiddenFor(x => x.RequestDetails[i].Id)
                 </tr>
