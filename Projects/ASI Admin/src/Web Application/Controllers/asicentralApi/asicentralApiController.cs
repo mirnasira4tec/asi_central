@@ -79,19 +79,20 @@ namespace asi.asicentral.web.Controllers.asicentralApi
                     });
                 }
 
+                if (supUpdateRequest != null && command != "Save")
+                {
+                    supUpdateRequest.Status = command == "Accept" ? SupRequestStatus.Approved : SupRequestStatus.Rejected;
+                    supUpdateRequest.ApprovedBy = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
+                    supUpdateRequest.UpdateDate = DateTime.UtcNow;
+                    ObjectService.SaveChanges();
+                }
             }
             catch (Exception ex)
             {
                 LogService log = LogService.GetLog(this.GetType());
                 log.Error(ex.Message);
             }
-            if (supUpdateRequest != null && command != "Save")
-            {
-                supUpdateRequest.Status = command == "Accept" ? SupRequestStatus.Approved : SupRequestStatus.Rejected;
-                supUpdateRequest.ApprovedBy = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
-                supUpdateRequest.UpdateDate = DateTime.UtcNow;
-                ObjectService.SaveChanges();
-            }
+
             return RedirectToAction("SupplierUpdateRequestList");
         }
 
