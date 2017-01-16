@@ -1232,7 +1232,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 var data = xml.Root.Elements("Table").FirstOrDefault();
                 if (data != null)
                 {
-                    var imprintingTypes = storeService.GetAll<LookDecoratorImprintingType>(false).ToList();
+                    var imprintingTypes = storeService.GetAll<LookDecoratorImprintingType>().ToList();
                     LookDecoratorImprintingType imprintType = null;
                     foreach (var element in data.Elements())
                     {
@@ -1296,7 +1296,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 var data = xml.Root.Elements("Table").FirstOrDefault();
                 var productionTimeMin = string.Empty;
                 var productionTimeMax = string.Empty;
-                var decoratorTypes = storeService.GetAll<LookSupplierDecoratingType>(true).ToList();
+                var decoratorTypes = storeService.GetAll<LookSupplierDecoratingType>().ToList();
                 if (data != null)
                 {
                     foreach (var element in data.Elements())
@@ -1440,7 +1440,7 @@ namespace asi.asicentral.services.PersonifyProxy
 	            {
 	                memberData.ProductLines = GetProductLines(storeService, data.Elements(), memberData.ProductLines);
 	                memberData.AccountTypes = GetDistAccountTypes(storeService, data.Elements(), memberData.AccountTypes);
-	                var businessTypes = storeService.GetAll<LookDistributorRevenueType>(true).ToList();
+	                var businessTypes = storeService.GetAll<LookDistributorRevenueType>().ToList();
                     foreach (var element in data.Elements())
 	                {
 	                    int intValue = 0;
@@ -1501,7 +1501,7 @@ namespace asi.asicentral.services.PersonifyProxy
             if (elements != null && elements.Count() > 1)
             {
                 productLines = productLines ?? new List<LookProductLine>();
-                var prodLines = storeService.GetAll<LookProductLine>(true).ToList();
+                var prodLines = storeService.GetAll<LookProductLine>().ToList();
                 foreach (var element in elements)
                 {
                     LookProductLine type = null;
@@ -1623,7 +1623,7 @@ namespace asi.asicentral.services.PersonifyProxy
             if (elements != null && elements.Count() > 1)
             {
                 accountTypes = accountTypes ?? new List<LookDistributorAccountType>();
-                var types = storeService.GetAll<LookDistributorAccountType>(true).ToList();
+                var types = storeService.GetAll<LookDistributorAccountType>().ToList();
                 foreach (var element in elements)
                 {
                     LookDistributorAccountType type = null;
