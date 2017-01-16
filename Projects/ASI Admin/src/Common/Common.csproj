@@ -334,6 +334,7 @@
     <Compile Include="database\MemberDemogrContext.cs" />
     <Compile Include="database\Umbraco_ShowContext.cs" />
     <Compile Include="interfaces\ICreditCardService.cs" />
+    <Compile Include="interfaces\IImageConvertService.cs" />
     <Compile Include="model\CompanyInformation.cs" />
     <Compile Include="model\DM_memberDemogr\CompanyASIRep.cs" />
     <Compile Include="model\findsupplier\memberdemogr\SupplierRating.cs" />
@@ -506,6 +507,7 @@
     </Compile>
     <Compile Include="services\CreditCardService.cs" />
     <Compile Include="interfaces\IBackendService.cs" />
+    <Compile Include="services\ImageConvertService.cs" />
     <Compile Include="services\PersonifyProxy\AddressInfoEqualityComparer.cs" />
     <Compile Include="services\PersonifyProxy\MemberData.cs" />
     <Compile Include="services\PersonifyProxy\MemberTypeIDToCD.cs" />
