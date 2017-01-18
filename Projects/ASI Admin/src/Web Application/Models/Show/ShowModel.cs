@@ -18,7 +18,7 @@ namespace asi.asicentral.web.models.show
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public int? ShowTypeId { get; set; }
         public int? year { get; set; }
-
+        public string asiNumber { get; set; }
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string Name { get; set; }

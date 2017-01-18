@@ -34,22 +34,15 @@ namespace asi.asicentral.web.Controllers.Show
             log.Debug("CompanyList.cshtml - Start");
             companyList = ObjectService.GetAll<ShowCompany>(true).OrderBy(form => form.Name).ToList();
             if (string.IsNullOrEmpty(companyTab)) companyTab = CompanyModel.TAB_COMPANYNAME;
-            if (!string.IsNullOrEmpty(MemberType) && !string.IsNullOrEmpty(companyName))
-            {
-                companyList = companyList.Where(item => (item.Name != null
-                 && item.Name.Contains(companyName) && item.MemberType != null
-                 && item.MemberType.Contains(MemberType))).ToList();
-            }
-
-            else if (!string.IsNullOrEmpty(MemberType))
+            if (!string.IsNullOrEmpty(MemberType))
             {
                 companyList = companyList.Where(item => item.MemberType != null
-                 && item.MemberType.Contains(MemberType)).ToList();
+                 && item.MemberType.ToLower().Contains(MemberType.ToLower())).ToList();
             }
-            else if (!string.IsNullOrEmpty(companyName))
+             if (!string.IsNullOrEmpty(companyName))
             {
                 companyList = companyList.Where(item => item.Name != null
-                 && item.Name.Contains(companyName)).ToList();
+                 && item.Name.ToLower().Contains(companyName.ToLower())).ToList();
             }
             company.TotalRecordCount = companyList.Count();
             companyList = companyList.Skip((company.CurrentPageIndex - 1) * company.PageSize)
@@ -549,17 +542,15 @@ namespace asi.asicentral.web.Controllers.Show
             }
         }
         [HttpGet]
-        public ActionResult GetAttendeeCompany(int? showId, String companyTab, string companyName, string MemberType, int page = 1, int pageSize = 10)
+        public ActionResult GetAttendeeCompany(int? showId, String companyTab, string companyName, string MemberType)
         {
             var showCompanies = new ShowCompaniesModel();
-            showCompanies.CurrentPageIndex = page;
-            showCompanies.PageSize = pageSize;
+
             if (string.IsNullOrEmpty(companyTab)) companyTab = ShowCompaniesModel.TAB_COMPANYNAME;
             showCompanies.CompanyTab = companyTab;
             IList<ShowAttendee> existingAttendees = ObjectService.GetAll<ShowAttendee>().Where(attendee => attendee.ShowId == showId).OrderBy(form => form.Company.Name).ToList();
             showCompanies.TotalRecordCount = existingAttendees.Count();
-            existingAttendees = existingAttendees.Skip((showCompanies.CurrentPageIndex - 1) * showCompanies.PageSize)
-                                            .Take(showCompanies.PageSize).ToList();
+
             if (existingAttendees.Any())
             {
                 foreach (ShowAttendee attendee in existingAttendees)

@@ -102,20 +102,23 @@ namespace asi.asicentral.web.Controllers.Show
             return new RedirectResult("/ShowCompany/GetAttendeeCompany?showId=" + attendeeInfo.Show.Id);
         }
 
-        public ActionResult ShowList(String showTab, int? ShowTypeId, int? year)
+        public ActionResult ShowList(String showTab, int? ShowTypeId, int? year, string asiNumber)
         {
             var show = new ShowModel();
             show.ShowType = GetShowType();
             IList<ShowASI> showList = ObjectService.GetAll<ShowASI>().OrderByDescending(form => form.StartDate).ToList();
             if (string.IsNullOrEmpty(showTab)) showTab = ShowModel.TAB_SHOWTYPE;
-            if (ShowTypeId != null && year != null)
+            if (ShowTypeId != null)
             {
-                showList = showList.Where(item => (item.StartDate.Year == year && item.ShowTypeId != null && item.ShowTypeId == ShowTypeId)).ToList();
+                showList = showList.Where(item => item.ShowTypeId == ShowTypeId).ToList();
             }
-            else if (ShowTypeId != null || year != null )
+            if (year != null)
             {
-                showList = showList.Where(item => (item.ShowTypeId != null 
-                && item.ShowTypeId == ShowTypeId) || (item.StartDate.Year == year)).ToList();
+                showList = showList.Where(item => item.StartDate.Year == year).ToList();
+            }
+            if (!string.IsNullOrEmpty(asiNumber))
+            {
+                showList = showList.Where(f => f.Attendees.Any(z => z.Company.ASINumber == asiNumber)).ToList();
             }
             show.ShowTab = showTab;
             show.Show = showList;
