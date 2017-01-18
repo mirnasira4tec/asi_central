@@ -1,0 +1,393 @@
+﻿@using asi.asicentral.model.store;
+@inherits System.Web.Mvc.WebViewPage<FormInstance>
+@{
+    var count = 0;
+	if (Model.Values == null || Model.Values.Count == 0)
+	{
+		for (int i = 0; i < 34; i++)
+		{
+			Model.Values.Add(new FormValue());
+		}
+	}
+}
+<div class="container-fluid-store">
+	<header>
+		<img src="https://store.asicentral.com/media/Forms/onsite-exhibitor-header-2018.jpg" alt="ASI 2018 Form">
+	</header>
+    <div class="form-inline">
+	<table id="booth-selection-form">
+		<thead>
+			<tr>
+				<td>
+					<h1>Orlando</h1>
+					<h2>January 2-4</h2>
+					<p>(Tuesday-Thursday)</p>
+				</td>
+				<td>
+					<h1>Dallas</h1>
+					<h2>February 24-26</h2>
+					<p>(Wednesday-Friday)</p>
+				</td>
+				<td>
+					<h1>Chicago</h1>
+					<h2>July 24-26</h2>
+					<p>(Tuesday-Thursday)</p>
+				</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th colspan="3">1. Company Information <span class="pull-right"><small>Thank you for reserving exhibit space at The ASI Shows in 2015.</small></span></th>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<fieldset>
+						<label>Show Contact:
+                            <input type="hidden" name="Form.Values[@count].Name" value="ShowContact" />
+							<input type="text" class="input-md" name="Form.Values[@count].Value" value="@Model.Values[count].Value" />
+						</label>
+                        @{count++;}
+						<label>Title:
+                            <input type="hidden" name="Form.Values[@count].Name" value="Title" />
+							<input type="text" class="input-md" name="Form.Values[@count].Value" value="@Model.Values[count].Value" />
+						</label>
+					</fieldset>
+				</td>
+			</tr>
+			<tr>
+				<th colspan="3">2. Booth Information</th>
+			</tr>
+			<tr>
+				<td colspan="3">
+                    <h3>On-Site Booth Selection Pricing (After January 20, 2017 Price Becomes $2,659)</h3>
+					<div class="booth-show-section">
+                        <div>
+							<label class="checkbox inline">
+								<h2>Orlando - $2,459</h2>
+							</label>
+                            @{count++;}
+							<label>
+								<div>
+									Booth number: 
+                                    <input type="hidden" name="Form.Values[@count].Name" value="BNOrlando" />
+                                    <input type="text" class="input-medium" name="Form.Values[@count].Value" value="@Model.Values[count].Value" /> 
+								</div>
+							</label>
+                            @{count++;}
+							<label>
+								<div>
+                                    <input type="hidden" name="Form.Values[@count].Name" value="NBOrlando" />
+									<input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value" /> Number of booths
+								</div>
+							</label>
+                        </div>
+                        <div>
+							<label class="checkbox inline">
+								<h2>Dallas - $2,459</h2>
+							</label>
+                            @{count++;}
+							<label>
+								<div>
+									Booth number: 
+                                    <input type="hidden" name="Form.Values[@count].Name" value="BNDallas" />
+                                    <input type="text" class="input-medium" name="Form.Values[@count].Value" value="@Model.Values[count].Value" /> 
+								</div>
+							</label>
+                            @{count++;}
+							<label>
+								<div>
+                                    <input type="hidden" name="Form.Values[@count].Name" value="NBDallas" />
+									<input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value" /> Number of booths
+								</div>
+							</label>
+                        </div>
+                        <div>
+							<label class="checkbox inline">
+								<h2>Chicago - $2,459</h2>
+							</label>
+                            @{count++;}
+							<label>
+								<div>
+									Booth number: 
+                                    <input type="hidden" name="Form.Values[@count].Name" value="BNChicago" />
+                                    <input type="text" class="input-medium" name="Form.Values[@count].Value" value="@Model.Values[count].Value" /> 
+								</div>
+							</label>
+                            @{count++;}
+							<label>
+								<div>
+                                    <input type="hidden" name="Form.Values[@count].Name" value="NBChicago" />
+									<input type="text" class="input-small" name="Form.Values[@count].Value" value="@Model.Values[count].Value" /> Number of booths
+								</div>
+							</label>
+                        </div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" >
+					<h3>Place me in the:</h3>
+					<div><strong>
+						Incentive Pavilion (
+                        @{count++;}
+						<label class="checkbox">
+                            <input type="hidden" name="Form.Values[@count].Name" value="IPOR" />
+							<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+							<strong>OR</strong>
+						</label>
+                        @{count++;}
+						<label class="checkbox">
+                            <input type="hidden" name="Form.Values[@count].Name" value="IPDA" />
+							<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+						    <strong>DA</strong>
+                        </label>
+                        @{count++;}
+						<label class="checkbox">
+                            <input type="hidden" name="Form.Values[@count].Name" value="IPCH" />
+							<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+							<strong>CH</strong>
+						</label>)........	  
+							ASI Decoration Pavilion
+                        @{count++;}
+						<label class="checkbox">
+                            <input type="hidden" name="Form.Values[@count].Name" value="DPOR" />
+							<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+							<strong>OR</strong>
+						</label>
+                        @{count++;}
+						<label class="checkbox">
+                            <input type="hidden" name="Form.Values[@count].Name" value="DPCH" />
+							<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+							<strong>CH</strong>
+						</label> )
+					</strong></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<p>In order to exhibit at the ASI Supplier Member rate, you must be an ASI Supplier Member at the time of exhibit application as well as at the time the <em>Show</em> is held.</p>
+					<p><strong>Member:</strong> You may be billed for upcharges after booth assignment due to premium locations @@ $199 each; corners and islands @@ $399 per corner; aisle carpet, aisle span and hanging signs @@ $199 per 10x10 booth in advance, $300 on site. You can request these special configurations during your booth selection; however, these charges may become automatic based on availability at time of reservation.</p>
+					<p>You are responsible for ensuring that the fees and any calculations are consistent with your selection. If you make an error, you agree that we can correct the error and charge you accordingly.</p>
+				</td>
+			</tr>
+			<tr>
+				<th colspan="3">3. Booth Selection</th>
+			</tr>
+			<tr>
+				<td colspan="3" class="no-padding">
+					<table id="booth-selection">
+						<tr class="gray-header">
+							<td>
+								<small>*All pricing is per a 10x10 booth. Explanation of Special Exhibit Options are available in the Exhibitor Manual <a href="http://www.asishow.com/rules-and-regulations/" target="_blank">online</a> under the Booth Standards section.</small>
+							</td>
+							<td>
+								<h2>Orlando</h2>
+								<h3>January 2-4, 2018</h3>
+							</td>
+							<td>
+								<h2>Dallas</h2>
+								<h3>February 24-26, 2018</h3>
+							</td>
+							<td>
+								<h2>Chicago</h2>
+								<h3>July 24-26, 2018</h3>
+							</td>
+						</tr>
+						<tr>
+							<td>Premium locations: $199 per booth</td>
+							<td>
+                                @{count++;}
+								<label class="checkbox">
+									<input type="hidden" name="Form.Values[@count].Name" value="BS01" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+								</label>
+							</td>
+							<td>
+                                @{count++;}
+								<label class="checkbox">
+									<input type="hidden" name="Form.Values[@count].Name" value="BS02" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+								</label>
+							</td>
+							<td>
+                                @{count++;}
+								<label class="checkbox">
+									<input type="hidden" name="Form.Values[@count].Name" value="BS03" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+								</label>
+							</td>
+						</tr>
+						<tr>
+							<td>Corner(s): $399 per corner</td>
+							<td>
+                                @{count++;}
+								<label class="checkbox">
+									<input type="hidden" name="Form.Values[@count].Name" value="BS04" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+								</label>
+							</td>
+							<td>
+                                @{count++;}
+								<label class="checkbox">
+									<input type="hidden" name="Form.Values[@count].Name" value="BS05" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+								</label>
+							</td>
+							<td>
+                                @{count++;}
+								<label class="checkbox">
+									<input type="hidden" name="Form.Values[@count].Name" value="BS06" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+								</label>
+							</td>
+						</tr>
+						<tr>
+							<td>Hanging sign*: $199 per booth in advance / $300 on site<br />(Rigging not included)</td>
+							<td>
+                                @{count++;}
+								<label class="checkbox">
+									<input type="hidden" name="Form.Values[@count].Name" value="BS07" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+								</label>
+							</td>
+							<td>
+                                @{count++;}
+								<label class="checkbox">
+									<input type="hidden" name="Form.Values[@count].Name" value="BS08" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+								</label>
+							</td>
+							<td>
+                                @{count++;}
+								<label class="checkbox">
+									<input type="hidden" name="Form.Values[@count].Name" value="BS09" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+								</label>
+							</td>
+						</tr>
+						<tr>
+							<td>Aisle span*: $199 per booth in advance / $300 on site</td>
+							<td>
+                                @{count++;}
+								<label class="checkbox">
+									<input type="hidden" name="Form.Values[@count].Name" value="BS10" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+								</label>
+							</td>
+							<td>
+                                @{count++;}
+								<label class="checkbox">
+									<input type="hidden" name="Form.Values[@count].Name" value="BS11" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+								</label>
+							</td>
+							<td>
+                                @{count++;}
+								<label class="checkbox">
+									<input type="hidden" name="Form.Values[@count].Name" value="BS12" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+								</label>
+							</td>
+						</tr>
+						<tr>
+							<td>Aisle carpet*: $199 per booth in advance / $300 on site</td>
+							<td>
+                                @{count++;}
+								<label class="checkbox">
+									<input type="hidden" name="Form.Values[@count].Name" value="BS13" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+								</label>
+							</td>
+							<td>
+                                @{count++;}
+								<label class="checkbox">
+									<input type="hidden" name="Form.Values[@count].Name" value="BS14" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+								</label>
+							</td>
+							<td>
+                                @{count++;}
+								<label class="checkbox">
+									<input type="hidden" name="Form.Values[@count].Name" value="BS15" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+								</label>
+							</td>
+						</tr>
+						<tr>
+							<td>Extended height*: $199 per booth in advance / $300 on site</td>
+							<td>
+                                @{count++;}
+								<label class="checkbox">
+									<input type="hidden" name="Form.Values[@count].Name" value="BS16" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+								</label>
+							</td>
+							<td>
+                                @{count++;}
+								<label class="checkbox">
+									<input type="hidden" name="Form.Values[@count].Name" value="BS17" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+								</label>
+							</td>
+							<td>
+                                @{count++;}
+								<label class="checkbox">
+									<input type="hidden" name="Form.Values[@count].Name" value="BS18" />
+									<input type="checkbox" name="Form.Values[@count].Value" @(Model.Values[count].Value != null && Model.Values[count].Value == "on" ? "checked" : "")>
+								</label>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="6">
+								<p>Please do not position my booth near the following companies: (List every competitor or company – do not list product lines – that you do not wish to appear next to or close to. You may be assigned next to or close to companies you do not list on this form.)</p>
+                                @{count++;}
+                                <input type="hidden" name="Form.Values[@count].Name" value="Companies" />
+								<textarea rows="4" cols="50" name="Form.Values[@count].Value">@Model.Values[count].Value</textarea>
+                                @{count++;}
+								<label>Products to be exhibited (to be used when assigning booths)                             
+                                    <input type="hidden" name="Form.Values[@count].Name" value="ExhibitedProducts" />
+									<input type="text" class="input-large" name="Form.Values[@count].Value" value="@Model.Values[count].Value" />
+								</label>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<th colspan="5">4. Payment Schedule</th>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<h2 class="red-text">A $500 deposit per booth, per Show, must accompany this application.<br/>
+					NOTE: Balances are due using the following schedule for the 2018 Shows:</h2>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<h2><em>ASI Show</em> Orlando</h2>
+					<p>Second Payment Due.........7/2/17 (180 days)<br/>
+					Final Payment Due..............9/2/17 (120 days)</p>
+				</td>
+				<td>
+					<h2><em>ASI Show</em> Dallas</h2>
+					<p>Second Payment Due......7/24/17 (180 days)<br/>
+					Final Payment Due...........9/24/17 (120 days)</p>
+				</td>
+				<td>
+					<h2><em>ASI Show</em> Chicago</h2>
+					<p>Second Payment Due......1/24/18 (180 days)<br/>
+					Final Payment Due...........3/24/18 (120 days)</p>
+				</td>
+			</tr>
+            <tr>
+                <td colspan="3">
+                    <p>Any booth upcharges will be charged with first balance due. Advertising orders will be processed at the same time as booth deposit.</p>
+                    <p>Second payment includes 50% of total balance, plus any upcharge fees. Final payment is the remainder of your balance due (100%). Full payments are due 120 days prior to the <em>Show</em>.
+                    </p>
+                    <p>Note: Any booth upcharges will be charged with first balance due.</p>
+                </td>
+			</tr>
+		</tbody>
+	</table>
+    </div>
+</div><!--End Container-->
