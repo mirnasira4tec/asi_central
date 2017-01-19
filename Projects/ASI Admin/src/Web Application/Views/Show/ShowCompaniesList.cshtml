@@ -90,6 +90,14 @@
                 <td>@showAttendee.BoothNumber</td>
             </tr>
         }
+          @if (Model.TotalRecordCount > 20)
+         {
+             <tr>
+                 <td class="pager" colspan="10">
+                     @Html.Partial("../Show/Shared/_Pager", Model)
+                 </td>
+             </tr>
+         }
 
     </tbody>
 </table>
@@ -104,8 +112,6 @@
             else
                 return false
         });
-        $('#tblShowCompanyList').DataTable({
-            "pagingType": "full_numbers"
-        });
+      
     </script>
 }
