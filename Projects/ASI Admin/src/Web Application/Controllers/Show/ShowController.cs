@@ -102,7 +102,7 @@ namespace asi.asicentral.web.Controllers.Show
             return new RedirectResult("/ShowCompany/GetAttendeeCompany?showId=" + attendeeInfo.Show.Id);
         }
 
-        public ActionResult ShowList(String showTab, int? ShowTypeId, int? year, string asiNumber, int page = 1, int pageSize = 10)
+        public ActionResult ShowList(String showTab, int? ShowTypeId, int? year, int page = 1, int pageSize = 10)
         {
             var show = new ShowModel();
             show.ShowType = GetShowType();
@@ -117,10 +117,6 @@ namespace asi.asicentral.web.Controllers.Show
             if (year != null)
             {
                 showList = showList.Where(item => item.StartDate.Year == year).ToList();
-            }
-            if (!string.IsNullOrEmpty(asiNumber))
-            {
-                showList = showList.Where(f => f.Attendees.Any(z => z.Company.ASINumber == asiNumber)).ToList();
             }
             show.TotalRecordCount = showList.Count();
             showList = showList.Skip((show.CurrentPageIndex - 1) * show.PageSize)
