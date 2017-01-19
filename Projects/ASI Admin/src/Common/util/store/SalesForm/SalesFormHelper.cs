@@ -19,12 +19,13 @@
             { "Social Boost – Starter", "SOBO-49",""},
             { "Social Boost – Advanced", "SOBO-99",""},
             { "Social Boost – Pro", "SOBO-199",""},
-            { "Website Maintenance 1 hr","WEBM-120",""},
-            { "Website Maintenance 2 hr","WEBM-240",""},
-            { "Website Maintenance 3 hr","WEBM-360",""},
-            { "Website Maintenance 4 hr","WEBM-480",""},
-            { "Website Maintenance 6 hr","WEBM-720",""},
-            { "Website Maintenance 12 hr","WEBM-1440",""},
+            { "Corporate Gifts and Incentives","CG&I-20",""},
+            { "Basic ESPWS Maintenance 1","BMWP-20",""},
+            { "Basic ESPWS Maintenance 2","BMWP-40",""},
+            { "Basic ESPWS Maintenance 3","BMWP-60",""},
+            { "Custom ESPWS Maintenance 1","CMWP-20",""},
+            { "Custom ESPWS Maintenance 2","CMWP-40",""},
+            { "Custom ESPWS Maintenance 3","CMWP-60",""},
             { "Decorator Membership - Standard", "DECM-49.99", "Decorator Membership" },
             { "Decorator Membership - Plus", "DECM-99.99", "Decorator Membership" },
             { "Decorator Membership - Pro", "DECM-149.99", "Decorator Membership" } };
@@ -36,6 +37,14 @@
             { "Custom Package Genius", "CPGE-999", "" },
             { "Custom Package Prodigy", "CPRD-1499", "" },
             { "Custom Package Virtuoso", "CPGE-1899", "" } };
+
+        public static readonly string[,] OLD_PRODUCTS = {
+            { "Website Maintenance 1 hr","WEBM-120",""},
+            { "Website Maintenance 2 hr","WEBM-240",""},
+            { "Website Maintenance 3 hr","WEBM-360",""},
+            { "Website Maintenance 4 hr","WEBM-480",""},
+            { "Website Maintenance 6 hr","WEBM-720",""},
+            { "Website Maintenance 12 hr","WEBM-1440",""}};
 
         public static readonly int SALES_FORM_PRODUCT_ID = 99;
 
@@ -50,13 +59,24 @@
                     break;
                 }
             }
-            if (description.Equals(string.Empty))
+            if (string.IsNullOrEmpty(description))
             {
                 for (var i = 0; i < FEES.GetLength(0); i++)
                 {
                     if (FEES[i, 1].Equals(code))
                     {
                         description = FEES[i, 0];
+                        break;
+                    }
+                }
+            }
+            if (string.IsNullOrEmpty(description))
+            {
+                for (var i = 0; i < OLD_PRODUCTS.GetLength(0); i++)
+                {
+                    if (OLD_PRODUCTS[i, 1].Equals(code))
+                    {
+                        description = OLD_PRODUCTS[i, 0];
                         break;
                     }
                 }
