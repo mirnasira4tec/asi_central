@@ -52,10 +52,8 @@
                     
                     <div class="formField span4 pull-right">
                         <label for="year">Year</label>
-                        <input name="year" type="text" id="year" value="@Model.year" />
+                        @Html.TextBoxFor(model => model.year)
                     </div>
-                  
-                    
                 }
             </div>
         </div>

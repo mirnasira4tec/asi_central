@@ -102,29 +102,29 @@ namespace asi.asicentral.web.Controllers.Show
             return new RedirectResult("/ShowCompany/GetAttendeeCompany?showId=" + attendeeInfo.Show.Id);
         }
 
-        public ActionResult ShowList(String showTab, int? ShowTypeId, int? year, int page = 1, int pageSize = 10)
+        public ActionResult ShowList(String showTab, int? ShowTypeId, int? year, int page = 1, int pageSize = 20)
         {
             var show = new ShowModel();
             show.ShowType = GetShowType();
             show.CurrentPageIndex = page;
             show.PageSize = pageSize;
-            IList<ShowASI> showList = ObjectService.GetAll<ShowASI>().OrderByDescending(form => form.StartDate).ToList();
+            var showList = ObjectService.GetAll<ShowASI>(true);
             if (string.IsNullOrEmpty(showTab)) showTab = ShowModel.TAB_SHOWTYPE;
             if (ShowTypeId != null)
             {
-                showList = showList.Where(item => item.ShowTypeId == ShowTypeId).ToList();
+                showList = showList.Where(item => item.ShowTypeId == ShowTypeId);
             }
             if (year != null)
             {
-                showList = showList.Where(item => item.StartDate.Year == year).ToList();
+                showList = showList.Where(item => item.StartDate.Year == year);
             }
             show.TotalRecordCount = showList.Count();
-            showList = showList.Skip((show.CurrentPageIndex - 1) * show.PageSize)
-                                            .Take(show.PageSize).ToList();
+            showList = showList.OrderByDescending(form => form.StartDate);
             show.ShowTab = showTab;
             show.TabShowTypeId = ShowTypeId;
             show.TabYear = year;
-            show.Show = showList;
+            show.Show = showList.Skip((show.CurrentPageIndex - 1) * show.PageSize)
+                                            .Take(show.PageSize).ToList();
             return View("../Show/ShowList", show);
         }
 

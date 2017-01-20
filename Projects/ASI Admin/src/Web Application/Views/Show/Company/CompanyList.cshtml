@@ -16,26 +16,25 @@
             <div class="well clearfix">
                 @using (Html.BeginForm("CompanyList", "../ShowCompany/CompanyList", FormMethod.Get, new { @class = "form-inline clearfix", @id = "form-" + @CompanyModel.TAB_COMPANYNAME }))
                 {   
-                    <div class=" formField span1 pull-left">
-                        <a href="/showCompany/AddCompany" class="btn btn-red">Add </a>
-                    </div>
+                    <div class="span1 formField pull-left"><a href="/showCompany/AddCompany" class="btn btn-red">Add </a></div>
                     <div class="formField span1 pull-right">
                         <input type="hidden" value="@CompanyModel.TAB_COMPANYNAME" name="companyTab"><input type="submit" value="Search" class="btn " />
-                    </div> 
+                    </div>
                     <div class="formField span3 pull-right">
                         <label for="MemberType">Member Type</label>
-                        @Html.DropDownListFor(model => model.MemberType, new SelectList(asi.asicentral.web.models.show.CompanyModel.GetMemberTypes(), "Value", "Text"), new { name = "MemberType", value = "@Model.MemberType" })
+                        @Html.DropDownListFor(model => model.MemberType, new SelectList(asi.asicentral.web.models.show.CompanyModel.GetMemberTypes(), "Value", "Text"), new { name = "MemberType", value = "@Model.MemberType", style = "width:50%;" })
                     </div>
-                    <div class=" formField span3 pull-right">
+                    <div class="formField span3 pull-right">
                         <label for="companyName">Name</label>
-                        <input name="companyName" type="text" id="companyName" value="@Model.Name" />
+                        @Html.TextBoxFor(model => model.Name, new { style = "width:70%;" })
                     </div>
                     <div class="formField span3 pull-right">
                         <label for="asiNumber">ASI Number</label>
-                        <input name="asiNumber" type="text" id="asiNumber" value="@Model.ASINumber" />
+                        @Html.TextBoxFor(model => model.ASINumber, new { style = "width:50%;" })
                     </div>
                 }
             </div>
+
         </div>
     </div>
 </div>
