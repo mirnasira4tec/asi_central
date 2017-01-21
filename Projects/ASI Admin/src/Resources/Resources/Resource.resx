@@ -1939,7 +1939,7 @@
     <value>&lt;strong&gt;5. I work solely for the company applying for membership.&lt;/strong&gt;</value>
   </data>
   <data name="IsAuthorizedToBindCompany" xml:space="preserve">
-    <value>&lt;strong&gt;1. I am authorized to bind the Company to the following terms and conditions.&lt;/strong&gt;</value>
+    <value>&lt;strong&gt;1. I am authorized to bind the Company to terms and conditions (you will have a chance to review and approve them at the end of the process).&lt;/strong&gt;</value>
   </data>
   <data name="IsChangesInformed" xml:space="preserve">
     <value>&lt;strong&gt;6. If the above conditions should change, I will inform ASI of the change.&lt;/strong&gt;</value>
