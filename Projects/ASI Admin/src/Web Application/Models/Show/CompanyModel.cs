@@ -26,7 +26,6 @@ namespace asi.asicentral.web.models.show
 
         public const String TAB_COMPANYNAME = "companyName";
         public String CompanyTab { get; set; }
-
         [Display(ResourceType = typeof(Resource), Name = "IsNonUSAddress")]
         public bool IsNonUSAddress { get; set; }
 
@@ -122,6 +121,8 @@ namespace asi.asicentral.web.models.show
         public int NumericPageCount { get; set; }
         public string TabCompanyName { get; set; }
         public string TabMemberType { get; set; }
+        public int? TabYear { get; set; }
+        public int? TabShowTypeId { get; set; }
         public int ShowId { get; set; }
     }
 }

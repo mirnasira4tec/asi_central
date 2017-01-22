@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace asi.asicentral.web.models.show
 {
-    public class ShowModel
+    public class ShowModel : CompanyModel
     {
         public int Id { get; set; }
         public string Path { get; set; }
@@ -18,7 +18,7 @@ namespace asi.asicentral.web.models.show
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public int? ShowTypeId { get; set; }
         public int? year { get; set; }
-
+       
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string Name { get; set; }
@@ -39,6 +39,7 @@ namespace asi.asicentral.web.models.show
 
         public IList<ShowASI> Show { set; get; }
         public IList<SelectListItem> ShowType { get; set; }
-
+      
+       
     }
 }

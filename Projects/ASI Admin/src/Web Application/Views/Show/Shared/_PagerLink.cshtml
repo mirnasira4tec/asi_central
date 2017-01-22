@@ -12,7 +12,7 @@
     else
     {
 
-        var routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize },{"showId", Model.ShowId}, { "companyName", ViewData["CompanyName"] != null ? ViewData["CompanyName"].ToString() : null }, { "MemberType", ViewData["MemberType"] != null ? ViewData["MemberType"].ToString() : null } };
+        var routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize }, { "showId", Model.ShowId }, { "ShowTypeId", Model.TabShowTypeId }, { "year", Model.TabYear }, { "companyName", ViewData["CompanyName"] != null ? ViewData["CompanyName"].ToString() : null }, { "MemberType", ViewData["MemberType"] != null ? ViewData["MemberType"].ToString() : null } };
         var htmlAttributes = new Dictionary<string, object>();
         if (ViewData["Selected"] != null ? (bool)ViewData["Selected"] : false)
         {

@@ -370,6 +370,7 @@
     <Content Include="Content\multiselecteddatepicker.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Content\jquery.dataTables.min.css" />
     <None Include="Properties\PublishProfiles\Local File.pubxml" />
     <None Include="Properties\PublishProfiles\Web App Deploy.pubxml" />
     <Content Include="Images\admin-asi-creditcard.gif" />
