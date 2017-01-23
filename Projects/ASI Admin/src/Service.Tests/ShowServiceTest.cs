@@ -18,6 +18,7 @@ using System.Web;
 using System.IO;
 using ClosedXML.Excel;
 using System.Dynamic;
+using System.Text.RegularExpressions;
 
 namespace asi.asicentral.Tests
 {
@@ -352,40 +353,25 @@ namespace asi.asicentral.Tests
         public void ExcelUploadTest()
         {
             IList<ShowASI> shows = new List<ShowASI>();
-            shows.Add(CreateShowData(2, "ENGAGE EAST 2016"));
-            shows.Add(CreateShowData(1, "ENGAGE WEST 2016"));
+            shows.Add(CreateShowData(4, "WEEK 1 - SOUTHEAST- Raleigh"));
+            shows.Add(CreateShowData(5, "WEEK 1 - SOUTHEAST - Charlotte"));
+            shows.Add(CreateShowData(6, "WEEK 1 - SOUTHEAST - Atlanta"));
+            shows.Add(CreateShowData(7, "WEEK 1 - SOUTHEAST - Nashville"));
 
             IList<ShowCompany> supplierCompanies = new List<ShowCompany>();
-            supplierCompanies.Add(CreateCompanyData(26458, "30208", "A P Specialties"));
+            supplierCompanies.Add(CreateCompanyData(216, "12310", "Action Illustrated"));
 
             IList<ShowAddress> supplierCompanyAddresses = new List<ShowAddress>();
-            supplierCompanyAddresses.Add(CreateAddressData(26494, "140 Calle Iglesia", "San Clemente", "CA", "92672-7502", "United States"));
-
-            IList<ShowCompany> distributorCompanies = new List<ShowCompany>();
-            distributorCompanies.Add(CreateCompanyData(26514, "181369", "Diverse Printing & Graphics"));
-
-            IList<ShowAddress> distributorCompanyAddresses = new List<ShowAddress>();
-            distributorCompanyAddresses.Add(CreateAddressData(26609, "1500 NE 131st St test", "North Miami", "FL", "33161-4426", "United States"));
+            supplierCompanyAddresses.Add(CreateAddressData(370, "N/A", "N/A", "N/A", "N/A", "N/A"));
 
             IList<ShowAttendee> attendees = new List<ShowAttendee>();
-            attendees.Add(CreateAttendeeData(964, 26514, 2, false, false, true, false, false));
-
-            IList<ShowEmployee> employees = new List<ShowEmployee>();
-            employees.Add(CreateEmployeeData(159, 26514, "Rohan", "Kathe"));
-
-            IList<ShowEmployeeAttendee> employeeAttendees = new List<ShowEmployeeAttendee>();
-            employeeAttendees.Add(CreateEmployeeAttendeeData(144, 964, 159));
-
+            attendees.Add(CreateAttendeeData(264, 216, 4, false, false, false, false, false));
 
             Mock<IObjectService> mockObjectService = new Mock<IObjectService>();
             mockObjectService.Setup(objectService => objectService.GetAll<ShowASI>(false)).Returns(shows.AsQueryable());
             mockObjectService.Setup(objectService => objectService.GetAll<ShowCompany>(false)).Returns(supplierCompanies.AsQueryable());
             mockObjectService.Setup(objectService => objectService.GetAll<ShowAddress>(false)).Returns(supplierCompanyAddresses.AsQueryable());
-            mockObjectService.Setup(objectService => objectService.GetAll<ShowCompany>(false)).Returns(distributorCompanies.AsQueryable());
-            mockObjectService.Setup(objectService => objectService.GetAll<ShowAddress>(false)).Returns(distributorCompanyAddresses.AsQueryable());
             mockObjectService.Setup(objectService => objectService.GetAll<ShowAttendee>(false)).Returns(attendees.AsQueryable());
-            mockObjectService.Setup(objectService => objectService.GetAll<ShowEmployee>(false)).Returns(employees.AsQueryable());
-            mockObjectService.Setup(objectService => objectService.GetAll<ShowEmployeeAttendee>(false)).Returns(employeeAttendees.AsQueryable());
 
             ExcelUploadController objExcel = new ExcelUploadController();
             objExcel.ObjectService = mockObjectService.Object;
@@ -393,56 +379,33 @@ namespace asi.asicentral.Tests
             var dataTable = GetDataTable();
             Assert.IsNotNull(dataTable);
 
-            var show = GetShowData();
-            Assert.AreEqual(shows.ElementAt(0).Name.ToLower(), show.Name.ToLower());
-
-            var supplierCompany = objExcel.UpdateShowCompanyData (dataTable, 0);
+            var supplierCompany = objExcel.UpdateShowCompanyData(dataTable, 0);
             Assert.AreEqual(supplierCompanies.ElementAt(0).ASINumber, supplierCompany.ASINumber);
             Assert.AreEqual(supplierCompanies.ElementAt(0).Name, supplierCompany.Name);
 
-            var distributorCompany = objExcel.UpdateShowCompanyData(dataTable, 1);
-            Assert.AreEqual(distributorCompanies.ElementAt(0).ASINumber, distributorCompany.ASINumber);
-            Assert.AreEqual(distributorCompanies.ElementAt(0).Name, distributorCompany.Name);
+            var supplierCompanyAddress = objExcel.UpdateShowCompanyData(dataTable, 0);
+            Assert.AreEqual(supplierCompanyAddresses.ElementAt(0).Street1, supplierCompanyAddress.CompanyAddresses[0].Address.Street1);
+            Assert.AreEqual(supplierCompanyAddresses.ElementAt(0).City, supplierCompanyAddress.CompanyAddresses[0].Address.City);
+            Assert.AreEqual(supplierCompanyAddresses.ElementAt(0).Zip, supplierCompanyAddress.CompanyAddresses[0].Address.Zip);
 
-            //var supplierCompanyAddress = objExcel.ConvertDataAsShowAddress(dataTable, supplierCompany.Id, 0);
-            //Assert.AreEqual(supplierCompanyAddresses.ElementAt(0).Street1, supplierCompanyAddress.Street1);
-            //Assert.AreEqual(supplierCompanyAddresses.ElementAt(0).City, supplierCompanyAddress.City);
-            //Assert.AreEqual(supplierCompanyAddresses.ElementAt(0).Zip, supplierCompanyAddress.Zip);
-
-            //var distributorCompanyAddress = objExcel.ConvertDataAsShowAddress(dataTable, distributorCompany.Id, 1);
-            //Assert.AreEqual(distributorCompanyAddresses.ElementAt(0).Street1, distributorCompanyAddress.Street1);
-            //Assert.AreEqual(distributorCompanyAddresses.ElementAt(0).City, distributorCompanyAddress.City);
-            //Assert.AreEqual(distributorCompanyAddresses.ElementAt(0).Zip, distributorCompanyAddress.Zip);
-
-            //var attendee = objExcel.ConvertDataAsShowAttendee(dataTable, show.Id, distributorCompany.Id, 0);
-            //Assert.AreEqual(attendees.ElementAt(0).CompanyId, attendee.CompanyId);
-            //Assert.AreEqual(attendees.ElementAt(0).ShowId, attendee.ShowId);
-
-            //var distributorAttendee = objExcel.ConvertDataAsShowAttendee(dataTable, show.Id, distributorCompany.Id, 1);
-            //Assert.AreEqual(attendees.ElementAt(0).CompanyId, distributorAttendee.CompanyId);
-            //Assert.AreEqual(attendees.ElementAt(0).ShowId, distributorAttendee.ShowId);
-
-            //var employee = objExcel.ConvertDataAsShowEmployee(dataTable, distributorCompany.Id, 1);
-            //Assert.AreEqual(employees.ElementAt(0).Id, employee.Id);
-            //Assert.AreEqual(employees.ElementAt(0).FirstName, employee.FirstName);
-            //Assert.AreEqual(employees.ElementAt(0).LastName, employee.LastName);
-
-            //var employeeAttendee = objExcel.ConvertDataAsShowEmployeeAttendee(dataTable, distributorCompany.Id, distributorAttendee.Id, employee.Id, 1);
-            //Assert.AreEqual(employeeAttendees.ElementAt(0).EmployeeId, employeeAttendee.EmployeeId);
-            //Assert.AreEqual(employeeAttendees.ElementAt(0).AttendeeId, employeeAttendee.AttendeeId);
-
+            var attendee = objExcel.UpdateShowCompanyData(dataTable, 0 ,4 );
+            Assert.AreEqual(attendees.ElementAt(0).CompanyId, attendee.Attendees[1].CompanyId);
+            Assert.AreEqual(attendees.ElementAt(0).ShowId, attendee.Attendees[1].ShowId);
         }
+
+
         public DataTable GetDataTable()
         {
             ExcelUploadController objExcel = new ExcelUploadController();
             DataTable dt = null;
-            string startupPath = System.AppDomain.CurrentDomain.BaseDirectory;
-            string currFilePath = startupPath + "\\test.xlsx";
+            string tempPath = Path.GetTempPath();
+            string currFilePath = tempPath + "Roadshow Import.xlsx";
             FileInfo fi = new FileInfo(currFilePath);
             var workBook = new XLWorkbook(fi.FullName);
             int totalsheets = workBook.Worksheets.Count;
             var worksheet = workBook.Worksheet(1);
-
+            string[] columnNameList = null;
+            var objShow = new ShowASI();
             var firstRowUsed = worksheet.FirstRowUsed();
             if (firstRowUsed != null)
             {
@@ -454,6 +417,29 @@ namespace asi.asicentral.Tests
                     keyValues.Add(cell, categoryRow.Cell(cell).GetString());
                 }
                 categoryRow = categoryRow.RowBelow();
+                Registry registry = new EFRegistry();
+                IContainer container = new Container(registry);
+                using (var objectContext = new ObjectService(container))
+                {
+                        var matchShow = Regex.Match(worksheet.Name, @"^\s*WEEK\s+\d+\s*-\s*", RegexOptions.IgnoreCase);
+                        if (matchShow.Success)
+                        {
+                            var weekNum = matchShow.Value.Trim();
+                            var address = worksheet.Name.Substring(matchShow.Value.Length);
+                            objShow = objectContext.GetAll<ShowASI>().Where(item => item.Name.Contains(weekNum.Replace("-", " -")) && item.Address.Contains(address.Trim()))
+                                                                     .OrderByDescending(s => s.StartDate).FirstOrDefault();
+                            columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
+                        }
+                }
+                var containsAll = columnNameList.Where(x => keyValues.Values.Any(d => d.Contains(x))).ToList();
+                if (containsAll.Count() == columnNameList.Count())
+                {
+                    Assert.AreEqual(containsAll.Count(), columnNameList.Count());
+                }
+                else
+                {
+                    Assert.AreNotEqual(containsAll.Count(), columnNameList.Count());
+                }
                 var parent = new List<IDictionary<string, object>>();
                 while (!categoryRow.Cell(coCategoryId).IsEmpty())
                 {
@@ -472,32 +458,6 @@ namespace asi.asicentral.Tests
                 dt = objExcel.ToDictionary(parent);
             }
             return dt;
-        }
-
-        public ShowASI GetShowData()
-        {
-            ExcelUploadController objExcel = new ExcelUploadController();
-            string startupPath = System.AppDomain.CurrentDomain.BaseDirectory;
-            string currFilePath = startupPath + "\\test.xlsx";
-            FileInfo fi = new FileInfo(currFilePath);
-            var workBook = new XLWorkbook(fi.FullName);
-            int totalsheets = workBook.Worksheets.Count;
-            var objShow = new ShowASI();
-            var worksheet = workBook.Worksheet(1);
-            Registry registry = new EFRegistry();
-            IContainer container = new Container(registry);
-            using (var objectContext = new ObjectService(container))
-            {
-                if (worksheet.Name.Contains("ENGAGE EAST 2016"))
-                {
-                    objShow = objectContext.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE EAST"));
-                }
-                else if (worksheet.Name.Contains("ENGAGE WEST 2016"))
-                {
-                    objShow = objectContext.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains("ENGAGE WEST"));
-                }
-            }
-            return objShow;
         }
 
         private DataSet GetDataset(int t, string conn)

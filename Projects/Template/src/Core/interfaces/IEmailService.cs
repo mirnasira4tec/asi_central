@@ -14,12 +14,12 @@ namespace asi.asicentral.interfaces
         /// Sends an email
         /// </summary>
         /// <param name="mail"></param>
-        void SendMail(Mail mail);
+        bool SendMail(Mail mail);
 
         /// <summary>
         /// Sends an email
         /// </summary>
         /// <param name="mail"></param>
-        void SendMail(MailMessage mail);
+        bool SendMail(MailMessage mail);
     }
 }

@@ -1033,7 +1033,7 @@
     <value>SGR is delivered to 8,000 ASI suppliers. SGR helps promotional products suppliers run their enterprises more efficiently.</value>
   </data>
   <data name="MagazineAdvertisingSGRURL" xml:space="preserve">
-    <value>https://mydigitalpublication.com/reports/getCover.php?m=21604</value>
+    <value>http://www.SUPPLIERGLOBALRESOURCE-DIGITAL.COM/reports/getCover.php?m=21604</value>
   </data>
   <data name="MagazineAdvertisingStitchesDescription" xml:space="preserve">
     <value>Stitches is published 10x a year, with a circulation of 21,250.</value>
@@ -1045,7 +1045,7 @@
     <value>Wearables is published 10x a year, with a circulation of 15,000. Wearables is read by screen-printers and distributors.</value>
   </data>
   <data name="MagazineAdvertisingWearablesURL" xml:space="preserve">
-    <value>https://mydigitalpublication.com/reports/getCover.php?m=7893</value>
+    <value>http://www.wearables-digital.com/publish/getCover.php?m=43902</value>
   </data>
   <data name="MagazineCounselorDescription" xml:space="preserve">
     <value>Counselor's "State of the Industry" statistics are the industry's benchmark.</value>
@@ -1063,7 +1063,7 @@
     <value>Wearables is designed for today's busy apparel business owner.</value>
   </data>
   <data name="MagazineWearablesURL" xml:space="preserve">
-    <value>https://mydigitalpublication.com/reports/getCover.php?m=7893</value>
+    <value>http://www.wearables-digital.com/publish/getCover.php?m=43902</value>
   </data>
   <data name="MainChatRoom_750" xml:space="preserve">
     <value>Main Chat Room $750/mo.</value>
@@ -1924,7 +1924,7 @@
     <value>Our Supplier Global Resource™ (SGR) readers think globally and act locally.</value>
   </data>
   <data name="MagazineSGRURL" xml:space="preserve">
-    <value>https://mydigitalpublication.com/publish/getCover.php?m=5604</value>
+    <value>http://www.SUPPLIERGLOBALRESOURCE-DIGITAL.COM/reports/getCover.php?m=21604</value>
   </data>
   <data name="Form_No" xml:space="preserve">
     <value>No</value>
@@ -1939,7 +1939,7 @@
     <value>&lt;strong&gt;5. I work solely for the company applying for membership.&lt;/strong&gt;</value>
   </data>
   <data name="IsAuthorizedToBindCompany" xml:space="preserve">
-    <value>&lt;strong&gt;1. I am authorized to bind the Company to the following terms and conditions.&lt;/strong&gt;</value>
+    <value>&lt;strong&gt;1. I am authorized to bind the Company to terms and conditions (you will have a chance to review and approve them at the end of the process).&lt;/strong&gt;</value>
   </data>
   <data name="IsChangesInformed" xml:space="preserve">
     <value>&lt;strong&gt;6. If the above conditions should change, I will inform ASI of the change.&lt;/strong&gt;</value>

@@ -38,6 +38,62 @@ namespace asi.asicentral.Tests
         }
 
         [TestMethod]
+        public void AddEEXSubscription()
+        {
+            var tag = DateTime.Now.Ticks.ToString();
+            tag = tag.Substring(tag.Length - 5);
+
+            var storeService = MockupStoreService();
+            var personifyService = new PersonifyService(storeService);
+            var user = new User () 
+                { AsiNumber = "", FirstName = "EEX" + tag, LastName = "EEXSubscription", Email = string.Format("DistEEX{0}@gmail.com", tag),
+                  PhoneAreaCode = "201", Phone = "34" + tag, CompanyName = "Distributor EEX Subscription " + tag,
+                  MemberType_CD = "Distributor", 
+                   Street1 = "1 Street1", City = "Trevose", State = "PA", Country = "USA" };
+
+            var companyInfo = personifyService.AddEEXSubscription(user, true);
+            Assert.IsNotNull(companyInfo);
+
+            user = new User()
+            {
+                AsiNumber = "",
+                FirstName = "EEX-supplier" + tag,
+                LastName = "EEXSubscription",
+                Email = string.Format("SupEEX{0}@gmail.com", tag),
+                PhoneAreaCode = "202",
+                Phone = "34" + tag,
+                CompanyName = "Supplier EEX Subscription",
+                MemberType_CD = "Supplier",
+                Street1 = "1 Street1",
+                City = "Trevose",
+                State = "PA",
+                Country = "USA"
+            };
+
+            companyInfo = personifyService.AddEEXSubscription(user, false);
+            Assert.IsNotNull(companyInfo);
+
+            user = new User()
+            {
+                AsiNumber = "",
+                FirstName = "EEX-Deco" + tag,
+                LastName = "EEXSubscription",
+                Email = string.Format("DecoEEX{0}@gmail.com", tag),
+                PhoneAreaCode = "203",
+                Phone = "34" + tag,
+                CompanyName = "Decorator EEX Subscription",
+                MemberType_CD = "Decorator",
+                Street1 = "1 Street1",
+                City = "Trevose",
+                State = "PA",
+                Country = "USA"
+            };
+
+            companyInfo = personifyService.AddEEXSubscription(user, false);
+            Assert.IsNotNull(companyInfo);
+        }
+
+        [TestMethod]
         public void PlaceBundleOrderTest()
         {
             IStoreService storeService = MockupStoreService();
