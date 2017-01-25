@@ -82,6 +82,9 @@ namespace asi.asicentral.services
                 var orderDetail = order.OrderDetails[0];
                 var coupon = orderDetail.Coupon;
 
+                // update demographic questions
+                PersonifyClient.UpdateDemographicData(storeService, orderDetail);
+
                 // processing coupon
                 if (coupon != null && !string.IsNullOrEmpty(coupon.CouponCode) )
                 {
@@ -720,6 +723,14 @@ namespace asi.asicentral.services
             }
 
             return companyInfo;
+        }
+
+        public virtual StoreDetailApplication GetDemographicData(StoreOrderDetail orderDetail)
+        {
+            var storeDetailApp = PersonifyClient.GetDemographicData(storeService, orderDetail);
+            storeService.SaveChanges();
+
+            return storeDetailApp;
         }
 
         private static string GetCountryCode(string country)
