@@ -48,6 +48,10 @@
       <HintPath>..\packages\ASI.Contracts.1.2.0-beta953\lib\ASI.Contracts.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ASI.Contracts.Excit, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\library\ASI.Contracts.Excit.dll</HintPath>
+    </Reference>
     <Reference Include="ASI.EntityModel, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ASI.EntityModel.1.2.0-beta16\lib\ASI.EntityModel.dll</HintPath>
       <Private>True</Private>
@@ -281,6 +285,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\asicentralApi\AsiCentralApiController.cs" />
     <Compile Include="Helpers\Authorized.cs" />
     <Compile Include="Controllers\asicentral\CallQueueController.cs" />
     <Compile Include="Controllers\CompanyValidationsController.cs" />
@@ -514,6 +519,9 @@
     <Content Include="Views\Show\ViewError.cshtml" />
     <Content Include="Views\Store\Admin\ShowForms.cshtml" />
     <EmbeddedResource Include="Views\Emails\OrderApprovalEmail.cshtml" />
+    <Content Include="Views\Shared\_CentralApiLayout.cshtml" />
+    <Content Include="Views\asicentralApi\SupplierUpdateRequestList.cshtml" />
+    <Content Include="Views\asicentralApi\SupplierUpdateRequestDetail.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
