@@ -36,7 +36,8 @@
             { "Custom Package Pro", "CPRO-599", "" },
             { "Custom Package Genius", "CPGE-999", "" },
             { "Custom Package Prodigy", "CPRD-1499", "" },
-            { "Custom Package Virtuoso", "CPGE-1899", "" } };
+            { "Custom Package Virtuoso", "CPGE-1899", "" },
+            { "Custom Package", "CPOT-0", "" } };
 
         public static readonly string[,] OLD_PRODUCTS = {
             { "Website Maintenance 1 hr","WEBM-120",""},
