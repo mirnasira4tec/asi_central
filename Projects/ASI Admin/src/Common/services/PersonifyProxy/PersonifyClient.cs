@@ -780,13 +780,11 @@ namespace asi.asicentral.services.PersonifyProxy
             if (matchCompany == null && matchCompanyList.Count > 0)
             {
                 matchCompany = GetMatchCompanyFromList(matchCompanyList, company.MemberType);
+                matchedList = matchedList == null ? new List<string>() : matchedList;
 
-                if (matchedList == null)
-                    matchedList = new List<string>();
-
-                foreach (var c in matchCompanyList.Distinct().ToList())
+                foreach (var c in matchCompanyList.Distinct())
                 {
-                    if (c.MasterCustomerId != matchCompany.MasterCustomerId )
+                    if (matchCompany == null || c.MasterCustomerId != matchCompany.MasterCustomerId )
                     {
                         matchedList.Add(string.Format("{0},{1},{2}", c.MasterCustomerId, c.MemberStatus, c.CustomerClassCode ));
                     }
@@ -867,7 +865,10 @@ namespace asi.asicentral.services.PersonifyProxy
             PersonifyCustomerInfo companyInfo = null;
             if (matchCompanyList != null && matchCompanyList.Count > 0)
             {
-                if (matchCompanyList.Count == 1)
+                //do not match distirbutor type with other delisted types
+                if (matchCompanyList.Count == 1 && 
+                    (memberType.ToUpper() != "DISTRIBUTOR" ||
+                        (matchCompanyList[0].CustomerClassCode.ToUpper() != "DISTRIBUTOR" && matchCompanyList[0].MemberStatus.ToUpper() != "DELISTED")))
                 {
                     companyInfo = matchCompanyList[0];
                 }
@@ -876,7 +877,8 @@ namespace asi.asicentral.services.PersonifyProxy
                     // find company from terminated/deliested/active companies, first the same memberType, then All MemberTypes
                     var searchList = SelectCompanies(matchCompanyList.FindAll(c => c.CustomerClassCode.ToUpper() == memberType.ToUpper()).ToList());
 
-                    if (searchList.Count < 1)
+                    //for distributor do not try to match with other delisted member types, we will create a new record
+                    if (searchList.Count < 1 && memberType.ToUpper() != "DISTRIBUTOR")
                         searchList = SelectCompanies(matchCompanyList);
 
                     // no match company is TERMINATED, ACTIVE and DELISTED, match from LEAD companies
@@ -887,7 +889,8 @@ namespace asi.asicentral.services.PersonifyProxy
 
                     if (searchList.Count < 1)
                     {  // find company from the original list
-                        searchList = matchCompanyList;
+                        if (memberType.ToUpper() != "DISTRIBUTOR") searchList = matchCompanyList;
+                        else searchList = matchCompanyList.FindAll(m => m.MemberStatus != null && m.MemberStatus.ToUpper() != "DELISTED");
                     }
                     else if (searchList.Count == 1)
                     {  // one selected company, no more searching

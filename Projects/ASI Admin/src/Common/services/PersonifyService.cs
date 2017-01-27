@@ -53,7 +53,7 @@ namespace asi.asicentral.services
                 log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
                 var individualInfos = PersonifyClient.AddIndividualInfos(order.Company, countryCodes, companyInfo.MasterCustomerId, companyInfo.SubCustomerId).ToList();
-                if (!individualInfos.Any()) throw new Exception("Failed in creating individuald in Personify.");
+                if (!individualInfos.Any()) throw new Exception("Failed in creating individual in Personify.");
                 log.Debug(string.Format("Added individuals to company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
                 var contactAddresses = individualInfos.SelectMany(i =>
