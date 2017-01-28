@@ -140,7 +140,7 @@ namespace asi.asicentral.web.Controllers.asicentralApi
                     stageConfig.LoginInstruction = item.UpdateValue ?? item.OrigValue;
                 }
             }
-            asi.asicentral.util.HtmlHelper.SubmitWebRequest(url, headerParams, Newtonsoft.Json.JsonConvert.SerializeObject(stageConfig), true, true);
+            await asi.asicentral.util.HtmlHelper.SubmitWebRequestAsync(url, headerParams, Newtonsoft.Json.JsonConvert.SerializeObject(stageConfig), true, true).ConfigureAwait(false);
         }
 
         private async Task UpdateProdConfigValue(SupUpdateRequest supUpdateRequest)
@@ -187,7 +187,7 @@ namespace asi.asicentral.web.Controllers.asicentralApi
                     prodConfig.LoginInstruction = item.UpdateValue ?? item.OrigValue;
                 }
             }
-            asi.asicentral.util.HtmlHelper.SubmitWebRequestAsync(urlProd, headerParams, Newtonsoft.Json.JsonConvert.SerializeObject(prodConfig), true, true);
+            await asi.asicentral.util.HtmlHelper.SubmitWebRequestAsync(urlProd, headerParams, Newtonsoft.Json.JsonConvert.SerializeObject(prodConfig), true, true).ConfigureAwait(false);
         }
     }
 }
