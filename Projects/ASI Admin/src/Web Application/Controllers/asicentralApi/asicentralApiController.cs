@@ -34,7 +34,8 @@ namespace asi.asicentral.web.Controllers.asicentralApi
         }
 
         [HttpPost]
-        public ActionResult EditServicesData(string command, int supUpdateRequestId, SupUpdateRequest model)
+        [ValidateInput(false)]
+        public async Task<ActionResult> EditServicesData(string command, int supUpdateRequestId, SupUpdateRequest model)
         {
             SupUpdateRequest supUpdateRequest = null;
             var isProduction = ConfigurationManager.AppSettings["IsProduction"];
@@ -46,17 +47,14 @@ namespace asi.asicentral.web.Controllers.asicentralApi
             {
                 if (command == "Accept")
                 {
-                    Task.Run(async () =>
+                    if (supUpdateRequest != null)
                     {
-                        if (supUpdateRequest != null)
+                        await UpdateStageConfigValue(supUpdateRequest).ConfigureAwait(false);
+                        if (string.IsNullOrEmpty(isProduction) &&  isProduction == "true")
                         {
-                            await UpdateStageConfigValue(supUpdateRequest);
-                            if (string.IsNullOrEmpty(isProduction) &&  isProduction == "true")
-                            {
-                                await UpdateProdConfigValue(supUpdateRequest);
-                            }
+                            await UpdateProdConfigValue(supUpdateRequest).ConfigureAwait(false);
                         }
-                    }).Wait();
+                    }
                 }
                 else if (command == "Save")
                 {
@@ -82,7 +80,10 @@ namespace asi.asicentral.web.Controllers.asicentralApi
                 if (supUpdateRequest != null && command != "Save")
                 {
                     supUpdateRequest.Status = command == "Accept" ? SupRequestStatus.Approved : SupRequestStatus.Rejected;
-                    supUpdateRequest.ApprovedBy = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
+                    if (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.User != null)
+                        supUpdateRequest.ApprovedBy = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
+                    else
+                        supUpdateRequest.ApprovedBy = "Development";
                     supUpdateRequest.UpdateDate = DateTime.UtcNow;
                     ObjectService.SaveChanges();
                 }
