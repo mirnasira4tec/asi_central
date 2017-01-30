@@ -1,3 +1,4 @@
+
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -77,28 +78,37 @@ GO
 SET IDENTITY_INSERT EXCT_SupUpdateField ON
 INSERT INTO EXCT_SupUpdateField (SupUpdateFieldId, Name, Description, CreateDateUTC, UpdateDateUTC, UpdateSource)
 VALUES
-(1, 'InventoryUrlTest', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(2, 'LoginValidateUrlTest', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(3, 'OrderCreateUrlTest', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(4, 'OrderStatusUrlTest', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(5, 'AccountNoTest', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(6, 'UserNameTest', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(7, 'PasswordTest', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(8, 'EmailTest', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(11, 'InventoryUrlProd', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(12, 'LoginValidateUrlProd', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(13, 'OrderCreateUrlProd', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(14, 'OrderStatusUrlProd', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(15, 'AccountNoProd', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(16, 'UserNameProd', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(17, 'PasswordProd', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(18, 'EmailProd', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(31, 'Warehouse', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(32, 'WarehouseAvailable', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(33, 'CheckInventory', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(34, 'OrderNumber', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(35, 'OrderInHandsDate', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(36, 'DistributorAcknowledgementContactPhoneNumber', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
-(37, 'OrderLineItemViewSKU', '', GETUTCDATE(), GETUTCDATE(), 'ADMIN')
+(1, 'InventoryUrlTest', 'Inventory Url (Test)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(2, 'LoginValidateUrlTest', 'Login Validate Url (Test)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(3, 'OrderCreateUrlTest', 'Order Create Url (Test)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(4, 'OrderStatusUrlTest', 'Order Status Url (Test)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(5, 'AccountNoTest', 'Account Number (Test)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(6, 'UserNameTest', 'User Name (Test)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(7, 'PasswordTest', 'Password (Test)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(8, 'EmailTest', 'Email (Test)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(11, 'InventoryUrlProd', 'Inventory Url (Prod)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(12, 'LoginValidateUrlProd', 'Login Validate Url (Prod)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(13, 'OrderCreateUrlProd', 'Order Create Url (Prod)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(14, 'OrderStatusUrlProd', 'Order Status Url (Prod)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(15, 'AccountNoProd', 'Account Number (Prod)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(16, 'UserNameProd', 'User Name (Prod)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(17, 'PasswordProd', 'Password (Prod)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(18, 'EmailProd', 'Email (Prod)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(31, 'WarehouseProd', 'Ware House (Prod)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(32, 'WarehouseAvailableProd', 'Ware House Available (Prod)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(33, 'CheckInventoryProd', 'Check Inventory (Prod)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(34, 'OrderNumberProd', 'Order Number (Prod)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(35, 'OrderInHandsDateProd', 'Order In Hands Date (Prod)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(36, 'DistributorAcknowledgementContactPhoneNumberProd', 'Distributor Phone Number (Prod)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(37, 'OrderLineItemViewSKUProd', 'Order Line Item View SKU (Prod)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(38, 'LoginInstructionTest', 'Login Instruction (Test)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(39, 'LoginInstructionProd', 'Login Instruction (Prod)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(40, 'WarehouseTest', 'Ware House (Test)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(41, 'WarehouseAvailableTest', 'Ware House Available (Test)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(42, 'CheckInventoryTest', 'Check Inventory (Test)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(43, 'OrderNumberTest', 'Order Number (Test)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(44, 'OrderInHandsDateTest', 'Order In Hands Date (Test)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(45, 'DistributorAcknowledgementContactPhoneNumberTest', 'Distributor Phone Number (Test)', GETUTCDATE(), GETUTCDATE(), 'ADMIN'),
+(46, 'OrderLineItemViewSKUTest', 'Order Line Item View SKU (Test)', GETUTCDATE(), GETUTCDATE(), 'ADMIN')
 SET IDENTITY_INSERT EXCT_SupUpdateField OFF
 
