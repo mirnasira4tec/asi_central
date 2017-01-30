@@ -486,6 +486,26 @@ namespace asi.asicentral.Tests
         }
 
         [TestMethod]
+        public void MatchDistributorChange()
+        {
+            //Distributor should not match to a delisted supplier
+            //match name only  
+            IBackendService personify = new PersonifyService();
+            var company = GetStoreCompany("10 Again Inc",
+                                          "818501800",
+                                          "wholesale@10againclothing.com",
+                                          "SUPPLIER");
+            List<string> masterIdList = null;
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
+            Assert.IsNotNull(companyInfo);
+            Assert.AreEqual("000000090868", companyInfo.MasterCustomerId);
+            company.MemberType = "DISTRIBUTOR";
+            if (masterIdList != null) masterIdList = null;
+            var companyInfo1 = personify.FindCompanyInfo(company, ref masterIdList);
+            Assert.IsTrue(companyInfo1 == null || companyInfo1.MasterCustomerId != companyInfo.MasterCustomerId);
+        }
+
+        [TestMethod]
         public void ReconcileCompanySupplierWithPhoneEmail()
         {
             // match email only

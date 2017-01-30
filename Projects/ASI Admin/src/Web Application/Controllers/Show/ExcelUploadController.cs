@@ -246,7 +246,6 @@ namespace asi.asicentral.web.Controllers.Show
                                     keyValues.Add(cell, categoryRow.Cell(cell).GetString());
                                 }
                                 categoryRow = categoryRow.RowBelow();
-                                IList<ShowASI> objShows = null;
                                 var objShow = new ShowASI();
                                 string[] columnNameList = null;
 

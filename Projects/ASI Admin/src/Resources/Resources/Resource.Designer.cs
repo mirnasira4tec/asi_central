@@ -2743,7 +2743,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;strong&gt;1. I am authorized to bind the Company to the following terms and conditions.&lt;/strong&gt;.
+        ///   Looks up a localized string similar to &lt;strong&gt;1. I am authorized to bind the Company to terms and conditions (you will have a chance to review and approve them at the end of the process).&lt;/strong&gt;.
         /// </summary>
         public static string IsAuthorizedToBindCompany {
             get {
