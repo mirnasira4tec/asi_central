@@ -50,7 +50,7 @@ namespace asi.asicentral.web.Controllers.asicentralApi
                     if (supUpdateRequest != null)
                     {
                         await UpdateStageConfigValue(supUpdateRequest).ConfigureAwait(false);
-                        if (string.IsNullOrEmpty(isProduction) &&  isProduction == "true")
+                        if (!string.IsNullOrEmpty(isProduction) &&  isProduction == "true")
                         {
                             await UpdateProdConfigValue(supUpdateRequest).ConfigureAwait(false);
                         }
