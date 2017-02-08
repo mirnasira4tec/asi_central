@@ -32,10 +32,18 @@ namespace asi.asicentral.web.Controllers.Show
 
         public ShowCompany UpdateShowCompanyData(DataTable ds, int rowId, int showId = 0, bool fasiliateFlag = false)
         {
+            ShowCompany company = null;
             var asinumber = ds.Rows[rowId]["ASINO"].ToString();
             var name = ds.Rows[rowId]["Company"].ToString();
             var memberType = ds.Rows[rowId]["MemberType"].ToString();
-            var company = ObjectService.GetAll<ShowCompany>().FirstOrDefault(item => (item.ASINumber == asinumber || (item.Name == name && item.MemberType == memberType)));
+            if (fasiliateFlag == true)
+            {
+                 company = ObjectService.GetAll<ShowCompany>().FirstOrDefault(item => (item.ASINumber == asinumber && item.Name == name && item.MemberType == memberType));
+            }
+            else
+            {
+                company = ObjectService.GetAll<ShowCompany>().FirstOrDefault(item => (item.ASINumber == asinumber || (item.Name == name && item.MemberType == memberType)));
+            }
             if (company == null)
             {
                 company = new ShowCompany()
