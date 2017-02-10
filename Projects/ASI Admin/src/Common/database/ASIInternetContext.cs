@@ -1,7 +1,9 @@
 ﻿using asi.asicentral.database.mappings.asiinternet;
 using asi.asicentral.model.sgr;
 using System.Data.Entity;
+using asi.asicentral.model.excit;
 using asi.asicentral.model.store;
+using asi.asicentral.database.mappings.excit;
 
 namespace asi.asicentral.database
 {
@@ -44,6 +46,9 @@ namespace asi.asicentral.database
         public DbSet<LegacySupplierMembershipApplicationContact> SupplierMembershipApplicationContacts { get; set; }
         public DbSet<LegacyOrderDistributorAddress> OrderDistributorAddresses { get; set; }
         public DbSet<LegacyOrderAddress> OrderAddresses { get; set; }
+        public DbSet<SupUpdateField> SupplierUpdateFields { get; set; }
+        public DbSet<SupUpdateRequest> SupplierUpdateRequests { get; set; }
+        public DbSet<SupUpdateRequestDetail> SupplierUpdateRequestDetails { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -53,31 +58,34 @@ namespace asi.asicentral.database
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Configurations
-               .Add(new ASPNetMembershipMap())
-               .Add(new ASPNetUserMap())
-               .Add(new CategoryMap())
-               .Add(new CompanyMap())
-               .Add(new DistributorAccountTypeMap())
-               .Add(new DistributorBusinessRevenueMap())
-               .Add(new DistributorMembershipApplicationMap())
-               .Add(new DistributorMembershipApplicationContactMap())
-               .Add(new DistributorProductLineMap())
-               .Add(new CENTUserProfilesPROFMap())
-               .Add(new LegacyOrderAddressMap())
-               .Add(new LegacyOrderDistributorAddressMap())
-               .Add(new LegacyOrderCatalogMap())
-               .Add(new LegacyOrderCatalogOptionMap())
-               .Add(new LegacyOrderContactMap())
-               .Add(new OrderCreditCardMap())
-               .Add(new OrderDetailMap())
-               .Add(new OrderMap())
-               .Add(new LegacyMagazineAddressMap())
-               .Add(new LegacyOrderMagazineAddressMap())
-               .Add(new ProductMap())
-               .Add(new StoreProductConfiguration())
-               .Add(new SupplierDecoratingTypeMap())
-               .Add(new SupplierMembershipApplicationMap())
-               .Add(new SupplierMembershipApplicationContactMap());
+                .Add(new ASPNetMembershipMap())
+                .Add(new ASPNetUserMap())
+                .Add(new CategoryMap())
+                .Add(new CompanyMap())
+                .Add(new DistributorAccountTypeMap())
+                .Add(new DistributorBusinessRevenueMap())
+                .Add(new DistributorMembershipApplicationMap())
+                .Add(new DistributorMembershipApplicationContactMap())
+                .Add(new DistributorProductLineMap())
+                .Add(new CENTUserProfilesPROFMap())
+                .Add(new LegacyOrderAddressMap())
+                .Add(new LegacyOrderDistributorAddressMap())
+                .Add(new LegacyOrderCatalogMap())
+                .Add(new LegacyOrderCatalogOptionMap())
+                .Add(new LegacyOrderContactMap())
+                .Add(new OrderCreditCardMap())
+                .Add(new OrderDetailMap())
+                .Add(new OrderMap())
+                .Add(new LegacyMagazineAddressMap())
+                .Add(new LegacyOrderMagazineAddressMap())
+                .Add(new ProductMap())
+                .Add(new StoreProductConfiguration())
+                .Add(new SupplierDecoratingTypeMap())
+                .Add(new SupplierMembershipApplicationMap())
+                .Add(new SupplierMembershipApplicationContactMap())
+                .Add(new SupUpdateFieldMap())
+                .Add(new SupUpdateRequestMap())
+                .Add(new SupUpdateRequestDetailMap());
         }
     }
 }
