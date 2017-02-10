@@ -28,57 +28,61 @@
 	<div class="tab-content">
 		@Html.Partial("../Store/Application/Shared/CompanyInformation", Model)
 		@Html.Partial("../Store/Application/Shared/OrderT&Cs", Model)
-<!------------------------------------product-information---------------------------------->					
-		<div id="tabproduct" class="product-information tab-pane fade">
-			<fieldset class="primary-business-revenue">
-				<legend>Primary Business Revenue</legend>
-				<span class="primary-business-row">
+<!------------------------------------product-information---------------------------------->
+	<div id="tabproduct" class="product-information tab-pane fade">
+	    @Html.HiddenFor(m => m.EstablishedDate)
+	    <fieldset class="primary-business-revenue">
+	        <legend>Primary Business Revenue</legend>
+	        <span class="primary-business-row">
 					<label class="primary-business-radio radio">
-						@Html.RadioButtonFor(m => m.BuisnessRevenue, LegacyDistributorBusinessRevenue.BUSINESSREVENUE_PRINTING, Model.Printing ? new { @checked = "checked" } : null)
+						@Html.RadioButtonFor(m => m.BuisnessRevenue, LegacyDistributorBusinessRevenue.BUSINESSREVENUE_PRINTING, Model.Printing ? new {@checked = "checked"} : null)
 						@LegacyDistributorBusinessRevenue.BUSINESSREVENUE_PRINTING
 					</label>
 					<label class="primary-business-radio radio">
-						@Html.RadioButtonFor(m => m.BuisnessRevenue, LegacyDistributorBusinessRevenue.BUSINESSREVENUE_PROMOTIONALPRODUCTS, Model.PromotionalProducts ? new { @checked = "checked" } : null)
+						@Html.RadioButtonFor(m => m.BuisnessRevenue, LegacyDistributorBusinessRevenue.BUSINESSREVENUE_PROMOTIONALPRODUCTS, Model.PromotionalProducts ? new {@checked = "checked"} : null)
 						@LegacyDistributorBusinessRevenue.BUSINESSREVENUE_PROMOTIONALPRODUCTS
 					</label>
 					<label class="primary-business-radio radio">
-						@Html.RadioButtonFor(m => m.BuisnessRevenue, LegacyDistributorBusinessRevenue.BUSINESSREVENUE_SIGNS, Model.Signs ? new { @checked = "checked" } : null)
+						@Html.RadioButtonFor(m => m.BuisnessRevenue, LegacyDistributorBusinessRevenue.BUSINESSREVENUE_SIGNS, Model.Signs ? new {@checked = "checked"} : null)
 						@LegacyDistributorBusinessRevenue.BUSINESSREVENUE_SIGNS
 					</label>
 					<label class="primary-business-radio radio">
-						@Html.RadioButtonFor(m => m.BuisnessRevenue, LegacyDistributorBusinessRevenue.BUSINESSREVENUE_TROPHYAWARDS, Model.TrophyAwards ? new { @checked = "checked" } : null)
+						@Html.RadioButtonFor(m => m.BuisnessRevenue, LegacyDistributorBusinessRevenue.BUSINESSREVENUE_TROPHYAWARDS, Model.TrophyAwards ? new {@checked = "checked"} : null)
 						@LegacyDistributorBusinessRevenue.BUSINESSREVENUE_TROPHYAWARDS
 					</label>
 					<label class="primary-business-radio radio">
-						@Html.RadioButtonFor(m => m.BuisnessRevenue, LegacyDistributorBusinessRevenue.BUSINESSREVENUE_SCREENPRINTING, Model.ScreenPrinting ? new { @checked = "checked" } : null)
+						@Html.RadioButtonFor(m => m.BuisnessRevenue, LegacyDistributorBusinessRevenue.BUSINESSREVENUE_SCREENPRINTING, Model.ScreenPrinting ? new {@checked = "checked"} : null)
 						@LegacyDistributorBusinessRevenue.BUSINESSREVENUE_SCREENPRINTING
 					</label>
 					<label class="primary-business-radio radio">
-						@Html.RadioButtonFor(m => m.BuisnessRevenue, "Other", Model.Other ? new { @checked = "checked" } : null)
+						@Html.RadioButtonFor(m => m.BuisnessRevenue, "Other", Model.Other ? new {@checked = "checked"} : null)
 						Other
 					</label>
-                    <span class="label-row">@Html.EditorFor(m => m.OtherBusinessRevenue, Model.Other ? new { @class = "input-medium" } : new { @class = "input-medium hidden" }) @Html.ValidationMessageFor(m => m.OtherBusinessRevenue)</span>
+                    <span class="label-row">@Html.EditorFor(m => m.OtherBusinessRevenue, Model.Other ? new {@class = "input-medium"} : new {@class = "input-medium hidden"}) @Html.ValidationMessageFor(m => m.OtherBusinessRevenue)</span>
 				</span>
-				<span class="label-row">
+	        <span class="label-row">
 					@Html.LabelFor(m => m.NumberOfEmployee) 
 					@Html.LabelFor(m => m.NumberOfSalesEmployee) 
 					@Html.LabelFor(m => m.AnnualSalesVolumeASP) 
 				</span>
-				<span class="label-row">
+	        <span class="label-row">
 					@Html.EditorFor(m => m.NumberOfEmployee) @Html.ValidationMessageFor(m => m.NumberOfEmployee) 
 					@Html.EditorFor(m => m.NumberOfSalesEmployee) @Html.ValidationMessageFor(m => m.NumberOfSalesEmployee)
 					@Html.EditorFor(m => m.AnnualSalesVolumeASP) @Html.ValidationMessageFor(m => m.AnnualSalesVolumeASP)
 				</span>
-				<span class="label-row">
-					@Html.LabelFor(m => m.AnnualSalesVolume, new { @class = "span3" }) 
+	        <span class="label-row">
+					@Html.LabelFor(m => m.AnnualSalesVolume) 
+                    @Html.LabelFor(m => m.EstablishedDate, new {@class = "span2"}) 
 				</span>
-				<span class="label-row">
+	        <span class="label-row">
 					@Html.EditorFor(m => m.AnnualSalesVolume) @Html.ValidationMessageFor(m => m.AnnualSalesVolume)	
+                    @{ var year = Model.EstablishedDate.HasValue ? Model.EstablishedDate.Value.Year.ToString() : string.Empty;}
+                    <input data-val="true" name="EstablishedDate" type="text" value="@year" readonly="readonly" class="span2" />
 				</span>
-			</fieldset>
-			<fieldset class="product-lines">
-				<legend>Product Lines</legend>
-				<span class="checkbox-left">
+	    </fieldset>
+	    <fieldset class="product-lines">
+	        <legend>Product Lines</legend>
+	        <span class="checkbox-left">
 					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductA)">@Html.CheckBoxFor(model => model.ProductA) Auto Accessories</label>
 					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductB)">@Html.CheckBoxFor(model => model.ProductB) Awards, Trophies &amp; Plaques</label>
 					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductC)">@Html.CheckBoxFor(model => model.ProductC) Badges, Buttons</label>
@@ -96,7 +100,7 @@
 					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductJ)">@Html.CheckBoxFor(model => model.ProductJ) Housewares and home products (flashlights, cutlery, etc)</label>
 					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductH)">@Html.CheckBoxFor(model => model.ProductH) Industrial and safety items Inflatables (balloons, etc)</label>
 				</span>
-				<span class="checkbox-right">
+	        <span class="checkbox-right">
 					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductU)">@Html.CheckBoxFor(model => model.ProductU) Key tags</label>
 					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductX)">@Html.CheckBoxFor(model => model.ProductX) Magnetic products</label>
 					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductM)">@Html.CheckBoxFor(model => model.ProductM) Office and desk products</label>
@@ -113,8 +117,8 @@
 					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductS)">@Html.CheckBoxFor(model => model.ProductS) Wearables (Caps, jackets, shirts, etc)</label>
 					<label class="account-checkbox checkbox" for="@Html.NameFor(model => model.ProductT)">@Html.CheckBoxFor(model => model.ProductT) Writing instruments</label>
 				</span>
-			</fieldset>
-		</div><!-- END #product-information -->			
+	    </fieldset>
+	</div><!-- END #product-information -->			
 <!------------------------------------account-information---------------------------------->			
 		<div id="tabaccount" class="account-information tab-pane fade">
 			<fieldset class="asi-contact">

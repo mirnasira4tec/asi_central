@@ -248,6 +248,9 @@
     <Compile Include="database\ASIInternetContext.cs" />
     <Compile Include="database\ASIPublicationContext.cs" />
     <Compile Include="database\mappings\show\ShowDistShowLogoMap.cs" />
+    <Compile Include="database\mappings\excit\SupUpdateFieldMap.cs" />
+    <Compile Include="database\mappings\excit\SupUpdateRequestDetailMap.cs" />
+    <Compile Include="database\mappings\excit\SupUpdateRequestMap.cs" />
     <Compile Include="database\PersonifyContext.cs" />
     <Compile Include="database\CallContext.cs" />
     <Compile Include="database\DM_MemberDemogrContext.cs" />
@@ -337,6 +340,9 @@
     <Compile Include="interfaces\IImageConvertService.cs" />
     <Compile Include="model\CompanyInformation.cs" />
     <Compile Include="model\DM_memberDemogr\CompanyASIRep.cs" />
+    <Compile Include="model\excit\SupUpdateField.cs" />
+    <Compile Include="model\excit\SupUpdateRequest.cs" />
+    <Compile Include="model\excit\SupUpdateRequestDetail.cs" />
     <Compile Include="model\findsupplier\memberdemogr\SupplierRating.cs" />
     <Compile Include="model\findsupplier\memberdemogr\SupplierSeadElectronicAddress.cs" />
     <Compile Include="model\findsupplier\memberdemogr\SupplierPhone.cs" />

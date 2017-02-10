@@ -112,8 +112,8 @@ namespace asi.asicentral.web.DependencyResolution
                     x.SetAllProperties(instance => instance.OfType<ICreditCardService>());
                     x.SetAllProperties(instance => instance.OfType<IBackendService>());
 
-                    x.For<IController>()
-                        .EnrichAllWith(controller => proxyGenerator.CreateInterfaceProxyWithTarget(controller, new IInterceptor[] { new LogInterceptor(controller.GetType()) }));
+                    //x.For<IController>()
+                    //    .EnrichAllWith(controller => proxyGenerator.CreateInterfaceProxyWithTarget(controller, new IInterceptor[] { new LogInterceptor(controller.GetType()) }));
                 });
             return ObjectFactory.Container;
         }
