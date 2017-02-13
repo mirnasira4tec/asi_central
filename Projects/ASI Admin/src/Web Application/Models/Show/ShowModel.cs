@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace asi.asicentral.web.models.show
 {
-    public class ShowModel : CompanyModel
+    public class ShowModel : PagerModel
     {
         public int Id { get; set; }
         public string Path { get; set; }
@@ -39,7 +39,5 @@ namespace asi.asicentral.web.models.show
 
         public IList<ShowASI> Show { set; get; }
         public IList<SelectListItem> ShowType { get; set; }
-      
-       
     }
 }

@@ -53,7 +53,7 @@ namespace asi.asicentral.services
                 log.Debug(string.Format("Reconciled company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
                 var individualInfos = PersonifyClient.AddIndividualInfos(order.Company, countryCodes, companyInfo.MasterCustomerId, companyInfo.SubCustomerId).ToList();
-                if (!individualInfos.Any()) throw new Exception("Failed in creating individuald in Personify.");
+                if (!individualInfos.Any()) throw new Exception("Failed in creating individual in Personify.");
                 log.Debug(string.Format("Added individuals to company '{1}' to order '{0}'.", order, companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId));
 
                 var contactAddresses = individualInfos.SelectMany(i =>
@@ -81,6 +81,9 @@ namespace asi.asicentral.services
 
                 var orderDetail = order.OrderDetails[0];
                 var coupon = orderDetail.Coupon;
+
+                // update demographic questions
+                PersonifyClient.UpdateDemographicData(storeService, orderDetail);
 
                 // processing coupon
                 if (coupon != null && !string.IsNullOrEmpty(coupon.CouponCode) )
@@ -720,6 +723,14 @@ namespace asi.asicentral.services
             }
 
             return companyInfo;
+        }
+
+        public virtual StoreDetailApplication GetDemographicData(StoreOrderDetail orderDetail)
+        {
+            var storeDetailApp = PersonifyClient.GetDemographicData(storeService, orderDetail);
+            storeService.SaveChanges();
+
+            return storeDetailApp;
         }
 
         private static string GetCountryCode(string country)

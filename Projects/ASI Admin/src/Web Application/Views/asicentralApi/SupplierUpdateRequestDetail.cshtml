@@ -1,0 +1,54 @@
+﻿@using asi.asicentral.model.excit;
+@model  SupUpdateRequest
+@{
+    ViewBag.Title = "SupplierUpdateRequestDetail";
+    Layout = "~/Views/Shared/_CentralApiLayout.cshtml";
+    var objectService = asi.asicentral.web.DependencyResolution.IoC.Initialize().GetInstance<asi.asicentral.interfaces.IObjectService>();
+    var supUpdateFieldList = objectService.GetAll<SupUpdateField>().OrderByDescending(item => item.CreateDate).ToList();
+}
+
+<h2>Supplier Update Request Detail for @Model.CompanyName</h2>
+
+@using (Html.BeginForm("EditServicesData", "asicentralApi", FormMethod.Post))
+{
+    if (Model != null)
+    {
+    <div class="status-btns">
+        <input  type ="hidden" value="@Model.Id" name="supUpdateRequestId"/>
+        <input class="command btn-primary" type="submit" value="Accept" name="command">
+        <input class="command btn-primary" type="submit" value="Save" name="command">
+        <input class="command btn-primary" type="submit" value="Reject" name="command">
+        <a href="/asicentralApi/SupplierUpdateRequestList">Cancel</a>
+
+    </div>
+    <br />
+    <br />
+    <table class="table table-bordered table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>Configuration Description</th>
+                <th>Original Value</th>
+                <th>Updated Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.RequestDetails.Count(); i++)
+            {
+                <tr>
+                    <td style="width:30%;">@Model.RequestDetails[i].UpdateField.Description</td>
+                    <td style="width:30%;">@Model.RequestDetails[i].OrigValue</td>
+                    @if (Model.RequestDetails[i].UpdateField.Name == "LoginInstructionTest" || Model.RequestDetails[i].UpdateField.Name == "LoginInstructionProd")
+                    {
+                        <td style="width:30%;">@Html.TextAreaFor(x => x.RequestDetails[i].UpdateValue, new {style="width:95%;height:100%"})</td>
+                    }
+                    else
+                    {
+                        <td style="width:30%;">@Html.TextBoxFor(x => x.RequestDetails[i].UpdateValue)</td>
+                    }
+                    @Html.HiddenFor(x => x.RequestDetails[i].Id)
+                </tr>
+            }
+        </tbody>
+    </table>
+    }
+}
