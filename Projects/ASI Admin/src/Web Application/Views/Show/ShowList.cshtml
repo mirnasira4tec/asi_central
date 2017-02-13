@@ -9,24 +9,25 @@
 
 
 
-<div><h2 class="pull-left">List of Shows</h2>
-    
-@using (Html.BeginForm("Index", "ExcelUpload", new { tempPath = (string.IsNullOrEmpty(Model.Path) ? "" : Model.Path) }, FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    <div id="ImportExcel" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3 id="myModalLabel1">Import Excel</h3>
+<div>
+    <h2 class="pull-left">List of Shows</h2>
+
+    @using (Html.BeginForm("Index", "ExcelUpload", new { tempPath = (string.IsNullOrEmpty(Model.Path) ? "" : Model.Path) }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div id="ImportExcel" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 id="myModalLabel1">Import Excel</h3>
+            </div>
+            <div class="modal-body">
+                <input type="file" id="fileImport" name="file" multiple="multiple" />
+            </div>
+            <div class="modal-footer">
+                <input class="btn btn-primary" type="submit" id="btnExcel" value="Import" />
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            </div>
         </div>
-        <div class="modal-body">
-            <input type="file" id="fileImport" name="file" multiple="multiple" />
-        </div>
-        <div class="modal-footer">
-            <input class="btn btn-primary" type="submit" id="btnExcel" value="Import" />
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-        </div>
-    </div>
-}
+    }
 </div>
 <div class="tabbable tabs-below small">
     <h5>Search by</h5>
@@ -36,24 +37,23 @@
     <div class="tab-content" id="formtab-content">
         <div class="tab-pane @(Model.ShowTab == ShowModel.TAB_SHOWTYPE ? "active" : string.Empty)" id="@ShowModel.TAB_SHOWTYPE">
             <div class="well clearfix">
-                
+
                 @using (Html.BeginForm("ShowList", "/Show/ShowList", FormMethod.Get, new { @class = "form-inline clearfix", @id = "form-" + @ShowModel.TAB_SHOWTYPE }))
                 {                
                   
-                    <div class="span1 formField pull-left"><a href="/Show/AddShow" class="btn btn-red">Add </a></div><div class="formField span1 pull-right">
+                    <div class="span1 formField pull-left"><a href="/Show/AddShow" class="btn btn-red">Add </a></div>
+                    <div class="formField span1 pull-right">
                         <input type="hidden" value="@ShowModel.TAB_SHOWTYPE" name="showTab" /><input type="submit" value="Search" class="btn" />
                     </div>
-<div class="formField span4 pull-right">
+                    <div class="formField span4 pull-right">
                         <label for="showType">Show Type</label>
                         @Html.DropDownListFor(model => model.ShowTypeId, Model.ShowType, "Select", new { name = "ShowTypeId", value = "@Model.ShowTypeId" })
                     </div>
                     
                     <div class="formField span4 pull-right">
                         <label for="year">Year</label>
-                        <input name="year" type="text" id="year" value="@Model.year" />
+                        @Html.TextBoxFor(model => model.year)
                     </div>
-                
-                    
                 }
             </div>
         </div>
@@ -63,13 +63,14 @@
 @using (Html.BeginForm())
 {
     <a href="#ImportExcel" class="modal-link" data-toggle="modal">
-    <img src="/images/upload.png" title="Excel Import" /></a>
+        <img src="/images/upload.png" title="Excel Import" /></a>
     <table class="table table-bordered table-condensed table-striped">
         <thead>
             <tr>
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
                 <th>Name</th>
+                <th>Id</th>
                 <th>Type</th>
                 <th>Details</th>
                 <th>Start Date</th>
@@ -80,9 +81,10 @@
             @foreach (var show in Model.Show)
             {  <tr>
                 <td><a class="delete" id="@show.Id" href="/Show/Delete?id=@show.Id"><i class="icon-trash"></i></a></td>
-                 <td>   <a rel="tooltip" data-placement="right" class="icon-pencil" href="@Url.Action("Edit", "Show", new { Id = @show.Id })"></a>
+                <td><a rel="tooltip" data-placement="right" class="icon-pencil" href="@Url.Action("Edit", "Show", new { Id = @show.Id })"></a>
                 </td>
                 <td><a class="red" href="/ShowCompany/GetAttendeeCompany?showId=@show.Id">@show.Name</a></td>
+                <td>@show.Id</td>
                 <td>
                     @show.ShowType.Type
                 </td>
@@ -98,10 +100,20 @@
                 <td>@show.EndDate.ToString("dd-MMM-yyyy")</td>
             </tr>
             }
+             @if (Model.TotalRecordCount > 10)
+         {
+             <tr>
+                 <td class="pager" colspan="10">
+                     @Html.Partial("../Show/Shared/_Pager", Model)
+                 </td>
+             </tr>
+         }
         </tbody>
     </table>
 }
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
 @section scripts {
+    <script src="~/Scripts/jquery.dataTables-1.10.3.min.js"></script>
     <script type="text/javascript">
         $('ul[id*="formtab"] a').click(function (e) {
             e.preventDefault();
@@ -117,5 +129,6 @@
             else
                 return false
         });
+      
     </script>
 }

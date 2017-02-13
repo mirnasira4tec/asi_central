@@ -102,23 +102,29 @@ namespace asi.asicentral.web.Controllers.Show
             return new RedirectResult("/ShowCompany/GetAttendeeCompany?showId=" + attendeeInfo.Show.Id);
         }
 
-        public ActionResult ShowList(String showTab, int? ShowTypeId, int? year)
+        public ActionResult ShowList(String showTab, int? ShowTypeId, int? year, int page = 1, int pageSize = 20)
         {
             var show = new ShowModel();
             show.ShowType = GetShowType();
-            IList<ShowASI> showList = ObjectService.GetAll<ShowASI>().OrderByDescending(form => form.StartDate).ToList();
+            show.CurrentPageIndex = page;
+            show.PageSize = pageSize;
+            var showList = ObjectService.GetAll<ShowASI>(true);
             if (string.IsNullOrEmpty(showTab)) showTab = ShowModel.TAB_SHOWTYPE;
-            if (ShowTypeId != null && year != null)
+            if (ShowTypeId != null)
             {
-                showList = showList.Where(item => (item.StartDate.Year == year && item.ShowTypeId != null && item.ShowTypeId == ShowTypeId)).ToList();
+                showList = showList.Where(item => item.ShowTypeId == ShowTypeId);
             }
-            else if (ShowTypeId != null || year != null )
+            if (year != null)
             {
-                showList = showList.Where(item => (item.ShowTypeId != null 
-                && item.ShowTypeId == ShowTypeId) || (item.StartDate.Year == year)).ToList();
+                showList = showList.Where(item => item.StartDate.Year == year);
             }
+            show.TotalRecordCount = showList.Count();
+            showList = showList.OrderByDescending(form => form.StartDate);
             show.ShowTab = showTab;
-            show.Show = showList;
+            show.TabShowTypeId = ShowTypeId;
+            show.TabYear = year;
+            show.Show = showList.Skip((show.CurrentPageIndex - 1) * show.PageSize)
+                                            .Take(show.PageSize).ToList();
             return View("../Show/ShowList", show);
         }
 

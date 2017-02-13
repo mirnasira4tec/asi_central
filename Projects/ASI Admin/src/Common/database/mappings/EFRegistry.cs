@@ -410,6 +410,9 @@ namespace asi.asicentral.database.mappings
             For<IRepository<ShowCompanyAddress>>().Use<EFRepository<ShowCompanyAddress>>()
                 .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
+            For<IRepository<ShowDistShowLogo>>().Use<EFRepository<ShowDistShowLogo>>()
+                .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+
             #endregion Umbraco_ShowContext
 
             #region PersonifyContext

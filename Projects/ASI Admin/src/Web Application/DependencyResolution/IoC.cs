@@ -91,9 +91,12 @@ namespace asi.asicentral.web.DependencyResolution
                     x.For<IEmailService>()
                        .Use<QueueMailService>()
                        .EnrichWith(emailService => proxyGenerator.CreateClassProxyWithTarget(emailService.GetType(), emailService, new IInterceptor[] { new LogInterceptor(emailService.GetType()) }));
-                       
 
-					//Used to store credit cards outside of the application and return a token
+                    x.For<IImageConvertService>()
+                       .Use<ImageConvertService>()
+                       .EnrichWith(imageService => proxyGenerator.CreateClassProxyWithTarget(imageService.GetType(), imageService, new IInterceptor[] { new LogInterceptor(imageService.GetType()) }));
+
+                    //Used to store credit cards outside of the application and return a token
 					x.For<ICreditCardService>()
 						.Use<services.CreditCardService>()
 						.EnrichWith(cardService => proxyGenerator.CreateClassProxyWithTarget(cardService.GetType(), cardService, new object[] { null }, new IInterceptor[] { new LogInterceptor(cardService.GetType()) }))

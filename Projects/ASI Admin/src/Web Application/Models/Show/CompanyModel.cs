@@ -10,7 +10,7 @@ using asi.asicentral.interfaces;
 
 namespace asi.asicentral.web.models.show
 {
-    public class CompanyModel 
+    public class CompanyModel : PagerModel
     {
 
         public CompanyModel()
@@ -26,7 +26,6 @@ namespace asi.asicentral.web.models.show
 
         public const String TAB_COMPANYNAME = "companyName";
         public String CompanyTab { get; set; }
-
         [Display(ResourceType = typeof(Resource), Name = "IsNonUSAddress")]
         public bool IsNonUSAddress { get; set; }
 
@@ -107,21 +106,5 @@ namespace asi.asicentral.web.models.show
             selItems.Add(new SelectListItem() { Selected = false, Text = "Non-Member", Value = "Non-Member" });
             return selItems;
         }
-
-        // Paging-related properties
-        public int CurrentPageIndex { get; set; }
-        public int PageSize { get; set; }
-        public int TotalRecordCount { get; set; }
-        public int PageCount
-        {
-            get
-            {
-                return Math.Max(this.TotalRecordCount / this.PageSize, 1);
-            }
-        }
-        public int NumericPageCount { get; set; }
-        public string TabCompanyName { get; set; }
-        public string TabMemberType { get; set; }
-        public int ShowId { get; set; }
     }
 }
