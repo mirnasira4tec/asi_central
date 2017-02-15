@@ -34,15 +34,19 @@ namespace asi.asicentral.web.Controllers.Show
         {
             ShowCompany company = null;
             var asinumber = ds.Rows[rowId]["ASINO"].ToString();
-            var name = ds.Rows[rowId]["Company"].ToString();
+            var name = ds.Rows[rowId]["Company"].ToString().Trim();
             var memberType = ds.Rows[rowId]["MemberType"].ToString();
             if (fasiliateFlag == true)
             {
-                company = ObjectService.GetAll<ShowCompany>().FirstOrDefault(item => (item.ASINumber == asinumber && item.Name.Trim().Equals(name.Trim(), StringComparison.CurrentCultureIgnoreCase) && item.MemberType.Trim().Equals(memberType.Trim(), StringComparison.CurrentCultureIgnoreCase)));
+                var companies = ObjectService.GetAll<ShowCompany>().Where(item => (item.ASINumber == asinumber)).ToList();
+                var specialCharsPattern = @"[\s,\./\\&\?;=]";
+                var compName = Regex.Replace(name, specialCharsPattern, "");
+                company = companies.FirstOrDefault(item => Regex.Replace(item.Name, specialCharsPattern, "").Equals(compName, StringComparison.CurrentCultureIgnoreCase) && 
+                                                           item.MemberType.Equals(memberType, StringComparison.CurrentCultureIgnoreCase));
             }
             else
             {
-                company = ObjectService.GetAll<ShowCompany>().FirstOrDefault(item => (item.ASINumber == asinumber || (item.Name.Trim().Equals(name.Trim(), StringComparison.CurrentCultureIgnoreCase) && item.MemberType.Trim().Equals(memberType.Trim(), StringComparison.CurrentCultureIgnoreCase))));
+                company = ObjectService.GetAll<ShowCompany>().FirstOrDefault(item => (item.ASINumber == asinumber || (item.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase) && item.MemberType.Equals(memberType, StringComparison.CurrentCultureIgnoreCase))));
             }
             if (company == null)
             {
