@@ -33,9 +33,9 @@ namespace asi.asicentral.web.Controllers.Show
         public ShowCompany UpdateShowCompanyData(DataTable ds, int rowId, int showId = 0, bool fasiliateFlag = false)
         {
             ShowCompany company = null;
-            var asinumber = ds.Rows[rowId]["ASINO"].ToString();
+            var asinumber = ds.Rows[rowId]["ASINO"].ToString().Trim();
             var name = ds.Rows[rowId]["Company"].ToString().Trim();
-            var memberType = ds.Rows[rowId]["MemberType"].ToString();
+            var memberType = ds.Rows[rowId]["MemberType"].ToString().Trim();
             if (fasiliateFlag == true)
             {
                 var companies = ObjectService.GetAll<ShowCompany>().Where(item => (item.ASINumber == asinumber)).ToList();
