@@ -13,27 +13,34 @@
     </ul>
     <div class="tab-content" id="formtab-content">
         <div class="tab-pane @(Model.CompanyTab == CompanyModel.TAB_COMPANYNAME ? "active" : string.Empty)" id="@CompanyModel.TAB_COMPANYNAME">
-            <div class="well">
-                @using (Html.BeginForm("CompanyList", "../ShowCompany/CompanyList", FormMethod.Get, new { @class = "form-inline", @id = "form-" + @CompanyModel.TAB_COMPANYNAME }))
-                {     <a href="/showCompany/AddCompany" class="btn btn-red">Add </a>
-                    <div class=" span5 pull-right">
-                        <label for="MemberType">Member Type</label>
-                        @Html.DropDownListFor(model => model.MemberType, new SelectList(asi.asicentral.web.models.show.CompanyModel.GetMemberTypes(), "Value", "Text"), new { name = "MemberType", value = "@Model.MemberType" })
-                    <div class="span1 pull-right">
-                        <input type="hidden" value="@CompanyModel.TAB_COMPANYNAME" name="companyTab"><input type="submit" value="Search" class="btn">
-                    </div></div>           
-                    <div class=" span4 pull-right">
-                        <label for="companyName">Name</label>
-                        <input name="companyName" type="text" id="companyName" value="@Model.Name" />
+            <div class="well clearfix">
+                @using (Html.BeginForm("CompanyList", "../ShowCompany/CompanyList", FormMethod.Get, new { @class = "form-inline clearfix", @id = "form-" + @CompanyModel.TAB_COMPANYNAME }))
+                {   
+                    <div class="span1 formField pull-left"><a href="/showCompany/AddCompany" class="btn btn-red">Add </a></div>
+                    <div class="formField span1 pull-right">
+                        <input type="hidden" value="@CompanyModel.TAB_COMPANYNAME" name="companyTab"><input type="submit" value="Search" class="btn " />
                     </div>
-                     }
+                    <div class="formField span3 pull-right">
+                        <label for="MemberType">Member Type</label>
+                        @Html.DropDownListFor(model => model.MemberType, new SelectList(asi.asicentral.web.models.show.CompanyModel.GetMemberTypes(), "Value", "Text"), new { name = "MemberType", value = "@Model.MemberType", style = "width:50%;" })
+                    </div>
+                    <div class="formField span3 pull-right">
+                        <label for="companyName">Name</label>
+                        @Html.TextBoxFor(model => model.Name, new { style = "width:70%;" })
+                    </div>
+                    <div class="formField span3 pull-right">
+                        <label for="asiNumber">ASI Number</label>
+                        @Html.TextBoxFor(model => model.ASINumber, new { style = "width:50%;" })
+                    </div>
+                }
             </div>
+
         </div>
     </div>
 </div>
 @using (Html.BeginForm())
 { 
-    <table id ="tblCompany" class="table table-bordered table-condensed table-striped">
+    <table id="tblCompany" class="table table-bordered table-condensed table-striped">
         <thead>
             <tr>
                 <th>&nbsp;</th>
@@ -48,15 +55,15 @@
             @foreach (var company in Model.company)
             {
                 <tr>
-                    <td><a class="delete" id="@company.Id" href="/ShowCompany/Delete?id=@company.Id"><i class="icon-trash"></i></a></td> 
-                      <td> <a rel="tooltip" data-placement="right" class="icon-pencil" href="/ShowCompany/EditCompany?id=@company.Id"></a>
+                    <td><a class="delete" id="@company.Id" href="/ShowCompany/Delete?id=@company.Id"><i class="icon-trash"></i></a></td>
+                    <td><a rel="tooltip" data-placement="right" class="icon-pencil" href="/ShowCompany/EditCompany?id=@company.Id"></a>
                     </td>
-                    <td >
+                    <td>
                         <a class="red" href="@Url.Action("List", "../ShowCompany", new CompanyInformation { Id = company.Id })">@company.Name</a>
                     </td>
-                    <td> @company.ASINumber</td>
-                    <td >@company.MemberType </td>
-                    <td >No of Address :@company.CompanyAddresses.Count() No of Employee :@company.Employees.Count()</td>
+                    <td>@company.ASINumber</td>
+                    <td>@company.MemberType </td>
+                    <td>No of Address :@company.CompanyAddresses.Count() No of Employee :@company.Employees.Count()</td>
                 </tr>
                
             }
@@ -88,9 +95,9 @@
                 return false
         });
     </script>
-<script type="text/javascript">
-    $(function () {
-        window.location = '#tblCompany';
-    });
-</script>
+    <script type="text/javascript">
+        $(function () {
+            window.location = '#tblCompany';
+        });
+    </script>
 }

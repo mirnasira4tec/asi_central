@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "ASI Central API";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section css { @RenderSection("css", required: false)}
+@RenderBody()
+@section navigation { 
+    <nav id="admin-subnavigation">
+    <ul class="clearfix">
+	    <li><a href="/asicentralApi/SupplierUpdateRequestList">Supplier Update Request</a></li>
+    </ul>
+    </nav>    
+}
+@section scripts { @RenderSection("scripts", required: false)}
+

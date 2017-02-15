@@ -12,11 +12,22 @@
      <div id="tabbasic" class="basic-information tab-pane fade in active">
         <fieldset class="company-info-form">
             <legend>@{var headerText = (Model.Id == 0 ? "Add Show" : "Update Show");}@headerText</legend>
-            @Html.HiddenFor(model => model.Id)
-                <div class="control-group" id="asinumber-product">
-                    @Html.LabelFor(model => model.Name, new { @class = "control-label" })
-                    <div class="controls">@Html.EditorFor(model => model.Name) @Html.ValidationMessageFor(model => model.Name)</div>
-                </div>
+            <div class="control-group" id="asinumber-product">
+                @Html.LabelFor(model => model.Name, new {@class = "control-label"})
+                <div class="controls">@Html.EditorFor(model => model.Name) @Html.ValidationMessageFor(model => model.Name)</div>
+            </div>
+
+                @if (Model.Id > 0)
+                {
+                    <div class="control-group">
+                        @Html.LabelFor(model => model.Id, new {@class = "control-label"})
+                        <div class="controls"> @Html.TextBoxFor(model => model.Id, new {@readonly = "readonly"})</div>
+                    </div>
+                }
+                else
+                {
+                    @Html.HiddenFor(model => model.Id)
+                }
             
               <div class="control-group">
                     @Html.LabelFor(model => model.ShowType, new { @class = "control-label" })

@@ -136,6 +136,27 @@ namespace asi.asicentral.Tests
         }
 
         [TestMethod]
+        public void DistLogoTest()
+        {
+            Registry registry = new EFRegistry();
+            IContainer container = new Container(registry);
+            using (var objectContext = new ObjectService(container))
+            {
+                ShowDistShowLogo objDistShowLogo = ShowHelper.CreateOrUpdateDistShowLogo(objectContext, new ShowDistShowLogo
+                {
+                    AttendeeId = 1764,
+                    LogoImageUrl = "/fasilitate/logos/companyLogo/Orlando Show/banner_2017events.png",
+                    UpdateSource = "ShowServiceTest - DistLogoTest",
+                    UpdateDate = DateTime.Now,
+                    CreateDate = DateTime.Now,
+                });
+                objectContext.Add<ShowDistShowLogo>(objDistShowLogo);
+                objectContext.SaveChanges();
+                Assert.IsNotNull(objDistShowLogo);
+            }
+        }
+
+        [TestMethod]
         public void EmployeeTest()
         {
             Registry registry = new EFRegistry();
@@ -165,6 +186,7 @@ namespace asi.asicentral.Tests
                     WebUrl = "www.company.com",
                     MemberType = "Distributor",
                     ASINumber = "32456",
+                    LogoUrl = "/logo/logo.jpg",
                     CreateDate = DateTime.Now,
                     UpdateDate = DateTime.Now,
                     UpdateSource = "ShowServiceTest - EmployeeTest"
@@ -216,6 +238,7 @@ namespace asi.asicentral.Tests
                     WebUrl = "www.company.com",
                     MemberType = "Supplier",
                     ASINumber = "32456",
+                    LogoUrl = "/logo/logo.jpg",
                     CreateDate = DateTime.Now,
                     UpdateDate = DateTime.Now,
                     UpdateSource = "ShowServiceTest - ShowCompanyTest"
@@ -289,7 +312,6 @@ namespace asi.asicentral.Tests
                 Assert.IsNull(objCompany);
             }
         }
-
 
         [TestMethod]
         public void Test()
@@ -382,13 +404,14 @@ namespace asi.asicentral.Tests
             var supplierCompany = objExcel.UpdateShowCompanyData(dataTable, 0);
             Assert.AreEqual(supplierCompanies.ElementAt(0).ASINumber, supplierCompany.ASINumber);
             Assert.AreEqual(supplierCompanies.ElementAt(0).Name, supplierCompany.Name);
+            Assert.AreEqual(supplierCompanies.ElementAt(0).LogoUrl, supplierCompany.LogoUrl);
 
             var supplierCompanyAddress = objExcel.UpdateShowCompanyData(dataTable, 0);
             Assert.AreEqual(supplierCompanyAddresses.ElementAt(0).Street1, supplierCompanyAddress.CompanyAddresses[0].Address.Street1);
             Assert.AreEqual(supplierCompanyAddresses.ElementAt(0).City, supplierCompanyAddress.CompanyAddresses[0].Address.City);
             Assert.AreEqual(supplierCompanyAddresses.ElementAt(0).Zip, supplierCompanyAddress.CompanyAddresses[0].Address.Zip);
 
-            var attendee = objExcel.UpdateShowCompanyData(dataTable, 0 ,4 );
+            var attendee = objExcel.UpdateShowCompanyData(dataTable, 0, 4);
             Assert.AreEqual(attendees.ElementAt(0).CompanyId, attendee.Attendees[1].CompanyId);
             Assert.AreEqual(attendees.ElementAt(0).ShowId, attendee.Attendees[1].ShowId);
         }
@@ -421,15 +444,15 @@ namespace asi.asicentral.Tests
                 IContainer container = new Container(registry);
                 using (var objectContext = new ObjectService(container))
                 {
-                        var matchShow = Regex.Match(worksheet.Name, @"^\s*WEEK\s+\d+\s*-\s*", RegexOptions.IgnoreCase);
-                        if (matchShow.Success)
-                        {
-                            var weekNum = matchShow.Value.Trim();
-                            var address = worksheet.Name.Substring(matchShow.Value.Length);
-                            objShow = objectContext.GetAll<ShowASI>().Where(item => item.Name.Contains(weekNum.Replace("-", " -")) && item.Address.Contains(address.Trim()))
-                                                                     .OrderByDescending(s => s.StartDate).FirstOrDefault();
-                            columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
-                        }
+                    var matchShow = Regex.Match(worksheet.Name, @"^\s*WEEK\s+\d+\s*-\s*", RegexOptions.IgnoreCase);
+                    if (matchShow.Success)
+                    {
+                        var weekNum = matchShow.Value.Trim();
+                        var address = worksheet.Name.Substring(matchShow.Value.Length);
+                        objShow = objectContext.GetAll<ShowASI>().Where(item => item.Name.Contains(weekNum.Replace("-", " -")) && item.Address.Contains(address.Trim()))
+                                                                 .OrderByDescending(s => s.StartDate).FirstOrDefault();
+                        columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
+                    }
                 }
                 var containsAll = columnNameList.Where(x => keyValues.Values.Any(d => d.Contains(x))).ToList();
                 if (containsAll.Count() == columnNameList.Count())
@@ -496,13 +519,14 @@ namespace asi.asicentral.Tests
             return objShow;
         }
 
-        private ShowCompany CreateCompanyData(int companyId, string asiNumber, string name)
+        private ShowCompany CreateCompanyData(int companyId, string asiNumber, string name, string logoUrl = null)
         {
             ShowCompany objCompany = new ShowCompany()
             {
                 Id = companyId,
                 ASINumber = asiNumber,
-                Name = name
+                Name = name,
+                LogoUrl = logoUrl
             };
             return objCompany;
         }

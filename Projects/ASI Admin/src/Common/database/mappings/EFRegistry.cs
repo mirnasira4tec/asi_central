@@ -9,6 +9,7 @@ using asi.asicentral.model.call;
 using asi.asicentral.model.findsupplier;
 using asi.asicentral.model.DM_memberDemogr;
 using asi.asicentral.database.mappings.show;
+using asi.asicentral.model.excit;
 using asi.asicentral.model.show;
 using asi.asicentral.model.personify;
 
@@ -110,6 +111,15 @@ namespace asi.asicentral.database.mappings
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
             For<IRepository<CENTUserProfilesPROF>>().Use<EFRepository<CENTUserProfilesPROF>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
+            For<IRepository<SupUpdateField>>().Use<EFRepository<SupUpdateField>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
+            For<IRepository<SupUpdateRequest>>().Use<EFRepository<SupUpdateRequest>>()
+                .Ctor<IValidatedContext>().Named("ASIInternetContext");
+
+            For<IRepository<SupUpdateRequestDetail>>().Use<EFRepository<SupUpdateRequestDetail>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
             #endregion ASIInternetContext
@@ -398,6 +408,9 @@ namespace asi.asicentral.database.mappings
                 .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
             For<IRepository<ShowCompanyAddress>>().Use<EFRepository<ShowCompanyAddress>>()
+                .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+
+            For<IRepository<ShowDistShowLogo>>().Use<EFRepository<ShowDistShowLogo>>()
                 .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
             #endregion Umbraco_ShowContext

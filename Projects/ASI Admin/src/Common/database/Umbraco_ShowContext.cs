@@ -20,6 +20,7 @@ namespace asi.asicentral.database
         public DbSet<ShowCompany> Company { get; set; }
         public DbSet<ShowType> ShowType { get; set; }
         public DbSet<ShowCompanyAddress> CompanyAddress { get; set; }
+        public DbSet<ShowDistShowLogo> DistShowLogo { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -37,7 +38,8 @@ namespace asi.asicentral.database
                 .Add(new ShowEmployeeMap())
                 .Add(new ShowMap())
                 .Add(new ShowTypeMap())
-                .Add(new ShowCompanyAddressMap());
+                .Add(new ShowCompanyAddressMap())
+                .Add(new ShowDistShowLogoMap());
     }
 }
 }
