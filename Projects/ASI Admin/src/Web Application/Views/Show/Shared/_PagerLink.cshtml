@@ -4,6 +4,7 @@
 
 
 @{
+    var url = Request.RawUrl;
     var razorWriter = ViewContext.Writer;
     if (ViewData["Inactive"] != null ? (bool)ViewData["Inactive"] : false)
     {
@@ -11,8 +12,19 @@
     }
     else
     {
-
-        var routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize }, { "showId", Model.ShowId }, { "ShowTypeId", Model.TabShowTypeId }, { "year", Model.TabYear }, { "companyName", ViewData["CompanyName"] != null ? ViewData["CompanyName"].ToString() : null }, { "MemberType", ViewData["MemberType"] != null ? ViewData["MemberType"].ToString() : null } };
+        var routeData = new RouteValueDictionary { };
+        if(url.Contains("/Show/ShowList"))
+        {
+            routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize }, { "ShowTypeId", Model.TabShowTypeId }, { "year", Model.TabYear }};
+        }
+        else if (url.Contains("/ShowCompany/CompanyList"))
+        {
+            routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize }, { "Name", Model.TabCompanyName }, { "MemberType", Model.TabMemberType } };
+        }
+        else if (url.Contains("/ShowCompany/GetAttendeeCompany"))
+        {
+            routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize }, { "showId", Model.ShowId }  };
+        }
         var htmlAttributes = new Dictionary<string, object>();
         if (ViewData["Selected"] != null ? (bool)ViewData["Selected"] : false)
         {

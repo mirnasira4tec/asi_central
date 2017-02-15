@@ -38,11 +38,11 @@ namespace asi.asicentral.web.Controllers.Show
             var memberType = ds.Rows[rowId]["MemberType"].ToString();
             if (fasiliateFlag == true)
             {
-                 company = ObjectService.GetAll<ShowCompany>().FirstOrDefault(item => (item.ASINumber == asinumber && item.Name == name && item.MemberType == memberType));
+                company = ObjectService.GetAll<ShowCompany>().FirstOrDefault(item => (item.ASINumber == asinumber && item.Name.Trim().Equals(name.Trim(), StringComparison.CurrentCultureIgnoreCase) && item.MemberType.Trim().Equals(memberType.Trim(), StringComparison.CurrentCultureIgnoreCase)));
             }
             else
             {
-                company = ObjectService.GetAll<ShowCompany>().FirstOrDefault(item => (item.ASINumber == asinumber || (item.Name == name && item.MemberType == memberType)));
+                company = ObjectService.GetAll<ShowCompany>().FirstOrDefault(item => (item.ASINumber == asinumber || (item.Name.Trim().Equals(name.Trim(), StringComparison.CurrentCultureIgnoreCase) && item.MemberType.Trim().Equals(memberType.Trim(), StringComparison.CurrentCultureIgnoreCase))));
             }
             if (company == null)
             {
