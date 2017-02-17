@@ -33,16 +33,20 @@ namespace asi.asicentral.web.Controllers.Show
         public ShowCompany UpdateShowCompanyData(DataTable ds, int rowId, int showId = 0, bool fasiliateFlag = false)
         {
             ShowCompany company = null;
-            var asinumber = ds.Rows[rowId]["ASINO"].ToString();
-            var name = ds.Rows[rowId]["Company"].ToString();
-            var memberType = ds.Rows[rowId]["MemberType"].ToString();
+            var asinumber = ds.Rows[rowId]["ASINO"].ToString().Trim();
+            var name = ds.Rows[rowId]["Company"].ToString().Trim();
+            var memberType = ds.Rows[rowId]["MemberType"].ToString().Trim();
             if (fasiliateFlag == true)
             {
-                 company = ObjectService.GetAll<ShowCompany>().FirstOrDefault(item => (item.ASINumber == asinumber && item.Name == name && item.MemberType == memberType));
+                var companies = ObjectService.GetAll<ShowCompany>().Where(item => (item.ASINumber == asinumber)).ToList();
+                var specialCharsPattern = @"[\s,\./\\&\?;=]";
+                var compName = Regex.Replace(name, specialCharsPattern, "");
+                company = companies.FirstOrDefault(item => Regex.Replace(item.Name, specialCharsPattern, "").Equals(compName, StringComparison.CurrentCultureIgnoreCase) && 
+                                                           item.MemberType.Equals(memberType, StringComparison.CurrentCultureIgnoreCase));
             }
             else
             {
-                company = ObjectService.GetAll<ShowCompany>().FirstOrDefault(item => (item.ASINumber == asinumber || (item.Name == name && item.MemberType == memberType)));
+                company = ObjectService.GetAll<ShowCompany>().FirstOrDefault(item => (item.ASINumber == asinumber || (item.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase) && item.MemberType.Equals(memberType, StringComparison.CurrentCultureIgnoreCase))));
             }
             if (company == null)
             {
