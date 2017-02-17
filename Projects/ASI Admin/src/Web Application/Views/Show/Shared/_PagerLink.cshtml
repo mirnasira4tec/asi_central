@@ -25,6 +25,10 @@
         {
             routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize }, { "showId", Model.ShowId }  };
         }
+        else if( url.Contains("/showCompany/AddCompaniesToShow"))
+        {
+            routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize }, { "showId", Model.ShowId } };            
+        }
         var htmlAttributes = new Dictionary<string, object>();
         if (ViewData["Selected"] != null ? (bool)ViewData["Selected"] : false)
         {
