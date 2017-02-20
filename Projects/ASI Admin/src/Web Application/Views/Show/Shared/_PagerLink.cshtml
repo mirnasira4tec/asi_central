@@ -13,21 +13,21 @@
     else
     {
         var routeData = new RouteValueDictionary { };
-        if(url.Contains("/Show/ShowList"))
+        if (url.IndexOf("/Show/ShowList", StringComparison.InvariantCultureIgnoreCase) != -1)
         {
             routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize }, { "ShowTypeId", Model.TabShowTypeId }, { "year", Model.TabYear }};
         }
-        else if (url.Contains("/ShowCompany/CompanyList"))
+        else if (url.IndexOf("/ShowCompany/CompanyList", StringComparison.InvariantCultureIgnoreCase) != -1)
         {
             routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize }, { "Name", Model.TabCompanyName }, { "MemberType", Model.TabMemberType } };
         }
-        else if (url.Contains("/ShowCompany/GetAttendeeCompany"))
+        else if (url.IndexOf("/ShowCompany/GetAttendeeCompany", StringComparison.InvariantCultureIgnoreCase) != -1)
         {
             routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize }, { "showId", Model.ShowId }  };
         }
-        else if( url.Contains("/showCompany/AddCompaniesToShow"))
+        else if (url.IndexOf("/ShowCompany/AddCompaniesToShow", StringComparison.InvariantCultureIgnoreCase) != -1)
         {
-            routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize }, { "showId", Model.ShowId } };            
+            routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize }, { "showId", Model.ShowId }, { "companyName", Model.TabCompanyName }, { "MemberType", Model.TabMemberType } };            
         }
         var htmlAttributes = new Dictionary<string, object>();
         if (ViewData["Selected"] != null ? (bool)ViewData["Selected"] : false)
