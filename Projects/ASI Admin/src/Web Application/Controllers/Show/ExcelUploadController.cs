@@ -1,4 +1,4 @@
-﻿using asi.asicentral.interfaces;
+using asi.asicentral.interfaces;
 using asi.asicentral.model.show;
 using asi.asicentral.services;
 using asi.asicentral.util.show;
