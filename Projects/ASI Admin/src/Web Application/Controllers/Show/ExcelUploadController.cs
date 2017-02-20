@@ -143,22 +143,23 @@ namespace asi.asicentral.web.Controllers.Show
             if (company.MemberType == "Distributor" || fasiliateFlag)
             {
                 // update showEmployee
-                var firstName = ds.Rows[rowId]["FirstName"].ToString();
-                var lastName = ds.Rows[rowId]["LastName"].ToString();
+                var firstName = ds.Rows[rowId]["FirstName"].ToString().Trim();
+                var lastName = ds.Rows[rowId]["LastName"].ToString().Trim();
                 string phone = string.Empty;
                 string email = string.Empty;
                 if (ds.Columns.Contains("Phone"))
                 {
-                    phone = ds.Rows[rowId]["Phone"].ToString();
+                    phone = ds.Rows[rowId]["Phone"].ToString().Trim();
                 }
                 if (ds.Columns.Contains("Email Address"))
                 {
-                    email = ds.Rows[rowId]["Email Address"].ToString();
+                    email = ds.Rows[rowId]["Email Address"].ToString().Trim();
                 }
-                if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName))
+                if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName) )
                 {
                     ShowEmployee employee = null;
-                    employee = company.Employees.FirstOrDefault(item => (item.FirstName == firstName && item.LastName == lastName));
+                    employee = company.Employees.FirstOrDefault(item => (item.FirstName.Trim().Equals(firstName, StringComparison.CurrentCultureIgnoreCase) &&
+                                                                         item.LastName.Trim().Equals(lastName, StringComparison.CurrentCultureIgnoreCase)));
                     if (employee == null)
                     {
                         employee = new ShowEmployee()
