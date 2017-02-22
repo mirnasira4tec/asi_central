@@ -158,8 +158,17 @@ namespace asi.asicentral.web.Controllers.Show
                 if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName) )
                 {
                     ShowEmployee employee = null;
-                    employee = company.Employees.FirstOrDefault(item => (item.FirstName.Trim().Equals(firstName, StringComparison.CurrentCultureIgnoreCase) &&
-                                                                         item.LastName.Trim().Equals(lastName, StringComparison.CurrentCultureIgnoreCase)));
+                    if (!string.IsNullOrEmpty(email))
+                    {
+                        employee = company.Employees.FirstOrDefault(item => !string.IsNullOrEmpty(item.Email) && item.Email.Trim().Equals(email, StringComparison.CurrentCultureIgnoreCase));
+                    }
+                    
+                    if( employee == null)
+                    {
+                        employee = company.Employees.FirstOrDefault(item => (item.FirstName.Trim().Equals(firstName, StringComparison.CurrentCultureIgnoreCase) &&
+                                                                             item.LastName.Trim().Equals(lastName, StringComparison.CurrentCultureIgnoreCase)));
+                    }
+
                     if (employee == null)
                     {
                         employee = new ShowEmployee()
@@ -173,10 +182,8 @@ namespace asi.asicentral.web.Controllers.Show
                     employee.LastName = lastName;
                     employee.EPhone = phone;
                     employee.Email = email;
-                    employee.CreateDate = DateTime.UtcNow;
                     employee.UpdateDate = DateTime.UtcNow;
                     employee.UpdateSource = "ExcelUploadcontroller-Index";
-
 
                     if (fasiliateFlag)
                     {
