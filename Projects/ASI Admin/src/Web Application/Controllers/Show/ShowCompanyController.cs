@@ -650,21 +650,15 @@ namespace asi.asicentral.web.Controllers.Show
             {
                 list = ObjectService.GetAll<ShowCompany>(true).OrderBy(form => form.Name).ToList();
             }
-            if (!string.IsNullOrEmpty(MemberType) && !string.IsNullOrEmpty(companyName))
-            {
-                list = list.Where(item => (item.Name != null
-                && item.Name.Contains(companyName) && item.MemberType != null
-                && item.MemberType.Contains(MemberType))).ToList();
-            }
-            else if (!string.IsNullOrEmpty(MemberType))
+            if (!string.IsNullOrEmpty(MemberType))
             {
                 list = list.Where(item => item.MemberType != null
-                 && item.MemberType.Contains(MemberType)).ToList();
+                 && item.MemberType.ToLower().Contains(MemberType.ToLower())).ToList();
             }
-            else if (!string.IsNullOrEmpty(companyName))
+            if (!string.IsNullOrEmpty(companyName))
             {
                 list = list.Where(item => item.Name != null
-                 && item.Name.Contains(companyName)).ToList();
+                 && item.Name.ToLower().Contains(companyName.ToLower())).ToList();
             }
             showCompanies.TotalRecordCount = list.Count();
             showCompanies.ShowCompanies = list.Skip((showCompanies.CurrentPageIndex - 1) * showCompanies.PageSize)
