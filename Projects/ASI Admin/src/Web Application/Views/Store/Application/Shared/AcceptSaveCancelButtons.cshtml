@@ -20,19 +20,22 @@
     {
         <h3>Status: @Model.CompanyStatus</h3>
     }
-	@if (Model.OrderStatus == OrderStatus.Approved && !string.IsNullOrEmpty(Model.BackendReference))
-	{
-		<h3>Personify Order#: @Model.BackendReference</h3>
-	}
+    @if (Model.OrderStatus == OrderStatus.Approved && !string.IsNullOrEmpty(Model.BackendReference))
+    {
+        <h3>Personify Order#: @Model.BackendReference</h3>
+    }
     @if (Model.TotalCost >= 0.0m)
     {
-	    <div><h3 class="order-status-header3">Order Status:</h3><div class="order-status">@orderStatus</div></div>
+        <div>
+            <h3 class="order-status-header3">Order Status:</h3>
+            <div class="order-status">@orderStatus</div>
+        </div>
         
-        if (!string.IsNullOrEmpty(errMsg) )
+        if (!string.IsNullOrEmpty(errMsg))
         {
-            <div class="span10">
-                <p>(@errMsg)</p>
-            </div>                
+        <div class="span10">
+            <p>(@errMsg)</p>
+        </div>                
         }
 
         <div class="timms-info">
@@ -41,9 +44,10 @@
                 <div class="order-status-input">
                     @if (string.IsNullOrEmpty(Model.ExternalReference))
                     {
-                        @Html.EditorFor(m => m.ExternalReference, new { @class = "span2"})
+                        @Html.EditorFor(m => m.ExternalReference, new { @class = "span2" })
                     }
-                    else {
+                    else
+                    {
                         @Html.HiddenFor(m => m.ExternalReference)
                         @Html.TextBoxFor(m => m.ExternalReference, new { @class = "span2", disabled = "disabled", @readonly = "readonly" })
                     }
@@ -56,38 +60,41 @@
             }
             <div class="status-btns">
                 @{
-                    if (Model.IsCompleted && Model.OrderStatus != OrderStatus.Approved && string.IsNullOrEmpty(errMsg))
-                    {
+            if (Model.IsCompleted && Model.OrderStatus != OrderStatus.Approved && string.IsNullOrEmpty(errMsg))
+            {
+                if (Model.CompanyStatus != "TERMINATED")
+                {
                     <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_ACCEPT"/>
-                    }
-                    if (Model.IsCompleted && (Model.OrderStatus == OrderStatus.Pending || Model.OrderStatus == OrderStatus.Approved) )
-                    {
+                }
+            }
+            if (Model.IsCompleted && (Model.OrderStatus == OrderStatus.Pending || Model.OrderStatus == OrderStatus.Approved))
+            {
                     <input class="command btn-primary" type="submit" value="@ApplicationController.COMMAND_REJECT"/>
-                    }
+            }
 
                     <input class="command btn-primary save" type="submit" value="@ApplicationController.COMMAND_SAVE"/>
 
-                    if (Model.OrderStatus == OrderStatus.Approved)
-                    { @Html.ActionLink("Close", "../Orders") }
-                    else
-                    { @Html.ActionLink("Cancel", "../Orders") }
+            if (Model.OrderStatus == OrderStatus.Approved)
+            { @Html.ActionLink("Close", "../Orders") }
+            else
+            { @Html.ActionLink("Cancel", "../Orders") }
                 }
             </div>
             <div id="termsWarningMessage" data-type="errormessage" class="field-validation-error span10"></div>
             @if (!string.IsNullOrEmpty(Model.ExternalReference))
             {
                 <div class="span10">
-                <p>(Please contact ASICentral team if this is not the Constituent ID expected.)</p>
+                    <p>(Please contact ASICentral team if this is not the Constituent ID expected.)</p>
                 </div>
             }
             @if (!string.IsNullOrEmpty(Model.ExternalReference))
             {
                 var matchingIds = GetMatchingCompanyIds();
-                if( !string.IsNullOrEmpty(matchingIds))
+                if (!string.IsNullOrEmpty(matchingIds))
                 {
-                    <div style="display: none">
-                        Potential Matching Companys' Constituent IDs: @matchingIds
-                    </div>
+                <div style="display: none">
+                    Potential Matching Companys' Constituent IDs: @matchingIds
+                </div>
                 }
             }
         </div>
@@ -111,31 +118,30 @@
             var errMsg = string.Empty;
             var orderDetail = StoreService.GetAll<StoreOrderDetail>(true).FirstOrDefault(detail => detail.Order.Id == Model.OrderId);
             var order = StoreService.GetAll<StoreOrder>(true).FirstOrDefault(o => o.Id == Model.OrderId);
-            if( order != null && orderDetail != null)
+            if (order != null && orderDetail != null)
             {
                 var product = orderDetail.Product;
-                if( product.IsMembership() && Model.OrderStatus == OrderStatus.Pending)
+                if (product.IsMembership() && (Model.OrderStatus == OrderStatus.Pending || Model.CompanyStatus == StatusCode.TERMINATED.ToString()))
                 {
                     List<string> matchList = null;
                     var companyInfo = BackendService.FindCompanyInfo(order.Company, ref matchList);
                     if (companyInfo != null)
-                    {
+                    {                        
                         order.Company.MemberStatus = companyInfo.MemberStatus;
-                        Model.CompanyStatus = companyInfo.MemberStatus;
+                        Model.CompanyStatus = companyInfo.MemberStatus;                        
 
                         if (ASIOAuthClient.IsActiveUser(order.Company.MemberStatus))
                         {
-                            if( companyInfo.MemberType.ToUpper() != "SUPPLIER" || !string.IsNullOrEmpty(companyInfo.SubClassCode) || product.Id != 69 )
-                                
+                            if (companyInfo.MemberType.ToUpper() != "SUPPLIER" || !string.IsNullOrEmpty(companyInfo.SubClassCode) || product.Id != 69)
                             {
                                 var activeMembership = string.IsNullOrEmpty(companyInfo.SubClassCode) ? companyInfo.MemberType
                                     : string.Format("{0} {1}", companyInfo.MemberType, companyInfo.SubClassCode);
                                 errMsg = string.Format("This company already has an active \'{0}\' membership", activeMembership);
-                            }                                
+                            }
                         }
                     }
                 }
-                
+
                 // confirm coupon in Personify mapping table
                 if (orderDetail.Coupon != null && !CouponHelper.IsValidCoupon(StoreService, orderDetail.Coupon, product.Id, order.ContextId))
                 {
@@ -144,7 +150,7 @@
             }
             return errMsg;
         }
-        
+
         public string GetMatchingCompanyIds()
         {
             var ids = string.Empty;
@@ -152,9 +158,9 @@
             if (order != null && order.Company != null && order.Company.MatchingCompanyIds != null)
                 ids = order.Company.MatchingCompanyIds.Replace("|", " ");
 
-            return ids;            
+            return ids;
         }
-        
+
         public bool HasPendingTerms()
         {
             var pendingTerms = StoreService.GetAll<TermsConditionsInstance>()
