@@ -121,14 +121,14 @@
             if (order != null && orderDetail != null)
             {
                 var product = orderDetail.Product;
-                if (product.IsMembership() && (Model.OrderStatus == OrderStatus.Pending || Model.CompanyStatus == "TERMINATED"))
+                if (product.IsMembership() && (Model.OrderStatus == OrderStatus.Pending || Model.CompanyStatus == StatusCode.TERMINATED.ToString()))
                 {
                     List<string> matchList = null;
                     var companyInfo = BackendService.FindCompanyInfo(order.Company, ref matchList);
                     if (companyInfo != null)
-                    {
+                    {                        
                         order.Company.MemberStatus = companyInfo.MemberStatus;
-                        Model.CompanyStatus = companyInfo.MemberStatus;
+                        Model.CompanyStatus = companyInfo.MemberStatus;                        
 
                         if (ASIOAuthClient.IsActiveUser(order.Company.MemberStatus))
                         {
