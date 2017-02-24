@@ -94,12 +94,24 @@ namespace asi.asicentral.Tests
         }
 
         [TestMethod]
-        public void PlaceBundleOrderTest()
+        public void PackageOrderTest()
         {
             IStoreService storeService = MockupStoreService();
             var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 7);
-            var order = CreateOrder("12345", new ContextProduct[] { distributor }, "PlaceBundleOrderTest");
-            var companyInfo = CreateBundleOrder(order, storeService);
+            var order = CreateStoreOrder("12345", new ContextProduct[] { distributor }, "PlaceBundleOrderTest");
+            var companyInfo = CreatePersonifyOrder(order, storeService);
+            Assert.IsNotNull(companyInfo);
+            Assert.IsNotNull(order.BackendReference);
+        }
+
+        [TestMethod]
+        public void EmailMrktOrderTest()
+        {
+            IStoreService storeService = MockupStoreService();
+            var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 126);
+            var order = CreateStoreOrder("181255", new ContextProduct[] { distributor }, "EmailMrktOrderTest");
+            order.OrderDetails[0].OptionId = 1;
+            var companyInfo = CreatePersonifyOrder(order, storeService);
             Assert.IsNotNull(companyInfo);
             Assert.IsNotNull(order.BackendReference);
         }
@@ -112,19 +124,19 @@ namespace asi.asicentral.Tests
             var storeService = MockupStoreService("DISTFIRSTMONTH");
             var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 7);
             var context = storeService.GetAll<Context>(true).FirstOrDefault(c => c.Id == 8);
-            var order = CreateOrder("12345", new ContextProduct[] { distributor }, "PlaceBundleOrderTest", "DISTFIRSTMONTH", 199, context);
-            var companyInfo = CreateBundleOrder(order, storeService);
+            var order = CreateStoreOrder("12345", new ContextProduct[] { distributor }, "PlaceBundleOrderTest", "DISTFIRSTMONTH", 199, context);
+            var companyInfo = CreatePersonifyOrder(order, storeService);
             Assert.IsNotNull(companyInfo);
             Assert.IsNotNull(order.BackendReference);
         }
 
         [TestMethod]
-        public void BundleOrderSupplierWaveFirstMonth()
+        public void MemberOrderSupplierWaveFirstMonth()
         {
             IStoreService storeService = MockupStoreService();
             var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 2);
-            var order = CreateOrder("12345", new ContextProduct[] { distributor }, "BundleOrderSupplierWaveFirstMonth");
-            var companyInfo = CreateBundleOrder(order, storeService);
+            var order = CreateStoreOrder("12345", new ContextProduct[] { distributor }, "MemberOrderSupplierWaveFirstMonth");
+            var companyInfo = CreatePersonifyOrder(order, storeService);
             Assert.IsNotNull(companyInfo);
             Assert.IsNotNull(order.BackendReference);
         }
@@ -134,10 +146,10 @@ namespace asi.asicentral.Tests
         {
             IStoreService storeService = MockupStoreService();
             var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 2);
-            var order = CreateOrder("10275773", new ContextProduct[] { distributor }, "BundleOrderSupplierWaveFirstMonth");
+            var order = CreateStoreOrder("10275773", new ContextProduct[] { distributor }, "BundleOrderSupplierWaveFirstMonth");
             order.Company.Name = "Terminateddist001@gmail.Com";
             order.Company.Phone = "9999990001";
-            var companyInfo = CreateBundleOrder(order, storeService);
+            var companyInfo = CreatePersonifyOrder(order, storeService);
             Assert.IsNotNull(companyInfo);
             Assert.IsTrue(companyInfo.IsTerminated());
             Assert.IsNull(order.BackendReference);
@@ -271,7 +283,7 @@ namespace asi.asicentral.Tests
         private void PlaceOrderTest(string asiNumber, IStoreService storeService, ContextProduct[] products, string testName)
         {
             IBackendService personify = new PersonifyService(storeService);
-            StoreOrder order = CreateOrder(asiNumber, products, testName);
+            StoreOrder order = CreateStoreOrder(asiNumber, products, testName);
 
             //simulate the store process by first processing the credit card
             ICreditCardService cardService = new CreditCardService(new PersonifyService(storeService));
@@ -291,7 +303,7 @@ namespace asi.asicentral.Tests
             personify.PlaceOrder(order, new Mock<IEmailService>().Object, null);
         }
 
-        private CompanyInformation CreateBundleOrder(StoreOrder order, IStoreService storeService)
+        private CompanyInformation CreatePersonifyOrder(StoreOrder order, IStoreService storeService)
         {
             IBackendService personify = new PersonifyService(storeService);
 
@@ -409,7 +421,7 @@ namespace asi.asicentral.Tests
 
             // test active distributor is buying supplier membership
             var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 5);
-            var order = CreateOrder("10275773", new ContextProduct[] { distributor }, "TestIsNewMembership");
+            var order = CreateStoreOrder("10275773", new ContextProduct[] { distributor }, "TestIsNewMembership");
             //order.OrderRequestType = "Distributor";
 
             order.Company = GetStoreCompany("Create Company Dist",
@@ -682,6 +694,7 @@ namespace asi.asicentral.Tests
         #endregion end FindCompanyInfo performance tests
 
         [TestMethod]
+        [Ignore]
         public void AddActivity()
         {
             var company = GetStoreCompany("Reconcile Company Supplier 1",
@@ -691,7 +704,7 @@ namespace asi.asicentral.Tests
 
             IBackendService personify = new PersonifyService();
             List<string> masterIdList = null;
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);            
+            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.IsTrue(masterIdList.Count > 0);
             Assert.IsTrue(companyInfo.DNSFlag);
@@ -727,6 +740,7 @@ namespace asi.asicentral.Tests
         private IStoreService MockupStoreService(string couponCode = null)
         {
             var products = new List<ContextProduct>();
+            products.Add(new ContextProduct { Id = 126, HasBackEndIntegration = true, Cost = 25 });
             products.Add(new ContextProduct { Id = 77, HasBackEndIntegration = true });
             products.Add(new ContextProduct { Id = 61, HasBackEndIntegration = true });
             products.Add(new ContextProduct { Id = 5, HasBackEndIntegration = true, Type = "Distributor Membership" });
@@ -737,15 +751,16 @@ namespace asi.asicentral.Tests
             var emailExpresses = new List<StoreDetailEmailExpress>();
             emailExpresses.Add(new StoreDetailEmailExpress { OrderDetailId = 1, ItemTypeId = 1 });
             var mappings = new List<PersonifyMapping>();
+            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 126, StoreOption = "1", PersonifyProduct = 458162300, PersonifyRateCode = "500_credits", PersonifyRateStructure = "MEMBER", ProductCode="Email_Marketing" });
             mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 77, StoreOption = "0", PersonifyProduct = 14471, PersonifyRateCode = "STD", PersonifyRateStructure = "MEMBER" });
             mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 61, StoreOption = "1;1X", PersonifyProduct = 1587, PersonifyRateCode = "1X", PersonifyRateStructure = "MEMBER" });
-            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 5, PersonifyProduct = 1003113722, PersonifyRateCode = "FY_DISTMEM", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "DIST_MEM", ClassCode = "DISTRIBUTOR" });
-            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 70, PersonifyProduct = 1003113722, PersonifyRateCode = "", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "DIST_MEM", ClassCode = "DISTRIBUTOR" });
+            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 5, PersonifyProduct = 1003113722, PersonifyRateCode = "FY_DISTMEM", PersonifyRateStructure = "MEMBER", ClassCode = "DISTRIBUTOR", PaySchedule = true});
+            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 70, PersonifyProduct = 1003113722, PersonifyRateCode = "", PersonifyRateStructure = "MEMBER", ClassCode = "DISTRIBUTOR" });
             //mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 2, PersonifyProduct = 1003113955, StoreOption = "SUPWAVEAPPFEE", PersonifyRateCode = "FP_SUPMEMSTDCON", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "SUPPLIERMEM_STD_CON" });
-            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 2, PersonifyProduct = 1003113955, StoreOption = string.Empty, PersonifyRateCode = "FP_SUPMEMSTDCON", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "SUPPLIERMEM_STD_CON", ClassCode = "SUPPLIER" });
-            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 2, PersonifyProduct = 1003113955, StoreOption = string.Empty, PersonifyRateCode = "STD_SUPMEMSTD", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "SUPPLIERMEM_STD", ClassCode = "SUPPLIER" });
-            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 7, PersonifyProduct = 1003113722, PersonifyRateCode = "FP_ESPPMDLMORD14", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "ESPP-MD-LM-ORD", ClassCode = "DISTRIBUTOR" });
-            mappings.Add(new PersonifyMapping { StoreContext = 8, StoreProduct = 7, StoreOption = "DISTFIRSTMONTH", PersonifyRateCode = "TRIAL1000_ESPPMDLMORD15", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "ESPP-MD-LM-ORD", ClassCode = "DISTRIBUTOR" });
+            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 2, PersonifyProduct = 439255209, StoreOption = string.Empty, PersonifyRateCode = "FP_SUPMEMSTDCON", PersonifyRateStructure = "MEMBER", ClassCode = "SUPPLIER", PaySchedule = true });
+            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 2, PersonifyProduct = 439255209, StoreOption = string.Empty, PersonifyRateCode = "STD_SUPMEMSTD", PersonifyRateStructure = "MEMBER", ClassCode = "SUPPLIER", PaySchedule = true });
+            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 7, PersonifyProduct = 438951661, PersonifyRateCode = "FP_ESPPMDLMORD14", PersonifyRateStructure = "MEMBER", ClassCode = "DISTRIBUTOR", PaySchedule = true });
+            mappings.Add(new PersonifyMapping { StoreContext = 8, StoreProduct = 7, StoreOption = "DISTFIRSTMONTH", PersonifyRateCode = "TRIAL1000_ESPPMDLMORD15", PersonifyRateStructure = "MEMBER", ClassCode = "DISTRIBUTOR", PaySchedule = true });
             var codes = new List<LookSendMyAdCountryCode>();
             codes.Add(new LookSendMyAdCountryCode { Alpha2 = "USA", Alpha3 = "USA", CountryName = "United States" });
 
@@ -767,7 +782,7 @@ namespace asi.asicentral.Tests
             return mockObjectService.Object;
         }
 
-        private static StoreOrder CreateOrder(string asiNumber, ContextProduct[] products, string testName, 
+        private static StoreOrder CreateStoreOrder(string asiNumber, ContextProduct[] products, string testName, 
                                               string couponCode=null, decimal discountAmount = 0, Context context = null)
         {
             var tag = DateTime.Now.Ticks;

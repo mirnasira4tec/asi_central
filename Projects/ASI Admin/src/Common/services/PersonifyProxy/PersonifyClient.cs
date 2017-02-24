@@ -141,6 +141,8 @@ namespace asi.asicentral.services.PersonifyProxy
             {"DECORATOR", new List<string>() { "EEX_WEARABLES" }}
         };
 
+        public static readonly int EMAIL_MARKETING_PRODUCT_ID = 126;
+
         public static CreateOrderOutput CreateOrder(StoreOrder storeOrder,
             string companyMasterCustomerId,
             int companySubCustomerId,

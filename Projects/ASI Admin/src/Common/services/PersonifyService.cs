@@ -98,7 +98,11 @@ namespace asi.asicentral.services
                                               .Where(map => (map.StoreContext == null || map.StoreContext == order.ContextId) && map.StoreProduct == orderDetail.Product.Id)
                                               .OrderByDescending(m => m.StoreContext).ToList();
 
-                if (orderDetail.Product.Id != 61 && orderDetail.Product.Id != 77)
+                if (orderDetail.Product.Id == PersonifyClient.EMAIL_MARKETING_PRODUCT_ID && orderDetail.OptionId.HasValue)  // email marketing
+                {
+                    allMappings = allMappings.FindAll(m => m.StoreOption == orderDetail.OptionId.Value.ToString());
+                }
+                else if (orderDetail.Product.Id != 61 && orderDetail.Product.Id != 77 )
                 {
                     if (coupon != null && !string.IsNullOrEmpty(coupon.CouponCode))
                     {
