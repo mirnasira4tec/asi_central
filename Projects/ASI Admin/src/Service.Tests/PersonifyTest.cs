@@ -25,16 +25,22 @@ namespace asi.asicentral.Tests
             IStoreService storeService = MockupStoreService();
             var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
             var emailExpress = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 61);
-            PlaceOrderTest(string.Empty, storeService, new ContextProduct[] { supplierSpecials, emailExpress }, "PlaceOrderNewCompanyTest");
+            var order = CreateStoreOrder(string.Empty, new ContextProduct[] { supplierSpecials, emailExpress }, "PlaceOrderNewCompanyTest");
+            var companyInfo = CreatePersonifyOrder(order, storeService);
+            Assert.IsNotNull(companyInfo);
+            Assert.IsNotNull(order.BackendReference);
         }
 
         [TestMethod]
         public void PlaceOrderExistingCompanyTest()
-        {
+        {  // supplierSpecials and emailExpress don't have personify integrations any more
             IStoreService storeService = MockupStoreService();
             var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
             var emailExpress = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 61);
-            PlaceOrderTest("30279", storeService, new ContextProduct[] { supplierSpecials, emailExpress }, "PlaceOrderExistingCompanyTest");
+            var order = CreateStoreOrder("30279", new ContextProduct[] { supplierSpecials, emailExpress }, "PlaceOrderExistingCompanyTest");
+            var companyInfo = CreatePersonifyOrder(order, storeService);
+            Assert.IsNotNull(companyInfo);
+            Assert.IsNotNull(order.BackendReference);
         }
 
         [TestMethod]
@@ -278,29 +284,6 @@ namespace asi.asicentral.Tests
                 Assert.IsNotNull(companyInformation.MemberType, "EQUIPMENT");
                 Assert.IsNotNull(companyInformation.MemberStatus);
             }
-        }
-
-        private void PlaceOrderTest(string asiNumber, IStoreService storeService, ContextProduct[] products, string testName)
-        {
-            IBackendService personify = new PersonifyService(storeService);
-            StoreOrder order = CreateStoreOrder(asiNumber, products, testName);
-
-            //simulate the store process by first processing the credit card
-            ICreditCardService cardService = new CreditCardService(new PersonifyService(storeService));
-            var cc = new CreditCard
-            {
-                Address = "",
-                CardHolderName = order.CreditCard.CardHolderName,
-                Type = order.CreditCard.CardType,
-                Number = order.CreditCard.CardNumber,
-                ExpirationDate = new DateTime(int.Parse(order.CreditCard.ExpYear), int.Parse(order.CreditCard.ExpMonth), 1),
-            };
-            Assert.IsTrue(cardService.Validate(cc));
-            var profileIdentifier = cardService.Store(order, cc, true);
-            Assert.IsNotNull(profileIdentifier);
-            Assert.IsNotNull(order.Company.ExternalReference);
-            order.CreditCard.ExternalReference = profileIdentifier;
-            personify.PlaceOrder(order, new Mock<IEmailService>().Object, null);
         }
 
         private CompanyInformation CreatePersonifyOrder(StoreOrder order, IStoreService storeService)
