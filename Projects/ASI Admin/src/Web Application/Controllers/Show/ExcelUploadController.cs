@@ -460,7 +460,7 @@ namespace asi.asicentral.web.Controllers.Show
 
                                     showAttendees.ForEach(a => a.IsExisting = false);
                                     ObjectService.SaveChanges();
-                                    log.Debug(string.Format("{0} company attendees have been deleted for '{0}' after uploading", attendeesToBeDeleted.Count, objShow.Name));
+                                    log.Debug(string.Format("{0} company attendees have been deleted for '{1}' after uploading", attendeesToBeDeleted.Count, objShow.Name));
                                 }
 
                                 // delete any employee attendees not in the sheet
@@ -479,7 +479,7 @@ namespace asi.asicentral.web.Controllers.Show
                                 if (countDel > 0)
                                 {
                                     ObjectService.SaveChanges();
-                                    log.Debug(string.Format("{0} employee attendees have been deleted for '{0}' after uploading", countDel, objShow.Name));
+                                    log.Debug(string.Format("{0} employee attendees have been deleted for '{1}' after uploading", countDel, objShow.Name));
                                 }
 
                                 log.Debug("Index - end updating attendee data - " + (DateTime.Now - postAddingStart).TotalMilliseconds);
