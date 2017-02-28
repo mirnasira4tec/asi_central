@@ -22,7 +22,7 @@ namespace asi.asicentral.web.models.show
         {
             get
             {
-                if (this.TotalRecordCount / 2 < this.PageSize)
+                if (this.TotalRecordCount % this.PageSize != 0)
                 {
                     return Math.Max((this.TotalRecordCount / this.PageSize)+ 1, 1);
                 }
