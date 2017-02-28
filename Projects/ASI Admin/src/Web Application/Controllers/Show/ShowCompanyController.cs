@@ -548,7 +548,7 @@ namespace asi.asicentral.web.Controllers.Show
             }
         }
         [HttpGet]
-        public ActionResult GetAttendeeCompany(int? showId, String companyTab, string companyName, string MemberType, int page = 1, int pageSize = 10)
+        public ActionResult GetAttendeeCompany(int? showId, String companyTab, string MemberType, int page = 1, int pageSize = 20)
         {
             var showCompanies = new ShowCompaniesModel();
             showCompanies.CurrentPageIndex = page;

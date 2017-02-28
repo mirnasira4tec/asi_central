@@ -22,7 +22,14 @@ namespace asi.asicentral.web.models.show
         {
             get
             {
-                return Math.Max(this.TotalRecordCount / this.PageSize, 1);
+                if (this.TotalRecordCount / 2 < this.PageSize)
+                {
+                    return Math.Max((this.TotalRecordCount / this.PageSize)+ 1, 1);
+                }
+                else
+                {
+                    return Math.Max(this.TotalRecordCount / this.PageSize, 1);
+                }
             }
         }
         public int NumericPageCount { get; set; }
