@@ -140,6 +140,21 @@
                         <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.IsBonus)">@Html.CheckBoxFor(m => m.IsBonus) <strong>BONUS:</strong> Receive an additional 20% off any store or package of stores when pre-paid for the year </label>
 		            </span>
                     break;
+                case 126:
+                    <span class="label-row span11">
+                        <label><strong>Credits</strong></label>
+                        <label><strong>Price</strong></label>
+                        <label><strong>Cost Per Email</strong></label>
+			        </span>
+                    foreach (var option in asi.asicentral.util.store.emailmarketing.EmailMarketingHelper.EmailMarketingOptions)
+                    {
+                        <span class="label-row span11">
+                            <label class="radio">@Html.RadioButtonFor(model => model.OptionId, option.Key) @Html.Raw(option.Value[0]) </label>
+                            <label>$@Html.Raw(option.Value[1])</label>
+                            <label>$@Html.Raw(option.Value[2])</label>
+                        </span>                                
+                    }
+                    break;
                 default:
                 <span class="label-row span11">
 			        @Html.LabelFor(m => m.Quantity) 
