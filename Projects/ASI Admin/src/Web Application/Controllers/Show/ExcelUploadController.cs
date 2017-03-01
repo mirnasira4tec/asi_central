@@ -30,7 +30,7 @@ namespace asi.asicentral.web.Controllers.Show
             return View();
         }
 
-        public ShowCompany UpdateShowCompanyData(DataTable ds, int rowId, int showId = 0, bool fasiliateFlag = false)
+        public ShowCompany UpdateShowCompanyData(DataTable ds, int rowId, int showId = 0, bool fasiliateFlag = false, List<ShowEmployeeAttendee> employeeAttendees = null)
         {
             ShowCompany company = null;
             var asinumber = ds.Rows[rowId]["ASINO"].ToString().Trim();
@@ -226,6 +226,9 @@ namespace asi.asicentral.web.Controllers.Show
 
                         attendee.EmployeeAttendees.Add(employeeAttendee);
                     }
+
+                    if( employeeAttendees != null )
+                        employeeAttendees.Add(employeeAttendee);
                 }
             }
             #endregion update distributor data
@@ -389,6 +392,8 @@ namespace asi.asicentral.web.Controllers.Show
                                     parent.Add((IDictionary<string, object>)pc);
                                 }
                                 DataTable excelDataTable = ToDictionary(parent);
+                                // all employeeAttendees for this event
+                                var employeeAttendees = new List<ShowEmployeeAttendee>();
                                 for (int i = 0; i < excelDataTable.Rows.Count; i++)
                                 {
                                     var memberType = excelDataTable.Rows[i]["MemberType"].ToString();
@@ -419,8 +424,8 @@ namespace asi.asicentral.web.Controllers.Show
                                         return View("../Show/ViewError", objErrors);
                                     }
 
-                                    UpdateShowCompanyData(excelDataTable, i, objShow.Id, fasiliateFlag);
-                                }
+                                    UpdateShowCompanyData(excelDataTable, i, objShow.Id, fasiliateFlag, employeeAttendees);
+                                }                                
 
                                 ObjectService.SaveChanges();
 
@@ -429,30 +434,54 @@ namespace asi.asicentral.web.Controllers.Show
                                 log.Debug("Index - start updating attendee data");
                                 var showAttendees = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == objShow.Id).ToList();
                                 var attendeesToBeDeleted = showAttendees.Where(attendee => attendee.IsExisting == false).ToList();
-                                for (var i = attendeesToBeDeleted.Count() - 1; i >= 0; i--)
+                                if (attendeesToBeDeleted.Count > 0)
                                 {
-                                    var attendee = attendeesToBeDeleted[i];
-                                    if (attendee.EmployeeAttendees != null && attendee.EmployeeAttendees.Any())
+                                    for (var i = attendeesToBeDeleted.Count() - 1; i >= 0; i--)
                                     {
-                                        for (var j = attendee.EmployeeAttendees.Count() - 1; j >= 0; j--)
+                                        var attendee = attendeesToBeDeleted[i];
+                                        if (attendee.EmployeeAttendees != null && attendee.EmployeeAttendees.Any())
                                         {
-                                            ObjectService.Delete(attendee.EmployeeAttendees[j]);
+                                            for (var j = attendee.EmployeeAttendees.Count() - 1; j >= 0; j--)
+                                            {
+                                                ObjectService.Delete(attendee.EmployeeAttendees[j]);
+                                            }
                                         }
+
+                                        if (attendee.DistShowLogos != null && attendee.DistShowLogos.Any())
+                                        {
+                                            for (var j = attendee.DistShowLogos.Count() - 1; j >= 0; j--)
+                                            {
+                                                ObjectService.Delete(attendee.DistShowLogos[j]);
+                                            }
+                                        }
+
+                                        ObjectService.Delete<ShowAttendee>(attendee);
                                     }
 
-                                    if (attendee.DistShowLogos != null && attendee.DistShowLogos.Any())
-                                    {
-                                        for (var j = attendee.DistShowLogos.Count() - 1; j >= 0; j--)
-                                        {
-                                            ObjectService.Delete(attendee.DistShowLogos[j]);
-                                        }
-                                    }
-
-                                    ObjectService.Delete<ShowAttendee>(attendee);
+                                    showAttendees.ForEach(a => a.IsExisting = false);
+                                    ObjectService.SaveChanges();
+                                    log.Debug(string.Format("{0} company attendees have been deleted for '{1}' after uploading", attendeesToBeDeleted.Count, objShow.Name));
                                 }
 
-                                showAttendees.ForEach(a => a.IsExisting = false);
-                                ObjectService.SaveChanges();
+                                // delete any employee attendees not in the sheet
+                                var attendeeIds = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == objShow.Id).Select(a => a.Id).ToList();
+                                var attendees = ObjectService.GetAll<ShowEmployeeAttendee>().Where(e => attendeeIds.Contains(e.AttendeeId)).ToList();
+                                var countDel = 0;
+                                for (var k = attendees.Count - 1; k >= 0; k--)
+                                {
+                                    if (employeeAttendees.FirstOrDefault(a => a.EmployeeId == attendees[k].EmployeeId) == null)
+                                    { // delete employee from attendee list only, not from database
+                                        countDel++;
+                                        ObjectService.Delete(attendees[k]);
+                                    }
+                                }
+
+                                if (countDel > 0)
+                                {
+                                    ObjectService.SaveChanges();
+                                    log.Debug(string.Format("{0} employee attendees have been deleted for '{1}' after uploading", countDel, objShow.Name));
+                                }
+
                                 log.Debug("Index - end updating attendee data - " + (DateTime.Now - postAddingStart).TotalMilliseconds);
 
                             }
