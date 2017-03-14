@@ -90,7 +90,7 @@
                 <td>@showAttendee.BoothNumber</td>
             </tr>
         }
-          @if (Model.TotalRecordCount > 20)
+          @if (Model.TotalRecordCount > Model.PageSize)
          {
              <tr>
                  <td class="pager" colspan="10">

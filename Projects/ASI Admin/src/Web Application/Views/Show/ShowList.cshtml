@@ -100,7 +100,7 @@
                 <td>@show.EndDate.ToString("dd-MMM-yyyy")</td>
             </tr>
             }
-             @if (Model.TotalRecordCount > 10)
+             @if (Model.TotalRecordCount > Model.PageSize)
          {
              <tr>
                  <td class="pager" colspan="10">
