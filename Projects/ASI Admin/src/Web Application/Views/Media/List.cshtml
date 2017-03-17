@@ -34,8 +34,16 @@
         <tr>
             @if (@fileItem.RelativePath != "")
             {
-                <td><a id="@fileItem.RelativePath" href="/Media/Delete?file=@fileItem.RelativePath" data-type="reject">
-                    <img id="imgDelete" src="/images/delete_small.jpg" width="20" height="20" class="command btn-primary" alt="delete " /></a></td>    
+                <td>
+                    @if (asi.asicentral.web.Helpers.Authorized.IsAuthorizedUser())
+                    {
+                    <a id="@fileItem.RelativePath" href="/Media/Delete?file=@fileItem.RelativePath" data-type="reject">
+                    <img id="imgDelete" src="/images/delete_small.jpg" width="20" height="20" class="command btn-primary" alt="delete " /></a>
+                    }
+                    else {
+                        <text>&nbsp;</text>
+                    }
+                </td>
             }
             else
             {

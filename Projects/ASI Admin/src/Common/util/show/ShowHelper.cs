@@ -145,6 +145,7 @@ namespace asi.asicentral.util.show
             company.WebUrl = objCompany.WebUrl;
             company.MemberType = objCompany.MemberType;
             company.ASINumber = objCompany.ASINumber;
+            company.LogoUrl = objCompany.LogoUrl;
             company.UpdateDate = DateTime.UtcNow;
             company.UpdateSource = objCompany.UpdateSource;
             return company;
@@ -247,5 +248,29 @@ namespace asi.asicentral.util.show
             employeeAttendee.UpdateSource = objEmployeeAttendee.UpdateSource;
             return employeeAttendee;
         }
+
+        public static ShowDistShowLogo CreateOrUpdateDistShowLogo(IObjectService objectService, ShowDistShowLogo objDistShowLogo)
+         {
+             if (objDistShowLogo == null) return null;
+             ShowDistShowLogo distShowLogo = null;
+             if (objDistShowLogo.Id == 0)
+             {
+                 distShowLogo = new ShowDistShowLogo()
+                 {
+                     CreateDate = DateTime.UtcNow,
+                 };
+                 objectService.Add<ShowDistShowLogo>(distShowLogo);
+             }
+             else
+             {
+                 distShowLogo = objectService.GetAll<ShowDistShowLogo>().Where(ctxt => ctxt.Id == objDistShowLogo.Id).SingleOrDefault();
+             }
+             distShowLogo.AttendeeId = objDistShowLogo.AttendeeId;
+             distShowLogo.LogoImageUrl = objDistShowLogo.LogoImageUrl;
+             distShowLogo.UpdateDate = DateTime.UtcNow;
+             distShowLogo.UpdateSource = objDistShowLogo.UpdateSource;
+             return distShowLogo;
+         }
+
     }
 }

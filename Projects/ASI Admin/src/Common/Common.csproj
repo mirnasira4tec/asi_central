@@ -247,6 +247,10 @@
     <Compile Include="database\ASIEmailBlastContext.cs" />
     <Compile Include="database\ASIInternetContext.cs" />
     <Compile Include="database\ASIPublicationContext.cs" />
+    <Compile Include="database\mappings\show\ShowDistShowLogoMap.cs" />
+    <Compile Include="database\mappings\excit\SupUpdateFieldMap.cs" />
+    <Compile Include="database\mappings\excit\SupUpdateRequestDetailMap.cs" />
+    <Compile Include="database\mappings\excit\SupUpdateRequestMap.cs" />
     <Compile Include="database\PersonifyContext.cs" />
     <Compile Include="database\CallContext.cs" />
     <Compile Include="database\DM_MemberDemogrContext.cs" />
@@ -333,8 +337,12 @@
     <Compile Include="database\MemberDemogrContext.cs" />
     <Compile Include="database\Umbraco_ShowContext.cs" />
     <Compile Include="interfaces\ICreditCardService.cs" />
+    <Compile Include="interfaces\IImageConvertService.cs" />
     <Compile Include="model\CompanyInformation.cs" />
     <Compile Include="model\DM_memberDemogr\CompanyASIRep.cs" />
+    <Compile Include="model\excit\SupUpdateField.cs" />
+    <Compile Include="model\excit\SupUpdateRequest.cs" />
+    <Compile Include="model\excit\SupUpdateRequestDetail.cs" />
     <Compile Include="model\findsupplier\memberdemogr\SupplierRating.cs" />
     <Compile Include="model\findsupplier\memberdemogr\SupplierSeadElectronicAddress.cs" />
     <Compile Include="model\findsupplier\memberdemogr\SupplierPhone.cs" />
@@ -344,6 +352,7 @@
     <Compile Include="model\call\CallQueue.cs" />
     <Compile Include="model\call\CallRequests.cs" />
     <Compile Include="model\CreditCard.cs" />
+    <Compile Include="model\show\ShowDistShowLogo.cs" />
     <Compile Include="model\store\CompanyValidation.cs" />
     <Compile Include="model\OAuth\Security.cs" />
     <Compile Include="model\OAuth\User.cs" />
@@ -504,6 +513,7 @@
     </Compile>
     <Compile Include="services\CreditCardService.cs" />
     <Compile Include="interfaces\IBackendService.cs" />
+    <Compile Include="services\ImageConvertService.cs" />
     <Compile Include="services\PersonifyProxy\AddressInfoEqualityComparer.cs" />
     <Compile Include="services\PersonifyProxy\MemberData.cs" />
     <Compile Include="services\PersonifyProxy\MemberTypeIDToCD.cs" />
@@ -565,6 +575,7 @@
     <EmbeddedResource Include="views\store\Roadshow2016Exhibitor-MLR.cshtml" />
     <EmbeddedResource Include="views\store\Roadshow2016ExhibitorAgreement.cshtml" />
     <EmbeddedResource Include="views\store\SpaceDrawForm2017.cshtml" />
+    <EmbeddedResource Include="views\store\OnSiteExhibitorAgreement2018.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -587,6 +598,7 @@
     <WCFMetadataStorage Include="Service References\web.CreditCardService\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\DataSources\asi.asicentral.PersonifyDataASI.PersonifyEntitiesASI.datasource" />
     <None Include="Service References\PersonifyDataASI\service.edmx" />
     <None Include="Service References\web.CreditCardService\configuration91.svcinfo" />
   </ItemGroup>

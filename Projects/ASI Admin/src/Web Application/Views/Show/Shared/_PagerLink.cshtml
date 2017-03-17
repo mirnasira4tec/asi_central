@@ -1,9 +1,10 @@
 ﻿@using asi.asicentral.web.models.show;
 @using asi.asicentral.util.show;
-@model CompanyModel
+@model PagerModel
 
 
 @{
+    var url = Request.RawUrl;
     var razorWriter = ViewContext.Writer;
     if (ViewData["Inactive"] != null ? (bool)ViewData["Inactive"] : false)
     {
@@ -11,8 +12,23 @@
     }
     else
     {
-
-        var routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize },{"showId", Model.ShowId}, { "companyName", ViewData["CompanyName"] != null ? ViewData["CompanyName"].ToString() : null }, { "MemberType", ViewData["MemberType"] != null ? ViewData["MemberType"].ToString() : null } };
+        var routeData = new RouteValueDictionary { };
+        if (url.IndexOf("/Show/ShowList", StringComparison.InvariantCultureIgnoreCase) != -1)
+        {
+            routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize }, { "ShowTypeId", Model.TabShowTypeId }, { "year", Model.TabYear }};
+        }
+        else if (url.IndexOf("/ShowCompany/CompanyList", StringComparison.InvariantCultureIgnoreCase) != -1)
+        {
+            routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize }, { "Name", Model.TabCompanyName }, { "MemberType", Model.TabMemberType } };
+        }
+        else if (url.IndexOf("/ShowCompany/GetAttendeeCompany", StringComparison.InvariantCultureIgnoreCase) != -1)
+        {
+            routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize }, { "showId", Model.ShowId }  };
+        }
+        else if (url.IndexOf("/ShowCompany/AddCompaniesToShow", StringComparison.InvariantCultureIgnoreCase) != -1)
+        {
+            routeData = new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize }, { "showId", Model.ShowId }, { "companyName", Model.TabCompanyName }, { "MemberType", Model.TabMemberType } };            
+        }
         var htmlAttributes = new Dictionary<string, object>();
         if (ViewData["Selected"] != null ? (bool)ViewData["Selected"] : false)
         {

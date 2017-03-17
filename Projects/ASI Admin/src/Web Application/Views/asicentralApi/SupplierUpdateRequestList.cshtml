@@ -1,0 +1,81 @@
+﻿@using asi.asicentral.model.excit;
+@using System.Web.UI.WebControls;
+@model  IList<SupUpdateRequest>
+
+@{
+    ViewBag.Title = "Supplier Update Request List";
+    Layout = "~/Views/Shared/_CentralApiLayout.cshtml";
+}
+
+<h2>List of Supplier Update Request</h2>
+<div class="tabbable tabs-below small">
+    <h5>Search by</h5>
+    @{var listItems = new List<ListItem>
+    {
+          new ListItem { Text = "Select", Value="Select" },
+          new ListItem { Text = "Pending", Value="0" },
+          new ListItem { Text = "Approved", Value="1" },
+          new ListItem { Text = "Rejected", Value="2" },
+          new ListItem { Text = "Cancelled", Value="3" }
+    };
+    }
+    <div class="well">
+        @using (Html.BeginForm("SupplierUpdateRequestList", "/asicentralApi/SupplierUpdateRequestList", FormMethod.Get))
+        {               
+            <div class="formField form-inline">
+                <label for="requestStatus">Request Status</label>
+                @Html.DropDownList("requestStatus", new SelectList(listItems, "Value", "Text"), new { @name = "requestStatus" })
+                <input type="submit" value="Search" class="btn" />
+            </div>
+        }
+    </div>
+</div>
+<table class="table table-bordered table-condensed table-striped">
+    <thead>
+        <tr>
+            <th>Company Name</th>
+            <th>Status</th>
+            <th>Requested By</th>
+            <th>Approved By</th>
+            <th>Date Created</th>
+            <th>Date Updated</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                @if (item.Status != SupRequestStatus.Cancelled)
+                {
+                    <td>
+                        <a class="red" title="@item.CompanyId" href="/asicentralApi/SupplierUpdateRequestDetail?id=@item.Id">@item.CompanyName</a>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        @item.CompanyName
+                    </td>
+                }
+                <td>
+                    @item.Status
+                </td>
+                <td>
+                    @item.RequestedBy
+                </td>
+                <td>
+                    @item.ApprovedBy
+                </td>
+                <td>
+                    @item.CreateDate.ToString("dd-MMM-yyyy")
+                </td>
+                <td>
+                    @item.UpdateDate.ToString("dd-MMM-yyyy")
+                </td>
+            </tr>
+        }
+
+
+    </tbody>
+</table>

@@ -36,8 +36,12 @@ namespace asi.asicentral.database.mappings.show
              .WithMany()
              .HasForeignKey(x => x.ShowId);
 
-
             HasMany(t => t.EmployeeAttendees)
+                  .WithOptional()
+                  .HasForeignKey(t => t.AttendeeId)
+                  .WillCascadeOnDelete();
+
+            HasMany(t => t.DistShowLogos)
                   .WithOptional()
                   .HasForeignKey(t => t.AttendeeId)
                   .WillCascadeOnDelete();
