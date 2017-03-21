@@ -45,6 +45,7 @@
                     <thead>
                         <tr>
                             <th>Name</th>
+                            <th>Email</th>
                             <th>Phone</th>
                         </tr>
                     </thead>
@@ -58,7 +59,8 @@
                                     <label class="checkbox" for="@Model.ShowEmployees[empCnt].IsAttending">@Html.EditorFor(model => model.ShowEmployees[empCnt].IsAttending) @Model.ShowEmployees[empCnt].Employee.FirstName @Model.ShowEmployees[empCnt].Employee.LastName
                                     </label>
                                 </td>
-                                <td>@Model.ShowEmployees[empCnt].Employee.EPhoneAreaCode - @Model.ShowEmployees[empCnt].Employee.EPhone</td>
+                                <td>@Model.ShowEmployees[empCnt].Employee.Email</td>
+                                <td>@Model.ShowEmployees[empCnt].Employee.EPhoneAreaCode @Model.ShowEmployees[empCnt].Employee.EPhone</td>
                             </tr>
                         </tbody>
                
