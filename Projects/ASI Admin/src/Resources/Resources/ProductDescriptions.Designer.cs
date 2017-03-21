@@ -187,7 +187,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ESP Websites are functional and user-friendly websites that are pre-loaded with products from ESP. Motivate your customers to stay, enjoy and shop with all of these great website features:.
+        ///   Looks up a localized string similar to ESP Websites™ are functional and user-friendly websites pre-loaded with products from ESP®. Motivate your customers to stay, enjoy and shop with all of these great website features:.
         /// </summary>
         public static string ProductESPWebsites {
             get {
