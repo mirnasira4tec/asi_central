@@ -1,0 +1,42 @@
+﻿@using asi.asicentral.web.model.velocity;
+@model  ColorMapping
+@{
+    ViewBag.Title = "SupplierColorMapping";
+    Layout = "~/Views/Shared/_CentralApiLayout.cshtml";
+}
+<h2>SupplierColorMapping</h2>
+@using (Html.BeginForm("Index", "Velocity", FormMethod.Post))
+{
+    
+    
+    <table class="table table-bordered table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>Company Id</th>
+                <th>Base Color</th>
+                <th>Mapping Color</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <td style="width: 25%;">@Html.TextBoxFor(x => x.CompayId)</td>
+                <td style="width: 25%;">@Html.TextBoxFor(x => x.BaseColor)</td>
+                <td style="width: 25%;">@Html.TextBoxFor(x => x.MappingColor)</td>
+                <td style="width: 25%;">
+                    <input class="command btn-primary" type="submit" value="Insert" name="command">
+                </td>
+            </tr>
+            @if (Model != null && !string.IsNullOrEmpty(Model.Status))
+            {                 
+                <tr>
+                    <td colspan="4">
+                        <strong>@Model.Status</strong> 
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    
+}
