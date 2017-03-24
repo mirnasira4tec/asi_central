@@ -317,9 +317,8 @@
     </Compile>
     <Compile Include="Interface\IVelocityContext.cs" />
     <Compile Include="Interface\IVelocityService.cs" />
-    <Compile Include="Models\velocity\CodeValueGroup.cs" />
+    <Compile Include="Models\velocity\ColorMapData.cs" />
     <Compile Include="Models\velocity\ColorMapping.cs" />
-    <Compile Include="Models\velocity\CriteriaValue.cs" />
     <Compile Include="Models\asicentral\CallVolume.cs" />
     <Compile Include="Models\CreditCardModel.cs" />
     <Compile Include="Models\forms\FormModel.cs" />
@@ -532,6 +531,7 @@
     <Content Include="Views\asicentralApi\SupplierUpdateRequestList.cshtml" />
     <Content Include="Views\asicentralApi\SupplierUpdateRequestDetail.cshtml" />
     <Content Include="Views\Velocity\Index.cshtml" />
+    <Content Include="Views\Velocity\Result.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

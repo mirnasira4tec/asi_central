@@ -1,42 +1,66 @@
-﻿@using asi.asicentral.web.model.velocity;
-@model  ColorMapping
+﻿@using asi.asicentral.web.Models.velocity;
+@model  ColorMapData
 @{
     ViewBag.Title = "SupplierColorMapping";
     Layout = "~/Views/Shared/_CentralApiLayout.cshtml";
 }
-<h2>SupplierColorMapping</h2>
+<h2>Supplier Color Mapping</h2>
 @using (Html.BeginForm("Index", "Velocity", FormMethod.Post))
-{
-    
-    
-    <table class="table table-bordered table-condensed table-striped">
-        <thead>
-            <tr>
-                <th>Company Id</th>
-                <th>Base Color</th>
-                <th>Mapping Color</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
+{   
+    @Html.AntiForgeryToken()
+    <div>
+        <div class="row">
+            <div class="span5">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CompanyId)
+                    @Html.TextBoxFor(model => model.CompanyId, new { Value = "" })
+                    @Html.ValidationMessageFor(model => model.CompanyId)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span5">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ColorData)
+                    @Html.TextAreaFor(model => model.ColorData, new { style = "width: 500px; height:200px;" })
+                    @Html.ValidationMessageFor(model => model.ColorData)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span4"></div>
+            <div class="span4"></div>
+            <div class="span2">
+                <button class="btn btn-primary" id="Submit" type="submit" name="btnSubmit" value="Update">Update</button>
+            </div>
+        </div>
+    </div>
+}
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#CompanyId").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl+A, Command+A
+                    (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
 
-            <tr>
-                <td style="width: 25%;">@Html.TextBoxFor(x => x.CompayId)</td>
-                <td style="width: 25%;">@Html.TextBoxFor(x => x.BaseColor)</td>
-                <td style="width: 25%;">@Html.TextBoxFor(x => x.MappingColor)</td>
-                <td style="width: 25%;">
-                    <input class="command btn-primary" type="submit" value="Insert" name="command">
-                </td>
-            </tr>
-            @if (Model != null && !string.IsNullOrEmpty(Model.Status))
-            {                 
-                <tr>
-                    <td colspan="4">
-                        <strong>@Model.Status</strong> 
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    
+            //$("#Submit").click(function () {
+            //    if ($('#CompanyId').val() == "" || $('#ColorData').val() == "") {
+            //        alert('Please provide valid details.');
+            //        return false;
+            //    }
+            //});
+        });
+    </script>
 }
