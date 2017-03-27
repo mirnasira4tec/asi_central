@@ -12,8 +12,8 @@ namespace asi.asicentral.Tests
         [TestMethod]
         public void SupplierUpdateColourMappingTest()
         {
-            ColorMapping colorMapping = new ColorMapping();            
-            colorMapping.CompayId = Convert.ToInt32(DateTime.Now.Ticks.ToString().Substring(0,9));
+            ColorMapping colorMapping = new ColorMapping();
+            colorMapping.CompayId = 9207; //Company Name - ASI 30232
             colorMapping.MappingColor = Guid.NewGuid().ToString();
             colorMapping.BaseColor = Guid.NewGuid().ToString();
 
