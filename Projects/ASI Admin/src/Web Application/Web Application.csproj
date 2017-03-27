@@ -22,6 +22,7 @@
     <IISExpressUseClassicPipelineMode />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -286,6 +287,8 @@
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\asicentralApi\AsiCentralApiController.cs" />
+    <Compile Include="Controllers\velocity\VelocityController.cs" />
+    <Compile Include="Database\VelocityContext.cs" />
     <Compile Include="Helpers\Authorized.cs" />
     <Compile Include="Controllers\asicentral\CallQueueController.cs" />
     <Compile Include="Controllers\CompanyValidationsController.cs" />
@@ -312,6 +315,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Interface\IVelocityContext.cs" />
+    <Compile Include="Interface\IVelocityService.cs" />
+    <Compile Include="Models\velocity\ColorMapData.cs" />
+    <Compile Include="Models\velocity\ColorMapping.cs" />
     <Compile Include="Models\asicentral\CallVolume.cs" />
     <Compile Include="Models\CreditCardModel.cs" />
     <Compile Include="Models\forms\FormModel.cs" />
@@ -356,6 +363,7 @@
     <Compile Include="Models\TermsConditions\TermsConditionsInstanceVM.cs" />
     <Compile Include="Models\TermsConditions\TermsConditionsTypeVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\VelocityService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\asi-store.css" />
@@ -495,8 +503,6 @@
     <Content Include="Views\Store\Application\CatalogAdvertising.cshtml" />
     <Content Include="Views\Store\Application\Equipment.cshtml" />
     <Content Include="Views\Store\Application\SalesForm.cshtml" />
-    <Content Include="Views\Store\CompanyValidations\List.cshtml" />
-    <Content Include="Views\Store\CompanyValidations\GroupByType.cshtml" />
     <Content Include="Views\TermsConditions\Index.cshtml" />
     <Content Include="Views\TermsConditions\Terms&amp;Conditions.cshtml" />
     <Content Include="Views\TermsConditions\_TermsLayout.cshtml" />
@@ -524,6 +530,8 @@
     <Content Include="Views\Shared\_CentralApiLayout.cshtml" />
     <Content Include="Views\asicentralApi\SupplierUpdateRequestList.cshtml" />
     <Content Include="Views\asicentralApi\SupplierUpdateRequestDetail.cshtml" />
+    <Content Include="Views\Velocity\Index.cshtml" />
+    <Content Include="Views\Velocity\Result.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
