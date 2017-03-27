@@ -1094,6 +1094,36 @@ namespace asi.asicentral.services.PersonifyProxy
 	        return companyInfo;
 	    }
 
+        public static PersonifyStatus OptOutEmailSubscription(string email, List<string> usageCodes)
+        {
+            var requestStatus = PersonifyStatus.PersonifyError;
+            if (!string.IsNullOrEmpty(email) && usageCodes != null && usageCodes.Any())
+            {
+                try
+                {
+                    if (GetIndividualInfoByEmail(email) == null)
+                    {
+                        requestStatus = PersonifyStatus.NoRecordFound;
+                    }
+                    else
+                    {
+                        foreach (var code in usageCodes)
+	                    {
+                            ExecutePersonifySP(SP_EEX_EMAIL_USAGE_UPDATE, new List<string>() { email, code, "Y", "N" });
+	                    }
+
+                        requestStatus = PersonifyStatus.Success;
+                    }
+                }
+                catch(Exception ex)
+                {
+                    _log.Debug(string.Format("OptOutEmailSubscription() Exception, message: {0}", ex.Message));
+                }
+            }
+
+            return requestStatus;
+        }
+
         public static StoreDetailApplication GetDemographicData(IStoreService storeService, StoreOrderDetail orderDetail)
         {
             var storeDetailApp = storeService.GetApplication(orderDetail);
