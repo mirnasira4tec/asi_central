@@ -730,11 +730,6 @@ namespace asi.asicentral.services
             return PersonifyClient.OptOutEmailSubscription(email, usageCodes);
         }
 
-        public bool IsExistingEmail(string email)
-        {
-            return PersonifyClient.GetIndividualInfoByEmail(email) != null;
-        }
-
         public virtual StoreDetailApplication GetDemographicData(StoreOrderDetail orderDetail)
         {
             var storeDetailApp = PersonifyClient.GetDemographicData(storeService, orderDetail);

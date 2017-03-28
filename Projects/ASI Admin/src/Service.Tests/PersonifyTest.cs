@@ -94,6 +94,17 @@ namespace asi.asicentral.Tests
         }
 
         [TestMethod]
+        [Ignore]
+        public void EmailOptOut()
+        {
+            var email = "testing@111.com";
+            var codes = new List<string>() { "OPTOUT_ASI_Marketing", "OPTOUT_Editorial", "OPTOUT_ASI_Show_Mkt", "OPTOUT_Global_ASI_Show", "OPTOUT_GLOBAL_ASI" };
+            var output = PersonifyClient.OptOutEmailSubscription(email, codes);
+
+            Assert.IsNotNull(output);
+        }
+
+        [TestMethod]
         public void PlaceBundleOrderTest()
         {
             IStoreService storeService = MockupStoreService();
