@@ -378,6 +378,7 @@ namespace asi.asicentral.web.Controllers.Show
                     objEmployee.FirstName = employee.FirstName;
                     objEmployee.LastName = employee.LastName;
                     objEmployee.Email = employee.Email;
+                    objEmployee.LoginEmail = employee.LoginEmail;
                     objEmployee.CompanyId = employee.CompanyId;
                     objEmployee.Address = objAddress;
                     objEmployee.UpdateSource = "ShowCompanyController - Add";
@@ -411,6 +412,7 @@ namespace asi.asicentral.web.Controllers.Show
                     companyInfo.FirstName = employeeModel.FirstName;
                     companyInfo.LastName = employeeModel.LastName;
                     companyInfo.Email = employeeModel.Email;
+                    companyInfo.LoginEmail = employeeModel.LoginEmail;
                     companyInfo.CompanyId = employeeModel.CompanyId.HasValue ? employeeModel.CompanyId.Value : 0;
                     companyInfo.HasAddress = employeeModel.Address != null;
                     if (companyInfo.HasAddress)
@@ -520,6 +522,18 @@ namespace asi.asicentral.web.Controllers.Show
         public ActionResult IsValidEmail(string Email)
         {
             IList<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>().Where(item => item.Email != null && item.Email.ToLower().Equals(Email.ToLower())).ToList();
+            if (employeeList.Any())
+            {
+                return Json(false);
+            }
+            else
+            {
+                return Json(true);
+            }
+        }
+        public ActionResult IsValidLoginEmail(string LoginEmail)
+        {
+            IList<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>().Where(item => item.LoginEmail != null && item.LoginEmail.ToLower().Equals(LoginEmail.ToLower())).ToList();
             if (employeeList.Any())
             {
                 return Json(false);
