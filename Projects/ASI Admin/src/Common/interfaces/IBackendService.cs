@@ -55,7 +55,6 @@ namespace asi.asicentral.interfaces
 
         CompanyInformation AddEEXSubscription(User user, bool isBusinessAddress);
         PersonifyStatus OptOutEmailSubscription(string email, List<string> usageCodes);
-        bool IsExistingEmail(string email);
 
         StoreDetailApplication GetDemographicData(StoreOrderDetail orderDetail);
     }
