@@ -531,19 +531,6 @@ namespace asi.asicentral.web.Controllers.Show
                 return Json(true);
             }
         }
-        public ActionResult IsValidLoginEmail(string LoginEmail)
-        {
-            IList<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>().Where(item => item.LoginEmail != null && item.LoginEmail.ToLower().Equals(LoginEmail.ToLower())).ToList();
-            if (employeeList.Any())
-            {
-                return Json(false);
-            }
-            else
-            {
-                return Json(true);
-            }
-        }
-
 
         public ActionResult IsValidCompany(string name)
         {

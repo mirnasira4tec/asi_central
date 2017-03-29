@@ -33,7 +33,6 @@
                 <div class="controls">@Html.EditorFor(model => model.Email, new { id = "Email" }) @Html.ValidationMessageFor(model => model.Email)</div>
             </div>
             <div class="control-group">
-                @Html.Hidden("LoginEmailBeforeChange", Model.LoginEmail)
                 @Html.LabelFor(model => model.LoginEmail, new { @class = "control-label" })
                 <div class="controls">@Html.EditorFor(model => model.LoginEmail, new { id = "LoginEmail" }) @Html.ValidationMessageFor(model => model.LoginEmail)</div>
             </div>
@@ -74,9 +73,6 @@
         $("#employee-form").submit(function (evt) {
             if ($("#Email").val() == $("#EmailBeforeChange").val()) {
                 $("#Email").rules("remove", "remote");
-            }
-            if ($("#LoginEmail").val() == $("#LoginEmailBeforeChange").val()) {
-                $("#LoginEmail").rules("remove", "remote");
             }
         });
         $(document).ready(function () {

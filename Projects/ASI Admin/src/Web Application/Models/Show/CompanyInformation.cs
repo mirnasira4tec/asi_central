@@ -35,8 +35,8 @@ namespace asi.asicentral.web.models.show
         [Remote("IsValidEmail", "ShowCompany", HttpMethod = "POST", ErrorMessage = "Email already exists. Please enter a different Email.")]
         public string Email { get; set; }
 
+        [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength50")]
         [RegularExpression(@"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*", ErrorMessage = "Invalid email")]
-        [Remote("IsValidLoginEmail", "ShowCompany", HttpMethod = "POST", ErrorMessage = "Login Email already exists. Please enter a different Login Email.")]
         public string LoginEmail { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "Phone")]

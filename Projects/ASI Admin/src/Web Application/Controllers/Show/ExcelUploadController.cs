@@ -167,11 +167,6 @@ namespace asi.asicentral.web.Controllers.Show
                     {
                         employee = company.Employees.FirstOrDefault(item => !string.IsNullOrEmpty(item.Email) && item.Email.Trim().Equals(email, StringComparison.CurrentCultureIgnoreCase) );
                     }
-                    if ( !string.IsNullOrEmpty(loginEmail))
-                    {
-                        employee = company.Employees.FirstOrDefault(item => !string.IsNullOrEmpty(item.LoginEmail) && item.LoginEmail.Trim().Equals(loginEmail, StringComparison.CurrentCultureIgnoreCase));
-                    }
-                    
                     if( employee == null)
                     {
                         employee = company.Employees.FirstOrDefault(item => (item.FirstName.Trim().Equals(firstName, StringComparison.CurrentCultureIgnoreCase) &&
