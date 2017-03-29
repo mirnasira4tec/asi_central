@@ -378,6 +378,7 @@ namespace asi.asicentral.web.Controllers.Show
                     objEmployee.FirstName = employee.FirstName;
                     objEmployee.LastName = employee.LastName;
                     objEmployee.Email = employee.Email;
+                    objEmployee.LoginEmail = employee.LoginEmail;
                     objEmployee.CompanyId = employee.CompanyId;
                     objEmployee.Address = objAddress;
                     objEmployee.UpdateSource = "ShowCompanyController - Add";
@@ -411,6 +412,7 @@ namespace asi.asicentral.web.Controllers.Show
                     companyInfo.FirstName = employeeModel.FirstName;
                     companyInfo.LastName = employeeModel.LastName;
                     companyInfo.Email = employeeModel.Email;
+                    companyInfo.LoginEmail = employeeModel.LoginEmail;
                     companyInfo.CompanyId = employeeModel.CompanyId.HasValue ? employeeModel.CompanyId.Value : 0;
                     companyInfo.HasAddress = employeeModel.Address != null;
                     if (companyInfo.HasAddress)
@@ -529,7 +531,6 @@ namespace asi.asicentral.web.Controllers.Show
                 return Json(true);
             }
         }
-
 
         public ActionResult IsValidCompany(string name)
         {

@@ -116,6 +116,7 @@ namespace asi.asicentral.util.show
             employee.MiddleName = objEmployee.MiddleName;
             employee.LastName = objEmployee.LastName;
             employee.Email = objEmployee.Email;
+            employee.LoginEmail = objEmployee.LoginEmail;
             employee.EPhoneAreaCode = objEmployee.EPhoneAreaCode;
             employee.EPhone = objEmployee.EPhone;
             employee.CompanyId = objEmployee.CompanyId;
