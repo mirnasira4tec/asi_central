@@ -13,6 +13,7 @@ using asi.asicentral.model.timss;
 using asi.asicentral.util.store;
 using PersonifySvcClient;
 using asi.asicentral.model.personify;
+using asi.asicentral.oauth;
 
 namespace asi.asicentral.Tests
 {
@@ -25,16 +26,23 @@ namespace asi.asicentral.Tests
             IStoreService storeService = MockupStoreService();
             var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
             var emailExpress = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 61);
-            PlaceOrderTest(string.Empty, storeService, new ContextProduct[] { supplierSpecials, emailExpress }, "PlaceOrderNewCompanyTest");
+            var order = CreateStoreOrder(string.Empty, new ContextProduct[] { supplierSpecials, emailExpress }, "PlaceOrderNewCompanyTest");
+            var companyInfo = CreatePersonifyOrder(order, storeService);
+            Assert.IsNotNull(companyInfo);
+            Assert.IsNotNull(order.BackendReference);
         }
 
         [TestMethod]
+        [Ignore]
         public void PlaceOrderExistingCompanyTest()
-        {
+        {  // supplierSpecials and emailExpress don't have personify integrations any more
             IStoreService storeService = MockupStoreService();
             var supplierSpecials = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 77);
             var emailExpress = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 61);
-            PlaceOrderTest("30279", storeService, new ContextProduct[] { supplierSpecials, emailExpress }, "PlaceOrderExistingCompanyTest");
+            var order = CreateStoreOrder("30279", new ContextProduct[] { supplierSpecials, emailExpress }, "PlaceOrderExistingCompanyTest");
+            var companyInfo = CreatePersonifyOrder(order, storeService);
+            Assert.IsNotNull(companyInfo);
+            Assert.IsNotNull(order.BackendReference);
         }
 
         [TestMethod]
@@ -94,37 +102,36 @@ namespace asi.asicentral.Tests
         }
 
         [TestMethod]
-        public void PlaceBundleOrderTest()
+        public void PackageOrderTest()
         {
             IStoreService storeService = MockupStoreService();
             var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 7);
-            var order = CreateOrder("12345", new ContextProduct[] { distributor }, "PlaceBundleOrderTest");
-            var companyInfo = CreateBundleOrder(order, storeService);
+            var order = CreateStoreOrder("12345", new ContextProduct[] { distributor }, "PlaceBundleOrderTest");
+            var companyInfo = CreatePersonifyOrder(order, storeService);
             Assert.IsNotNull(companyInfo);
             Assert.IsNotNull(order.BackendReference);
         }
 
-        // rate-code is not set properly on staging
-        [Ignore] 
         [TestMethod]
-        public void BundleOrderDistributorFirstMonthFree()
+        public void PackageOrderWithCoupon()
         {
-            var storeService = MockupStoreService("DISTFIRSTMONTH");
+            var storeService = MockupStoreService("STANDARD129");
             var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 7);
             var context = storeService.GetAll<Context>(true).FirstOrDefault(c => c.Id == 8);
-            var order = CreateOrder("12345", new ContextProduct[] { distributor }, "PlaceBundleOrderTest", "DISTFIRSTMONTH", 199, context);
-            var companyInfo = CreateBundleOrder(order, storeService);
+            var order = CreateStoreOrder("12345", new ContextProduct[] { distributor }, "PackageOrderDistributorCoupon", "STANDARD129", 129, context);
+            var companyInfo = CreatePersonifyOrder(order, storeService);
             Assert.IsNotNull(companyInfo);
             Assert.IsNotNull(order.BackendReference);
         }
 
         [TestMethod]
-        public void BundleOrderSupplierWaveFirstMonth()
+        public void EmailMrktOrderTest()
         {
             IStoreService storeService = MockupStoreService();
-            var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 2);
-            var order = CreateOrder("12345", new ContextProduct[] { distributor }, "BundleOrderSupplierWaveFirstMonth");
-            var companyInfo = CreateBundleOrder(order, storeService);
+            var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 126);
+            var order = CreateStoreOrder("181255", new ContextProduct[] { distributor }, "EmailMrktOrderTest");
+            order.OrderDetails[0].OptionId = 1;
+            var companyInfo = CreatePersonifyOrder(order, storeService);
             Assert.IsNotNull(companyInfo);
             Assert.IsNotNull(order.BackendReference);
         }
@@ -134,10 +141,10 @@ namespace asi.asicentral.Tests
         {
             IStoreService storeService = MockupStoreService();
             var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 2);
-            var order = CreateOrder("10275773", new ContextProduct[] { distributor }, "BundleOrderSupplierWaveFirstMonth");
+            var order = CreateStoreOrder("10275773", new ContextProduct[] { distributor }, "NoOrderCreatedForTerminatedCompany");
             order.Company.Name = "Terminateddist001@gmail.Com";
             order.Company.Phone = "9999990001";
-            var companyInfo = CreateBundleOrder(order, storeService);
+            var companyInfo = CreatePersonifyOrder(order, storeService, MockupPersonifyService(storeService, order, StatusCode.TERMINATED.ToString()));
             Assert.IsNotNull(companyInfo);
             Assert.IsTrue(companyInfo.IsTerminated());
             Assert.IsNull(order.BackendReference);
@@ -146,15 +153,16 @@ namespace asi.asicentral.Tests
         [TestMethod]
         public void AddPersonifyCompanyForDualDecorator()
         {
-            StoreCompany company = GetStoreCompany("NewMembership", 
-                                                   "151111222222", 
-                                                   "newMembershipPurchase@unittest.com", 
-                                                   "Distributor");
-
-            IEnumerable<StoreAddressInfo> storeAddress = null; 
-            var companyInfo = PersonifyClient.ReconcileCompany(company, "DISTRIBUTOR", null, ref storeAddress, true);
             var storeService = MockupStoreService();
             IBackendService personify = new PersonifyService(storeService);
+            var company = GetStoreCompany("NewMembership", 
+                                          "1511112222", 
+                                          "newMembership@unittest.com", 
+                                          "Distributor");
+
+            var companyInfo = GetPersonifyCompany(personify, company);
+            personify.UpdateCompanyStatus(company, StatusCode.ACTIVE);
+            company.MemberStatus = StatusCode.ACTIVE.ToString();
 
             var order = new StoreOrder()
             {
@@ -197,17 +205,6 @@ namespace asi.asicentral.Tests
         public void AddCompany()
         {
             var tag = DateTime.Now.Ticks;
-
-            var companyInfo = new CompanyInformation
-            {
-                Name = "New Company1 " + tag,
-                Street1 = "4800 Street Rd",
-                City = "Trevose",
-                State = "PA",
-                Zip = "19053",
-                Country = "USA",
-				MemberTypeNumber = 6,
-            };
             var accountInfo = new User
             {
                 FirstName = "New First Name",
@@ -223,7 +220,7 @@ namespace asi.asicentral.Tests
                 CountryCode = "USA"
             };
             IBackendService personify = new PersonifyService(MockupStoreService());
-            companyInfo = personify.AddCompany(accountInfo);
+            var companyInfo = personify.AddCompany(accountInfo);
             Assert.IsTrue(companyInfo.CompanyId > 0);
 			Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
 			Assert.AreEqual("ASICENTRAL", companyInfo.MemberStatus);
@@ -233,11 +230,11 @@ namespace asi.asicentral.Tests
 	    public void LookupCompany()
 	    {
 			IBackendService personify = new PersonifyService();
-		    var companyInformation = personify.GetCompanyInfoByAsiNumber("30279");
-			Assert.IsNotNull(companyInformation.CompanyId);
+            var companyInformation = personify.GetCompanyInfoByAsiNumber("30279");
+            Assert.IsNotNull(companyInformation.CompanyId);
             Assert.IsNotNull(companyInformation.City);
             Assert.IsNotNull(companyInformation.MemberType);
-			Assert.IsNotNull(companyInformation.MemberStatus);
+            Assert.IsNotNull(companyInformation.MemberStatus);
 			companyInformation = personify.GetCompanyInfoByIdentifier(5806901);
             Assert.IsNotNull(companyInformation.Name);
             Assert.IsNotNull(companyInformation.City);
@@ -268,57 +265,13 @@ namespace asi.asicentral.Tests
             }
         }
 
-        private void PlaceOrderTest(string asiNumber, IStoreService storeService, ContextProduct[] products, string testName)
-        {
-            IBackendService personify = new PersonifyService(storeService);
-            StoreOrder order = CreateOrder(asiNumber, products, testName);
-
-            //simulate the store process by first processing the credit card
-            ICreditCardService cardService = new CreditCardService(new PersonifyService(storeService));
-            var cc = new CreditCard
-            {
-                Address = "",
-                CardHolderName = order.CreditCard.CardHolderName,
-                Type = order.CreditCard.CardType,
-                Number = order.CreditCard.CardNumber,
-                ExpirationDate = new DateTime(int.Parse(order.CreditCard.ExpYear), int.Parse(order.CreditCard.ExpMonth), 1),
-            };
-            Assert.IsTrue(cardService.Validate(cc));
-            var profileIdentifier = cardService.Store(order, cc, true);
-            Assert.IsNotNull(profileIdentifier);
-            Assert.IsNotNull(order.Company.ExternalReference);
-            order.CreditCard.ExternalReference = profileIdentifier;
-            personify.PlaceOrder(order, new Mock<IEmailService>().Object, null);
-        }
-
-        private CompanyInformation CreateBundleOrder(StoreOrder order, IStoreService storeService)
-        {
-            IBackendService personify = new PersonifyService(storeService);
-
-           //simulate the store process by first processing the credit card
-            ICreditCardService cardService = new CreditCardService(new PersonifyService(storeService));
-            var cc = new CreditCard
-            {
-                Address = "",
-                CardHolderName = order.CreditCard.CardHolderName,
-                Type = order.CreditCard.CardType,
-                Number = order.CreditCard.CardNumber,
-                ExpirationDate = new DateTime(int.Parse(order.CreditCard.ExpYear), int.Parse(order.CreditCard.ExpMonth), 1),
-            };
-            Assert.IsTrue(cardService.Validate(cc));
-            var profileIdentifier = cardService.Store(order, cc, true);
-            Assert.IsNotNull(profileIdentifier);
-            Assert.IsNotNull(order.Company.ExternalReference);
-            order.CreditCard.ExternalReference = profileIdentifier;
-            return personify.PlaceOrder(order, new Mock<IEmailService>().Object, null);
-        }
         [TestMethod]
         public void AddPhoneNumberTest()
         {
             var companyInfo = PersonifyClient.GetCompanyInfoByASINumber("33020");
 	        if (companyInfo != null)
 	        {
-		        PersonifyClient.AddPhoneNumber("2222222222", "USA", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+		        var cusComm = PersonifyClient.AddPhoneNumber("2222222222", "USA", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
 	        }
 	        else
 	        {
@@ -361,164 +314,107 @@ namespace asi.asicentral.Tests
             Assert.IsTrue(!string.IsNullOrEmpty(company.ExternalReference));
         }
 
-        #region FindCompanyInfo performance tests
-        // Companys and Employees: 
-        //      Reconcile Company Supplier 1, 2135555551, LEAD, 000010252975
-        //          Reconcile Individual1, 2135555551, 2135555552, individual1@reconcile.com, : 000010252976
-        //
-        //      Reconcile Company Supplier 2, 2135555561, LEAD, 000010252977
-        //          Reconcile Individual2, 2135555561, 2135555552, individual2@reconcile.com, : 000010252978
-        //
-        //      Reconcile Company Supplier 3, 2135555541, ASICENTRAL : 000010252985
-        //          Reconcile Individual5, 2135555541, 2135555552, individual5@reconcile.com, : 000010252986
-        //
-        //      Reconcile Company Distributor 1, 2135555571,      : 000010252979
-        //          Reconcile Individual3, 2135555571, 2135555552, individual3@reconcile.com, : 000010252980
-        //
-        //      Reconcile Company Distributor 2, 2135555501, LEAD : 000010252994
-        //          Reconcile Individual6, 2135555502, 2135555552, individual6@reconcile.com, : 000010252995
-        //
-        //      Reconcile Company Distributor 3, 2135555591, LEAD : 000010252996
-        //          Reconcile Individual7, 2135555592, 2135555552, individual7@reconcile.com, : 
-        //
-        //      Reconcile Company Decorator 1, 2135555581, LEAD  : 000010252982
-        //          Reconcile Individual4, 2135555581, 2135555552, individual4@reconcile.com, : 000010252984
-        //
-        //      Reconcile Company Decorator 2, 2135555511,      : 000010252998
-        //          Reconcile Individual8, 2135555512, 2135555553, individual8@reconcile.com, : 000010252999
-        //
-        //      Reconcile Company Decorator 3, 2135555531,      : 000010253000
-        //          Reconcile Individual9, 2135555532, 2135555553, individual9@reconcile.com, : 000010253001
-        //
-        [TestMethod]
-        public void ReconcileCompanyPerformance()
-        {
-            ReconcileCompanyMatchNameOnly();
-            ReconcileCompanyMatchNameOnly();
-            ReconcileCompanySupplierWithPhoneEmail();
-            ReconcileCompanyNonSupplierPhoneEmail();
-            ReconcileCompanyMultipleMatches();
-            ReconcileCompanySupplierNoMatch();
-        }
-
         [TestMethod]
         public void TestIsNewMembership()
         {
-
-            IStoreService storeService = MockupStoreService();
+            var storeService = MockupStoreService();
 
             // test active distributor is buying supplier membership
             var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 5);
-            var order = CreateOrder("10275773", new ContextProduct[] { distributor }, "TestIsNewMembership");
-            //order.OrderRequestType = "Distributor";
+            var order = CreateStoreOrder("10275773", new ContextProduct[] { distributor }, "TestIsNewMembership");
 
             order.Company = GetStoreCompany("Create Company Dist",
                               "2152220001",
                               "newDist001@gmail.com",
                               "DISTRIBUTOR");
 
-            IBackendService personify = new PersonifyService(storeService);
-            List<string> masterIdList = null;
-            var companyInfo = personify.FindCompanyInfo(order.Company, ref masterIdList);
-            //if (companyInfo == null)
-            //{
-            //    companyInfo = personify.CreateCompany(order.Company, "DISTRIBUTOR");
-            //    companyInfo = personify.CreateCompany(order.Company, "DISTRIBUTOR");
-            //}
+            order.Company.MemberStatus = StatusCode.ACTIVE.ToString();
+            order.Company.MemberType = "DISTRIBUTOR";
 
-            //companyInfo = personify.FindCompanyInfo(order.Company, ref masterIdList);
-            Assert.IsNotNull(companyInfo);
-            //Assert.AreEqual(companyInfo.MemberStatus, "ACTIVE");
-
-            order.Company.MemberStatus = companyInfo.MemberStatus;
-            order.Company.MemberType = companyInfo.MemberType;
-
-            order.Company.MatchingCompanyIds = string.Join("|", masterIdList);
             var newMemberType = string.Empty;
             var isNewMembership = order.IsNewMemberShip(ref newMemberType);
             Assert.IsTrue(isNewMembership);
-
-            var creditCard = new CreditCard()
-            {
-                Type = "Visa",
-                Number = "4111111111111111",
-                ExpirationDate = new DateTime(2018, 11, 15),
-                CardHolderName = "ASI Store",
-                Address = "Street",
-                City = "City",
-                State = "NJ",
-                Country = "USA",
-                PostalCode = "98123",
-            };
-            var profile = personify.SaveCreditCard(order, creditCard);
-
-            Assert.IsNotNull(profile);
-
-            // Test Supplier is buying supplier membership
         }
 
+        #region Test company matching logic
         [TestMethod]
         public void ReconcileCompanyMatchNameOnly()
         {
-            IBackendService personify = new PersonifyService();
+            var personify = new PersonifyService();
             List<string> masterIdList = null;
 
             //match name only  
             var company = GetStoreCompany("Reconcile Company Distributor 1",
-                                          "11000000",
+                                          "1100000001",
                                           "noMatch@reconcile.com", 
                                           "DISTRIBUTOR");
+            GetPersonifyCompany(personify, company);
 
+            company = GetStoreCompany("Reconcile Company Distributor 1",
+                                      "1100000002",
+                                      "noMatch1@reconcile.com",
+                                      "DISTRIBUTOR");
             var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsNull(companyInfo);
 
             // match name with extra special characters and phone/email
             company = GetStoreCompany(".Reconcile $@#?Company $@#?$!&,Distributor 1.",
-                                      "2135555571",
-                                      "individual3@reconcile.com",
+                                      "1100000001",
+                                      "noMatch@reconcile.com",
                                       "DISTRIBUTOR"); 
 
             companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
             Assert.AreEqual(companyInfo.Name, "Reconcile Company Distributor 1");
-            Assert.IsTrue(companyInfo.DNSFlag);
         }
 
         [TestMethod]
         public void MatchDistributorChange()
         {
-            //Distributor should not match to a delisted supplier
+            //Distributor should match to a delisted supplier
             //match name only  
-            IBackendService personify = new PersonifyService();
+            var personify = new PersonifyService();
             var company = GetStoreCompany("10 Again Inc",
                                           "818501800",
                                           "wholesale@10againclothing.com",
                                           "SUPPLIER");
-            List<string> masterIdList = null;
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
+            var companyInfo = GetPersonifyCompany(personify, company);
             Assert.IsNotNull(companyInfo);
-            Assert.AreEqual("000000090868", companyInfo.MasterCustomerId);
-            company.MemberType = "DISTRIBUTOR";
-            if (masterIdList != null) masterIdList = null;
+
+            List<string> masterIdList = null;
+            personify.UpdateCompanyStatus(company, StatusCode.DELISTED);
+            company = GetStoreCompany("10 Again Inc",
+                                      "818501801",
+                                      "wholesale1@10againclothing.com",
+                                      "SUPPLIER");
+
+            AddPersonifyCompany(personify, company);
             var companyInfo1 = personify.FindCompanyInfo(company, ref masterIdList);
-            Assert.IsTrue(companyInfo1 == null || companyInfo1.MasterCustomerId != companyInfo.MasterCustomerId);
+
+            Assert.IsTrue(companyInfo1 != null && companyInfo1.MasterCustomerId == companyInfo.MasterCustomerId);
+            personify.UpdateCompanyStatus(company, StatusCode.LEAD);
         }
 
         [TestMethod]
         public void ReconcileCompanySupplierWithPhoneEmail()
         {
             // match email only
-            var company = GetStoreCompany("Failed aaa Match",
-                                          "1110011100",
-                                          "individual1@reconcile.com",
+            var company = GetStoreCompany("Reconcile Supplier",
+                                          "1110011122",
+                                          "supplierReconcile@reconcile.com",
                                           "SUPPLIER");
 
             IBackendService personify = new PersonifyService();
             List<string> masterIdList = null;
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
+            var companyInfo = GetPersonifyCompany(personify, company);
+
+            company = GetStoreCompany("Failed aaa Match",
+                                      "1110011122",
+                                      "supplierReconcile@reconcile.com",
+                                      "SUPPLIER");
             Assert.IsTrue(companyInfo.CompanyId > 0);
-            Assert.AreEqual(companyInfo.Name, "Reconcile Company Supplier 1");
+            Assert.AreEqual(companyInfo.Name, "Reconcile Supplier");
 
             // match phone or email with LEAD matches
             company.Phone = "2135555552";
@@ -526,22 +422,6 @@ namespace asi.asicentral.Tests
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.IsTrue(companyInfo.MemberStatus.ToUpper() == "ASICENTRAL" ||
                           companyInfo.MemberStatus.ToUpper() == "LEAD");
-
-            company.Phone = "2135555553";
-            companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
-            Assert.IsTrue(companyInfo.CompanyId > 0);
-            Assert.IsTrue(companyInfo.MemberStatus.ToUpper() == "ASICENTRAL" ||
-                          companyInfo.MemberStatus.ToUpper() == "LEAD");
-
-            // phone or email without LEAD matches
-            company = GetStoreCompany("Failed aaa Match",
-                                      "2135555531",
-                                      "nommmmatch@reconcile.com",
-                                      "SUPPLIER"); ;
-            companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
-            Assert.IsTrue(companyInfo.CompanyId > 0);
-            Assert.IsTrue(string.IsNullOrEmpty(companyInfo.MemberStatus) || 
-                          ( companyInfo.MemberStatus.ToUpper() != "ASICENTRAL" && companyInfo.MemberStatus.ToUpper() != "LEAD"));
         }
 
         [TestMethod]
@@ -551,30 +431,45 @@ namespace asi.asicentral.Tests
             var company = GetStoreCompany("11x17 Inc",
                                           "9035410100",
                                           "jrw@11x17.com",
-                                          "MMS_LOAD");
+                                          "DISTRIBUTOR");
 
             IBackendService personify = new PersonifyService();
+            var companyInfo = GetPersonifyCompany(personify, company);
+            personify.UpdateCompanyStatus(company, StatusCode.MMS_LOAD);
             List<string> masterIdList = null;
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsNull(companyInfo);
+            personify.UpdateCompanyStatus(company, StatusCode.LEAD);
         }
 
         [TestMethod]
         public void ReconcileCompanyNonSupplierPhoneEmail()
         {
+            var personify = new PersonifyService();
             //Distributor
-            var company = GetStoreCompany("No matchhhh",
+            var company = GetStoreCompany("Reconcile Company Distributor 1",
                                           "2135555571",
                                           "individual3@reconcile.com",
                                           "DISTRIBUTOR");
 
-            IBackendService personify = new PersonifyService();
+            var companyInfo = GetPersonifyCompany(personify, company);
+
             List<string> masterIdList = null;
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
+            company = GetStoreCompany("No matchhhh",
+                                        "2135555571",
+                                        "individual3@reconcile.com",
+                                        "DISTRIBUTOR");
+            companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsTrue(companyInfo.CompanyId > 0);
             Assert.AreEqual(companyInfo.Name, "Reconcile Company Distributor 1");
 
             //Decorator 
+            company = GetStoreCompany("Reconcile Company Decorator",
+                                      "2135555511",
+                                      "individual8@reconcile.com",
+                                      "DECORATOR");
+
+            companyInfo = GetPersonifyCompany(personify, company);
             company = GetStoreCompany("No matchhhh",
                                       "2135555511",
                                       "individual8@reconcile.com",
@@ -582,7 +477,7 @@ namespace asi.asicentral.Tests
 
             companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsTrue(companyInfo.CompanyId > 0);
-            Assert.AreEqual(companyInfo.Name, "Reconcile Company Decorator 2");
+            Assert.AreEqual(companyInfo.Name, "Reconcile Company Decorator");
         }
 
         [TestMethod]
@@ -615,23 +510,22 @@ namespace asi.asicentral.Tests
                           companyInfo.MemberStatus.ToUpper() == "LEAD");
 
             //Decorator matching name and email only
-            company = GetStoreCompany("Reconcile Company Decorator 2",
-                                      "2135555553",
+            company = GetStoreCompany("Reconcile Company Decorator",
+                                      "2135555551",
                                       "individual8@reconcile.com",
                                       "DECORATOR");
-
+            GetPersonifyCompany(personify, company);
+            company.Name = "Reconcile Company Decorator 2";
             companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsTrue(companyInfo.CompanyId > 0);
-            Assert.IsTrue(companyInfo.MemberStatus.ToUpper() != "ASICENTRAL" &&
-                          companyInfo.MemberStatus.ToUpper() != "LEAD");
         }
 
         [TestMethod]
         public void ReconcileCompanySupplierNoMatch()
         {
             var company = GetStoreCompany("Invalid XXX Name",
-                                          "1110011100",
-                                          "nomatch@reconcile.com",
+                                          "11122111222",
+                                          "uniqeEmail@reconcile.com",
                                           "SUPPLIER");
 
             IBackendService personify = new PersonifyService();
@@ -639,6 +533,7 @@ namespace asi.asicentral.Tests
             var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.AreEqual(companyInfo, null);
         }
+        #endregion test company matching logic
 
         private StoreCompany GetStoreCompany(string name, string phone, string email, string memberType)
         {
@@ -679,31 +574,6 @@ namespace asi.asicentral.Tests
             return company;
         }
 
-        #endregion end FindCompanyInfo performance tests
-
-        [TestMethod]
-        public void AddActivity()
-        {
-            var company = GetStoreCompany("Reconcile Company Supplier 1",
-                                          "2135555552",
-                                          "individual4@reconcile.com",
-                                          "SUPPLIER");
-
-            IBackendService personify = new PersonifyService();
-            List<string> masterIdList = null;
-            var companyInfo = personify.FindCompanyInfo(company, ref masterIdList);            
-            Assert.IsTrue(companyInfo.CompanyId > 0);
-            Assert.IsTrue(masterIdList.Count > 0);
-            Assert.IsTrue(companyInfo.DNSFlag);
-
-            company.ExternalReference = string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
-            company.MatchingCompanyIds = string.Join("|", masterIdList);
-
-            personify.AddActivity(company, 
-                                  "This company tried to purchase supplier membership from the store but was rejected because the DNS flag is set to true. ", 
-                                  Activity.Exception);
-        }
-
         [TestMethod]
         public void PersonifyAddActivity()
         {
@@ -724,9 +594,76 @@ namespace asi.asicentral.Tests
             Assert.AreEqual(result.CallTypeCode, "STORE");
         }
 
+        private CompanyInformation GetPersonifyCompany(IBackendService personify, StoreCompany storeCompany)
+        {
+            personify = personify ?? new PersonifyService(MockupStoreService());
+            var matchList = new List<string>();
+            var companyInfo = personify.FindCompanyInfo(storeCompany, ref matchList);
+
+            if (companyInfo == null)
+            {
+                companyInfo = AddPersonifyCompany(personify, storeCompany);
+            }
+
+            return companyInfo;
+        }
+
+        private CompanyInformation AddPersonifyCompany(IBackendService personify, StoreCompany storeCompany)
+        {
+            personify = personify ?? new PersonifyService(MockupStoreService());
+            var contact = storeCompany.Individuals[0];
+            var address = storeCompany.Addresses[0];
+            var tag = DateTime.Now.Ticks;
+
+            var accountInfo = new User
+            {
+                FirstName = contact.FirstName + tag.ToString().Substring(0, 4),
+                LastName = contact.LastName + tag.ToString().Substring(0, 4),
+                Email = contact.Email,
+                CompanyName = storeCompany.Name,
+                PhoneAreaCode = storeCompany.Phone.Substring(0, 3),
+                Phone = storeCompany.Phone.Substring(3),
+                Street1 = "4800 Street Rd",
+                City = "Trevose",
+                State = "PA",
+                Zip = "19053",
+                Country = "USA",
+                CountryCode = "USA"
+            };
+
+            switch (storeCompany.MemberType)
+            {
+                case "DISTRIBUTOR":
+                    accountInfo.MemberTypeId = 6;
+                    break;
+                case "DECORATOR":
+                    accountInfo.MemberTypeId = 12;
+                    break;
+                case "SUPPLIER":
+                    accountInfo.MemberTypeId = 7;
+                    break;
+            }
+
+            var companyInfo = personify.AddCompany(accountInfo);
+            Assert.IsTrue(companyInfo.CompanyId > 0);
+
+            return companyInfo;
+        }
+
+        private IBackendService MockupPersonifyService(IStoreService storeService, StoreOrder storeOrder,
+                                                       string memberStatus)
+        {
+            var mockPersonifyService = new Mock<PersonifyService>(storeService);
+            mockPersonifyService.Setup(personifyService => personifyService.PlaceOrder(storeOrder, It.IsAny<IEmailService>(), string.Empty))
+                                .Returns(new CompanyInformation() { MemberStatus = memberStatus });
+
+            return mockPersonifyService.Object;
+        }
+
         private IStoreService MockupStoreService(string couponCode = null)
         {
             var products = new List<ContextProduct>();
+            products.Add(new ContextProduct { Id = 126, HasBackEndIntegration = true, Cost = 25 });
             products.Add(new ContextProduct { Id = 77, HasBackEndIntegration = true });
             products.Add(new ContextProduct { Id = 61, HasBackEndIntegration = true });
             products.Add(new ContextProduct { Id = 5, HasBackEndIntegration = true, Type = "Distributor Membership" });
@@ -737,15 +674,17 @@ namespace asi.asicentral.Tests
             var emailExpresses = new List<StoreDetailEmailExpress>();
             emailExpresses.Add(new StoreDetailEmailExpress { OrderDetailId = 1, ItemTypeId = 1 });
             var mappings = new List<PersonifyMapping>();
+            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 126, StoreOption = "1", PersonifyProduct = 458162300, PersonifyRateCode = "500_credits", PersonifyRateStructure = "MEMBER", ProductCode="Email_Marketing" });
             mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 77, StoreOption = "0", PersonifyProduct = 14471, PersonifyRateCode = "STD", PersonifyRateStructure = "MEMBER" });
             mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 61, StoreOption = "1;1X", PersonifyProduct = 1587, PersonifyRateCode = "1X", PersonifyRateStructure = "MEMBER" });
-            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 5, PersonifyProduct = 1003113722, PersonifyRateCode = "FY_DISTMEM", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "DIST_MEM", ClassCode = "DISTRIBUTOR" });
-            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 70, PersonifyProduct = 1003113722, PersonifyRateCode = "", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "DIST_MEM", ClassCode = "DISTRIBUTOR" });
+            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 5, PersonifyProduct = 1003113722, PersonifyRateCode = "FY_DISTMEM", PersonifyRateStructure = "MEMBER", ClassCode = "DISTRIBUTOR", PaySchedule = true});
+            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 70, PersonifyProduct = 1003113722, PersonifyRateCode = "", PersonifyRateStructure = "MEMBER", ClassCode = "DECORATOER" });
             //mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 2, PersonifyProduct = 1003113955, StoreOption = "SUPWAVEAPPFEE", PersonifyRateCode = "FP_SUPMEMSTDCON", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "SUPPLIERMEM_STD_CON" });
-            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 2, PersonifyProduct = 1003113955, StoreOption = string.Empty, PersonifyRateCode = "FP_SUPMEMSTDCON", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "SUPPLIERMEM_STD_CON", ClassCode = "SUPPLIER" });
-            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 2, PersonifyProduct = 1003113955, StoreOption = string.Empty, PersonifyRateCode = "STD_SUPMEMSTD", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "SUPPLIERMEM_STD", ClassCode = "SUPPLIER" });
-            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 7, PersonifyProduct = 1003113722, PersonifyRateCode = "FP_ESPPMDLMORD14", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "ESPP-MD-LM-ORD", ClassCode = "DISTRIBUTOR" });
-            mappings.Add(new PersonifyMapping { StoreContext = 8, StoreProduct = 7, StoreOption = "DISTFIRSTMONTH", PersonifyRateCode = "TRIAL1000_ESPPMDLMORD15", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "ESPP-MD-LM-ORD", ClassCode = "DISTRIBUTOR" });
+            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 2, PersonifyProduct = 439255209, StoreOption = string.Empty, PersonifyRateCode = "FP_SUPMEMSTDCON", PersonifyRateStructure = "MEMBER", ClassCode = "SUPPLIER", PaySchedule = true });
+            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 2, PersonifyProduct = 439255209, StoreOption = string.Empty, PersonifyRateCode = "STD_SUPMEMSTD", PersonifyRateStructure = "MEMBER", ClassCode = "SUPPLIER", PaySchedule = true });
+            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 7, PersonifyProduct = 438951661, PersonifyRateCode = "FP_ESPPMDLMORD14", ProductCode = "ESPP-MD-LM-ORD", PersonifyRateStructure = "MEMBER", ClassCode = "DISTRIBUTOR", PaySchedule = true });
+            mappings.Add(new PersonifyMapping { StoreContext = 8, StoreProduct = 7, StoreOption = couponCode, PersonifyProduct = 438951661, ProductCode = "ESPP-MD-LM-ORD", PersonifyRateCode = "SG_YR3_ESPPMDLMORD15", PersonifyRateStructure = "MEMBER", ClassCode = "DISTRIBUTOR", PaySchedule = true });
+            mappings.Add(new PersonifyMapping { StoreContext = 8, StoreProduct = 7, StoreOption = couponCode, PersonifyRateCode = "STD", PersonifyRateStructure = "MEMBER", ClassCode = "DISTRIBUTOR", PaySchedule = true });
             var codes = new List<LookSendMyAdCountryCode>();
             codes.Add(new LookSendMyAdCountryCode { Alpha2 = "USA", Alpha3 = "USA", CountryName = "United States" });
 
@@ -767,7 +706,7 @@ namespace asi.asicentral.Tests
             return mockObjectService.Object;
         }
 
-        private static StoreOrder CreateOrder(string asiNumber, ContextProduct[] products, string testName, 
+        private static StoreOrder CreateStoreOrder(string asiNumber, ContextProduct[] products, string testName, 
                                               string couponCode=null, decimal discountAmount = 0, Context context = null)
         {
             var tag = DateTime.Now.Ticks;
@@ -865,6 +804,32 @@ namespace asi.asicentral.Tests
                 orderDetails.Add(orderDetail);
             }
             return order;
+        }
+
+        private CompanyInformation CreatePersonifyOrder(StoreOrder order, IStoreService storeService)
+        {
+            IBackendService personify = new PersonifyService(storeService);
+            return CreatePersonifyOrder(order, storeService, personify);
+        }
+
+        private CompanyInformation CreatePersonifyOrder(StoreOrder order, IStoreService storeService, IBackendService personify)
+        {
+            //simulate the store process by first processing the credit card
+            ICreditCardService cardService = new CreditCardService(new PersonifyService(storeService));
+            var cc = new CreditCard
+            {
+                Address = "",
+                CardHolderName = order.CreditCard.CardHolderName,
+                Type = order.CreditCard.CardType,
+                Number = order.CreditCard.CardNumber,
+                ExpirationDate = new DateTime(int.Parse(order.CreditCard.ExpYear), int.Parse(order.CreditCard.ExpMonth), 1),
+            };
+            Assert.IsTrue(cardService.Validate(cc));
+            var profileIdentifier = cardService.Store(order, cc, true);
+            Assert.IsNotNull(profileIdentifier);
+            Assert.IsNotNull(order.Company.ExternalReference);
+            order.CreditCard.ExternalReference = profileIdentifier;
+            return personify.PlaceOrder(order, new Mock<IEmailService>().Object, string.Empty);
         }
     }
 }
