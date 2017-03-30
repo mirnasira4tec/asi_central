@@ -46,7 +46,8 @@ namespace asi.asicentral.web.Controllers.Show
             if (!string.IsNullOrEmpty(asiNumber))
             {
                 companyList = companyList.Where(item => item.ASINumber != null
-                 && item.ASINumber == asiNumber);
+                 && item.ASINumber == asiNumber || item.SecondaryASINo != null
+                 && item.SecondaryASINo == asiNumber);
             }
             company.TotalRecordCount = companyList.Count();
             companyList = companyList.OrderBy(form => form.Name);
@@ -86,6 +87,7 @@ namespace asi.asicentral.web.Controllers.Show
                     objCompany.WebUrl = company.Url;
                     objCompany.MemberType = company.MemberType;
                     objCompany.ASINumber = (company.MemberType == "Non-Member") ? null : company.ASINumber;
+                    objCompany.SecondaryASINo = company.SecondaryASINo;
                     objCompany.UpdateSource = "ShowCompanyController - AddCompany";
                     objCompany = ShowHelper.CreateOrUpdateCompany(ObjectService, objCompany);
 
@@ -155,6 +157,7 @@ namespace asi.asicentral.web.Controllers.Show
                     {
                         company.ASINumber = CompanyModel.ASINumber;
                     }
+                    company.SecondaryASINo = CompanyModel.SecondaryASINo;
                     company.Url = CompanyModel.WebUrl;
                     ShowCompanyAddress companyAddress = ObjectService.GetAll<ShowCompanyAddress>().FirstOrDefault(item => item.CompanyId == id);
                     if (companyAddress != null)

@@ -36,6 +36,11 @@ namespace asi.asicentral.web.Controllers.Show
             var asinumber = ds.Rows[rowId]["ASINO"].ToString().Trim();
             var name = ds.Rows[rowId]["Company"].ToString().Trim();
             var memberType = ds.Rows[rowId]["MemberType"].ToString().Trim();
+            string secondaryASINo = string.Empty;
+            if (ds.Columns.Contains("Secondary ASINO"))
+            {
+                 secondaryASINo = ds.Rows[rowId]["Secondary ASINO"].ToString().Trim();
+            }
             if (fasiliateFlag == true)
             {
                 var companies = ObjectService.GetAll<ShowCompany>().Where(item => (item.ASINumber == asinumber)).ToList();
@@ -59,6 +64,7 @@ namespace asi.asicentral.web.Controllers.Show
 
             company.Name = name;
             company.ASINumber = asinumber;
+            company.SecondaryASINo = secondaryASINo;
             company.MemberType = memberType;
             company.UpdateSource = "ExcelUploadcontroller-Index";
             company.UpdateDate = DateTime.UtcNow;
