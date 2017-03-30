@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace asi.asicentral.web.model.velocity
+namespace asi.asicentral.web.Models.velocity
 {
     public class ColorMapping
     {
