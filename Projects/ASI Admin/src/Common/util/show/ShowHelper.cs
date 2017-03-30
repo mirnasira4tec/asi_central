@@ -146,6 +146,7 @@ namespace asi.asicentral.util.show
             company.WebUrl = objCompany.WebUrl;
             company.MemberType = objCompany.MemberType;
             company.ASINumber = objCompany.ASINumber;
+            company.SecondaryASINo = objCompany.SecondaryASINo;
             company.LogoUrl = objCompany.LogoUrl;
             company.UpdateDate = DateTime.UtcNow;
             company.UpdateSource = objCompany.UpdateSource;
