@@ -1,4 +1,4 @@
-﻿using asi.asicentral.web.model.velocity;
+﻿using asi.asicentral.web.Models.velocity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
