@@ -38,8 +38,8 @@ namespace asi.asicentral.web.Controllers.velocity
                                  .Select(l => l.Split(','))
                                     .Select(c => new ColorMapping
                                     {
-                                        BaseColor = c[0],
-                                        MappingColor = c[1],
+                                        SupplierColor = c[0].Trim(),
+                                        ColorGroup = c[1].Trim(),
                                         CompayId = MapDetails.CompanyId,
                                     }).ToList();
 
@@ -48,11 +48,11 @@ namespace asi.asicentral.web.Controllers.velocity
                         try
                         {
                             var isColorMapped = _velocityService.MapColor(color);
-                            status.Add(new KeyValuePair<string, string>(string.Format("{0},{1}", color.BaseColor, color.MappingColor), isColorMapped ? "success" : "already exists."));
+                            status.Add(new KeyValuePair<string, string>(string.Format("{0},{1}", color.SupplierColor, color.ColorGroup), isColorMapped ? "success" : "already exists."));
                         }
                         catch (Exception ex)
                         {
-                            status.Add(new KeyValuePair<string, string>(string.Format("{0},{1}", color.BaseColor, color.MappingColor), ex.InnerException != null && !string.IsNullOrEmpty(ex.InnerException.Message) ? ex.InnerException.Message : ex.Message));
+                            status.Add(new KeyValuePair<string, string>(string.Format("{0},{1}", color.SupplierColor, color.ColorGroup), ex.InnerException != null && !string.IsNullOrEmpty(ex.InnerException.Message) ? ex.InnerException.Message : ex.Message));
                         }
                     }
 

@@ -9,8 +9,8 @@ namespace asi.asicentral.web.Models.velocity
     public class ColorMapping
     {
         public int CompayId { get; set; }
-        public string BaseColor { get; set; }
-        public string MappingColor { get; set; }
+        public string SupplierColor { get; set; }
+        public string ColorGroup { get; set; }
         public string Status { get; set; }
     }
 }

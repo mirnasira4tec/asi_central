@@ -22,7 +22,7 @@
             <div class="span5">
                 <div class="form-group">
                     @Html.LabelFor(model => model.ColorData)
-                    @Html.TextAreaFor(model => model.ColorData, new { style = "width: 500px; height:200px;" })
+                    @Html.TextAreaFor(model => model.ColorData, new { style = "width: 500px; height:200px;", placeholder="SupplierColor,ColorGroup" })
                     @Html.ValidationMessageFor(model => model.ColorData)
                 </div>
             </div>
