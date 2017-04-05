@@ -14,8 +14,8 @@ namespace asi.asicentral.Tests
         {
             ColorMapping colorMapping = new ColorMapping();
             colorMapping.CompayId = 9207; //Company Name - ASI 30232
-            colorMapping.MappingColor = Guid.NewGuid().ToString();
-            colorMapping.BaseColor = Guid.NewGuid().ToString();
+            colorMapping.ColorGroup = Guid.NewGuid().ToString();
+            colorMapping.SupplierColor = Guid.NewGuid().ToString();
 
             var velocityService = new VelocityContext();
             var velocityColorMapping = new VelocityService(velocityService);
