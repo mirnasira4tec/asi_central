@@ -57,6 +57,7 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string SP_UPDATE_DISTRIBUTOR_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_DISTRIBUTOR_PROC";
         private const string SP_UPDATE_SUPPLIER_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_SUPPLIER_PROC";
         private const string SP_UPDATE_DECORATOR_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_DECORATOR_PROC";
+        private const string SP_OAM_INSERT_CREDIT_CARD = "USR_OAM_INSERT_CREDIT_CARD_PROC";
 
 		private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
 		private static readonly IDictionary<string, string> ASIShowCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "SHOW AE" }, { "DISCOVER", "SHOW DISC" }, { "MASTERCARD", "SHOW MS" }, { "VISA", "SHOW VS" } };
@@ -77,6 +78,26 @@ namespace asi.asicentral.services.PersonifyProxy
             {SP_GET_BUNDLE_PRODUCT_DETAILS, new List<string>() { "@ip_Bundle_Group_Name ", "@ip_Rate_Structure", "@ip_Rate_Code" }},
             {SP_GET_PRODUCT_DETAILS, new List<string>() { "@ip_parent_product", "@ip_product_code", "@ip_Rate_Structure", "@ip_Rate_Code" }},
             {SP_EEX_EMAIL_USAGE_UPDATE, new List<string>() { "@email_address", "@usage_code", "@unsubscribe", "@is_globally_suppressed" }},
+            {SP_OAM_INSERT_CREDIT_CARD, new List<string>() {"@ip_master_customer_id",
+                                                            "@ip_sub_customer_id",
+                                                            "@ip_org_id",
+                                                            "@ip_org_unit_id",
+                                                            "@ip_cc_name",
+                                                            "@ip_address_1",
+                                                            "@ip_city",
+                                                            "@ip_state",
+                                                            "@ip_postal_code",
+                                                            "@ip_country_code",
+                                                            "@ip_requester",
+                                                            "@ip_cc_acct_no",
+                                                            "@ip_cc_exp_date",
+                                                            "@ip_currency_code",
+                                                            "@ip_merchant_id",
+                                                            "@ip_customer_ip_address",
+                                                            //"@ip_partial_cc_acct_no",
+                                                            "@ip_cc_authorization",
+                                                            "@ip_auth_reference",
+                                                            "@ip_user"}},
             {SP_GET_SUPPLIER_MEMBER_QUESTRIONS, new List<string>(){"@ip_master_customer_id", "@ip_sub_customer_id"}},
             {SP_GET_DISTRIBUTOR_MEMBER_QUESTRIONS, new List<string>(){"@ip_master_customer_id", "@ip_sub_customer_id"}},
             {SP_GET_DECORATOR_MEMBER_QUESTRIONS, new List<string>(){"@ip_master_customer_id", "@ip_sub_customer_id"}},
@@ -1731,7 +1752,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return accountTypes;
         }
         
-        private static StoredProcedureOutput ExecutePersonifySP(string spName, List<string> parameters)
+        public static StoredProcedureOutput ExecutePersonifySP(string spName, List<string> parameters)
         {
             _log.Debug(string.Format("ExecutePersonifySP - start: StoreProcedure name - {0})", spName));
             var startTime = DateTime.Now;
@@ -2323,39 +2344,61 @@ namespace asi.asicentral.services.PersonifyProxy
             return resp.IsValid ?? false;
         }
 
-        public static string SaveCreditCard(string asiCompany, string masterCustomerId, int subCustomerId, CreditCard creditCard)
+        public static string SaveCreditCard(string asiCompany, string masterCustomerId, int subCustomerId, CreditCard creditCard, string ipAddress)
         {
 	        if (string.IsNullOrEmpty(asiCompany)) asiCompany = "ASI";
-	        string creditCardType = CreditCardType[asiCompany][creditCard.Type.ToUpper()];
-            var customerCreditCardInput = new CustomerCreditCardInput()
-            {
-                MasterCustomerId = masterCustomerId,
-                SubCustomerId = subCustomerId,
-                ReceiptType = creditCardType,
-                CreditCardNumber = creditCard.Number,
-                ExpirationMonth = (short)creditCard.ExpirationDate.Month,
-                ExpirationYear = (short)creditCard.ExpirationDate.Year,
-                NameOnCard = creditCard.CardHolderName,
-                BillingAddressStreet = creditCard.Address,
-                BillingAddressCity = creditCard.City,
-                BillingAddressState = creditCard.State,
-                BillingAddressPostalCode = creditCard.PostalCode,
-                BillingAddressCountryCode = creditCard.CountryCode,
-                DefaultFlag = true,
-				CompanyNumber = CompanyNumber[asiCompany],
-                AddedOrModifiedBy = ADDED_OR_MODIFIED_BY
-            };
-            var resp = SvcClient.Post<CustomerCreditCardOutput>("AddCustomerCreditCard", customerCreditCardInput);
-            if (!(resp.Success?? false))
-            {
-                var m = string.Format("Error in saving credit {0} to Personify", GetCreditCardReference(creditCard.Number));
-                if (resp.AddCustomerCreditCardVI.Any())
-                {
-                    m = string.Format("{0}\n{1}", m, resp.AddCustomerCreditCardVI[0].Message);
-                }
-                throw new Exception(m);
-            }
-            return resp.CreditCardProfileId;
+            var resp = ExecutePersonifySP(SP_OAM_INSERT_CREDIT_CARD, new List<string>() { 
+                masterCustomerId, 
+                subCustomerId.ToString(),
+                asiCompany,
+                asiCompany,
+                creditCard.CardHolderName,
+                creditCard.Address,
+                creditCard.City,
+                creditCard.State,
+                creditCard.PostalCode,
+                creditCard.Country,
+                ADDED_OR_MODIFIED_BY,
+                creditCard.MaskedPAN,
+                creditCard.ExpirationDate.ToString(),
+                "USD",
+                "ASICompanies",
+                ipAddress,
+                creditCard.TokenId,
+                creditCard.AuthReference,               
+                "Store"
+            });
+	        //string creditCardType = CreditCardType[asiCompany][creditCard.Type.ToUpper()];
+            //var customerCreditCardInput = new CustomerCreditCardInput()
+            //{
+            //    MasterCustomerId = masterCustomerId,
+            //    SubCustomerId = subCustomerId,
+            //    ReceiptType = creditCardType,
+            //    CreditCardNumber = creditCard.Number,
+            //    ExpirationMonth = (short)creditCard.ExpirationDate.Month,
+            //    ExpirationYear = (short)creditCard.ExpirationDate.Year,
+            //    NameOnCard = creditCard.CardHolderName,
+            //    BillingAddressStreet = creditCard.Address,
+            //    BillingAddressCity = creditCard.City,
+            //    BillingAddressState = creditCard.State,
+            //    BillingAddressPostalCode = creditCard.PostalCode,
+            //    BillingAddressCountryCode = creditCard.CountryCode,
+            //    DefaultFlag = true,
+            //    CompanyNumber = CompanyNumber[asiCompany],
+            //    AddedOrModifiedBy = ADDED_OR_MODIFIED_BY
+            //};
+
+            ////var resp = SvcClient.Post<CustomerCreditCardOutput>("AddCustomerCreditCard", customerCreditCardInput);
+            //if (!(resp.Success?? false))
+            //{
+            //    var m = string.Format("Error in saving credit {0} to Personify", GetCreditCardReference(creditCard.Number));
+            //    if (resp.AddCustomerCreditCardVI.Any())
+            //    {
+            //        m = string.Format("{0}\n{1}", m, resp.AddCustomerCreditCardVI[0].Message);
+            //    }
+            //    throw new Exception(m);
+            //}
+            return resp.Data;
         }
 
         public static ASICustomerCreditCard GetCreditCardByProfileId(string masterCustomerId, int subCustomerId, string profileId)
