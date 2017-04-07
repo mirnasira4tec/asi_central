@@ -24,11 +24,11 @@ namespace asi.asicentral.web.database
             object[] param = 
             {
                 new SqlParameter("@CompanyId", colorMapping.CompayId),
-                new SqlParameter("@MappingColor", colorMapping.MappingColor ),
-                new SqlParameter("@BaseColor", colorMapping.BaseColor ),                
+                new SqlParameter("@ColorGroup", colorMapping.ColorGroup ),
+                new SqlParameter("@SupplierColor", colorMapping.SupplierColor ),                
             };
 
-            var val = Database.SqlQuery<long>("SP_INSERTCOLORMAPPING @CompanyId, @MappingColor, @BaseColor", param)
+            var val = Database.SqlQuery<long>("SP_INSERTCOLORMAPPING @CompanyId, @ColorGroup, @SupplierColor", param)
                                 .ToList<long>();
             return val[0] > 0;
         }
