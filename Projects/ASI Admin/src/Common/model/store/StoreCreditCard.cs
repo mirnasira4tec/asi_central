@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,12 @@ namespace asi.asicentral.model.store
         public string ExpMonth { get; set; }
         public string ExpYear { get; set; }
         public string ExternalReference { get; set; }
+
+        [NotMapped]
+        public string TokenId { get; set; }
+        [NotMapped]
+        public string AuthReference { get; set; }
+
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
