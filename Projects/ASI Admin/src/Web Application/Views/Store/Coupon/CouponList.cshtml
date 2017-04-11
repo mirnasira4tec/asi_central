@@ -34,9 +34,19 @@
 </div>
 @using (Html.BeginForm())
 {
+    if (Authorized.IsAuthorizedUser())
+    {
     <a href="/store/Coupon/Add" class="btn btn-primary">Add </a>
     <br />
     <br />
+    }
+    else
+    {
+     <a href="#" class="btn btn-primary" disabled="disabled">Add </a>
+    <br />
+    <br />  
+    }
+    
     <table class="table table-bordered table-condensed table-striped">
         <thead>
             <tr>
@@ -55,19 +65,34 @@
             {
                 <tr>
                     <td><a class="delete" id="@coupon.CouponCode" href="/store/Coupon/Delete?id=@coupon.Id"><i class="icon-trash"></i></a></td>
-
-                    <td><a href="/store/Coupon/Edit?id=@coupon.Id" data-toggle="tooltip" data-placement="right" title="@if (coupon.ContextId != null
+                    @if (Authorized.IsAuthorizedUser())
+                    {
+                        <td><a href="/store/Coupon/Edit?id=@coupon.Id" data-toggle="tooltip" data-placement="right" title="@if (coupon.ContextId != null
                                                                                                                                && coupon.ProductId != null)
-                                                                                                                       { <text>Context: </text>@GetContextName(coupon.ContextId); <text>Product: </text>@GetProductName(coupon.ProductId);
-                                                                                                                       }
-                                                                                                                       else if (coupon.ContextId != null)
-                                                                                                                       { @GetContextName(coupon.ContextId);
-                                                                                                                       }
-                                                                                                                       else if (coupon.ProductId != null)
-                                                                                                                       { @GetProductName(coupon.ProductId);
-                                                                                                                       }">@coupon.CouponCode</a></td>
-
-
+                                                                                                                           { <text>Context: </text>@GetContextName(coupon.ContextId); <text>Product: </text>@GetProductName(coupon.ProductId);
+                                                                                                                           }
+                                                                                                                           else if (coupon.ContextId != null)
+                                                                                                                           { @GetContextName(coupon.ContextId);
+                                                                                                                           }
+                                                                                                                           else if (coupon.ProductId != null)
+                                                                                                                           { @GetProductName(coupon.ProductId);
+                                                                                                                           }">
+                            @coupon.CouponCode</a></td>
+                    }
+                    else
+                    {
+                        <td><a href="#" data-toggle="tooltip" data-placement="right" title="@if (coupon.ContextId != null
+                                                                                                                               && coupon.ProductId != null)
+                                                                                            { <text>Context: </text>@GetContextName(coupon.ContextId); <text>Product: </text>@GetProductName(coupon.ProductId);
+                                                                                            }
+                                                                                            else if (coupon.ContextId != null)
+                                                                                            { @GetContextName(coupon.ContextId);
+                                                                                            }
+                                                                                            else if (coupon.ProductId != null)
+                                                                                            { @GetProductName(coupon.ProductId);
+                                                                                            }">
+                            @coupon.CouponCode</a></td>
+                    }
                     <td>
                         @if (coupon.ContextId != null && coupon.ProductId != null)
                         {
