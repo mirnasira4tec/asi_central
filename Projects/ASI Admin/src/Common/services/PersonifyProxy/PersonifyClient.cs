@@ -2344,61 +2344,45 @@ namespace asi.asicentral.services.PersonifyProxy
             return resp.IsValid ?? false;
         }
 
-        public static string SaveCreditCard(string asiCompany, string masterCustomerId, int subCustomerId, CreditCard creditCard, string ipAddress)
+        public static string SaveCreditCard(string asiCompany, string masterCustomerId, int subCustomerId, CreditCard creditCard, string ipAddress, string currency = "USD")
         {
-	        if (string.IsNullOrEmpty(asiCompany)) asiCompany = "ASI";
-            var resp = ExecutePersonifySP(SP_OAM_INSERT_CREDIT_CARD, new List<string>() { 
-                masterCustomerId, 
-                subCustomerId.ToString(),
-                asiCompany,
-                asiCompany,
-                creditCard.CardHolderName,
-                creditCard.Address,
-                creditCard.City,
-                creditCard.State,
-                creditCard.PostalCode,
-                creditCard.Country,
-                ADDED_OR_MODIFIED_BY,
-                creditCard.MaskedPAN,
-                creditCard.ExpirationDate.ToString(),
-                "USD",
-                "ASICompanies",
-                ipAddress,
-                creditCard.TokenId,
-                creditCard.AuthReference,               
-                "Store"
-            });
-	        //string creditCardType = CreditCardType[asiCompany][creditCard.Type.ToUpper()];
-            //var customerCreditCardInput = new CustomerCreditCardInput()
-            //{
-            //    MasterCustomerId = masterCustomerId,
-            //    SubCustomerId = subCustomerId,
-            //    ReceiptType = creditCardType,
-            //    CreditCardNumber = creditCard.Number,
-            //    ExpirationMonth = (short)creditCard.ExpirationDate.Month,
-            //    ExpirationYear = (short)creditCard.ExpirationDate.Year,
-            //    NameOnCard = creditCard.CardHolderName,
-            //    BillingAddressStreet = creditCard.Address,
-            //    BillingAddressCity = creditCard.City,
-            //    BillingAddressState = creditCard.State,
-            //    BillingAddressPostalCode = creditCard.PostalCode,
-            //    BillingAddressCountryCode = creditCard.CountryCode,
-            //    DefaultFlag = true,
-            //    CompanyNumber = CompanyNumber[asiCompany],
-            //    AddedOrModifiedBy = ADDED_OR_MODIFIED_BY
-            //};
+            var profileId = string.Empty;
+            if( !string.IsNullOrEmpty(masterCustomerId) && creditCard != null && !string.IsNullOrEmpty(ipAddress) && !string.IsNullOrEmpty(currency))
+            {
+                if( System.Web.HttpContext.Current.Request.Url.Authority.Contains("localhost") )
+                {
+                    ipAddress = "127.0.0.1";
+                }
+                var response = ExecutePersonifySP(SP_OAM_INSERT_CREDIT_CARD, new List<string>() { 
+                    masterCustomerId, 
+                    subCustomerId.ToString(),
+                    asiCompany,
+                    asiCompany,
+                    creditCard.CardHolderName,
+                    creditCard.Address,
+                    creditCard.City,
+                    creditCard.State,
+                    creditCard.PostalCode,
+                    creditCard.Country,
+                    ADDED_OR_MODIFIED_BY,
+                    creditCard.Number,
+                    creditCard.ExpirationDate.ToString(),
+                    currency,
+                    "ASIcompanies",
+                    ipAddress,
+                    creditCard.TokenId,
+                    creditCard.AuthReference,               
+                    "WEBUSER"
+                });
 
-            ////var resp = SvcClient.Post<CustomerCreditCardOutput>("AddCustomerCreditCard", customerCreditCardInput);
-            //if (!(resp.Success?? false))
-            //{
-            //    var m = string.Format("Error in saving credit {0} to Personify", GetCreditCardReference(creditCard.Number));
-            //    if (resp.AddCustomerCreditCardVI.Any())
-            //    {
-            //        m = string.Format("{0}\n{1}", m, resp.AddCustomerCreditCardVI[0].Message);
-            //    }
-            //    throw new Exception(m);
-            //}
-            return resp.Data;
+                if (response != null && !string.IsNullOrEmpty(response.Data) && response.Data.Trim().ToUpper() != "NO DATA FOUND")
+                {
+                    var match = Regex.Match(response.Data, @"<CUS_CREDIT_CARD_PROFILE_ID>(.*?)</CUS_CREDIT_CARD_PROFILE_ID>");
+                    if (match.Success)
+                        profileId = match.Groups[1].Value;
+                }
+            }
+            return profileId;
         }
 
         public static ASICustomerCreditCard GetCreditCardByProfileId(string masterCustomerId, int subCustomerId, string profileId)

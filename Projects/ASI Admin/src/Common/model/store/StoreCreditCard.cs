@@ -17,9 +17,7 @@ namespace asi.asicentral.model.store
         public string ExpYear { get; set; }
         public string ExternalReference { get; set; }
 
-        [NotMapped]
         public string TokenId { get; set; }
-        [NotMapped]
         public string AuthReference { get; set; }
 
         public DateTime CreateDate { get; set; }
