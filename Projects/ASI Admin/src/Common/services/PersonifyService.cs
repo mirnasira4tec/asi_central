@@ -98,7 +98,11 @@ namespace asi.asicentral.services
                                               .Where(map => (map.StoreContext == null || map.StoreContext == order.ContextId) && map.StoreProduct == orderDetail.Product.Id)
                                               .OrderByDescending(m => m.StoreContext).ToList();
 
-                if (orderDetail.Product.Id != 61 && orderDetail.Product.Id != 77)
+                if (orderDetail.Product.Id == PersonifyClient.EMAIL_MARKETING_PRODUCT_ID && orderDetail.OptionId.HasValue)  // email marketing
+                {
+                    allMappings = allMappings.FindAll(m => m.StoreOption == orderDetail.OptionId.Value.ToString());
+                }
+                else if (orderDetail.Product.Id != 61 && orderDetail.Product.Id != 77 )
                 {
                     if (coupon != null && !string.IsNullOrEmpty(coupon.CouponCode))
                     {
@@ -551,7 +555,7 @@ namespace asi.asicentral.services
 			order.ExternalReference = companyInfo.MasterCustomerId;
             //Add credit card to the company
 			//@todo CC Personify temporary measure, always add the credit card. No longer checking if (profile == string.Empty) from string profile = PersonifyClient.GetCreditCardProfileId(order.GetASICompany(), companyInfo, creditCard);
-			var profile = PersonifyClient.SaveCreditCard(order.GetASICompany(), companyInfo.MasterCustomerId, companyInfo.SubCustomerId, creditCard);
+			var profile = PersonifyClient.SaveCreditCard(order.GetASICompany(), companyInfo.MasterCustomerId, companyInfo.SubCustomerId, creditCard, order.IPAdd);
             log.Debug(string.IsNullOrWhiteSpace(profile) ?
                 "Fail to save the credit." : string.Format("Saved credit profile id : {0}", profile));
             if (string.IsNullOrEmpty(profile)) throw new Exception("Credit card can't be saved to Personify.");
