@@ -34,9 +34,12 @@
 </div>
 @using (Html.BeginForm())
 {
-    <a href="/store/Coupon/Add" class="btn btn-primary" id="btnAdd">Add </a>
+    if (Authorized.IsAuthorizedUser())
+    {
+    <a href="/store/Coupon/Add" class="btn btn-primary">Add </a>
     <br />
     <br />
+    }
     <table class="table table-bordered table-condensed table-striped">
         <thead>
             <tr>
@@ -57,12 +60,12 @@
             @foreach (var coupon in Model.Coupons)
             {
                 <tr>
-                    
-                        @if (Authorized.IsAuthorizedUser())
-                        {
-                            <td><a class="delete" id="@coupon.CouponCode" href="/store/Coupon/Delete?id=@coupon.Id"><i class="icon-trash"></i></a></td>
-                        }
-                    
+
+                    @if (Authorized.IsAuthorizedUser())
+                    {
+                        <td><a class="delete" id="@coupon.CouponCode" href="/store/Coupon/Delete?id=@coupon.Id"><i class="icon-trash"></i></a></td>
+                    }
+
                     <td><a href="/store/Coupon/Edit?id=@coupon.Id" data-toggle="tooltip" data-placement="right" title="@if (coupon.ContextId != null
                                                                                                                                && coupon.ProductId != null)
                                                                                                                        { <text>Context: </text>@GetContextName(coupon.ContextId); <text>Product: </text>@GetProductName(coupon.ProductId);
@@ -139,14 +142,6 @@
                 return true
             else
                 return false
-        });
-        $(function () {
-            if ('@Authorized.IsAuthorizedUser()' == 'True') {
-                $('#btnAdd').attr('disabled', false);
-            }
-            else {
-                $('#btnAdd').attr('disabled', true);
-            }
         });
     </script>
 }
