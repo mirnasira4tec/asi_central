@@ -1,0 +1,36 @@
+﻿@model List<KeyValuePair<string, string>>
+@{
+    ViewBag.Title = "Result";
+    Layout = "~/Views/Shared/_CentralApiLayout.cshtml";
+}
+<h2>Color Map Status</h2>
+@if (Model != null && Model.Any())
+{   
+    <a class="btn btn-default" href="@Url.Action("Index", "Velocity")">Add Colors</a>
+    <table class="table table-bordered table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>Supplier Color</th>
+                <th>Color Group</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var status in @Model)
+            {
+                string[] Color = status.Key.Split(',');
+                <tr>
+                    <td style="width: 25%;">@Color[0]</td>
+                    <td style="width: 25%;">@Color[1]</td>
+                    <td style="width: 25%;">@status.Value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{ 
+    <strong>No status found.</strong> 
+}
+
+
