@@ -15,6 +15,7 @@ using asi.asicentral.web.store.interfaces;
 using System.Net.Mail;
 using System.Text;
 using asi.asicentral.util.store.emailmarketing;
+using System.Configuration;
 
 namespace asi.asicentral.web.Controllers.Store
 {
@@ -971,18 +972,24 @@ namespace asi.asicentral.web.Controllers.Store
             if (command == ApplicationController.COMMAND_ACCEPT)
             {
                 //make sure we have external reference
-                if (string.IsNullOrEmpty(order.ExternalReference)) throw new Exception("You need to specify a Timms id to approve an order");
+                //if (string.IsNullOrEmpty(order.ExternalReference)) throw new Exception("You need to specify a Timms id to approve an order");
 
                 //make sure timms id contains numbers only
-                int num;
-                bool success = int.TryParse(order.ExternalReference, out num);
-                if (!success) throw new Exception("Timms id must be numbers only.");
+                if (!string.IsNullOrEmpty(order.ExternalReference))
+                {
+                    int num;
+                    bool success = int.TryParse(order.ExternalReference, out num);
+                    if (!success) throw new Exception("Timms id must be numbers only.");
+                }
 
                 if (System.Web.HttpContext.Current != null)
                 {
                     if (System.Web.HttpContext.Current.User.Identity as System.Security.Principal.WindowsIdentity != null)
                         order.ApprovedBy = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
                 }
+
+                // save credit card info to Personify
+                SaveCreditCardInfo(order);
 
                 var product = order.OrderDetails[0].Product;
                 var orderPlaced = true;
@@ -1053,6 +1060,52 @@ namespace asi.asicentral.web.Controllers.Store
                 {
                     LogService log = LogService.GetLog(this.GetType());
                     log.Error(ex.Message);
+                    throw ex;
+                }
+            }
+        }
+
+        private void SaveCreditCardInfo(StoreOrder order)
+        {
+            if (order != null && order.CreditCard != null && order.BillingIndividual != null )
+            {
+                var billingInfo = order.BillingIndividual;
+                var creditCard = new asi.asicentral.model.CreditCard()
+                {
+                    Address = billingInfo.Address.Street1,
+                    City = billingInfo.Address.City,
+                    PostalCode = billingInfo.Address.Zip,
+                    State = billingInfo.Address.State,
+                    Country = billingInfo.Address.Country,
+                    //CountryCode = billingInfo.Address,  //TODO:: code ???
+                    CardHolderName = order.CreditCard.CardHolderName,
+                    Type = order.CreditCard.CardType,
+                    Number = order.CreditCard.CardNumber,
+                    MaskedPAN = order.CreditCard.CardNumber,
+                    ExpirationDate = new DateTime(Int32.Parse(order.CreditCard.ExpYear), Int32.Parse(order.CreditCard.ExpMonth), 01),
+                    ExternalReference = order.CreditCard.ExternalReference,
+                    TokenId = order.CreditCard.TokenId,
+                    AuthReference = order.CreditCard.AuthReference
+                };
+
+                try
+                {
+                    if (string.IsNullOrEmpty(ConfigurationManager.AppSettings["svcUri"]))
+                    {
+                        throw new Exception("Personify Service is not provided");
+                    }
+
+                    order.CreditCard.ExternalReference = BackendService.SaveCreditCard(order, creditCard);
+
+                    if (creditCard.Number.Length >= 4)
+                        creditCard.MaskedPAN = "****" + creditCard.Number.Substring(creditCard.Number.Length - 4, 4);
+
+                    StoreService.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    var log = LogService.GetLog(this.GetType());
+                    log.Debug(string.Format("Error in saving credit card to personify: {0}.", ex.Message));
                     throw ex;
                 }
             }

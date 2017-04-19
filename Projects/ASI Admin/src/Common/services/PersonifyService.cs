@@ -122,15 +122,6 @@ namespace asi.asicentral.services
                 }
                 #endregion mapping items from mapping table
 
-                #region ******* need to revisit and remove after packages ******
-                // handle bundles first if any
-                var mappedBundles = allMappings.FindAll(m => m.PersonifyBundle != null );
-                if (mappedBundles.Any())
-                {
-                    PersonifyClient.CreateBundleOrder(order, mappedBundles[0], companyInfo, contactMasterId, contactSubId, billToAddr, shipToAddr);
-                }
-                #endregion ******* need to revisit and remove after packages *******
-
                 // get all non-bundle products
                 var mappedProducts = allMappings.FindAll(map => map.PersonifyProduct != null && map.PersonifyBundle == null);
 
@@ -547,8 +538,14 @@ namespace asi.asicentral.services
             else
             {
                 var memberType = string.IsNullOrEmpty(company.MemberType) ? "UNKNOWN" : company.MemberType;
-                IEnumerable<StoreAddressInfo> storeAddress = null;
-                companyInfo = PersonifyClient.ReconcileCompany(company, memberType, countryCodes, ref storeAddress);
+
+                // Create new company in Personify if no lead company found
+                List<string> masterIdList = null;
+                companyInfo = PersonifyClient.FindCustomerInfo(company, ref masterIdList);
+                if (companyInfo == null || (string.IsNullOrEmpty(order.ExternalReference) && companyInfo.MemberStatus != "LEAD" && companyInfo.MemberStatus != "ASICENTRAL"))
+                {
+                    companyInfo = PersonifyClient.CreateCompany(company, memberType, countryCodes);
+                }
             }
 
 			//field used to map an order to a company before approval for non backoffice orders

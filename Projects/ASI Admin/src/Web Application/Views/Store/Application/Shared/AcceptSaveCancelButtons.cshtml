@@ -7,8 +7,15 @@
 @model asi.asicentral.web.store.interfaces.IMembershipModel
 <div>
     @{
-        var errMsg = CheckBackEnd();
+        var hasBackEndFlag = false;
+        var disableEditing = false;
+        var errMsg = CheckBackEnd(ref hasBackEndFlag, ref disableEditing);
         var orderStatus = string.IsNullOrEmpty(errMsg) ? Model.OrderStatus : OrderStatus.PersonifyError;
+        if( !disableEditing && orderStatus != OrderStatus.Pending)
+        {
+            disableEditing = true;
+        }
+                
         var hasPendingTerms = HasPendingTerms();
     }
 
@@ -46,10 +53,14 @@
                     {
                         @Html.EditorFor(m => m.ExternalReference, new { @class = "span2" })
                     }
-                    else
+                    else if(disableEditing)
                     {
                         @Html.HiddenFor(m => m.ExternalReference)
                         @Html.TextBoxFor(m => m.ExternalReference, new { @class = "span2", disabled = "disabled", @readonly = "readonly" })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(m => m.ExternalReference, new { @class = "span2"})                        
                     }
                     <span id="timmsErrorMessage" data-type="errormessage" class="field-validation-error"></span>
                 </div>
@@ -81,12 +92,25 @@
                 }
             </div>
             <div id="termsWarningMessage" data-type="errormessage" class="field-validation-error span10"></div>
-            @if (!string.IsNullOrEmpty(Model.ExternalReference))
+            @if(string.IsNullOrEmpty(Model.ExternalReference))
+            {
+                <div class="span10">
+                    <p>(Company Constituent ID will be generated automatically unless being provided here)</p>
+                </div>               
+            }
+            @*else
             {
                 <div class="span10">
                     <p>(Please contact ASICentral team if this is not the Constituent ID expected.)</p>
                 </div>
-            }
+            }*@
+            @if(!hasBackEndFlag)
+            {
+                <div class="span10">
+                    <p>This order needs to be created in Personify manually after being approved.</p>
+                </div>
+            }               
+
             @if (!string.IsNullOrEmpty(Model.ExternalReference))
             {
                 var matchingIds = GetMatchingCompanyIds();
@@ -113,7 +137,7 @@
     @functions{
         public IStoreService StoreService { get; set; }
         public IBackendService BackendService { get; set; }
-        public string CheckBackEnd()
+        public string CheckBackEnd(ref bool hasBackEndFlag, ref bool disableEditing)
         {
             var errMsg = string.Empty;
             var orderDetail = StoreService.GetAll<StoreOrderDetail>(true).FirstOrDefault(detail => detail.Order.Id == Model.OrderId);
@@ -121,12 +145,22 @@
             if (order != null && orderDetail != null)
             {
                 var product = orderDetail.Product;
+                hasBackEndFlag = product.HasBackEndIntegration;
                 if (product.IsMembership() && (Model.OrderStatus == OrderStatus.Pending || Model.CompanyStatus == StatusCode.TERMINATED.ToString()))
                 {
+                    // make sure order and company have the same constituent ID
+                    if( string.IsNullOrEmpty(order.ExternalReference) && order.Company.HasExternalReference() ||
+                        !string.IsNullOrEmpty(order.ExternalReference) && order.Company.HasExternalReference() && !order.Company.ExternalReference.Contains(order.ExternalReference))
+                    {
+                        order.Company.ExternalReference = order.ExternalReference;
+                        order.Company.MatchingCompanyIds = string.Empty;
+                        order.Company.ASINumber = string.Empty;
+                    }
+
                     List<string> matchList = null;
                     var companyInfo = BackendService.FindCompanyInfo(order.Company, ref matchList);
-                    if (companyInfo != null)
-                    {                        
+                    if (companyInfo != null && !string.IsNullOrEmpty(order.ExternalReference) )
+                    {   // match from constituent ID                    
                         order.Company.MemberStatus = companyInfo.MemberStatus;
                         Model.CompanyStatus = companyInfo.MemberStatus;                        
 
@@ -137,15 +171,21 @@
                                 var activeMembership = string.IsNullOrEmpty(companyInfo.SubClassCode) ? companyInfo.MemberType
                                     : string.Format("{0} {1}", companyInfo.MemberType, companyInfo.SubClassCode);
                                 errMsg = string.Format("This company already has an active \'{0}\' membership", activeMembership);
+                                disableEditing = true;
                             }
                         }
                     }
                 }
 
                 // confirm coupon in Personify mapping table
-                if (orderDetail.Coupon != null && !CouponHelper.IsValidCoupon(StoreService, orderDetail.Coupon, product.Id, order.ContextId))
+                if (string.IsNullOrEmpty(errMsg) && orderDetail.Coupon != null && !CouponHelper.IsValidCoupon(StoreService, orderDetail.Coupon, product.Id, order.ContextId))
                 {
                     errMsg = string.Format("Unable to find coupon '{0}' for Personify order", orderDetail.Coupon.CouponCode);
+                }
+                
+                if( !disableEditing && order.CreditCard != null && !string.IsNullOrEmpty(order.CreditCard.ExternalReference))
+                { // using existing credit card, could not switch company any more
+                    disableEditing = true;
                 }
             }
             return errMsg;

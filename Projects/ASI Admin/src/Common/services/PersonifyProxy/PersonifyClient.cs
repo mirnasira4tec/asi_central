@@ -198,46 +198,6 @@ namespace asi.asicentral.services.PersonifyProxy
             return orderOutput;
         }
 
-        public static void CreateBundleOrder(StoreOrder storeOrder, PersonifyMapping mapping, CompanyInformation companyInfo, string contactMasterCustomerId, 
-                                             int contactSubCustomerId, AddressInfo billToAddress, AddressInfo shipToAddress)
-        {          
-            _log.Debug(string.Format("CreateBundleOrder - start: order {0} ", storeOrder));
-            DateTime startTime = DateTime.Now;
-
-            if( mapping == null)
-            {
-                throw new Exception("Error getting personify bundle in mapping table");
-            }
-            else if (storeOrder == null || string.IsNullOrEmpty(companyInfo.MasterCustomerId) ||
-                     string.IsNullOrEmpty(contactMasterCustomerId) || billToAddress == null || shipToAddress == null)
-            {
-                throw new Exception("Error processing personify bunddle order, one of the parameters is null!");
-            }
-
-            UpdatePersonifyCompany(companyInfo, mapping);
-
-            // create bundle
-            var bundleOrderInput = new ASICreateBundleOrderInput()
-            {
-                ShipMasterCustomerID = contactMasterCustomerId,
-                ShipSubCustomerID = (short)contactSubCustomerId,
-                ShipAddressID = (int)shipToAddress.CustomerAddressId,
-                ShipAddressTypeCode = "CORPORATE",
-                BillMasterCustomerID = companyInfo.MasterCustomerId,
-                BillSubCustomerID = (short)companyInfo.SubCustomerId,
-                BillAddressID = (int)billToAddress.CustomerAddressId,
-                BillAddressTypeCode = "CORPORATE",
-                RateStructure = mapping.PersonifyRateStructure,
-
-                RateCode = mapping.PersonifyRateCode, //"FY_DISTMEM", "FP_ESPPMDLMORD14", //
-                BundleGroupName = mapping.PersonifyBundle //"DIST_MEM", "ESPP-MD-LM-ORD" //
-            };
-
-            var bOutput = SvcClient.Post<ASICreateBundleOrderOutput>("ASICreateBundleOrder", bundleOrderInput);
-            storeOrder.BackendReference = bOutput.ASIBundleOrderNumber;
-            _log.Debug(string.Format("CreateBundleOrder - end: order {0} ({1})", storeOrder, DateTime.Now.Subtract(startTime).TotalMilliseconds));
-        }
-
 	    public static void AddLineItemToOrder(StoreOrder order, int productId, string rateStructure, string rateCode, 
                                                 bool boltOn = true, int quantity = 1)
 	    {
