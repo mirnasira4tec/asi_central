@@ -25,6 +25,9 @@ using Castle.DynamicProxy;
 using asi.asicentral.util;
 using System.Web.Mvc;
 using System.Reflection;
+using asi.asicentral.web.Interface;
+using asi.asicentral.web.database;
+using asi.asicentral.web.Service;
 namespace asi.asicentral.web.DependencyResolution
 {
     public static class IoC
@@ -96,6 +99,12 @@ namespace asi.asicentral.web.DependencyResolution
                        .Use<ImageConvertService>()
                        .EnrichWith(imageService => proxyGenerator.CreateClassProxyWithTarget(imageService.GetType(), imageService, new IInterceptor[] { new LogInterceptor(imageService.GetType()) }));
 
+                    x.For<IVelocityContext>()
+                        .Use<VelocityContext>();
+                    
+                    x.For<IVelocityService>()
+                        .Use<VelocityService>();
+
                     x.SetAllProperties(instance => instance.OfType<IObjectService>());
                     x.SetAllProperties(instance => instance.OfType<IStoreService>());
                     x.SetAllProperties(instance => instance.OfType<IEncryptionService>());
@@ -104,6 +113,7 @@ namespace asi.asicentral.web.DependencyResolution
                     x.SetAllProperties(instance => instance.OfType<ITemplateService>());
                     x.SetAllProperties(instance => instance.OfType<IEmailService>());
                     x.SetAllProperties(instance => instance.OfType<IBackendService>());
+                    x.SetAllProperties(instance => instance.OfType<IVelocityService>());
 
                     //x.For<IController>()
                     //    .EnrichAllWith(controller => proxyGenerator.CreateInterfaceProxyWithTarget(controller, new IInterceptor[] { new LogInterceptor(controller.GetType()) }));
