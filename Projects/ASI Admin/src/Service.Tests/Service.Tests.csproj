@@ -138,6 +138,7 @@
     <Compile Include="ASIEmailBlastContextTest.cs" />
     <Compile Include="PersonifyTest.cs" />
     <Compile Include="DM_MemberDemogrContextTest.cs" />
+    <Compile Include="VelocityTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
