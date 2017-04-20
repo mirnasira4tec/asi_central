@@ -43,7 +43,6 @@ namespace asi.asicentral.web.Controllers.Store
 
         public IStoreService StoreService { get; set; }
         public IFulfilmentService FulfilmentService { get; set; }
-        public ICreditCardService CreditCardService { get; set; }
         public IBackendService BackendService { get; set; }
         public IEmailService EmailService { get; set; }
         public ITemplateService TemplateService { get; set; }

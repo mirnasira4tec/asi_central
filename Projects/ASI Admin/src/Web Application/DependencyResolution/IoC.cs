@@ -96,12 +96,6 @@ namespace asi.asicentral.web.DependencyResolution
                        .Use<ImageConvertService>()
                        .EnrichWith(imageService => proxyGenerator.CreateClassProxyWithTarget(imageService.GetType(), imageService, new IInterceptor[] { new LogInterceptor(imageService.GetType()) }));
 
-                    //Used to store credit cards outside of the application and return a token
-					x.For<ICreditCardService>()
-						.Use<services.CreditCardService>()
-						.EnrichWith(cardService => proxyGenerator.CreateClassProxyWithTarget(cardService.GetType(), cardService, new object[] { null }, new IInterceptor[] { new LogInterceptor(cardService.GetType()) }))
-						.Ctor<IBackendService>();
-
                     x.SetAllProperties(instance => instance.OfType<IObjectService>());
                     x.SetAllProperties(instance => instance.OfType<IStoreService>());
                     x.SetAllProperties(instance => instance.OfType<IEncryptionService>());
@@ -109,7 +103,6 @@ namespace asi.asicentral.web.DependencyResolution
                     x.SetAllProperties(instance => instance.OfType<IFileSystemService>());
                     x.SetAllProperties(instance => instance.OfType<ITemplateService>());
                     x.SetAllProperties(instance => instance.OfType<IEmailService>());
-                    x.SetAllProperties(instance => instance.OfType<ICreditCardService>());
                     x.SetAllProperties(instance => instance.OfType<IBackendService>());
 
                     //x.For<IController>()

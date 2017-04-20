@@ -815,7 +815,7 @@ namespace asi.asicentral.Tests
         private CompanyInformation CreatePersonifyOrder(StoreOrder order, IStoreService storeService, IBackendService personify)
         {
             //simulate the store process by first processing the credit card
-            ICreditCardService cardService = new CreditCardService(new PersonifyService(storeService));
+            var personifyService = new PersonifyService(storeService);
             var cc = new CreditCard
             {
                 Address = "",
@@ -824,8 +824,7 @@ namespace asi.asicentral.Tests
                 Number = order.CreditCard.CardNumber,
                 ExpirationDate = new DateTime(int.Parse(order.CreditCard.ExpYear), int.Parse(order.CreditCard.ExpMonth), 1),
             };
-            Assert.IsTrue(cardService.Validate(cc));
-            var profileIdentifier = cardService.Store(order, cc, true);
+            var profileIdentifier = personifyService.SaveCreditCard(order, cc);
             Assert.IsNotNull(profileIdentifier);
             Assert.IsNotNull(order.Company.ExternalReference);
             order.CreditCard.ExternalReference = profileIdentifier;

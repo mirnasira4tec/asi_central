@@ -19,6 +19,13 @@
         var hasPendingTerms = HasPendingTerms();
     }
 
+    @if(!hasBackEndFlag && orderStatus == OrderStatus.Pending  )
+    {
+        <div class="span12">
+            <p>This order needs to be created in Personify manually after being approved.</p><br />
+        </div>
+    }               
+
     @if (!string.IsNullOrEmpty(Model.ASINumber))
     {
         <h3>ASI #: @Model.ASINumber</h3>
@@ -104,12 +111,6 @@
                     <p>(Please contact ASICentral team if this is not the Constituent ID expected.)</p>
                 </div>
             }*@
-            @if(!hasBackEndFlag)
-            {
-                <div class="span10">
-                    <p>This order needs to be created in Personify manually after being approved.</p>
-                </div>
-            }               
 
             @if (!string.IsNullOrEmpty(Model.ExternalReference))
             {
