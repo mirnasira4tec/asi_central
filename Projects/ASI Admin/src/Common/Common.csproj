@@ -251,6 +251,10 @@
     <Compile Include="database\mappings\excit\SupUpdateFieldMap.cs" />
     <Compile Include="database\mappings\excit\SupUpdateRequestDetailMap.cs" />
     <Compile Include="database\mappings\excit\SupUpdateRequestMap.cs" />
+    <Compile Include="database\mappings\show\ShowProfileOptionalDataLabelMap.cs" />
+    <Compile Include="database\mappings\show\ShowProfileRequestMap.cs" />
+    <Compile Include="database\mappings\show\ShowProfileRequestOptionalDetailsMap.cs" />
+    <Compile Include="database\mappings\show\ShowProfileRequiredDataMap.cs" />
     <Compile Include="database\PersonifyContext.cs" />
     <Compile Include="database\CallContext.cs" />
     <Compile Include="database\DM_MemberDemogrContext.cs" />
@@ -353,6 +357,10 @@
     <Compile Include="model\call\CallRequests.cs" />
     <Compile Include="model\CreditCard.cs" />
     <Compile Include="model\show\ShowDistShowLogo.cs" />
+    <Compile Include="model\show\ShowProfileOptionalDataLabel.cs" />
+    <Compile Include="model\show\ShowProfileRequestOptionalDetails.cs" />
+    <Compile Include="model\show\ShowProfileRequests.cs" />
+    <Compile Include="model\show\ShowProfileRequiredData.cs" />
     <Compile Include="model\store\CompanyValidation.cs" />
     <Compile Include="model\OAuth\Security.cs" />
     <Compile Include="model\OAuth\User.cs" />

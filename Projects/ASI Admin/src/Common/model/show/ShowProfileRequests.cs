@@ -24,7 +24,10 @@ namespace asi.asicentral.model.show
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
+        public virtual ShowASI Show { get; set; }
+        public virtual ShowCompany Company { get; set; }
 
-        public virtual IList<ShowProfileRequestOptionalDetails> RequestOptionalDetails { get; set; }
+        public virtual IList<ShowProfileRequestOptionalDetails> ProfileRequestOptionalDetails { get; set; }
+        public virtual ShowProfileRequiredData ProfileRequiredData { get; set; }
     }
 }

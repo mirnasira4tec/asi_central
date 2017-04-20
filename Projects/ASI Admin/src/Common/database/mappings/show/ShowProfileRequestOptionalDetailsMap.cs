@@ -24,6 +24,14 @@ namespace asi.asicentral.database.mappings.show
 
             this.Property(t => t.UpdateSource)
                 .HasColumnName("UpdateSource");
-        }  
+
+            HasRequired(x => x.ProfileRequests)
+           .WithMany()
+           .HasForeignKey(x => x.ProfileRequestId);
+
+            HasRequired(x => x.ProfileOptionalDataLabel)
+         .WithMany()
+         .HasForeignKey(x => x.ProfileOptionalDataLabelId);
+        }
     }
 }

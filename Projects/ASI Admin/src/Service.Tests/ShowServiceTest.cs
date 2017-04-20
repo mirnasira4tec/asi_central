@@ -416,6 +416,82 @@ namespace asi.asicentral.Tests
             Assert.AreEqual(attendees.ElementAt(0).ShowId, attendee.Attendees[1].ShowId);
         }
 
+        [TestMethod]
+        public void ProfileUpdateRequestTest()
+        {
+            using (var context = new Umbraco_ShowContext())
+            {
+                //retrieve update field
+                var fields = context.ProfileOptionalDataLabel.Where(s => s.IsObsolete.HasValue).ToList();
+                Assert.IsNull(fields);
+
+                var profileRequests = new ShowProfileRequests()
+                {
+                    CompanyId = 414,
+                    EventId = 104,
+                    RequestedBy = "rprajapati_unit",
+                    Status = ProfileRequestStatus.Pending,
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    UpdateSource = "Initial Unit Tests"
+                };
+
+                context.ProfileRequests.Add(profileRequests);
+                context.SaveChanges();
+                profileRequests = context.ProfileRequests.Where(r => r.CompanyId == 414 && r.EventId == 104).OrderByDescending(r => r.Id).FirstOrDefault();
+                Assert.IsNotNull(profileRequests);
+
+                var profileRequiredData = new ShowProfileRequiredData()
+                {
+                    ProfileRequestId = profileRequests.Id,
+                    Email = "reena.prajapati@a4technology.com",
+                    CompanyName = "A4 Tech",
+                    ASINumber = "1234",
+                    AttendeeName = "test Name",
+                    AttendeeTitle  = "test title",
+                    AttendeeCommEmail = "test@test.com",
+                    AttendeeCellPhone= "1234567892",
+                    AttendeeWorkPhone = "9874563215",
+                    CorporateAddress = "test Address",
+                    City = "test City",
+                    State = "test State",
+                    Zip = "test Zip",
+                    CompanyWebsite= "test.com",
+                    ProductSummary = "test Product Summary",
+                    TrustFromDistributor = "test Trust From Distributor",
+                    SpecialServices = "test Special Services",
+                    LoyaltyPrograms = "test Loyalty Programs",
+                    Samples = "test Samples",
+                    ProductSafety = "test Product Safety",
+                    FactAboutCompany = "test Fact About Company",
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    UpdateSource = "Initial Unit Tests"
+                };
+
+                context.ProfileRequiredData.Add(profileRequiredData);
+                context.SaveChanges();
+                profileRequiredData = context.ProfileRequiredData.FirstOrDefault(r => r.ProfileRequestId == profileRequests.Id);
+                Assert.IsNotNull(profileRequiredData);
+
+                var profileRequestOptionalDetails = new ShowProfileRequestOptionalDetails()
+                {
+                    ProfileRequestId = profileRequests.Id,
+                    ProfileOptionalDataLabelId = 1,
+                    UpdateValue = "updateValue",
+                    OrigValue = "origiValue",
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    UpdateSource = "Unit Test"
+                };
+
+                context.ProfileRequestOptionalDetails.Add(profileRequestOptionalDetails);
+                context.SaveChanges();
+
+                var detail = context.ProfileRequestOptionalDetails.FirstOrDefault(d => d.UpdateValue.Equals("updateValue"));
+                Assert.IsNotNull(detail);
+            }
+        }
 
         public DataTable GetDataTable()
         {
