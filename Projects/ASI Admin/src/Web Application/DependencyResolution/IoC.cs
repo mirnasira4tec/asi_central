@@ -25,6 +25,9 @@ using Castle.DynamicProxy;
 using asi.asicentral.util;
 using System.Web.Mvc;
 using System.Reflection;
+using asi.asicentral.web.Interface;
+using asi.asicentral.web.database;
+using asi.asicentral.web.Service;
 namespace asi.asicentral.web.DependencyResolution
 {
     public static class IoC
@@ -102,6 +105,12 @@ namespace asi.asicentral.web.DependencyResolution
 						.EnrichWith(cardService => proxyGenerator.CreateClassProxyWithTarget(cardService.GetType(), cardService, new object[] { null }, new IInterceptor[] { new LogInterceptor(cardService.GetType()) }))
 						.Ctor<IBackendService>();
 
+                    x.For<IVelocityContext>()
+                        .Use<VelocityContext>();
+                    
+                    x.For<IVelocityService>()
+                        .Use<VelocityService>();
+
                     x.SetAllProperties(instance => instance.OfType<IObjectService>());
                     x.SetAllProperties(instance => instance.OfType<IStoreService>());
                     x.SetAllProperties(instance => instance.OfType<IEncryptionService>());
@@ -111,6 +120,7 @@ namespace asi.asicentral.web.DependencyResolution
                     x.SetAllProperties(instance => instance.OfType<IEmailService>());
                     x.SetAllProperties(instance => instance.OfType<ICreditCardService>());
                     x.SetAllProperties(instance => instance.OfType<IBackendService>());
+                    x.SetAllProperties(instance => instance.OfType<IVelocityService>());
 
                     //x.For<IController>()
                     //    .EnrichAllWith(controller => proxyGenerator.CreateInterfaceProxyWithTarget(controller, new IInterceptor[] { new LogInterceptor(controller.GetType()) }));

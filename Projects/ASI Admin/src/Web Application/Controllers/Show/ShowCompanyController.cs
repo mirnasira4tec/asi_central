@@ -203,23 +203,26 @@ namespace asi.asicentral.web.Controllers.Show
                 int employeeCount = company.Employees.Count();
                 int companyAttendeeCount = company.Attendees.Count();
                  
-                for (int i = addressCount; i > 0; i--)
+                for (int i = addressCount - 1; i >= 0; i--)
                 {
-                    ObjectService.Delete(company.CompanyAddresses.ElementAt(i - 1));
+                    ObjectService.Delete(company.CompanyAddresses.ElementAt(i));
                 }
-                for (int i = employeeCount; i > 0; i--)
+                for (int i = employeeCount - 1; i >= 0; i--)
                 {
-                    var employeeId= company.Employees.ElementAt(i - 1).Id;
-                    ShowEmployeeAttendee employeeAttendee = ObjectService.GetAll<ShowEmployeeAttendee>().FirstOrDefault(item => item.EmployeeId == employeeId);
-                    if (employeeAttendee != null)
+                    var employeeId = company.Employees.ElementAt(i).Id;
+                    IList<ShowEmployeeAttendee> employeeAttendees = ObjectService.GetAll<ShowEmployeeAttendee>().Where(item => item.EmployeeId == employeeId).ToList();
+                    if (employeeAttendees.Count() > 0)
                     {
-                        ObjectService.Delete<ShowEmployeeAttendee>(employeeAttendee);
+                        for (int j = employeeAttendees.Count() - 1; j >= 0; j--)
+                        {
+                            ObjectService.Delete<ShowEmployeeAttendee>(employeeAttendees.ElementAt(j));
+                        }
                     }
-                    ObjectService.Delete(company.Employees.ElementAt(i - 1));
+                    ObjectService.Delete(company.Employees.ElementAt(i));
                 }
-                for (int i = companyAttendeeCount; i > 0; i--)
+                for (int i = companyAttendeeCount - 1; i >= 0; i--)
                 {
-                    ObjectService.Delete(company.Attendees.ElementAt(i - 1));
+                    ObjectService.Delete(company.Attendees.ElementAt(i));
                 }
                 ObjectService.Delete<ShowCompany>(company);
                 ObjectService.SaveChanges();

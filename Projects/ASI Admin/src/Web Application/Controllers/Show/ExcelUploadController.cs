@@ -468,12 +468,10 @@ namespace asi.asicentral.web.Controllers.Show
 
                                         ObjectService.Delete<ShowAttendee>(attendee);
                                     }
-
-                                    showAttendees.ForEach(a => a.IsExisting = false);
-                                    ObjectService.SaveChanges();
                                     log.Debug(string.Format("{0} company attendees have been deleted for '{1}' after uploading", attendeesToBeDeleted.Count, objShow.Name));
                                 }
-
+                                showAttendees.ForEach(a => a.IsExisting = false);
+                                ObjectService.SaveChanges();
                                 // delete any employee attendees not in the sheet
                                 var attendeeIds = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == objShow.Id).Select(a => a.Id).ToList();
                                 var attendees = ObjectService.GetAll<ShowEmployeeAttendee>().Where(e => attendeeIds.Contains(e.AttendeeId)).ToList();
