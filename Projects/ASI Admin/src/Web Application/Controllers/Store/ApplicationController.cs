@@ -1032,7 +1032,11 @@ namespace asi.asicentral.web.Controllers.Store
 
                 if (orderPlaced)
                 {
-                    fulfilmentService.Process(order, application);
+                    if( !product.HasBackEndIntegration && order.CreditCard != null && 
+                        !string.IsNullOrEmpty(order.CreditCard.ExternalReference) && string.IsNullOrEmpty(order.CreditCard.TokenId) )
+                    { // call TIMSS service only for non-PCI order and product without Personify Integration
+                        fulfilmentService.Process(order, application);
+                    }
                     order.ProcessStatus = OrderStatus.Approved;
                     order.ApprovedDate = DateTime.UtcNow;
                 }
