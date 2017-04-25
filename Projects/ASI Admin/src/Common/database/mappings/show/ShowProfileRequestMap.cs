@@ -31,22 +31,15 @@ namespace asi.asicentral.database.mappings.show
                 .HasColumnName("UpdateSource");
 
             //Relationships
-            HasRequired(x => x.Company)
-             .WithMany()
-             .HasForeignKey(x => x.CompanyId);
-
-            HasRequired(x => x.Show)
-             .WithMany()
-             .HasForeignKey(x => x.EventId);
-
-            HasRequired(x => x.ProfileRequiredData)
-            .WithMany()
-            .HasForeignKey(x => x.Id);
+            HasRequired(x => x.Attendee)
+             .WithMany(x => x.ProfileRequests)
+             .HasForeignKey(x => x.AttendeeId);
 
             HasMany(t => t.ProfileRequestOptionalDetails)
                  .WithOptional()
                  .HasForeignKey(t => t.ProfileRequestId)
                  .WillCascadeOnDelete();
+
         }
     }
 }

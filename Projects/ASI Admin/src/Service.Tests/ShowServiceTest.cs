@@ -416,6 +416,7 @@ namespace asi.asicentral.Tests
             Assert.AreEqual(attendees.ElementAt(0).ShowId, attendee.Attendees[1].ShowId);
         }
 
+
         [TestMethod]
         public void ProfileUpdateRequestTest()
         {
@@ -423,12 +424,12 @@ namespace asi.asicentral.Tests
             {
                 //retrieve update field
                 var fields = context.ProfileOptionalDataLabel.Where(s => s.IsObsolete.HasValue).ToList();
-                Assert.IsNull(fields);
+                Assert.IsNotNull(fields);
 
                 var profileRequests = new ShowProfileRequests()
                 {
-                    CompanyId = 414,
-                    EventId = 104,
+                    AttendeeId = 98,
+                    EmployeeAttendeeId = 4,
                     RequestedBy = "rprajapati_unit",
                     Status = ProfileRequestStatus.Pending,
                     CreateDate = DateTime.Now,
@@ -438,7 +439,7 @@ namespace asi.asicentral.Tests
 
                 context.ProfileRequests.Add(profileRequests);
                 context.SaveChanges();
-                profileRequests = context.ProfileRequests.Where(r => r.CompanyId == 414 && r.EventId == 104).OrderByDescending(r => r.Id).FirstOrDefault();
+                profileRequests = context.ProfileRequests.FirstOrDefault(r => r.AttendeeId == 98);
                 Assert.IsNotNull(profileRequests);
 
                 var profileRequiredData = new ShowProfileRequiredData()
@@ -448,20 +449,20 @@ namespace asi.asicentral.Tests
                     CompanyName = "A4 Tech",
                     ASINumber = "1234",
                     AttendeeName = "test Name",
-                    AttendeeTitle  = "test title",
+                    AttendeeTitle = "test title",
                     AttendeeCommEmail = "test@test.com",
-                    AttendeeCellPhone= "1234567892",
+                    AttendeeCellPhone = "1234567892",
                     AttendeeWorkPhone = "9874563215",
                     CorporateAddress = "test Address",
                     City = "test City",
                     State = "test State",
-                    Zip = "test Zip",
-                    CompanyWebsite= "test.com",
+                    Zip = "zip",
+                    CompanyWebsite = "test.com",
                     ProductSummary = "test Product Summary",
                     TrustFromDistributor = "test Trust From Distributor",
                     SpecialServices = "test Special Services",
                     LoyaltyPrograms = "test Loyalty Programs",
-                    Samples = "test Samples",
+                    Samples = "samples",
                     ProductSafety = "test Product Safety",
                     FactAboutCompany = "test Fact About Company",
                     CreateDate = DateTime.Now,
