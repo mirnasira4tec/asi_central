@@ -32,6 +32,10 @@
                 @Html.LabelFor(model => model.Email, new { @class = "control-label" })
                 <div class="controls">@Html.EditorFor(model => model.Email, new { id = "Email" }) @Html.ValidationMessageFor(model => model.Email)</div>
             </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.LoginEmail, new { @class = "control-label" })
+                <div class="controls">@Html.EditorFor(model => model.LoginEmail, new { id = "LoginEmail" }) @Html.ValidationMessageFor(model => model.LoginEmail)</div>
+            </div>
             <div class="form-group control-group">
                 @Html.LabelFor(model => model.EPhone, new { @class = "col-sm-4 control-label" })
                 <div class="controls">

@@ -1977,4 +1977,7 @@
   <data name="InvalidZipCode" xml:space="preserve">
     <value>The zip code is invalid</value>
   </data>
+  <data name="SecondaryASINo" xml:space="preserve">
+    <value>Secondary ASI No</value>
+  </data>
 </root>
