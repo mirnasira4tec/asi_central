@@ -185,7 +185,7 @@
                 }
                 
                 if( !disableEditing && order.CreditCard != null && !string.IsNullOrEmpty(order.CreditCard.ExternalReference))
-                { // using existing credit card, could not switch company any more
+                { // using existing credit card, could not switch company any more; or creit card provided by non-PCI processing
                     disableEditing = true;
                 }
             }

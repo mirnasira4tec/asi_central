@@ -138,10 +138,10 @@ namespace asi.asicentral.web.Controllers.Store
                 }
                 order = UpdateCompanyInformation(application, order);
                 application.CopyTo(distributorApplication);
-
-                ProcessCommand(StoreService, FulfilmentService, order, distributorApplication, application.ActionName);
                 distributorApplication.UpdateDate = DateTime.UtcNow;
                 distributorApplication.UpdateSource = "ASI Admin Application - EditDistributor";
+
+                ProcessCommand(StoreService, FulfilmentService, order, distributorApplication, application.ActionName);
                 StoreService.SaveChanges();
                 if (application.ActionName == ApplicationController.COMMAND_REJECT)
                     return RedirectToAction("List", "Orders");
@@ -1070,7 +1070,7 @@ namespace asi.asicentral.web.Controllers.Store
 
         private void SaveCreditCardInfo(StoreOrder order)
         {
-            if (order != null && order.CreditCard != null && order.BillingIndividual != null )
+            if (order != null && order.CreditCard != null && !string.IsNullOrEmpty(order.CreditCard.TokenId) && order.BillingIndividual != null )
             {
                 var billingInfo = order.BillingIndividual;
                 var creditCard = new asi.asicentral.model.CreditCard()
