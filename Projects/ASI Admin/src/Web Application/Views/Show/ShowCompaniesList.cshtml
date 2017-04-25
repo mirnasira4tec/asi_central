@@ -20,6 +20,7 @@
         <tr>
             <th>&nbsp;</th>
             <th>ASI#</th>
+            <th>Secondary ASI#</th>
             <th>Company Name</th>
             <th>Member Type</th>
             <th>Is Sponsor</th>
@@ -36,6 +37,7 @@
             <tr>
                 <td><a class="delete" id="@showAttendee.Id" href="/ShowCompany/DeleteAttendeeCompany?id=@showAttendee.Id&showId=@Model.Show.Id"><i class="icon-trash"></i></a></td>
                 <td>@showAttendee.Company.ASINumber</td>
+                 <td>@showAttendee.Company.SecondaryASINo</td>
                 <td><a class="red" href="/ShowCompany/GetCompanyDetailsForShow?companyId=@showAttendee.Company.Id&showId=@(Model.Show != null ? Model.Show.Id : 0)">@showAttendee.Company.Name</a></td>
                 <td>@showAttendee.Company.MemberType</td>
                 <td>
