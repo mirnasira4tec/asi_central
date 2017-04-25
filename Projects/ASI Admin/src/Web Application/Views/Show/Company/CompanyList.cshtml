@@ -47,6 +47,7 @@
                 <th>&nbsp;</th>
                 <th>Name</th>
                 <th>ASI Number</th>
+                <th>Secondary ASI No</th>
                 <th>Type</th>
                 <th>Details</th>
             </tr>
@@ -62,6 +63,7 @@
                         <a class="red" href="@Url.Action("List", "../ShowCompany", new CompanyInformation { Id = company.Id })">@company.Name</a>
                     </td>
                     <td>@company.ASINumber</td>
+                    <td>@company.SecondaryASINo</td>
                     <td>@company.MemberType </td>
                     <td>No of Address :@company.CompanyAddresses.Count() No of Employee :@company.Employees.Count()</td>
                 </tr>
@@ -70,7 +72,7 @@
             @if (Model.TotalRecordCount > Model.PageSize)
             {
                 <tr>
-                    <td class="pager" colspan="6">
+                    <td class="pager" colspan="7">
                         @Html.Partial("../Show/Shared/_Pager", Model)
                     </td>
                 </tr>
