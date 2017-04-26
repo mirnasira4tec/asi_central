@@ -99,7 +99,7 @@
                 }
             </div>
             <div id="termsWarningMessage" data-type="errormessage" class="field-validation-error span10"></div>
-            @if(string.IsNullOrEmpty(Model.ExternalReference))
+            @if (Model.OrderStatus != OrderStatus.Approved && Model.IsCompleted && !disableEditing)
             {
                 <div class="span10">
                     <p>(Company Constituent ID will be generated automatically unless being provided here)</p>
