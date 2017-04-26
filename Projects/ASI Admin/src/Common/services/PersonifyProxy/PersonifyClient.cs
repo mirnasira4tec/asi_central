@@ -62,8 +62,10 @@ namespace asi.asicentral.services.PersonifyProxy
 		private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
 		private static readonly IDictionary<string, string> ASIShowCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "SHOW AE" }, { "DISCOVER", "SHOW DISC" }, { "MASTERCARD", "SHOW MS" }, { "VISA", "SHOW VS" } };
 		private static readonly IDictionary<string, string> ASICanadaCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "CAN AMEX" }, { "DISCOVER", "CAN DISC" }, { "MASTERCARD", "CAN MC" }, { "VISA", "CAN VISA" } };
-		private static readonly IDictionary<string, IDictionary<string, string>> CreditCardType = new Dictionary<string, IDictionary<string, string>>(3, StringComparer.InvariantCultureIgnoreCase) { { "ASI", ASICreditCardType }, { "ASI Show", ASIShowCreditCardType }, { "ASI Canada", ASICanadaCreditCardType } };
-		private static readonly IDictionary<string, string> CompanyNumber = new Dictionary<string, string>(3, StringComparer.InvariantCultureIgnoreCase) { { "ASI", "1" }, { "ASI Show", "2" }, { "ASI Canada", "4" } };
+        //private static readonly IDictionary<string, IDictionary<string, string>> CreditCardType = new Dictionary<string, IDictionary<string, string>>(3, StringComparer.InvariantCultureIgnoreCase) { { "ASI", ASICreditCardType }, { "ASI Show", ASIShowCreditCardType }, { "ASI Canada", ASICanadaCreditCardType } };
+        private static readonly IDictionary<string, string> CompanyNumber = new Dictionary<string, string>(3, StringComparer.InvariantCultureIgnoreCase) { { "ASI", "1" }, { "ASI Show", "2" }, { "ASI Canada", "4" } };
+        private static readonly IDictionary<string, string> CreditCardMerchantID = new Dictionary<string, string>(3, StringComparer.InvariantCultureIgnoreCase) { { "ASI", "ASIcompanies" }, { "ASI Show", "ASIShow" }, { "ASI Canada", "ASICanada" } };
+        private static readonly IDictionary<string, string> CreditCardOrgID = new Dictionary<string, string>(3, StringComparer.InvariantCultureIgnoreCase) { { "ASI", "ASI" }, { "ASI Show", "ASI" }, { "ASI Canada", "ASICAN" } };
         private static readonly IDictionary<Activity, IList<string>> ActivityCodes = new Dictionary<Activity, IList<string>>() { { Activity.Exception, new List<string>(){ "EXCEPTION", "VALIDATION" } }, 
                                                                                                                                  { Activity.Order, new List<string>(){ "ACTIVITY", "ORDER" } } };
         private static readonly IDictionary<string, List<string>> PERSONIFY_STORED_PROCEDURE = new Dictionary<string, List<string>>()
@@ -94,7 +96,6 @@ namespace asi.asicentral.services.PersonifyProxy
                                                             "@ip_currency_code",
                                                             "@ip_merchant_id",
                                                             "@ip_customer_ip_address",
-                                                            //"@ip_partial_cc_acct_no",
                                                             "@ip_cc_authorization",
                                                             "@ip_auth_reference",
                                                             "@ip_user"}},
@@ -2291,21 +2292,11 @@ namespace asi.asicentral.services.PersonifyProxy
 			return creditCards;
 	    }
 
-        public static bool ValidateCreditCard(CreditCard info)
-        {
-			//when validating the credit card we can use ASI for the company
-	        string creditCardType = CreditCardType["ASI"][info.Type.ToUpper()];
-            var asiValidateCreditCardInput = new ASIValidateCreditCardInput()
-            {
-                ReceiptType = creditCardType,
-                CreditCardNumber = info.Number
-            };
-            var resp = SvcClient.Post<ASIValidateCreditCardOutput>("ASIValidateCreditCard", asiValidateCreditCardInput);
-            return resp.IsValid ?? false;
-        }
-
         public static string SaveCreditCard(string asiCompany, string masterCustomerId, int subCustomerId, CreditCard creditCard, string ipAddress, string currency = "USD")
         {
+            if (string.IsNullOrEmpty(asiCompany) || !CreditCardOrgID.Keys.Contains(asiCompany))
+                asiCompany = "ASI";
+
             var profileId = string.Empty;
             if( !string.IsNullOrEmpty(masterCustomerId) && creditCard != null && !string.IsNullOrEmpty(ipAddress) && !string.IsNullOrEmpty(currency))
             {
@@ -2313,11 +2304,12 @@ namespace asi.asicentral.services.PersonifyProxy
                 {
                     ipAddress = "127.0.0.1";
                 }
+                var orgId = CreditCardOrgID[asiCompany];
                 var response = ExecutePersonifySP(SP_OAM_INSERT_CREDIT_CARD, new List<string>() { 
                     masterCustomerId, 
                     subCustomerId.ToString(),
-                    asiCompany,
-                    asiCompany,
+                    orgId,
+                    orgId,
                     creditCard.CardHolderName,
                     creditCard.Address,
                     creditCard.City,
@@ -2328,7 +2320,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     creditCard.Number,
                     creditCard.ExpirationDate.ToString(),
                     currency,
-                    "ASIcompanies",
+                    CreditCardMerchantID[asiCompany],
                     ipAddress,
                     creditCard.TokenId,
                     creditCard.AuthReference,               
