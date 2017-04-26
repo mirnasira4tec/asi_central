@@ -25,9 +25,8 @@ namespace asi.asicentral.model.show
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
         public virtual ShowAttendee Attendee { get; set; }
-        public virtual ShowEmployeeAttendee EmployeeAttendee { get; set; }
+        //public virtual ShowEmployeeAttendee EmployeeAttendee { get; set; }
         public virtual IList<ShowProfileRequestOptionalDetails> ProfileRequestOptionalDetails { get; set; }
-        public virtual ShowProfileRequiredData ProfileRequiredDataOriginal { get; set; }
-        //public virtual ShowProfileRequiredData ProfileRequiredDataUpdate { get; set; }
+        public virtual IList<ShowProfileRequiredData> ProfileRequiredData { get; set; }
     }
 }

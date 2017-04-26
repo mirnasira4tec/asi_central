@@ -426,6 +426,7 @@ namespace asi.asicentral.Tests
                 var fields = context.ProfileOptionalDataLabel.Where(s => s.IsObsolete.HasValue).ToList();
                 Assert.IsNotNull(fields);
 
+                var request = context.ProfileRequests.FirstOrDefault(x => x.Id == 10);
                 var profileRequests = new ShowProfileRequests()
                 {
                     AttendeeId = 98,
@@ -439,7 +440,7 @@ namespace asi.asicentral.Tests
 
                 context.ProfileRequests.Add(profileRequests);
                 context.SaveChanges();
-                profileRequests = context.ProfileRequests.FirstOrDefault(r => r.AttendeeId == 98);
+                //profileRequests = context.ProfileRequests.FirstOrDefault(r => r.AttendeeId == 98);
                 Assert.IsNotNull(profileRequests);
 
                 var profileRequiredData = new ShowProfileRequiredData()
@@ -491,6 +492,16 @@ namespace asi.asicentral.Tests
 
                 var detail = context.ProfileRequestOptionalDetails.FirstOrDefault(d => d.UpdateValue.Equals("updateValue"));
                 Assert.IsNotNull(detail);
+            }
+        }
+
+        [TestMethod]
+        public void GetProfileUpdateRequest()
+        {
+            using (var context = new Umbraco_ShowContext())
+            {
+                var request = context.ProfileRequests.OrderByDescending(x => x.Id).FirstOrDefault();
+                Assert.IsNotNull(request);
             }
         }
 

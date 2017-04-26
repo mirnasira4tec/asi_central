@@ -26,7 +26,8 @@ namespace asi.asicentral.database.mappings.show
                 .HasColumnName("UpdateSource");
 
             HasRequired(x => x.ProfileRequests)
-           .WithRequiredPrincipal(x => x.ProfileRequiredDataOriginal);
+           .WithMany(x => x.ProfileRequiredData)
+           .HasForeignKey(x=>x.ProfileRequestId);
 
         }  
     }
