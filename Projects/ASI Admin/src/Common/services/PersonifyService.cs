@@ -440,15 +440,6 @@ namespace asi.asicentral.services
             return companyInfo;
         }
 
-        public virtual bool ValidateCreditCard(CreditCard creditCard)
-        {
-
-            log.Debug(string.Format("Validate credit card {0} ({1}).", creditCard.MaskedPAN, creditCard.Type));
-            var result = PersonifyClient.ValidateCreditCard(creditCard);
-            log.Debug(string.Format("Credit card {0} ({1}) is {2}.", creditCard.MaskedPAN, creditCard.Type, result ? "valid" : "invalid"));
-            return result;
-        }
-
 		public virtual string SaveCreditCard(StoreOrder order, CreditCard creditCard)
 		{
 			StoreCompany company = order.Company;
