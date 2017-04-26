@@ -4345,6 +4345,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Secondary ASI No.
+        /// </summary>
+        public static string SecondaryASINo {
+            get {
+                return ResourceManager.GetString("SecondaryASINo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is your company&apos;s secondary business? (Check ALL that apply).
         /// </summary>
         public static string SecondaryBusiness {
