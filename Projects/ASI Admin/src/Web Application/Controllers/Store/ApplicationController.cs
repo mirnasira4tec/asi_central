@@ -14,6 +14,7 @@ using ASI.EntityModel;
 using asi.asicentral.web.store.interfaces;
 using System.Net.Mail;
 using System.Text;
+using asi.asicentral.util.store.emailmarketing;
 
 namespace asi.asicentral.web.Controllers.Store
 {
@@ -512,6 +513,15 @@ namespace asi.asicentral.web.Controllers.Store
                             if (application.IsBonus) orderDetail.Cost = orderDetail.Cost * 12m * 0.8m;
                             var productId = (application.IsBonus) ? SpecialtyShoppesHelper.SPECIALTY_SHOPPES_IDS[0] :  SpecialtyShoppesHelper.SPECIALTY_SHOPPES_IDS[1];
                             if (orderDetail.Product.Id != productId) orderDetail.Product = StoreService.GetAll<ContextProduct>().SingleOrDefault(p => p.Id == productId);
+                            break;
+                        case 126:
+                            if (application.OptionId.HasValue)
+                            {
+                                orderDetail.OptionId = application.OptionId;
+                                decimal cost;
+                                if (decimal.TryParse(EmailMarketingHelper.EmailMarketingOptions[application.OptionId.Value][1], out cost))
+                                    orderDetail.Cost = cost;
+                            }
                             break;
                         default:
                             int quantity = orderDetail.Quantity;

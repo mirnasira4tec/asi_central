@@ -1,2 +1,2 @@
-INSERT INTO FRM_Type (Name,RequestType,ContextId,Implementation,TermsAndConditions,NotificationEmails,IsASINumberFlag,CreateDateUTC,UpdateDateUTC,UpdateSource) 
-VALUES('On-Site Exhibitor Agreement 2018','Supplier',12,'~/asi.asicentral.common/asi.asicentral.views.store.OnSiteExhibitorAgreement2018.cshtml','ASI Show Space Reservation 2016 (July 2015)','dfidler@asicentral.com;kditomasso@asicentral.com;HDolphin@asicentral.com',1,GETUTCDATE(), GETUTCDATE(),'Initial SQL');
+Alter table Att_Company
+Add SecondaryASINo nvarchar(10) null 
