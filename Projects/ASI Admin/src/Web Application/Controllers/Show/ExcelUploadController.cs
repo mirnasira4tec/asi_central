@@ -36,6 +36,11 @@ namespace asi.asicentral.web.Controllers.Show
             var asinumber = ds.Rows[rowId]["ASINO"].ToString().Trim();
             var name = ds.Rows[rowId]["Company"].ToString().Trim();
             var memberType = ds.Rows[rowId]["MemberType"].ToString().Trim();
+            string secondaryASINo = string.Empty;
+            if (ds.Columns.Contains("Secondary ASINO"))
+            {
+                 secondaryASINo = ds.Rows[rowId]["Secondary ASINO"].ToString().Trim();
+            }
             if (fasiliateFlag == true)
             {
                 var companies = ObjectService.GetAll<ShowCompany>().Where(item => (item.ASINumber == asinumber)).ToList();
@@ -59,6 +64,7 @@ namespace asi.asicentral.web.Controllers.Show
 
             company.Name = name;
             company.ASINumber = asinumber;
+            company.SecondaryASINo = secondaryASINo;
             company.MemberType = memberType;
             company.UpdateSource = "ExcelUploadcontroller-Index";
             company.UpdateDate = DateTime.UtcNow;
@@ -147,6 +153,7 @@ namespace asi.asicentral.web.Controllers.Show
                 var lastName = ds.Rows[rowId]["LastName"].ToString().Trim();
                 string phone = string.Empty;
                 string email = string.Empty;
+                string loginEmail = string.Empty;
                 if (ds.Columns.Contains("Phone"))
                 {
                     phone = ds.Rows[rowId]["Phone"].ToString().Trim();
@@ -155,14 +162,17 @@ namespace asi.asicentral.web.Controllers.Show
                 {
                     email = ds.Rows[rowId]["Email Address"].ToString().Trim();
                 }
+                if (ds.Columns.Contains("Login Email"))
+                {
+                    loginEmail = ds.Rows[rowId]["Login Email"].ToString().Trim();
+                }
                 if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName) )
                 {
                     ShowEmployee employee = null;
                     if (!string.IsNullOrEmpty(email))
                     {
-                        employee = company.Employees.FirstOrDefault(item => !string.IsNullOrEmpty(item.Email) && item.Email.Trim().Equals(email, StringComparison.CurrentCultureIgnoreCase));
+                        employee = company.Employees.FirstOrDefault(item => !string.IsNullOrEmpty(item.Email) && item.Email.Trim().Equals(email, StringComparison.CurrentCultureIgnoreCase) );
                     }
-                    
                     if( employee == null)
                     {
                         employee = company.Employees.FirstOrDefault(item => (item.FirstName.Trim().Equals(firstName, StringComparison.CurrentCultureIgnoreCase) &&
@@ -182,6 +192,7 @@ namespace asi.asicentral.web.Controllers.Show
                     employee.LastName = lastName;
                     employee.EPhone = phone;
                     employee.Email = email;
+                    employee.LoginEmail = loginEmail;
                     employee.UpdateDate = DateTime.UtcNow;
                     employee.UpdateSource = "ExcelUploadcontroller-Index";
 
@@ -457,12 +468,10 @@ namespace asi.asicentral.web.Controllers.Show
 
                                         ObjectService.Delete<ShowAttendee>(attendee);
                                     }
-
-                                    showAttendees.ForEach(a => a.IsExisting = false);
-                                    ObjectService.SaveChanges();
                                     log.Debug(string.Format("{0} company attendees have been deleted for '{1}' after uploading", attendeesToBeDeleted.Count, objShow.Name));
                                 }
-
+                                showAttendees.ForEach(a => a.IsExisting = false);
+                                ObjectService.SaveChanges();
                                 // delete any employee attendees not in the sheet
                                 var attendeeIds = ObjectService.GetAll<ShowAttendee>().Where(item => item.ShowId == objShow.Id).Select(a => a.Id).ToList();
                                 var attendees = ObjectService.GetAll<ShowEmployeeAttendee>().Where(e => attendeeIds.Contains(e.AttendeeId)).ToList();

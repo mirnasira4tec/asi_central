@@ -141,6 +141,8 @@ namespace asi.asicentral.services.PersonifyProxy
             {"DECORATOR", new List<string>() { "EEX_WEARABLES" }}
         };
 
+        public static readonly int EMAIL_MARKETING_PRODUCT_ID = 126;
+
         public static CreateOrderOutput CreateOrder(StoreOrder storeOrder,
             string companyMasterCustomerId,
             int companySubCustomerId,
@@ -624,7 +626,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 if ( company.HasExternalReference() )
                 {
 				    string[] references = company.ExternalReference.Split(';');
-				    int subCustomerId = Int32.Parse(references[1]);
+                    int subCustomerId = references.Length > 1 ? Int32.Parse(references[1]) : 0;
                     companyInfo = GetPersonifyCompanyInfo(references[0], subCustomerId);
                 }
 			}

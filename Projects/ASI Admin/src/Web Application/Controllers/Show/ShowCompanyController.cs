@@ -46,7 +46,8 @@ namespace asi.asicentral.web.Controllers.Show
             if (!string.IsNullOrEmpty(asiNumber))
             {
                 companyList = companyList.Where(item => item.ASINumber != null
-                 && item.ASINumber == asiNumber);
+                 && item.ASINumber == asiNumber || item.SecondaryASINo != null
+                 && item.SecondaryASINo == asiNumber);
             }
             company.TotalRecordCount = companyList.Count();
             companyList = companyList.OrderBy(form => form.Name);
@@ -86,6 +87,7 @@ namespace asi.asicentral.web.Controllers.Show
                     objCompany.WebUrl = company.Url;
                     objCompany.MemberType = company.MemberType;
                     objCompany.ASINumber = (company.MemberType == "Non-Member") ? null : company.ASINumber;
+                    objCompany.SecondaryASINo = company.SecondaryASINo;
                     objCompany.UpdateSource = "ShowCompanyController - AddCompany";
                     objCompany = ShowHelper.CreateOrUpdateCompany(ObjectService, objCompany);
 
@@ -155,6 +157,7 @@ namespace asi.asicentral.web.Controllers.Show
                     {
                         company.ASINumber = CompanyModel.ASINumber;
                     }
+                    company.SecondaryASINo = CompanyModel.SecondaryASINo;
                     company.Url = CompanyModel.WebUrl;
                     ShowCompanyAddress companyAddress = ObjectService.GetAll<ShowCompanyAddress>().FirstOrDefault(item => item.CompanyId == id);
                     if (companyAddress != null)
@@ -200,23 +203,26 @@ namespace asi.asicentral.web.Controllers.Show
                 int employeeCount = company.Employees.Count();
                 int companyAttendeeCount = company.Attendees.Count();
                  
-                for (int i = addressCount; i > 0; i--)
+                for (int i = addressCount - 1; i >= 0; i--)
                 {
-                    ObjectService.Delete(company.CompanyAddresses.ElementAt(i - 1));
+                    ObjectService.Delete(company.CompanyAddresses.ElementAt(i));
                 }
-                for (int i = employeeCount; i > 0; i--)
+                for (int i = employeeCount - 1; i >= 0; i--)
                 {
-                    var employeeId= company.Employees.ElementAt(i - 1).Id;
-                    ShowEmployeeAttendee employeeAttendee = ObjectService.GetAll<ShowEmployeeAttendee>().FirstOrDefault(item => item.EmployeeId == employeeId);
-                    if (employeeAttendee != null)
+                    var employeeId = company.Employees.ElementAt(i).Id;
+                    IList<ShowEmployeeAttendee> employeeAttendees = ObjectService.GetAll<ShowEmployeeAttendee>().Where(item => item.EmployeeId == employeeId).ToList();
+                    if (employeeAttendees.Count() > 0)
                     {
-                        ObjectService.Delete<ShowEmployeeAttendee>(employeeAttendee);
+                        for (int j = employeeAttendees.Count() - 1; j >= 0; j--)
+                        {
+                            ObjectService.Delete<ShowEmployeeAttendee>(employeeAttendees.ElementAt(j));
+                        }
                     }
-                    ObjectService.Delete(company.Employees.ElementAt(i - 1));
+                    ObjectService.Delete(company.Employees.ElementAt(i));
                 }
-                for (int i = companyAttendeeCount; i > 0; i--)
+                for (int i = companyAttendeeCount - 1; i >= 0; i--)
                 {
-                    ObjectService.Delete(company.Attendees.ElementAt(i - 1));
+                    ObjectService.Delete(company.Attendees.ElementAt(i));
                 }
                 ObjectService.Delete<ShowCompany>(company);
                 ObjectService.SaveChanges();
@@ -378,6 +384,7 @@ namespace asi.asicentral.web.Controllers.Show
                     objEmployee.FirstName = employee.FirstName;
                     objEmployee.LastName = employee.LastName;
                     objEmployee.Email = employee.Email;
+                    objEmployee.LoginEmail = employee.LoginEmail;
                     objEmployee.CompanyId = employee.CompanyId;
                     objEmployee.Address = objAddress;
                     objEmployee.UpdateSource = "ShowCompanyController - Add";
@@ -411,6 +418,7 @@ namespace asi.asicentral.web.Controllers.Show
                     companyInfo.FirstName = employeeModel.FirstName;
                     companyInfo.LastName = employeeModel.LastName;
                     companyInfo.Email = employeeModel.Email;
+                    companyInfo.LoginEmail = employeeModel.LoginEmail;
                     companyInfo.CompanyId = employeeModel.CompanyId.HasValue ? employeeModel.CompanyId.Value : 0;
                     companyInfo.HasAddress = employeeModel.Address != null;
                     if (companyInfo.HasAddress)
@@ -529,7 +537,6 @@ namespace asi.asicentral.web.Controllers.Show
                 return Json(true);
             }
         }
-
 
         public ActionResult IsValidCompany(string name)
         {
