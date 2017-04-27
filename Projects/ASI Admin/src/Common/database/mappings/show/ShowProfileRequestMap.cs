@@ -31,13 +31,9 @@ namespace asi.asicentral.database.mappings.show
                 .HasColumnName("UpdateSource");
 
             //Relationships
-            HasRequired(x => x.Attendee)
+            HasOptional(x => x.Attendee)
              .WithMany(x => x.ProfileRequests)
              .HasForeignKey(x => x.AttendeeId);
-
-            //HasOptional(x => x.EmployeeAttendee)
-            //    .WithMany(x => x.ProfileRequests)
-            //    .HasForeignKey(x => x.EmployeeAttendeeId);
 
             HasMany(t => t.ProfileRequestOptionalDetails)
                  .WithOptional()

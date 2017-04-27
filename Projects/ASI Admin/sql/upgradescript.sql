@@ -40,7 +40,7 @@ GO
 
 CREATE TABLE [dbo].[ATT_ProfileRequests](
 	[ProfileRequestId] [int] IDENTITY(1,1) NOT NULL,
-	[AttendeeId] [int] NOT NULL,
+	[AttendeeId] [int] NULL,
 	[EmployeeAttendeeId] [int] NULL,
 	[RequestedBy] [nvarchar](250) NOT NULL,
 	[ApprovedBy] [nvarchar](250) NULL,

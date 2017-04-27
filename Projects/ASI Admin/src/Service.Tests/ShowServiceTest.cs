@@ -426,72 +426,141 @@ namespace asi.asicentral.Tests
                 var fields = context.ProfileOptionalDataLabel.Where(s => s.IsObsolete.HasValue).ToList();
                 Assert.IsNotNull(fields);
 
-                var request = context.ProfileRequests.FirstOrDefault(x => x.Id == 10);
-                var profileRequests = new ShowProfileRequests()
+                var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.AttendeeId == 98 && x.EmployeeAttendeeId == 4 && x.Status == (int)ProfileRequestStatus.Pending);
+                if (profileRequests == null)
                 {
-                    AttendeeId = 98,
-                    EmployeeAttendeeId = 4,
-                    RequestedBy = "rprajapati_unit",
-                    Status = ProfileRequestStatus.Pending,
-                    CreateDate = DateTime.Now,
-                    UpdateDate = DateTime.Now,
-                    UpdateSource = "Initial Unit Tests"
-                };
-
-                context.ProfileRequests.Add(profileRequests);
-                context.SaveChanges();
-                //profileRequests = context.ProfileRequests.FirstOrDefault(r => r.AttendeeId == 98);
-                Assert.IsNotNull(profileRequests);
-
-                var profileRequiredData = new ShowProfileRequiredData()
+                    profileRequests = new ShowProfileRequests()
+                    {
+                        AttendeeId = 98,
+                        EmployeeAttendeeId = 4,
+                        RequestedBy = "rprajapati_unit",
+                        Status = ProfileRequestStatus.Pending,
+                        CreateDate = DateTime.Now,
+                        UpdateDate = DateTime.Now,
+                        UpdateSource = "Initial Unit Tests"
+                    };
+                    context.ProfileRequests.Add(profileRequests);
+                    context.SaveChanges();
+                    Assert.IsNotNull(profileRequests);
+                }
+                var profileRequiredData = context.ProfileRequiredData.FirstOrDefault(x => x.ProfileRequestId == profileRequests.Id && x.flag == false);
+                if (profileRequiredData == null)
                 {
-                    ProfileRequestId = profileRequests.Id,
-                    Email = "reena.prajapati@a4technology.com",
-                    CompanyName = "A4 Tech",
-                    ASINumber = "1234",
-                    AttendeeName = "test Name",
-                    AttendeeTitle = "test title",
-                    AttendeeCommEmail = "test@test.com",
-                    AttendeeCellPhone = "1234567892",
-                    AttendeeWorkPhone = "9874563215",
-                    CorporateAddress = "test Address",
-                    City = "test City",
-                    State = "test State",
-                    Zip = "zip",
-                    CompanyWebsite = "test.com",
-                    ProductSummary = "test Product Summary",
-                    TrustFromDistributor = "test Trust From Distributor",
-                    SpecialServices = "test Special Services",
-                    LoyaltyPrograms = "test Loyalty Programs",
-                    Samples = "samples",
-                    ProductSafety = "test Product Safety",
-                    FactAboutCompany = "test Fact About Company",
-                    CreateDate = DateTime.Now,
-                    UpdateDate = DateTime.Now,
-                    UpdateSource = "Initial Unit Tests"
-                };
+                    profileRequiredData = new ShowProfileRequiredData()
+                    {
+                        ProfileRequestId = profileRequests.Id,
+                        Email = "reena.prajapati@a4technology.com",
+                        CompanyName = "A4 Tech",
+                        ASINumber = "1234",
+                        AttendeeName = "test Name",
+                        AttendeeTitle = "test title",
+                        AttendeeCommEmail = "test@test.com",
+                        AttendeeCellPhone = "1234567892",
+                        AttendeeWorkPhone = "9874563215",
+                        CorporateAddress = "test Address",
+                        City = "test City",
+                        State = "test State",
+                        Zip = "zip",
+                        CompanyWebsite = "test.com",
+                        ProductSummary = "test Product Summary",
+                        TrustFromDistributor = "test Trust From Distributor",
+                        SpecialServices = "test Special Services",
+                        LoyaltyPrograms = "test Loyalty Programs",
+                        Samples = "samples",
+                        ProductSafety = "test Product Safety",
+                        FactAboutCompany = "test Fact About Company",
+                        CreateDate = DateTime.Now,
+                        UpdateDate = DateTime.Now,
+                        UpdateSource = "Initial Unit Tests"
+                    };
 
-                context.ProfileRequiredData.Add(profileRequiredData);
-                context.SaveChanges();
-                profileRequiredData = context.ProfileRequiredData.FirstOrDefault(r => r.ProfileRequestId == profileRequests.Id);
-                Assert.IsNotNull(profileRequiredData);
-
-                var profileRequestOptionalDetails = new ShowProfileRequestOptionalDetails()
+                    context.ProfileRequiredData.Add(profileRequiredData);
+                    context.SaveChanges();
+                    Assert.IsNotNull(profileRequiredData);
+                }
+                else
                 {
-                    ProfileRequestId = profileRequests.Id,
-                    ProfileOptionalDataLabelId = 1,
-                    UpdateValue = "updateValue",
-                    OrigValue = "origiValue",
-                    CreateDate = DateTime.Now,
-                    UpdateDate = DateTime.Now,
-                    UpdateSource = "Unit Test"
-                };
+                    profileRequiredData = context.ProfileRequiredData.FirstOrDefault(x => x.ProfileRequestId == profileRequests.Id && x.flag == true);
+                    if (profileRequiredData == null)
+                    {
+                        profileRequiredData = new ShowProfileRequiredData()
+                        {
+                            ProfileRequestId = profileRequests.Id,
+                            Email = "reena.prajapati1@a4technology.com",
+                            CompanyName = "A4 Tech1",
+                            ASINumber = "1234",
+                            AttendeeName = "test Name",
+                            AttendeeTitle = "test title",
+                            AttendeeCommEmail = "test@test.com",
+                            AttendeeCellPhone = "1234567892",
+                            AttendeeWorkPhone = "9874563215",
+                            CorporateAddress = "test Address",
+                            City = "test City",
+                            State = "test State",
+                            Zip = "zip",
+                            CompanyWebsite = "test.com",
+                            ProductSummary = "test Product Summary",
+                            TrustFromDistributor = "test Trust From Distributor",
+                            SpecialServices = "test Special Services",
+                            LoyaltyPrograms = "test Loyalty Programs",
+                            Samples = "samples",
+                            ProductSafety = "test Product Safety",
+                            FactAboutCompany = "test Fact About Company",
+                            CreateDate = DateTime.Now,
+                            UpdateDate = DateTime.Now,
+                            UpdateSource = "Initial Unit Tests",
+                            flag = true
+                        };
 
-                context.ProfileRequestOptionalDetails.Add(profileRequestOptionalDetails);
-                context.SaveChanges();
+                        context.ProfileRequiredData.Add(profileRequiredData);
+                        context.SaveChanges();
+                        Assert.IsNotNull(profileRequiredData);
+                    }
+                    else
+                    {
+                        profileRequiredData.CompanyWebsite = "test1.com";
+                        context.SaveChanges();
+                    }
+                }
+                var profileRequestOptionalDetails = context.ProfileRequestOptionalDetails.FirstOrDefault(x => x.ProfileRequestId == profileRequests.Id && x.ProfileOptionalDataLabelId == 1);
+                if (profileRequestOptionalDetails == null)
+                {
+                    profileRequestOptionalDetails = new ShowProfileRequestOptionalDetails()
+                    {
+                        ProfileRequestId = profileRequests.Id,
+                        ProfileOptionalDataLabelId = 1,
+                        UpdateValue = "updateValue",
+                        OrigValue = "origiValue",
+                        CreateDate = DateTime.Now,
+                        UpdateDate = DateTime.Now,
+                        UpdateSource = "Unit Test"
+                    };
 
-                var detail = context.ProfileRequestOptionalDetails.FirstOrDefault(d => d.UpdateValue.Equals("updateValue"));
-                Assert.IsNotNull(detail);
+                    context.ProfileRequestOptionalDetails.Add(profileRequestOptionalDetails);
+                    context.SaveChanges();
+                }
+                else
+                {
+                    profileRequestOptionalDetails.UpdateValue = "updateValue1";
+                    context.SaveChanges();
+                }
+                Assert.IsNotNull(profileRequestOptionalDetails);
+                
+            }
+        }
+
+        [TestMethod]
+        public void DeleteProfileUpdateRequest()
+        {
+            using (var context = new Umbraco_ShowContext())
+            {
+                var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.AttendeeId == 98 && x.EmployeeAttendeeId == 4);
+                if (profileRequests != null)
+                {
+                    profileRequests.AttendeeId = null;
+                    context.SaveChanges();
+                }
+                Assert.AreNotEqual(profileRequests.AttendeeId, 98);
             }
         }
 
