@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.model.store;
 using System.Collections.Generic;
 using asi.asicentral.interfaces;
@@ -10,10 +9,11 @@ using asi.asicentral.web.Controllers.Store;
 using asi.asicentral.web.model.store;
 using System.Web.Mvc;
 using asi.asicentral.model.ROI;
+using NUnit.Framework;
 
 namespace asi.asicentral.WebApplication.Tests.Controllers.Store
 {
-    [TestClass]
+    [TestFixture]
     public class EmailExpressApplicationTest
     {
         public ContextProduct CreateProduct(int id = 1)
@@ -54,7 +54,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             return companywithAddress;
         }
 
-        [TestMethod]
+        [Test]
         public void EditEmailExpress()
         {
             StoreIndividual individual = new StoreIndividual() { LastName = "Last", FirstName = "First" };

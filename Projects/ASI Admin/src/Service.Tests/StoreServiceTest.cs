@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.interfaces;
 using asi.asicentral.services;
 using asi.asicentral.database.mappings;
 using asi.asicentral.model.store;
 using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace asi.asicentral.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class StoreServiceTest
     {
-        [Ignore]
+        [Test]
+        [Ignore("Ignore a OrderApplicationRetrieveTest")]
         public void OrderApplicationRetrieveTest()
         {
             using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
@@ -50,7 +51,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void OrderSupplierProduct()
         {
             using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
@@ -176,7 +177,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void StoreDetailMagazineAdvertisingDbTest()
         {
             using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
@@ -193,7 +194,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void LookSendMyAdDbTest()
         {
             using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
@@ -208,7 +209,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void StoreDetailMagazineAdvertisingItemTest()
         {
             using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
@@ -234,7 +235,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-	    [TestMethod]
+	    [Test]
 	    public void LookSendMyAdCountryCodeCachedTest()
 	    {
 		    using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
@@ -245,7 +246,7 @@ namespace asi.asicentral.Tests
 			}
 	    }
 
-        [TestMethod]
+        [Test]
         public void FormPersistenceTest()
         {
             string testKey = Guid.NewGuid().ToString();

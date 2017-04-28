@@ -1,15 +1,15 @@
 ﻿using asi.asicentral.database;
 using asi.asicentral.model.counselor;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Linq;
 
 namespace asi.asicentral.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class ASIPublicationTest
     {
-        [TestMethod]
+        [Test]
         public void LegacyDataTest()
         {
             using (var context = new ASIPublicationContext())
