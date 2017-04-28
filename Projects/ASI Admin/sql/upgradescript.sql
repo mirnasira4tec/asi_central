@@ -40,8 +40,8 @@ GO
 
 CREATE TABLE [dbo].[ATT_ProfileRequests](
 	[ProfileRequestId] [int] IDENTITY(1,1) NOT NULL,
-	[CompanyId] [int] NOT NULL,
-	[EventId] [int] NOT NULL,
+	[AttendeeId] [int] NULL,
+	[EmployeeAttendeeId] [int] NULL,
 	[RequestedBy] [nvarchar](250) NOT NULL,
 	[ApprovedBy] [nvarchar](250) NULL,
 	[Status] [int] NULL,
@@ -59,19 +59,20 @@ GO
 ALTER TABLE [dbo].[ATT_ProfileRequests] ADD  CONSTRAINT [DF_ATT_ProfileRequests_UpdateSource]  DEFAULT ('Not Specified') FOR [UpdateSource]
 GO
 
-ALTER TABLE [dbo].[ATT_ProfileRequests]  WITH CHECK ADD  CONSTRAINT [FK_ATT_ProfileRequests_ATT_Company] FOREIGN KEY([CompanyId])
-REFERENCES [dbo].[ATT_Company] ([CompanyId])
+ALTER TABLE [dbo].[ATT_ProfileRequests]  WITH CHECK ADD  CONSTRAINT [FK_ATT_ProfileRequests_ATT_Attendee] FOREIGN KEY([AttendeeId])
+REFERENCES [dbo].[ATT_Attendee] ([AttendeeId])
 GO
 
-ALTER TABLE [dbo].[ATT_ProfileRequests] CHECK CONSTRAINT [FK_ATT_ProfileRequests_ATT_Company]
+ALTER TABLE [dbo].[ATT_ProfileRequests] CHECK CONSTRAINT [FK_ATT_ProfileRequests_ATT_Attendee]
 GO
 
-ALTER TABLE [dbo].[ATT_ProfileRequests]  WITH CHECK ADD  CONSTRAINT [FK_ATT_ProfileRequests_ATT_Show] FOREIGN KEY([EventId])
-REFERENCES [dbo].[ATT_Show] ([ShowId])
+ALTER TABLE [dbo].[ATT_ProfileRequests]  WITH CHECK ADD  CONSTRAINT [FK_ATT_ProfileRequests_ATT_EmployeeAttendee] FOREIGN KEY([EmployeeAttendeeId])
+REFERENCES [dbo].[ATT_EmployeeAttendee] ([EmployeeAttendeeId])
 GO
 
-ALTER TABLE [dbo].[ATT_ProfileRequests] CHECK CONSTRAINT [FK_ATT_ProfileRequests_ATT_Show]
+ALTER TABLE [dbo].[ATT_ProfileRequests] CHECK CONSTRAINT [FK_ATT_ProfileRequests_ATT_EmployeeAttendee]
 GO
+
 
 /****** Object:  Table [dbo].[ATT_ProfileRequestOptionalDetails]******/
 SET ANSI_NULLS ON
@@ -144,6 +145,7 @@ CREATE TABLE [dbo].[ATT_ProfileRequiredData](
 	[Samples] [nvarchar](10) NOT NULL,
 	[ProductSafety] [nvarchar](1000) NOT NULL,
 	[FactAboutCompany] [nvarchar](1000) NOT NULL,
+	[IsUpdate] [BIT] NOT NULL DEFAULT 0
 	[CreateDateUTC] [datetime] NOT NULL,
 	[UpdateDateUTC] [datetime] NOT NULL,
 	[UpdateSource] [nvarchar](200) NOT NULL,

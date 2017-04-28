@@ -30,8 +30,10 @@ namespace asi.asicentral.model.show
         public string Samples { get; set; }
         public string ProductSafety { get; set; }
         public string FactAboutCompany { get; set; }
+        public Boolean IsUpdate { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
+        public virtual ShowProfileRequests ProfileRequests { get; set; }
     }
 }

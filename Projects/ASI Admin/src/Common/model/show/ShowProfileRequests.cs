@@ -16,15 +16,17 @@ namespace asi.asicentral.model.show
    public class ShowProfileRequests
     {
         public int Id { get; set; }
-        public int CompanyId { get; set; }
-        public int EventId { get; set; }
+        public int? AttendeeId { get; set; }
+        public int? EmployeeAttendeeId { get; set; }
         public string RequestedBy { get; set; }
         public string ApprovedBy { get; set; }
         public ProfileRequestStatus Status { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
-
-        public virtual IList<ShowProfileRequestOptionalDetails> RequestOptionalDetails { get; set; }
+        public virtual ShowAttendee Attendee { get; set; }
+        public virtual ShowEmployeeAttendee EmployeeAttendee { get; set; }
+        public virtual IList<ShowProfileRequestOptionalDetails> ProfileRequestOptionalDetails { get; set; }
+        public virtual IList<ShowProfileRequiredData> ProfileRequiredData { get; set; }
     }
 }

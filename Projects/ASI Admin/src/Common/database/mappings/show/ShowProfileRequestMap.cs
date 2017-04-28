@@ -29,6 +29,16 @@ namespace asi.asicentral.database.mappings.show
 
             this.Property(t => t.UpdateSource)
                 .HasColumnName("UpdateSource");
-        }  
+
+            //Relationships
+            HasOptional(x => x.Attendee)
+             .WithMany(x => x.ProfileRequests)
+             .HasForeignKey(x => x.AttendeeId);
+
+            HasMany(t => t.ProfileRequestOptionalDetails)
+                 .WithOptional()
+                 .HasForeignKey(t => t.ProfileRequestId)
+                 .WillCascadeOnDelete();
+        }
     }
 }

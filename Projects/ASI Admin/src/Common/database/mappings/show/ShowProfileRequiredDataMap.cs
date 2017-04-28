@@ -13,7 +13,7 @@ namespace asi.asicentral.database.mappings.show
 
             //Properties
             this.Property(t => t.Id)
-                .HasColumnName("ProfileRequestId")
+                .HasColumnName("ProfileRequiredDataId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.CreateDate)
@@ -24,6 +24,11 @@ namespace asi.asicentral.database.mappings.show
 
             this.Property(t => t.UpdateSource)
                 .HasColumnName("UpdateSource");
+
+            HasRequired(x => x.ProfileRequests)
+           .WithMany(x => x.ProfileRequiredData)
+           .HasForeignKey(x=>x.ProfileRequestId);
+
         }  
     }
 }
