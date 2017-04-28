@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Web.Mvc;
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Web_Application;
 using asi.asicentral.web.Controllers;
+using NUnit.Framework;
 
 namespace asi.asicentral.WebApplication.Tests.Controllers
 {
-    [TestClass]
+     [TestFixture]
     public class TemplateControllerTest
     {
-        [TestMethod]
+        [Test]
         public void Form()
         {
             // arrange
@@ -20,7 +19,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers
             ViewResult form = controller.Form() as ViewResult;
         }
 
-        [TestMethod]
+        [Test]
         public void Dialog()
         {
             // arrange

@@ -7,15 +7,15 @@ using asi.asicentral.model.sgr;
 using asi.asicentral.interfaces;
 using asi.asicentral.web.Models.sgr;
 using asi.asicentral.web.Controllers.sgr;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace asi.asicentral.WebApplication.Tests.Controllers.sgr
 {
-    [TestClass]
+    [TestFixture]
     public class CategoryControllerTest
     {
-        [TestMethod]
+        [Test]
         public void List()
         {
             // arrange
@@ -31,13 +31,13 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.sgr
             Assert.IsNotNull(result.ViewBag.SubTitle);
         }
 
-        [TestMethod]
+        [Test]
         public void Edit()
         {
             // arrange
             IList<Company> companies = new List<Company>();
             companies.Add(new Company { Id = 1, Name = "Test Company 1", Summary = "Summary" });
-            
+
             Mock<IObjectService> mockObjectService = new Mock<IObjectService>();
             mockObjectService.Setup(objectService => objectService.GetAll<Company>(false)).Returns(companies.AsQueryable());
             CompanyController controller = new CompanyController();
@@ -46,20 +46,20 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.sgr
             // returning a Company model to the view
             ViewResult result = controller.Edit(1) as ViewResult;
             Assert.IsNotNull(result.Model);
-            Assert.IsInstanceOfType(result.Model, typeof(Company));
-            Assert.IsInstanceOfType(result, typeof(ViewResult));
+            Assert.That(result.Model, Is.InstanceOf<Company>());
+            Assert.That(result, Is.InstanceOf<ViewResult>());
 
             // editing and saving a Company model to the database
             Company company = new Company();
             company.Name = "New Company";
             company.Summary = "Summary";
             ActionResult actionResult = controller.Edit(company);
-            Assert.IsInstanceOfType(actionResult, typeof(RedirectToRouteResult));
+            Assert.That(actionResult, Is.InstanceOf<RedirectToRouteResult>());
             mockObjectService.Verify(objectService => objectService.Update<Company>(company), Times.Exactly(1));
             mockObjectService.Verify(objectService => objectService.SaveChanges(), Times.Exactly(1));
         }
 
-        [TestMethod]
+        [Test]
         public void Add()
         {
             // arrange
@@ -81,12 +81,12 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.sgr
             // add new company to the data
             Company company = new Company { Id = 1, Name = "New Company", Summary = "Summary" };
             ActionResult actionResult = controller.Add(company);
-            Assert.IsInstanceOfType(actionResult, typeof(RedirectToRouteResult));
+            Assert.That(actionResult, Is.InstanceOf<RedirectToRouteResult>());
             mockObjectService.Verify(objectService => objectService.Add<Company>(company), Times.Exactly(1));
             mockObjectService.Verify(objectService => objectService.SaveChanges());
         }
 
-        [TestMethod]
+        [Test]
         public void Delete()
         {
 

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.database;
 using asi.asicentral.model.store;
 using System.Collections.Generic;
 using asi.asicentral.services;
+using NUnit.Framework;
 
 namespace asi.asicentral.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class ProductTest
     {
         public void PopulateDemoData()
@@ -707,7 +707,7 @@ namespace asi.asicentral.Tests
             #endregion Add the supplier data
         }
 
-        [TestMethod]
+        [Test]
         public void ContextCrud()
         {
             int newId;
@@ -743,7 +743,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void ESPAdvertisingCrud()
         {
             int newId = 25000;
@@ -775,7 +775,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestLookups()
         {
             using (var objectContext = new StoreContext())
@@ -790,7 +790,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void CompanyTest()
         {
             int companyId;
@@ -860,7 +860,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void OrderCrud()
         {
             int newOrderId;
@@ -997,7 +997,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void RetrieveProductStructure()
         {
             using (var objectContext = new StoreContext())
@@ -1031,7 +1031,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void RetrieveTax()
         {
             using (var objectContext = new StoreContext())

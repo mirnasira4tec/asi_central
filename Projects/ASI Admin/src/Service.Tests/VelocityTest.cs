@@ -1,15 +1,15 @@
 ﻿using asi.asicentral.web.database;
 using asi.asicentral.web.Models.velocity;
 using asi.asicentral.web.Service;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 
 namespace asi.asicentral.Tests
 {
-    [TestClass]
+   [TestFixture]
     public class VelocityTest 
     {
-        [TestMethod]
+        [Test]
         public void SupplierUpdateColourMappingTest()
         {
             ColorMapping colorMapping = new ColorMapping();
