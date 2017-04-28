@@ -416,9 +416,33 @@ namespace asi.asicentral.Tests
             Assert.AreEqual(attendees.ElementAt(0).ShowId, attendee.Attendees[1].ShowId);
         }
 
+        [TestMethod]
+        public void GetProfileUpdateRequest()
+        {
+            using (var context = new Umbraco_ShowContext())
+            {
+                var request = context.ProfileRequests.OrderByDescending(x => x.Id).FirstOrDefault();
+                Assert.IsNotNull(request);
+            }
+        }
 
         [TestMethod]
-        public void ProfileUpdateRequestTest()
+        public void SupplierProfileRequest()
+        {
+           var request = RequestForAttendee(101);
+           RequestProfile(request.Id);
+           DeleteRequest(request.Id);
+        }
+
+        [TestMethod]
+        public void DistributorProfileRequest()
+        {
+            var request = RequestForEmployeeAttendee(101, 8);
+            RequestProfile(request.Id);
+            DeleteRequest(request.Id);
+        }
+
+        private ShowProfileRequests RequestForAttendee(int attnedeeId)
         {
             using (var context = new Umbraco_ShowContext())
             {
@@ -426,13 +450,12 @@ namespace asi.asicentral.Tests
                 var fields = context.ProfileOptionalDataLabel.Where(s => s.IsObsolete.HasValue).ToList();
                 Assert.IsNotNull(fields);
 
-                var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.AttendeeId == 98 && x.EmployeeAttendeeId == 4 && x.Status == (int)ProfileRequestStatus.Pending);
+                var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.AttendeeId == attnedeeId && x.Status == (int)ProfileRequestStatus.Pending);
                 if (profileRequests == null)
                 {
                     profileRequests = new ShowProfileRequests()
                     {
-                        AttendeeId = 98,
-                        EmployeeAttendeeId = 4,
+                        AttendeeId = attnedeeId,
                         RequestedBy = "rprajapati_unit",
                         Status = ProfileRequestStatus.Pending,
                         CreateDate = DateTime.Now,
@@ -443,12 +466,49 @@ namespace asi.asicentral.Tests
                     context.SaveChanges();
                     Assert.IsNotNull(profileRequests);
                 }
-                var profileRequiredData = context.ProfileRequiredData.FirstOrDefault(x => x.ProfileRequestId == profileRequests.Id && x.flag == false);
+                return profileRequests;
+            }
+        }
+
+        private ShowProfileRequests RequestForEmployeeAttendee(int attnedeeId, int employeeAttendeeId)
+        {
+            using (var context = new Umbraco_ShowContext())
+            {
+                //retrieve update field
+                var fields = context.ProfileOptionalDataLabel.Where(s => s.IsObsolete.HasValue).ToList();
+                Assert.IsNotNull(fields);
+
+                var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.AttendeeId == attnedeeId && x.EmployeeAttendeeId == employeeAttendeeId && x.Status == (int)ProfileRequestStatus.Pending);
+                if (profileRequests == null)
+                {
+                    profileRequests = new ShowProfileRequests()
+                    {
+                        AttendeeId = attnedeeId,
+                        EmployeeAttendeeId = employeeAttendeeId,
+                        RequestedBy = "rprajapati_unit",
+                        Status = ProfileRequestStatus.Pending,
+                        CreateDate = DateTime.Now,
+                        UpdateDate = DateTime.Now,
+                        UpdateSource = "Initial Unit Tests"
+                    };
+                    context.ProfileRequests.Add(profileRequests);
+                    context.SaveChanges();
+                    Assert.IsNotNull(profileRequests);
+                }
+                return profileRequests;
+            }
+        }
+
+        private void RequestProfile(int profileRequestsId)
+        {
+            using (var context = new Umbraco_ShowContext())
+            {
+                var profileRequiredData = context.ProfileRequiredData.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.IsUpdate == false);
                 if (profileRequiredData == null)
                 {
                     profileRequiredData = new ShowProfileRequiredData()
                     {
-                        ProfileRequestId = profileRequests.Id,
+                        ProfileRequestId = profileRequestsId,
                         Email = "reena.prajapati@a4technology.com",
                         CompanyName = "A4 Tech",
                         ASINumber = "1234",
@@ -480,12 +540,12 @@ namespace asi.asicentral.Tests
                 }
                 else
                 {
-                    profileRequiredData = context.ProfileRequiredData.FirstOrDefault(x => x.ProfileRequestId == profileRequests.Id && x.flag == true);
+                    profileRequiredData = context.ProfileRequiredData.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.IsUpdate == true);
                     if (profileRequiredData == null)
                     {
                         profileRequiredData = new ShowProfileRequiredData()
                         {
-                            ProfileRequestId = profileRequests.Id,
+                            ProfileRequestId = profileRequestsId,
                             Email = "reena.prajapati1@a4technology.com",
                             CompanyName = "A4 Tech1",
                             ASINumber = "1234",
@@ -509,7 +569,7 @@ namespace asi.asicentral.Tests
                             CreateDate = DateTime.Now,
                             UpdateDate = DateTime.Now,
                             UpdateSource = "Initial Unit Tests",
-                            flag = true
+                            IsUpdate = true
                         };
 
                         context.ProfileRequiredData.Add(profileRequiredData);
@@ -522,12 +582,12 @@ namespace asi.asicentral.Tests
                         context.SaveChanges();
                     }
                 }
-                var profileRequestOptionalDetails = context.ProfileRequestOptionalDetails.FirstOrDefault(x => x.ProfileRequestId == profileRequests.Id && x.ProfileOptionalDataLabelId == 1);
+                var profileRequestOptionalDetails = context.ProfileRequestOptionalDetails.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.ProfileOptionalDataLabelId == 1);
                 if (profileRequestOptionalDetails == null)
                 {
                     profileRequestOptionalDetails = new ShowProfileRequestOptionalDetails()
                     {
-                        ProfileRequestId = profileRequests.Id,
+                        ProfileRequestId = profileRequestsId,
                         ProfileOptionalDataLabelId = 1,
                         UpdateValue = "updateValue",
                         OrigValue = "origiValue",
@@ -545,33 +605,66 @@ namespace asi.asicentral.Tests
                     context.SaveChanges();
                 }
                 Assert.IsNotNull(profileRequestOptionalDetails);
-                
-            }
+            }  
         }
 
-        [TestMethod]
-        public void DeleteProfileUpdateRequest()
+        private void DeleteRequest(int profileRequestsId)
         {
             using (var context = new Umbraco_ShowContext())
             {
-                var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.AttendeeId == 98 && x.EmployeeAttendeeId == 4);
-                if (profileRequests != null)
+                var profileRequestOptionalDetails = context.ProfileRequestOptionalDetails.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.ProfileOptionalDataLabelId == 1);
+                context.ProfileRequestOptionalDetails.Remove(profileRequestOptionalDetails);
+                var profileRequiredData = context.ProfileRequiredData.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId);
+                context.ProfileRequiredData.Remove(profileRequiredData);
+                var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.Id == profileRequestsId);
+                context.ProfileRequests.Remove(profileRequests);
+                context.SaveChanges();
+            }
+        }
+
+        private ShowAttendee CreateAttendee()
+        {
+            using (var context = new Umbraco_ShowContext())
+            {
+                var newAttendee = new ShowAttendee()
                 {
-                    profileRequests.AttendeeId = null;
-                    context.SaveChanges();
-                }
-                Assert.AreNotEqual(profileRequests.AttendeeId, 98);
+                    CompanyId = 1,
+                    ShowId = 1,
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    UpdateSource = "Initial Unit Tests"
+                };
+                context.Attendee.Add(newAttendee);
+                context.SaveChanges();
+                Assert.IsNotNull(newAttendee);
+                return newAttendee;
             }
         }
 
         [TestMethod]
-        public void GetProfileUpdateRequest()
+        public void ProfileUpdateRequestTest()
         {
             using (var context = new Umbraco_ShowContext())
             {
-                var request = context.ProfileRequests.OrderByDescending(x => x.Id).FirstOrDefault();
-                Assert.IsNotNull(request);
+                var attendee = CreateAttendee();
+                if (attendee != null)
+                {
+                    var request = RequestForAttendee(attendee.Id);
+                    RequestProfile(request.Id);
+                    context.Attendee.Attach(attendee);
+                    context.Attendee.Remove(attendee);
+                    var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.AttendeeId == attendee.Id);
+                    if (profileRequests != null)
+                    {
+                        Assert.AreEqual(profileRequests.AttendeeId, attendee.Id);
+                        profileRequests.AttendeeId = null;
+                        context.SaveChanges();
+                    }
+                    Assert.AreNotEqual(profileRequests.AttendeeId, attendee.Id);
+                    DeleteRequest(profileRequests.Id);
+                }
             }
+
         }
 
         public DataTable GetDataTable()

@@ -17,7 +17,7 @@ namespace asi.asicentral.model.show
     {
         public int Id { get; set; }
         public int? AttendeeId { get; set; }
-        public int EmployeeAttendeeId { get; set; }
+        public int? EmployeeAttendeeId { get; set; }
         public string RequestedBy { get; set; }
         public string ApprovedBy { get; set; }
         public ProfileRequestStatus Status { get; set; }

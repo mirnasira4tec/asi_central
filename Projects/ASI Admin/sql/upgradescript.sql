@@ -145,7 +145,7 @@ CREATE TABLE [dbo].[ATT_ProfileRequiredData](
 	[Samples] [nvarchar](10) NOT NULL,
 	[ProductSafety] [nvarchar](1000) NOT NULL,
 	[FactAboutCompany] [nvarchar](1000) NOT NULL,
-	[flag] [BIT] NOT NULL DEFAULT 0
+	[IsUpdate] [BIT] NOT NULL DEFAULT 0
 	[CreateDateUTC] [datetime] NOT NULL,
 	[UpdateDateUTC] [datetime] NOT NULL,
 	[UpdateSource] [nvarchar](200) NOT NULL,
