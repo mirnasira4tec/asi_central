@@ -658,8 +658,8 @@ namespace asi.asicentral.Tests
                     {
                         Assert.AreEqual(profileRequests.AttendeeId, attendee.Id);
                         profileRequests.AttendeeId = null;
-                        context.SaveChanges();
                     }
+                    context.SaveChanges();
                     Assert.AreNotEqual(profileRequests.AttendeeId, attendee.Id);
                     DeleteRequest(profileRequests.Id);
                 }
