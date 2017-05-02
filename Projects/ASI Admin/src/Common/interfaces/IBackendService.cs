@@ -1,4 +1,5 @@
 ﻿using asi.asicentral.model;
+using asi.asicentral.model.personify;
 using asi.asicentral.model.store;
 using asi.asicentral.PersonifyDataASI;
 using System.Collections.Generic;
@@ -51,6 +52,7 @@ namespace asi.asicentral.interfaces
         bool ValidateRateCode(string groupName, string rateStructure, string rateCode, ref int persProductId);
 
         CompanyInformation AddEEXSubscription(User user, bool isBusinessAddress);
+        PersonifyStatus OptOutEmailSubscription(string email, List<string> usageCodes);
 
         StoreDetailApplication GetDemographicData(StoreOrderDetail orderDetail);
     }
