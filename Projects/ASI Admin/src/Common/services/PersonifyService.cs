@@ -729,6 +729,11 @@ namespace asi.asicentral.services
             return companyInfo;
         }
 
+        public virtual PersonifyStatus OptOutEmailSubscription(string email, List<string> usageCodes)
+        {
+            return PersonifyClient.OptOutEmailSubscription(email, usageCodes);
+        }
+
         public virtual StoreDetailApplication GetDemographicData(StoreOrderDetail orderDetail)
         {
             var storeDetailApp = PersonifyClient.GetDemographicData(storeService, orderDetail);
