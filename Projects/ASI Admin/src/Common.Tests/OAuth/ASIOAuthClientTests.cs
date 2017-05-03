@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using asi.asicentral.services;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.oauth;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,14 +10,15 @@ using System.Net;
 using ASI.Services.Http.SmartLink;
 using ASI.Services.Http.Security;
 using System.Security.Claims;
+using NUnit.Framework;
 
 namespace Core.Tests.OAuth
 {
-    [TestClass]
+    [TestFixture]
     public class ASIOAuthClientTests
     {
-        [Ignore]
-        [TestMethod]
+        [Ignore("UserTestScenarios")]
+        [Test]
         public void UserTestScenarios()
         {
             var tag = DateTime.Now.Ticks;
@@ -61,8 +61,8 @@ namespace Core.Tests.OAuth
             Assert.AreEqual(user.MemberType_CD, "DISTRIBUTOR"); // 4440
         }
 
-        [TestMethod]
-        [Ignore]
+        [Test]
+        [Ignore("UserTestScenarios1")]
         public void UserTestScenarios1()
         {
             var email = "pkumartest8@test.com";
@@ -105,28 +105,28 @@ namespace Core.Tests.OAuth
             Assert.IsNotNull(tokens["RefreshToken"]);
         }
 
-        [TestMethod]
+        [Test]
         public void IsValidEmailFailureTest()
         {
             bool result1 = ASIOAuthClient.IsValidEmail("failtest@asicentral.com");
             Assert.IsFalse(result1);
         }
 
-        [TestMethod]
+        [Test]
         public void IsValidEmailTest()
         {
             bool result1 = ASIOAuthClient.IsValidEmail("pkumar@asicentral.com");
             Assert.IsTrue(result1);
         }
 
-        [TestMethod]
+        [Test]
         public void GetUserBySSOFailureTest()
         {
             var result1 = ASIOAuthClient.GetUser(123);
             Assert.IsNull(result1);
         }
 
-        [TestMethod]
+        [Test]
         public void GetUserBySSOTest()
         {
             var result1 = ASIOAuthClient.GetUser(4419);
@@ -134,7 +134,7 @@ namespace Core.Tests.OAuth
             Assert.AreEqual(result1.SSOId, 4419);
         }
 
-        [TestMethod]
+        [Test]
         public void UpdateUserTest()
         {
             var result = ASIOAuthClient.GetUser(4419);
@@ -158,7 +158,7 @@ namespace Core.Tests.OAuth
             Assert.AreEqual(result.Street1, street1);
         }
 
-        [TestMethod]
+        [Test]
         public void ChangePasswordTest()
         {
             asi.asicentral.model.Security security = new asi.asicentral.model.Security();
@@ -172,7 +172,7 @@ namespace Core.Tests.OAuth
             Assert.IsTrue(isPasswordChanged);
         }
 
-        [TestMethod]
+        [Test]
         public void GetCopmanyByASITest()
         {
             asi.asicentral.model.User user = ASIOAuthClient.GetCompanyByASINumber("342495");
@@ -180,14 +180,14 @@ namespace Core.Tests.OAuth
             Assert.AreEqual(user.AsiNumber, "342495");
         }
 
-        [TestMethod]
+        [Test]
         public void GetCopmanyByASIFailedTest()
         {
             asi.asicentral.model.User user = ASIOAuthClient.GetCompanyByASINumber("12345");
             Assert.IsNull(user);
         }
 
-        [TestMethod]
+        [Test]
         public void IsValidUserByTrueCredentials()
         {
             IDictionary<string, string> result = ASIOAuthClient.IsValidUser("pkumar@asicentral.com", "password1");
@@ -196,14 +196,14 @@ namespace Core.Tests.OAuth
             Assert.IsNotNull(result["RefreshToken"]);
 		}
                 
-        [TestMethod]
+        [Test]
         public void IsValidUserByFalseCredentials()
         {
             IDictionary<string, string> result = ASIOAuthClient.IsValidUser("125724pk1", "password1");
             Assert.IsNull(result);
         }
 
-        [TestMethod]
+        [Test]
         public void LoginTest()
         {
             var tokens = ASIOAuthClient.Login_FetchUserDetails("pkumar@asicentral.com", "password1");
@@ -212,7 +212,7 @@ namespace Core.Tests.OAuth
             Assert.IsNotNull(tokens["RefreshToken"]);
         }
 
-        [TestMethod]
+        [Test]
         public void RefreshTokenTest()
         {
             var tokens = ASIOAuthClient.Login_FetchUserDetails("pkumar@asicentral.com", "password1");
@@ -226,7 +226,7 @@ namespace Core.Tests.OAuth
             Assert.IsNotNull(tokens["RefreshToken"]);
         }
 
-        [TestMethod]
+        [Test]
         public void GenarateTokens()
         {
             var userName = "ad68507velo";
@@ -254,7 +254,7 @@ namespace Core.Tests.OAuth
             return claimsPrincipal.Identity as AuthenticatedUser;
         }
 
-        [TestMethod]
+        [Test]
         public void TestRefreshTokenIfAccessTokenIsNotValid()
         {
             string accessToken = string.Empty;
