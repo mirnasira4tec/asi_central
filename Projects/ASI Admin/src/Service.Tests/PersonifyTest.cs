@@ -102,7 +102,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
-        [Ignore]
+        [Ignore("EmailOptOut")]
         public void EmailOptOut()
         {
             var email = "testing@111.com";
@@ -112,7 +112,7 @@ namespace asi.asicentral.Tests
             Assert.IsNotNull(output);
         }
 
-        [TestMethod]
+        [Test]
         public void PackageOrderTest()
         {
             IStoreService storeService = MockupStoreService();
