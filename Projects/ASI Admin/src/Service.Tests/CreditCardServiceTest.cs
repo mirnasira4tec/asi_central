@@ -1,16 +1,16 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.services;
 using asi.asicentral.interfaces;
 using asi.asicentral.model;
 using System.Configuration;
+using NUnit.Framework;
 
 namespace asi.asicentral.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class CreditCardServiceTest
     {
-        [TestMethod]
+        [Test]
         public void ValidateCreditCard()
         {
             string webAPIUrl = ConfigurationManager.AppSettings["ConnectUrl"];

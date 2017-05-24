@@ -1,17 +1,17 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.interfaces;
 using asi.asicentral.services;
 using System.Collections;
 using asi.asicentral.model.ROI;
 using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace asi.asicentral.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class ROIServiceTest
     {
-        [TestMethod]
+        [Test]
         public void GetImpressionsPerCategory()
         {
             IROIService roiService = new ROIService();
