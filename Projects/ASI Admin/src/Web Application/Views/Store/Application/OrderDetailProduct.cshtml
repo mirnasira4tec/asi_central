@@ -144,14 +144,12 @@
                     <span class="label-row span11">
                         <label><strong>Credits</strong></label>
                         <label><strong>Price</strong></label>
-                        <label><strong>Cost Per Email</strong></label>
 			        </span>
                     foreach (var option in asi.asicentral.util.store.emailmarketing.EmailMarketingHelper.EmailMarketingOptions)
                     {
                         <span class="label-row span11">
                             <label class="radio">@Html.RadioButtonFor(model => model.OptionId, option.Key) @Html.Raw(option.Value[0]) </label>
                             <label>$@Html.Raw(option.Value[1])</label>
-                            <label>$@Html.Raw(option.Value[2])</label>
                         </span>                                
                     }
                     break;
