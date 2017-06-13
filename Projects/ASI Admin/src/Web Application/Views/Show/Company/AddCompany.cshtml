@@ -27,6 +27,10 @@
                 @Html.LabelFor(model => model.ASINumber, new { @class = "control-label" })
                 <div class="controls">@Html.EditorFor(model => model.ASINumber, new { ID = "ASINumber" }) @Html.ValidationMessageFor(model => model.ASINumber)</div>
             </div>
+              <div class="control-group">
+                @Html.LabelFor(model => model.SecondaryASINo, new { @class = "control-label" })
+                <div class="controls">@Html.EditorFor(model => model.SecondaryASINo, new { ID = "SecondaryASINo" }) @Html.ValidationMessageFor(model => model.SecondaryASINo)</div>
+            </div>
             <div class="control-group">
                 @Html.LabelFor(model => model.Url, new { @class = "control-label" })
                 <div class="controls">@Html.EditorFor(model => model.Url)<span class="helper-text"> (optional)</span> @Html.ValidationMessageFor(model => model.Url)</div>

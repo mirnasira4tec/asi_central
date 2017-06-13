@@ -92,6 +92,10 @@ namespace asi.asicentral.web.models.show
         [RegularExpression(@"^[1-9][0-9]{3,5}$", ErrorMessageResourceName = "FieldInvalidASINumber", ErrorMessageResourceType = typeof(Resource))]
         public string ASINumber { set; get; }
 
+        [Display(ResourceType = typeof(Resource), Name = "SecondaryASINo")]
+        [RegularExpression(@"^[1-9][0-9]{3,5}$", ErrorMessageResourceName = "FieldInvalidASINumber", ErrorMessageResourceType = typeof(Resource))]
+        public string SecondaryASINo { set; get; }
+
         [Display(ResourceType = typeof(Resource), Name = "MemberType")]
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public string MemberType { set; get; }

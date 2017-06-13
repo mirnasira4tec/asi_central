@@ -116,6 +116,7 @@ namespace asi.asicentral.util.show
             employee.MiddleName = objEmployee.MiddleName;
             employee.LastName = objEmployee.LastName;
             employee.Email = objEmployee.Email;
+            employee.LoginEmail = objEmployee.LoginEmail;
             employee.EPhoneAreaCode = objEmployee.EPhoneAreaCode;
             employee.EPhone = objEmployee.EPhone;
             employee.CompanyId = objEmployee.CompanyId;
@@ -145,6 +146,7 @@ namespace asi.asicentral.util.show
             company.WebUrl = objCompany.WebUrl;
             company.MemberType = objCompany.MemberType;
             company.ASINumber = objCompany.ASINumber;
+            company.SecondaryASINo = objCompany.SecondaryASINo;
             company.LogoUrl = objCompany.LogoUrl;
             company.UpdateDate = DateTime.UtcNow;
             company.UpdateSource = objCompany.UpdateSource;

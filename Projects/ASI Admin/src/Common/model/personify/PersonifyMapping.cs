@@ -7,6 +7,13 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.model.personify
 {
+    public enum PersonifyStatus
+    {
+        Success = 0,
+        NoRecordFound = 1,
+        PersonifyError = 2
+    }
+
     public class PersonifyMapping
     {
         public PersonifyMapping()
