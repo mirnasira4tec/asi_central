@@ -230,7 +230,6 @@ namespace asi.asicentral.web.Controllers.Show
                             AttendeeId = attendee.Id,
                             EmployeeId = employee.Id,
                             UpdateSource = "ExcelUploadcontroller-Index",
-                            HasTravelForm = Convert.ToBoolean(ds.Rows[rowId]["HasTravelForm"].ToString() == "Yes") ? true : false
                         };
 
                         employeeAttendee.Employee = employee;
@@ -238,9 +237,10 @@ namespace asi.asicentral.web.Controllers.Show
 
                         attendee.EmployeeAttendees.Add(employeeAttendee);
                     }
-                    else
+                    if (ds.Columns.Contains("HasTravelForm"))
+                    {
                         employeeAttendee.HasTravelForm = Convert.ToBoolean(ds.Rows[rowId]["HasTravelForm"].ToString() == "Yes") ? true : false;
-
+                    }
                     if( employeeAttendees != null )
                         employeeAttendees.Add(employeeAttendee);
                 }
