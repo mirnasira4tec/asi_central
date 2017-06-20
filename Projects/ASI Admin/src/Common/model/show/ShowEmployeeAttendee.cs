@@ -12,9 +12,10 @@ namespace asi.asicentral.model.show
         public int AttendeeId { get; set; }
         public int EmployeeId { get; set; }
         public virtual ShowAttendee Attendee { get; set; }
-        public virtual ShowEmployee Employee { get; set; } 
+        public virtual ShowEmployee Employee { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
+        public bool? HasTravelForm { get; set; }
     }
 }
