@@ -84,7 +84,7 @@ namespace asi.asicentral.oauth
                     var cookie = GetCookieValue(request, response, FormsAuthentication.FormsCookieName);
                     if (!string.IsNullOrEmpty(cookie))
                     {
-                        var redirectParams = GetLatestTokens(request, response, cookie, domainName, userCookieName, toAppCode: appCode);
+                        var redirectParams = GetLatestTokens(request, response, cookie, domainName, userCookieName);
                         if (redirectParams != null)
                         {
                             if (ApplicationCodes.WESP == appCode)
@@ -132,8 +132,10 @@ namespace asi.asicentral.oauth
             return redirectUrl;
         }
 
-        private static CrossApplication.RedirectParams GetCrossAppTokens(CrossApplication.RedirectParams redirectParams, ApplicationCodes toAppCode)
+        private static CrossApplication.RedirectParams GetCrossAppTokens(HttpRequestBase request, HttpResponseBase response, string cookie, string domainName, string userCookieName = "Name", ApplicationCodes toAppCode = ApplicationCodes.ASCT)
         {
+            var redirectParams = GetLatestTokens(request, response, cookie, domainName, userCookieName);
+            
             if (redirectParams != null && !string.IsNullOrEmpty(redirectParams.AccessToken))
             {
                 var accessToken = redirectParams.AccessToken;
@@ -179,7 +181,7 @@ namespace asi.asicentral.oauth
             return redirectParams;
         }
 
-        private static CrossApplication.RedirectParams GetLatestTokens(HttpRequestBase request, HttpResponseBase response, string cookie, string domainName, string userCookieName = "Name", ApplicationCodes toAppCode = ApplicationCodes.ASCT)
+        public static CrossApplication.RedirectParams GetLatestTokens(HttpRequestBase request, HttpResponseBase response, string cookie, string domainName, string userCookieName = "Name")
         {
             ILogService log = LogService.GetLog(typeof(CookiesHelper));
             log.Debug("GetLatestTokens - Start");
@@ -216,7 +218,7 @@ namespace asi.asicentral.oauth
                         }
                 }
 
-                extraData = GetCrossAppTokens(extraData, toAppCode);
+              //  extraData = GetCrossAppTokens(extraData, toAppCode);
             }
             catch (Exception ex)
             {
@@ -246,7 +248,7 @@ namespace asi.asicentral.oauth
                 var cookie = GetCookieValue(request, response, FormsAuthentication.FormsCookieName);
                 if (!string.IsNullOrEmpty(cookie))
                 {
-                    var redirectParms = GetLatestTokens(request, response, cookie, domainName, userCookieName: userCookieName, toAppCode: appCode);
+                    var redirectParms = GetCrossAppTokens(request, response, cookie, domainName, userCookieName: userCookieName, toAppCode: appCode);
                     if (redirectParms != null && !string.IsNullOrEmpty(redirectParms.AccessToken))
                         lmsToken = EncriptToken(redirectParms.AccessToken);
                 }
