@@ -84,13 +84,13 @@ namespace asi.asicentral.oauth
                     var cookie = GetCookieValue(request, response, FormsAuthentication.FormsCookieName);
                     if (!string.IsNullOrEmpty(cookie))
                     {
-                        var redirectParams = GetLatestTokens(request, response, cookie, domainName, userCookieName);
+                        var redirectParams = GetCrossAppTokens(request, response, cookie, domainName, userCookieName, appCode);
                         if (redirectParams != null)
                         {
                             if (ApplicationCodes.WESP == appCode)
                             {
                                 var espUrl = ConfigurationManager.AppSettings["ESPRedirectUrl"];
-                                redirectUrl = string.Format("http://{0}/default.aspx?appCode={1}&fromAppCode={2}&fromAppVer=&guidtype=App&extguid={3}", 
+                                redirectUrl = string.Format("http://{0}/default.aspx?appCode={1}&fromAppCode={2}&fromAppVer=&guidtype=App&extguid={3}",
                                                              espUrl, appCode.ToString(), ApplicationCodes.ASCT.ToString(), redirectParams.ExtGuid);
                             }
                             else if (ApplicationCodes.ASED == appCode)
@@ -99,7 +99,7 @@ namespace asi.asicentral.oauth
                                 var Lmsurl = ConfigurationManager.AppSettings["LMSRedirectUrl"];
                                 redirectUrl = string.Format("{0}learnerssologin.jsp?tokenid={1}", Lmsurl, HttpUtility.UrlEncode(encryptedToken));
                             }
-                         }
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -135,7 +135,7 @@ namespace asi.asicentral.oauth
         private static CrossApplication.RedirectParams GetCrossAppTokens(HttpRequestBase request, HttpResponseBase response, string cookie, string domainName, string userCookieName = "Name", ApplicationCodes toAppCode = ApplicationCodes.ASCT)
         {
             var redirectParams = GetLatestTokens(request, response, cookie, domainName, userCookieName);
-            
+
             if (redirectParams != null && !string.IsNullOrEmpty(redirectParams.AccessToken))
             {
                 var accessToken = redirectParams.AccessToken;
@@ -153,7 +153,7 @@ namespace asi.asicentral.oauth
 
                         var oAuth2Client = new OAuth2Client(host, relativePath: relativePath);
                         var authenticatedUser = ASIOAuthClient.GetAuthenticatedUser(accessToken);
-                        if(authenticatedUser != null && authenticatedUser.Token != null)
+                        if (authenticatedUser != null && authenticatedUser.Token != null)
                         {
                             var sessionId = authenticatedUser.Token.Value;
                             var asiOAuthClientId = ConfigurationManager.AppSettings["AsiOAuthClientId"];
@@ -175,7 +175,7 @@ namespace asi.asicentral.oauth
                         var log = LogService.GetLog(typeof(CookiesHelper));
                         log.Debug(string.Format("GetLatestTokens - exception: {0}", ex.Message));
                     }
-                }                
+                }
             }
 
             return redirectParams;
@@ -193,32 +193,32 @@ namespace asi.asicentral.oauth
 
             try
             {
-                if ( extraData != null && !string.IsNullOrEmpty(extraData.RefreshToken))
+                if (extraData != null && !string.IsNullOrEmpty(extraData.RefreshToken))
                 {
                     log.Debug("GetLatestTokens - Requesting a new token");
-                        var tokens = ASIOAuthClient.RefreshToken(extraData.RefreshToken);
-                        if (tokens != null && tokens.Count > 0)
+                    var tokens = ASIOAuthClient.RefreshToken(extraData.RefreshToken);
+                    if (tokens != null && tokens.Count > 0)
+                    {
+                        foreach (var key in tokens.Keys)
                         {
-                            foreach (var key in tokens.Keys)
-                            {
-                                log.Debug("GetLatestTokens - RefreshToken - " + key + " " + tokens[key]);
-                            }
-                            var user = new model.User();
-                            if (tokens.ContainsKey("AuthToken")) user.AccessToken = tokens["AuthToken"];
-                            if (tokens.ContainsKey("RefreshToken")) user.RefreshToken = tokens["RefreshToken"];
-                            user.FirstName = HttpContext.Current.User.Identity.Name;
-                            SetFormsAuthenticationCookie(request, response, user, false, userCookieName, domainName);
+                            log.Debug("GetLatestTokens - RefreshToken - " + key + " " + tokens[key]);
+                        }
+                        var user = new model.User();
+                        if (tokens.ContainsKey("AuthToken")) user.AccessToken = tokens["AuthToken"];
+                        if (tokens.ContainsKey("RefreshToken")) user.RefreshToken = tokens["RefreshToken"];
+                        user.FirstName = HttpContext.Current.User.Identity.Name;
+                        SetFormsAuthenticationCookie(request, response, user, false, userCookieName, domainName);
 
-                            extraData.AccessToken = user.AccessToken;
-                            extraData.RefreshToken = user.RefreshToken;
-                        }
-                        else
-                        {
-                            log.Error("GetLatestTokens - RefreshToken - did not get a new token");
-                        }
+                        extraData.AccessToken = user.AccessToken;
+                        extraData.RefreshToken = user.RefreshToken;
+                    }
+                    else
+                    {
+                        log.Error("GetLatestTokens - RefreshToken - did not get a new token");
+                    }
                 }
 
-              //  extraData = GetCrossAppTokens(extraData, toAppCode);
+                //  extraData = GetCrossAppTokens(extraData, toAppCode);
             }
             catch (Exception ex)
             {
