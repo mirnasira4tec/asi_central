@@ -11,7 +11,9 @@ namespace asi.asicentral.model.show
         Pending = 0,
         Approved = 1,
         Rejected = 2,
-        Cancelled = 3
+        Cancelled = 3,
+        Updated = 4,
+        PreApproved =5
     }
    public class ShowProfileRequests
     {
@@ -20,6 +22,7 @@ namespace asi.asicentral.model.show
         public int? EmployeeAttendeeId { get; set; }
         public string RequestedBy { get; set; }
         public string ApprovedBy { get; set; }
+        public string RequestReference { get; set; }
         public ProfileRequestStatus Status { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }

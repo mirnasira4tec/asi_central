@@ -449,7 +449,7 @@ namespace asi.asicentral.Tests
                 //retrieve update field
                 var fields = context.ProfileOptionalDataLabel.Where(s => s.IsObsolete.HasValue).ToList();
                 Assert.IsNotNull(fields);
-
+                String guid = Guid.NewGuid().ToString();
                 var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.AttendeeId == attnedeeId && x.Status == (int)ProfileRequestStatus.Pending);
                 if (profileRequests == null)
                 {
@@ -457,6 +457,7 @@ namespace asi.asicentral.Tests
                     {
                         AttendeeId = attnedeeId,
                         RequestedBy = "rprajapati_unit",
+                        RequestReference = guid,
                         Status = ProfileRequestStatus.Pending,
                         CreateDate = DateTime.Now,
                         UpdateDate = DateTime.Now,

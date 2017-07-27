@@ -13,6 +13,7 @@ namespace asi.asicentral.model.show
         public string Email { get; set; }
         public string CompanyName { get; set; }
         public string ASINumber { get; set; }
+        public string AttendeeImage { get; set; }
         public string AttendeeName { get; set; }
         public string AttendeeTitle { get; set; }
         public string AttendeeCommEmail { get; set; }
