@@ -246,4 +246,7 @@
   <data name="IdeaShowcaseFallDescription" xml:space="preserve">
     <value>Give your customers tons of variety with this compact catalog.</value>
   </data>
+  <data name="IdeaShowcaseFallEducationDescription" xml:space="preserve">
+    <value>Give your customers tons of variety with this compact catalog.</value>
+  </data>
 </root>
