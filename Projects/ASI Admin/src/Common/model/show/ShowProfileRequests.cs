@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,11 +10,10 @@ namespace asi.asicentral.model.show
     public enum ProfileRequestStatus
     {
         Pending = 0,
-        Approved = 1,
-        Rejected = 2,
-        Cancelled = 3,
-        Updated = 4,
-        PreApproved =5
+        Updated = 1,
+        PreApproved = 2,
+        Approved = 3,
+        Cancelled = 4
     }
    public class ShowProfileRequests
     {
@@ -23,7 +23,7 @@ namespace asi.asicentral.model.show
         public string RequestedBy { get; set; }
         public string ApprovedBy { get; set; }
         public string RequestReference { get; set; }
-        public ProfileRequestStatus Status { get; set; }
+        public ProfileRequestStatus Status{ get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
