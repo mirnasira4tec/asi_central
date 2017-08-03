@@ -20,9 +20,6 @@ namespace asi.asicentral.web.Controllers.Show
 {
     public class ExcelUploadController : Controller
     {
-        private static readonly List<string> _engageShows = new List<string>() { "ENGAGE EAST", "ENGAGE WEST" };
-        private static readonly List<string> _singleShows = new List<string>() { "Orlando Show", "Dallas Show", "Long Beach Show", "New York Show", "Chicago Show" };
-
         public IObjectService ObjectService { get; set; }
 
         public ActionResult Index()
@@ -314,30 +311,23 @@ namespace asi.asicentral.web.Controllers.Show
                                 categoryRow = categoryRow.RowBelow();
                                 var objShow = new ShowASI();
                                 string[] columnNameList = null;
-
-                                foreach (var showName in _engageShows)
-                                {
-                                    if (worksheet.Name.Contains(showName))
-                                    {
-                                        objShow = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains(showName)).OrderByDescending(s => s.StartDate).FirstOrDefault();
-                                        columnNameList = new string[] { "ASINO", "Company", "Sponsor", "Presentation", "Roundtable", "ExhibitOnly", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
-                                        break;
-                                    }
-                                }
                                 if (columnNameList == null)
                                 {
-                                    foreach (var showName in _singleShows)
+                                    objShow = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Trim() == worksheet.Name.Trim())
+                                                                               .OrderByDescending(s => s.StartDate).FirstOrDefault();
+                                    if (objShow != null && (objShow.ShowTypeId == 1 || objShow.ShowTypeId == 2))
                                     {
-                                        if (worksheet.Name.Contains(showName))
-                                        {
-                                            objShow = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Name.Contains(showName));
-                                            columnNameList = new string[] { "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
-                                            break;
-                                        }
+                                         columnNameList = new string[] { "ASINO", "Company", "Sponsor", "Presentation", "Roundtable", "ExhibitOnly", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                                     }
-                                }
-                                if (columnNameList == null)
-                                {
+                                    if (objShow != null && objShow.ShowTypeId == 4)
+                                    {
+                                        columnNameList = new string[] { "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
+                                    }
+                                    if (objShow != null && objShow.ShowTypeId == 5)
+                                    {
+                                        fasiliateFlag = true;
+                                        columnNameList = new string[] { "ASINO", "MemberType", "Company", "FirstName", "LastName", "Address", "City", "State", "Zip Code", "Country", "Shipping Address 1", "Shipping Address 2", "Shipping City", "Shipping State", "Shipping Zip Code", "Shipping Country", "Phone", "Email Address" };
+                                    }
                                     var matchShow = Regex.Match(worksheet.Name, @"^\s*WEEK\s+\d+\s*-\s*", RegexOptions.IgnoreCase);
                                     if (matchShow.Success)
                                     {
@@ -348,17 +338,6 @@ namespace asi.asicentral.web.Controllers.Show
                                         columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                                     }
                                 }
-                                if (columnNameList == null)
-                                {
-                                    objShow = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Trim() == worksheet.Name.Trim())
-                                                                                .OrderByDescending(s => s.StartDate).FirstOrDefault();
-                                    if (objShow != null && objShow.ShowTypeId == 5)
-                                    {
-                                        fasiliateFlag = true;
-                                        columnNameList = new string[] { "ASINO", "MemberType", "Company", "FirstName", "LastName", "Address", "City", "State", "Zip Code", "Country", "Shipping Address 1", "Shipping Address 2", "Shipping City", "Shipping State", "Shipping Zip Code", "Shipping Country", "Phone", "Email Address" };
-                                    }
-                                }
-
                                 if (objShow == null)
                                 {
                                     ModelState.AddModelError("CustomError", string.Format("Show {0} doesn't exist.", worksheet.Name));
