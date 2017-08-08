@@ -29,7 +29,7 @@ namespace asi.asicentral.model.show
         public string UpdateSource { get; set; }
         public virtual ShowAttendee Attendee { get; set; }
         public virtual ShowEmployeeAttendee EmployeeAttendee { get; set; }
-        public virtual IList<ShowProfileRequestOptionalDetails> ProfileRequestOptionalDetails { get; set; }
-        public virtual IList<ShowProfileRequiredData> ProfileRequiredData { get; set; }
+        public virtual IList<ShowProfileOptionalDetails> ProfileRequestOptionalDetails { get; set; }
+        public virtual IList<ShowProfileSupplierData> ProfileSupplierData { get; set; }
     }
 }

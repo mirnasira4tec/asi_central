@@ -504,10 +504,10 @@ namespace asi.asicentral.Tests
         {
             using (var context = new Umbraco_ShowContext())
             {
-                var profileRequiredData = context.ProfileRequiredData.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.IsUpdate == false);
+                var profileRequiredData = context.ProfileSupplierData.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.IsUpdate == false);
                 if (profileRequiredData == null)
                 {
-                    profileRequiredData = new ShowProfileRequiredData()
+                    profileRequiredData = new ShowProfileSupplierData()
                     {
                         ProfileRequestId = profileRequestsId,
                         Email = "reena.prajapati@a4technology.com",
@@ -535,16 +535,16 @@ namespace asi.asicentral.Tests
                         UpdateSource = "Initial Unit Tests"
                     };
 
-                    context.ProfileRequiredData.Add(profileRequiredData);
+                    context.ProfileSupplierData.Add(profileRequiredData);
                     context.SaveChanges();
                     Assert.IsNotNull(profileRequiredData);
                 }
                 else
                 {
-                    profileRequiredData = context.ProfileRequiredData.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.IsUpdate == true);
+                    profileRequiredData = context.ProfileSupplierData.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.IsUpdate == true);
                     if (profileRequiredData == null)
                     {
-                        profileRequiredData = new ShowProfileRequiredData()
+                        profileRequiredData = new ShowProfileSupplierData()
                         {
                             ProfileRequestId = profileRequestsId,
                             Email = "reena.prajapati1@a4technology.com",
@@ -573,7 +573,7 @@ namespace asi.asicentral.Tests
                             IsUpdate = true
                         };
 
-                        context.ProfileRequiredData.Add(profileRequiredData);
+                        context.ProfileSupplierData.Add(profileRequiredData);
                         context.SaveChanges();
                         Assert.IsNotNull(profileRequiredData);
                     }
@@ -583,10 +583,10 @@ namespace asi.asicentral.Tests
                         context.SaveChanges();
                     }
                 }
-                var profileRequestOptionalDetails = context.ProfileRequestOptionalDetails.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.ProfileOptionalDataLabelId == 1);
+                var profileRequestOptionalDetails = context.ProfileOptionalDetails.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.ProfileOptionalDataLabelId == 1);
                 if (profileRequestOptionalDetails == null)
                 {
-                    profileRequestOptionalDetails = new ShowProfileRequestOptionalDetails()
+                    profileRequestOptionalDetails = new ShowProfileOptionalDetails()
                     {
                         ProfileRequestId = profileRequestsId,
                         ProfileOptionalDataLabelId = 1,
@@ -597,7 +597,7 @@ namespace asi.asicentral.Tests
                         UpdateSource = "Unit Test"
                     };
 
-                    context.ProfileRequestOptionalDetails.Add(profileRequestOptionalDetails);
+                    context.ProfileOptionalDetails.Add(profileRequestOptionalDetails);
                     context.SaveChanges();
                 }
                 else
@@ -613,10 +613,10 @@ namespace asi.asicentral.Tests
         {
             using (var context = new Umbraco_ShowContext())
             {
-                var profileRequestOptionalDetails = context.ProfileRequestOptionalDetails.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.ProfileOptionalDataLabelId == 1);
-                context.ProfileRequestOptionalDetails.Remove(profileRequestOptionalDetails);
-                var profileRequiredData = context.ProfileRequiredData.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId);
-                context.ProfileRequiredData.Remove(profileRequiredData);
+                var profileRequestOptionalDetails = context.ProfileOptionalDetails.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.ProfileOptionalDataLabelId == 1);
+                context.ProfileOptionalDetails.Remove(profileRequestOptionalDetails);
+                var profileRequiredData = context.ProfileSupplierData.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId);
+                context.ProfileSupplierData.Remove(profileRequiredData);
                 var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.Id == profileRequestsId);
                 context.ProfileRequests.Remove(profileRequests);
                 context.SaveChanges();

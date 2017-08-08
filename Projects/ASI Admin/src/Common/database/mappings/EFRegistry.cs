@@ -414,7 +414,7 @@ namespace asi.asicentral.database.mappings
             For<IRepository<ShowDistShowLogo>>().Use<EFRepository<ShowDistShowLogo>>()
                 .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
-            For<IRepository<ShowProfileRequiredData>>().Use<EFRepository<ShowProfileRequiredData>>()
+            For<IRepository<ShowProfileSupplierData>>().Use<EFRepository<ShowProfileSupplierData>>()
                .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
             For<IRepository<ShowProfileOptionalDataLabel>>().Use<EFRepository<ShowProfileOptionalDataLabel>>()
@@ -423,7 +423,7 @@ namespace asi.asicentral.database.mappings
             For<IRepository<ShowProfileRequests>>().Use<EFRepository<ShowProfileRequests>>()
               .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
-            For<IRepository<ShowProfileRequestOptionalDetails>>().Use<EFRepository<ShowProfileRequestOptionalDetails>>()
+            For<IRepository<ShowProfileOptionalDetails>>().Use<EFRepository<ShowProfileOptionalDetails>>()
               .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
             #endregion Umbraco_ShowContext

@@ -25,10 +25,10 @@ namespace asi.asicentral.database
         public DbSet<ShowType> ShowType { get; set; }
         public DbSet<ShowCompanyAddress> CompanyAddress { get; set; }
         public DbSet<ShowDistShowLogo> DistShowLogo { get; set; }
-        public DbSet<ShowProfileRequiredData> ProfileRequiredData { get; set; }
+        public DbSet<ShowProfileSupplierData> ProfileSupplierData { get; set; }
         public DbSet<ShowProfileOptionalDataLabel> ProfileOptionalDataLabel { get; set; }
         public DbSet<ShowProfileRequests> ProfileRequests { get; set; }
-        public DbSet<ShowProfileRequestOptionalDetails> ProfileRequestOptionalDetails { get; set; }
+        public DbSet<ShowProfileOptionalDetails> ProfileOptionalDetails { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -48,10 +48,10 @@ namespace asi.asicentral.database
                 .Add(new ShowTypeMap())
                 .Add(new ShowCompanyAddressMap())
                 .Add(new ShowDistShowLogoMap())
-                .Add(new ShowProfileRequiredDataMap())
+                .Add(new ShowProfileSupplierDataMap())
                 .Add(new ShowProfileOptionalDataLabelMap())
                 .Add(new ShowProfileRequestMap())
-                .Add(new ShowProfileRequestOptionalDetailsMap());
+                .Add(new ShowProfileOptionalDetailsMap());
         }
     }
 }

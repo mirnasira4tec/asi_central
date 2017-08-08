@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.model.show
 {
-    public class ShowProfileRequiredData
+    public class ShowProfileSupplierData
     {
         public int Id { get; set; }
         public int ProfileRequestId { get; set; }
