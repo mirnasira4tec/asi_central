@@ -4,16 +4,16 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace asi.asicentral.database.mappings.show
 {
-    class ShowProfileRequestOptionalDetailsMap : EntityTypeConfiguration<ShowProfileRequestOptionalDetails>
+    class ShowProfileOptionalDetailsMap : EntityTypeConfiguration<ShowProfileOptionalDetails>
     {
-        public ShowProfileRequestOptionalDetailsMap()
+        public ShowProfileOptionalDetailsMap()
         {
-            this.ToTable("ATT_ProfileRequestOptionalDetails");
+            this.ToTable("ATT_ProfileOptionalDetails");
             this.HasKey(t => t.Id);
 
             //Properties
             this.Property(t => t.Id)
-                .HasColumnName("ProfileRequestOptionalDetailId")
+                .HasColumnName("ProfileOptionalDetailId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.CreateDate)

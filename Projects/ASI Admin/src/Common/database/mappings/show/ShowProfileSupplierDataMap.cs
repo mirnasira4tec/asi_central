@@ -4,16 +4,16 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace asi.asicentral.database.mappings.show
 {
-    class ShowProfileRequiredDataMap : EntityTypeConfiguration<ShowProfileRequiredData>
+    class ShowProfileSupplierDataMap : EntityTypeConfiguration<ShowProfileSupplierData>
     {
-        public ShowProfileRequiredDataMap()
+        public ShowProfileSupplierDataMap()
         {
-            this.ToTable("ATT_ProfileRequiredData");
+            this.ToTable("ATT_ProfileSupplierData");
             this.HasKey(t => t.Id);
 
             //Properties
             this.Property(t => t.Id)
-                .HasColumnName("ProfileRequiredDataId")
+                .HasColumnName("ProfileSupplierDataId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.CreateDate)
@@ -26,7 +26,7 @@ namespace asi.asicentral.database.mappings.show
                 .HasColumnName("UpdateSource");
 
             HasRequired(x => x.ProfileRequests)
-           .WithMany(x => x.ProfileRequiredData)
+           .WithMany(x => x.ProfileSupplierData)
            .HasForeignKey(x=>x.ProfileRequestId);
 
         }  

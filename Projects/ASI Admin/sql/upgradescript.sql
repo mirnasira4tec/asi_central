@@ -81,7 +81,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[ATT_ProfileRequestOptionalDetails](
+CREATE TABLE [dbo].[ATT_ProfileOptionalDetails](
 	[ProfileRequestOptionalDetailId] [int] IDENTITY(1,1) NOT NULL,
 	[ProfileRequestId] [int] NOT NULL,
 	[ProfileOptionalDataLabelId] [int] NOT NULL,
@@ -90,81 +90,82 @@ CREATE TABLE [dbo].[ATT_ProfileRequestOptionalDetails](
 	[CreateDateUTC] [datetime] NOT NULL,
 	[UpdateDateUTC] [datetime] NOT NULL,
 	[UpdateSource] [nvarchar](200) NOT NULL,
- CONSTRAINT [PK_ATT_ProfileRequestOptionalDetails] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_ATT_ProfileOptionalDetails] PRIMARY KEY CLUSTERED 
 (
-	[ProfileRequestOptionalDetailId] ASC
+	[ProfileOptionalDetailId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
 GO
 
-ALTER TABLE [dbo].[ATT_ProfileRequestOptionalDetails] ADD  CONSTRAINT [DF_ATT_ProfileRequestOptionalDetails_UpdateSource]  DEFAULT ('Not Specified') FOR [UpdateSource]
+ALTER TABLE [dbo].[ATT_ProfileOptionalDetails] ADD  CONSTRAINT [DF_ATT_ProfileOptionalDetails_UpdateSource]  DEFAULT ('Not Specified') FOR [UpdateSource]
 GO
 
-ALTER TABLE [dbo].[ATT_ProfileRequestOptionalDetails]  WITH CHECK ADD  CONSTRAINT [FK_ATT_ProfileRequestOptionalDetails_ATT_ProfileOptionalDataLabel] FOREIGN KEY([ProfileOptionalDataLabelId])
+ALTER TABLE [dbo].[ATT_ProfileOptionalDetails]  WITH CHECK ADD  CONSTRAINT [FK_ATT_ProfileOptionalDetails_ATT_ProfileOptionalDataLabel] FOREIGN KEY([ProfileOptionalDataLabelId])
 REFERENCES [dbo].[ATT_ProfileOptionalDataLabel] ([ProfileOptionalDataLabelId])
 GO
 
-ALTER TABLE [dbo].[ATT_ProfileRequestOptionalDetails] CHECK CONSTRAINT [FK_ATT_ProfileRequestOptionalDetails_ATT_ProfileOptionalDataLabel]
+ALTER TABLE [dbo].[ATT_ProfileOptionalDetails] CHECK CONSTRAINT [FK_ATT_ProfileOptionalDetails_ATT_ProfileOptionalDataLabel]
 GO
 
-ALTER TABLE [dbo].[ATT_ProfileRequestOptionalDetails]  WITH CHECK ADD  CONSTRAINT [FK_ATT_ProfileRequestOptionalDetails_ATT_ProfileRequests] FOREIGN KEY([ProfileRequestId])
+ALTER TABLE [dbo].[ATT_ProfileOptionalDetails]  WITH CHECK ADD  CONSTRAINT [FK_ATT_ProfileOptionalDetails_ATT_ProfileRequests] FOREIGN KEY([ProfileRequestId])
 REFERENCES [dbo].[ATT_ProfileRequests] ([ProfileRequestId])
 GO
 
-ALTER TABLE [dbo].[ATT_ProfileRequestOptionalDetails] CHECK CONSTRAINT [FK_ATT_ProfileRequestOptionalDetails_ATT_ProfileRequests]
+ALTER TABLE [dbo].[ATT_ProfileOptionalDetails] CHECK CONSTRAINT [FK_ATT_ProfileOptionalDetails_ATT_ProfileRequests]
 GO
 
-/****** Object:  Table [dbo].[ATT_ProfileRequiredData] ******/
+/****** Object:  Table [dbo].[ATT_ProfileSupplierData] ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[ATT_ProfileRequiredData](
-	[ProfileRequiredDataId] [int] IDENTITY(1,1) NOT NULL,
+CREATE TABLE [dbo].[ATT_ProfileSupplierData](
+	[ProfileSupplierDataId] [int] IDENTITY(1,1) NOT NULL,
 	[ProfileRequestId] [int] NOT NULL,
-	[Email] [nvarchar](100) NOT NULL,
-	[CompanyName] [nvarchar](100) NOT NULL,
-	[ASINumber] [nvarchar](10) NOT NULL,
-	[AttendeeName] [nvarchar](100) NOT NULL,
-	[AttendeeTitle] [nvarchar](100) NOT NULL,
-	[AttendeeCommEmail] [nvarchar](100) NOT NULL,
-	[AttendeeCellPhone] [nvarchar](15) NOT NULL,
-	[AttendeeWorkPhone] [nvarchar](15) NOT NULL,
-	[CorporateAddress] [nvarchar](100) NOT NULL,
-	[City] [nvarchar](50) NOT NULL,
-	[State] [nvarchar](50) NOT NULL,
-	[Zip] [nvarchar](10) NOT NULL,
-	[CompanyWebsite] [nvarchar](50) NOT NULL,
-	[ProductSummary] [nvarchar](1000) NOT NULL,
-	[TrustFromDistributor] [nvarchar](1000) NOT NULL,
-	[SpecialServices] [nvarchar](1000) NOT NULL,
-	[LoyaltyPrograms] [nvarchar](1000) NOT NULL,
-	[Samples] [nvarchar](10) NOT NULL,
-	[ProductSafety] [nvarchar](1000) NOT NULL,
-	[FactAboutCompany] [nvarchar](1000) NOT NULL,
-	[IsUpdate] [BIT] NOT NULL DEFAULT 0
+	[Email] [nvarchar](100) NULL,
+	[CompanyName] [nvarchar](100) NULL,
+	[ASINumber] [nvarchar](10) NULL,
+	[AttendeeName] [nvarchar](100) NULL,
+	[AttendeeImage] [nvarchar] (200) NULL,
+	[AttendeeTitle] [nvarchar](100) NULL,
+	[AttendeeCommEmail] [nvarchar](100) NULL,
+	[AttendeeCellPhone] [nvarchar](15) NULL,
+	[AttendeeWorkPhone] [nvarchar](15) NULL,
+	[CorporateAddress] [nvarchar](100) NULL,
+	[City] [nvarchar](50) NULL,
+	[State] [nvarchar](50) NULL,
+	[Zip] [nvarchar](10) NULL,
+	[CompanyWebsite] [nvarchar](50) NULL,
+	[ProductSummary] [nvarchar](1000) NULL,
+	[TrustFromDistributor] [nvarchar](1000) NULL,
+	[SpecialServices] [nvarchar](1000) NULL,
+	[LoyaltyPrograms] [nvarchar](1000) NULL,
+	[Samples] [nvarchar](10) NULL,
+	[ProductSafety] [nvarchar](1000) NULL,
+	[FactAboutCompany] [nvarchar](1000) NULL,
+	[IsUpdate] [BIT] NOT NULL DEFAULT 0,
 	[CreateDateUTC] [datetime] NOT NULL,
 	[UpdateDateUTC] [datetime] NOT NULL,
 	[UpdateSource] [nvarchar](200) NOT NULL,
- CONSTRAINT [PK_ATT_ProfileRequiredData] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_ATT_ProfileSupplierData] PRIMARY KEY CLUSTERED 
 (
-	[ProfileRequiredDataId] ASC
+	[ProfileSupplierDataId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
 GO
 
-ALTER TABLE [dbo].[ATT_ProfileRequiredData] ADD  CONSTRAINT [DF_ATT_ProfileRequiredData_UpdateSource]  DEFAULT ('Not Specified') FOR [UpdateSource]
+ALTER TABLE [dbo].[ATT_ProfileSupplierData] ADD  CONSTRAINT [DF_ATT_ProfileSupplierData_UpdateSource]  DEFAULT ('Not Specified') FOR [UpdateSource]
 GO
 
-ALTER TABLE [dbo].[ATT_ProfileRequiredData]  WITH CHECK ADD  CONSTRAINT [FK_ATT_ProfileRequiredData_ATT_ProfileRequests] FOREIGN KEY([ProfileRequestId])
+ALTER TABLE [dbo].[ATT_ProfileSupplierData]  WITH CHECK ADD  CONSTRAINT [FK_ATT_ProfileSupplierData_ATT_ProfileRequests] FOREIGN KEY([ProfileRequestId])
 REFERENCES [dbo].[ATT_ProfileRequests] ([ProfileRequestId])
 GO
 
-ALTER TABLE [dbo].[ATT_ProfileRequiredData] CHECK CONSTRAINT [FK_ATT_ProfileRequiredData_ATT_ProfileRequests]
+ALTER TABLE [dbo].[ATT_ProfileSupplierData] CHECK CONSTRAINT [FK_ATT_ProfileSupplierData_ATT_ProfileRequests]
 GO
 
 
