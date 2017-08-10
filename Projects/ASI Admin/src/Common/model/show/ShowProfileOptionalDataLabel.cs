@@ -15,5 +15,7 @@ namespace asi.asicentral.model.show
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
         public bool? IsObsolete { get; set; }
+        public bool IsSupplier { get; set; }
+        public bool IsDistributor { get; set; }
     }
 }

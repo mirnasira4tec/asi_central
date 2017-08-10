@@ -447,7 +447,7 @@ namespace asi.asicentral.Tests
             using (var context = new Umbraco_ShowContext())
             {
                 //retrieve update field
-                var fields = context.ProfileOptionalDataLabel.Where(s => s.IsObsolete.HasValue).ToList();
+                var fields = context.ProfileOptionalDataLabel.Where(s => !s.IsObsolete.HasValue && s.IsSupplier == true).ToList();
                 Assert.IsNotNull(fields);
                 String guid = Guid.NewGuid().ToString();
                 var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.AttendeeId == attnedeeId && x.Status == (int)ProfileRequestStatus.Pending);
@@ -476,7 +476,7 @@ namespace asi.asicentral.Tests
             using (var context = new Umbraco_ShowContext())
             {
                 //retrieve update field
-                var fields = context.ProfileOptionalDataLabel.Where(s => s.IsObsolete.HasValue).ToList();
+                var fields = context.ProfileOptionalDataLabel.Where(s => s.IsObsolete.HasValue && s.IsSupplier == true).ToList();
                 Assert.IsNotNull(fields);
 
                 var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.AttendeeId == attnedeeId && x.EmployeeAttendeeId == employeeAttendeeId && x.Status == (int)ProfileRequestStatus.Pending);
