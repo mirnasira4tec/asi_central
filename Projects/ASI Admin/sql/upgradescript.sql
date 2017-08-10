@@ -169,6 +169,21 @@ ALTER TABLE [dbo].[ATT_ProfileSupplierData] CHECK CONSTRAINT [FK_ATT_ProfileSupp
 GO
 
 
+SET IDENTITY_INSERT [dbo].[ATT_ProfileOptionalDataLabel] ON
+INSERT INTO [dbo].[ATT_ProfileOptionalDataLabel]([ProfileOptionalDataLabelId],[Name],[Description],[CreateDateUTC],[UpdateDateUTC],[UpdateSource],[IsObsolete])
+VALUES(1,'AttendeeName','Secondary Attendee Name',GETUTCDATE(), GETUTCDATE(),'Admin', 1),
+(2,'AttendeeTitle','Secondary Attendee Title',GETUTCDATE(), GETUTCDATE(),'Admin', 1),
+(3,'AttendeeCommEmail','Secondary Attendee Email',GETUTCDATE(), GETUTCDATE(),'Admin', 1),
+(4,'AttendeeCellPhone','Secondary Attendee Cell Phone',GETUTCDATE(), GETUTCDATE(),'Admin', 1),
+(5,'AttendeeWorkPhone','Secondary Attendee Work Phone',GETUTCDATE(), GETUTCDATE(),'Admin', 1),
+(6,'AttendeeImage','Secondary Attendee Image',GETUTCDATE(), GETUTCDATE(),'Admin', 1),
+(7,'OfferToDistributor','Product specials you are offering to fASIlitate distributors',GETUTCDATE(), GETUTCDATE(),'Admin', 1),
+(8,'GoalForParticipating','What is your #1 goal for participating in fASIlitate?',GETUTCDATE(), GETUTCDATE(),'Admin', 1),
+(9,'FiveDistributorCompanies','Please list five distributor companies you would like to see be invited to future fASIlitate events',GETUTCDATE(), GETUTCDATE(),'Admin', 1),
+(10,'FOBlocations','What are your current FOB locations?',GETUTCDATE(), GETUTCDATE(),'Admin', 1) 
+SET IDENTITY_INSERT [dbo].[ATT_ProfileOptionalDataLabel] OFF
+
+
 
 
 
