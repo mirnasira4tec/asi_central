@@ -22,7 +22,7 @@ namespace asi.asicentral.oauth
         public static void SetFormsAuthenticationCookie(HttpRequestBase request, HttpResponseBase response, asi.asicentral.model.User user, bool isCreate, string userCookieName = "Name", string domainName = null)
         {
             var redirectParams = new CrossApplication.RedirectParams();
-            redirectParams.AccessToken = user.AccessToken;
+            redirectParams.AccessToken = string.Empty; // user.AccessToken;
             redirectParams.RefreshToken = user.RefreshToken;
             redirectParams.TokenExpirationTime = DateTime.Now.AddHours(1).AddMinutes(15); //defaulting token to expire in 1.25 hours
             string userName = ASIOAuthClient.GetUserName(user.FirstName, user.LastName);
