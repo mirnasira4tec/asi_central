@@ -1,14 +1,14 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.database;
 using System.Linq;
+using NUnit.Framework;
 
 namespace asi.asicentral.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class DM_MemberDemogrContextTest
     {
-        [TestMethod]
+        [Test]
         public void GetAllRepsTest()
         {
             int count = 0;
@@ -23,7 +23,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void GetAllRepsByCompanyIdTest()
         {
             int count = 0;

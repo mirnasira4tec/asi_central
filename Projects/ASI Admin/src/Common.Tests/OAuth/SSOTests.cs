@@ -1,13 +1,13 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.oauth;
+using NUnit.Framework;
 
 namespace Common.Tests.OAuth
 {
-    [TestClass]
+    [TestFixture]
     public class SSOTests
     {
-        [TestMethod]
+        [Test]
         public void GetRoleNameTest()
         {
             var result = SSO.GetRoleName("ABCD", "ACTIVE");

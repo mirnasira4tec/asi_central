@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.database;
 using asi.asicentral.model.show;
 using System.Collections.Generic;
@@ -19,13 +18,14 @@ using System.IO;
 using ClosedXML.Excel;
 using System.Dynamic;
 using System.Text.RegularExpressions;
+using NUnit.Framework;
 
 namespace asi.asicentral.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class ShowServiceTest
     {
-        [TestMethod]
+        [Test]
         public void ShowTypeTest()
         {
             Registry registry = new EFRegistry();
@@ -52,7 +52,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void ShowTest()
         {
             Registry registry = new EFRegistry();
@@ -93,7 +93,7 @@ namespace asi.asicentral.Tests
 
         }
 
-        [TestMethod]
+        [Test]
         public void AddressTest()
         {
             Registry registry = new EFRegistry();
@@ -135,7 +135,7 @@ namespace asi.asicentral.Tests
 
         }
 
-        [TestMethod]
+        [Test]
         public void DistLogoTest()
         {
             Registry registry = new EFRegistry();
@@ -156,7 +156,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void EmployeeTest()
         {
             Registry registry = new EFRegistry();
@@ -225,7 +225,7 @@ namespace asi.asicentral.Tests
 
         }
 
-        [TestMethod]
+        [Test]
         public void ShowCompanyTest()
         {
             Registry registry = new EFRegistry();
@@ -313,7 +313,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Test()
         {
             Registry registry = new EFRegistry();
@@ -371,7 +371,7 @@ namespace asi.asicentral.Tests
             }
 
         }
-        [TestMethod]
+        [Test]
         public void ExcelUploadTest()
         {
             IList<ShowASI> shows = new List<ShowASI>();

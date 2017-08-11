@@ -3,15 +3,15 @@ using asi.asicentral.interfaces;
 using asi.asicentral.model.counselor;
 using asi.asicentral.model.sgr;
 using asi.asicentral.services;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System.Linq;
 
 namespace asi.asicentral.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class ObjectServiceTest
     {
-        [TestMethod]
+        [Test]
         public void TestAddProducts()
         {
             using (IObjectService objectService = new ObjectService(new Container(new EFRegistry())))
@@ -32,7 +32,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void MultipleContextTest()
         {
             //make sure we can retrieve data from 2 separate contexts using the one object service
