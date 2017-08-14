@@ -1,16 +1,18 @@
 ﻿using asi.asicentral.database;
 using asi.asicentral.model.counselor;
 using asi.asicentral.model.news;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Linq;
 
 namespace asi.asicentral.Tests
 {
-    [Ignore]
+    [TestFixture]
+    [Ignore("Ignore a fixture")]
     public class InternetTest
     {
-        [Ignore]
+        [Test]
+        [Ignore("Ignore a test")]
         public void LegacyDataTest()
         {
             using (var context = new InternetContext())
