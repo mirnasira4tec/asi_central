@@ -232,6 +232,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Give your customers tons of variety with this compact catalog..
+        /// </summary>
+        public static string IdeaShowcaseFallEducationDescription {
+            get {
+                return ResourceManager.GetString("IdeaShowcaseFallEducationDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create sales with this compact catalog that’s perfect for leave-behinds and mailers..
         /// </summary>
         public static string IdeaShowcaseSchoolsDescription {

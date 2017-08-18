@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.model.store;
 using asi.asicentral.interfaces;
 using asi.asicentral.services;
@@ -8,13 +7,14 @@ using asi.asicentral.database.mappings;
 using System.Globalization;
 using System.Collections.Generic;
 using asi.asicentral.model.timss;
+using NUnit.Framework;
 
 namespace asi.asicentral.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class FulfilmentServiceTest
     {
-        [TestMethod]
+        [Test]
         public void SupplierOrder()
         {
             #region create the order to store
@@ -63,7 +63,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void DistributorOrder()
         {
             StoreOrder order = CreateOrder();

@@ -2,8 +2,8 @@
 using asi.asicentral.model.store;
 using asi.asicentral.web.Controllers.Store;
 using asi.asicentral.web.model.store;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +13,10 @@ using System.Web.Mvc;
 
 namespace asi.asicentral.WebApplication.Tests.Controllers.Store
 {
-    [TestClass]
+    [TestFixture]
     public class CouponControllerTest
     {
-        [TestMethod]
+        [Test]
         public void SaveCouponDetails()
         {
             Coupon product = new Coupon();
