@@ -1,17 +1,17 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.database;
 using asi.asicentral.model.store;
 using System.Linq;
+using NUnit.Framework;
 
 namespace asi.asicentral.Tests
 {
 
-    [TestClass]
+   [TestFixture]
     public class ASIEmailBlastContextTest
     {
 
-        [TestMethod]
+        [Test]
         public void ClosedCampaignDateTest()
         {
             using (var context = new ASIEmailBlastContext())

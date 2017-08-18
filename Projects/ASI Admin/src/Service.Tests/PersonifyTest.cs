@@ -7,20 +7,20 @@ using asi.asicentral.model.store;
 using asi.asicentral.PersonifyDataASI;
 using asi.asicentral.services;
 using asi.asicentral.services.PersonifyProxy;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using asi.asicentral.model.timss;
 using asi.asicentral.util.store;
 using PersonifySvcClient;
 using asi.asicentral.model.personify;
 using asi.asicentral.oauth;
+using NUnit.Framework;
 
 namespace asi.asicentral.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class PersonifyTest
     {
-        [TestMethod]
+        [Test]
         public void PlaceOrderNewCompanyTest()
         {
             IStoreService storeService = MockupStoreService();
@@ -32,8 +32,8 @@ namespace asi.asicentral.Tests
             Assert.IsNotNull(order.BackendReference);
         }
 
-        [TestMethod]
-        [Ignore]
+        [Test]
+        [Ignore("Ignore a PlaceOrderExistingCompanyTest")]
         public void PlaceOrderExistingCompanyTest()
         {  // supplierSpecials and emailExpress don't have personify integrations any more
             IStoreService storeService = MockupStoreService();
@@ -45,7 +45,7 @@ namespace asi.asicentral.Tests
             Assert.IsNotNull(order.BackendReference);
         }
 
-        [TestMethod]
+        [Test]
         public void AddEEXSubscription()
         {
             var tag = DateTime.Now.Ticks.ToString();
@@ -101,8 +101,8 @@ namespace asi.asicentral.Tests
             Assert.IsNotNull(companyInfo);
         }
 
-        [TestMethod]
-        [Ignore]
+        [Test]
+        [Ignore("EmailOptOut")]
         public void EmailOptOut()
         {
             var email = "testing@111.com";
@@ -112,7 +112,7 @@ namespace asi.asicentral.Tests
             Assert.IsNotNull(output);
         }
 
-        [TestMethod]
+        [Test]
         public void PackageOrderTest()
         {
             IStoreService storeService = MockupStoreService();
@@ -123,7 +123,7 @@ namespace asi.asicentral.Tests
             Assert.IsNotNull(order.BackendReference);
         }
 
-        [TestMethod]
+        [Test]
         public void PackageOrderWithCoupon()
         {
             var storeService = MockupStoreService("STANDARD129");
@@ -135,7 +135,7 @@ namespace asi.asicentral.Tests
             Assert.IsNotNull(order.BackendReference);
         }
 
-        [TestMethod]
+        [Test]
         public void EmailMrktOrderTest()
         {
             IStoreService storeService = MockupStoreService();
@@ -147,7 +147,7 @@ namespace asi.asicentral.Tests
             Assert.IsNotNull(order.BackendReference);
         }
 
-        [TestMethod]
+        [Test]
         public void NoOrderCreatedForTerminatedCompany()
         {
             IStoreService storeService = MockupStoreService();
@@ -161,7 +161,7 @@ namespace asi.asicentral.Tests
             Assert.IsNull(order.BackendReference);
         }
 
-        [TestMethod]
+        [Test]
         public void AddPersonifyCompanyForDualDecorator()
         {
             var storeService = MockupStoreService();
@@ -212,7 +212,7 @@ namespace asi.asicentral.Tests
             Assert.AreNotEqual("distributor", order.Company.MemberType.ToLower());
         }
 
-        [TestMethod]
+        [Test]
         public void AddCompany()
         {
             var tag = DateTime.Now.Ticks;
@@ -237,7 +237,7 @@ namespace asi.asicentral.Tests
 			Assert.AreEqual("ASICENTRAL", companyInfo.MemberStatus);
 		}
 
-	    [TestMethod]
+	    [Test]
 	    public void LookupCompany()
 	    {
 			IBackendService personify = new PersonifyService();
@@ -252,7 +252,7 @@ namespace asi.asicentral.Tests
             Assert.IsNotNull(companyInformation.MemberType);
         }
 
-        [TestMethod]
+        [Test]
         public void EquipmentASINumberTest()
         {
             IBackendService personify = new PersonifyService();
@@ -276,7 +276,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void AddPhoneNumberTest()
         {
             var companyInfo = PersonifyClient.GetCompanyInfoByASINumber("33020");
@@ -290,7 +290,7 @@ namespace asi.asicentral.Tests
 	        }
         }
 
-		[TestMethod]
+		[Test]
 		public void GetCompanyCreditCards()
 		{
 			StoreCompany company = new StoreCompany()
@@ -312,7 +312,7 @@ namespace asi.asicentral.Tests
 			}
 		}
 
-        [TestMethod]
+        [Test]
         public void CreatCompany()
         {
             var companyName = "Createcompany" + DateTime.Now.Ticks;
@@ -325,7 +325,7 @@ namespace asi.asicentral.Tests
             Assert.IsTrue(!string.IsNullOrEmpty(company.ExternalReference));
         }
 
-        [TestMethod]
+        [Test]
         public void TestIsNewMembership()
         {
             var storeService = MockupStoreService();
@@ -348,7 +348,7 @@ namespace asi.asicentral.Tests
         }
 
         #region Test company matching logic
-        [TestMethod]
+        [Test]
         public void ReconcileCompanyMatchNameOnly()
         {
             var personify = new PersonifyService();
@@ -380,7 +380,7 @@ namespace asi.asicentral.Tests
             Assert.AreEqual(companyInfo.Name, "Reconcile Company Distributor 1");
         }
 
-        [TestMethod]
+        [Test]
         public void MatchDistributorChange()
         {
             //Distributor should match to a delisted supplier
@@ -407,7 +407,7 @@ namespace asi.asicentral.Tests
             personify.UpdateCompanyStatus(company, StatusCode.LEAD);
         }
 
-        [TestMethod]
+        [Test]
         public void ReconcileCompanySupplierWithPhoneEmail()
         {
             // match email only
@@ -435,7 +435,7 @@ namespace asi.asicentral.Tests
                           companyInfo.MemberStatus.ToUpper() == "LEAD");
         }
 
-        [TestMethod]
+        [Test]
         public void ReconcileCompanyWithPhoneEmailForMMSLoad()
         {
             // match email only
@@ -453,7 +453,7 @@ namespace asi.asicentral.Tests
             personify.UpdateCompanyStatus(company, StatusCode.LEAD);
         }
 
-        [TestMethod]
+        [Test]
         public void ReconcileCompanyNonSupplierPhoneEmail()
         {
             var personify = new PersonifyService();
@@ -491,7 +491,7 @@ namespace asi.asicentral.Tests
             Assert.AreEqual(companyInfo.Name, "Reconcile Company Decorator");
         }
 
-        [TestMethod]
+        [Test]
         public void ReconcileCompanyMultipleMatches()
         {
             //Distributor matching both name and phone/email, one LEAD
@@ -531,7 +531,7 @@ namespace asi.asicentral.Tests
             Assert.IsTrue(companyInfo.CompanyId > 0);
         }
 
-        [TestMethod]
+        [Test]
         public void ReconcileCompanySupplierNoMatch()
         {
             var company = GetStoreCompany("Invalid XXX Name",
@@ -585,7 +585,7 @@ namespace asi.asicentral.Tests
             return company;
         }
 
-        [TestMethod]
+        [Test]
         public void PersonifyAddActivity()
         {
             var activity = SvcClient.Create<CusActivity>();
