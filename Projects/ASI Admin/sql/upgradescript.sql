@@ -170,17 +170,17 @@ GO
 
 
 SET IDENTITY_INSERT [dbo].[ATT_ProfileOptionalDataLabel] ON
-INSERT INTO [dbo].[ATT_ProfileOptionalDataLabel]([ProfileOptionalDataLabelId],[Name],[Description],[CreateDateUTC],[UpdateDateUTC],[UpdateSource],[IsObsolete])
-VALUES(1,'AttendeeName','Secondary Attendee Name',GETUTCDATE(), GETUTCDATE(),'Admin', 1),
-(2,'AttendeeTitle','Secondary Attendee Title',GETUTCDATE(), GETUTCDATE(),'Admin', 1),
-(3,'AttendeeCommEmail','Secondary Attendee Email',GETUTCDATE(), GETUTCDATE(),'Admin', 1),
-(4,'AttendeeCellPhone','Secondary Attendee Cell Phone',GETUTCDATE(), GETUTCDATE(),'Admin', 1),
-(5,'AttendeeWorkPhone','Secondary Attendee Work Phone',GETUTCDATE(), GETUTCDATE(),'Admin', 1),
-(6,'AttendeeImage','Secondary Attendee Image',GETUTCDATE(), GETUTCDATE(),'Admin', 1),
-(7,'OfferToDistributor','Product specials you are offering to fASIlitate distributors',GETUTCDATE(), GETUTCDATE(),'Admin', 1),
-(8,'GoalForParticipating','What is your #1 goal for participating in fASIlitate?',GETUTCDATE(), GETUTCDATE(),'Admin', 1),
-(9,'FiveDistributorCompanies','Please list five distributor companies you would like to see be invited to future fASIlitate events',GETUTCDATE(), GETUTCDATE(),'Admin', 1),
-(10,'FOBlocations','What are your current FOB locations?',GETUTCDATE(), GETUTCDATE(),'Admin', 1) 
+INSERT INTO [dbo].[ATT_ProfileOptionalDataLabel]([ProfileOptionalDataLabelId],[Name],[Description],[CreateDateUTC],[UpdateDateUTC],[UpdateSource],[IsObsolete],[isSupplier],[isDistributor])
+VALUES(1,'AttendeeName','Secondary Attendee Name',GETUTCDATE(), GETUTCDATE(),'Admin',null, 1,0),
+(2,'AttendeeTitle','Secondary Attendee Title',GETUTCDATE(), GETUTCDATE(),'Admin',null, 1,0),
+(3,'AttendeeCommEmail','Secondary Attendee Email',GETUTCDATE(), GETUTCDATE(),'Admin', null, 1,0),
+(4,'AttendeeCellPhone','Secondary Attendee Cell Phone',GETUTCDATE(), GETUTCDATE(),'Admin', null, 1,0),
+(5,'AttendeeWorkPhone','Secondary Attendee Work Phone',GETUTCDATE(), GETUTCDATE(),'Admin', null, 1,0),
+(6,'AttendeeImage','Secondary Attendee Image',GETUTCDATE(), GETUTCDATE(),'Admin', null, 1,0),
+(7,'OfferToDistributor','Product specials you are offering to fASIlitate distributors',GETUTCDATE(), GETUTCDATE(),'Admin', null, 1,0),
+(8,'GoalForParticipating','What is your #1 goal for participating in fASIlitate?',GETUTCDATE(), GETUTCDATE(),'Admin', null, 1,0),
+(9,'FiveDistributorCompanies','Please list five distributor companies you would like to see be invited to future fASIlitate events',GETUTCDATE(), GETUTCDATE(),'Admin', null, 1,0),
+(10,'FOBlocations','What are your current FOB locations?',GETUTCDATE(), GETUTCDATE(),'Admin', null, 1,0) 
 SET IDENTITY_INSERT [dbo].[ATT_ProfileOptionalDataLabel] OFF
 
 --Added by Arun

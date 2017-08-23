@@ -416,7 +416,7 @@ namespace asi.asicentral.Tests
             Assert.AreEqual(attendees.ElementAt(0).ShowId, attendee.Attendees[1].ShowId);
         }
 
-        [TestMethod]
+        [Test]
         public void GetProfileUpdateRequest()
         {
             using (var context = new Umbraco_ShowContext())
@@ -426,7 +426,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void SupplierProfileRequest()
         {
             var request = RequestForAttendee(101);
@@ -434,10 +434,10 @@ namespace asi.asicentral.Tests
             DeleteRequest(request.Id);
         }
 
-        [TestMethod]
+        [Test]
         public void DistributorProfileRequest()
         {
-            var request = RequestForEmployeeAttendee(101, 8);
+            var request = RequestForEmployeeAttendee(5184);
             RequestDistributorProfile(request.Id);
             DeleteDistributorRequest(request.Id);
         }
@@ -447,7 +447,7 @@ namespace asi.asicentral.Tests
             using (var context = new Umbraco_ShowContext())
             {
                 //retrieve update field
-                var fields = context.ProfileOptionalDataLabel.Where(s => s.IsObsolete.HasValue).ToList();
+                var fields = context.ProfileOptionalDataLabel.Where(s => !s.IsObsolete.HasValue && s.IsSupplier == true).ToList();
                 Assert.IsNotNull(fields);
                 String guid = Guid.NewGuid().ToString();
                 var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.AttendeeId == attnedeeId && x.Status == (int)ProfileRequestStatus.Pending);
@@ -471,16 +471,15 @@ namespace asi.asicentral.Tests
             }
         }
 
-        private ShowProfileRequests RequestForEmployeeAttendee(int attnedeeId, int employeeAttendeeId)
+        private ShowProfileRequests RequestForEmployeeAttendee(int employeeAttendeeId)
         {
             using (var context = new Umbraco_ShowContext())
             {
-                var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.AttendeeId == attnedeeId && x.EmployeeAttendeeId == employeeAttendeeId && x.Status == (int)ProfileRequestStatus.Pending);
+                var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.EmployeeAttendeeId == employeeAttendeeId && x.Status == (int)ProfileRequestStatus.Pending);
                 if (profileRequests == null)
                 {
                     profileRequests = new ShowProfileRequests()
                     {
-                        AttendeeId = attnedeeId,
                         EmployeeAttendeeId = employeeAttendeeId,
                         RequestedBy = "rprajapati_unit",
                         Status = ProfileRequestStatus.Pending,
@@ -817,7 +816,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void ProfileUpdateRequestTest()
         {
             using (var context = new Umbraco_ShowContext())
