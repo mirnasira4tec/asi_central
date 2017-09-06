@@ -1,17 +1,17 @@
 ﻿using Moq;
 using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using asi.asicentral.model.store;
 using asi.asicentral.interfaces;
 using asi.asicentral.web.Controllers.Store;
 using asi.asicentral.web.model.store;
 using System.Web.Mvc;
+using NUnit.Framework;
 
 namespace asi.asicentral.WebApplication.Tests.Controllers.Store
 {
-    [TestClass]
+    [TestFixture]
     public class CatalogsApplicationTest
     {
         public ContextProduct CreateProduct(int id = 1)
@@ -52,7 +52,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             return companywithAddress;
         }
 
-        [TestMethod]
+        [Test]
         public void EditCatalogs()
         {
             StoreIndividual individual = new StoreIndividual() { LastName = "Last", FirstName = "First" };

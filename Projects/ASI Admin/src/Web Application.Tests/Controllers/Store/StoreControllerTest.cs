@@ -5,16 +5,16 @@ using System.Web.Mvc;
 using System.Collections.Generic;
 using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.web.Controllers.Store;
 using asi.asicentral.web.model.store;
+using NUnit.Framework;
 
 namespace asi.asicentral.WebApplication.Tests.Controllers.Store
 {
-    [TestClass]
+    [TestFixture]
     public class StoreControllerTest
     {
-        [TestMethod]
+        [Test]
         public void OrderList()
         {
             // arrange            

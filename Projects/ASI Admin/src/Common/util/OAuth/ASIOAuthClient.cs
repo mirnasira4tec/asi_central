@@ -182,15 +182,17 @@ namespace asi.asicentral.oauth
                 {
                     try
                     {
-                        if (HttpContext.Current != null && HttpContext.Current.Request != null && HttpContext.Current.Request.Url != null &&
-                            !string.IsNullOrEmpty(HttpContext.Current.Request.Url.Authority) && HttpContext.Current.Request.Url.Authority.Contains("localhost"))
+                        if (HttpContext.Current == null || (HttpContext.Current.Request != null && HttpContext.Current.Request.IsLocal))
                         {
                             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true; // ignor Certificate for testing
                         }
 
                         log.Debug("RefreshToken - Get Client");
-                        OAuth2Client oAuth2Client = new OAuth2Client(host, relativePath: relativePath);                        
-                        var oauth2Response = oAuth2Client.Refresh(asiOAuthClientId, asiOAuthClientSecret, refreshToken, appCode, appVersion, userHostAddress: HttpContext.Current.Request.UserHostAddress).Result;
+                        OAuth2Client oAuth2Client = new OAuth2Client(host, relativePath: relativePath);
+
+                        var hostAddress = HttpContext.Current == null ? string.Empty : HttpContext.Current.Request.UserHostAddress;
+
+                        var oauth2Response = oAuth2Client.Refresh(asiOAuthClientId, asiOAuthClientSecret, refreshToken, appCode, appVersion, userHostAddress: hostAddress).Result;
                         if (oauth2Response != null)
                         {
                             log.Debug("Login_FetchUserDetails - Login - AccessToken " + oauth2Response.AccessToken);
@@ -235,18 +237,22 @@ namespace asi.asicentral.oauth
             if (!string.IsNullOrEmpty(asiOAuthClientId) && !string.IsNullOrEmpty(asiOAuthClientSecret) &&
                 !string.IsNullOrEmpty(host) && !string.IsNullOrEmpty(relativePath))
             {
-                if (HttpContext.Current != null && HttpContext.Current.Request != null && HttpContext.Current.Request.Url != null &&
-                    !string.IsNullOrEmpty(HttpContext.Current.Request.Url.Authority) && HttpContext.Current.Request.Url.Authority.Contains("localhost"))
+                if (HttpContext.Current == null || (HttpContext.Current.Request != null && HttpContext.Current.Request.IsLocal))
                 {
                     ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true; // ignor Certificate for testing
                 }
+
 
 				log.Debug("Login_FetchUserDetails - ServerCertificateValidationCallback created");
 				try
                 {
 					log.Debug("Login_FetchUserDetails - Login");
                     OAuth2Client oauth2Client = new OAuth2Client(host, relativePath: relativePath);
-                    var oauth2Response = oauth2Client.Login(asiOAuthClientId, asiOAuthClientSecret, userName, password, scope: "AsiNumberOptional", userHostAddress: HttpContext.Current.Request.UserHostAddress).Result;
+
+                    var hostAddress = HttpContext.Current == null ? string.Empty : HttpContext.Current.Request.UserHostAddress;
+
+
+                    var oauth2Response = oauth2Client.Login(asiOAuthClientId, asiOAuthClientSecret, userName, password, scope: "AsiNumberOptional", userHostAddress: hostAddress).Result;
                     if (oauth2Response != null)
                     {
                         log.Debug("Login_FetchUserDetails - Login - AccessToken " + oauth2Response.AccessToken);
@@ -356,6 +362,7 @@ namespace asi.asicentral.oauth
                     var userRequest = new UserRequest() { UserRequestType = UserRequestType.Create, AuditTrail = new AuditTrail() { LoggedInUserId = 1 }, User = entityUser, SkipCompanyValidation = skipValidateCompany };
 
                     //ACT
+                    var message = string.Empty;
                     userRequest.TalkAndWait<UserRequest, UserResponse>(responseMessage =>
                     {
                         ssoId = (responseMessage != null && responseMessage.Users != null && responseMessage.Users.Count > 0 && responseMessage.Users[0] != null && responseMessage.Users[0].Id > 0) ? responseMessage.Users[0].Id.ToString() 
