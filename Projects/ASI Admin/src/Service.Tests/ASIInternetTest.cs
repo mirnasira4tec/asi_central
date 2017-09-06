@@ -1,18 +1,18 @@
 ﻿using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.database;
 using asi.asicentral.model.sgr;
 using asi.asicentral.model.store;
 using System;
 using System.Collections.Generic;
 using asi.asicentral.model.excit;
+using NUnit.Framework;
 
 namespace asi.asicentral.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class ASIInternetTest
     {
-        [TestMethod]
+        [Test]
         public void CompanyTest()
         {
             int count = 0;
@@ -29,7 +29,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void ProductTest()
         {
             int count = 0;
@@ -46,7 +46,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void CategoryTest()
         {
             int count = 0;
@@ -63,7 +63,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void OrderRetreiveTest()
         {
             int count = 0;
@@ -83,7 +83,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void ASPNetMembership()
         {
             int count = 0;
@@ -94,7 +94,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void CENTUserProfilesPROF()
         {
             int count = 0;
@@ -105,7 +105,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Order()
         {
             int count = 0;
@@ -121,7 +121,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void SupplierAppTest()
         {
             Guid appIdentifier;
@@ -148,7 +148,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void DistributorAppTest()
         {
             Guid appIdentifier;
@@ -187,13 +187,13 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void SupplierUpdateRequestTest()
         {
             using (var context = new ASIInternetContext())
             {
                 //retrieve update field
-                var fields = context.SupplierUpdateFields.Where(s => s.IsObsolete.HasValue ).ToList();
+                var fields = context.SupplierUpdateFields.Where(s => s.IsObsolete.HasValue).ToList();
                 Assert.IsNotNull(fields);
 
                 var updateRequest = new SupUpdateRequest()
@@ -214,11 +214,11 @@ namespace asi.asicentral.Tests
 
                 var requestDetails = new SupUpdateRequestDetail()
                 {
-                    SupUpdateRequestId = updateRequest.Id, 
-                    SupUpdateFieldId = 1, 
-                    UpdateValue = "http://testInventory.com/svc", 
-                    OrigValue = "origiValue", 
-                    CreateDate = DateTime.Now, 
+                    SupUpdateRequestId = updateRequest.Id,
+                    SupUpdateFieldId = 1,
+                    UpdateValue = "http://testInventory.com/svc",
+                    OrigValue = "origiValue",
+                    CreateDate = DateTime.Now,
                     UpdateDate = DateTime.Now,
                     UpdateSource = "Unit Test"
                 };

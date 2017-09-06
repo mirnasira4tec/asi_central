@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.model.store;
 using System.Collections.Generic;
 using asi.asicentral.interfaces;
@@ -10,10 +9,11 @@ using asi.asicentral.web.Controllers.Store;
 using asi.asicentral.web.model.store;
 using System.Web.Mvc;
 using asi.asicentral.model.ROI;
+using NUnit.Framework;
 
 namespace asi.asicentral.WebApplication.Tests.Controllers.Store
 {
-    [TestClass]
+     [TestFixture]
     public class ESPAdvertisingApplicationTest
     {
         public ContextProduct CreateProduct(int id = 1)
@@ -54,7 +54,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             return companywithAddress;
         }
 
-        [TestMethod]
+        [Test]
         public void EditPayForPlacement()
         {
             StoreIndividual individual = new StoreIndividual() { LastName = "Last", FirstName = "First" };
@@ -167,7 +167,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(1));
         }
 
-        [TestMethod]
+        [Test]
         public void EditBannerTileTower()
         {
             StoreIndividual individual = new StoreIndividual() { LastName = "Last", FirstName = "First" };
@@ -230,7 +230,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(1));
         }
 
-        [TestMethod]
+        [Test]
         public void EditEventPlanner()
         {
             StoreIndividual individual = new StoreIndividual() { LastName = "Last", FirstName = "First" };
@@ -334,7 +334,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(1));
         }
 
-        [TestMethod]
+        [Test]
         public void EditClearanceNewSpecials()
         {
             StoreIndividual individual = new StoreIndividual() { LastName = "Last", FirstName = "First" };
@@ -411,7 +411,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(1));
         }
 
-        [TestMethod]
+        [Test]
         public void EditFeaturedProductsOrVideo()
         {
             StoreIndividual individual = new StoreIndividual() { LastName = "Last", FirstName = "First" };
@@ -505,7 +505,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
 
         }
 
-        [TestMethod]
+        [Test]
         public void EditLoginScreen()
         {
             StoreIndividual individual = new StoreIndividual() { LastName = "Last", FirstName = "First" };
