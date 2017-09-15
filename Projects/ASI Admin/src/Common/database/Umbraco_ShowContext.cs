@@ -29,6 +29,7 @@ namespace asi.asicentral.database
         public DbSet<ShowProfileOptionalDataLabel> ProfileOptionalDataLabel { get; set; }
         public DbSet<ShowProfileRequests> ProfileRequests { get; set; }
         public DbSet<ShowProfileOptionalDetails> ProfileOptionalDetails { get; set; }
+        public DbSet<ShowProfileDistributorData> ProfileDistributorData { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -51,7 +52,8 @@ namespace asi.asicentral.database
                 .Add(new ShowProfileSupplierDataMap())
                 .Add(new ShowProfileOptionalDataLabelMap())
                 .Add(new ShowProfileRequestMap())
-                .Add(new ShowProfileOptionalDetailsMap());
+                .Add(new ShowProfileOptionalDetailsMap())
+                .Add(new ShowProfileDistributorDataMap());
         }
     }
 }

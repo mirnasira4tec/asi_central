@@ -183,6 +183,74 @@ VALUES(1,'AttendeeName','Secondary Attendee Name',GETUTCDATE(), GETUTCDATE(),'Ad
 (10,'FOBlocations','What are your current FOB locations?',GETUTCDATE(), GETUTCDATE(),'Admin', null, 1,0) 
 SET IDENTITY_INSERT [dbo].[ATT_ProfileOptionalDataLabel] OFF
 
+--Added by Arun
+
+Create table dbo.ATT_ProfileDistributorData(
+ProfileDistributorDataId int IDENTITY(1,1) NOT NULL Primary Key,
+	ProfileRequestId int NOT NULL,
+	Email nvarchar(100) NULL,
+	CompanyName nvarchar(100) NULL,
+	ASINumber nvarchar(10) NULL,
+	AttendeeName nvarchar(100) NULL,
+	AttendeeTitle nvarchar(100) NULL,
+	AttendeeCommEmail nvarchar(100) NULL,
+	AttendeeCellPhone nvarchar(15) NULL,
+	AttendeeWorkPhone nvarchar(15) NULL,
+	AttendeeBiography nvarchar(1000) NULL,
+	Focus2018 nvarchar(1000) NULL,
+	BussinessFrom nvarchar(1000) NULL,
+	SalesByCustomer nvarchar(1000) NULL,
+	AnnualSalesVolume nvarchar(1000) NULL,
+	CatalogPercentage decimal(18,2) NULL,
+	WebPercentage decimal(18,2) NULL,
+	SpotPercentage decimal(18,2) NULL,
+	DifferncFromOtherDistributor  nvarchar(1000) NULL,
+	HasSupplierNetwork bit NULL,
+	VendorContact nvarchar(250) NULL,
+	PreviousBuyerEventAttendee bit NULL,
+	PreviousFasilitateAttendee bit NULL,
+	FasilitateAttendedDetail varchar(1000) NULL,
+	IsBuyingGroup bit NULL,
+	BuyingGroupsDetail varchar(1000) NULL,
+	ShowSample nvarchar(10) NULL,
+	SalesAids nvarchar(1000) NULL,
+	SellingMode nvarchar(1000) NULL,
+	SalesChallenge nvarchar(1000) NULL,
+	IdealSupDescription nvarchar(1000) NULL,
+	SupImportanceRating nvarchar(500) NULL,
+	Importancelist nvarchar(150) NULL,
+	CorporateAddress nvarchar(100) NULL,
+	City nvarchar(50) NULL,
+	State nvarchar(50) NULL,
+	Zip nvarchar(10) NULL,
+	CompanyDescription nvarchar(1000) NULL,
+	CompanyAmtForProductSale decimal(18,2) NULL,
+	AcceptTerms bit NULL,
+	CreateDateUTC datetime NOT NULL,
+	UpdateDateUTC datetime NOT NULL,
+	UpdateSource nvarchar(200) NOT NULL,
+	IsUpdate bit NOT NULL,
+	AttendeeImage nvarchar(1000) NULL);
+	
+	---------------------------------------------------------------------------------
+	ALTER TABLE ATT_ProfileOptionalDataLabel
+    ADD IsSupplier bit DEFAULT 1 NOT NULL, IsDistributor bit DEFAULT 0 NOT NULL;
+   ---------------------------------------------------------------------------------
+   
+   SET IDENTITY_INSERT [dbo].[ATT_ProfileOptionalDataLabel] ON
+	INSERT INTO [dbo].[ATT_ProfileOptionalDataLabel]([ProfileOptionalDataLabelId],[Name],[Description],[CreateDateUTC],[UpdateDateUTC],[UpdateSource],[IsObsolete],[IsSupplier],[IsDistributor])
+	VALUES(11,'ShippingAddress','Shipping Address',GETUTCDATE(), GETUTCDATE(),'Admin', 1,0,1),
+	(12,'City','City',GETUTCDATE(), GETUTCDATE(),'Admin', 1,0,1),
+	(13,'State','State',GETUTCDATE(), GETUTCDATE(),'Admin', 1,0,1),
+	(14,'Zip','Zip',GETUTCDATE(), GETUTCDATE(),'Admin', 1,0,1),
+	(15,'CurrentBussinessCompanies','Please provide the names of three supplier companies that you are currently doing business with',GETUTCDATE(), GETUTCDATE(),'Admin', 1,0,1),
+	(16,'BussinessInUSA','For distributors based outside of the USA only, please indicate how much business you do in the USA',GETUTCDATE(), GETUTCDATE(),'Admin', 1,0,1),
+	(17,'AdditionalCriteriaForSupplier','Please provide any additional criteria when choosing a supplier',GETUTCDATE(), GETUTCDATE(),'Admin', 1,0,1),
+	(18,'BenefitSupForFasilitate','Name 5 suppliers you feel would benefit from attending a future fASIlitate event',GETUTCDATE(), GETUTCDATE(),'Admin', 1,0,1),
+	(19,'MediaPlatforms','List social media platforms you currently use and your handle associated with that platform',GETUTCDATE(), GETUTCDATE(),'Admin', 1,0,1)    
+	SET IDENTITY_INSERT [dbo].[ATT_ProfileOptionalDataLabel] OFF
+
+
 
 
 

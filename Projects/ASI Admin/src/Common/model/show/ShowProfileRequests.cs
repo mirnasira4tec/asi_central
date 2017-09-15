@@ -31,5 +31,6 @@ namespace asi.asicentral.model.show
         public virtual ShowEmployeeAttendee EmployeeAttendee { get; set; }
         public virtual IList<ShowProfileOptionalDetails> ProfileRequestOptionalDetails { get; set; }
         public virtual IList<ShowProfileSupplierData> ProfileSupplierData { get; set; }
+        public virtual IList<ShowProfileDistributorData> ProfileDistributorData { get; set; }
     }
 }
