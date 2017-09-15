@@ -426,6 +426,9 @@ namespace asi.asicentral.database.mappings
             For<IRepository<ShowProfileOptionalDetails>>().Use<EFRepository<ShowProfileOptionalDetails>>()
               .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
+            For<IRepository<ShowProfileDistributorData>>().Use<EFRepository<ShowProfileDistributorData>>()
+              .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+
             #endregion Umbraco_ShowContext
 
             #region PersonifyContext

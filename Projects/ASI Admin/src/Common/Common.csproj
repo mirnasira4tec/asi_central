@@ -252,6 +252,7 @@
     <Compile Include="database\mappings\excit\SupUpdateFieldMap.cs" />
     <Compile Include="database\mappings\excit\SupUpdateRequestDetailMap.cs" />
     <Compile Include="database\mappings\excit\SupUpdateRequestMap.cs" />
+    <Compile Include="database\mappings\show\ShowProfileDistributorDataMap.cs" />
     <Compile Include="database\mappings\show\ShowProfileOptionalDataLabelMap.cs" />
     <Compile Include="database\mappings\show\ShowProfileRequestMap.cs" />
     <Compile Include="database\mappings\show\ShowProfileOptionalDetailsMap.cs" />
@@ -358,6 +359,7 @@
     <Compile Include="model\call\CallRequests.cs" />
     <Compile Include="model\CreditCard.cs" />
     <Compile Include="model\show\ShowDistShowLogo.cs" />
+    <Compile Include="model\show\ShowProfileDistributorData.cs" />
     <Compile Include="model\show\ShowProfileOptionalDataLabel.cs" />
     <Compile Include="model\show\ShowProfileOptionalDetails.cs" />
     <Compile Include="model\show\ShowProfileRequests.cs" />
