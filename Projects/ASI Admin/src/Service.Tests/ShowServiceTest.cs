@@ -659,7 +659,8 @@ namespace asi.asicentral.Tests
                         UpdateDate = DateTime.Now,
                         UpdateSource = "Admin",
                         IsUpdate = true,
-                        AttendeeImage = "test image path"
+                        AttendeeImage = "test image path",
+                        ClientLogo="test client logo path"
                     };
                     context.ProfileDistributorData.Add(profileRequiredData);
                     context.SaveChanges();
