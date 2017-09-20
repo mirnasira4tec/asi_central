@@ -53,6 +53,7 @@ namespace asi.asicentral.model.show
        public string UpdateSource { get; set; }
        public bool IsUpdate { get; set; }
        public string AttendeeImage { get; set; }
+       public string ClientLogo { get; set; }
        public virtual ShowProfileRequests ProfileRequests { get; set; }
        
     }
