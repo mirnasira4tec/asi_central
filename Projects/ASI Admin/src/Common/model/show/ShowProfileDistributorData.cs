@@ -27,13 +27,13 @@ namespace asi.asicentral.model.show
        public decimal WebPercentage { get; set; }
        public decimal SpotPercentage { get; set; }
        public string DifferncFromOtherDistributor { get; set; }
-       public bool HasSupplierNetwork { get; set; }
+       public bool? HasSupplierNetwork { get; set; }
        public string VendorContact { get; set; }
-       public bool PreviousBuyerEventAttendee { get; set; }
+       public bool? PreviousBuyerEventAttendee { get; set; }
        public string BuyingGroupsDetail { get; set; }
-       public bool PreviousFasilitateAttendee { get; set; }
+       public bool? PreviousFasilitateAttendee { get; set; }
        public string FasilitateAttendedDetail { get; set; }
-       public bool IsBuyingGroup { get; set; }
+       public bool? IsBuyingGroup { get; set; }
        public string ShowSample { get; set; }
        public string SalesAids { get; set; }
        public string SellingMode { get; set; }
