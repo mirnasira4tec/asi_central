@@ -13,7 +13,8 @@ namespace asi.asicentral.model.show
         Updated = 1,
         PreApproved = 2,
         Approved = 3,
-        Cancelled = 4
+        AttendeeUpdate = 4,
+        Cancelled = 5
     }
    public class ShowProfileRequests
     {
