@@ -23,9 +23,9 @@ namespace asi.asicentral.model.show
        public string BussinessFrom { get; set; }
        public string SalesByCustomer { get; set; }
        public string AnnualSalesVolume { get; set; }
-       public decimal CatalogPercentage { get; set; }
-       public decimal WebPercentage { get; set; }
-       public decimal SpotPercentage { get; set; }
+       public string CatalogPercentage { get; set; }
+       public string WebPercentage { get; set; }
+       public string SpotPercentage { get; set; }
        public string DifferncFromOtherDistributor { get; set; }
        public bool? HasSupplierNetwork { get; set; }
        public string VendorContact { get; set; }
