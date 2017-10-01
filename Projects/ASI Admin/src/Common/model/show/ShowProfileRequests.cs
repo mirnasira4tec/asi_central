@@ -9,12 +9,13 @@ namespace asi.asicentral.model.show
 {
     public enum ProfileRequestStatus
     {
-        Pending = 0,
-        Updated = 1,
-        PreApproved = 2,
-        Approved = 3,
-        AttendeeUpdate = 4,
-        Cancelled = 5
+        Created = 0,
+        Pending = 1,
+        AttendeeUpdate = 2,
+        Updated = 3,
+        PreApproved = 4,
+        Approved = 5,
+        Cancelled = 6
     }
    public class ShowProfileRequests
     {
