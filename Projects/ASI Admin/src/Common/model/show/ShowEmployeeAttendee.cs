@@ -17,5 +17,6 @@ namespace asi.asicentral.model.show
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
         public bool? HasTravelForm { get; set; }
+        public virtual IList<ShowProfileRequests> ProfileRequests { get; set; }
     }
 }
