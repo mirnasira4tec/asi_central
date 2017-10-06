@@ -1,5 +1,6 @@
 using asi.asicentral.interfaces;
 using asi.asicentral.model.show;
+using asi.asicentral.oauth;
 using asi.asicentral.services;
 using asi.asicentral.util.show;
 using asi.asicentral.web.models.show;
@@ -12,9 +13,11 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
+
 
 namespace asi.asicentral.web.Controllers.Show
 {
@@ -36,14 +39,14 @@ namespace asi.asicentral.web.Controllers.Show
             string secondaryASINo = string.Empty;
             if (ds.Columns.Contains("Secondary ASINO"))
             {
-                 secondaryASINo = ds.Rows[rowId]["Secondary ASINO"].ToString().Trim();
+                secondaryASINo = ds.Rows[rowId]["Secondary ASINO"].ToString().Trim();
             }
             if (fasiliateFlag == true)
             {
                 var companies = ObjectService.GetAll<ShowCompany>().Where(item => (item.ASINumber == asinumber)).ToList();
                 var specialCharsPattern = @"[\s,\./\\&\?;=]";
                 var compName = Regex.Replace(name, specialCharsPattern, "");
-                company = companies.FirstOrDefault(item => Regex.Replace(item.Name, specialCharsPattern, "").Equals(compName, StringComparison.CurrentCultureIgnoreCase) && 
+                company = companies.FirstOrDefault(item => Regex.Replace(item.Name, specialCharsPattern, "").Equals(compName, StringComparison.CurrentCultureIgnoreCase) &&
                                                            item.MemberType.Equals(memberType, StringComparison.CurrentCultureIgnoreCase));
             }
             else
@@ -163,14 +166,14 @@ namespace asi.asicentral.web.Controllers.Show
                 {
                     loginEmail = ds.Rows[rowId]["Login Email"].ToString().Trim();
                 }
-                if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName) )
+                if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName))
                 {
                     ShowEmployee employee = null;
                     if (!string.IsNullOrEmpty(email))
                     {
-                        employee = company.Employees.FirstOrDefault(item => !string.IsNullOrEmpty(item.Email) && item.Email.Trim().Equals(email, StringComparison.CurrentCultureIgnoreCase) );
+                        employee = company.Employees.FirstOrDefault(item => !string.IsNullOrEmpty(item.Email) && item.Email.Trim().Equals(email, StringComparison.CurrentCultureIgnoreCase));
                     }
-                    if( employee == null)
+                    if (employee == null)
                     {
                         employee = company.Employees.FirstOrDefault(item => (item.FirstName.Trim().Equals(firstName, StringComparison.CurrentCultureIgnoreCase) &&
                                                                              item.LastName.Trim().Equals(lastName, StringComparison.CurrentCultureIgnoreCase)));
@@ -238,7 +241,7 @@ namespace asi.asicentral.web.Controllers.Show
                     {
                         employeeAttendee.HasTravelForm = Convert.ToBoolean(ds.Rows[rowId]["HasTravelForm"].ToString() == "Yes") ? true : false;
                     }
-                    if( employeeAttendees != null )
+                    if (employeeAttendees != null)
                         employeeAttendees.Add(employeeAttendee);
                 }
             }
@@ -258,7 +261,6 @@ namespace asi.asicentral.web.Controllers.Show
             );
 
             list.ForEach(r => result.Rows.Add(r.Select(c => c.Value).Cast<object>().ToArray()));
-
             return result;
         }
 
@@ -320,7 +322,7 @@ namespace asi.asicentral.web.Controllers.Show
                                                                                .OrderByDescending(s => s.StartDate).FirstOrDefault();
                                     if (objShow != null && (objShow.ShowTypeId == 1 || objShow.ShowTypeId == 2))
                                     {
-                                         columnNameList = new string[] { "ASINO", "Company", "Sponsor", "Presentation", "Roundtable", "ExhibitOnly", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
+                                        columnNameList = new string[] { "ASINO", "Company", "Sponsor", "Presentation", "Roundtable", "ExhibitOnly", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                                     }
                                     if (objShow != null && objShow.ShowTypeId == 4)
                                     {
@@ -353,7 +355,7 @@ namespace asi.asicentral.web.Controllers.Show
                                         var problematicCols = columnNameList.Where(x => keyValues.Values.FirstOrDefault(d => d.ToLower() == x.ToLower()) == null).ToList();
                                         if (problematicCols != null && problematicCols.Any())
                                         {
-                                            ModelState.AddModelError("CustomError", string.Format("Columns '{0}' doesn't exist in spreadsheet {1}.", string.Join(",", problematicCols), worksheet.Name ));
+                                            ModelState.AddModelError("CustomError", string.Format("Columns '{0}' doesn't exist in spreadsheet {1}.", string.Join(",", problematicCols), worksheet.Name));
                                         }
                                     }
                                 }
@@ -418,7 +420,7 @@ namespace asi.asicentral.web.Controllers.Show
                                     }
 
                                     UpdateShowCompanyData(excelDataTable, i, objShow.Id, fasiliateFlag, employeeAttendees);
-                                }                                
+                                }
 
                                 ObjectService.SaveChanges();
 
@@ -491,9 +493,288 @@ namespace asi.asicentral.web.Controllers.Show
                 }
                 return RedirectToAction("../Show/ShowList");
             }
-            
+
             return RedirectToAction("../Show/ShowList");
+        }
+        [HttpGet]
+        public ActionResult MigrateCompanies()
+        {
+            return View("~/Views/Show/ExcelUpload/MigrateCompanies.cshtml");
+        }
+
+        [HttpPost]
+        public ActionResult MigrateCompanies(List<HttpPostedFileBase> files)
+        {
+            DataTable companiesDt = new DataTable();
+            DataTable userDt = new DataTable();
+            if (files.Count > 0 && files[0] != null && files[1] != null)
+            {
+                companiesDt = ExcelToDataTable(files[0]);
+                userDt = ExcelToDataTable(files[1]);
+            }
+            if (companiesDt.Rows.Count > 0)
+            {
+                foreach (DataRow crow in companiesDt.Rows)
+                {
+                    var filteredRows = userDt.AsEnumerable().Where(r => r["asi"].ToString() == crow["ACCOUNT"].ToString()).ToList();
+                    foreach (DataRow urow in filteredRows)
+                    {
+                        CreateUser(crow, urow);
+                    }
+
+
+                }
+            }
+            return View();
+        }
+
+        public DataTable ExcelToDataTable(HttpPostedFileBase userFile)
+        {
+            DataTable dt = new DataTable();
+            LogService log = LogService.GetLog(this.GetType());
+            if (userFile != null)
+            {
+                try
+                {
+
+                    log.Debug("Index - start Process the file");
+                    var start = DateTime.Now;
+                    var objErrors = new ErrorModel();
+                    var fileName = Path.GetFileName(userFile.FileName);
+                    string tempPath = Path.GetTempPath();
+                    string currFilePath = tempPath + fileName;
+                    string fileExtension = Path.GetExtension(userFile.FileName);
+                    log.Debug("Index - end process the file - " + (DateTime.Now - start).TotalMilliseconds);
+
+                    if (fileExtension == ".xls" || fileExtension == ".xlsx")
+                    {
+                        if (System.IO.File.Exists(currFilePath))
+                        {
+                            log.Debug("Index - Delete file if exists");
+                            System.IO.File.Delete(currFilePath);
+                            log.Debug("Index - end Delete file if exists - " + (DateTime.Now - start));
+                        }
+                        userFile.SaveAs(currFilePath);
+                        FileInfo fi = new FileInfo(currFilePath);
+                        var workBook = new XLWorkbook(fi.FullName);
+                        IXLWorksheet workSheet = workBook.Worksheet(1);
+
+                        //Create a new DataTable.
+
+                        //Loop through the Worksheet rows.
+                        bool firstRow = true;
+                        foreach (IXLRow row in workSheet.Rows())
+                        {
+                            //Use the first row to add columns to DataTable.
+                            if (firstRow)
+                            {
+                                foreach (IXLCell cell in row.Cells())
+                                {
+                                    dt.Columns.Add(cell.Value.ToString());
+                                }
+                                firstRow = false;
+                            }
+                            else
+                            {
+                                //Add rows to DataTable.
+                                dt.Rows.Add();
+                                int i = 0;
+                                foreach (IXLCell cell in row.Cells(row.FirstCellUsed().Address.ColumnNumber, row.LastCellUsed().Address.ColumnNumber))
+                                {
+                                    dt.Rows[dt.Rows.Count - 1][i] = cell.Value.ToString();
+                                    i++;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    log.Debug("Exception while importing the file, exception message: " + ex.Message);
+                }
+            }
+            return dt;
+        }
+
+        private void CreateUser(DataRow companyInfo, DataRow UserInfo)
+        {
+         LogService _log = LogService.GetLog(this.GetType());
+            //Set username to unique value - this is needed in order to have a username
+            //that is an email address (that can be changed)        
+            string firstName =UserInfo["Name"].ToString().Replace(".", "").Replace(",", "");
+            var status=0;
+            string lastName ="";
+           
+
+           // model.UserName = firstName + "." + lastName + "." + Guid.NewGuid().ToString();
+            string txtPhone =companyInfo["PHONE"].ToString();
+          //  string txtPhoneAreaCode = string.Empty;
+            //if (!string.IsNullOrEmpty(model.Phone) || !string.IsNullOrEmpty(model.PhoneAreaCode))
+            //{
+            //    txtPhone = model.Phone;
+            //    txtPhoneAreaCode = model.PhoneAreaCode;
+            //}
+
+            string txtFax = string.Empty;
+            //string txtFaxAreaCode = string.Empty;
+            //if (!string.IsNullOrEmpty(model.Fax) || !string.IsNullOrEmpty(model.FaxAreaCode))
+            //{
+            //    txtFax = model.Fax;
+            //    txtFaxAreaCode = model.FaxAreaCode;
+            //}
+            string ddlCountry = "USA";
+            string ddlState = "";
+            ddlState =companyInfo["STATE"].ToString();
+            int rblMemberType = 0;
+            int memberTypeID = 0;
+
+            //Set user's role
+            string userRole = "";
+            string userRole_CD = SSO.MemberType.UNKNOWN.ToString();
+            asi.asicentral.model.User companyUser = null;
+        var asiNo=companyInfo["ACCOUNT"].ToString();
+        var companyName=companyInfo["COMPANY"].ToString();
+           
+                    companyUser = ASIOAuthClient.GetCompanyByASINumber(asiNo);
+                    if (companyUser != null && !string.IsNullOrEmpty(companyUser.MemberType_CD)) userRole_CD = companyUser.MemberType_CD;
+                userRole = SSO.GetMemberTypeDesciptionForRole<SSO.MemberType>(userRole_CD);
+          
+            asi.asicentral.model.User user = new asi.asicentral.model.User();
+
+            user.FirstName = firstName;
+            user.LastName = lastName;
+            
+                if (asiNo.Length < 7)
+                    user.AsiNumber = asiNo;
+                else
+                    user.AsiNumber = asiNo.Substring(0, 6);
+           
+
+            if (companyUser != null)
+            {
+                user.CompanyId = companyUser.CompanyId;
+                user.CompanyName = companyUser.CompanyName;
+                user.MemberTypeId = companyUser.MemberTypeId;
+                user.MemberType_CD = companyUser.MemberType_CD;
+                user.MemberStatus_CD = companyUser.MemberStatus_CD;
+            }
+            else
+            {
+                user.CompanyName = companyName;
+                user.MemberTypeId = memberTypeID;
+                user.MemberStatus_CD = StatusCode.ASICENTRAL.ToString();
+            }
+            user.Street1 = UserInfo["address"].ToString();
+            user.Street2 ="";
+            user.City = UserInfo["city"].ToString();
+            user.Email = UserInfo["Email"].ToString();
+            user.State = UserInfo["state"].ToString();
+                user.Country = "USA";
+                user.CountryCode = "USA";
+          
+            user.Zip = UserInfo["zip"].ToString();
+            user.PhoneAreaCode = "";
+            user.Fax = "";
+            user.FaxAreaCode = "";
+            user.Phone = "";
+            user.Password = UserInfo["Password"].ToString();
+            user.PasswordAnswer =UserInfo["Password"].ToString();
+            user.TelephonePassword =UserInfo["Password"].ToString();
+            user.UserName =  UserInfo["Email"].ToString();
+
+            status = -1;
+            string ssoId = string.Empty;
+            ssoId = ASIOAuthClient.CreateUser(user);
+
+            if (!string.IsNullOrEmpty(ssoId))
+            {
+               status = 1;
+                try
+                {
+                    user = ASIOAuthClient.GetUser(Convert.ToInt32(ssoId));
+                    if (user != null)
+                    {
+                        IDictionary<string, string> tokens = ASIOAuthClient.Login_FetchUserDetails(user.Email,user.Password);
+                        if (tokens == null)
+                        {
+                            _log.Debug(string.Format("Time before sleep {0}", DateTime.Now));
+                            Thread.Sleep(10000);
+                            _log.Debug(string.Format("Time after sleep {0}", DateTime.Now));
+                            tokens = ASIOAuthClient.Login_FetchUserDetails(user.Email, user.Password));
+                            if (tokens == null) _log.Debug("Tokens not received");
+                            else _log.Debug("Tokens received after wait");
+                        }
+
+                        if (tokens != null && tokens.Count > 0)
+                        {
+                            if (tokens.ContainsKey("AuthToken")) user.AccessToken = tokens["AuthToken"];
+                            if (tokens.ContainsKey("RefreshToken")) user.RefreshToken = tokens["RefreshToken"];
+                        }
+                    }
+                }
+                catch
+                {
+                    //In case of error message from UMS
+                    status = 4;
+                  //  model.ErrorMsg = ssoId;
+
+                     // modify server side error message
+                    if (!string.IsNullOrEmpty(ssoId))
+                    {  
+                        if (ssoId.Contains("EMAL_EXST:"))
+                        {
+                        //    model.ErrorMsg = ssoId.Replace("EMAL_EXST:", "");
+                        }
+                        else if (ssoId.Contains("PasswordHint"))
+                        {
+                        //    model.ErrorMsg = System.Text.RegularExpressions.Regex.Replace(ssoId, @"PasswordHint contains.*$", "");
+                        }
+                        else if (ssoId.Contains("CompanyId is not valid."))
+                        {
+                          //  model.ErrorMsg = ssoId.Replace("CompanyId is not valid.", "Failed to create an account.");
+                        }
+                    }
+                }
+                if (status != 4)
+                {
+                    SSOUtility.ProcessUserInfo(user, Request, Response);
+                    bool isUserEmail = EmailUtility.SendRegUsernameEmail(model.Email, model.UserName);
+                    if (isUserEmail) model.Status = 2; //Mail sent successfully
+                    else model.Status = 3; //Fail to send mail
+                }
+
+                if ((userRole == "Prospective Distributor") ||
+                (userRole == "Prospective Supplier") ||
+                (userRole == "Prospective Decorator") ||
+                (userRole == "Prospective Affiliate"))
+                {
+                    var salesNewMember = new List<string>();
+                    if (userRole == "Prospective Distributor" || userRole == "Prospective Decorator")
+                    {
+                        string[] toAddresses =
+                            ConfigurationManager.AppSettings["AsiRegistrationMembershipEmail"].Replace("jkrolick@asicentral.com;", "").Split(';');
+                        salesNewMember.AddRange(toAddresses);
+                    }
+                    else if (userRole == "Prospective Affiliate")
+                    {
+                        string[] toAddresses =
+                            ConfigurationManager.AppSettings["AsiRegistrationAffiliateEmail"].Split(';');
+                        salesNewMember.AddRange(toAddresses);
+                    }
+                    else if (userRole == "Prospective Supplier")
+                    {
+                        string[] toAddresses =
+                            ConfigurationManager.AppSettings["AsiRegistrationSupplierEmail"].Replace("jkrolick@asicentral.com;", "").Split(';');
+                        salesNewMember.AddRange(toAddresses);
+                    }
+
+                    //model.Role = userRole;
+                    //bool isAdminEmail = EmailUtility.CreateAdminEmail(model, salesNewMember);
+                }
+            }
+            else
+            {}
+               // model.Status = 0;//user failed
         }
     }
 }
-
