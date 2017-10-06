@@ -46,7 +46,7 @@ namespace asi.asicentral.model.show
        public string State { get; set; }
        public string Zip { get; set; }
        public string CompanyDescription { get; set; }
-       public decimal CompanyAmtForProductSale { get; set; }
+       public string CompanyAmtForProductSale { get; set; }
        public bool AcceptTerms { get; set; }
        public DateTime CreateDate { get; set; }
        public DateTime UpdateDate { get; set; }
