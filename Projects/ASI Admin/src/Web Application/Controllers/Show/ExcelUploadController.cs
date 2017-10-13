@@ -2,6 +2,7 @@ using asi.asicentral.interfaces;
 using asi.asicentral.model.show;
 using asi.asicentral.oauth;
 using asi.asicentral.services;
+using asi.asicentral.services.PersonifyProxy;
 using asi.asicentral.util.show;
 using asi.asicentral.web.models.show;
 using ClosedXML.Excel;
@@ -24,6 +25,7 @@ namespace asi.asicentral.web.Controllers.Show
     public class ExcelUploadController : Controller
     {
         public IObjectService ObjectService { get; set; }
+        PersonifyService personifyService = new PersonifyService();
 
         public ActionResult Index()
         {
@@ -507,6 +509,7 @@ namespace asi.asicentral.web.Controllers.Show
         {
             DataTable companiesDt = new DataTable();
             DataTable userDt = new DataTable();
+            List<asi.asicentral.model.CompanyInformation> compnayInformationList = new List<asi.asicentral.model.CompanyInformation>();
             if (files.Count > 0 && files[0] != null && files[1] != null)
             {
                 companiesDt = ExcelToDataTable(files[0]);
@@ -516,18 +519,24 @@ namespace asi.asicentral.web.Controllers.Show
             {
                 foreach (DataRow crow in companiesDt.Rows)
                 {
-                    var filteredRows = userDt.AsEnumerable().Where(r => r["asi"].ToString() == crow["ACCOUNT"].ToString()).ToList();
-                    foreach (DataRow urow in filteredRows)
+                    compnayInformationList.Add(CreateCompany(crow));
+                }
+            }
+            if (compnayInformationList.Count > 0)
+            {
+                foreach (var companyInfo in compnayInformationList)
+                {
+                    DataRow[] filterUsers = userDt.Select("asi=" + companyInfo.ASINumber);
+                    foreach (var userInfo in filterUsers)
                     {
-                        CreateUser(crow, urow);
+                        CreateUser(companyInfo, userInfo);
                     }
-
-
                 }
             }
             return View();
         }
 
+        //converts Excel sheet to datatable
         public DataTable ExcelToDataTable(HttpPostedFileBase userFile)
         {
             DataTable dt = new DataTable();
@@ -536,7 +545,6 @@ namespace asi.asicentral.web.Controllers.Show
             {
                 try
                 {
-
                     log.Debug("Index - start Process the file");
                     var start = DateTime.Now;
                     var objErrors = new ErrorModel();
@@ -596,185 +604,147 @@ namespace asi.asicentral.web.Controllers.Show
             return dt;
         }
 
-        private void CreateUser(DataRow companyInfo, DataRow UserInfo)
+        //creates company in personify
+        private asi.asicentral.model.CompanyInformation CreateCompany(DataRow companyInforow)
         {
-         LogService _log = LogService.GetLog(this.GetType());
-            //Set username to unique value - this is needed in order to have a username
-            //that is an email address (that can be changed)        
-            string firstName =UserInfo["Name"].ToString().Replace(".", "").Replace(",", "");
-            var status=0;
-            string lastName ="";
-           
 
-           // model.UserName = firstName + "." + lastName + "." + Guid.NewGuid().ToString();
-            string txtPhone =companyInfo["PHONE"].ToString();
-          //  string txtPhoneAreaCode = string.Empty;
-            //if (!string.IsNullOrEmpty(model.Phone) || !string.IsNullOrEmpty(model.PhoneAreaCode))
-            //{
-            //    txtPhone = model.Phone;
-            //    txtPhoneAreaCode = model.PhoneAreaCode;
-            //}
+            var asiNo = Convert.ToString(companyInforow["ACCOUNT"]);
+            var phone = Convert.ToString(companyInforow["PHONE"]) != string.Empty ? Convert.ToString(companyInforow["PHONE"]) : string.Empty;
+            var phoneNo = string.Empty;
+            var areaCode = string.Empty;
+            if (phone != string.Empty)
+            {
+                List<string> phoneNumber = SeprateAreaCodeFromPhonNo(phone);
+                if (phoneNumber.Count() > 0)
+                {
+                    phoneNo = phoneNumber[1];
+                    areaCode = phoneNumber[0];
+                }
+            }
+            asi.asicentral.model.CompanyInformation companyInfo = null;
+            var companyInformation = new asi.asicentral.model.CompanyInformation
+                 {
+                     Name = Convert.ToString(companyInforow["COMPANY"]),
+                     Phone = phoneNo + areaCode,
+                     Street1 = Convert.ToString(companyInforow["ADDRESS1"]),
+                     Street2 = Convert.ToString(companyInforow["ADDRESS2"]),
+                     City = Convert.ToString(companyInforow["CITY"]),
+                     Zip = Convert.ToString(companyInforow["ZIP"]),
+                     State = Convert.ToString(companyInforow["STATE"]),
+                     Country = "USA",
+                     MemberType = "ASICENTRAL",
+                     MemberTypeNumber = 0,
+                     ASINumber = asiNo
+                 };
 
-            string txtFax = string.Empty;
-            //string txtFaxAreaCode = string.Empty;
-            //if (!string.IsNullOrEmpty(model.Fax) || !string.IsNullOrEmpty(model.FaxAreaCode))
-            //{
-            //    txtFax = model.Fax;
-            //    txtFaxAreaCode = model.FaxAreaCode;
-            //}
-            string ddlCountry = "USA";
-            string ddlState = "";
-            ddlState =companyInfo["STATE"].ToString();
-            int rblMemberType = 0;
-            int memberTypeID = 0;
+            //create equivalent store objects
+            var company = new asi.asicentral.model.store.StoreCompany
+              {
+                  Name = companyInformation.Name,
+                  Phone = companyInformation.Phone,
+                  ASINumber = asiNo,
+              };
+            var address = new asi.asicentral.model.store.StoreAddress
+               {
+                   Street1 = companyInformation.Street1,
+                   Street2 = companyInformation.Street2,
+                   City = companyInformation.City,
+                   State = companyInformation.State,
+                   Country = companyInformation.Country,
+                   Zip = companyInformation.Zip
+               };
+            company.Addresses.Add(new asi.asicentral.model.store.StoreCompanyAddress
+            {
+                Address = address,
+                IsBilling = true,
+                IsShipping = true,
+            });
 
-            //Set user's role
-            string userRole = "";
-            string userRole_CD = SSO.MemberType.UNKNOWN.ToString();
-            asi.asicentral.model.User companyUser = null;
-        var asiNo=companyInfo["ACCOUNT"].ToString();
-        var companyName=companyInfo["COMPANY"].ToString();
-           
-                    companyUser = ASIOAuthClient.GetCompanyByASINumber(asiNo);
-                    if (companyUser != null && !string.IsNullOrEmpty(companyUser.MemberType_CD)) userRole_CD = companyUser.MemberType_CD;
-                userRole = SSO.GetMemberTypeDesciptionForRole<SSO.MemberType>(userRole_CD);
-          
+            company.MemberType = companyInformation.MemberType;
+            companyInfo = personifyService.GetCompanyInfoByAsiNumber(asiNo);
+
+            if (companyInfo == null)
+            {
+                companyInfo = PersonifyClient.CreateCompany(company, companyInformation.MemberType, null);
+                PersonifyClient.AddCustomerAddresses(company, companyInfo.MasterCustomerId, companyInfo.SubCustomerId, null);
+                PersonifyClient.AddPhoneNumber(companyInformation.Phone, companyInformation.Country, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+            }
+            else
+            {
+                company.ExternalReference = companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId;
+                asi.asicentral.model.store.StoreAddress companyAddress = company.GetCompanyAddress();
+                string countryCode = "USA";
+                PersonifyClient.AddPhoneNumber(company.Phone, countryCode, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+                PersonifyClient.AddCompanyEmail(company, companyInfo);
+                PersonifyClient.AddCustomerAddresses(company, companyInfo.MasterCustomerId, companyInformation.SubCustomerId, null);
+            }
+            return companyInfo;
+        }
+
+        //creates user
+        private void CreateUser(asi.asicentral.model.CompanyInformation companyInfo, DataRow UserInfo)
+        {
+            LogService _log = LogService.GetLog(this.GetType());
             asi.asicentral.model.User user = new asi.asicentral.model.User();
-
-            user.FirstName = firstName;
-            user.LastName = lastName;
-            
-                if (asiNo.Length < 7)
-                    user.AsiNumber = asiNo;
-                else
-                    user.AsiNumber = asiNo.Substring(0, 6);
-           
-
-            if (companyUser != null)
-            {
-                user.CompanyId = companyUser.CompanyId;
-                user.CompanyName = companyUser.CompanyName;
-                user.MemberTypeId = companyUser.MemberTypeId;
-                user.MemberType_CD = companyUser.MemberType_CD;
-                user.MemberStatus_CD = companyUser.MemberStatus_CD;
-            }
-            else
-            {
-                user.CompanyName = companyName;
-                user.MemberTypeId = memberTypeID;
-                user.MemberStatus_CD = StatusCode.ASICENTRAL.ToString();
-            }
-            user.Street1 = UserInfo["address"].ToString();
-            user.Street2 ="";
-            user.City = UserInfo["city"].ToString();
-            user.Email = UserInfo["Email"].ToString();
-            user.State = UserInfo["state"].ToString();
-                user.Country = "USA";
-                user.CountryCode = "USA";
-          
-            user.Zip = UserInfo["zip"].ToString();
-            user.PhoneAreaCode = "";
-            user.Fax = "";
-            user.FaxAreaCode = "";
-            user.Phone = "";
-            user.Password = UserInfo["Password"].ToString();
-            user.PasswordAnswer =UserInfo["Password"].ToString();
-            user.TelephonePassword =UserInfo["Password"].ToString();
-            user.UserName =  UserInfo["Email"].ToString();
-
-            status = -1;
             string ssoId = string.Empty;
-            ssoId = ASIOAuthClient.CreateUser(user);
-
-            if (!string.IsNullOrEmpty(ssoId))
+            if (Convert.ToString(UserInfo["Active"])=="yes")
             {
-               status = 1;
-                try
-                {
-                    user = ASIOAuthClient.GetUser(Convert.ToInt32(ssoId));
-                    if (user != null)
-                    {
-                        IDictionary<string, string> tokens = ASIOAuthClient.Login_FetchUserDetails(user.Email,user.Password);
-                        if (tokens == null)
-                        {
-                            _log.Debug(string.Format("Time before sleep {0}", DateTime.Now));
-                            Thread.Sleep(10000);
-                            _log.Debug(string.Format("Time after sleep {0}", DateTime.Now));
-                            tokens = ASIOAuthClient.Login_FetchUserDetails(user.Email, user.Password));
-                            if (tokens == null) _log.Debug("Tokens not received");
-                            else _log.Debug("Tokens received after wait");
-                        }
+                user.Email = string.Format(Convert.ToString(UserInfo["Email"]));
+                var name = Convert.ToString(UserInfo["Name"]).Split(new[] { ' ' }, 2);
+                user.FirstName = name[0];
+                user.LastName = name[1];
+                //Title
+                user.Title = "";
+                //Company
+                user.CompanyName = companyInfo.Name;
+                user.CompanyId = companyInfo.CompanyId;
+                user.UserName = user.Email;
+                //ASI Number
+                user.StatusCode = StatusCode.ACTV.ToString(); ;
+                user.AsiNumber = companyInfo.ASINumber;
+                user.MemberType_CD = companyInfo.MemberType;
+               // user.PhoneAreaCode = companyInfo.;
+                user.Phone = companyInfo.Phone;
+                user.Street1 = Convert.ToString(UserInfo["address"]);
+                user.Street2 = "";
+                user.City = Convert.ToString(UserInfo["city"]);
+                user.CountryCode = "USA";
+                user.Country = "USA";
+                user.State = Convert.ToString(UserInfo["state"]);
+                user.Zip = Convert.ToString(UserInfo["zip"]);
+                user.Password = Convert.ToString(UserInfo["Password"]);
 
-                        if (tokens != null && tokens.Count > 0)
-                        {
-                            if (tokens.ContainsKey("AuthToken")) user.AccessToken = tokens["AuthToken"];
-                            if (tokens.ContainsKey("RefreshToken")) user.RefreshToken = tokens["RefreshToken"];
-                        }
-                    }
-                }
-                catch
+                var userInformation = ASIOAuthClient.GetUserByEmail(user.Email);
+                if (userInformation == null)
                 {
-                    //In case of error message from UMS
-                    status = 4;
-                  //  model.ErrorMsg = ssoId;
-
-                     // modify server side error message
-                    if (!string.IsNullOrEmpty(ssoId))
-                    {  
-                        if (ssoId.Contains("EMAL_EXST:"))
-                        {
-                        //    model.ErrorMsg = ssoId.Replace("EMAL_EXST:", "");
-                        }
-                        else if (ssoId.Contains("PasswordHint"))
-                        {
-                        //    model.ErrorMsg = System.Text.RegularExpressions.Regex.Replace(ssoId, @"PasswordHint contains.*$", "");
-                        }
-                        else if (ssoId.Contains("CompanyId is not valid."))
-                        {
-                          //  model.ErrorMsg = ssoId.Replace("CompanyId is not valid.", "Failed to create an account.");
-                        }
-                    }
+                    ssoId = ASIOAuthClient.CreateUserWithOutCompany(user);
                 }
-                if (status != 4)
-                {
-                    SSOUtility.ProcessUserInfo(user, Request, Response);
-                    bool isUserEmail = EmailUtility.SendRegUsernameEmail(model.Email, model.UserName);
-                    if (isUserEmail) model.Status = 2; //Mail sent successfully
-                    else model.Status = 3; //Fail to send mail
-                }
-
-                if ((userRole == "Prospective Distributor") ||
-                (userRole == "Prospective Supplier") ||
-                (userRole == "Prospective Decorator") ||
-                (userRole == "Prospective Affiliate"))
-                {
-                    var salesNewMember = new List<string>();
-                    if (userRole == "Prospective Distributor" || userRole == "Prospective Decorator")
-                    {
-                        string[] toAddresses =
-                            ConfigurationManager.AppSettings["AsiRegistrationMembershipEmail"].Replace("jkrolick@asicentral.com;", "").Split(';');
-                        salesNewMember.AddRange(toAddresses);
-                    }
-                    else if (userRole == "Prospective Affiliate")
-                    {
-                        string[] toAddresses =
-                            ConfigurationManager.AppSettings["AsiRegistrationAffiliateEmail"].Split(';');
-                        salesNewMember.AddRange(toAddresses);
-                    }
-                    else if (userRole == "Prospective Supplier")
-                    {
-                        string[] toAddresses =
-                            ConfigurationManager.AppSettings["AsiRegistrationSupplierEmail"].Replace("jkrolick@asicentral.com;", "").Split(';');
-                        salesNewMember.AddRange(toAddresses);
-                    }
-
-                    //model.Role = userRole;
-                    //bool isAdminEmail = EmailUtility.CreateAdminEmail(model, salesNewMember);
-                }
+              
             }
-            else
-            {}
-               // model.Status = 0;//user failed
+        }
+
+        private List<string> SeprateAreaCodeFromPhonNo(string phoneNo)
+        {
+            ILogService log = LogService.GetLog(this.GetType());
+            List<string> phoneWithArea = new List<string>();
+            var charsToRemove = new string[] { "(", ")", " ", "-" };
+            try
+            {
+                foreach (var c in charsToRemove)
+                {
+                    phoneNo = phoneNo.Replace(c, string.Empty);
+                }
+                string areaCode = phoneNo.Substring(0, 3);
+                string phone = phoneNo.Substring(phoneNo.Length - 7);
+                phoneWithArea = new List<string>();
+                phoneWithArea.Add(areaCode);
+                phoneWithArea.Add(phone);
+            }
+            catch (Exception ex)
+            {
+                log.Debug(ex.Message);
+            }
+            return phoneWithArea;
         }
     }
 }
