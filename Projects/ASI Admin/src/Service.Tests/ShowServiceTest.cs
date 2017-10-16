@@ -416,6 +416,433 @@ namespace asi.asicentral.Tests
             Assert.AreEqual(attendees.ElementAt(0).ShowId, attendee.Attendees[1].ShowId);
         }
 
+        [Test]
+        public void GetProfileUpdateRequest()
+        {
+            using (var context = new Umbraco_ShowContext())
+            {
+                var request = context.ProfileRequests.OrderByDescending(x => x.Id).FirstOrDefault();
+                Assert.IsNotNull(request);
+            }
+        }
+
+        [Test]
+        public void SupplierProfileRequest()
+        {
+            var request = RequestForAttendee(101);
+            RequestProfile(request.Id);
+            DeleteRequest(request.Id);
+        }
+
+        [Test]
+        public void DistributorProfileRequest()
+        {
+            var request = RequestForEmployeeAttendee(5184);
+            RequestDistributorProfile(request.Id);
+            DeleteDistributorRequest(request.Id);
+        }
+
+        private ShowProfileRequests RequestForAttendee(int attnedeeId)
+        {
+            using (var context = new Umbraco_ShowContext())
+            {
+                //retrieve update field
+                var fields = context.ProfileOptionalDataLabel.Where(s => !s.IsObsolete.HasValue && s.IsSupplier == true).ToList();
+                Assert.IsNotNull(fields);
+                String guid = Guid.NewGuid().ToString();
+                var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.AttendeeId == attnedeeId && x.Status == ProfileRequestStatus.Pending);
+                if (profileRequests == null)
+                {
+                    profileRequests = new ShowProfileRequests()
+                    {
+                        AttendeeId = attnedeeId,
+                        RequestedBy = "rprajapati_unit",
+                        RequestReference = guid,
+                        Status = ProfileRequestStatus.Pending,
+                        CreateDate = DateTime.Now,
+                        UpdateDate = DateTime.Now,
+                        UpdateSource = "Initial Unit Tests"
+                    };
+                    context.ProfileRequests.Add(profileRequests);
+                    context.SaveChanges();
+                    Assert.IsNotNull(profileRequests);
+                }
+                return profileRequests;
+            }
+        }
+
+        private ShowProfileRequests RequestForEmployeeAttendee(int employeeAttendeeId)
+        {
+            using (var context = new Umbraco_ShowContext())
+            {
+                var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.EmployeeAttendeeId == employeeAttendeeId && x.Status == ProfileRequestStatus.Pending);
+                var fields = context.ProfileOptionalDataLabel.Where(s => s.IsObsolete.HasValue && s.IsSupplier == true).ToList();
+                if (profileRequests == null)
+                {
+                    profileRequests = new ShowProfileRequests()
+                    {
+                        EmployeeAttendeeId = employeeAttendeeId,
+                        RequestedBy = "rprajapati_unit",
+                        Status = ProfileRequestStatus.Pending,
+                        CreateDate = DateTime.Now,
+                        UpdateDate = DateTime.Now,
+                        UpdateSource = "Initial Unit Tests"
+                    };
+                    context.ProfileRequests.Add(profileRequests);
+                    context.SaveChanges();
+                    Assert.IsNotNull(profileRequests);
+                }
+                return profileRequests;
+            }
+        }
+
+        private void RequestProfile(int profileRequestsId)
+        {
+            using (var context = new Umbraco_ShowContext())
+            {
+                var profileRequiredData = context.ProfileSupplierData.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.IsUpdate == false);
+                if (profileRequiredData == null)
+                {
+                    profileRequiredData = new ShowProfileSupplierData()
+                    {
+                        ProfileRequestId = profileRequestsId,
+                        Email = "reena.prajapati@a4technology.com",
+                        CompanyName = "A4 Tech",
+                        ASINumber = "1234",
+                        AttendeeName = "test Name",
+                        AttendeeTitle = "test title",
+                        AttendeeCommEmail = "test@test.com",
+                        AttendeeCellPhone = "1234567892",
+                        AttendeeWorkPhone = "9874563215",
+                        CorporateAddress = "test Address",
+                        City = "test City",
+                        State = "test State",
+                        Zip = "zip",
+                        CompanyWebsite = "test.com",
+                        ProductSummary = "test Product Summary",
+                        TrustFromDistributor = "test Trust From Distributor",
+                        SpecialServices = "test Special Services",
+                        LoyaltyPrograms = "test Loyalty Programs",
+                        Samples = "samples",
+                        ProductSafety = "test Product Safety",
+                        FactAboutCompany = "test Fact About Company",
+                        CreateDate = DateTime.Now,
+                        UpdateDate = DateTime.Now,
+                        UpdateSource = "Initial Unit Tests"
+                    };
+
+                    context.ProfileSupplierData.Add(profileRequiredData);
+                    context.SaveChanges();
+                    Assert.IsNotNull(profileRequiredData);
+                }
+                else
+                {
+                    profileRequiredData = context.ProfileSupplierData.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.IsUpdate == true);
+                    if (profileRequiredData == null)
+                    {
+                        profileRequiredData = new ShowProfileSupplierData()
+                        {
+                            ProfileRequestId = profileRequestsId,
+                            Email = "reena.prajapati1@a4technology.com",
+                            CompanyName = "A4 Tech1",
+                            ASINumber = "1234",
+                            AttendeeName = "test Name",
+                            AttendeeTitle = "test title",
+                            AttendeeCommEmail = "test@test.com",
+                            AttendeeCellPhone = "1234567892",
+                            AttendeeWorkPhone = "9874563215",
+                            CorporateAddress = "test Address",
+                            City = "test City",
+                            State = "test State",
+                            Zip = "zip",
+                            CompanyWebsite = "test.com",
+                            ProductSummary = "test Product Summary",
+                            TrustFromDistributor = "test Trust From Distributor",
+                            SpecialServices = "test Special Services",
+                            LoyaltyPrograms = "test Loyalty Programs",
+                            Samples = "samples",
+                            ProductSafety = "test Product Safety",
+                            FactAboutCompany = "test Fact About Company",
+                            CreateDate = DateTime.Now,
+                            UpdateDate = DateTime.Now,
+                            UpdateSource = "Initial Unit Tests",
+                            IsUpdate = true
+                        };
+
+                        context.ProfileSupplierData.Add(profileRequiredData);
+                        context.SaveChanges();
+                        Assert.IsNotNull(profileRequiredData);
+                    }
+                    else
+                    {
+                        profileRequiredData.CompanyWebsite = "test1.com";
+                        context.SaveChanges();
+                    }
+                }
+                var profileRequestOptionalDetails = context.ProfileOptionalDetails.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.ProfileOptionalDataLabelId == 1);
+                if (profileRequestOptionalDetails == null)
+                {
+                    profileRequestOptionalDetails = new ShowProfileOptionalDetails()
+                    {
+                        ProfileRequestId = profileRequestsId,
+                        ProfileOptionalDataLabelId = 1,
+                        UpdateValue = "updateValue",
+                        OrigValue = "origiValue",
+                        CreateDate = DateTime.Now,
+                        UpdateDate = DateTime.Now,
+                        UpdateSource = "Unit Test"
+                    };
+
+                    context.ProfileOptionalDetails.Add(profileRequestOptionalDetails);
+                    context.SaveChanges();
+                }
+                else
+                {
+                    profileRequestOptionalDetails.UpdateValue = "updateValue1";
+                    context.SaveChanges();
+                }
+                Assert.IsNotNull(profileRequestOptionalDetails);
+            }
+        }
+
+
+        private void RequestDistributorProfile(int profileRequestsId)
+        {
+            using (var context = new Umbraco_ShowContext())
+            {
+                var profileRequiredData = context.ProfileDistributorData.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.IsUpdate == false);
+                if (profileRequiredData == null)
+                {
+                    profileRequiredData = new ShowProfileDistributorData()
+                    {
+
+                        ProfileRequestId = profileRequestsId,
+                        Email = "arun.kumar@a4technology.com",
+                        CompanyName = "A4Technology",
+                        ASINumber = "123452",
+                        AttendeeName = "Arun Verma",
+                        AttendeeTitle = "Sales Person",
+                        AttendeeCommEmail = "arun.kumar@a4technology.com",
+                        AttendeeCellPhone = "1223434545",
+                        AttendeeWorkPhone = "1223434545",
+                        AttendeeBiography = "From India",
+                        Focus2018 = "Focus",
+                        BussinessFrom = "Test Company",
+                        SalesByCustomer = "Test Sales",
+                        AnnualSalesVolume = "1000",
+                        CatalogPercentage = "65.0m",
+                        WebPercentage = "89.0m",
+                        SpotPercentage = "67.0m",
+                        DifferncFromOtherDistributor = "Test Other Distributor",
+                        HasSupplierNetwork = true,
+                        VendorContact = "Test Vendor Contanct",
+                        PreviousBuyerEventAttendee = false,
+                        BuyingGroupsDetail = "Test Buyer Group",
+                        PreviousFasilitateAttendee = true,
+                        FasilitateAttendedDetail = "New Jersey- 2015",
+                        IsBuyingGroup = true,
+                        ShowSample = "Generic",
+                        SalesAids = "Test Sales",
+                        SellingMode = "Online",
+                        SalesChallenge = "Test Challenge",
+                        IdealSupDescription = "Supplier Descriptions",
+                        SupImportanceRating = "Supplier Importance Rating",
+                        Importancelist = "Test List",
+                        CorporateAddress = "Address",
+                        City = "Test City",
+                        State = "Test State",
+                        Zip = "40218",
+                        CompanyDescription = "Company Description",
+                        CompanyAmtForProductSale = "5000",
+                        AcceptTerms = true,
+                        CreateDate = DateTime.Now,
+                        UpdateDate = DateTime.Now,
+                        UpdateSource = "Admin",
+                        IsUpdate = true,
+                        AttendeeImage = "test image path",
+                        ClientLogo="test client logo path"
+                    };
+                    context.ProfileDistributorData.Add(profileRequiredData);
+                    context.SaveChanges();
+                    Assert.IsNotNull(profileRequiredData);
+                }
+                else
+                {
+                    profileRequiredData = context.ProfileDistributorData.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.IsUpdate == true);
+                    if (profileRequiredData == null)
+                    {
+                        profileRequiredData = new ShowProfileDistributorData()
+                        {
+
+                            ProfileRequestId = profileRequestsId,
+                            Email = "arun.kumar@a4technology.com",
+                            CompanyName = "A4Technology",
+                            ASINumber = "123452",
+                            AttendeeName = "Arun Verma",
+                            AttendeeTitle = "Sales Person",
+                            AttendeeCommEmail = "arun.kumar@a4technology.com",
+                            AttendeeCellPhone = "1223434545",
+                            AttendeeWorkPhone = "1223434545",
+                            AttendeeBiography = "From India",
+                            Focus2018 = "Focus",
+                            BussinessFrom = "Test Company",
+                            SalesByCustomer = "Test Sales",
+                            AnnualSalesVolume = "1000",
+                            CatalogPercentage = "65.0m",
+                            WebPercentage = "89.0m",
+                            SpotPercentage = "67.0m",
+                            DifferncFromOtherDistributor = "Test Other Distributor",
+                            HasSupplierNetwork = true,
+                            VendorContact = "Test Vendor Contanct",
+                            PreviousBuyerEventAttendee = false,
+                            BuyingGroupsDetail = "Test Buyer Group",
+                            PreviousFasilitateAttendee = true,
+                            FasilitateAttendedDetail = "New Jersey- 2015",
+                            IsBuyingGroup = true,
+                            ShowSample = "Generic",
+                            SalesAids = "Test Sales",
+                            SellingMode = "Online",
+                            SalesChallenge = "Test Challenge",
+                            IdealSupDescription = "Supplier Descriptions",
+                            SupImportanceRating = "Supplier Importance Rating",
+                            Importancelist = "Test List",
+                            CorporateAddress = "Address",
+                            City = "Test City",
+                            State = "Test State",
+                            Zip = "40218",
+                            CompanyDescription = "Company Description",
+                            CompanyAmtForProductSale = "5000",
+                            AcceptTerms = true,
+                            CreateDate = DateTime.Now,
+                            UpdateDate = DateTime.Now,
+                            UpdateSource = "Admin",
+                            IsUpdate = true,
+                            AttendeeImage = "test image path"
+                        };
+                        context.ProfileDistributorData.Add(profileRequiredData);
+                        context.SaveChanges();
+                        Assert.IsNotNull(profileRequiredData);
+                    }
+                    else
+                    {
+                        context.SaveChanges();
+                    }
+                }
+
+                var distributorOptionLableList = context.ProfileOptionalDataLabel.Where(m => m.IsDistributor == true).ToList();
+                if (distributorOptionLableList != null && distributorOptionLableList.Count > 0)
+                {
+                    foreach (var distributorOptionalLable in distributorOptionLableList)
+                    {
+                        var profileRequestOptionalDetails = context.ProfileOptionalDetails
+                                            .FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.ProfileOptionalDataLabelId == distributorOptionalLable.Id);
+                        if (profileRequestOptionalDetails == null)
+                        {
+                            profileRequestOptionalDetails = new ShowProfileOptionalDetails()
+                            {
+                                ProfileRequestId = profileRequestsId,
+                                ProfileOptionalDataLabelId = distributorOptionalLable.Id,
+                                UpdateValue = "updateValue",
+                                OrigValue = "origiValue",
+                                CreateDate = DateTime.Now,
+                                UpdateDate = DateTime.Now,
+                                UpdateSource = "Unit Test"
+                            };
+
+                            context.ProfileOptionalDetails.Add(profileRequestOptionalDetails);
+                            context.SaveChanges();
+                        }
+                        else
+                        {
+                            profileRequestOptionalDetails.UpdateValue = "updateValue" + distributorOptionalLable.Id;
+                            context.SaveChanges();
+                        }
+                        Assert.IsNotNull(profileRequestOptionalDetails); 
+                    }
+                }
+               
+            }
+        }
+
+        private void DeleteRequest(int profileRequestsId)
+        {
+            using (var context = new Umbraco_ShowContext())
+            {
+                var profileRequestOptionalDetails = context.ProfileOptionalDetails.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.ProfileOptionalDataLabelId == 1);
+                context.ProfileOptionalDetails.Remove(profileRequestOptionalDetails);
+                var profileRequiredData = context.ProfileSupplierData.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId);
+                context.ProfileSupplierData.Remove(profileRequiredData);
+                var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.Id == profileRequestsId);
+                context.ProfileRequests.Remove(profileRequests);
+                context.SaveChanges();
+            }
+        }
+
+        private void DeleteDistributorRequest(int profileRequestsId)
+        {
+            using (var context = new Umbraco_ShowContext())
+            {
+                 var distributorOptionLableList = context.ProfileOptionalDataLabel.Where(m => m.IsDistributor == true).ToList();
+                 if (distributorOptionLableList != null && distributorOptionLableList.Count > 0)
+                 {
+                     foreach (var distributorOptionalLable in distributorOptionLableList)
+                     {
+                         var profileRequestOptionalDetails = context.ProfileOptionalDetails.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.ProfileOptionalDataLabelId == distributorOptionalLable.Id);
+                         context.ProfileOptionalDetails.Remove(profileRequestOptionalDetails);
+                     }
+                 }
+                var profileRequiredData = context.ProfileDistributorData.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId);
+                context.ProfileDistributorData.Remove(profileRequiredData);
+                var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.Id == profileRequestsId);
+                context.ProfileRequests.Remove(profileRequests);
+                context.SaveChanges();
+            }
+        }
+
+        private ShowAttendee CreateAttendee()
+        {
+            using (var context = new Umbraco_ShowContext())
+            {
+                var newAttendee = new ShowAttendee()
+                {
+                    CompanyId = 1,
+                    ShowId = 1,
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    UpdateSource = "Initial Unit Tests"
+                };
+                context.Attendee.Add(newAttendee);
+                context.SaveChanges();
+                Assert.IsNotNull(newAttendee);
+                return newAttendee;
+            }
+        }
+
+        [Test]
+        public void ProfileUpdateRequestTest()
+        {
+            using (var context = new Umbraco_ShowContext())
+            {
+                var attendee = CreateAttendee();
+                if (attendee != null)
+                {
+                    var request = RequestForAttendee(attendee.Id);
+                    RequestProfile(request.Id);
+                    context.Attendee.Attach(attendee);
+                    context.Attendee.Remove(attendee);
+                    var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.AttendeeId == attendee.Id);
+                    if (profileRequests != null)
+                    {
+                        Assert.AreEqual(profileRequests.AttendeeId, attendee.Id);
+                        profileRequests.AttendeeId = null;
+                    }
+                    context.SaveChanges();
+                    Assert.AreNotEqual(profileRequests.AttendeeId, attendee.Id);
+                    DeleteRequest(profileRequests.Id);
+                }
+            }
+
+        }
 
         public DataTable GetDataTable()
         {

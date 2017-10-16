@@ -7,7 +7,11 @@ namespace asi.asicentral.database
     public class Umbraco_ShowContext : BaseContext
     {
         public Umbraco_ShowContext()
-            : base("name=Umbraco_ShowContext")
+            : this("Umbraco_ShowContext")
+        {
+        }
+        public Umbraco_ShowContext(string connectionName)
+            : base("name=" + connectionName)
         {
             Database.SetInitializer<Umbraco_ShowContext>(null);
             EnableTracing(typeof(Umbraco_ShowContext));
@@ -21,6 +25,11 @@ namespace asi.asicentral.database
         public DbSet<ShowType> ShowType { get; set; }
         public DbSet<ShowCompanyAddress> CompanyAddress { get; set; }
         public DbSet<ShowDistShowLogo> DistShowLogo { get; set; }
+        public DbSet<ShowProfileSupplierData> ProfileSupplierData { get; set; }
+        public DbSet<ShowProfileOptionalDataLabel> ProfileOptionalDataLabel { get; set; }
+        public DbSet<ShowProfileRequests> ProfileRequests { get; set; }
+        public DbSet<ShowProfileOptionalDetails> ProfileOptionalDetails { get; set; }
+        public DbSet<ShowProfileDistributorData> ProfileDistributorData { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -39,7 +48,12 @@ namespace asi.asicentral.database
                 .Add(new ShowMap())
                 .Add(new ShowTypeMap())
                 .Add(new ShowCompanyAddressMap())
-                .Add(new ShowDistShowLogoMap());
+                .Add(new ShowDistShowLogoMap())
+                .Add(new ShowProfileSupplierDataMap())
+                .Add(new ShowProfileOptionalDataLabelMap())
+                .Add(new ShowProfileRequestMap())
+                .Add(new ShowProfileOptionalDetailsMap())
+                .Add(new ShowProfileDistributorDataMap());
+        }
     }
-}
 }
