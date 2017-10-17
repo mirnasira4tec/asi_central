@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Migrate Companies";
+}
+@using System.Web.Optimization;
+<h2>MigrateCompanies</h2>
+@Styles.Render("~/Content/css")
+@using (Html.BeginForm("MigrateCompanies", "ExcelUpload", FormMethod.Post, new { style = "padding-left: 50px", enctype = "multipart/form-data" }))
+{
+    <div class="row">
+        <div class="col-md-6">
+            <label>Company Information</label>
+            <input type="file" name="files" /></div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <label>User Information</label>
+            <input type="file" name="files" /></div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <button type="submit" name="btn" class="btn btn-primary">Migrate</button></div>
+    </div>
+}
