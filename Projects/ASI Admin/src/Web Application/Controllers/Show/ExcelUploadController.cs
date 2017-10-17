@@ -440,6 +440,10 @@ namespace asi.asicentral.web.Controllers.Show
                                         {
                                             for (var j = attendee.EmployeeAttendees.Count() - 1; j >= 0; j--)
                                             {
+                                                if (attendee.EmployeeAttendees[j].ProfileRequests.Count() > 0)
+                                                {
+                                                    attendee.EmployeeAttendees[j].ProfileRequests.ForEach(a => a.EmployeeAttendeeId = null);
+                                                }
                                                 ObjectService.Delete(attendee.EmployeeAttendees[j]);
                                             }
                                         }
@@ -451,7 +455,10 @@ namespace asi.asicentral.web.Controllers.Show
                                                 ObjectService.Delete(attendee.DistShowLogos[j]);
                                             }
                                         }
-
+                                        if (attendee.ProfileRequests != null && attendee.ProfileRequests.Any())
+                                        {
+                                            attendee.ProfileRequests.ForEach(a => a.AttendeeId = null);
+                                        }
                                         ObjectService.Delete<ShowAttendee>(attendee);
                                     }
                                     log.Debug(string.Format("{0} company attendees have been deleted for '{1}' after uploading", attendeesToBeDeleted.Count, objShow.Name));
@@ -467,6 +474,10 @@ namespace asi.asicentral.web.Controllers.Show
                                     if (employeeAttendees.FirstOrDefault(a => a.EmployeeId == attendees[k].EmployeeId) == null)
                                     { // delete employee from attendee list only, not from database
                                         countDel++;
+                                        if (attendees[k].ProfileRequests.Count() > 0)
+                                        {
+                                            attendees[k].ProfileRequests.ForEach(a => a.EmployeeAttendeeId = null);
+                                        }
                                         ObjectService.Delete(attendees[k]);
                                     }
                                 }

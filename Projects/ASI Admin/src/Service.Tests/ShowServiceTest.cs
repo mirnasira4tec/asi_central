@@ -450,7 +450,7 @@ namespace asi.asicentral.Tests
                 var fields = context.ProfileOptionalDataLabel.Where(s => !s.IsObsolete.HasValue && s.IsSupplier == true).ToList();
                 Assert.IsNotNull(fields);
                 String guid = Guid.NewGuid().ToString();
-                var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.AttendeeId == attnedeeId && x.Status == (int)ProfileRequestStatus.Pending);
+                var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.AttendeeId == attnedeeId && x.Status == ProfileRequestStatus.Pending);
                 if (profileRequests == null)
                 {
                     profileRequests = new ShowProfileRequests()
@@ -475,7 +475,7 @@ namespace asi.asicentral.Tests
         {
             using (var context = new Umbraco_ShowContext())
             {
-                var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.EmployeeAttendeeId == employeeAttendeeId && x.Status == (int)ProfileRequestStatus.Pending);
+                var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.EmployeeAttendeeId == employeeAttendeeId && x.Status == ProfileRequestStatus.Pending);
                 var fields = context.ProfileOptionalDataLabel.Where(s => s.IsObsolete.HasValue && s.IsSupplier == true).ToList();
                 if (profileRequests == null)
                 {
@@ -630,9 +630,9 @@ namespace asi.asicentral.Tests
                         BussinessFrom = "Test Company",
                         SalesByCustomer = "Test Sales",
                         AnnualSalesVolume = "1000",
-                        CatalogPercentage = 65.0m,
-                        WebPercentage = 89.0m,
-                        SpotPercentage = 67.0m,
+                        CatalogPercentage = "65.0m",
+                        WebPercentage = "89.0m",
+                        SpotPercentage = "67.0m",
                         DifferncFromOtherDistributor = "Test Other Distributor",
                         HasSupplierNetwork = true,
                         VendorContact = "Test Vendor Contanct",
@@ -653,7 +653,7 @@ namespace asi.asicentral.Tests
                         State = "Test State",
                         Zip = "40218",
                         CompanyDescription = "Company Description",
-                        CompanyAmtForProductSale = 5000,
+                        CompanyAmtForProductSale = "5000",
                         AcceptTerms = true,
                         CreateDate = DateTime.Now,
                         UpdateDate = DateTime.Now,
@@ -688,9 +688,9 @@ namespace asi.asicentral.Tests
                             BussinessFrom = "Test Company",
                             SalesByCustomer = "Test Sales",
                             AnnualSalesVolume = "1000",
-                            CatalogPercentage = 65.0m,
-                            WebPercentage = 89.0m,
-                            SpotPercentage = 67.0m,
+                            CatalogPercentage = "65.0m",
+                            WebPercentage = "89.0m",
+                            SpotPercentage = "67.0m",
                             DifferncFromOtherDistributor = "Test Other Distributor",
                             HasSupplierNetwork = true,
                             VendorContact = "Test Vendor Contanct",
@@ -711,7 +711,7 @@ namespace asi.asicentral.Tests
                             State = "Test State",
                             Zip = "40218",
                             CompanyDescription = "Company Description",
-                            CompanyAmtForProductSale = 5000,
+                            CompanyAmtForProductSale = "5000",
                             AcceptTerms = true,
                             CreateDate = DateTime.Now,
                             UpdateDate = DateTime.Now,

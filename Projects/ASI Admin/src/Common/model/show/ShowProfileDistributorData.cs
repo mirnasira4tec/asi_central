@@ -23,17 +23,17 @@ namespace asi.asicentral.model.show
        public string BussinessFrom { get; set; }
        public string SalesByCustomer { get; set; }
        public string AnnualSalesVolume { get; set; }
-       public decimal CatalogPercentage { get; set; }
-       public decimal WebPercentage { get; set; }
-       public decimal SpotPercentage { get; set; }
+       public string CatalogPercentage { get; set; }
+       public string WebPercentage { get; set; }
+       public string SpotPercentage { get; set; }
        public string DifferncFromOtherDistributor { get; set; }
-       public bool HasSupplierNetwork { get; set; }
+       public bool? HasSupplierNetwork { get; set; }
        public string VendorContact { get; set; }
-       public bool PreviousBuyerEventAttendee { get; set; }
+       public bool? PreviousBuyerEventAttendee { get; set; }
        public string BuyingGroupsDetail { get; set; }
-       public bool PreviousFasilitateAttendee { get; set; }
+       public bool? PreviousFasilitateAttendee { get; set; }
        public string FasilitateAttendedDetail { get; set; }
-       public bool IsBuyingGroup { get; set; }
+       public bool? IsBuyingGroup { get; set; }
        public string ShowSample { get; set; }
        public string SalesAids { get; set; }
        public string SellingMode { get; set; }
@@ -46,7 +46,7 @@ namespace asi.asicentral.model.show
        public string State { get; set; }
        public string Zip { get; set; }
        public string CompanyDescription { get; set; }
-       public decimal CompanyAmtForProductSale { get; set; }
+       public string CompanyAmtForProductSale { get; set; }
        public bool AcceptTerms { get; set; }
        public DateTime CreateDate { get; set; }
        public DateTime UpdateDate { get; set; }
