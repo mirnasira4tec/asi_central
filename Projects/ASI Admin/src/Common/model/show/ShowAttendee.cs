@@ -29,6 +29,7 @@ namespace asi.asicentral.model.show
         public virtual ShowCompany Company { get; set; }
         public virtual List<ShowDistShowLogo> DistShowLogos { get; set; }
         public virtual IList<ShowEmployeeAttendee> EmployeeAttendees { get; set; }
+        public virtual IList<ShowProfileRequests> ProfileRequests { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }

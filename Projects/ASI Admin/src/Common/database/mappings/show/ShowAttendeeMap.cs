@@ -45,6 +45,11 @@ namespace asi.asicentral.database.mappings.show
                   .WithOptional()
                   .HasForeignKey(t => t.AttendeeId)
                   .WillCascadeOnDelete();
+
+            HasMany(t =>t.ProfileRequests)
+                .WithOptional()
+                  .HasForeignKey(t => t.AttendeeId)
+                  .WillCascadeOnDelete();
         }
     }
 }
