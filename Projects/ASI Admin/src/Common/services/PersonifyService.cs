@@ -440,7 +440,45 @@ namespace asi.asicentral.services
             return companyInfo;
         }
 
-		public virtual string SaveCreditCard(StoreOrder order, CreditCard creditCard)
+        public virtual void SaveCreditCardInfo(StoreOrder order)
+        {
+            if (order != null && order.CreditCard != null && !string.IsNullOrEmpty(order.CreditCard.TokenId) && order.BillingIndividual != null)
+            {
+                var billingInfo = order.BillingIndividual;
+                var creditCard = new asi.asicentral.model.CreditCard()
+                {
+                    Address = billingInfo.Address.Street1,
+                    City = billingInfo.Address.City,
+                    PostalCode = billingInfo.Address.Zip,
+                    State = billingInfo.Address.State,
+                    Country = billingInfo.Address.Country,
+                    //CountryCode = billingInfo.Address,  //TODO:: code ???
+                    CardHolderName = order.CreditCard.CardHolderName,
+                    Type = order.CreditCard.CardType,
+                    Number = order.CreditCard.CardNumber,
+                    MaskedPAN = order.CreditCard.CardNumber,
+                    ExpirationDate = new DateTime(Int32.Parse(order.CreditCard.ExpYear), Int32.Parse(order.CreditCard.ExpMonth), 01),
+                    ExternalReference = order.CreditCard.ExternalReference,
+                    TokenId = order.CreditCard.TokenId,
+                    AuthReference = order.CreditCard.AuthReference
+                };
+
+                try
+                {
+                    order.CreditCard.ExternalReference = SaveCreditCard(order, creditCard);
+                    if (creditCard.Number.Length >= 4)
+                        creditCard.MaskedPAN = "****" + creditCard.Number.Substring(creditCard.Number.Length - 4, 4);
+                }
+                catch (Exception ex)
+                {
+                    var log = LogService.GetLog(this.GetType());
+                    log.Debug(string.Format("Error in saving credit card to personify: {0}.", ex.Message));
+                    throw ex;
+                }
+            }
+        }
+
+        public virtual string SaveCreditCard(StoreOrder order, CreditCard creditCard)
 		{
 			StoreCompany company = order.Company;
             log.Debug(string.Format("Save credit of {0} ({1})", creditCard.MaskedPAN, company.Name));

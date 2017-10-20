@@ -1070,48 +1070,8 @@ namespace asi.asicentral.web.Controllers.Store
 
         private void SaveCreditCardInfo(StoreOrder order)
         {
-            if (order != null && order.CreditCard != null && !string.IsNullOrEmpty(order.CreditCard.TokenId) && order.BillingIndividual != null )
-            {
-                var billingInfo = order.BillingIndividual;
-                var creditCard = new asi.asicentral.model.CreditCard()
-                {
-                    Address = billingInfo.Address.Street1,
-                    City = billingInfo.Address.City,
-                    PostalCode = billingInfo.Address.Zip,
-                    State = billingInfo.Address.State,
-                    Country = billingInfo.Address.Country,
-                    //CountryCode = billingInfo.Address,  //TODO:: code ???
-                    CardHolderName = order.CreditCard.CardHolderName,
-                    Type = order.CreditCard.CardType,
-                    Number = order.CreditCard.CardNumber,
-                    MaskedPAN = order.CreditCard.CardNumber,
-                    ExpirationDate = new DateTime(Int32.Parse(order.CreditCard.ExpYear), Int32.Parse(order.CreditCard.ExpMonth), 01),
-                    ExternalReference = order.CreditCard.ExternalReference,
-                    TokenId = order.CreditCard.TokenId,
-                    AuthReference = order.CreditCard.AuthReference
-                };
-
-                try
-                {
-                    if (string.IsNullOrEmpty(ConfigurationManager.AppSettings["svcUri"]))
-                    {
-                        throw new Exception("Personify Service is not provided");
-                    }
-
-                    order.CreditCard.ExternalReference = BackendService.SaveCreditCard(order, creditCard);
-
-                    if (creditCard.Number.Length >= 4)
-                        creditCard.MaskedPAN = "****" + creditCard.Number.Substring(creditCard.Number.Length - 4, 4);
-
-                    StoreService.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    var log = LogService.GetLog(this.GetType());
-                    log.Debug(string.Format("Error in saving credit card to personify: {0}.", ex.Message));
-                    throw ex;
-                }
-            }
+            BackendService.SaveCreditCardInfo(order);
+            StoreService.SaveChanges();
         }
 
         /// <summary>
