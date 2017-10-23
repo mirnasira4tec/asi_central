@@ -316,6 +316,7 @@
     </Compile>
     <Compile Include="Interface\IVelocityContext.cs" />
     <Compile Include="Interface\IVelocityService.cs" />
+    <Compile Include="Models\CompanyInfoModel.cs" />
     <Compile Include="Models\velocity\ColorMapData.cs" />
     <Compile Include="Models\velocity\ColorMapping.cs" />
     <Compile Include="Models\asicentral\CallVolume.cs" />

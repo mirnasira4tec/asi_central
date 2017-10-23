@@ -5,6 +5,7 @@ using asi.asicentral.services;
 using asi.asicentral.services.PersonifyProxy;
 using asi.asicentral.util.show;
 using asi.asicentral.web.models.show;
+using asi.asicentral.web.Models;
 using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
@@ -520,7 +521,8 @@ namespace asi.asicentral.web.Controllers.Show
         {
             DataTable companiesDt = new DataTable();
             DataTable userDt = new DataTable();
-            List<asi.asicentral.model.CompanyInformation> compnayInformationList = new List<asi.asicentral.model.CompanyInformation>();
+            List<CompanyInfoModel> compnayInformationList = new List<CompanyInfoModel>();
+            List<UserInfoModel> userInformationList = new List<UserInfoModel>();
             if (files.Count > 0 && files[0] != null && files[1] != null)
             {
                 companiesDt = ExcelToDataTable(files[0]);
@@ -530,21 +532,249 @@ namespace asi.asicentral.web.Controllers.Show
             {
                 foreach (DataRow crow in companiesDt.Rows)
                 {
-                    compnayInformationList.Add(CreateCompany(crow));
+                    CompanyInfoModel companyModel = CreateCompany(crow);
+                    compnayInformationList.Add(companyModel);
                 }
             }
             if (compnayInformationList.Count > 0)
             {
-                foreach (var companyInfo in compnayInformationList)
+                foreach (var company in compnayInformationList)
                 {
-                    DataRow[] filterUsers = userDt.Select("asi=" + companyInfo.ASINumber);
-                    foreach (var userInfo in filterUsers)
+                    if (company.status == CompanyStatusCode.Created || company.status == CompanyStatusCode.Exists)
                     {
-                        CreateUser(companyInfo, userInfo);
+                        DataRow[] filterUsers = userDt.Select("asi=" + company.companyInfo.ASINumber);
+                        foreach (var userInfo in filterUsers)
+                        {
+                            UserInfoModel user = CreateUser(company.companyInfo, userInfo);
+                            userInformationList.Add(user);
+                        }
                     }
                 }
             }
-            return View();
+            return View("~/Views/Show/ExcelUpload/MigrateCompanies.cshtml");
+        }
+
+        //converts Excel sheet to datatable
+        public DataTable ExcelToDataTable(HttpPostedFileBase userFile)
+        {
+            DataTable dt = new DataTable();
+            LogService log = LogService.GetLog(this.GetType());
+            if (userFile != null)
+            {
+                try
+                {
+                    log.Debug("Index - start Process the file");
+                    var start = DateTime.Now;
+                    var objErrors = new ErrorModel();
+                    var fileName = Path.GetFileName(userFile.FileName);
+                    string tempPath = Path.GetTempPath();
+                    string currFilePath = tempPath + fileName;
+                    string fileExtension = Path.GetExtension(userFile.FileName);
+                    log.Debug("Index - end process the file - " + (DateTime.Now - start).TotalMilliseconds);
+
+                    if (fileExtension == ".xls" || fileExtension == ".xlsx")
+                    {
+                        if (System.IO.File.Exists(currFilePath))
+                        {
+                            log.Debug("Index - Delete file if exists");
+                            System.IO.File.Delete(currFilePath);
+                            log.Debug("Index - end Delete file if exists - " + (DateTime.Now - start));
+                        }
+                        userFile.SaveAs(currFilePath);
+                        FileInfo fi = new FileInfo(currFilePath);
+                        var workBook = new XLWorkbook(fi.FullName);
+                        IXLWorksheet workSheet = workBook.Worksheet(1);
+
+                        //Create a new DataTable.
+
+                        //Loop through the Worksheet rows.
+                        bool firstRow = true;
+                        foreach (IXLRow row in workSheet.Rows())
+                        {
+                            //Use the first row to add columns to DataTable.
+                            if (firstRow)
+                            {
+                                foreach (IXLCell cell in row.Cells())
+                                {
+                                    dt.Columns.Add(cell.Value.ToString());
+                                }
+                                firstRow = false;
+                            }
+                            else
+                            {
+                                //Add rows to DataTable.
+                                dt.Rows.Add();
+                                int i = 0;
+                                foreach (IXLCell cell in row.Cells(row.FirstCellUsed().Address.ColumnNumber, row.LastCellUsed().Address.ColumnNumber))
+                                {
+                                    dt.Rows[dt.Rows.Count - 1][i] = cell.Value.ToString();
+                                    i++;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    log.Debug("Exception while importing the file, exception message: " + ex.Message);
+                }
+            }
+            return dt;
+        }
+
+        //creates company in personify
+        private CompanyInfoModel CreateCompany(DataRow companyInforow)
+        {
+            var asiNo = Convert.ToString(companyInforow["ACCOUNT"]);
+            var phone = Convert.ToString(companyInforow["PHONE"]) != string.Empty ? Convert.ToString(companyInforow["PHONE"]) : string.Empty;
+            var phoneNo = string.Empty;
+            var areaCode = string.Empty;
+            if (phone != string.Empty)
+            {
+                List<string> phoneNumber = SeprateAreaCodeFromPhonNo(phone);
+                if (phoneNumber.Count() > 0)
+                {
+                    phoneNo = phoneNumber[1];
+                    areaCode = phoneNumber[0];
+                }
+            }
+            CompanyInfoModel companyModel = new CompanyInfoModel();
+            asi.asicentral.model.CompanyInformation companyInfo = null;
+            try
+            {
+                var companyInformation = new asi.asicentral.model.CompanyInformation
+                     {
+                         Name = Convert.ToString(companyInforow["COMPANY"]),
+                         Phone = phoneNo + areaCode,
+                         Street1 = Convert.ToString(companyInforow["ADDRESS1"]),
+                         Street2 = Convert.ToString(companyInforow["ADDRESS2"]),
+                         City = Convert.ToString(companyInforow["CITY"]),
+                         Zip = Convert.ToString(companyInforow["ZIP"]),
+                         State = Convert.ToString(companyInforow["STATE"]),
+                         Country = "USA",
+                         MemberType = "ASICENTRAL",
+                         MemberTypeNumber = 0,
+                         ASINumber = asiNo
+                     };
+
+                //create equivalent store objects
+                var company = new asi.asicentral.model.store.StoreCompany
+                  {
+                      Name = companyInformation.Name,
+                      Phone = companyInformation.Phone,
+                      ASINumber = asiNo,
+                  };
+                var address = new asi.asicentral.model.store.StoreAddress
+                   {
+                       Street1 = companyInformation.Street1,
+                       Street2 = companyInformation.Street2,
+                       City = companyInformation.City,
+                       State = companyInformation.State,
+                       Country = companyInformation.Country,
+                       Zip = companyInformation.Zip
+                   };
+                company.Addresses.Add(new asi.asicentral.model.store.StoreCompanyAddress
+                {
+                    Address = address,
+                    IsBilling = true,
+                    IsShipping = true,
+                });
+
+                company.MemberType = companyInformation.MemberType;
+                companyInfo = personifyService.GetCompanyInfoByAsiNumber(asiNo);
+
+                if (companyInfo == null)
+                {
+                    companyInfo = PersonifyClient.CreateCompany(company, companyInformation.MemberType, null);
+                    PersonifyClient.AddCustomerAddresses(company, companyInfo.MasterCustomerId, companyInfo.SubCustomerId, null);
+                    PersonifyClient.AddPhoneNumber(companyInformation.Phone, companyInformation.Country, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+                    companyModel.status = CompanyStatusCode.Created;
+                }
+                else
+                {
+                    company.ExternalReference = companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId;
+                    asi.asicentral.model.store.StoreAddress companyAddress = company.GetCompanyAddress();
+                    string countryCode = "USA";
+                    PersonifyClient.AddPhoneNumber(company.Phone, countryCode, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+                    PersonifyClient.AddCompanyEmail(company, companyInfo);
+                    PersonifyClient.AddCustomerAddresses(company, companyInfo.MasterCustomerId, companyInformation.SubCustomerId, null);
+                    companyModel.status = CompanyStatusCode.Exists;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                log.Error(ex.Message);
+                companyModel.status = CompanyStatusCode.Fail;
+            }
+            companyModel.companyInfo = companyInfo;
+            return companyModel;
+        }
+
+        //creates user
+        private UserInfoModel CreateUser(asi.asicentral.model.CompanyInformation companyInfo, DataRow UserInfo)
+        {
+            LogService _log = LogService.GetLog(this.GetType());
+            UserInfoModel userModel = new UserInfoModel();
+            userModel.user = new asi.asicentral.model.User();
+
+            string ssoId = string.Empty;
+            try
+            {
+                if (Convert.ToString(UserInfo["Active"]) == "yes")
+                {
+                    userModel.user.Email = string.Format(Convert.ToString(UserInfo["Email"]));
+                    var name = Convert.ToString(UserInfo["Name"]).Split(new[] { ' ' }, 2);
+                    userModel.user.FirstName = name[0];
+                    userModel.user.LastName = name[1];
+                    //Title
+                    userModel.user.Title = "";
+                    //Company
+                    userModel.user.CompanyName = companyInfo.Name;
+                    userModel.user.CompanyId = companyInfo.CompanyId;
+                    userModel.user.UserName = userModel.user.Email;
+                    //ASI Number
+                    userModel.user.StatusCode = StatusCode.ACTV.ToString(); ;
+                    userModel.user.AsiNumber = companyInfo.ASINumber;
+                    userModel.user.MemberType_CD = companyInfo.MemberType;
+                    // user.PhoneAreaCode = companyInfo.;
+                    userModel.user.Phone = companyInfo.Phone;
+                    userModel.user.Street1 = Convert.ToString(UserInfo["address"]);
+                    userModel.user.Street2 = "";
+                    userModel.user.City = Convert.ToString(UserInfo["city"]);
+                    userModel.user.CountryCode = "USA";
+                    userModel.user.Country = "USA";
+                    userModel.user.State = Convert.ToString(UserInfo["state"]);
+                    userModel.user.Zip = Convert.ToString(UserInfo["zip"]);
+                    userModel.user.Password = Convert.ToString(UserInfo["Password"]);
+
+                    userModel.user = ASIOAuthClient.GetUserByEmail(userModel.user.Email);
+                    if (userModel.user == null)
+                    {
+                        ssoId = ASIOAuthClient.CreateUserWithOutCompany(userModel.user);
+                        if (!string.IsNullOrEmpty(ssoId))
+                        {
+                            userModel.status = CompanyStatusCode.Created;
+                        }
+                        else
+                        {
+                            userModel.status = CompanyStatusCode.Fail;
+                        }
+                    }
+                    else
+                    {
+                        userModel.status = CompanyStatusCode.Exists;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                log.Error(ex.Message);
+                userModel.status = CompanyStatusCode.Fail;
+            }
+            return userModel;
         }
 
         //converts Excel sheet to datatable
