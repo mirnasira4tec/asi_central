@@ -437,7 +437,7 @@ namespace asi.asicentral.Tests
         [Test]
         public void DistributorProfileRequest()
         {
-            var request = RequestForEmployeeAttendee(5184);
+            var request = RequestForEmployeeAttendee(5183);
             RequestDistributorProfile(request.Id);
             DeleteDistributorRequest(request.Id);
         }
@@ -660,7 +660,8 @@ namespace asi.asicentral.Tests
                         UpdateSource = "Admin",
                         IsUpdate = true,
                         AttendeeImage = "test image path",
-                        ClientLogo="test client logo path"
+                        ClientLogo="test client logo path",
+                        HostedBuyerEventDetails="Nov 2016, NYc"
                     };
                     context.ProfileDistributorData.Add(profileRequiredData);
                     context.SaveChanges();
@@ -717,7 +718,8 @@ namespace asi.asicentral.Tests
                             UpdateDate = DateTime.Now,
                             UpdateSource = "Admin",
                             IsUpdate = true,
-                            AttendeeImage = "test image path"
+                            AttendeeImage = "test image path",
+                            HostedBuyerEventDetails = "Nov 2016, NYc"
                         };
                         context.ProfileDistributorData.Add(profileRequiredData);
                         context.SaveChanges();
