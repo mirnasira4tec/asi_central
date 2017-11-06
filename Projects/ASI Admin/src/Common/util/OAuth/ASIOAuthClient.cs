@@ -104,7 +104,7 @@ namespace asi.asicentral.oauth
             catch (Exception ex)
             {
                 var log = LogService.GetLog(typeof(ASIOAuthClient));
-                log.Error(string.Format("GetAuthenticatedUser - exception: {0}", ex.Message));
+                log.Error(string.Format("GetAuthenticatedUser - exception message: {0}, StackTrace: {1}", ex.Message, ex.StackTrace));
             }
 
             return user;
@@ -265,7 +265,7 @@ namespace asi.asicentral.oauth
                 }
                 catch (Exception ex)
                 {
-                    log.Error(ex.Message);
+                    log.Error(string.Format("Error message: {0}; StackTrace: {1} ", ex.Message, ex.StackTrace) );
                 }
 				log.Debug("Login_FetchUserDetails - End");
 			}

@@ -987,12 +987,22 @@ namespace asi.asicentral.web.Controllers.Store
                         order.ApprovedBy = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
                 }
 
-                // save credit card info to Personify
-                SaveCreditCardInfo(order);
-
-                var product = order.OrderDetails[0].Product;
                 var orderPlaced = true;
-                if (product.HasBackEndIntegration)
+                var product = order.OrderDetails[0].Product;
+
+                // save credit card info to Personify
+                try
+                {
+                    BackendService.SaveCreditCardInfo(order);
+                    StoreService.SaveChanges();
+                }
+                catch(Exception ex)
+                {
+                    orderPlaced = false;
+                    order.ProcessStatus = OrderStatus.PersonifyError;
+                }
+
+                if (product.HasBackEndIntegration && orderPlaced)
                 {
                     try
                     {
@@ -1066,12 +1076,6 @@ namespace asi.asicentral.web.Controllers.Store
                     throw ex;
                 }
             }
-        }
-
-        private void SaveCreditCardInfo(StoreOrder order)
-        {
-            BackendService.SaveCreditCardInfo(order);
-            StoreService.SaveChanges();
         }
 
         /// <summary>
