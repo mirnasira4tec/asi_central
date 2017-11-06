@@ -542,7 +542,7 @@ namespace asi.asicentral.web.Controllers.Show
                 {
                     if (company.status == CompanyStatusCode.Created || company.status == CompanyStatusCode.Exists)
                     {
-                        DataRow[] filterUsers = userDt.Select("asi=" + company.companyInfo.ASINumber);
+                        DataRow[] filterUsers = userDt.Select("asi=" + company.companyInfo.ASINumber+" and Active='yes'");
                         foreach (var userInfo in filterUsers)
                         {
                             UserInfoModel user = CreateUser(company.companyInfo, userInfo);
@@ -551,6 +551,8 @@ namespace asi.asicentral.web.Controllers.Show
                     }
                 }
             }
+            ViewBag.CompanyInfo = compnayInformationList;
+            ViewBag.UserInfo = userInformationList;
             return View("~/Views/Show/ExcelUpload/MigrateCompanies.cshtml");
         }
 
@@ -689,6 +691,7 @@ namespace asi.asicentral.web.Controllers.Show
                     PersonifyClient.AddCustomerAddresses(company, companyInfo.MasterCustomerId, companyInfo.SubCustomerId, null);
                     PersonifyClient.AddPhoneNumber(companyInformation.Phone, companyInformation.Country, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
                     companyModel.status = CompanyStatusCode.Created;
+                    companyModel.message = "Company created successfully.";
                 }
                 else
                 {
@@ -699,6 +702,7 @@ namespace asi.asicentral.web.Controllers.Show
                     PersonifyClient.AddCompanyEmail(company, companyInfo);
                     PersonifyClient.AddCustomerAddresses(company, companyInfo.MasterCustomerId, companyInformation.SubCustomerId, null);
                     companyModel.status = CompanyStatusCode.Exists;
+                    companyModel.message = "Company already exists.";
                 }
             }
             catch (Exception ex)
@@ -706,6 +710,7 @@ namespace asi.asicentral.web.Controllers.Show
                 LogService log = LogService.GetLog(typeof(ASIOAuthClient));
                 log.Error(ex.Message);
                 companyModel.status = CompanyStatusCode.Fail;
+                companyModel.message = ex.Message;
             }
             companyModel.companyInfo = companyInfo;
             return companyModel;
@@ -725,8 +730,16 @@ namespace asi.asicentral.web.Controllers.Show
                 {
                     userModel.user.Email = string.Format(Convert.ToString(UserInfo["Email"]));
                     var name = Convert.ToString(UserInfo["Name"]).Split(new[] { ' ' }, 2);
-                    userModel.user.FirstName = name[0];
-                    userModel.user.LastName = name[1];
+                    if (name.Length > 1)
+                    {
+                        userModel.user.FirstName = name[0];
+                        userModel.user.LastName = name[1];
+                    }
+                    else
+                    {
+                        userModel.user.FirstName = name[0];
+                        userModel.user.LastName = name[0];
+                    }
                     //Title
                     userModel.user.Title = "";
                     //Company
@@ -737,7 +750,6 @@ namespace asi.asicentral.web.Controllers.Show
                     userModel.user.StatusCode = StatusCode.ACTV.ToString(); ;
                     userModel.user.AsiNumber = companyInfo.ASINumber;
                     userModel.user.MemberType_CD = companyInfo.MemberType;
-                    // user.PhoneAreaCode = companyInfo.;
                     userModel.user.Phone = companyInfo.Phone;
                     userModel.user.Street1 = Convert.ToString(UserInfo["address"]);
                     userModel.user.Street2 = "";
@@ -747,25 +759,41 @@ namespace asi.asicentral.web.Controllers.Show
                     userModel.user.State = Convert.ToString(UserInfo["state"]);
                     userModel.user.Zip = Convert.ToString(UserInfo["zip"]);
                     userModel.user.Password = Convert.ToString(UserInfo["Password"]);
-
-                    userModel.user = ASIOAuthClient.GetUserByEmail(userModel.user.Email);
-                    if (userModel.user == null)
+                  //  Regex regex = new Regex(@"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9_@():;.,'&]{8,25})$");
+                    Regex regex = new Regex(@"^(?=.*\d)([a-zA-Z0-9_@():;.,'&]{8,25})$");
+                    Match match = regex.Match(userModel.user.Password);
+                    if (!match.Success)
+                    {
+                        string passwordPadding = "Asi@123";
+                        userModel.user.PasswordResetRequired = true;
+                        userModel.user.Password += passwordPadding;
+                    }
+                    else
+                    {
+                        userModel.user.PasswordResetRequired = false;
+                    }
+                    var user = ASIOAuthClient.GetUserByEmail(userModel.user.Email);
+                    if (user == null)
                     {
                         ssoId = ASIOAuthClient.CreateUserWithOutCompany(userModel.user);
-                        if (!string.IsNullOrEmpty(ssoId))
+                        int number;
+                        bool result = Int32.TryParse(ssoId, out number);
+                        if (result)
                         {
                             userModel.status = CompanyStatusCode.Created;
+                            userModel.message = "User created successfully.";
                         }
                         else
                         {
                             userModel.status = CompanyStatusCode.Fail;
+                            userModel.message = ssoId;
                         }
                     }
                     else
                     {
                         userModel.status = CompanyStatusCode.Exists;
+                        userModel.message = "User already exists.";
                     }
-
                 }
             }
             catch (Exception ex)
@@ -773,6 +801,7 @@ namespace asi.asicentral.web.Controllers.Show
                 LogService log = LogService.GetLog(typeof(ASIOAuthClient));
                 log.Error(ex.Message);
                 userModel.status = CompanyStatusCode.Fail;
+                userModel.message = ex.Message;
             }
             return userModel;
         }

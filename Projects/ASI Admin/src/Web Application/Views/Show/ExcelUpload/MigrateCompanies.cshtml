@@ -1,7 +1,11 @@
-﻿@{
+﻿@using System.Web.Optimization;
+@using asi.asicentral.web.Models;
+@{
     ViewBag.Title = "Migrate Companies";
+    List<CompanyInfoModel> companyInfo = (List<CompanyInfoModel>)ViewBag.CompanyInfo;
+    List<UserInfoModel> userInfo = (List<UserInfoModel>)ViewBag.UserInfo;
 }
-@using System.Web.Optimization;
+
 <h2>MigrateCompanies</h2>
 @Styles.Render("~/Content/css")
 @using (Html.BeginForm("MigrateCompanies", "ExcelUpload", FormMethod.Post, new { style = "padding-left: 50px", enctype = "multipart/form-data" }))
@@ -9,17 +13,74 @@
     <div class="row">
         <div class="col-md-6">
             <label>Company Information</label>
-            <input type="file" name="files" /></div>
+            <input type="file" name="files" />
+        </div>
     </div>
     <hr />
     <div class="row">
         <div class="col-md-6">
             <label>User Information</label>
-            <input type="file" name="files" /></div>
+            <input type="file" name="files" />
+        </div>
     </div>
     <hr />
     <div class="row">
         <div class="col-md-6">
-            <button type="submit" name="btn" class="btn btn-primary">Migrate</button></div>
+            <button type="submit" name="btn" class="btn btn-primary">Migrate</button>
+        </div>
     </div>
+}
+
+@if (companyInfo!=null && companyInfo.Count > 0)
+{<h2>Company Details</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <td>Asi No.</td>
+                <td>Name</td>
+                <td>Status</td>
+                <td>Message</td>
+            </tr>
+        </thead>
+        <tbody>
+            
+                @foreach (var company in companyInfo)
+                {<tr>
+                    <td>@company.companyInfo.ASINumber</td>
+                    <td>@company.companyInfo.Name</td>
+                    <td>@company.status</td>
+                    <td>@company.message</td>
+                 </tr>
+                }
+            
+        </tbody>
+    </table>
+}
+<hr />
+
+@if (userInfo!=null && userInfo.Count > 0)
+{
+    <h2>User Details</h2>
+     <table class="table">
+        <thead>
+            <tr>
+                <td>Asi No.</td>
+                <td>Name</td>
+                <td>Status</td>
+                <td>Message</td>
+            </tr>
+        </thead>
+        <tbody>
+            
+                @foreach (var user in userInfo)
+                {<tr>
+                    <td>@user.user.AsiNumber</td>
+                    <td>@user.user.FirstName @user.user.LastName</td>
+                    <td>@user.status</td>
+                    <td>@user.message</td>
+                 </tr>
+                }
+            
+        </tbody>
+    </table>
 }
