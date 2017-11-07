@@ -112,13 +112,30 @@
                     @Html.EditorFor(m => m.FedTaxId) @Html.ValidationMessageFor(m => m.FedTaxId)
 				</span>
 			<span class="checkbox-left">
-                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.WomanOwned)">@Html.CheckBox("WomanOwned") @Html.LabelFor(m => m.WomanOwned)</label>
-                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.HasAmericanProducts)">@Html.CheckBox("HasAmericanProducts") @Html.LabelFor(m => m.SellThruInternet)</label>
+                  <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.HasAmericanProducts)">@Html.CheckBox("HasAmericanProducts") @Html.LabelFor(m => m.SellThruInternet)</label>
+                  <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.IsMinorityOwned)">@Html.CheckBox("IsMinorityOwned") @Html.LabelFor(m => m.IsMinorityOwned)</label>            
             </span>
 			<span class="checkbox-right">
-                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.IsMinorityOwned)">@Html.CheckBox("IsMinorityOwned") @Html.LabelFor(m => m.IsMinorityOwned)</label>
-                <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.IsRushServiceAvailable)">@Html.CheckBox("IsRushServiceAvailable") @Html.LabelFor(m => m.IsRushServiceAvailable)</label>
+                  <label class="account-checkbox checkbox" for="@Html.NameFor(model => model.IsRushServiceAvailable)">@Html.CheckBox("IsRushServiceAvailable") @Html.LabelFor(m => m.IsRushServiceAvailable)</label>
             </span>
+             
+            <div class="label-row">
+                         <div id="dvMinorityGroups"  class="multiple-select-area label-groups checkbox padding-left-0">                           	
+                            @Html.HiddenFor(m=> m.MinorityGroups)
+				            <label class="checkbox" for="chkWomen"><input type="checkbox" id="chkWomen" name="chkMinorityGroups" value="Woman" /> Woman</label>
+                            <label class="checkbox" for="chkVeteran"><input type="checkbox" id="chkVeteran" name="chkMinorityGroups" value="Veteran" /> Veteran</label>
+                            <label class="checkbox" for="chkAsian"><input type="checkbox" id="chkAsian" name="chkMinorityGroups" value="Asian" /> Asian</label>
+                            <label class="checkbox" for="chkHispanic"><input type="checkbox" id="chkHispanic" name="chkMinorityGroups" value="Hispanic" /> Hispanic</label>
+                            <label class="checkbox" for="chkAfricanAmerican"><input type="checkbox" id="chAfricanAmerican" name="chkMinorityGroups" value="African American" /> African American</label>
+                            <label class="checkbox" for="chkNativeAmerican"><input type="checkbox" id="chkNativeAmerican" name="chkMinorityGroups" value="Native American" /> Native American</label>
+                            <label class="checkbox" for="chkJewish"><input type="checkbox" id="chkJewish" name="chkMinorityGroups" value="Jewish" /> Jewish</label>
+                            <label class="checkbox" for="chkDisabled"><input type="checkbox" id="chkDisabled" name="chkMinorityGroups" value="Disabled" /> Disabled</label>
+                            <label class="checkbox" for="chkESPO"><input type="checkbox" id="chkESPO" name="chkMinorityGroups" value="ESPO" /> ESPO</label>
+                            <label class="checkbox" for="chkCertificationAvailable"><input type="checkbox" id="chkCertificationAvailable" name="chkMinorityGroups" value="Certification Available" /> Certification Available</label>
+                        </div>
+                 </div>
+           
+            
         </fieldset>
         <fieldset><legend><small>Other Options</small></legend>
 			<span class="checkbox-left">
@@ -141,4 +158,5 @@
     @Scripts.Render("~/bundles/form")
     <script src="/Scripts/asi.js"></script>
     <script src="/Scripts/orders.js"></script>
+    <script src="/Scripts/supplierVerification.js"></script>
 }
