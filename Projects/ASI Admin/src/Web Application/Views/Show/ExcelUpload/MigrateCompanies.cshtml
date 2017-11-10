@@ -1,7 +1,11 @@
-﻿@{
+﻿@using System.Web.Optimization;
+@using asi.asicentral.web.Models;
+@{
     ViewBag.Title = "Migrate Companies";
+    var compnayInformationList = (List<CompanyInfoModel>)ViewData["CompanyInfo"];
+    var userInformationList = (List<UserInfoModel>)ViewData["UserInfo"];
 }
-@using System.Web.Optimization;
+
 <h2>MigrateCompanies</h2>
 @Styles.Render("~/Content/css")
 @using (Html.BeginForm("MigrateCompanies", "ExcelUpload", FormMethod.Post, new { style = "padding-left: 50px", enctype = "multipart/form-data" }))
@@ -9,17 +13,22 @@
     <div class="row">
         <div class="col-md-6">
             <label>Company Information</label>
-            <input type="file" name="files" /></div>
+            <input type="file" name="files" />
+        </div>
     </div>
     <hr />
     <div class="row">
         <div class="col-md-6">
             <label>User Information</label>
-            <input type="file" name="files" /></div>
+            <input type="file" name="files" />
+        </div>
     </div>
     <hr />
     <div class="row">
         <div class="col-md-6">
-            <button type="submit" name="btn" class="btn btn-primary">Migrate</button></div>
+            <button type="submit" name="btn" class="btn btn-primary">Migrate</button>
+        </div>
     </div>
 }
+
+@{Html.RenderPartial("~/Views/Emails/AsicompMigrationEmail.cshtml", new ViewDataDictionary { { "CompanyInfo", compnayInformationList }, { "UserInfo", userInformationList } });}

@@ -529,6 +529,7 @@
     <Content Include="Views\Velocity\Index.cshtml" />
     <Content Include="Views\Velocity\Result.cshtml" />
     <Content Include="Views\Show\ExcelUpload\MigrateCompanies.cshtml" />
+    <Content Include="Views\Emails\AsicompMigrationEmail.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

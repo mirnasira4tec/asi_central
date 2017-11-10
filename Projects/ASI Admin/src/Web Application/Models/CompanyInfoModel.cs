@@ -8,8 +8,8 @@ namespace asi.asicentral.web.Models
     public class CompanyInfoModel
     {
         public asi.asicentral.model.CompanyInformation companyInfo { get; set; }
+        public string message { get; set; }
         public CompanyStatusCode status { get; set; }
-
     }
     public enum CompanyStatusCode
     {
@@ -20,7 +20,7 @@ namespace asi.asicentral.web.Models
     public class UserInfoModel
     {
         public asi.asicentral.model.User user { get; set; }
-        public string ssoId { get; set; }
+        public string message { get; set; }
         public CompanyStatusCode status { get; set; }
     }
 
