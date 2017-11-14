@@ -559,20 +559,23 @@ namespace asi.asicentral.web.Controllers.Show
                 }
             }
 
+            CompanyUserCollection companyUserCollection = new CompanyUserCollection() { companyInfoList = compnayInformationList, userInfoList = userInformationList };
+            string emailBody = TemplateService.Render("asi.asicentral.web.Views.Emails.AsicompMigrationEmail.cshtml", companyUserCollection);
 
-
-
-            string emailBody = TemplateService.Render("~/Views/Emails/AsicompMigrationEmail.cshtml", new ViewDataDictionary { { "CompanyInfo", compnayInformationList }, { "UserInfo", userInformationList } });
             var mail = new MailMessage();
-            mail.Subject = "You have Terms and Conditions to be accepted";
+            mail.Subject = "AsiComp account Mirgration report.";
             mail.Body = emailBody;
             mail.BodyEncoding = Encoding.UTF8;
             mail.IsBodyHtml = true;
-            mail.To.Add("arun.kumar@a4technology.com");
-
+            var emails = ConfigurationManager.AppSettings["AsiCompEmails"];
+            string[] emailList = emails.Split(';');
+            for (int i = 0; i < emailList.Length; i++)
+            {
+                mail.To.Add(emailList[i]);
+            }
             EmailService.SendMail(mail);
 
-            return View("~/Views/Show/ExcelUpload/MigrateCompanies.cshtml");
+            return View("~/Views/Show/ExcelUpload/MigrateCompanies.cshtml", companyUserCollection);
         }
 
         //converts Excel sheet to datatable
@@ -799,7 +802,7 @@ namespace asi.asicentral.web.Controllers.Show
                         {
                             userModel.user.PasswordResetRequired = false;
                         }
-                        ssoId = ASIOAuthClient.CreateUserWithOutCompany(userModel.user);
+                        ssoId = ASIOAuthClient.CreateUserOnly(userModel.user);
                         int number;
                         bool result = Int32.TryParse(ssoId, out number);
                         if (result)

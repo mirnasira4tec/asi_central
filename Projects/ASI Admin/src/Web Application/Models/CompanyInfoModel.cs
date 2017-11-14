@@ -24,4 +24,9 @@ namespace asi.asicentral.web.Models
         public CompanyStatusCode status { get; set; }
     }
 
+    public class CompanyUserCollection {
+       public List<CompanyInfoModel> companyInfoList { get; set; }
+       public List<UserInfoModel> userInfoList { get; set; }
+    }
+
 }

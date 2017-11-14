@@ -807,7 +807,7 @@ namespace asi.asicentral.oauth
         }
 
 
-        public static string CreateUserWithOutCompany(asi.asicentral.model.User user)
+        public static string CreateUserOnly(asi.asicentral.model.User user)
         {
             string ssoId = string.Empty;
             if (user != null)

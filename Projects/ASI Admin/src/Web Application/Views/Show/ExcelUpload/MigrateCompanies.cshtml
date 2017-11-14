@@ -2,8 +2,12 @@
 @using asi.asicentral.web.Models;
 @{
     ViewBag.Title = "Migrate Companies";
-    var compnayInformationList = (List<CompanyInfoModel>)ViewData["CompanyInfo"];
-    var userInformationList = (List<UserInfoModel>)ViewData["UserInfo"];
+
+    CompanyUserCollection companyUserCollection = null;
+    if (Model != null)
+    {
+        companyUserCollection = (CompanyUserCollection)Model;
+    }
 }
 
 <h2>MigrateCompanies</h2>
@@ -31,4 +35,4 @@
     </div>
 }
 
-@{Html.RenderPartial("~/Views/Emails/AsicompMigrationEmail.cshtml", new ViewDataDictionary { { "CompanyInfo", compnayInformationList }, { "UserInfo", userInformationList } });}
+@{Html.RenderPartial("~/Views/Emails/AsicompMigrationEmail.cshtml", companyUserCollection);}
