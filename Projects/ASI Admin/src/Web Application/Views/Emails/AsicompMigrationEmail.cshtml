@@ -2,9 +2,15 @@
 @using asi.asicentral.web.Models;
 @{
     ViewBag.Title = "Migrate Companies";
+    
+    List<CompanyInfoModel> compnayInformationList = null;
+    List<UserInfoModel> userInformationList = null;
 
-    var compnayInformationList = (List<CompanyInfoModel>)ViewData["CompanyInfo"];
-    var userInformationList = (List<UserInfoModel>)ViewData["UserInfo"];
+    if (Model != null)
+    {
+    compnayInformationList = (List<CompanyInfoModel>)Model.companyInfoList;
+    userInformationList = (List<UserInfoModel>)Model.userInfoList;
+    }
 
     List<CompanyInfoModel> createdCompaniesList = null;
     List<CompanyInfoModel> existsCompaniesList = null;
