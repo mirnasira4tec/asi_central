@@ -15,6 +15,7 @@ namespace asi.asicentral.model.store
         public decimal Cost { get; set; }
         public decimal ApplicationCost { get; set; }
         public virtual ContextProduct Product { get; set; }
+        public bool IsBestProduct { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
