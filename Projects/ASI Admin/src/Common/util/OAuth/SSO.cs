@@ -22,16 +22,20 @@ namespace asi.asicentral.oauth
         public const string COOKIES_USERNAME = "Name";
         public const string COOKIES_MEMBERTYPE_CODE = "MemberType";
         public const string COOKIES_ASP_NET_SESSION_ID = "ASP.NET_SessionId";
-        private string configuration = string.Empty;
+        private static string _cookieDomain = string.Empty;
 
         public static string COOKIES_DOMAIN
         {
             get
             {
-                var configuration = WebConfigurationManager.OpenWebConfiguration("/");
-                var authenticationSection = (AuthenticationSection)configuration.GetSection("system.web/authentication");
-                var formsAuthentication = authenticationSection.Forms;
-                return formsAuthentication.Domain;
+                if (_cookieDomain == string.Empty)
+                {
+                    var configuration = WebConfigurationManager.OpenWebConfiguration("/");
+                    var authenticationSection = (AuthenticationSection)configuration.GetSection("system.web/authentication");
+                    var formsAuthentication = authenticationSection.Forms;
+                    _cookieDomain = formsAuthentication.Domain;
+                }
+                return _cookieDomain;
             }
         }
 
