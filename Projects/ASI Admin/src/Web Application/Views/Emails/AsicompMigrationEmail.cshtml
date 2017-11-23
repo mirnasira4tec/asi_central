@@ -2,14 +2,14 @@
 @using asi.asicentral.web.Models;
 @{
     ViewBag.Title = "Migrate Companies";
-    
+
     List<CompanyInfoModel> compnayInformationList = null;
     List<UserInfoModel> userInformationList = null;
 
     if (Model != null)
     {
-    compnayInformationList = (List<CompanyInfoModel>)Model.companyInfoList;
-    userInformationList = (List<UserInfoModel>)Model.userInfoList;
+        compnayInformationList = (List<CompanyInfoModel>)Model.companyInfoList;
+        userInformationList = (List<UserInfoModel>)Model.userInfoList;
     }
 
     List<CompanyInfoModel> createdCompaniesList = null;
@@ -32,7 +32,7 @@
         existsUserList = userInformationList.Where(m => m.status == CompanyStatusCode.Exists).ToList();
         failedUserList = userInformationList.Where(m => m.status == CompanyStatusCode.Fail).ToList();
     }
-    
+
 }
 <h2>Company Details</h2>
 @if (createdCompaniesList != null && createdCompaniesList.Count > 0)
@@ -42,6 +42,7 @@
             <tr>
                 <td>Asi No.</td>
                 <td>Name</td>
+                <td>Phone</td>
                 <td>Status</td>
                 <td>Message</td>
             </tr>
@@ -51,12 +52,14 @@
                 <td colspan="5" style="color: green">Created</td>
             </tr>
             @foreach (var company in createdCompaniesList)
-            {<tr>
-                <td>@company.companyInfo.ASINumber</td>
-                <td>@company.companyInfo.Name</td>
-                <td>@company.status</td>
-                <td>@company.message</td>
-            </tr>
+            {
+                <tr>
+                    <td>@company.companyInfo.ASINumber</td>
+                    <td>@company.companyInfo.Name</td>
+                    <td>@company.companyInfo.Phone</td>
+                    <td>@company.status</td>
+                    <td>@company.message</td>
+                </tr>
             }
         </tbody>
     </table>
@@ -69,6 +72,7 @@
             <tr>
                 <td>Asi No.</td>
                 <td>Name</td>
+                <td>Phone</td>
                 <td>Status</td>
                 <td>Message</td>
             </tr>
@@ -78,12 +82,14 @@
                 <td colspan="5" style="color: blue">Already Exists</td>
             </tr>
             @foreach (var company in existsCompaniesList)
-            {<tr>
-                <td>@company.companyInfo.ASINumber</td>
-                <td>@company.companyInfo.Name</td>
-                <td>@company.status</td>
-                <td>@company.message</td>
-            </tr>
+            {
+                <tr>
+                    <td>@company.companyInfo.ASINumber</td>
+                    <td>@company.companyInfo.Name</td>
+                    <td>@company.companyInfo.Phone</td>
+                    <td>@company.status</td>
+                    <td>@company.message</td>
+                </tr>
             }
 
         </tbody>
@@ -96,6 +102,7 @@
             <tr>
                 <td>Asi No.</td>
                 <td>Name</td>
+                <td>Phone</td>
                 <td>Status</td>
                 <td>Message</td>
             </tr>
@@ -105,12 +112,14 @@
                 <td colspan="5" style="color: red">Failed</td>
             </tr>
             @foreach (var company in failedComapniesList)
-            {<tr>
-                <td>@company.companyInfo.ASINumber</td>
-                <td>@company.companyInfo.Name</td>
-                <td>@company.status</td>
-                <td>@company.message</td>
-            </tr>
+            {
+                <tr>
+                    <td>@company.companyInfo.ASINumber</td>
+                    <td>@company.companyInfo.Name</td>
+                    <td>@company.companyInfo.Phone</td>
+                    <td>@company.status</td>
+                    <td>@company.message</td>
+                </tr>
             }
 
         </tbody>
@@ -126,6 +135,7 @@
             <tr>
                 <td>Asi No.</td>
                 <td>Name</td>
+                <td>Email</td>
                 <td>Status</td>
                 <td>Old Password</td>
                 <td>New Password</td>
@@ -153,6 +163,7 @@
                 <tr>
                     <td>@user.user.AsiNumber</td>
                     <td>@user.user.FirstName @user.user.LastName</td>
+                    <td>@user.user.Email</td>
                     <td>@user.status</td>
                     <td>@oldPassword</td>
                     <td>@newPassword</td>
@@ -171,6 +182,7 @@
             <tr>
                 <td>Asi No.</td>
                 <td>Name</td>
+                <td>Email</td>
                 <td>Status</td>
                 <td>Old Password</td>
                 <td>New Password</td>
@@ -198,6 +210,7 @@
                 <tr>
                     <td>@user.user.AsiNumber</td>
                     <td>@user.user.FirstName @user.user.LastName</td>
+                    <td>@user.user.Email</td>
                     <td>@user.status</td>
                     <td>@oldPassword</td>
                     <td>@newPassword</td>
@@ -216,6 +229,7 @@
             <tr>
                 <td>Asi No.</td>
                 <td>Name</td>
+                <td>Email</td>
                 <td>Status</td>
                 <td>Old Password</td>
                 <td>New Password</td>
@@ -243,6 +257,7 @@
                 <tr>
                     <td>@user.user.AsiNumber</td>
                     <td>@user.user.FirstName @user.user.LastName</td>
+                    <td>@user.user.Email</td>
                     <td>@user.status</td>
                     <td>@oldPassword</td>
                     <td>@newPassword</td>
