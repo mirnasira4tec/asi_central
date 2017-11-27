@@ -980,25 +980,25 @@ namespace asi.asicentral.services.PersonifyProxy
         public static void UpdatePersonifyCompany(CompanyInformation companyInfo, PersonifyMapping mapping)
         {
             // update company status from Delisted to Active
-            if (companyInfo.MemberStatus == StatusCode.DELISTED.ToString())
-            {
-                var customers = SvcClient.Ctxt.ASICustomers.Where(
-                        p => p.MasterCustomerId == companyInfo.MasterCustomerId && p.SubCustomerId == 0).ToList();
-                if (customers.Count > 0)
-                {
-                    ASICustomer customer = customers[0];
-                    if (customer.UserDefinedMemberStatusString == StatusCode.DELISTED.ToString())
-                    {
-                        customer.UserDefinedMemberStatusString = StatusCode.ACTIVE.ToString();
-                        SvcClient.Save<ASICustomer>(customer);
+            //if (companyInfo.MemberStatus == StatusCode.DELISTED.ToString())
+            //{
+            //    var customers = SvcClient.Ctxt.ASICustomers.Where(
+            //            p => p.MasterCustomerId == companyInfo.MasterCustomerId && p.SubCustomerId == 0).ToList();
+            //    if (customers.Count > 0)
+            //    {
+            //        ASICustomer customer = customers[0];
+            //        if (customer.UserDefinedMemberStatusString == StatusCode.DELISTED.ToString())
+            //        {
+            //            customer.UserDefinedMemberStatusString = StatusCode.ACTIVE.ToString();
+            //            SvcClient.Save<ASICustomer>(customer);
 
-                        companyInfo.MemberStatus = customer.UserDefinedMemberStatusString;
-                    }
-                }
-            }
-            // update company class/subclass if they are different from mapping table
-            else
-            {
+            //            companyInfo.MemberStatus = customer.UserDefinedMemberStatusString;
+            //        }
+            //    }
+            //}
+            //// update company class/subclass if they are different from mapping table
+            //else
+            //{
                 var mappedClassCode = !string.IsNullOrEmpty(mapping.ClassCode) ? mapping.ClassCode.Trim().ToUpper() : string.Empty;
                 var mappedSubClassCode = !string.IsNullOrEmpty(mapping.SubClassCode) ?  mapping.SubClassCode.Trim().ToUpper() : string.Empty;
                 var classCode = !string.IsNullOrEmpty(companyInfo.CustomerClassCode) ? companyInfo.CustomerClassCode.Trim().ToUpper() : string.Empty;
@@ -1025,7 +1025,6 @@ namespace asi.asicentral.services.PersonifyProxy
                     companyInfo.CustomerClassCode = mapping.ClassCode;
                     companyInfo.SubClassCode = mapping.SubClassCode;
                 }
-            }
         }
 
 	    public static CompanyInformation AddEEXSubscription(StoreCompany company, User user, IList<LookSendMyAdCountryCode> countryCodes, bool isBusinessAddress)

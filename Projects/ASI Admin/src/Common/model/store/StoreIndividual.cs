@@ -23,9 +23,9 @@ namespace asi.asicentral.model.store
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         public string LastName { get; set; }
         public string Email { get; set; }
-        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
+        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9extEXT\.\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
         public string Phone { get; set; }
-        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
+        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9extEXT\.\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
         public string Fax { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }

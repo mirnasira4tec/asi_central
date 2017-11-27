@@ -30,9 +30,7 @@ namespace asi.asicentral.oauth
             {
                 if (string.IsNullOrEmpty(_cookieDomain))
                 {
-                    var authenticationSection = (AuthenticationSection)WebConfigurationManager.OpenWebConfiguration("/").GetSection("system.web/authentication");
-                    var formsAuthentication = authenticationSection.Forms;
-                    _cookieDomain = formsAuthentication.Domain;
+                    _cookieDomain = FormsAuthentication.CookieDomain;
                 }
                 return _cookieDomain;
             }
