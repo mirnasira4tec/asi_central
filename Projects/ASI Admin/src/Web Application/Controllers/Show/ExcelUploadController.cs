@@ -714,6 +714,7 @@ namespace asi.asicentral.web.Controllers.Show
                     if (companyInfo == null)
                     {
                         companyInfo = PersonifyClient.CreateCompany(company, companyInformation.MemberType, null);
+                        companyInfo.Phone = companyInformation.Phone;
                         PersonifyClient.AddCustomerAddresses(company, companyInfo.MasterCustomerId, companyInfo.SubCustomerId, null);
                         PersonifyClient.AddPhoneNumber(companyInformation.Phone, companyInformation.Country, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
                         companyModel.status = CompanyStatusCode.Created;
@@ -723,6 +724,7 @@ namespace asi.asicentral.web.Controllers.Show
                     {
                         company.ExternalReference = companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId;
                         asi.asicentral.model.store.StoreAddress companyAddress = company.GetCompanyAddress();
+                        companyInfo.Phone = companyInformation.Phone;
                         string countryCode = "USA";
                         PersonifyClient.AddPhoneNumber(company.Phone, countryCode, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
                         PersonifyClient.AddCompanyEmail(company, companyInfo);
@@ -740,7 +742,6 @@ namespace asi.asicentral.web.Controllers.Show
                 companyModel.message = ex.Message;
             }
             companyModel.companyInfo = companyInfo;
-
             return companyModel;
         }
 
