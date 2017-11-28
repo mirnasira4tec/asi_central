@@ -24,10 +24,10 @@ namespace asi.asicentral.model.store
         public string Name { get; set; }
         public string MemberType { get; set; }
         public string MemberStatus { get; set; }
-        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
+        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9extEXT\.\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
         [Display(ResourceType = typeof(Resource), Name = "Phone")]
         public string Phone { get; set; }
-        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
+        [RegularExpression(@"^(?=[^0-9]*[0-9])[0-9extEXT\.\s!@#$%^&*()_\-+]+$", ErrorMessageResourceName = "FieldInvalidNumber", ErrorMessageResourceType = typeof(Resource))]
         public string Fax { get; set; }
         public string Email { get; set; }
         public string WebURL { get; set; }

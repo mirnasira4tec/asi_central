@@ -1980,4 +1980,7 @@
   <data name="SecondaryASINo" xml:space="preserve">
     <value>Secondary ASI No</value>
   </data>
+  <data name="MinorityGroups" xml:space="preserve">
+    <value>Minority Groups</value>
+  </data>
 </root>
