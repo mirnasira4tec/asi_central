@@ -57,8 +57,10 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string SP_UPDATE_DISTRIBUTOR_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_DISTRIBUTOR_PROC";
         private const string SP_UPDATE_SUPPLIER_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_SUPPLIER_PROC";
         private const string SP_UPDATE_DECORATOR_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_DECORATOR_PROC";
+        private const string SP_UPDATE_ASICOMP_DATA = "CREATE_ASI_COMP_DATA";
+        private const string SP_GET_ASICOMP_DATA = "REPORT_ASI_COMP_DATA";
 
-		private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
+        private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
 		private static readonly IDictionary<string, string> ASIShowCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "SHOW AE" }, { "DISCOVER", "SHOW DISC" }, { "MASTERCARD", "SHOW MS" }, { "VISA", "SHOW VS" } };
 		private static readonly IDictionary<string, string> ASICanadaCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "CAN AMEX" }, { "DISCOVER", "CAN DISC" }, { "MASTERCARD", "CAN MC" }, { "VISA", "CAN VISA" } };
 		private static readonly IDictionary<string, IDictionary<string, string>> CreditCardType = new Dictionary<string, IDictionary<string, string>>(3, StringComparer.InvariantCultureIgnoreCase) { { "ASI", ASICreditCardType }, { "ASI Show", ASIShowCreditCardType }, { "ASI Canada", ASICanadaCreditCardType } };
@@ -131,7 +133,19 @@ namespace asi.asicentral.services.PersonifyProxy
                                                                     "@ip_usr_organization",
                                                                     "@ip_imprinting",
                                                                     "@ip_usr_union_label_flag",
-                                                                    "@ip_user" }}
+                                                                    "@ip_user" }},
+
+            {SP_UPDATE_ASICOMP_DATA, new List<string>(){ "@ip_USR_ACCOUNTID",
+                                                         "@ip_MASTER_CUSTOMER_ID",
+                                                         "@ip_SUB_CUSTOMER_ID",
+                                                         "@ip_USR_PACKAGE",
+                                                         "@ip_USR_CONTRACT",
+                                                         "@ip_USR_CREDIT_STATUS",
+                                                         "@ip_USR_ECOMMERCE",
+                                                         "@ip_USR_ASI_SMARTBOOKS_EVAL",
+                                                         "@ip_USR_NEWS",
+                                                         "@ip_ADDED_BY" } },
+            {SP_GET_ASICOMP_DATA, new List<string>(){ "@ip_MASTER_CUSTOMER_ID" } }
         };
 
         private static readonly IDictionary<string, List<string>> EEX_USAGE_CODES = new Dictionary<string, List<string>>()
@@ -699,6 +713,33 @@ namespace asi.asicentral.services.PersonifyProxy
 
 	        return isValid;
 	    }
+
+        public static void GetASICOMPData(string acctId)
+        {
+            var response = ExecutePersonifySP(SP_GET_ASICOMP_DATA, new List<string>() { acctId });
+            if (response != null && !string.IsNullOrEmpty(response.Data) && response.Data.Trim().ToUpper() != "NO DATA FOUND")
+            {
+                var xml = XDocument.Parse(response.Data);
+
+                var list = xml.Root.Elements("Table").ToList();
+                foreach (var data in list)
+                {
+                    foreach (var element in data.Elements())
+                    {
+                        var value = element.Value;
+                        //switch (element.Name.ToString())
+                        //{
+
+                        //}
+                    }
+                }
+            }
+        }
+
+        public static void UpdateASICompData(List<string> parameters)
+        {
+            var response = ExecutePersonifySP(SP_UPDATE_ASICOMP_DATA, parameters);
+        }
 
         #region matching company with name, email or phone
         private static PersonifyCustomerInfo FindMatchingCompany(StoreCompany company, ref List<string> matchedList)
