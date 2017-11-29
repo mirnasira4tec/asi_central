@@ -57,5 +57,8 @@ namespace asi.asicentral.interfaces
         PersonifyStatus OptOutEmailSubscription(string email, List<string> usageCodes);
 
         StoreDetailApplication GetDemographicData(StoreOrderDetail orderDetail);
+
+        void GetASICOMPData(string masterId);
+        void UpdateASICompData(List<string> parameters);
     }
 }

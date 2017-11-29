@@ -742,6 +742,16 @@ namespace asi.asicentral.services
             return storeDetailApp;
         }
 
+        public virtual void GetASICOMPData(string masterId)
+        {
+            PersonifyClient.GetASICOMPData(masterId);
+        }
+
+        public virtual void UpdateASICompData(List<string> parameters)
+        {
+            PersonifyClient.UpdateASICompData(parameters);
+        }
+
         private static string GetCountryCode(string country)
 		{
 			string result = null;
