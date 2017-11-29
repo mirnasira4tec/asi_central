@@ -57,8 +57,8 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string SP_UPDATE_DISTRIBUTOR_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_DISTRIBUTOR_PROC";
         private const string SP_UPDATE_SUPPLIER_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_SUPPLIER_PROC";
         private const string SP_UPDATE_DECORATOR_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_DECORATOR_PROC";
-        private const string SP_UPDATE_ASICOMP_DATA = "CREATE_ASI_COMP_DATA";
-        private const string SP_GET_ASICOMP_DATA = "REPORT_ASI_COMP_DATA";
+        private const string SP_UPDATE_ASICOMP_DATA = "USR_CREATE_ASI_COMP_DATA";
+        private const string SP_GET_ASICOMP_DATA = "USR_REPORT_ASI_COMP_DATA";
 
         private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
 		private static readonly IDictionary<string, string> ASIShowCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "SHOW AE" }, { "DISCOVER", "SHOW DISC" }, { "MASTERCARD", "SHOW MS" }, { "VISA", "SHOW VS" } };
