@@ -59,7 +59,7 @@ namespace asi.asicentral.Tests
         [Test]
         public void UpdateASICompData()
         {
-            var param = new List<string>() { "12345", "000010610433", "0", "PROFITMAKER", "FULL ACCESS", "CURRENT", "Yes", "Yes", "No", "WEB_USER" };
+            var param = new List<string>() { "123456", "000010610432", "0", "PROFITMAKER", "FULL ACCESS", "CURRENT", "Yes", "Yes", "No", "WEB_USER" };
             PersonifyClient.UpdateASICompData(param);
         }
 
