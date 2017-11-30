@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace asi.asicentral.services
 {
@@ -742,9 +743,9 @@ namespace asi.asicentral.services
             return storeDetailApp;
         }
 
-        public virtual void GetASICOMPData(string masterId)
+        public virtual List<XElement> GetASICOMPData(string masterId)
         {
-            PersonifyClient.GetASICOMPData(masterId);
+            return PersonifyClient.GetASICOMPData(masterId);
         }
 
         public virtual void UpdateASICompData(List<string> parameters)

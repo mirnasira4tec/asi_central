@@ -714,28 +714,18 @@ namespace asi.asicentral.services.PersonifyProxy
 	        return isValid;
 	    }
 
-        public static void GetASICOMPData(string masterId)
+        public static List<XElement> GetASICOMPData(string masterId)
         {
-            // TODO:  need to return ASICOMP data from SP instead of void in this function
+            List<XElement> asicompData = null;
             var response = ExecutePersonifySP(SP_GET_ASICOMP_DATA, new List<string>() { masterId });
             if (response != null && !string.IsNullOrEmpty(response.Data) && response.Data.Trim().ToUpper() != "NO DATA FOUND")
             {
                 var xml = XDocument.Parse(response.Data);
 
-                var list = xml.Root.Elements("Table").ToList();
-                foreach (var data in list)
-                {
-                    foreach (var element in data.Elements())
-                    {
-                        var value = element.Value;
-                        //switch (element.Name.ToString())
-                        //{
-
-                        //}
-                    }
-                }
+                asicompData = xml.Root.Elements("Table").ToList();                
             }
 
+            return asicompData;
         }
 
         public static void UpdateASICompData(List<string> parameters)

@@ -48,7 +48,7 @@ namespace asi.asicentral.Tests
         [Test]
         public void GetASICompData()
         {
-            var acctid = "000010610433";
+            var acctid = "000006880201";
             PersonifyClient.GetASICOMPData(acctid);
 
             acctid = "000010610433";
@@ -60,6 +60,7 @@ namespace asi.asicentral.Tests
         public void UpdateASICompData()
         {
             var param = new List<string>() { "123456", "000010610432", "0", "PROFITMAKER", "FULL ACCESS", "CURRENT", "Yes", "Yes", "No", "WEB_USER" };
+            param = new List<string>() { "", "000010615052", "0", "", "", "", "", "", "Yes", "WEB_ADMIN" };
             PersonifyClient.UpdateASICompData(param);
         }
 

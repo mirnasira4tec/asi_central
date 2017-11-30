@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using asi.asicentral.model;
+using asi.asicentral.model.store;
 
 namespace asi.asicentral.web.Models
 {
     public class CompanyInfoModel
     {
-        public asi.asicentral.model.CompanyInformation companyInfo { get; set; }
-        public string message { get; set; }
-        public CompanyStatusCode status { get; set; }
+        public CompanyInformation CompanyInfo { get; set; }
+        public string Message { get; set; }
+        public CompanyStatusCode Status { get; set; }
+        public StoreCompany StoreCompany;
     }
     public enum CompanyStatusCode
     {

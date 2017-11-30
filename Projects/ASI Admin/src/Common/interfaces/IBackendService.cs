@@ -3,6 +3,7 @@ using asi.asicentral.model.personify;
 using asi.asicentral.model.store;
 using asi.asicentral.PersonifyDataASI;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace asi.asicentral.interfaces
 {
@@ -58,7 +59,7 @@ namespace asi.asicentral.interfaces
 
         StoreDetailApplication GetDemographicData(StoreOrderDetail orderDetail);
 
-        void GetASICOMPData(string masterId);
+        List<XElement> GetASICOMPData(string masterId);
         void UpdateASICompData(List<string> parameters);
     }
 }
