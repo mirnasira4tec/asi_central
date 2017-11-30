@@ -11,6 +11,8 @@ using Umbraco.Core.Models;
 using Umbraco.Core;
 using asi.asicentral.interfaces;
 using asi.asicentral.services;
+using System.Configuration;
+using System.Web.Configuration;
 
 namespace asi.asicentral.oauth
 {
@@ -18,9 +20,21 @@ namespace asi.asicentral.oauth
     {
         public const string COOKIES_CMPSSO = "CMPSSO";
         public const string COOKIES_USERNAME = "Name";
-        public const string COOKIES_DOMAIN = ".asicentral.com";
         public const string COOKIES_MEMBERTYPE_CODE = "MemberType";
         public const string COOKIES_ASP_NET_SESSION_ID = "ASP.NET_SessionId";
+        private static string _cookieDomain = string.Empty;
+
+        public static string COOKIES_DOMAIN
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_cookieDomain))
+                {
+                    _cookieDomain = FormsAuthentication.CookieDomain;
+                }
+                return _cookieDomain;
+            }
+        }
 
         public enum MemberType
         {
@@ -120,7 +134,7 @@ namespace asi.asicentral.oauth
                 {
                     log.Error(string.Format("GetRoleName - exception: {0}", ex.Message));
                 }
-                if (ASIOAuthClient.IsActiveUser(memberStatus)) 
+                if (ASIOAuthClient.IsActiveUser(memberStatus))
                 {
                     switch (code)
                     {
