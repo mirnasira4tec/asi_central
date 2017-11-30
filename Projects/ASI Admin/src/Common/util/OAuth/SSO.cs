@@ -22,6 +22,15 @@ namespace asi.asicentral.oauth
         public const string COOKIES_MEMBERTYPE_CODE = "MemberType";
         public const string COOKIES_ASP_NET_SESSION_ID = "ASP.NET_SessionId";
 
+        #region package cookie values
+        public const string SmartsBooksPackage = "SMARTSBOOKS";
+        public const string ProfitMakerPackage = "PROFITMAKER";
+        public const string FullAccessContract = "FULL ACCESS";
+        public const string NoDownloadContract = "NO DOWNLOAD";
+        public const string CurrrentCreditStatus = "CURRENT";
+        public const string NoAccessContract = "NO ACCESS";
+        #endregion
+
         public enum MemberType
         {
             [Description("Distributor")]

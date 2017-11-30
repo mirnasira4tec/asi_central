@@ -552,16 +552,15 @@ namespace asi.asicentral.web.Controllers.Show
                         DataRow[] filterUsers = userDt.Select("asi=" + company.companyInfo.ASINumber + " and Active='yes'");
                         foreach (var userInfo in filterUsers)
                         {
-                            UserInfoModel user = CreateUser(company.companyInfo, userInfo);
+                            UserInfoModel user = CreateUser(company, userInfo);
                             userInformationList.Add(user);
                         }
                     }
                 }
             }
-
             CompanyUserCollection companyUserCollection = new CompanyUserCollection() { companyInfoList = compnayInformationList, userInfoList = userInformationList };
-            string emailBody = TemplateService.Render("asi.asicentral.web.Views.Emails.AsicompMigrationEmail.cshtml", companyUserCollection);
 
+            string emailBody = TemplateService.Render("asi.asicentral.web.Views.Emails.AsicompMigrationEmail.cshtml", companyUserCollection);
             var mail = new MailMessage();
             mail.Subject = "AsiComp account Mirgration report.";
             mail.Body = emailBody;
@@ -683,7 +682,11 @@ namespace asi.asicentral.web.Controllers.Show
                          CustomerClassCode = "UNKNOWN",
                          ASINumber = asiNo
                      };
-
+                companyModel.asiSmartBooksEval = Convert.ToString(companyInforow["ASI SMARTBOOKS EVAL"]);
+                companyModel.ecommerce = Convert.ToString(companyInforow["ECOMMERCE"]);
+                companyModel.contract = Convert.ToString(companyInforow["CONTRACT"]);
+                companyModel.pacakage = Convert.ToString(companyInforow["PACKAGE"]);
+                companyModel.creditStatus = Convert.ToString(companyInforow["CREDIT STATUS"]);
                 //create equivalent store objects
                 var company = new asi.asicentral.model.store.StoreCompany
                   {
@@ -719,6 +722,7 @@ namespace asi.asicentral.web.Controllers.Show
                         PersonifyClient.AddPhoneNumber(companyInformation.Phone, companyInformation.Country, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
                         companyModel.status = CompanyStatusCode.Created;
                         companyModel.message = "Company created successfully.";
+
                     }
                     else
                     {
@@ -746,7 +750,7 @@ namespace asi.asicentral.web.Controllers.Show
         }
 
         //creates user
-        private UserInfoModel CreateUser(asi.asicentral.model.CompanyInformation companyInfo, DataRow UserInfo)
+        private UserInfoModel CreateUser(CompanyInfoModel companyModel, DataRow UserInfo)
         {
             LogService _log = LogService.GetLog(this.GetType());
             UserInfoModel userModel = new UserInfoModel();
@@ -771,14 +775,14 @@ namespace asi.asicentral.web.Controllers.Show
                     //Title
                     userModel.user.Title = "";
                     //Company
-                    userModel.user.CompanyName = companyInfo.Name;
-                    userModel.user.CompanyId = companyInfo.CompanyId;
+                    userModel.user.CompanyName = companyModel.companyInfo.Name;
+                    userModel.user.CompanyId = companyModel.companyInfo.CompanyId;
                     userModel.user.UserName = userModel.user.Email;
                     //ASI Number
                     userModel.user.StatusCode = StatusCode.ACTV.ToString(); ;
-                    userModel.user.AsiNumber = companyInfo.ASINumber;
-                    userModel.user.MemberType_CD = companyInfo.MemberType;
-                    userModel.user.Phone = companyInfo.Phone;
+                    userModel.user.AsiNumber = companyModel.companyInfo.ASINumber;
+                    userModel.user.MemberType_CD = companyModel.companyInfo.MemberType;
+                    userModel.user.Phone = companyModel.companyInfo.Phone;
                     userModel.user.Street1 = Convert.ToString(UserInfo["address"]);
                     userModel.user.Street2 = "";
                     userModel.user.City = Convert.ToString(UserInfo["city"]);
@@ -789,6 +793,21 @@ namespace asi.asicentral.web.Controllers.Show
                     userModel.user.Password = Convert.ToString(UserInfo["Password"]);
 
                     var user = ASIOAuthClient.GetUserByEmail(userModel.user.Email);
+
+                    List<string> spParameters = new List<string>()
+                            {
+                                companyModel.companyInfo.ASINumber,
+                                companyModel.companyInfo.MasterCustomerId,
+                                "0",
+                               companyModel.pacakage,
+                               companyModel.contract,
+                               companyModel.creditStatus,
+                               companyModel.ecommerce,
+                               companyModel.asiSmartBooksEval,
+                               Convert.ToString(UserInfo["news"]),
+                               "web user"
+                            };
+
                     if (user == null)
                     {
                         Regex regex = new Regex(@"^(?=.*\d)([a-zA-Z0-9_@():;.,'&]{8,25})$");
@@ -806,8 +825,10 @@ namespace asi.asicentral.web.Controllers.Show
                         ssoId = ASIOAuthClient.CreateUserOnly(userModel.user);
                         int number;
                         bool result = Int32.TryParse(ssoId, out number);
+
                         if (result)
                         {
+                            PersonifyClient.UpdateASICompData(spParameters);
                             userModel.status = CompanyStatusCode.Created;
                             userModel.message = "User created successfully.";
                         }
@@ -819,6 +840,7 @@ namespace asi.asicentral.web.Controllers.Show
                     }
                     else
                     {
+                        PersonifyClient.UpdateASICompData(spParameters);
                         userModel.status = CompanyStatusCode.Exists;
                         userModel.message = "User already exists.";
                     }
@@ -858,7 +880,6 @@ namespace asi.asicentral.web.Controllers.Show
             }
             return phoneWithArea;
         }
-
 
     }
 }

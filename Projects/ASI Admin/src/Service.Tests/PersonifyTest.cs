@@ -49,10 +49,10 @@ namespace asi.asicentral.Tests
         public void GetASICompData()
         {
             var acctid = "000010610433";
-            PersonifyClient.GetASICOMPData(acctid);
+            var asiCompData = PersonifyClient.GetASICOMPData(acctid);
 
             acctid = "000010610433";
-            PersonifyClient.GetASICOMPData(acctid);
+            var asiCompData1 = PersonifyClient.GetASICOMPData(acctid);
 
         }
 
@@ -71,11 +71,21 @@ namespace asi.asicentral.Tests
 
             var storeService = MockupStoreService();
             var personifyService = new PersonifyService(storeService);
-            var user = new User () 
-                { AsiNumber = "", FirstName = "EEX" + tag, LastName = "EEXSubscription", Email = string.Format("DistEEX{0}@gmail.com", tag),
-                  PhoneAreaCode = "201", Phone = "34" + tag, CompanyName = "Distributor EEX Subscription " + tag,
-                  MemberType_CD = "Distributor", 
-                   Street1 = "1 Street1", City = "Trevose", State = "PA", Country = "USA" };
+            var user = new User()
+                {
+                    AsiNumber = "",
+                    FirstName = "EEX" + tag,
+                    LastName = "EEXSubscription",
+                    Email = string.Format("DistEEX{0}@gmail.com", tag),
+                    PhoneAreaCode = "201",
+                    Phone = "34" + tag,
+                    CompanyName = "Distributor EEX Subscription " + tag,
+                    MemberType_CD = "Distributor",
+                    Street1 = "1 Street1",
+                    City = "Trevose",
+                    State = "PA",
+                    Country = "USA"
+                };
 
             var companyInfo = personifyService.AddEEXSubscription(user, true);
             Assert.IsNotNull(companyInfo);
@@ -136,7 +146,8 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
-        public void PackageOrderTest()        {
+        public void PackageOrderTest()
+        {
             IStoreService storeService = MockupStoreService();
             var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 7);
             var order = CreateStoreOrder("12345", new ContextProduct[] { distributor }, "PlaceBundleOrderTest");
@@ -188,9 +199,9 @@ namespace asi.asicentral.Tests
         {
             var storeService = MockupStoreService();
             IBackendService personify = new PersonifyService(storeService);
-            var company = GetStoreCompany("NewMembership", 
-                                          "1511112222", 
-                                          "newMembership@unittest.com", 
+            var company = GetStoreCompany("NewMembership",
+                                          "1511112222",
+                                          "newMembership@unittest.com",
                                           "Distributor");
 
             var companyInfo = GetPersonifyCompany(personify, company);
@@ -204,7 +215,7 @@ namespace asi.asicentral.Tests
             };
 
             var product = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 70);
-            order.OrderDetails.Add(new StoreOrderDetail() 
+            order.OrderDetails.Add(new StoreOrderDetail()
                          {
                              Id = 1,
                              ApplicationCost = 0,
@@ -229,7 +240,7 @@ namespace asi.asicentral.Tests
 
             var profile = personify.SaveCreditCard(order, creditCard);
             Assert.IsNotNull(profile);
-            Assert.AreNotEqual(string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId), 
+            Assert.AreNotEqual(string.Join(";", companyInfo.MasterCustomerId, companyInfo.SubCustomerId),
                                order.Company.ExternalReference);
             Assert.AreNotEqual("distributor", order.Company.MemberType.ToLower());
         }
@@ -241,7 +252,7 @@ namespace asi.asicentral.Tests
             var accountInfo = new User
             {
                 FirstName = "New First Name",
-                LastName =  "New Last Name",
+                LastName = "New Last Name",
                 Email = String.Format("user{0}@addCompany.com", tag),
                 CompanyName = "New Company1 " + tag,
                 Street1 = "4800 Street Rd",
@@ -249,26 +260,26 @@ namespace asi.asicentral.Tests
                 State = "PA",
                 Zip = "19053",
                 Country = "USA",
-                MemberTypeId  = 6,
+                MemberTypeId = 6,
                 CountryCode = "USA"
             };
             IBackendService personify = new PersonifyService(MockupStoreService());
             var companyInfo = personify.AddCompany(accountInfo);
             Assert.IsTrue(companyInfo.CompanyId > 0);
-			Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
-			Assert.AreEqual("ASICENTRAL", companyInfo.MemberStatus);
-		}
+            Assert.AreEqual("DISTRIBUTOR", companyInfo.MemberType);
+            Assert.AreEqual("ASICENTRAL", companyInfo.MemberStatus);
+        }
 
-	    [Test]
-	    public void LookupCompany()
-	    {
-			IBackendService personify = new PersonifyService();
+        [Test]
+        public void LookupCompany()
+        {
+            IBackendService personify = new PersonifyService();
             var companyInformation = personify.GetCompanyInfoByAsiNumber("30279");
             Assert.IsNotNull(companyInformation.CompanyId);
             Assert.IsNotNull(companyInformation.City);
             Assert.IsNotNull(companyInformation.MemberType);
             Assert.IsNotNull(companyInformation.MemberStatus);
-			companyInformation = personify.GetCompanyInfoByIdentifier(5806901);
+            companyInformation = personify.GetCompanyInfoByIdentifier(5806901);
             Assert.IsNotNull(companyInformation.Name);
             Assert.IsNotNull(companyInformation.City);
             Assert.IsNotNull(companyInformation.MemberType);
@@ -278,7 +289,7 @@ namespace asi.asicentral.Tests
         public void EquipmentASINumberTest()
         {
             IBackendService personify = new PersonifyService();
-            string[] asiNumbers = { "18200","12555" };
+            string[] asiNumbers = { "18200", "12555" };
 
             //Equipment ASI Numbers
             //"12310", "12550", "12553", "12555", "12600", 
@@ -302,37 +313,37 @@ namespace asi.asicentral.Tests
         public void AddPhoneNumberTest()
         {
             var companyInfo = PersonifyClient.GetCompanyInfoByASINumber("33020");
-	        if (companyInfo != null)
-	        {
-		        var cusComm = PersonifyClient.AddPhoneNumber("2222222222", "USA", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
-	        }
-	        else
-	        {
-		        Assert.IsTrue(false, "Could not find the Company forASI# 33020");
-	        }
+            if (companyInfo != null)
+            {
+                var cusComm = PersonifyClient.AddPhoneNumber("2222222222", "USA", companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+            }
+            else
+            {
+                Assert.IsTrue(false, "Could not find the Company forASI# 33020");
+            }
         }
 
-		[Test]
-		public void GetCompanyCreditCards()
-		{
-			StoreCompany company = new StoreCompany()
-			{
-				ASINumber = "125724",
-				Name = "ASI"
-			};
-			var creditCards = PersonifyClient.GetCompanyCreditCards(company, "ASI");
-			if (creditCards.Any())
-			{
-				foreach (var creditCard in creditCards)
-				{
-					Assert.IsTrue(!string.IsNullOrEmpty(creditCard.CardNumber));
-				}
-			}
-			else
-			{
-				Assert.IsTrue(false, "Could not find any credit cards for ASI# 33020");
-			}
-		}
+        [Test]
+        public void GetCompanyCreditCards()
+        {
+            StoreCompany company = new StoreCompany()
+            {
+                ASINumber = "125724",
+                Name = "ASI"
+            };
+            var creditCards = PersonifyClient.GetCompanyCreditCards(company, "ASI");
+            if (creditCards.Any())
+            {
+                foreach (var creditCard in creditCards)
+                {
+                    Assert.IsTrue(!string.IsNullOrEmpty(creditCard.CardNumber));
+                }
+            }
+            else
+            {
+                Assert.IsTrue(false, "Could not find any credit cards for ASI# 33020");
+            }
+        }
 
         [Test]
         public void CreatCompany()
@@ -379,7 +390,7 @@ namespace asi.asicentral.Tests
             //match name only  
             var company = GetStoreCompany("Reconcile Company Distributor 1",
                                           "1100000001",
-                                          "noMatch@reconcile.com", 
+                                          "noMatch@reconcile.com",
                                           "DISTRIBUTOR");
             GetPersonifyCompany(personify, company);
 
@@ -394,7 +405,7 @@ namespace asi.asicentral.Tests
             company = GetStoreCompany(".Reconcile $@#?Company $@#?$!&,Distributor 1.",
                                       "1100000001",
                                       "noMatch@reconcile.com",
-                                      "DISTRIBUTOR"); 
+                                      "DISTRIBUTOR");
 
             companyInfo = personify.FindCompanyInfo(company, ref masterIdList);
             Assert.IsTrue(companyInfo.CompanyId > 0);
@@ -616,7 +627,7 @@ namespace asi.asicentral.Tests
             activity.ActivityCode = "CONTACTTRACKING";
             activity.CallTopicCode = "EXCEPTION";
             activity.CallTopicSubcode = "VALIDATION";
-            activity.CallTypeCode = "STORE"; 
+            activity.CallTypeCode = "STORE";
             activity.ActivityDate = DateTime.Now;
             activity.Subsystem = "MRM";
             activity.ActivityText = "Test personify activity Type and Subject.";
@@ -707,10 +718,10 @@ namespace asi.asicentral.Tests
             var emailExpresses = new List<StoreDetailEmailExpress>();
             emailExpresses.Add(new StoreDetailEmailExpress { OrderDetailId = 1, ItemTypeId = 1 });
             var mappings = new List<PersonifyMapping>();
-            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 126, StoreOption = "1", PersonifyProduct = 458162300, PersonifyRateCode = "500_credits", PersonifyRateStructure = "MEMBER", ProductCode="Email_Marketing" });
+            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 126, StoreOption = "1", PersonifyProduct = 458162300, PersonifyRateCode = "500_credits", PersonifyRateStructure = "MEMBER", ProductCode = "Email_Marketing" });
             mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 77, StoreOption = "0", PersonifyProduct = 14471, PersonifyRateCode = "STD", PersonifyRateStructure = "MEMBER" });
             mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 61, StoreOption = "1;1X", PersonifyProduct = 1587, PersonifyRateCode = "1X", PersonifyRateStructure = "MEMBER" });
-            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 5, PersonifyProduct = 1003113722, PersonifyRateCode = "FY_DISTMEM", PersonifyRateStructure = "MEMBER", ClassCode = "DISTRIBUTOR", PaySchedule = true});
+            mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 5, PersonifyProduct = 1003113722, PersonifyRateCode = "FY_DISTMEM", PersonifyRateStructure = "MEMBER", ClassCode = "DISTRIBUTOR", PaySchedule = true });
             mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 70, PersonifyProduct = 1003113722, PersonifyRateCode = "", PersonifyRateStructure = "MEMBER", ClassCode = "DECORATOER" });
             //mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 2, PersonifyProduct = 1003113955, StoreOption = "SUPWAVEAPPFEE", PersonifyRateCode = "FP_SUPMEMSTDCON", PersonifyRateStructure = "BUNDLE", PersonifyBundle = "SUPPLIERMEM_STD_CON" });
             mappings.Add(new PersonifyMapping { StoreContext = null, StoreProduct = 2, PersonifyProduct = 439255209, StoreOption = string.Empty, PersonifyRateCode = "FP_SUPMEMSTDCON", PersonifyRateStructure = "MEMBER", ClassCode = "SUPPLIER", PaySchedule = true });
@@ -739,8 +750,8 @@ namespace asi.asicentral.Tests
             return mockObjectService.Object;
         }
 
-        private static StoreOrder CreateStoreOrder(string asiNumber, ContextProduct[] products, string testName, 
-                                              string couponCode=null, decimal discountAmount = 0, Context context = null)
+        private static StoreOrder CreateStoreOrder(string asiNumber, ContextProduct[] products, string testName,
+                                              string couponCode = null, decimal discountAmount = 0, Context context = null)
         {
             var tag = DateTime.Now.Ticks;
             var address1 = new StoreAddress()
@@ -785,7 +796,7 @@ namespace asi.asicentral.Tests
             var contacts = new List<StoreIndividual>() { person };
             var company = new StoreCompany()
             {
-                Name = string.Format("{0} {1}", string.IsNullOrEmpty(testName) ? "ORDER Test" : testName , tag),
+                Name = string.Format("{0} {1}", string.IsNullOrEmpty(testName) ? "ORDER Test" : testName, tag),
                 Addresses = companyAddresses,
                 Individuals = contacts,
                 ASINumber = asiNumber,
@@ -815,7 +826,7 @@ namespace asi.asicentral.Tests
             foreach (var product in products)
             {
                 Coupon coupon = null;
-                if( !string.IsNullOrEmpty(couponCode) && discountAmount > 0 && context != null)
+                if (!string.IsNullOrEmpty(couponCode) && discountAmount > 0 && context != null)
                 {
                     coupon = new Coupon() { ProductId = product.Id, CouponCode = couponCode, AppFeeDiscount = discountAmount };
                     order.ContextId = context.Id;

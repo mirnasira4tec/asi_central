@@ -9,6 +9,11 @@ namespace asi.asicentral.web.Models
     {
         public asi.asicentral.model.CompanyInformation companyInfo { get; set; }
         public string message { get; set; }
+        public string pacakage { get; set; }
+        public string contract { get; set; }
+        public string creditStatus { get; set; }
+        public string ecommerce { get; set; }
+        public string asiSmartBooksEval { get; set; }
         public CompanyStatusCode status { get; set; }
     }
     public enum CompanyStatusCode
