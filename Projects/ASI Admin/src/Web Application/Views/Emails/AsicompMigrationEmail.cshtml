@@ -22,9 +22,9 @@
 
     if (compnayInformationList != null && compnayInformationList.Count > 0)
     {
-        createdCompaniesList = compnayInformationList.Where(m => m.status == CompanyStatusCode.Created).ToList();
-        existsCompaniesList = compnayInformationList.Where(m => m.status == CompanyStatusCode.Exists).ToList();
-        failedComapniesList = compnayInformationList.Where(m => m.status == CompanyStatusCode.Fail).ToList();
+        createdCompaniesList = compnayInformationList.Where(m => m.Status == CompanyStatusCode.Created).ToList();
+        existsCompaniesList = compnayInformationList.Where(m => m.Status == CompanyStatusCode.Exists).ToList();
+        failedComapniesList = compnayInformationList.Where(m => m.Status == CompanyStatusCode.Fail).ToList();
     }
     if (userInformationList != null && userInformationList.Count > 0)
     {
@@ -54,11 +54,11 @@
             @foreach (var company in createdCompaniesList)
             {
                 <tr>
-                    <td>@company.companyInfo.ASINumber</td>
-                    <td>@company.companyInfo.Name</td>
-                    <td>@company.companyInfo.Phone</td>
-                    <td>@company.status</td>
-                    <td>@company.message</td>
+                    <td>@company.CompanyInfo.ASINumber</td>
+                    <td>@company.CompanyInfo.Name</td>
+                    <td>@company.CompanyInfo.Phone</td>
+                    <td>@company.Status</td>
+                    <td>@company.Message</td>
                 </tr>
             }
         </tbody>
@@ -84,11 +84,11 @@
             @foreach (var company in existsCompaniesList)
             {
                 <tr>
-                    <td>@company.companyInfo.ASINumber</td>
-                    <td>@company.companyInfo.Name</td>
-                    <td>@company.companyInfo.Phone</td>
-                    <td>@company.status</td>
-                    <td>@company.message</td>
+                    <td>@company.CompanyInfo.ASINumber</td>
+                    <td>@company.CompanyInfo.Name</td>
+                    <td>@company.CompanyInfo.Phone</td>
+                    <td>@company.Status</td>
+                    <td>@company.Message</td>
                 </tr>
             }
 
@@ -114,11 +114,11 @@
             @foreach (var company in failedComapniesList)
             {
                 <tr>
-                    <td>@company.companyInfo.ASINumber</td>
-                    <td>@company.companyInfo.Name</td>
-                    <td>@company.companyInfo.Phone</td>
-                    <td>@company.status</td>
-                    <td>@company.message</td>
+                    <td>@company.CompanyInfo.ASINumber</td>
+                    <td>@company.CompanyInfo.Name</td>
+                    <td>@company.CompanyInfo.Phone</td>
+                    <td>@company.Status</td>
+                    <td>@company.Message</td>
                 </tr>
             }
 
