@@ -796,7 +796,7 @@ namespace asi.asicentral.web.Controllers.Show
                         userModel.user.Phone = phoneNumber[1];
                         userModel.user.PhoneAreaCode = phoneNumber[0];
                     }
-                    else if( companyInfo.Phone.Length > 3)
+                    else if (companyInfo.Phone.Length > 3)
                     {
                         userModel.user.Phone = companyInfo.Phone.Substring(3);
                         userModel.user.PhoneAreaCode = companyInfo.Phone.Substring(0, 3);
@@ -844,23 +844,32 @@ namespace asi.asicentral.web.Controllers.Show
                         userModel.message = "User already exists.";
                     }
 
-                    // create individual record in Personify
-                    comInfoModel.StoreCompany.Individuals.Add(
-                        new StoreIndividual()
-                        {
-                            FirstName = userModel.user.FirstName,
-                            LastName = userModel.user.LastName,
-                            Email = userModel.user.Email,
-                            Phone = comInfoModel.StoreCompany.Phone,
-                            Company = comInfoModel.StoreCompany,
-                            Address = comInfoModel.StoreCompany.GetCompanyAddress()
-                        });
-
-                    var indivInfo = PersonifyClient.AddIndividualInfos(comInfoModel.StoreCompany, null, companyInfo.MasterCustomerId, 0);
-                    // update ASICOMP data for this user
-                    if( indivInfo != null && indivInfo.Count() > 0  )
+                    var personifyUser = PersonifyClient.GetIndividualInfoByEmail(user.Email);
+                    if (personifyUser == null)
                     {
-                        var masterCustomerId = indivInfo.ElementAt(0).MasterCustomerId;
+                        // create individual record in Personify
+                        comInfoModel.StoreCompany.Individuals.Add(
+                            new StoreIndividual()
+                            {
+                                FirstName = userModel.user.FirstName,
+                                LastName = userModel.user.LastName,
+                                Email = userModel.user.Email,
+                                Phone = comInfoModel.StoreCompany.Phone,
+                                Company = comInfoModel.StoreCompany,
+                                Address = comInfoModel.StoreCompany.GetCompanyAddress()
+                            });
+
+                        var indivInfo = PersonifyClient.AddIndividualInfos(comInfoModel.StoreCompany, null, companyInfo.MasterCustomerId, 0);
+                        if (indivInfo != null && indivInfo.Count() > 0)
+                        {
+                            personifyUser = indivInfo.ElementAt(0);
+                            PersonifyClient.AddCustomerAddresses(comInfoModel.StoreCompany, personifyUser.MasterCustomerId, 0, null);
+                        }
+                    }
+                     // update ASICOMP data for this user
+                    if(personifyUser != null)
+                    {
+                        var masterCustomerId = personifyUser.MasterCustomerId;
                         PersonifyClient.AddCustomerAddresses(comInfoModel.StoreCompany, masterCustomerId, 0, null);
                             
                         if( Convert.ToString(UserInfo["news"]) == "yes")
