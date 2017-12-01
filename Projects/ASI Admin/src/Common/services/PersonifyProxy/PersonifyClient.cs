@@ -15,18 +15,17 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using DocumentFormat.OpenXml.Drawing;
-using asi.asicentral.model.ASIComp;
 
 namespace asi.asicentral.services.PersonifyProxy
 {
-    public enum AddressType
-    {
-        Primary,
-        Shipping,
-        Billing
-    }
-
-    public static class PersonifyClient
+	public enum AddressType
+	{
+		Primary,
+		Shipping,
+		Billing
+	}
+	
+	public static class PersonifyClient
     {
         private static ILogService _log = LogService.GetLog(typeof(PersonifyClient));
 
@@ -50,9 +49,9 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string SP_SEARCH_BY_COMPANY_IDENTIFIER = "USR_EASI_CUSTOMER_SEARCH_CUSTOMER_NO_PROC";
         private const string SP_UPDATE_CUSTOMER_CLASS = "USR_EASI_CUSTOMER_UPDATE_CLASS";
         private const string SP_GET_BUNDLE_PRODUCT_DETAILS = "ASI_GetBundleProductDetails_SP";
-        private const string SP_GET_PRODUCT_DETAILS = "USR_PRODUCT_VALIDATION_PROC";
+	    private const string SP_GET_PRODUCT_DETAILS = "USR_PRODUCT_VALIDATION_PROC";
         private const string SP_EEX_EMAIL_USAGE_UPDATE = "USR_EEX_EMAIL_USAGE_UPDATE";
-        private const string SP_GET_SUPPLIER_MEMBER_QUESTRIONS = "USR_ASI_CENTRAL_MQ_SELECT_SUPPLIER_PROC";
+	    private const string SP_GET_SUPPLIER_MEMBER_QUESTRIONS = "USR_ASI_CENTRAL_MQ_SELECT_SUPPLIER_PROC";
         private const string SP_GET_DISTRIBUTOR_MEMBER_QUESTRIONS = "USR_ASI_CENTRAL_MQ_SELECT_DISTRIBUTOR_PROC";
         private const string SP_GET_DECORATOR_MEMBER_QUESTRIONS = "USR_ASI_CENTRAL_MQ_SELECT_DECORATOR_PROC";
         private const string SP_UPDATE_DISTRIBUTOR_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_DISTRIBUTOR_PROC";
@@ -62,10 +61,10 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string SP_GET_ASICOMP_DATA = "USR_REPORT_ASI_COMP_DATA";
 
         private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
-        private static readonly IDictionary<string, string> ASIShowCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "SHOW AE" }, { "DISCOVER", "SHOW DISC" }, { "MASTERCARD", "SHOW MS" }, { "VISA", "SHOW VS" } };
-        private static readonly IDictionary<string, string> ASICanadaCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "CAN AMEX" }, { "DISCOVER", "CAN DISC" }, { "MASTERCARD", "CAN MC" }, { "VISA", "CAN VISA" } };
-        private static readonly IDictionary<string, IDictionary<string, string>> CreditCardType = new Dictionary<string, IDictionary<string, string>>(3, StringComparer.InvariantCultureIgnoreCase) { { "ASI", ASICreditCardType }, { "ASI Show", ASIShowCreditCardType }, { "ASI Canada", ASICanadaCreditCardType } };
-        private static readonly IDictionary<string, string> CompanyNumber = new Dictionary<string, string>(3, StringComparer.InvariantCultureIgnoreCase) { { "ASI", "1" }, { "ASI Show", "2" }, { "ASI Canada", "4" } };
+		private static readonly IDictionary<string, string> ASIShowCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "SHOW AE" }, { "DISCOVER", "SHOW DISC" }, { "MASTERCARD", "SHOW MS" }, { "VISA", "SHOW VS" } };
+		private static readonly IDictionary<string, string> ASICanadaCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "CAN AMEX" }, { "DISCOVER", "CAN DISC" }, { "MASTERCARD", "CAN MC" }, { "VISA", "CAN VISA" } };
+		private static readonly IDictionary<string, IDictionary<string, string>> CreditCardType = new Dictionary<string, IDictionary<string, string>>(3, StringComparer.InvariantCultureIgnoreCase) { { "ASI", ASICreditCardType }, { "ASI Show", ASIShowCreditCardType }, { "ASI Canada", ASICanadaCreditCardType } };
+		private static readonly IDictionary<string, string> CompanyNumber = new Dictionary<string, string>(3, StringComparer.InvariantCultureIgnoreCase) { { "ASI", "1" }, { "ASI Show", "2" }, { "ASI Canada", "4" } };
         private static readonly IDictionary<Activity, IList<string>> ActivityCodes = new Dictionary<Activity, IList<string>>() { { Activity.Exception, new List<string>(){ "EXCEPTION", "VALIDATION" } }, 
                                                                                                                                  { Activity.Order, new List<string>(){ "ACTIVITY", "ORDER" } } };
         private static readonly IDictionary<string, List<string>> PERSONIFY_STORED_PROCEDURE = new Dictionary<string, List<string>>()
@@ -192,13 +191,13 @@ namespace asi.asicentral.services.PersonifyProxy
             return orderOutput;
         }
 
-        public static void CreateBundleOrder(StoreOrder storeOrder, PersonifyMapping mapping, CompanyInformation companyInfo, string contactMasterCustomerId,
+        public static void CreateBundleOrder(StoreOrder storeOrder, PersonifyMapping mapping, CompanyInformation companyInfo, string contactMasterCustomerId, 
                                              int contactSubCustomerId, AddressInfo billToAddress, AddressInfo shipToAddress)
-        {
+        {          
             _log.Debug(string.Format("CreateBundleOrder - start: order {0} ", storeOrder));
             DateTime startTime = DateTime.Now;
 
-            if (mapping == null)
+            if( mapping == null)
             {
                 throw new Exception("Error getting personify bundle in mapping table");
             }
@@ -232,9 +231,9 @@ namespace asi.asicentral.services.PersonifyProxy
             _log.Debug(string.Format("CreateBundleOrder - end: order {0} ({1})", storeOrder, DateTime.Now.Subtract(startTime).TotalMilliseconds));
         }
 
-        public static void AddLineItemToOrder(StoreOrder order, int productId, string rateStructure, string rateCode,
+	    public static void AddLineItemToOrder(StoreOrder order, int productId, string rateStructure, string rateCode, 
                                                 bool boltOn = true, int quantity = 1)
-        {
+	    {
             var linePriceInput = new ASIAddOrderLinewithPriceInput()
             {
                 OrderNumber = order.BackendReference,
@@ -248,35 +247,35 @@ namespace asi.asicentral.services.PersonifyProxy
             var output = SvcClient.Post<OrderNumberParam>("ASIAddOrderLinewithPrice", linePriceInput);
         }
 
-        public static bool ScheduleOrderPayment(StoreOrder storeOrder)
-        {
+	    public static bool ScheduleOrderPayment(StoreOrder storeOrder)
+	    {
             var scheduleCreated = false;
-            if (storeOrder != null && !string.IsNullOrEmpty(storeOrder.BackendReference))
-            {
+	        if (storeOrder != null && !string.IsNullOrEmpty(storeOrder.BackendReference))
+	        {
                 var orderLineItems = SvcClient.Ctxt.OrderDetailInfos
                                        .Where(c => c.OrderNumber == storeOrder.BackendReference && c.BaseTotalAmount > 0)
                                        .ToList();
-                if (orderLineItems.Any())
-                {
-                    var item = orderLineItems[0];
-                    var iPaySchedual = new ASICreatePayScheduleInput()
-                    {
-                        OrderNumber = item.OrderNumber,
-                        OrderLineNumber = (short)item.RelatedLineNumber,
-                        PayFrequency = "MONTHLY",
-                        PayStartDate = DateTime.Now,
-                        PayMethodCode = "CC",
-                        CCProfileId = Int32.Parse(storeOrder.CreditCard.ExternalReference),
-                        SyncPayScheduleFlag = true
-                    };
+	            if (orderLineItems.Any())
+	            {
+	                var item = orderLineItems[0];
+	                var iPaySchedual = new ASICreatePayScheduleInput()
+	                {
+	                    OrderNumber = item.OrderNumber,
+	                    OrderLineNumber = (short) item.RelatedLineNumber,
+	                    PayFrequency = "MONTHLY",
+	                    PayStartDate = DateTime.Now,
+	                    PayMethodCode = "CC",
+	                    CCProfileId = Int32.Parse(storeOrder.CreditCard.ExternalReference),
+	                    SyncPayScheduleFlag = true
+	                };
 
-                    var output = SvcClient.Post<ASICreatePayScheduleOutput>("ASICreatePaySchedule", iPaySchedual);
-                    scheduleCreated = output.IsPaySchduleCreated ?? false;
-                }
-            }
+	                var output = SvcClient.Post<ASICreatePayScheduleOutput>("ASICreatePaySchedule", iPaySchedual);
+	                scheduleCreated = output.IsPaySchduleCreated ?? false;
+	            }
+	        }
 
             return scheduleCreated;
-        }
+	    }
 
         public static decimal GetOrderBalanceTotal(string orderNumber)
         {
@@ -290,7 +289,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return total;
         }
 
-        public static CompanyInformation ReconcileCompany(StoreCompany company, string customerClassCode, IList<LookSendMyAdCountryCode> countryCodes,
+        public static CompanyInformation ReconcileCompany(StoreCompany company, string customerClassCode, IList<LookSendMyAdCountryCode> countryCodes, 
                                                           ref IEnumerable<StoreAddressInfo> storeAddress, bool update = false)
         {
             List<string> masterIdList = null;
@@ -326,14 +325,14 @@ namespace asi.asicentral.services.PersonifyProxy
             if (!string.IsNullOrEmpty(storeType) && storeType.ToUpper() == "EQUIPMENT")
                 storeType = "SUPPLIER";
 
-            var saveCustomerInput = new SaveCustomerInput { LastName = storeCompany.Name, CustomerClassCode = storeType };
+            var saveCustomerInput = new SaveCustomerInput { LastName = storeCompany.Name, CustomerClassCode = storeType  };
             AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_PHONE, storeCompany.Phone,
                 COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode);
             AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_FAX, storeCompany.Fax,
                 COMMUNICATION_LOCATION_CODE_CORPORATE, countryCode);
             // add company email only if it is not the same as contact email
-            if (!string.IsNullOrEmpty(storeCompany.Email) &&
-                 (storeCompany.Individuals == null || !storeCompany.Individuals.Any() || string.IsNullOrEmpty(storeCompany.Individuals[0].Email) ||
+            if (!string.IsNullOrEmpty(storeCompany.Email) && 
+                 (storeCompany.Individuals == null || !storeCompany.Individuals.Any() || string.IsNullOrEmpty(storeCompany.Individuals[0].Email) || 
                   string.Compare(storeCompany.Individuals[0].Email, storeCompany.Email, StringComparison.CurrentCultureIgnoreCase) != 0))
             {
                 AddCusCommunicationInput(saveCustomerInput, COMMUNICATION_INPUT_EMAIL, storeCompany.Email,
@@ -375,7 +374,7 @@ namespace asi.asicentral.services.PersonifyProxy
             int subCustomerId,
             IEnumerable<LookSendMyAdCountryCode> countryCodes)
         {
-            if (storeCompany == null || storeCompany.Addresses == null || string.IsNullOrEmpty(masterCustomerId))
+            if (storeCompany == null || storeCompany.Addresses == null || string.IsNullOrEmpty(masterCustomerId) )
             {
                 throw new Exception("Store company and addresses, customer personify information and country codes are required");
             }
@@ -463,7 +462,7 @@ namespace asi.asicentral.services.PersonifyProxy
         }
 
         private static IEnumerable<StoreAddressInfo> ProcessPersonifyAddresses(
-                                                    IEnumerable<StoreAddressInfo> customerAddresses,
+                                                    IEnumerable<StoreAddressInfo> customerAddresses, 
                                                     IList<AddressInfo> existingAddressInfos)
         {
             if (existingAddressInfos.Any(a => a.BillToFlag.HasValue && a.BillToFlag.Value))
@@ -560,7 +559,7 @@ namespace asi.asicentral.services.PersonifyProxy
         {
             string status = string.Empty;
             var asiCustomers = SvcClient.Ctxt.ASICustomers.Where(c => c.MasterCustomerId == masterCustomerId && c.SubCustomerId == subCustomerId).ToList();
-            if (asiCustomers.Any())
+            if( asiCustomers.Any() )
                 status = asiCustomers.ElementAt(0).UserDefinedMemberStatusString;
 
             return status;
@@ -623,41 +622,41 @@ namespace asi.asicentral.services.PersonifyProxy
             return customerInfos.Any() ? customerInfos.FirstOrDefault(c => c.RecordType == RECORD_TYPE_CORPORATE) : null;
         }
 
-        public static PersonifyCustomerInfo GetCompanyInfoByASINumber(string asiNumber)
-        {
+		public static PersonifyCustomerInfo GetCompanyInfoByASINumber(string asiNumber)
+		{
             var customerInfos = GetCustomerInfoFromSP(SP_SEARCH_BY_ASI_NUMBER, new List<string>() { asiNumber });
-            return customerInfos.Any() ? customerInfos[0] : null;
-        }
+            return customerInfos.Any() ? customerInfos[0]: null;
+		}
 
         public static CompanyInformation FindCustomerInfo(StoreCompany company, ref List<string> matchList)
-        {
+	    {
             var startTime = DateTime.Now;
             PersonifyCustomerInfo companyInfo = null;
             _log.Debug(string.Format("FindCustomerInfo - start: company {0} ", company.Name));
             if (company == null || string.IsNullOrWhiteSpace(company.Name)) throw new Exception("Store company is not valid.");
-            if (!string.IsNullOrEmpty(company.ExternalReference))
-            {
+			if (!string.IsNullOrEmpty(company.ExternalReference))
+			{
                 // company exists in personify
-                if (company.HasExternalReference())
+                if ( company.HasExternalReference() )
                 {
-                    string[] references = company.ExternalReference.Split(';');
+				    string[] references = company.ExternalReference.Split(';');
                     int subCustomerId = references.Length > 1 ? Int32.Parse(references[1]) : 0;
                     companyInfo = GetPersonifyCompanyInfo(references[0], subCustomerId);
                 }
-            }
-            else if (!string.IsNullOrEmpty(company.ASINumber))
-            {  //look company by ASI#
+			}
+			else if (!string.IsNullOrEmpty(company.ASINumber))
+			{  //look company by ASI#
                 companyInfo = GetCompanyInfoByASINumber(company.ASINumber);
-            }
-            else
+			}
+            else            
             {  // find matching company by phone, email or name
                 companyInfo = FindMatchingCompany(company, ref matchList);
             }
             _log.Debug(string.Format("FindCustomerInfo - end: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
 
             return companyInfo != null ? GetCompanyInfo(companyInfo) : null;
-        }
-        #endregion Getting company information
+	    }
+	    #endregion Getting company information
 
         public static void AddActivity(StoreCompany company, string activityText, Activity activityType)
         {
@@ -667,14 +666,14 @@ namespace asi.asicentral.services.PersonifyProxy
                 int subCustomerId = Int32.Parse(references[1]);
                 var masterCustomerId = references[0];
                 var curActivity = ActivityCodes.Keys.Contains(activityType) ? ActivityCodes[activityType] : ActivityCodes[Activity.Exception];
-
+               
                 var activity = SvcClient.Create<CusActivity>();
                 activity.MasterCustomerId = masterCustomerId;
                 activity.SubCustomerId = subCustomerId;
                 activity.ActivityCode = "CONTACTTRACKING";
                 activity.CallTopicCode = curActivity[0];
                 activity.CallTopicSubcode = curActivity[1];
-                activity.CallTypeCode = "STORE";
+                activity.CallTypeCode = "STORE"; 
                 activity.ActivityDate = DateTime.Now;
                 activity.Subsystem = "MRM";
                 activity.ResolvedFlag = true;
@@ -692,69 +691,41 @@ namespace asi.asicentral.services.PersonifyProxy
         }
 
         public static bool ValidateRateCode(string groupName, string rateStructure, string rateCode, ref int persProductId)
-        {
-            var isValid = false;
+	    {
+	        var isValid = false;
             if (!string.IsNullOrEmpty(groupName) && !string.IsNullOrEmpty(rateStructure) && !string.IsNullOrEmpty(rateCode))
-            {
+	        {
                 var response = ExecutePersonifySP(SP_GET_PRODUCT_DETAILS, new List<string>() { "ASI_PRODUCTS", groupName, rateStructure, rateCode });
 
-                if (response != null && !string.IsNullOrEmpty(response.Data))
-                {
-                    var responseData = response.Data.Trim();
-                    if (responseData.ToUpper() != "NO DATA FOUND")
-                    {
-                        var match = Regex.Match(responseData, @"<PRODUCT_ID>(.*?)</PRODUCT_ID>");
-                        if (match.Success && Int32.TryParse(match.Groups[1].Value.Trim(), out persProductId))
-                        {
-                            isValid = true;
-                        }
-                    }
-                }
-            }
+	            if (response != null && !string.IsNullOrEmpty(response.Data) )
+	            {
+	                var responseData = response.Data.Trim();
+	                if (responseData.ToUpper() != "NO DATA FOUND")
+	                {
+	                    var match = Regex.Match(responseData, @"<PRODUCT_ID>(.*?)</PRODUCT_ID>");
+	                    if (match.Success && Int32.TryParse(match.Groups[1].Value.Trim(), out persProductId))
+	                    {
+	                        isValid = true;
+	                    }
+	                }
+	            }
+	        }
 
-            return isValid;
-        }
+	        return isValid;
+	    }
 
-        public static ASICompData GetASICOMPData(string masterId)
+        public static List<XElement> GetASICOMPData(string masterId)
         {
-            // TODO:  need to return ASICOMP data from SP instead of void in this function
-            ASICompData asiCompData = null;
+            List<XElement> asicompData = null;
             var response = ExecutePersonifySP(SP_GET_ASICOMP_DATA, new List<string>() { masterId });
             if (response != null && !string.IsNullOrEmpty(response.Data) && response.Data.Trim().ToUpper() != "NO DATA FOUND")
             {
                 var xml = XDocument.Parse(response.Data);
-                var list = xml.Root.Elements("Table").ToList();
-                asiCompData = new ASICompData();
-                foreach (var data in list)
-                {
-                    foreach (var element in data.Elements())
-                    {
-                        var value = element.Value;
-                        switch (element.Name.ToString())
-                        {
-                            case "USR_PACKAGE":
-                                asiCompData.Package = element.Value;
-                                break;
-                            case "USR_CONTRACT":
-                                asiCompData.Contract = element.Value;
-                                break;
-                            case "USR_CREDIT_STATUS":
-                                asiCompData.CreditStatus = element.Value;
-                                break;
-                            case "USR_ECOMMERCE":
-                                asiCompData.Ecommerce = element.Value;
-                                break;
-                            case "USR_ASI_SMARTBOOKS_EVAL":
-                                asiCompData.AsiSmartBooksEval = element.Value;
-                                break;
-                            case "USR_NEWS":
-                                asiCompData.News = element.Value;
-                                break;
-                        }
-                    }
-                }
+
+                asicompData = xml.Root.Elements("Table").ToList();                
             }
-            return asiCompData;
+
+            return asicompData;
         }
 
         public static void UpdateASICompData(List<string> parameters)
@@ -767,7 +738,7 @@ namespace asi.asicentral.services.PersonifyProxy
         {
             var startTime = DateTime.Now;
             _log.Debug(string.Format("FindMatchingCompany - start: company name {0} ", company.Name));
-
+            
             PersonifyCustomerInfo matchCompany = null;
             List<PersonifyCustomerInfo> nameMatchList = null;
             var phoneMatchList = new List<PersonifyCustomerInfo>();
@@ -848,9 +819,9 @@ namespace asi.asicentral.services.PersonifyProxy
 
                 foreach (var c in matchCompanyList.Distinct())
                 {
-                    if (matchCompany == null || c.MasterCustomerId != matchCompany.MasterCustomerId)
+                    if (matchCompany == null || c.MasterCustomerId != matchCompany.MasterCustomerId )
                     {
-                        matchedList.Add(string.Format("{0},{1},{2}", c.MasterCustomerId, c.MemberStatus, c.CustomerClassCode));
+                        matchedList.Add(string.Format("{0},{1},{2}", c.MasterCustomerId, c.MemberStatus, c.CustomerClassCode ));
                     }
                 }
             }
@@ -870,7 +841,7 @@ namespace asi.asicentral.services.PersonifyProxy
             if (companyList.Count < 1)
             {
                 var nameWithoutSpecialChars = IgnoreSpecialChars(company.Name);
-                if (nameWithoutSpecialChars != company.Name)
+                if( nameWithoutSpecialChars != company.Name )
                     companyList = GetCustomerInfoFromSP(SP_SEARCH_BY_COMPANY_NAME, new List<string>() { nameWithoutSpecialChars });
             }
 
@@ -882,7 +853,7 @@ namespace asi.asicentral.services.PersonifyProxy
             var startTime = DateTime.Now;
             _log.Debug(string.Format("MatchPhoneEmail - start: filter {0}", filter));
 
-            if (companyList == null)
+            if( companyList == null )
                 companyList = new List<PersonifyCustomerInfo>();
 
             if (!string.IsNullOrEmpty(filter))
@@ -930,7 +901,7 @@ namespace asi.asicentral.services.PersonifyProxy
             if (matchCompanyList != null && matchCompanyList.Count > 0)
             {
                 //do not match distirbutor type with other delisted types
-                if (matchCompanyList.Count == 1 &&
+                if (matchCompanyList.Count == 1 && 
                     (memberType.ToUpper() != "DISTRIBUTOR" ||
                         (matchCompanyList[0].CustomerClassCode.ToUpper() != "DISTRIBUTOR" && matchCompanyList[0].MemberStatus.ToUpper() != "DELISTED")))
                 {
@@ -961,7 +932,7 @@ namespace asi.asicentral.services.PersonifyProxy
                         companyInfo = searchList[0];
                     }
 
-                    if (companyInfo == null && searchList.Count > 0)
+                    if (companyInfo == null && searchList.Count > 0 )
                     {
                         string condition = null;
                         foreach (var com in searchList)
@@ -991,12 +962,12 @@ namespace asi.asicentral.services.PersonifyProxy
             return companyInfo;
         }
 
-        private static List<PersonifyCustomerInfo> SelectCompanies(List<PersonifyCustomerInfo> matchCompanyList)
-        {
-            var selectedCompanies = matchCompanyList;
+	    private static List<PersonifyCustomerInfo> SelectCompanies(List<PersonifyCustomerInfo> matchCompanyList)
+	    {
+	        var selectedCompanies = matchCompanyList;
 
-            if (selectedCompanies != null && selectedCompanies.Any())
-            {
+	        if (selectedCompanies != null && selectedCompanies.Any())
+	        {
                 selectedCompanies = matchCompanyList.FindAll(m => m.MemberStatus != null && m.MemberStatus.ToUpper() == "TERMINATED");
 
                 if (selectedCompanies.Count < 1)
@@ -1007,11 +978,11 @@ namespace asi.asicentral.services.PersonifyProxy
                 if (selectedCompanies.Count < 1)
                 {
                     selectedCompanies = matchCompanyList.FindAll(m => m.MemberStatus != null && m.MemberStatus.ToUpper() == "ACTIVE");
-                }
-            }
+                }	            
+	        }
 
             return selectedCompanies;
-        }
+	    }
 
         private static string IgnoreSpecialChars(string input)
         {
@@ -1062,7 +1033,7 @@ namespace asi.asicentral.services.PersonifyProxy
             else
             {
                 var mappedClassCode = !string.IsNullOrEmpty(mapping.ClassCode) ? mapping.ClassCode.Trim().ToUpper() : string.Empty;
-                var mappedSubClassCode = !string.IsNullOrEmpty(mapping.SubClassCode) ? mapping.SubClassCode.Trim().ToUpper() : string.Empty;
+                var mappedSubClassCode = !string.IsNullOrEmpty(mapping.SubClassCode) ?  mapping.SubClassCode.Trim().ToUpper() : string.Empty;
                 var classCode = !string.IsNullOrEmpty(companyInfo.CustomerClassCode) ? companyInfo.CustomerClassCode.Trim().ToUpper() : string.Empty;
                 var subClassCode = !string.IsNullOrEmpty(companyInfo.SubClassCode) ? companyInfo.SubClassCode.Trim().ToUpper() : string.Empty;
                 var needUpdate = false;
@@ -1076,7 +1047,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     needUpdate = mappedClassCode == "SUPPLIER" && mappedClassCode == classCode && string.IsNullOrEmpty(subClassCode) && !string.IsNullOrEmpty(mappedSubClassCode);
                 }
 
-                if (needUpdate)
+                if( needUpdate )
                 {
                     ExecutePersonifySP(SP_UPDATE_CUSTOMER_CLASS, new List<string>{ companyInfo.MasterCustomerId,
                                                                                    companyInfo.SubCustomerId.ToString(),
@@ -1090,73 +1061,73 @@ namespace asi.asicentral.services.PersonifyProxy
             }
         }
 
-        public static CompanyInformation AddEEXSubscription(StoreCompany company, User user, IList<LookSendMyAdCountryCode> countryCodes, bool isBusinessAddress)
-        {
-            CompanyInformation companyInfo = null;
+	    public static CompanyInformation AddEEXSubscription(StoreCompany company, User user, IList<LookSendMyAdCountryCode> countryCodes, bool isBusinessAddress)
+	    {
+	        CompanyInformation companyInfo = null;
             IEnumerable<StoreAddressInfo> storeAddress = null;
 
-            if (user != null && company != null)
-            {
-                try
-                {
-                    companyInfo = ReconcileCompany(company, user.MemberType_CD, countryCodes, ref storeAddress, false);
+	        if (user != null && company != null)
+	        {
+	            try
+	            {
+	                companyInfo = ReconcileCompany(company, user.MemberType_CD, countryCodes, ref storeAddress, false);
 
-                    if (companyInfo != null)
-                    {
-                        // Add contact to personify
-                        var customerInfos = AddIndividualInfos(company, countryCodes, companyInfo.MasterCustomerId,
-                            companyInfo.SubCustomerId);
-                        if (customerInfos != null && customerInfos.Any())
-                        {
-                            var indivInfo = customerInfos.ElementAt(0);
-                            // save address to personify
-                            if (indivInfo != null)
-                            {
-                                var countryCode = countryCodes != null
-                                    ? countryCodes.Alpha3Code(user.Country)
-                                    : user.Country;
-                                var saveAddressInput = new SaveAddressInput()
-                                {
-                                    MasterCustomerId = indivInfo.MasterCustomerId,
-                                    SubCustomerId = indivInfo.SubCustomerId,
-                                    AddressTypeCode = isBusinessAddress ? "OFFICE" : "HOME",
-                                    Address1 = user.Street1,
-                                    City = user.City,
-                                    State = user.State,
-                                    PostalCode = user.Zip,
-                                    CountryCode = countryCode,
-                                    DirectoryFlag = true,
-                                    WebMobileDirectory = false,
-                                    CreateNewAddressIfOrdersExist = true,
-                                    OverrideAddressValidation = true,
-                                    ShipToFlag = true,
-                                    BillToFlag = true,
-                                    AddedOrModifiedBy = ADDED_OR_MODIFIED_BY
-                                };
+	                if (companyInfo != null)
+	                {
+	                    // Add contact to personify
+	                    var customerInfos = AddIndividualInfos(company, countryCodes, companyInfo.MasterCustomerId,
+	                        companyInfo.SubCustomerId);
+	                    if (customerInfos != null && customerInfos.Any())
+	                    {
+	                        var indivInfo = customerInfos.ElementAt(0);
+	                        // save address to personify
+	                        if (indivInfo != null)
+	                        {
+	                            var countryCode = countryCodes != null
+	                                ? countryCodes.Alpha3Code(user.Country)
+	                                : user.Country;
+	                            var saveAddressInput = new SaveAddressInput()
+	                            {
+	                                MasterCustomerId = indivInfo.MasterCustomerId,
+	                                SubCustomerId = indivInfo.SubCustomerId,
+	                                AddressTypeCode = isBusinessAddress ? "OFFICE" : "HOME",
+	                                Address1 = user.Street1,
+	                                City = user.City,
+	                                State = user.State,
+	                                PostalCode = user.Zip,
+	                                CountryCode = countryCode,
+	                                DirectoryFlag = true,
+	                                WebMobileDirectory = false,
+	                                CreateNewAddressIfOrdersExist = true,
+	                                OverrideAddressValidation = true,
+	                                ShipToFlag = true,
+	                                BillToFlag = true,
+	                                AddedOrModifiedBy = ADDED_OR_MODIFIED_BY
+	                            };
 
-                                SvcClient.Post<SaveAddressOutput>("CreateOrUpdateAddress", saveAddressInput);
-                            }
+	                            SvcClient.Post<SaveAddressOutput>("CreateOrUpdateAddress", saveAddressInput);
+	                        }
 
-                            var memberType = user.MemberType_CD.ToUpper();
-                            if (EEX_USAGE_CODES.Keys.Contains(memberType))
-                            {
-                                foreach (var code in EEX_USAGE_CODES[memberType])
-                                {
-                                    ExecutePersonifySP(SP_EEX_EMAIL_USAGE_UPDATE,
-                                        new List<string>() { user.Email, code, "N", "N" });
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _log.Debug("PersonifyClient.AddEEXSubscription - exception when update EmailExpress Subscription, messages " + ex.Message);
-                }
-            }
+	                        var memberType = user.MemberType_CD.ToUpper();
+	                        if (EEX_USAGE_CODES.Keys.Contains(memberType))
+	                        {
+	                            foreach (var code in EEX_USAGE_CODES[memberType])
+	                            {
+	                                ExecutePersonifySP(SP_EEX_EMAIL_USAGE_UPDATE,
+	                                    new List<string>() {user.Email, code, "N", "N"});
+	                            }
+	                        }
+	                    }
+	                }
+	            }
+	            catch (Exception ex)
+	            {
+	                _log.Debug("PersonifyClient.AddEEXSubscription - exception when update EmailExpress Subscription, messages " + ex.Message);
+	            }
+	        }
 
-            return companyInfo;
-        }
+	        return companyInfo;
+	    }
 
         public static PersonifyStatus OptOutEmailSubscription(string email, List<string> usageCodes)
         {
@@ -1172,14 +1143,14 @@ namespace asi.asicentral.services.PersonifyProxy
                     else
                     {
                         foreach (var code in usageCodes)
-                        {
+	                    {
                             ExecutePersonifySP(SP_EEX_EMAIL_USAGE_UPDATE, new List<string>() { email, code, "Y", "N" });
-                        }
+	                    }
 
                         requestStatus = PersonifyStatus.Success;
                     }
                 }
-                catch (Exception ex)
+                catch(Exception ex)
                 {
                     _log.Debug(string.Format("OptOutEmailSubscription() Exception, message: {0}", ex.Message));
                 }
@@ -1204,7 +1175,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     {
                         storeDetailApp = GetDistributorDemograpic((StoreDetailDistributorMembership)storeDetailApp, storeService, masterId);
                     }
-                    else if (StoreDetailDecoratorMembership.Identifiers.Contains(orderDetail.Product.Id))
+                    else if(StoreDetailDecoratorMembership.Identifiers.Contains(orderDetail.Product.Id))
                     {
                         storeDetailApp = GetDecoratorDemograpic((StoreDetailDecoratorMembership)storeDetailApp, storeService, masterId);
                     }
@@ -1221,7 +1192,7 @@ namespace asi.asicentral.services.PersonifyProxy
         public static void UpdateDemographicData(IStoreService storeService, StoreOrderDetail orderDetail)
         {
             var storeDetailApp = storeService.GetApplication(orderDetail);
-            if (storeDetailApp != null && orderDetail.Order != null && orderDetail.Order.Company != null &&
+            if (storeDetailApp != null && orderDetail.Order != null && orderDetail.Order.Company != null && 
                 orderDetail.Order.Company.HasExternalReference())
             {
                 try
@@ -1322,7 +1293,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 memberData = new StoreDetailDecoratorMembership();
 
             var response = ExecutePersonifySP(SP_GET_DECORATOR_MEMBER_QUESTRIONS, new List<string>() { masterCustomerId, "0" });
-            if (storeService != null && response != null && !string.IsNullOrEmpty(response.Data) &&
+            if (storeService != null && response != null && !string.IsNullOrEmpty(response.Data) && 
                 response.Data.Trim().ToUpper() != "NO DATA FOUND")
             {
                 var xml = XDocument.Parse(response.Data);
@@ -1363,10 +1334,10 @@ namespace asi.asicentral.services.PersonifyProxy
                                 break;
                             case "Union_LabeL_Flag":
                                 memberData.IsUnionMember = true;
-                                break;
+                                break;                        
                         }
 
-                        if (imprintType != null)
+                        if ( imprintType != null)
                         {
                             var existing = memberData.ImprintTypes.FirstOrDefault(p => p.Id == imprintType.Id);
                             if (value == 1 && existing == null)
@@ -1521,52 +1492,52 @@ namespace asi.asicentral.services.PersonifyProxy
             return memberData;
         }
 
-        private static StoreDetailDistributorMembership GetDistributorDemograpic(StoreDetailDistributorMembership memberData, IStoreService storeService, string masterCustomerId)
+	    private static StoreDetailDistributorMembership GetDistributorDemograpic(StoreDetailDistributorMembership memberData, IStoreService storeService, string masterCustomerId)
         {
             if (memberData == null)
                 memberData = new StoreDetailDistributorMembership();
 
             var response = ExecutePersonifySP(SP_GET_DISTRIBUTOR_MEMBER_QUESTRIONS, new List<string>() { masterCustomerId, "0" });
-            if (response != null && !string.IsNullOrEmpty(response.Data) &&
-                response.Data.Trim().ToUpper() != "NO DATA FOUND")
-            {
+	        if (response != null && !string.IsNullOrEmpty(response.Data) &&
+	            response.Data.Trim().ToUpper() != "NO DATA FOUND")
+	        {
                 var xml = XDocument.Parse(response.Data);
 
                 var data = xml.Root.Elements("Table").FirstOrDefault();
-                if (data != null)
-                {
-                    memberData.ProductLines = GetProductLines(storeService, data.Elements(), memberData.ProductLines);
-                    memberData.AccountTypes = GetDistAccountTypes(storeService, data.Elements(), memberData.AccountTypes);
-                    var businessTypes = storeService.GetAll<LookDistributorRevenueType>().ToList();
+	            if (data != null)
+	            {
+	                memberData.ProductLines = GetProductLines(storeService, data.Elements(), memberData.ProductLines);
+	                memberData.AccountTypes = GetDistAccountTypes(storeService, data.Elements(), memberData.AccountTypes);
+	                var businessTypes = storeService.GetAll<LookDistributorRevenueType>().ToList();
                     foreach (var element in data.Elements())
-                    {
-                        int intValue = 0;
+	                {
+	                    int intValue = 0;
                         Int32.TryParse(element.Value, out intValue);
-                        switch (element.Name.ToString())
-                        {
-                            case "USR_YEAR_ESTABLISHED":
-                                if (intValue != 0) memberData.EstablishedDate = new DateTime(intValue, 1, 1);
-                                break;
-                            case "USR_FACILITIESINFORMATION":
-                                if (intValue > 0) memberData.NumberOfEmployee = intValue;
-                                break;
-                            case "USR_TOTAL_SALES_FORCE":
-                                if (intValue > 0) memberData.NumberOfSalesEmployee = intValue;
-                                break;
-                            case "USR_SPECIALTY_SALES_AMOUNT":
-                                memberData.AnnualSalesVolumeASP = element.Value;
-                                break;
-                            case "USR_COMPANY_SALES_AMOUNT":
-                                memberData.AnnualSalesVolume = element.Value;
-                                break;
-                            case "USR_PRI_BUS_REV_SRC":
-                                if (!string.IsNullOrEmpty(element.Value))
-                                {
-                                    switch (element.Value.ToLower())
-                                    {
-                                        case "signs":
-                                            memberData.PrimaryBusinessRevenue = businessTypes.FirstOrDefault(t => t.Id == 1);
-                                            break;
+	                    switch (element.Name.ToString())
+	                    {
+	                        case "USR_YEAR_ESTABLISHED":
+	                            if( intValue != 0 ) memberData.EstablishedDate = new DateTime(intValue, 1, 1);
+	                            break;
+	                        case "USR_FACILITIESINFORMATION":
+	                            if( intValue > 0 )  memberData.NumberOfEmployee = intValue;
+	                            break;
+	                        case "USR_TOTAL_SALES_FORCE":
+	                            if( intValue > 0 )  memberData.NumberOfSalesEmployee = intValue;
+	                            break;
+	                        case "USR_SPECIALTY_SALES_AMOUNT":
+	                            memberData.AnnualSalesVolumeASP = element.Value;
+	                            break;
+	                        case "USR_COMPANY_SALES_AMOUNT":
+	                            memberData.AnnualSalesVolume = element.Value;
+	                            break;
+	                        case "USR_PRI_BUS_REV_SRC":
+	                            if (!string.IsNullOrEmpty(element.Value))
+	                            {
+	                                switch( element.Value.ToLower())
+	                                {
+	                                    case "signs":
+	                                        memberData.PrimaryBusinessRevenue = businessTypes.FirstOrDefault(t => t.Id == 1);
+	                                        break;
                                         case "trophy & awards":
                                             memberData.PrimaryBusinessRevenue = businessTypes.FirstOrDefault(t => t.Id == 2);
                                             break;
@@ -1580,15 +1551,15 @@ namespace asi.asicentral.services.PersonifyProxy
                                             memberData.PrimaryBusinessRevenue = businessTypes.FirstOrDefault(t => t.Id == 5);
                                             break;
                                     }
-                                }
-                                break;
-                            case "USR_PRI_BUS_OTHER_DESC":
-                                memberData.OtherBusinessRevenue = element.Value;
-                                break;
-                        }
-                    }
+	                            }
+	                            break;
+	                        case "USR_PRI_BUS_OTHER_DESC":
+	                            memberData.OtherBusinessRevenue = element.Value;
+	                            break;
+	                    }
+	                }
                 }
-            }
+	        }
 
             return memberData;
         }
@@ -1770,7 +1741,7 @@ namespace asi.asicentral.services.PersonifyProxy
                             break;
                         case "Marketing_x0020_Services":
                             type = types.FirstOrDefault(t => t.SubCode == "O");
-                            break;
+                           break;
                         case "Media":
                             type = types.FirstOrDefault(t => t.SubCode == "Y");
                             break;
@@ -1822,7 +1793,7 @@ namespace asi.asicentral.services.PersonifyProxy
 
             return accountTypes;
         }
-
+        
         private static StoredProcedureOutput ExecutePersonifySP(string spName, List<string> parameters)
         {
             _log.Debug(string.Format("ExecutePersonifySP - start: StoreProcedure name - {0})", spName));
@@ -1926,8 +1897,8 @@ namespace asi.asicentral.services.PersonifyProxy
                         }
                     }
 
-                    if (customerInfo.RecordType == null || customerInfo.RecordType != RECORD_TYPE_CORPORATE ||
-                        ((customerInfo.CustomerStatusCode == null || customerInfo.CustomerStatusCode != CUSTOMER_INFO_STATUS_DUPLICATE) &&
+                    if( customerInfo.RecordType == null || customerInfo.RecordType != RECORD_TYPE_CORPORATE ||
+                        ((customerInfo.CustomerStatusCode == null || customerInfo.CustomerStatusCode != CUSTOMER_INFO_STATUS_DUPLICATE) && 
                          (customerInfo.MemberStatus == null || customerInfo.MemberStatus != StatusCode.MMS_LOAD.ToString())))
                     {
                         companyInfoList.Add(customerInfo);
@@ -1938,9 +1909,9 @@ namespace asi.asicentral.services.PersonifyProxy
             return companyInfoList;
         }
 
-        #endregion matching company
+  	    #endregion matching company
 
-        public static IEnumerable<PersonifyCustomerInfo> AddIndividualInfos(StoreCompany storeCompany,
+        public static IEnumerable<PersonifyCustomerInfo> AddIndividualInfos(StoreCompany storeCompany, 
                                                                       IList<LookSendMyAdCountryCode> countryCodes,
                                                                       string companyMasterId, int companySubId)
         {
@@ -1973,7 +1944,7 @@ namespace asi.asicentral.services.PersonifyProxy
             {
                 //check if individual already exist based on email
                 var customerInfo = GetIndividualInfoByEmail(storeIndividual.Email);
-
+                
                 //check if contact belong to company
                 if (customerInfo != null)
                 {
@@ -2017,7 +1988,7 @@ namespace asi.asicentral.services.PersonifyProxy
                         AddCusCommunicationInput(customerInfoInput, COMMUNICATION_INPUT_PHONE, storeIndividual.Phone, COMMUNICATION_LOCATION_CODE_WORK, countryCode);
                         AddCusCommunicationInput(customerInfoInput, COMMUNICATION_INPUT_EMAIL, storeIndividual.Email, COMMUNICATION_LOCATION_CODE_WORK);
                         var customerInfoOutput = SvcClient.Post<SaveCustomerOutput>("CreateIndividual", customerInfoInput);
-                        if (customerInfoOutput != null)
+                        if (customerInfoOutput != null )
                         {
                             customerInfo = GetIndividualInfo(customerInfoOutput.MasterCustomerId);
                             if (customerInfo != null)
@@ -2038,7 +2009,7 @@ namespace asi.asicentral.services.PersonifyProxy
 
         private static void AddRelationship(string contactMasterId, int contactSubId, string companyMasterId, int companySubId, bool newContact = false)
         {
-            if (string.IsNullOrEmpty(contactMasterId) || string.IsNullOrEmpty(companyMasterId))
+            if ( string.IsNullOrEmpty(contactMasterId) || string.IsNullOrEmpty(companyMasterId))
             {
                 throw new Exception("To add a relation between individual and company, information from both sides is required");
             }
@@ -2095,7 +2066,7 @@ namespace asi.asicentral.services.PersonifyProxy
         public static PersonifyCustomerInfo GetIndividualInfo(string masterCustomerId, int subCustomerId = 0)
         {
             var individualList = GetCustomerInfoFromSP(SP_SEARCH_BY_CUSTOMER_ID, new List<string>() { masterCustomerId, subCustomerId.ToString() });
-            return individualList.Any() ? individualList.Find(c => c.RecordType.StartsWith("I")) : null;
+            return individualList.Any() ? individualList.Find(c => c.RecordType.StartsWith("I")): null;
         }
 
         public static PersonifyCustomerInfo GetIndividualInfoByEmail(string emailAddress)
@@ -2172,7 +2143,7 @@ namespace asi.asicentral.services.PersonifyProxy
             }
             if (!string.IsNullOrWhiteSpace(key) && !string.IsNullOrWhiteSpace(value))
             {
-                if (key == COMMUNICATION_INPUT_PHONE || key == COMMUNICATION_INPUT_FAX)
+                if ( key == COMMUNICATION_INPUT_PHONE || key == COMMUNICATION_INPUT_FAX )
                 {
                     value = new string(value.Where(Char.IsDigit).ToArray());
                     value = value.Substring(0, Math.Min(value.Length, PHONE_NUMBER_LENGTH));
@@ -2242,7 +2213,7 @@ namespace asi.asicentral.services.PersonifyProxy
                         && (string.Equals(countryCode, "USA", StringComparison.InvariantCultureIgnoreCase)
                         || string.Equals(countryCode, "CAN", StringComparison.InvariantCultureIgnoreCase)))
                     {
-                        if (phoneNumber.Length == PHONE_NUMBER_LENGTH)
+                        if (phoneNumber.Length == PHONE_NUMBER_LENGTH )
                         {
                             bool isPhoneExist = GetCusCommunications(masterCustomerId, subCustomerId, COMMUNICATION_INPUT_PHONE).Any(c => c.SearchPhoneAddress == phoneNumber);
                             if (!isPhoneExist)
@@ -2271,11 +2242,11 @@ namespace asi.asicentral.services.PersonifyProxy
 
         public static CusCommunication AddCompanyEmail(StoreCompany company, CompanyInformation companyInfo)
         {
-            if (company == null || string.IsNullOrEmpty(company.Email) || companyInfo == null)
+            if (company == null || string.IsNullOrEmpty(company.Email) || companyInfo == null ) 
                 return null;
 
             // check if the email is the same as contact email
-            if (company.Individuals != null && company.Individuals.Any() &&
+            if (company.Individuals != null && company.Individuals.Any() && 
                 string.Compare(company.Email, company.Individuals[0].Email, StringComparison.CurrentCultureIgnoreCase) == 0)
             {
                 return null;
@@ -2292,7 +2263,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 if (existingEmails.Any())
                 {
                     var curLocTypes = existingEmails.Select(c => c.CommLocationCodeString).ToList();
-                    commType = new string[] { COMMUNICATION_LOCATION_CODE_BUSINESS, COMMUNICATION_LOCATION_CODE_CORPORATE }.FirstOrDefault(c => !curLocTypes.Contains(c));
+                    commType = new string[] {COMMUNICATION_LOCATION_CODE_BUSINESS, COMMUNICATION_LOCATION_CODE_CORPORATE}.FirstOrDefault(c => !curLocTypes.Contains(c));
                     // already having both BUSINESS and CORPORATE emails
                     if (string.IsNullOrEmpty(commType))
                     {
@@ -2305,7 +2276,7 @@ namespace asi.asicentral.services.PersonifyProxy
                             commType = COMMUNICATION_LOCATION_CODE_BUSINESS;
                         }
 
-                        if (!string.IsNullOrEmpty(commType))
+                        if ( !string.IsNullOrEmpty(commType))
                         {
                             var emailCnt = 1;
                             while (curLocTypes.Contains(COMMUNICATION_LOCATION_CODE_CORPORATE + emailCnt))
@@ -2335,13 +2306,13 @@ namespace asi.asicentral.services.PersonifyProxy
                         _log.Error(string.Format("Faild to add email '{0}' to company '{1}' in Personify; error message: {2}",
                                     company.Email, companyInfo.Name, ex.Message));
                     }
-                }
+                }                    
             }
 
             return cusCommRecord;
         }
 
-        private static IList<CusCommunication> GetCusCommunications(string masterCustomerId, int subCustomerId, string cusCommType)
+         private static IList<CusCommunication> GetCusCommunications(string masterCustomerId, int subCustomerId, string cusCommType)
         {
             IEnumerable<CusCommunication> cc = SvcClient.Ctxt.CusCommunications
                 .Where(c => c.MasterCustomerId == masterCustomerId
@@ -2351,61 +2322,61 @@ namespace asi.asicentral.services.PersonifyProxy
 
         #region Credit Card Handling
 
-        public static IEnumerable<StoreCreditCard> GetCompanyCreditCards(StoreCompany company, string asiCompany)
-        {
-            var creditCards = new List<StoreCreditCard>();
-            if (company == null || string.IsNullOrWhiteSpace(company.Name)) throw new Exception("Store company is not valid.");
-            string masterCustomerId = string.Empty;
-            int subCustomerId = 0;
+	    public static IEnumerable<StoreCreditCard> GetCompanyCreditCards(StoreCompany company, string asiCompany)
+	    {
+		    var creditCards = new List<StoreCreditCard>();
+			if (company == null || string.IsNullOrWhiteSpace(company.Name)) throw new Exception("Store company is not valid.");
+		    string masterCustomerId = string.Empty;
+		    int subCustomerId = 0;
 
-            if (company.HasExternalReference())
-            {
-                string[] references = company.ExternalReference.Split(';');
-                subCustomerId = Int32.Parse(references[1]);
-                masterCustomerId = references[0];
-            }
-            else
-            {
-                //look company by ASI#
-                if (!string.IsNullOrEmpty(company.ASINumber))
-                {
-                    var customers = SvcClient.Ctxt.ASICustomerInfos.Where(p => p.UserDefinedAsiNumber == company.ASINumber).ToList();
-                    if (customers.Any())
-                    {
-                        masterCustomerId = customers[0].MasterCustomerId;
-                        subCustomerId = customers[0].SubCustomerId;
-                    }
-                }
-            }
-            if (!string.IsNullOrEmpty(masterCustomerId))
-            {
-                IEnumerable<ASICustomerCreditCard> personifyCreditCards = SvcClient.Ctxt.ASICustomerCreditCards
-                                .Where(c => c.MasterCustomerId == masterCustomerId && c.SubCustomerId == subCustomerId &&
-                                    c.UserDefinedCompanyNumber == CompanyNumber[asiCompany]);
+			if ( company.HasExternalReference())
+			{
+				string[] references = company.ExternalReference.Split(';');
+				subCustomerId = Int32.Parse(references[1]);
+				masterCustomerId = references[0];
+			}
+			else
+			{
+				//look company by ASI#
+				if (!string.IsNullOrEmpty(company.ASINumber))
+				{
+					var customers = SvcClient.Ctxt.ASICustomerInfos.Where(p => p.UserDefinedAsiNumber == company.ASINumber).ToList();
+					if (customers.Any())
+					{
+						masterCustomerId = customers[0].MasterCustomerId;
+						subCustomerId = customers[0].SubCustomerId;
+					}
+				}
+			}
+		    if (!string.IsNullOrEmpty(masterCustomerId))
+		    {
+				IEnumerable<ASICustomerCreditCard> personifyCreditCards = SvcClient.Ctxt.ASICustomerCreditCards
+								.Where(c => c.MasterCustomerId == masterCustomerId && c.SubCustomerId == subCustomerId && 
+									c.UserDefinedCompanyNumber == CompanyNumber[asiCompany]);
 
-                foreach (var personifyCreditCard in personifyCreditCards.OrderByDescending(cc => cc.AddedOn))
-                {
-                    var card = new StoreCreditCard()
-                    {
-                        CardNumber = "****" + personifyCreditCard.CCReference.Substring(personifyCreditCard.CCReference.Length - 4),
-                        ExternalReference = personifyCreditCard.CustomerCreditCardProfileId.ToString(),
-                        CardType = personifyCreditCard.ReceiptTypeCodeString,
-                    };
-                    //convert credit card type
-                    var creditCardType = ASICreditCardType.Union(ASIShowCreditCardType).Union(ASICanadaCreditCardType).FirstOrDefault(c => c.Value == card.CardType);
-                    if (creditCardType.Key != null) card.CardType = creditCardType.Key;
-                    //make sure we do not add a duplicate card reference
-                    if (!creditCards.Any(cc => cc.CardNumber == card.CardNumber && cc.CardType == card.CardType))
-                        creditCards.Add(card);
-                }
-            }
-            return creditCards;
-        }
+			    foreach (var personifyCreditCard in personifyCreditCards.OrderByDescending( cc => cc.AddedOn))
+			    {
+				    var card = new StoreCreditCard()
+				    {
+						CardNumber = "****" + personifyCreditCard.CCReference.Substring(personifyCreditCard.CCReference.Length - 4),
+						ExternalReference = personifyCreditCard.CustomerCreditCardProfileId.ToString(),
+						CardType = personifyCreditCard.ReceiptTypeCodeString,
+				    };
+					//convert credit card type
+				    var creditCardType = ASICreditCardType.Union(ASIShowCreditCardType).Union(ASICanadaCreditCardType).FirstOrDefault(c => c.Value == card.CardType);
+				    if (creditCardType.Key != null) card.CardType = creditCardType.Key;
+					//make sure we do not add a duplicate card reference
+					if (!creditCards.Any(cc => cc.CardNumber == card.CardNumber && cc.CardType == card.CardType))
+						creditCards.Add(card);
+			    }
+		    }
+			return creditCards;
+	    }
 
         public static bool ValidateCreditCard(CreditCard info)
         {
-            //when validating the credit card we can use ASI for the company
-            string creditCardType = CreditCardType["ASI"][info.Type.ToUpper()];
+			//when validating the credit card we can use ASI for the company
+	        string creditCardType = CreditCardType["ASI"][info.Type.ToUpper()];
             var asiValidateCreditCardInput = new ASIValidateCreditCardInput()
             {
                 ReceiptType = creditCardType,
@@ -2417,8 +2388,8 @@ namespace asi.asicentral.services.PersonifyProxy
 
         public static string SaveCreditCard(string asiCompany, string masterCustomerId, int subCustomerId, CreditCard creditCard)
         {
-            if (string.IsNullOrEmpty(asiCompany)) asiCompany = "ASI";
-            string creditCardType = CreditCardType[asiCompany][creditCard.Type.ToUpper()];
+	        if (string.IsNullOrEmpty(asiCompany)) asiCompany = "ASI";
+	        string creditCardType = CreditCardType[asiCompany][creditCard.Type.ToUpper()];
             var customerCreditCardInput = new CustomerCreditCardInput()
             {
                 MasterCustomerId = masterCustomerId,
@@ -2434,11 +2405,11 @@ namespace asi.asicentral.services.PersonifyProxy
                 BillingAddressPostalCode = creditCard.PostalCode,
                 BillingAddressCountryCode = creditCard.CountryCode,
                 DefaultFlag = true,
-                CompanyNumber = CompanyNumber[asiCompany],
+				CompanyNumber = CompanyNumber[asiCompany],
                 AddedOrModifiedBy = ADDED_OR_MODIFIED_BY
             };
             var resp = SvcClient.Post<CustomerCreditCardOutput>("AddCustomerCreditCard", customerCreditCardInput);
-            if (!(resp.Success ?? false))
+            if (!(resp.Success?? false))
             {
                 var m = string.Format("Error in saving credit {0} to Personify", GetCreditCardReference(creditCard.Number));
                 if (resp.AddCustomerCreditCardVI.Any())
@@ -2452,7 +2423,7 @@ namespace asi.asicentral.services.PersonifyProxy
 
         public static ASICustomerCreditCard GetCreditCardByProfileId(string masterCustomerId, int subCustomerId, string profileId)
         {
-            if (string.IsNullOrEmpty(masterCustomerId) || string.IsNullOrWhiteSpace(profileId))
+            if( string.IsNullOrEmpty(masterCustomerId) || string.IsNullOrWhiteSpace(profileId))
             {
                 throw new Exception("Company information and profile id are required.");
             }
@@ -2520,13 +2491,13 @@ namespace asi.asicentral.services.PersonifyProxy
             return resp;
         }
 
-        public static string GetOrderLinesByOrderId(string orderId, ref decimal amount, List<PersonifyMapping> requestedProducts = null)
+        public static string GetOrderLinesByOrderId(string orderId, ref decimal amount, List<PersonifyMapping> requestedProducts = null )
         {
             var orderLines = SvcClient.Ctxt.OrderDetailInfos.Where(c => c.OrderNumber == orderId).ToList();
 
             if (requestedProducts != null && requestedProducts.Any())
             {
-                orderLines = orderLines.FindAll(o => requestedProducts.Find(p => p.PersonifyProduct.HasValue && p.PersonifyProduct == o.ProductId
+                orderLines = orderLines.FindAll(o => requestedProducts.Find(p => p.PersonifyProduct.HasValue && p.PersonifyProduct == o.ProductId 
                                                                                    && o.ActualTotalAmount.HasValue && o.ActualTotalAmount.Value > 0) != null);
             }
 
