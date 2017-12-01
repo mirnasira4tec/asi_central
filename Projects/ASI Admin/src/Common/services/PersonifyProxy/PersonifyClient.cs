@@ -1821,7 +1821,14 @@ namespace asi.asicentral.services.PersonifyProxy
                         SPParameterList = ipSPParameterList
                     };
 
-                    response = SvcClient.Post<StoredProcedureOutput>("GetStoredProcedureDataXML", spRequest);
+                    try
+                    {
+                        response = SvcClient.Post<StoredProcedureOutput>("GetStoredProcedureDataXML", spRequest);
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.Error(string.Format("ExecutePersonifySP Error - message: {0}, stack track: {1}", ex.Message, ex.StackTrace) );
+                    }
                 }
             }
 
