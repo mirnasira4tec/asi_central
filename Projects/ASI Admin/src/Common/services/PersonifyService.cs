@@ -856,7 +856,7 @@ namespace asi.asicentral.services
 		    }
 	    }
 
-        public ASICompData GetAsiCompData(string masterCustomerId)
+        public List<XElement> GetAsiCompData(string masterCustomerId)
         {
             return PersonifyClient.GetASICOMPData(masterCustomerId);
         }
