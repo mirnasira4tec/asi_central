@@ -11,6 +11,7 @@ namespace asi.asicentral.web.Models
         public string Message { get; set; }
         public CompanyStatusCode Status { get; set; }
         public StoreCompany StoreCompany;
+        public string AccountId { get; set; }
     }
     public enum CompanyStatusCode
     {
