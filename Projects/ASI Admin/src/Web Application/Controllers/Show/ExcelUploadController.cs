@@ -549,7 +549,7 @@ namespace asi.asicentral.web.Controllers.Show
                 {
                     if (company.Status == CompanyStatusCode.Created || company.Status == CompanyStatusCode.Exists)
                     {
-                        DataRow[] filterUsers = userDt.Select("asi=" + company.CompanyInfo.ASINumber + " and Active='yes'");
+                        DataRow[] filterUsers = userDt.Select("asi=" + company.AccountId + " and Active='yes'");
                         foreach (var userInfo in filterUsers)
                         {
                             UserInfoModel user = CreateUser(company, userInfo);
@@ -650,7 +650,7 @@ namespace asi.asicentral.web.Controllers.Show
         private CompanyInfoModel CreateCompany(DataRow companyInforow)
         {
             var asiNo = Convert.ToString(companyInforow["ACCOUNT"]);
-            CompanyInfoModel companyModel = new CompanyInfoModel();
+            CompanyInfoModel companyModel = new CompanyInfoModel() { AccountId = asiNo };
 
             var phone = Convert.ToString(companyInforow["PHONE"]) != string.Empty ? Convert.ToString(companyInforow["PHONE"]) : string.Empty;
             var phoneNo = string.Empty;
@@ -678,9 +678,9 @@ namespace asi.asicentral.web.Controllers.Show
                          Zip = Convert.ToString(companyInforow["ZIP"]),
                          State = Convert.ToString(companyInforow["STATE"]),
                          Country = "USA",
-                         MemberType = "UNKNOWN",
+                         MemberType = "DISTRIBUTOR",
                          MemberTypeNumber = 0,
-                         CustomerClassCode = "UNKNOWN",
+                         CustomerClassCode = "DISTRIBUTOR",
                          ASINumber = asiNo
                      };
 
@@ -810,6 +810,37 @@ namespace asi.asicentral.web.Controllers.Show
                     userModel.user.Zip = Convert.ToString(UserInfo["zip"]);
                     userModel.user.Password = Convert.ToString(UserInfo["Password"]);
 
+                    #region  create individual record in Personify, add relationship to company
+                    comInfoModel.StoreCompany.Individuals.Add(
+                        new StoreIndividual()
+                        {
+                            FirstName = userModel.user.FirstName,
+                            LastName = userModel.user.LastName,
+                            Email = userModel.user.Email,
+                            Phone = comInfoModel.StoreCompany.Phone,
+                            Company = comInfoModel.StoreCompany,
+                            Address = comInfoModel.StoreCompany.GetCompanyAddress()
+                        });                    var personifyUser = PersonifyClient.GetIndividualInfoByEmail(userModel.user.Email);
+                    var indivInfo = PersonifyClient.AddIndividualInfos(comInfoModel.StoreCompany, null, companyInfo.MasterCustomerId, 0);
+                    if ( indivInfo != null && indivInfo.Count() > 0)
+                    {
+                        personifyUser = indivInfo.ElementAt(0);
+                        PersonifyClient.AddCustomerAddresses(comInfoModel.StoreCompany, personifyUser.MasterCustomerId, 0, null);
+                    }
+
+                    // update ASICOMP data for this user
+                    if (personifyUser != null)
+                    {
+                        var masterCustomerId = personifyUser.MasterCustomerId;
+                        PersonifyClient.AddCustomerAddresses(comInfoModel.StoreCompany, masterCustomerId, 0, null);
+
+                        if (Convert.ToString(UserInfo["news"]) == "yes")
+                        {
+                            PersonifyClient.UpdateASICompData(new List<string>() { "", masterCustomerId, "0", "", "", "", "", "", "Yes", "WEB_ADMIN" });
+                        }
+                    }
+                    #endregion
+                    #region create user in mms2
                     var user = ASIOAuthClient.GetUserByEmail(userModel.user.Email);
                     if (user == null)
                     {
@@ -843,40 +874,7 @@ namespace asi.asicentral.web.Controllers.Show
                         userModel.status = CompanyStatusCode.Exists;
                         userModel.message = "User already exists.";
                     }
-
-                    var personifyUser = PersonifyClient.GetIndividualInfoByEmail(user.Email);
-                    if (personifyUser == null)
-                    {
-                        // create individual record in Personify
-                        comInfoModel.StoreCompany.Individuals.Add(
-                            new StoreIndividual()
-                            {
-                                FirstName = userModel.user.FirstName,
-                                LastName = userModel.user.LastName,
-                                Email = userModel.user.Email,
-                                Phone = comInfoModel.StoreCompany.Phone,
-                                Company = comInfoModel.StoreCompany,
-                                Address = comInfoModel.StoreCompany.GetCompanyAddress()
-                            });
-
-                        var indivInfo = PersonifyClient.AddIndividualInfos(comInfoModel.StoreCompany, null, companyInfo.MasterCustomerId, 0);
-                        if (indivInfo != null && indivInfo.Count() > 0)
-                        {
-                            personifyUser = indivInfo.ElementAt(0);
-                            PersonifyClient.AddCustomerAddresses(comInfoModel.StoreCompany, personifyUser.MasterCustomerId, 0, null);
-                        }
-                    }
-                     // update ASICOMP data for this user
-                    if(personifyUser != null)
-                    {
-                        var masterCustomerId = personifyUser.MasterCustomerId;
-                        PersonifyClient.AddCustomerAddresses(comInfoModel.StoreCompany, masterCustomerId, 0, null);
-                            
-                        if( Convert.ToString(UserInfo["news"]) == "yes")
-                        {
-                            PersonifyClient.UpdateASICompData(new List<string>() { "", masterCustomerId, "0", "", "", "", "", "", "Yes", "WEB_ADMIN" });
-                        }
-                    }
+                    #endregion create user in mms2
                 }
             }
             catch (Exception ex)
@@ -884,7 +882,7 @@ namespace asi.asicentral.web.Controllers.Show
                 LogService log = LogService.GetLog(typeof(ASIOAuthClient));
                 log.Error(ex.Message);
                 userModel.status = CompanyStatusCode.Fail;
-                userModel.message = ex.Message;
+                userModel.message += "" + ex.Message;
             }
             return userModel;
         }        
