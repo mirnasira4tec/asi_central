@@ -11,6 +11,8 @@ using Umbraco.Core.Models;
 using Umbraco.Core;
 using asi.asicentral.interfaces;
 using asi.asicentral.services;
+using System.Configuration;
+using System.Web.Configuration;
 
 namespace asi.asicentral.oauth
 {
@@ -18,9 +20,21 @@ namespace asi.asicentral.oauth
     {
         public const string COOKIES_CMPSSO = "CMPSSO";
         public const string COOKIES_USERNAME = "Name";
-        public const string COOKIES_DOMAIN = ".asicentral.com";
         public const string COOKIES_MEMBERTYPE_CODE = "MemberType";
         public const string COOKIES_ASP_NET_SESSION_ID = "ASP.NET_SessionId";
+        private static string _cookieDomain = string.Empty;
+
+        public static string COOKIES_DOMAIN
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_cookieDomain))
+                {
+                    _cookieDomain = FormsAuthentication.CookieDomain;
+                }
+                return _cookieDomain;
+            }
+        }
 
         #region package cookie values
         public const string SmartsBooksPackage = "SMARTSBOOKS";
@@ -129,7 +143,7 @@ namespace asi.asicentral.oauth
                 {
                     log.Error(string.Format("GetRoleName - exception: {0}", ex.Message));
                 }
-                if (ASIOAuthClient.IsActiveUser(memberStatus)) 
+                if (ASIOAuthClient.IsActiveUser(memberStatus))
                 {
                     switch (code)
                     {
@@ -358,7 +372,7 @@ namespace asi.asicentral.oauth
             return new HttpResponseWrapper(response);
         }
 
-        public static void ProcessUserInfo(asi.asicentral.model.User user, HttpRequestBase request, HttpResponseBase response, string domain, bool isAddRoles = false)
+        public static void ProcessUserInfo(model.User user, HttpRequestBase request, HttpResponseBase response, string domain, bool isAddRoles = false, int years = 1, int days = 0, int hours = 0)
         {
             if (user != null)
             {
@@ -379,10 +393,10 @@ namespace asi.asicentral.oauth
                 ClearUserCookies(request, response, domain);
                 string domainName = null;
                 if (!request.Url.Authority.Contains("localhost")) domainName = domain;
-                if (!String.IsNullOrEmpty(username)) CookiesHelper.SetCookieValue(request, response, COOKIES_USERNAME, username, true, domainName);
-                if (!String.IsNullOrEmpty(membertypeCode)) CookiesHelper.SetCookieValue(request, response, COOKIES_MEMBERTYPE_CODE, membertypeCode, true, domainName);
+                if (!String.IsNullOrEmpty(username)) CookiesHelper.SetCookieValue(request, response, COOKIES_USERNAME, username, true, domainName, true, years, days, hours);
+                if (!String.IsNullOrEmpty(membertypeCode)) CookiesHelper.SetCookieValue(request, response, COOKIES_MEMBERTYPE_CODE, membertypeCode, true, domainName, true, years, days, hours);
                 CookiesHelper.SetFormsAuthenticationCookie(request, response, user, true, domainName: domainName);
-                CookiesHelper.SetCookieValue(request, response, COOKIES_CMPSSO, companyId + "-" + sso, true, domainName);
+                CookiesHelper.SetCookieValue(request, response, COOKIES_CMPSSO, companyId + "-" + sso, true, domainName, true, years, days, hours);
 
                 //Code to add userrole
                 if (isAddRoles) AddOrRemoveUserFromRole(username, user.Email, user.MemberType_CD, user.MemberStatus_CD, true);

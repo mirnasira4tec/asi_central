@@ -37,7 +37,8 @@ namespace asi.asicentral.oauth
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public static void SetCookieValue(HttpRequestBase request, HttpResponseBase response, string key, string value, bool addCookie = false, string domainName = null, bool persist = true, int year = 1)
+        public static void SetCookieValue(HttpRequestBase request, HttpResponseBase response, string key, string value, bool addCookie = false, 
+                                          string domainName = null, bool persist = true, int year = 1, int days = 0, int hours = 0)
         {
             HttpCookie cookie = request.Cookies.Get(key);
             if (request.Url.Authority.Contains("localhost")) domainName = null;
@@ -45,16 +46,32 @@ namespace asi.asicentral.oauth
             {
                 if (!string.IsNullOrEmpty(domainName)) cookie.Domain = domainName;
                 cookie.Value = value;
-                if (persist) cookie.Expires = DateTime.Now.AddYears(year);
-                response.Cookies.Set(cookie);
             }
             else if (addCookie && response != null)
             {
                 cookie = !string.IsNullOrEmpty(domainName)
                     ? new HttpCookie(key, value) { Domain = domainName }
                     : new HttpCookie(key, value);
-                if (persist) cookie.Expires = DateTime.Now.AddYears(year);
-                response.Cookies.Add(cookie);
+            }
+
+            if(cookie != null && response != null)
+            {
+                if (persist)
+                {
+                    if( year > 0)
+                    {
+                        cookie.Expires = DateTime.Now.AddYears(year);
+                    }
+                    if (days > 0)
+                    {
+                        cookie.Expires = DateTime.Now.AddDays(days);
+                    }
+                    if (hours > 0)
+                    {
+                        cookie.Expires = DateTime.Now.AddHours(hours);
+                    }
+                }
+                response.Cookies.Set(cookie);
             }
         }
 

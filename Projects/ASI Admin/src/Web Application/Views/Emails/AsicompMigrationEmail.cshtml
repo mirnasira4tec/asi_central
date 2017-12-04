@@ -40,6 +40,7 @@
     <table class="table">
         <thead>
             <tr>
+                <td>AccountID</td>
                 <td>Asi No.</td>
                 <td>Name</td>
                 <td>Phone</td>
@@ -54,6 +55,7 @@
             @foreach (var company in createdCompaniesList)
             {
                 <tr>
+                    <td>@company.AccountId</td>
                     <td>@company.CompanyInfo.ASINumber</td>
                     <td>@company.CompanyInfo.Name</td>
                     <td>@company.CompanyInfo.Phone</td>
@@ -70,6 +72,7 @@
     <table class="table">
         <thead>
             <tr>
+                <td>AccountID</td>
                 <td>Asi No.</td>
                 <td>Name</td>
                 <td>Phone</td>
@@ -84,6 +87,7 @@
             @foreach (var company in existsCompaniesList)
             {
                 <tr>
+                    <td>@company.AccountId</td>
                     <td>@company.CompanyInfo.ASINumber</td>
                     <td>@company.CompanyInfo.Name</td>
                     <td>@company.CompanyInfo.Phone</td>
@@ -100,6 +104,7 @@
     <table class="table">
         <thead>
             <tr>
+                <td>AccountId</td>
                 <td>Asi No.</td>
                 <td>Name</td>
                 <td>Phone</td>
@@ -114,6 +119,7 @@
             @foreach (var company in failedComapniesList)
             {
                 <tr>
+                    <td>@company.AccountId</td>
                     <td>@company.CompanyInfo.ASINumber</td>
                     <td>@company.CompanyInfo.Name</td>
                     <td>@company.CompanyInfo.Phone</td>
