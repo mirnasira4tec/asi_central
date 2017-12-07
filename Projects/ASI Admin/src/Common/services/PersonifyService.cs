@@ -855,6 +855,11 @@ namespace asi.asicentral.services
 		    }
 	    }
 
+        public List<XElement> GetAsiCompData(string masterCustomerId)
+        {
+            return PersonifyClient.GetASICOMPData(masterCustomerId);
+        }
+
         public void Dispose()
         {
             Dispose(true);

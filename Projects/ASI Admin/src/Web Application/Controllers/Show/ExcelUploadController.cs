@@ -649,6 +649,8 @@ namespace asi.asicentral.web.Controllers.Show
         //creates company in personify
         private CompanyInfoModel CreateCompany(DataRow companyInforow)
         {
+            ILogService log = LogService.GetLog(this.GetType());
+            var startTime = DateTime.Now;
             var asiNo = Convert.ToString(companyInforow["ACCOUNT"]);
             CompanyInfoModel companyModel = new CompanyInfoModel() { AccountId = asiNo };
 
@@ -677,7 +679,9 @@ namespace asi.asicentral.web.Controllers.Show
                          City = Convert.ToString(companyInforow["CITY"]),
                          Zip = Convert.ToString(companyInforow["ZIP"]),
                          State = Convert.ToString(companyInforow["STATE"]),
-                         Country = "USA",
+                         Country = (companyInforow["COUNTRY"] != DBNull.Value &&
+                                   Convert.ToString(companyInforow["COUNTRY"]) != string.Empty) ?
+                                   Convert.ToString(companyInforow["COUNTRY"]) : "USA",
                          MemberType = "DISTRIBUTOR",
                          MemberTypeNumber = 0,
                          CustomerClassCode = "DISTRIBUTOR",
@@ -725,8 +729,8 @@ namespace asi.asicentral.web.Controllers.Show
                     {
                         company.ExternalReference = companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId;
                         companyInfo.Phone = companyInformation.Phone;
-                        string countryCode = "USA";
-                        PersonifyClient.AddPhoneNumber(company.Phone, countryCode, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+                        string countryCode = companyInformation.Country;
+                        PersonifyClient.AddPhoneNumber(company.Phone, companyInformation.Country, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
                         PersonifyClient.AddCompanyEmail(company, companyInfo);
                         PersonifyClient.AddCustomerAddresses(company, companyInfo.MasterCustomerId, companyInformation.SubCustomerId, null);
                         companyModel.Status = CompanyStatusCode.Exists;
@@ -734,7 +738,7 @@ namespace asi.asicentral.web.Controllers.Show
                     }
                 }
                 // add ASICOMP DATA in Personify
-                if(companyInfo != null && !string.IsNullOrEmpty(companyInfo.MasterCustomerId))
+                if (companyInfo != null && !string.IsNullOrEmpty(companyInfo.MasterCustomerId))
                 {
                     var package = Convert.ToString(companyInforow["PACKAGE"]);
                     var contract = Convert.ToString(companyInforow["CONTRACT"]);
@@ -747,19 +751,20 @@ namespace asi.asicentral.web.Controllers.Show
             }
             catch (Exception ex)
             {
-                LogService log = LogService.GetLog(typeof(ASIOAuthClient));
                 log.Error(ex.Message);
                 companyModel.Status = CompanyStatusCode.Fail;
                 companyModel.Message = ex.Message;
             }
             companyModel.CompanyInfo = companyInfo;
+            log.Debug(string.Format("Company creation time: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
             return companyModel;
         }
 
         //creates user
         private UserInfoModel CreateUser(CompanyInfoModel comInfoModel, DataRow UserInfo)
         {
-            LogService _log = LogService.GetLog(this.GetType());
+            ILogService log = LogService.GetLog(this.GetType());
+            var startTime = DateTime.Now;
             var companyInfo = comInfoModel.CompanyInfo;
             UserInfoModel userModel = new UserInfoModel();
             userModel.user = new asi.asicentral.model.User();
@@ -804,8 +809,11 @@ namespace asi.asicentral.web.Controllers.Show
                     userModel.user.Street1 = Convert.ToString(UserInfo["address"]);
                     userModel.user.Street2 = "";
                     userModel.user.City = Convert.ToString(UserInfo["city"]);
-                    userModel.user.CountryCode = "USA";
-                    userModel.user.Country = "USA";
+                    var country = (UserInfo["country"] != DBNull.Value &&
+                                   Convert.ToString(UserInfo["country"]) != string.Empty) ?
+                                   Convert.ToString(UserInfo["country"]) : "USA";
+                    userModel.user.CountryCode = country;
+                    userModel.user.Country = country;
                     userModel.user.State = Convert.ToString(UserInfo["state"]);
                     userModel.user.Zip = Convert.ToString(UserInfo["zip"]);
                     userModel.user.Password = Convert.ToString(UserInfo["Password"]);
@@ -820,9 +828,9 @@ namespace asi.asicentral.web.Controllers.Show
                             Phone = comInfoModel.StoreCompany.Phone,
                             Company = comInfoModel.StoreCompany,
                             Address = comInfoModel.StoreCompany.GetCompanyAddress()
-                        });                    var personifyUser = PersonifyClient.GetIndividualInfoByEmail(userModel.user.Email);
+                        }); var personifyUser = PersonifyClient.GetIndividualInfoByEmail(userModel.user.Email);
                     var indivInfo = PersonifyClient.AddIndividualInfos(comInfoModel.StoreCompany, null, companyInfo.MasterCustomerId, 0);
-                    if ( indivInfo != null && indivInfo.Count() > 0)
+                    if (indivInfo != null && indivInfo.Count() > 0)
                     {
                         personifyUser = indivInfo.ElementAt(0);
                         PersonifyClient.AddCustomerAddresses(comInfoModel.StoreCompany, personifyUser.MasterCustomerId, 0, null);
@@ -879,13 +887,13 @@ namespace asi.asicentral.web.Controllers.Show
             }
             catch (Exception ex)
             {
-                LogService log = LogService.GetLog(typeof(ASIOAuthClient));
                 log.Error(ex.Message);
                 userModel.status = CompanyStatusCode.Fail;
                 userModel.message += "" + ex.Message;
             }
+            log.Debug(string.Format("User Creation time: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
             return userModel;
-        }        
+        }
 
         private List<string> SeprateAreaCodeFromPhonNo(string phoneNo)
         {
