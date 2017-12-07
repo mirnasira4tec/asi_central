@@ -3454,6 +3454,15 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Minority Groups.
+        /// </summary>
+        public static string MinorityGroups {
+            get {
+                return ResourceManager.GetString("MinorityGroups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Line Minority Owned.
         /// </summary>
         public static string MinorityOwned {

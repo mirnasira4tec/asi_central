@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace asi.asicentral.services
 {
@@ -766,6 +767,16 @@ namespace asi.asicentral.services
             storeService.SaveChanges();
 
             return storeDetailApp;
+        }
+
+        public virtual List<XElement> GetASICOMPData(string masterId)
+        {
+            return PersonifyClient.GetASICOMPData(masterId);
+        }
+
+        public virtual void UpdateASICompData(List<string> parameters)
+        {
+            PersonifyClient.UpdateASICompData(parameters);
         }
 
         private static string GetCountryCode(string country)
