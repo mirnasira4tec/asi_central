@@ -46,6 +46,25 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        public void GetASICompData()
+        {
+            var acctid = "000006880201";
+            PersonifyClient.GetASICOMPData(acctid);
+
+            acctid = "000010610433";
+            PersonifyClient.GetASICOMPData(acctid);
+
+        }
+
+        [Test]
+        public void UpdateASICompData()
+        {
+            var param = new List<string>() { "123456", "000010610432", "0", "PROFITMAKER", "FULL ACCESS", "CURRENT", "Yes", "Yes", "No", "WEB_USER" };
+            param = new List<string>() { "", "000010615052", "0", "", "", "", "", "", "Yes", "WEB_ADMIN" };
+            PersonifyClient.UpdateASICompData(param);
+        }
+
+        [Test]
         public void AddEEXSubscription()
         {
             var tag = DateTime.Now.Ticks.ToString();
@@ -101,6 +120,11 @@ namespace asi.asicentral.Tests
             Assert.IsNotNull(companyInfo);
         }
 
+        public void AsicompPackage()
+        {
+
+        }
+
         [Test]
         [Ignore("EmailOptOut")]
         public void EmailOptOut()
@@ -113,8 +137,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
-        public void PackageOrderTest()
-        {
+        public void PackageOrderTest()        {
             IStoreService storeService = MockupStoreService();
             var distributor = storeService.GetAll<ContextProduct>(true).FirstOrDefault(p => p.Id == 7);
             var order = CreateStoreOrder("12345", new ContextProduct[] { distributor }, "PlaceBundleOrderTest");
@@ -826,7 +849,7 @@ namespace asi.asicentral.Tests
         private CompanyInformation CreatePersonifyOrder(StoreOrder order, IStoreService storeService, IBackendService personify)
         {
             //simulate the store process by first processing the credit card
-            ICreditCardService cardService = new CreditCardService(new PersonifyService(storeService));
+            var personifyService = new PersonifyService(storeService);
             var cc = new CreditCard
             {
                 Address = "",
@@ -835,8 +858,7 @@ namespace asi.asicentral.Tests
                 Number = order.CreditCard.CardNumber,
                 ExpirationDate = new DateTime(int.Parse(order.CreditCard.ExpYear), int.Parse(order.CreditCard.ExpMonth), 1),
             };
-            Assert.IsTrue(cardService.Validate(cc));
-            var profileIdentifier = cardService.Store(order, cc, true);
+            var profileIdentifier = personifyService.SaveCreditCard(order, cc);
             Assert.IsNotNull(profileIdentifier);
             Assert.IsNotNull(order.Company.ExternalReference);
             order.CreditCard.ExternalReference = profileIdentifier;

@@ -363,7 +363,7 @@ namespace asi.asicentral.oauth
             return new HttpResponseWrapper(response);
         }
 
-        public static void ProcessUserInfo(asi.asicentral.model.User user, HttpRequestBase request, HttpResponseBase response, string domain, bool isAddRoles = false)
+        public static void ProcessUserInfo(model.User user, HttpRequestBase request, HttpResponseBase response, string domain, bool isAddRoles = false, int years = 1, int days = 0, int hours = 0)
         {
             if (user != null)
             {
@@ -384,10 +384,10 @@ namespace asi.asicentral.oauth
                 ClearUserCookies(request, response, domain);
                 string domainName = null;
                 if (!request.Url.Authority.Contains("localhost")) domainName = domain;
-                if (!String.IsNullOrEmpty(username)) CookiesHelper.SetCookieValue(request, response, COOKIES_USERNAME, username, true, domainName);
-                if (!String.IsNullOrEmpty(membertypeCode)) CookiesHelper.SetCookieValue(request, response, COOKIES_MEMBERTYPE_CODE, membertypeCode, true, domainName);
+                if (!String.IsNullOrEmpty(username)) CookiesHelper.SetCookieValue(request, response, COOKIES_USERNAME, username, true, domainName, true, years, days, hours);
+                if (!String.IsNullOrEmpty(membertypeCode)) CookiesHelper.SetCookieValue(request, response, COOKIES_MEMBERTYPE_CODE, membertypeCode, true, domainName, true, years, days, hours);
                 CookiesHelper.SetFormsAuthenticationCookie(request, response, user, true, domainName: domainName);
-                CookiesHelper.SetCookieValue(request, response, COOKIES_CMPSSO, companyId + "-" + sso, true, domainName);
+                CookiesHelper.SetCookieValue(request, response, COOKIES_CMPSSO, companyId + "-" + sso, true, domainName, true, years, days, hours);
 
                 //Code to add userrole
                 if (isAddRoles) AddOrRemoveUserFromRole(username, user.Email, user.MemberType_CD, user.MemberStatus_CD, true);

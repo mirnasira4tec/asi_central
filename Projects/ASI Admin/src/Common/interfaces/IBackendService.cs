@@ -3,6 +3,7 @@ using asi.asicentral.model.personify;
 using asi.asicentral.model.store;
 using asi.asicentral.PersonifyDataASI;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace asi.asicentral.interfaces
 {
@@ -57,5 +58,8 @@ namespace asi.asicentral.interfaces
         PersonifyStatus OptOutEmailSubscription(string email, List<string> usageCodes);
 
         StoreDetailApplication GetDemographicData(StoreOrderDetail orderDetail);
+
+        List<XElement> GetASICOMPData(string masterId);
+        void UpdateASICompData(List<string> parameters);
     }
 }
