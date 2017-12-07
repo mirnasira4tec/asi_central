@@ -30,6 +30,9 @@ namespace asi.asicentral.model.store
         [Display(ResourceType = typeof(Resource), Name = "MinorityOwned")]
         public Nullable<bool> IsMinorityOwned { get; set; }
 
+        [Display(ResourceType = typeof(Resource), Name = "MinorityGroups")]
+        public string MinorityGroups { get; set; }
+
         [Display(ResourceType = typeof(Resource), Name = "SalesVolume")]
         public string SalesVolume { get; set; }
 
@@ -186,6 +189,7 @@ namespace asi.asicentral.model.store
             supplier.IsImprinterVsDecorator = IsImprinterVsDecorator;
             supplier.IsManufacturer = IsManufacturer;
             supplier.IsMinorityOwned = IsMinorityOwned;
+            supplier.MinorityGroups = MinorityGroups;
             supplier.IsRetailer = IsRetailer;
             supplier.IsRushServiceAvailable = IsRushServiceAvailable;
             supplier.IsUnionMade = IsUnionMade;

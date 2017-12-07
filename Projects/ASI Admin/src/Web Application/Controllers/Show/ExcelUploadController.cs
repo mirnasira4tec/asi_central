@@ -1,8 +1,11 @@
 using asi.asicentral.interfaces;
 using asi.asicentral.model.show;
+using asi.asicentral.oauth;
 using asi.asicentral.services;
+using asi.asicentral.services.PersonifyProxy;
 using asi.asicentral.util.show;
 using asi.asicentral.web.models.show;
+using asi.asicentral.web.Models;
 using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
@@ -11,16 +14,23 @@ using System.Data;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
+using asi.asicentral.model.store;
 
 namespace asi.asicentral.web.Controllers.Show
 {
     public class ExcelUploadController : Controller
     {
         public IObjectService ObjectService { get; set; }
+        PersonifyService personifyService = new PersonifyService();
+        public IEmailService EmailService { get; set; }
+        public ITemplateService TemplateService { get; set; }
 
         public ActionResult Index()
         {
@@ -36,14 +46,14 @@ namespace asi.asicentral.web.Controllers.Show
             string secondaryASINo = string.Empty;
             if (ds.Columns.Contains("Secondary ASINO"))
             {
-                 secondaryASINo = ds.Rows[rowId]["Secondary ASINO"].ToString().Trim();
+                secondaryASINo = ds.Rows[rowId]["Secondary ASINO"].ToString().Trim();
             }
             if (fasiliateFlag == true)
             {
                 var companies = ObjectService.GetAll<ShowCompany>().Where(item => (item.ASINumber == asinumber)).ToList();
                 var specialCharsPattern = @"[\s,\./\\&\?;=]";
                 var compName = Regex.Replace(name, specialCharsPattern, "");
-                company = companies.FirstOrDefault(item => Regex.Replace(item.Name, specialCharsPattern, "").Equals(compName, StringComparison.CurrentCultureIgnoreCase) && 
+                company = companies.FirstOrDefault(item => Regex.Replace(item.Name, specialCharsPattern, "").Equals(compName, StringComparison.CurrentCultureIgnoreCase) &&
                                                            item.MemberType.Equals(memberType, StringComparison.CurrentCultureIgnoreCase));
             }
             else
@@ -163,14 +173,14 @@ namespace asi.asicentral.web.Controllers.Show
                 {
                     loginEmail = ds.Rows[rowId]["Login Email"].ToString().Trim();
                 }
-                if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName) )
+                if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName))
                 {
                     ShowEmployee employee = null;
                     if (!string.IsNullOrEmpty(email))
                     {
-                        employee = company.Employees.FirstOrDefault(item => !string.IsNullOrEmpty(item.Email) && item.Email.Trim().Equals(email, StringComparison.CurrentCultureIgnoreCase) );
+                        employee = company.Employees.FirstOrDefault(item => !string.IsNullOrEmpty(item.Email) && item.Email.Trim().Equals(email, StringComparison.CurrentCultureIgnoreCase));
                     }
-                    if( employee == null)
+                    if (employee == null)
                     {
                         employee = company.Employees.FirstOrDefault(item => (item.FirstName.Trim().Equals(firstName, StringComparison.CurrentCultureIgnoreCase) &&
                                                                              item.LastName.Trim().Equals(lastName, StringComparison.CurrentCultureIgnoreCase)));
@@ -238,7 +248,7 @@ namespace asi.asicentral.web.Controllers.Show
                     {
                         employeeAttendee.HasTravelForm = Convert.ToBoolean(ds.Rows[rowId]["HasTravelForm"].ToString() == "Yes") ? true : false;
                     }
-                    if( employeeAttendees != null )
+                    if (employeeAttendees != null)
                         employeeAttendees.Add(employeeAttendee);
                 }
             }
@@ -258,7 +268,6 @@ namespace asi.asicentral.web.Controllers.Show
             );
 
             list.ForEach(r => result.Rows.Add(r.Select(c => c.Value).Cast<object>().ToArray()));
-
             return result;
         }
 
@@ -320,7 +329,7 @@ namespace asi.asicentral.web.Controllers.Show
                                                                                .OrderByDescending(s => s.StartDate).FirstOrDefault();
                                     if (objShow != null && (objShow.ShowTypeId == 1 || objShow.ShowTypeId == 2))
                                     {
-                                         columnNameList = new string[] { "ASINO", "Company", "Sponsor", "Presentation", "Roundtable", "ExhibitOnly", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
+                                        columnNameList = new string[] { "ASINO", "Company", "Sponsor", "Presentation", "Roundtable", "ExhibitOnly", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                                     }
                                     if (objShow != null && objShow.ShowTypeId == 4)
                                     {
@@ -353,7 +362,7 @@ namespace asi.asicentral.web.Controllers.Show
                                         var problematicCols = columnNameList.Where(x => keyValues.Values.FirstOrDefault(d => d.ToLower() == x.ToLower()) == null).ToList();
                                         if (problematicCols != null && problematicCols.Any())
                                         {
-                                            ModelState.AddModelError("CustomError", string.Format("Columns '{0}' doesn't exist in spreadsheet {1}.", string.Join(",", problematicCols), worksheet.Name ));
+                                            ModelState.AddModelError("CustomError", string.Format("Columns '{0}' doesn't exist in spreadsheet {1}.", string.Join(",", problematicCols), worksheet.Name));
                                         }
                                     }
                                 }
@@ -418,7 +427,7 @@ namespace asi.asicentral.web.Controllers.Show
                                     }
 
                                     UpdateShowCompanyData(excelDataTable, i, objShow.Id, fasiliateFlag, employeeAttendees);
-                                }                                
+                                }
 
                                 ObjectService.SaveChanges();
 
@@ -502,9 +511,406 @@ namespace asi.asicentral.web.Controllers.Show
                 }
                 return RedirectToAction("../Show/ShowList");
             }
-            
+
             return RedirectToAction("../Show/ShowList");
         }
+        [HttpGet]
+        public ActionResult MigrateCompanies()
+        {
+            return View("~/Views/Show/ExcelUpload/MigrateCompanies.cshtml");
+        }
+
+        [HttpPost]
+        public ActionResult MigrateCompanies(List<HttpPostedFileBase> files)
+        {
+            DataTable companiesDt = new DataTable();
+            DataTable userDt = new DataTable();
+            List<CompanyInfoModel> compnayInformationList = new List<CompanyInfoModel>();
+            List<UserInfoModel> userInformationList = new List<UserInfoModel>();
+            if (files.Count > 0 && files[0] != null && files[1] != null)
+            {
+                companiesDt = ExcelToDataTable(files[0]);
+                userDt = ExcelToDataTable(files[1]);
+            }
+            if (companiesDt.Rows.Count > 0)
+            {
+                foreach (DataRow crow in companiesDt.Rows)
+                {
+                    CompanyInfoModel companyModel = CreateCompany(crow);
+                    if (companyModel.CompanyInfo != null)
+                    {
+                        compnayInformationList.Add(companyModel);
+                    }
+                }
+            }
+            if (compnayInformationList.Count > 0)
+            {
+                foreach (var company in compnayInformationList)
+                {
+                    if (company.Status == CompanyStatusCode.Created || company.Status == CompanyStatusCode.Exists)
+                    {
+                        DataRow[] filterUsers = userDt.Select("asi=" + company.AccountId + " and Active='yes'");
+                        foreach (var userInfo in filterUsers)
+                        {
+                            UserInfoModel user = CreateUser(company, userInfo);
+                            userInformationList.Add(user);
+                        }
+                    }
+                }
+            }
+
+            CompanyUserCollection companyUserCollection = new CompanyUserCollection() { companyInfoList = compnayInformationList, userInfoList = userInformationList };
+            string emailBody = TemplateService.Render("asi.asicentral.web.Views.Emails.AsicompMigrationEmail.cshtml", companyUserCollection);
+
+            var mail = new MailMessage();
+            mail.Subject = "AsiComp account Mirgration report.";
+            mail.Body = emailBody;
+            mail.BodyEncoding = Encoding.UTF8;
+            mail.IsBodyHtml = true;
+            var emails = ConfigurationManager.AppSettings["AsiCompEmails"];
+            string[] emailList = emails.Split(';');
+            for (int i = 0; i < emailList.Length; i++)
+            {
+                mail.To.Add(emailList[i]);
+            }
+            EmailService.SendMail(mail);
+
+            return View("~/Views/Show/ExcelUpload/MigrateCompanies.cshtml", companyUserCollection);
+        }
+
+        //converts Excel sheet to datatable
+        public DataTable ExcelToDataTable(HttpPostedFileBase userFile)
+        {
+            DataTable dt = new DataTable();
+            LogService log = LogService.GetLog(this.GetType());
+            if (userFile != null)
+            {
+                try
+                {
+                    log.Debug("Index - start Process the file");
+                    var start = DateTime.Now;
+                    var objErrors = new ErrorModel();
+                    var fileName = Path.GetFileName(userFile.FileName);
+                    string tempPath = Path.GetTempPath();
+                    string currFilePath = tempPath + fileName;
+                    string fileExtension = Path.GetExtension(userFile.FileName);
+                    log.Debug("Index - end process the file - " + (DateTime.Now - start).TotalMilliseconds);
+
+                    if (fileExtension == ".xls" || fileExtension == ".xlsx")
+                    {
+                        if (System.IO.File.Exists(currFilePath))
+                        {
+                            log.Debug("Index - Delete file if exists");
+                            System.IO.File.Delete(currFilePath);
+                            log.Debug("Index - end Delete file if exists - " + (DateTime.Now - start));
+                        }
+                        userFile.SaveAs(currFilePath);
+                        FileInfo fi = new FileInfo(currFilePath);
+                        var workBook = new XLWorkbook(fi.FullName);
+                        IXLWorksheet workSheet = workBook.Worksheet(1);
+
+                        //Create a new DataTable.
+
+                        //Loop through the Worksheet rows.
+                        bool firstRow = true;
+                        foreach (IXLRow row in workSheet.Rows())
+                        {
+                            //Use the first row to add columns to DataTable.
+                            if (firstRow)
+                            {
+                                foreach (IXLCell cell in row.Cells())
+                                {
+                                    dt.Columns.Add(cell.Value.ToString());
+                                }
+                                firstRow = false;
+                            }
+                            else
+                            {
+                                //Add rows to DataTable.
+                                dt.Rows.Add();
+                                int i = 0;
+                                foreach (IXLCell cell in row.Cells(row.FirstCellUsed().Address.ColumnNumber, row.LastCellUsed().Address.ColumnNumber))
+                                {
+                                    dt.Rows[dt.Rows.Count - 1][i] = cell.Value.ToString();
+                                    i++;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    log.Debug("Exception while importing the file, exception message: " + ex.Message);
+                }
+            }
+            return dt;
+        }
+
+        //creates company in personify
+        private CompanyInfoModel CreateCompany(DataRow companyInforow)
+        {
+            var asiNo = Convert.ToString(companyInforow["ACCOUNT"]);
+            CompanyInfoModel companyModel = new CompanyInfoModel() { AccountId = asiNo };
+
+            var phone = Convert.ToString(companyInforow["PHONE"]) != string.Empty ? Convert.ToString(companyInforow["PHONE"]) : string.Empty;
+            var phoneNo = string.Empty;
+            var areaCode = string.Empty;
+            if (phone != string.Empty)
+            {
+                List<string> phoneNumber = SeprateAreaCodeFromPhonNo(phone);
+                if (phoneNumber.Count() > 0)
+                {
+                    phoneNo = phoneNumber[1];
+                    areaCode = phoneNumber[0];
+                }
+            }
+
+            asi.asicentral.model.CompanyInformation companyInfo = null;
+            try
+            {
+                var companyInformation = new asi.asicentral.model.CompanyInformation
+                     {
+                         Name = Convert.ToString(companyInforow["COMPANY"]),
+                         Phone = phoneNo + areaCode,
+                         Street1 = Convert.ToString(companyInforow["ADDRESS1"]),
+                         Street2 = Convert.ToString(companyInforow["ADDRESS2"]),
+                         City = Convert.ToString(companyInforow["CITY"]),
+                         Zip = Convert.ToString(companyInforow["ZIP"]),
+                         State = Convert.ToString(companyInforow["STATE"]),
+                         Country = "USA",
+                         MemberType = "DISTRIBUTOR",
+                         MemberTypeNumber = 0,
+                         CustomerClassCode = "DISTRIBUTOR",
+                         ASINumber = asiNo
+                     };
+
+                //create equivalent store objects
+                var company = new asi.asicentral.model.store.StoreCompany
+                  {
+                      Name = companyInformation.Name,
+                      Phone = companyInformation.Phone,
+                      ASINumber = asiNo,
+                  };
+                var address = new StoreAddress
+                   {
+                       Street1 = companyInformation.Street1,
+                       Street2 = companyInformation.Street2,
+                       City = companyInformation.City,
+                       State = companyInformation.State,
+                       Country = companyInformation.Country,
+                       Zip = companyInformation.Zip
+                   };
+                company.Addresses.Add(new StoreCompanyAddress
+                {
+                    Address = address,
+                    IsBilling = true,
+                    IsShipping = true,
+                });
+                company.MemberType = companyInformation.MemberType;
+                companyModel.StoreCompany = company;
+                companyInfo = personifyService.GetCompanyInfoByAsiNumber(asiNo);
+
+                if (!string.IsNullOrEmpty(asiNo))
+                {
+                    if (companyInfo == null)
+                    {
+                        companyInfo = PersonifyClient.CreateCompany(company, companyInformation.MemberType, null);
+                        companyInfo.Phone = companyInformation.Phone;
+                        PersonifyClient.AddCustomerAddresses(company, companyInfo.MasterCustomerId, companyInfo.SubCustomerId, null);
+                        PersonifyClient.AddPhoneNumber(companyInformation.Phone, companyInformation.Country, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+                        companyModel.Status = CompanyStatusCode.Created;
+                        companyModel.Message = "Company created successfully.";
+                    }
+                    else
+                    {
+                        company.ExternalReference = companyInfo.MasterCustomerId + ";" + companyInfo.SubCustomerId;
+                        companyInfo.Phone = companyInformation.Phone;
+                        string countryCode = "USA";
+                        PersonifyClient.AddPhoneNumber(company.Phone, countryCode, companyInfo.MasterCustomerId, companyInfo.SubCustomerId);
+                        PersonifyClient.AddCompanyEmail(company, companyInfo);
+                        PersonifyClient.AddCustomerAddresses(company, companyInfo.MasterCustomerId, companyInformation.SubCustomerId, null);
+                        companyModel.Status = CompanyStatusCode.Exists;
+                        companyModel.Message = "Company already exists.";
+                    }
+                }
+                // add ASICOMP DATA in Personify
+                if(companyInfo != null && !string.IsNullOrEmpty(companyInfo.MasterCustomerId))
+                {
+                    var package = Convert.ToString(companyInforow["PACKAGE"]);
+                    var contract = Convert.ToString(companyInforow["CONTRACT"]);
+                    var creditStatus = Convert.ToString(companyInforow["CREDIT STATUS"]);
+                    var eCommerce = Convert.ToString(companyInforow["ECOMMERCE"]);
+                    var smartBooksEval = Convert.ToString(companyInforow["ASI SMARTBOOKS EVAL"]);
+
+                    PersonifyClient.UpdateASICompData(new List<string>() { asiNo, companyInfo.MasterCustomerId, "0", package, contract, creditStatus, eCommerce, smartBooksEval, "", "WEB_ADMIN" });
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                log.Error(ex.Message);
+                companyModel.Status = CompanyStatusCode.Fail;
+                companyModel.Message = ex.Message;
+            }
+            companyModel.CompanyInfo = companyInfo;
+            return companyModel;
+        }
+
+        //creates user
+        private UserInfoModel CreateUser(CompanyInfoModel comInfoModel, DataRow UserInfo)
+        {
+            LogService _log = LogService.GetLog(this.GetType());
+            var companyInfo = comInfoModel.CompanyInfo;
+            UserInfoModel userModel = new UserInfoModel();
+            userModel.user = new asi.asicentral.model.User();
+            string ssoId = string.Empty;
+            try
+            {
+                if (Convert.ToString(UserInfo["Active"]).ToLower() == "yes")
+                {
+                    userModel.user.Email = string.Format(Convert.ToString(UserInfo["Email"]));
+                    var name = Convert.ToString(UserInfo["Name"]).Split(new[] { ' ' }, 2);
+                    if (name.Length > 1)
+                    {
+                        userModel.user.FirstName = name[0];
+                        userModel.user.LastName = name[1];
+                    }
+                    else
+                    {
+                        userModel.user.FirstName = name[0];
+                        userModel.user.LastName = name[0];
+                    }
+                    //Title
+                    userModel.user.Title = "";
+                    //Company
+                    userModel.user.CompanyName = companyInfo.Name;
+                    userModel.user.CompanyId = companyInfo.CompanyId;
+                    userModel.user.UserName = userModel.user.Email;
+                    //ASI Number
+                    userModel.user.StatusCode = StatusCode.ACTV.ToString(); ;
+                    userModel.user.AsiNumber = companyInfo.ASINumber;
+                    userModel.user.MemberType_CD = companyInfo.MemberType;
+                    List<string> phoneNumber = SeprateAreaCodeFromPhonNo(companyInfo.Phone);
+                    if (phoneNumber.Count() > 0)
+                    {
+                        userModel.user.Phone = phoneNumber[1];
+                        userModel.user.PhoneAreaCode = phoneNumber[0];
+                    }
+                    else if (companyInfo.Phone.Length > 3)
+                    {
+                        userModel.user.Phone = companyInfo.Phone.Substring(3);
+                        userModel.user.PhoneAreaCode = companyInfo.Phone.Substring(0, 3);
+                    }
+                    userModel.user.Street1 = Convert.ToString(UserInfo["address"]);
+                    userModel.user.Street2 = "";
+                    userModel.user.City = Convert.ToString(UserInfo["city"]);
+                    userModel.user.CountryCode = "USA";
+                    userModel.user.Country = "USA";
+                    userModel.user.State = Convert.ToString(UserInfo["state"]);
+                    userModel.user.Zip = Convert.ToString(UserInfo["zip"]);
+                    userModel.user.Password = Convert.ToString(UserInfo["Password"]);
+
+                    #region  create individual record in Personify, add relationship to company
+                    comInfoModel.StoreCompany.Individuals.Add(
+                        new StoreIndividual()
+                        {
+                            FirstName = userModel.user.FirstName,
+                            LastName = userModel.user.LastName,
+                            Email = userModel.user.Email,
+                            Phone = comInfoModel.StoreCompany.Phone,
+                            Company = comInfoModel.StoreCompany,
+                            Address = comInfoModel.StoreCompany.GetCompanyAddress()
+                        });                    var personifyUser = PersonifyClient.GetIndividualInfoByEmail(userModel.user.Email);
+                    var indivInfo = PersonifyClient.AddIndividualInfos(comInfoModel.StoreCompany, null, companyInfo.MasterCustomerId, 0);
+                    if ( indivInfo != null && indivInfo.Count() > 0)
+                    {
+                        personifyUser = indivInfo.ElementAt(0);
+                        PersonifyClient.AddCustomerAddresses(comInfoModel.StoreCompany, personifyUser.MasterCustomerId, 0, null);
+                    }
+
+                    // update ASICOMP data for this user
+                    if (personifyUser != null)
+                    {
+                        var masterCustomerId = personifyUser.MasterCustomerId;
+                        PersonifyClient.AddCustomerAddresses(comInfoModel.StoreCompany, masterCustomerId, 0, null);
+
+                        if (Convert.ToString(UserInfo["news"]) == "yes")
+                        {
+                            PersonifyClient.UpdateASICompData(new List<string>() { "", masterCustomerId, "0", "", "", "", "", "", "Yes", "WEB_ADMIN" });
+                        }
+                    }
+                    #endregion
+                    #region create user in mms2
+                    var user = ASIOAuthClient.GetUserByEmail(userModel.user.Email);
+                    if (user == null)
+                    {
+                        Regex regex = new Regex(@"^(?=.*\d)([a-zA-Z0-9_@():;.,'&]{8,25})$");
+                        Match match = regex.Match(userModel.user.Password);
+                        if (!match.Success)
+                        {
+                            string passwordPadding = "As1";
+                            userModel.user.PasswordResetRequired = true;
+                            userModel.user.Password += passwordPadding;
+                        }
+                        else
+                        {
+                            userModel.user.PasswordResetRequired = false;
+                        }
+                        ssoId = ASIOAuthClient.CreateUser(userModel.user);
+                        int number;
+                        if (Int32.TryParse(ssoId, out number))
+                        {
+                            userModel.status = CompanyStatusCode.Created;
+                            userModel.message = "User created successfully.";
+                        }
+                        else
+                        {
+                            userModel.status = CompanyStatusCode.Fail;
+                            userModel.message = ssoId;
+                        }
+                    }
+                    else
+                    {
+                        userModel.status = CompanyStatusCode.Exists;
+                        userModel.message = "User already exists.";
+                    }
+                    #endregion create user in mms2
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                log.Error(ex.Message);
+                userModel.status = CompanyStatusCode.Fail;
+                userModel.message += "" + ex.Message;
+            }
+            return userModel;
+        }        
+
+        private List<string> SeprateAreaCodeFromPhonNo(string phoneNo)
+        {
+            ILogService log = LogService.GetLog(this.GetType());
+            List<string> phoneWithArea = new List<string>();
+            var charsToRemove = new string[] { "(", ")", " ", "-" };
+            try
+            {
+                foreach (var c in charsToRemove)
+                {
+                    phoneNo = phoneNo.Replace(c, string.Empty);
+                }
+                string areaCode = phoneNo.Substring(0, 3);
+                string phone = phoneNo.Substring(phoneNo.Length - 7);
+                phoneWithArea = new List<string>();
+                phoneWithArea.Add(areaCode);
+                phoneWithArea.Add(phone);
+            }
+            catch (Exception ex)
+            {
+                log.Debug(ex.Message);
+            }
+            return phoneWithArea;
+        }
+
+
     }
 }
-

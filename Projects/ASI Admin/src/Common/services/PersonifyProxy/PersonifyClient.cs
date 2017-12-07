@@ -58,8 +58,10 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string SP_UPDATE_SUPPLIER_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_SUPPLIER_PROC";
         private const string SP_UPDATE_DECORATOR_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_DECORATOR_PROC";
         private const string SP_OAM_INSERT_CREDIT_CARD = "USR_OAM_INSERT_CREDIT_CARD_PROC";
+        private const string SP_UPDATE_ASICOMP_DATA = "USR_CREATE_ASI_COMP_DATA";
+        private const string SP_GET_ASICOMP_DATA = "USR_REPORT_ASI_COMP_DATA";
 
-		private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
+        private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
 		private static readonly IDictionary<string, string> ASIShowCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "SHOW AE" }, { "DISCOVER", "SHOW DISC" }, { "MASTERCARD", "SHOW MS" }, { "VISA", "SHOW VS" } };
 		private static readonly IDictionary<string, string> ASICanadaCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "CAN AMEX" }, { "DISCOVER", "CAN DISC" }, { "MASTERCARD", "CAN MC" }, { "VISA", "CAN VISA" } };
         //private static readonly IDictionary<string, IDictionary<string, string>> CreditCardType = new Dictionary<string, IDictionary<string, string>>(3, StringComparer.InvariantCultureIgnoreCase) { { "ASI", ASICreditCardType }, { "ASI Show", ASIShowCreditCardType }, { "ASI Canada", ASICanadaCreditCardType } };
@@ -153,7 +155,19 @@ namespace asi.asicentral.services.PersonifyProxy
                                                                     "@ip_usr_organization",
                                                                     "@ip_imprinting",
                                                                     "@ip_usr_union_label_flag",
-                                                                    "@ip_user" }}
+                                                                    "@ip_user" }},
+
+            {SP_UPDATE_ASICOMP_DATA, new List<string>(){ "@ip_USR_ACCOUNTID",
+                                                         "@ip_MASTER_CUSTOMER_ID",
+                                                         "@ip_SUB_CUSTOMER_ID",
+                                                         "@ip_USR_PACKAGE",
+                                                         "@ip_USR_CONTRACT",
+                                                         "@ip_USR_CREDIT_STATUS",
+                                                         "@ip_USR_ECOMMERCE",
+                                                         "@ip_USR_ASI_SMARTBOOKS_EVAL",
+                                                         "@ip_USR_NEWS",
+                                                         "@ip_ADDED_BY" } },
+            {SP_GET_ASICOMP_DATA, new List<string>(){ "@ip_MASTER_CUSTOMER_ID" } }
         };
 
         private static readonly IDictionary<string, List<string>> EEX_USAGE_CODES = new Dictionary<string, List<string>>()
@@ -682,6 +696,25 @@ namespace asi.asicentral.services.PersonifyProxy
 	        return isValid;
 	    }
 
+        public static List<XElement> GetASICOMPData(string masterId)
+        {
+            List<XElement> asicompData = null;
+            var response = ExecutePersonifySP(SP_GET_ASICOMP_DATA, new List<string>() { masterId });
+            if (response != null && !string.IsNullOrEmpty(response.Data) && response.Data.Trim().ToUpper() != "NO DATA FOUND")
+            {
+                var xml = XDocument.Parse(response.Data);
+
+                asicompData = xml.Root.Elements("Table").ToList();                
+            }
+
+            return asicompData;
+        }
+
+        public static void UpdateASICompData(List<string> parameters)
+        {
+            var response = ExecutePersonifySP(SP_UPDATE_ASICOMP_DATA, parameters);
+        }
+
         #region matching company with name, email or phone
         private static PersonifyCustomerInfo FindMatchingCompany(StoreCompany company, ref List<string> matchedList)
         {
@@ -962,25 +995,25 @@ namespace asi.asicentral.services.PersonifyProxy
         public static void UpdatePersonifyCompany(CompanyInformation companyInfo, PersonifyMapping mapping)
         {
             // update company status from Delisted to Active
-            if (companyInfo.MemberStatus == StatusCode.DELISTED.ToString())
-            {
-                var customers = SvcClient.Ctxt.ASICustomers.Where(
-                        p => p.MasterCustomerId == companyInfo.MasterCustomerId && p.SubCustomerId == 0).ToList();
-                if (customers.Count > 0)
-                {
-                    ASICustomer customer = customers[0];
-                    if (customer.UserDefinedMemberStatusString == StatusCode.DELISTED.ToString())
-                    {
-                        customer.UserDefinedMemberStatusString = StatusCode.ACTIVE.ToString();
-                        SvcClient.Save<ASICustomer>(customer);
+            //if (companyInfo.MemberStatus == StatusCode.DELISTED.ToString())
+            //{
+            //    var customers = SvcClient.Ctxt.ASICustomers.Where(
+            //            p => p.MasterCustomerId == companyInfo.MasterCustomerId && p.SubCustomerId == 0).ToList();
+            //    if (customers.Count > 0)
+            //    {
+            //        ASICustomer customer = customers[0];
+            //        if (customer.UserDefinedMemberStatusString == StatusCode.DELISTED.ToString())
+            //        {
+            //            customer.UserDefinedMemberStatusString = StatusCode.ACTIVE.ToString();
+            //            SvcClient.Save<ASICustomer>(customer);
 
-                        companyInfo.MemberStatus = customer.UserDefinedMemberStatusString;
-                    }
-                }
-            }
-            // update company class/subclass if they are different from mapping table
-            else
-            {
+            //            companyInfo.MemberStatus = customer.UserDefinedMemberStatusString;
+            //        }
+            //    }
+            //}
+            //// update company class/subclass if they are different from mapping table
+            //else
+            //{
                 var mappedClassCode = !string.IsNullOrEmpty(mapping.ClassCode) ? mapping.ClassCode.Trim().ToUpper() : string.Empty;
                 var mappedSubClassCode = !string.IsNullOrEmpty(mapping.SubClassCode) ?  mapping.SubClassCode.Trim().ToUpper() : string.Empty;
                 var classCode = !string.IsNullOrEmpty(companyInfo.CustomerClassCode) ? companyInfo.CustomerClassCode.Trim().ToUpper() : string.Empty;
@@ -1007,7 +1040,6 @@ namespace asi.asicentral.services.PersonifyProxy
                     companyInfo.CustomerClassCode = mapping.ClassCode;
                     companyInfo.SubClassCode = mapping.SubClassCode;
                 }
-            }
         }
 
 	    public static CompanyInformation AddEEXSubscription(StoreCompany company, User user, IList<LookSendMyAdCountryCode> countryCodes, bool isBusinessAddress)
@@ -1770,7 +1802,14 @@ namespace asi.asicentral.services.PersonifyProxy
                         SPParameterList = ipSPParameterList
                     };
 
-                    response = SvcClient.Post<StoredProcedureOutput>("GetStoredProcedureDataXML", spRequest);
+                    try
+                    {
+                        response = SvcClient.Post<StoredProcedureOutput>("GetStoredProcedureDataXML", spRequest);
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.Error(string.Format("ExecutePersonifySP Error - message: {0}, stack track: {1}", ex.Message, ex.StackTrace) );
+                    }
                 }
             }
 
