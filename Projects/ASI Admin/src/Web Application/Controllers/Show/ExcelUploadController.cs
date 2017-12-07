@@ -649,8 +649,8 @@ namespace asi.asicentral.web.Controllers.Show
         //creates company in personify
         private CompanyInfoModel CreateCompany(DataRow companyInforow)
         {
-            LogService log = LogService.GetLog(typeof(ASIOAuthClient));
-            log.Debug("Company Creation Started at:" + DateTime.Now.ToString());
+            ILogService log = LogService.GetLog(this.GetType());
+            var startTime = DateTime.Now;
             var asiNo = Convert.ToString(companyInforow["ACCOUNT"]);
             CompanyInfoModel companyModel = new CompanyInfoModel() { AccountId = asiNo };
 
@@ -751,21 +751,20 @@ namespace asi.asicentral.web.Controllers.Show
             }
             catch (Exception ex)
             {
-
                 log.Error(ex.Message);
                 companyModel.Status = CompanyStatusCode.Fail;
                 companyModel.Message = ex.Message;
             }
             companyModel.CompanyInfo = companyInfo;
-            log.Debug("Company Creation ends at:" + DateTime.Now.ToString());
+            log.Debug(string.Format("Company creation time: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
             return companyModel;
         }
 
         //creates user
         private UserInfoModel CreateUser(CompanyInfoModel comInfoModel, DataRow UserInfo)
         {
-            LogService _log = LogService.GetLog(this.GetType());
-            _log.Debug("User creation started at:" + DateTime.Now.ToString());
+            ILogService log = LogService.GetLog(this.GetType());
+            var startTime = DateTime.Now;
             var companyInfo = comInfoModel.CompanyInfo;
             UserInfoModel userModel = new UserInfoModel();
             userModel.user = new asi.asicentral.model.User();
@@ -888,12 +887,11 @@ namespace asi.asicentral.web.Controllers.Show
             }
             catch (Exception ex)
             {
-                LogService log = LogService.GetLog(typeof(ASIOAuthClient));
                 log.Error(ex.Message);
                 userModel.status = CompanyStatusCode.Fail;
                 userModel.message += "" + ex.Message;
             }
-            _log.Debug("User creation ends at:" + DateTime.Now.ToString());
+            log.Debug(string.Format("User Creation time: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
             return userModel;
         }
 

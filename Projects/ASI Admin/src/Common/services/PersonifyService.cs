@@ -1,6 +1,5 @@
 ﻿using asi.asicentral.interfaces;
 using asi.asicentral.model;
-using asi.asicentral.model.ASIComp;
 using asi.asicentral.model.personify;
 using asi.asicentral.model.store;
 using asi.asicentral.model.timss;

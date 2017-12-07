@@ -344,7 +344,6 @@
     <Compile Include="database\Umbraco_ShowContext.cs" />
     <Compile Include="interfaces\ICreditCardService.cs" />
     <Compile Include="interfaces\IImageConvertService.cs" />
-    <Compile Include="model\ASIComp\ASICompData.cs" />
     <Compile Include="model\CompanyInformation.cs" />
     <Compile Include="model\DM_memberDemogr\CompanyASIRep.cs" />
     <Compile Include="model\excit\SupUpdateField.cs" />
