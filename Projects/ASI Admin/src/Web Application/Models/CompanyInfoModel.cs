@@ -12,6 +12,7 @@ namespace asi.asicentral.web.Models
         public CompanyStatusCode Status { get; set; }
         public StoreCompany StoreCompany;
         public string AccountId { get; set; }
+        public string creationTime { get; set; }
     }
     public enum CompanyStatusCode
     {
@@ -24,6 +25,7 @@ namespace asi.asicentral.web.Models
         public asi.asicentral.model.User user { get; set; }
         public string message { get; set; }
         public CompanyStatusCode status { get; set; }
+        public string creationTime { get; set; }
     }
 
     public class CompanyUserCollection {
