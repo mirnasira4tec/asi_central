@@ -679,9 +679,7 @@ namespace asi.asicentral.web.Controllers.Show
                          City = Convert.ToString(companyInforow["CITY"]),
                          Zip = Convert.ToString(companyInforow["ZIP"]),
                          State = Convert.ToString(companyInforow["STATE"]),
-                         Country = (companyInforow["COUNTRY"] != DBNull.Value &&
-                                   Convert.ToString(companyInforow["COUNTRY"]) != string.Empty) ?
-                                   Convert.ToString(companyInforow["COUNTRY"]) : "USA",
+                         Country = GetCountryCode(companyInforow["COUNTRY"]),
                          MemberType = "DISTRIBUTOR",
                          MemberTypeNumber = 0,
                          CustomerClassCode = "DISTRIBUTOR",
@@ -757,6 +755,7 @@ namespace asi.asicentral.web.Controllers.Show
             }
             companyModel.CompanyInfo = companyInfo;
             log.Debug(string.Format("Company creation time: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
+            companyModel.creationTime = DateTime.Now.Subtract(startTime).TotalMilliseconds.ToString();
             return companyModel;
         }
 
@@ -809,10 +808,7 @@ namespace asi.asicentral.web.Controllers.Show
                     userModel.user.Street1 = Convert.ToString(UserInfo["address"]);
                     userModel.user.Street2 = "";
                     userModel.user.City = Convert.ToString(UserInfo["city"]);
-                    var country = (UserInfo["country"] != DBNull.Value &&
-                                   Convert.ToString(UserInfo["country"]) != string.Empty) ?
-                                   Convert.ToString(UserInfo["country"]) : "USA";
-                    userModel.user.CountryCode = country;
+                    var country = GetCountryCode(UserInfo["country"]);
                     userModel.user.Country = country;
                     userModel.user.State = Convert.ToString(UserInfo["state"]);
                     userModel.user.Zip = Convert.ToString(UserInfo["zip"]);
@@ -892,6 +888,7 @@ namespace asi.asicentral.web.Controllers.Show
                 userModel.message += "" + ex.Message;
             }
             log.Debug(string.Format("User Creation time: ({0})", DateTime.Now.Subtract(startTime).TotalMilliseconds));
+            userModel.creationTime = DateTime.Now.Subtract(startTime).TotalMilliseconds.ToString();
             return userModel;
         }
 
@@ -919,6 +916,37 @@ namespace asi.asicentral.web.Controllers.Show
             return phoneWithArea;
         }
 
+        private string GetCountryCode(object country)
+        {
+            var countryName = Convert.ToString(country);
+            string countryCode = string.Empty;
+            if (country != DBNull.Value && countryName != string.Empty)
+            {
+                switch (countryName)
+                {
+                    case "Australia":
+                        countryCode = "AUS";
+                        break;
+                    case "Bermuda":
+                        countryCode = "BMU";
+                        break;
+                    case "CAN":
+                    case "CA":
+                    case "CANADA":
+                    case "CN":
+                        countryCode = "CAN";
+                        break;
+                    case "US":
+                    case "USA":
+                        countryCode = "USA";
+                        break;
+                    default:
+                        countryCode = "USA";
+                        break;
+                }
+            }
+            return countryCode;
+        }
 
     }
 }
