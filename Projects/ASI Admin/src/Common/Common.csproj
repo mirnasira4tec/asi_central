@@ -342,7 +342,6 @@
     <Compile Include="database\mappings\personify\PersonifyMappingMap.cs" />
     <Compile Include="database\MemberDemogrContext.cs" />
     <Compile Include="database\Umbraco_ShowContext.cs" />
-    <Compile Include="interfaces\ICreditCardService.cs" />
     <Compile Include="interfaces\IImageConvertService.cs" />
     <Compile Include="model\CompanyInformation.cs" />
     <Compile Include="model\DM_memberDemogr\CompanyASIRep.cs" />
@@ -517,12 +516,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.datasvcmap</DependentUpon>
     </Compile>
-    <Compile Include="Service References\web.CreditCardService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
-    <Compile Include="services\CreditCardService.cs" />
     <Compile Include="interfaces\IBackendService.cs" />
     <Compile Include="services\ImageConvertService.cs" />
     <Compile Include="services\PersonifyProxy\AddressInfoEqualityComparer.cs" />
@@ -607,31 +600,8 @@
     </ServiceReferenceMetadataStorage>
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\web.CreditCardService\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Properties\DataSources\asi.asicentral.PersonifyDataASI.PersonifyEntitiesASI.datasource" />
     <None Include="Service References\PersonifyDataASI\service.edmx" />
-    <None Include="Service References\web.CreditCardService\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\web.CreditCardService\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\web.CreditCardService\CreditCardService.wsdl" />
-    <None Include="Service References\web.CreditCardService\CreditCardService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\web.CreditCardService\CreditCardService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\web.CreditCardService\CreditCardService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\web.CreditCardService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\PersonifyDataASI\Reference.datasvcmap">

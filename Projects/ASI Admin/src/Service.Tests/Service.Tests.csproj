@@ -128,7 +128,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="CreditCardServiceTest.cs" />
     <Compile Include="InternetTest.cs" />
     <Compile Include="Model\store\SupplierMembershipApplicationTest.cs" />
     <Compile Include="Model\store\DistributorMembershipApplicationTest.cs" />

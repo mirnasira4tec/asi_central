@@ -21,9 +21,10 @@ namespace asi.asicentral.model.store
         ProductInfo = 1,
         CompanyInfo = 2,
         DemographicInfo = 3,
-        BillingInfo = 4,
-        PlaceOrder = 5,
-        PostOrder = 6
+        CouponInfo = 4,
+        BillingInfo = 5,
+        PlaceOrder = 6,
+        PostOrder = 7
     }
 
     public class StoreOrder

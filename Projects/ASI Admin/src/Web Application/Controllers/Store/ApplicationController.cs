@@ -15,6 +15,7 @@ using asi.asicentral.web.store.interfaces;
 using System.Net.Mail;
 using System.Text;
 using asi.asicentral.util.store.emailmarketing;
+using System.Configuration;
 
 namespace asi.asicentral.web.Controllers.Store
 {
@@ -42,7 +43,6 @@ namespace asi.asicentral.web.Controllers.Store
 
         public IStoreService StoreService { get; set; }
         public IFulfilmentService FulfilmentService { get; set; }
-        public ICreditCardService CreditCardService { get; set; }
         public IBackendService BackendService { get; set; }
         public IEmailService EmailService { get; set; }
         public ITemplateService TemplateService { get; set; }
@@ -138,10 +138,10 @@ namespace asi.asicentral.web.Controllers.Store
                 }
                 order = UpdateCompanyInformation(application, order);
                 application.CopyTo(distributorApplication);
-
-                ProcessCommand(StoreService, FulfilmentService, order, distributorApplication, application.ActionName);
                 distributorApplication.UpdateDate = DateTime.UtcNow;
                 distributorApplication.UpdateSource = "ASI Admin Application - EditDistributor";
+
+                ProcessCommand(StoreService, FulfilmentService, order, distributorApplication, application.ActionName);
                 StoreService.SaveChanges();
                 if (application.ActionName == ApplicationController.COMMAND_REJECT)
                     return RedirectToAction("List", "Orders");
@@ -971,12 +971,15 @@ namespace asi.asicentral.web.Controllers.Store
             if (command == ApplicationController.COMMAND_ACCEPT)
             {
                 //make sure we have external reference
-                if (string.IsNullOrEmpty(order.ExternalReference)) throw new Exception("You need to specify a Timms id to approve an order");
+                //if (string.IsNullOrEmpty(order.ExternalReference)) throw new Exception("You need to specify a Timms id to approve an order");
 
                 //make sure timms id contains numbers only
-                int num;
-                bool success = int.TryParse(order.ExternalReference, out num);
-                if (!success) throw new Exception("Timms id must be numbers only.");
+                if (!string.IsNullOrEmpty(order.ExternalReference))
+                {
+                    int num;
+                    bool success = int.TryParse(order.ExternalReference, out num);
+                    if (!success) throw new Exception("Timms id must be numbers only.");
+                }
 
                 if (System.Web.HttpContext.Current != null)
                 {
@@ -984,9 +987,22 @@ namespace asi.asicentral.web.Controllers.Store
                         order.ApprovedBy = ((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name;
                 }
 
-                var product = order.OrderDetails[0].Product;
                 var orderPlaced = true;
-                if (product.HasBackEndIntegration)
+                var product = order.OrderDetails[0].Product;
+
+                // save credit card info to Personify
+                try
+                {
+                    BackendService.SaveCreditCardInfo(order);
+                    StoreService.SaveChanges();
+                }
+                catch(Exception ex)
+                {
+                    orderPlaced = false;
+                    order.ProcessStatus = OrderStatus.PersonifyError;
+                }
+
+                if (product.HasBackEndIntegration && orderPlaced)
                 {
                     try
                     {
@@ -1026,7 +1042,11 @@ namespace asi.asicentral.web.Controllers.Store
 
                 if (orderPlaced)
                 {
-                    fulfilmentService.Process(order, application);
+                    if( !product.HasBackEndIntegration && order.CreditCard != null && 
+                        !string.IsNullOrEmpty(order.CreditCard.ExternalReference) && string.IsNullOrEmpty(order.CreditCard.TokenId) )
+                    { // call TIMSS service only for non-PCI order and product without Personify Integration
+                        fulfilmentService.Process(order, application);
+                    }
                     order.ProcessStatus = OrderStatus.Approved;
                     order.ApprovedDate = DateTime.UtcNow;
                 }

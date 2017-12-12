@@ -123,15 +123,6 @@ namespace asi.asicentral.services
                 }
                 #endregion mapping items from mapping table
 
-                #region ******* need to revisit and remove after packages ******
-                // handle bundles first if any
-                var mappedBundles = allMappings.FindAll(m => m.PersonifyBundle != null );
-                if (mappedBundles.Any())
-                {
-                    PersonifyClient.CreateBundleOrder(order, mappedBundles[0], companyInfo, contactMasterId, contactSubId, billToAddr, shipToAddr);
-                }
-                #endregion ******* need to revisit and remove after packages *******
-
                 // get all non-bundle products
                 var mappedProducts = allMappings.FindAll(map => map.PersonifyProduct != null && map.PersonifyBundle == null);
 
@@ -450,16 +441,45 @@ namespace asi.asicentral.services
             return companyInfo;
         }
 
-        public virtual bool ValidateCreditCard(CreditCard creditCard)
+        public virtual void SaveCreditCardInfo(StoreOrder order)
         {
+            if (order != null && order.CreditCard != null && !string.IsNullOrEmpty(order.CreditCard.TokenId) && order.BillingIndividual != null)
+            {
+                var billingInfo = order.BillingIndividual;
+                var creditCard = new asi.asicentral.model.CreditCard()
+                {
+                    Address = billingInfo.Address.Street1,
+                    City = billingInfo.Address.City,
+                    PostalCode = billingInfo.Address.Zip,
+                    State = billingInfo.Address.State,
+                    Country = billingInfo.Address.Country,
+                    //CountryCode = billingInfo.Address,  //TODO:: code ???
+                    CardHolderName = order.CreditCard.CardHolderName,
+                    Type = order.CreditCard.CardType,
+                    Number = order.CreditCard.CardNumber,
+                    MaskedPAN = order.CreditCard.CardNumber,
+                    ExpirationDate = new DateTime(Int32.Parse(order.CreditCard.ExpYear), Int32.Parse(order.CreditCard.ExpMonth), 01),
+                    ExternalReference = order.CreditCard.ExternalReference,
+                    TokenId = order.CreditCard.TokenId,
+                    AuthReference = order.CreditCard.AuthReference
+                };
 
-            log.Debug(string.Format("Validate credit card {0} ({1}).", creditCard.MaskedPAN, creditCard.Type));
-            var result = PersonifyClient.ValidateCreditCard(creditCard);
-            log.Debug(string.Format("Credit card {0} ({1}) is {2}.", creditCard.MaskedPAN, creditCard.Type, result ? "valid" : "invalid"));
-            return result;
+                try
+                {
+                    order.CreditCard.ExternalReference = SaveCreditCard(order, creditCard);
+                    if (creditCard.Number.Length >= 4)
+                        creditCard.MaskedPAN = "****" + creditCard.Number.Substring(creditCard.Number.Length - 4, 4);
+                }
+                catch (Exception ex)
+                {
+                    var log = LogService.GetLog(this.GetType());
+                    log.Debug(string.Format("Error in saving credit card to personify: {0}.", ex.Message));
+                    throw ex;
+                }
+            }
         }
 
-		public virtual string SaveCreditCard(StoreOrder order, CreditCard creditCard)
+        public virtual string SaveCreditCard(StoreOrder order, CreditCard creditCard)
 		{
 			StoreCompany company = order.Company;
             log.Debug(string.Format("Save credit of {0} ({1})", creditCard.MaskedPAN, company.Name));
@@ -548,15 +568,21 @@ namespace asi.asicentral.services
             else
             {
                 var memberType = string.IsNullOrEmpty(company.MemberType) ? "UNKNOWN" : company.MemberType;
-                IEnumerable<StoreAddressInfo> storeAddress = null;
-                companyInfo = PersonifyClient.ReconcileCompany(company, memberType, countryCodes, ref storeAddress);
+
+                // Create new company in Personify if no lead company found
+                List<string> masterIdList = null;
+                companyInfo = PersonifyClient.FindCustomerInfo(company, ref masterIdList);
+                if (companyInfo == null || (string.IsNullOrEmpty(order.ExternalReference) && companyInfo.MemberStatus != "LEAD" && companyInfo.MemberStatus != "ASICENTRAL"))
+                {
+                    companyInfo = PersonifyClient.CreateCompany(company, memberType, countryCodes);
+                }
             }
 
 			//field used to map an order to a company before approval for non backoffice orders
 			order.ExternalReference = companyInfo.MasterCustomerId;
             //Add credit card to the company
 			//@todo CC Personify temporary measure, always add the credit card. No longer checking if (profile == string.Empty) from string profile = PersonifyClient.GetCreditCardProfileId(order.GetASICompany(), companyInfo, creditCard);
-			var profile = PersonifyClient.SaveCreditCard(order.GetASICompany(), companyInfo.MasterCustomerId, companyInfo.SubCustomerId, creditCard);
+			var profile = PersonifyClient.SaveCreditCard(order.GetASICompany(), companyInfo.MasterCustomerId, companyInfo.SubCustomerId, creditCard, order.IPAdd);
             log.Debug(string.IsNullOrWhiteSpace(profile) ?
                 "Fail to save the credit." : string.Format("Saved credit profile id : {0}", profile));
             if (string.IsNullOrEmpty(profile)) throw new Exception("Credit card can't be saved to Personify.");
