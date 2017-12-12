@@ -808,8 +808,9 @@ namespace asi.asicentral.web.Controllers.Show
                     userModel.user.Street1 = Convert.ToString(UserInfo["address"]);
                     userModel.user.Street2 = "";
                     userModel.user.City = Convert.ToString(UserInfo["city"]);
+                    userModel.user.Country = Convert.ToString(UserInfo["country"]);
                     var country = GetCountryCode(UserInfo["country"]);
-                    userModel.user.Country = country;
+                    userModel.user.CountryCode = country;
                     userModel.user.State = Convert.ToString(UserInfo["state"]);
                     userModel.user.Zip = Convert.ToString(UserInfo["zip"]);
                     userModel.user.Password = Convert.ToString(UserInfo["Password"]);
