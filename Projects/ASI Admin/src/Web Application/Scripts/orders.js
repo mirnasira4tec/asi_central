@@ -1,14 +1,14 @@
 ﻿$('input.command').click(function (e) {
     $('#ActionName').val(e.target.value);
     if ($('#ActionName').val() == 'Accept') {
-        //make sure we have Timms value
-        if (!$('#ExternalReference').val()) {
-            asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
-            $("#ExternalReference").attr("class", "text-box single-line input-validation-error span2");
-            $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
-            e.preventDefault();
-        }
-        else {
+        ////make sure we have Timms value
+        //if (!$('#ExternalReference').val()) {
+        //    asi.modal.confirm('Error', 'You need to pass a Timms ID number to approve order.', null, "#hide", "Close");
+        //    $("#ExternalReference").attr("class", "text-box single-line input-validation-error span2");
+        //    $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
+        //    e.preventDefault();
+        //}
+        if ($('#ExternalReference').val()) {
             var isnum = /^\d+$/.test($('#ExternalReference').val());
             if (!isnum) {
                 asi.modal.confirm('Error', 'TIMMS ID must contain only numbers.', null, "#hide", "Close");

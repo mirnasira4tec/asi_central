@@ -14,5 +14,7 @@
         public string Country { get; set; }
         public string CountryCode { get; set; }
         public string ExternalReference { get; set; }
+        public string TokenId { get; set; }
+        public string AuthReference { get; set; }
     }
 }
