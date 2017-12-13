@@ -185,6 +185,13 @@ namespace Core.Tests.OAuth
         }
 
         [Test]
+        public void GetCopmanyByAccountTest()
+        {
+            string masterId = ASIOAuthClient.GetCompanyByAccId("170720");
+            Assert.IsNotNull(masterId);
+        }
+
+        [Test]
         public void GetCopmanyByASIFailedTest()
         {
             asi.asicentral.model.User user = ASIOAuthClient.GetCompanyByASINumber("12345");

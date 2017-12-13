@@ -730,6 +730,18 @@ namespace asi.asicentral.services
             return PersonifyClient.ValidateRateCode(groupName, rateStructure, rateCode, ref persProductId);
         }
 
+        public CompanyInformation GetCompanyByMasterId(string masterId)
+        {
+            CompanyInformation companyInfo = null;
+            var customerInfo = PersonifyClient.GetPersonifyCompanyInfo(masterId, 0);
+            if (customerInfo != null)
+            {
+                companyInfo = PersonifyClient.GetCompanyInfo(customerInfo);
+                UpdateMemberType(companyInfo);
+            }
+            return companyInfo;
+        }
+
         public CompanyInformation AddEEXSubscription(User user, bool isBusinessAddress)
         {
             CompanyInformation companyInfo = null;
@@ -772,6 +784,11 @@ namespace asi.asicentral.services
         public virtual List<XElement> GetASICOMPData(string masterId)
         {
             return PersonifyClient.GetASICOMPData(masterId);
+        }
+
+        public virtual string GetASICOMPDataByAccount(string accountId)
+        {
+            return PersonifyClient.GetASICOMPDataByAccount(accountId);
         }
 
         public virtual void UpdateASICompData(List<string> parameters)

@@ -411,6 +411,58 @@ namespace asi.asicentral.oauth
             return user;
         }
 
+        public static string GetCompanyByAccId(string accountId)
+        {
+            var usePersonifyServices = ConfigurationManager.AppSettings["UsePersonifyServices"];
+            string masterId = null;
+            if (!string.IsNullOrEmpty(usePersonifyServices) && Convert.ToBoolean(usePersonifyServices) && !string.IsNullOrEmpty(accountId))
+            {
+                try
+                {
+                    IBackendService personifyService = new PersonifyService();
+                     masterId = personifyService.GetASICOMPDataByAccount(accountId);
+                }
+                catch (Exception ex)
+                {
+                    LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                    log.Error(ex.Message);
+                }
+            }
+            return masterId;
+        }
+
+        public static asi.asicentral.model.User GetCompanyByMasterId(string masterId)
+        {
+            asi.asicentral.model.User user = null;
+            var usePersonifyServices = ConfigurationManager.AppSettings["UsePersonifyServices"];
+            if (!string.IsNullOrEmpty(usePersonifyServices) && Convert.ToBoolean(usePersonifyServices) && !string.IsNullOrEmpty(masterId))
+            {
+                try
+                {
+                    IBackendService personifyService = new PersonifyService();
+                    CompanyInformation company = personifyService.GetCompanyByMasterId(masterId);
+                    if (company != null)
+                    {
+                        user = new model.User
+                        {
+                            CompanyName = company.Name,
+                            CompanyId = company.CompanyId,
+                            AsiNumber = company.ASINumber,
+                            MemberType_CD = company.MemberType,
+                            MemberTypeId = company.MemberTypeNumber,
+                            MemberStatus_CD = company.MemberStatus
+                        };
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                    log.Error(ex.Message);
+                }
+            }
+            return user;
+        }
+
         public static bool UpdateUser(asi.asicentral.model.User user, bool isPasswordReset = false)
         {
             bool isUserUpdated = false;

@@ -57,6 +57,17 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        public void GetASICOMPDataByAccount()
+        {
+            var acctid = "60019";
+            PersonifyClient.GetASICOMPDataByAccount(acctid);
+
+            acctid = "1002";
+            PersonifyClient.GetASICOMPDataByAccount(acctid);
+
+        }
+
+        [Test]
         public void UpdateASICompData()
         {
             var param = new List<string>() { "123456", "000010610432", "0", "PROFITMAKER", "FULL ACCESS", "CURRENT", "Yes", "Yes", "No", "WEB_USER" };

@@ -711,7 +711,14 @@ namespace asi.asicentral.web.Controllers.Show
                 company.MemberType = companyInformation.MemberType;
                 companyModel.StoreCompany = company;
                 companyInfo = personifyService.GetCompanyInfoByAsiNumber(asiNo);
-
+                if (companyInfo == null)
+                {
+                    string masterId = ASIOAuthClient.GetCompanyByAccId(asiNo);//get master id by accId
+                    if (!string.IsNullOrEmpty(masterId))
+                    {
+                        companyInfo = personifyService.GetCompanyByMasterId(masterId);
+                    }
+                }
                 if (!string.IsNullOrEmpty(asiNo))
                 {
                     if (companyInfo == null)
