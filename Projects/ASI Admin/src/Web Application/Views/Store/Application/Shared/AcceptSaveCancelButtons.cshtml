@@ -101,9 +101,18 @@
             <div id="termsWarningMessage" data-type="errormessage" class="field-validation-error span10"></div>
             @if (Model.OrderStatus != OrderStatus.Approved && Model.IsCompleted && !disableEditing)
             {
-                <div class="span10">
-                    <p>(Company Constituent ID will be generated automatically unless being provided here)</p>
-                </div>               
+                if (Model.TotalCost > 0)
+                {
+                    <div class="span10">
+                       <p>(Company Constituent ID will be generated automatically unless being provided here)</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="span10">
+                        <p>(Provide company constituent ID to approve the order)</p>
+                    </div>
+                }          
             }
             @*else
             {
