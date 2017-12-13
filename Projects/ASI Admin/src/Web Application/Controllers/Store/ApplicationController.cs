@@ -979,6 +979,11 @@ namespace asi.asicentral.web.Controllers.Store
                     int num;
                     bool success = int.TryParse(order.ExternalReference, out num);
                     if (!success) throw new Exception("Timms id must be numbers only.");
+
+                    if (order.ExternalReference.Length < 12)
+                    {
+                        order.ExternalReference = order.ExternalReference.PadLeft(12, '0');
+                    }
                 }
 
                 if (System.Web.HttpContext.Current != null)
@@ -993,6 +998,10 @@ namespace asi.asicentral.web.Controllers.Store
                 // save credit card info to Personify
                 try
                 {
+                    if( !string.IsNullOrEmpty(order.ExternalReference) && order.Company != null)
+                    {
+                        order.Company.ExternalReference = order.ExternalReference;
+                    }
                     BackendService.SaveCreditCardInfo(order);
                     StoreService.SaveChanges();
                 }
