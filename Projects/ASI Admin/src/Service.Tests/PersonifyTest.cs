@@ -56,6 +56,8 @@ namespace asi.asicentral.Tests
 
         }
 
+       
+
         [Test]
         public void UpdateASICompData()
         {
@@ -626,6 +628,17 @@ namespace asi.asicentral.Tests
             Assert.AreEqual(result.CallTopicCode, "EXCEPTION");
             Assert.AreEqual(result.CallTopicSubcode, "VALIDATION");
             Assert.AreEqual(result.CallTypeCode, "STORE");
+        }
+
+        [Test]
+        public void GetASICOMPMasterCustomerIdTest()
+        {
+            var acctid = "60019";
+            PersonifyClient.GetASICOMPMasterCustomerId(acctid);
+
+            acctid = "1002";
+            PersonifyClient.GetASICOMPMasterCustomerId(acctid);
+
         }
 
         private CompanyInformation GetPersonifyCompany(IBackendService personify, StoreCompany storeCompany)
