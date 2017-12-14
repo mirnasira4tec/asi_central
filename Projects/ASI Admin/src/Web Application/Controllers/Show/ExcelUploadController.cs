@@ -532,6 +532,7 @@ namespace asi.asicentral.web.Controllers.Show
                 companiesDt = ExcelToDataTable(files[0]);
                 userDt = ExcelToDataTable(files[1]);
             }
+
             if (companiesDt.Rows.Count > 0)
             {
                 foreach (DataRow crow in companiesDt.Rows)
@@ -713,11 +714,7 @@ namespace asi.asicentral.web.Controllers.Show
                 companyInfo = personifyService.GetCompanyInfoByAsiNumber(asiNo);
                 if (companyInfo == null)
                 {
-                    string masterId = personifyService.GetASICOMPMasterCustomerId(asiNo);//get master id by accId
-                    if (!string.IsNullOrEmpty(masterId))
-                    {
-                        companyInfo = personifyService.GetCompanyByMasterId(masterId);
-                    }
+                    companyInfo = personifyService.GetCompanyInfoByASICompAccountId(asiNo);
                 }
                 if (!string.IsNullOrEmpty(asiNo))
                 {
@@ -750,7 +747,6 @@ namespace asi.asicentral.web.Controllers.Show
                     var creditStatus = Convert.ToString(companyInforow["CREDIT STATUS"]);
                     var eCommerce = Convert.ToString(companyInforow["ECOMMERCE"]);
                     var smartBooksEval = Convert.ToString(companyInforow["ASI SMARTBOOKS EVAL"]);
-
                     PersonifyClient.UpdateASICompData(new List<string>() { asiNo, companyInfo.MasterCustomerId, "0", package, contract, creditStatus, eCommerce, smartBooksEval, "", "WEB_ADMIN" });
                 }
             }
