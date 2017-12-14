@@ -712,7 +712,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return asicompData;
         }
 
-        public static string GetASICOMPDataByAccount(string accountId)
+        public static string GetASICOMPMasterCustomerId(string accountId)
         {
             List<XElement> asicompData = null;
             string masterId = null;

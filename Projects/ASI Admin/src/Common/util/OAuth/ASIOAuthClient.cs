@@ -420,7 +420,7 @@ namespace asi.asicentral.oauth
                 try
                 {
                     IBackendService personifyService = new PersonifyService();
-                     masterId = personifyService.GetASICOMPDataByAccount(accountId);
+                     masterId = personifyService.GetASICOMPMasterCustomerId(accountId);
                 }
                 catch (Exception ex)
                 {
@@ -429,38 +429,6 @@ namespace asi.asicentral.oauth
                 }
             }
             return masterId;
-        }
-
-        public static asi.asicentral.model.User GetCompanyByMasterId(string masterId)
-        {
-            asi.asicentral.model.User user = null;
-            var usePersonifyServices = ConfigurationManager.AppSettings["UsePersonifyServices"];
-            if (!string.IsNullOrEmpty(usePersonifyServices) && Convert.ToBoolean(usePersonifyServices) && !string.IsNullOrEmpty(masterId))
-            {
-                try
-                {
-                    IBackendService personifyService = new PersonifyService();
-                    CompanyInformation company = personifyService.GetCompanyByMasterId(masterId);
-                    if (company != null)
-                    {
-                        user = new model.User
-                        {
-                            CompanyName = company.Name,
-                            CompanyId = company.CompanyId,
-                            AsiNumber = company.ASINumber,
-                            MemberType_CD = company.MemberType,
-                            MemberTypeId = company.MemberTypeNumber,
-                            MemberStatus_CD = company.MemberStatus
-                        };
-                    }
-                }
-                catch (Exception ex)
-                {
-                    LogService log = LogService.GetLog(typeof(ASIOAuthClient));
-                    log.Error(ex.Message);
-                }
-            }
-            return user;
         }
 
         public static bool UpdateUser(asi.asicentral.model.User user, bool isPasswordReset = false)

@@ -713,7 +713,7 @@ namespace asi.asicentral.web.Controllers.Show
                 companyInfo = personifyService.GetCompanyInfoByAsiNumber(asiNo);
                 if (companyInfo == null)
                 {
-                    string masterId = ASIOAuthClient.GetCompanyByAccId(asiNo);//get master id by accId
+                    string masterId = personifyService.GetASICOMPMasterCustomerId(asiNo);//get master id by accId
                     if (!string.IsNullOrEmpty(masterId))
                     {
                         companyInfo = personifyService.GetCompanyByMasterId(masterId);
@@ -927,26 +927,22 @@ namespace asi.asicentral.web.Controllers.Show
         private string GetCountryCode(object country)
         {
             var countryName = Convert.ToString(country);
-            string countryCode = string.Empty;
+            string countryCode = "USA";
             if (country != DBNull.Value && countryName != string.Empty)
             {
-                switch (countryName)
+                switch (countryName.ToLower())
                 {
-                    case "Australia":
+                    case "australia":
                         countryCode = "AUS";
                         break;
-                    case "Bermuda":
+                    case "bermuda":
                         countryCode = "BMU";
                         break;
-                    case "CAN":
-                    case "CA":
-                    case "CANADA":
-                    case "CN":
+                    case "can":
+                    case "ca":
+                    case "canada":
+                    case "cn":
                         countryCode = "CAN";
-                        break;
-                    case "US":
-                    case "USA":
-                        countryCode = "USA";
                         break;
                     default:
                         countryCode = "USA";

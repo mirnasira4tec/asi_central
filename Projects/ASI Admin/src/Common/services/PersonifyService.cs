@@ -786,9 +786,9 @@ namespace asi.asicentral.services
             return PersonifyClient.GetASICOMPData(masterId);
         }
 
-        public virtual string GetASICOMPDataByAccount(string accountId)
+        public virtual string GetASICOMPMasterCustomerId(string accountId)
         {
-            return PersonifyClient.GetASICOMPDataByAccount(accountId);
+            return PersonifyClient.GetASICOMPMasterCustomerId(accountId);
         }
 
         public virtual void UpdateASICompData(List<string> parameters)

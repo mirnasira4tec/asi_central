@@ -184,12 +184,7 @@ namespace Core.Tests.OAuth
             Assert.AreEqual(user.AsiNumber, "342495");
         }
 
-        [Test]
-        public void GetCopmanyByAccountTest()
-        {
-            string masterId = ASIOAuthClient.GetCompanyByAccId("170720");
-            Assert.IsNotNull(masterId);
-        }
+        
 
         [Test]
         public void GetCopmanyByASIFailedTest()
