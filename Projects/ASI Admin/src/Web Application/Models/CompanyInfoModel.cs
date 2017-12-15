@@ -28,9 +28,12 @@ namespace asi.asicentral.web.Models
         public string creationTime { get; set; }
     }
 
-    public class CompanyUserCollection {
-       public List<CompanyInfoModel> companyInfoList { get; set; }
-       public List<UserInfoModel> userInfoList { get; set; }
+    public class CompanyUserCollection
+    {
+        public List<CompanyInfoModel> companyInfoList { get; set; }
+        public List<UserInfoModel> userInfoList { get; set; }
+        public string cTotalTime { get; set; }
+        public string uTotalTime { get; set; }
     }
 
 }

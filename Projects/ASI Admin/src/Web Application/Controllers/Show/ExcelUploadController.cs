@@ -22,6 +22,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Xml;
 using asi.asicentral.model.store;
+using System.Threading.Tasks;
 
 namespace asi.asicentral.web.Controllers.Show
 {
@@ -532,35 +533,59 @@ namespace asi.asicentral.web.Controllers.Show
                 companiesDt = ExcelToDataTable(files[0]);
                 userDt = ExcelToDataTable(files[1]);
             }
-
+            
+            DateTime cstartTime = DateTime.Now;
+            string companyTotalTime = string.Empty;
+            List<Task> companyTasks = new List<Task>();
             if (companiesDt.Rows.Count > 0)
             {
                 foreach (DataRow crow in companiesDt.Rows)
                 {
-                    CompanyInfoModel companyModel = CreateCompany(crow);
-                    if (companyModel.CompanyInfo != null)
-                    {
-                        compnayInformationList.Add(companyModel);
-                    }
+                    var task = Task.Factory.StartNew(() =>
+                                   {
+                                       CompanyInfoModel companyModel = CreateCompany(crow);
+                                       if (companyModel.CompanyInfo != null)
+                                       {
+                                           compnayInformationList.Add(companyModel);
+                                       }
+                                   });
+                    companyTasks.Add(task);
                 }
+                Task.WaitAll(companyTasks.ToArray());
+                companyTotalTime = DateTime.Now.Subtract(cstartTime).TotalMilliseconds.ToString();
             }
+            
+            DateTime ustartTime = DateTime.Now;
+            string userTotalTime = string.Empty;
+            List<Task> userTasks = new List<Task>();
             if (compnayInformationList.Count > 0)
             {
                 foreach (var company in compnayInformationList)
                 {
                     if (company.Status == CompanyStatusCode.Created || company.Status == CompanyStatusCode.Exists)
                     {
-                        DataRow[] filterUsers = userDt.Select("asi=" + company.AccountId + " and Active='yes'");
-                        foreach (var userInfo in filterUsers)
+                        var task = Task.Factory.StartNew(() =>
                         {
-                            UserInfoModel user = CreateUser(company, userInfo);
-                            userInformationList.Add(user);
-                        }
+                            DataRow[] filterUsers = userDt.Select("asi=" + company.AccountId + " and Active='yes'");
+                            foreach (var userInfo in filterUsers)
+                            {
+                                UserInfoModel user = CreateUser(company, userInfo);
+                                userInformationList.Add(user);
+                            }
+                        });
+                        userTasks.Add(task);
                     }
                 }
+                Task.WaitAll(userTasks.ToArray());
+                userTotalTime = DateTime.Now.Subtract(ustartTime).TotalMilliseconds.ToString();
             }
 
-            CompanyUserCollection companyUserCollection = new CompanyUserCollection() { companyInfoList = compnayInformationList, userInfoList = userInformationList };
+            CompanyUserCollection companyUserCollection = new CompanyUserCollection() 
+            { companyInfoList = compnayInformationList, 
+                userInfoList = userInformationList,
+                cTotalTime=companyTotalTime,
+                uTotalTime=userTotalTime
+            };
             string emailBody = TemplateService.Render("asi.asicentral.web.Views.Emails.AsicompMigrationEmail.cshtml", companyUserCollection);
 
             var mail = new MailMessage();
@@ -711,11 +736,7 @@ namespace asi.asicentral.web.Controllers.Show
                 });
                 company.MemberType = companyInformation.MemberType;
                 companyModel.StoreCompany = company;
-                companyInfo = personifyService.GetCompanyInfoByAsiNumber(asiNo);
-                if (companyInfo == null)
-                {
-                    companyInfo = personifyService.GetCompanyInfoByASICompAccountId(asiNo);
-                }
+                companyInfo = personifyService.GetCompanyInfoByASICompAccountId(asiNo);
                 if (!string.IsNullOrEmpty(asiNo))
                 {
                     if (companyInfo == null)

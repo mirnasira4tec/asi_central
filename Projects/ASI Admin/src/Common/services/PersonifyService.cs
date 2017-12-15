@@ -730,7 +730,7 @@ namespace asi.asicentral.services
             return PersonifyClient.ValidateRateCode(groupName, rateStructure, rateCode, ref persProductId);
         }
 
-      
+
         public CompanyInformation AddEEXSubscription(User user, bool isBusinessAddress)
         {
             CompanyInformation companyInfo = null;
@@ -780,14 +780,18 @@ namespace asi.asicentral.services
             CompanyInformation companyInfo = null;
             if (!string.IsNullOrEmpty(accountId))
             {
-                string masterId =PersonifyClient.GetASICOMPMasterCustomerId(accountId);
-                if (!string.IsNullOrEmpty(masterId))
+                companyInfo = GetCompanyInfoByAsiNumber(accountId);
+                if (companyInfo == null)
                 {
-                    var customerInfo = PersonifyClient.GetPersonifyCompanyInfo(masterId, 0);
-                    if (customerInfo != null)
+                    string masterId = PersonifyClient.GetASICOMPMasterCustomerId(accountId);
+                    if (!string.IsNullOrEmpty(masterId))
                     {
-                        companyInfo = PersonifyClient.GetCompanyInfo(customerInfo);
-                        UpdateMemberType(companyInfo);
+                        var customerInfo = PersonifyClient.GetPersonifyCompanyInfo(masterId, 0);
+                        if (customerInfo != null)
+                        {
+                            companyInfo = PersonifyClient.GetCompanyInfo(customerInfo);
+                            UpdateMemberType(companyInfo);
+                        }
                     }
                 }
             }

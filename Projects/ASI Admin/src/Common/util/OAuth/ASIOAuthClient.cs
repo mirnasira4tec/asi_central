@@ -412,26 +412,6 @@ namespace asi.asicentral.oauth
             return user;
         }
 
-        public static string GetCompanyByAccId(string accountId)
-        {
-            var usePersonifyServices = ConfigurationManager.AppSettings["UsePersonifyServices"];
-            string masterId = null;
-            if (!string.IsNullOrEmpty(usePersonifyServices) && Convert.ToBoolean(usePersonifyServices) && !string.IsNullOrEmpty(accountId))
-            {
-                try
-                {
-                    IBackendService personifyService = new PersonifyService();
-                     masterId = PersonifyClient.GetASICOMPMasterCustomerId(accountId);
-                }
-                catch (Exception ex)
-                {
-                    LogService log = LogService.GetLog(typeof(ASIOAuthClient));
-                    log.Error(ex.Message);
-                }
-            }
-            return masterId;
-        }
-
         public static bool UpdateUser(asi.asicentral.model.User user, bool isPasswordReset = false)
         {
             bool isUserUpdated = false;
