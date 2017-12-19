@@ -706,9 +706,9 @@ namespace asi.asicentral.web.Controllers.Show
                          Zip = Convert.ToString(companyInforow["ZIP"]),
                          State = Convert.ToString(companyInforow["STATE"]),
                          Country = GetCountryCode(companyInforow["COUNTRY"]),
-                         MemberType = "Unknown",
+                         MemberType = "UNKNOWN",
                          MemberTypeNumber = 0,
-                         CustomerClassCode = "Unknown",
+                         CustomerClassCode = "UNKNOWN",
                          ASINumber = asiNo
                      };
 

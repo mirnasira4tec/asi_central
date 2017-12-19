@@ -26,11 +26,14 @@
             <label>User Information</label>
             <input type="file" name="files" />
         </div>
-        <div class="col-md-6">
-            <label>Company Total Time: @companyUserCollection.cTotalTime</label>
-            <br />
-             <label>User Total Time: @companyUserCollection.uTotalTime</label>
-        </div>
+        @if (companyUserCollection != null)
+        { 
+            <div class="col-md-6">
+                <label>Company Total Time: @companyUserCollection.cTotalTime</label>
+                <br />
+                <label>User Total Time: @companyUserCollection.uTotalTime</label>
+            </div>
+        }
     </div>
     <hr />
     <div class="row">
