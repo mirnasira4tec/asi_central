@@ -593,6 +593,26 @@ namespace asi.asicentral.services.PersonifyProxy
                     company.Country = address.CountryCode;
                     company.Zip = address.PostalCode;
                 }
+
+                // get primary phone, email
+                if( string.IsNullOrEmpty(company.Phone)  )
+                {
+                    var primaryPhone = PersonifyClient.GetCusCommunications(company.MasterCustomerId, company.SubCustomerId, COMMUNICATION_INPUT_PHONE)
+                                              .FirstOrDefault(c => c.PrimaryFlag.HasValue && c.PrimaryFlag.Value);
+                    if( primaryPhone != null)
+                    {
+                        company.Phone = primaryPhone.FormattedPhoneAddress;
+                    }
+                }
+                if (string.IsNullOrEmpty(company.Email))
+                {
+                    var primaryEmail = PersonifyClient.GetCusCommunications(company.MasterCustomerId, company.SubCustomerId, COMMUNICATION_INPUT_EMAIL)
+                                              .FirstOrDefault(c => c.PrimaryFlag.HasValue && c.PrimaryFlag.Value);
+                    if (primaryEmail != null)
+                    {
+                        company.Phone = primaryEmail.FormattedPhoneAddress;
+                    }
+                }
             }
 
             return company;
