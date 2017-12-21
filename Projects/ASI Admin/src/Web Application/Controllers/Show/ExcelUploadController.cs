@@ -566,7 +566,7 @@ namespace asi.asicentral.web.Controllers.Show
                     {
                         var task = Task.Factory.StartNew(() =>
                         {
-                            DataRow[] filterUsers = userDt.Select("asi=" + company.AccountId + " and Active='yes'");
+                            DataRow[] filterUsers = userDt.Select("asi='" + company.AccountId + "' and Active='yes'");
                             foreach (var userInfo in filterUsers)
                             {
                                 UserInfoModel user = CreateUser(company, userInfo);
