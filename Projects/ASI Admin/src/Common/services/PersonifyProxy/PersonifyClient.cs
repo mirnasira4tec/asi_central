@@ -610,7 +610,7 @@ namespace asi.asicentral.services.PersonifyProxy
                                               .FirstOrDefault(c => c.PrimaryFlag.HasValue && c.PrimaryFlag.Value);
                     if (primaryEmail != null)
                     {
-                        company.Phone = primaryEmail.FormattedPhoneAddress;
+                        company.Email = primaryEmail.FormattedPhoneAddress;
                     }
                 }
             }
