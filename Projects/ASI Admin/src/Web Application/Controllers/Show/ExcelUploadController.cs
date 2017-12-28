@@ -533,7 +533,7 @@ namespace asi.asicentral.web.Controllers.Show
                 companiesDt = ExcelToDataTable(files[0]);
                 userDt = ExcelToDataTable(files[1]);
             }
-            
+
             DateTime cstartTime = DateTime.Now;
             string companyTotalTime = string.Empty;
             List<Task> companyTasks = new List<Task>();
@@ -541,50 +541,40 @@ namespace asi.asicentral.web.Controllers.Show
             {
                 foreach (DataRow crow in companiesDt.Rows)
                 {
-                    var task = Task.Factory.StartNew(() =>
-                                   {
-                                       CompanyInfoModel companyModel = CreateCompany(crow);
-                                       if (companyModel.CompanyInfo != null)
-                                       {
-                                           compnayInformationList.Add(companyModel);
-                                       }
-                                   });
-                    companyTasks.Add(task);
+                    CompanyInfoModel companyModel = CreateCompany(crow);
+                    if (companyModel.CompanyInfo != null)
+                    {
+                        compnayInformationList.Add(companyModel);
+                    }
                 }
-                Task.WaitAll(companyTasks.ToArray());
                 companyTotalTime = DateTime.Now.Subtract(cstartTime).TotalMilliseconds.ToString();
             }
-            
+
             DateTime ustartTime = DateTime.Now;
             string userTotalTime = string.Empty;
-            List<Task> userTasks = new List<Task>();
             if (compnayInformationList.Count > 0)
             {
                 foreach (var company in compnayInformationList)
                 {
                     if (company.Status == CompanyStatusCode.Created || company.Status == CompanyStatusCode.Exists)
                     {
-                        var task = Task.Factory.StartNew(() =>
+                        DataRow[] filterUsers = userDt.Select("asi='" + company.AccountId.Trim() + "' and Active='yes'");
+                        foreach (var userInfo in filterUsers)
                         {
-                            DataRow[] filterUsers = userDt.Select("asi='" + company.AccountId + "' and Active='yes'");
-                            foreach (var userInfo in filterUsers)
-                            {
-                                UserInfoModel user = CreateUser(company, userInfo);
-                                userInformationList.Add(user);
-                            }
-                        });
-                        userTasks.Add(task);
+                            UserInfoModel user = CreateUser(company, userInfo);
+                            userInformationList.Add(user);
+                        }
                     }
                 }
-                Task.WaitAll(userTasks.ToArray());
                 userTotalTime = DateTime.Now.Subtract(ustartTime).TotalMilliseconds.ToString();
             }
 
-            CompanyUserCollection companyUserCollection = new CompanyUserCollection() 
-            { companyInfoList = compnayInformationList, 
+            CompanyUserCollection companyUserCollection = new CompanyUserCollection()
+            {
+                companyInfoList = compnayInformationList,
                 userInfoList = userInformationList,
-                cTotalTime=companyTotalTime,
-                uTotalTime=userTotalTime
+                cTotalTime = companyTotalTime,
+                uTotalTime = userTotalTime
             };
             string emailBody = TemplateService.Render("asi.asicentral.web.Views.Emails.AsicompMigrationEmail.cshtml", companyUserCollection);
 
@@ -699,7 +689,7 @@ namespace asi.asicentral.web.Controllers.Show
                 var companyInformation = new asi.asicentral.model.CompanyInformation
                      {
                          Name = Convert.ToString(companyInforow["COMPANY"]),
-                         Phone = phoneNo + areaCode,
+                         Phone = areaCode + phoneNo,
                          Street1 = Convert.ToString(companyInforow["ADDRESS1"]),
                          Street2 = Convert.ToString(companyInforow["ADDRESS2"]),
                          City = Convert.ToString(companyInforow["CITY"]),
@@ -815,7 +805,7 @@ namespace asi.asicentral.web.Controllers.Show
                     userModel.user.CompanyId = companyInfo.CompanyId;
                     userModel.user.UserName = userModel.user.Email;
                     //ASI Number
-                    userModel.user.StatusCode = StatusCode.ACTV.ToString(); ;
+                    userModel.user.StatusCode = StatusCode.ACTV.ToString();
                     userModel.user.AsiNumber = companyInfo.ASINumber;
                     userModel.user.MemberType_CD = companyInfo.MemberType;
                     List<string> phoneNumber = SeprateAreaCodeFromPhonNo(companyInfo.Phone);
@@ -873,17 +863,32 @@ namespace asi.asicentral.web.Controllers.Show
                     var user = ASIOAuthClient.GetUserByEmail(userModel.user.Email);
                     if (user == null)
                     {
+                        string notAllowedChars = @"!#$%*+-./<=>?[\]^_`{|}~";
+                        string newPassword = userModel.user.Password;
+                        userModel.oldPassword = userModel.user.Password;
+
+                        foreach (char p in userModel.user.Password)
+                        {
+                            foreach (var n in notAllowedChars)
+                            {
+                                if (p == n)
+                                {
+                                    newPassword = newPassword.Replace(p.ToString(), string.Empty);
+                                }
+                            }
+                        }
                         Regex regex = new Regex(@"^(?=.*\d)([a-zA-Z0-9_@():;.,'&]{8,25})$");
-                        Match match = regex.Match(userModel.user.Password);
+                        Match match = regex.Match(newPassword);
                         if (!match.Success)
                         {
                             string passwordPadding = "As1";
                             userModel.user.PasswordResetRequired = true;
-                            userModel.user.Password += passwordPadding;
+                            userModel.user.Password = newPassword + passwordPadding;
                         }
                         else
                         {
                             userModel.user.PasswordResetRequired = false;
+                            userModel.user.Password = newPassword;
                         }
                         ssoId = ASIOAuthClient.CreateUser(userModel.user);
                         int number;

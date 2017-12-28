@@ -26,6 +26,7 @@ namespace asi.asicentral.web.Models
         public string message { get; set; }
         public CompanyStatusCode status { get; set; }
         public string creationTime { get; set; }
+        public string oldPassword { get; set; }
     }
 
     public class CompanyUserCollection
