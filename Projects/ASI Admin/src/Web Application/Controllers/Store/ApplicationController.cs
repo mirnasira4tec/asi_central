@@ -1178,7 +1178,7 @@ namespace asi.asicentral.web.Controllers.Store
                                 StoreService.Add<StoreAddress>(order.BillingIndividual.Address);
                             }
                             order.BillingIndividual.Address.Street1 = model.BillingAddress1;
-                            order.BillingIndividual.Address.Street2 = model.BillingAddress1;
+                            order.BillingIndividual.Address.Street2 = model.BillingAddress2;
                             order.BillingIndividual.Address.City = model.BillingCity;
                             order.BillingIndividual.Address.State = model.BillingState;
                             order.BillingIndividual.Address.Zip = model.BillingZip;
