@@ -443,7 +443,8 @@ namespace asi.asicentral.services
 
         public virtual void SaveCreditCardInfo(StoreOrder order)
         {
-            if (order != null && order.CreditCard != null && !string.IsNullOrEmpty(order.CreditCard.TokenId) && order.BillingIndividual != null)
+            if (order != null && order.CreditCard != null && string.IsNullOrEmpty(order.CreditCard.ExternalReference) && 
+                !string.IsNullOrEmpty(order.CreditCard.TokenId) && order.BillingIndividual != null )
             {
                 var billingInfo = order.BillingIndividual;
                 var creditCard = new asi.asicentral.model.CreditCard()
