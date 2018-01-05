@@ -30,5 +30,6 @@ namespace asi.asicentral.web.models.show
     {
         public ShowEmployee Employee { get; set; }
         public bool IsAttending { get; set; }
+        public int? PriorityOrder { get; set; }
     }
 }
