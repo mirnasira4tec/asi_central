@@ -780,6 +780,15 @@ namespace asi.asicentral.services
             PersonifyClient.UpdateASICompData(parameters);
         }
 
+        public virtual void UpdateEMSSSO(string masterId, int subCustomerId, string ssoId)
+        {
+            if( !string.IsNullOrEmpty(ssoId) && !string.IsNullOrEmpty(masterId))
+            {
+                var paramList = new List<string>() { masterId, subCustomerId.ToString(), ssoId };
+                PersonifyClient.ExecutePersonifySP(PersonifyClient.SP_UPDATE_MMS_EMS_SIGNON, paramList);
+            }
+        }
+
         private static string GetCountryCode(string country)
 		{
 			string result = null;
