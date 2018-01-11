@@ -780,13 +780,24 @@ namespace asi.asicentral.services
             PersonifyClient.UpdateASICompData(parameters);
         }
 
-        public virtual void UpdateEMSSSO(string masterId, int subCustomerId, string ssoId)
+        public virtual bool UpdateEMSSSO(string masterId, int subCustomerId, string ssoId)
         {
+            var success = false;
             if( !string.IsNullOrEmpty(ssoId) && !string.IsNullOrEmpty(masterId))
             {
                 var paramList = new List<string>() { masterId, subCustomerId.ToString(), ssoId };
-                PersonifyClient.ExecutePersonifySP(PersonifyClient.SP_UPDATE_MMS_EMS_SIGNON, paramList);
+                var response = PersonifyClient.ExecutePersonifySP(PersonifyClient.SP_UPDATE_MMS_EMS_SIGNON, paramList);
+                if (response != null && !string.IsNullOrEmpty(response.Data))
+                {
+                    var result = 0;
+                    var match = Regex.Match(response.Data, @"<RESULT>(.*?)</RESULT>");
+                    if (match.Success && Int32.TryParse(match.Groups[1].Value.Trim(), out result))
+                    {
+                        success = result == 1;
+                    }
+                }
             }
+            return success;
         }
 
         private static string GetCountryCode(string country)

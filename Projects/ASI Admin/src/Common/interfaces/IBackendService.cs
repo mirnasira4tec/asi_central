@@ -62,6 +62,6 @@ namespace asi.asicentral.interfaces
         List<XElement> GetASICOMPData(string masterId);
         void UpdateASICompData(List<string> parameters);
 
-        void UpdateEMSSSO(string masterId, int subCustomerId, string ssoId);
+        bool UpdateEMSSSO(string masterId, int subCustomerId, string ssoId);
     }
 }
