@@ -11,10 +11,6 @@
         var disableEditing = false;
         var errMsg = CheckBackEnd(ref hasBackEndFlag, ref disableEditing);
         var orderStatus = string.IsNullOrEmpty(errMsg) ? Model.OrderStatus : OrderStatus.PersonifyError;
-        if( !disableEditing && orderStatus != OrderStatus.Pending)
-        {
-            disableEditing = true;
-        }
                 
         var hasPendingTerms = HasPendingTerms();
     }
