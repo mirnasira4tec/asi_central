@@ -211,7 +211,8 @@ namespace asi.asicentral.services
                     }
                     catch (Exception e)
                     {
-                        string s = string.Format("Failed to pay the order '{0} {3}'. Error is {2}{1}", order, e.StackTrace, e.Message, order.BackendReference);
+                        var ccId = order.CreditCard != null && !string.IsNullOrEmpty(order.CreditCard.ExternalReference) ? order.CreditCard.ExternalReference : string.Empty;
+                        string s = string.Format("Failed to pay the order '{0} {3}', CC ProfileId '{4}'. Error is {2}{1}", order, e.StackTrace, e.Message, order.BackendReference, ccId);
                         log.Error(s);
                         var data = new EmailData()
                         {
