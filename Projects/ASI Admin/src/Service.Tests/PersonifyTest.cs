@@ -315,6 +315,13 @@ namespace asi.asicentral.Tests
 	        }
         }
 
+        [Test]
+        public void TestSP()
+        {
+            var result = PersonifyClient.ExecutePersonifySP(PersonifyClient.SP_UPDATE_MMS_EMS_SIGNON, new List<string>() { "000000125724", "0", "240989" });
+            Assert.IsNotNull(result);
+        }
+
 		[Test]
 		public void GetCompanyCreditCards()
 		{
