@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace asi.asicentral.model.show
 {
-  public class ShowAttendee
+    public class ShowAttendee
     {
-      public ShowAttendee()
-      {
-          if (this.GetType() == typeof(ShowAttendee))
-          {
-              EmployeeAttendees = new List<ShowEmployeeAttendee>();
-          }
-      }
+        public ShowAttendee()
+        {
+            if (this.GetType() == typeof(ShowAttendee))
+            {
+                EmployeeAttendees = new List<ShowEmployeeAttendee>();
+            }
+        }
         public int Id { get; set; }
         public int? ShowId { get; set; }
         public int? CompanyId { get; set; }

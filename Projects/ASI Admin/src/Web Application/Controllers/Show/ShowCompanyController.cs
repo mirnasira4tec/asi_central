@@ -20,7 +20,7 @@ namespace asi.asicentral.web.Controllers.Show
         public IObjectService ObjectService { get; set; }
         IList<string> messages = new List<string>();
 
-        public ActionResult CompanyList(String companyTab, string Name, string MemberType,string asiNumber, int page = 1, int pageSize = 20)
+        public ActionResult CompanyList(String companyTab, string Name, string MemberType, string asiNumber, int page = 1, int pageSize = 20)
         {
             var company = new CompanyModel();
             company.CurrentPageIndex = page;
@@ -202,7 +202,7 @@ namespace asi.asicentral.web.Controllers.Show
                 int addressCount = company.CompanyAddresses.Count();
                 int employeeCount = company.Employees.Count();
                 int companyAttendeeCount = company.Attendees.Count();
-                 
+
                 for (int i = addressCount - 1; i >= 0; i--)
                 {
                     ObjectService.Delete(company.CompanyAddresses.ElementAt(i));
@@ -581,7 +581,7 @@ namespace asi.asicentral.web.Controllers.Show
         public ActionResult EmployeeList()
         {
             var employee = new CompanyInformation();
-            IList<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>().OrderByDescending(form => form.CreateDate).ToList();;
+            IList<ShowEmployee> employeeList = ObjectService.GetAll<ShowEmployee>().OrderByDescending(form => form.CreateDate).ToList(); ;
             return View("../Show/Company/CompanyList", employee);
         }
 
@@ -598,7 +598,8 @@ namespace asi.asicentral.web.Controllers.Show
                 IList<ShowEmployeeAttendee> attendees = ObjectService.GetAll<ShowEmployeeAttendee>(true).Where(sea => sea.AttendeeId == attendee.Id).ToList();
                 foreach (ShowEmployee showEmployee in employees)
                 {
-                    EmployeeAttendance employeeAttendance = AddEmployeeAttandance(showEmployee, attendees.Where(a => a.EmployeeId == showEmployee.Id).Count() == 1);
+                    var attendeeInfo = attendees.Where(a => a.EmployeeId == showEmployee.Id);
+                    EmployeeAttendance employeeAttendance = AddEmployeeAttandance(showEmployee, attendeeInfo.Count() == 1, attendeeInfo.FirstOrDefault() != null ? attendeeInfo.FirstOrDefault().PriorityOrder : null);
                     showCompanies.ShowEmployees.Add(employeeAttendance);
                 }
             }
@@ -613,7 +614,7 @@ namespace asi.asicentral.web.Controllers.Show
                 showCompanies.ShowAttendees.Add(newAttendee);
                 foreach (ShowEmployee showEmployee in employees)
                 {
-                    EmployeeAttendance employeeAttendance = AddEmployeeAttandance(showEmployee, false);
+                    EmployeeAttendance employeeAttendance = AddEmployeeAttandance(showEmployee, false, null);
                     showCompanies.ShowEmployees.Add(employeeAttendance);
                 }
                 showCompanies.Show = show;
@@ -628,11 +629,12 @@ namespace asi.asicentral.web.Controllers.Show
             return View("../Show/AddCompanyAttendeesToShow", showCompanies);
         }
 
-        private EmployeeAttendance AddEmployeeAttandance(ShowEmployee showEmployee, bool isAttending)
+        private EmployeeAttendance AddEmployeeAttandance(ShowEmployee showEmployee, bool isAttending, int? priorityOrder)
         {
             var employeeAttendance = new EmployeeAttendance();
             employeeAttendance.Employee = showEmployee;
             employeeAttendance.IsAttending = isAttending;
+            employeeAttendance.PriorityOrder = priorityOrder;
             return employeeAttendance;
         }
 
@@ -691,7 +693,7 @@ namespace asi.asicentral.web.Controllers.Show
                 ObjectService.Delete<ShowAttendee>(attendee);
                 ObjectService.SaveChanges();
             }
-            return RedirectToAction("GetAttendeeCompany", new {showId = showId });
+            return RedirectToAction("GetAttendeeCompany", new { showId = showId });
         }
     }
 }

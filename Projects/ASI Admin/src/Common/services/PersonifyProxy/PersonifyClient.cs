@@ -60,6 +60,7 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string SP_OAM_INSERT_CREDIT_CARD = "USR_OAM_INSERT_CREDIT_CARD_PROC";
         private const string SP_UPDATE_ASICOMP_DATA = "USR_CREATE_ASI_COMP_DATA";
         private const string SP_GET_ASICOMP_DATA = "USR_REPORT_ASI_COMP_DATA";
+        public const string SP_UPDATE_MMS_EMS_SIGNON = "USR_UPDATE_MMS_EMS_SIGNON";
         private const string SP_GET_ASICOMP_DATA_BY_ACCT = "USR_ASI_COMP_DATA_BY_ACCT";
 
         private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
@@ -169,7 +170,8 @@ namespace asi.asicentral.services.PersonifyProxy
                                                          "@ip_USR_NEWS",
                                                          "@ip_ADDED_BY" } },
             {SP_GET_ASICOMP_DATA, new List<string>(){ "@ip_MASTER_CUSTOMER_ID" } },
-            {SP_GET_ASICOMP_DATA_BY_ACCT, new List<string>(){"@ip_USR_ACCOUNTID"}},
+            {SP_UPDATE_MMS_EMS_SIGNON, new List<string>(){  "@ip_MASTER_CUSTOMER_ID", "@ip_SUB_CUSTOMER_ID", "@ip_USR_MMS_SIGNON_EMS" } },
+            {SP_GET_ASICOMP_DATA_BY_ACCT, new List<string>(){"@ip_USR_ACCOUNTID"}}
         };
 
         private static readonly IDictionary<string, List<string>> EEX_USAGE_CODES = new Dictionary<string, List<string>>()

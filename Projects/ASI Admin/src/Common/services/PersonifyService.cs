@@ -211,7 +211,8 @@ namespace asi.asicentral.services
                     }
                     catch (Exception e)
                     {
-                        string s = string.Format("Failed to pay the order '{0} {3}'. Error is {2}{1}", order, e.StackTrace, e.Message, order.BackendReference);
+                        var ccId = order.CreditCard != null && !string.IsNullOrEmpty(order.CreditCard.ExternalReference) ? order.CreditCard.ExternalReference : string.Empty;
+                        string s = string.Format("Failed to pay the order '{0} {3}', CC ProfileId '{4}'. Error is {2}{1}", order, e.StackTrace, e.Message, order.BackendReference, ccId);
                         log.Error(s);
                         var data = new EmailData()
                         {
@@ -444,7 +445,7 @@ namespace asi.asicentral.services
         public virtual void SaveCreditCardInfo(StoreOrder order)
         {
             if (order != null && order.CreditCard != null && string.IsNullOrEmpty(order.CreditCard.ExternalReference) && 
-                !string.IsNullOrEmpty(order.CreditCard.TokenId) && order.BillingIndividual != null )
+                !string.IsNullOrEmpty(order.CreditCard.AuthReference) && order.BillingIndividual != null )
             {
                 var billingInfo = order.BillingIndividual;
                 var creditCard = new asi.asicentral.model.CreditCard()
@@ -802,6 +803,26 @@ namespace asi.asicentral.services
         public virtual void UpdateASICompData(List<string> parameters)
         {
             PersonifyClient.UpdateASICompData(parameters);
+        }
+
+        public virtual bool UpdateEMSSSO(string masterId, int subCustomerId, string ssoId)
+        {
+            var success = false;
+            if( !string.IsNullOrEmpty(ssoId) && !string.IsNullOrEmpty(masterId))
+            {
+                var paramList = new List<string>() { masterId, subCustomerId.ToString(), ssoId };
+                var response = PersonifyClient.ExecutePersonifySP(PersonifyClient.SP_UPDATE_MMS_EMS_SIGNON, paramList);
+                if (response != null && !string.IsNullOrEmpty(response.Data))
+                {
+                    var result = 0;
+                    var match = Regex.Match(response.Data, @"<RESULT>(.*?)</RESULT>");
+                    if (match.Success && Int32.TryParse(match.Groups[1].Value.Trim(), out result))
+                    {
+                        success = result == 1;
+                    }
+                }
+            }
+            return success;
         }
 
         private static string GetCountryCode(string country)

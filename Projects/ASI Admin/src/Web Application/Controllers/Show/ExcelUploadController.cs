@@ -148,6 +148,7 @@ namespace asi.asicentral.web.Controllers.Show
             {
                 attendee.BoothNumber = ds.Rows[rowId]["BoothNumber"].ToString();
             }
+
             attendee.IsExisting = true;
             attendee.UpdateSource = "ExcelUploadcontroller-Index";
             attendee.UpdateDate = DateTime.UtcNow;
@@ -249,6 +250,10 @@ namespace asi.asicentral.web.Controllers.Show
                     {
                         employeeAttendee.HasTravelForm = Convert.ToBoolean(ds.Rows[rowId]["HasTravelForm"].ToString() == "Yes") ? true : false;
                     }
+                    if (ds.Columns.Contains("PriorityOrder"))
+                    {
+                        employeeAttendee.PriorityOrder = ds.Rows[rowId]["PriorityOrder"].ToString() == string.Empty ? (int?)null : Convert.ToInt32(ds.Rows[rowId]["PriorityOrder"]);
+                    }
                     if (employeeAttendees != null)
                         employeeAttendees.Add(employeeAttendee);
                 }
@@ -332,23 +337,26 @@ namespace asi.asicentral.web.Controllers.Show
                                     {
                                         columnNameList = new string[] { "ASINO", "Company", "Sponsor", "Presentation", "Roundtable", "ExhibitOnly", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
                                     }
-                                    if (objShow != null && objShow.ShowTypeId == 4)
+                                    else if (objShow != null && objShow.ShowTypeId == 4)
                                     {
                                         columnNameList = new string[] { "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
                                     }
-                                    if (objShow != null && objShow.ShowTypeId == 5)
+                                    else if (objShow != null && objShow.ShowTypeId == 5)
                                     {
                                         fasiliateFlag = true;
                                         columnNameList = new string[] { "ASINO", "MemberType", "Company", "FirstName", "LastName", "Address", "City", "State", "Zip Code", "Country", "Shipping Address 1", "Shipping Address 2", "Shipping City", "Shipping State", "Shipping Zip Code", "Shipping Country", "Phone", "Email Address" };
                                     }
-                                    var matchShow = Regex.Match(worksheet.Name, @"^\s*WEEK\s+\d+\s*-\s*", RegexOptions.IgnoreCase);
-                                    if (matchShow.Success)
+                                    else
                                     {
-                                        var weekNum = matchShow.Value.Trim();
-                                        var address = worksheet.Name.Substring(matchShow.Value.Length);
-                                        objShow = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains(weekNum.Replace("-", " -")) && item.Address.Contains(address.Trim()))
-                                                                                 .OrderByDescending(s => s.StartDate).FirstOrDefault();
-                                        columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
+                                        var matchShow = Regex.Match(worksheet.Name, @"^\s*WEEK\s+\d+\s*-\s*", RegexOptions.IgnoreCase);
+                                        if (matchShow.Success)
+                                        {
+                                            var weekNum = matchShow.Value.Trim();
+                                            var address = worksheet.Name.Substring(matchShow.Value.Length);
+                                            objShow = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains(weekNum.Replace("-", " -")) && item.Address.Contains(address.Trim()))
+                                                                                     .OrderByDescending(s => s.StartDate).FirstOrDefault();
+                                            columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
+                                        }
                                     }
                                 }
                                 if (objShow == null)
