@@ -46,6 +46,7 @@
                 <td>Phone</td>
                 <td>Status</td>
                 <td>Message</td>
+                <td>Time</td>
             </tr>
         </thead>
         <tbody>
@@ -61,6 +62,7 @@
                     <td>@company.CompanyInfo.Phone</td>
                     <td>@company.Status</td>
                     <td>@company.Message</td>
+                    <td>@company.creationTime</td>
                 </tr>
             }
         </tbody>
@@ -78,6 +80,7 @@
                 <td>Phone</td>
                 <td>Status</td>
                 <td>Message</td>
+                <td>Time</td>
             </tr>
         </thead>
         <tbody>
@@ -93,6 +96,7 @@
                     <td>@company.CompanyInfo.Phone</td>
                     <td>@company.Status</td>
                     <td>@company.Message</td>
+                    <td>@company.creationTime</td>
                 </tr>
             }
 
@@ -110,6 +114,7 @@
                 <td>Phone</td>
                 <td>Status</td>
                 <td>Message</td>
+                <td>Time</td>
             </tr>
         </thead>
         <tbody>
@@ -125,6 +130,7 @@
                     <td>@company.CompanyInfo.Phone</td>
                     <td>@company.Status</td>
                     <td>@company.Message</td>
+                    <td>@company.creationTime</td>
                 </tr>
             }
 
@@ -146,6 +152,7 @@
                 <td>Old Password</td>
                 <td>New Password</td>
                 <td>Message</td>
+                <td>Time</td>
             </tr>
         </thead>
         <tbody>
@@ -154,26 +161,15 @@
             </tr>
             @foreach (var user in createdUserList)
             {
-                var oldPassword = string.Empty;
-                var newPassword = string.Empty;
-                if (user.user.PasswordResetRequired == true)
-                {
-                    oldPassword = user.user.Password.Remove(@user.user.Password.Length - 3);
-                    newPassword = user.user.Password;
-                }
-                else
-                {
-                    oldPassword = user.user.Password;
-                    newPassword = string.Empty;
-                }
                 <tr>
                     <td>@user.user.AsiNumber</td>
                     <td>@user.user.FirstName @user.user.LastName</td>
                     <td>@user.user.Email</td>
                     <td>@user.status</td>
-                    <td>@oldPassword</td>
-                    <td>@newPassword</td>
+                    <td>@user.oldPassword</td>
+                    <td>@user.user.Password</td>
                     <td>@user.message</td>
+                    <td>@user.creationTime</td>
                 </tr>
             }
 
@@ -193,6 +189,7 @@
                 <td>Old Password</td>
                 <td>New Password</td>
                 <td>Message</td>
+                <td>Time</td>
             </tr>
         </thead>
         <tbody>
@@ -201,26 +198,15 @@
             </tr>
             @foreach (var user in existsUserList)
             {
-                var oldPassword = string.Empty;
-                var newPassword = string.Empty;
-                if (user.user.PasswordResetRequired == true)
-                {
-                    oldPassword = user.user.Password.Remove(@user.user.Password.Length - 3);
-                    newPassword = user.user.Password;
-                }
-                else
-                {
-                    oldPassword = user.user.Password;
-                    newPassword = string.Empty;
-                }
                 <tr>
                     <td>@user.user.AsiNumber</td>
                     <td>@user.user.FirstName @user.user.LastName</td>
                     <td>@user.user.Email</td>
                     <td>@user.status</td>
-                    <td>@oldPassword</td>
-                    <td>@newPassword</td>
+                    <td>@user.oldPassword</td>
+                    <td>@user.user.Password</td>
                     <td>@user.message</td>
+                    <td>@user.creationTime</td>
                 </tr>
             }
 
@@ -240,6 +226,7 @@
                 <td>Old Password</td>
                 <td>New Password</td>
                 <td>Message</td>
+                <td>Time</td>
             </tr>
         </thead>
         <tbody>
@@ -248,26 +235,15 @@
             </tr>
             @foreach (var user in failedUserList)
             {
-                var oldPassword = string.Empty;
-                var newPassword = string.Empty;
-                if (user.user.PasswordResetRequired == true)
-                {
-                    oldPassword = user.user.Password.Remove(@user.user.Password.Length - 3);
-                    newPassword = user.user.Password;
-                }
-                else
-                {
-                    oldPassword = user.user.Password;
-                    newPassword = string.Empty;
-                }
                 <tr>
                     <td>@user.user.AsiNumber</td>
                     <td>@user.user.FirstName @user.user.LastName</td>
                     <td>@user.user.Email</td>
                     <td>@user.status</td>
-                    <td>@oldPassword</td>
-                    <td>@newPassword</td>
+                    <td>@user.oldPassword</td>
+                    <td>@user.user.Password</td>
                     <td>@user.message</td>
+                    <td>@user.creationTime</td>
                 </tr>
             }
 

@@ -40,6 +40,8 @@ namespace asi.asicentral.interfaces
 
         CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber);
 
+        CompanyInformation GetCompanyInfoByASICompAccountId(string accountId);
+
 		CompanyInformation GetCompanyInfoByIdentifier(int companyIdentifier);
 
         CompanyInformation AddCompany(User curUser);

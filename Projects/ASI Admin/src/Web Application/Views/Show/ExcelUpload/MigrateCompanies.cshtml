@@ -26,6 +26,14 @@
             <label>User Information</label>
             <input type="file" name="files" />
         </div>
+        @if (companyUserCollection != null)
+        { 
+            <div class="col-md-6">
+                <label>Company Total Time: @companyUserCollection.cTotalTime</label>
+                <br />
+                <label>User Total Time: @companyUserCollection.uTotalTime</label>
+            </div>
+        }
     </div>
     <hr />
     <div class="row">
@@ -33,6 +41,7 @@
             <button type="submit" name="btn" class="btn btn-primary">Migrate</button>
         </div>
     </div>
+    
 }
 
 @{Html.RenderPartial("~/Views/Emails/AsicompMigrationEmail.cshtml", companyUserCollection);}
