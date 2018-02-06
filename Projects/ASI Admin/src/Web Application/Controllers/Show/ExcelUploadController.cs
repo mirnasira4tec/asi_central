@@ -891,7 +891,12 @@ namespace asi.asicentral.web.Controllers.Show
                         {
                             string passwordPadding = "As1";
                             userModel.user.PasswordResetRequired = true;
-                            userModel.user.Password = newPassword + passwordPadding;
+                            userModel.user.Password = newPassword;
+                            do
+                            {
+                                userModel.user.Password += passwordPadding;
+                            } while (userModel.user.Password.Length < 8);
+
                         }
                         else
                         {
