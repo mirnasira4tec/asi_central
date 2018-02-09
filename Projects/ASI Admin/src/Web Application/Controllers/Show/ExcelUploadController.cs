@@ -584,10 +584,25 @@ namespace asi.asicentral.web.Controllers.Show
                 cTotalTime = companyTotalTime,
                 uTotalTime = userTotalTime
             };
-            string emailBody = TemplateService.Render("asi.asicentral.web.Views.Emails.AsicompMigrationEmail.cshtml", companyUserCollection);
+            SendMigrationNotificationEmail(companyUserCollection, "AsiComp account Mirgration report.");
+           
+            CompanyUserCollection createdCompanyUserCollection = new CompanyUserCollection()
+            {
+                companyInfoList = new List<CompanyInfoModel>(),
+                userInfoList = userInformationList.Where(m => m.isPasswordUpdated).ToList(),
+                cTotalTime = companyTotalTime,
+                uTotalTime = userTotalTime
+            };
+            SendMigrationNotificationEmail(createdCompanyUserCollection, "Asicomp migration report – updating password accounts");
 
+            return View("~/Views/Show/ExcelUpload/MigrateCompanies.cshtml", companyUserCollection);
+        }
+
+        private void SendMigrationNotificationEmail(CompanyUserCollection infoCollection, string subject)
+        {
+            string emailBody = TemplateService.Render("asi.asicentral.web.Views.Emails.AsicompMigrationEmail.cshtml", infoCollection);
             var mail = new MailMessage();
-            mail.Subject = "AsiComp account Mirgration report.";
+            mail.Subject = subject;
             mail.Body = emailBody;
             mail.BodyEncoding = Encoding.UTF8;
             mail.IsBodyHtml = true;
@@ -599,7 +614,6 @@ namespace asi.asicentral.web.Controllers.Show
             }
             EmailService.SendMail(mail);
 
-            return View("~/Views/Show/ExcelUpload/MigrateCompanies.cshtml", companyUserCollection);
         }
 
         //converts Excel sheet to datatable
@@ -892,6 +906,7 @@ namespace asi.asicentral.web.Controllers.Show
                             string passwordPadding = "As1";
                             userModel.user.PasswordResetRequired = true;
                             userModel.user.Password = newPassword;
+                            userModel.isPasswordUpdated = true;
                             do
                             {
                                 userModel.user.Password += passwordPadding;
