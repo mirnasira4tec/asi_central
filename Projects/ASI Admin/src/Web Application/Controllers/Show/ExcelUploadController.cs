@@ -901,6 +901,10 @@ namespace asi.asicentral.web.Controllers.Show
                         }
                         Regex regex = new Regex(@"^(?=.*\d)([a-zA-Z0-9_@():;.,'&]{8,25})$");
                         Match match = regex.Match(newPassword);
+                        if( match.Success )
+                        {
+                            match = Regex.Match(newPassword, @"[a-zA-Z]+");
+                        }
                         if (!match.Success)
                         {
                             string passwordPadding = "As1";
