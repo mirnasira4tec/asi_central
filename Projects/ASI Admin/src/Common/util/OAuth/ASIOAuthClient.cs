@@ -15,6 +15,7 @@ using System.Security.Claims;
 using ASI.Services.Messaging;
 using System.Net;
 using System.Web;
+using asi.asicentral.services.PersonifyProxy;
 
 namespace asi.asicentral.oauth
 {
@@ -419,8 +420,6 @@ namespace asi.asicentral.oauth
                 try
                 {
                     ASI.EntityModel.User entityUser = null;
-                    // Function removed due to package update ASCN-3224
-                    //ASI.EntityModel.Company entityCompany = null;
                     //entityCompany = MapASIUserCompanyToEntityModelCompany(user, entityCompany, false);
                     entityUser = MapASIUserToEntityModelUser(user, entityUser, isCreate: false, isPasswordReset: isPasswordReset);
 

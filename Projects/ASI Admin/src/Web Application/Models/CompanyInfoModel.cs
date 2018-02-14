@@ -12,6 +12,7 @@ namespace asi.asicentral.web.Models
         public CompanyStatusCode Status { get; set; }
         public StoreCompany StoreCompany;
         public string AccountId { get; set; }
+        public string creationTime { get; set; }
     }
     public enum CompanyStatusCode
     {
@@ -24,11 +25,17 @@ namespace asi.asicentral.web.Models
         public asi.asicentral.model.User user { get; set; }
         public string message { get; set; }
         public CompanyStatusCode status { get; set; }
+        public string creationTime { get; set; }
+        public string oldPassword { get; set; }
+        public bool isPasswordUpdated { get; set; }
     }
 
-    public class CompanyUserCollection {
-       public List<CompanyInfoModel> companyInfoList { get; set; }
-       public List<UserInfoModel> userInfoList { get; set; }
+    public class CompanyUserCollection
+    {
+        public List<CompanyInfoModel> companyInfoList { get; set; }
+        public List<UserInfoModel> userInfoList { get; set; }
+        public string cTotalTime { get; set; }
+        public string uTotalTime { get; set; }
     }
 
 }

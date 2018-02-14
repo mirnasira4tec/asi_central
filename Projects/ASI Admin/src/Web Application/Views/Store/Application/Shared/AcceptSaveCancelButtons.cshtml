@@ -184,7 +184,7 @@
                 }
 
                 // confirm coupon in Personify mapping table
-                if (string.IsNullOrEmpty(errMsg) && orderDetail.Coupon != null && !CouponHelper.IsValidCoupon(StoreService, orderDetail.Coupon, product.Id, order.ContextId))
+                if (hasBackEndFlag && string.IsNullOrEmpty(errMsg) && orderDetail.Coupon != null && !CouponHelper.IsValidCoupon(StoreService, orderDetail.Coupon, product.Id, order.ContextId))
                 {
                     errMsg = string.Format("Unable to find coupon '{0}' for Personify order", orderDetail.Coupon.CouponCode);
                 }
