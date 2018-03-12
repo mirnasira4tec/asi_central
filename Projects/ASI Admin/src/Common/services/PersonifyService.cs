@@ -77,7 +77,7 @@ namespace asi.asicentral.services
                 var contactMasterId = primaryContactInfo != null ? primaryContactInfo.MasterCustomerId : individualInfos[0].MasterCustomerId;
                 var contactSubId = primaryContactInfo != null ? primaryContactInfo.SubCustomerId : individualInfos[0].SubCustomerId;
 
-                var shipToAddr = GetAddressInfo(contactAddresses, AddressType.Shipping, order).PersonifyAddr;
+                var shipToAddr = GetAddressInfo(contactAddresses, AddressType.Shipping, order, contactMasterId).PersonifyAddr;
                 var billToAddr = storeAddress.FirstOrDefault(a => a.StoreIsBilling == true).PersonifyAddr;
 
                 var orderDetail = order.OrderDetails[0];
@@ -389,14 +389,22 @@ namespace asi.asicentral.services
             return backEndTotal;
         }
 
-        private StoreAddressInfo GetAddressInfo(IList<StoreAddressInfo> addresses, AddressType type, StoreOrder order)
+        private StoreAddressInfo GetAddressInfo(IList<StoreAddressInfo> addresses, AddressType type, StoreOrder order, string contactMasterId)
         {
-            var addr = addresses.FirstOrDefault(a =>
+            StoreAddressInfo addr = null;
+            if(addresses.Count>1 && !string.IsNullOrEmpty(contactMasterId))
             {
-                if (type == AddressType.Shipping) return a.StoreIsShipping && !a.StoreIsPrimary;
-                if (type == AddressType.Billing) return a.StoreIsBilling && !a.StoreIsPrimary;
-                return false;
-            });
+                addr = addresses.Where(a => a.PersonifyAddr.MasterCustomerId == contactMasterId).FirstOrDefault();
+            }
+            if (addr == null)
+            {
+                addr = addresses.FirstOrDefault(a =>
+               {
+                   if (type == AddressType.Shipping) return a.StoreIsShipping && !a.StoreIsPrimary;
+                   if (type == AddressType.Billing) return a.StoreIsBilling && !a.StoreIsPrimary;
+                   return false;
+               });
+            }
             if (addr == null)
             {
                 addr = addresses.FirstOrDefault(a =>
