@@ -75,7 +75,9 @@ namespace asi.asicentral.web.Controllers.Show
                 showAttendee = attendeeInfo.ShowAttendees.ElementAt(0);
                 companyId = (showAttendee.CompanyId != null && showAttendee.CompanyId.HasValue) ? showAttendee.CompanyId.Value : 0;
                 showId = (showAttendee.ShowId != null && showAttendee.ShowId.HasValue) ? showAttendee.ShowId.Value : 0;
+
             }
+            int? priorityOrder = null;
             ShowAttendee existingAttendee = ObjectService.GetAll<ShowAttendee>().SingleOrDefault(attendee => attendee.ShowId == showId && attendee.CompanyId == companyId);
             if (showAttendee != null)
             {
@@ -91,12 +93,22 @@ namespace asi.asicentral.web.Controllers.Show
                 existingAttendee.UpdateDate = DateTime.UtcNow;
                 existingAttendee.UpdateSource = "ShowController - PostShowAttendeeInformation";
                 ShowAttendee attendeeToSave = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, existingAttendee);
-
+                if (attendeeInfo != null && attendeeInfo.ShowAttendees != null && attendeeInfo.ShowAttendees.Count > 0 &&
+                    existingAttendee.EmployeeAttendees != null && existingAttendee.EmployeeAttendees.Count > 0)
+                {
+                    for (int i = 0; i < existingAttendee.EmployeeAttendees.Count; i++)
+                    {
+                        var employeeInfo = attendeeInfo.ShowEmployees.FirstOrDefault(m => m.Employee.Id == existingAttendee.EmployeeAttendees[i].EmployeeId);
+                        existingAttendee.EmployeeAttendees[i].PriorityOrder = employeeInfo.PriorityOrder;
+                    }
+                }
                 foreach (EmployeeAttendance employeeAttendance in attendeeInfo.ShowEmployees)
                 {
                     bool isAdd = employeeAttendance.IsAttending;
                     ShowHelper.AddOrDeleteShowEmployeeAttendance(ObjectService, attendeeToSave, employeeAttendance.Employee, isAdd, "ShowController - PostShowAttendeeInformation");
                 }
+
+
                 ObjectService.SaveChanges();
             }
             return new RedirectResult("/ShowCompany/GetAttendeeCompany?showId=" + attendeeInfo.Show.Id);
@@ -186,7 +198,7 @@ namespace asi.asicentral.web.Controllers.Show
                         {
                             employeeAttendees = ObjectService.GetAll<ShowEmployeeAttendee>().Where(item => item.AttendeeId == employeeAttendee.Id).ToList();
                             int employeeAttendeeCount = employeeAttendees.Count();
-                            if (employeeAttendeeCount >0)
+                            if (employeeAttendeeCount > 0)
                             {
                                 for (int employee = employeeAttendeeCount; employee > 0; employee--)
                                 {

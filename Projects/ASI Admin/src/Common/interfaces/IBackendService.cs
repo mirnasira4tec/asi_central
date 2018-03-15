@@ -40,6 +40,8 @@ namespace asi.asicentral.interfaces
 
         CompanyInformation GetCompanyInfoByAsiNumber(string asiNumber);
 
+        CompanyInformation GetCompanyInfoByASICompAccountId(string accountId);
+
 		CompanyInformation GetCompanyInfoByIdentifier(int companyIdentifier);
 
         CompanyInformation AddCompany(User curUser);
@@ -61,5 +63,7 @@ namespace asi.asicentral.interfaces
 
         List<XElement> GetASICOMPData(string masterId);
         void UpdateASICompData(List<string> parameters);
+
+        bool UpdateEMSSSO(string masterId, int subCustomerId, string ssoId);
     }
 }

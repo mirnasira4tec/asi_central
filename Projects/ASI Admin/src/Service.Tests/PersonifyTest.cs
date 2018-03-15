@@ -56,6 +56,8 @@ namespace asi.asicentral.Tests
 
         }
 
+       
+
         [Test]
         public void UpdateASICompData()
         {
@@ -311,6 +313,13 @@ namespace asi.asicentral.Tests
 	        {
 		        Assert.IsTrue(false, "Could not find the Company forASI# 33020");
 	        }
+        }
+
+        [Test]
+        public void TestSP()
+        {
+            var result = PersonifyClient.ExecutePersonifySP(PersonifyClient.SP_UPDATE_MMS_EMS_SIGNON, new List<string>() { "000000125724", "0", "240989" });
+            Assert.IsNotNull(result);
         }
 
 		[Test]
@@ -626,6 +635,17 @@ namespace asi.asicentral.Tests
             Assert.AreEqual(result.CallTopicCode, "EXCEPTION");
             Assert.AreEqual(result.CallTopicSubcode, "VALIDATION");
             Assert.AreEqual(result.CallTypeCode, "STORE");
+        }
+
+        [Test]
+        public void GetASICOMPMasterCustomerIdTest()
+        {
+            var acctid = "60019";
+            PersonifyClient.GetASICOMPMasterCustomerId(acctid);
+
+            acctid = "1002";
+            PersonifyClient.GetASICOMPMasterCustomerId(acctid);
+
         }
 
         private CompanyInformation GetPersonifyCompany(IBackendService personify, StoreCompany storeCompany)

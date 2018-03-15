@@ -15,6 +15,7 @@ using System.Security.Claims;
 using ASI.Services.Messaging;
 using System.Net;
 using System.Web;
+using asi.asicentral.services.PersonifyProxy;
 
 namespace asi.asicentral.oauth
 {
@@ -419,8 +420,6 @@ namespace asi.asicentral.oauth
                 try
                 {
                     ASI.EntityModel.User entityUser = null;
-                    ASI.EntityModel.Company entityCompany = null;
-                    entityCompany = MapASIUserCompanyToEntityModelCompany(user, entityCompany, false);
                     entityUser = MapASIUserToEntityModelUser(user, entityUser, isCreate: false, isPasswordReset: isPasswordReset);
 
                     var userRequest = new UserRequest() { UserRequestType = UserRequestType.Update, AuditTrail = new AuditTrail() { LoggedInUserId = 1 }, User = entityUser };
@@ -630,59 +629,6 @@ namespace asi.asicentral.oauth
                 }
             }
             return entityUser;
-        }
-
-        private static ASI.EntityModel.Company MapASIUserCompanyToEntityModelCompany(asi.asicentral.model.User user, ASI.EntityModel.Company company, bool isCreate)
-        {
-            if (user != null)
-            {
-                if (company == null) company = new ASI.EntityModel.Company();
-                company.Name = user.CompanyName;
-                company.Id = user.CompanyId;
-                ASI.EntityModel.Contact contact = null;
-                if (company.Contacts != null && company.Contacts.Count > 0)
-                {
-                    contact = company.Contacts.ElementAt(0);
-                }
-                else
-                {
-                    company.Contacts = new List<Contact>();
-                    contact = new ASI.EntityModel.Contact();
-                    company.Contacts.Add(contact);
-                }
-
-                if (!string.IsNullOrEmpty(company.Type))
-                {
-                    string membertype = company.Type;
-                    membertype = user.MemberType_CD;
-                }
-                else company.Type = user.MemberType_CD;
-                
-                contact.Title = user.Title;
-                contact.Suffix = user.Suffix;
-                
-                ASI.EntityModel.Address address = null;
-                if (company.Addresses != null && company.Addresses.Count > 0)
-                {
-                    address = company.Addresses.Where(add => add.IsPrimary).SingleOrDefault();
-                }
-                else
-                {
-                    company.Addresses = new List<Address>();
-                    address = new ASI.EntityModel.Address();
-                    company.Addresses.Add(address);
-                }
-
-                address.AddressLine1 = user.Street1;
-                address.AddressLine2 = user.Street2;
-                address.State = user.State;
-                address.CountryCode = user.CountryCode;
-                address.UsageCode = UsageCode.GNRL.ToString();
-                address.County = user.Country;
-                address.ZipCode = user.Zip;
-                address.City = user.City;
-            }
-            return company;
         }
 
         private static asi.asicentral.model.User MapEntityModelUserToASIUser(ASI.EntityModel.User entityUser)

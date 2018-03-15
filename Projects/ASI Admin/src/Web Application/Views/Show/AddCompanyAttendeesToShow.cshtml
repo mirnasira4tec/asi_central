@@ -47,6 +47,7 @@
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
+                            <th>Profile  Order</th>
                         </tr>
                     </thead>
                     @for (int empCnt = 0; empCnt < Model.ShowEmployees.Count; empCnt++)
@@ -61,6 +62,7 @@
                                 </td>
                                 <td>@Model.ShowEmployees[empCnt].Employee.Email</td>
                                 <td>@Model.ShowEmployees[empCnt].Employee.EPhoneAreaCode @Model.ShowEmployees[empCnt].Employee.EPhone</td>
+                                <td>@Html.TextBoxFor(m => m.ShowEmployees[empCnt].PriorityOrder, new { style="width:20px" })</td>
                             </tr>
                         </tbody>
                
