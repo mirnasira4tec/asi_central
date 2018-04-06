@@ -420,6 +420,7 @@ namespace asi.asicentral.oauth
                 try
                 {
                     ASI.EntityModel.User entityUser = null;
+                    //entityCompany = MapASIUserCompanyToEntityModelCompany(user, entityCompany, false);
                     entityUser = MapASIUserToEntityModelUser(user, entityUser, isCreate: false, isPasswordReset: isPasswordReset);
 
                     var userRequest = new UserRequest() { UserRequestType = UserRequestType.Update, AuditTrail = new AuditTrail() { LoggedInUserId = 1 }, User = entityUser };
@@ -630,7 +631,7 @@ namespace asi.asicentral.oauth
             }
             return entityUser;
         }
-
+        
         private static asi.asicentral.model.User MapEntityModelUserToASIUser(ASI.EntityModel.User entityUser)
         {
             model.User user = null;
@@ -751,8 +752,7 @@ namespace asi.asicentral.oauth
             }
             return user;
         }
-
-
+        
         public static string CreateUserOnly(asi.asicentral.model.User user)
         {
             string ssoId = string.Empty;
