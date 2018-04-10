@@ -184,8 +184,6 @@ namespace Core.Tests.OAuth
             Assert.AreEqual(user.AsiNumber, "342495");
         }
 
-        
-
         [Test]
         public void GetCopmanyByASIFailedTest()
         {

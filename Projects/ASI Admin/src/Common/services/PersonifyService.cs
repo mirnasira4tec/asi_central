@@ -400,9 +400,9 @@ namespace asi.asicentral.services
                 return false;
             });
 
-            if (addrList == null && addrList.Count() == 0)
+            if (addrList == null || addrList.Count() < 1)
             {
-                addr = addresses.FirstOrDefault(a =>
+                addrList = addresses.Where(a =>
                 {
                     if (type == AddressType.Shipping) return a.StoreIsShipping;
                     if (type == AddressType.Billing) return a.StoreIsBilling;
@@ -410,9 +410,17 @@ namespace asi.asicentral.services
                 });
             };
 
-            if (addresses.Count > 1 && !string.IsNullOrEmpty(contactMasterId))
+            if (addrList != null && addrList.Count() > 0 )
             {
-                addr = addresses.Where(a => a.PersonifyAddr.MasterCustomerId == contactMasterId).FirstOrDefault();
+                if (!string.IsNullOrEmpty(contactMasterId))
+                {
+                    addr = addrList.Where(a => a.PersonifyAddr.MasterCustomerId == contactMasterId).FirstOrDefault();
+                }
+
+                if( addr == null )
+                {
+                    addr = addrList.FirstOrDefault();
+                }
             }
 
             if (addr == null || addr.PersonifyAddr == null)
