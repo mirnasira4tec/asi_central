@@ -1869,6 +1869,8 @@ namespace asi.asicentral.services.PersonifyProxy
                 var xml = XDocument.Parse(response.Data);
 
                 var list = xml.Root.Elements("Table").ToList();
+                var configSetting = System.Configuration.ConfigurationManager.AppSettings["IncludeMMSLoad"];
+                var includeMMSLoad = !string.IsNullOrEmpty(configSetting) && configSetting == "true" ? true : false;
                 foreach (var com in list)
                 {
                     var customerInfo = new PersonifyCustomerInfo();
@@ -1928,7 +1930,7 @@ namespace asi.asicentral.services.PersonifyProxy
 
                     if (customerInfo.RecordType == null || customerInfo.RecordType != RECORD_TYPE_CORPORATE ||
                         ((customerInfo.CustomerStatusCode == null || customerInfo.CustomerStatusCode != CUSTOMER_INFO_STATUS_DUPLICATE) &&
-                         (customerInfo.MemberStatus == null || customerInfo.MemberStatus != StatusCode.MMS_LOAD.ToString())))
+                         (customerInfo.MemberStatus == null || (includeMMSLoad || customerInfo.MemberStatus != StatusCode.MMS_LOAD.ToString()) )))
                     {
                         companyInfoList.Add(customerInfo);
                     }
