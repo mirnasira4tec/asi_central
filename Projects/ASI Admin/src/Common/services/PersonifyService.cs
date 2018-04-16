@@ -77,7 +77,7 @@ namespace asi.asicentral.services
                 var contactMasterId = primaryContactInfo != null ? primaryContactInfo.MasterCustomerId : individualInfos[0].MasterCustomerId;
                 var contactSubId = primaryContactInfo != null ? primaryContactInfo.SubCustomerId : individualInfos[0].SubCustomerId;
 
-                var shipToAddr = GetAddressInfo(contactAddresses, AddressType.Shipping, order).PersonifyAddr;
+                var shipToAddr = GetAddressInfo(contactAddresses, AddressType.Shipping, order, contactMasterId).PersonifyAddr;
                 var billToAddr = storeAddress.FirstOrDefault(a => a.StoreIsBilling == true).PersonifyAddr;
 
                 var orderDetail = order.OrderDetails[0];
@@ -390,23 +390,39 @@ namespace asi.asicentral.services
             return backEndTotal;
         }
 
-        private StoreAddressInfo GetAddressInfo(IList<StoreAddressInfo> addresses, AddressType type, StoreOrder order)
+        private StoreAddressInfo GetAddressInfo(IList<StoreAddressInfo> addresses, AddressType type, StoreOrder order, string contactMasterId)
         {
-            var addr = addresses.FirstOrDefault(a =>
+            StoreAddressInfo addr = null;
+            var addrList = addresses.Where(a =>
             {
                 if (type == AddressType.Shipping) return a.StoreIsShipping && !a.StoreIsPrimary;
                 if (type == AddressType.Billing) return a.StoreIsBilling && !a.StoreIsPrimary;
                 return false;
             });
-            if (addr == null)
+
+            if (addrList == null || addrList.Count() < 1)
             {
-                addr = addresses.FirstOrDefault(a =>
+                addrList = addresses.Where(a =>
                 {
                     if (type == AddressType.Shipping) return a.StoreIsShipping;
                     if (type == AddressType.Billing) return a.StoreIsBilling;
                     return false;
                 });
             };
+
+            if (addrList != null && addrList.Count() > 0 )
+            {
+                if (!string.IsNullOrEmpty(contactMasterId))
+                {
+                    addr = addrList.Where(a => a.PersonifyAddr.MasterCustomerId == contactMasterId).FirstOrDefault();
+                }
+
+                if( addr == null )
+                {
+                    addr = addrList.FirstOrDefault();
+                }
+            }
+
             if (addr == null || addr.PersonifyAddr == null)
             {
                 string s = string.Format("Shipping and billing personify customer addresses are required for order {0}.", order.ToString());
@@ -444,7 +460,7 @@ namespace asi.asicentral.services
 
         public virtual void SaveCreditCardInfo(StoreOrder order)
         {
-            if (order != null && order.CreditCard != null && string.IsNullOrEmpty(order.CreditCard.ExternalReference) && 
+            if (order != null && order.CreditCard != null && string.IsNullOrEmpty(order.CreditCard.ExternalReference) &&
                 !string.IsNullOrEmpty(order.CreditCard.AuthReference) && order.BillingIndividual != null )
             {
                 var billingInfo = order.BillingIndividual;
