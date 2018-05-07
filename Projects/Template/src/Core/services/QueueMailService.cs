@@ -50,13 +50,24 @@ namespace asi.asicentral.services
             {
                 content.FromEmail = ConfigurationManager.AppSettings["SmtpFrom"];
             }
-            if(mail.To != null) 
+            if(mail.To != null)
             {
                 if(mail.To.Any())
                 {
                     content.ToEmailList = new List<string>();
                     foreach(var to in mail.To){
                         content.ToEmailList.Add(to.Address);
+                    }
+                }
+            }
+            if (mail.CC != null)
+            {
+                if (mail.CC.Any())
+                {
+                    content.CCEmailList = new List<string>();
+                    foreach (var cc in mail.CC)
+                    {
+                        content.CCEmailList.Add(cc.Address);
                     }
                 }
             }
