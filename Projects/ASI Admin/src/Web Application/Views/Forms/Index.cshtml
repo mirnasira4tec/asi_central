@@ -71,7 +71,7 @@
                 <tr>
                     <td>@Html.Raw(string.Format("{0:MM/dd/yy} <br /> {0:hh:mm tt}", form.CreateDate.ToLocalTime()))</td>
                     <td>@form.Email</td>
-                    @if (string.Compare(form.FormType.Name, "Printer Portal Form", true) == 0)
+                @if (string.IsNullOrWhiteSpace(form.FormType.Implementation))
                     {
                         <td>@form.FormType.Name</td>
                     }
