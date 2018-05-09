@@ -99,7 +99,7 @@ namespace asi.asicentral.model.store
                     }
                     else
                     {
-                        if (this.FormType != null && string.Compare(this.FormType.Name, "Printer Portal Form", true) == 0)
+                        if (this.FormType != null && string.IsNullOrWhiteSpace(this.FormType.Implementation))
                         {
                             _status = "Approved";
                         }

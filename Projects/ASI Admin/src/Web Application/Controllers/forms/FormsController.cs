@@ -52,7 +52,7 @@ namespace asi.asicentral.web.Controllers.forms
             if (!string.IsNullOrEmpty(companyName)) viewModel.CompanyName = companyName;
             viewModel.FormTab = formTab;
             viewModel.Forms = formInstanceQuery.OrderByDescending(form => form.CreateDate).ToList();
-            viewModel.FormTypes = StoreService.GetAll<FormType>(true).Where(ft => !ft.IsObsolete && string.Compare(ft.Name, "Printer Portal Form", true) != 0).ToList();
+			viewModel.FormTypes = StoreService.GetAll<FormType>(true).Where(ft => !ft.IsObsolete && !(ft.Implementation == string.Empty || ft.Implementation == null )).ToList();
             return View("../Forms/Index", viewModel);
         }
 
