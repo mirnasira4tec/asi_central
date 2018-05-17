@@ -20,7 +20,7 @@ namespace asi.asicentral.model.show
     }
     public enum ProfileData
     {
-        Unknown=0,
+        Unknown = 0,
         AttendeeName = 1,
         AttendeeTitle = 2,
         AttendeeCommEmail = 3,
@@ -39,6 +39,12 @@ namespace asi.asicentral.model.show
         BussinessInUSA = 16,
         AdditionalCriteriaForSupplier = 17,
         BenefitSupForFasilitate = 18,
-        MediaPlatforms = 19
+        MediaPlatforms = 19,
+        ThirdAttendeeName = 20,
+        ThirdAttendeeTitle = 21,
+        ThirdAttendeeCommEmail = 22,
+        ThirdAttendeeCellPhone = 23,
+        ThirdAttendeeWorkPhone = 24,
+        ThirdAttendeeImage = 25
     }
 }
