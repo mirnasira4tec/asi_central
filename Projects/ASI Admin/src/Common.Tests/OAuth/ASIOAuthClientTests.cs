@@ -330,12 +330,8 @@ namespace Core.Tests.OAuth
         [Test]
         public void TestIsPersonifyAvailable()
         {
-            var sUrl = ConfigurationManager.AppSettings["svcUri"];
-            var isPersonifyRunning = Utility.IsPersonifyAvailable(true, sUrl);
+            var isPersonifyRunning = Utility.IsPersonifyAvailable();
             Assert.IsTrue(isPersonifyRunning);
-
-            isPersonifyRunning = Utility.IsPersonifyAvailable(false, sUrl);
-            Assert.False(isPersonifyRunning);
         }
     }
 }

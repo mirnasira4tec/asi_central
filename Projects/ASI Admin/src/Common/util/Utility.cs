@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Net;
 
 namespace asi.asicentral.util
@@ -24,19 +25,13 @@ namespace asi.asicentral.util
             return isServiceRunning;
         }
 
-        public static bool IsPersonifyAvailable(bool usePersonify, string url)
+        public static bool IsPersonifyAvailable()
         {
-            if (!usePersonify)
+            var usePersonify = Convert.ToBoolean(ConfigurationManager.AppSettings["UsePersonifyServices"]);
+            if (usePersonify)
             {
-                usePersonify = false;
-            }
-            else
-            {
-                var isPersonifyRunning =IsServiceAvailable(url);
-                if (!isPersonifyRunning)
-                {
-                    usePersonify = false;
-                }
+                var svcUrl = ConfigurationManager.AppSettings["svcUri"];
+                usePersonify = IsServiceAvailable(svcUrl);
             }
             return usePersonify;
         }
