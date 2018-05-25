@@ -573,6 +573,7 @@
     <Compile Include="util\store\Helper.cs" />
     <Compile Include="util\store\magazinesadvertising\MagazinesAdvertisingHelper.cs" />
     <Compile Include="util\store\magazinesadvertising\UpdateDateAndSource.cs" />
+    <Compile Include="util\Utility.cs" />
     <Compile Include="views\CustomVirtualFile.cs" />
     <Compile Include="views\CustomVirtualPathProvider.cs" />
   </ItemGroup>
