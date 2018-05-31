@@ -11,6 +11,7 @@ using ASI.Services.Http.SmartLink;
 using ASI.Services.Http.Security;
 using System.Security.Claims;
 using NUnit.Framework;
+using asi.asicentral.util;
 
 namespace Core.Tests.OAuth
 {
@@ -314,6 +315,23 @@ namespace Core.Tests.OAuth
                 isValidToken = ASIOAuthClient.IsValidAccessToken(accessTokenNew);
                 Assert.IsTrue(isValidToken, "The new token was not valid after lms from: " + accessToken + " to " + accessTokenNew);
             }
+        }
+        [Test]
+        public void TestIsServiceAvailable()
+        {
+            var sUrl = ConfigurationManager.AppSettings["svcUri"];
+            var isServiceRunning = Utility.IsServiceAvailable(sUrl);
+            Assert.IsTrue(isServiceRunning);
+
+            sUrl = "ftp" + ConfigurationManager.AppSettings["svcUri"];//making url invalid
+            isServiceRunning = Utility.IsServiceAvailable(sUrl);
+            Assert.IsFalse(isServiceRunning);
+        }
+        [Test]
+        public void TestIsPersonifyAvailable()
+        {
+            var isPersonifyRunning = Utility.IsPersonifyAvailable();
+            Assert.IsTrue(isPersonifyRunning);
         }
     }
 }
