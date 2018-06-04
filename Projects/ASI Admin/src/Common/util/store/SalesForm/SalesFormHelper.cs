@@ -7,6 +7,7 @@
             { "Additional ESP License", "ESPL-60", "" },
             { "Company Store", "CPYS-49.99", "ESP (ALL) Product" },
             { "Distributor Membership", "DIST-49.99", "Distributor Membership" },
+            { "Distributor Package - Corporate Account","DTCA-199.99", "Distributor Membership;ESP (ALL) Product" },
             { "Distributor Package – Basic","DIST-149.99", "Distributor Membership" },
             { "Distributor Package - Standard", "DIST-199.99", "Distributor Membership;ESP (ALL) Product" },
             { "Distributor Package – Executive", "DIST-229.99", "Distributor Membership;ESP (ALL) Product" },
