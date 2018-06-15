@@ -186,7 +186,7 @@
                                 <td><a href="@Url.Action("Edit", "Application", new { Id = order.OrderDetailId })">Application</a></td>
                                 <td>@order.CompletedStep</td>
                                 <td>@order.Quantity</td>
-                                <td>$@order.Price</td>
+                                <td>@(order.CurrencySymbol)@order.Price</td>
                                 <td>@order.Billing</td>
                                 <td>@order.CreditCard</td>
                                 <td>@order.DateOrderCreated.ToString("MM/dd/yy")</td>
