@@ -232,11 +232,14 @@ namespace asi.asicentral.web.model.store
             if (application.IsApplyingForMembership != null) IsApplyingForMembership = application.IsApplyingForMembership.Value;
             if (application.IsChangesInformed != null) IsChangesInformed = application.IsChangesInformed.Value;
             if (application.IsDataCertified != null) IsDataCertified = application.IsDataCertified.Value;
+            CurrencySymbol = orderDetail.Product.ASICompany.ToLower() == "asi canada" ? "C$" : "$";
             OtherCompanyName = application.OtherCompanyName;
             ApprovedSignature = application.ApprovedSignature;
             MonthlyPrice = (order.Total - order.AnnualizedTotal) / 11;
             MembershipModelHelper.PopulateModel(this, orderDetail);
         }
+
+        public string CurrencySymbol { get; set; }
 
         private void GetPrimaryBusinessRevenue()
         {
