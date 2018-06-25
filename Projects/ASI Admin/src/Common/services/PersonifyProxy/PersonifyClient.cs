@@ -213,7 +213,8 @@ namespace asi.asicentral.services.PersonifyProxy
                 OrderLines = orderLineInputs,
                 AddedOrModifiedBy = ADDED_OR_MODIFIED_BY,
             };
-            var orderOutput = SvcClient.Post<CreateOrderOutput>("CreateOrder", createOrderInput);
+            var isCanada = storeOrder.OrderDetails[0].Product.ASICompany.ToLower() == "asi canada";
+            var orderOutput = SvcClient.Post<CreateOrderOutput>("CreateOrder", createOrderInput, isCanada);
             return orderOutput;
         }
 
@@ -229,8 +230,8 @@ namespace asi.asicentral.services.PersonifyProxy
                 RateStructure = rateStructure,
                 RateCode = rateCode
             };
-
-            var output = SvcClient.Post<OrderNumberParam>("ASIAddOrderLinewithPrice", linePriceInput);
+            var isCanada = order.OrderDetails[0].Product.ASICompany.ToLower() == "asi canada";
+            var output = SvcClient.Post<OrderNumberParam>("ASIAddOrderLinewithPrice", linePriceInput, isCanada);
         }
 
         public static bool ScheduleOrderPayment(StoreOrder storeOrder)

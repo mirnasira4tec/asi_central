@@ -1,5 +1,10 @@
 ﻿@using asi.asicentral.util.store
 @model asi.asicentral.web.store.interfaces.IMembershipModel
+    @if (string.IsNullOrWhiteSpace(Model.CurrencySymbol))
+        {
+            Model.CurrencySymbol = "$";
+        }
+   
 <table>
     <tr>
         <td>Cost:</td>
