@@ -374,15 +374,15 @@ namespace asi.asicentral.services
 
             decimal backEndTotal = PersonifyClient.GetOrderBalanceTotal(order.BackendReference);
             log.Debug(string.Format("Got the order total {0} of for the order '{1}'.", backEndTotal, order));
-
+            var currencySymbol = order.OrderDetails[0].Product.ASICompany.ToLower() == "asi canada" ? "C$" : "$";
             if (backEndTotal != order.Total)
             {
                 var data = new EmailData()
                 {
                     Subject = "here is a price discrepancy for an order from the store to Personify",
                     EmailBody = string.Format("A new order created in the store ({0}) has been transferred to a Personify "
-                    + "order ({1}). The prices do not match, the order needs to be looked at. The store price is {2:C} and "
-                    + "the Personify price is {3:C}.{4}", order.Id.ToString(), order.BackendReference, order.Total, backEndTotal, EmailData.GetMessageSuffix(url))
+                    + "order ({1}). The prices do not match, the order needs to be looked at. The store price is {5}{2} and "
+                    + "the Personify price is {5}{3}.{4}", order.Id.ToString(), order.BackendReference, order.Total, backEndTotal, EmailData.GetMessageSuffix(url), currencySymbol)
                 };
                 data.SendEmail(emailService);
             }

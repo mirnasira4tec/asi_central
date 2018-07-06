@@ -9,6 +9,7 @@
     var compAddress = company.Addresses.Count > 0 ? company.Addresses[0].Address : null;
     var address = compAddress != null ? string.Format("{0} {1} {2}, {3} {4}", compAddress.Street1, compAddress.Street2 ?? string.Empty, compAddress.City, compAddress.State, compAddress.Zip)
                                       : string.Empty;
+    var currencySymbol = orderDetail.Product.ASICompany.ToLower() == "asi canada" ? "C$" : "$";
 }
 <!DOCTYPE html>
 <html>
@@ -57,23 +58,23 @@
             <tr><td><strong>Membership Type:</strong>&nbsp;@orderDetail.Product.Type </td></tr>
             <tr><td><strong>Package Type:</strong>&nbsp;@orderDetail.Product.Name</td></tr>
             <tr><td><strong>Order Details:</strong></td></tr>
-            <tr><td>&nbsp;&nbsp;- Item Subtotal: $@orderDetail.Cost.ToString("F")</td></tr>
+            <tr><td>&nbsp;&nbsp;- Item Subtotal: @(currencySymbol)@orderDetail.Cost.ToString("F")</td></tr>
             @if (orderDetail.ApplicationCost > 0)
             {
                 orderTotal += orderDetail.ApplicationCost;
-                <tr><td>&nbsp;&nbsp;- Application Fee: $@orderDetail.ApplicationCost.ToString("F")</td></tr>
+                <tr><td>&nbsp;&nbsp;- Application Fee: @(currencySymbol)@orderDetail.ApplicationCost.ToString("F")</td></tr>
             }
             @if (orderDetail.TaxCost > 0)
             {
                 orderTotal += orderDetail.TaxCost;
-                <tr><td>&nbsp;&nbsp;- Tax: $@orderDetail.TaxCost.ToString("F")</td></tr>
+                <tr><td>&nbsp;&nbsp;- Tax: @(currencySymbol)@orderDetail.TaxCost.ToString("F")</td></tr>
             }
             @if (orderDetail.ShippingCost > 0)
             {
                 orderTotal += orderDetail.ShippingCost;
-                <tr><td>&nbsp;&nbsp;- Shipping &amp; Handling: $@orderDetail.ShippingCost.ToString("F")</td></tr>
+                <tr><td>&nbsp;&nbsp;- Shipping &amp; Handling: @(currencySymbol)@orderDetail.ShippingCost.ToString("F")</td></tr>
             }
-            <tr><td>&nbsp;&nbsp;- Order Total: $@orderTotal.ToString("F")</td></tr>
+            <tr><td>&nbsp;&nbsp;- Order Total: @(currencySymbol)@orderTotal.ToString("F")</td></tr>
             <tr><td><strong>Constituent ID:</strong>&nbsp;@constituentId </td></tr>
             <tr><td><strong>Company Name:</strong>&nbsp;@company.Name </td></tr>
             <tr><td><strong>Company Address:</strong>&nbsp;@address</td></tr>
