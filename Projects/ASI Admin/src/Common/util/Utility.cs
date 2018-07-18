@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using asi.asicentral.services;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -40,79 +41,67 @@ namespace asi.asicentral.util
             return usePersonify;
         }
 
-        public static IList<SelectListItem> GetStates(string countrycode)
-        {
-            if (countrycode == "USA")
-                return asi.asicentral.util.HtmlHelper.GetStates();
-            else
-                return GetStateValues(countrycode);
-        }
-
         public static IList<SelectListItem> GetCountriesList()
         {
-            var countryArr = GetCountries();
-            IList<SelectListItem> countryList = new List<SelectListItem>();
-            if (countryArr != null && countryArr.Count > 0)
+            var jsResult = GetValueFromUrl(ConfigurationManager.AppSettings["CountryApiUrl"]);
+            var countryList = new List<SelectListItem>();
+            var jArr = JArray.Parse(jsResult);
+            if (jArr != null && jArr.Count > 0)
             {
-                for (int i = 0; i < countryArr.Count; i++)
+                countryList.Add(new SelectListItem { Text = "--Select a Country--", Value = "" });
+                for (int i = 0; i < jArr.Count; i++)
                 {
-                    countryList.Add(new SelectListItem { Selected = false, Text = countryArr[i]["Descr"].ToString(), Value = countryArr[i]["Code"].ToString() });
+                    countryList.Add(new SelectListItem { Selected = false, Text = jArr[i]["Descr"].ToString(), Value = jArr[i]["Code"].ToString() });
                 }
             }
             return countryList;
         }
 
-        public static JArray GetCountries()
-        {
-            // Create web client.
-            JArray jsResult = null;
-            try
-            {
-                using (var client = new WebClient())
-                {
-                    var url = ConfigurationManager.AppSettings["CountryApiUrl"];
-                    var result = client.DownloadData(url);
-                    var responseString = Encoding.Default.GetString(result);
-                    var a = responseString.Length;
-                    // deserializing nested JSON string to object
-                    jsResult = JArray.Parse(responseString);
-                }
-            }
-            catch
-            {
-
-            }
-            return jsResult;
-        }
         public static IList<SelectListItem> GetStateValues(string countrycode)
         {
             // Create web client.
-            JArray jsResult = null;
-            IList<SelectListItem> statesList = new List<SelectListItem>();
+            var statesList = new List<SelectListItem>();
+            var url = ConfigurationManager.AppSettings["StateApiUrl"];
+            var parmeters = new List<KeyValuePair<string, string>>();
+            parmeters.Add(new KeyValuePair<string, string>("countrycode", countrycode));
+            var jsResult = GetValueFromUrl(url, parmeters);
+            var jArr = JArray.Parse(jsResult);
+            if (jArr != null && jArr.Count > 0)
+            {
+                statesList.Add(new SelectListItem { Text = "--Select a State--", Value = "" });
+                for (int i = 0; i < jArr.Count; i++)
+                {
+                    statesList.Add(new SelectListItem { Selected = false, Text = jArr[i]["Descr"].ToString(), Value = jArr[i]["Code"].ToString() });
+                }
+            }
+            return statesList;
+        }
+        public static string GetValueFromUrl(string url, List<KeyValuePair<string, string>> parameters = null)
+        {
+            var queryString = string.Empty;
+            var responseString = string.Empty;
+            if (parameters != null && parameters.Count > 0)
+            {
+                foreach (var parameter in parameters)
+                {
+                    queryString += $"?{parameter.Key}={parameter.Value}";
+                }
+            }
+            url += queryString;
             try
             {
                 using (var client = new WebClient())
                 {
-                    var url = ConfigurationManager.AppSettings["StateApiUrl"] + $"?countrycode={countrycode}";
                     var result = client.DownloadData(url);
-                    var responseString = Encoding.Default.GetString(result);
-                    var a = responseString.Length;
-                    // deserializing nested JSON string to object
-                    jsResult = JArray.Parse(responseString);
-                    if (jsResult != null && jsResult.Count > 0)
-                    {
-                        for (int i = 0; i < jsResult.Count; i++)
-                        {
-                            statesList.Add(new SelectListItem { Selected = false, Text = jsResult[i]["Descr"].ToString(), Value = jsResult[i]["Code"].ToString() });
-                        }
-                    }
+                    responseString = Encoding.Default.GetString(result);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-
+                LogService log = LogService.GetLog("Api Call");
+                log.Error(ex.Message);
             }
-            return statesList;
+            return responseString;
         }
     }
 }
