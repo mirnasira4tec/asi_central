@@ -78,15 +78,16 @@ namespace asi.asicentral.util
         }
         public static string GetValueFromUrl(string url, List<KeyValuePair<string, string>> parameters = null)
         {
-            var queryString = string.Empty;
+            var queryString = "?";
             var responseString = string.Empty;
             if (parameters != null && parameters.Count > 0)
             {
                 foreach (var parameter in parameters)
                 {
-                    queryString += $"?{parameter.Key}={parameter.Value}";
+                    queryString += $"{parameter.Key}={parameter.Value}&";
                 }
             }
+            queryString = queryString.Remove(queryString.Length - 1, 1);
             url += queryString;
             try
             {
