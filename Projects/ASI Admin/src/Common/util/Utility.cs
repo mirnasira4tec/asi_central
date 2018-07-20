@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace asi.asicentral.util
 {
-  public static  class Utility
+    public static class Utility
     {
         public static bool IsServiceAvailable(string url)
         {
@@ -43,15 +43,18 @@ namespace asi.asicentral.util
 
         public static IList<SelectListItem> GetCountriesList()
         {
-            var jsResult = GetValueFromUrl(ConfigurationManager.AppSettings["CountryApiUrl"]);
             var countryList = new List<SelectListItem>();
-            var jArr = JArray.Parse(jsResult);
-            if (jArr != null && jArr.Count > 0)
+            countryList.Add(new SelectListItem { Text = "--Select a Country--", Value = "" });
+            var jsResult = GetValueFromUrl(ConfigurationManager.AppSettings["CountryApiUrl"]);
+            if (!string.IsNullOrWhiteSpace(jsResult))
             {
-                countryList.Add(new SelectListItem { Text = "--Select a Country--", Value = "" });
-                for (int i = 0; i < jArr.Count; i++)
+                var jArr = JArray.Parse(jsResult);
+                if (jArr != null && jArr.Count > 0)
                 {
-                    countryList.Add(new SelectListItem { Selected = false, Text = jArr[i]["Descr"].ToString(), Value = jArr[i]["Code"].ToString() });
+                    for (int i = 0; i < jArr.Count; i++)
+                    {
+                        countryList.Add(new SelectListItem { Selected = false, Text = jArr[i]["Descr"].ToString(), Value = jArr[i]["Code"].ToString() });
+                    }
                 }
             }
             return countryList;
@@ -61,17 +64,20 @@ namespace asi.asicentral.util
         {
             // Create web client.
             var statesList = new List<SelectListItem>();
+            statesList.Add(new SelectListItem { Text = "--Select a State--", Value = "" });
             var url = ConfigurationManager.AppSettings["StateApiUrl"];
             var parmeters = new List<KeyValuePair<string, string>>();
             parmeters.Add(new KeyValuePair<string, string>("countrycode", countrycode));
             var jsResult = GetValueFromUrl(url, parmeters);
-            var jArr = JArray.Parse(jsResult);
-            if (jArr != null && jArr.Count > 0)
+            if (!string.IsNullOrWhiteSpace(jsResult))
             {
-                statesList.Add(new SelectListItem { Text = "--Select a State--", Value = "" });
-                for (int i = 0; i < jArr.Count; i++)
+                var jArr = JArray.Parse(jsResult);
+                if (jArr != null && jArr.Count > 0)
                 {
-                    statesList.Add(new SelectListItem { Selected = false, Text = jArr[i]["Descr"].ToString(), Value = jArr[i]["Code"].ToString() });
+                    for (int i = 0; i < jArr.Count; i++)
+                    {
+                        statesList.Add(new SelectListItem { Selected = false, Text = jArr[i]["Descr"].ToString(), Value = jArr[i]["Code"].ToString() });
+                    }
                 }
             }
             return statesList;
