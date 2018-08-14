@@ -174,7 +174,7 @@ namespace asi.asicentral.services.PersonifyProxy
                                                          "@ip_ADDED_BY" } },
             {SP_GET_ASICOMP_DATA, new List<string>(){ "@ip_MASTER_CUSTOMER_ID" } },
             {SP_UPDATE_MMS_EMS_SIGNON, new List<string>(){  "@ip_MASTER_CUSTOMER_ID", "@ip_SUB_CUSTOMER_ID", "@ip_USR_MMS_SIGNON_EMS" } },
-            {SP_GET_ASICOMP_DATA_BY_ACCT, new List<string>(){"@ip_USR_ACCOUNTID"}},
+            {SP_GET_ASICOMP_DATA_BY_ACCT, new List<string>(){"@ip_USR_ACCOUNTID"}}
             
         };
 
