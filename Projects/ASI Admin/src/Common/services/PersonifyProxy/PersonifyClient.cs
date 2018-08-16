@@ -4,7 +4,6 @@ using asi.asicentral.model.personify;
 using asi.asicentral.model.store;
 using asi.asicentral.oauth;
 using asi.asicentral.PersonifyDataASI;
-using asi.asicentral.util.store;
 using asi.asicentral.util.store.companystore;
 using PersonifySvcClient;
 using System;
@@ -14,7 +13,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using DocumentFormat.OpenXml.Drawing;
 
 namespace asi.asicentral.services.PersonifyProxy
 {
@@ -213,7 +211,19 @@ namespace asi.asicentral.services.PersonifyProxy
                 OrderLines = orderLineInputs,
                 AddedOrModifiedBy = ADDED_OR_MODIFIED_BY,
             };
-            var orderOutput = SvcClient.Post<CreateOrderOutput>("CreateOrder", createOrderInput);
+            CreateOrderOutput orderOutput = null;
+            try
+            {
+                orderOutput = SvcClient.Post<CreateOrderOutput>("CreateOrder", createOrderInput);
+            }
+            catch (Exception ex)
+            {
+                var createOrderInputJSON = util.Utility.ObjectToXML<CreateOrderInput>(createOrderInput);
+                createOrderInputJSON = createOrderInputJSON.Replace("<", "&lt;").Replace(">", "&gt;");
+                var personifyErrorMessage = string.Format("Order Creation Failed in Personify - message: {0},<br /> stack track: {1} <br /><br /> <b>Store Order Detail:</b> <br /> {2} <br /><br />", ex.Message, ex.StackTrace, createOrderInputJSON);
+                _log.Error(personifyErrorMessage);
+                throw new Exception(personifyErrorMessage, ex);
+            }
             return orderOutput;
         }
 
