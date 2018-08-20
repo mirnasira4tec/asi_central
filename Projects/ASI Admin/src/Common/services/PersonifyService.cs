@@ -371,8 +371,8 @@ namespace asi.asicentral.services
             {
                 throw new Exception("No Personify Order has been generated");
             }
-
-            decimal backEndTotal = PersonifyClient.GetOrderBalanceTotal(order.BackendReference);
+            var isCanada = order.OrderDetails[0].Product.ASICompany.ToLower() == "asi canada";
+            decimal backEndTotal = PersonifyClient.GetOrderBalanceTotal(order.BackendReference, isCanada);
             log.Debug(string.Format("Got the order total {0} of for the order '{1}'.", backEndTotal, order));
             var currencySymbol = order.OrderDetails[0].Product.ASICompany.ToLower() == "asi canada" ? "C$" : "$";
             if (backEndTotal != order.Total)
@@ -386,7 +386,6 @@ namespace asi.asicentral.services
                 };
                 data.SendEmail(emailService);
             }
-
             return backEndTotal;
         }
 
