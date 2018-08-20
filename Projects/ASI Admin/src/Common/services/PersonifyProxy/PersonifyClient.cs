@@ -239,9 +239,12 @@ namespace asi.asicentral.services.PersonifyProxy
             var scheduleCreated = false;
             if (storeOrder != null && !string.IsNullOrEmpty(storeOrder.BackendReference))
             {
-                var orderLineItems = SvcClient.Ctxt.OrderDetailInfos
+                var isCanada = storeOrder.OrderDetails[0].Product.ASICompany.ToLower() == "asi canada";
+                var svcContext = isCanada ? SvcClient.CtxtCanada : SvcClient.Ctxt;
+                var orderLineItems = svcContext.OrderDetailInfos
                                        .Where(c => c.OrderNumber == storeOrder.BackendReference && c.BaseTotalAmount > 0)
                                        .ToList();
+               
                 if (orderLineItems.Any())
                 {
                     var item = orderLineItems[0];
@@ -255,8 +258,8 @@ namespace asi.asicentral.services.PersonifyProxy
                         CCProfileId = Int32.Parse(storeOrder.CreditCard.ExternalReference),
                         SyncPayScheduleFlag = true
                     };
-
-                    var output = SvcClient.Post<ASICreatePayScheduleOutput>("ASICreatePaySchedule", iPaySchedual);
+                  
+                    var output = SvcClient.Post<ASICreatePayScheduleOutput>("ASICreatePaySchedule", iPaySchedual, isCanada);
                     scheduleCreated = output.IsPaySchduleCreated ?? false;
                 }
             }
@@ -264,10 +267,11 @@ namespace asi.asicentral.services.PersonifyProxy
             return scheduleCreated;
         }
 
-        public static decimal GetOrderBalanceTotal(string orderNumber)
-        {
-            decimal total = 0;
-            IList<WebOrderBalanceView> oOrdBalInfo = SvcClient.Ctxt.WebOrderBalanceViews
+        public static decimal GetOrderBalanceTotal(string orderNumber, bool isCanada = false)
+        {           
+            decimal total = 0;           
+            var svcContext = isCanada ? SvcClient.CtxtCanada : SvcClient.Ctxt;            
+            IList<WebOrderBalanceView> oOrdBalInfo = svcContext.WebOrderBalanceViews
                 .Where(o => o.OrderNumber == orderNumber).ToList();
             if (oOrdBalInfo.Any())
             {
@@ -333,6 +337,7 @@ namespace asi.asicentral.services.PersonifyProxy
             {
                 var subCustomerId = result.SubCustomerId.HasValue ? result.SubCustomerId.Value : 0;
                 //try update status, non critical but should be working
+
                 var customers = SvcClient.Ctxt.ASICustomers.Where(
                         p => p.MasterCustomerId == result.MasterCustomerId && p.SubCustomerId == subCustomerId).ToList();
                 if (customers.Count > 0)

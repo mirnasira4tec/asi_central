@@ -28,11 +28,13 @@ namespace PersonifySvcClient
 
         #region Helpers
 
+       
         private static PersonifyEntitiesASI ctxt;
+        private static PersonifyEntitiesASI ctxtCanada;
         public static PersonifyEntitiesASI Ctxt
         {
             get
-            {
+            {                
                 if (ctxt == null)
                 {
                     ctxt = new PersonifyEntitiesASI(svcUri);
@@ -50,6 +52,29 @@ namespace PersonifySvcClient
                     ctxt.IgnoreResourceNotFoundException = true;
                 }
                 return ctxt;
+            }
+        }
+
+        public static PersonifyEntitiesASI CtxtCanada
+        {
+            get
+            {
+                if (ctxtCanada == null)
+                {                   
+                    ctxtCanada = new PersonifyEntitiesASI(svcUri);
+                    ctxtCanada.MergeOption = MergeOption.OverwriteChanges;
+
+                    //enable authentication if necessary
+                    if (Convert.ToBoolean(EnableBasicAuthentication) == true)
+                    {
+                        var serviceCreds = new NetworkCredential(CanadaUserName, CanadaPassword);
+                        var cache = new CredentialCache();
+                        cache.Add(svcUri, "Basic", serviceCreds);
+                        ctxtCanada.Credentials = cache;
+                    }
+                    ctxtCanada.IgnoreResourceNotFoundException = true;
+                }
+                return ctxtCanada;
             }
         }
 
