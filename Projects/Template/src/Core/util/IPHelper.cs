@@ -68,20 +68,22 @@ namespace asi.asicentral.util
                 string result = string.Empty;
                 var client = new WebClient();
                 byte[] data = client.DownloadData(IpLookup.LookupServiceUrl + ipAddress);
-                string[] dataResults = Encoding.Default.GetString(data).Split(";".ToArray());
+                var responseData = Encoding.Default.GetString(data);
+                string[] dataResults = responseData.Split(";".ToArray());
 
                 if (dataResults.Length == 0)
                 {
                     return result;
                 }
 
+                Log.Debug(string.Format("Response data for IP {0}: {1}", ipAddress, responseData));
                 result = dataResults[4] == "-" ? DEFAULTCOUNTRY.ToLower() : dataResults[4];
                 Log.Debug(string.Format("Country based on LookupByIp: {0}", result.ToLower()));
                 return result.ToLower();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Log.Debug(string.Format("Country basesd on LookupByIp: {0}", DEFAULTCOUNTRY.ToLower()));
+                Log.Debug(string.Format("Exception on LookupByIp: {0}", ex.Message));
                 return DEFAULTCOUNTRY.ToLower();
             }
         }
