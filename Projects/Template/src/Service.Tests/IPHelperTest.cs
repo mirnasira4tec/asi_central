@@ -25,5 +25,13 @@ namespace asi.asicentral.Tests
             Assert.IsTrue(isFromAsia);
             Assert.AreEqual("china", country);
         }
+
+        [TestMethod]
+        public void LookUpIp_GeoIpNekudoTest()
+        {
+            var ipLookup = new LookUpIp_GeoIpNekudo();
+            var result = ipLookup.GetCountry("42.104.255.255");
+            Assert.IsNotNull(result);
+        }
     }
 }
