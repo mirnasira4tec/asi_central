@@ -146,6 +146,7 @@
     <Compile Include="util\IPHelper.cs" />
     <Compile Include="util\LookUpIp_GeoIpNekudo.cs" />
     <Compile Include="util\LogInterceptor.cs" />
+    <Compile Include="util\LookupIp_ipstack.cs" />
     <Compile Include="util\MvcHelper.cs" />
   </ItemGroup>
   <ItemGroup>

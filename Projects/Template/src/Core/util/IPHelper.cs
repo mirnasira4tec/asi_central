@@ -28,10 +28,16 @@ namespace asi.asicentral.util
                 return session["IpCountry"] as string;
 
             var ipLookup = new LookUpIp_GeoIpNekudo();
-            string result = ipLookup.GetCountry(ipAddress);
-            session["IpCountry"] = !string.IsNullOrEmpty(result) ? result : DEFAULTCOUNTRY;
-            Log.Debug(string.Format("Country basesd on GetCountry: {0}", result));
-            return result;
+            var country = ipLookup.GetCountry(ipAddress);
+            // try ipstack.com for the same ip
+            if( string.IsNullOrEmpty(country))
+            {
+                var ipStackLookup = new LookupIp_ipstack();
+                country = ipStackLookup.GetCountry(ipAddress); 
+            }
+            session["IpCountry"] = !string.IsNullOrEmpty(country) ? country : DEFAULTCOUNTRY;
+            Log.Debug(string.Format("Country basesd on GetCountry: {0}", country));
+            return country;
         }
 
         /// <summary>
