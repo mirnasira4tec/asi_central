@@ -101,7 +101,10 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.40804.0\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.20715.0\lib\net40\System.Web.Razor.dll</HintPath>
       <Private>True</Private>
@@ -120,6 +123,7 @@
     <Compile Include="interfaces\IFileSystemService.cs" />
     <Compile Include="interfaces\ILogService.cs" />
     <Compile Include="interfaces\IEncryptionService.cs" />
+    <Compile Include="interfaces\ILookupIp.cs" />
     <Compile Include="interfaces\ITemplateService.cs" />
     <Compile Include="model\FileModel.cs" />
     <Compile Include="model\Mail.cs" />
@@ -140,7 +144,9 @@
     <Compile Include="util\FileSystemHelper.cs" />
     <Compile Include="util\HtmlHelper.cs" />
     <Compile Include="util\IPHelper.cs" />
+    <Compile Include="util\LookUpIp_GeoIpNekudo.cs" />
     <Compile Include="util\LogInterceptor.cs" />
+    <Compile Include="util\LookupIp_ipstack.cs" />
     <Compile Include="util\MvcHelper.cs" />
   </ItemGroup>
   <ItemGroup>
