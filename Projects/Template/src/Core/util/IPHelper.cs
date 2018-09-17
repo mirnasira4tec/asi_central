@@ -24,17 +24,26 @@ namespace asi.asicentral.util
         /// <returns></returns>
         public static string GetCountry(HttpSessionStateBase session, string ipAddress)
         {
+            var vendor = string.Empty;
+            return GetCountryAndVendor(session, ipAddress, ref vendor);
+        }
+
+        public static string GetCountryAndVendor(HttpSessionStateBase session, string ipAddress, ref string vendor)
+        {
             if (!string.IsNullOrEmpty(session["IpCountry"] as string))
                 return session["IpCountry"] as string;
 
-            var ipLookup = new LookUpIp_GeoIpNekudo();
+            ILookupIp ipLookup = new LookUpIp_GeoIpNekudo();
             var country = ipLookup.GetCountry(ipAddress);
             // try ipstack.com for the same ip
-            if( string.IsNullOrEmpty(country))
+            if (string.IsNullOrEmpty(country))
             {
-                var ipStackLookup = new LookupIp_ipstack();
-                country = ipStackLookup.GetCountry(ipAddress); 
+                ipLookup = new LookupIp_ipstack();
+                country = ipLookup.GetCountry(ipAddress);
             }
+
+            vendor = ipLookup.LookupVendor;
+
             session["IpCountry"] = !string.IsNullOrEmpty(country) ? country : DEFAULTCOUNTRY;
             Log.Debug(string.Format("Country basesd on GetCountry: {0}", country));
             return country;
