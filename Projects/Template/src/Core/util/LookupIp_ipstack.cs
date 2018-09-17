@@ -15,6 +15,10 @@ namespace asi.asicentral.util
         private static readonly ILogService Log = LogService.GetLog(typeof(LookupIp_ipstack));
         private static readonly string _lookupServiceUrl = "http://api.ipstack.com/{0}?access_key=4b917cafd695fbda4c614f6105d9a89e";
 
+        public string LookupVendor
+        {
+            get { return "api.ipstack.com"; }
+        }
         public string GetCountry(string ipAddress)
         {
             var country = string.Empty;
