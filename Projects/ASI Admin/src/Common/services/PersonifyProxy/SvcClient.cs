@@ -19,6 +19,8 @@ namespace PersonifySvcClient
         static string EnableBasicAuthentication = System.Configuration.ConfigurationManager.AppSettings["EnableBasicAuthentication"];
         static string UserName = System.Configuration.ConfigurationManager.AppSettings["UserName"];
         static string Password = System.Configuration.ConfigurationManager.AppSettings["Password"];
+        static string CanadaUserName = System.Configuration.ConfigurationManager.AppSettings["CanadaUserName"];
+        static string CanadaPassword = System.Configuration.ConfigurationManager.AppSettings["CanadaPassword"];
         static string SourceFormatValue = System.Configuration.ConfigurationManager.AppSettings["CommunicationFormat"];
 
         static Uri svcUri = new Uri(sUri);
@@ -26,11 +28,13 @@ namespace PersonifySvcClient
 
         #region Helpers
 
+       
         private static PersonifyEntitiesASI ctxt;
+        private static PersonifyEntitiesASI ctxtCanada;
         public static PersonifyEntitiesASI Ctxt
         {
             get
-            {
+            {                
                 if (ctxt == null)
                 {
                     ctxt = new PersonifyEntitiesASI(svcUri);
@@ -48,6 +52,29 @@ namespace PersonifySvcClient
                     ctxt.IgnoreResourceNotFoundException = true;
                 }
                 return ctxt;
+            }
+        }
+
+        public static PersonifyEntitiesASI CtxtCanada
+        {
+            get
+            {
+                if (ctxtCanada == null)
+                {                   
+                    ctxtCanada = new PersonifyEntitiesASI(svcUri);
+                    ctxtCanada.MergeOption = MergeOption.OverwriteChanges;
+
+                    //enable authentication if necessary
+                    if (Convert.ToBoolean(EnableBasicAuthentication) == true)
+                    {
+                        var serviceCreds = new NetworkCredential(CanadaUserName, CanadaPassword);
+                        var cache = new CredentialCache();
+                        cache.Add(svcUri, "Basic", serviceCreds);
+                        ctxtCanada.Credentials = cache;
+                    }
+                    ctxtCanada.IgnoreResourceNotFoundException = true;
+                }
+                return ctxtCanada;
             }
         }
 
@@ -96,9 +123,9 @@ namespace PersonifySvcClient
 
 
 
-        public static ReturnType Post<ReturnType>(string SvcOperName, object o)
+        public static ReturnType Post<ReturnType>(string SvcOperName, object o, bool isCanada =false)
         {
-            return DoPost<ReturnType>(SvcOperName, o, true);
+            return DoPost<ReturnType>(SvcOperName, o, true,isCanada);
         }
 
         public static ReturnType PostAnonymous<ReturnType>(string SvcOperName, object o)
@@ -106,12 +133,14 @@ namespace PersonifySvcClient
             return DoPost<ReturnType>(SvcOperName, o, false);
         }
 
-        private static ReturnType DoPost<ReturnType>(string SvcOperName, object o, bool enableAuthentication)
+        private static ReturnType DoPost<ReturnType>(string SvcOperName, object o, bool enableAuthentication, bool isCanada = false)
         {
+            string uid = isCanada ? CanadaUserName : UserName;
+            string pwd = isCanada ? CanadaPassword : Password;
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(sUri.TrimEnd('/') + "/" + SvcOperName);
             if (enableAuthentication)
             {
-                NetworkCredential serviceCreds = new NetworkCredential(UserName, Password);
+                NetworkCredential serviceCreds = new NetworkCredential(uid, pwd);
                 CredentialCache cache = new CredentialCache();
                 Uri uri = new Uri(sUri);
                 cache.Add(uri, "Basic", serviceCreds);

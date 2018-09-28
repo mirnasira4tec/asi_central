@@ -76,6 +76,7 @@ namespace asi.asicentral.web.store.interfaces
         string BackendReference { get; set; }
         OrderStatus OrderStatus { get; set; }
         bool IsCompleted { get; set; }
+        string CurrencySymbol { get; set; }
         #endregion
 
         #region Bank information

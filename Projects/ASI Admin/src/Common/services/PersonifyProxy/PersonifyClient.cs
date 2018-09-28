@@ -49,6 +49,7 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string SP_GET_BUNDLE_PRODUCT_DETAILS = "ASI_GetBundleProductDetails_SP";
         private const string SP_GET_PRODUCT_DETAILS = "USR_PRODUCT_VALIDATION_PROC";
         private const string SP_EEX_EMAIL_USAGE_UPDATE = "USR_EEX_EMAIL_USAGE_UPDATE";
+        private const string SP_STORE_CUST_SEARCH_COMM_OPT_PROC = "USR_STORE_CUST_SEARCH_COMM_OPT_PROC";
         private const string SP_GET_SUPPLIER_MEMBER_QUESTRIONS = "USR_ASI_CENTRAL_MQ_SELECT_SUPPLIER_PROC";
         private const string SP_GET_DISTRIBUTOR_MEMBER_QUESTRIONS = "USR_ASI_CENTRAL_MQ_SELECT_DISTRIBUTOR_PROC";
         private const string SP_GET_DECORATOR_MEMBER_QUESTRIONS = "USR_ASI_CENTRAL_MQ_SELECT_DECORATOR_PROC";
@@ -60,6 +61,7 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string SP_GET_ASICOMP_DATA = "USR_REPORT_ASI_COMP_DATA";
         public const string SP_UPDATE_MMS_EMS_SIGNON = "USR_UPDATE_MMS_EMS_SIGNON";
         private const string SP_GET_ASICOMP_DATA_BY_ACCT = "USR_ASI_COMP_DATA_BY_ACCT";
+       
 
         private static readonly IDictionary<string, string> ASICreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "AMEX" }, { "DISCOVER", "DISCOVER" }, { "MASTERCARD", "MC" }, { "VISA", "VISA" } };
         private static readonly IDictionary<string, string> ASIShowCreditCardType = new Dictionary<string, string>(4, StringComparer.InvariantCultureIgnoreCase) { { "AMEX", "SHOW AE" }, { "DISCOVER", "SHOW DISC" }, { "MASTERCARD", "SHOW MS" }, { "VISA", "SHOW VS" } };
@@ -68,7 +70,7 @@ namespace asi.asicentral.services.PersonifyProxy
         private static readonly IDictionary<string, string> CompanyNumber = new Dictionary<string, string>(3, StringComparer.InvariantCultureIgnoreCase) { { "ASI", "1" }, { "ASI Show", "2" }, { "ASI Canada", "4" } };
         private static readonly IDictionary<string, string> CreditCardMerchantID = new Dictionary<string, string>(3, StringComparer.InvariantCultureIgnoreCase) { { "ASI", "ASIcompanies" }, { "ASI Show", "ASIShow" }, { "ASI Canada", "ASICanada" } };
         private static readonly IDictionary<string, string> CreditCardOrgID = new Dictionary<string, string>(3, StringComparer.InvariantCultureIgnoreCase) { { "ASI", "ASI" }, { "ASI Show", "ASI" }, { "ASI Canada", "ASICAN" } };
-        private static readonly IDictionary<Activity, IList<string>> ActivityCodes = new Dictionary<Activity, IList<string>>() { { Activity.Exception, new List<string>(){ "EXCEPTION", "VALIDATION" } }, 
+        private static readonly IDictionary<Activity, IList<string>> ActivityCodes = new Dictionary<Activity, IList<string>>() { { Activity.Exception, new List<string>(){ "EXCEPTION", "VALIDATION" } },
                                                                                                                                  { Activity.Order, new List<string>(){ "ACTIVITY", "ORDER" } } };
         private static readonly IDictionary<string, List<string>> PERSONIFY_STORED_PROCEDURE = new Dictionary<string, List<string>>()
         {
@@ -77,12 +79,13 @@ namespace asi.asicentral.services.PersonifyProxy
             {SP_SEARCH_BY_COMPANY_NAME, new List<string>() { "@ip_label_name" }},
             {SP_SEARCH_BY_COMMUNICATION, new List<string>() { "@ip_search_phone_address" }},
             {SP_SEARCH_BY_COMPANY_IDENTIFIER, new List<string>() { "@ip_customer_number" }},
-            {SP_UPDATE_CUSTOMER_CLASS, new List<string>(){"@ip_master_customer_id", "@ip_sub_customer_id", 
+            {SP_UPDATE_CUSTOMER_CLASS, new List<string>(){"@ip_master_customer_id", "@ip_sub_customer_id",
                                                           "@upd_class_code", "@upd_sub_class", "@upd_user" }},
             {SP_GET_BUNDLE_PRODUCT_DETAILS, new List<string>() { "@ip_Bundle_Group_Name ", "@ip_Rate_Structure", "@ip_Rate_Code" }},
             {SP_GET_PRODUCT_DETAILS, new List<string>() { "@ip_parent_product", "@ip_product_code", "@ip_Rate_Structure", "@ip_Rate_Code" }},
             {SP_EEX_EMAIL_USAGE_UPDATE, new List<string>() { "@email_address", "@usage_code", "@unsubscribe", "@is_globally_suppressed" }},
-            {SP_OAM_INSERT_CREDIT_CARD, new List<string>() {"@ip_master_customer_id",
+            {SP_STORE_CUST_SEARCH_COMM_OPT_PROC, new List<string>() { "@ip_search_phone_address" }},
+            { SP_OAM_INSERT_CREDIT_CARD, new List<string>() {"@ip_master_customer_id",
                                                             "@ip_sub_customer_id",
                                                             "@ip_org_id",
                                                             "@ip_org_unit_id",
@@ -104,7 +107,7 @@ namespace asi.asicentral.services.PersonifyProxy
             {SP_GET_SUPPLIER_MEMBER_QUESTRIONS, new List<string>(){"@ip_master_customer_id", "@ip_sub_customer_id"}},
             {SP_GET_DISTRIBUTOR_MEMBER_QUESTRIONS, new List<string>(){"@ip_master_customer_id", "@ip_sub_customer_id"}},
             {SP_GET_DECORATOR_MEMBER_QUESTRIONS, new List<string>(){"@ip_master_customer_id", "@ip_sub_customer_id"}},
-            {SP_UPDATE_DISTRIBUTOR_MEMBER_QUESTIONS, new List<string>{ "@ip_master_customer_id", 
+            {SP_UPDATE_DISTRIBUTOR_MEMBER_QUESTIONS, new List<string>{ "@ip_master_customer_id",
                                                                         "@ip_sub_customer_id",
                                                                         "@ip_usr_year_established",
                                                                         "@ip_usr_facilitiesinformation",
@@ -115,42 +118,42 @@ namespace asi.asicentral.services.PersonifyProxy
                                                                         "@ip_usr_pri_bus_other_desc",
                                                                         "@ip_product_line",
                                                                         "@ip_types_accounts",
-                                                                        "@ip_user" }},  
-            {SP_UPDATE_SUPPLIER_MEMBER_QUESTIONS, new List<string> {"@ip_master_customer_id", 
-                                                                    "@ip_sub_customer_id", 
-                                                                    "@ip_usr_year_established", 
-                                                                    "@ip_usr_selling_promo_products", 
-                                                                    "@ip_usr_owner_gender", 
-                                                                    "@ip_usr_minority_owned", 
-                                                                    "@ip_usr_facilitiesinformation", 
-                                                                    "@ip_usr_north_american_company", 
-                                                                    "@ip_usr_office_hours", 
-                                                                    "@ip_usr_prod_time_min", 
-                                                                    "@ip_usr_prod_time_max", 
-                                                                    "@ip_usr_rush_time", 
-                                                                    "@ip_usr_imprinter", 
-                                                                    "@ip_usr_retail", 
-                                                                    "@ip_usr_importer", 
-                                                                    "@ip_usr_wholesaler", 
-                                                                    "@ip_usr_manufacturer", 
-                                                                    "@ip_usr_etching", 
-                                                                    "@ip_usr_pad_print", 
-                                                                    "@ip_usr_lithography", 
-                                                                    "@ip_usr_engraving", 
-                                                                    "@ip_usr_transfer", 
-                                                                    "@ip_usr_other_note", 
-                                                                    "@ip_usr_hot_stamping", 
-                                                                    "@ip_usr_direct_embroidery", 
-                                                                    "@ip_usr_sublimation", 
-                                                                    "@ip_usr_laser", 
-                                                                    "@ip_usr_full_color_process", 
-                                                                    "@ip_usr_silkscreen", 
-                                                                    "@ip_usr_foil_stamping", 
-                                                                    "@ip_usr_four_color_process", 
-                                                                    "@ip_usr_offset", 
-                                                                    "@ip_usr_die_stamp", 
+                                                                        "@ip_user" }},
+            {SP_UPDATE_SUPPLIER_MEMBER_QUESTIONS, new List<string> {"@ip_master_customer_id",
+                                                                    "@ip_sub_customer_id",
+                                                                    "@ip_usr_year_established",
+                                                                    "@ip_usr_selling_promo_products",
+                                                                    "@ip_usr_owner_gender",
+                                                                    "@ip_usr_minority_owned",
+                                                                    "@ip_usr_facilitiesinformation",
+                                                                    "@ip_usr_north_american_company",
+                                                                    "@ip_usr_office_hours",
+                                                                    "@ip_usr_prod_time_min",
+                                                                    "@ip_usr_prod_time_max",
+                                                                    "@ip_usr_rush_time",
+                                                                    "@ip_usr_imprinter",
+                                                                    "@ip_usr_retail",
+                                                                    "@ip_usr_importer",
+                                                                    "@ip_usr_wholesaler",
+                                                                    "@ip_usr_manufacturer",
+                                                                    "@ip_usr_etching",
+                                                                    "@ip_usr_pad_print",
+                                                                    "@ip_usr_lithography",
+                                                                    "@ip_usr_engraving",
+                                                                    "@ip_usr_transfer",
+                                                                    "@ip_usr_other_note",
+                                                                    "@ip_usr_hot_stamping",
+                                                                    "@ip_usr_direct_embroidery",
+                                                                    "@ip_usr_sublimation",
+                                                                    "@ip_usr_laser",
+                                                                    "@ip_usr_full_color_process",
+                                                                    "@ip_usr_silkscreen",
+                                                                    "@ip_usr_foil_stamping",
+                                                                    "@ip_usr_four_color_process",
+                                                                    "@ip_usr_offset",
+                                                                    "@ip_usr_die_stamp",
                                                                     "@ip_user" }},
-            {SP_UPDATE_DECORATOR_MEMBER_QUESTIONS, new List<string>{"@ip_master_customer_id", 
+            {SP_UPDATE_DECORATOR_MEMBER_QUESTIONS, new List<string>{"@ip_master_customer_id",
                                                                     "@ip_sub_customer_id",
                                                                     "@ip_usr_organization",
                                                                     "@ip_imprinting",
@@ -170,6 +173,7 @@ namespace asi.asicentral.services.PersonifyProxy
             {SP_GET_ASICOMP_DATA, new List<string>(){ "@ip_MASTER_CUSTOMER_ID" } },
             {SP_UPDATE_MMS_EMS_SIGNON, new List<string>(){  "@ip_MASTER_CUSTOMER_ID", "@ip_SUB_CUSTOMER_ID", "@ip_USR_MMS_SIGNON_EMS" } },
             {SP_GET_ASICOMP_DATA_BY_ACCT, new List<string>(){"@ip_USR_ACCOUNTID"}}
+            
         };
 
         private static readonly IDictionary<string, List<string>> EEX_USAGE_CODES = new Dictionary<string, List<string>>()
@@ -211,10 +215,12 @@ namespace asi.asicentral.services.PersonifyProxy
                 OrderLines = orderLineInputs,
                 AddedOrModifiedBy = ADDED_OR_MODIFIED_BY,
             };
+            var isCanada = storeOrder.OrderDetails[0].Product.ASICompany.ToLower() == "asi canada";
+            
             CreateOrderOutput orderOutput = null;
             try
             {
-                orderOutput = SvcClient.Post<CreateOrderOutput>("CreateOrder", createOrderInput);
+                orderOutput = SvcClient.Post<CreateOrderOutput>("CreateOrder", createOrderInput, isCanada);
             }
             catch (Exception ex)
             {
@@ -239,8 +245,8 @@ namespace asi.asicentral.services.PersonifyProxy
                 RateStructure = rateStructure,
                 RateCode = rateCode
             };
-
-            var output = SvcClient.Post<OrderNumberParam>("ASIAddOrderLinewithPrice", linePriceInput);
+            var isCanada = order.OrderDetails[0].Product.ASICompany.ToLower() == "asi canada";
+            var output = SvcClient.Post<OrderNumberParam>("ASIAddOrderLinewithPrice", linePriceInput, isCanada);
         }
 
         public static bool ScheduleOrderPayment(StoreOrder storeOrder)
@@ -248,9 +254,12 @@ namespace asi.asicentral.services.PersonifyProxy
             var scheduleCreated = false;
             if (storeOrder != null && !string.IsNullOrEmpty(storeOrder.BackendReference))
             {
-                var orderLineItems = SvcClient.Ctxt.OrderDetailInfos
+                var isCanada = storeOrder.OrderDetails[0].Product.ASICompany.ToLower() == "asi canada";
+                var svcContext = isCanada ? SvcClient.CtxtCanada : SvcClient.Ctxt;
+                var orderLineItems = svcContext.OrderDetailInfos
                                        .Where(c => c.OrderNumber == storeOrder.BackendReference && c.BaseTotalAmount > 0)
                                        .ToList();
+               
                 if (orderLineItems.Any())
                 {
                     var item = orderLineItems[0];
@@ -264,8 +273,8 @@ namespace asi.asicentral.services.PersonifyProxy
                         CCProfileId = Int32.Parse(storeOrder.CreditCard.ExternalReference),
                         SyncPayScheduleFlag = true
                     };
-
-                    var output = SvcClient.Post<ASICreatePayScheduleOutput>("ASICreatePaySchedule", iPaySchedual);
+                  
+                    var output = SvcClient.Post<ASICreatePayScheduleOutput>("ASICreatePaySchedule", iPaySchedual, isCanada);
                     scheduleCreated = output.IsPaySchduleCreated ?? false;
                 }
             }
@@ -273,10 +282,11 @@ namespace asi.asicentral.services.PersonifyProxy
             return scheduleCreated;
         }
 
-        public static decimal GetOrderBalanceTotal(string orderNumber)
-        {
-            decimal total = 0;
-            IList<WebOrderBalanceView> oOrdBalInfo = SvcClient.Ctxt.WebOrderBalanceViews
+        public static decimal GetOrderBalanceTotal(string orderNumber, bool isCanada = false)
+        {           
+            decimal total = 0;           
+            var svcContext = isCanada ? SvcClient.CtxtCanada : SvcClient.Ctxt;            
+            IList<WebOrderBalanceView> oOrdBalInfo = svcContext.WebOrderBalanceViews
                 .Where(o => o.OrderNumber == orderNumber).ToList();
             if (oOrdBalInfo.Any())
             {
@@ -342,6 +352,7 @@ namespace asi.asicentral.services.PersonifyProxy
             {
                 var subCustomerId = result.SubCustomerId.HasValue ? result.SubCustomerId.Value : 0;
                 //try update status, non critical but should be working
+
                 var customers = SvcClient.Ctxt.ASICustomers.Where(
                         p => p.MasterCustomerId == result.MasterCustomerId && p.SubCustomerId == subCustomerId).ToList();
                 if (customers.Count > 0)
@@ -443,11 +454,11 @@ namespace asi.asicentral.services.PersonifyProxy
             if (!primaryIsShipping && !billingIsShipping)
             {
                 storeCompanyAddresses.Add(new StoreAddressInfo()
-                                            {
-                                                StoreAddr = shipToAdress,
-                                                PersonifyIsShipping = true,
-                                                StoreIsShipping = true
-                                            });
+                {
+                    StoreAddr = shipToAdress,
+                    PersonifyIsShipping = true,
+                    StoreIsShipping = true
+                });
             }
 
             return storeCompanyAddresses.Select(a =>
@@ -609,11 +620,11 @@ namespace asi.asicentral.services.PersonifyProxy
                 }
 
                 // get primary phone, email
-                if( string.IsNullOrEmpty(company.Phone)  )
+                if (string.IsNullOrEmpty(company.Phone))
                 {
                     var primaryPhone = PersonifyClient.GetCusCommunications(company.MasterCustomerId, company.SubCustomerId, COMMUNICATION_INPUT_PHONE)
                                               .FirstOrDefault(c => c.PrimaryFlag.HasValue && c.PrimaryFlag.Value);
-                    if( primaryPhone != null)
+                    if (primaryPhone != null)
                     {
                         company.Phone = primaryPhone.FormattedPhoneAddress;
                     }
@@ -1168,7 +1179,7 @@ namespace asi.asicentral.services.PersonifyProxy
             {
                 try
                 {
-                    if (GetIndividualInfoByEmail(email) == null)
+                    if (GetIndividualInfoByEmail(email, false) == null)
                     {
                         requestStatus = PersonifyStatus.NoRecordFound;
                     }
@@ -1178,7 +1189,6 @@ namespace asi.asicentral.services.PersonifyProxy
                         {
                             ExecutePersonifySP(SP_EEX_EMAIL_USAGE_UPDATE, new List<string>() { email, code, "Y", "N" });
                         }
-
                         requestStatus = PersonifyStatus.Success;
                     }
                 }
@@ -1307,8 +1317,8 @@ namespace asi.asicentral.services.PersonifyProxy
                         var imprinting = string.Join("", memberData.ImprintTypes.Select(m => m.Id.ToString()));
 
                         ExecutePersonifySP(SP_UPDATE_DECORATOR_MEMBER_QUESTIONS, new List<string>
-                                           { orderDetail.Order.ExternalReference, "0", 
-                                            memberData.BestDescribesOption != null ?  memberData.BestDescribesOption.Value.ToString() : "", 
+                                           { orderDetail.Order.ExternalReference, "0",
+                                            memberData.BestDescribesOption != null ?  memberData.BestDescribesOption.Value.ToString() : "",
                                             imprinting, memberData.IsUnionMember ? "Y" : "N", user });
                     }
                 }
@@ -1494,7 +1504,7 @@ namespace asi.asicentral.services.PersonifyProxy
                             case "USR_DIE_STAMP":
                                 type = decoratorTypes.FirstOrDefault(t => t.Description == LookSupplierDecoratingType.DECORATION_DIESTAMP);
                                 break;
-                            #endregion decorator types
+                                #endregion decorator types
                         }
 
                         if (type != null)
@@ -1940,7 +1950,7 @@ namespace asi.asicentral.services.PersonifyProxy
 
                     if (customerInfo.RecordType == null || customerInfo.RecordType != RECORD_TYPE_CORPORATE ||
                         ((customerInfo.CustomerStatusCode == null || customerInfo.CustomerStatusCode != CUSTOMER_INFO_STATUS_DUPLICATE) &&
-                         (customerInfo.MemberStatus == null || (includeMMSLoad || customerInfo.MemberStatus != StatusCode.MMS_LOAD.ToString()) )))
+                         (customerInfo.MemberStatus == null || (includeMMSLoad || customerInfo.MemberStatus != StatusCode.MMS_LOAD.ToString()))))
                     {
                         companyInfoList.Add(customerInfo);
                     }
@@ -2110,9 +2120,17 @@ namespace asi.asicentral.services.PersonifyProxy
             return individualList.Any() ? individualList.Find(c => c.RecordType.StartsWith("I")) : null;
         }
 
-        public static PersonifyCustomerInfo GetIndividualInfoByEmail(string emailAddress)
+        public static PersonifyCustomerInfo GetIndividualInfoByEmail(string emailAddress, bool checkInvalidEmail = true)
         {
-            var individuals = GetCustomerInfoFromSP(SP_SEARCH_BY_COMMUNICATION, new List<string>() { emailAddress });
+            List<PersonifyCustomerInfo> individuals = null;
+            if (checkInvalidEmail)
+            {
+                individuals = GetCustomerInfoFromSP(SP_SEARCH_BY_COMMUNICATION, new List<string>() { emailAddress });
+            }
+            else
+            {
+                individuals = GetCustomerInfoFromSP(SP_STORE_CUST_SEARCH_COMM_OPT_PROC, new List<string>() { emailAddress });
+            }
             PersonifyCustomerInfo customerInfo = individuals.Any() ? customerInfo = individuals.Find(i => i.RecordType.StartsWith(RECORD_TYPE_INDIVIDUAL)) : null;
             return customerInfo;
         }
@@ -2189,11 +2207,11 @@ namespace asi.asicentral.services.PersonifyProxy
                     value = new string(value.Where(Char.IsDigit).ToArray());
                     value = value.Substring(0, Math.Min(value.Length, PHONE_NUMBER_LENGTH));
                     var comm = new CusCommunicationInput()
-                        {
-                            CommLocationCode = communitionLocationCode,
-                            CommTypeCode = key,
-                            ActiveFlag = true,
-                        };
+                    {
+                        CommLocationCode = communitionLocationCode,
+                        CommTypeCode = key,
+                        ActiveFlag = true,
+                    };
                     if (value.Length == PHONE_NUMBER_LENGTH && (string.Equals(countryCode, "USA", StringComparison.InvariantCultureIgnoreCase)
                         || string.Equals(countryCode, "CAN", StringComparison.InvariantCultureIgnoreCase)))
                     {
@@ -2427,8 +2445,8 @@ namespace asi.asicentral.services.PersonifyProxy
                     ipAddress = "127.0.0.1";
                 }
                 var orgId = CreditCardOrgID[asiCompany];
-                var response = ExecutePersonifySP(SP_OAM_INSERT_CREDIT_CARD, new List<string>() { 
-                    masterCustomerId, 
+                var response = ExecutePersonifySP(SP_OAM_INSERT_CREDIT_CARD, new List<string>() {
+                    masterCustomerId,
                     subCustomerId.ToString(),
                     orgId,
                     orgId,
@@ -2445,7 +2463,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     CreditCardMerchantID[asiCompany],
                     ipAddress,
                     creditCard.TokenId,
-                    creditCard.AuthReference,               
+                    creditCard.AuthReference,
                     "WEBUSER"
                 });
 
@@ -2563,5 +2581,8 @@ namespace asi.asicentral.services.PersonifyProxy
         }
 
         #endregion Credit Card Handling
+       
     }
+
+
 }

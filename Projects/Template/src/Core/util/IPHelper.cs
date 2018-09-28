@@ -15,6 +15,7 @@ namespace asi.asicentral.util
     {
         private static readonly ILogService Log = LogService.GetLog(MethodBase.GetCurrentMethod().DeclaringType);
         private static string[] ASIAN_COUNTRIES = new string[] { "CHINA", "HONG KONG","INDIA","KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF","KOREA, REPUBLIC OF","TAIWAN, PROVINCE OF CHINA" };
+        private static readonly string DEFAULTCOUNTRY = "UNITED STATES";
         /// <summary>
         /// Gives country based on give IP addres, caches the value in session
         /// </summary>
@@ -26,10 +27,17 @@ namespace asi.asicentral.util
             if (!string.IsNullOrEmpty(session["IpCountry"] as string))
                 return session["IpCountry"] as string;
 
-            string result = IpLookup.LookupByIp(ipAddress);
-            session["IpCountry"] = result;
-            Log.Debug(string.Format("Country basesd on GetCountry: {0}", result));
-            return result;
+            var ipLookup = new LookUpIp_GeoIpNekudo();
+            var country = ipLookup.GetCountry(ipAddress);
+            // try ipstack.com for the same ip
+            if( string.IsNullOrEmpty(country))
+            {
+                var ipStackLookup = new LookupIp_ipstack();
+                country = ipStackLookup.GetCountry(ipAddress); 
+            }
+            session["IpCountry"] = !string.IsNullOrEmpty(country) ? country : DEFAULTCOUNTRY;
+            Log.Debug(string.Format("Country basesd on GetCountry: {0}", country));
+            return country;
         }
 
         /// <summary>
