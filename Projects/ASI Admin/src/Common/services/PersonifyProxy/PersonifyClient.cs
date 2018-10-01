@@ -4,7 +4,6 @@ using asi.asicentral.model.personify;
 using asi.asicentral.model.store;
 using asi.asicentral.oauth;
 using asi.asicentral.PersonifyDataASI;
-using asi.asicentral.util.store;
 using asi.asicentral.util.store.companystore;
 using PersonifySvcClient;
 using System;
@@ -14,7 +13,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using DocumentFormat.OpenXml.Drawing;
 
 namespace asi.asicentral.services.PersonifyProxy
 {
@@ -218,7 +216,20 @@ namespace asi.asicentral.services.PersonifyProxy
                 AddedOrModifiedBy = ADDED_OR_MODIFIED_BY,
             };
             var isCanada = storeOrder.OrderDetails[0].Product.ASICompany.ToLower() == "asi canada";
-            var orderOutput = SvcClient.Post<CreateOrderOutput>("CreateOrder", createOrderInput, isCanada);
+            
+            CreateOrderOutput orderOutput = null;
+            try
+            {
+                orderOutput = SvcClient.Post<CreateOrderOutput>("CreateOrder", createOrderInput, isCanada);
+            }
+            catch (Exception ex)
+            {
+                var createOrderInputJSON = util.Utility.ObjectToXML<CreateOrderInput>(createOrderInput);
+                createOrderInputJSON = createOrderInputJSON.Replace("<", "&lt;").Replace(">", "&gt;");
+                var personifyErrorMessage = string.Format("Order Creation Failed in Personify - message: {0},<br /> stack track: {1} <br /><br /> <b>Store Order Detail:</b> <br /> {2} <br /><br />", ex.Message, ex.StackTrace, createOrderInputJSON);
+                _log.Error(personifyErrorMessage);
+                throw new Exception(personifyErrorMessage, ex);
+            }
             return orderOutput;
         }
 
@@ -2466,13 +2477,14 @@ namespace asi.asicentral.services.PersonifyProxy
             return profileId;
         }
 
-        public static ASICustomerCreditCard GetCreditCardByProfileId(string masterCustomerId, int subCustomerId, string profileId)
+        public static ASICustomerCreditCard GetCreditCardByProfileId(string masterCustomerId, int subCustomerId, string profileId, bool isCanada=false)
         {
             if (string.IsNullOrEmpty(masterCustomerId) || string.IsNullOrWhiteSpace(profileId))
             {
                 throw new Exception("Company information and profile id are required.");
             }
-            IEnumerable<ASICustomerCreditCard> oCreditCards = SvcClient.Ctxt.ASICustomerCreditCards
+            var svcClient = isCanada ? SvcClient.CtxtCanada : SvcClient.Ctxt;
+            IEnumerable<ASICustomerCreditCard> oCreditCards = svcClient.ASICustomerCreditCards
                 .Where(c => c.MasterCustomerId == masterCustomerId
                          && c.SubCustomerId == subCustomerId
                          && c.CustomerCreditCardProfileId == Convert.ToInt64(profileId));
@@ -2491,7 +2503,8 @@ namespace asi.asicentral.services.PersonifyProxy
             AddressInfo billToAddressInfo,
             string masterCustomerId,
             int subCustomerId,
-            string payOrderLineNumbers = null)
+            string payOrderLineNumbers = null,
+            bool isCanada = false)
         {
             if (string.IsNullOrWhiteSpace(orderNumber))
             {
@@ -2506,15 +2519,15 @@ namespace asi.asicentral.services.PersonifyProxy
                 throw new ArgumentException(
                     string.Format("Billto address and company information are required for order {0}", orderNumber));
             }
-            ASICustomerCreditCard credirCard = GetCreditCardByProfileId(masterCustomerId, subCustomerId, ccProfileid);
-            var orderLineNumbers = string.IsNullOrEmpty(payOrderLineNumbers) ? GetOrderLinesByOrderId(orderNumber, ref amount) : payOrderLineNumbers;
+            ASICustomerCreditCard credirCard = GetCreditCardByProfileId(masterCustomerId, subCustomerId, ccProfileid, isCanada);
+            var orderLineNumbers = string.IsNullOrEmpty(payOrderLineNumbers) ? GetOrderLinesByOrderId(orderNumber, ref amount, null, isCanada) : payOrderLineNumbers;
             var payOrderInput = new PayOrderInput()
             {
                 OrderNumber = orderNumber,
                 OrderLineNumbers = orderLineNumbers,
                 Amount = amount,
                 AcceptPartialPayment = true,
-                CurrencyCode = "USD",
+                CurrencyCode = isCanada ? "CAD" : "USD",
                 MasterCustomerId = masterCustomerId,
                 SubCustomerId = Convert.ToInt16(subCustomerId),
                 BillMasterCustomerId = masterCustomerId,
@@ -2536,9 +2549,10 @@ namespace asi.asicentral.services.PersonifyProxy
             return resp;
         }
 
-        public static string GetOrderLinesByOrderId(string orderId, ref decimal amount, List<PersonifyMapping> requestedProducts = null)
+        public static string GetOrderLinesByOrderId(string orderId, ref decimal amount, List<PersonifyMapping> requestedProducts = null, bool isCanada = false)
         {
-            var orderLines = SvcClient.Ctxt.OrderDetailInfos.Where(c => c.OrderNumber == orderId).ToList();
+            var svcClient = isCanada ? SvcClient.CtxtCanada : SvcClient.Ctxt;
+            var orderLines = svcClient.OrderDetailInfos.Where(c => c.OrderNumber == orderId).ToList();
 
             if (requestedProducts != null && requestedProducts.Any())
             {

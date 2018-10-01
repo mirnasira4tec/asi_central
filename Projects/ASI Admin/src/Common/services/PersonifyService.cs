@@ -180,6 +180,7 @@ namespace asi.asicentral.services
                 var nonScheduledOrderLineNumbers = string.Empty;
                 var nonScheduledProducts = mappedProducts.FindAll(m => !m.PaySchedule.HasValue || !m.PaySchedule.Value);
                 decimal payAmount = 0;
+                var isCanada = order.OrderDetails[0].Product.ASICompany.ToLower() == "asi canada";
                 if (nonScheduledProducts.Any())
                 {
                     if (string.IsNullOrEmpty(order.BackendReference))
@@ -194,7 +195,7 @@ namespace asi.asicentral.services
                         }
                     }
 
-                    nonScheduledOrderLineNumbers = PersonifyClient.GetOrderLinesByOrderId(order.BackendReference, ref payAmount, nonScheduledProducts);
+                    nonScheduledOrderLineNumbers = PersonifyClient.GetOrderLinesByOrderId(order.BackendReference, ref payAmount, nonScheduledProducts, isCanada);
                 }
 
                 // validate order total before any payment
@@ -205,7 +206,7 @@ namespace asi.asicentral.services
                     try
                     {
                         PersonifyClient.PayOrderWithCreditCard(order.BackendReference, payAmount, order.CreditCard.ExternalReference, billToAddr,
-                                                               companyInfo.MasterCustomerId, companyInfo.SubCustomerId, nonScheduledOrderLineNumbers);
+                                                               companyInfo.MasterCustomerId, companyInfo.SubCustomerId, nonScheduledOrderLineNumbers, isCanada);
                         log.Debug(string.Format("Payed the order '{0}'.", order));
                         log.Debug(string.Format("Place order End: {0}", order));
                     }

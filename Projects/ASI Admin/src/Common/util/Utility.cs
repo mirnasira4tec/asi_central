@@ -3,9 +3,12 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Net;
 using System.Text;
 using System.Web.Mvc;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace asi.asicentral.util
 {
@@ -109,6 +112,21 @@ namespace asi.asicentral.util
                 log.Error(ex.Message);
             }
             return responseString;
+        }
+
+        public static string ObjectToXML<T>(T source)
+        {
+            var xml = string.Empty;
+            XmlDocument xmlDoc = new XmlDocument();           
+            XmlSerializer xmlSerializer = new XmlSerializer(source.GetType());
+            using (MemoryStream xmlStream = new MemoryStream())
+            {
+                xmlSerializer.Serialize(xmlStream, source);
+                xmlStream.Position = 0;
+                xmlDoc.Load(xmlStream);
+                xml = xmlDoc.InnerXml;
+            }
+            return xml;
         }
     }
 }
