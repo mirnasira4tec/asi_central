@@ -2527,7 +2527,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 OrderLineNumbers = orderLineNumbers,
                 Amount = amount,
                 AcceptPartialPayment = true,
-                CurrencyCode = isCanada ? "CAD" : "USD",
+                CurrencyCode = "USD",
                 MasterCustomerId = masterCustomerId,
                 SubCustomerId = Convert.ToInt16(subCustomerId),
                 BillMasterCustomerId = masterCustomerId,
@@ -2539,9 +2539,9 @@ namespace asi.asicentral.services.PersonifyProxy
                 BillingAddressPostalCode = billToAddressInfo.PostalCode,
                 UseCreditCardOnFile = true,
                 CCProfileId = ccProfileid,
-                CompanyNumber = credirCard.UserDefinedCompanyNumber
+                CompanyNumber = isCanada ? "4" : credirCard.UserDefinedCompanyNumber
             };
-            var resp = SvcClient.Post<PayOrderOutput>("PayOrder", payOrderInput);
+            var resp = SvcClient.Post<PayOrderOutput>("PayOrder", payOrderInput, isCanada);
             if (!(resp.Success ?? false))
             {
                 throw new Exception(resp.ErrorMessage ?? "Error in paying order");
