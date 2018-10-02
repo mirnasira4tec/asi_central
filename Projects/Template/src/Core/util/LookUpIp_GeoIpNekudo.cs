@@ -15,6 +15,11 @@ namespace asi.asicentral.util
         private static readonly ILogService Log = LogService.GetLog(typeof(LookUpIp_GeoIpNekudo));
         private static readonly string _lookupServiceUrl = "https://geoip.nekudo.com/api/{0}/en";
 
+        public string LookupVendor
+        {
+            get { return "geoip.nekudo.com"; }
+        }
+
         public string GetCountry(string ipAddress)
         {
             var country = string.Empty;

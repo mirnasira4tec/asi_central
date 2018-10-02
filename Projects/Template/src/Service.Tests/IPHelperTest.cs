@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.util;
 using Moq;
 using System.Web;
+using System.Text.RegularExpressions;
 
 namespace asi.asicentral.Tests
 {
@@ -39,6 +40,15 @@ namespace asi.asicentral.Tests
         {
             var ipLookup = new LookupIp_ipstack();
             var result = ipLookup.GetCountry("42.104.255.255");
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void LookUpIpTest()
+        {
+            var session = new Mock<HttpSessionStateBase>();
+            session.SetupGet(x => x["IpCountry"]).Returns(string.Empty);
+            var result = IPHelper.GetCountry(session.Object, "42.104.255.255");
             Assert.IsNotNull(result);
         }
     }
