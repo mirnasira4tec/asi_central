@@ -123,6 +123,15 @@ namespace asi.asicentral.web.model.store
             }
         }
 
+        public String CurrencySymbol
+        {
+            get
+            {
+                var currencySymbol = this.orderDetail.Product.ASICompany.ToLower() == "asi canada" ? "C$" : "$";
+                return currencySymbol;
+            }
+        }
+
         public DateTime DateOrderCreated
         {
             get {
