@@ -341,7 +341,7 @@ namespace asi.asicentral.web.Controllers.Show
                                     {
                                         columnNameList = new string[] { "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
                                     }
-                                    else if (objShow != null && objShow.ShowTypeId == 5)
+                                    else if (objShow != null && (objShow.ShowTypeId == 5 || objShow.ShowTypeId == 6))
                                     {
                                         fasiliateFlag = true;
                                         columnNameList = new string[] { "ASINO", "MemberType", "Company", "FirstName", "LastName", "Address", "City", "State", "Zip Code", "Country", "Shipping Address 1", "Shipping Address 2", "Shipping City", "Shipping State", "Shipping Zip Code", "Shipping Country", "Phone", "Email Address" };
@@ -585,7 +585,7 @@ namespace asi.asicentral.web.Controllers.Show
                 uTotalTime = userTotalTime
             };
             SendMigrationNotificationEmail(companyUserCollection, "AsiComp account Mirgration report.");
-           
+
             CompanyUserCollection createdCompanyUserCollection = new CompanyUserCollection()
             {
                 companyInfoList = new List<CompanyInfoModel>(),
@@ -709,37 +709,37 @@ namespace asi.asicentral.web.Controllers.Show
             try
             {
                 var companyInformation = new asi.asicentral.model.CompanyInformation
-                     {
-                         Name = Convert.ToString(companyInforow["COMPANY"]),
-                         Phone = areaCode + phoneNo,
-                         Street1 = Convert.ToString(companyInforow["ADDRESS1"]),
-                         Street2 = Convert.ToString(companyInforow["ADDRESS2"]),
-                         City = Convert.ToString(companyInforow["CITY"]),
-                         Zip = Convert.ToString(companyInforow["ZIP"]),
-                         State = Convert.ToString(companyInforow["STATE"]),
-                         Country = GetCountryCode(companyInforow["COUNTRY"]),
-                         MemberType = "UNKNOWN",
-                         MemberTypeNumber = 0,
-                         CustomerClassCode = "UNKNOWN",
-                         ASINumber = asiNo
-                     };
+                {
+                    Name = Convert.ToString(companyInforow["COMPANY"]),
+                    Phone = areaCode + phoneNo,
+                    Street1 = Convert.ToString(companyInforow["ADDRESS1"]),
+                    Street2 = Convert.ToString(companyInforow["ADDRESS2"]),
+                    City = Convert.ToString(companyInforow["CITY"]),
+                    Zip = Convert.ToString(companyInforow["ZIP"]),
+                    State = Convert.ToString(companyInforow["STATE"]),
+                    Country = GetCountryCode(companyInforow["COUNTRY"]),
+                    MemberType = "UNKNOWN",
+                    MemberTypeNumber = 0,
+                    CustomerClassCode = "UNKNOWN",
+                    ASINumber = asiNo
+                };
 
                 //create equivalent store objects
                 var company = new asi.asicentral.model.store.StoreCompany
-                  {
-                      Name = companyInformation.Name,
-                      Phone = companyInformation.Phone,
-                      ASINumber = asiNo,
-                  };
+                {
+                    Name = companyInformation.Name,
+                    Phone = companyInformation.Phone,
+                    ASINumber = asiNo,
+                };
                 var address = new StoreAddress
-                   {
-                       Street1 = companyInformation.Street1,
-                       Street2 = companyInformation.Street2,
-                       City = companyInformation.City,
-                       State = companyInformation.State,
-                       Country = companyInformation.Country,
-                       Zip = companyInformation.Zip
-                   };
+                {
+                    Street1 = companyInformation.Street1,
+                    Street2 = companyInformation.Street2,
+                    City = companyInformation.City,
+                    State = companyInformation.State,
+                    Country = companyInformation.Country,
+                    Zip = companyInformation.Zip
+                };
                 company.Addresses.Add(new StoreCompanyAddress
                 {
                     Address = address,
@@ -901,7 +901,7 @@ namespace asi.asicentral.web.Controllers.Show
                         }
                         Regex regex = new Regex(@"^(?=.*\d)([a-zA-Z0-9_@():;.,'&]{8,25})$");
                         Match match = regex.Match(newPassword);
-                        if( match.Success )
+                        if (match.Success)
                         {
                             match = Regex.Match(newPassword, @"[a-zA-Z]+");
                         }
