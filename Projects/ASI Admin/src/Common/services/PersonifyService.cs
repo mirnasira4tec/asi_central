@@ -180,6 +180,7 @@ namespace asi.asicentral.services
                 var nonScheduledOrderLineNumbers = string.Empty;
                 var nonScheduledProducts = mappedProducts.FindAll(m => !m.PaySchedule.HasValue || !m.PaySchedule.Value);
                 decimal payAmount = 0;
+                var isCanada = order.OrderDetails[0].Product.ASICompany.ToLower() == "asi canada";
                 if (nonScheduledProducts.Any())
                 {
                     if (string.IsNullOrEmpty(order.BackendReference))
@@ -194,7 +195,7 @@ namespace asi.asicentral.services
                         }
                     }
 
-                    nonScheduledOrderLineNumbers = PersonifyClient.GetOrderLinesByOrderId(order.BackendReference, ref payAmount, nonScheduledProducts);
+                    nonScheduledOrderLineNumbers = PersonifyClient.GetOrderLinesByOrderId(order.BackendReference, ref payAmount, nonScheduledProducts, isCanada);
                 }
 
                 // validate order total before any payment
@@ -205,7 +206,7 @@ namespace asi.asicentral.services
                     try
                     {
                         PersonifyClient.PayOrderWithCreditCard(order.BackendReference, payAmount, order.CreditCard.ExternalReference, billToAddr,
-                                                               companyInfo.MasterCustomerId, companyInfo.SubCustomerId, nonScheduledOrderLineNumbers);
+                                                               companyInfo.MasterCustomerId, companyInfo.SubCustomerId, nonScheduledOrderLineNumbers, isCanada);
                         log.Debug(string.Format("Payed the order '{0}'.", order));
                         log.Debug(string.Format("Place order End: {0}", order));
                     }
@@ -371,22 +372,21 @@ namespace asi.asicentral.services
             {
                 throw new Exception("No Personify Order has been generated");
             }
-
-            decimal backEndTotal = PersonifyClient.GetOrderBalanceTotal(order.BackendReference);
+            var isCanada = order.OrderDetails[0].Product.ASICompany.ToLower() == "asi canada";
+            decimal backEndTotal = PersonifyClient.GetOrderBalanceTotal(order.BackendReference, isCanada);
             log.Debug(string.Format("Got the order total {0} of for the order '{1}'.", backEndTotal, order));
-
+            var currencySymbol = order.OrderDetails[0].Product.ASICompany.ToLower() == "asi canada" ? "C$" : "$";
             if (backEndTotal != order.Total)
             {
                 var data = new EmailData()
                 {
                     Subject = "here is a price discrepancy for an order from the store to Personify",
                     EmailBody = string.Format("A new order created in the store ({0}) has been transferred to a Personify "
-                    + "order ({1}). The prices do not match, the order needs to be looked at. The store price is {2:C} and "
-                    + "the Personify price is {3:C}.{4}", order.Id.ToString(), order.BackendReference, order.Total, backEndTotal, EmailData.GetMessageSuffix(url))
+                    + "order ({1}). The prices do not match, the order needs to be looked at. The store price is {5}{2} and "
+                    + "the Personify price is {5}{3}.{4}", order.Id.ToString(), order.BackendReference, order.Total, backEndTotal, EmailData.GetMessageSuffix(url), currencySymbol)
                 };
                 data.SendEmail(emailService);
             }
-
             return backEndTotal;
         }
 

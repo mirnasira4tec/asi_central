@@ -14,6 +14,8 @@ namespace asi.asicentral.web.model.store
 {
     public class MembershipModel : IMembershipModel
     {
+        public string CurrencySymbol { get; set; }
+
         [Display(ResourceType = typeof (Resource), Name = "CompanyName")]
         public string Company { get; set; }
         public string CompanyStatus { get; set; }

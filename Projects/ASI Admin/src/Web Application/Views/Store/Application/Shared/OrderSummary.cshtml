@@ -1,10 +1,15 @@
 ﻿@using asi.asicentral.util.store
 @model asi.asicentral.web.store.interfaces.IMembershipModel
+    @if (string.IsNullOrWhiteSpace(Model.CurrencySymbol))
+        {
+            Model.CurrencySymbol = "$";
+        }
+   
 <table>
     <tr>
         <td>Cost:</td>
         <td/>
-        <td>$@Model.ItemsCost.ToString("F")</td>
+        <td>@(Model.CurrencySymbol)@Model.ItemsCost.ToString("F")</td>
     </tr>
     <tr>
         <td>Quantity:</td>
@@ -16,7 +21,7 @@
     <tr>
         <td>Application Fee:</td>
         <td/>
-        <td>$@Model.ApplicationFeeCost.ToString("F")</td>
+        <td>@(Model.CurrencySymbol)@Model.ApplicationFeeCost.ToString("F")</td>
     </tr>
     }
     @if (Model.AppFeeDiscount > 0)
@@ -24,7 +29,7 @@
     <tr>
         <td> Application Fee Discount:</td>
         <td>-</td> 
-        <td> $@Model.AppFeeDiscount.ToString("F")</td>
+        <td>@(Model.CurrencySymbol)@Model.AppFeeDiscount.ToString("F")</td>
     </tr>
     }
     @if (Model.ProductDiscount > 0)
@@ -32,7 +37,7 @@
     <tr>
         <td> Product Discount:</td>
         <td>-</td> 
-        <td> $@Model.ProductDiscount.ToString("F")</td>
+        <td>@(Model.CurrencySymbol)@Model.ProductDiscount.ToString("F")</td>
     </tr>
     }
     @if (Model.SubscriptionDiscount > 0)
@@ -40,7 +45,7 @@
     <tr>
         <td> Subscription Discount:</td>
         <td>-</td> 
-        <td> $@Model.SubscriptionDiscount.ToString("F")</td>
+        <td> @(Model.CurrencySymbol)@Model.SubscriptionDiscount.ToString("F")</td>
     </tr>
     }
     @if (Model.TaxCost > 0)
@@ -48,7 +53,7 @@
     <tr>
         <td>Tax:</td>
         <td/>
-        <td>$@Model.TaxCost.ToString("F")</td>
+        <td>@(Model.CurrencySymbol)@Model.TaxCost.ToString("F")</td>
     </tr>
     }
     @if (Model.ShippingCost > 0)
@@ -56,7 +61,7 @@
     <tr>
         <td>Shipping &amp; Handling:</td>
         <td/>
-        <td>$@Model.ShippingCost.ToString("F")</td>
+        <td>@(Model.CurrencySymbol)@Model.ShippingCost.ToString("F")</td>
     </tr>
     }
     <tr>
@@ -65,12 +70,12 @@
     <tr>
         <td class="order-total"><b>Order Total:</b></td>
         <td/>
-        <td class="order-total"><b>$@Model.TotalCost.ToString("F")</b></td>
+        <td class="order-total"><b>@(Model.CurrencySymbol)@Model.TotalCost.ToString("F")</b></td>
     </tr>
     @if (Model.SubscriptionCost > 0)
     {
     <tr >
-        <td colspan="3"><small>The @Model.SubscriptionFrequency subscription will be billed at $@Model.SubscriptionCost.ToString("F")</small></td>
+        <td colspan="3"><small>The @Model.SubscriptionFrequency subscription will be billed at @(Model.CurrencySymbol)@Model.SubscriptionCost.ToString("F")</small></td>
     </tr>
     }
 </table>
