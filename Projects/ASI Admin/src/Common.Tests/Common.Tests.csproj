@@ -54,45 +54,41 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\library\asi.asicentral.Core.dll</HintPath>
     </Reference>
-    <Reference Include="ASI.Barista.Plugins, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Barista.Plugins.2.1.10\lib\ASI.Barista.Plugins.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="ASI.Barista.Plugins, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASI.Barista.Plugins.3.0.27\lib\net45\ASI.Barista.Plugins.dll</HintPath>
     </Reference>
-    <Reference Include="ASI.Barista.Plugins.Messaging, Version=2.1.7.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Barista.Plugins.Messaging.2.1.7\lib\ASI.Barista.Plugins.Messaging.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="ASI.Barista.Plugins.Messaging, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASI.Barista.Plugins.Messaging.3.1.1\lib\net45\ASI.Barista.Plugins.Messaging.dll</HintPath>
     </Reference>
-    <Reference Include="ASI.Contracts, Version=1.2.38.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Contracts.1.2.38\lib\ASI.Contracts.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="ASI.Contracts, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASI.Contracts.1.2.44\lib\ASI.Contracts.dll</HintPath>
     </Reference>
-    <Reference Include="ASI.EntityModel, Version=1.2.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.EntityModel.1.2.5\lib\ASI.EntityModel.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="ASI.EntityModel, Version=1.2.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASI.EntityModel.1.2.6\lib\ASI.EntityModel.dll</HintPath>
     </Reference>
     <Reference Include="ASI.Services.Data.Sql, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Services.Data.Sql.2.0.0\lib\ASI.Services.Data.Sql.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\ASI.Services.Data.Sql.2.0.2\lib\ASI.Services.Data.Sql.dll</HintPath>
     </Reference>
-    <Reference Include="ASI.Services.Http, Version=3.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Services.Http.3.4.19\lib\ASI.Services.Http.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="ASI.Services.Http, Version=3.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASI.Services.Http.3.5.2\lib\ASI.Services.Http.dll</HintPath>
     </Reference>
     <Reference Include="ASI.Services.InfluxDb, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Services.InfluxDb.0.3.1\lib\net45\ASI.Services.InfluxDb.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\ASI.Services.InfluxDb.0.3.4\lib\net45\ASI.Services.InfluxDb.dll</HintPath>
     </Reference>
-    <Reference Include="ASI.Services.Messaging, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Services.Messaging.2.1.7\lib\ASI.Services.Messaging.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="ASI.Services.Logging, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASI.Services.Logging.2.1.12\lib\ASI.Services.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="ASI.Services.Messaging, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASI.Services.Messaging.2.2.0\lib\ASI.Services.Messaging.dll</HintPath>
+    </Reference>
+    <Reference Include="ASI.Services.Monitoring, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASI.Services.Monitoring.1.0.16\lib\ASI.Services.Monitoring.dll</HintPath>
     </Reference>
     <Reference Include="ASI.Services.Statistics, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Services.Statistics.2.1.25\lib\ASI.Services.Statistics.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\ASI.Services.Statistics.2.1.29\lib\ASI.Services.Statistics.dll</HintPath>
     </Reference>
-    <Reference Include="ASI.Sugar, Version=2.1.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Sugar.2.1.13\lib\ASI.Sugar.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="ASI.Sugar, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASI.Sugar.2.2.0\lib\ASI.Sugar.dll</HintPath>
     </Reference>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
       <HintPath>..\packages\BouncyCastle.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
@@ -148,6 +144,9 @@
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Administration.7.0.0.0\lib\net20\Microsoft.Web.Administration.dll</HintPath>
     </Reference>
     <Reference Include="MsgPack, Version=0.8.0.0, Culture=neutral, PublicKeyToken=a2625990d5dc0167, processorArchitecture=MSIL">
       <HintPath>..\packages\MsgPack.Cli.0.8.1\lib\net45\MsgPack.dll</HintPath>
