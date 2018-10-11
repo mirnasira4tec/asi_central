@@ -316,6 +316,7 @@ namespace asi.asicentral.web.Controllers.Show
                             log.Debug("Index - start processing one sheet");
                             start = DateTime.Now;
                             var worksheet = workBook.Worksheet(sheetcount);
+                            var showName = worksheet.Name.Replace("(500)", "").Replace("(fASI)", "").Trim();
                             var firstRowUsed = worksheet.FirstRowUsed();
                             if (firstRowUsed != null)
                             {
@@ -331,7 +332,7 @@ namespace asi.asicentral.web.Controllers.Show
                                 string[] columnNameList = null;
                                 if (columnNameList == null)
                                 {
-                                    objShow = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Trim() == worksheet.Name.Trim())
+                                    objShow = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Trim() == showName)
                                                                                .OrderByDescending(s => s.StartDate).FirstOrDefault();
                                     if (objShow != null && (objShow.ShowTypeId == 1 || objShow.ShowTypeId == 2))
                                     {
@@ -348,11 +349,11 @@ namespace asi.asicentral.web.Controllers.Show
                                     }
                                     else
                                     {
-                                        var matchShow = Regex.Match(worksheet.Name, @"^\s*WEEK\s+\d+\s*-\s*", RegexOptions.IgnoreCase);
+                                        var matchShow = Regex.Match(showName, @"^\s*WEEK\s+\d+\s*-\s*", RegexOptions.IgnoreCase);
                                         if (matchShow.Success)
                                         {
                                             var weekNum = matchShow.Value.Trim();
-                                            var address = worksheet.Name.Substring(matchShow.Value.Length);
+                                            var address = showName.Substring(matchShow.Value.Length);
                                             objShow = ObjectService.GetAll<ShowASI>().Where(item => item.Name.Contains(weekNum.Replace("-", " -")) && item.Address.Contains(address.Trim()))
                                                                                      .OrderByDescending(s => s.StartDate).FirstOrDefault();
                                             columnNameList = new string[] { "ASINO", "Company", "IsCatalog", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName" };
@@ -361,7 +362,7 @@ namespace asi.asicentral.web.Controllers.Show
                                 }
                                 if (objShow == null)
                                 {
-                                    ModelState.AddModelError("CustomError", string.Format("Show {0} doesn't exist.", worksheet.Name));
+                                    ModelState.AddModelError("CustomError", string.Format("Show {0} doesn't exist.", showName));
                                 }
                                 else
                                 {
