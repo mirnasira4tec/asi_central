@@ -248,7 +248,13 @@ namespace asi.asicentral.web.Controllers.Show
                     }
                     if (ds.Columns.Contains("HasTravelForm"))
                     {
-                        employeeAttendee.HasTravelForm = Convert.ToBoolean(ds.Rows[rowId]["HasTravelForm"].ToString() == "Yes") ? true : false;
+                        var hasTravelForm = Convert.ToBoolean(ds.Rows[rowId]["HasTravelForm"].ToString() == "Yes") ? true : false;
+                        if( company.MemberType == "Distributor")
+                        {
+                            employeeAttendee.HasTravelForm = hasTravelForm;
+                        }
+                        else 
+                           attendee.HasTravelForm = hasTravelForm;
                     }
                     if (ds.Columns.Contains("PriorityOrder"))
                     {
@@ -258,6 +264,7 @@ namespace asi.asicentral.web.Controllers.Show
                         employeeAttendees.Add(employeeAttendee);
                 }
             }
+ 
             #endregion update distributor data
 
             return company;
