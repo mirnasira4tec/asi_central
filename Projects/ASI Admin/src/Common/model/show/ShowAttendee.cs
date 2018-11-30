@@ -25,6 +25,7 @@ namespace asi.asicentral.model.show
         public bool IsExisting { get; set; }
         public bool IsCatalog { get; set; }
         public string BoothNumber { get; set; }
+        public bool? HasTravelForm { get; set; }
         public virtual ShowASI Show { get; set; }
         public virtual ShowCompany Company { get; set; }
         public virtual List<ShowDistShowLogo> DistShowLogos { get; set; }
