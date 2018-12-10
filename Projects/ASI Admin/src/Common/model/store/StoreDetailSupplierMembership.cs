@@ -14,7 +14,7 @@ namespace asi.asicentral.model.store
         //Among them 9 to 16 are Chinese SGR products
         //17 to 24 are Chinese English products
         //83 is ESP Advantage, it is a supplier membership product
-        public static int[] Identifiers = new int[] { 1, 2, 3, 4, 9, 10, 11, 12 ,13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 83, 110};
+        public static int[] Identifiers = new int[] { 1, 2, 3, 4, 9, 10, 11, 12 ,13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 83, 110, 140, 141, 142, 143};
 
         public StoreDetailSupplierMembership()
         {
