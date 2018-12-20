@@ -16,17 +16,18 @@
                 $("#timmsErrorMessage").text("TIMMS ID must contain only numbers.");
                 e.preventDefault();
             }
-            else if ($('#hasPendingTerms').length > 0) {
-                $("#termsWarningMessage").text('This order has pending Terms and Conditions.');
-                var confirm = window.confirm('This order has pending Terms and Conditions. Are you sure to accept the order?');
-                if (!confirm) {
-                    e.preventDefault();
-                }
-            }
             else
             {
                 $(this).attr('disabled', 'disabled');
                 $(this).closest('form')[0].submit();
+            }
+        }
+
+        if ($('#hasPendingTerms').length > 0) {
+            $("#termsWarningMessage").text('This order has pending Terms and Conditions.');
+            var confirm = window.confirm('This order has pending Terms and Conditions. Are you sure to accept the order?');
+            if (!confirm) {
+                e.preventDefault();
             }
         }
     }

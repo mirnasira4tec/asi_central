@@ -23,6 +23,17 @@ namespace asi.asicentral.web.model.store
 
         public IList<StoreDetailSpecialProductItem> SpecialProductItems { get; set; }
 
+        // distributor questions
+        public bool? IsAuthorizedToBindCompany { get; set; }
+        public bool? IsForResale { get; set; }
+        public bool? IsOnlyProfitReseller { get; set; }
+        public bool? IsDetailsProvider { get; set; }
+        public bool? IsApplyingForMembership { get; set; }
+        public bool? IsChangesInformed { get; set; }
+        public bool? IsDataCertified { get; set; }
+        public string OtherCompanyName { get; set; }
+        public string ApprovedSignature { get; set; }
+
         #endregion Sales Form information
 
         /// <summary>
@@ -60,6 +71,20 @@ namespace asi.asicentral.web.model.store
             IsCompleted = order.IsCompleted;
             MembershipModelHelper.PopulateModel(this, orderdetail);
             this.SpecialProductItems = specialProducItems;
+
+            var distQuestions = storeService.GetAll<StoreDetailDistributorMembership>(false).FirstOrDefault(detail => detail.OrderDetailId == OrderDetailId);
+            if( distQuestions != null)
+            {
+                IsAuthorizedToBindCompany = distQuestions.IsAuthorizedToBindCompany;
+                IsForResale = distQuestions.IsForResale;
+                IsOnlyProfitReseller = distQuestions.IsOnlyProfitReseller;
+                IsDetailsProvider = distQuestions.IsDetailsProvider;
+                IsApplyingForMembership = distQuestions.IsApplyingForMembership;
+                IsChangesInformed = distQuestions.IsChangesInformed;
+                IsDataCertified = distQuestions.IsDataCertified;
+                OtherCompanyName = distQuestions.OtherCompanyName;
+                ApprovedSignature = distQuestions.ApprovedSignature;
+            }
         }
     }
 }

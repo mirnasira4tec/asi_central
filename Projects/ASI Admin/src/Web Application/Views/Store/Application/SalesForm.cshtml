@@ -1,9 +1,11 @@
 ﻿@using asi.asicentral.model.store
 @using asi.asicentral.util.store.catalogadvertising
 @using asi.asicentral.web.Controllers.Store
+@using asi.asicentral.Resources;
 @model asi.asicentral.web.model.store.SalesFormApplicationModel
 @{
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
+    var displayRequiredQuestions = Model.IsAuthorizedToBindCompany.HasValue && Model.IsAuthorizedToBindCompany.Value;
 }
 <h1>@Html.Raw(string.Format("{0} (#{1})", Model.ProductName, Model.OrderId))</h1>
 @if (Model.Price > 0.0m)
@@ -12,7 +14,7 @@
 }
 @Html.Partial("../Store/Application/Shared/OrderSummary", Model)
 @using (Html.BeginForm("EditSalesForm", "Application"))
-{        
+{
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.ProductId)
     @Html.HiddenFor(m => m.OrderDetailId) @Html.HiddenFor(m => m.OrderId) @Html.HiddenFor(m => m.ActionName)
@@ -21,74 +23,128 @@
         <ul class="nav nav-tabs" id="tabs">
             <li class="active"><a href="#tabbasic" data-toggle="tab">Basic Information</a></li>
             <li><a href="#tabproduct" data-toggle="tab">Sales Form Data</a></li>
+            @if (displayRequiredQuestions)
+            {
+                <li><a href="#tabquestions" data-toggle="tab">Required Questions</a></li>
+            }
         </ul>
     </nav>
     <div class="tab-content">
         @Html.Partial("../Store/Application/Shared/CompanyInformation", Model)
-	    <div id="tabproduct" class="product-information tab-pane fade">
-			@if (Model.SpecialProductItems != null && Model.SpecialProductItems.Any())
-			{
+        <div id="tabproduct" class="product-information tab-pane fade">
+            @if (Model.SpecialProductItems != null && Model.SpecialProductItems.Any())
+            {
                 var item = Model.SpecialProductItems.First();
-		        <fieldset>
-			        <legend>Sales Representative</legend>
-				    <span>@item.ASIContactName</span>
-		        </fieldset>
-                if( !string.IsNullOrEmpty(item.ASIContactEmail))
+                <fieldset>
+                    <legend>Sales Representative</legend>
+                    <span>@item.ASIContactName</span>
+                </fieldset>
+                if (!string.IsNullOrEmpty(item.ASIContactEmail))
                 {
-		            <fieldset>
-			            <legend>Sales Representative Email</legend>
-				        <span>@item.ASIContactEmail</span>
-		            </fieldset>
+                    <fieldset>
+                        <legend>Sales Representative Email</legend>
+                        <span>@item.ASIContactEmail</span>
+                    </fieldset>
                 }
-                if( !string.IsNullOrEmpty(item.CustomerEmail))
+                if (!string.IsNullOrEmpty(item.CustomerEmail))
                 {
-		            <fieldset>
-			            <legend>Customer Email</legend>
-				        <span>@item.CustomerEmail</span>
-		            </fieldset>
+                    <fieldset>
+                        <legend>Customer Email</legend>
+                        <span>@item.CustomerEmail</span>
+                    </fieldset>
                 }
-			}
-		    @if(!string.IsNullOrEmpty(Model.OrderDetailComments))
-		    {
-		    <fieldset>
-			    <legend>Special Instructions</legend>
-				<span>@Model.OrderDetailComments</span>
-		    </fieldset>
-			}
-		    <fieldset>
-			    <legend>Order Details</legend>
-		    </fieldset>
-		    @if (Model.SpecialProductItems != null && Model.SpecialProductItems.Any())
-	        {
-			    <table class="table">
-				    <thead>
-					    <tr>
-						    <th>ASI Services</th>
-						    <th>Fee</th>
-						    <th>Quantity</th>
-						    <th>Regular Price</th>
-						    <th>Limited Time offer</th>
-					    </tr>
-				    </thead>
-				    <tbody >
-					    @foreach (var item in Model.SpecialProductItems)
-		                {
-						    <tr>
-							    <td>@asi.asicentral.util.store.SalesFormHelper.GetProductDescription(item.ServiceType)</td>
-							    <td>@Html.Raw(item.IsSetupCharges ? "<i class=\"icon-ok\"></i>" : "&nbsp;")</td>
-							    <td>@item.Quantity</td>
-							    <td>@item.Price</td>
-							    <td>@item.OfferPrice</td>
-						    </tr>
-		                 }
-				    </tbody>
-			    </table>
-	        }
-	  else
-	  {
-			    <text>No data was associated with this order</text>
-	  }
-	    </div>
+            }
+            @if (!string.IsNullOrEmpty(Model.OrderDetailComments))
+            {
+                <fieldset>
+                    <legend>Special Instructions</legend>
+                    <span>@Model.OrderDetailComments</span>
+                </fieldset>
+            }
+            <fieldset>
+                <legend>Order Details</legend>
+            </fieldset>
+            @if (Model.SpecialProductItems != null && Model.SpecialProductItems.Any())
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ASI Services</th>
+                            <th>Fee</th>
+                            <th>Quantity</th>
+                            <th>Regular Price</th>
+                            <th>Limited Time offer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.SpecialProductItems)
+                        {
+                            <tr>
+                                <td>@asi.asicentral.util.store.SalesFormHelper.GetProductDescription(item.ServiceType)</td>
+                                <td>@Html.Raw(item.IsSetupCharges ? "<i class=\"icon-ok\"></i>" : "&nbsp;")</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.Price</td>
+                                <td>@item.OfferPrice</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <text>No data was associated with this order</text>
+            }
+        </div>
+        @if (displayRequiredQuestions)
+        {
+        <div id="tabquestions" class="product-information tab-pane fade">
+            <label>
+                @Html.Raw(Resource.IsAuthorizedToBindCompany)
+                @(Model.IsAuthorizedToBindCompany != null && Model.IsAuthorizedToBindCompany.Value ? Resource.Form_Yes : Resource.Form_No)
+            </label>
+            <label>
+                @Html.Raw(Resource.ApprovedSignature):
+                @(Model.ApprovedSignature)
+            </label>
+            <br />
+            <label>
+                @Html.Raw(Resource.IsForResale)
+                @(Model.IsForResale != null && Model.IsForResale.Value ? Resource.Form_Yes : Resource.Form_No)
+            </label>
+            <br />
+            <label>
+                @Html.Raw(Resource.IsOnlyProfitReseller)
+                @(Model.IsOnlyProfitReseller != null && Model.IsOnlyProfitReseller.Value ? Resource.Form_Yes : Resource.Form_No)
+            </label>
+            <br />
+            <label>
+                @Html.Raw(Resource.IsDetailsProvider)
+                @(Model.IsDetailsProvider != null && Model.IsDetailsProvider.Value ? Resource.Form_Yes : Resource.Form_No)
+            </label>
+            <br />
+            <label>
+                @Html.Raw(Resource.IsApplyingForMembership)
+                @(Model.IsApplyingForMembership != null && Model.IsApplyingForMembership.Value ? Resource.Form_Yes : Resource.Form_No)
+            </label>
+            @if (Model.IsApplyingForMembership != null && !Model.IsApplyingForMembership.Value)
+            {
+                <label>
+                    @Html.Raw(Resource.OtherCompanyName)
+                    @(!string.IsNullOrEmpty(Model.OtherCompanyName) ? Model.OtherCompanyName : string.Empty)
+                </label>
+            }
+            <br />
+            <label>
+                @Html.Raw(Resource.IsChangesInformed)
+                @(Model.IsChangesInformed != null && Model.IsChangesInformed.Value ? Resource.Form_Yes : Resource.Form_No)
+            </label>
+            <br />
+            <label>
+                @Html.Raw(Resource.IsDataCertified)
+                @(Model.IsDataCertified != null && Model.IsDataCertified.Value ? Resource.Form_Yes : Resource.Form_No)
+            </label>
+        </div>
+        }
         <!-- END #orderdetail-information -->
     </div> <!-- END #content -->
 }

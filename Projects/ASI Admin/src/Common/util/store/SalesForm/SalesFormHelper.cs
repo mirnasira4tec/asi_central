@@ -6,11 +6,11 @@
             { "ESP Website", "ESPW-60", "ESP (ALL) Product" },
             { "Additional ESP License", "ESPL-60", "" },
             { "Company Store", "CPYS-49.99", "ESP (ALL) Product" },
-            { "Distributor Membership", "DIST-49.99", "Distributor Membership" },
+            { "Distributor Membership", "DIST-29.99", "Distributor Membership" },
             { "Distributor Package - Corporate Account","DTCA-199.99", "Distributor Membership;ESP (ALL) Product" },
             { "Distributor Package – Basic","DIST-149.99", "Distributor Membership" },
             { "Distributor Package - Standard", "DIST-199.99", "Distributor Membership;ESP (ALL) Product" },
-            { "Distributor Package – Executive", "DIST-229.99", "Distributor Membership;ESP (ALL) Product" },
+            { "Distributor Package – Executive", "DIST-219.99", "Distributor Membership;ESP (ALL) Product" },
             { "Distributor Package - Premium", "DIST-299.99", "Distributor Membership;ESP (ALL) Product" },
             { "Pay Per Click Advertising plus monthly advertising spend", "PPCA-149",""},
             { "Company Reviews","CORW-99",""},
@@ -27,6 +27,17 @@
             { "Custom ESPWS Maintenance 1","CMWP-20",""},
             { "Custom ESPWS Maintenance 2","CMWP-40",""},
             { "Custom ESPWS Maintenance 3","CMWP-60",""},
+            { "Decorator Membership - Standard", "DECM-49.99", "Decorator Membership" },
+            { "Decorator Membership - Plus", "DECM-99.99", "Decorator Membership" },
+            { "Decorator Membership - Pro", "DECM-149.99", "Decorator Membership" } };
+
+        public static readonly string[,] ACTIVE_PRODUCTS = {
+            { "Additional ESP License", "ESPL-60", "" },
+            { "Distributor Membership", "DIST-29.99", "Distributor Membership" },
+            { "Distributor Package – Basic","DIST-149.99", "Distributor Membership" },
+            { "Distributor Package - Standard", "DIST-199.99", "Distributor Membership;ESP (ALL) Product" },
+            { "Distributor Package – Executive", "DIST-219.99", "Distributor Membership;ESP (ALL) Product" },
+            { "Distributor Package - Premium", "DIST-299.99", "Distributor Membership;ESP (ALL) Product" },
             { "Decorator Membership - Standard", "DECM-49.99", "Decorator Membership" },
             { "Decorator Membership - Plus", "DECM-99.99", "Decorator Membership" },
             { "Decorator Membership - Pro", "DECM-149.99", "Decorator Membership" } };
