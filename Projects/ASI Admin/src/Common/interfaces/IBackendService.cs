@@ -44,6 +44,9 @@ namespace asi.asicentral.interfaces
 
 		CompanyInformation GetCompanyInfoByIdentifier(int companyIdentifier);
 
+        CompanyInformation GetIndividualByEmail(string email, bool validate);
+        List<CompanyInformation> AddIndividualInfos(StoreCompany storeCompany, string companyMasterId, int companySubId);
+
         CompanyInformation AddCompany(User curUser);
 
         CompanyInformation CreateCompany(StoreCompany storeCompany, string storeType);

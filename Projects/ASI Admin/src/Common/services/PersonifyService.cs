@@ -728,6 +728,30 @@ namespace asi.asicentral.services
             return companyInfo;
         }
 
+        public virtual CompanyInformation GetIndividualByEmail(string email, bool checkInvalidEmail = true)
+        {
+            var indivInfo = PersonifyClient.GetIndividualInfoByEmail(email, checkInvalidEmail);
+            CompanyInformation companyInfo = indivInfo != null ? PersonifyClient.GetCompanyInfo(indivInfo) : null;
+
+            return companyInfo;
+        }
+
+        public virtual List<CompanyInformation> AddIndividualInfos(StoreCompany storeCompany, string companyMasterId, int companySubId)
+        {
+            var indivList = new List<CompanyInformation>();
+            var countryCodes = storeService.GetAll<LookSendMyAdCountryCode>(true).ToList();
+            var indivInfos = PersonifyClient.AddIndividualInfos(storeCompany, countryCodes, companyMasterId, companySubId);
+
+            if( indivInfos != null && indivInfos.Count() > 0)
+            {
+                foreach( var c in indivInfos )
+                {
+                    indivList.Add(PersonifyClient.GetCompanyInfo(c));
+                }
+            }
+            return indivList;
+        }
+
         public virtual void AddActivity(StoreCompany company, string activityText, Activity activityType)
         {
             PersonifyClient.AddActivity(company, activityText, activityType);
