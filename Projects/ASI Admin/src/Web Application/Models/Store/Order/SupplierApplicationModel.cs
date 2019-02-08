@@ -7,6 +7,7 @@ using System.Web;
 using asi.asicentral.interfaces;
 using asi.asicentral.Resources;
 using asi.asicentral.web.store.interfaces;
+using asi.asicentral.util.store;
 
 namespace asi.asicentral.web.model.store
 {
@@ -192,7 +193,7 @@ namespace asi.asicentral.web.model.store
         public bool IsCompleted { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public decimal Price { get; set; }
-
+        public IList<OrderAddOnOption> SupplierAddOnOptions { get; set; }
         public IList<StoreIndividual> Contacts { get; set; }
 
         /// <summary>
@@ -223,6 +224,9 @@ namespace asi.asicentral.web.model.store
             OrderStatus = order.ProcessStatus;
             Price = order.Total;
             IsCompleted = order.IsCompleted;
+
+            SupplierAddOnOptions = Helper.GetAddonOptionsFromJson(application.AddOnOptions);           
+
             MembershipModelHelper.PopulateModel(this, orderdetail);
         }
 

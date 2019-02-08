@@ -6,6 +6,7 @@ using asi.asicentral.model.timss;
 using asi.asicentral.oauth;
 using asi.asicentral.PersonifyDataASI;
 using asi.asicentral.services.PersonifyProxy;
+using asi.asicentral.util.store;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -145,7 +146,30 @@ namespace asi.asicentral.services
                         }
                     }
                 }
+                #region Adding Addon Options
 
+                if (string.Compare(orderDetail.Product.Type, "Supplier Membership") == 0)
+                {
+                    StoreDetailSupplierMembership supplierApplication = storeService.GetAll<StoreDetailSupplierMembership>(false).Where(app => app.OrderDetailId == orderDetail.Id).SingleOrDefault();
+                    if(supplierApplication != null)
+                    { 
+                       
+                        var addonOptions = Helper.GetAddonOptionsFromJson(supplierApplication.AddOnOptions);
+                        if (addonOptions != null && addonOptions.Count > 0)
+                        {
+                            var storeOptions = addonOptions.Select(q => q.Name).ToList();
+                            var addonOptionsMappings = storeService.GetAll<PersonifyMapping>(true)
+                                                      .Where(map => (storeOptions.Contains(map.StoreOption)))
+                                                      .ToList();
+                            foreach (var addonOption in addonOptionsMappings)
+                            {
+                                mappedProducts.Add(addonOption);
+                            }
+                        }
+                    }
+                }
+
+                #endregion
                 #region scheduled products
                 var scheduledProducts = mappedProducts.FindAll(m => m.PaySchedule.HasValue && m.PaySchedule.Value);
                 if (scheduledProducts.Any())

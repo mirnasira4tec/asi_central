@@ -225,8 +225,10 @@ namespace asi.asicentral.web.Controllers.Store
                 if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
                 StoreOrder order = orderDetail.Order;
                 StoreDetailSupplierMembership supplierApplication = StoreService.GetAll<StoreDetailSupplierMembership>(false).Where(app => app.OrderDetailId == application.OrderDetailId).SingleOrDefault();
+                
                 if (order == null) throw new Exception("Invalid reference to an order");
                 if (supplierApplication == null) throw new Exception("Invalid reference to an application");
+                var addonOptions = supplierApplication.AddOnOptions;
                 order.ExternalReference = application.ExternalReference;
                 //copy decorating types bool to the collections
                 application.SyncDecoratingTypes(StoreService.GetAll<LookSupplierDecoratingType>().ToList(), supplierApplication);

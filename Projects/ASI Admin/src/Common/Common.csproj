@@ -383,6 +383,7 @@
     <Compile Include="model\show\ShowEmployeeAttendee.cs" />
     <Compile Include="model\show\ShowASI.cs" />
     <Compile Include="model\show\ShowType.cs" />
+    <Compile Include="model\store\OrderAddOnOption.cs" />
     <Compile Include="model\store\StoreDetailSpecialProductItem.cs" />
     <Compile Include="model\store\StoreSupplierRepresentativeInformation.cs" />
     <Compile Include="model\store\LookEquipmentType.cs" />

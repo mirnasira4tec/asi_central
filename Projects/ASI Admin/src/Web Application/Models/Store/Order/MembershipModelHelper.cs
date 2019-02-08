@@ -90,7 +90,7 @@ namespace asi.asicentral.web.model.store
 
             decimal cost = orderDetail.Cost;
             int quantity = orderDetail.Quantity;
-
+            
             if (orderDetail.Product != null)
             {
                 model.HasBankInformation = orderDetail.Product.HasBankInformation;
@@ -100,6 +100,23 @@ namespace asi.asicentral.web.model.store
                 if (orderDetail.Product.HasBackEndIntegration && !string.IsNullOrEmpty(order.BackendReference))
                 {
                     model.BackendReference = order.BackendReference;
+                }
+            }
+            var isSupplier = model is SupplierApplicationModel;
+            if (isSupplier)
+            {
+                var supplierModel = (SupplierApplicationModel)model;
+
+                if (supplierModel.SupplierAddOnOptions != null && supplierModel.SupplierAddOnOptions.Count > 0)
+                {
+                    foreach (var addonOption in supplierModel.SupplierAddOnOptions)
+                    {
+                        model.TotalCost += addonOption.Price;
+                        if (string.Compare(addonOption.Subscripiton, "M") == 0)
+                        {
+                            model.SubscriptionCost += addonOption.Price;
+                        }
+                    }
                 }
             }
         }

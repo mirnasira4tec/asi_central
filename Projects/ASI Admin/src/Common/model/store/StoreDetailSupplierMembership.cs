@@ -149,6 +149,8 @@ namespace asi.asicentral.model.store
         [Display(ResourceType = typeof(Resource), Name = "PSINumber")]
         public string PSINumber { get; set; }
 
+        public string AddOnOptions { get; set; }
+
         public virtual IList<LookSupplierDecoratingType> DecoratingTypes { get; set; }
 
         public override string ToString()
@@ -218,6 +220,10 @@ namespace asi.asicentral.model.store
             supplier.PSINumber = PSINumber;
             supplier.YearEnteredAdvertising = YearEnteredAdvertising;
             supplier.YearEstablished = YearEstablished;
+            if (!string.IsNullOrWhiteSpace(AddOnOptions))
+            {
+                supplier.AddOnOptions = AddOnOptions;
+            }
         }
     }
 }

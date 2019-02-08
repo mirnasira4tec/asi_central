@@ -1,81 +1,114 @@
 ﻿@using asi.asicentral.util.store
+@using asi.asicentral.web.model.store
+@using asi.asicentral.model.store
+@using asi.asicentral.util.store
 @model asi.asicentral.web.store.interfaces.IMembershipModel
-    @if (string.IsNullOrWhiteSpace(Model.CurrencySymbol))
-        {
-            Model.CurrencySymbol = "$";
-        }
-   
+@if (string.IsNullOrWhiteSpace(Model.CurrencySymbol))
+{
+	Model.CurrencySymbol = "$";
+}
+@{
+	var isSupplier = Model is SupplierApplicationModel;
+	IList<OrderAddOnOption> addonOptions = null;
+	if (isSupplier)
+	{
+		var supplierModel = (SupplierApplicationModel)Model;
+		addonOptions = supplierModel.SupplierAddOnOptions;		
+	}
+}
 <table>
-    <tr>
-        <td>Cost:</td>
-        <td/>
-        <td>@(Model.CurrencySymbol)@Model.ItemsCost.ToString("F")</td>
-    </tr>
-    <tr>
-        <td>Quantity:</td>
-        <td/>
-        <td>@Model.Quantity.ToString()</td>
-    </tr>
-    @if (Model.ApplicationFeeCost > 0)
-    {
-    <tr>
-        <td>Application Fee:</td>
-        <td/>
-        <td>@(Model.CurrencySymbol)@Model.ApplicationFeeCost.ToString("F")</td>
-    </tr>
-    }
-    @if (Model.AppFeeDiscount > 0)
-    {
-    <tr>
-        <td> Application Fee Discount:</td>
-        <td>-</td> 
-        <td>@(Model.CurrencySymbol)@Model.AppFeeDiscount.ToString("F")</td>
-    </tr>
-    }
-    @if (Model.ProductDiscount > 0)
-    {
-    <tr>
-        <td> Product Discount:</td>
-        <td>-</td> 
-        <td>@(Model.CurrencySymbol)@Model.ProductDiscount.ToString("F")</td>
-    </tr>
-    }
-    @if (Model.SubscriptionDiscount > 0)
-    {
-    <tr>
-        <td> Subscription Discount:</td>
-        <td>-</td> 
-        <td> @(Model.CurrencySymbol)@Model.SubscriptionDiscount.ToString("F")</td>
-    </tr>
-    }
-    @if (Model.TaxCost > 0)
-    {
-    <tr>
-        <td>Tax:</td>
-        <td/>
-        <td>@(Model.CurrencySymbol)@Model.TaxCost.ToString("F")</td>
-    </tr>
-    }
-    @if (Model.ShippingCost > 0)
-    {
-    <tr>
-        <td>Shipping &amp; Handling:</td>
-        <td/>
-        <td>@(Model.CurrencySymbol)@Model.ShippingCost.ToString("F")</td>
-    </tr>
-    }
-    <tr>
-        <td colspan="3" />
-    </tr>
-    <tr>
-        <td class="order-total"><b>Order Total:</b></td>
-        <td/>
-        <td class="order-total"><b>@(Model.CurrencySymbol)@Model.TotalCost.ToString("F")</b></td>
-    </tr>
-    @if (Model.SubscriptionCost > 0)
-    {
-    <tr >
-        <td colspan="3"><small>The @Model.SubscriptionFrequency subscription will be billed at @(Model.CurrencySymbol)@Model.SubscriptionCost.ToString("F")</small></td>
-    </tr>
-    }
+	<tr>
+		<td>Cost:</td>
+		<td />
+		<td>@(Model.CurrencySymbol)@Model.ItemsCost.ToString("F")</td>
+	</tr>
+	<tr>
+		<td>Quantity:</td>
+		<td />
+		<td>@Model.Quantity.ToString()</td>
+	</tr>
+	@if (Model.ApplicationFeeCost > 0)
+	{
+		<tr>
+			<td>Application Fee:</td>
+			<td />
+			<td>@(Model.CurrencySymbol)@Model.ApplicationFeeCost.ToString("F")</td>
+		</tr>
+	}
+	@if (Model.AppFeeDiscount > 0)
+	{
+		<tr>
+			<td> Application Fee Discount:</td>
+			<td>-</td>
+			<td>@(Model.CurrencySymbol)@Model.AppFeeDiscount.ToString("F")</td>
+		</tr>
+	}
+	@if (Model.ProductDiscount > 0)
+	{
+		<tr>
+			<td> Product Discount:</td>
+			<td>-</td>
+			<td>@(Model.CurrencySymbol)@Model.ProductDiscount.ToString("F")</td>
+		</tr>
+	}
+	@if (Model.SubscriptionDiscount > 0)
+	{
+		<tr>
+			<td> Subscription Discount:</td>
+			<td>-</td>
+			<td> @(Model.CurrencySymbol)@Model.SubscriptionDiscount.ToString("F")</td>
+		</tr>
+	}
+	@if (Model.TaxCost > 0)
+	{
+		<tr>
+			<td>Tax:</td>
+			<td />
+			<td>@(Model.CurrencySymbol)@Model.TaxCost.ToString("F")</td>
+		</tr>
+	}
+	@if (Model.ShippingCost > 0)
+	{
+		<tr>
+			<td>Shipping &amp; Handling:</td>
+			<td />
+			<td>@(Model.CurrencySymbol)@Model.ShippingCost.ToString("F")</td>
+		</tr>
+	}
+	@if (addonOptions != null && addonOptions.Count > 0)
+	{
+		foreach (var addonOption in addonOptions)
+		{
+			<tr>
+				<td>@addonOption.Name:</td>
+				<td />
+				<td>@(Model.CurrencySymbol)@addonOption.Price.ToString("F")</td>
+			</tr>
+		}
+	}
+
+	<tr>
+		<td colspan="3" />
+	</tr>
+	<tr>
+		<td class="order-total"><b>Order Total:</b></td>
+		<td />
+		<td class="order-total"><b>@(Model.CurrencySymbol)@Model.TotalCost.ToString("F")</b></td>
+	</tr>
+	@if (Model.SubscriptionCost > 0)
+	{
+		<tr>
+			<td colspan="3"><small>The @Model.SubscriptionFrequency subscription will be billed at @(Model.CurrencySymbol)@Model.SubscriptionCost.ToString("F")</small></td>
+		</tr>
+	}
+	@if (addonOptions != null && addonOptions.Count > 0 && addonOptions.Where(q => q.Name == "CANADIAN_MARKET_SEGMENT").Count() >0)
+	{
+		
+		<tr>
+			<td colspan="3" id="tdCanada" style="color:red;">
+				Please add CANADIAN_MARKET_SEGMENT option in ASICAN manually after approving the order.
+			</td>
+		</tr>
+	}
+
 </table>

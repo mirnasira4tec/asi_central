@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 
 namespace asi.asicentral.util.store
 {
@@ -48,5 +49,13 @@ namespace asi.asicentral.util.store
             titles.Add(new SelectListItem() { Text = "3rd Party Consultant", Value = "Consulting" });
             return titles;
         }
-    }
+
+        public static List<OrderAddOnOption> GetAddonOptionsFromJson(string json)
+        {
+            List<OrderAddOnOption> addonOptions = null;
+            if(!string.IsNullOrWhiteSpace(json))
+                addonOptions = JsonConvert.DeserializeObject<List<OrderAddOnOption>>(json);
+            return addonOptions;
+        }
+     }
 }
