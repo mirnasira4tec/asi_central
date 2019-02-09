@@ -92,6 +92,7 @@ namespace asi.asicentral.web.Controllers.Show
                 existingAttendee.IsCatalog = showAttendee.IsCatalog;
                 existingAttendee.UpdateDate = DateTime.UtcNow;
                 existingAttendee.UpdateSource = "ShowController - PostShowAttendeeInformation";
+                existingAttendee.IsNew = showAttendee.IsNew;
                 ShowAttendee attendeeToSave = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, existingAttendee);
                 if (attendeeInfo != null && attendeeInfo.ShowAttendees != null && attendeeInfo.ShowAttendees.Count > 0 &&
                     existingAttendee.EmployeeAttendees != null && existingAttendee.EmployeeAttendees.Count > 0)

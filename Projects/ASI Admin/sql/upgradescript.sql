@@ -1,1 +1,2 @@
-ALTER TABLE Att_EmployeeAttendee ADD PriorityOrder int NULL;
+ALTER TABLE ATT_Attendee
+ADD IsNew  bit

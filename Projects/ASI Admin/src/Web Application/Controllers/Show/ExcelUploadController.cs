@@ -148,6 +148,16 @@ namespace asi.asicentral.web.Controllers.Show
             {
                 attendee.BoothNumber = ds.Rows[rowId]["BoothNumber"].ToString();
             }
+            if (ds.Columns.Contains("New!"))
+            {
+                var colValue = ds.Rows[rowId]["New!"] != null ? ds.Rows[rowId]["New!"].ToString() : string.Empty;
+                var isYes = false;
+                if (!string.IsNullOrWhiteSpace(colValue))
+                {
+                    isYes = colValue.Substring(0, 1).ToLower() == "y" ? true : false;
+                }
+                attendee.IsNew = isYes;
+            }
 
             attendee.IsExisting = true;
             attendee.UpdateSource = "ExcelUploadcontroller-Index";
@@ -249,12 +259,12 @@ namespace asi.asicentral.web.Controllers.Show
                     if (ds.Columns.Contains("HasTravelForm"))
                     {
                         var hasTravelForm = Convert.ToBoolean(ds.Rows[rowId]["HasTravelForm"].ToString() == "Yes") ? true : false;
-                        if( company.MemberType == "Distributor")
+                        if (company.MemberType == "Distributor")
                         {
                             employeeAttendee.HasTravelForm = hasTravelForm;
                         }
-                        else 
-                           attendee.HasTravelForm = hasTravelForm;
+                        else
+                            attendee.HasTravelForm = hasTravelForm;
                     }
                     if (ds.Columns.Contains("PriorityOrder"))
                     {
@@ -264,7 +274,7 @@ namespace asi.asicentral.web.Controllers.Show
                         employeeAttendees.Add(employeeAttendee);
                 }
             }
- 
+
             #endregion update distributor data
 
             return company;
@@ -328,7 +338,7 @@ namespace asi.asicentral.web.Controllers.Show
                             if (firstRowUsed != null)
                             {
                                 var categoryRow = firstRowUsed.RowUsed();
-                                int coCategoryId = 1;
+                                int coCategoryId = 2;
                                 Dictionary<int, string> keyValues = new Dictionary<int, string>();
                                 for (int cell = 1; cell <= categoryRow.CellCount(); cell++)
                                 {
@@ -347,7 +357,7 @@ namespace asi.asicentral.web.Controllers.Show
                                     }
                                     else if (objShow != null && objShow.ShowTypeId == 4)
                                     {
-                                        columnNameList = new string[] { "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
+                                        columnNameList = new string[] { "New!", "ASINO", "Company", "Address", "City", "State", "Zip Code", "Country", "MemberType", "FirstName", "LastName", "BoothNumber" };
                                     }
                                     else if (objShow != null && (objShow.ShowTypeId == 5 || objShow.ShowTypeId == 6))
                                     {
