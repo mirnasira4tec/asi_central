@@ -259,12 +259,15 @@ namespace asi.asicentral.web.Controllers.Show
                     if (ds.Columns.Contains("HasTravelForm"))
                     {
                         var hasTravelForm = Convert.ToBoolean(ds.Rows[rowId]["HasTravelForm"].ToString() == "Yes") ? true : false;
-                        if (company.MemberType == "Distributor")
+                        if (hasTravelForm)
                         {
-                            employeeAttendee.HasTravelForm = hasTravelForm;
+                            if (company.MemberType == "Distributor")
+                            {
+                                employeeAttendee.HasTravelForm = hasTravelForm;
+                            }
+                            else
+                                attendee.HasTravelForm = hasTravelForm;
                         }
-                        else
-                            attendee.HasTravelForm = hasTravelForm;
                     }
                     if (ds.Columns.Contains("PriorityOrder"))
                     {
