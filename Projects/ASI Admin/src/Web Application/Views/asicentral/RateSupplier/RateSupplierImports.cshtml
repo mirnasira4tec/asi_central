@@ -1,0 +1,111 @@
+﻿@using asi.asicentral.model.asicentral;
+@model List<RateSupplierImport>
+@{
+    ViewBag.Title = "List of Imports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@helper UplodForm()
+{
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 id="myModalLabel1">Import Excel</h3>
+    </div>
+    <div class="modal-body">
+        <input type="file" id="fileImport" name="file" multiple="multiple" />
+    </div>
+    <div class="modal-footer">
+        <input class="btn btn-primary" type="submit" id="btnExcel" value="Import" />
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+}
+<div>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div id="dvSuccess" class="alert alert-block alert-success" style="padding-top:12px;margin-top:15px;">@Html.Raw(TempData["SuccessMessage"])</div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div id="dvErr" class="alert alert-danger" style="padding-top:12px;margin-top:15px;">@Html.Raw(TempData["ErrorMessage"])</div>
+    }
+    <h2 class="pull-left">List of Imports</h2><br />
+    @using (Html.BeginForm("Import", "RateSupplier", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div id="ImportExcel" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            @UplodForm()
+        </div>
+    }
+    @using (Html.BeginForm("Import", "RateSupplier", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div id="UpdateImport" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <input type="hidden" id="importId" name="importId" />
+            @UplodForm()
+        </div>
+    }
+</div>
+
+<form>
+    <a href="#ImportExcel" class="modal-link btn" data-toggle="modal" style="margin-bottom:5px">
+     Import New  
+    </a>
+    @if (Model != null && Model.Count() > 0)
+    {
+        var imports = Model.OrderByDescending(m => m.RateSupplierImportId).ToList();
+        var latestImport = imports.FirstOrDefault();
+        var isFormSubmited = latestImport != null ? latestImport.RateSupplierForms.Any(m => m.SubmitSuccessful) ? true : false : false;
+        <table class="table table-bordered table-condensed table-striped">
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>Last Updated by</th>
+                    <th>Is Active</th>
+                    <th>Update Date</th>
+                    <th>Create Date</th>
+                    <th>Number of Imports </th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < imports.Count(); i++)
+                {
+                    var import = imports[i];
+                    <tr>
+                        <td>
+                            @if (i == 0 && !isFormSubmited)
+                            {
+                                <a rel="tooltip" onclick="openUdatePopup('@import.RateSupplierImportId')" data-placement="right" class="btn modal-link" width="150px" href="#UpdateImport">Update</a>
+                            }
+                            else
+                            {
+                                <a rel="tooltip" width="150px" data-placement="right" href="/RateSupplier/RatingSummary?importId=@import.RateSupplierImportId">View Report</a>
+                            }
+                        </td>
+                        <td><a href="/RateSupplier/RateSupplierDistributors?importId=@import.RateSupplierImportId" alt="rate supplier">@import.LastUpdatedBy</a></td>
+                        <td>@((i == 0) ? "Yes" : "No")</td>
+                        <td>@import.UpdateDateUTC.ToString("MM/dd/yyyy")</td>
+                        <td>@import.CreateDateUTC.ToString("MM/dd/yyyy")</td>
+                        <td>@import.NumberOfImports</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <hr />
+        <ul>
+            <li>No data available!</li>
+        </ul>
+    }
+</form>
+
+<script>
+    function openUdatePopup(importId) {
+        $("#importId").val(importId);
+        $("#UpdateImport").modal();
+    }
+</script>
+
+
+
+
+

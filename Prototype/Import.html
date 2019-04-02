@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="ASI Central">
+    <title>ASI Central Admin tools</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+	
+	<link rel="stylesheet" href="../Projects/ASI Admin/src/Web Application/Content/bootstrap.css">
+	<link rel="stylesheet" href="../Projects/ASI Admin/src/Web Application/Content/datepicker.css">
+	<link rel="stylesheet" href="../Projects/ASI Admin/src/Web Application/Content/site.css">
+   
+</head>
+<body class="normal">
+<!-- BEGIN bootstrap fluid layout body content container -->
+<div class="container-fluid">
+<!-- BEGIN global site header content -->
+<header id="site-header" class="clearfix">
+	<a href="/"><img class="float-left" src="../Projects/ASI Admin/src/Web Application/images/asi-logo.gif" alt="Logo of ASI The Advertising Specialty Institute"></a>
+	<div id="account-admin">
+		<p>You are logged in as\averma</p>
+        <div class="title">Content Administration</div>
+	</div>
+</header><!-- END #site-header -->
+
+<div>
+    <h2 class="pull-left">List of Imports</h2><br/>
+
+    <form>
+        <div id="ImportExcel" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 id="myModalLabel1">Import Excel</h3>
+            </div>
+            <div class="modal-body">
+                <input type="file" id="fileImport" name="file" multiple="multiple" />
+            </div>
+            <div class="modal-footer">
+                <input class="btn btn-primary" type="submit" id="btnExcel" value="Import" />
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<form>
+    <a href="#ImportExcel" class="modal-link" data-toggle="modal" style="margin-bottom:5px"> 
+       <img src="../Projects/ASI Admin/src/Web Application/images/upload.png" title="Excel Import"></a>
+	 
+    <table class="table table-bordered table-condensed table-striped">
+        <thead>
+            <tr>
+                
+                <th>&nbsp;</th>
+                <th>Last Updated by</th>
+				 <th>Is Active</th>
+                <th>Update Date</th>
+                <th>Create Date</th>
+                <th>Number of Imports </th>
+                
+            </tr>
+        </thead>
+        <tbody>
+              <tr>
+               	<td> 
+				<a rel="tooltip" data-placement="right" class="icon icon-refresh" href="#"></a>
+				
+	   </td>
+                <td><a href="#" alt="">Bernice</a></td>
+				<td>Yes</td>
+                <td>12/27/2018</td>
+                <td>12/15/2018</td>
+				<td>3</td>
+            </tr>
+			 <tr>
+               	<td> 
+				<a rel="tooltip" data-placement="right" class="icon icon-refresh" href="#"></a>
+	   </td>
+                <td><a href="#" alt="">Steve</a></td>
+				<td>No</td>
+                <td>12/27/2018</td>
+                <td>10/15/2018</td>
+				<td>1</td>
+            </tr>
+			<tr>
+               	<td> 
+				<a rel="tooltip" data-placement="right" class="icon icon-refresh" href="#"></a>
+	   </td>
+                <td><a href="#" alt=""> Arun</a></td>
+				<td>Yes</td>
+                <td>08/11/2018</td>
+                <td>08/11/2018</td>
+				<td>1</td>
+            </tr>
+           
+        </tbody>
+    </table>
+</form>
+
+   
+
+</div><!-- END .container-fluid -->
+<!-- BEGIN global site footer -->
+	
+    <footer id="asi-brand-bar">
+		<p>&copy; 2013 - ASI Central Admin Application - <a href="#">Admin FAQ</a> - <a href="#">Contact ASI Central Administrators</a>
+	</footer>
+
+<script src="../Projects/ASI Admin/src/Web Application/Scripts/jquery-1.9.1.min.js"></script>
+<script src="../Projects/ASI Admin/src/Web Application/Scripts/bootstrap.js"></script>
+
+</body>
+</html>

@@ -1,7 +1,7 @@
 <Project DefaultTargets = "BuildSolution" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
 	<Import Project="$(MSBuildExtensionsPath)\ExtensionPack\MSBuild.ExtensionPack.tasks" Condition="Exists('$(MSBuildExtensionsPath)\ExtensionPack\MSBuild.ExtensionPack.tasks')" />	
 	<Import Project="$(ExtensionTasksPath)MSBuild.ExtensionPack.tasks" Condition="Exists('$(ExtensionTasksPath)MSBuild.ExtensionPack.tasks') And !Exists('$(MSBuildExtensionsPath)\ExtensionPack\MSBuild.ExtensionPack.tasks')" />
-	<Import Project="C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v11.0\Web\Microsoft.Web.Publishing.targets" Condition="Exists('C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v11.0\Web\Microsoft.Web.Publishing.targets')" />
+	<Import Project="C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v15.0\Web\Microsoft.Web.Publishing.targets" Condition="Exists('C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v15.0\Web\Microsoft.Web.Publishing.targets')" />
 
 	<PropertyGroup>
 		<ProjectRoot Condition="$(Local) == 'true'">\Projects\asicentral.com\Projects</ProjectRoot>

@@ -1,0 +1,62 @@
+﻿@using asi.asicentral.web.Models.asicentral;
+@model RateSupplierImportModel
+
+<div class="pager">
+    @{
+        var importId = Model.ImportId;
+        var distCompanyName = Model.DistCompanyName;
+        var asiNumber = Model.ASINumber;
+        // Create Previous link
+        Html.RenderPartial("../asicentral/Shared/_PagerLink", Model, new ViewDataDictionary { { "Text", "<< Previous" }, { "PageIndex", Model.CurrentPageIndex - 1 }, { "Selected", false }, { "Inactive", Model.CurrentPageIndex == 1 }, { "importId", importId }, { "distCompanyName", Model.DistCompanyName }, { "asiNumber", Model.ASINumber }});
+
+
+        // Create numeric links
+        var startPageIndex = Math.Max(1, Model.CurrentPageIndex - Model.NumericPageCount / 2);
+        var endPageIndex = Math.Min(Model.PageCount, Model.CurrentPageIndex + Model.NumericPageCount / 2);
+
+        // Add in initial page numbers, if needed
+        if (Model.PageCount > Model.NumericPageCount / 2)
+        {
+            if (startPageIndex > 1)
+            {
+                Html.RenderPartial("../asicentral/Shared/_PagerLink", Model, new ViewDataDictionary { { "Text", "1" }, { "PageIndex", 1 }, { "Selected", false }, { "Inactive", false }, { "importId", importId }, { "distCompanyName", Model.DistCompanyName }, { "asiNumber", Model.ASINumber } });
+            }
+            if (startPageIndex > 2)
+            {
+                Html.RenderPartial("../asicentral/Shared/_PagerLink", Model, new ViewDataDictionary { { "Text", "2" }, { "PageIndex", 2 }, { "Selected", false }, { "Inactive", false }, { "importId", importId }, { "distCompanyName", Model.DistCompanyName }, { "asiNumber", Model.ASINumber } });
+            }
+            if (startPageIndex > 3)
+            {
+                Html.RenderPartial("../asicentral/Shared/_PagerLink", Model, new ViewDataDictionary { { "Text", "..." }, { "PageIndex", 1 }, { "Selected", false }, { "Inactive", true }, { "importId", importId }, { "distCompanyName", Model.DistCompanyName }, { "asiNumber", Model.ASINumber } });
+            }
+        }
+
+        // Add in the numeric pages
+        for (var i = startPageIndex; i <= endPageIndex; i++)
+        {
+            Html.RenderPartial("../asicentral/Shared/_PagerLink", Model, new ViewDataDictionary { { "Text", i }, { "PageIndex", i }, { "Selected", i == Model.CurrentPageIndex }, { "Inactive", false }, { "importId", importId }, { "distCompanyName", Model.DistCompanyName }, { "asiNumber", Model.ASINumber } });
+        }
+
+
+        // Add in trailing page numbers, if needed
+        if (Model.PageCount > Model.NumericPageCount / 2)
+        {
+            if (endPageIndex < Model.PageCount - 2)
+            {
+                Html.RenderPartial("../asicentral/Shared/_PagerLink", Model, new ViewDataDictionary { { "Text", "..." }, { "PageIndex", 1 }, { "Selected", false }, { "Inactive", true }, { "importId", importId }, { "distCompanyName", Model.DistCompanyName }, { "asiNumber", Model.ASINumber } });
+            }
+            if (endPageIndex < Model.PageCount - 1)
+            {
+                Html.RenderPartial("../asicentral/Shared/_PagerLink", Model, new ViewDataDictionary { { "Text", Model.PageCount - 1 }, { "PageIndex", Model.PageCount - 1 }, { "Selected", false }, { "Inactive", false }, { "importId", importId }, { "distCompanyName", Model.DistCompanyName }, { "asiNumber", Model.ASINumber } });
+            }
+            if (endPageIndex < Model.PageCount)
+            {
+                Html.RenderPartial("../asicentral/Shared/_PagerLink", Model, new ViewDataDictionary { { "Text", Model.PageCount }, { "PageIndex", Model.PageCount }, { "Selected", false }, { "Inactive", false }, { "importId", importId }, { "distCompanyName", Model.DistCompanyName }, { "asiNumber", Model.ASINumber } });
+            }
+        }
+
+        //
+        // Create Next link
+        Html.RenderPartial("../asicentral/Shared/_PagerLink", Model, new ViewDataDictionary { { "Text", "Next >>" }, { "PageIndex", Model.CurrentPageIndex + 1 }, { "Selected", false }, { "Inactive", Model.CurrentPageIndex == Model.PageCount }, { "importId", importId }, { "distCompanyName", Model.DistCompanyName }, { "asiNumber", Model.ASINumber } });
+    }
+</div>

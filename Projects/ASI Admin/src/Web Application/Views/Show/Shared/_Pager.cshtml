@@ -53,6 +53,6 @@
 
      //   
     // Create Next link
-    Html.RenderPartial("../Show/Shared/_PagerLink", Model, new ViewDataDictionary { { "Text", "Next >>" }, { "showId", Model.ShowId }, { "ShowTypeId", Model.TabShowTypeId }, { "year", Model.TabYear }, { "PageIndex", Model.CurrentPageIndex + 1 }, { "Name", Model.TabCompanyName }, { "MemberType", Model.TabMemberType }, { "Selected", false }, { "Inactive", Model.TotalRecordCount / Model.PageSize == 1 } });
+    Html.RenderPartial("../Show/Shared/_PagerLink", Model, new ViewDataDictionary { { "Text", "Next >>" }, { "showId", Model.ShowId }, { "ShowTypeId", Model.TabShowTypeId }, { "year", Model.TabYear }, { "PageIndex", Model.CurrentPageIndex + 1 }, { "Name", Model.TabCompanyName }, { "MemberType", Model.TabMemberType }, { "Selected", false }, { "Inactive", Model.CurrentPageIndex == Model.PageCount } });
 }
 </div>

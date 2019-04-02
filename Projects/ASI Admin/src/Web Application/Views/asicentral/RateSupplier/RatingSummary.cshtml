@@ -1,0 +1,115 @@
+﻿@using asi.asicentral.model.asicentral;
+@using asi.asicentral.web.Controllers.asicentral;
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var heading = " - More than 50 Transactions";
+}
+<style>
+	table.dataTable td {
+		padding: 2px !important;
+	}
+</style>
+
+@switch ((int)ViewBag.ReportType)
+{
+	case (int)ReportType.AllRated:
+		heading = " - All Ratings submitted";
+		break;
+	case (int)ReportType.NotRated:
+		heading = " - Ratings Not Completed";
+		break;
+
+}
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+
+<div class="clearfix"></div>
+<div>&nbsp;</div>
+<div>
+
+	@if ((int)ViewBag.ReportType != (int)ReportType.Plus50Rated)
+	{
+		<a class="DTTT_button DTTT_button_text btn" href="/RateSupplier/RatingSummary?importId=@ViewBag.ImportId&reportType=@((int)ReportType.Plus50Rated)">View Report</a> @:&nbsp;
+	}
+	@if ((int)ViewBag.ReportType != (int)ReportType.AllRated)
+	{
+		<a class="DTTT_button DTTT_button_text btn" href="/RateSupplier/RatingSummary?importId=@ViewBag.ImportId&reportType=@((int)ReportType.AllRated)">All Ratings</a> @:&nbsp;
+	}
+	@if ((int)ViewBag.ReportType != (int)ReportType.NotRated)
+	{
+		<a class="DTTT_button DTTT_button_text btn" href="/RateSupplier/RatingSummary?importId=@ViewBag.ImportId&reportType=@((int)ReportType.NotRated)">Not Completed Ratings</a>
+	}
+</div>
+<h2 class="pull-left">Supplier Rating List @heading</h2>
+<br />
+<table class="table table-bordered table-condensed table-striped" id="tblSummary">
+	<thead>
+		<tr style="padding:6px">
+			<th style="font-size:11px;padding:5px">Distributor ASI#</th>
+			<th style="font-size:11px;padding:5px">Dist Name</th>
+			<th style="font-size:11px;padding:5px">Supplier ASI#</th>
+			<th style="font-size:11px;padding:5px">Supp. Name</th>
+			<th style="font-size:11px;padding:5px">Trans# In system</th>
+			<th style="font-size:11px;padding:5px">Trans# Submit</th>
+			<th style="font-size:11px;padding:5px">Diff. of Trans#</th>
+			<th style="font-size:11px;padding:5px">Overall</th>
+			<th style="font-size:11px;padding:5px">Qual.</th>
+			<th style="font-size:11px;padding:5px">Comm.</th>
+			<th style="font-size:11px;padding:5px">Del.</th>
+			<th style="font-size:11px;padding:5px">Prob. Reso.</th>
+			<th style="font-size:11px;padding:5px">Imprt</th>
+		</tr>
+	</thead>
+	<tbody></tbody>
+</table>
+@section scripts{
+	<script src="~/Scripts/jquery.dataTables-1.10.3.min.js"></script>
+	<script>
+        $(document).ready(function () {
+        $('#tblSummary').DataTable({
+                "processing": true, // for show progress bar
+                "serverSide": true, // for process server side
+                "lengthChange": false,
+                "pageLength" :25,
+                "fnInitComplete": function () {
+                    var tdCount = $(this).find(' tbody tr:eq(0)').children('td').length;
+                    if (tdCount <= 1) {
+                        $(this).hide();
+                        $(this).parent().html(" <hr/><ul><li>No data available!</li></ul>");
+                    }
+                },
+                "language": {
+                    "search": "Search Distributor Asi Number:"
+                },
+                "ajax": {
+                    "url": "/RateSupplier/FilterRatingSummary",
+                    "type": "POST",
+                    "datatype": "json",
+                    "data": function(d) {
+                        d.importId =@ViewBag.ImportId;
+						d.reportType ="@ViewBag.ReportType";
+                    }
+            },
+
+                "columnDefs": [
+                    { "width": "20", "targets": 0 }
+                ],
+                "columns": [
+                    { "data": "DistASINum", "name": "DistASINum", "sType": "numeric" },
+                    { "data": "DistName", "name": "DistName" },
+                    { "data": "SupASINum", "name": "SupASINum", "sType": "numeric"},
+                    { "data": "SupCompanyName", "name": "SupCompanyName" },
+                    { "data": "NumOfTransImport", "name": "NumOfTransImport", "sType": "numeric"},
+                    { "data": "NumOfTransSubmit", "name": "NumOfTransSubmit",  "sType": "numeric" },
+                    { "data": "TransDifference", "name": "TransDifference",  "sType": "numeric"},
+                    { "data": "OverallRating", "name": "OverallRating",  "sType": "numeric" },
+                    { "data": "ProdQualityRating", "name": "ProdQualityRating",  "sType": "numeric" },
+                    { "data": "CommunicationRating", "name": "CommunicationRating",  "sType": "numeric"},
+                    { "data": "DeliveryRating", "name": "DeliveryRating", "sType": "numeric"},
+                    { "data": "ProbResolutionRating", "name": "ProbResolutionRating", "sType": "numeric"},
+                    { "data": "ImprintingRating", "name": "ImprintingRating",  "sType": "numeric"}
+                ]
+            });
+            $(".DTTT_container a").addClass("btn");
+        });
+	</script>
+}

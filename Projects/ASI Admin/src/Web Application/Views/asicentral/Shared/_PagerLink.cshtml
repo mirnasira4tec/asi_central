@@ -1,0 +1,38 @@
+﻿@using asi.asicentral.web.Models.asicentral;
+@model RateSupplierImportModel
+
+@{
+    var url = Request.RawUrl;
+    var razorWriter = ViewContext.Writer;
+    if (ViewData["Inactive"] != null ? (bool)ViewData["Inactive"] : false)
+    {
+        razorWriter.Write(string.Format("<span class=\"{0}\">{1}</span>", "pagerButtonDisabled", ViewData["Text"]));
+    }
+    else
+    {
+        var routeData =  new RouteValueDictionary { { "page", ViewData["PageIndex"] != null ? ViewData["PageIndex"].ToString() : null }, { "pageSize", Model.PageSize },
+            { "importId", ViewData["importId"]!= null ?ViewData["importId"].ToString():null },
+            { "distCompanyName", ViewData["distCompanyName"]!=null?ViewData["distCompanyName"].ToString():null },
+            { "asiNumber", ViewData["asiNumber"]!=null?ViewData["asiNumber"].ToString():null } };
+
+        var htmlAttributes = new Dictionary<string, object>();
+        if (ViewData["Selected"] != null ? (bool)ViewData["Selected"] : false)
+        {
+            htmlAttributes.Add("class", "pagerButtonCurrentPage");
+        }
+        else
+        {
+            htmlAttributes.Add("class", "pagerButton");
+        }
+
+        var linkMarkup = Html.ActionLink(
+                ViewData["Text"] != null ? ViewData["Text"].ToString() : null,  // Link Text
+                Html.ViewContext.RouteData.Values["action"].ToString(),         // Action
+                Html.ViewContext.RouteData.Values["controller"].ToString(),     // Controller
+                routeData,                                                      // Route data
+                htmlAttributes                                                  // HTML attributes to apply to hyperlink
+            ).ToHtmlString();
+
+        razorWriter.Write(linkMarkup);
+    }
+}

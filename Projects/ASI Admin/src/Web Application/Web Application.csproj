@@ -168,6 +168,9 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Linq.Dynamic, Version=1.0.6132.35681, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Linq.Dynamic.1.0.7\lib\net40\System.Linq.Dynamic.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
     </Reference>
@@ -257,6 +260,7 @@
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\asicentralApi\AsiCentralApiController.cs" />
+    <Compile Include="Controllers\asicentral\RateSupplierController.cs" />
     <Compile Include="Controllers\velocity\VelocityController.cs" />
     <Compile Include="Database\VelocityContext.cs" />
     <Compile Include="Helpers\Authorized.cs" />
@@ -285,8 +289,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\UploadHelper.cs" />
     <Compile Include="Interface\IVelocityContext.cs" />
     <Compile Include="Interface\IVelocityService.cs" />
+    <Compile Include="Models\asicentral\RateSupplierImportModel.cs" />
+    <Compile Include="Models\asicentral\RateSupplierSummaryModel.cs" />
     <Compile Include="Models\CompanyInfoModel.cs" />
     <Compile Include="Models\velocity\ColorMapData.cs" />
     <Compile Include="Models\velocity\ColorMapping.cs" />
@@ -507,6 +514,12 @@
     <Content Include="Views\Velocity\Result.cshtml" />
     <Content Include="Views\Show\ExcelUpload\MigrateCompanies.cshtml" />
     <EmbeddedResource Include="Views\Emails\AsicompMigrationEmail.cshtml" />
+    <Content Include="Views\asicentral\RateSupplier\RateSupplierImports.cshtml" />
+    <Content Include="Views\asicentral\RateSupplier\RateSupplierDistributors.cshtml" />
+    <Content Include="Views\asicentral\RateSupplier\RateSupplierRatings.cshtml" />
+    <Content Include="Views\asicentral\Shared\_Pager.cshtml" />
+    <Content Include="Views\asicentral\Shared\_PagerLink.cshtml" />
+    <Content Include="Views\asicentral\RateSupplier\RatingSummary.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

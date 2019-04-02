@@ -6,6 +6,11 @@ using System;
 using System.Collections.Generic;
 using asi.asicentral.model.excit;
 using NUnit.Framework;
+using StructureMap.Configuration.DSL;
+using asi.asicentral.database.mappings;
+using asi.asicentral.interfaces;
+using asi.asicentral.services;
+using asi.asicentral.model.asicentral;
 
 namespace asi.asicentral.Tests
 {
@@ -230,5 +235,7 @@ namespace asi.asicentral.Tests
                 Assert.IsNotNull(detail);
             }
         }
+
+       
     }
 }

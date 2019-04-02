@@ -1,0 +1,84 @@
+﻿@using asi.asicentral.model.asicentral;
+@model List<RateSupplierFormDetail>
+@{
+    ViewBag.Title = "Supplier Rating List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@if (Model != null && Model.Count() > 0)
+{
+    var supplierInfo = Model[0].RateSupplierForm;
+    if (supplierInfo != null)
+    {
+        <table>
+            <tr>
+                <th class="pull-left">Dist ASI#: </th>
+
+                <td>@supplierInfo.DistASINum</td>
+            </tr>
+            <tr>
+                <th class="pull-left">Dist company name: </th>
+                <td>@supplierInfo.DistCompanyName</td>
+            </tr>
+            <tr>
+                <th class="pull-left">Distibutor Fax: </th>
+                <td>@supplierInfo.DistFax</td>
+            </tr>
+            <tr>
+                <th class="pull-left">Distributor Phone: </th>
+                <td>@supplierInfo.DistPhone</td>
+            </tr>
+            <tr>
+                <th class="pull-left">Submit Date: </th>
+                <td>@(supplierInfo.SubmitDateUTC.HasValue? supplierInfo.SubmitDateUTC.Value.ToString("MM/dd/yyyy") : string.Empty)</td>
+            </tr>
+            <tr>
+                <th class="pull-left">Submit By: </th>
+                <td>@supplierInfo.SubmitBy</td>
+            </tr>
+        </table>
+    }
+    <h2 class="pull-left">Supplier Rating List</h2>
+    <br />
+    <table class="table table-bordered table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>Sup ASI#</th>
+                <th>Supplier Name</th>
+                <th>Transaction# Import</th>
+                <th>Transacti-on# submit</th>
+                <th>Overall</th>
+                <th>Product Quality</th>
+                <th>Communication</th>
+                <th>Delivery</th>
+                <th>Imprinting</th>
+                <th>ProbResolution</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var details in Model)
+            {
+                <tr>
+                    <td>@details.SupASINum </td>
+                    <td>@details.SupCompanyName </td>
+                    <td>@details.NumOfTransImport </td>
+                    <td>@details.NumOfTransSubmit</td>
+                    <td>@details.OverallRating</td>
+                    <td>@details.ProdQualityRating</td>
+                    <td>@details.CommunicationRating</td>
+                    <td>@details.DeliveryRating</td>
+                    <td>@details.ImprintingRating</td>
+                    <td>@details.ProbResolutionRating</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <hr />
+    <ul>
+        <li>No data available!</li>
+    </ul>
+}

@@ -1,0 +1,105 @@
+﻿@using asi.asicentral.web.Models.asicentral;
+@model RateSupplierImportModel
+@{
+    ViewBag.Title = "List of Distributors";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@if (Model != null && Model.Import != null && Model.Import.RateSupplierForms != null && Model.Import.RateSupplierForms.Count() > 0)
+{
+    var disInfo = Model.Import.RateSupplierForms[0].RateSupplierImports;
+    if (disInfo != null)
+    {
+        <table>
+            <tr>
+                <th class="pull-left">Last Updated By: </th>
+                <td>@disInfo.LastUpdatedBy </td>
+            </tr>
+            <tr>
+                <th class="pull-left">Update Date: </th>
+                <td>@disInfo.UpdateDateUTC.ToString("MM/dd/yyyy")</td>
+            </tr>
+            <tr>
+                <th class="pull-left">Create Date: </th>
+                <td>@disInfo.CreateDateUTC.ToString("MM/dd/yyyy")</td>
+            </tr>
+        </table>
+    }
+    <div class="tabbable tabs-below small">
+        <div class="tab-content" id="formtab-content">
+            <div class="well clearfix">
+                @using (Html.BeginForm("RateSupplierDistributors", "RateSupplier", FormMethod.Get, new { @class = "form-inline clearfix" }))
+                {
+                    <div class="formField span1 pull-right">
+                        <input type="submit" value="Search" class="btn " />
+                    </div>
+                    <div class="formField span3 pull-right">
+                        <label for="companyName">Name</label>
+                        @Html.TextBoxFor(model => model.DistCompanyName, new { style = "width:70%;" })
+                    </div>
+                    <div class="formField span3 pull-right">
+                        <label for="asiNumber">ASI Number</label>
+                        @Html.TextBoxFor(model => model.ASINumber, new { style = "width:50%;" })
+                    </div>
+                    @Html.HiddenFor(m => m.ImportId)
+                }
+            </div>
+
+        </div>
+    </div>
+    <h2 class="pull-left">List of Distributors</h2>
+    <br />
+    <table class="table table-bordered table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>Dist ASI#</th>
+                <th>Dist Name</th>
+                <th>Fax</th>
+                <th>Phone</th>
+                <th>Submit Name</th>
+                <th>Submit Date</th>
+                <th>Supplier count</th>
+                <th>Transaction count</th>
+                <th>IP Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forms in Model.Import.RateSupplierForms)
+            {
+                <tr>
+                    <td><a href="/RateSupplier/RateSupplierRatings?formId=@forms.RateSupplierFormId" alt="rate supplier">@forms.DistASINum</a></td>
+                    <td>@forms.DistCompanyName</td>
+                    <td>@forms.DistFax</td>
+                    <td>@forms.DistPhone</td>
+                    <td>@forms.SubmitName </td>
+                    <td>@(forms.SubmitDateUTC.HasValue ? forms.SubmitDateUTC.Value.ToString("MM/dd/yyyy") : string.Empty)</td>
+                    <td>@forms.RateSupplierFormDetails.Count()</td>
+                    <td>@(forms.RateSupplierFormDetails.Sum(m => m.NumOfTransImport))</td>
+                    <td>@forms.IPAddress</td>
+                </tr>
+            }
+            @if (Model.TotalRecordCount > Model.PageSize)
+            {
+                <tr>
+                    <td class="pager" colspan="9">
+                        @Html.Partial("../asicentral/Shared/_Pager", Model)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+    @section scripts {
+        <script src="~/Scripts/jquery.dataTables-1.10.3.min.js"></script>
+    }
+}
+else
+{
+    <hr />
+    <ul>
+        <li>No data available!</li>
+    </ul>
+}
+

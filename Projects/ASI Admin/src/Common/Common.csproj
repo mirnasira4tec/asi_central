@@ -252,9 +252,13 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="database\AsicentralContext.cs" />
     <Compile Include="database\ASIEmailBlastContext.cs" />
     <Compile Include="database\ASIInternetContext.cs" />
     <Compile Include="database\ASIPublicationContext.cs" />
+    <Compile Include="database\mappings\asicentral\RateSupplierFormDetailMap.cs" />
+    <Compile Include="database\mappings\asicentral\RateSupplierFormMap.cs" />
+    <Compile Include="database\mappings\asicentral\RateSupplierImportMap.cs" />
     <Compile Include="database\mappings\show\ShowDistShowLogoMap.cs" />
     <Compile Include="database\mappings\excit\SupUpdateFieldMap.cs" />
     <Compile Include="database\mappings\excit\SupUpdateRequestDetailMap.cs" />
@@ -350,6 +354,9 @@
     <Compile Include="database\MemberDemogrContext.cs" />
     <Compile Include="database\Umbraco_ShowContext.cs" />
     <Compile Include="interfaces\IImageConvertService.cs" />
+    <Compile Include="model\asicentral\RateSupplierForm.cs" />
+    <Compile Include="model\asicentral\RateSupplierFormDetail.cs" />
+    <Compile Include="model\asicentral\RateSupplierImport.cs" />
     <Compile Include="model\CompanyInformation.cs" />
     <Compile Include="model\DM_memberDemogr\CompanyASIRep.cs" />
     <Compile Include="model\excit\SupUpdateField.cs" />
@@ -618,6 +625,7 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <PropertyGroup>

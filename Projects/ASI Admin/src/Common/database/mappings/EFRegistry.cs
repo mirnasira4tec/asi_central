@@ -12,6 +12,7 @@ using asi.asicentral.database.mappings.show;
 using asi.asicentral.model.excit;
 using asi.asicentral.model.show;
 using asi.asicentral.model.personify;
+using asi.asicentral.model.asicentral;
 
 namespace asi.asicentral.database.mappings
 {
@@ -29,6 +30,7 @@ namespace asi.asicentral.database.mappings
             SelectConstructor<DM_MemberDemogrContext>(() => new DM_MemberDemogrContext());
             SelectConstructor<Umbraco_ShowContext>(() => new Umbraco_ShowContext());
             SelectConstructor<PersonifyContext>(() => new PersonifyContext());
+            SelectConstructor<AsicentralContext>(() => new AsicentralContext());
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIInternetContext>().Name = "ASIInternetContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIPublicationContext>().Name = "ASIPublicationContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<InternetContext>().Name = "InternetContext";
@@ -40,6 +42,7 @@ namespace asi.asicentral.database.mappings
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<DM_MemberDemogrContext>().Name = "DM_MemberDemogrContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<Umbraco_ShowContext>().Name = "Umbraco_ShowContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<PersonifyContext>().Name = "PersonifyContext";
+            For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<AsicentralContext>().Name = "umbracoDbDSN";
 
             //for each model - get the repository class with the appropriate context 
 
@@ -433,7 +436,16 @@ namespace asi.asicentral.database.mappings
 
             #region PersonifyContext
             For<IRepository<PersonifyMapping>>().Use<EFRepository<PersonifyMapping>>()
-                .Ctor<IValidatedContext>().Named("PersonifyContext");            
+                .Ctor<IValidatedContext>().Named("PersonifyContext");
+            #endregion
+
+            #region AsiCentralContext
+            For<IRepository<RateSupplierForm>>().Use<EFRepository<RateSupplierForm>>()
+              .Ctor<IValidatedContext>().Named("umbracoDbDSN");
+            For<IRepository<RateSupplierFormDetail>>().Use<EFRepository<RateSupplierFormDetail>>()
+                    .Ctor<IValidatedContext>().Named("umbracoDbDSN");
+            For<IRepository<RateSupplierImport>>().Use<EFRepository<RateSupplierImport>>()
+                    .Ctor<IValidatedContext>().Named("umbracoDbDSN");
             #endregion
         }
     }
