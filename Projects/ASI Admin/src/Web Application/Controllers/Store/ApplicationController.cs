@@ -112,7 +112,11 @@ namespace asi.asicentral.web.Controllers.Store
         public virtual ActionResult EditDistributor(DistributorApplicationModel application)
         {
             if (ModelState.IsValid)
-            {
+            { 
+                if (IsConstituentidInvalid(application.ExternalReference))
+                {
+                   return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId, invalidConstituentID = application.ExternalReference });
+                 }
                 StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
                 if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
                 StoreOrder order = orderDetail.Order;
@@ -161,6 +165,10 @@ namespace asi.asicentral.web.Controllers.Store
         {
             if (ModelState.IsValid)
             {
+                if (IsConstituentidInvalid(application.ExternalReference))
+                {
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId, invalidConstituentID = application.ExternalReference });
+                }
                 StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
                 if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
                 StoreOrder order = orderDetail.Order;
@@ -221,6 +229,10 @@ namespace asi.asicentral.web.Controllers.Store
         {
             if (ModelState.IsValid)
             {
+                if (IsConstituentidInvalid(application.ExternalReference))
+                {
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId, invalidConstituentID = application.ExternalReference });
+                }
                 StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
                 if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
                 StoreOrder order = orderDetail.Order;
@@ -257,6 +269,10 @@ namespace asi.asicentral.web.Controllers.Store
         {
             if (ModelState.IsValid)
             {
+                if (IsConstituentidInvalid(application.ExternalReference))
+                {
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId, invalidConstituentID = application.ExternalReference });
+                }
                 StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
                 if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
                 StoreOrder order = orderDetail.Order;
@@ -291,6 +307,10 @@ namespace asi.asicentral.web.Controllers.Store
         {
             if (ModelState.IsValid)
             {
+                if (IsConstituentidInvalid(application.ExternalReference))
+                {
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId, invalidConstituentID = application.ExternalReference });
+                }
                 StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
                 if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
                 StoreOrder order = orderDetail.Order;
@@ -362,6 +382,10 @@ namespace asi.asicentral.web.Controllers.Store
         {
             if (ModelState.IsValid)
             {
+                if (IsConstituentidInvalid(application.ExternalReference))
+                {
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId, invalidConstituentID = application.ExternalReference });
+                }
                 StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
                 if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
                 StoreOrder order = orderDetail.Order;
@@ -392,6 +416,10 @@ namespace asi.asicentral.web.Controllers.Store
         {
             if (ModelState.IsValid)
             {
+                if (IsConstituentidInvalid(application.ExternalReference))
+                {
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId, invalidConstituentID = application.ExternalReference });
+                }
                 StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
                 if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
                 StoreDetailCatalog storeDetailCatalog = StoreService.GetAll<StoreDetailCatalog>().Where(catalog => catalog.OrderDetailId == orderDetail.Id).SingleOrDefault();
@@ -478,6 +506,10 @@ namespace asi.asicentral.web.Controllers.Store
         {
             if (ModelState.IsValid)
             {
+                if (IsConstituentidInvalid(application.ExternalReference))
+                {
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId, invalidConstituentID = application.ExternalReference });
+                }
                 StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
                 if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
                 StoreOrder order = orderDetail.Order;
@@ -557,6 +589,10 @@ namespace asi.asicentral.web.Controllers.Store
         {
             if (ModelState.IsValid)
             {
+                if (IsConstituentidInvalid(application.ExternalReference))
+                {
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId, invalidConstituentID = application.ExternalReference });
+                }
                 StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
                 if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
                 StoreOrder order = orderDetail.Order;
@@ -584,6 +620,10 @@ namespace asi.asicentral.web.Controllers.Store
         {
             if (ModelState.IsValid)
             {
+                if (IsConstituentidInvalid(application.ExternalReference))
+                {
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId, invalidConstituentID = application.ExternalReference });
+                }
                 StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
                 if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
                 StoreOrder order = orderDetail.Order;
@@ -709,6 +749,10 @@ namespace asi.asicentral.web.Controllers.Store
         {
             if (ModelState.IsValid)
             {
+                if (IsConstituentidInvalid(application.ExternalReference))
+                {
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId, invalidConstituentID = application.ExternalReference });
+                }
                 StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
                 if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
                 StoreOrder order = orderDetail.Order;
@@ -773,6 +817,10 @@ namespace asi.asicentral.web.Controllers.Store
         {
             if (ModelState.IsValid)
             {
+                if (IsConstituentidInvalid(application.ExternalReference))
+                {
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId, invalidConstituentID = application.ExternalReference });
+                }
                 StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
                 if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
                 StoreOrder order = orderDetail.Order;
@@ -857,6 +905,10 @@ namespace asi.asicentral.web.Controllers.Store
         {
             if (ModelState.IsValid)
             {
+                if (IsConstituentidInvalid(application.ExternalReference))
+                {
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId, invalidConstituentID = application.ExternalReference });
+                }
                 StoreOrderDetail orderDetail = StoreService.GetAll<StoreOrderDetail>().Where(detail => detail.Id == application.OrderDetailId).FirstOrDefault();
                 if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
                 StoreOrder order = orderDetail.Order;
@@ -894,6 +946,10 @@ namespace asi.asicentral.web.Controllers.Store
         {
             if (ModelState.IsValid)
             {
+                if (IsConstituentidInvalid(application.ExternalReference))
+                {
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId, invalidConstituentID = application.ExternalReference });
+                }
                 var orderDetail = StoreService.GetAll<StoreOrderDetail>().FirstOrDefault(detail => detail.Id == application.OrderDetailId);
                 if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
                 var adItems = StoreService.GetAll<StoreDetailCatalogAdvertisingItem>().Where(detail => detail.OrderDetailId == application.OrderDetailId).ToList();
@@ -938,7 +994,11 @@ namespace asi.asicentral.web.Controllers.Store
 		{
 			if (ModelState.IsValid)
 			{
-				var orderDetail = StoreService.GetAll<StoreOrderDetail>().FirstOrDefault(detail => detail.Id == application.OrderDetailId);
+                if (IsConstituentidInvalid(application.ExternalReference))
+                {
+                    return RedirectToAction("Edit", "Application", new { id = application.OrderDetailId, invalidConstituentID = application.ExternalReference });
+                }
+                var orderDetail = StoreService.GetAll<StoreOrderDetail>().FirstOrDefault(detail => detail.Id == application.OrderDetailId);
 				if (orderDetail == null) throw new Exception("Invalid id, could not find the OrderDetail record");
 
 				var order = orderDetail.Order;
@@ -958,6 +1018,34 @@ namespace asi.asicentral.web.Controllers.Store
 			}
 			return View("../Store/Application/SalesForm", application);
 		}
+
+        
+        private bool IsConstituentidInvalid(string constituentId)
+        {
+            if (string.IsNullOrWhiteSpace(constituentId))
+            {
+                return false;
+            }
+            string companyStatus = string.Empty;
+            if (!string.IsNullOrEmpty(constituentId))
+            {
+                int num;
+                bool success = int.TryParse(constituentId, out num);
+                if (success)
+                {
+                    if (constituentId.Length < 12)
+                    {
+                        constituentId = constituentId.PadLeft(12, '0');
+                    }
+                    companyStatus = BackendService.GetCompanyStatus(constituentId, 0);
+                }
+                //else
+                //{
+                //    companyStatus = "NAN";
+                //}
+            }
+            return string.IsNullOrWhiteSpace(companyStatus) ? true : false;
+        }
 
         /// <summary>
         /// Common code between Edit supplier and distributor
