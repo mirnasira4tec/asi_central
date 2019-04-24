@@ -1,19 +1,18 @@
 ﻿using System;
-using System.Configuration;
-using asi.asicentral.services;
-using asi.asicentral.oauth;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using asi.asicentral.model;
-using System.Net.Http;
-using System.Net;
-using ASI.Services.Http.SmartLink;
-using ASI.Services.Http.Security;
-using System.Security.Claims;
+using asi.asicentral.oauth;
 using NUnit.Framework;
+using System.Configuration;
+using System.Net;
+using ASI.Services.Security;
+using System.Security.Claims;
+using asi.asicentral.services;
 using asi.asicentral.util;
 
-namespace Core.Tests.OAuth
+namespace Common.External.Tests
 {
     [TestFixture]
     public class ASIOAuthClientTests
@@ -262,7 +261,6 @@ namespace Core.Tests.OAuth
         [Test]
         public void TestRefreshTokenIfAccessTokenIsNotValid()
         {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string accessToken = string.Empty;
             string refreshToken = string.Empty;
             string accessTokenNew = string.Empty;

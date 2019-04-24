@@ -14,6 +14,17 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
     [TestFixture]
     public class SupplierApplicationTest
     {
+        public ContextProduct CreateProduct(int id = 1)
+        {
+            ContextProduct product = new ContextProduct()
+            {
+                Name = "test product" + id.ToString(),
+                Cost = 100,
+                Id = id,
+                Origin = "ASI"
+            };
+            return product;
+        }
         [Test]
         public void EditSupplier()
         {
@@ -27,8 +38,9 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             StoreOrder order = new StoreOrder() { Id = 0, BillingIndividual = individual };
             StoreOrderDetail detail = new StoreOrderDetail { Id = 0, Order = order, };
             List<StoreOrderDetail> details = new List<StoreOrderDetail>();
-            details.Add(detail);
             detail.Order = order;
+            detail.Product = CreateProduct(39);
+            details.Add(detail);
             order.CreditCard = new StoreCreditCard() { ExternalReference = "111" };
             StoreOrder orderRef = order;
             StoreCompany company = new StoreCompany()
@@ -36,6 +48,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
                 Name = "Company",
             };
             order.Company = company;
+            order.OrderDetails = details;
             company.Individuals.Add(new StoreIndividual() { FirstName = "First1", LastName = "Last1", Id = 0 });
             company.Individuals.Add(new StoreIndividual() { FirstName = "First2", LastName = "Last2", Id = 1 });
             StoreDetailSupplierMembership application = new StoreDetailSupplierMembership();

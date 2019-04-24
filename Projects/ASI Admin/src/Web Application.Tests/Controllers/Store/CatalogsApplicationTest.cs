@@ -61,16 +61,16 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             List<StoreOrderDetail> details = new List<StoreOrderDetail>();
             List<StoreDetailCatalog> catalogs = new List<StoreDetailCatalog>();
             List<LookCatalogOption> options = new List<LookCatalogOption>();
-            details.Add(detail);
             detail.Order = order;
             detail.Quantity = 30;
             detail.Product = CreateProduct(39);
             detail.ShippingMethod = "UPS2DAY";
-
+            details.Add(detail);
+            order.OrderDetails = details;
             order.Company = new StoreCompany();
             order.Company.Email = "asi@asi.com";
             order.Company.WebURL = "http://asicentral.com";
-            
+
             StoreDetailCatalog catalogDetail = new StoreDetailCatalog();
             catalogDetail.OrderDetailId = 5;
             catalogDetail.AreaId = 25;
@@ -91,7 +91,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             catalogDetail.BackLine3 = "Back line3";
             catalogDetail.BackLine4 = "Back line4";
             catalogs.Add(catalogDetail);
-            
+
             order.CreditCard = new StoreCreditCard() { ExternalReference = "111" };
             StoreOrder orderRef = order;
             order.Company.Name = "Company";
