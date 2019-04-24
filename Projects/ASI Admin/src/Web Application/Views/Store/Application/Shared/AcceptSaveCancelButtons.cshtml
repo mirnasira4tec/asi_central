@@ -169,6 +169,7 @@
 				{
 					// make sure order and company have the same constituent ID
 					if (string.IsNullOrEmpty(order.ExternalReference) && order.Company.HasExternalReference() ||
+                        !string.IsNullOrEmpty(order.ExternalReference) && string.IsNullOrEmpty(order.Company.ExternalReference) ||
 						!string.IsNullOrEmpty(order.ExternalReference) && order.Company.HasExternalReference() && !order.Company.ExternalReference.Contains(order.ExternalReference))
 					{
 						order.Company.ExternalReference = order.ExternalReference;
