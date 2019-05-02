@@ -283,7 +283,7 @@ namespace asi.asicentral.web.Controllers.asicentral
             {
                 distributors = distributors.Where(m => !m.SubmitSuccessful);
             }
-            else
+            else if (reportType == (int)ReportType.Plus50Rated)
             {
                 distributors = distributors.Where(m => m.SubmitSuccessful);
             }
