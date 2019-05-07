@@ -111,3 +111,5 @@ Projects/ASI Admin/Config/Prod/Web.config
 Projects/ASI Admin/Config/Stage/Web.config
 Projects/ASI Admin/Config/uat/Web.config
 /Projects/ServiceTest.txt
+/Projects/Template/src/.vs/**/*
+/Projects/ASI Admin/src/.vs/**/*
