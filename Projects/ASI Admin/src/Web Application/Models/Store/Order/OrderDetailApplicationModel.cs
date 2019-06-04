@@ -47,7 +47,15 @@ namespace asi.asicentral.web.model.store
            
             if (orderdetail.Product != null)
             {
-                ProductName += orderdetail.Product.Name;
+                if (CatalogsHelper.DIGITAL_MARKETING_PRODUCT_IDS.Contains(orderdetail.Product.Id))
+                {
+                    ProductName += orderdetail.Product.Description;
+                }
+                else
+                {
+                    ProductName += orderdetail.Product.Name;
+                }
+                
                 ProductId = orderdetail.Product.Id;
                 Cost = orderdetail.Cost;
                 IsBonus = (SpecialtyShoppesHelper.SPECIALTY_SHOPPES_IDS[0] == ProductId);

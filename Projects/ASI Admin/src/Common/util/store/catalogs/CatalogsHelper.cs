@@ -29,6 +29,8 @@ namespace asi.asicentral.util.store
         public static readonly int[] CATALOG_COLOR_PRODUCT_35_36_38_39_40_82_120_127 = { 11, 26 };
         public static readonly int[] CATALOG_IMPRINT_PRODUCT_35_36_37_38_39_40_82_120_127 = { 18, 19, 20, 21 };
 
+        public static readonly int[] DIGITAL_MARKETING_PRODUCT_IDS = { 144, 145, 146, 147, 148, 149, 150, 151 };
+
         private IStoreService storeService;
         private int productId;
         private IList<LookCatalogOption> catalogOptions { get; set; }

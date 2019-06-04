@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using asi.asicentral.interfaces;
+using asi.asicentral.util.store;
 
 namespace asi.asicentral.web.model.store
 {
@@ -69,7 +70,22 @@ namespace asi.asicentral.web.model.store
 
         public String Item
         {
-            get { return (orderDetail.Product != null ? orderDetail.Product.Name : String.Empty); }
+            get {
+               
+                var productName = string.Empty;
+                if (orderDetail.Product != null)
+                {
+                    if (CatalogsHelper.DIGITAL_MARKETING_PRODUCT_IDS.Contains(orderDetail.Product.Id))
+                    {
+                        productName = orderDetail.Product.Description;
+                    }
+                    else
+                    {
+                        productName = orderDetail.Product.Name;
+                    }
+                }
+                return productName;
+            }
         }
 
         public String ProductType
