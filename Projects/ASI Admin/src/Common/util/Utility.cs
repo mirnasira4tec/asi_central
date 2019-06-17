@@ -39,7 +39,7 @@ namespace asi.asicentral.util
             if (usePersonify)
             {
                 var svcUrl = ConfigurationManager.AppSettings["svcUri"];
-                usePersonify = IsServiceAvailable(svcUrl);
+                usePersonify = !string.IsNullOrEmpty(svcUrl);
             }
             return usePersonify;
         }

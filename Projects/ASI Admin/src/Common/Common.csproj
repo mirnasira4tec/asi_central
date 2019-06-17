@@ -526,12 +526,8 @@
     <Compile Include="model\timss\TIMSSCreditInfo.cs" />
     <Compile Include="model\timss\TIMSSProductType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service References\PersonifyDataASI\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.datasvcmap</DependentUpon>
-    </Compile>
     <Compile Include="interfaces\IBackendService.cs" />
+    <Compile Include="Service References\PersonifyDataASI\Reference.cs" />
     <Compile Include="services\ImageConvertService.cs" />
     <Compile Include="services\PersonifyProxy\AddressInfoEqualityComparer.cs" />
     <Compile Include="services\PersonifyProxy\MemberData.cs" />
@@ -597,6 +593,7 @@
     <EmbeddedResource Include="views\store\Roadshow2016ExhibitorAgreement.cshtml" />
     <EmbeddedResource Include="views\store\SpaceDrawForm2017.cshtml" />
     <EmbeddedResource Include="views\store\OnSiteExhibitorAgreement2018.cshtml" />
+    <None Include="Service References\PersonifyDataASI\ConnectedService.json" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -611,19 +608,9 @@
     <ServiceReferenceMetadataStorage Include="Service References\PersonifyDataASI\">
       <Type>datasvcmap</Type>
     </ServiceReferenceMetadataStorage>
-    <ServiceReferenceMetadataStorage Include="Service References\PersonifyDataASI\">
-      <Type>datasvcmap</Type>
-    </ServiceReferenceMetadataStorage>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\DataSources\asi.asicentral.PersonifyDataASI.PersonifyEntitiesASI.datasource" />
-    <None Include="Service References\PersonifyDataASI\service.edmx" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\PersonifyDataASI\Reference.datasvcmap">
-      <Generator>DataServicesCoreClientGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
