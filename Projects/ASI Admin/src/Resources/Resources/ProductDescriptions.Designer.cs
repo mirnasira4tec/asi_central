@@ -160,7 +160,7 @@ namespace asi.asicentral.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The $20.5 billion advertising specialty industry is ready for you with a membership package tailored especially for commercial decorators! As an ASI&lt;sup&gt;&amp;reg;&lt;/sup&gt; member, you are provided with exclusive benefits – top industry information, affiliate discounts and savings, business tools and software, world-class education and services other industry organizations do not provide. Start growing more business right now by selecting the membership package that’s right for you..
+        ///   Looks up a localized string similar to The $24.7 billion advertising specialty industry is ready for you with a membership package tailored especially for commercial decorators! As an ASI&lt;sup&gt;&amp;reg;&lt;/sup&gt; member, you are provided with exclusive benefits – top industry information, affiliate discounts and savings, business tools and software, world-class education and services other industry organizations do not provide. Start growing more business right now by selecting the membership package that’s right for you..
         /// </summary>
         public static string ProductDualforDistributor {
             get {
