@@ -6,6 +6,7 @@ using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using System.Xml;
 using System.Xml.Serialization;
@@ -79,7 +80,9 @@ namespace asi.asicentral.util
                 {
                     for (int i = 0; i < jArr.Count; i++)
                     {
-                        statesList.Add(new SelectListItem { Selected = false, Text = jArr[i]["Descr"].ToString(), Value = jArr[i]["Code"].ToString() });
+                        var description = jArr[i]["Descr"].ToString();
+                        description = Regex.Replace(description, @"\s*\(.*?\)\s*", "");
+                        statesList.Add(new SelectListItem { Selected = false, Text = description, Value = jArr[i]["Code"].ToString() });
                     }
                 }
             }
