@@ -87,7 +87,6 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             order.Company.Addresses.Add(CreateCompanyWithAddress());
 
             Mock<IStoreService> mockStoreService = new Mock<IStoreService>();
-            Mock<IFulfilmentService> mockFulFilService = new Mock<IFulfilmentService>();
             mockStoreService.Setup(service => service.GetAll<StoreOrderDetail>(false)).Returns(details.AsQueryable());
             mockStoreService.Setup(service => service.GetAll<StoreDetailPayForPlacement>(false)).Returns(advertisings.AsQueryable());
             mockStoreService.Setup(service => service.GetAll<CENTUserProfilesPROF>(false)).Returns(profiles.AsQueryable());
@@ -95,7 +94,6 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
                             .Callback<StoreDetailPayForPlacement>((theESPAdvertising) => espPayForPlacement = theESPAdvertising);
 
             ApplicationController controller = new ApplicationController();
-            controller.FulfilmentService = mockFulFilService.Object;
             controller.StoreService = mockStoreService.Object;
 
             order.UserId = "e6a9bb54-da25-102b-9a03-2db401e887ec";
@@ -127,7 +125,6 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Assert.AreEqual(espPayForPlacement.ImpressionsRequested, 5000);
             Assert.AreEqual(detail.Cost, 1225.00M);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(1));
-            mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(0));
             espPayForPlacement = null;
 
             model.Categries.ElementAt(2).IsSelected = true;
@@ -164,7 +161,6 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             RedirectToRouteResult result3 = controller.EditPayForPlacement(model) as RedirectToRouteResult;
             Assert.AreEqual(orderRef.ProcessStatus, OrderStatus.Approved);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(4));
-            mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(1));
         }
 
         [Test]
@@ -194,12 +190,10 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             order.Company.Addresses.Add(CreateCompanyWithAddress());
 
             Mock<IStoreService> mockStoreService = new Mock<IStoreService>();
-            Mock<IFulfilmentService> mockFulFilService = new Mock<IFulfilmentService>();
             mockStoreService.Setup(service => service.GetAll<StoreOrderDetail>(false)).Returns(details.AsQueryable());
             mockStoreService.Setup(service => service.GetAll<StoreDetailESPAdvertising>(false)).Returns(advertisings.AsQueryable());
 
             ApplicationController controller = new ApplicationController();
-            controller.FulfilmentService = mockFulFilService.Object;
             controller.StoreService = mockStoreService.Object;
 
             ESPAdvertisingModel model = new ESPAdvertisingModel();
@@ -227,7 +221,6 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             RedirectToRouteResult result3 = controller.EditESPAdvertising(model) as RedirectToRouteResult;
             Assert.AreEqual(orderRef.ProcessStatus, OrderStatus.Approved);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(3));
-            mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(1));
         }
 
         [Test]
@@ -286,14 +279,12 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             order.Company.Addresses.Add(CreateCompanyWithAddress());
 
             Mock<IStoreService> mockStoreService = new Mock<IStoreService>();
-            Mock<IFulfilmentService> mockFulFilService = new Mock<IFulfilmentService>();
             mockStoreService.Setup(service => service.GetAll<StoreOrderDetail>(false)).Returns(details.AsQueryable());
             mockStoreService.Setup(objectService => objectService.GetAll<LookEventMerchandiseProduct>(false)).Returns(lookupEvents.AsQueryable());
             mockStoreService.Setup(objectService => objectService.GetAll<StoreDetailESPAdvertisingItem>(false)).Returns(advertisingItems.AsQueryable());
             mockStoreService.Setup(service => service.GetAll<StoreDetailESPAdvertising>(false)).Returns(advertisings.AsQueryable());
 
             ApplicationController controller = new ApplicationController();
-            controller.FulfilmentService = mockFulFilService.Object;
             controller.StoreService = mockStoreService.Object;
 
             ESPAdvertisingModel model = new ESPAdvertisingModel();
@@ -331,7 +322,6 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             RedirectToRouteResult result3 = controller.EditESPAdvertising(model) as RedirectToRouteResult;
             Assert.AreEqual(orderRef.ProcessStatus, OrderStatus.Approved);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(3));
-            mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(1));
         }
 
         [Test]
@@ -361,12 +351,10 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             order.Company.Addresses.Add(CreateCompanyWithAddress());
 
             Mock<IStoreService> mockStoreService = new Mock<IStoreService>();
-            Mock<IFulfilmentService> mockFulFilService = new Mock<IFulfilmentService>();
             mockStoreService.Setup(service => service.GetAll<StoreOrderDetail>(false)).Returns(details.AsQueryable());
             mockStoreService.Setup(service => service.GetAll<StoreDetailESPAdvertising>(false)).Returns(advertisings.AsQueryable());
 
             ApplicationController controller = new ApplicationController();
-            controller.FulfilmentService = mockFulFilService.Object;
             controller.StoreService = mockStoreService.Object;
 
             ESPAdvertisingModel model = new ESPAdvertisingModel();
@@ -408,7 +396,6 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             RedirectToRouteResult result3 = controller.EditESPAdvertising(model) as RedirectToRouteResult;
             Assert.AreEqual(orderRef.ProcessStatus, OrderStatus.Approved);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(3));
-            mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(1));
         }
 
         [Test]
@@ -438,12 +425,10 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             order.Company.Addresses.Add(CreateCompanyWithAddress());
 
             Mock<IStoreService> mockStoreService = new Mock<IStoreService>();
-            Mock<IFulfilmentService> mockFulFilService = new Mock<IFulfilmentService>();
             mockStoreService.Setup(service => service.GetAll<StoreOrderDetail>(false)).Returns(details.AsQueryable());
             mockStoreService.Setup(service => service.GetAll<StoreDetailESPAdvertising>(false)).Returns(advertisings.AsQueryable());
 
             ApplicationController controller = new ApplicationController();
-            controller.FulfilmentService = mockFulFilService.Object;
             controller.StoreService = mockStoreService.Object;
 
             ESPAdvertisingModel model = new ESPAdvertisingModel();
@@ -472,7 +457,6 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             RedirectToRouteResult result3 = controller.EditESPAdvertising(model) as RedirectToRouteResult;
             Assert.AreEqual(orderRef.ProcessStatus, OrderStatus.Approved);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(3));
-            mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(1));
 
             detail.Product = CreateProduct(53);
             model = new ESPAdvertisingModel();
@@ -501,8 +485,6 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             result3 = controller.EditESPAdvertising(model) as RedirectToRouteResult;
             Assert.AreEqual(orderRef.ProcessStatus, OrderStatus.Approved);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(6));
-            mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(2));
-
         }
 
         [Test]
@@ -533,14 +515,12 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             order.Company.Addresses.Add(CreateCompanyWithAddress());
 
             Mock<IStoreService> mockStoreService = new Mock<IStoreService>();
-            Mock<IFulfilmentService> mockFulFilService = new Mock<IFulfilmentService>();
             mockStoreService.Setup(service => service.GetAll<StoreOrderDetail>(false)).Returns(details.AsQueryable());
             mockStoreService.Setup(service => service.GetAll<StoreDetailESPAdvertising>(false)).Returns(advertisings.AsQueryable());
             mockStoreService.Setup(objectService => objectService.Add<StoreDetailESPAdvertisingItem>(It.IsAny<StoreDetailESPAdvertisingItem>()))
                             .Callback<StoreDetailESPAdvertisingItem>((theLoginDate) => dateItem = theLoginDate);
 
             ApplicationController controller = new ApplicationController();
-            controller.FulfilmentService = mockFulFilService.Object;
             controller.StoreService = mockStoreService.Object;
 
             ESPAdvertisingModel model = new ESPAdvertisingModel();
@@ -573,7 +553,6 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             RedirectToRouteResult result3 = controller.EditESPAdvertising(model) as RedirectToRouteResult;
             Assert.AreEqual(orderRef.ProcessStatus, OrderStatus.Approved);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(3));
-            mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(1));
 
             model.LoginScreen_Dates = "17-10-2013\r\n18-10-2013\r\n19-10-2013\r\n20-10-2013\r\n14-11-2013\r\n11-11-2013\r\n15-12-2013\r\n";
             // LoginScreen - 52
@@ -586,9 +565,6 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             Assert.IsNotNull(dateItem);
             Assert.AreEqual(dateItem.AdSelectedDate, new DateTime(2013, 12, 15));
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(4));
-            mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(2));
-        }
-
-        
+        }        
     }
 }

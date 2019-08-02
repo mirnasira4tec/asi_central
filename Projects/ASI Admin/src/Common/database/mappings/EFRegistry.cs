@@ -1,18 +1,15 @@
-﻿using asi.asicentral.model.sgr;
-using asi.asicentral.model.counselor;
-using asi.asicentral.interfaces;
-using StructureMap.Configuration.DSL;
-using asi.asicentral.model.store;
-using asi.asicentral.model.news;
-using asi.asicentral.model.timss;
-using asi.asicentral.model.call;
-using asi.asicentral.model.findsupplier;
-using asi.asicentral.model.DM_memberDemogr;
-using asi.asicentral.database.mappings.show;
-using asi.asicentral.model.excit;
-using asi.asicentral.model.show;
-using asi.asicentral.model.personify;
+﻿using asi.asicentral.interfaces;
 using asi.asicentral.model.asicentral;
+using asi.asicentral.model.call;
+using asi.asicentral.model.DM_memberDemogr;
+using asi.asicentral.model.excit;
+using asi.asicentral.model.findsupplier;
+using asi.asicentral.model.news;
+using asi.asicentral.model.personify;
+using asi.asicentral.model.sgr;
+using asi.asicentral.model.show;
+using asi.asicentral.model.store;
+using StructureMap.Configuration.DSL;
 
 namespace asi.asicentral.database.mappings
 {
@@ -32,10 +29,8 @@ namespace asi.asicentral.database.mappings
             SelectConstructor<PersonifyContext>(() => new PersonifyContext());
             SelectConstructor<AsicentralContext>(() => new AsicentralContext());
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIInternetContext>().Name = "ASIInternetContext";
-            For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIPublicationContext>().Name = "ASIPublicationContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<InternetContext>().Name = "InternetContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<StoreContext>().Name = "StoreContext";
-            For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<TIMSSContext>().Name = "TIMSSContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<CallContext>().Name = "CallContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<ASIEmailBlastContext>().Name = "ASIEmailBlastContext";
             For<IValidatedContext>().HybridHttpOrThreadLocalScoped().Use<MemberDemogrContext>().Name = "MemberDemogrContext";
@@ -126,20 +121,7 @@ namespace asi.asicentral.database.mappings
             For<IRepository<SupUpdateRequestDetail>>().Use<EFRepository<SupUpdateRequestDetail>>()
                 .Ctor<IValidatedContext>().Named("ASIInternetContext");
 
-            #endregion ASIInternetContext
-
-            #region ASIPublicationContext
-
-            For<IRepository<CounselorCategory>>().Use<EFRepository<CounselorCategory>>()
-                .Ctor<IValidatedContext>().Named("ASIPublicationContext");
-
-            For<IRepository<CounselorContent>>().Use<EFRepository<CounselorContent>>()
-                .Ctor<IValidatedContext>().Named("ASIPublicationContext");
-
-            For<IRepository<CounselorFeature>>().Use<EFRepository<CounselorFeature>>()
-                .Ctor<IValidatedContext>().Named("ASIPublicationContext");
-
-            #endregion ASIPublicationContext
+            #endregion ASIInternetContext            
 
             #region InternetContext
 
@@ -340,31 +322,6 @@ namespace asi.asicentral.database.mappings
              .Ctor<IValidatedContext>().Named("StoreContext");
 
             #endregion StoreContext
-
-            #region TIMSS Context
-
-            For<IRepository<TIMSSAccountType>>().Use<EFRepository<TIMSSAccountType>>()
-                .Ctor<IValidatedContext>().Named("TIMSSContext");
-
-            For<IRepository<TIMSSAdditionalInfo>>().Use<EFRepository<TIMSSAdditionalInfo>>()
-                .Ctor<IValidatedContext>().Named("TIMSSContext");
-
-            For<IRepository<TIMSSCompany>>().Use<EFRepository<TIMSSCompany>>()
-                .Ctor<IValidatedContext>().Named("TIMSSContext");
-
-            For<IRepository<TIMSSContact>>().Use<EFRepository<TIMSSContact>>()
-                .Ctor<IValidatedContext>().Named("TIMSSContext");
-
-            For<IRepository<TIMSSCreditInfo>>().Use<EFRepository<TIMSSCreditInfo>>()
-                .Ctor<IValidatedContext>().Named("TIMSSContext");
-
-            For<IRepository<TIMSSProductType>>().Use<EFRepository<TIMSSProductType>>()
-                .Ctor<IValidatedContext>().Named("TIMSSContext");
-
-            For<IRepository<PersonifyMapping>>().Use<EFRepository<PersonifyMapping>>()
-                .Ctor<IValidatedContext>().Named("TIMSSContext");
-
-            #endregion TIMSS Context
 
             #region Call Context
 

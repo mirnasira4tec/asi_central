@@ -13,28 +13,6 @@
 		<MSBuild Projects=".\Projects\ASI Admin\src\Admin Tool.sln" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU"/>
 	</Target>
 	
-	<Target Name="Compile Template">
-		<MSBuild Projects=".\Projects\Template\src\Template.sln" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU"/>
-	</Target>
-	
-	<Target Name="Package Template" DependsOnTargets="Compile Template" Condition="'$(CREATEZIP)'=='true'">
-		<CreateItem Include=".\Projects\Template\src\Web Application\**\*" 
-			Exclude=".\Projects\Template\src\Web Application\**\*.cs;.\Projects\Template\src\Web Application\**\*.resx;.\Projects\Template\src\Web Application\**\thumb.db;.\Projects\Template\src\Web Application\Properties\**;.\Projects\Template\src\Web Application\obj\**;.\Projects\Template\src\Web Application\Web*.config;.\Projects\Template\src\Web Application\Web Application.csproj;.\Projects\Template\src\Web Application\Web Application.csproj.user">
-			
-			<Output TaskParameter="Include" ItemName="TemplateWebFiles"/>
-		</CreateItem>
-		<CreateItem Include=".\Projects\Template\Config\**\*">
-			<Output TaskParameter="Include" ItemName="TemplateConfigFiles"/>
-		</CreateItem>
-		<CreateItem Include=".\Projects\Template\sql\**\*">
-			<Output TaskParameter="Include" ItemName="TemplateSQLFiles"/>
-		</CreateItem>
-		<MSBuild.ExtensionPack.Compression.Zip TaskAction="Create" RemoveRoot="$(ProjectRoot)\Template\src" CompressFiles="@(TemplateWebFiles)" ZipFileName="$(BUILDTARGETDIR)\$(JOB_NAME)-Template-$(BUILD_NUMBER).zip"/>
-		<MSBuild.ExtensionPack.Compression.Zip TaskAction="AddFiles" RemoveRoot="$(ProjectRoot)\Template" CompressFiles="@(TemplateConfigFiles)" ZipFileName="$(BUILDTARGETDIR)\$(JOB_NAME)-Template-$(BUILD_NUMBER).zip"/>
-		<MSBuild.ExtensionPack.Compression.Zip TaskAction="AddFiles" RemoveRoot="$(ProjectRoot)\Template" CompressFiles="@(TemplateSQLFiles)" ZipFileName="$(BUILDTARGETDIR)\$(JOB_NAME)-Template-$(BUILD_NUMBER).zip"/>
-		<Message Text="Zip file created" />
-	</Target>
-
 	<Target Name="Config ASI Admin">
 		<ItemGroup>
 			<OriginalWebConfig Include=".\Projects\ASI Admin\src\Web Application\Web.config" />
@@ -63,9 +41,9 @@
 		<Message Text="Zip file created" />
 	</Target>
 
-	<Target Name="Compile" DependsOnTargets="Compile ASI Admin;Compile Template" />
+	<Target Name="Compile" DependsOnTargets="Compile ASI Admin" />
 
-	<Target Name="Package" DependsOnTargets="Package ASI Admin;Package Template" Condition="'$(CREATEZIP)'=='true'" />
+	<Target Name="Package" DependsOnTargets="Package ASI Admin" Condition="'$(CREATEZIP)'=='true'" />
 	
 	<Target Name="BuildSolutions" DependsOnTargets="Compile;Package">
 		<Message Text="Builds has been completed" />

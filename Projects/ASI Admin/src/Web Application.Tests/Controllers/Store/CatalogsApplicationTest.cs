@@ -102,13 +102,11 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             order.Company.Addresses.Add(CreateCompanyWithAddress());
 
             Mock<IStoreService> mockStoreService = new Mock<IStoreService>();
-            Mock<IFulfilmentService> mockFulFilService = new Mock<IFulfilmentService>();
             mockStoreService.Setup(service => service.GetAll<StoreOrderDetail>(false)).Returns(details.AsQueryable());
             mockStoreService.Setup(service => service.GetAll<StoreDetailCatalog>(false)).Returns(catalogs.AsQueryable());
             mockStoreService.Setup(service => service.GetAll<LookCatalogOption>(false)).Returns(options.AsQueryable());
 
             ApplicationController controller = new ApplicationController();
-            controller.FulfilmentService = mockFulFilService.Object;
             controller.StoreService = mockStoreService.Object;
 
             CatalogsApplicationModel model = new CatalogsApplicationModel(detail, catalogDetail, controller.StoreService);
@@ -171,7 +169,6 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             RedirectToRouteResult result3 = controller.EditCatalogs(model) as RedirectToRouteResult;
             Assert.AreEqual(orderRef.ProcessStatus, OrderStatus.Approved);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(3));
-            mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(1));
         }
     }
 }

@@ -51,11 +51,9 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             company.Individuals.Add(new StoreIndividual() { FirstName = "First2", LastName = "Last2", Id = 1 });
 
             Mock<IStoreService> mockStoreService = new Mock<IStoreService>();
-            Mock<IFulfilmentService> mockFulFilService = new Mock<IFulfilmentService>();
             mockStoreService.Setup(service => service.GetAll<StoreOrderDetail>(false)).Returns(details.AsQueryable());
 
             ApplicationController controller = new ApplicationController();
-            controller.FulfilmentService = mockFulFilService.Object;
             controller.StoreService = mockStoreService.Object;
 
             MagazinesAdvertisingApplicationModel model = new MagazinesAdvertisingApplicationModel();
@@ -78,16 +76,13 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             RedirectToRouteResult result3 = controller.EditMagazineAdvertising(model) as RedirectToRouteResult;
             Assert.AreEqual(orderRef.ProcessStatus, OrderStatus.Approved);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(2));
-            mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(1));
 
             // user clicks reject - order should be updated to reject
             model.ActionName = ApplicationController.COMMAND_REJECT;
             RedirectToRouteResult result2 = controller.EditMagazineAdvertising(model) as RedirectToRouteResult;
             Assert.AreEqual(result2.RouteValues["controller"], "Orders");
             Assert.AreEqual(orderRef.ProcessStatus, OrderStatus.Rejected);
-            mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(3));
-
-            
+            mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(3));            
         }
     }
 }

@@ -37,7 +37,7 @@ namespace asi.asicentral.services
             return SendMail(mailObject);
         }
 
-        private bool SendMailSmtp(MailMessage mail)
+        public virtual bool SendMail(MailMessage mail)
         {
             if (mail == null) throw new Exception("Invalid mail details");
             bool result = false;
@@ -45,17 +45,18 @@ namespace asi.asicentral.services
 
             content.Subject = mail.Subject;
             content.Body = mail.Body;
-            if(mail.From != null) content.FromEmail = string.Format("{0}|{1}", mail.From.Address, mail.From.DisplayName);
+            if (mail.From != null) content.FromEmail = string.Format("{0}|{1}", mail.From.Address, mail.From.DisplayName);
             if (string.IsNullOrEmpty(content.FromEmail) && ConfigurationManager.AppSettings["SmtpFrom"] != null && !string.IsNullOrEmpty(ConfigurationManager.AppSettings["SmtpFrom"]))
             {
                 content.FromEmail = ConfigurationManager.AppSettings["SmtpFrom"];
             }
-            if(mail.To != null)
+            if (mail.To != null)
             {
-                if(mail.To.Any())
+                if (mail.To.Any())
                 {
                     content.ToEmailList = new List<string>();
-                    foreach(var to in mail.To){
+                    foreach (var to in mail.To)
+                    {
                         content.ToEmailList.Add(to.Address);
                     }
                 }
@@ -78,14 +79,9 @@ namespace asi.asicentral.services
             catch (Exception ex)
             {
                 result = false;
-                log.Error(string.Format("Failed email sending in SmtpEmailService-SendMailSmtp(): {0}", ex.Message));
+                log.Error(string.Format("Failed email sending in QueueMailService-SendMail(): {0}", ex.Message));
             }
             return result;
-        }
-
-        public virtual bool SendMail(MailMessage mail)
-        {
-            return SendMailSmtp(mail);
         }
     }
 }

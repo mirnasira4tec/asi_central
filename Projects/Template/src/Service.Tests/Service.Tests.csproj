@@ -38,6 +38,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="asi.asicentral.Core">
+      <HintPath>..\..\library\asi.asicentral.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.4.3.1\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
@@ -113,10 +116,6 @@
     <Compile Include="IPHelperTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj">
-      <Project>{941aa4de-b070-47c8-ae2e-541a7cfaaee2}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Service\Service.csproj">
       <Project>{5f16e4e1-f26a-43c1-8a08-5733354acb76}</Project>
       <Name>Service</Name>

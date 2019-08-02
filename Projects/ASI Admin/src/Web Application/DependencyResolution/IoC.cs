@@ -61,13 +61,7 @@ namespace asi.asicentral.web.DependencyResolution
                         .HttpContextScoped()
                         .Use<StoreService>()
                         .EnrichWith(storeService => proxyGenerator.CreateClassProxyWithTarget(storeService.GetType(), storeService, new object[] { null }, new IInterceptor[] { new LogInterceptor(storeService.GetType()) }))
-                        .Ctor<asi.asicentral.interfaces.IContainer>();
-
-                    x.For<IFulfilmentService>()
-                        .HttpContextScoped()
-                        .Use<TIMSSService>()
-                        .EnrichWith(timssService => proxyGenerator.CreateClassProxyWithTarget(timssService.GetType(), timssService, new object[] { null }, new IInterceptor[] { new LogInterceptor(timssService.GetType()) }))
-                        .Ctor<IObjectService>();
+                        .Ctor<asi.asicentral.interfaces.IContainer>();                    
 
                     x.For<IROIService>()
                         .HttpContextScoped()
@@ -108,7 +102,6 @@ namespace asi.asicentral.web.DependencyResolution
                     x.SetAllProperties(instance => instance.OfType<IObjectService>());
                     x.SetAllProperties(instance => instance.OfType<IStoreService>());
                     x.SetAllProperties(instance => instance.OfType<IEncryptionService>());
-                    x.SetAllProperties(instance => instance.OfType<IFulfilmentService>());
                     x.SetAllProperties(instance => instance.OfType<IFileSystemService>());
                     x.SetAllProperties(instance => instance.OfType<ITemplateService>());
                     x.SetAllProperties(instance => instance.OfType<IEmailService>());

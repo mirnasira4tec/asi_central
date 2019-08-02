@@ -8,7 +8,6 @@ using asi.asicentral.PersonifyDataASI;
 using asi.asicentral.services;
 using asi.asicentral.services.PersonifyProxy;
 using Moq;
-using asi.asicentral.model.timss;
 using asi.asicentral.util.store;
 using PersonifySvcClient;
 using asi.asicentral.model.personify;

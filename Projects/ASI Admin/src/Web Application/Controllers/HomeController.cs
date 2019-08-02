@@ -1,6 +1,5 @@
 ﻿using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
-using asi.asicentral.model.timss;
 using asi.asicentral.services;
 using asi.asicentral.web.model;
 using System;
@@ -44,16 +43,7 @@ namespace Web_Application.Controllers
             {
                 messages.Add("Error could not access context database: " + exception.Message);
             }
-            //Accessing the database hosting TIMSS tables
-            try
-            {
-                ObjectService.GetAll<TIMSSCompany>().FirstOrDefault();
-                messages.Add("Successfully accessed the TIMSS database");
-            }
-            catch (Exception exception)
-            {
-                messages.Add("Error could not access timss database: " + exception.Message);
-            }
+            
             //Accessing the ASIInternet database
             try
             {

@@ -137,7 +137,6 @@
     <Compile Include="services\LogService.cs" />
     <Compile Include="services\ObjectService.cs" />
     <Compile Include="services\EncryptionService.cs" />
-    <Compile Include="services\SmtpEmailService.cs" />
     <Compile Include="util\FileSystemHelper.cs" />
     <Compile Include="util\HtmlHelper.cs" />
     <Compile Include="util\IPHelper.cs" />

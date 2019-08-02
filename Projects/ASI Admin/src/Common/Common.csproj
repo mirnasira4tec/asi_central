@@ -49,9 +49,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="asi.asicentral.Core">
-      <HintPath>..\..\library\asi.asicentral.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="asi.asicentral.Core, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Core\bin\Debug\asi.asicentral.Core.dll</HintPath>
     </Reference>
     <Reference Include="ASI.Barista.Plugins, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ASI.Barista.Plugins.3.0.27\lib\net45\ASI.Barista.Plugins.dll</HintPath>
@@ -255,7 +255,6 @@
     <Compile Include="database\AsicentralContext.cs" />
     <Compile Include="database\ASIEmailBlastContext.cs" />
     <Compile Include="database\ASIInternetContext.cs" />
-    <Compile Include="database\ASIPublicationContext.cs" />
     <Compile Include="database\mappings\asicentral\RateSupplierFormDetailMap.cs" />
     <Compile Include="database\mappings\asicentral\RateSupplierFormMap.cs" />
     <Compile Include="database\mappings\asicentral\RateSupplierImportMap.cs" />
@@ -430,18 +429,11 @@
     <Compile Include="model\store\LegacySupplierDecoratingType.cs" />
     <Compile Include="model\store\LegacyDistributorAccountType.cs" />
     <Compile Include="database\mappings\asiinternet\DistributorBusinessRevenueMap.cs" />
-    <Compile Include="database\TIMSSContext.cs" />
     <Compile Include="database\mappings\store\ContextFeatureProductMap.cs" />
     <Compile Include="database\mappings\store\ContextMap.cs" />
     <Compile Include="database\mappings\store\ContextProductMap.cs" />
     <Compile Include="database\mappings\store\ContextFeatureMap.cs" />
     <Compile Include="database\mappings\store\ContextProductSequenceMap.cs" />
-    <Compile Include="database\mappings\timss\TIMSSAccountTypeMap.cs" />
-    <Compile Include="database\mappings\timss\TIMSSAdditionalInfoMap.cs" />
-    <Compile Include="database\mappings\timss\TIMSSCompanyMap.cs" />
-    <Compile Include="database\mappings\timss\TIMSSContactMap.cs" />
-    <Compile Include="database\mappings\timss\TIMSSCreditInfoMap.cs" />
-    <Compile Include="database\mappings\timss\TIMSSProductTypeMap.cs" />
     <Compile Include="database\StoreContext.cs" />
     <Compile Include="database\InternetContext.cs" />
     <Compile Include="database\mappings\asiinternet\ASPNetMembershipMap.cs" />
@@ -456,20 +448,12 @@
     <Compile Include="database\mappings\asiinternet\OrderProductMap.cs" />
     <Compile Include="database\mappings\asiinternet\ProductMap.cs" />
     <Compile Include="database\mappings\asiinternet\SupplierMembershipApplicationMap.cs" />
-    <Compile Include="database\mappings\asipublication\CategoryMap.cs" />
-    <Compile Include="database\mappings\asipublication\ContentMap.cs" />
-    <Compile Include="database\mappings\asipublication\FeatureContentMap.cs" />
-    <Compile Include="database\mappings\asipublication\FeatureContentRotatorMap.cs" />
     <Compile Include="database\mappings\EFRegistry.cs" />
     <Compile Include="database\mappings\internet\NewsMap.cs" />
     <Compile Include="database\mappings\internet\NewsRotatorMap.cs" />
     <Compile Include="database\mappings\internet\NewsSourceMap.cs" />
     <Compile Include="interfaces\IStoreService.cs" />
     <Compile Include="model\store\ContextFeature.cs" />
-    <Compile Include="model\counselor\CounselorCategory.cs" />
-    <Compile Include="model\counselor\CounselorContent.cs" />
-    <Compile Include="model\counselor\CounselorFeature.cs" />
-    <Compile Include="model\counselor\CounselorFeatureRotator.cs" />
     <Compile Include="model\news\News.cs" />
     <Compile Include="model\news\NewsRotator.cs" />
     <Compile Include="model\news\NewsSource.cs" />
@@ -519,12 +503,6 @@
     <Compile Include="model\store\TermsConditionsType.cs" />
     <Compile Include="model\store\TermsConditionsInstance.cs" />
     <Compile Include="model\personify\PersonifyMapping.cs" />
-    <Compile Include="model\timss\TIMSSAccountType.cs" />
-    <Compile Include="model\timss\TIMSSAdditionalInfo.cs" />
-    <Compile Include="model\timss\TIMSSCompany.cs" />
-    <Compile Include="model\timss\TIMSSContact.cs" />
-    <Compile Include="model\timss\TIMSSCreditInfo.cs" />
-    <Compile Include="model\timss\TIMSSProductType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="interfaces\IBackendService.cs" />
     <Compile Include="Service References\PersonifyDataASI\Reference.cs" />

@@ -53,7 +53,7 @@
   <ItemGroup>
     <Reference Include="asi.asicentral.Core, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\library\asi.asicentral.Core.dll</HintPath>
+      <HintPath>..\Core\bin\Release\asi.asicentral.Core.dll</HintPath>
     </Reference>
     <Reference Include="ASI.Barista.Plugins, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ASI.Barista.Plugins.3.0.27\lib\net45\ASI.Barista.Plugins.dll</HintPath>

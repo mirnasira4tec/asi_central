@@ -82,14 +82,12 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             order.Company.Addresses.Add(CreateCompanyWithAddress());
 
             Mock<IStoreService> mockStoreService = new Mock<IStoreService>();
-            Mock<IFulfilmentService> mockFulFilService = new Mock<IFulfilmentService>();
             mockStoreService.Setup(service => service.GetAll<StoreOrderDetail>(false)).Returns(details.AsQueryable());
             mockStoreService.Setup(service => service.GetAll<StoreDetailEmailExpress>(false)).Returns(advertisings.AsQueryable());
             mockStoreService.Setup(objectService => objectService.Add<StoreDetailEmailExpressItem>(It.IsAny<StoreDetailEmailExpressItem>()))
                             .Callback<StoreDetailEmailExpressItem>((theLoginDate) => dateItem = theLoginDate);
 
             ApplicationController controller = new ApplicationController();
-            controller.FulfilmentService = mockFulFilService.Object;
             controller.StoreService = mockStoreService.Object;
 
             EmailExpressModel model = new EmailExpressModel();
@@ -118,10 +116,6 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             RedirectToRouteResult result3 = controller.EditEmailExpress(model) as RedirectToRouteResult;
             Assert.AreEqual(orderRef.ProcessStatus, OrderStatus.Approved);
             mockStoreService.Verify(service => service.SaveChanges(), Times.Exactly(3));
-            mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(1));
-
-          
-            mockFulFilService.Verify(service => service.Process(It.IsAny<StoreOrder>(), It.IsAny<StoreDetailApplication>()), Times.Exactly(1));
         }
 
     }

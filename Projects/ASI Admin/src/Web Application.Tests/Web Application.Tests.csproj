@@ -53,8 +53,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="asi.asicentral.Core">
-      <HintPath>..\..\library\asi.asicentral.Core.dll</HintPath>
+    <Reference Include="asi.asicentral.Core, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Core\bin\Release\asi.asicentral.Core.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.4.3.1\lib\net45\Castle.Core.dll</HintPath>
@@ -166,10 +167,6 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{b74b2258-2b47-435c-a0ea-6a0c1ffe18de}</Project>
       <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Service\Service.csproj">
-      <Project>{cec7f727-f96b-484c-8687-e9426deb76a2}</Project>
-      <Name>Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\Web Application\Web Application.csproj">
       <Project>{F91A81D1-69FF-4C32-8BD7-5E0169A235AF}</Project>

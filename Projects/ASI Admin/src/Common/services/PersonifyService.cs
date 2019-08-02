@@ -2,7 +2,6 @@
 using asi.asicentral.model;
 using asi.asicentral.model.personify;
 using asi.asicentral.model.store;
-using asi.asicentral.model.timss;
 using asi.asicentral.oauth;
 using asi.asicentral.PersonifyDataASI;
 using asi.asicentral.services.PersonifyProxy;
@@ -11,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace asi.asicentral.services

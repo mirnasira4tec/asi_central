@@ -1,6 +1,5 @@
 ﻿using asi.asicentral.database.mappings;
 using asi.asicentral.interfaces;
-using asi.asicentral.model.counselor;
 using asi.asicentral.model.sgr;
 using asi.asicentral.services;
 using NUnit.Framework;
@@ -39,8 +38,6 @@ namespace asi.asicentral.Tests
             using (IObjectService objectService = new ObjectService(new Container(new EFRegistry())))
             {
                 int rows = objectService.GetAll<Company>().Count();
-                Assert.IsTrue(rows > 0);
-                rows = objectService.GetAll<CounselorCategory>().Count();
                 Assert.IsTrue(rows > 0);
             }
         }

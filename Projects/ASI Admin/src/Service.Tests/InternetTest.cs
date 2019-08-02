@@ -1,8 +1,6 @@
 ﻿using asi.asicentral.database;
-using asi.asicentral.model.counselor;
 using asi.asicentral.model.news;
 using NUnit.Framework;
-using System;
 using System.Linq;
 
 namespace asi.asicentral.Tests

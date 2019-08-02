@@ -7,7 +7,7 @@ namespace asi.asicentral.database
     public class PersonifyContext : BaseContext
     {
         public PersonifyContext()
-            : base("name=PersonifyMappingContext")
+            : base("name=ProductContext")
         {
             Database.SetInitializer<PersonifyContext>(null);      
         }

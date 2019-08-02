@@ -42,7 +42,7 @@ namespace asi.asicentral.web.Controllers.Store
         public static readonly int SUPPLIER_ESP_WEBSITES_PRODUCT_COLLECTIONS_ID = 64;
 
         public IStoreService StoreService { get; set; }
-        public IFulfilmentService FulfilmentService { get; set; }
+        //public IFulfilmentService FulfilmentService { get; set; }
         public IBackendService BackendService { get; set; }
         public IEmailService EmailService { get; set; }
         public ITemplateService TemplateService { get; set; }
@@ -145,7 +145,7 @@ namespace asi.asicentral.web.Controllers.Store
                 distributorApplication.UpdateDate = DateTime.UtcNow;
                 distributorApplication.UpdateSource = "ASI Admin Application - EditDistributor";
 
-                ProcessCommand(StoreService, FulfilmentService, order, distributorApplication, application.ActionName);
+                ProcessCommand(StoreService, order, distributorApplication, application.ActionName);
                 StoreService.SaveChanges();
                 if (application.ActionName == ApplicationController.COMMAND_REJECT)
                     return RedirectToAction("List", "Orders");
@@ -209,7 +209,7 @@ namespace asi.asicentral.web.Controllers.Store
                 orderDetail.UpdateDate = DateTime.UtcNow;
                 orderDetail.UpdateSource = "ApplicationController - EditProductCollections";
 
-                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                ProcessCommand(StoreService, order, null, application.ActionName);
                 StoreService.SaveChanges();
                 if (application.ActionName == ApplicationController.COMMAND_REJECT)
                     return RedirectToAction("List", "Orders");
@@ -249,7 +249,7 @@ namespace asi.asicentral.web.Controllers.Store
                 application.CopyTo(supplierApplication);
                 supplierApplication.UpdateDate = DateTime.UtcNow;
                 supplierApplication.UpdateSource = "ASI Admin Application - EditSupplier";
-                ProcessCommand(StoreService, FulfilmentService, order, supplierApplication, application.ActionName);
+                ProcessCommand(StoreService, order, supplierApplication, application.ActionName);
                 StoreService.SaveChanges();
                 if (application.ActionName == ApplicationController.COMMAND_REJECT)
                     return RedirectToAction("List", "Orders");
@@ -287,7 +287,7 @@ namespace asi.asicentral.web.Controllers.Store
                 application.CopyTo(decoratorApplication);
                 decoratorApplication.UpdateDate = DateTime.UtcNow;
                 decoratorApplication.UpdateSource = "ASI Admin Application - EditDecorator";
-                ProcessCommand(StoreService, FulfilmentService, order, decoratorApplication, application.ActionName);
+                ProcessCommand(StoreService, order, decoratorApplication, application.ActionName);
                 StoreService.SaveChanges();
                 if (application.ActionName == ApplicationController.COMMAND_REJECT)
                     return RedirectToAction("List", "Orders");
@@ -362,7 +362,7 @@ namespace asi.asicentral.web.Controllers.Store
                     }
                 }
 
-                ProcessCommand(StoreService, FulfilmentService, order, equipmentApplication, application.ActionName);
+                ProcessCommand(StoreService, order, equipmentApplication, application.ActionName);
                 StoreService.SaveChanges();
                 if (application.ActionName == ApplicationController.COMMAND_REJECT)
                     return RedirectToAction("List", "Orders");
@@ -396,7 +396,7 @@ namespace asi.asicentral.web.Controllers.Store
                     order = UpdateCompanyInformation(application, order);
                 }
                 orderDetail = UpdateMagazineSubscriptionInformation(application, orderDetail);
-                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                ProcessCommand(StoreService, order, null, application.ActionName);
                 StoreService.SaveChanges();
                 if (application.ActionName == ApplicationController.COMMAND_REJECT)
                     return RedirectToAction("List", "Orders");
@@ -486,7 +486,7 @@ namespace asi.asicentral.web.Controllers.Store
                 storeDetailCatalog.UpdateDate = DateTime.UtcNow;
                 storeDetailCatalog.UpdateSource = "ApplicationController - EditCatalogs";
 
-                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                ProcessCommand(StoreService, order, null, application.ActionName);
                 StoreService.SaveChanges();
                 if (application.ActionName == ApplicationController.COMMAND_REJECT)
                     return RedirectToAction("List", "Orders");
@@ -569,7 +569,7 @@ namespace asi.asicentral.web.Controllers.Store
                 orderDetail.UpdateDate = DateTime.UtcNow;
                 orderDetail.UpdateSource = "ApplicationController - EditOrderDetailProduct";
 
-                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                ProcessCommand(StoreService, order, null, application.ActionName);
                 StoreService.SaveChanges();
                 if (application.ActionName == ApplicationController.COMMAND_REJECT)
                     return RedirectToAction("List", "Orders");
@@ -600,7 +600,7 @@ namespace asi.asicentral.web.Controllers.Store
                 order.ExternalReference = application.ExternalReference;
                 order = UpdateCompanyInformation(application, order);
 
-                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                ProcessCommand(StoreService, order, null, application.ActionName);
                 StoreService.SaveChanges();
                 if (application.ActionName == ApplicationController.COMMAND_REJECT)
                     return RedirectToAction("List", "Orders");
@@ -729,7 +729,7 @@ namespace asi.asicentral.web.Controllers.Store
                 orderDetail.UpdateDate = DateTime.UtcNow;
                 orderDetail.UpdateSource = "ApplicationController - EditESPAdvertising";
 
-                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                ProcessCommand(StoreService, order, null, application.ActionName);
                 StoreService.SaveChanges();
                 if (application.ActionName == ApplicationController.COMMAND_REJECT)
                     return RedirectToAction("List", "Orders");
@@ -785,7 +785,7 @@ namespace asi.asicentral.web.Controllers.Store
                 orderDetail.UpdateDate = DateTime.UtcNow;
                 orderDetail.UpdateSource = "ApplicationController - EditMagazineAdvertising";
 
-                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                ProcessCommand(StoreService, order, null, application.ActionName);
                 StoreService.SaveChanges();
                 if (application.ActionName == ApplicationController.COMMAND_REJECT)
                     return RedirectToAction("List", "Orders");
@@ -883,7 +883,7 @@ namespace asi.asicentral.web.Controllers.Store
                 orderDetail.UpdateDate = DateTime.UtcNow;
                 orderDetail.UpdateSource = "ApplicationController - EditESPAdvertising";
 
-                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                ProcessCommand(StoreService, order, null, application.ActionName);
                 StoreService.SaveChanges();
                 if (application.ActionName == ApplicationController.COMMAND_REJECT)
                     return RedirectToAction("List", "Orders");
@@ -926,7 +926,7 @@ namespace asi.asicentral.web.Controllers.Store
                     orderDetail.UpdateSource = "ApplicationController - EditEmailExpress";
                 }
 
-                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                ProcessCommand(StoreService, order, null, application.ActionName);
                 StoreService.SaveChanges();
                 if (application.ActionName == ApplicationController.COMMAND_REJECT)
                     return RedirectToAction("List", "Orders");
@@ -976,7 +976,7 @@ namespace asi.asicentral.web.Controllers.Store
                 order.ExternalReference = application.ExternalReference;
                 order = UpdateCompanyInformation(application, order);
                 StoreService.UpdateTaxAndShipping(order);
-                ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+                ProcessCommand(StoreService, order, null, application.ActionName);
                 StoreService.SaveChanges();
                 if (application.ActionName == COMMAND_REJECT)
                 {
@@ -1008,7 +1008,7 @@ namespace asi.asicentral.web.Controllers.Store
 				order.ExternalReference = application.ExternalReference;
 				order = UpdateCompanyInformation(application, order);
 				StoreService.UpdateTaxAndShipping(order);
-				ProcessCommand(StoreService, FulfilmentService, order, null, application.ActionName);
+				ProcessCommand(StoreService, order, null, application.ActionName);
 				StoreService.SaveChanges();
 				if (application.ActionName == COMMAND_REJECT)
 				{
@@ -1055,7 +1055,7 @@ namespace asi.asicentral.web.Controllers.Store
         /// <param name="applicationId"></param>
         /// <param name="command"></param>
         /// <returns></returns>
-        private void ProcessCommand(IStoreService storeService, IFulfilmentService fulfilmentService, StoreOrder order, StoreDetailApplication application, string command)
+        private void ProcessCommand(IStoreService storeService, StoreOrder order, StoreDetailApplication application, string command)
         {
 
             if (command == ApplicationController.COMMAND_ACCEPT)
@@ -1140,12 +1140,7 @@ namespace asi.asicentral.web.Controllers.Store
                 }
 
                 if (orderPlaced)
-                {
-                    if( !product.HasBackEndIntegration && order.CreditCard != null && 
-                        !string.IsNullOrEmpty(order.CreditCard.ExternalReference) && string.IsNullOrEmpty(order.CreditCard.TokenId) )
-                    { // call TIMSS service only for non-PCI order and product without Personify Integration
-                        fulfilmentService.Process(order, application);
-                    }
+                {                    
                     order.ProcessStatus = OrderStatus.Approved;
                     order.ApprovedDate = DateTime.UtcNow;
                 }
