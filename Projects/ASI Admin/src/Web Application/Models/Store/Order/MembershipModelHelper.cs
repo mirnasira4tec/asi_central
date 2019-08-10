@@ -16,7 +16,10 @@ namespace asi.asicentral.web.model.store
             if (orderDetail == null || orderDetail.Order == null) return;
             StoreOrder order = orderDetail.Order;
 
-            if (order != null && order.Context != null) model.ContextId = order.Context.Id;
+            if (order != null && order.Context != null)
+            {
+                model.ContextId = order.Context.Id;
+            }
             //fill in company fields
             if (order.Company != null)
             {
@@ -94,7 +97,17 @@ namespace asi.asicentral.web.model.store
             if (orderDetail.Product != null)
             {
                 model.HasBankInformation = orderDetail.Product.HasBankInformation;
-                model.SubscriptionCost += (cost * quantity) + orderDetail.TaxCost + orderDetail.ShippingCost;
+
+                var subscriptionCost = 0m;
+                if (orderDetail.DiscountedCost.HasValue && model.Quantity > 1)
+                {
+                        subscriptionCost = orderDetail.Cost + (orderDetail.Quantity - 1) * orderDetail.DiscountedCost.Value;
+                }
+                else
+                {
+                    subscriptionCost = orderDetail.Cost * orderDetail.Quantity;
+                }
+                model.SubscriptionCost += subscriptionCost + orderDetail.TaxCost + orderDetail.ShippingCost;
 
                 model.SubscriptionFrequency = (!string.IsNullOrEmpty(orderDetail.Product.SubscriptionFrequency) ? (orderDetail.Product.SubscriptionFrequency == "M" ? "monthly" : "yearly") : string.Empty);
                 if (orderDetail.Product.HasBackEndIntegration && !string.IsNullOrEmpty(order.BackendReference))

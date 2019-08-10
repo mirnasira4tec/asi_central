@@ -42,7 +42,6 @@ namespace asi.asicentral.web.model.store
         public bool HasBillAddress { get; set; }
         public int? OptionId { get; set; }
         public int ContextId { get; set; }
-
         #region Billing information
 
         [Display(ResourceType = typeof(Resource), Name = "BillingTollPhone")]
@@ -110,6 +109,7 @@ namespace asi.asicentral.web.model.store
         public decimal ItemsCost { get; set; }
         public decimal TaxCost { get; set; }
         public decimal ApplicationFeeCost { get; set; }
+        public decimal? DiscountedCost { get; set; }
         public decimal ShippingCost { get; set; }
         public decimal TotalCost { get; set; }
         public decimal SubscriptionCost { get; set; }

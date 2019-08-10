@@ -43,6 +43,7 @@ namespace asi.asicentral.web.model.store
             if (orderdetail.OptionId.HasValue) this.OptionId = orderdetail.OptionId;
             if (orderdetail.DateOption.HasValue) this.StartDate = orderdetail.DateOption.Value.ToString("MM/dd/yyyy");
             this.Quantity = orderdetail.Quantity;
+            this.DiscountedCost = orderdetail.DiscountedCost;
             this.AcceptedByName = orderdetail.AcceptedByName;
            
             if (orderdetail.Product != null)

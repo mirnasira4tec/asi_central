@@ -59,6 +59,7 @@ namespace asi.asicentral.web.store.interfaces
         decimal ItemsCost { get; set; }
         decimal TaxCost { get; set; }
         decimal ApplicationFeeCost { get; set; }
+        decimal? DiscountedCost { get; set; }
         decimal ShippingCost { get; set; }
         decimal TotalCost { get; set; }
         decimal SubscriptionCost { get; set; }

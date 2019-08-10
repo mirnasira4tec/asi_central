@@ -22,6 +22,7 @@ namespace asi.asicentral.model.store
         public int? CouponId { get; set; }
         public int Quantity { get; set; }
         public decimal ApplicationCost { get; set; }
+        public decimal? DiscountedCost { get; set; }
         public decimal ShippingCost { get; set; }
         public string ShippingMethod { get; set; }
         public decimal TaxCost { get; set; }
@@ -34,7 +35,6 @@ namespace asi.asicentral.model.store
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
         public string Comments { get; set; }
-
         public decimal Cost
         {
             get { return _cost; }

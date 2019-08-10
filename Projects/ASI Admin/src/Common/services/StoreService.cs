@@ -11,13 +11,13 @@ namespace asi.asicentral.services
 {
     public class StoreService : ObjectService, IStoreService
     {
-	    static StoreService()
-	    {
-			//listing objects to be cached
-			objectsToCache.Add("asi.asicentral.model.store.LookSendMyAdCountryCode");
-	    }
+        static StoreService()
+        {
+            //listing objects to be cached
+            objectsToCache.Add("asi.asicentral.model.store.LookSendMyAdCountryCode");
+        }
 
-	    public StoreService(IContainer container)
+        public StoreService(IContainer container)
             : base(container)
         {
             //nothing to do right now
@@ -28,7 +28,7 @@ namespace asi.asicentral.services
             StoreDetailDistributorMembership application = null;
             if (orderDetail.Product != null && StoreDetailDistributorMembership.Identifiers.Contains(orderDetail.Product.Id))
             {
-				application = GetAll<StoreDetailDistributorMembership>().SingleOrDefault(app => app.OrderDetailId == orderDetail.Id);
+                application = GetAll<StoreDetailDistributorMembership>().SingleOrDefault(app => app.OrderDetailId == orderDetail.Id);
             }
             return application;
         }
@@ -163,7 +163,7 @@ namespace asi.asicentral.services
         public void UpdateTaxAndShipping(StoreOrder order)
         {
             StoreAddress address = null;
-             
+
             if (order != null && order.Company != null && order.Company.Addresses != null && order.Company.Addresses.Count > 0)
             {
                 address = order.Company.GetCompanyShippingAddress();
@@ -175,7 +175,7 @@ namespace asi.asicentral.services
                 bool shouldBeAnnualized = false;
                 order.Total = 0m;
                 order.AnnualizedTotal = 0m;
-                decimal tax= 0m;
+                decimal tax = 0m;
                 foreach (StoreOrderDetail orderDetail in order.OrderDetails)
                 {
                     if (orderDetail.Product != null && orderDetail.Product.IsSubscription && orderDetail.Product.SubscriptionFrequency == "M")
@@ -185,7 +185,7 @@ namespace asi.asicentral.services
                     //set the default values
                     tax = 0m;
                     orderDetail.ShippingCost = 0m;
-                   
+
                     //Retrieve Shipping cost and HasTax values to calculate tax 
                     //calculate the taxes, membership application fee is non-taxable
                     if (orderDetail.Product != null)
@@ -207,7 +207,7 @@ namespace asi.asicentral.services
                         }
                         else
                         {
-							//specturm has a supplement option which may impact shipping
+                            //specturm has a supplement option which may impact shipping
                             bool isGiftSupplement = false;
                             if (orderDetail.Product.Id == 39)
                             {
@@ -222,8 +222,25 @@ namespace asi.asicentral.services
                     }
 
                     orderDetail.TaxCost = tax;
+                    var cost = 0.0M;
+                    var quantity = orderDetail.Quantity;
                     //this is the cost of what to pay now
-                    order.Total += orderDetail.Cost * orderDetail.Quantity + orderDetail.TaxCost - orderDetail.DiscountAmount + orderDetail.ShippingCost + orderDetail.ApplicationCost;
+                    if (orderDetail.DiscountedCost.HasValue)
+                    {
+                        if (quantity == 1)
+                        {
+                            cost = orderDetail.Cost;
+                        }
+                        else
+                        {
+                            cost = orderDetail.Cost + ((quantity - 1) * orderDetail.DiscountedCost.Value);
+                        }
+                    }
+                    else
+                    {
+                        cost = orderDetail.Cost * quantity;
+                    }
+                    order.Total += cost + orderDetail.TaxCost - orderDetail.DiscountAmount + orderDetail.ShippingCost + orderDetail.ApplicationCost;
                     if (order.Total < 0.0m) order.Total = 0;
 
                     order.AnnualizedTotal += order.Total;
@@ -240,7 +257,7 @@ namespace asi.asicentral.services
                         order.AnnualizedTotal += orderDetail.Cost * orderDetail.Quantity * 11 + tax + orderDetail.ShippingCost * 11;
                     }
 
-                    if (order.AnnualizedTotal < 0.0m) 
+                    if (order.AnnualizedTotal < 0.0m)
                         order.AnnualizedTotal = 0;
                 }
             }
@@ -264,8 +281,8 @@ namespace asi.asicentral.services
                 {
                     taxRate = taxRateRecord.Rate;
                 }
-                
-                if( !string.IsNullOrEmpty(address.Zip) )
+
+                if (!string.IsNullOrEmpty(address.Zip))
                 {
                     int zipCode = 0;
                     int.TryParse(address.Zip, out zipCode);
