@@ -85,11 +85,11 @@
 			</span>
 
             <div id="showArtworkOptions">
-                <span class="row">
-                <label>@Html.RadioButtonFor(model => model.ArtworkOption, "UPLOAD", new { id = "UPLOAD" }) @Html.Raw(asi.asicentral.Resources.Resource.ArtworkOptionforUPLOAD)</label>
-                <label>@Html.RadioButtonFor(model => model.ArtworkOption, "EMAIL", new { id = "EMAIL" }) @Html.Raw(asi.asicentral.Resources.Resource.ArtworkOptionforEMAIL)</label>
-                </span>
+				<span class="label-row">
+					Customer will EMAIL Camera Ready Artwork to  <a href="mailto:catalogart@asicentral.com">catalogart@asicentral.com</a>
+				</span>
 	        </div>
+			<div>&nbsp;</div>
             if(!string.IsNullOrEmpty(Model.LogoPath))
             {
             <span class="label-row ">@Html.Raw("<strong>Logo Information</strong>")</span>
