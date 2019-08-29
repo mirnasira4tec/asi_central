@@ -49,10 +49,6 @@
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="asi.asicentral.Core, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Core\bin\Release\asi.asicentral.Core.dll</HintPath>
-    </Reference>
     <Reference Include="ASI.Contracts, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ASI.Contracts.1.2.44\lib\ASI.Contracts.dll</HintPath>
     </Reference>
@@ -548,6 +544,10 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{b74b2258-2b47-435c-a0ea-6a0c1ffe18de}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{941aa4de-b070-47c8-ae2e-541a7cfaaee2}</Project>
+      <Name>Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Resources\Resources.csproj">
       <Project>{04d943e2-6c0d-4fd5-b3bc-1860c962c977}</Project>

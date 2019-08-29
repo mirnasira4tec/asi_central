@@ -49,10 +49,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="asi.asicentral.Core, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Core\bin\Debug\asi.asicentral.Core.dll</HintPath>
-    </Reference>
     <Reference Include="ASI.Barista.Plugins, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ASI.Barista.Plugins.3.0.27\lib\net45\ASI.Barista.Plugins.dll</HintPath>
     </Reference>
@@ -577,6 +573,10 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{941aa4de-b070-47c8-ae2e-541a7cfaaee2}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Resources\Resources.csproj">
       <Project>{04d943e2-6c0d-4fd5-b3bc-1860c962c977}</Project>
       <Name>Resources</Name>
