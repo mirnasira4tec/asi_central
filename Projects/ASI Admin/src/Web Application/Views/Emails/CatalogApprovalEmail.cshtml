@@ -1,0 +1,125 @@
+﻿@using asi.asicentral.model.asicentral
+@model List<CatalogContactSaleDetail>
+<!DOCTYPE html>
+<html>
+<head>
+    <style type="text/css">
+        body {
+            font-family: Arial, Helvetica, Tahoma, sans-serif;
+            font-size: 14px;
+            width: 700px;
+            margin: 0 auto;
+            padding: 20px 10px;
+        }
+
+        h2 {
+            font-size: 16px;
+            color: #58585a;
+            margin: 5px 0 0 0;
+        }
+
+        td {
+            vertical-align: top;
+        }
+
+        .red {
+            color: #da1c23;
+        }
+
+        tfoot {
+            margin: 40px 0 40px 0;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr></tr>
+        </thead>
+        <tbody>
+            <tr><td>&nbsp;</td></tr>
+            <tr><td><h4>Hello, </h4></td></tr>
+            <tr><td>&nbsp;</td></tr>
+            <tr><td>Your catalog county reservation has been approved.</td></tr>
+            <tr><td>&nbsp;</td></tr>
+            <tr><td>Please see below a summary of your order. For any questions, contact your catalog rep at (800) 546-1392 or email catalogs@asicentral.com<mailto:catalogs@asicentral.com></td></tr>
+            <tr>
+                <td>
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        var saleInfo = Model[0].CatalogContactSale;
+                        <table width="40%">
+                            <tr>
+                                <td><strong>ASI#: </strong></td>
+                                <td>@saleInfo.ASINumber</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Company name:	</strong></td>
+                                <td>@saleInfo.CompanyName</td>
+                            </tr>
+                            <tr>
+                                <td><strong>First Name:	</strong></td>
+                                <td>@saleInfo.FirstName</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Last Name:	</strong></td>
+                                <td>@saleInfo.LastName</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Email:	</strong></td>
+                                <td>@saleInfo.Email</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Phone:	</strong></td>
+                                <td>@saleInfo.Phone</td>
+                            </tr>
+                        </table>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        <table border="1" id="approveTable">
+                            <thead>
+                                <tr>
+                                    <td><strong>State</strong></td>
+                                    <td><strong>County</strong></td>
+                                    <td><strong>Industry</strong></td>
+                                    <td><strong>Available Businesses</strong></td>
+                                    <td><strong>Approved Businesses</strong></td>
+                                    <td><strong>Requested Date</strong></td>
+                                    <td><strong>Approved Date</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (var i = 0; i < Model.Count(); i++)
+                                {
+                                    <tr>
+                                        <td>@Model[i].CatalogContacts.State</td>
+                                        <td>@Model[i].CatalogContacts.County</td>
+                                        <td>
+                                           @Model[i].CatalogContacts.CatalogContactImport.IndustryName
+                                        </td>
+                                        <td>
+                                            @Model[i].CatalogContacts.RemainingContacts
+                                        </td>
+                                        <td>
+                                            <label>@Model[i].ContactsApproved</label>
+                                        </td>
+                                        <td>@Model[i].CatalogContactSale.UpdateDateUTC.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss")</td>
+                                        <td>@(Model[i].CatalogContactSale.ApprovedDate != null ? Model[i].CatalogContactSale.ApprovedDate.Value.ToLocalTime().ToString("MM/dd/yyyy") : "")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </td>
+            </tr>
+            <tr><td>Thank you for your business.</td></tr>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -251,6 +251,11 @@
     <Compile Include="database\AsicentralContext.cs" />
     <Compile Include="database\ASIEmailBlastContext.cs" />
     <Compile Include="database\ASIInternetContext.cs" />
+    <Compile Include="database\mappings\asicentral\CatalogArtWorksMap.cs" />
+    <Compile Include="database\mappings\asicentral\CatalogContactImportMap.cs" />
+    <Compile Include="database\mappings\asicentral\CatalogContactMap.cs" />
+    <Compile Include="database\mappings\asicentral\CatalogContactSaleDetailMap.cs" />
+    <Compile Include="database\mappings\asicentral\CatalogContactSaleMap.cs" />
     <Compile Include="database\mappings\asicentral\RateSupplierFormDetailMap.cs" />
     <Compile Include="database\mappings\asicentral\RateSupplierFormMap.cs" />
     <Compile Include="database\mappings\asicentral\RateSupplierImportMap.cs" />
@@ -349,6 +354,12 @@
     <Compile Include="database\MemberDemogrContext.cs" />
     <Compile Include="database\Umbraco_ShowContext.cs" />
     <Compile Include="interfaces\IImageConvertService.cs" />
+    <Compile Include="model\asicentral\CatalogArtWorks.cs" />
+    <Compile Include="model\asicentral\CatalogContact.cs" />
+    <Compile Include="model\asicentral\CatalogContactImport.cs" />
+    <Compile Include="model\asicentral\CatalogContactSale.cs" />
+    <Compile Include="model\asicentral\CatalogContactSaleDetail.cs" />
+    <Compile Include="model\asicentral\PagerBase.cs" />
     <Compile Include="model\asicentral\RateSupplierForm.cs" />
     <Compile Include="model\asicentral\RateSupplierFormDetail.cs" />
     <Compile Include="model\asicentral\RateSupplierImport.cs" />

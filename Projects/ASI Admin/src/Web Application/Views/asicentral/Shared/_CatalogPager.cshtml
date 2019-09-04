@@ -1,0 +1,117 @@
+﻿@using asi.asicentral.model.asicentral;
+@model PagerBase
+@{
+    var importId = ViewBag.importId;
+    if(Model.q!=null)
+    {
+        foreach (var param in Model.q)
+        {
+            if (!string.IsNullOrWhiteSpace(param.Value))
+            {
+                ViewData.Add(param.Key, param.Value);
+            }
+        }
+    }
+}
+
+<div class="pager">
+    @{
+        ViewData.Add("Text", "Previous");
+        ViewData.Add("PageIndex", Model.Page - 1);
+        ViewData.Add("Selected", false);
+        ViewData.Add("Inactive", Model.Page == 1);
+
+        Html.RenderPartial("../asicentral/Shared/_CatalogPagerLink", Model, ViewData);
+
+
+        var startPageIndex = Math.Max(1, Model.Page - Model.NumericPageCount / 2);
+        var endPageIndex = Math.Min(Model.PageCount, Model.Page + Model.NumericPageCount / 2);
+
+        if (Model.PageCount > Model.NumericPageCount / 2)
+        {
+            if (startPageIndex > 1)
+            {
+                ViewData["Text"]= "1";
+                ViewData["PageIndex"]=1;
+                ViewData["Selected"]= false;
+                ViewData["Inactive"]= false;
+                Html.RenderPartial("../asicentral/Shared/_CatalogPagerLink", Model, ViewData);
+            }
+            if (startPageIndex > 2)
+            {
+                ViewData["Text"] = "2";
+                ViewData["PageIndex"] = 2;
+                ViewData["Selected"] = false;
+                ViewData["Inactive"] = false;
+
+
+                Html.RenderPartial("../asicentral/Shared/_CatalogPagerLink", Model, ViewData);
+            }
+            if (startPageIndex > 3)
+            {
+                ViewData["Text"] = "...";
+                ViewData["PageIndex"] = 1;
+                ViewData["Selected"] = false;
+                ViewData["Inactive"] = true;
+
+
+                Html.RenderPartial("../asicentral/Shared/_CatalogPagerLink", Model, ViewData);
+            }
+        }
+
+        for (var i = startPageIndex; i <= endPageIndex; i++)
+        {
+            
+
+            ViewData["Text"] = i;
+            ViewData["PageIndex"] = i;
+            ViewData["Selected"] = i == Model.Page;
+            ViewData["Inactive"] = false;
+
+
+            Html.RenderPartial("../asicentral/Shared/_CatalogPagerLink", Model,  ViewData);
+        }
+
+
+        if (Model.PageCount > Model.NumericPageCount / 2)
+        {
+            if (endPageIndex < Model.PageCount - 2)
+            {
+                
+
+                ViewData["Text"] = "...";
+                ViewData["Selected"] = false;
+                ViewData["Inactive"] = true;
+
+                Html.RenderPartial("../asicentral/Shared/_CatalogPagerLink", Model,  ViewData);
+            }
+            if (endPageIndex < Model.PageCount - 1)
+            {
+               
+                ViewData["Text"] = Model.PageCount - 1;
+                ViewData["Selected"] = false;
+                ViewData["Inactive"] = false;
+
+
+                Html.RenderPartial("../asicentral/Shared/_CatalogPagerLink", Model,  ViewData);
+            }
+            if (endPageIndex < Model.PageCount)
+            {
+                ViewData["Text"] = Model.PageCount;
+                ViewData["Selected"] = false;
+                ViewData["Inactive"] = false;
+
+                Html.RenderPartial("../asicentral/Shared/_CatalogPagerLink", Model,  ViewData );
+            }
+        }
+
+
+        ViewData["Text"] = "Next >>";
+        ViewData["PageIndex"] = Model.Page + 1;
+        ViewData["Selected"] = false;
+        ViewData["Inactive"] = Model.Page == Model.PageCount;
+
+        Html.RenderPartial("../asicentral/Shared/_CatalogPagerLink", Model,  ViewData);
+    }
+
+</div>

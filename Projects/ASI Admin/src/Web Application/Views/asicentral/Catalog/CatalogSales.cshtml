@@ -1,0 +1,247 @@
+﻿@using asi.asicentral.model.asicentral;
+@model asi.asicentral.web.Models.asicentral.CatalogContactsSalesModel
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var pendingApprovals = Request.QueryString["pendingApprovals"];
+    var isPendingApproval = pendingApprovals != null ? pendingApprovals == "true" ? true : false : false;
+    var allPendingSales = false;
+    var pendingSales = true;
+    var allSales = true;
+    if (isPendingApproval)
+    {
+        ViewBag.Title = "Pending Approvals";
+        allSales = false;
+    }
+    else if (Model.ImportId == 0)
+    {
+        ViewBag.Title = "All Catalog Contacts Sales";
+        allPendingSales = true;
+        pendingSales = false;
+    }
+    else
+    {
+        ViewBag.Title = "Reserved Catalog Contacts";
+    }
+}
+<div>&nbsp;</div>
+<div>
+    <a href="/Catalog/" class="modal-link btn" data-toggle="modal" style="margin-bottom:5px">
+        Home
+    </a>
+</div>
+@if (Model.ImportId != 0)
+{
+    var state = Request.QueryString["state"] != null ? Request.QueryString["state"] : string.Empty;
+    var county = Request.QueryString["county"] != null ? Request.QueryString["county"] : string.Empty;
+    <div>&nbsp;</div>
+    <table>
+        <tr>
+            <th class="pull-left">State: </th>
+            <td>@state</td>
+        </tr>
+        <tr>
+            <th class="pull-left">County: </th>
+            <td>@county</td>
+        </tr>
+    </table>
+}
+
+@if (Model != null && Model.Sales != null && Model.Sales.Count > 0)
+{
+    <form>
+        <div class="clearfix"></div>
+        <div>
+        </div>
+        <div>&nbsp;</div>
+        <div class="tabbable tabs-below small">
+            <div class="tab-content" id="formtab-content">
+                <div class="well clearfix">
+                    @using (Html.BeginForm("CatalogSales", "Catalog", FormMethod.Get, new { @class = "form-inline clearfix" }))
+                    {
+                        <table width="100%" style="margin:15px">
+                            <tr>
+                                <td>
+                                    <label>Industry</label>
+                                    @if (Model.ImportId == 0)
+                                    {
+                                        @Html.DropDownList("industry", Model.Industries, new { style = "width:85%;" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBox("industry", Model.Industries, new { style = "width:85%;", @readonly = "readonly" })
+                                    }
+                                </td>
+                                <td>
+                                    <label>ASI #</label>
+                                    @Html.TextBox("asiNo", "", new { style = "width:85%;" })
+                                    @Html.Hidden("importId", Model.ImportId)
+                                    @Html.Hidden("pendingApprovals", Model.q["pendingApprovals"])
+                                </td>
+                                <td>
+                                    <label for="asiNumber">Company Name</label>
+                                    @Html.TextBox("reservedBy", "", new { style = "width:85%;" })
+                                </td>
+                                <td>
+                                    <label for="asiNumber">Contact Email</label>
+                                    @Html.TextBox("email", "", new { style = "width:85%;" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>Sales Rep</label>
+                                    @Html.TextBox("salesRep", "", new { style = "width:85%;" })
+                                </td>
+                                <td>
+                                    <label>From Date</label>
+                                    @Html.TextBox("fromDate", "", new { style = "width:85%;" })
+                                </td>
+                                <td>
+                                    <label>To Date</label>
+                                    @Html.TextBox("toDate", "", new { style = "width:85%;" })
+                                </td>
+                                <td>
+                                    <label for="companyName">&nbsp;</label>
+                                    <input type="submit" value="Search" class="btn " />
+                                </td>
+                            </tr>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+        <table class="table table-bordered table-condensed table-striped">
+            <thead>
+                <tr>
+                    @if (allSales)
+                    {
+                        <th>All Sales</th>
+                    }
+                    @if (allPendingSales)
+                    {
+                        <th>All Pending Sales</th>
+                    }
+
+                    <th>Company Name</th>
+                    <th>ASI Number</th>
+                    @if (Model.ImportId == 0)
+                    {
+                        <th>Industry</th>
+                    }
+                    <th>Sales Rep</th>
+
+                    @if (pendingSales)
+                    {
+                        <th>Pending Sales</th>
+                    }
+
+                    <th>Request Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Sales != null && Model.Sales.Count > 0)
+                {
+                    foreach (var sale in Model.Sales)
+                    {
+                        <tr>
+                            @if (allSales)
+                            {
+                                <td>@sale.PendingContact</td>
+                            }
+                            @if (allPendingSales)
+                            {
+
+                                <td>@(sale.PendingContact - sale.ApprovedContact)</td>
+                            }
+                            <td>
+                                <a rel="tooltip" data-placement="right"
+                                   href="/Catalog/ApproveContact?asiNumber=@sale.ASINumber">
+                                    @sale.CompanyName
+                                </a>
+                            </td>
+                            <td>@sale.ASINumber</td>
+                            @if (Model.ImportId == 0)
+                            {
+                                <td>@Html.Raw(@sale.Industry)</td>
+                            }
+                            <td>@Html.Raw(sale.ASIRep.Replace(";", "<br/>"))</td>
+
+
+                            @if (pendingSales)
+                            {
+                                <td>
+                                    @if (!string.IsNullOrWhiteSpace(sale.Industry) && sale.salesDetails != null && sale.salesDetails.Count > 0)
+                                    {
+                                        foreach (var sdetails in sale.salesDetails)
+                                        {
+                                            if (sdetails.IsPending)
+                                            {
+                                                <text>@sdetails.State, @Html.Raw(sdetails.County) - @sdetails.PendingSales</text>
+                                                <br />
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <text>@sale.OtherOption</text>
+                                    }
+                                </td>
+                            }
+                            <td>@sale.UpdateDateUTC.ToString("MM/dd/yyyy")</td>
+                        </tr>
+                    }
+                    if (Model.ResultsTotal > Model.ResultsPerPage)
+                    {
+                        <tr>
+                            <td class="pager" colspan="9">
+                                @Html.Partial("../asicentral/Shared/_CatalogPager", Model)
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </form>
+}
+else
+{
+    <hr />
+    <ul>
+        <li> No data available!</li>
+    </ul>
+}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+@section scripts{
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            var dateFormat = "mm/dd/yy",
+                from = $("#fromDate")
+                    .datepicker({
+                        changeMonth: true,
+                        numberOfMonths: 3
+                    })
+                    .on("change", function () {
+                        to.datepicker("option", "minDate", getDate(this));
+                    }),
+                to = $("#toDate").datepicker({
+                    changeMonth: true,
+                    numberOfMonths: 3
+                })
+                    .on("change", function () {
+                        from.datepicker("option", "maxDate", getDate(this));
+                    });
+
+            function getDate(element) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate(dateFormat, element.value);
+                } catch (error) {
+                    date = null;
+                }
+
+                return date;
+            }
+        });
+    </script>
+}

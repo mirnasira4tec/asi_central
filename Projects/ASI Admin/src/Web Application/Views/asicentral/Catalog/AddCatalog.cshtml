@@ -1,0 +1,35 @@
+﻿@model asi.asicentral.web.Models.asicentral.CatalogContactsSalesModel
+<table class="table table-bordered table-condensed table-striped" id="catalogRows">
+    <thead>
+        <tr>
+            <th>Industry</th>
+            <td>
+                @Html.DropDownListFor(m => m.IndustryName, new SelectList(Model.Industries, "Value", "Text"), new { style = "width:150px", onchange = "GetStateByIndustryName(this)" })
+            </td>
+        </tr>
+        <tr>
+            <th>State</th>
+            <td>
+                @Html.DropDownListFor(m => m.States, new SelectList(Model.States, "Value", "Text"), new { style = "width:150px", onchange = "GetCountyByState(this)" })
+            </td>
+            </tr>
+        <tr>
+            <th>County</th>
+            <td>
+                @Html.DropDownListFor(m => m.Counties, new SelectList(Model.Counties, "Value", "Text"), new { style = "width:150px", onchange = "GetRemContactByIndustryStateCounty(this)" })
+            </td>
+            </tr>
+        <tr>
+            <th>Available Businesses</th>
+            <td>
+                @Html.TextBox("availableContancts", "", new { @readonly = "readonly" })
+            </td>
+            </tr>
+        <tr>
+            <th>Reserved Businesses</th>
+            <td>
+                @Html.TextBox("approveContacts", "")
+            </td>
+        </tr>
+    </thead>
+</table>

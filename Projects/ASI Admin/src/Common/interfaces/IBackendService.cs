@@ -4,6 +4,7 @@ using asi.asicentral.model.store;
 using asi.asicentral.PersonifyDataASI;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using asi.asicentral.services.PersonifyProxy;
 
 namespace asi.asicentral.interfaces
 {
@@ -68,5 +69,6 @@ namespace asi.asicentral.interfaces
         void UpdateASICompData(List<string> parameters);
 
         bool UpdateEMSSSO(string masterId, int subCustomerId, string ssoId);
+        List<CompanyInformation> GetASIRep(string asiNumber, string relationshipCode);
     }
 }

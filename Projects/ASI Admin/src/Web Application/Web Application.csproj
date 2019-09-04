@@ -257,6 +257,7 @@
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\asicentralApi\AsiCentralApiController.cs" />
+    <Compile Include="Controllers\asicentral\CatalogController.cs" />
     <Compile Include="Controllers\asicentral\RateSupplierController.cs" />
     <Compile Include="Controllers\velocity\VelocityController.cs" />
     <Compile Include="Database\VelocityContext.cs" />
@@ -289,6 +290,10 @@
     <Compile Include="Helpers\UploadHelper.cs" />
     <Compile Include="Interface\IVelocityContext.cs" />
     <Compile Include="Interface\IVelocityService.cs" />
+    <Compile Include="Models\asicentral\CatalogContactImportModel.cs" />
+    <Compile Include="Models\asicentral\CatalogContactModel.cs" />
+    <Compile Include="Models\asicentral\CatalogContactSalesDetailsModel.cs" />
+    <Compile Include="Models\asicentral\CatalogContactsSalesModel.cs" />
     <Compile Include="Models\asicentral\RateSupplierImportModel.cs" />
     <Compile Include="Models\asicentral\RateSupplierSummaryModel.cs" />
     <Compile Include="Models\CompanyInfoModel.cs" />
@@ -339,6 +344,7 @@
     <Compile Include="Models\TermsConditions\TermsConditionsTypeVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\VelocityService.cs" />
+    <Compile Include="Utility\Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\asi-store.css" />
@@ -517,6 +523,18 @@
     <Content Include="Views\asicentral\Shared\_Pager.cshtml" />
     <Content Include="Views\asicentral\Shared\_PagerLink.cshtml" />
     <Content Include="Views\asicentral\RateSupplier\RatingSummary.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\asicentral\Catalog\CatalogContactImport.cshtml" />
+    <Content Include="Views\asicentral\Catalog\CatalogContacts.cshtml" />
+    <Content Include="Views\asicentral\Catalog\CatalogSales.cshtml" />
+    <Content Include="Views\asicentral\Catalog\PendingApprovalList.cshtml" />
+    <Content Include="Views\asicentral\Catalog\ApproveContact.cshtml" />
+    <Content Include="Views\asicentral\Shared\_CatalogPager.cshtml" />
+    <Content Include="Views\asicentral\Shared\_CatalogPagerLink.cshtml" />
+    <Content Include="Views\asicentral\Catalog\Index.cshtml" />
+    <Content Include="Views\asicentral\Catalog\EditContactForm.cshtml" />
+    <Content Include="Views\asicentral\Catalog\AddCatalog.cshtml" />
+    <EmbeddedResource Include="Views\Emails\CatalogApprovalEmail.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

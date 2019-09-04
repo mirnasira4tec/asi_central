@@ -1,0 +1,13 @@
+﻿@{ 
+    var contactId = (int)ViewData["contactId"];
+    var contacts = (int)ViewData["contacts"];
+}
+<form action="/Catalog/SaveEditContact" method="post">
+    <input type="hidden" value="@contactId" name="contactId"/>
+    <span>
+        <input type="text" value="@contacts" name="contacts" style="width:auto"/>
+        <button type="submit" class="btn pull-right">Save</button>
+        <a href="#" onclick="closeContactForm(@contacts,'@contactId')">Close</a>
+    </span>
+</form>
+ 

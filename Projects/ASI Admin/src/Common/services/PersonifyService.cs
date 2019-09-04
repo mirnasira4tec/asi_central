@@ -6,6 +6,7 @@ using asi.asicentral.oauth;
 using asi.asicentral.PersonifyDataASI;
 using asi.asicentral.services.PersonifyProxy;
 using asi.asicentral.util.store;
+using PersonifySvcClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -992,6 +993,29 @@ namespace asi.asicentral.services
         public List<XElement> GetAsiCompData(string masterCustomerId)
         {
             return PersonifyClient.GetASICOMPData(masterCustomerId);
+        }
+
+        public List<CompanyInformation> GetASIRep(string asiNumber, string relationshipCode)
+        {
+            var asiReps = new List<CompanyInformation>();
+            //var asiReps = new List<PersonifyCustomerInfo>();
+            var compInfos = PersonifyClient.GetCompanyInfoByASINumber(asiNumber);
+            var companyMasterId = compInfos.MasterCustomerId;
+            List<CusRelationship> oCusRltnshps = SvcClient.Ctxt.CusRelationships
+                .Where(a => a.RelationshipCode == relationshipCode && a.MasterCustomerId == compInfos.MasterCustomerId).ToList();
+            oCusRltnshps = oCusRltnshps.Where(a => a.ActiveFlag.HasValue && a.ActiveFlag.Value).ToList();
+            // get list of rep
+            foreach (var cus in oCusRltnshps)
+            {
+                var customerInfo = PersonifyClient.GetIndividualInfo(cus.RelatedMasterCustomerId);
+                if (customerInfo != null)
+                {
+                    var companyInfo = PersonifyClient.GetCompanyInfo(customerInfo);
+                    UpdateMemberType(companyInfo);
+                    asiReps.Add(companyInfo);
+                }
+            }
+            return asiReps;
         }
 
         public void Dispose()

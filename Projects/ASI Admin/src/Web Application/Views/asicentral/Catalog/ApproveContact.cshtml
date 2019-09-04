@@ -1,0 +1,522 @@
+﻿@model asi.asicentral.web.Models.asicentral.CatalogContactSalesDetailsModel
+@using asi.asicentral.web.Utility
+@using asi.asicentral.model.asicentral;
+@{
+    ViewBag.Title = "";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (TempData["States"] == null)
+    {
+        TempData["States"] = asi.asicentral.util.HtmlHelper.GetStates();
+    }
+    var apiStates = (IList<SelectListItem>)TempData.Peek("States");
+    CatalogContactSale saleInfo = Model.CatalogRequested;
+    var message = "Catalog Businesses Requested";
+    message = Model.CatalogRequested == null ? "Latest " + message : "" + message;
+}
+@helper ShowArtWrok(CatalogContactSale saleInfo)
+{if (saleInfo != null)
+    {
+        <form>
+            @if (saleInfo.ArtworkInFile)
+            {
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="pull-left">Uploaded Artworks : </th>
+                            <td>Use artworks in file.</td>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            }
+            else
+            {
+                if (saleInfo.CatalogArtWorks != null && saleInfo.CatalogArtWorks.Count > 0)
+                {
+                    <table width="100%">
+                        <thead>
+                            <tr>
+                                <th class="pull-left">Uploaded Artworks</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table class="table table-bordered table-condensed table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>FileName</th>
+                                                <th>Created Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var artWork in saleInfo.CatalogArtWorks)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <a href="@("https:"+artWork.MediaLink)" target="_blank">@Utility.GetArtWorkFileName(artWork.MediaLink)</a>
+                                                    </td>
+                                                    <td>
+                                                        @artWork.CreateDateUTC.ToLocalTime()
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                }
+                else
+                {
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="pull-left">Uploaded Artworks: </th>
+                                <td> No data available!</td>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                }
+            }
+        </form>
+    }
+}
+
+@if (Model != null)
+{
+    if (saleInfo == null)
+    {
+        saleInfo = Model.CatalogContactSale.OrderByDescending(q => q.CatalogContactSaleId).FirstOrDefault();
+    }
+
+    if (TempData["SuccessMessage"] != null)
+    {
+        <div id="dvSuccess" class="alert alert-block alert-success" style="padding-top:12px;margin-top:15px;">@Html.Raw(TempData["SuccessMessage"])</div>
+    }
+    if (TempData["ErrorMessage"] != null)
+    {
+        <div id="dvErr" class="alert alert-danger" style="padding-top:12px;margin-top:15px;">@Html.Raw(TempData["ErrorMessage"])</div>
+    }
+    <div>&nbsp;</div>
+    <a href="/Catalog/CatalogSales?pendingApprovals=true" class="btn" style="margin-bottom:5px">
+        Pending Approvals
+    </a>
+    <a href="/Catalog/Index" class="modal-link btn" data-toggle="modal" style="margin-bottom:5px">
+        Home
+    </a>
+
+    <div>&nbsp;</div>
+    if (saleInfo != null)
+    {
+        <table>
+            <tr>
+                <th class="pull-left">ASI#: </th>
+
+                <td>@saleInfo.ASINumber</td>
+            </tr>
+            <tr>
+                <th class="pull-left">Company name: </th>
+                <td>@saleInfo.CompanyName</td>
+            </tr>
+            <tr>
+                <th class="pull-left">First Name: </th>
+                <td>@saleInfo.FirstName</td>
+            </tr>
+            <tr>
+                <th class="pull-left">Last Name: </th>
+                <td>@saleInfo.LastName</td>
+            </tr>
+            <tr>
+                <th class="pull-left">Email: </th>
+                <td>@saleInfo.Email</td>
+            </tr>
+            <tr>
+                <th class="pull-left">Phone: </th>
+                <td>@saleInfo.Phone</td>
+            </tr>
+            <tr>
+                <th class="pull-left">Sales Rep: </th>
+                <td>@Html.Raw(saleInfo.ASIRep.Replace(";", "<br/>"))</td>
+            </tr>
+        </table>
+        if (!saleInfo.IsApproved)
+        {
+            var unApprovedContact = saleInfo.CatalogContactSaleDetails.ToList();
+            <h2 class="pull-left">
+                @message
+            </h2>
+            <div class="pull-right">
+                <button type="button" onclick="AddMoreCatalog()" class="btn">
+                    Add New
+                </button>
+            </div>
+            <br />
+            using (Html.BeginForm("ApproveContact", "Catalog", FormMethod.Post, new { id = "ApproveContact" }))
+            {
+                <table class="table table-bordered table-condensed table-striped" id="unapproveTable">
+                    <thead>
+                        <tr>
+                            <th>State</th>
+                            <th>County</th>
+                            <th>Industry</th>
+                            <th>Available Businesses</th>
+                            <th>Requested Date</th>
+                            <th>Reserved Businesses</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < unApprovedContact.Count(); i++)
+                        {
+                            var stateFullName = asi.asicentral.web.Utility.Utility.GetSateFullNameBySortName(unApprovedContact[i].CatalogContacts.State, apiStates);
+                            <tr>
+                                <td>@stateFullName</td>
+                                <td>@unApprovedContact[i].CatalogContacts.County</td>
+                                <td>
+                                    @Html.Raw(unApprovedContact[i].CatalogContacts.CatalogContactImport.IndustryName)
+                                </td>
+                                <td>
+                                    @unApprovedContact[i].CatalogContacts.RemainingContacts
+                                    @Html.HiddenFor(m => unApprovedContact[i].CatalogContacts.RemainingContacts)
+                                </td>
+                                <td>@unApprovedContact[i].UpdateDateUTC.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss")</td>
+                                <td>
+                                    @Html.TextBoxFor(m => unApprovedContact[i].ContactsRequested)
+                                    @Html.HiddenFor(m => unApprovedContact[i].CatalogContactSaleDetailId)
+                                    @if (!string.IsNullOrWhiteSpace(Request.QueryString["asiNumber"]))
+                                    {
+                                        @Html.Hidden("asiNo", saleInfo.ASINumber)
+                                    }
+                                    @if (!string.IsNullOrWhiteSpace(Request.QueryString["saleId"]))
+                                    {
+                                        @Html.Hidden("saleId", saleInfo.CatalogContactSaleId)
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div>
+                    <button type="button" onclick="validateResContacts()" class="btn pull-right" id="btnApproved" disabled="disabled">
+                        Approve
+                    </button>
+                </div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>
+                                Other Options : @Html.TextArea("OtherOptions", saleInfo.OtherOptions, new { @class = "form-control" })
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+                @ShowArtWrok(saleInfo)
+
+            }
+        }
+        else
+        {
+            var currentSales = saleInfo.CatalogContactSaleDetails.ToList();
+            <h2 class="pull-left">
+                @message
+            </h2>
+            <br />
+            <form style="max-height:500px; overflow-y:scroll">
+                <table class="table table-bordered table-condensed table-striped" id="approveTable">
+                    <thead>
+                        <tr>
+                            <th>State</th>
+                            <th>County</th>
+                            <th>Industry</th>
+                            <th>Available Businesses</th>
+                            <th>Approved Businesses</th>
+                            <th>Requested Date</th>
+                            <th>Approved Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @for (var i = 0; i < currentSales.Count(); i++)
+                        {
+                            var stateFullName = asi.asicentral.web.Utility.Utility.GetSateFullNameBySortName(currentSales[i].CatalogContacts.State, apiStates);
+                            <tr>
+                                <td>@stateFullName </td>
+                                <td>@currentSales[i].CatalogContacts.County   </td>
+                                <td>
+                                    @Html.Raw(currentSales[i].CatalogContacts.CatalogContactImport.IndustryName)
+                                </td>
+                                <td>
+                                    @currentSales[i].CatalogContacts.RemainingContacts
+                                    @Html.HiddenFor(m => currentSales[i].CatalogContacts.RemainingContacts)
+                                </td>
+                                <td>
+                                    <label>@currentSales[i].ContactsApproved</label>
+                                </td>
+                                <td>@currentSales[i].UpdateDateUTC.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss")</td>
+                                <td>@(currentSales[i].CatalogContactSale.ApprovedDate != null ? currentSales[i].CatalogContactSale.ApprovedDate.Value.ToLocalTime().ToString("MM/dd/yyyy") : "")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>
+                                Other Options :
+                            </th>
+                            <td>@saleInfo.OtherOptions</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+            @ShowArtWrok(saleInfo)
+        }
+
+        if (Model.CatalogContactSaleDetails != null && Model.CatalogContactSaleDetails.Count > 0)
+        {
+            var approvedSales = Model.CatalogContactSaleDetails.Where(ap => ap.CatalogContactSale.IsApproved).ToList();
+            if (approvedSales != null && approvedSales.Count > 0 && Model.CatalogRequested != null)
+            {
+                var approveSaleByAsiNo = approvedSales.Where(m => m.CatalogContactSale.ASINumber == saleInfo.ASINumber);
+                approvedSales = approveSaleByAsiNo != null && approveSaleByAsiNo.Count() > 0 ? approveSaleByAsiNo.ToList() : null;
+
+            }
+        <h2 class="pull-left">All Catalog Businesses Approved</h2>
+        <br />
+            if (approvedSales != null && approvedSales.Count > 0)
+            {
+
+            <form style="max-height:500px; overflow-y:scroll; padding:1% ">
+                <table class="table table-bordered table-condensed table-striped" id="approveTable">
+                    <thead>
+                        <tr>
+                            <th>State</th>
+                            <th>County</th>
+                            <th>Industry</th>
+                            <th>Available Businesses</th>
+                            <th>Approved Businesses</th>
+                            <th>Requested Date</th>
+                            <th>Approved Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < approvedSales.Count(); i++)
+                        {
+                            var stateFullName = asi.asicentral.web.Utility.Utility.GetSateFullNameBySortName(approvedSales[i].CatalogContacts.State, apiStates);
+                            <tr>
+                                <td>@stateFullName </td>
+                                <td>@approvedSales[i].CatalogContacts.County   </td>
+                                <td>
+                                    @Html.Raw(approvedSales[i].CatalogContacts.CatalogContactImport.IndustryName)
+                                </td>
+                                <td>
+                                    @approvedSales[i].CatalogContacts.RemainingContacts
+                                    @Html.HiddenFor(m => approvedSales[i].CatalogContacts.RemainingContacts)
+                                </td>
+                                <td>
+                                    <label>@approvedSales[i].ContactsApproved</label>
+                                </td>
+                                <td>@approvedSales[i].CatalogContactSale.UpdateDateUTC.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss")</td>
+                                <td>@(approvedSales[i].CatalogContactSale.ApprovedDate != null ? approvedSales[i].CatalogContactSale.ApprovedDate.Value.ToLocalTime().ToString("MM/dd/yyyy") : "")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </form>
+            }
+            else
+            {
+            <hr />
+            <ul>
+                <li>No data available!</li>
+            </ul>
+            }
+
+        }
+
+        using (Html.BeginForm("AddMoreCatalog", "Catalog", FormMethod.Post, new { id = "frmAddNewCatalog", style = "padding:1%" }))
+        {
+        @Html.Hidden("saleId", saleInfo.CatalogContactSaleId)
+        @Html.Hidden("asiNo", saleInfo.ASINumber)
+        @Html.Hidden("catalogContactId", "")
+        <div id="newCatalog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 id="myModalLabel1">Add New Catalog Businesses</h3>
+            </div>
+            <div class="modal-body" id="catalogRows">
+                <table class="table table-bordered table-condensed table-striped" id="catalogRows">
+                    <thead>
+                        <tr>
+                            <th>Industry</th>
+                            <th>State</th>
+                            <th>County</th>
+                            <th>Available Businesses</th>
+                            <th>Reserved Businesses</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" onclick="AddNewCatalog()">Add</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            </div>
+        </div>
+        }
+
+        if (Model.CatalogRequested == null && Model.CatalogContactSale != null && Model.CatalogContactSale.Count() > 0)
+        {
+        <h2 class="pull-left">Submission History </h2>
+        <br />
+        <form style="max-height:500px; overflow-y:scroll; padding:1% ">
+            <table class="table table-bordered table-condensed table-striped" id="approveTable">
+                <thead>
+                    <tr>
+                        <th>Create Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var sale in Model.CatalogContactSale)
+                    {
+                        <tr>
+                            <td>
+                                <a href="/Catalog/ApproveContact?saleId=@sale.CatalogContactSaleId" class="" style="margin-bottom:5px">
+                                    @sale.CreateDateUTC.ToLocalTime()
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </form>
+        }
+    }
+    else
+    {
+    <hr />
+    <ul>
+        <li>No data available!</li>
+    </ul>
+    }
+}
+<script>
+    function validateResContacts() {
+        var valid = true;
+        $("#approveTable tbody tr").each(function () {
+            var reqTextBox = $(this).find("input[type=text]");
+            var remContact = parseInt($(this).find("input[type=hidden]").val());
+            var reqContact = parseInt(reqTextBox.val());
+            if (reqContact > remContact || reqContact == 0) {
+                reqTextBox.css("border", "1px red solid");
+                valid = false;
+            }
+            else {
+                reqTextBox.css("border", "");
+            }
+        });
+        if (valid) {
+            $("#ApproveContact").submit();
+        }
+    }
+    function AddMoreCatalog() {
+        $.ajax({
+            url: "/Catalog/AddMoreCatalog",
+            cache: false,
+            type: 'GET',
+            success: function (data) {
+                $("#catalogRows").html(data);
+                $("#newCatalog").modal('show');
+            }
+        });
+    }
+
+    function GetCountyByState(obj) {
+        var state = $(obj).val();
+        $.ajax({
+            url: '/Catalog/GetValidCounties',
+            data: { state: state, industry: $("#IndustryName").val() },
+            type: 'GET',
+            success: function (coutyInfo) {
+                if (typeof coutyInfo !== "undefined" && coutyInfo.length > 0) {
+                    var countyDD = ("#Counties");
+                    $(countyDD).html('');
+                    $(countyDD).append($("<option value=''>--Select--</option>"));
+                    for (i = 1; i < coutyInfo.length; i++) {
+                        $(countyDD).append($("<option value='" + coutyInfo[i].County + "' contactId='" + coutyInfo[i].CatalogContactId + "' remContacts='" + coutyInfo[i].RemaingContacts + "'>" + coutyInfo[i].County + "</option>"));
+                    }
+                }
+            }
+        })
+    }
+
+    function GetRemContactByIndustryStateCounty(obj) {
+        var countryinfo = $(obj).find(":selected")
+        $("#availableContancts").val($(countryinfo).attr("remcontacts"));
+        $("#catalogContactId").val($(countryinfo).attr("contactid"));
+    }
+
+    function GetStateByIndustryName(obj) {
+        var industry = $(obj).val();
+        $.ajax({
+            url: '/Catalog/GetStateByIndustryName',
+            data: { industry: industry },
+            type: 'GET',
+            success: function (stateList) {
+                if (typeof stateList !== "undefined" && stateList.length > 0) {
+                    var stateDD = $("#States");
+                    $(stateDD).html('');
+                    $(stateDD).append($("<option value=''>--Select--</option>"));
+                    for (i = 1; i < stateList.length; i++) {
+                        $(stateDD).append($("<option value='" + stateList[i].Value + "'>" + stateList[i].Text + "</option>"));
+                    }
+                }
+            }
+        })
+    }
+
+    function AddNewCatalog() {
+        var availableContacts = parseInt($("#availableContancts").val());
+        var reqContacts = parseInt($("#approveContacts").val());
+        var isValid = true;
+
+        if (isNaN(reqContacts)) {
+            $("#approveContacts").css("border", "1px red solid");
+            isValid = false;
+        }
+        else {
+            $("#approveContacts").css("border", "1px red solid");
+        }
+
+        if (reqContacts > availableContacts || reqContacts === 0) {
+            isValid = false;
+        }
+
+        if (isValid) {
+            $("#frmAddNewCatalog").submit();
+        }
+        else {
+            $("#approveContacts").css("border", "1px red solid");
+            isValid = false;
+        }
+    }
+
+    function EnableApproveButton() {
+        var unApproveTable = $("#unapproveTable");
+        if ($(unApproveTable).length > 0 && ($(unApproveTable).find("tbody tr").length > 0)) {
+            $("#btnApproved").prop("disabled", false);
+        }
+    }
+
+</script>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#newCatalog').on('hidden.bs.modal', function () {
+                $("#catalogRows").html("");
+            })
+            EnableApproveButton();
+        });
+    </script>
+}

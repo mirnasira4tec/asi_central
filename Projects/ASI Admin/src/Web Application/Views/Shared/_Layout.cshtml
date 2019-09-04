@@ -15,29 +15,30 @@
     <![endif]-->
 </head>
 <body class="@(string.IsNullOrEmpty(ViewBag.BodyClass) ? "normal" : ViewBag.BodyClass)">
-<!-- BEGIN bootstrap fluid layout body content container -->
-<div class="container-fluid">
-<!-- BEGIN global site header content -->
-<header id="site-header" class="clearfix">
-	<a href="/"><img class="float-left" src="/images/asi-logo.gif" alt="Logo of ASI The Advertising Specialty Institute"></a>
-	<div id="account-admin">
-		<p>You are logged in as @(((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name).</p>
-        <div class="title">@ViewBag.Title</div>
-	</div>
-</header><!-- END #site-header -->
-@RenderSection("navigation", required: false)
+    <!-- BEGIN bootstrap fluid layout body content container -->
+    <div class="container-fluid">
+        <!-- BEGIN global site header content -->
+        <header id="site-header" class="clearfix">
+            <a href="/"><img class="float-left" src="/images/asi-logo.gif" alt="Logo of ASI The Advertising Specialty Institute"></a>
+            <div id="account-admin">
+                <p>You are logged in as @(((System.Security.Principal.WindowsIdentity)System.Web.HttpContext.Current.User.Identity).Name).</p>
+                <div class="title">@ViewBag.Title</div>
+            </div>
+        </header><!-- END #site-header -->
+        @RenderSection("navigation", required: false)
 
-    @RenderBody()
+        @RenderBody()
 
-</div><!-- END .container-fluid -->
-<!-- BEGIN global site footer -->
-	
+    </div><!-- END .container-fluid -->
+    <!-- BEGIN global site footer -->
+
     <footer id="asi-brand-bar">
-		<p>&copy; 2013 - ASI Central Admin Application - <a href="#">Admin FAQ</a> - <a href="#">Contact ASI Central Administrators</a>
-	</footer>
+        <p>&copy; 2013 - ASI Central Admin Application - <a href="#">Admin FAQ</a> - <a href="#">Contact ASI Central Administrators</a>
+    </footer>
 
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/bootstrap")
-@RenderSection("scripts", required: false)
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/form")
+    @RenderSection("scripts", required: false)
 </body>
 </html>

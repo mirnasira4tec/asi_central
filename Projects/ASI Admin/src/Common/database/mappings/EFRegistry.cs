@@ -403,6 +403,16 @@ namespace asi.asicentral.database.mappings
                     .Ctor<IValidatedContext>().Named("umbracoDbDSN");
             For<IRepository<RateSupplierImport>>().Use<EFRepository<RateSupplierImport>>()
                     .Ctor<IValidatedContext>().Named("umbracoDbDSN");
+            For<IRepository<CatalogContactImport>>().Use<EFRepository<CatalogContactImport>>()
+                   .Ctor<IValidatedContext>().Named("umbracoDbDSN");
+            For<IRepository<CatalogContactSale>>().Use<EFRepository<CatalogContactSale>>()
+                   .Ctor<IValidatedContext>().Named("umbracoDbDSN");
+            For<IRepository<CatalogContact>>().Use<EFRepository<CatalogContact>>()
+                   .Ctor<IValidatedContext>().Named("umbracoDbDSN");
+            For<IRepository<CatalogContactSaleDetail>>().Use<EFRepository<CatalogContactSaleDetail>>()
+                   .Ctor<IValidatedContext>().Named("umbracoDbDSN");
+            For<IRepository<CatalogArtWorks>>().Use<EFRepository<CatalogArtWorks>>()
+                   .Ctor<IValidatedContext>().Named("umbracoDbDSN");
             #endregion
         }
     }

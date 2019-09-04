@@ -95,7 +95,7 @@ namespace asi.asicentral.Tests
                     objectContext.Delete<RateSupplierForm>(form);
                     objectContext.SaveChanges();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Assert.IsInstanceOf<Exception>(ex);
                 }
@@ -140,7 +140,7 @@ namespace asi.asicentral.Tests
                 UpdateSource = "Test Case",
                 SubmitName = "Test",
                 SubmitEmail = "test@test.com",
-                IPAddress="127.0.0.1"
+                IPAddress = "127.0.0.1"
             });
         }
         private RateSupplierFormDetail PopulateRateSupplierFormsDetails()
@@ -162,5 +162,6 @@ namespace asi.asicentral.Tests
                 UpdateSource = "Test Case",
             });
         }
+
     }
 }

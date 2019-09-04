@@ -57,7 +57,6 @@ namespace asi.asicentral.web.Controllers.asicentral
                         IsActive = true,
                         RateSupplierForms = new List<RateSupplierForm>()
                     };
-                    rateSupplierImport.RateSupplierForms = new List<RateSupplierForm>();
                 }
                 else
                 {

@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Catalog Contacts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Welcome to the ASI Catalog Sales Module.</h1>
+<p>Please select a content area to update from the options below.  If you do not see the area you wish to update, please contact <a href="mailto:asicentral-team@asinetwork.local">Content Administration Support.</a></p>
+
+<!-- BEGIN listing of admin areas -->
+<div id="admin-areas" class="clearfix">
+    <section>
+        <h1><a href="/store/Catalog/CatalogContactImport">Catalog List</a></h1>
+        <a href="/store/Catalog/CatalogContactImport"><img src="../images/admin-asicentral.gif" alt="ASI Catalog Contact Inventory"></a>
+        <p>View Catalog Import List</p>
+    </section>
+    <section>
+        <h1><a href="/store/Catalog/CatalogSales">All Sales</a></h1>
+        <a href="/store/Catalog/CatalogSales"><img src="../images/admin-asicentral.gif" alt="Store Catalog All Sales"></a>
+        <p>View All Sales</p>
+    </section>
+    <section>
+        <h1><a href="/store/Catalog/CatalogSales?pendingApprovals=true">Pending Approvals</a></h1>
+        <a href="/store/Catalog/CatalogSales?pendingApprovals=true"><img src="../images/admin-asicentral.gif" alt="Store Catalog Pending Approvals"></a>
+        <p>View Pending Approvals</p>
+    </section>
+</div><!-- END #admin-areas -->

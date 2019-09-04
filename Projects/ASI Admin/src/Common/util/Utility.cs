@@ -1,10 +1,14 @@
-﻿using asi.asicentral.services;
+﻿using asi.asicentral.interfaces;
+using asi.asicentral.services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
@@ -15,6 +19,7 @@ namespace asi.asicentral.util
 {
     public static class Utility
     {
+        private static readonly ILogService Log = LogService.GetLog(MethodBase.GetCurrentMethod().DeclaringType);
         public static bool IsServiceAvailable(string url)
         {
             bool isServiceRunning = false;
@@ -131,5 +136,6 @@ namespace asi.asicentral.util
             }
             return xml;
         }
+
     }
 }

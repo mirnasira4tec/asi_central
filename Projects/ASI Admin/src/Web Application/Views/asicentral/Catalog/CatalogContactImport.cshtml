@@ -1,0 +1,169 @@
+﻿@using asi.asicentral.web.Models.asicentral
+@model CatalogContactImportModel
+@{
+    ViewBag.Title = "List of Imports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div id="dvSuccess" class="alert alert-block alert-success" style="padding-top:12px;margin-top:15px;">@Html.Raw(TempData["SuccessMessage"])</div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div id="dvErr" class="alert alert-danger" style="padding-top:12px;margin-top:15px;">@Html.Raw(TempData["ErrorMessage"])</div>
+    }
+    @using (Html.BeginForm("CatalogContactImport", "Catalog", FormMethod.Post, new { enctype = "multipart/form-data", id = "importCatalog" }))
+    {
+        <input type="hidden" id="importId" name="importId" />
+        <div id="ImportExcel" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 id="myModalLabel1">Import Excel</h3>
+            </div>
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>
+                            Industry
+                            @Html.DropDownList("IndustryDD", new SelectList(Model.Industries, "Value", "Text"), new { onchange = "showIndustryTextBox(this)" })
+                            @Html.ValidationMessageFor(m => m.Industry)
+                        </td>
+                        <td style="vertical-align:baseline; padding-left:5px">
+                            &nbsp;
+                            <input type="file" id="fileImport" name="file" multiple="multiple" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            @Html.TextBox("IndustryText", "", new { palceholder = "Industry Name", style = "display:none" })
+                            @Html.HiddenFor(m => m.Industry)
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" id="btnExcel" value="Import" onclick="SubmitImportForm()">Submit</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            </div>
+        </div>
+    }
+</div>
+
+<a href="#ImportExcel" class="modal-link btn" data-toggle="modal" style="margin-bottom:5px" onclick="openUpdatePopup('','')">
+    Import New
+</a>
+<a href="/Catalog/Index" class="modal-link btn" data-toggle="modal" style="margin-bottom:5px">
+    Home
+</a>
+
+
+@if (Model != null && Model.Imports != null && Model.Imports.Count() > 0)
+{
+    var Imports = Model.Imports;
+    <table class="table table-bordered table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Industry</th>
+                <th>Last Updated by</th>
+                <th>Update Date</th>
+                <th>Create Date</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var import in Imports)
+            {
+                var isInSales = false;
+                int saleApproveStatus = 0; //no sale exists
+                var reservedContact = asi.asicentral.web.Utility.Utility.IsImportContactReserved(import.CatalogContactImportId);
+                if (reservedContact != null && reservedContact.Count>0)
+                {
+                    isInSales = true;
+                    var saleApproved = reservedContact.SelectMany(m=>m.CatalogContacts.CatalogContactSaleDetails.Where(c => !c.CatalogContactSale.IsApproved));
+                    if (saleApproved != null && saleApproved.Count()>0)
+                    {
+                        saleApproveStatus = 2;//sale Unapproved;
+                    }
+                    else
+                    {
+                        saleApproveStatus = 1;// sale Approved
+                    }
+                }
+                <tr>
+                    @if (import.IsActive && !isInSales)
+                    {
+                        <td>
+                            <a rel="tooltip" class="modal-link btn" data-toggle="modal" data-placement="right" href="#ImportExcel" onclick="openUpdatePopup(@import.CatalogContactImportId,'@import.IndustryName')">Update</a>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>&nbsp;</td>
+                    }
+
+                    <td>@import.IndustryName</td>
+                    <td>@import.ImportedBy</td>
+                    <td>@import.UpdateDateUTC.ToString("MM/dd/yyyy")</td>
+                    <td>@import.CreateDateUTC.ToString("MM/dd/yyyy")</td>
+                    <td>
+                        @if (import.CatalogContacts != null && import.CatalogContacts.Count > 0)
+                        {
+                            <a rel="tooltip" data-placement="right" href="/Catalog/CatalogContacts?importId=@import.CatalogContactImportId&industry=@import.IndustryName">Inventory</a>
+                        }
+                    </td>
+                    <td>
+                        @if (isInSales)
+                        {
+                            <a rel="tooltip" data-placement="right" href="/Catalog/CatalogSales?importId=@import.CatalogContactImportId&industry=@import.IndustryName">Sales</a>
+                        }
+                    </td>
+                    <td>
+                        @if (saleApproveStatus == 2)
+                        {
+                            <a rel="tooltip" data-placement="right" href="/Catalog/CatalogSales?importId=@import.CatalogContactImportId&industry=@import.IndustryName&pendingApprovals=true">Pending Approvals</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <hr />
+    <ul>
+        <li>No data available!</li>
+    </ul>
+}
+
+<script>
+    function openUpdatePopup(importId, industry) {
+        $("#importId").val(importId);
+        $("#IndustryDD").val(industry);
+        $("#Industry").val(industry);
+    }
+    function showIndustryTextBox(obj) {
+        var industryVal = $("#IndustryDD").val();
+        if (industryVal === "other") {
+            industryVal = "";
+            $("#IndustryText").show();
+        }
+        else {
+            $("#IndustryText").hide();
+        }
+        $("#Industry").val(industryVal);
+    }
+
+    function SubmitImportForm() {
+        var industry = $("#IndustryText").val();
+        if (industry !== "" && typeof industry !== "undefined") {
+            $("#Industry").val(industry);
+        }
+        $("#importCatalog").submit();
+    }
+</script>

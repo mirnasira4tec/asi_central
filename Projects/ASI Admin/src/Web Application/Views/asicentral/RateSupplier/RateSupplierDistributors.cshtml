@@ -31,9 +31,9 @@
             <div class="well clearfix">
                 @using (Html.BeginForm("RateSupplierDistributors", "RateSupplier", FormMethod.Get, new { @class = "form-inline clearfix" }))
                 {
-                    <div class="formField span1 pull-right">
-                        <input type="submit" value="Search" class="btn " />
-                    </div>
+                    @*<div class="formField span1 pull-right">
+                        <input type="submit" value="Search" class="btn" />
+                    </div>*@
                     <div class="formField span3 pull-right">
                         <label for="companyName">Name</label>
                         @Html.TextBoxFor(model => model.DistCompanyName, new { style = "width:70%;" })
@@ -41,6 +41,10 @@
                     <div class="formField span3 pull-right">
                         <label for="asiNumber">ASI Number</label>
                         @Html.TextBoxFor(model => model.ASINumber, new { style = "width:50%;" })
+                    </div>
+                    <div class="span1 pull-right">
+                        <label for="asiNumber">&nbsp;</label>
+                        <input type="submit" value="Search" class="btn" />
                     </div>
                     @Html.HiddenFor(m => m.ImportId)
                 }

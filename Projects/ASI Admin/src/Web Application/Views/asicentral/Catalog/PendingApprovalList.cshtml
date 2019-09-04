@@ -1,0 +1,117 @@
+﻿@{
+    ViewBag.Title = "List of Imports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <h2 class="pull-left">Pending Approval List</h2><br />
+</div>
+
+
+<form>
+    <div class="clearfix"></div>
+    <div>&nbsp;</div>
+    <div>
+        <table>
+            <tr>
+                <th class="pull-left">Catalog Name: </th>
+                <td>CatalogTest</td>
+            </tr>
+        </table>
+    </div>
+    <div>&nbsp;</div>
+    <div>
+        <a href="#ImportExcel" class="modal-link btn" data-toggle="modal" style="margin-bottom:5px">
+            Catalog Contact List
+        </a>
+        <a href="#ImportExcel" class="modal-link btn" data-toggle="modal" style="margin-bottom:5px">
+           Reserved Contacts
+        </a>
+    </div>
+    <div class="tabbable tabs-below small">
+        <div class="tab-content" id="formtab-content">
+            <div class="well clearfix">
+                @using (Html.BeginForm("RateSupplierDistributors", "RateSupplier", FormMethod.Get, new { @class = "form-inline clearfix" }))
+                {
+                    <div class="formField span2 pull-right">
+                        <label for="companyName">&nbsp;</label>
+                        <input type="submit" value="Search" class="btn " />
+                    </div>
+                    <div class="formField span2 pull-right">
+                        <label for="asiNumber">Sales Rep</label>
+                        @Html.TextBox("salesRep", "", new { style = "width:80%;" })
+                    </div>
+                    <div class="formField span2 pull-right">
+                        <label for="asiNumber">County</label>
+                        @Html.TextBox("county", "", new { style = "width:80%;" })
+                    </div>
+                    <div class="formField span2 pull-right">
+                        <label for="companyName">Sate</label>
+                        @Html.TextBox("state", "", new { style = "width:80%;" })
+                    </div>
+                    <div class="formField span2 pull-right">
+                        <label for="asiNumber">Industry</label>
+                        @Html.TextBox("industry", "", new { style = "width:80%;" })
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+    <table class="table table-bordered table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>Reserved By</th>
+                <th>ASI Number</th>
+                <th>Email</th>
+                <th>State</th>
+                <th>Industry</th>
+                <th>County</th>
+                <th>Sales Rep</th>
+                <th>Contacts Requested</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <a rel="tooltip" data-placement="right" href="#">Company</a>
+
+                </td>
+                <td>123456</td>
+                <td>baker@County.con</td>
+                <td>Florida  </td>
+                <td>Education  </td>
+                <td>Baker County  </td>
+                <td>Jonh</td>
+                <td>20</td>
+            </tr>
+            <tr>
+                <td>
+                    <a rel="tooltip" data-placement="right" href="#">Company</a>
+
+                </td>
+                <td>123456</td>
+                <td>baker@County.con</td>
+                <td>Texas  </td>
+                <td>Education  </td>
+                <td>Angelina County  </td>
+                <td>Jack</td>
+                <td>30</td>
+            </tr>
+            <tr>
+                <td>
+                    <a rel="tooltip" data-placement="right" href="#">Company</a>
+
+                </td>
+                <td>123456</td>
+                <td>baker@County.con</td>
+                <td>Georgia  </td>
+                <td>Education  </td>
+                <td>Atkinson  County  </td>
+                <td>Tom</td>
+                <td>45</td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
