@@ -530,8 +530,8 @@ namespace asi.asicentral.web.Controllers.asicentral
                             }
                         }
                     }
-                    ObjectService.SaveChanges();
-                    SendEmail(saleDetailsList);
+                    ObjectService.SaveChanges();                    
+                    SendEmail(saleDetailsList); 
                     TempData["SuccessMessage"] = "Contact Approved successfully";
                 }
                 catch (Exception ex)
@@ -563,13 +563,21 @@ namespace asi.asicentral.web.Controllers.asicentral
             {
                 string emailBody = TemplateService.Render("asi.asicentral.web.Views.Emails.CatalogApprovalEmail.cshtml", saleDetails);
                 MailMessage mail = new MailMessage();
-                var toMail = saleDetails[0].CatalogContactSale.Email;
-                mail.To.Add(new MailAddress(toMail));
-                mail.Subject = "Catalog county reservation order approved";
-                mail.Body = emailBody;
-                mail.BodyEncoding = Encoding.UTF8;
-                mail.IsBodyHtml = true;
-                EmailService.SendMail(mail);
+                var toMails = saleDetails[0].CatalogContactSale.ASIRep;
+                if (!string.IsNullOrEmpty(toMails))
+                {
+                    var repEmails = toMails.Split(';');
+                    foreach (var email in repEmails)
+                    {
+                        mail.To.Add(new MailAddress(email));
+                    }
+
+                    mail.Subject = "Catalog county reservation order approved";
+                    mail.Body = emailBody;
+                    mail.BodyEncoding = Encoding.UTF8;
+                    mail.IsBodyHtml = true;
+                    EmailService.SendMail(mail);
+                }
             }
         }
 
