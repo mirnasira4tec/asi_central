@@ -189,7 +189,7 @@
                                 <td>@(order.CurrencySymbol)@order.Price</td>
                                 <td>@order.Billing</td>
                                 <td>@order.CreditCard</td>
-                                <td>@order.DateOrderCreated.ToString("MM/dd/yy")</td>
+                                <td>@order.DateOrderCreated.ToLocalTime().ToString("MM/dd/yy HH:mm:ss")</td>
                                 <td>@order.Company</td>
                             </tr>
                         }
