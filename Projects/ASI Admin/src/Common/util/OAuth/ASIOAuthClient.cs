@@ -157,7 +157,7 @@ namespace asi.asicentral.oauth
                 userRequest.TalkAndWait<UserRequest, UserResponse>(userResponse =>
                 {
                     if (userResponse.Users != null && userResponse.Users.Count > 0) user = userResponse.Users.FirstOrDefault();
-                });
+                }, timeout: 5000);
             }
             catch (Exception ex)
             {
@@ -319,7 +319,7 @@ namespace asi.asicentral.oauth
                                 }
                             }
                         }
-                    });
+                    }, timeout: 5000);
                 }
                 catch (Exception ex)
                 {
@@ -368,7 +368,7 @@ namespace asi.asicentral.oauth
                     {
                         ssoId = (responseMessage != null && responseMessage.Users != null && responseMessage.Users.Count > 0 && responseMessage.Users[0] != null && responseMessage.Users[0].Id > 0) ? responseMessage.Users[0].Id.ToString() 
                             : (responseMessage != null && !responseMessage.IsSuccess && responseMessage.Error != null ? responseMessage.Error.ErrorMessage : null);
-                    });
+                    }, timeout: 5000);
                 }
                 catch (Exception ex)
                 {
@@ -427,7 +427,7 @@ namespace asi.asicentral.oauth
                     userRequest.TalkAndWait<UserRequest, UserResponse>(updResponseMessage =>
                     {
                         isUserUpdated = (updResponseMessage != null && updResponseMessage.Users != null && updResponseMessage.Users.Count > 0 && updResponseMessage.Users.FirstOrDefault() != null) ? true : false;
-                    });
+                    }, timeout: 5000);
                 }
                 catch (Exception ex)
                 {
@@ -739,7 +739,7 @@ namespace asi.asicentral.oauth
                                         user.Suffix = contact.Suffix;
                                     }
                                 }
-                            });
+                            }, timeout: 5000);
                         }
                     }
                 }
@@ -771,7 +771,7 @@ namespace asi.asicentral.oauth
                     {
                         ssoId = (responseMessage != null && responseMessage.Users != null && responseMessage.Users.Count > 0 && responseMessage.Users[0] != null && responseMessage.Users[0].Id > 0) ? responseMessage.Users[0].Id.ToString() 
                             : (responseMessage != null && !responseMessage.IsSuccess && responseMessage.Error != null ? responseMessage.Error.ErrorMessage : null);
-                    });
+                    }, timeout: 5000);
                 }
                 catch (Exception ex)
                 {
