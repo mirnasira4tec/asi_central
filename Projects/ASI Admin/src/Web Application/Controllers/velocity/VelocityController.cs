@@ -28,53 +28,58 @@ namespace asi.asicentral.web.Controllers.velocity
         [ValidateAntiForgeryToken]
         public ActionResult Index(ColorMapData MapDetails)
         {
+            List<ColorMapping> colorMappingList = null;
             if (ModelState.IsValid)
             {
+                var resultColors = new ResultantColorMapping();
                 var status = new List<KeyValuePair<string, string>>();
                 try
                 {
-
-                    var colors = GetEnumerator(MapDetails.ColorData)
-                                 .Select(l => l.Split(','))
-                                    .Select(c => new ColorMapping
-                                    {
-                                        SupplierColor = c[0].Trim(),
-                                        ColorGroup = c[1].Trim(),
-                                        CompayId = MapDetails.CompanyId,
-                                    }).ToList();
-
+                    var colors = from colorData in GetEnumerator(MapDetails.ColorData)
+                                 let indexValue = colorData.LastIndexOf(',')
+                                 select new ColorMapping
+                                 {
+                                     SupplierColor = colorData.Substring(0, indexValue).Trim(),
+                                     ColorGroup = colorData.Substring(indexValue + 1, (colorData.Length - (indexValue + 1))).Trim(),
+                                     CompayId = MapDetails.CompanyId,
+                                 };
+                    if (colors.Any())
+                    {
+                        colorMappingList = new List<ColorMapping>();
+                    }
+                    
                     foreach (var color in colors)
                     {
                         try
                         {
                             var isColorMapped = _velocityService.MapColor(color);
-                            status.Add(new KeyValuePair<string, string>(string.Format("{0},{1}", color.SupplierColor, color.ColorGroup), isColorMapped ? "success" : "already exists."));
+                            color.Status = isColorMapped ? "success" : "already exists.";
                         }
                         catch (Exception ex)
                         {
-                            status.Add(new KeyValuePair<string, string>(string.Format("{0},{1}", color.SupplierColor, color.ColorGroup), ex.InnerException != null && !string.IsNullOrEmpty(ex.InnerException.Message) ? ex.InnerException.Message : ex.Message));
+                            color.Status = ex.InnerException != null && !string.IsNullOrEmpty(ex.InnerException.Message) ? ex.InnerException.Message : ex.Message;
                         }
+                        colorMappingList.Add(color);
                     }
-
                 }
                 catch (Exception ex)
                 {
-                    status.Add(new KeyValuePair<string, string>("Error occurred during update", ex.InnerException != null && !string.IsNullOrEmpty(ex.InnerException.Message) ? ex.InnerException.Message : ex.Message));
+                    resultColors.Status = ex.InnerException != null && !string.IsNullOrEmpty(ex.InnerException.Message) ? ex.InnerException.Message : ex.Message;
                 }
-                TempData["ColorMapStatus"] = status;
+                resultColors.ColorMappings = colorMappingList;
+                TempData["ColorMapStatus"] = resultColors;
                 return RedirectToAction("Result");
             }
             else { return View(MapDetails); }
         }
         public ActionResult Result()
         {
-            List<KeyValuePair<string, string>> colorMapStatus = null;
+            ResultantColorMapping resultColors = null;
             if (TempData["ColorMapStatus"] != null)
             {
-                colorMapStatus = (List<KeyValuePair<string, string>>)TempData.Peek("ColorMapStatus");
+                resultColors = (ResultantColorMapping)TempData.Peek("ColorMapStatus");
             }
-
-            return View(colorMapStatus);
+             return View(resultColors);
         }
 
         private static IEnumerable<string> GetEnumerator(string data)

@@ -13,4 +13,9 @@ namespace asi.asicentral.web.Models.velocity
         public string ColorGroup { get; set; }
         public string Status { get; set; }
     }
+    public class ResultantColorMapping
+    {
+        public string Status { get; set; }
+        public List<ColorMapping> ColorMappings { get; set; }
+    }
 }
