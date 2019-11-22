@@ -39,38 +39,38 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ASI.Contracts, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Contracts.1.2.44\lib\ASI.Contracts.dll</HintPath>
+      <HintPath>..\..\..\..\packages\ASI.Contracts.1.2.44\lib\ASI.Contracts.dll</HintPath>
     </Reference>
     <Reference Include="ASI.EntityModel, Version=1.2.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.EntityModel.1.2.6\lib\ASI.EntityModel.dll</HintPath>
+      <HintPath>..\..\..\..\packages\ASI.EntityModel.1.2.6\lib\ASI.EntityModel.dll</HintPath>
     </Reference>
     <Reference Include="ASI.Services.Messaging, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Services.Messaging.2.2.0\lib\ASI.Services.Messaging.dll</HintPath>
+      <HintPath>..\..\..\..\packages\ASI.Services.Messaging.2.2.0\lib\ASI.Services.Messaging.dll</HintPath>
     </Reference>
     <Reference Include="ASI.Sugar, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASI.Sugar.2.2.0\lib\ASI.Sugar.dll</HintPath>
+      <HintPath>..\..\..\..\packages\ASI.Sugar.2.2.0\lib\ASI.Sugar.dll</HintPath>
     </Reference>
     <Reference Include="DocumentFormat.OpenXml, Version=2.8.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
-      <HintPath>..\packages\DocumentFormat.OpenXml.2.8.1\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
+      <HintPath>..\..\..\..\packages\DocumentFormat.OpenXml.2.8.1\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
     <Reference Include="EasyNetQ, Version=0.53.6.419, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EasyNetQ.0.53.6.419\lib\net45\EasyNetQ.dll</HintPath>
+      <HintPath>..\..\..\..\packages\EasyNetQ.0.53.6.419\lib\net45\EasyNetQ.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+      <HintPath>..\..\..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MsgPack, Version=0.8.0.0, Culture=neutral, PublicKeyToken=a2625990d5dc0167, processorArchitecture=MSIL">
-      <HintPath>..\packages\MsgPack.Cli.0.8.1\lib\net45\MsgPack.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MsgPack.Cli.0.8.1\lib\net45\MsgPack.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RabbitMQ.Client, Version=3.5.7.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
-      <HintPath>..\packages\RabbitMQ.Client.3.5.7\lib\net40\RabbitMQ.Client.dll</HintPath>
+      <HintPath>..\..\..\..\packages\RabbitMQ.Client.3.5.7\lib\net40\RabbitMQ.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

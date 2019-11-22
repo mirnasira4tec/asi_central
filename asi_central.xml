@@ -1,35 +1,34 @@
 <Project DefaultTargets = "BuildSolution" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
-	<Import Project="$(MSBuildExtensionsPath)\ExtensionPack\MSBuild.ExtensionPack.tasks" Condition="Exists('$(MSBuildExtensionsPath)\ExtensionPack\MSBuild.ExtensionPack.tasks')" />	
-	<Import Project="$(ExtensionTasksPath)MSBuild.ExtensionPack.tasks" Condition="Exists('$(ExtensionTasksPath)MSBuild.ExtensionPack.tasks') And !Exists('$(MSBuildExtensionsPath)\ExtensionPack\MSBuild.ExtensionPack.tasks')" />
+	<Import Project=".build\MSBuild.ExtensionPack.tasks" />
 	<Import Project="C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v15.0\Web\Microsoft.Web.Publishing.targets" Condition="Exists('C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v15.0\Web\Microsoft.Web.Publishing.targets')" />
 	<Import Project="C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\Microsoft\VisualStudio\v15.0\Web\Microsoft.Web.Publishing.targets" Condition="Exists('C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\Microsoft\VisualStudio\v15.0\Web\Microsoft.Web.Publishing.targets')" />
 
 	<PropertyGroup>
-		<ProjectRoot Condition="$(Local) == 'true'">\Projects\asicentral.com\Projects</ProjectRoot>
-		<ProjectRoot Condition="$(Local) == ''">\asi_central2\Projects</ProjectRoot>
+		<ProjectRoot Condition="$(Local) == 'true'">\Projects\asi_central\Projects</ProjectRoot>
+		<ProjectRoot Condition="$(Local) == ''">\asi_central\Projects</ProjectRoot>
 	</PropertyGroup>
 	
 	<Target Name="Compile ASI Admin">
-		<MSBuild Projects=".\Projects\ASI Admin\src\Admin Tool.sln" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU"/>
+		<MSBuild Projects=".\Admin Tool.sln" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU"/>
 	</Target>
 	
 	<Target Name="Config ASI Admin">
 		<ItemGroup>
-			<OriginalWebConfig Include=".\Projects\ASI Admin\src\Web Application\Web.config" />
+			<OriginalWebConfig Include=".\Projects\ASI Admin\src\ASI.Admin\Web.config" />
 			<TempWebConfig Include=".\Projects\ASI Admin\Config\Dev\Web.config" />
 		</ItemGroup>
 		<Copy SourceFiles="@(OriginalWebConfig)" DestinationFiles="@(TempWebConfig)" />
 		<Copy SourceFiles="@(OriginalWebConfig)" DestinationFiles=".\Projects\ASI Admin\Config\Stage\Web.config" />
 		<Copy SourceFiles="@(OriginalWebConfig)" DestinationFiles=".\Projects\ASI Admin\Config\uat\Web.config" />
 		<Copy SourceFiles="@(OriginalWebConfig)" DestinationFiles=".\Projects\ASI Admin\Config\Prod\Web.config" />
-    <TransformXml Source="@(TempWebConfig)" Transform=".\Projects\ASI Admin\src\Web Application\Web.Stage.config" Destination=".\Projects\ASI Admin\Config\Stage\Web.config" StackTrace="true" />
-		<TransformXml Source="@(TempWebConfig)" Transform=".\Projects\ASI Admin\src\Web Application\Web.uat.config" Destination=".\Projects\ASI Admin\Config\uat\Web.config" StackTrace="true" />
-		<TransformXml Source="@(TempWebConfig)" Transform=".\Projects\ASI Admin\src\Web Application\Web.Prod.config" Destination=".\Projects\ASI Admin\Config\Prod\Web.config" StackTrace="true" />
+    <TransformXml Source="@(TempWebConfig)" Transform=".\Projects\ASI Admin\src\ASI.Admin\Web.Stage.config" Destination=".\Projects\ASI Admin\Config\Stage\Web.config" StackTrace="true" />
+		<TransformXml Source="@(TempWebConfig)" Transform=".\Projects\ASI Admin\src\ASI.Admin\Web.uat.config" Destination=".\Projects\ASI Admin\Config\uat\Web.config" StackTrace="true" />
+		<TransformXml Source="@(TempWebConfig)" Transform=".\Projects\ASI Admin\src\ASI.Admin\Web.Prod.config" Destination=".\Projects\ASI Admin\Config\Prod\Web.config" StackTrace="true" />
    </Target>
 	
 	<Target Name="Package ASI Admin" DependsOnTargets="Compile ASI Admin;Config ASI Admin" Condition="'$(CREATEZIP)'=='true'">
-		<CreateItem Include=".\Projects\ASI Admin\src\Web Application\**\*" 
-			Exclude=".\Projects\ASI Admin\src\Web Application\**\*.cs;.\Projects\ASI Admin\src\Web Application\**\*.resx;.\Projects\ASI Admin\src\Web Application\**\thumb.db;.\Projects\ASI Admin\src\Web Application\Properties\**;.\Projects\ASI Admin\src\Web Application\obj\**;.\Projects\ASI Admin\src\Web Application\Web*.config;.\Projects\ASI Admin\src\Web Application\Web Application.csproj;.\Projects\ASI Admin\src\Web Application\Web Application.csproj.user">
+		<CreateItem Include=".\Projects\ASI Admin\src\ASI.Admin\**\*" 
+			Exclude=".\Projects\ASI Admin\src\ASI.Admin\**\*.cs;.\Projects\ASI Admin\src\ASI.Admin\**\*.resx;.\Projects\ASI Admin\src\ASI.Admin\**\thumb.db;.\Projects\ASI Admin\src\ASI.Admin\Properties\**;.\Projects\ASI Admin\src\ASI.Admin\obj\**;.\Projects\ASI Admin\src\ASI.Admin\Web*.config;.\Projects\ASI Admin\src\ASI.Admin\ASI.Admin.csproj;.\Projects\ASI Admin\src\ASI.Admin\ASI.Admin.csproj.user">
 			
 			<Output TaskParameter="Include" ItemName="ASIAdminWebFiles"/>
 		</CreateItem>

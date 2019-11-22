@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web Application", "Web Application\Web Application.csproj", "{F91A81D1-69FF-4C32-8BD7-5E0169A235AF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASI.Admin", "Projects\ASI Admin\src\ASI.Admin\ASI.Admin.csproj", "{F91A81D1-69FF-4C32-8BD7-5E0169A235AF}"
 	ProjectSection(ProjectDependencies) = postProject
 		{04D943E2-6C0D-4FD5-B3BC-1860C962C977} = {04D943E2-6C0D-4FD5-B3BC-1860C962C977}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{B74B2258-2B47-435C-A0EA-6A0C1FFE18DE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Projects\ASI Admin\src\Common\Common.csproj", "{B74B2258-2B47-435C-A0EA-6A0C1FFE18DE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{04D943E2-6C0D-4FD5-B3BC-1860C962C977} = {04D943E2-6C0D-4FD5-B3BC-1860C962C977}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Tests", "Service.Tests\Service.Tests.csproj", "{EE6DF0C2-ACEB-4108-8F43-5D5138C5A3EB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Tests", "Projects\ASI Admin\src\Service.Tests\Service.Tests.csproj", "{EE6DF0C2-ACEB-4108-8F43-5D5138C5A3EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web Application.Tests", "Web Application.Tests\Web Application.Tests.csproj", "{0A5A68FD-710B-436E-AFA4-C8485FA2B34C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASI.Admin.Tests", "Projects\ASI Admin\src\ASI.Admin.Tests\ASI.Admin.Tests.csproj", "{0A5A68FD-710B-436E-AFA4-C8485FA2B34C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B3946CEE-56E0-4469-A61A-C57B8D7CAF3E}"
 	ProjectSection(SolutionItems) = preProject
@@ -26,17 +26,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B3946C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FA7455E9-F2C6-43BF-B39C-EB2EE0ED5421}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{04D943E2-6C0D-4FD5-B3BC-1860C962C977}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Projects\ASI Admin\src\Resources\Resources.csproj", "{04D943E2-6C0D-4FD5-B3BC-1860C962C977}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Tests", "Common.Tests\Common.Tests.csproj", "{466ED1B5-21BB-4398-8F27-535E3502626D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Tests", "Projects\ASI Admin\src\Common.Tests\Common.Tests.csproj", "{466ED1B5-21BB-4398-8F27-535E3502626D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Internal.Tests", "Common.Internal.Tests\Common.Internal.Tests.csproj", "{60ADFD91-4D9C-4157-8BC3-3646E6B48E6E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Internal.Tests", "Projects\ASI Admin\src\Common.Internal.Tests\Common.Internal.Tests.csproj", "{60ADFD91-4D9C-4157-8BC3-3646E6B48E6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.External.Tests", "Common.External.Tests\Common.External.Tests.csproj", "{0F63DF39-D445-405B-A480-37F408FCD695}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.External.Tests", "Projects\ASI Admin\src\Common.External.Tests\Common.External.Tests.csproj", "{0F63DF39-D445-405B-A480-37F408FCD695}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{941AA4DE-B070-47C8-AE2E-541A7CFAAEE2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Projects\ASI Admin\src\Core\Core.csproj", "{941AA4DE-B070-47C8-AE2E-541A7CFAAEE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Tests", "Core.Tests\Core.Tests.csproj", "{F93C7016-6E35-4654-B035-981C3B5D7B82}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Tests", "Projects\ASI Admin\src\Core.Tests\Core.Tests.csproj", "{F93C7016-6E35-4654-B035-981C3B5D7B82}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{5E028298-6CBD-46CB-82CB-A78254F8B603}"
+	ProjectSection(SolutionItems) = preProject
+		asi_central.xml = asi_central.xml
+		.build\Ionic.Zip.DLL = .build\Ionic.Zip.DLL
+		Jenkinsfile = Jenkinsfile
+		.build\MSBuild.ExtensionPack.dll = .build\MSBuild.ExtensionPack.dll
+		.build\MSBuild.ExtensionPack.Loggers.dll = .build\MSBuild.ExtensionPack.Loggers.dll
+		.build\MSBuild.ExtensionPack.tasks = .build\MSBuild.ExtensionPack.tasks
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

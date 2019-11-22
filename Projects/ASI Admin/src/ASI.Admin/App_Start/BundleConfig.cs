@@ -52,6 +52,8 @@ namespace asi.asicentral.web
 
             bundles.Add(new StyleBundle("~/dataTable/css").Include(
                         "~/Content/datatables-bootstrap.css"));
+
+            BundleTable.EnableOptimizations = false;
         }
     }
 }

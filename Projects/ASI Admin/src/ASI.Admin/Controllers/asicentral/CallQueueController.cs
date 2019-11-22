@@ -38,36 +38,44 @@ namespace asi.asicentral.web.Controllers.asicentral
 
         public virtual ActionResult Volume(CallVolume callVolume)
         {
-            if (callVolume == null || callVolume.StartDate == DateTime.MinValue)
+            try
             {
-                DateTime now = DateTime.Now;
-                callVolume = new CallVolume();
-                callVolume.StartDate = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
-                callVolume.EndDate = now;
-            }
-            else
-            {
-                callVolume.StartDate = new DateTime(callVolume.StartDate.Year, callVolume.StartDate.Month, callVolume.StartDate.Day, 0, 0, 0);
-                callVolume.EndDate = new DateTime(callVolume.EndDate.Year, callVolume.EndDate.Month, callVolume.EndDate.Day, 23, 59, 59);
-            }
-            IList<Volume> volumes = ObjectService.GetAll<CallRequest>(true)
-                .Where(req => req.CreateDate >= callVolume.StartDate && req.CreateDate <= callVolume.EndDate)
-                .GroupBy(req => new { req.Req_Queue } )
-                .Select( grouped => new Volume() {
-                    QueueIdentifier = grouped.Key.Req_Queue,
-                    Amount = grouped.Count() })
-                .ToList();
-            if (volumes.Count > 0)
-            {
-                //translate the queue ids
-                IList<CallQueue> queues = ObjectService.GetAll<CallQueue>(true).ToList();
-                foreach (Volume vol in volumes)
+                if (callVolume == null || callVolume.StartDate == DateTime.MinValue)
                 {
-                    CallQueue queue = queues.Where(q => q.Id == vol.QueueIdentifier).FirstOrDefault();
-                    if (queue != null) vol.QueueName = queue.Name;
+                    DateTime now = DateTime.Now;
+                    callVolume = new CallVolume();
+                    callVolume.StartDate = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
+                    callVolume.EndDate = now;
                 }
+                else
+                {
+                    callVolume.StartDate = new DateTime(callVolume.StartDate.Year, callVolume.StartDate.Month, callVolume.StartDate.Day, 0, 0, 0);
+                    callVolume.EndDate = new DateTime(callVolume.EndDate.Year, callVolume.EndDate.Month, callVolume.EndDate.Day, 23, 59, 59);
+                }
+                IList<Volume> volumes = ObjectService.GetAll<CallRequest>(true)
+                    .Where(req => req.CreateDate >= callVolume.StartDate && req.CreateDate <= callVolume.EndDate)
+                    .GroupBy(req => new { req.Req_Queue } )
+                    .Select( grouped => new Volume() {
+                        QueueIdentifier = grouped.Key.Req_Queue,
+                        Amount = grouped.Count() })
+                    .ToList();
+                if (volumes.Count > 0)
+                {
+                    //translate the queue ids
+                    IList<CallQueue> queues = ObjectService.GetAll<CallQueue>(true).ToList();
+                    foreach (Volume vol in volumes)
+                    {
+                        CallQueue queue = queues.Where(q => q.Id == vol.QueueIdentifier).FirstOrDefault();
+                        if (queue != null) vol.QueueName = queue.Name;
+                    }
+                }
+                callVolume.Data = volumes;
             }
-            callVolume.Data = volumes;
+            catch(Exception ex)
+            {
+                services.LogService log = services.LogService.GetLog(this.GetType());
+                log.Error("CallQueue Controller exception message: " + ex.Message);
+            }
             return View("../asicentral/Volume", callVolume);
         }
 

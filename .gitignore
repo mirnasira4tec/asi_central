@@ -12,6 +12,7 @@
 [Rr]elease/
 
 build/
+.vs/
 
 
 [Tt]est[Rr]esult
