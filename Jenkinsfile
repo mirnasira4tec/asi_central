@@ -11,7 +11,7 @@ def packageNames = []
 def octopusServer = 'http://asi-deploy-02/'
 def octopusProject = 'asicentraladmin.asinetwork.local-new'
 def octopusVersion = "1.2.${env.BUILD_NUMBER}"
-def octopusEnvironments = ['STAGE-ASICentral-Family', 'UAT-ASICentral-Family', 'PROD-ASI Central-Family']
+def octopusEnvironments = ['STAGE-ASICentral-Family', 'UAT-ASICentral-Family']
 def defaultDeployTo = ['STAGE-ASICentral-Family']
 def nugetServer = "\\\\asi-nuget-01\\Packages"
 def buildTarget = '\\\\asi-nas-01\\jenkins\\Releases'
@@ -34,9 +34,7 @@ def projectProperties = [
         choice(choices: "Release\nDebug\n", description: 'Solution configuration used for build.', name: 'BUILDCONFIGURATION'),
         string(defaultValue: buildTarget, description: 'The target location for the distribution package', name: 'BUILDTARGETDIR'),
         choice(choices: buildOptionsParameter.join('\n'), description: 'Build/deployment options', name: 'buildOptions'),
-        deployToParameter,
-		choice(choices: "Hotfix\nFull\n", description: 'Choose deployment type', name: 'DeploymentType'),
-		string(defaultValue: "False", description: 'True or False', name: 'tobeRecycled')
+        deployToParameter
     ]),
     [$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', numToKeepStr: '10']]
 ]
@@ -217,7 +215,7 @@ node {
                         withCredentials([string(credentialsId: 'octopus-api-key', variable: 'octoApiKey')]) {
                             bat("octo create-release --server ${octopusServer} --apiKey ${octoApiKey} --project \"${octopusProject}\" --packageversion \"${octopusVersion}\" --version \"${octopusVersion}\" --releasenotesfile \"releaseNotes.md\"")
                             for (int i = 0; i < deploymentTargets.size(); i++) {
-                                bat("octo deploy-release --server ${octopusServer} --apiKey ${octoApiKey} --project \"${octopusProject}\" --releaseNumber \"${octopusVersion}\" --deployto \"${deploymentTargets[i]}\" --variable=\"DeploymentType:${deploymentType}\" --variable=\"tobeRecycled:${tobeRecycled}\"")
+                                bat("octo deploy-release --server ${octopusServer} --apiKey ${octoApiKey} --project \"${octopusProject}\" --releaseNumber \"${octopusVersion}\" --deployto \"${deploymentTargets[i]}\"")
                             }
                         }
                     }
