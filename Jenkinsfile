@@ -9,7 +9,7 @@ def adminSolutionName = 'Admin Tool.sln'
 def packageNames = []
 
 def octopusServer = 'http://asi-deploy-02/'
-def octopusProject = 'asicentraladmin.asinetwork.local-new'
+def octopusProject = 'asicentraladmin.asinetwork.local'
 def octopusVersion = "1.2.${env.BUILD_NUMBER}"
 def octopusEnvironments = ['STAGE-ASICentral-Family', 'UAT-ASICentral-Family']
 def defaultDeployTo = ['STAGE-ASICentral-Family']
