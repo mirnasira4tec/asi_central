@@ -66,39 +66,41 @@
         <img src="/images/upload.png" title="Excel Import" /></a>
     <table class="table table-bordered table-condensed table-striped">
         <thead>
-            <tr>
-                <th>&nbsp;</th>
-                <th>&nbsp;</th>
-                <th>Name</th>
-                <th>Id</th>
-                <th>Type</th>
-                <th>Details</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-            </tr>
+			<tr>
+				<th>&nbsp;</th>
+				<th>&nbsp;</th>
+				<th>&nbsp;</th>
+				<th>Name</th>
+				<th>Id</th>
+				<th>Type</th>
+				<th>Details</th>
+				<th>Start Date</th>
+				<th>End Date</th>
+			</tr>
         </thead>
         <tbody>
             @foreach (var show in Model.Show)
             {  <tr>
-                <td><a class="delete" id="@show.Id" href="/Show/Delete?id=@show.Id"><i class="icon-trash"></i></a></td>
-                <td><a rel="tooltip" data-placement="right" class="icon-pencil" href="@Url.Action("Edit", "Show", new { Id = @show.Id })"></a>
-                </td>
-                <td><a class="red" href="/ShowCompany/GetAttendeeCompany?showId=@show.Id">@show.Name</a></td>
-                <td>@show.Id</td>
-                <td>
-                    @show.ShowType.Type
-                </td>
-                @{ var noOfAttendees = 0;
-                   foreach (var showAttendee in show.Attendees)
-                   {
-                       noOfAttendees += showAttendee.EmployeeAttendees.Count();
-                   }
-                }
-                <td>No of Companies: @show.Attendees.Count() No of Attendee:@noOfAttendees
-                </td>
-                <td>@show.StartDate.ToString("dd-MMM-yyyy")</td>
-                <td>@show.EndDate.ToString("dd-MMM-yyyy")</td>
-            </tr>
+	<td><a class="delete" id="@show.Id" href="/Show/Delete?id=@show.Id"><i class="icon-trash"></i></a></td>
+	<td><a rel="tooltip" data-placement="right" class="icon-pencil" href="@Url.Action("Edit", "Show", new { Id = @show.Id })"></a></td>
+	<td><a rel="tooltip" data-placement="right" class="icon-user" href="/Store/Show/ValidateAttendeeEmails/@show.Id"></a></td>
+	<td><a class="red" href="/ShowCompany/GetAttendeeCompany?showId=@show.Id">@show.Name</a></td>
+	<td>@show.Id</td>
+	<td>
+		@show.ShowType.Type
+	</td>
+	@{ var noOfAttendees = 0;
+		foreach (var showAttendee in show.Attendees)
+		{
+			noOfAttendees += showAttendee.EmployeeAttendees.Count();
+		}
+	}
+	<td>
+		No of Companies: @show.Attendees.Count() No of Attendee:@noOfAttendees
+	</td>
+	<td>@show.StartDate.ToString("dd-MMM-yyyy")</td>
+	<td>@show.EndDate.ToString("dd-MMM-yyyy")</td>
+</tr>
             }
              @if (Model.TotalRecordCount > Model.PageSize)
          {

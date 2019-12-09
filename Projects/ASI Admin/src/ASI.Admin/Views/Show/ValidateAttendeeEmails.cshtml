@@ -1,0 +1,48 @@
+﻿@using asi.asicentral.model.show
+@model List<Tuple<ShowEmployeeAttendee, string>>
+@{
+	Layout = "~/Views/Show/Shared/_Layout.cshtml";
+}
+<h1>Attendee Email Validation Results</h1>
+
+@if (Model != null && Model.Count > 0)
+{
+	<div>
+		@{
+			var show = Model.FirstOrDefault().Item1.Attendee.Show;
+			if (show != null)
+			{
+				<h2 class="pull-left">@show.Name (@show.StartDate.ToString("MMM") @show.StartDate.Day.ToString() - @show.EndDate.ToString("MMM") @show.EndDate.Day.ToString()) </h2>
+			}
+		}
+	</div>
+	<br />
+	<br />
+	<table class="table table-bordered table-condensed table-striped" id="tblShowCompanyList">
+		<thead>
+			<tr>
+				<th>ASI#</th>
+				<th>Company Name</th>
+				<th>Member Type</th>
+				<th>Email</th>
+				<th>Error Message</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var validationInfo in Model)
+			{
+				<tr>
+					<td>@validationInfo.Item1.Attendee.Company.ASINumber</td>
+					<td>@validationInfo.Item1.Attendee.Company.Name</td>
+					<td>@validationInfo.Item1.Attendee.Company.MemberType</td>
+					<td>@validationInfo.Item1.Employee.Email</td>
+					<td nowrap>@Html.Raw(validationInfo.Item2)</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+else
+{
+	<div>No Invalid Email Found.</div>
+}

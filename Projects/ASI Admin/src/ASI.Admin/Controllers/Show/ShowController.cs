@@ -1,10 +1,12 @@
 ﻿using asi.asicentral.interfaces;
 using asi.asicentral.model.show;
+using asi.asicentral.oauth;
 using asi.asicentral.util.show;
 using asi.asicentral.web.models.show;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -222,6 +224,51 @@ namespace asi.asicentral.web.Controllers.Show
         {
             IList<ShowEmployeeAttendee> attendees = ObjectService.GetAll<ShowEmployeeAttendee>(true).ToList();
             return View("../Show/Attendees", attendees);
+        }
+
+        [HttpGet]
+        public ActionResult ValidateAttendeeEmails(int id)
+        {
+            var validationDetails = new List<Tuple<ShowEmployeeAttendee, string>>();
+            var empAttendees = ObjectService.GetAll<ShowEmployeeAttendee>("Employee").Where(empAttendee => empAttendee.Attendee.ShowId == id).OrderBy(empAttendee => empAttendee.Attendee.Company.Name).ToList();
+            if (empAttendees != null && empAttendees.Count > 0)
+            {                
+                var employees = new List<ShowEmployee>();
+                var errorMessage = string.Empty;
+
+                //Parallel.ForEach(empAttendees, empAttendee =>
+                foreach (var empAttendee in empAttendees)
+                {
+                    var inValidEmails = new List<string>();
+                    var email = empAttendee.Employee.Email;
+                    var user = ASIOAuthClient.GetUserByEmail(email);
+                    if (user == null)
+                    {
+                        errorMessage = "Invalid Email";
+                    }
+                    else
+                    {
+                        if ((string.Compare(user.StatusCode, "DELISTED") == 0))
+                        {
+                            if (!string.IsNullOrWhiteSpace(errorMessage))
+                                errorMessage += "<br/>";
+                            errorMessage = "Invalid Company Status - <b>DELISTED</b>";
+                        }
+                        if ((string.Compare(user.StatusCode, "TERMINATED") == 0))
+                        {
+                            if (!string.IsNullOrWhiteSpace(errorMessage))
+                                errorMessage += "<br/>";
+                            errorMessage = "Invalid Company Status - <b>TERMINATED</b>";
+                        }
+                    }
+                    if (!string.IsNullOrWhiteSpace(errorMessage))
+                    {
+                        validationDetails.Add(new Tuple<ShowEmployeeAttendee, string>(empAttendee, errorMessage));
+                    }
+                }
+               //});
+            }
+            return View("../Show/ValidateAttendeeEmails", validationDetails);
         }
     }
 }
