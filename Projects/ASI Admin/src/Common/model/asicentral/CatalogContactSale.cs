@@ -25,6 +25,12 @@ namespace asi.asicentral.model.asicentral
         public string UpdateSource { get; set; }
         public string OtherOptions { get; set; }
         public bool ArtworkInFile { get; set; }
+        public bool IsCancelled { get; set; }
+        public string CancelledBy { get; set; }
+        public DateTime? CancelledUTCDate { get; set; }
+        public string ArtworkOption { get; set; }
+        public string ArtworkRepeatNotes { get; set; }
+        public bool RequestMoreInfo { get; set; }
         public virtual ICollection<CatalogContactSaleDetail> CatalogContactSaleDetails { get; set; }
         public virtual ICollection<CatalogArtWorks> CatalogArtWorks { get; set; }
     }

@@ -49,19 +49,51 @@
             </div>
         </div>
     }
+    @*@using (Html.BeginForm("CatalogContactReImport", "Catalog", FormMethod.Post, new { enctype = "multipart/form-data", id = "importReCatalog" }))
+    {
+        <input type="hidden" id="importId" name="importId" />
+        <div id="ReImportExcel" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 id="myModalLabel1">Import Excel</h3>
+            </div>
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>
+                            Industry
+                            @Html.DropDownList("IndustryDD", new SelectList(Model.Industries, "Value", "Text"), new { onchange = "showIndustryTextBox(this)" })
+                            @Html.ValidationMessageFor(m => m.Industry)
+                        </td>
+                        <td style="vertical-align:baseline; padding-left:5px">
+                            &nbsp;
+                            <input type="file" id="fileImport" name="file" multiple="multiple" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            @Html.TextBox("IndustryText", "", new { palceholder = "Industry Name", style = "display:none" })
+                            @Html.HiddenFor(m => m.Industry)
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" id="btnExcel" value="Import" onclick="SubmitReImportForm()">Submit</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            </div>
+        </div>
+    }*@
 </div>
-
 <a href="#ImportExcel" class="modal-link btn" data-toggle="modal" style="margin-bottom:5px" onclick="openUpdatePopup('','')">
     Import New
 </a>
 <a href="/Catalog/Index" class="modal-link btn" data-toggle="modal" style="margin-bottom:5px">
     Home
 </a>
-
-
 @if (Model != null && Model.Imports != null && Model.Imports.Count() > 0)
 {
-    var Imports = Model.Imports;
+    var imports = Model.Imports;
     <table class="table table-bordered table-condensed table-striped">
         <thead>
             <tr>
@@ -76,36 +108,40 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var import in Imports)
+            @foreach (var import in imports)
             {
                 var isInSales = false;
                 int saleApproveStatus = 0; //no sale exists
-                var reservedContact = asi.asicentral.web.Utility.Utility.IsImportContactReserved(import.CatalogContactImportId);
-                if (reservedContact != null && reservedContact.Count>0)
+                var contactSalesInfo = Model.contactSalesInfo.Where(m => m.Key == import.CatalogContactImportId).FirstOrDefault();
+                if (contactSalesInfo.Key != 0)
                 {
-                    isInSales = true;
-                    var saleApproved = reservedContact.SelectMany(m=>m.CatalogContacts.CatalogContactSaleDetails.Where(c => !c.CatalogContactSale.IsApproved));
-                    if (saleApproved != null && saleApproved.Count()>0)
-                    {
-                        saleApproveStatus = 2;//sale Unapproved;
-                    }
-                    else
-                    {
-                        saleApproveStatus = 1;// sale Approved
-                    }
+                    isInSales = contactSalesInfo.Value.Key;
+                    saleApproveStatus = contactSalesInfo.Value.Value;
                 }
                 <tr>
-                    @if (import.IsActive && !isInSales)
+
+                    @if (import.IsActive)
                     {
+                        var href = string.Empty;
+                        var onclick = string.Empty;
+                        //if (!isInSales)
+                        //{
+                        href = "#ImportExcel";
+                        onclick = "openUpdatePopup";
+                    @*}
+                    else
+                    {
+                        href = "#ReImportExcel";
+                        onclick = "openReImportPopup";
+                    }*@
                         <td>
-                            <a rel="tooltip" class="modal-link btn" data-toggle="modal" data-placement="right" href="#ImportExcel" onclick="openUpdatePopup(@import.CatalogContactImportId,'@import.IndustryName')">Update</a>
+                            <a rel="tooltip" class="modal-link btn" data-toggle="modal" data-placement="right" href="@href" onclick="@(onclick+"("+@import.CatalogContactImportId+",'"+@import.IndustryName+"')")">Update</a>
                         </td>
                     }
                     else
                     {
                         <td>&nbsp;</td>
                     }
-
                     <td>@import.IndustryName</td>
                     <td>@import.ImportedBy</td>
                     <td>@import.UpdateDateUTC.ToString("MM/dd/yyyy")</td>
@@ -145,7 +181,19 @@ else
     function openUpdatePopup(importId, industry) {
         $("#importId").val(importId);
         $("#IndustryDD").val(industry);
+        if (industry == "" || typeof industry == "undefined") {
+            $('#IndustryDD').removeAttr("disabled"); 
+        }
+        else {
+            $('#IndustryDD').attr("disabled", true); 
+        }
+     
         $("#Industry").val(industry);
+    }
+    function openReImportPopup(importId, industry) {
+        $("#importReCatalog #importId").val(importId);
+        $("#importReCatalog #IndustryDD").val(industry);
+        $("#importReCatalog #Industry").val(industry);
     }
     function showIndustryTextBox(obj) {
         var industryVal = $("#IndustryDD").val();
@@ -163,7 +211,17 @@ else
         var industry = $("#IndustryText").val();
         if (industry !== "" && typeof industry !== "undefined") {
             $("#Industry").val(industry);
+          
+            
         }
         $("#importCatalog").submit();
     }
+    function SubmitReImportForm() {
+        var industry = $("#IndustryText").val();
+        if (industry !== "" && typeof industry !== "undefined") {
+            $("#importReCatalog #Industry").val(industry);
+        }
+        $("#importReCatalog").submit();
+    }
+
 </script>

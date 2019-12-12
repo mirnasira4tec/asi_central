@@ -2,6 +2,7 @@
 @model PagerBase
 @{
     var importId = ViewBag.importId;
+    ViewData.Clear();
     if(Model.q!=null)
     {
         foreach (var param in Model.q)

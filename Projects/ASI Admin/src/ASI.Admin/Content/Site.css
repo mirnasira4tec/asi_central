@@ -689,4 +689,18 @@ a:hover, a:focus {
 input[type="text"] {
     padding:4px 3px !important;
 }
-
+ #emailModel {
+        /* new custom width */
+        width: 70%;
+        /* must be half of the width, minus scrollbar on the left (30px) */
+        margin-left: -35%;
+		margin-top:0px
+    }
+.shadow {
+   -moz-box-shadow:    inset 0 0 3px #000000;
+   -webkit-box-shadow: inset 0 0 3px #000000;
+   box-shadow:         inset 0 0 3px #000000;
+}
+th a{
+    border:none!important;
+}

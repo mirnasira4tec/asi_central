@@ -344,7 +344,6 @@
     <Compile Include="Models\TermsConditions\TermsConditionsTypeVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\VelocityService.cs" />
-    <Compile Include="Utility\Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\asi-store.css" />
@@ -539,6 +538,7 @@
     <EmbeddedResource Include="Views\Emails\CatalogApprovalEmail.cshtml" />
     <Content Include="Views\asicentral\Volume.cshtml" />
     <Content Include="Views\Show\ValidateAttendeeEmails.cshtml" />
+    <Content Include="Views\asicentral\Catalog\EditContactNotesForm.cshtml" />
     <Content Include="Views\Store\CompanyValidations\GroupByType.cshtml" />
     <Content Include="Views\Store\CompanyValidations\List.cshtml" />
     <None Include="Web.Dev.config">

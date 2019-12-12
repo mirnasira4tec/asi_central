@@ -23,6 +23,7 @@ namespace asi.asicentral.web.Models.asicentral
         public List<SelectListItem> Counties { get; set; }
         public List<SelectListItem> Industries { get; set; }
         public List<CatalogContactImport> Imports { get; set; }
-        //  public CatalogContactImport Import { get; set; }
+        public Dictionary<int, KeyValuePair<bool, int>> contactSalesInfo { get; set; }
+        //public CatalogContactImport Import { get; set; }
     }
 }

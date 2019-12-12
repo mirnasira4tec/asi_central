@@ -1,29 +1,104 @@
 ﻿@model asi.asicentral.web.Models.asicentral.CatalogContactSalesDetailsModel
-@using asi.asicentral.web.Utility
 @using asi.asicentral.model.asicentral;
 @{
     ViewBag.Title = "";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var showEmail = string.Empty;
     if (TempData["States"] == null)
     {
         TempData["States"] = asi.asicentral.util.HtmlHelper.GetStates();
     }
+    if (TempData["ShowEmail"] != null)
+    {
+        showEmail = TempData["ShowEmail"].ToString();
+    }
     var apiStates = (IList<SelectListItem>)TempData.Peek("States");
     CatalogContactSale saleInfo = Model.CatalogRequested;
-    var message = "Catalog Businesses Requested";
+    var message = "Catalog Businesses";
     message = Model.CatalogRequested == null ? "Latest " + message : "" + message;
+    var isSaleIdView = false;
+    if (!string.IsNullOrWhiteSpace(Request.QueryString["saleId"]))
+    {
+        isSaleIdView = true;
+    }
+}
+@helper RenderArtWorkFileRows(List<CatalogArtWorks> artworks)
+{
+    <table class="table table-bordered table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>FileName</th>
+                <th>Created Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var artWork in artworks)
+            {
+                var fileName = string.Empty;
+                if (!string.IsNullOrWhiteSpace(artWork.MediaLink))
+                {
+                    var dashIndex = artWork.MediaLink.LastIndexOf("-");
+                    var dotIndex = artWork.MediaLink.LastIndexOf(".");
+                    var slashIndex = artWork.MediaLink.LastIndexOf("\\");
+                    fileName = artWork.MediaLink.Substring(slashIndex + 1, dashIndex - slashIndex - 1) + artWork.MediaLink.Substring(dotIndex);
+                }
+                <tr>
+                    <td>
+                        <a href="@("https:"+artWork.MediaLink)" target="_blank">@fileName</a>
+                    </td>
+                    <td>
+                        @artWork.CreateDateUTC.ToLocalTime()
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 @helper ShowArtWrok(CatalogContactSale saleInfo)
 {if (saleInfo != null)
     {
         <form>
-            @if (saleInfo.ArtworkInFile)
+            @if (saleInfo.ArtworkOption == "RepeatArtwork")
+            {
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <th class="pull-left">Artwork Options : </th>
+                            <td class="pull-left">Use repeat artwork on file.</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                @RenderArtWorkFileRows(saleInfo.CatalogArtWorks.ToList())
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            }
+            else if (saleInfo.ArtworkOption == "ModifiedRepeat")
             {
                 <table>
                     <thead>
                         <tr>
-                            <th class="pull-left">Uploaded Artworks : </th>
-                            <td>Use artworks in file.</td>
+                            <th class="pull-left">Artwork Options : </th>
+                            <td>Modified Repeat:  @saleInfo.ArtworkRepeatNotes</td>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            }
+            else if (saleInfo.ArtworkOption == "NewArtwork" && saleInfo.CatalogArtWorks != null && saleInfo.CatalogArtWorks.Count > 0)
+            {
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <th class="pull-left">Artwork Options: </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                @RenderArtWorkFileRows(saleInfo.CatalogArtWorks.ToList())
+                            </td>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -31,54 +106,15 @@
             }
             else
             {
-                if (saleInfo.CatalogArtWorks != null && saleInfo.CatalogArtWorks.Count > 0)
-                {
-                    <table width="100%">
-                        <thead>
-                            <tr>
-                                <th class="pull-left">Uploaded Artworks</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <table class="table table-bordered table-condensed table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>FileName</th>
-                                                <th>Created Date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var artWork in saleInfo.CatalogArtWorks)
-                                            {
-                                                <tr>
-                                                    <td>
-                                                        <a href="@("https:"+artWork.MediaLink)" target="_blank">@Utility.GetArtWorkFileName(artWork.MediaLink)</a>
-                                                    </td>
-                                                    <td>
-                                                        @artWork.CreateDateUTC.ToLocalTime()
-                                                    </td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                }
-                else
-                {
-                    <table>
-                        <thead>
-                            <tr>
-                                <th class="pull-left">Uploaded Artworks: </th>
-                                <td> No data available!</td>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                }
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="pull-left">Uploaded Artworks: </th>
+                            <td> No data available!</td>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             }
         </form>
     }
@@ -143,9 +179,9 @@
         </table>
         if (!saleInfo.IsApproved)
         {
-            var unApprovedContact = saleInfo.CatalogContactSaleDetails.ToList();
+            var unApprovedContact = saleInfo.CatalogContactSaleDetails.Where(m => m.CatalogContacts.CatalogContactImport.IsActive).ToList();
             <h2 class="pull-left">
-                @message
+                @(message + " Requested")
             </h2>
             <div class="pull-right">
                 <button type="button" onclick="AddMoreCatalog()" class="btn">
@@ -158,6 +194,7 @@
                 <table class="table table-bordered table-condensed table-striped" id="unapproveTable">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>State</th>
                             <th>County</th>
                             <th>Industry</th>
@@ -169,8 +206,13 @@
                     <tbody>
                         @for (var i = 0; i < unApprovedContact.Count(); i++)
                         {
-                            var stateFullName = asi.asicentral.web.Utility.Utility.GetSateFullNameBySortName(unApprovedContact[i].CatalogContacts.State, apiStates);
+                            var stateFullName = apiStates.Where(m => m.Value == unApprovedContact[i].CatalogContacts.State).Select(m => m.Text).FirstOrDefault();
                             <tr>
+                                <td>
+                                    <a class="delete" href="#" onclick="DeleteContactDetail(@unApprovedContact[i].CatalogContactSaleDetailId)">
+                                        <i class="icon-trash"></i>
+                                    </a>
+                                </td>
                                 <td>@stateFullName</td>
                                 <td>@unApprovedContact[i].CatalogContacts.County</td>
                                 <td>
@@ -182,15 +224,15 @@
                                 </td>
                                 <td>@unApprovedContact[i].UpdateDateUTC.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss")</td>
                                 <td>
-                                    @Html.TextBoxFor(m => unApprovedContact[i].ContactsRequested)
+                                    @Html.TextBoxFor(m => unApprovedContact[i].ContactsRequested, new { type = "number", min = "1", max = unApprovedContact[i].CatalogContacts.RemainingContacts })
                                     @Html.HiddenFor(m => unApprovedContact[i].CatalogContactSaleDetailId)
-                                    @if (!string.IsNullOrWhiteSpace(Request.QueryString["asiNumber"]))
-                                    {
-                                        @Html.Hidden("asiNo", saleInfo.ASINumber)
-                                    }
-                                    @if (!string.IsNullOrWhiteSpace(Request.QueryString["saleId"]))
+                                    @if (isSaleIdView)
                                     {
                                         @Html.Hidden("saleId", saleInfo.CatalogContactSaleId)
+                                    }
+                                    else
+                                    {
+                                        @Html.Hidden("asiNo", saleInfo.ASINumber)
                                     }
                                 </td>
                             </tr>
@@ -198,34 +240,39 @@
                     </tbody>
                 </table>
                 <div>
-                    <button type="button" onclick="validateResContacts()" class="btn pull-right" id="btnApproved" disabled="disabled">
+                    <button type="button" style="margin-left:3px" onclick="validateResContacts()" class="btn pull-right" id="btnApproved" disabled="disabled">
                         Approve
                     </button>
+                    <a onclick="CancelOrder(@saleInfo.CatalogContactSaleId)" href="#" class="btn pull-right" id="btnCancel" name="command" value="cancel">
+                        Cancel
+                    </a>
                 </div>
-                <table>
-                    <tbody>
-                        <tr>
+                <table width="100%">
+                    <tbody  class="pull-left">
+                        <tr >
                             <th>
-                                Other Options : @Html.TextArea("OtherOptions", saleInfo.OtherOptions, new { @class = "form-control" })
+                                @Html.CheckBox("requestMoreInfo", saleInfo.RequestMoreInfo, new { style = "margin-top:-2px" }) Request More Information: @Html.TextArea("OtherOptions", saleInfo.OtherOptions, new { @class = "form-control" })
                             </th>
                         </tr>
                     </tbody>
                 </table>
+                <div>&nbsp;</div>
                 @ShowArtWrok(saleInfo)
-
             }
         }
         else
         {
-            var currentSales = saleInfo.CatalogContactSaleDetails.ToList();
+            var currentSales =  saleInfo.CatalogContactSaleDetails.Where(m => m.CatalogContacts.CatalogContactImport.IsActive).ToList();
             <h2 class="pull-left">
-                @message
+                @(message + " Approved")
             </h2>
             <br />
-            <form style="max-height:500px; overflow-y:scroll">
+            using (Html.BeginForm("EditApprovedOrder", "Catalog", FormMethod.Post, new { id = "RemoveEditContact", style = "max-height:500px; overflow-y:scroll" }))
+            {
                 <table class="table table-bordered table-condensed table-striped" id="approveTable">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>State</th>
                             <th>County</th>
                             <th>Industry</th>
@@ -236,11 +283,15 @@
                         </tr>
                     </thead>
                     <tbody>
-
                         @for (var i = 0; i < currentSales.Count(); i++)
                         {
-                            var stateFullName = asi.asicentral.web.Utility.Utility.GetSateFullNameBySortName(currentSales[i].CatalogContacts.State, apiStates);
-                            <tr>
+                            var stateFullName = apiStates.Where(m => m.Value == currentSales[i].CatalogContacts.State).Select(m => m.Text).FirstOrDefault();
+                            <tr class="dataRow">
+                                <td>
+                                    <a class="delete" href="#" onclick="DeleteContactDetail(@currentSales[i].CatalogContactSaleDetailId)">
+                                        <i class="icon-trash"></i>
+                                    </a>
+                                </td>
                                 <td>@stateFullName </td>
                                 <td>@currentSales[i].CatalogContacts.County   </td>
                                 <td>
@@ -249,12 +300,16 @@
                                 <td>
                                     @currentSales[i].CatalogContacts.RemainingContacts
                                     @Html.HiddenFor(m => currentSales[i].CatalogContacts.RemainingContacts)
+                                    @Html.HiddenFor(m => currentSales[i].CatalogContactSaleDetailId)
+                                    @Html.HiddenFor(m => currentSales[i].CatalogContactSale.ASINumber)
+                                    @Html.HiddenFor(m => currentSales[i].CatalogContactSale.CatalogContactSaleId)
+                                    <input type="hidden" class="maxContactAllowed" value="@(currentSales[i].ContactsRequested+currentSales[i].CatalogContacts.RemainingContacts)" />
                                 </td>
                                 <td>
-                                    <label>@currentSales[i].ContactsApproved</label>
+                                    @Html.TextBoxFor(m => currentSales[i].ContactsRequested, new { @class = "reqContact", type = "number", min = "1", max = currentSales[i].ContactsRequested + currentSales[i].CatalogContacts.RemainingContacts, style = "width:50px" })
                                 </td>
                                 <td>@currentSales[i].UpdateDateUTC.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss")</td>
-                                <td>@(currentSales[i].CatalogContactSale.ApprovedDate != null ? currentSales[i].CatalogContactSale.ApprovedDate.Value.ToLocalTime().ToString("MM/dd/yyyy") : "")</td>
+                                <td>@(currentSales[i].CatalogContactSale.ApprovedDate != null ? currentSales[i].CatalogContactSale.ApprovedDate.Value.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss") : "")</td>
                             </tr>
                         }
                     </tbody>
@@ -263,13 +318,26 @@
                     <tbody>
                         <tr>
                             <th>
-                                Other Options :
+                                @Html.CheckBox("requestMoreInfo", saleInfo.RequestMoreInfo, new { style = "margin-top:-2px", disabled="disabled" }) Requeste More Information  :
                             </th>
                             <td>@saleInfo.OtherOptions</td>
                         </tr>
                     </tbody>
                 </table>
-            </form>
+                <div>&nbsp;</div>
+                @Html.Hidden("isSaleIdView", isSaleIdView)
+                <div>
+                    <a onclick="RemoveOrder(@saleInfo.CatalogContactSaleId)" href="#" class="btn pull-right" id="btnCancel" style="margin-left:3px" name="command" value="cancel">
+                        Remove
+                    </a>
+                    <button type="submit" class="btn pull-right" style="margin-left:3px" id="btnCancel" name="command" value="cancel">
+                        Save
+                    </button>
+                    <button type="button" class="btn pull-right" onclick="OpenCustomerEmailPopup()">
+                        Notify Customer
+                    </button>
+                </div>
+            }
             @ShowArtWrok(saleInfo)
         }
 
@@ -282,125 +350,176 @@
                 approvedSales = approveSaleByAsiNo != null && approveSaleByAsiNo.Count() > 0 ? approveSaleByAsiNo.ToList() : null;
 
             }
-        <h2 class="pull-left">All Catalog Businesses Approved</h2>
-        <br />
+            <h2 class="pull-left">All Catalog Businesses Approved</h2>
+            <br />
             if (approvedSales != null && approvedSales.Count > 0)
             {
-
-            <form style="max-height:500px; overflow-y:scroll; padding:1% ">
-                <table class="table table-bordered table-condensed table-striped" id="approveTable">
-                    <thead>
-                        <tr>
-                            <th>State</th>
-                            <th>County</th>
-                            <th>Industry</th>
-                            <th>Available Businesses</th>
-                            <th>Approved Businesses</th>
-                            <th>Requested Date</th>
-                            <th>Approved Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (var i = 0; i < approvedSales.Count(); i++)
-                        {
-                            var stateFullName = asi.asicentral.web.Utility.Utility.GetSateFullNameBySortName(approvedSales[i].CatalogContacts.State, apiStates);
+                <form style="max-height:500px; overflow-y:scroll; padding:1% ">
+                    <table class="table table-bordered table-condensed table-striped" id="approveTable">
+                        <thead>
                             <tr>
-                                <td>@stateFullName </td>
-                                <td>@approvedSales[i].CatalogContacts.County   </td>
-                                <td>
-                                    @Html.Raw(approvedSales[i].CatalogContacts.CatalogContactImport.IndustryName)
-                                </td>
-                                <td>
-                                    @approvedSales[i].CatalogContacts.RemainingContacts
-                                    @Html.HiddenFor(m => approvedSales[i].CatalogContacts.RemainingContacts)
-                                </td>
-                                <td>
-                                    <label>@approvedSales[i].ContactsApproved</label>
-                                </td>
-                                <td>@approvedSales[i].CatalogContactSale.UpdateDateUTC.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss")</td>
-                                <td>@(approvedSales[i].CatalogContactSale.ApprovedDate != null ? approvedSales[i].CatalogContactSale.ApprovedDate.Value.ToLocalTime().ToString("MM/dd/yyyy") : "")</td>
+                                <th>State</th>
+                                <th>County</th>
+                                <th>Industry</th>
+                                <th>Available Businesses</th>
+                                <th>Approved Businesses</th>
+                                <th>Requested Date</th>
+                                <th>Approved Date</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
-            </form>
+                        </thead>
+                        <tbody>
+                            @for (var i = 0; i < approvedSales.Count(); i++)
+                            {
+                                var stateFullName = apiStates.Where(m => m.Value == approvedSales[i].CatalogContacts.State).Select(m => m.Text).FirstOrDefault();
+                                <tr>
+                                    <td>@stateFullName </td>
+                                    <td>@approvedSales[i].CatalogContacts.County   </td>
+                                    <td>
+                                        @Html.Raw(approvedSales[i].CatalogContacts.CatalogContactImport.IndustryName)
+                                    </td>
+                                    <td>
+                                        @approvedSales[i].CatalogContacts.RemainingContacts
+                                        @Html.HiddenFor(m => approvedSales[i].CatalogContacts.RemainingContacts)
+                                    </td>
+                                    <td>
+                                        <label>@approvedSales[i].ContactsApproved</label>
+                                    </td>
+                                    <td>@approvedSales[i].CatalogContactSale.UpdateDateUTC.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss")</td>
+                                    <td>@(approvedSales[i].CatalogContactSale.ApprovedDate != null ? approvedSales[i].CatalogContactSale.ApprovedDate.Value.ToLocalTime().ToString("MM/dd/yyyy") : "")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </form>
             }
             else
             {
-            <hr />
-            <ul>
-                <li>No data available!</li>
-            </ul>
+                <hr />
+                <ul>
+                    <li>No data available!</li>
+                </ul>
             }
 
         }
 
         using (Html.BeginForm("AddMoreCatalog", "Catalog", FormMethod.Post, new { id = "frmAddNewCatalog", style = "padding:1%" }))
         {
-        @Html.Hidden("saleId", saleInfo.CatalogContactSaleId)
-        @Html.Hidden("asiNo", saleInfo.ASINumber)
-        @Html.Hidden("catalogContactId", "")
-        <div id="newCatalog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3 id="myModalLabel1">Add New Catalog Businesses</h3>
+            @Html.Hidden("saleId", saleInfo.CatalogContactSaleId)
+            @Html.Hidden("asiNo", saleInfo.ASINumber)
+            @Html.Hidden("catalogContactId", "")
+            <div id="newCatalog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 id="myModalLabel1">Add New Catalog Businesses</h3>
+                </div>
+                <div class="modal-body" id="catalogRows">
+                    <table class="table table-bordered table-condensed table-striped" id="catalogRows">
+                        <thead>
+                            <tr>
+                                <th>Industry</th>
+                                <th>State</th>
+                                <th>County</th>
+                                <th>Available Businesses</th>
+                                <th>Reserved Businesses</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="button" onclick="AddNewCatalog()">Add</button>
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                </div>
             </div>
-            <div class="modal-body" id="catalogRows">
-                <table class="table table-bordered table-condensed table-striped" id="catalogRows">
-                    <thead>
-                        <tr>
-                            <th>Industry</th>
-                            <th>State</th>
-                            <th>County</th>
-                            <th>Available Businesses</th>
-                            <th>Reserved Businesses</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" type="button" onclick="AddNewCatalog()">Add</button>
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-            </div>
-        </div>
         }
 
         if (Model.CatalogRequested == null && Model.CatalogContactSale != null && Model.CatalogContactSale.Count() > 0)
         {
-        <h2 class="pull-left">Submission History </h2>
-        <br />
-        <form style="max-height:500px; overflow-y:scroll; padding:1% ">
-            <table class="table table-bordered table-condensed table-striped" id="approveTable">
-                <thead>
-                    <tr>
-                        <th>Create Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var sale in Model.CatalogContactSale)
-                    {
+            <h2 class="pull-left">Submission History </h2>
+            <br />
+            <form style="max-height:500px; overflow-y:scroll; padding:1% ">
+                <table class="table table-bordered table-condensed table-striped" id="approveTable">
+                    <thead>
                         <tr>
-                            <td>
-                                <a href="/Catalog/ApproveContact?saleId=@sale.CatalogContactSaleId" class="" style="margin-bottom:5px">
-                                    @sale.CreateDateUTC.ToLocalTime()
-                                </a>
-                            </td>
+                            <th>Create Date</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </form>
+                    </thead>
+                    <tbody>
+                        @foreach (var sale in Model.CatalogContactSale)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="/Catalog/ApproveContact?saleId=@sale.CatalogContactSaleId" class="" style="margin-bottom:5px">
+                                        @sale.CreateDateUTC.ToLocalTime()
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </form>
+        }
+
+        using (Html.BeginForm("SendCustomerEmail", "Catalog", FormMethod.Post, new { id = "frmCustomerEmail" }))
+        {
+            var fromEmail = !string.IsNullOrWhiteSpace(saleInfo.ASIRep) ? saleInfo.ASIRep.Split(';')[0] : string.Empty;
+            <div id="emailModel" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h3 id="myModalLabel1"></h3>
+                        </div>
+                        <div class="modal-body">
+                            <table width="100%">
+                                <tr>
+                                    <td>
+                                        <table width="100%">
+                                            <tr>
+                                                <td style="width:10%"> From:</td>
+                                                <td>  <input type="email" name="fromEmail" value="@fromEmail" required style="width:100%" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width:10%">  To:</td>
+                                                <td>  <input type="text" name="toEmail" value="@saleInfo.Email" required style="width:100%" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width:10%"> Subject: </td>
+                                                <td>  <input type="text" name="subject" value="Catalog county reservation order approved" required style="width:100%" /></td>
+                                            </tr>
+                                        </table>
+                                        <input type="hidden" name="asiNumber" value="@saleInfo.ASINumber" />
+                                        <input type="hidden" id="contactsSaleId" value="@saleInfo.CatalogContactSaleId" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div contenteditable="true" id="customerEmail" class="shadow" style="padding:2px">
+                                        </div>
+                                        <textarea id="customerEmailHidden" name="mailMessage" style="display:none">
+                                        </textarea>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="button" onclick="SendEmailContent()">Send</button>
+                            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         }
     }
     else
     {
-    <hr />
-    <ul>
-        <li>No data available!</li>
-    </ul>
+        <hr />
+        <ul>
+            <li>No data available!</li>
+        </ul>
     }
 }
+
 <script>
     function validateResContacts() {
         var valid = true;
@@ -509,6 +628,52 @@
         }
     }
 
+
+
+    function GetCustomerEmailBody() {
+        $.ajax({
+            url: '/Catalog/GetCustomerEmailBody',
+            data: { saleId: $("#contactsSaleId").val() },
+            type: 'GET',
+            success: function (body) {
+                if (typeof body !== "undefined") {
+                    $("#customerEmail").html(body);
+                }
+            }
+        });
+    }
+    function DeleteContactDetail(detailId) {
+
+        if (confirm("Are you sure you want to delete this item?")) {
+            window.location.href = "/catalog/RemoveSalesDetail?detailId=" + detailId +"&isSaleIdView=@isSaleIdView";
+        } else {
+            return false;
+        }
+    }
+    function SendEmailContent() {
+        document.getElementById("customerEmailHidden").value = document.getElementById("customerEmail").innerHTML;
+        $("#frmCustomerEmail").submit();
+    }
+    function OpenCustomerEmailPopup() {
+        GetCustomerEmailBody();
+        $("#emailModel").modal('show');
+    }
+    function CancelOrder(saleId) {
+        if (confirm("Are you sure you want to cancel this order?")) {
+            window.location.href = "/Catalog/CancelOrder?saleId=" + saleId;
+        } else {
+            return false;
+        }
+    }
+
+    function RemoveOrder(saleId) {
+        if (confirm("Are you sure you want to remove this order?")) {
+            window.location.href = "/Catalog/RemoveOrder?saleId=" + saleId;
+        } else {
+            return false;
+        }
+    }
+
 </script>
 @section scripts{
     <script>
@@ -517,6 +682,10 @@
                 $("#catalogRows").html("");
             })
             EnableApproveButton();
+            var isApproved = "@showEmail";
+            if (isApproved == "true") {
+                OpenCustomerEmailPopup();
+            }
         });
     </script>
 }

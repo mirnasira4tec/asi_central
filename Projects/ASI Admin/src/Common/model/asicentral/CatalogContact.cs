@@ -18,6 +18,7 @@ namespace asi.asicentral.model.asicentral
         public DateTime CreateDateUTC { get; set; }
         public DateTime UpdateDateUTC { get; set; }
         public string UpdateSource { get; set; }
+        public string Note { get; set; }
         public virtual CatalogContactImport CatalogContactImport { get; set; }
         public virtual ICollection<CatalogContactSaleDetail> CatalogContactSaleDetails { get; set; }
     }

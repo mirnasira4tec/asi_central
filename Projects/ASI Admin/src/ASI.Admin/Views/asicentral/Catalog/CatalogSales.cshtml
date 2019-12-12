@@ -1,5 +1,17 @@
 ﻿@using asi.asicentral.model.asicentral;
 @model asi.asicentral.web.Models.asicentral.CatalogContactsSalesModel
+@helper SortingLink(string text, string orderTitle, string orderType)
+{
+ViewData["Text"] = text;
+ViewData["orderTitle"] = orderTitle;
+ViewData["orderType"] = orderType;
+Model.q["orderTitle"] = orderTitle;
+if(ViewData["PageIndex"]==null)
+{
+    ViewData["PageIndex"] = Model.Page;
+}
+Html.RenderPartial("../asicentral/Shared/_CatalogPagerLink", Model, ViewData);
+}
 @{
 
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -23,6 +35,17 @@
     {
         ViewBag.Title = "Reserved Catalog Contacts";
     }
+    if (Model.q != null)
+    {
+        foreach (var param in Model.q)
+        {
+            if (!string.IsNullOrWhiteSpace(param.Value))
+            {
+                ViewData.Add(param.Key, param.Value);
+            }
+        }
+    }
+
 }
 <div>&nbsp;</div>
 <div>
@@ -49,159 +72,165 @@
 
 @if (Model != null && Model.Sales != null && Model.Sales.Count > 0)
 {
-    <form>
-        <div class="clearfix"></div>
-        <div>
-        </div>
-        <div>&nbsp;</div>
-        <div class="tabbable tabs-below small">
-            <div class="tab-content" id="formtab-content">
-                <div class="well clearfix">
-                    @using (Html.BeginForm("CatalogSales", "Catalog", FormMethod.Get, new { @class = "form-inline clearfix" }))
-                    {
-                        <table width="100%" style="margin:15px">
-                            <tr>
-                                <td>
-                                    <label>Industry</label>
-                                    @if (Model.ImportId == 0)
-                                    {
-                                        @Html.DropDownList("industry", Model.Industries, new { style = "width:85%;" })
-                                    }
-                                    else
-                                    {
-                                        @Html.TextBox("industry", Model.Industries, new { style = "width:85%;", @readonly = "readonly" })
-                                    }
-                                </td>
-                                <td>
-                                    <label>ASI #</label>
-                                    @Html.TextBox("asiNo", "", new { style = "width:85%;" })
-                                    @Html.Hidden("importId", Model.ImportId)
-                                    @Html.Hidden("pendingApprovals", Model.q["pendingApprovals"])
-                                </td>
-                                <td>
-                                    <label for="asiNumber">Company Name</label>
-                                    @Html.TextBox("reservedBy", "", new { style = "width:85%;" })
-                                </td>
-                                <td>
-                                    <label for="asiNumber">Contact Email</label>
-                                    @Html.TextBox("email", "", new { style = "width:85%;" })
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label>Sales Rep</label>
-                                    @Html.TextBox("salesRep", "", new { style = "width:85%;" })
-                                </td>
-                                <td>
-                                    <label>From Date</label>
-                                    @Html.TextBox("fromDate", "", new { style = "width:85%;" })
-                                </td>
-                                <td>
-                                    <label>To Date</label>
-                                    @Html.TextBox("toDate", "", new { style = "width:85%;" })
-                                </td>
-                                <td>
-                                    <label for="companyName">&nbsp;</label>
-                                    <input type="submit" value="Search" class="btn " />
-                                </td>
-                            </tr>
-                        </table>
-                    }
-                </div>
-            </div>
-        </div>
-        <table class="table table-bordered table-condensed table-striped">
-            <thead>
-                <tr>
-                    @if (allSales)
-                    {
-                        <th>All Sales</th>
-                    }
-                    @if (allPendingSales)
-                    {
-                        <th>All Pending Sales</th>
-                    }
+	<form>
+		<div class="clearfix"></div>
+		<div>
+		</div>
+		<div>&nbsp;</div>
+		<div class="tabbable tabs-below small">
+			<div class="tab-content" id="formtab-content">
+				<div class="well clearfix">
+					@using (Html.BeginForm("CatalogSales", "Catalog", FormMethod.Get, new { @class = "form-inline clearfix" }))
+					{
+						<table width="100%" style="margin:15px">
+							<tr>
+								<td>
+									<label>Industry</label>
+									@if (Model.ImportId == 0)
+									{
+										@Html.DropDownList("industry", Model.Industries, new { style = "width:85%;" })
+									}
+									else
+									{
+										@Html.TextBox("industry", Model.Industries, new { style = "width:85%;", @readonly = "readonly" })
+									}
+								</td>
+								<td>
+									<label>ASI #</label>
+									@Html.TextBox("asiNo", "", new { style = "width:85%;" })
+									@Html.Hidden("importId", Model.ImportId)
+									@Html.Hidden("pendingApprovals", Model.q["pendingApprovals"])
+								</td>
+								<td>
+									<label for="asiNumber">Company Name</label>
+									@Html.TextBox("reservedBy", "", new { style = "width:85%;" })
+								</td>
+								<td>
+									<label for="asiNumber">Contact Email</label>
+									@Html.TextBox("email", "", new { style = "width:85%;" })
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>Sales Rep</label>
+									@Html.TextBox("salesRep", "", new { style = "width:85%;" })
+								</td>
+								<td>
+									<label>From Date</label>
+									@Html.TextBox("fromDate", "", new { style = "width:85%;" })
+								</td>
+								<td>
+									<label>To Date</label>
+									@Html.TextBox("toDate", "", new { style = "width:85%;" })
+								</td>
+								<td>
+									<label for="companyName">&nbsp;</label>
+									<input type="submit" value="Search" class="btn " />
+								</td>
+							</tr>
+						</table>
+					}
+				</div>
+			</div>
+		</div>
+		<div class="pull-right">
+			<a href="javascript:;" onclick="DownloadExcel();" class="btn" title="Download" style="margin-bottom: 20px;" target="_self">Download</a>
+		</div>
+		<table class="table table-bordered table-condensed table-striped">
+			<thead>
+				<tr>
+					@if (allSales)
+					{
+                        <th >
+                            <span style="border:none"> @SortingLink("All Sales", "allSales", Model.q["orderType"])</span>
+                        </th>
+					}
+					@if (allPendingSales)
+					{
+                        <th >
+                            <span style="border:none">@SortingLink("All Pending Sales", "pendingSales", Model.q["orderType"])</span>
+                        </th>
+					}
+					<th>Company Name</th>
+					<th>ASI Number</th>
+					@if (Model.ImportId == 0)
+					{
+						<th>Industry</th>
+					}
+                    <th><span>@SortingLink("Sales Rep", "salesRep", Model.q["orderType"])</span></th>
 
-                    <th>Company Name</th>
-                    <th>ASI Number</th>
-                    @if (Model.ImportId == 0)
-                    {
-                        <th>Industry</th>
-                    }
-                    <th>Sales Rep</th>
+					@if (pendingSales)
+					{
+						<th>Pending Sales</th>
+					}
 
-                    @if (pendingSales)
-                    {
-                        <th>Pending Sales</th>
-                    }
+					<th>Request Date</th>
+				</tr>
+			</thead>
+			<tbody>
+				@if (Model.Sales != null && Model.Sales.Count > 0)
+				{
+					foreach (var sale in Model.Sales)
+					{
+						<tr>
+							@if (allSales)
+							{
+								<td>@sale.PendingContact</td>
+							}
+							@if (allPendingSales)
+							{
 
-                    <th>Request Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model.Sales != null && Model.Sales.Count > 0)
-                {
-                    foreach (var sale in Model.Sales)
-                    {
-                        <tr>
-                            @if (allSales)
-                            {
-                                <td>@sale.PendingContact</td>
-                            }
-                            @if (allPendingSales)
-                            {
-
-                                <td>@(sale.PendingContact - sale.ApprovedContact)</td>
-                            }
-                            <td>
-                                <a rel="tooltip" data-placement="right"
-                                   href="/Catalog/ApproveContact?asiNumber=@sale.ASINumber">
-                                    @sale.CompanyName
-                                </a>
-                            </td>
-                            <td>@sale.ASINumber</td>
-                            @if (Model.ImportId == 0)
-                            {
-                                <td>@Html.Raw(@sale.Industry)</td>
-                            }
-                            <td>@Html.Raw(sale.ASIRep.Replace(";", "<br/>"))</td>
+								<td>@(sale.PendingContact - sale.ApprovedContact)</td>
+							}
+							<td>
+								<a rel="tooltip" data-placement="right"
+								   href="/Catalog/ApproveContact?asiNumber=@sale.ASINumber">
+									@sale.CompanyName
+								</a>
+							</td>
+							<td>@sale.ASINumber</td>
+							@if (Model.ImportId == 0)
+							{
+								<td>@Html.Raw(@sale.Industry)</td>
+							}
+							<td>@Html.Raw(sale.ASIRep.Replace(";", "<br/>"))</td>
 
 
-                            @if (pendingSales)
-                            {
-                                <td>
-                                    @if (!string.IsNullOrWhiteSpace(sale.Industry) && sale.salesDetails != null && sale.salesDetails.Count > 0)
-                                    {
-                                        foreach (var sdetails in sale.salesDetails)
-                                        {
-                                            if (sdetails.IsPending)
-                                            {
-                                                <text>@sdetails.State, @Html.Raw(sdetails.County) - @sdetails.PendingSales</text>
-                                                <br />
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <text>@sale.OtherOption</text>
-                                    }
-                                </td>
-                            }
-                            <td>@sale.UpdateDateUTC.ToString("MM/dd/yyyy")</td>
-                        </tr>
-                    }
-                    if (Model.ResultsTotal > Model.ResultsPerPage)
-                    {
-                        <tr>
-                            <td class="pager" colspan="9">
-                                @Html.Partial("../asicentral/Shared/_CatalogPager", Model)
-                            </td>
-                        </tr>
-                    }
-                }
-            </tbody>
-        </table>
-    </form>
+							@if (pendingSales)
+							{
+								<td>
+									@if (!string.IsNullOrWhiteSpace(sale.Industry) && sale.salesDetails != null && sale.salesDetails.Count > 0)
+									{
+										foreach (var sdetails in sale.salesDetails)
+										{
+											if (sdetails.IsPending)
+											{
+												<text>@sdetails.State, @Html.Raw(sdetails.County) - @sdetails.PendingSales</text>
+												<br />
+											}
+										}
+									}
+									else
+									{
+										<text>@sale.OtherOption</text>
+									}
+								</td>
+							}
+							<td>@sale.UpdateDateUTC.ToString("MM/dd/yyyy")</td>
+						</tr>
+					}
+					if (Model.ResultsTotal > Model.ResultsPerPage)
+					{
+						<tr>
+							<td class="pager" colspan="9">
+								@Html.Partial("../asicentral/Shared/_CatalogPager", Model)
+							</td>
+						</tr>
+					}
+				}
+			</tbody>
+		</table>
+	</form>
 }
 else
 {
@@ -242,6 +271,17 @@ else
 
                 return date;
             }
-        });
+		});
+
+		function DownloadExcel() {
+			var industry = $("#industry").val();
+			var asiNo = $("#asiNo").val();
+			if (industry == '') {
+				alert("Please select industry.");
+				return;
+			}
+			var path = "/Store/Catalog/DownloadCatalogSales?industry=" + industry + "&asiNo=" + asiNo;
+				window.location = path;	
+		}
     </script>
 }
