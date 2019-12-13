@@ -233,12 +233,10 @@ namespace asi.asicentral.web.Controllers.Show
             var empAttendees = ObjectService.GetAll<ShowEmployeeAttendee>("Employee").Where(empAttendee => empAttendee.Attendee.ShowId == id).OrderBy(empAttendee => empAttendee.Attendee.Company.Name).ToList();
             if (empAttendees != null && empAttendees.Count > 0)
             {                
-                var employees = new List<ShowEmployee>();
-                var errorMessage = string.Empty;
-
                 //Parallel.ForEach(empAttendees, empAttendee =>
                 foreach (var empAttendee in empAttendees)
                 {
+                    var errorMessage = string.Empty;
                     var inValidEmails = new List<string>();
                     var email = empAttendee.Employee.Email;
                     var user = ASIOAuthClient.GetUserByEmail(email);
