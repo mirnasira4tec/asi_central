@@ -67,7 +67,7 @@
     <table class="table table-bordered table-condensed table-striped">
         <thead>
 			<tr>
-				<th>&nbsp;</th>
+				@*<th>&nbsp;</th>*@
 				<th>&nbsp;</th>
 				<th>&nbsp;</th>
 				<th>Name</th>
@@ -83,7 +83,7 @@
             {  <tr>
 	<td><a class="delete" id="@show.Id" href="/Show/Delete?id=@show.Id"><i class="icon-trash"></i></a></td>
 	<td><a rel="tooltip" data-placement="right" class="icon-pencil" href="@Url.Action("Edit", "Show", new { Id = @show.Id })"></a></td>
-	<td><a rel="tooltip" data-placement="right" class="icon-user" href="/Store/Show/ValidateAttendeeEmails/@show.Id"></a></td>
+	@*<td><a rel="tooltip" data-placement="right" class="icon-user" href="/Show/ValidateAttendeeEmails/@show.Id"></a></td>*@
 	<td><a class="red" href="/ShowCompany/GetAttendeeCompany?showId=@show.Id">@show.Name</a></td>
 	<td>@show.Id</td>
 	<td>
