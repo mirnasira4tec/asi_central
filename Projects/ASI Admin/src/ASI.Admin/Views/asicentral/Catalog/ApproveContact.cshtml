@@ -308,7 +308,7 @@
                                 <td>
                                     @Html.TextBoxFor(m => currentSales[i].ContactsRequested, new { @class = "reqContact", type = "number", min = "1", max = currentSales[i].ContactsRequested + currentSales[i].CatalogContacts.RemainingContacts, style = "width:50px" })
                                 </td>
-                                <td>@currentSales[i].UpdateDateUTC.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss")</td>
+                                <td>@(currentSales[i].CreateDateUTC.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss"))</td>
                                 <td>@(currentSales[i].CatalogContactSale.ApprovedDate != null ? currentSales[i].CatalogContactSale.ApprovedDate.Value.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss") : "")</td>
                             </tr>
                         }
@@ -384,7 +384,7 @@
                                     <td>
                                         <label>@approvedSales[i].ContactsApproved</label>
                                     </td>
-                                    <td>@approvedSales[i].CatalogContactSale.UpdateDateUTC.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss")</td>
+                                    <td>@(approvedSales[i].CatalogContactSale.CreateDateUTC.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss"))</td>
                                     <td>@(approvedSales[i].CatalogContactSale.ApprovedDate != null ? approvedSales[i].CatalogContactSale.ApprovedDate.Value.ToLocalTime().ToString("MM/dd/yyyy") : "")</td>
                                 </tr>
                             }
