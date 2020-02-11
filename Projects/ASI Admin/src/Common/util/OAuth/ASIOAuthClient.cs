@@ -483,10 +483,12 @@ namespace asi.asicentral.oauth
 
         public static bool IsActiveUser(string memberStatus)
         {
-            if (!string.IsNullOrEmpty(memberStatus) 
+            if (!string.IsNullOrEmpty(memberStatus)
                 && (memberStatus == StatusCode.ACTIVE.ToString()
-                || memberStatus == StatusCode.ACTV.ToString() 
-                || memberStatus == StatusCode.DIST_NEWLIE.ToString()))
+                || memberStatus == StatusCode.ACTV.ToString()
+                || memberStatus == StatusCode.DIST_NEWLIE.ToString()
+                || memberStatus == StatusCode.MMS_LOAD.ToString()))
+
                 return true;
             else return false;
         }
