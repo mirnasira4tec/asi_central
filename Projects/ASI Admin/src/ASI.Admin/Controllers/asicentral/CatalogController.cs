@@ -251,7 +251,7 @@ namespace asi.asicentral.web.Controllers.asicentral
                         }
                         contacttModel.States.Add(new SelectListItem { Value = "", Text = "--Select--" });
                         var apiStates = (IList<SelectListItem>)TempData.Peek("States");
-                        var dbStates = import.CatalogContacts.Select(m => m.State).Distinct();
+                        var dbStates = import.CatalogContacts.Select(m => m.State)?.Distinct();
                         if (dbStates != null && dbStates.Count() > 0)
                         {
                             foreach (var st in dbStates)
@@ -260,12 +260,17 @@ namespace asi.asicentral.web.Controllers.asicentral
                                 if (apiState != null)
                                     contacttModel.States.Add(new SelectListItem { Text = apiState.Text, Value = apiState.Value });
                             }
+                            contacttModel.States.OrderBy(m => m.Text);
                         }
-                        var counties = import.CatalogContacts.Where(s => s.State == state).Select(c => c.County).Distinct();
+                        var counties = import.CatalogContacts.Where(s => s.State == state).Select(c => c.County)?.Distinct();
                         contacttModel.Counties.Add(new SelectListItem { Value = "", Text = "--Select--" });
-                        foreach (var ct in counties)
+                        if (counties != null && counties.Count() > 0)
                         {
-                            contacttModel.Counties.Add(new SelectListItem { Value = ct, Text = ct });
+                            foreach (var ct in counties)
+                            {
+                                contacttModel.Counties.Add(new SelectListItem { Value = ct, Text = ct });
+                            }
+                            contacttModel.Counties.OrderBy(m => m.Text);
                         }
 
                         var contactList = import.CatalogContacts.Where(c => (c.CatalogContactImportId == importId.Value)
