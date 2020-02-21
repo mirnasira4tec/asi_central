@@ -249,7 +249,7 @@ namespace asi.asicentral.web.Controllers.asicentral
                         {
                             TempData["States"] = asi.asicentral.util.HtmlHelper.GetStates();
                         }
-                        contacttModel.States.Add(new SelectListItem { Value = "", Text = "--Select--" });
+                       
                         var apiStates = (IList<SelectListItem>)TempData.Peek("States");
                         var dbStates = import.CatalogContacts.Select(m => m.State)?.Distinct();
                         if (dbStates != null && dbStates.Count() > 0)
@@ -260,18 +260,19 @@ namespace asi.asicentral.web.Controllers.asicentral
                                 if (apiState != null)
                                     contacttModel.States.Add(new SelectListItem { Text = apiState.Text, Value = apiState.Value });
                             }
-                            contacttModel.States.OrderBy(m => m.Text);
+                            contacttModel.States= contacttModel.States.OrderBy(m => m.Text).ToList();
                         }
+                        contacttModel.States.Insert(0,new SelectListItem { Value = "", Text = "--Select--" });
                         var counties = import.CatalogContacts.Where(s => s.State == state).Select(c => c.County)?.Distinct();
-                        contacttModel.Counties.Add(new SelectListItem { Value = "", Text = "--Select--" });
                         if (counties != null && counties.Count() > 0)
                         {
                             foreach (var ct in counties)
                             {
                                 contacttModel.Counties.Add(new SelectListItem { Value = ct, Text = ct });
                             }
-                            contacttModel.Counties.OrderBy(m => m.Text);
+                            contacttModel.Counties= contacttModel.Counties.OrderBy(m => m.Text).ToList();
                         }
+                        contacttModel.Counties.Insert(0,new SelectListItem { Value = "", Text = "--Select--" });
 
                         var contactList = import.CatalogContacts.Where(c => (c.CatalogContactImportId == importId.Value)
                                             && (c.County == county || string.IsNullOrEmpty(county))
@@ -309,7 +310,6 @@ namespace asi.asicentral.web.Controllers.asicentral
             string asiNo = "", string orderTitle = "", string orderType = "asc")
         {
             CatalogContactsSalesModel salesModel = null;
-
             salesModel = new CatalogContactsSalesModel();
             salesModel.Page = page;
             salesModel.ResultsPerPage = pageSize;
