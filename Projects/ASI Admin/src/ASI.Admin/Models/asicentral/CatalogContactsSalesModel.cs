@@ -50,6 +50,7 @@ namespace asi.asicentral.web.Models.asicentral
 
     public class CatalogSalesDetails
     {
+        public int SaleId { get; set; }
         public string State { get; set; }
         public string County { get; set; }
         public int PendingSales { get; set; }

@@ -205,7 +205,7 @@ Html.RenderPartial("../asicentral/Shared/_CatalogPagerLink", Model, ViewData);
 										{
 											if (sdetails.IsPending)
 											{
-												<text>@sdetails.State, @Html.Raw(sdetails.County) - @sdetails.PendingSales</text>
+												<a href="/Catalog/ApproveContact?saleId=@sdetails.SaleId">@sdetails.State, @Html.Raw(sdetails.County) - @sdetails.PendingSales</a>
 												<br />
 											}
 										}

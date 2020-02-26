@@ -440,6 +440,7 @@ namespace asi.asicentral.web.Controllers.asicentral
                  Industry = string.Join("<br/>", s.GroupBy(i => i.Industry).Select(m => m.FirstOrDefault().Industry)),
                  salesDetails = s.GroupBy(i => i.County).Select(m => new CatalogSalesDetails
                  {
+                     SaleId = m.FirstOrDefault().CatalogContactSaleId,
                      State = m.FirstOrDefault().State,
                      County = m.FirstOrDefault().County,
                      PendingSales = m.Sum(pd => pd.PendingSales),
