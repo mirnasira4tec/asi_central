@@ -64,7 +64,7 @@ namespace asi.asicentral.util.show
             show.UpdateSource = objShow.UpdateSource;
             return show;
         }
-       
+
         public static ShowAddress CreateOrUpdateAddress(IObjectService objectService, ShowAddress objAddress)
         {
             if (objAddress == null) return null;
@@ -223,7 +223,7 @@ namespace asi.asicentral.util.show
             }
             else if (showEmployeeAttendee != null && !isAdd)
             {
-                objectService.Delete<ShowEmployeeAttendee>(showEmployeeAttendee);
+                DeleteShowEmployeeAttendee(objectService, showEmployeeAttendee, updateSource);
             }
             return showEmployeeAttendee;
         }
@@ -252,27 +252,103 @@ namespace asi.asicentral.util.show
         }
 
         public static ShowDistShowLogo CreateOrUpdateDistShowLogo(IObjectService objectService, ShowDistShowLogo objDistShowLogo)
-         {
-             if (objDistShowLogo == null) return null;
-             ShowDistShowLogo distShowLogo = null;
-             if (objDistShowLogo.Id == 0)
-             {
-                 distShowLogo = new ShowDistShowLogo()
-                 {
-                     CreateDate = DateTime.UtcNow,
-                 };
-                 objectService.Add<ShowDistShowLogo>(distShowLogo);
-             }
-             else
-             {
-                 distShowLogo = objectService.GetAll<ShowDistShowLogo>().Where(ctxt => ctxt.Id == objDistShowLogo.Id).SingleOrDefault();
-             }
-             distShowLogo.AttendeeId = objDistShowLogo.AttendeeId;
-             distShowLogo.LogoImageUrl = objDistShowLogo.LogoImageUrl;
-             distShowLogo.UpdateDate = DateTime.UtcNow;
-             distShowLogo.UpdateSource = objDistShowLogo.UpdateSource;
-             return distShowLogo;
-         }
+        {
+            if (objDistShowLogo == null) return null;
+            ShowDistShowLogo distShowLogo = null;
+            if (objDistShowLogo.Id == 0)
+            {
+                distShowLogo = new ShowDistShowLogo()
+                {
+                    CreateDate = DateTime.UtcNow,
+                };
+                objectService.Add<ShowDistShowLogo>(distShowLogo);
+            }
+            else
+            {
+                distShowLogo = objectService.GetAll<ShowDistShowLogo>().Where(ctxt => ctxt.Id == objDistShowLogo.Id).SingleOrDefault();
+            }
+            distShowLogo.AttendeeId = objDistShowLogo.AttendeeId;
+            distShowLogo.LogoImageUrl = objDistShowLogo.LogoImageUrl;
+            distShowLogo.UpdateDate = DateTime.UtcNow;
+            distShowLogo.UpdateSource = objDistShowLogo.UpdateSource;
+            return distShowLogo;
+        }
 
+        public static void DeleteShowAttendee(IObjectService objectService, ShowAttendee objShowAttendee, string updateSource)
+        {
+            if (objShowAttendee != null)
+            {
+                int employeeAttendeeCount = objShowAttendee.EmployeeAttendees.Count();                
+                for (int i = employeeAttendeeCount; i > 0; i--)
+                {
+                    var showEmployeeAttendee = objShowAttendee.EmployeeAttendees.ElementAt(i - 1);
+                    ShowHelper.DeleteShowEmployeeAttendee(objectService, showEmployeeAttendee, updateSource);
+                }
+                if (objShowAttendee.TravelForms != null)
+                {
+                    int travelFormsCount = objShowAttendee.TravelForms.Count();
+                    for (int i = travelFormsCount; i > 0; i--)
+                    {
+                        var frmInstance = objShowAttendee.TravelForms.ElementAt(i - 1);
+                        frmInstance.EmployeeAttendeeId = null;
+                        frmInstance.UpdateDate = DateTime.UtcNow;
+                        frmInstance.UpdateSource = updateSource;
+                    }
+                }
+                if (objShowAttendee.ProfileRequests != null)
+                {
+                    int profileCount = objShowAttendee.ProfileRequests.Count();
+                    for (int i = profileCount; i > 0; i--)
+                    {
+                        var profile = objShowAttendee.ProfileRequests.ElementAt(i - 1);
+                        profile.EmployeeAttendeeId = null;
+                        profile.UpdateDate = DateTime.UtcNow;
+                        profile.UpdateSource = updateSource;
+                    }
+                }
+                if(objShowAttendee.DistShowLogos != null)
+                {
+                    int attendeeLogoCount = objShowAttendee.DistShowLogos.Count();
+                    for (int i = attendeeLogoCount; i > 0; i--)
+                    {
+                        var distShowLogo = objShowAttendee.DistShowLogos.ElementAt(i - 1);
+                        objectService.Delete(distShowLogo);
+                    }
+                }
+                objectService.Delete<ShowAttendee>(objShowAttendee);
+                objectService.SaveChanges();
+            }
+        }
+
+        public static void DeleteShowEmployeeAttendee(IObjectService objectService, ShowEmployeeAttendee objShowEmployeeAttendee, string updateSource)
+        {
+            if (objShowEmployeeAttendee != null)
+            {
+                if (objShowEmployeeAttendee.TravelForms != null)
+                {
+                    int travelFormsCount = objShowEmployeeAttendee.TravelForms.Count();
+                    for (int i = travelFormsCount; i > 0; i--)
+                    {
+                        var frmInstance = objShowEmployeeAttendee.TravelForms.ElementAt(i - 1);
+                        frmInstance.EmployeeAttendeeId = null;
+                        frmInstance.UpdateDate = DateTime.UtcNow;
+                        frmInstance.UpdateSource = updateSource;
+                    }
+                }
+                if (objShowEmployeeAttendee.ProfileRequests != null)
+                {
+                    int profileCount = objShowEmployeeAttendee.ProfileRequests.Count();
+                    for (int i = profileCount; i > 0; i--)
+                    {
+                        var profile = objShowEmployeeAttendee.ProfileRequests.ElementAt(i - 1);
+                        profile.EmployeeAttendeeId = null;
+                        profile.UpdateDate = DateTime.UtcNow;
+                        profile.UpdateSource = updateSource;
+                    }
+                }
+                objectService.Delete<ShowEmployeeAttendee>(objShowEmployeeAttendee);
+                objectService.SaveChanges();
+            }
+        }
     }
 }

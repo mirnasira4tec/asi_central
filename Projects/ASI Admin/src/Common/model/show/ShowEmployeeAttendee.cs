@@ -18,6 +18,7 @@ namespace asi.asicentral.model.show
         public string UpdateSource { get; set; }
         public bool? HasTravelForm { get; set; }
         public virtual IList<ShowProfileRequests> ProfileRequests { get; set; }
+        public virtual IList<ShowFormInstance> TravelForms { get; set; }
         public int? PriorityOrder { get; set; }
     }
 }

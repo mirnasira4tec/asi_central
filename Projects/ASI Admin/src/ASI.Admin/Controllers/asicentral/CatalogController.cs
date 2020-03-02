@@ -427,6 +427,7 @@ namespace asi.asicentral.web.Controllers.asicentral
             sales = sales.GroupBy(m => m.ASINumber)
              .Select(s => new CatalogSales
              {
+                 CatalogContactSaleId = s.FirstOrDefault().CatalogContactSaleId,
                  CompanyName = s.FirstOrDefault().CompanyName,
                  ASINumber = s.FirstOrDefault().ASINumber,
                  Email = s.FirstOrDefault().Email,

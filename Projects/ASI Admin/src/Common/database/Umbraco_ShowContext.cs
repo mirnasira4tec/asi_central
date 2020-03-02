@@ -30,6 +30,9 @@ namespace asi.asicentral.database
         public DbSet<ShowProfileRequests> ProfileRequests { get; set; }
         public DbSet<ShowProfileOptionalDetails> ProfileOptionalDetails { get; set; }
         public DbSet<ShowProfileDistributorData> ProfileDistributorData { get; set; }
+        public DbSet<ShowFormType> ShowFormType { get; set; }
+        public DbSet<ShowFormInstance> ShowFormInstance { get; set; }
+        public DbSet<ShowFormPropertyValue> ShowFormPropertyValue { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -53,7 +56,11 @@ namespace asi.asicentral.database
                 .Add(new ShowProfileOptionalDataLabelMap())
                 .Add(new ShowProfileRequestMap())
                 .Add(new ShowProfileOptionalDetailsMap())
-                .Add(new ShowProfileDistributorDataMap());
+                .Add(new ShowProfileDistributorDataMap())
+                .Add(new ShowFormTypeMap())
+                .Add(new ShowFormInstanceMap())
+                .Add(new ShowFormValueMap());
+
         }
     }
 }

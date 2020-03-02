@@ -259,6 +259,9 @@
     <Compile Include="database\mappings\asicentral\RateSupplierFormDetailMap.cs" />
     <Compile Include="database\mappings\asicentral\RateSupplierFormMap.cs" />
     <Compile Include="database\mappings\asicentral\RateSupplierImportMap.cs" />
+    <Compile Include="database\mappings\show\ShowFormInstanceMap.cs" />
+    <Compile Include="database\mappings\show\ShowFormTypeMap.cs" />
+    <Compile Include="database\mappings\show\ShowFormValueMap.cs" />
     <Compile Include="database\mappings\show\ShowDistShowLogoMap.cs" />
     <Compile Include="database\mappings\excit\SupUpdateFieldMap.cs" />
     <Compile Include="database\mappings\excit\SupUpdateRequestDetailMap.cs" />
@@ -377,6 +380,9 @@
     <Compile Include="model\call\CallQueue.cs" />
     <Compile Include="model\call\CallRequests.cs" />
     <Compile Include="model\CreditCard.cs" />
+    <Compile Include="model\show\ShowFormInstance.cs" />
+    <Compile Include="model\show\ShowFormType.cs" />
+    <Compile Include="model\show\ShowFormPropertyValue.cs" />
     <Compile Include="model\show\ShowDistShowLogo.cs" />
     <Compile Include="model\show\ShowProfileDistributorData.cs" />
     <Compile Include="model\show\ShowProfileOptionalDataLabel.cs" />

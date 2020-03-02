@@ -35,7 +35,6 @@ namespace asi.asicentral.database.mappings.show
             HasRequired(x => x.Employee)
             .WithMany()
             .HasForeignKey(x => x.EmployeeId);
-
         }
     }
 }

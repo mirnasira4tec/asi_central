@@ -162,6 +162,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ASIInternetTest.cs" />
     <Compile Include="ObjectServiceTest.cs" />
+    <Compile Include="ShowFormTest.cs" />
     <Compile Include="ShowServiceTest.cs" />
     <Compile Include="StoreServiceTest.cs" />
     <Compile Include="ProductTest.cs" />

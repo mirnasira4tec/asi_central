@@ -212,7 +212,7 @@ Html.RenderPartial("../asicentral/Shared/_CatalogPagerLink", Model, ViewData);
 									}
 									else
 									{
-										<text>@sale.OtherOption</text>
+										<a href="/Catalog/ApproveContact?saleId=@sale.CatalogContactSaleId">@sale.OtherOption</a>
 									}
 								</td>
 							}

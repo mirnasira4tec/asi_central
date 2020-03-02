@@ -389,6 +389,15 @@ namespace asi.asicentral.database.mappings
             For<IRepository<ShowProfileDistributorData>>().Use<EFRepository<ShowProfileDistributorData>>()
               .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
+            For<IRepository<ShowFormType>>().Use<EFRepository<ShowFormType>>()
+              .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+
+            For<IRepository<ShowFormInstance>>().Use<EFRepository<ShowFormInstance>>()
+              .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+
+            For<IRepository<ShowFormPropertyValue>>().Use<EFRepository<ShowFormPropertyValue>>()
+              .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+
             #endregion Umbraco_ShowContext
 
             #region PersonifyContext

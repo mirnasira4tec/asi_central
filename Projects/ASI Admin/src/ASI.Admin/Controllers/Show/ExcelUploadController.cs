@@ -471,30 +471,7 @@ namespace asi.asicentral.web.Controllers.Show
                                     for (var i = attendeesToBeDeleted.Count() - 1; i >= 0; i--)
                                     {
                                         var attendee = attendeesToBeDeleted[i];
-                                        if (attendee.EmployeeAttendees != null && attendee.EmployeeAttendees.Any())
-                                        {
-                                            for (var j = attendee.EmployeeAttendees.Count() - 1; j >= 0; j--)
-                                            {
-                                                if (attendee.EmployeeAttendees[j].ProfileRequests.Count() > 0)
-                                                {
-                                                    attendee.EmployeeAttendees[j].ProfileRequests.ForEach(a => a.EmployeeAttendeeId = null);
-                                                }
-                                                ObjectService.Delete(attendee.EmployeeAttendees[j]);
-                                            }
-                                        }
-
-                                        if (attendee.DistShowLogos != null && attendee.DistShowLogos.Any())
-                                        {
-                                            for (var j = attendee.DistShowLogos.Count() - 1; j >= 0; j--)
-                                            {
-                                                ObjectService.Delete(attendee.DistShowLogos[j]);
-                                            }
-                                        }
-                                        if (attendee.ProfileRequests != null && attendee.ProfileRequests.Any())
-                                        {
-                                            attendee.ProfileRequests.ForEach(a => a.AttendeeId = null);
-                                        }
-                                        ObjectService.Delete<ShowAttendee>(attendee);
+                                        ShowHelper.DeleteShowAttendee(ObjectService, attendee, "ExcelUploadController - Index");
                                     }
                                     log.Debug(string.Format("{0} company attendees have been deleted for '{1}' after uploading", attendeesToBeDeleted.Count, objShow.Name));
                                 }
@@ -509,14 +486,9 @@ namespace asi.asicentral.web.Controllers.Show
                                     if (employeeAttendees.FirstOrDefault(a => a.EmployeeId == attendees[k].EmployeeId) == null)
                                     { // delete employee from attendee list only, not from database
                                         countDel++;
-                                        if (attendees[k].ProfileRequests.Count() > 0)
-                                        {
-                                            attendees[k].ProfileRequests.ForEach(a => a.EmployeeAttendeeId = null);
-                                        }
-                                        ObjectService.Delete(attendees[k]);
+                                        ShowHelper.DeleteShowEmployeeAttendee(ObjectService, attendees[k], "ExcelUploadController - Index");
                                     }
                                 }
-
                                 if (countDel > 0)
                                 {
                                     ObjectService.SaveChanges();

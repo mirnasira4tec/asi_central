@@ -216,6 +216,7 @@ namespace asi.asicentral.web.Controllers.Show
                         for (int j = employeeAttendees.Count() - 1; j >= 0; j--)
                         {
                             ObjectService.Delete<ShowEmployeeAttendee>(employeeAttendees.ElementAt(j));
+                            ShowHelper.DeleteShowEmployeeAttendee(ObjectService, employeeAttendees.ElementAt(j), "ShowCompanyController - Delete");
                         }
                     }
                     ObjectService.Delete(company.Employees.ElementAt(i));
@@ -494,7 +495,7 @@ namespace asi.asicentral.web.Controllers.Show
             ShowEmployeeAttendee employeeAttendee = ObjectService.GetAll<ShowEmployeeAttendee>().FirstOrDefault(item => item.Employee.Id == employee.Id);
             if (employeeAttendee != null)
             {
-                ObjectService.Delete<ShowEmployeeAttendee>(employeeAttendee);
+                ShowHelper.DeleteShowEmployeeAttendee(ObjectService, employeeAttendee, "ShowCompanyController - DeleteEmployee");
                 if (addresss != null)
                 {
                     ObjectService.Delete<ShowAddress>(addresss);
@@ -523,7 +524,6 @@ namespace asi.asicentral.web.Controllers.Show
                 ID = companyId
             });
         }
-
 
         public ActionResult IsValidEmail(string Email)
         {
@@ -684,14 +684,7 @@ namespace asi.asicentral.web.Controllers.Show
             ShowAttendee attendee = ObjectService.GetAll<ShowAttendee>().FirstOrDefault(item => item.Id == id);
             if (attendee != null)
             {
-                int employeeAttendeeCount = attendee.EmployeeAttendees.Count();
-
-                for (int i = employeeAttendeeCount; i > 0; i--)
-                {
-                    ObjectService.Delete(attendee.EmployeeAttendees.ElementAt(i - 1));
-                }
-                ObjectService.Delete<ShowAttendee>(attendee);
-                ObjectService.SaveChanges();
+                ShowHelper.DeleteShowAttendee(ObjectService, attendee, "ShowCompanyController - DeleteAttendeeCompany");
             }
             return RedirectToAction("GetAttendeeCompany", new { showId = showId });
         }
