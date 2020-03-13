@@ -196,7 +196,15 @@ namespace asi.asicentral.web.Controllers.Store
                     if (product != null && product.HasBackEndIntegration && 
                         ( couponModel.MonthlyCost.HasValue || couponModel.ProductDiscount == product.Cost) )
                     {
-                        if (!ValidatePersonifyRateCode(couponModel.RateStructure, couponModel.GroupName, couponModel.RateCode, ref persProductId))
+                        var isValid = !string.IsNullOrEmpty(couponModel.RateStructure) && !string.IsNullOrEmpty(couponModel.GroupName) &&
+                          !string.IsNullOrEmpty(couponModel.RateCode);
+                        if (isValid)
+                        {
+                            var isCanada = product.ASICompany.ToLower() == "asi canada" ? true : false;
+                            isValid = BackendService.ValidateRateCode(couponModel.GroupName, couponModel.RateStructure, couponModel.RateCode, ref persProductId, isCanada);
+                        }
+
+                        if (!isValid)
                         {
                             ModelState.AddModelError("Error", "Invalid Rate Structure, Product Code or Rate Code");
                         }
@@ -266,18 +274,6 @@ namespace asi.asicentral.web.Controllers.Store
             }
 
             return List();
-        }
-
-        private bool ValidatePersonifyRateCode(string rateStructure, string groupName, string rateCode, ref int persProductId)
-        {
-            var isValid = !string.IsNullOrEmpty(rateStructure) && !string.IsNullOrEmpty(groupName) &&
-                          !string.IsNullOrEmpty(rateCode);
-            if (isValid)
-            {
-                isValid = BackendService.ValidateRateCode(groupName, rateStructure, rateCode, ref persProductId);
-            }
-
-            return isValid;
         }
 
         private void UpdatePersonifyMappingTbl(Coupon coupon, ContextProduct product, int personifyProductId)

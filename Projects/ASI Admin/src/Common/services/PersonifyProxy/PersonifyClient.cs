@@ -726,12 +726,12 @@ namespace asi.asicentral.services.PersonifyProxy
             }
         }
 
-        public static bool ValidateRateCode(string groupName, string rateStructure, string rateCode, ref int persProductId)
+        public static bool ValidateRateCode(string groupName, string rateStructure, string rateCode, ref int persProductId, bool isCanada = false)
         {
             var isValid = false;
             if (!string.IsNullOrEmpty(groupName) && !string.IsNullOrEmpty(rateStructure) && !string.IsNullOrEmpty(rateCode))
             {
-                var response = ExecutePersonifySP(SP_GET_PRODUCT_DETAILS, new List<string>() { "ASI_PRODUCTS", groupName, rateStructure, rateCode });
+                var response = ExecutePersonifySP(SP_GET_PRODUCT_DETAILS, new List<string>() { isCanada ? "C-ASI_PRODUCTS" : "ASI_PRODUCTS", groupName, rateStructure, rateCode }, isCanada);
 
                 if (response != null && !string.IsNullOrEmpty(response.Data))
                 {
@@ -1845,7 +1845,7 @@ namespace asi.asicentral.services.PersonifyProxy
             return accountTypes;
         }
 
-        public static StoredProcedureOutput ExecutePersonifySP(string spName, List<string> parameters)
+        public static StoredProcedureOutput ExecutePersonifySP(string spName, List<string> parameters, bool isCanada = false)
         {
             _log.Debug(string.Format("ExecutePersonifySP - start: StoreProcedure name - {0})", spName));
             var startTime = DateTime.Now;
@@ -1874,7 +1874,7 @@ namespace asi.asicentral.services.PersonifyProxy
 
                     try
                     {
-                        response = SvcClient.Post<StoredProcedureOutput>("GetStoredProcedureDataXML", spRequest);
+                        response = SvcClient.Post<StoredProcedureOutput>("GetStoredProcedureDataXML", spRequest, isCanada);
                     }
                     catch (Exception ex)
                     {

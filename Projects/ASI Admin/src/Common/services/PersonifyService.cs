@@ -790,9 +790,9 @@ namespace asi.asicentral.services
             return PersonifyClient.GetCompanyAsiNumber(masterCustomerId, subCustomerId);
         }
 
-        public bool ValidateRateCode(string groupName, string rateStructure, string rateCode, ref int persProductId)
+        public bool ValidateRateCode(string groupName, string rateStructure, string rateCode, ref int persProductId, bool isCanada = false)
         {
-            return PersonifyClient.ValidateRateCode(groupName, rateStructure, rateCode, ref persProductId);
+            return PersonifyClient.ValidateRateCode(groupName, rateStructure, rateCode, ref persProductId, isCanada);
         }
 
 

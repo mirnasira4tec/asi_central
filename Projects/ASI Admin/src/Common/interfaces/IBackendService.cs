@@ -58,7 +58,7 @@ namespace asi.asicentral.interfaces
         string GetCompanyAsiNumber(string masterCustomerId, int subCustomerId);
 
         void AddActivity(StoreCompany company, string activityText, Activity activityType);
-        bool ValidateRateCode(string groupName, string rateStructure, string rateCode, ref int persProductId);
+        bool ValidateRateCode(string groupName, string rateStructure, string rateCode, ref int persProductId, bool isCanada);
 
         CompanyInformation AddEEXSubscription(User user, bool isBusinessAddress);
         PersonifyStatus OptOutEmailSubscription(string email, List<string> usageCodes);
