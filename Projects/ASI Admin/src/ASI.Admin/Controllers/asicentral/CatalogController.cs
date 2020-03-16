@@ -455,6 +455,7 @@ namespace asi.asicentral.web.Controllers.asicentral
             if (salesModel?.Sales != null)
             {
                 #region sorting
+                salesModel.Sales = salesModel.Sales.OrderByDescending(m => m.UpdateDateUTC).ToList();
                 if (orderType == "desc")
                 {
                     if (orderTitle == "pendingSales")
