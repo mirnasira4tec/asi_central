@@ -449,7 +449,7 @@ namespace asi.asicentral.web.Controllers.asicentral
                  }).ToList(),
              }).ToList();
 
-            salesModel.Sales = sales.OrderBy(m => m.CatalogContactSaleId).Skip((salesModel.Page - 1) * salesModel.ResultsPerPage)
+            salesModel.Sales = sales.OrderByDescending(m => m.UpdateDateUTC).Skip((salesModel.Page - 1) * salesModel.ResultsPerPage)
                                             .Take(salesModel.ResultsPerPage).ToList();
             salesModel.ResultsTotal = sales.Count();
             if (salesModel?.Sales != null)

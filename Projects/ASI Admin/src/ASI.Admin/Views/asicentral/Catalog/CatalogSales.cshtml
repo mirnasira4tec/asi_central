@@ -217,10 +217,11 @@ Html.RenderPartial("../asicentral/Shared/_CatalogPagerLink", Model, ViewData);
 								</td>
 							}
 							<td>@sale.UpdateDateUTC.ToString("MM/dd/yyyy")</td>
-						</tr>
-					}
-					if (Model.ResultsTotal > Model.ResultsPerPage)
-					{
+						</tr>  }
+                    if (Model.ResultsTotal > Model.ResultsPerPage)
+                    {
+                        Model.q["orderTitle"] = string.Empty;
+                        Model.q["orderType"] = string.Empty;
 						<tr>
 							<td class="pager" colspan="9">
 								@Html.Partial("../asicentral/Shared/_CatalogPager", Model)
