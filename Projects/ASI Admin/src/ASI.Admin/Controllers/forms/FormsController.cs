@@ -2,6 +2,7 @@
 using asi.asicentral.model.store;
 using asi.asicentral.web.Models.forms;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
@@ -52,7 +53,7 @@ namespace asi.asicentral.web.Controllers.forms
             if (!string.IsNullOrEmpty(companyName)) viewModel.CompanyName = companyName;
             viewModel.FormTab = formTab;
             viewModel.Forms = formInstanceQuery.OrderByDescending(form => form.CreateDate).ToList();
-			viewModel.FormTypes = StoreService.GetAll<FormType>(true).Where(ft => !ft.IsObsolete && !(ft.Implementation == string.Empty || ft.Implementation == null )).ToList();
+            viewModel.FormTypes = StoreService.GetAll<FormType>(true).Where(ft => !ft.IsObsolete && !(ft.Implementation == string.Empty || ft.Implementation == null)).ToList();
             return View("../Forms/Index", viewModel);
         }
 
@@ -148,6 +149,16 @@ namespace asi.asicentral.web.Controllers.forms
                 model.Form.FormType = formType;
                 return View("../Forms/SendForm", model);
             }
+        }
+
+        public ActionResult FormsDetails(int? id)
+        {
+            FormInstance instance = null;
+            if (id.HasValue)
+            {
+                instance= StoreService.GetAll<FormInstance>().Where(f => f.Id == id.Value).FirstOrDefault();
+            }
+            return View("../Forms/FormsDetails", instance);
         }
     }
 }

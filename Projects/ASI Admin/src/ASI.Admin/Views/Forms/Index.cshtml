@@ -70,8 +70,12 @@
             {
                 <tr>
                     <td>@Html.Raw(string.Format("{0:MM/dd/yy} <br /> {0:hh:mm tt}", form.CreateDate.ToLocalTime()))</td>
-                    <td>@form.Email</td>
-                @if (string.IsNullOrWhiteSpace(form.FormType.Implementation))
+                    <td>
+                        <a href="@Url.Content("~/forms/formsDetails/"+form.Id)">
+                            @form.Email
+                        </a>
+                    </td>
+                    @if (string.IsNullOrWhiteSpace(form.FormType.Implementation))
                     {
                         <td>@form.FormType.Name</td>
                     }
@@ -104,14 +108,14 @@
     @Scripts.Render("~/bundles/form")
     <script src="/Scripts/asi.js"></script>
     <script>
-		$('input[data-type*="date"]').datepicker();
+        $('input[data-type*="date"]').datepicker();
 
-		$('ul[id*="formtab"] a').click(function(e) {
-			e.preventDefault();
-			var tabname = e.target.toString();
-			tabname = tabname.substr(tabname.indexOf("#") + 1);
-			$('input[name*="formtab"]').val(tabname);
-			$(this).tab('show');
-		});
+        $('ul[id*="formtab"] a').click(function (e) {
+            e.preventDefault();
+            var tabname = e.target.toString();
+            tabname = tabname.substr(tabname.indexOf("#") + 1);
+            $('input[name*="formtab"]').val(tabname);
+            $(this).tab('show');
+        });
     </script>
 }

@@ -1,0 +1,37 @@
+﻿@model asi.asicentral.model.store.FormInstance
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Forms Details";
+}
+<form>
+    <h2>Forms Details</h2>
+    <div class="clearfix"></div>
+    @if (Model != null)
+    {
+    <h5>
+        @Model.FormType.Name <br />
+        Created: @Html.Raw(string.Format("{0:MM/dd/yy} {0:hh:mm tt}", Model.CreateDate.ToLocalTime()))
+    </h5>
+        if (Model.Values != null && Model.Values.Count() > 0)
+        {
+            <table class="table table-bordered table-condensed table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th style="width:315px">Field</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var value in Model.Values)
+                    {
+                        <tr>
+                            <td style="width:315px">@value.Name</td>
+                            <td>@value.Value</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+     }
+</form>
+

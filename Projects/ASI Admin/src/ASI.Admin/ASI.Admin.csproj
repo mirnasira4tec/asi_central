@@ -541,6 +541,7 @@
     <Content Include="Views\asicentral\Catalog\EditContactNotesForm.cshtml" />
     <Content Include="Views\Store\CompanyValidations\GroupByType.cshtml" />
     <Content Include="Views\Store\CompanyValidations\List.cshtml" />
+    <Content Include="Views\Forms\FormsDetails.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
