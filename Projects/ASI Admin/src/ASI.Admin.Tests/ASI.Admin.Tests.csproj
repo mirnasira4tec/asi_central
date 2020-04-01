@@ -137,6 +137,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\Form\FormControllerTest.cs" />
     <Compile Include="Controllers\sgr\CompanyControllerTest.cs" />
     <Compile Include="Controllers\Store\EquipmentApplicationTest.cs" />
     <Compile Include="Controllers\Store\CouponControllerTest.cs" />
