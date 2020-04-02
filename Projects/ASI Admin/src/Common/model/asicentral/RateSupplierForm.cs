@@ -22,6 +22,7 @@ namespace asi.asicentral.model.asicentral
         public string SubmitName { get; set; }
         public string SubmitEmail { get; set; }
         public string IPAddress { get; set; }
+        public bool IsDirty { get; set; }
         public virtual RateSupplierImport RateSupplierImports { get; set; }
         public virtual List<RateSupplierFormDetail> RateSupplierFormDetails { get; set; }
     }

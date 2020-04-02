@@ -12,6 +12,7 @@ using ClosedXML.Excel;
 using System.Linq.Dynamic;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Text;
 
 namespace asi.asicentral.web.Controllers.asicentral
 {
@@ -139,6 +140,7 @@ namespace asi.asicentral.web.Controllers.asicentral
                             {
                                 DistASINum = row.Cell(distASIIndex).GetString(),
                                 DistCompanyName = row.Cell(distNameIndex).GetString(),
+                                IsDirty = false,
                                 SubmitBy = string.Empty,
                                 SubmitSuccessful = false,
                                 CreateDateUTC = startdate,
@@ -257,7 +259,7 @@ namespace asi.asicentral.web.Controllers.asicentral
             return View("~/Views/asicentral/ratesupplier/ratesupplierratings.cshtml", details);
         }
 
-        public ActionResult RatingSummary(int? importId, int reportType=1)
+        public ActionResult RatingSummary(int? importId, int reportType = 1)
         {
             ViewBag.ImportId = 0;
             ViewBag.ReportType = reportType;
@@ -277,64 +279,44 @@ namespace asi.asicentral.web.Controllers.asicentral
             //Find Order Column
             var sortColumn = Request.Form.GetValues("columns[" + Request.Form.GetValues("order[0][column]").FirstOrDefault() + "][name]").FirstOrDefault();
             var sortColumnDir = Request.Form.GetValues("order[0][dir]").FirstOrDefault();
-            var distributors = ObjectService.GetAll<RateSupplierForm>().Where(m => m.RateSupplierImportId == importId);
-            if (reportType == (int)ReportType.NotRated)
-            {
-                distributors = distributors.Where(m => !m.SubmitSuccessful);
-            }
-            else if (reportType == (int)ReportType.Plus50Rated)
-            {
-                distributors = distributors.Where(m => m.SubmitSuccessful);
-            }
-            if (!string.IsNullOrWhiteSpace(search))
-            {
-                distributors = distributors.Where(m => m.DistASINum.Contains((search)));
-            }
-            var forms = distributors.Select(q => new RateDistributor { RateSupplierFormId = q.RateSupplierFormId, DistASINum = q.DistASINum, DistCompanyName = q.DistCompanyName });
-            var formIds = forms.Select(q => q.RateSupplierFormId);
-            var details = ObjectService.GetAll<RateSupplierFormDetail>().Where(m => formIds.Contains(m.RateSupplierFormId));
-            if (reportType == (int)ReportType.Plus50Rated)
-            {
-                details = details.Where(m=> m.NumOfTransSubmit >= 50 && m.NumOfTransSubmit < 100);
-            }
-            if (reportType == (int)ReportType.NotRated)
-            {
-                details = details.Where(m => !m.SubmitSuccessful);
-            }
-            else
-            {
-                details = details.Where(m => m.SubmitSuccessful);
-            }
+            IQueryable<RateDistributor> forms = null;
+            IQueryable<RateSupplierFormDetail> details = null;
+            var distributors = GetFilterQuery(importId, reportType, search, out forms, out details);
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
             int recordsTotal = 0;
-
-            recordsTotal = (from dist in distributors
-                            join rating in details
-                         on dist.RateSupplierFormId equals rating.RateSupplierFormId
-                            select 1).Count();
-
-            var summaries = (from dist in forms
-                             join rating in details
-                             on dist.RateSupplierFormId equals rating.RateSupplierFormId
-                             select new RateSupplierSummaryModel
-                             {
-                                 DistASINum = dist.DistASINum,
-                                 DistName = dist.DistCompanyName,
-                                 SupASINum = rating.SupASINum,
-                                 SupCompanyName = rating.SupCompanyName,
-                                 NumOfTransImport = rating.NumOfTransImport,
-                                 NumOfTransSubmit = rating.NumOfTransSubmit,
-                                 TransDifference = Math.Abs(rating.NumOfTransImport - rating.NumOfTransSubmit),
-                                 OverallRating = rating.OverallRating.HasValue ? rating.OverallRating.Value : 0,
-                                 ProdQualityRating = rating.ProdQualityRating.HasValue ? rating.ProdQualityRating.Value : 0,
-                                 CommunicationRating = rating.CommunicationRating.HasValue ? rating.CommunicationRating.Value : 0,
-                                 DeliveryRating = rating.DeliveryRating.HasValue ? rating.DeliveryRating.Value : 0,
-                                 ProbResolutionRating = rating.ProbResolutionRating.HasValue ? rating.ProbResolutionRating.Value : 0,
-                                 ImprintingRating = rating.ImprintingRating.HasValue ? rating.ImprintingRating.Value : 0,
-                             }).OrderBy(sortColumn + " " + sortColumnDir).Skip(skip).Take(pageSize);
             IQueryable result = null;
-            result = summaries.AsQueryable();
+            if (distributors != null)
+            { 
+                recordsTotal = (from dist in distributors
+                                join rating in details
+                             on dist.RateSupplierFormId equals rating.RateSupplierFormId
+                                select 1).Count();
+                if (forms != null && details != null)
+                {
+                    var summaries = (from dist in forms
+                                     join rating in details
+                                     on dist.RateSupplierFormId equals rating.RateSupplierFormId
+                                     select new RateSupplierSummaryModel
+                                     {
+                                         DistASINum = dist.DistASINum,
+                                         DistName = dist.DistCompanyName,
+                                         SupASINum = rating.SupASINum,
+                                         SupCompanyName = rating.SupCompanyName,
+                                         NumOfTransImport = rating.NumOfTransImport,
+                                         NumOfTransSubmit = rating.NumOfTransSubmit,
+                                         TransDifference = Math.Abs(rating.NumOfTransImport - rating.NumOfTransSubmit),
+                                         OverallRating = rating.OverallRating.HasValue ? rating.OverallRating.Value : 0,
+                                         ProdQualityRating = rating.ProdQualityRating.HasValue ? rating.ProdQualityRating.Value : 0,
+                                         CommunicationRating = rating.CommunicationRating.HasValue ? rating.CommunicationRating.Value : 0,
+                                         DeliveryRating = rating.DeliveryRating.HasValue ? rating.DeliveryRating.Value : 0,
+                                         ProbResolutionRating = rating.ProbResolutionRating.HasValue ? rating.ProbResolutionRating.Value : 0,
+                                         ImprintingRating = rating.ImprintingRating.HasValue ? rating.ImprintingRating.Value : 0,
+                                     }).OrderBy(sortColumn + " " + sortColumnDir).Skip(skip).Take(pageSize);
+                   
+                    result = summaries.AsQueryable();
+                }
+        }
             return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = result == null ? Enumerable.Empty<RateSupplierSummaryModel>().AsQueryable() : result }, JsonRequestBehavior.AllowGet);
         }
 
@@ -380,18 +362,110 @@ namespace asi.asicentral.web.Controllers.asicentral
             return "delete completed.";
         }
 
+        public ActionResult DownloadRateSupplierSummary(int? importId, string asiNumber, int reportType = 1)
+        {
+            LogService log = LogService.GetLog(this.GetType());
+            try
+            {                
+                IQueryable<RateDistributor> forms = null;
+                IQueryable<RateSupplierFormDetail> details = null;
+                var distributors = GetFilterQuery(importId, reportType, asiNumber,out forms,out details);
+                var csvString = new StringBuilder();
+                if (details != null)
+                {
+                    var ratings = details.ToList();                    
+                    var columnNames = string.Empty;
+                    columnNames = "Distributor ASI#,Distributor Name,Supplier ASI#,Supplier Name,Trans# in System,Trans# Submit,Diff. of Trans#,Overall,Prod Quality,Communication,Delivery,Prob Resolution,Imprinting";
+                    csvString.AppendLine(columnNames);
+                    if (forms != null)
+                    {
+                        foreach (var form in forms)
+                        {
+                            var line = string.Empty;
+                            var formRatings = ratings.Where(q => q.RateSupplierFormId == form.RateSupplierFormId).ToList();
+                            foreach (var rating in formRatings)
+                            {
+                                line = string.Join(",", form.DistASINum, form.DistCompanyName, rating.SupASINum, rating.NumOfTransImport, rating.NumOfTransSubmit, Math.Abs(rating.NumOfTransImport - rating.NumOfTransSubmit), rating.OverallRating, rating.ProdQualityRating, rating.CommunicationRating, rating.DeliveryRating, rating.ImprintingRating);
+                                csvString.AppendLine(line);
+                            }
+                        }
+                    }
+                }
+                var filename = "SupplierRating-" + ((ReportType)reportType).ToString() + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + DateTime.Today.Year + ".csv";
+                return File(new System.Text.UTF8Encoding().GetBytes(csvString.ToString()), "text/csv", filename);
+
+            }
+            catch (Exception ex)
+            {
+                log.Debug("Error in RateSupplierController -- DownloadRateSupplierSummary , exception message: " + ex.Message);
+                TempData["ErrorMessage"] = "Error occured while downloading data -'" + ex.Message;
+            }
+            return null;
+        }
+
+        private IQueryable<RateSupplierForm> GetFilterQuery(int? importId, int reportType, string search, out IQueryable<RateDistributor> forms,out IQueryable<RateSupplierFormDetail> details)
+        {
+            IQueryable<RateSupplierForm> distributors = null;
+            forms = null;
+            details = null;
+            if (importId.HasValue)
+            {
+                distributors = ObjectService.GetAll<RateSupplierForm>().Where(m => m.RateSupplierImportId == importId);
+                switch(reportType)
+                {
+                    case (int)ReportType.NotRated: distributors = distributors.Where(m => !m.IsDirty && m.SubmitDateUTC == null);
+                        break;
+                    case (int)ReportType.Plus50Rated:
+                        distributors = distributors.Where(m => m.RateSupplierFormDetails.Any(q => q.NumOfTransSubmit > 50 && q.SubmitSuccessful));
+                        break;
+                    case (int)ReportType.AllRated:
+                        distributors = distributors.Where(m => m.RateSupplierFormDetails.Any(q => q.SubmitSuccessful));
+                        break;
+                    case (int)ReportType.UserInteracted:
+                        distributors = distributors.Where(m => m.IsDirty && m.SubmitDateUTC == null && !m.SubmitSuccessful && m.RateSupplierFormDetails.Where(q => q.SubmitSuccessful).Count() < 1);
+                        break;
+                    case (int)ReportType.Saved:
+                        distributors = distributors.Where(m => m.SubmitDateUTC != null && m.RateSupplierFormDetails.Where(q => q.SubmitSuccessful).Count() < 1);
+                        break;
+                }
+                
+                if (!string.IsNullOrWhiteSpace(search))
+                {
+                    distributors = distributors.Where(m => m.DistASINum.Contains((search)));
+                }
+                forms = distributors.Select(q => new RateDistributor { RateSupplierFormId = q.RateSupplierFormId, DistASINum = q.DistASINum, DistCompanyName = q.DistCompanyName });
+                var formIds = forms.Select(q => q.RateSupplierFormId);
+                details = ObjectService.GetAll<RateSupplierFormDetail>().Where(m => formIds.Contains(m.RateSupplierFormId));
+                if (reportType == (int)ReportType.Plus50Rated)
+                {
+                    details = details.Where(m => m.NumOfTransSubmit >= 50 && m.NumOfTransSubmit < 100);
+                }
+                if (reportType == (int)ReportType.NotRated || reportType == (int)ReportType.UserInteracted || reportType == (int)ReportType.Saved)
+                {
+                    details = details.Where(m => !m.SubmitSuccessful);
+                }
+                else
+                {
+                    details = details.Where(m => m.SubmitSuccessful);
+                }
+            }
+            return distributors;
+        }
+
         private class RateDistributor
         {
             public int RateSupplierFormId { get; set; }
             public string DistASINum { get; set; }
             public string DistCompanyName { get; set; }
         }
-        
+
     }
     public enum ReportType
     {
         Plus50Rated = 1,
         AllRated = 2,
         NotRated = 3,
+        UserInteracted = 4,
+        Saved = 5
     }
 }

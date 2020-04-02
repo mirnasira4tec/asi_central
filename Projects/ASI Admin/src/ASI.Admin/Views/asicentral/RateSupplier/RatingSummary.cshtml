@@ -18,12 +18,21 @@
 	case (int)ReportType.NotRated:
 		heading = " - Ratings Not Completed";
 		break;
+	case (int)ReportType.UserInteracted:
+		heading = " - User Interacted";
+		break;
+	case (int)ReportType.Saved:
+		heading = " - Saved";
+		break;
 
 }
 <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
 
 <div class="clearfix"></div>
 <div>&nbsp;</div>
+<div class="pull-right">
+	<a href="javascript:;" onclick="DownloadExcel();" class="btn" title="Download" style="margin-bottom: 20px;" target="_self">Download</a>
+</div>
 <div>
 
 	@if ((int)ViewBag.ReportType != (int)ReportType.Plus50Rated)
@@ -37,6 +46,14 @@
 	@if ((int)ViewBag.ReportType != (int)ReportType.NotRated)
 	{
 		<a class="DTTT_button DTTT_button_text btn" href="/RateSupplier/RatingSummary?importId=@ViewBag.ImportId&reportType=@((int)ReportType.NotRated)">Not Completed Ratings</a>
+	}
+	@if ((int)ViewBag.ReportType != (int)ReportType.UserInteracted)
+	{
+		<a class="DTTT_button DTTT_button_text btn" href="/RateSupplier/RatingSummary?importId=@ViewBag.ImportId&reportType=@((int)ReportType.UserInteracted)">User Interacted</a>
+	}
+	@if ((int)ViewBag.ReportType != (int)ReportType.Saved)
+	{
+		<a class="DTTT_button DTTT_button_text btn" href="/RateSupplier/RatingSummary?importId=@ViewBag.ImportId&reportType=@((int)ReportType.Saved)">Saved</a>
 	}
 </div>
 <h2 class="pull-left">Supplier Rating List @heading</h2>
@@ -110,6 +127,14 @@
                 ]
             });
             $(".DTTT_container a").addClass("btn");
-        });
+		});
+
+		function DownloadExcel() {
+			var importId =@ViewBag.ImportId;
+			var reportType = "@ViewBag.ReportType";
+			var asiNumber = $("#tblSummary_filter input").val();
+			var path = "/Store/RateSupplier/DownloadRateSupplierSummary?importId=" + importId + "&asiNumber=" + asiNumber + "&reportType=" + reportType;
+			window.location = path;
+		}
 	</script>
 }
