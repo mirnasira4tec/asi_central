@@ -1172,7 +1172,7 @@ namespace asi.asicentral.web.Controllers.asicentral
         #endregion download
 
         #region Private helping functions
-        private ActionResult CatalogContactUpdate(CatalogContactImport import, IXLWorksheet sheet)
+        public ActionResult CatalogContactUpdate(CatalogContactImport import, IXLWorksheet sheet)
         {
             if (import == null)
             {

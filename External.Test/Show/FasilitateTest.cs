@@ -158,39 +158,6 @@ namespace External.Test.Show
             return objCompany.Id == 0 ? null : objCompany;
         }
 
-        //private ShowAddress CreateShowAddress(ObjectService objectService, string zip, string state, string city, string country)
-        //{
-        //    var objAddress = new ShowAddress();
-        //    objAddress.Phone = "1231232";
-        //    objAddress.PhoneAreaCode = "214";
-        //    objAddress.FaxAreaCode = null;
-        //    objAddress.Fax = null;
-        //    objAddress.Street1 = "Test Street One";
-        //    objAddress.Street2 = "Test Street Two";
-        //    objAddress.Zip = zip;
-        //    objAddress.State = state;
-        //    objAddress.Country = country;
-        //    objAddress.City = city;
-        //    objAddress.UpdateSource = "FasilitateTest.cs - CreateCompany";
-        //    objAddress.UpdateDate = DateTime.Now;
-        //    objAddress.CreateDate = DateTime.Now;
-        //    objectService.Add<ShowAddress>(objAddress);
-        //    objectService.SaveChanges();
-        //    return objAddress.Id == 0 ? null : objAddress;
-
-        //}
-        //private ShowCompanyAddress CreateCompanyAddress(ObjectService objectService, int companyId, ShowAddress addresss)
-        //{
-        //    var objCompanyAddress = new ShowCompanyAddress();
-        //    objCompanyAddress.CompanyId = companyId;
-        //    objCompanyAddress.Address = addresss;
-        //    objCompanyAddress.UpdateDate = DateTime.Now;
-        //    objCompanyAddress.UpdateSource = "FasilitateTest.cs - CreateCompany";
-        //    objCompanyAddress.CreateDate = DateTime.Now;
-        //    objectService.Add<ShowCompanyAddress>(objCompanyAddress);
-        //    objectService.SaveChanges();
-        //    return objCompanyAddress;
-        //}
 
         private ShowProfileRequests CreateProfileRequest(ObjectService objectService, int? attendeeId, int? employeeAttendeeId)
         {
