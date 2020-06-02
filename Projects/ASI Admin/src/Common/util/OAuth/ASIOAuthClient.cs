@@ -64,6 +64,8 @@ namespace asi.asicentral.oauth
         OUT_OF_BUSINESS,
         [Description("Trial")]
         TRIAL,
+        [Description("Trial Member")]
+        TLMB,
     }
 
     public enum UsageCode
@@ -487,7 +489,9 @@ namespace asi.asicentral.oauth
                 && (memberStatus == StatusCode.ACTIVE.ToString()
                 || memberStatus == StatusCode.ACTV.ToString()
                 || memberStatus == StatusCode.DIST_NEWLIE.ToString()
-                || memberStatus == StatusCode.MMS_LOAD.ToString()))
+                || memberStatus == StatusCode.MMS_LOAD.ToString()
+                || memberStatus == StatusCode.TRIAL.ToString()
+                || memberStatus == StatusCode.TLMB.ToString()))
 
                 return true;
             else return false;
