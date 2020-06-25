@@ -256,6 +256,9 @@
     <Compile Include="database\mappings\asicentral\CatalogContactMap.cs" />
     <Compile Include="database\mappings\asicentral\CatalogContactSaleDetailMap.cs" />
     <Compile Include="database\mappings\asicentral\CatalogContactSaleMap.cs" />
+    <Compile Include="database\mappings\asicentral\FormInstanceMap.cs" />
+    <Compile Include="database\mappings\asicentral\FormTypeMap.cs" />
+    <Compile Include="database\mappings\asicentral\FormValueMap.cs" />
     <Compile Include="database\mappings\asicentral\RateSupplierFormDetailMap.cs" />
     <Compile Include="database\mappings\asicentral\RateSupplierFormMap.cs" />
     <Compile Include="database\mappings\asicentral\RateSupplierImportMap.cs" />
@@ -362,6 +365,9 @@
     <Compile Include="model\asicentral\CatalogContactImport.cs" />
     <Compile Include="model\asicentral\CatalogContactSale.cs" />
     <Compile Include="model\asicentral\CatalogContactSaleDetail.cs" />
+    <Compile Include="model\asicentral\AsicentralFormInstance.cs" />
+    <Compile Include="model\asicentral\AsicentralFormType.cs" />
+    <Compile Include="model\asicentral\AsicentralFormValue.cs" />
     <Compile Include="model\asicentral\PagerBase.cs" />
     <Compile Include="model\asicentral\RateSupplierForm.cs" />
     <Compile Include="model\asicentral\RateSupplierFormDetail.cs" />

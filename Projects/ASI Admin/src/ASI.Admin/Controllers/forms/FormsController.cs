@@ -1,5 +1,6 @@
 ﻿using asi.asicentral.interfaces;
 using asi.asicentral.model.store;
+using asi.asicentral.model.asicentral;
 using asi.asicentral.web.Models.forms;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,8 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Web.Mvc;
+using asi.asicentral.model;
+using asi.asicentral.web.Models.forms.asicentral;
 
 namespace asi.asicentral.web.Controllers.forms
 {
@@ -16,6 +19,7 @@ namespace asi.asicentral.web.Controllers.forms
         public IStoreService StoreService { get; set; }
         public IEmailService EmailService { get; set; }
         public ITemplateService TemplateService { get; set; }
+        public IBackendService PersonifyService { get; set; }
 
         public ActionResult Index(DateTime? dateStart, DateTime? dateEnd, String formTab, string creator, string companyName, string showPendingOnly = null)
         {
@@ -160,5 +164,332 @@ namespace asi.asicentral.web.Controllers.forms
             }
             return View("../Forms/FormsDetails", instance);
         }
+
+        #region ASICentral form
+        public ActionResult Asicentral(DateTime? dateStart, DateTime? dateEnd, string status = "", string formType="")
+        {
+            var viewModel = _initAsicentralForm();
+            
+            var formInstanceQuery = StoreService.GetAll<AsicentralFormInstance>(true);
+            if ( !string.IsNullOrEmpty(status) )
+            {
+                status = status.ToLower();
+                formInstanceQuery = formInstanceQuery.Where(i => i.Status != null && i.Status.ToLower() == status);
+            }
+            if( !string.IsNullOrEmpty(formType))
+            {
+                int id;
+                if( Int32.TryParse(formType, out id))
+                {
+                    formInstanceQuery = formInstanceQuery.Where(i => i.TypeId == id);
+                }
+            }
+            //assume first time if no dates specified
+            if (dateStart == null) dateStart = DateTime.Now.AddDays(-7);
+            if (dateEnd == null) dateEnd = DateTime.Now;
+            else dateEnd = dateEnd.Value.Date + new TimeSpan(23, 59, 59);
+            DateTime dateStartParam = dateStart.Value.ToUniversalTime();
+            DateTime dateEndParam = dateEnd.Value.ToUniversalTime();
+            formInstanceQuery =
+                formInstanceQuery.Where(form => form.CreateDate >= dateStartParam && form.CreateDate <= dateEndParam);
+
+            if (dateStart.HasValue) viewModel.StartDate = dateStart.Value.ToString("MM/dd/yyyy");
+            if (dateEnd.HasValue) viewModel.EndDate = dateEnd.Value.ToString("MM/dd/yyyy");
+            viewModel.AsicentralForms = formInstanceQuery.OrderByDescending(form => form.CreateDate).ToList();
+            viewModel.AsicentralFormTypes = StoreService.GetAll<AsicentralFormType>(true).Where(ft => !ft.IsObsolete).ToList();
+
+            return View("../Forms/Asicentral", viewModel);
+        }
+        public ActionResult AsicentralFormsDetails(int? id)
+        {
+            var form = new FormInstanceModel();
+            if (id.HasValue)
+            {
+                form.AsicentralForm = StoreService.GetAll<AsicentralFormInstance>().Where(f => f.Id == id.Value).FirstOrDefault();
+                if( !string.IsNullOrEmpty(form.AsicentralForm.CompanyConstituentId) )
+                {
+                    form.Company = PersonifyService.GetPersonifyCompanyInfo(form.AsicentralForm.CompanyConstituentId, 0);
+                    //if( form.Company == null)
+                    //{
+                    //    form.Company = new CompanyInformation() { MasterCustomerId = "112121" };
+                    //}
+                }
+            }
+            return View("../Forms/asicentral/FormDetails", form);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PostAsicentralForm(FormInstanceModel formDetails, string submitBtn)
+        {
+            var form = formDetails?.AsicentralForm;
+            form.FormType = StoreService.GetAll<AsicentralFormType>().FirstOrDefault(t => t.Id == form.TypeId);
+
+            if (form != null && submitBtn.Contains("Create Company"))
+            {
+                formDetails.Company = _createCompanyInPersonify(form);
+                //if (formDetails.Company == null)
+                //{
+                //    formDetails.Company = new CompanyInformation()
+                //    {
+                //        Name = "Test COmpany",
+                //        Email = "LocalEmail@gmail.com",
+                //        Phone = "2122223333",
+                //        MasterCustomerId = "123456"
+                //    };
+                //}
+                if ( formDetails.Company != null)
+                {
+                    var dbForm = StoreService.GetAll<AsicentralFormInstance>().FirstOrDefault(i => i.Id == form.Id);
+                    dbForm.CompanyConstituentId = formDetails.Company.MasterCustomerId;
+                    dbForm.UpdateDate = DateTime.Now;
+                    StoreService.SaveChanges();
+                    ModelState.Clear();
+                    form.CompanyConstituentId = formDetails.Company.MasterCustomerId;
+                    formDetails.IsNewCompany = true;
+                }
+            }
+            else if (form != null && !string.IsNullOrEmpty(form.CompanyConstituentId))
+            {
+                if (form.CompanyConstituentId.Length < 12)
+                {
+                    form.CompanyConstituentId = form.CompanyConstituentId.PadLeft(12, '0');
+                }
+                try
+                {
+                    formDetails.Company = PersonifyService.GetPersonifyCompanyInfo(form.CompanyConstituentId, 0);
+                }
+                catch (Exception) { }
+
+                if (formDetails.Company == null)
+                {
+                    TempData["IDErrors"] = $"Constituent Id {form.CompanyConstituentId} doesn't exist in Personify";
+                    return View("../Forms/asicentral/FormDetails", formDetails);
+                };
+
+                if (submitBtn.Contains("Attach"))
+                {
+                    try
+                    {
+                        var creditcard = new CreditCard()
+                        {
+                            CardHolderName = form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_HOLDER_NAME)?.Value,
+                            Type = form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_TYPE)?.Value,
+                            Number = form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_NUMBER)?.Value,
+                            Address = form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_ADDRESS)?.Value,
+                            City = form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_CITY)?.Value,
+                            State = form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_STATE)?.Value,
+                            PostalCode = form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_POSTALCODE)?.Value,
+                            Country = form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_COUNTRY)?.Value,
+                            TokenId = form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_TOKEN_ID)?.Value,
+                            AuthReference = form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_AUTH_REFERENCE)?.Value,
+                            ExpirationDate = new DateTime(Int32.Parse(form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_EXP_YEAR)?.Value),
+                                                          Int32.Parse(form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_EXP_MONTH)?.Value),
+                                                          01)
+                        };
+
+                        // attach credit card to the specified company
+                        var canadianField = form.Values.FirstOrDefault(v => v.Name == "Is Canadian Membership")?.Value;
+                        var isCanada = !string.IsNullOrEmpty(canadianField) && canadianField == "Yes";
+                        var ccProfileId = PersonifyService.SaveCreditCard(isCanada ? "ASI Canada" : "ASI", 
+                                                                          form.CompanyConstituentId, 
+                                                                          0, 
+                                                                          creditcard, 
+                                                                          form.IPAddress, 
+                                                                          isCanada ? "CAD" : "USD");
+
+                        if (!string.IsNullOrEmpty(ccProfileId))
+                        {
+                            int id = 0;
+                            if (Int32.TryParse(ccProfileId, out id))
+                            {
+                                var dbForm = StoreService.GetAll<AsicentralFormInstance>().FirstOrDefault(i => i.Id == form.Id);
+                                dbForm.CompanyConstituentId = form.CompanyConstituentId;
+                                dbForm.CCProfileId = id;
+                                dbForm.ApprovedBy = User?.Identity?.ToString();
+                                dbForm.UpdateDate = DateTime.Now;
+                                dbForm.Status = "Complete";
+                                StoreService.SaveChanges();
+
+                                form.CCProfileId = id;
+                                form.ApprovedBy = dbForm.ApprovedBy;
+                                form.Status = "Complete";
+                            }
+                        }
+                        else
+                        {
+                            TempData["ErrorMessage"] = $"Could not attach CC to Personify company {form.CompanyConstituentId}";
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        TempData["ErrorMessage"] = $"Unexpected happened while adding CC info to Personify company, please try it again. \r\n" +
+                                              $"Error message: {ex.Message} \r\n Stack Trace: {ex.StackTrace}";
+                    }
+                }
+            }
+            else
+            {
+                TempData["IDErrors"] = "Please provide company constituent Id.";
+            }
+
+            return View("../Forms/asicentral/FormDetails", formDetails);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SendCCRequest(string toEmail, string mailMessage, string fromEmail, string subject, string formReference)
+        {
+            if (!string.IsNullOrWhiteSpace(toEmail) && !string.IsNullOrEmpty(mailMessage) && !string.IsNullOrEmpty(fromEmail))
+            {
+                var message = System.Web.HttpUtility.HtmlEncode(mailMessage);
+                var mail = new MailMessage()
+                {
+                    From = new MailAddress(fromEmail),
+                    Subject = subject,
+                    Body = message.Replace("\r\n", "<br>"),
+                    BodyEncoding = Encoding.UTF8,
+                    IsBodyHtml = true
+                };
+
+                var to = toEmail.Split(';');
+                foreach (var email in to)
+                {
+                    if( !string.IsNullOrEmpty(email))
+                        mail.To.Add(new MailAddress(email));
+                }
+                try
+                {
+                    EmailService.SendMail(mail);
+                    TempData["SuccessMessage"] = "Email sent to customer.";
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = "Exception while sending customer email.";
+                    
+                }
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Invalid from or to email address.";
+            }
+
+            if( !string.IsNullOrEmpty(formReference))
+            {
+                try
+                {
+                    var formInstance = StoreService.GetAll<AsicentralFormInstance>().FirstOrDefault(t => t.Reference == formReference);
+                    formInstance.IsCCRequestSent = true;
+                    StoreService.SaveChanges();
+
+                    return new RedirectResult("/Forms/AsicentralFormsDetails/" + formInstance.Id);
+                }
+                catch
+                { }
+            }
+
+            return new RedirectResult("/Forms/Asicentral");
+        }
+
+        private FormListModel _initAsicentralForm(FormListModel viewModel = null)
+        {
+            if (viewModel == null)
+            {
+                viewModel = new FormListModel();
+            }
+
+            // initialize status list
+            viewModel.StatusList = new List<SelectListItem>();
+            var allStatus = StoreService.GetAll<AsicentralFormInstance>(true).Where(i => i.Status != null && i.Status != "").Select(i => i.Status).Distinct().ToList();
+            foreach( var status in allStatus)
+            {
+                viewModel.StatusList.Add(new SelectListItem() { Selected = false, Text = status, Value = status });
+            }
+
+            // initialize type list
+            viewModel.TypeList = new List<SelectListItem>();
+            var allTypes = StoreService.GetAll<AsicentralFormType>(true).ToList();
+            foreach (var type in allTypes)
+            {
+                viewModel.TypeList.Add(new SelectListItem() { Selected = false, Text = type.Name, Value = type.Id.ToString() });
+            }
+
+            return viewModel;
+        }
+
+        private CompanyInformation _createCompanyInPersonify(AsicentralFormInstance form)
+        {
+            CompanyInformation companyInfo = null;
+
+            var company = new StoreCompany()
+            {
+                Name = form.Values.FirstOrDefault(v => v.Name == "Company Name")?.Value,
+                Email = form.Values.FirstOrDefault(v => v.Name == "Email")?.Value,
+                Phone = form.Values.FirstOrDefault(v => v.Name == "Phone")?.Value,
+                MemberType = "DISTRIBUTOR"
+            };
+
+            var hasShippingAddress = !string.IsNullOrEmpty(form.Values.FirstOrDefault(v => v.Name == "Shipping Address")?.Value);
+            company.Addresses = new List<StoreCompanyAddress>()
+                {
+                    new StoreCompanyAddress()
+                    {
+                        IsBilling = true,
+                        IsShipping = !hasShippingAddress,
+                        Address = new StoreAddress()
+                        {
+                            Street1 = form.Values.FirstOrDefault(v => v.Name == "Billing Address")?.Value,
+                            City = form.Values.FirstOrDefault(v => v.Name == "Billing City")?.Value,
+                            State = form.Values.FirstOrDefault(v => v.Name == "Billing State")?.Value,
+                            Zip = form.Values.FirstOrDefault(v => v.Name == "Billing Zip")?.Value,
+                            Country = "USA"
+                        }
+                    }
+                };
+
+            if( hasShippingAddress)
+            {
+                company.Addresses.Add(new StoreCompanyAddress()
+                {
+                    IsBilling = false,
+                    IsShipping = true,
+                    Address = new StoreAddress()
+                    {
+                        Street1 = form.Values.FirstOrDefault(v => v.Name == "Shipping Address")?.Value,
+                        City = form.Values.FirstOrDefault(v => v.Name == "Shipping City")?.Value,
+                        State = form.Values.FirstOrDefault(v => v.Name == "Shipping State")?.Value,
+                        Zip = form.Values.FirstOrDefault(v => v.Name == "Shipping Zip")?.Value,
+                        Country = "USA"
+                    }
+                });
+            }
+ 
+            company.Individuals = new List<StoreIndividual>()
+                {
+                    new StoreIndividual()
+                    {
+                        FirstName = form.Values.FirstOrDefault(v => v.Name == "Name")?.Value,
+                        LastName = form.Values.FirstOrDefault(v => v.Name == "Name")?.Value,
+                        Phone = form.Values.FirstOrDefault(v => v.Name == "Phone")?.Value,
+                        Email = form.Values.FirstOrDefault(v => v.Name == "Email")?.Value,
+                        Address = company.Addresses.FirstOrDefault()?.Address,
+                        Company = company
+                    }
+                };
+
+            try
+            {
+                companyInfo = PersonifyService.CreateCompany(company, "DISTRIBUTOR");
+            }
+            catch{ }
+
+            if (companyInfo == null)
+            {
+                TempData["ErrorMessage"] = "Failed to create a new company in Personify";
+            }
+
+            return companyInfo;
+        }
+        #endregion ASICentral form
     }
 }

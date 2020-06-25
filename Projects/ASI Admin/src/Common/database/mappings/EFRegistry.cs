@@ -11,6 +11,7 @@ using asi.asicentral.model.show;
 using asi.asicentral.model.store;
 using StructureMap.Configuration.DSL;
 
+
 namespace asi.asicentral.database.mappings
 {
     /// <summary>
@@ -422,6 +423,12 @@ namespace asi.asicentral.database.mappings
                    .Ctor<IValidatedContext>().Named("umbracoDbDSN");
             For<IRepository<CatalogArtWorks>>().Use<EFRepository<CatalogArtWorks>>()
                    .Ctor<IValidatedContext>().Named("umbracoDbDSN");
+            For<IRepository<AsicentralFormType>>().Use<EFRepository<AsicentralFormType>>()
+                  .Ctor<IValidatedContext>().Named("umbracoDbDSN");
+            For<IRepository<AsicentralFormInstance>>().Use<EFRepository<AsicentralFormInstance>>()
+                .Ctor<IValidatedContext>().Named("umbracoDbDSN");
+            For<IRepository<AsicentralFormValue>>().Use<EFRepository<AsicentralFormValue>>()
+                .Ctor<IValidatedContext>().Named("umbracoDbDSN");
             #endregion
         }
     }

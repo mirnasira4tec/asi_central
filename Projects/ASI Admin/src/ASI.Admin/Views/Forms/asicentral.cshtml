@@ -1,0 +1,74 @@
+﻿@using asi.asicentral.web.Models.forms.asicentral
+@using asi.asicentral.model.asicentral
+@model FormListModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Asicentral Forms";
+}
+<h1>Asicentral Forms</h1>
+<div class="tabbable tabs-below small">
+    <h5>Search by</h5>
+    <div class="well">
+        @using (Html.BeginForm("List", "../forms/Asicentral", FormMethod.Get, new { @class = "form-inline", @id = "asicentralForm" }))
+        {
+            <div class="formField">
+                <label for="status">Status: </label>
+                @Html.DropDownListFor(model => model.Status, Model.StatusList, "Select", new { name = "status", value = "@Model.Status" })
+                <label for="FormType">Form: </label>
+                @Html.DropDownListFor(model => model.FormType, Model.TypeList, "Select", new { name = "formType", value = "@Model.FormType" })
+            </div>
+            <div class="formField">
+                <label for="startDate">Start Date: </label><input data-type="date" name="DateStart" type="text" id="startDate" value="@Model.StartDate" />
+                &nbsp;<label for="endDate">End Date: </label><input data-type="date" name="DateEnd" type="text" id="endDate" value="@Model.EndDate" />
+                <input type="hidden" /><input type="submit" value="Search" class="btn" />
+            </div>
+        }
+    </div>
+</div>
+<br /><br />
+<table class="table table-bordered table-condensed table-striped">
+    <thead>
+        <tr>
+            <th>Created</th>
+            <th>Company Name</th>
+            <th>Constituent ID</th>
+            <th>Email</th>
+            <th style="width:10em">Type</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (AsicentralFormInstance form in @Model.AsicentralForms)
+        {
+            var ccInfo = string.Empty;
+            var comanpayField = form.Values.FirstOrDefault(n => n.Name == AsicentralFormValue.COMPANY_NAME) ?? form.Values.FirstOrDefault(n => n.Name == "CompanyName");
+            var companyName = comanpayField != null ? comanpayField.Value : string.Empty;
+            if (form.Status == "Submitted")
+            {
+                if( form.Values.FirstOrDefault(n => n.Name == AsicentralFormValue.CC_HOLDER_NAME) != null)
+                {
+                    ccInfo = " (CC)";
+                }
+                else if(form.IsCCRequestSent)
+                {
+                    ccInfo = "<br/> (CC Request Sent)";
+                }
+            }
+        <tr>
+            <td>@Html.Raw(string.Format("{0:MM/dd/yy} <br /> {0:hh:mm tt}", form.CreateDate.ToLocalTime()))</td>
+            <td><a href="/Forms/AsicentralFormsDetails/@form.Id">@companyName</a></td>
+            <td>@form.CompanyConstituentId</td>
+            <td><a href="/Forms/AsicentralFormsDetails/@form.Id">@form.Email</td>
+            <td>@form.FormType.Name</td>
+            <td style="white-space:nowrap">@form.Status@Html.Raw(ccInfo)</td>
+        </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    @Scripts.Render("~/bundles/form")
+    <script src="/Scripts/asi.js"></script>
+    <script>
+        $('input[data-type*="date"]').datepicker();
+    </script>
+}

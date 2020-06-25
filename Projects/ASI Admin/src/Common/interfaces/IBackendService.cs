@@ -70,5 +70,7 @@ namespace asi.asicentral.interfaces
 
         bool UpdateEMSSSO(string masterId, int subCustomerId, string ssoId);
         List<CompanyInformation> GetASIRep(string asiNumber, string relationshipCode);
+        CompanyInformation GetPersonifyCompanyInfo(string masterCustomerId, int subCustomerId);
+        string SaveCreditCard(string asiCompany, string masterCustomerId, int subCustomerId, CreditCard creditCard, string ipAddress, string currency = "USD");
     }
 }

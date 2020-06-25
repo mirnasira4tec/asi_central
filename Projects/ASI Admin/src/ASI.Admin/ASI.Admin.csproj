@@ -297,6 +297,8 @@
     <Compile Include="Models\asicentral\RateSupplierImportModel.cs" />
     <Compile Include="Models\asicentral\RateSupplierSummaryModel.cs" />
     <Compile Include="Models\CompanyInfoModel.cs" />
+    <Compile Include="Models\forms\asicentral\FormInstanceModel.cs" />
+    <Compile Include="Models\forms\asicentral\FormListModel.cs" />
     <Compile Include="Models\velocity\ColorMapData.cs" />
     <Compile Include="Models\velocity\ColorMapping.cs" />
     <Compile Include="Models\asicentral\CallVolume.cs" />
@@ -542,6 +544,8 @@
     <Content Include="Views\Store\CompanyValidations\GroupByType.cshtml" />
     <Content Include="Views\Store\CompanyValidations\List.cshtml" />
     <Content Include="Views\Forms\FormsDetails.cshtml" />
+    <Content Include="Views\Forms\asicentral.cshtml" />
+    <Content Include="Views\Forms\asicentral\FormDetails.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

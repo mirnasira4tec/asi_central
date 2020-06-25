@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using asi.asicentral.model.store;
+using asi.asicentral.model.asicentral;
 
 namespace asi.asicentral.web.Models.forms
 {
@@ -17,6 +18,6 @@ namespace asi.asicentral.web.Models.forms
 		public string CompanyName { get; set; }
 		public bool ShowPendingOnly { get; set; }
 		public IList<FormInstance> Forms { get; set; }
-		public IList<FormType> FormTypes { get; set; } 
-	}
+		public IList<FormType> FormTypes { get; set; }
+    }
 }

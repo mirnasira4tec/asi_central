@@ -26,7 +26,10 @@ namespace asi.asicentral.database
         public DbSet<CatalogContactSaleDetail> CatalogContactSaleDetails { get; set; }
         public DbSet<CatalogContact> CatalogContacts { get; set; }
         public DbSet<CatalogArtWorks> CatalogArtWorks { get; set; }
-        
+
+        public DbSet<AsicentralFormType> FormTypes { get; set; }
+        public DbSet<AsicentralFormInstance> FormInstances { get; set; }
+        public DbSet<AsicentralFormValue> FormValues { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -38,7 +41,10 @@ namespace asi.asicentral.database
                 .Add(new CatalogContactMap())
                 .Add(new CatalogContactSaleMap())
                 .Add(new CatalogContactSaleDetailMap())
-                .Add(new CatalogArtWorksMap());
+                .Add(new CatalogArtWorksMap())
+                .Add(new FormTypeMap())
+                .Add(new FormInstanceMap())
+                .Add(new FormValueMap());
         }
     }
 }

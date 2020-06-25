@@ -630,6 +630,10 @@ namespace asi.asicentral.services
             return profile;
         }
 
+        public virtual string SaveCreditCard(string asiCompany, string masterCustomerId, int subCustomerId, CreditCard creditCard, string ipAddress, string currency = "USD")
+        {
+            return PersonifyClient.SaveCreditCard(asiCompany, masterCustomerId, subCustomerId, creditCard, ipAddress, currency);
+        }
         public virtual IEnumerable<StoreCreditCard> GetCompanyCreditCards(StoreCompany company, string asiCompany)
         {
             return PersonifyClient.GetCompanyCreditCards(company, asiCompany);
@@ -741,6 +745,19 @@ namespace asi.asicentral.services
                 companyInfo = PersonifyClient.GetCompanyInfo(customerInfo);
                 UpdateMemberType(companyInfo);
             }
+            return companyInfo;
+        }
+
+        public virtual CompanyInformation GetPersonifyCompanyInfo(string masterCustomerId, int subCustomerId)
+        {
+            CompanyInformation companyInfo = null;
+            var customerInfo = PersonifyClient.GetPersonifyCompanyInfo(masterCustomerId, 0);
+            if (customerInfo != null)
+            {
+                companyInfo = PersonifyClient.GetCompanyInfo(customerInfo);
+                UpdateMemberType(companyInfo);
+            }
+
             return companyInfo;
         }
 
