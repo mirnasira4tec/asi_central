@@ -51,11 +51,11 @@
                 }
                 else if(form.IsCCRequestSent)
                 {
-                    ccInfo = "<br/> (CC Request Sent)";
+                    ccInfo = "<br/> (CC Req Sent)";
                 }
             }
         <tr>
-            <td>@Html.Raw(string.Format("{0:MM/dd/yy} <br /> {0:hh:mm tt}", form.CreateDate.ToLocalTime()))</td>
+            <td style="width: 9%">@Html.Raw(string.Format("{0:MM/dd/yy} <br /> {0:hh:mm tt}", form.CreateDate))</td>
             <td><a href="/Forms/AsicentralFormsDetails/@form.Id">@companyName</a></td>
             <td>@form.CompanyConstituentId</td>
             <td><a href="/Forms/AsicentralFormsDetails/@form.Id">@form.Email</td>

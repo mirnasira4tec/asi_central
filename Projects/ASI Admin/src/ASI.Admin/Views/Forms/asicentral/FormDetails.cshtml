@@ -37,9 +37,9 @@
             <br />
             IP: @Html.Raw(form.IPAddress)
             <br />
-            Created: @Html.Raw(string.Format("{0:MM/dd/yy} {0:hh:mm tt}", form.CreateDate.ToLocalTime()))
+            Created: @Html.Raw(string.Format("{0:MM/dd/yy} {0:hh:mm tt}", form.CreateDate))
             <br />
-            Updated: @Html.Raw(string.Format("{0:MM/dd/yy} {0:hh:mm tt}", form.UpdateDate.ToLocalTime()))
+            Updated: @Html.Raw(string.Format("{0:MM/dd/yy} {0:hh:mm tt}", form.UpdateDate))
             <br />
             Status: @Html.Raw(form.Status)
         </h5>
@@ -103,58 +103,6 @@
                         <div class="span12 field-validation-error">@TempData["IDErrors"].ToString()</div>
                     }
                 </div>
-                if (Model.Company != null)
-                {
-                    var company = Model.Company;
-                    <div>Personify Company: </div>
-                    <table class="table table-bordered table-condensed table-striped" style="width:100%">
-                        <tbody>
-                            <tr>
-                                <td>Name</td>
-                                <td>ContituentId</td>
-                                <td>Type</td>
-                                <td>Status</td>
-                                <td>Email</td>
-                                <td>PHone</td>
-                            </tr>
-                            <tr>
-                                <td>@company.Name</td>
-                                <td>@company.MasterCustomerId</td>
-                                <td>@company.MemberType</td>
-                                <td>@company.MemberStatus</td>
-                                <td>@company.Email</td>
-                                <td>@company.Phone</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                }
-                <div>Credit Card Information</div>
-                <table class="table table-bordered table-condensed table-striped" style="width:100%">
-                    <tbody>
-                        <tr>
-                            <td>Holder Name</td>
-                            <td>Type</td>
-                            <td>Number</td>
-                            <td>Exp Mo.</td>
-                            <td>Exp Year</td>
-                            <td>Street</td>
-                            <td>City</td>
-                            <td>State</td>
-                            <td>Zip</td>
-                            <td>Country</td>
-                        </tr>
-                        <tr>
-                            @foreach (var ccLabel in AsicentralFormValue.CC_Lables)
-                            {
-                                var formItem = form.Values.FirstOrDefault(m => m.Name == ccLabel);
-                                if (formItem != null && ccLabel != AsicentralFormValue.CC_TOKEN_ID && ccLabel != AsicentralFormValue.CC_AUTH_REFERENCE)
-                                {
-                                    <td>@formItem.Value</td>
-                                }
-                            }
-                        </tr>
-                    </tbody>
-                </table>
             }
             else  // no CC card
             {
@@ -166,7 +114,7 @@
                 // pop up modal
                 var fromEmail = "membership@asicentral.com";
                 var firstNameField = form.Values.FirstOrDefault(v => v.Name == "Name");
-                var firstName = firstNameField!=null?firstNameField.Value.Split(' ')[0]:string.Empty;
+                var firstName = firstNameField != null ? firstNameField.Value.Split(' ')[0] : string.Empty;
                 var asicentralUrl = System.Configuration.ConfigurationManager.AppSettings["BaseUrl"];
                 var link = string.Format("{0}/distributor/asi-membership/billing?reference={1}", asicentralUrl, form.Reference);
                 var message = string.Format("Hi {0}, \r\n\r\nThank you for applying to become an ASI member. We're so excited to welcome you to the family! \r\n\r\nBefore we process your application, " +
@@ -216,6 +164,63 @@
                     </div>
                 </div>
             }
+        }
+
+        if (hasCCSubmit)
+        {
+            if (Model.Company != null)
+            {
+                var company = Model.Company;
+                <div>Personify Company: </div>
+                <table class="table table-bordered table-condensed table-striped" style="width:100%">
+                    <tbody>
+                        <tr>
+                            <td>Name</td>
+                            <td>ContituentId</td>
+                            <td>Type</td>
+                            <td>Status</td>
+                            <td>Email</td>
+                            <td>PHone</td>
+                        </tr>
+                        <tr>
+                            <td>@company.Name</td>
+                            <td>@company.MasterCustomerId</td>
+                            <td>@company.MemberType</td>
+                            <td>@company.MemberStatus</td>
+                            <td>@company.Email</td>
+                            <td>@company.Phone</td>
+                        </tr>
+                    </tbody>
+                </table>
+            }
+
+            <div>Credit Card Information</div>
+            <table class="table table-bordered table-condensed table-striped" style="width:100%">
+                <tbody>
+                    <tr>
+                        <td>Holder Name</td>
+                        <td>Type</td>
+                        <td>Number</td>
+                        <td>Exp Mo.</td>
+                        <td>Exp Year</td>
+                        <td>Street</td>
+                        <td>City</td>
+                        <td>State</td>
+                        <td>Zip</td>
+                        <td>Country</td>
+                    </tr>
+                    <tr>
+                        @foreach (var ccLabel in AsicentralFormValue.CC_Lables)
+                        {
+                            var formItem = form.Values.FirstOrDefault(m => m.Name == ccLabel);
+                            if (formItem != null && ccLabel != AsicentralFormValue.CC_TOKEN_ID && ccLabel != AsicentralFormValue.CC_AUTH_REFERENCE)
+                            {
+                                <td>@formItem.Value</td>
+                            }
+                        }
+                    </tr>
+                </tbody>
+            </table>
         }
 
         if (form.Values != null && form.Values.Count() > 0)
