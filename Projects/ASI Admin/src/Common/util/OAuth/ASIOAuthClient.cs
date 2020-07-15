@@ -419,12 +419,15 @@ namespace asi.asicentral.oauth
             bool isUserUpdated = false;
             if (user != null)
             {
+                LogService log = LogService.GetLog(typeof(ASIOAuthClient));
                 try
                 {
                     ASI.EntityModel.User entityUser = null;
                     //entityCompany = MapASIUserCompanyToEntityModelCompany(user, entityCompany, false);
                     entityUser = MapASIUserToEntityModelUser(user, entityUser, isCreate: false, isPasswordReset: isPasswordReset);
 
+                    var userJson = new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(entityUser);
+                    log.Debug(string.Format("UpdateUser - user: {0} ", userJson));
                     var userRequest = new UserRequest() { UserRequestType = UserRequestType.Update, AuditTrail = new AuditTrail() { LoggedInUserId = 1 }, User = entityUser };
                     userRequest.TalkAndWait<UserRequest, UserResponse>(updResponseMessage =>
                     {
@@ -434,10 +437,13 @@ namespace asi.asicentral.oauth
                 catch (Exception ex)
                 {
                     isUserUpdated = false;
-                    LogService log = LogService.GetLog(typeof(ASIOAuthClient));
+                    log = LogService.GetLog(typeof(ASIOAuthClient));
                     log.Error(ex.Message);
                 }
-            }
+
+                log.Debug(string.Format("UpdateUser {0} - user: {1}, password: {2} ", isUserUpdated ? "Succeeds" : "fails", user.UserName, user.Password));
+           }
+
             return isUserUpdated;
         }
 
