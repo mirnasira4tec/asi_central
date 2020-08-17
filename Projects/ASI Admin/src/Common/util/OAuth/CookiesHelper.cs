@@ -71,6 +71,9 @@ namespace asi.asicentral.oauth
                         cookie.Expires = DateTime.Now.AddHours(hours);
                     }
                 }
+
+                cookie.SameSite = SameSiteMode.Strict;
+                cookie.Secure = request.Url.Scheme == Uri.UriSchemeHttps;
                 response.Cookies.Set(cookie);
             }
         }
