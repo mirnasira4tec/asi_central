@@ -4,6 +4,12 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Asicentral Forms";
+    var formTypeName = string.Empty;
+    var formTypeId = Request["FormType"];
+    if(Model!=null && Model.AsicentralForms!=null && Model.AsicentralForms.Any())
+    {
+        formTypeName= Model.AsicentralForms.FirstOrDefault().FormType.Name;
+    }
 }
 <h1>Asicentral Forms</h1>
 <div class="tabbable tabs-below small">
@@ -20,12 +26,21 @@
             <div class="formField">
                 <label for="startDate">Start Date: </label><input data-type="date" name="DateStart" type="text" id="startDate" value="@Model.StartDate" />
                 &nbsp;<label for="endDate">End Date: </label><input data-type="date" name="DateEnd" type="text" id="endDate" value="@Model.EndDate" />
-                <input type="hidden" /><input type="submit" value="Search" class="btn" />
+                <input type="hidden" /><input type="submit" name="command" value="Search" class="btn" />
             </div>
         }
     </div>
 </div>
-<br /><br />
+<br />
+<br />
+@if (!string.IsNullOrWhiteSpace(Request["FormType"]) && formTypeName == "ASI AD Impression Study")
+{
+<div>
+    <span class="pull-right"><button class="btn btn-red" onclick="downLoadExcel()">Download</button></span>
+</div>
+<br />
+<br />
+}
 <table class="table table-bordered table-condensed table-striped">
     <thead>
         <tr>
@@ -45,23 +60,23 @@
             var companyName = comanpayField != null ? comanpayField.Value : string.Empty;
             if (form.Status == "Submitted")
             {
-                if( form.Values.FirstOrDefault(n => n.Name == AsicentralFormValue.CC_HOLDER_NAME) != null)
+                if (form.Values.FirstOrDefault(n => n.Name == AsicentralFormValue.CC_HOLDER_NAME) != null)
                 {
                     ccInfo = " (CC)";
                 }
-                else if(form.IsCCRequestSent)
+                else if (form.IsCCRequestSent)
                 {
                     ccInfo = "<br/> (CC Req Sent)";
                 }
             }
-        <tr>
-            <td style="width: 9%">@Html.Raw(string.Format("{0:MM/dd/yy} <br /> {0:hh:mm tt}", form.CreateDate))</td>
-            <td><a href="/Forms/AsicentralFormsDetails/@form.Id">@companyName</a></td>
-            <td>@form.CompanyConstituentId</td>
-            <td><a href="/Forms/AsicentralFormsDetails/@form.Id">@form.Email</td>
-            <td>@form.FormType.Name</td>
-            <td style="white-space:nowrap">@form.Status@Html.Raw(ccInfo)</td>
-        </tr>
+            <tr>
+                <td style="width: 9%">@Html.Raw(string.Format("{0:MM/dd/yy} <br /> {0:hh:mm tt}", form.CreateDate))</td>
+                <td><a href="/Forms/AsicentralFormsDetails/@form.Id">@companyName</a></td>
+                <td>@form.CompanyConstituentId</td>
+                <td><a href="/Forms/AsicentralFormsDetails/@form.Id">@form.Email</td>
+                <td>@form.FormType.Name</td>
+                <td style="white-space:nowrap">@form.Status@Html.Raw(ccInfo)</td>
+            </tr>
         }
     </tbody>
 </table>
@@ -70,5 +85,13 @@
     <script src="/Scripts/asi.js"></script>
     <script>
         $('input[data-type*="date"]').datepicker();
+        function downLoadExcel(){
+            var input = $("<input>")
+                .attr("type", "hidden")
+                .attr("name", "command").val("download");
+            $('#asicentralForm').append(input);
+            $('#asicentralForm').submit();
+        }
     </script>
+   
 }

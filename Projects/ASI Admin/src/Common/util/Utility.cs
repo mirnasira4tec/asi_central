@@ -136,6 +136,19 @@ namespace asi.asicentral.util
             }
             return xml;
         }
+        public static string ParseCSVValue(string value)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                value = value.Replace("\"", "\"\"");
+                value = "\"" + value + "\"";
+            }
+            else
+            {
+                value = string.Empty;
+            }
+            return value;
+        }
 
     }
 }

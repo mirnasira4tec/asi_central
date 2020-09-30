@@ -10,6 +10,7 @@ using System.Text;
 using System.Web.Mvc;
 using asi.asicentral.model;
 using asi.asicentral.web.Models.forms.asicentral;
+using asi.asicentral.util;
 
 namespace asi.asicentral.web.Controllers.forms
 {
@@ -160,26 +161,26 @@ namespace asi.asicentral.web.Controllers.forms
             FormInstance instance = null;
             if (id.HasValue)
             {
-                instance= StoreService.GetAll<FormInstance>().Where(f => f.Id == id.Value).FirstOrDefault();
+                instance = StoreService.GetAll<FormInstance>().Where(f => f.Id == id.Value).FirstOrDefault();
             }
             return View("../Forms/FormsDetails", instance);
         }
 
         #region ASICentral form
-        public ActionResult Asicentral(DateTime? dateStart, DateTime? dateEnd, string status = "", string formType="")
+        public ActionResult Asicentral(DateTime? dateStart, DateTime? dateEnd, string status = "", string formType = "", string command= "Search")
         {
             var viewModel = _initAsicentralForm();
-            
+
             var formInstanceQuery = StoreService.GetAll<AsicentralFormInstance>(true);
-            if ( !string.IsNullOrEmpty(status) )
+            if (!string.IsNullOrEmpty(status))
             {
                 status = status.ToLower();
                 formInstanceQuery = formInstanceQuery.Where(i => i.Status != null && i.Status.ToLower() == status);
             }
-            if( !string.IsNullOrEmpty(formType))
+            if (!string.IsNullOrEmpty(formType))
             {
                 int id;
-                if( Int32.TryParse(formType, out id))
+                if (Int32.TryParse(formType, out id))
                 {
                     formInstanceQuery = formInstanceQuery.Where(i => i.TypeId == id);
                 }
@@ -190,15 +191,19 @@ namespace asi.asicentral.web.Controllers.forms
             else dateEnd = dateEnd.Value.Date + new TimeSpan(23, 59, 59);
             DateTime dateStartParam = dateStart.Value.ToUniversalTime();
             DateTime dateEndParam = dateEnd.Value.ToUniversalTime();
-            formInstanceQuery =
-                formInstanceQuery.Where(form => form.CreateDate >= dateStartParam && form.CreateDate <= dateEndParam);
-
-            if (dateStart.HasValue) viewModel.StartDate = dateStart.Value.ToString("MM/dd/yyyy");
-            if (dateEnd.HasValue) viewModel.EndDate = dateEnd.Value.ToString("MM/dd/yyyy");
-            viewModel.AsicentralForms = formInstanceQuery.OrderByDescending(form => form.CreateDate).ToList();
-            viewModel.AsicentralFormTypes = StoreService.GetAll<AsicentralFormType>(true).Where(ft => !ft.IsObsolete).ToList();
-
-            return View("../Forms/Asicentral", viewModel);
+            formInstanceQuery = formInstanceQuery.Where(form => form.CreateDate >= dateStartParam && form.CreateDate <= dateEndParam);
+            if (command == "download")
+            {
+                return _downloadAdImpressionCSV(formInstanceQuery);
+            }
+            else
+            {
+                if (dateStart.HasValue) viewModel.StartDate = dateStart.Value.ToString("MM/dd/yyyy");
+                if (dateEnd.HasValue) viewModel.EndDate = dateEnd.Value.ToString("MM/dd/yyyy");
+                viewModel.AsicentralForms = formInstanceQuery.OrderByDescending(form => form.CreateDate).ToList();
+                viewModel.AsicentralFormTypes = StoreService.GetAll<AsicentralFormType>(true).Where(ft => !ft.IsObsolete).ToList();
+                return View("../Forms/Asicentral", viewModel);
+            }
         }
         public ActionResult AsicentralFormsDetails(int? id)
         {
@@ -206,7 +211,7 @@ namespace asi.asicentral.web.Controllers.forms
             if (id.HasValue)
             {
                 form.AsicentralForm = StoreService.GetAll<AsicentralFormInstance>().Where(f => f.Id == id.Value).FirstOrDefault();
-                if( !string.IsNullOrEmpty(form.AsicentralForm.CompanyConstituentId) )
+                if (!string.IsNullOrEmpty(form.AsicentralForm.CompanyConstituentId))
                 {
                     form.Company = PersonifyService.GetPersonifyCompanyInfo(form.AsicentralForm.CompanyConstituentId, 0);
                     //if( form.Company == null)
@@ -238,7 +243,7 @@ namespace asi.asicentral.web.Controllers.forms
                 //        MasterCustomerId = "123456"
                 //    };
                 //}
-                if ( formDetails.Company != null)
+                if (formDetails.Company != null)
                 {
                     var dbForm = StoreService.GetAll<AsicentralFormInstance>().FirstOrDefault(i => i.Id == form.Id);
                     dbForm.CompanyConstituentId = formDetails.Company.MasterCustomerId;
@@ -291,11 +296,11 @@ namespace asi.asicentral.web.Controllers.forms
                         // attach credit card to the specified company
                         var canadianField = form.Values.FirstOrDefault(v => v.Name == "Is Canadian Membership")?.Value;
                         var isCanada = !string.IsNullOrEmpty(canadianField) && canadianField == "Yes";
-                        var ccProfileId = PersonifyService.SaveCreditCard(isCanada ? "ASI Canada" : "ASI", 
-                                                                          form.CompanyConstituentId, 
-                                                                          0, 
-                                                                          creditcard, 
-                                                                          form.IPAddress, 
+                        var ccProfileId = PersonifyService.SaveCreditCard(isCanada ? "ASI Canada" : "ASI",
+                                                                          form.CompanyConstituentId,
+                                                                          0,
+                                                                          creditcard,
+                                                                          form.IPAddress,
                                                                           isCanada ? "CAD" : "USD");
 
                         if (!string.IsNullOrEmpty(ccProfileId))
@@ -321,7 +326,7 @@ namespace asi.asicentral.web.Controllers.forms
                             TempData["ErrorMessage"] = $"Could not attach CC to Personify company {form.CompanyConstituentId}";
                         }
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         TempData["ErrorMessage"] = $"Unexpected happened while adding CC info to Personify company, please try it again. \r\n" +
                                               $"Error message: {ex.Message} \r\n Stack Trace: {ex.StackTrace}";
@@ -355,7 +360,7 @@ namespace asi.asicentral.web.Controllers.forms
                 var to = toEmail.Split(';');
                 foreach (var email in to)
                 {
-                    if( !string.IsNullOrEmpty(email))
+                    if (!string.IsNullOrEmpty(email))
                         mail.To.Add(new MailAddress(email));
                 }
                 try
@@ -366,7 +371,7 @@ namespace asi.asicentral.web.Controllers.forms
                 catch (Exception ex)
                 {
                     TempData["ErrorMessage"] = "Exception while sending customer email.";
-                    
+
                 }
             }
             else
@@ -374,7 +379,7 @@ namespace asi.asicentral.web.Controllers.forms
                 TempData["ErrorMessage"] = "Invalid from or to email address.";
             }
 
-            if( !string.IsNullOrEmpty(formReference))
+            if (!string.IsNullOrEmpty(formReference))
             {
                 try
                 {
@@ -401,7 +406,7 @@ namespace asi.asicentral.web.Controllers.forms
             // initialize status list
             viewModel.StatusList = new List<SelectListItem>();
             var allStatus = StoreService.GetAll<AsicentralFormInstance>(true).Where(i => i.Status != null && i.Status != "").Select(i => i.Status).Distinct().ToList();
-            foreach( var status in allStatus)
+            foreach (var status in allStatus)
             {
                 viewModel.StatusList.Add(new SelectListItem() { Selected = false, Text = status, Value = status });
             }
@@ -447,7 +452,7 @@ namespace asi.asicentral.web.Controllers.forms
                     }
                 };
 
-            if( hasShippingAddress)
+            if (hasShippingAddress)
             {
                 company.Addresses.Add(new StoreCompanyAddress()
                 {
@@ -463,7 +468,7 @@ namespace asi.asicentral.web.Controllers.forms
                     }
                 });
             }
- 
+
             company.Individuals = new List<StoreIndividual>()
                 {
                     new StoreIndividual()
@@ -481,7 +486,7 @@ namespace asi.asicentral.web.Controllers.forms
             {
                 companyInfo = PersonifyService.CreateCompany(company, "DISTRIBUTOR");
             }
-            catch{ }
+            catch { }
 
             if (companyInfo == null)
             {
@@ -489,6 +494,37 @@ namespace asi.asicentral.web.Controllers.forms
             }
 
             return companyInfo;
+        }
+
+        private ActionResult _downloadAdImpressionCSV(IQueryable<AsicentralFormInstance> formInstanceQuery)
+        {
+            var columnNames = string.Empty;
+            columnNames = "Date,First Name,Last Name,Company Name,Job Title,Email,ASI Number";
+            var csvString = new StringBuilder();
+            csvString.AppendLine(columnNames);
+            if (formInstanceQuery != null && formInstanceQuery.Count() > 0)
+            {
+                foreach (var instance in formInstanceQuery.ToList())
+                {
+                    if (instance.Values != null && instance.Values.Any())
+                    {
+                        var line = string.Empty;
+                        var firstName = instance.Values?.Where(v => v.Name == "First Name").FirstOrDefault()?.Value;
+                        if (!string.IsNullOrWhiteSpace(firstName))
+                        {
+                            var lastName = instance.Values?.Where(v => v.Name == "Last Name").FirstOrDefault()?.Value;
+                            var companyName = instance.Values?.Where(v => v.Name == "Company Name").FirstOrDefault()?.Value;
+                            var jobTitle = instance.Values?.Where(v => v.Name == "JobTitle").FirstOrDefault()?.Value;
+                            var email = instance.Values?.Where(v => v.Name == "Email").FirstOrDefault()?.Value;
+                            var asiNumber = instance.Values?.Where(v => v.Name == "ASINumber").FirstOrDefault()?.Value;
+                            line = string.Join(",", instance.CreateDate.ToString("MM/dd/yyyy: hh:mm tt"), Utility.ParseCSVValue(firstName), Utility.ParseCSVValue(lastName), Utility.ParseCSVValue(companyName), Utility.ParseCSVValue(jobTitle), Utility.ParseCSVValue(email), Utility.ParseCSVValue(asiNumber));
+                            csvString.AppendLine(line);
+                        }
+                    }
+                }
+            }
+            var filename = "AddImpression_" + DateTime.Now.ToString("MM/dd/yyyy: hh:mm tt") + ".csv";
+            return File(new System.Text.UTF8Encoding().GetBytes(csvString.ToString()), "text/csv", filename);
         }
         #endregion ASICentral form
     }
