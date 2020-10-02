@@ -76,18 +76,6 @@
                     <tbody></tbody>
                 </table>
             }
-            else if (saleInfo.ArtworkOption == "ModifiedRepeat")
-            {
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="pull-left">Artwork Options : </th>
-                            <td>Modified Repeat:  @saleInfo.ArtworkRepeatNotes</td>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            }
             else if (saleInfo.ArtworkOption == "NewArtwork" && saleInfo.CatalogArtWorks != null && saleInfo.CatalogArtWorks.Count > 0)
             {
                 <table width="100%">
@@ -111,6 +99,18 @@
                         <tr>
                             <th class="pull-left">Uploaded Artworks: </th>
                             <td> No data available!</td>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            }
+            @if (!string.IsNullOrWhiteSpace(saleInfo.ArtworkRepeatNotes))
+            {
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="pull-left">Artwork Notes : </th>
+                            <td> @saleInfo.ArtworkRepeatNotes</td>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -176,6 +176,11 @@
                 <th class="pull-left">Sales Rep: </th>
                 <td>@Html.Raw(saleInfo.ASIRep.Replace(";", "<br/>"))</td>
             </tr>
+            <tr>
+                <th class="pull-left">Referral Url: </th>
+                <td>@saleInfo.ReferrerUrl</td>
+            </tr>
+
         </table>
         if (!saleInfo.IsApproved)
         {
@@ -248,8 +253,8 @@
                     </a>
                 </div>
                 <table width="100%">
-                    <tbody  class="pull-left">
-                        <tr >
+                    <tbody class="pull-left">
+                        <tr>
                             <th>
                                 @Html.CheckBox("requestMoreInfo", saleInfo.RequestMoreInfo, new { style = "margin-top:-2px" }) Request More Information: @Html.TextArea("OtherOptions", saleInfo.OtherOptions, new { @class = "form-control" })
                             </th>
@@ -262,7 +267,7 @@
         }
         else
         {
-            var currentSales =  saleInfo.CatalogContactSaleDetails.Where(m => m.CatalogContacts.CatalogContactImport.IsActive).ToList();
+            var currentSales = saleInfo.CatalogContactSaleDetails.Where(m => m.CatalogContacts.CatalogContactImport.IsActive).ToList();
             <h2 class="pull-left">
                 @(message + " Approved")
             </h2>
@@ -318,7 +323,7 @@
                     <tbody>
                         <tr>
                             <th>
-                                @Html.CheckBox("requestMoreInfo", saleInfo.RequestMoreInfo, new { style = "margin-top:-2px", disabled="disabled" }) Requeste More Information  :
+                                @Html.CheckBox("requestMoreInfo", saleInfo.RequestMoreInfo, new { style = "margin-top:-2px", disabled = "disabled" }) Requeste More Information  :
                             </th>
                             <td>@saleInfo.OtherOptions</td>
                         </tr>

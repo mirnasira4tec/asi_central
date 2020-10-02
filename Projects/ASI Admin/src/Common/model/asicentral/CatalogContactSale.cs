@@ -31,6 +31,7 @@ namespace asi.asicentral.model.asicentral
         public string ArtworkOption { get; set; }
         public string ArtworkRepeatNotes { get; set; }
         public bool RequestMoreInfo { get; set; }
+        public string ReferrerUrl { get; set; }
         public virtual ICollection<CatalogContactSaleDetail> CatalogContactSaleDetails { get; set; }
         public virtual ICollection<CatalogArtWorks> CatalogArtWorks { get; set; }
     }
