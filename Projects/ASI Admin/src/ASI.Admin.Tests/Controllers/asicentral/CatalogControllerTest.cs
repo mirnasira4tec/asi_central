@@ -74,7 +74,7 @@ namespace Internal.Test.Admin
         [Test]
         public void ApproveContactRemaingCatalogMoreLessRequestTest()
         {
-           
+
             var mockObjectService = new Mock<IObjectService>();
 
             //Setup object for CatalogContactImport
@@ -121,11 +121,11 @@ namespace Internal.Test.Admin
 
 
         [Test]
-        [Ignore("Not completed")]
-        public void CatalogContactUpdateTest()
+        public void CatalogContactUpdateTestForSameIndustry()
         {
-
-            var import = _createImport("test industry", "Test Catalog");
+            var mockObjectService = new Mock<IObjectService>();
+            var industryName = "Healthcare";
+            var import = _createImport(industryName, "Test Catalog");
             int catalogQty1 = 500;
             var catalog1 = _createCatalogContact(1232, import.CatalogContactImportId, "AK", "Aleutians East", catalogQty1);
 
@@ -135,6 +135,56 @@ namespace Internal.Test.Admin
 
             var wb = new XLWorkbook();
             var ws = wb.Worksheets.Add("Health_Catalogs");
+            var xlCatalogQty1 = 200;
+            var xlCatalogQty2 = 120;
+
+            ws.Cell(1, 1).Value = "Industry";
+            ws.Cell(1, 2).Value = "State";
+            ws.Cell(1, 3).Value = "County";
+            ws.Cell(1, 4).Value = "Leads";
+
+            ws.Cell(2, 1).Value = industryName;
+            ws.Cell(2, 2).Value = "AK";
+            ws.Cell(2, 3).Value = "Aleutians East";
+            ws.Cell(2, 4).Value = xlCatalogQty1;
+
+            ws.Cell(3, 1).Value = industryName;
+            ws.Cell(3, 2).Value = "WY";
+            ws.Cell(3, 3).Value = "Goshen";
+            ws.Cell(3, 4).Value = xlCatalogQty2;
+
+            var controller = _mockCatalogController();
+
+            mockObjectService.Setup(objectService => objectService.Delete(It.IsAny<CatalogContact>())).Callback<CatalogContact>((contact) => import.CatalogContacts.Remove(contact));
+            controller.ObjectService = mockObjectService.Object;
+            var result = controller.CatalogContactUpdate(import, ws) as RedirectToRouteResult;
+
+            Assert.AreEqual(result.RouteValues["action"].ToString(), "CatalogContactImport");
+            Assert.AreEqual(result.RouteValues["controller"].ToString(), "Catalog");
+            Assert.NotNull(controller.TempData["SuccessMessage"]);
+            Assert.AreEqual(controller.TempData["SuccessMessage"].ToString(), $"Data updated successfully");
+            Assert.AreEqual(import.CatalogContacts.ElementAt(0).OriginalContacts, xlCatalogQty1);
+            Assert.AreEqual(import.CatalogContacts.ElementAt(1).OriginalContacts, xlCatalogQty2);
+            mockObjectService.Verify(objectService => objectService.SaveChanges(), Times.Exactly(1));
+        }
+
+        [Test]
+        public void CatalogContactUpdateTestForDifferentIndustry()
+        {
+            var mockObjectService = new Mock<IObjectService>();
+            var industryName = "Test Industry";
+            var import = _createImport("Test Industry", "Test Catalog");
+            int catalogQty1 = 500;
+            var catalog1 = _createCatalogContact(1232, import.CatalogContactImportId, "AK", "Aleutians East", catalogQty1);
+
+            int catalogQty2 = 700;
+            var catalog2 = _createCatalogContact(2345, import.CatalogContactImportId, "AL", "Lee", catalogQty2);
+            import.CatalogContacts = new List<CatalogContact>() { catalog1, catalog2 };
+
+            var wb = new XLWorkbook();
+            var ws = wb.Worksheets.Add("Health_Catalogs");
+            var xlCatalogQty1 = 200;
+            var xlCatalogQty2 = 120;
 
             ws.Cell(1, 1).Value = "Industry";
             ws.Cell(1, 2).Value = "State";
@@ -144,18 +194,24 @@ namespace Internal.Test.Admin
             ws.Cell(2, 1).Value = "Healthcare";
             ws.Cell(2, 2).Value = "AK";
             ws.Cell(2, 3).Value = "Aleutians East";
-            ws.Cell(2, 4).Value = "200";
+            ws.Cell(2, 4).Value = xlCatalogQty1;
 
             ws.Cell(3, 1).Value = "Healthcare";
             ws.Cell(3, 2).Value = "WY";
             ws.Cell(3, 3).Value = "Goshen";
-            ws.Cell(3, 4).Value = "120";
+            ws.Cell(3, 4).Value = xlCatalogQty2;
 
             var controller = _mockCatalogController();
 
-
+            mockObjectService.Setup(objectService => objectService.Delete(It.IsAny<CatalogContact>())).Callback<CatalogContact>((contact) => import.CatalogContacts.Remove(contact));
+            controller.ObjectService = mockObjectService.Object;
             var result = controller.CatalogContactUpdate(import, ws) as RedirectToRouteResult;
 
+            Assert.AreEqual(result.RouteValues["action"].ToString(), "CatalogContactImport");
+            Assert.AreEqual(result.RouteValues["controller"].ToString(), "Catalog");
+            Assert.NotNull(controller.TempData["SuccessMessage"]);
+            Assert.AreEqual(controller.TempData["SuccessMessage"].ToString(), $"Data imported partialy, this excel contains records other than {industryName} industry, those records are skipped.");
+            mockObjectService.Verify(objectService => objectService.SaveChanges(), Times.Exactly(1));
         }
 
         private CatalogContactImport _createImport(string industryName, string catalogName)
