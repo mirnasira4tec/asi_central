@@ -1,13 +1,15 @@
 ﻿@{ 
     var contactId = (int)ViewData["contactId"];
     var contacts = (int)ViewData["contacts"];
+    var containerIdPrefix = (string)ViewData["containerIdPrefix"];
 }
-<form action="/Catalog/SaveEditContact" method="post">
-    <input type="hidden" value="@contactId" name="contactId"/>
+<form action="/Catalog/SaveEditContact" method="post" id="frmEditContact">
+    <input type="hidden" value="@contactId" name="contactId" />
+    <input type="hidden" value="@containerIdPrefix" name="contactType" id="contactType" />
     <span>
-        <input type="text" value="@contacts" name="contacts" style="width:auto"/>
-        <button type="submit" class="btn pull-right">Save</button>
-        <a href="#" onclick="closeContactForm(@contacts,'@contactId')">Close</a>
+        <input type="text" value="@contacts" name="contacts" style="width:auto" id="contacts"/>
+        <button type="button" class="btn pull-right" onclick="saveContact(@contactId,this)">Save</button>
+        <a href="#" onclick="closeContactForm(@contacts,'@contactId','@containerIdPrefix')">Close</a>
     </span>
 </form>
  

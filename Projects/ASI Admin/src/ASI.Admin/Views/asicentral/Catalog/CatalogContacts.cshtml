@@ -1,125 +1,130 @@
 ﻿@model asi.asicentral.web.Models.asicentral.CatalogContactModel
 @{
-	ViewBag.Title = "Catalog List";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Catalog List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div>&nbsp;</div>
 <div>
-	@if (Model != null)
-	{
-		<a href="/Catalog/CatalogSales?industry=@Model.Industry" class="modal-link btn" data-toggle="modal" style="margin-bottom:5px">
-			All Sales
-		</a>
-		<a href="/Catalog/CatalogSales?industry=@Model.Industry&pendingApprovals=true" class="modal-link btn" data-toggle="modal" style="margin-bottom:5px">
-			Pending Approvals
-		</a>
-	}
+    @if (Model != null)
+    {
+        <a href="/Catalog/CatalogSales?industry=@Model.Industry" class="modal-link btn" data-toggle="modal" style="margin-bottom:5px">
+            All Sales
+        </a>
+        <a href="/Catalog/CatalogSales?industry=@Model.Industry&pendingApprovals=true" class="modal-link btn" data-toggle="modal" style="margin-bottom:5px">
+            Pending Approvals
+        </a>
+    }
 </div>
 @if (Model != null && Model.Contacts != null && Model.Contacts.Count > 0)
 {
 
-	<form>
-		<div class="clearfix"></div>
-		<div>&nbsp;</div>
-		<div>
-			<table>
-				<tr>
-					<th class="pull-left">Catalog Name: </th>
-					<td>@Model.CatalogName</td>
-				</tr>
-			</table>
-		</div>
-		<div class="tabbable tabs-below small">
-			<div class="tab-content" id="formtab-content">
-				<div class="well clearfix">
-					@using (Html.BeginForm("CatalogContacts", "Catalog", FormMethod.Get, new { @class = "form-inline clearfix" }))
-					{
-						<div class="formField span2 pull-right">
-							<label for="companyName">&nbsp;</label>
-							<input type="submit" value="Search" class="btn " />
-							<br />
-						</div>
-						<div class="formField span3 pull-right">
-							<label for="asiNumber">County</label>
-							@Html.DropDownList("county", new SelectList(Model.Counties, "Value", "Text", Model.q["county"]), new { style = "width:85%;" })
-							@Html.Hidden("importId", Model.ImportId)
-						</div>
-						<div class="formField span3 pull-right">
-							<label for="companyName">State</label>
-							@Html.DropDownList("state", new SelectList(Model.States, "Value", "Text", Model.q["state"]), new { style = "width:85%;", onchange = "getCountyByState()" })
-						</div>
-						<div class="formField span3 pull-right">
-							<label for="asiNumber">Industry</label>
-							@Html.TextBox("industry", Model.Industry, new { style = "width:85%;", @readonly = "readonly" })
-						</div>
-					}
-				</div>
-			</div>
-		</div>
-		<div class="pull-right">
-			<a href="javascript:;" onclick="DownloadExcel();" class="btn" title="Download" style="margin-bottom: 20px;" target="_self">Download</a>
-		</div>
-		<table class="table table-bordered table-condensed table-striped">
-			<thead>
-				<tr>
-					<th>State</th>
-					<th>County</th>
+    <form>
+        <div class="clearfix"></div>
+        <div>&nbsp;</div>
+        <div>
+            <table>
+                <tr>
+                    <th class="pull-left">Catalog Name: </th>
+                    <td>@Model.CatalogName</td>
+                </tr>
+            </table>
+        </div>
+        <div class="tabbable tabs-below small">
+            <div class="tab-content" id="formtab-content">
+                <div class="well clearfix">
+                    @using (Html.BeginForm("CatalogContacts", "Catalog", FormMethod.Get, new { @class = "form-inline clearfix" }))
+                    {
+                        <div class="formField span2 pull-right">
+                            <label for="companyName">&nbsp;</label>
+                            <input type="submit" value="Search" class="btn " />
+                            <br />
+                        </div>
+                        <div class="formField span3 pull-right">
+                            <label for="asiNumber">County</label>
+                            @Html.DropDownList("county", new SelectList(Model.Counties, "Value", "Text", Model.q["county"]), new { style = "width:85%;" })
+                            @Html.Hidden("importId", Model.ImportId)
+                        </div>
+                        <div class="formField span3 pull-right">
+                            <label for="companyName">State</label>
+                            @Html.DropDownList("state", new SelectList(Model.States, "Value", "Text", Model.q["state"]), new { style = "width:85%;", onchange = "getCountyByState()" })
+                        </div>
+                        <div class="formField span3 pull-right">
+                            <label for="asiNumber">Industry</label>
+                            @Html.TextBox("industry", Model.Industry, new { style = "width:85%;", @readonly = "readonly" })
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="pull-right">
+            <a href="javascript:;" onclick="DownloadExcel();" class="btn" title="Download" style="margin-bottom: 20px;" target="_self">Download</a>
+        </div>
+        <table class="table table-bordered table-condensed table-striped">
+            <thead>
+                <tr>
+                    <th>State</th>
+                    <th>County</th>
                     <th>Original<br />Contacts</th>
+                    <th>Manual<br /> Reserved</th>
                     <th>Reserved<br />Contacts</th>
                     <th>Remaining<br />Contacts</th>
                     <th>Last<br />Update</th>
                     <th>Notes</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach (var contact in Model.Contacts)
-				{
-					var reservedContact = contact.OriginalContacts - contact.RemainingContacts;
-					<tr>
-						<td>@contact.State</td>
-						<td>@contact.County</td>
-						<td id="orgContact_@contact.CatalogContactId">
-							@contact.OriginalContacts  <a href="#" class="pull-right icon-pencil" onclick="openContactEditForm(@contact.OriginalContacts,'@contact.CatalogContactId')"></a>
-						</td>
-						@if (reservedContact > 0)
-						{
-							<td>
-								<a rel="tooltip" data-placement="right"
-								   href="/Catalog/CatalogSales?importId=@Model.ImportId&industry=@Model.Industry&state=@contact.State&county=@contact.County&contactId=@contact.CatalogContactId">
-									@(contact.OriginalContacts - contact.RemainingContacts) (View Sales)
-								</a>
-							</td>
-						}
-						else
-						{
-							<td>@(contact.OriginalContacts - contact.RemainingContacts) </td>
-						}
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var contact in Model.Contacts)
+                {
+                    var reservedContact = (contact.OriginalContacts - contact.RemainingContacts) - contact.ManualReservedContacts;
+                    <input type="hidden" id="savedManualResContact_@contact.CatalogContactId" value="@contact.ManualReservedContacts" />
+                    <tr>
+                        <td>@contact.State</td>
+                        <td>@contact.County</td>
+                        <td id="orgContact_@contact.CatalogContactId">
+                            <span>@contact.OriginalContacts</span>  <a href="#" class="pull-right icon-pencil" onclick="openContactEditForm(@contact.OriginalContacts,'@contact.CatalogContactId','orgContact_')"></a>
+                        </td>
+                        <td id="manuallResContact_@contact.CatalogContactId">
+                            @contact.ManualReservedContacts  <a href="#" class="pull-right icon-pencil" onclick="openContactEditForm(@contact.ManualReservedContacts,'@contact.CatalogContactId','manuallResContact_')"></a>
+                        </td>
+                        @if (reservedContact > 0)
+                        {
+                            <td>
+                                <a rel="tooltip" data-placement="right"
+                                   href="/Catalog/CatalogSales?importId=@Model.ImportId&industry=@Model.Industry&state=@contact.State&county=@contact.County&contactId=@contact.CatalogContactId">
+                                    @reservedContact (View Sales)
+                                </a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>@reservedContact </td>
+                        }
 
-						<td>@contact.RemainingContacts </td>
-						<td>@contact.UpdateDateUTC.ToString("MM/dd/yyyy")</td>
+                        <td id="remContact_@contact.CatalogContactId">@contact.RemainingContacts </td>
+                        <td>@contact.UpdateDateUTC.ToString("MM/dd/yyyy")</td>
                         <td id="notes_@contact.CatalogContactId">
                             @contact.Note  <a href="#" class="pull-right icon-pencil" onclick="openContacNoteForm('@contact.Note','@contact.CatalogContactId')"></a>
                         </td>
-					</tr>
-				}
-				@if (Model.ResultsTotal > Model.ResultsPerPage)
-				{
-					<tr>
-						<td class="pager" colspan="9">
-							@Html.Partial("../asicentral/Shared/_CatalogPager", Model)
-						</td>
-					</tr>
-				}
-			</tbody>
-		</table>
-	</form>
+                    </tr>
+                }
+                @if (Model.ResultsTotal > Model.ResultsPerPage)
+                {
+                    <tr>
+                        <td class="pager" colspan="9">
+                            @Html.Partial("../asicentral/Shared/_CatalogPager", Model)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
 }
 else
 {
-	<hr />
-	<ul>
-		<li>No data available!</li>
-	</ul>
+    <hr />
+    <ul>
+        <li>No data available!</li>
+    </ul>
 }
 
 <script>
@@ -141,13 +146,13 @@ else
         })
     }
 
-    function openContactEditForm(contacts, contactId) {
+    function openContactEditForm(contacts, contactId, idPrefix) {
          $.ajax({
              url: '/Catalog/EditContact',
-             data: { contacts: contacts, contactId: contactId},
+             data: { contacts: contacts, contactId: contactId, containerIdPrefix: idPrefix},
             type: 'GET',
             success: function (data) {
-                $("#orgContact_" + contactId).html(data);
+                $("#"+idPrefix + contactId).html(data);
                 }
             })
         }
@@ -161,19 +166,44 @@ else
                     $("#notes_" + contactId).html(data);
                 }
             })
-        }
-    function closeContactForm(contacts, contactId) {
-        var html = contacts + '<a href="#" class="pull-right icon-pencil" onclick="openContactEditForm(' + contacts + ',\'' + contactId + '\')"></a>';
-        $("#orgContact_" + contactId).html(html);
+	}
+
+    function closeContactForm(contacts, contactId, idPrefix) {
+        var html = contacts + '<a href="#" class="pull-right icon-pencil" onclick="openContactEditForm(' + contacts + ',\'' + contactId + '\',\'' + idPrefix+'\')"></a>';
+        $("#" + idPrefix + contactId).html(html);
     }
-    
+
+    function saveContact(contactId, obj) {
+        var form = $(obj).closest("form");
+        var contactType = form.find("#contactType").val();
+        if (contactType === 'manuallResContact_') {
+            var manualResContacts = parseInt(form.find("#contacts").val());
+            var savedManualResContact = parseInt($("#savedManualResContact_" + contactId).val());
+            var originalContacts = parseInt($("#orgContact_" + contactId).find('span').text());
+            var remainingContacts = parseInt($("#remContact_" + contactId).text());
+            var reservedContacts = (originalContacts - remainingContacts) - savedManualResContact;
+            if (isNaN(manualResContacts) || manualResContacts<0 || (remainingContacts <= 0 && savedManualResContact<=0) || manualResContacts > originalContacts ||
+                ((manualResContacts + reservedContacts) > originalContacts)) {
+                //invalid
+                form.find("#contacts").css("border", "1px solid red");
+            }
+            else {
+                form.find("#contacts").css("border", "");
+                $(form).submit();
+            }
+        }
+        else {
+            $(form).submit();
+        }
+    }
+
     function DownloadExcel() {
 			var importId = $("#importId").val();
 			var state = $("#state").val();
 			var path = "/Store/Catalog/DownloadCatalogInventry?importId=" + importId + "&state=" + state;
 			window.location = path;
 		}
-		
+
     function closeContactNotesForm(note, contactId) {
        var html = note + '<a href="#" class="pull-right icon-pencil" onclick="openContacNoteForm(\'' + note + '\',\'' + contactId + '\')"></a>';
        $("#notes_" + contactId).html(html);

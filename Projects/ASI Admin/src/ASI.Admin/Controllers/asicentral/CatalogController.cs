@@ -129,7 +129,7 @@ namespace asi.asicentral.web.Controllers.asicentral
                             return RedirectToAction("CatalogContactImport", "Catalog");
                         }
 
-                        return CatalogContactUpdate(catalogContactImport, sheet); 
+                        return CatalogContactUpdate(catalogContactImport, sheet);
                     }
                     #endregion
 
@@ -249,7 +249,7 @@ namespace asi.asicentral.web.Controllers.asicentral
                         {
                             TempData["States"] = asi.asicentral.util.HtmlHelper.GetStates();
                         }
-                       
+
                         var apiStates = (IList<SelectListItem>)TempData.Peek("States");
                         var dbStates = import.CatalogContacts.Select(m => m.State)?.Distinct();
                         if (dbStates != null && dbStates.Count() > 0)
@@ -260,9 +260,9 @@ namespace asi.asicentral.web.Controllers.asicentral
                                 if (apiState != null)
                                     contacttModel.States.Add(new SelectListItem { Text = apiState.Text, Value = apiState.Value });
                             }
-                            contacttModel.States= contacttModel.States.OrderBy(m => m.Text).ToList();
+                            contacttModel.States = contacttModel.States.OrderBy(m => m.Text).ToList();
                         }
-                        contacttModel.States.Insert(0,new SelectListItem { Value = "", Text = "--Select--" });
+                        contacttModel.States.Insert(0, new SelectListItem { Value = "", Text = "--Select--" });
                         var counties = import.CatalogContacts.Where(s => s.State == state).Select(c => c.County)?.Distinct();
                         if (counties != null && counties.Count() > 0)
                         {
@@ -270,9 +270,9 @@ namespace asi.asicentral.web.Controllers.asicentral
                             {
                                 contacttModel.Counties.Add(new SelectListItem { Value = ct, Text = ct });
                             }
-                            contacttModel.Counties= contacttModel.Counties.OrderBy(m => m.Text).ToList();
+                            contacttModel.Counties = contacttModel.Counties.OrderBy(m => m.Text).ToList();
                         }
-                        contacttModel.Counties.Insert(0,new SelectListItem { Value = "", Text = "--Select--" });
+                        contacttModel.Counties.Insert(0, new SelectListItem { Value = "", Text = "--Select--" });
 
                         var contactList = import.CatalogContacts.Where(c => (c.CatalogContactImportId == importId.Value)
                                             && (c.County == county || string.IsNullOrEmpty(county))
@@ -287,6 +287,7 @@ namespace asi.asicentral.web.Controllers.asicentral
                                                    County = m.County,
                                                    OriginalContacts = m.OriginalContacts,
                                                    RemainingContacts = m.RemainingContacts,
+                                                   ManualReservedContacts = m.ManualReservedContacts,
                                                    UpdateDateUTC = m.UpdateDateUTC,
                                                    CreateDateUTC = m.CreateDateUTC,
                                                    CatalogContactId = m.CatalogContactId,
@@ -541,8 +542,8 @@ namespace asi.asicentral.web.Controllers.asicentral
             return View("~/Views/asicentral/Catalog/ApproveContact.cshtml", salesDetailsModel);
         }
         [HttpPost]
-        public ActionResult ApproveContact(List<CatalogContactSaleDetail> unApprovedContact, string asiNo, int saleId = 0, 
-            bool isSalesForm = false, string OtherOptions = "", bool requestMoreInfo=false)
+        public ActionResult ApproveContact(List<CatalogContactSaleDetail> unApprovedContact, string asiNo, int saleId = 0,
+            bool isSalesForm = false, string OtherOptions = "", bool requestMoreInfo = false)
         {
             LogService log = LogService.GetLog(this.GetType());
 
@@ -615,15 +616,18 @@ namespace asi.asicentral.web.Controllers.asicentral
         }
 
         [HttpGet]
-        public ActionResult EditContact(int contactId, int contacts)
+        public ActionResult EditContact(int contactId, int contacts, string containerIdPrefix)
         {
             ViewData["contactId"] = contactId;
             ViewData["contacts"] = contacts;
+            ViewData["containerIdPrefix"] = containerIdPrefix;
             return PartialView("~/Views/asicentral/Catalog/EditContactForm.cshtml");
         }
 
+
+
         [HttpPost]
-        public ActionResult SaveEditContact(int? contactId, int contacts = 0)
+        public ActionResult SaveEditContact(int? contactId, int contacts = 0, string contactType = "")
         {
             LogService log = LogService.GetLog(this.GetType());
             CatalogContact catalogContact = null;
@@ -634,8 +638,17 @@ namespace asi.asicentral.web.Controllers.asicentral
                     catalogContact = ObjectService.GetAll<CatalogContact>().Where(m => m.CatalogContactId == contactId.Value).FirstOrDefault();
                     if (catalogContact != null)
                     {
-                        catalogContact.RemainingContacts += contacts - catalogContact.OriginalContacts;
-                        catalogContact.OriginalContacts = contacts;
+                        if (contactType == "orgContact_")
+                        {
+                            catalogContact.RemainingContacts += contacts - catalogContact.OriginalContacts;
+                            catalogContact.OriginalContacts = contacts;
+                        }
+                        else
+                        {
+                            var manualResContactsInDb = catalogContact.ManualReservedContacts;
+                            catalogContact.ManualReservedContacts = contacts;
+                            catalogContact.RemainingContacts = (catalogContact.OriginalContacts - (catalogContact.OriginalContacts - (catalogContact.RemainingContacts+ manualResContactsInDb))) - contacts;
+                        }
                     }
                 }
                 ObjectService.SaveChanges();
@@ -744,7 +757,7 @@ namespace asi.asicentral.web.Controllers.asicentral
         public PartialViewResult AddMoreCatalog()
         {
             CatalogContactsSalesModel salesModel = new CatalogContactsSalesModel();
-            var imports =ObjectService.GetAll<CatalogContactImport>(true)?.OrderBy(m => !m.IsActive);
+            var imports = ObjectService.GetAll<CatalogContactImport>(true)?.OrderBy(m => !m.IsActive);
             var industries = imports.Where(m => m.IsActive).Select(m => m.IndustryName).Distinct();
             if (industries != null && industries.Count() > 0)
             {
@@ -1093,7 +1106,7 @@ namespace asi.asicentral.web.Controllers.asicentral
             }
             return Json(states.OrderBy(m => m.Value), JsonRequestBehavior.AllowGet);
         }
-        
+
         public ActionResult CatalogSubmissionHistory(string asiNumber)
         {
             var catalogSales = ObjectService.GetAll<CatalogContactSale>()?.OrderByDescending(m => m.CreateDateUTC).ToList();
@@ -1120,7 +1133,7 @@ namespace asi.asicentral.web.Controllers.asicentral
                     var line = string.Empty;
                     foreach (var item in catalogContacts)
                     {
-                        line = string.Join(",", industry, item.State, item.County,item.OriginalContacts, item.RemainingContacts);
+                        line = string.Join(",", industry, item.State, item.County, item.OriginalContacts, item.RemainingContacts);
                         csvString.AppendLine(line);
                     }
                 }
@@ -1134,7 +1147,7 @@ namespace asi.asicentral.web.Controllers.asicentral
             }
             return null;
         }
-        
+
         public ActionResult DownloadCatalogSales(string industry, string asiNo)
         {
             LogService log = LogService.GetLog(this.GetType());
@@ -1167,7 +1180,7 @@ namespace asi.asicentral.web.Controllers.asicentral
                 TempData["ErrorMessage"] = "Error occured while downloading data -'" + ex.Message;
             }
             return null;
-          }
+        }
 
         #endregion download
 

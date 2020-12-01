@@ -14,6 +14,7 @@ namespace asi.asicentral.model.asicentral
         public string County { get; set; }
         public decimal? Percentage { get; set; }
         public int OriginalContacts { get; set; }
+        public int ManualReservedContacts { get; set; }
         public int RemainingContacts { get; set; }
         public DateTime CreateDateUTC { get; set; }
         public DateTime UpdateDateUTC { get; set; }
