@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace asi.asicentral.model.show
 {
@@ -12,9 +13,8 @@ namespace asi.asicentral.model.show
                 PropertyValues = new List<ShowFormPropertyValue>();
             }
         }
-
-        public int InstanceId { get; set; }
-        
+       
+        public int Id { get; set; }
         public int TypeId { get; set; }
 
         public string Email { get; set; }

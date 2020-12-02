@@ -1,4 +1,5 @@
-﻿using System;
+﻿using asi.asicentral.model.show.form;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -26,9 +27,10 @@ namespace asi.asicentral.model.show
         public int? ShowTypeId { get; set; }
         public virtual ShowType ShowType { get; set; }
         public string Address { get; set; } 
-        public virtual IList<ShowAttendee> Attendees { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
+        public virtual IList<ShowAttendee> Attendees { get; set; }
+        public virtual IList<SHW_ShowFormInstance> ShowFormInstances { get; set; }
     }
 }

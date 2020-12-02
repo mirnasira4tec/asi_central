@@ -101,7 +101,7 @@ namespace External.Test.Show
             var formType = objectService.GetAll<ShowFormType>().Where(m => m.Name == "TravelForm").OrderByDescending(m => m.CreateDate).FirstOrDefault();//Travel Form
             ShowFormInstance formInstance = new ShowFormInstance()
             {
-                TypeId = formType.TypeId,
+                TypeId = formType.Id,
                 Email = "wesptest" + rand.Next() + "@mail.com",
                 RequestReference = Guid.NewGuid().ToString(),
                 CreateDate = DateTime.Now,
@@ -118,10 +118,10 @@ namespace External.Test.Show
             }
             objectService.Add<ShowFormInstance>(formInstance);
             objectService.SaveChanges();
-            var value = CreateFormPropertyValue(objectService, formInstance.InstanceId, 1, "Property1", "One" + rand.Next());
-            var value1 = CreateFormPropertyValue(objectService, formInstance.InstanceId, 2, "Property2", "Two" + rand.Next());
+            var value = CreateFormPropertyValue(objectService, formInstance.Id, 1, "Property1", "One" + rand.Next());
+            var value1 = CreateFormPropertyValue(objectService, formInstance.Id, 2, "Property2", "Two" + rand.Next());
             formInstance.PropertyValues = new List<ShowFormPropertyValue>() { value, value1 };
-            return formInstance.InstanceId == 0 ? null : formInstance;
+            return formInstance.Id == 0 ? null : formInstance;
         }
 
         private ShowFormPropertyValue CreateFormPropertyValue(ObjectService objectService, int formInstanceId, int sequence, string name, string value)
@@ -138,7 +138,7 @@ namespace External.Test.Show
             };
             objectService.Add<ShowFormPropertyValue>(showFormPropertyValue);
             objectService.SaveChanges();
-            return showFormPropertyValue.PropertyValueId == 0 ? null : showFormPropertyValue;
+            return showFormPropertyValue.Id == 0 ? null : showFormPropertyValue;
         }
 
 

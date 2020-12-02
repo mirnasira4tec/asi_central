@@ -37,5 +37,6 @@ namespace asi.asicentral.model.show
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
         public bool? IsNew { get; set; }
+        public int? ProfilePackageId { get; set; }
     }
 }

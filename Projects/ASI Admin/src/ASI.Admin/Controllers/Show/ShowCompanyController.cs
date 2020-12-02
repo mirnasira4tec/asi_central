@@ -1,17 +1,12 @@
-﻿using asi.asicentral.model.show;
+﻿using asi.asicentral.interfaces;
+using asi.asicentral.model.show;
 using asi.asicentral.services;
 using asi.asicentral.util.show;
 using asi.asicentral.web.models.show;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using StructureMap.Configuration.DSL;
-using asi.asicentral.database.mappings;
-using asi.asicentral.interfaces;
-using System.Data.Entity.Validation;
-using System.Diagnostics;
 
 namespace asi.asicentral.web.Controllers.Show
 {
@@ -224,6 +219,14 @@ namespace asi.asicentral.web.Controllers.Show
                 for (int i = companyAttendeeCount - 1; i >= 0; i--)
                 {
                     ObjectService.Delete(company.Attendees.ElementAt(i));
+                }
+                var companyProfile = ObjectService.GetAll<CompanyProfile>().Where(cp => cp.CompanyId == id);
+                if (companyProfile.Any())
+                {
+                    foreach (var profile in companyProfile)
+                    {
+                        profile.CompanyId = null;
+                    }
                 }
                 ObjectService.Delete<ShowCompany>(company);
                 ObjectService.SaveChanges();
@@ -591,6 +594,16 @@ namespace asi.asicentral.web.Controllers.Show
             ShowAttendee attendee = ObjectService.GetAll<ShowAttendee>(true).SingleOrDefault(sa => sa.ShowId == showId && sa.CompanyId == companyId);
             IList<ShowEmployee> employees = ObjectService.GetAll<ShowEmployee>(true).Where(e => e.CompanyId == companyId).ToList();
             var showCompanies = new ShowCompaniesModel();
+            var prfolilePackages = ObjectService.GetAll<ProfilePackage>();
+            if(prfolilePackages!=null && prfolilePackages.Any())
+            {
+                showCompanies.ProfilePackages = new List<SelectListItem>();
+                foreach (var package in prfolilePackages)
+                {
+                    var dropdownItem = new SelectListItem { Value = package.Id.ToString(), Text = package.ProfilePackageName };
+                    showCompanies.ProfilePackages.Add(dropdownItem);
+                }
+            }
             if (attendee != null)
             {
                 showCompanies.ShowAttendees.Add(attendee);

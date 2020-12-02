@@ -9,10 +9,11 @@ namespace asi.asicentral.database.mappings.show
         public ShowFormInstanceMap()
         {
             this.ToTable("FRM_Instance");
-            this.HasKey(t => t.InstanceId);
+            this.HasKey(t => t.Id);
 
             //Properties
-            this.Property(t => t.InstanceId)
+            this.Property(t => t.Id)
+                .HasColumnName("InstanceId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.CreateDate)
@@ -29,6 +30,10 @@ namespace asi.asicentral.database.mappings.show
             HasOptional(x => x.Attendee)
              .WithMany(x => x.TravelForms)
              .HasForeignKey(x => x.AttendeeId);
+
+            HasRequired(x => x.FormType)
+                .WithMany()
+                .HasForeignKey(x => x.TypeId);
         }
     }
 }

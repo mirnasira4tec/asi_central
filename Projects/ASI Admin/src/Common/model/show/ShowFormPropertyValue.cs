@@ -4,7 +4,7 @@ namespace asi.asicentral.model.show
 {
     public class ShowFormPropertyValue
     {
-        public int PropertyValueId { get; set; }
+        public int Id { get; set; }
         public int Sequence { get; set; }
         public string Name { get; set; }
         public string Value { get; set; }

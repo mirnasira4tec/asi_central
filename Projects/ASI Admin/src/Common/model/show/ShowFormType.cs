@@ -5,7 +5,7 @@ namespace asi.asicentral.model.show
 {
     public class ShowFormType
     {
-        public int TypeId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string NotificationEmails { get; set; }
         public DateTime CreateDate { get; set; }

@@ -1,5 +1,6 @@
 using asi.asicentral.interfaces;
 using asi.asicentral.model.show;
+using asi.asicentral.model.store;
 using asi.asicentral.oauth;
 using asi.asicentral.services;
 using asi.asicentral.services.PersonifyProxy;
@@ -17,12 +18,9 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.Xml;
-using asi.asicentral.model.store;
-using System.Threading.Tasks;
 
 namespace asi.asicentral.web.Controllers.Show
 {
@@ -158,7 +156,26 @@ namespace asi.asicentral.web.Controllers.Show
                 }
                 attendee.IsNew = isYes;
             }
-
+            if (ds.Columns.Contains("Exhibitor Package") && memberType.Equals("supplier", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var colValue = ds.Rows[rowId]["Exhibitor Package"].ToString().ToLower();
+                switch (colValue)
+                {
+                    case "basic":
+                        attendee.ProfilePackageId = 1;
+                        break;
+                    case "high":
+                    case "plus":
+                        attendee.ProfilePackageId = 2;
+                        break;
+                    case "premium":
+                        attendee.ProfilePackageId = 3;
+                        break;
+                    default:
+                        attendee.ProfilePackageId = null;
+                        break;
+                }
+            }
             attendee.IsExisting = true;
             attendee.UpdateSource = "ExcelUploadcontroller-Index";
             attendee.UpdateDate = DateTime.UtcNow;

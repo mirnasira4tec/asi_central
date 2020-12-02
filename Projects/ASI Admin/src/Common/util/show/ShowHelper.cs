@@ -282,31 +282,50 @@ namespace asi.asicentral.util.show
                 for (int i = employeeAttendeeCount; i > 0; i--)
                 {
                     var showEmployeeAttendee = objShowAttendee.EmployeeAttendees.ElementAt(i - 1);
+                    // Deleting Reference of Employee Attendee from Travel Form
+                    if (showEmployeeAttendee.TravelForms != null)
+                    {
+                        foreach(var frmInstance in showEmployeeAttendee.TravelForms)                        
+                        {                            
+                            frmInstance.EmployeeAttendeeId = null;
+                            frmInstance.UpdateDate = DateTime.UtcNow;
+                            frmInstance.UpdateSource = updateSource;
+                        }
+                    }
+                    // Deleting Reference of Employee Attendee from Profile Requests
+                    if (showEmployeeAttendee.ProfileRequests != null)
+                    {                        
+                        foreach (var profile in showEmployeeAttendee.ProfileRequests)
+                        {                           
+                            profile.EmployeeAttendeeId = null;
+                            profile.UpdateDate = DateTime.UtcNow;
+                            profile.UpdateSource = updateSource;
+                        }
+                    }
+                    // Deleting Employee Attendee
                     ShowHelper.DeleteShowEmployeeAttendee(objectService, showEmployeeAttendee, updateSource);
                 }
+                // Deleting Reference of Attendee from Travel Form
                 if (objShowAttendee.TravelForms != null)
                 {
-                    int travelFormsCount = objShowAttendee.TravelForms.Count();
-                    for (int i = travelFormsCount; i > 0; i--)
+                    foreach (var frmInstance in objShowAttendee.TravelForms)
                     {
-                        var frmInstance = objShowAttendee.TravelForms.ElementAt(i - 1);
-                        frmInstance.EmployeeAttendeeId = null;
+                        frmInstance.AttendeeId = null;
                         frmInstance.UpdateDate = DateTime.UtcNow;
                         frmInstance.UpdateSource = updateSource;
                     }
                 }
+                // Deleting Reference of Attendee from Profile Requests
                 if (objShowAttendee.ProfileRequests != null)
                 {
-                    int profileCount = objShowAttendee.ProfileRequests.Count();
-                    for (int i = profileCount; i > 0; i--)
+                    foreach (var profile in objShowAttendee.ProfileRequests)
                     {
-                        var profile = objShowAttendee.ProfileRequests.ElementAt(i - 1);
-                        profile.EmployeeAttendeeId = null;
+                        profile.AttendeeId = null;
                         profile.UpdateDate = DateTime.UtcNow;
                         profile.UpdateSource = updateSource;
                     }
                 }
-                if(objShowAttendee.DistShowLogos != null)
+                if (objShowAttendee.DistShowLogos != null)
                 {
                     int attendeeLogoCount = objShowAttendee.DistShowLogos.Count();
                     for (int i = attendeeLogoCount; i > 0; i--)
@@ -315,6 +334,7 @@ namespace asi.asicentral.util.show
                         objectService.Delete(distShowLogo);
                     }
                 }
+                // Deleting Attendee
                 objectService.Delete<ShowAttendee>(objShowAttendee);
                 objectService.SaveChanges();
             }

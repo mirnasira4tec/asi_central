@@ -99,6 +99,7 @@
     <Compile Include="Common\ASIOAuthClientTests.cs" />
     <Compile Include="Show\FasilitateTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Show\ShowContextTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

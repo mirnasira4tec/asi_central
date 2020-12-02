@@ -30,6 +30,7 @@
             <th>Round Table</th>
             <th>Is Catalog</th>
             <th>Booth Number</th>
+            <th>Profile Package</th>
         </tr>
     </thead>
     <tbody>
@@ -38,7 +39,7 @@
             <tr>
                 <td><a class="delete" id="@showAttendee.Id" href="/ShowCompany/DeleteAttendeeCompany?id=@showAttendee.Id&showId=@Model.Show.Id"><i class="icon-trash"></i></a></td>
                 <td>@showAttendee.Company.ASINumber</td>
-                 <td>@showAttendee.Company.SecondaryASINo</td>
+                <td>@showAttendee.Company.SecondaryASINo</td>
                 <td><a class="red" href="/ShowCompany/GetCompanyDetailsForShow?companyId=@showAttendee.Company.Id&showId=@(Model.Show != null ? Model.Show.Id : 0)">@showAttendee.Company.Name</a></td>
                 <td>@showAttendee.Company.MemberType</td>
                 <td>
@@ -47,7 +48,7 @@
                         <a class=" buttonHolder button tick"></a>
                     }
                     else
-                    {  <a class="buttonHolder button cross"></a>
+                    { <a class="buttonHolder button cross"></a>
                     }
                 </td>
                 <td>
@@ -91,16 +92,36 @@
                     }
                 </td>
                 <td>@showAttendee.BoothNumber</td>
+                <td>
+                    @{
+                        var package = string.Empty;
+                        switch (showAttendee.ProfilePackageId)
+                        {
+                            case 1:
+                                package = "Basic";
+                                break;
+                            case 2:
+                                package = "High";
+                                break;
+                            case 3:
+                                package = "Premium";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    @package
+                </td>
             </tr>
         }
-          @if (Model.TotalRecordCount > Model.PageSize)
-         {
-             <tr>
-                 <td class="pager" colspan="10">
-                     @Html.Partial("../Show/Shared/_Pager", Model)
-                 </td>
-             </tr>
-         }
+        @if (Model.TotalRecordCount > Model.PageSize)
+        {
+            <tr>
+                <td class="pager" colspan="12">
+                    @Html.Partial("../Show/Shared/_Pager", Model)
+                </td>
+            </tr>
+        }
 
     </tbody>
 </table>
@@ -115,6 +136,6 @@
             else
                 return false
         });
-      
+
     </script>
 }

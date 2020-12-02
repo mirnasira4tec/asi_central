@@ -1,5 +1,7 @@
 ﻿using asi.asicentral.database.mappings.show;
+using asi.asicentral.database.mappings.show.form;
 using asi.asicentral.model.show;
+using asi.asicentral.model.show.form;
 using System.Data.Entity;
 
 namespace asi.asicentral.database
@@ -33,6 +35,19 @@ namespace asi.asicentral.database
         public DbSet<ShowFormType> ShowFormType { get; set; }
         public DbSet<ShowFormInstance> ShowFormInstance { get; set; }
         public DbSet<ShowFormPropertyValue> ShowFormPropertyValue { get; set; }
+        public DbSet<SHW_FormType> SHW_ShowFormType { get; set; }
+        public DbSet<SHW_FormInstance> SHW_FormInstance { get; set; }
+        public DbSet<SHW_FormPropertyValue> SHW_ShowFormPropertyValue { get; set; }
+        public DbSet<SHW_ShowFormInstance> SHW_ShowFormInstance { get; set; }
+        public DbSet<SHW_FormQuestion> SHW_FormQuestion { get; set; }
+        public DbSet<SHW_FormQuestionOption> SHW_FormQuestionOption { get; set; }
+
+        public DbSet<ProfilePackage> ProfilePackages { get; set; }
+        public DbSet<ProfileOption> ProfileOptions { get; set; }
+        public DbSet<ProfileOptionValue> ProfileOptionValue { get; set; }
+        public DbSet<ProfilePackageOption> ProfilePackageOptions { get; set; }
+        public DbSet<CompanyProfile> CompanyProfiles { get; set; }
+        public DbSet<CompanyProfileData> CompanyProfileData { get; set; }
 
         /// <summary>
         /// Use to enhance the default mapping for the model
@@ -59,8 +74,19 @@ namespace asi.asicentral.database
                 .Add(new ShowProfileDistributorDataMap())
                 .Add(new ShowFormTypeMap())
                 .Add(new ShowFormInstanceMap())
-                .Add(new ShowFormValueMap());
-
+                .Add(new ShowFormValueMap())
+                .Add(new ProfilePackageMap())
+                .Add(new ProfileOptionMap())
+                .Add(new ProfileOptionValueMap())
+                .Add(new ProfilePackageOptionMap())
+                .Add(new CompanyProfileMap())
+                .Add(new CompanyProfileDataMap())
+                .Add(new SHW_FormTypeMap())
+                .Add(new SHW_FormInstanceMap())
+                .Add(new SHW_FormPropertyValueMap())
+                .Add(new SHW_ShowFormInstanceMap())
+                .Add(new SHW_FormQuestionMap())
+                .Add(new SHW_FormQuestionOptionMap());
         }
     }
 }

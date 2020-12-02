@@ -9,10 +9,11 @@ namespace asi.asicentral.database.mappings.show
         public ShowFormValueMap()
         {
             this.ToTable("FRM_PropertyValue");
-            this.HasKey(t => t.PropertyValueId);
+            this.HasKey(t => t.Id);
 
             //Properties
-            this.Property(t => t.PropertyValueId)
+            this.Property(t => t.Id)
+                .HasColumnName("PropertyValueId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.FormInstanceId)

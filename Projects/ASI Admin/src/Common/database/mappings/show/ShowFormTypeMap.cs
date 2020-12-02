@@ -9,10 +9,11 @@ namespace asi.asicentral.database.mappings.show
         public ShowFormTypeMap()
         {
             this.ToTable("FRM_Type");
-            this.HasKey(t => t.TypeId);
+            this.HasKey(t => t.Id);
 
             //Properties
-            this.Property(t => t.TypeId)
+            this.Property(t => t.Id)
+                .HasColumnName("TypeId")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.CreateDate)

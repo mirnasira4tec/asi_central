@@ -8,6 +8,7 @@ using asi.asicentral.model.news;
 using asi.asicentral.model.personify;
 using asi.asicentral.model.sgr;
 using asi.asicentral.model.show;
+using asi.asicentral.model.show.form;
 using asi.asicentral.model.store;
 using StructureMap.Configuration.DSL;
 
@@ -203,7 +204,7 @@ namespace asi.asicentral.database.mappings
                 .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<LookEquipmentType>>().Use<EFRepository<LookEquipmentType>>()
-                .Ctor<IValidatedContext>().Named("StoreContext"); 
+                .Ctor<IValidatedContext>().Named("StoreContext");
 
             For<IRepository<LookProductCollections>>().Use<EFRepository<LookProductCollections>>()
               .Ctor<IValidatedContext>().Named("StoreContext");
@@ -398,6 +399,38 @@ namespace asi.asicentral.database.mappings
 
             For<IRepository<ShowFormPropertyValue>>().Use<EFRepository<ShowFormPropertyValue>>()
               .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+
+            For<IRepository<SHW_FormType>>().Use<EFRepository<SHW_FormType>>()
+              .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+            For<IRepository<SHW_FormInstance>>().Use<EFRepository<SHW_FormInstance>>()
+              .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+            For<IRepository<SHW_FormPropertyValue>>().Use<EFRepository<SHW_FormPropertyValue>>()
+              .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+            For<IRepository<SHW_ShowFormInstance>>().Use<EFRepository<SHW_ShowFormInstance>>()
+              .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+            For<IRepository<SHW_FormQuestion>>().Use<EFRepository<SHW_FormQuestion>>()
+              .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+            For<IRepository<SHW_FormQuestionOption>>().Use<EFRepository<SHW_FormQuestionOption>>()
+              .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+
+            For<IRepository<CompanyProfile>>().Use<EFRepository<CompanyProfile>>()
+              .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+
+            For<IRepository<CompanyProfileData>>().Use<EFRepository<CompanyProfileData>>()
+          .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+
+            For<IRepository<ProfileOption>>().Use<EFRepository<ProfileOption>>()
+         .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+
+            For<IRepository<ProfileOptionValue>>().Use<EFRepository<ProfileOptionValue>>()
+        .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+
+            For<IRepository<ProfilePackage>>().Use<EFRepository<ProfilePackage>>()
+        .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+
+            For<IRepository<ProfilePackageOption>>().Use<EFRepository<ProfilePackageOption>>()
+        .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+
 
             #endregion Umbraco_ShowContext
 

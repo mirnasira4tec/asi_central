@@ -24,6 +24,7 @@ namespace asi.asicentral.web.models.show
         public IList<EmployeeAttendance> ShowEmployees { get; set; }
         public int? CompanyId { get; set; }
         public IList<ShowCompany> ShowCompanies { set; get; }
+        public List<SelectListItem> ProfilePackages { get; set; }
     }
 
     public class EmployeeAttendance    

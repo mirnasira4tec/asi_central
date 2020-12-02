@@ -35,10 +35,10 @@ namespace asi.asicentral.Tests
                     UpdateDate = DateTime.UtcNow,
                     UpdateSource = "TestCase"
                 };
-                showFormInstance.TypeId = formType.TypeId;
+                showFormInstance.TypeId = formType.Id;
                 objectContext.Add(showFormInstance);
                 objectContext.SaveChanges();
-                Assert.AreNotEqual(showFormInstance.InstanceId, 0);
+                Assert.AreNotEqual(showFormInstance.Id, 0);
 
                 var showFormPropertyValue = new ShowFormPropertyValue()
                 {
@@ -49,10 +49,10 @@ namespace asi.asicentral.Tests
                     UpdateDate = DateTime.UtcNow,
                     UpdateSource = "TestCase"
                 };
-                showFormPropertyValue.FormInstanceId = showFormInstance.InstanceId;
+                showFormPropertyValue.FormInstanceId = showFormInstance.Id;
                 objectContext.Add(showFormPropertyValue);
                 objectContext.SaveChanges();
-                Assert.AreNotEqual(showFormPropertyValue.PropertyValueId, 0);
+                Assert.AreNotEqual(showFormPropertyValue.Id, 0);
             }
         }
 
@@ -68,11 +68,11 @@ namespace asi.asicentral.Tests
                 //Test to check Mapping From Employee Attendee to TravelForm
                 var instanceFromEmpAttendee = employeeAttendee.TravelForms.FirstOrDefault();
                 Assert.IsNotNull(instanceFromEmpAttendee);
-                Assert.Greater(instanceFromEmpAttendee.InstanceId, 0); // 7
+                Assert.Greater(instanceFromEmpAttendee.Id, 0); // 7
                 //Test to check Mapping From TravelForm to Employee Attendee 
-                var instanceFromDB = objectContext.GetAll<ShowFormInstance>(true).FirstOrDefault(t => t.InstanceId == instanceFromEmpAttendee.InstanceId);
+                var instanceFromDB = objectContext.GetAll<ShowFormInstance>(true).FirstOrDefault(t => t.Id == instanceFromEmpAttendee.Id);
                 Assert.IsNotNull(instanceFromDB);
-                Assert.AreEqual(instanceFromDB.InstanceId, instanceFromEmpAttendee.InstanceId);
+                Assert.AreEqual(instanceFromDB.Id, instanceFromEmpAttendee.Id);
                 Assert.AreEqual(instanceFromDB.EmployeeAttendeeId, empAttendeeId);
 
                 // Test to check Profile Request Mapping 

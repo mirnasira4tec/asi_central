@@ -65,7 +65,7 @@ namespace Internal.Test.Show
             ShowFormInstance formInstance = new ShowFormInstance()
             {
                 TypeId = 1,
-                InstanceId = 4565,
+                Id = 4565,
                 Email = "wesptest@mail.com",
                 RequestReference = Guid.NewGuid().ToString(),
                 CreateDate = DateTime.Now,
@@ -80,8 +80,8 @@ namespace Internal.Test.Show
             {
                 formInstance.EmployeeAttendeeId = showEmployeeAttendeeId.Value;
             }
-            var value = CreateFormPropertyValue(231, formInstance.InstanceId, 1, "Property1", "One");
-            var value1 = CreateFormPropertyValue(232, formInstance.InstanceId, 2, "Property2", "Two");
+            var value = CreateFormPropertyValue(231, formInstance.Id, 1, "Property1", "One");
+            var value1 = CreateFormPropertyValue(232, formInstance.Id, 2, "Property2", "Two");
             formInstance.PropertyValues = new List<ShowFormPropertyValue>() { value, value1 };
             return formInstance;
         }
@@ -90,7 +90,7 @@ namespace Internal.Test.Show
         {
             ShowFormPropertyValue showFormPropertyValue = new ShowFormPropertyValue()
             {
-                PropertyValueId = propertyValueId,
+                Id = propertyValueId,
                 FormInstanceId = formInstanceId,
                 Sequence = sequence,
                 Name = name,

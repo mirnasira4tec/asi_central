@@ -1,13 +1,13 @@
 ﻿using asi.asicentral.interfaces;
 using asi.asicentral.model.show;
+using asi.asicentral.model.show.form;
+using asi.asicentral.model.store;
 using asi.asicentral.oauth;
 using asi.asicentral.util.show;
 using asi.asicentral.web.models.show;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace asi.asicentral.web.Controllers.Show
@@ -95,6 +95,7 @@ namespace asi.asicentral.web.Controllers.Show
                 existingAttendee.UpdateDate = DateTime.UtcNow;
                 existingAttendee.UpdateSource = "ShowController - PostShowAttendeeInformation";
                 existingAttendee.IsNew = showAttendee.IsNew;
+                existingAttendee.ProfilePackageId = showAttendee.ProfilePackageId;
                 ShowAttendee attendeeToSave = ShowHelper.CreateOrUpdateShowAttendee(ObjectService, existingAttendee);
                 if (attendeeInfo != null && attendeeInfo.ShowAttendees != null && attendeeInfo.ShowAttendees.Count > 0 &&
                     existingAttendee.EmployeeAttendees != null && existingAttendee.EmployeeAttendees.Count > 0)
@@ -188,32 +189,39 @@ namespace asi.asicentral.web.Controllers.Show
 
         public ActionResult Delete(int id)
         {
-            ShowASI show = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Id == id);
-            IList<ShowEmployeeAttendee> employeeAttendees = null;
+            ShowASI show = ObjectService.GetAll<ShowASI>().FirstOrDefault(item => item.Id == id);            
             if (show != null)
             {
                 int attendeeCount = show.Attendees.Count();
+                var attendees = show.Attendees.ToList();
+                // Deleting Attendee with Employee attendees
                 if (attendeeCount > 0)
                 {
-                    for (int attendee = attendeeCount; attendee > 0; attendee--)
+                    for (var i = attendeeCount - 1; i >= 0; i--)
                     {
-                        foreach (var employeeAttendee in show.Attendees)
-                        {
-                            employeeAttendees = ObjectService.GetAll<ShowEmployeeAttendee>().Where(item => item.AttendeeId == employeeAttendee.Id).ToList();
-                            int employeeAttendeeCount = employeeAttendees.Count();
-                            if (employeeAttendeeCount > 0)
-                            {
-                                for (int employee = employeeAttendeeCount; employee > 0; employee--)
-                                {
-                                    ObjectService.Delete(employeeAttendees.ElementAt(employee - 1));
-                                }
-                            }
-
-                        }
-                        ObjectService.Delete(show.Attendees.ElementAt(attendee - 1));
+                        var attendee = attendees[i];
+                        ShowHelper.DeleteShowAttendee(ObjectService, attendee, "ShowController - Delete");                        
                     }
                 }
-
+                // Deleting Reference of Show from Company Profile
+                var companyProfile = ObjectService.GetAll<CompanyProfile>().Where(cp => cp.ShowId == id).ToList();
+                if (companyProfile.Any())
+                {
+                    foreach (var profile in companyProfile)
+                    {
+                        profile.ShowId = null;
+                    }
+                }
+                // Deleting Reference of Show from Showcase Product Forms
+                var showFormsMappings = ObjectService.GetAll<SHW_ShowFormInstance>().Where(q => q.ShowId == id).ToList();
+                if (showFormsMappings.Any())
+                {
+                    var count = showFormsMappings.Count();
+                    for (int mappingsCount = count; mappingsCount > 0; mappingsCount--)
+                    {
+                        ObjectService.Delete(showFormsMappings.ElementAt(mappingsCount - 1));
+                    }
+                }
                 ObjectService.Delete<ShowASI>(show);
                 ObjectService.SaveChanges();
             }
@@ -232,7 +240,7 @@ namespace asi.asicentral.web.Controllers.Show
             var validationDetails = new List<Tuple<ShowEmployeeAttendee, string>>();
             var empAttendees = ObjectService.GetAll<ShowEmployeeAttendee>("Employee").Where(empAttendee => empAttendee.Attendee.ShowId == id).OrderBy(empAttendee => empAttendee.Attendee.Company.Name).ToList();
             if (empAttendees != null && empAttendees.Count > 0)
-            {                
+            {
                 //Parallel.ForEach(empAttendees, empAttendee =>
                 foreach (var empAttendee in empAttendees)
                 {
@@ -264,7 +272,7 @@ namespace asi.asicentral.web.Controllers.Show
                         validationDetails.Add(new Tuple<ShowEmployeeAttendee, string>(empAttendee, errorMessage));
                     }
                 }
-               //});
+                //});
             }
             return View("../Show/ValidateAttendeeEmails", validationDetails);
         }
