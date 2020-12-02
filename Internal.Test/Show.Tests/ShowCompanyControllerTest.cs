@@ -15,13 +15,13 @@ namespace Internal.Test.Show
     [TestFixture]
     public class ShowCompanyControllerTest
     {
-        private ShowAttendee CreateAttendee()
+        private ShowAttendee CreateAttendee(int attendeeId, int showId, int companyId)
         {
             ShowAttendee attendee = new ShowAttendee()
             {
-                Id = 3456,
-                ShowId = 108,
-                CompanyId = 2321,
+                Id = attendeeId,
+                ShowId = showId,
+                CompanyId = companyId,
                 IsSponsor = false,
                 IsExhibitDay = false,
                 IsPresentation = false,
@@ -225,7 +225,7 @@ namespace Internal.Test.Show
         {
            
             IList<ShowAttendee> attendees = new List<ShowAttendee>();
-            var showAttendee = CreateAttendee();
+            var showAttendee = CreateAttendee(3456, 108, 2321);
             attendees.Add(showAttendee);
 
             showAttendee.EmployeeAttendees = new List<ShowEmployeeAttendee>();

@@ -1,27 +1,26 @@
-﻿using System;
+﻿using asi.asicentral.interfaces;
+using asi.asicentral.model.show;
+using asi.asicentral.web.Controllers.Show;
+using Moq;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using asi.asicentral.model.show;
-using NUnit.Framework;
-using Moq;
-using asi.asicentral.interfaces;
-using asi.asicentral.util.show;
+using System.Web.Mvc;
 
-namespace Internal.Test.Show
+namespace asi.asicentral.WebApplication.Tests.Controllers.Show
 {
     [TestFixture]
-    public class FasilitateTest
+    public class ShowCompanyControllerTest
     {
-        Random rand = new Random();
-        private ShowAttendee CreateAttendee()
+        private readonly Random _random = new Random();
+        private ShowAttendee CreateAttendee(int showId, int companyId)
         {
             ShowAttendee attendee = new ShowAttendee()
             {
-                Id=3456,
-                ShowId = 108,
-                CompanyId = 2321,
+                Id = _random.Next(1000, 9999),
+                ShowId = showId,
+                CompanyId = companyId,
                 IsSponsor = false,
                 IsExhibitDay = false,
                 IsPresentation = false,
@@ -66,7 +65,7 @@ namespace Internal.Test.Show
             {
                 TypeId = 1,
                 Id = 4565,
-                Email = "wesptest" + rand.Next() + "@mail.com",
+                Email = "wesptest@mail.com",
                 RequestReference = Guid.NewGuid().ToString(),
                 CreateDate = DateTime.Now,
                 UpdateDate = DateTime.Now,
@@ -80,17 +79,17 @@ namespace Internal.Test.Show
             {
                 formInstance.EmployeeAttendeeId = showEmployeeAttendeeId.Value;
             }
-            var value = CreateFormPropertyValue(231, formInstance.Id, 1, "Property1", "One" + rand.Next());
-            var value1 = CreateFormPropertyValue(232, formInstance.Id, 2, "Property2", "Two" + rand.Next());
+            var value = CreateFormPropertyValue(231, formInstance.Id, 1, "Property1", "One");
+            var value1 = CreateFormPropertyValue(232, formInstance.Id, 2, "Property2", "Two");
             formInstance.PropertyValues = new List<ShowFormPropertyValue>() { value, value1 };
-            return  formInstance;
+            return formInstance;
         }
 
         private ShowFormPropertyValue CreateFormPropertyValue(int propertyValueId, int formInstanceId, int sequence, string name, string value)
         {
             ShowFormPropertyValue showFormPropertyValue = new ShowFormPropertyValue()
             {
-                Id= propertyValueId,
+                Id = propertyValueId,
                 FormInstanceId = formInstanceId,
                 Sequence = sequence,
                 Name = name,
@@ -217,43 +216,30 @@ namespace Internal.Test.Show
             profileDistributorData.CreateDate = DateTime.Now;
             profileDistributorData.UpdateDate = DateTime.Now;
             profileDistributorData.UpdateSource = "FasilitateTest.cs - CreateSupplierData";
-            return  profileDistributorData;
-        }
-
-
-
-        [Test]
-        public void DeleteDistributorAttendeeWithTravelForm()
-        {
-            Mock<IObjectService> mockObjectService = new Mock<IObjectService>();
-            var showEmpAttendee = CreateShowEmployeeAttendee();
-            var travelForm = CreateTravelForm(null, showEmpAttendee.Id);
-            showEmpAttendee.TravelForms = new List<ShowFormInstance>() {travelForm };
-
-            mockObjectService.Setup(objectService => objectService.Delete<ShowEmployeeAttendee>(showEmpAttendee));
-
-            ShowHelper.DeleteShowEmployeeAttendee(mockObjectService.Object, showEmpAttendee, "FistilitateTest.cs - DeleteDistributorAttendeeWithTravelForm"); // Unit Tested Function
-            Assert.IsNull(travelForm.EmployeeAttendeeId);
-            mockObjectService.Verify(objectService => objectService.Delete<ShowEmployeeAttendee>(showEmpAttendee), Times.Exactly(1));
-            mockObjectService.Verify(objectService => objectService.SaveChanges(), Times.Exactly(1));
+            return profileDistributorData;
         }
 
         [Test]
-        public void DeleteSupplierAttendeeWithTravelFormAndProfile()
+        public void DeleteAttendeeCompanyTest()
         {
+           
+            IList<ShowAttendee> attendees = new List<ShowAttendee>();
+            var showAttendee = CreateAttendee(108, 2321);
+            attendees.Add(showAttendee);
+
+            showAttendee.EmployeeAttendees = new List<ShowEmployeeAttendee>();
+
             Mock<IObjectService> mockObjectService = new Mock<IObjectService>();
-            var attendee = CreateAttendee();
-            var travelForm = CreateTravelForm(attendee.Id,null);
-            attendee.TravelForms = new List<ShowFormInstance>() { travelForm };
-            var profileRequest = CreateProfileRequest(attendee.Id, null);
-            attendee.ProfileRequests = new List<ShowProfileRequests>() { profileRequest };
+            mockObjectService.Setup(objectService => objectService.GetAll<ShowAttendee>(false)).Returns(attendees.AsQueryable());
+            mockObjectService.Setup(objectService => objectService.Delete<ShowAttendee>(showAttendee));
+            ShowCompanyController controller = new ShowCompanyController();
+            controller.ObjectService = mockObjectService.Object;
 
-            mockObjectService.Setup(objectService => objectService.Delete<ShowAttendee>(attendee));
+            RedirectToRouteResult actionResult = controller.DeleteAttendeeCompany(showAttendee.Id, showAttendee.ShowId.Value) as RedirectToRouteResult;
 
-            ShowHelper.DeleteShowAttendee(mockObjectService.Object, attendee, "FistilitateTest.cs - DeleteSupplierAttendeeWithTravelFormAndProfile"); // Unit Tested Function
-            Assert.IsNull(travelForm.AttendeeId);
-            Assert.IsNull(profileRequest.AttendeeId);
-            mockObjectService.Verify(objectService => objectService.Delete<ShowAttendee>(attendee), Times.Exactly(1));
+            Assert.AreEqual(actionResult.RouteValues["action"], "GetAttendeeCompany");
+
+            mockObjectService.Verify(objectService => objectService.Delete<ShowAttendee>(showAttendee), Times.Exactly(1));
             mockObjectService.Verify(objectService => objectService.SaveChanges(), Times.Exactly(1));
         }
     }

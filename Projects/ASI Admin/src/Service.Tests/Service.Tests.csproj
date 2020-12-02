@@ -190,7 +190,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="bin\Debug\test.xlsx" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
