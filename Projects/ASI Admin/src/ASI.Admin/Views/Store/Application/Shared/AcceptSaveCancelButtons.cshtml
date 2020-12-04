@@ -154,81 +154,85 @@
 		</div>
 	}
 	@functions{
-		public IStoreService StoreService { get; set; }
-		public IBackendService BackendService { get; set; }
-		public string CheckBackEnd(ref bool hasBackEndFlag, ref bool disableEditing)
-		{
-			var errMsg = string.Empty;
-			var orderDetail = StoreService.GetAll<StoreOrderDetail>(true).FirstOrDefault(detail => detail.Order.Id == Model.OrderId);
-			var order = StoreService.GetAll<StoreOrder>(true).FirstOrDefault(o => o.Id == Model.OrderId);
-			if (order != null && orderDetail != null)
-			{
-				var product = orderDetail.Product;
-				hasBackEndFlag = product.HasBackEndIntegration;
-				if (product.IsMembership() && (Model.OrderStatus == OrderStatus.Pending || Model.CompanyStatus == StatusCode.TERMINATED.ToString()))
-				{
-					// make sure order and company have the same constituent ID
-					if (string.IsNullOrEmpty(order.ExternalReference) && order.Company.HasExternalReference() ||
+        public IStoreService StoreService { get; set; }
+        public IBackendService BackendService { get; set; }
+        public string CheckBackEnd(ref bool hasBackEndFlag, ref bool disableEditing)
+        {
+            var errMsg = string.Empty;
+            var orderDetail = StoreService.GetAll<StoreOrderDetail>(true).FirstOrDefault(detail => detail.Order.Id == Model.OrderId);
+            var order = StoreService.GetAll<StoreOrder>(true).FirstOrDefault(o => o.Id == Model.OrderId);
+            if (order != null && orderDetail != null)
+            {
+                var product = orderDetail.Product;
+                hasBackEndFlag = product.HasBackEndIntegration;
+                if (product.IsMembership() && (Model.OrderStatus == OrderStatus.Pending || Model.CompanyStatus == StatusCode.TERMINATED.ToString()))
+                {
+                    // make sure order and company have the same constituent ID
+                    if (string.IsNullOrEmpty(order.ExternalReference) && order.Company != null && order.Company.HasExternalReference() ||
                         !string.IsNullOrEmpty(order.ExternalReference) && string.IsNullOrEmpty(order.Company.ExternalReference) ||
-						!string.IsNullOrEmpty(order.ExternalReference) && order.Company.HasExternalReference() && !order.Company.ExternalReference.Contains(order.ExternalReference))
-					{
-						order.Company.ExternalReference = order.ExternalReference;
-						order.Company.MatchingCompanyIds = string.Empty;
-						order.Company.ASINumber = string.Empty;
-					}
+                        !string.IsNullOrEmpty(order.ExternalReference) && order.Company.HasExternalReference() && !order.Company.ExternalReference.Contains(order.ExternalReference))
+                    {
+                        order.Company.ExternalReference = order.ExternalReference;
+                        order.Company.MatchingCompanyIds = string.Empty;
+                        order.Company.ASINumber = string.Empty;
+                    }
 
-					List<string> matchList = null;
-					var companyInfo = BackendService.FindCompanyInfo(order.Company, ref matchList);
-					if (companyInfo != null && !string.IsNullOrEmpty(order.ExternalReference))
-					{   // match from constituent ID
-						order.Company.MemberStatus = companyInfo.MemberStatus;
-						Model.CompanyStatus = companyInfo.MemberStatus;
+                    List<string> matchList = null;
+                    asi.asicentral.model.CompanyInformation companyInfo = null;
+                    if (order.Company != null)
+                    {
+                        companyInfo = BackendService.FindCompanyInfo(order.Company, ref matchList);
+                    }
+                    if (companyInfo != null && !string.IsNullOrEmpty(order.ExternalReference))
+                    {   // match from constituent ID
+                        order.Company.MemberStatus = companyInfo.MemberStatus;
+                        Model.CompanyStatus = companyInfo.MemberStatus;
 
-						if (ASIOAuthClient.IsActiveUser(order.Company.MemberStatus))
-						{
-							if (companyInfo.MemberType.ToUpper() != "SUPPLIER" || !string.IsNullOrEmpty(companyInfo.SubClassCode) || product.Id != 69)
-							{
-								var activeMembership = string.IsNullOrEmpty(companyInfo.SubClassCode) ? companyInfo.MemberType
-									: string.Format("{0} {1}", companyInfo.MemberType, companyInfo.SubClassCode);
-								errMsg = string.Format("This company already has an active \'{0}\' membership", activeMembership);
-								disableEditing = true;
-							}
-						}
-					}
-				}
+                        if (ASIOAuthClient.IsActiveUser(order.Company.MemberStatus))
+                        {
+                            if (companyInfo.MemberType.ToUpper() != "SUPPLIER" || !string.IsNullOrEmpty(companyInfo.SubClassCode) || product.Id != 69)
+                            {
+                                var activeMembership = string.IsNullOrEmpty(companyInfo.SubClassCode) ? companyInfo.MemberType
+                                    : string.Format("{0} {1}", companyInfo.MemberType, companyInfo.SubClassCode);
+                                errMsg = string.Format("This company already has an active \'{0}\' membership", activeMembership);
+                                disableEditing = true;
+                            }
+                        }
+                    }
+                }
 
-				// confirm coupon in Personify mapping table
-				if (hasBackEndFlag && string.IsNullOrEmpty(errMsg) && orderDetail.Coupon != null && !CouponHelper.IsValidCoupon(StoreService, orderDetail.Coupon, product.Id, order.ContextId))
-				{
-					errMsg = string.Format("Unable to find coupon '{0}' for Personify order", orderDetail.Coupon.CouponCode);
-				}
+                // confirm coupon in Personify mapping table
+                if (hasBackEndFlag && string.IsNullOrEmpty(errMsg) && orderDetail.Coupon != null && !CouponHelper.IsValidCoupon(StoreService, orderDetail.Coupon, product.Id, order.ContextId))
+                {
+                    errMsg = string.Format("Unable to find coupon '{0}' for Personify order", orderDetail.Coupon.CouponCode);
+                }
 
-				if (!disableEditing && order.CreditCard != null && !string.IsNullOrEmpty(order.CreditCard.ExternalReference))
-				{ // using existing credit card, could not switch company any more; or creit card provided by non-PCI processing
-					disableEditing = true;
-				}
-			}
-			return errMsg;
-		}
+                if (!disableEditing && order.CreditCard != null && !string.IsNullOrEmpty(order.CreditCard.ExternalReference))
+                { // using existing credit card, could not switch company any more; or creit card provided by non-PCI processing
+                    disableEditing = true;
+                }
+            }
+            return errMsg;
+        }
 
-		public string GetMatchingCompanyIds()
-		{
-			var ids = string.Empty;
-			var order = StoreService.GetAll<StoreOrder>(true).FirstOrDefault(o => o.Id == Model.OrderId);
-			if (order != null && order.Company != null && order.Company.MatchingCompanyIds != null)
-				ids = order.Company.MatchingCompanyIds.Replace("|", " ");
+        public string GetMatchingCompanyIds()
+        {
+            var ids = string.Empty;
+            var order = StoreService.GetAll<StoreOrder>(true).FirstOrDefault(o => o.Id == Model.OrderId);
+            if (order != null && order.Company != null && order.Company.MatchingCompanyIds != null)
+                ids = order.Company.MatchingCompanyIds.Replace("|", " ");
 
-			return ids;
-		}
+            return ids;
+        }
 
-		public bool HasPendingTerms()
-		{
-			var pendingTerms = StoreService.GetAll<TermsConditionsInstance>()
-											.Where(t => t.OrderId.Value == Model.OrderId && t.DateAgreedOn == null && string.IsNullOrEmpty(t.AcceptedBy))
-											.ToList();
+        public bool HasPendingTerms()
+        {
+            var pendingTerms = StoreService.GetAll<TermsConditionsInstance>()
+                                            .Where(t => t.OrderId.Value == Model.OrderId && t.DateAgreedOn == null && string.IsNullOrEmpty(t.AcceptedBy))
+                                            .ToList();
 
-			return pendingTerms != null && pendingTerms.Count() > 0;
-		}
+            return pendingTerms != null && pendingTerms.Count() > 0;
+        }
 	}
 </div>
 

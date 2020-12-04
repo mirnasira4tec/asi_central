@@ -1,2 +1,4 @@
-ALTER TABLE USR_CatalogContact
-    ADD ManualReservedContacts int DEFAULT 0 with values;
+ALTER TABLE [STOR_Order]
+ADD IsNotificationSent bit NOT NULL 
+CONSTRAINT STOR_Order_IsNotificationSent_Default DEFAULT (0)
+WITH VALUES 

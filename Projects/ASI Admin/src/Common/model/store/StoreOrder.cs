@@ -62,6 +62,7 @@ namespace asi.asicentral.model.store
         public string UpdateSource { get; set; }
         public DateTime? ApprovedDate { get; set; }
         public string ApprovedBy { get; set; }
+        public bool IsNotificationSent { get; set; }
 
         [NotMapped]
         public Uri RequestUrl { get; set; }
