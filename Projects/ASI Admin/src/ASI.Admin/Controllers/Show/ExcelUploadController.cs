@@ -84,14 +84,17 @@ namespace asi.asicentral.web.Controllers.Show
             {
                 address = company.CompanyAddresses.FirstOrDefault().Address;
             }
-
-            if (address == null)
+            var isAddressPresentInExcel = (ds.Columns.Contains("Address") && !string.IsNullOrWhiteSpace(ds.Rows[rowId]["Address"].ToString())) &&
+                                          (ds.Columns.Contains("City") && !string.IsNullOrWhiteSpace(ds.Rows[rowId]["City"].ToString())) &&
+                                          (ds.Columns.Contains("State") && !string.IsNullOrWhiteSpace(ds.Rows[rowId]["State"].ToString())) &&
+                                          (ds.Columns.Contains("Zip Code") && !string.IsNullOrWhiteSpace(ds.Rows[rowId]["Zip Code"].ToString())) &&
+                                          (ds.Columns.Contains("Country") && !string.IsNullOrWhiteSpace(ds.Rows[rowId]["Country"].ToString()));
+            if (address == null && isAddressPresentInExcel)
             {
                 address = new ShowAddress()
                 {
                     CreateDate = DateTime.UtcNow,
                 };
-
                 var showCompanyAddress = new ShowCompanyAddress()
                 {
                     Address = address,
@@ -102,14 +105,16 @@ namespace asi.asicentral.web.Controllers.Show
                 };
                 company.CompanyAddresses.Add(showCompanyAddress);
             }
-
-            address.Street1 = ds.Rows[rowId]["Address"].ToString();
-            address.City = ds.Rows[rowId]["City"].ToString();
-            address.State = ds.Rows[rowId]["State"].ToString();
-            address.Zip = ds.Rows[rowId]["Zip Code"].ToString();
-            address.Country = ds.Rows[rowId]["Country"].ToString();
-            address.UpdateSource = "ExcelUploadcontroller-Index";
-            address.UpdateDate = DateTime.UtcNow;
+            if (isAddressPresentInExcel)
+            {
+                address.Street1 = ds.Rows[rowId]["Address"].ToString();
+                address.City = ds.Rows[rowId]["City"].ToString();
+                address.State = ds.Rows[rowId]["State"].ToString();
+                address.Zip = ds.Rows[rowId]["Zip Code"].ToString();
+                address.Country = ds.Rows[rowId]["Country"].ToString();
+                address.UpdateSource = "ExcelUploadcontroller-Index";
+                address.UpdateDate = DateTime.UtcNow;
+            }
             #endregion
 
             #region update attendees
@@ -234,11 +239,11 @@ namespace asi.asicentral.web.Controllers.Show
 
                     if (fasiliateFlag)
                     {
-                        var street1 = ds.Rows[rowId]["Shipping Address 1"].ToString();
-                        var city = ds.Rows[rowId]["Shipping City"].ToString();
-                        var zip = ds.Rows[rowId]["Shipping Zip Code"].ToString();
-                        var state = ds.Rows[rowId]["Shipping State"].ToString();
-                        var country = ds.Rows[rowId]["Shipping Country"].ToString();
+                        var street1 = ds.Columns.Contains("Shipping Address 1") ? ds.Rows[rowId]["Shipping Address 1"].ToString() : string.Empty;
+                        var city = ds.Columns.Contains("Shipping City") ? ds.Rows[rowId]["Shipping City"].ToString() : string.Empty;
+                        var zip = ds.Columns.Contains("Shipping Zip Code") ? ds.Rows[rowId]["Shipping Zip Code"].ToString() : string.Empty;
+                        var state = ds.Columns.Contains("Shipping State") ? ds.Rows[rowId]["Shipping State"].ToString() : string.Empty;
+                        var country = ds.Columns.Contains("Shipping Country") ? ds.Rows[rowId]["Shipping Country"].ToString() : string.Empty;
                         if (!string.IsNullOrEmpty(street1) && !string.IsNullOrEmpty(city) && !string.IsNullOrEmpty(zip) && !string.IsNullOrEmpty(state))
                         {
                             employee.Address = employee.Address ?? new ShowAddress() { CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow };
@@ -272,19 +277,6 @@ namespace asi.asicentral.web.Controllers.Show
                         employeeAttendee.Attendee = attendee;
 
                         attendee.EmployeeAttendees.Add(employeeAttendee);
-                    }
-                    if (ds.Columns.Contains("HasTravelForm"))
-                    {
-                        var hasTravelForm = Convert.ToBoolean(ds.Rows[rowId]["HasTravelForm"].ToString() == "Yes") ? true : false;
-                        if (hasTravelForm)
-                        {
-                            if (company.MemberType == "Distributor")
-                            {
-                                employeeAttendee.HasTravelForm = hasTravelForm;
-                            }
-                            else
-                                attendee.HasTravelForm = hasTravelForm;
-                        }
                     }
                     if (ds.Columns.Contains("PriorityOrder"))
                     {
@@ -382,7 +374,7 @@ namespace asi.asicentral.web.Controllers.Show
                                     else if (objShow != null && (objShow.ShowTypeId == 5 || objShow.ShowTypeId == 6))
                                     {
                                         fasiliateFlag = true;
-                                        columnNameList = new string[] { "ASINO", "MemberType", "Company", "FirstName", "LastName", "Address", "City", "State", "Zip Code", "Country", "Shipping Address 1", "Shipping Address 2", "Shipping City", "Shipping State", "Shipping Zip Code", "Shipping Country", "Phone", "Email Address" };
+                                        columnNameList = new string[] { "ASINO", "MemberType", "Company", "FirstName", "LastName", "Email Address" };
                                     }
                                     else
                                     {
@@ -448,14 +440,16 @@ namespace asi.asicentral.web.Controllers.Show
                                     var memberType = excelDataTable.Rows[i]["MemberType"].ToString();
                                     var excelRow = i + 2;
                                     if (excelDataTable.Rows[i]["Company"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("Company cannot be empty in sheet {0} , row {1}", worksheet.Name, excelRow)); }
-                                    if (excelDataTable.Rows[i]["Zip Code"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("Zip Code cannot be empty in sheet {0} , row {1}", worksheet.Name, excelRow)); }
                                     if (excelDataTable.Rows[i]["ASINO"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("ASI Number cannot be empty in sheet {0} , row {1}", worksheet.Name, excelRow)); }
                                     if (string.IsNullOrEmpty(memberType)) { ModelState.AddModelError("CustomError", string.Format("MemberType cannot be empty in sheet {0} , row {1}", worksheet.Name, excelRow)); }
-                                    if (excelDataTable.Rows[i]["Address"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("Address cannot be empty in sheet {0} , row {1}", worksheet.Name, excelRow)); }
-                                    if (excelDataTable.Rows[i]["City"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("City cannot be empty in sheet {0} , row {1}", worksheet.Name, excelRow)); }
-                                    if (excelDataTable.Rows[i]["State"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("State Code cannot be empty in sheet {0} , row {1}", worksheet.Name, excelRow)); }
-                                    if (excelDataTable.Rows[i]["Country"].ToString() == "") excelDataTable.Rows[i]["Country"] = "United State";
-
+                                    if (objShow != null && (objShow.ShowTypeId != 5 && objShow.ShowTypeId != 6))
+                                    {
+                                        if (excelDataTable.Rows[i]["Zip Code"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("Zip Code cannot be empty in sheet {0} , row {1}", worksheet.Name, excelRow)); }
+                                        if (excelDataTable.Rows[i]["Address"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("Address cannot be empty in sheet {0} , row {1}", worksheet.Name, excelRow)); }
+                                        if (excelDataTable.Rows[i]["City"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("City cannot be empty in sheet {0} , row {1}", worksheet.Name, excelRow)); }
+                                        if (excelDataTable.Rows[i]["State"].ToString() == "") { ModelState.AddModelError("CustomError", string.Format("State Code cannot be empty in sheet {0} , row {1}", worksheet.Name, excelRow)); }
+                                        if (excelDataTable.Rows[i]["Country"].ToString() == "") excelDataTable.Rows[i]["Country"] = "United State";
+                                    }
                                     if (memberType.Equals("Distributor", StringComparison.CurrentCultureIgnoreCase) || fasiliateFlag)
                                     {
                                         if (string.IsNullOrEmpty(excelDataTable.Rows[i]["FirstName"].ToString())) { ModelState.AddModelError("CustomError", string.Format("Distributor First Name cannot be empty in sheet {0} , row {1}", worksheet.Name, i)); }

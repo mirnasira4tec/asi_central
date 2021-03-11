@@ -38,7 +38,6 @@ namespace asi.asicentral.web.models.show
         public string Name { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "Address1")]
-        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string Address1 { get; set; }
 
@@ -47,12 +46,10 @@ namespace asi.asicentral.web.models.show
         public string Address2 { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "City")]
-        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string City { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "State")]
-        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string State { get; set; }
 
@@ -61,12 +58,10 @@ namespace asi.asicentral.web.models.show
         public string InternationalState { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "Zip")]
-        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(Resource))]
         [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength50")]
         public string Zip { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "Country")]
-        [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "FieldLength100")]
         public string Country { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = "Phone")]

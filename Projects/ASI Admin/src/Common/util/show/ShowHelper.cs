@@ -278,15 +278,15 @@ namespace asi.asicentral.util.show
         {
             if (objShowAttendee != null)
             {
-                int employeeAttendeeCount = objShowAttendee.EmployeeAttendees.Count();                
+                int employeeAttendeeCount = objShowAttendee.EmployeeAttendees.Count();
                 for (int i = employeeAttendeeCount; i > 0; i--)
                 {
                     var showEmployeeAttendee = objShowAttendee.EmployeeAttendees.ElementAt(i - 1);
                     // Deleting Reference of Employee Attendee from Travel Form
                     if (showEmployeeAttendee.TravelForms != null)
                     {
-                        foreach(var frmInstance in showEmployeeAttendee.TravelForms)                        
-                        {                            
+                        foreach (var frmInstance in showEmployeeAttendee.TravelForms)
+                        {
                             frmInstance.EmployeeAttendeeId = null;
                             frmInstance.UpdateDate = DateTime.UtcNow;
                             frmInstance.UpdateSource = updateSource;
@@ -294,9 +294,9 @@ namespace asi.asicentral.util.show
                     }
                     // Deleting Reference of Employee Attendee from Profile Requests
                     if (showEmployeeAttendee.ProfileRequests != null)
-                    {                        
+                    {
                         foreach (var profile in showEmployeeAttendee.ProfileRequests)
-                        {                           
+                        {
                             profile.EmployeeAttendeeId = null;
                             profile.UpdateDate = DateTime.UtcNow;
                             profile.UpdateSource = updateSource;

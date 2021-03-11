@@ -75,7 +75,7 @@ namespace asi.asicentral.web.Controllers.Show
                 try
                 {
                     var objCompany = new ShowCompany();
-                    var objAddress = new ShowAddress();
+                    ShowAddress objAddress = null;
                     var objCompanyAddress = new ShowCompanyAddress();
                     objCompany.Id = company.Id;
                     objCompany.Name = company.Name;
@@ -86,35 +86,42 @@ namespace asi.asicentral.web.Controllers.Show
                     objCompany.UpdateSource = "ShowCompanyController - AddCompany";
                     objCompany = ShowHelper.CreateOrUpdateCompany(ObjectService, objCompany);
 
-                    objAddress.Id = company.AddressId;
-                    objAddress.Phone = !String.IsNullOrEmpty(company.Phone) ? company.Phone.Trim() : null;
-                    objAddress.PhoneAreaCode = !String.IsNullOrEmpty(company.PhoneAreaCode) ? company.PhoneAreaCode.Trim() : null;
-                    objAddress.FaxAreaCode = !String.IsNullOrEmpty(company.FaxAreaCode) ? company.FaxAreaCode.Trim() : null;
-                    objAddress.Fax = !String.IsNullOrEmpty(company.Fax) ? company.Fax.Trim() : null;
-                    objAddress.Street1 = company.Address1;
-                    objAddress.Street2 = company.Address2;
-                    objAddress.Zip = company.Zip;
-                    objAddress.State = company.IsNonUSAddress ? company.InternationalState : company.State;
-                    objAddress.Country = company.IsNonUSAddress ? company.Country : "USA";
-                    objAddress.City = company.City;
-                    objAddress.UpdateSource = "ShowCompanyController - AddCompany";
-                    objAddress = ShowHelper.CreateOrUpdateAddress(ObjectService, objAddress);
-
-                    ShowCompanyAddress companyAddress = ObjectService.GetAll<ShowCompanyAddress>().Where(item => item.CompanyId == company.Id && item.Address.Id == company.AddressId).FirstOrDefault();
-                    if (companyAddress != null)
+                    if (!(string.IsNullOrWhiteSpace(company.Address1) || string.IsNullOrWhiteSpace(company.City) ||
+                        string.IsNullOrWhiteSpace(company.State) || string.IsNullOrWhiteSpace(company.Zip)))
                     {
-                        objCompanyAddress.Id = companyAddress.Id;
-                        objCompanyAddress.CompanyId = companyAddress.CompanyId;
-                        objCompanyAddress.Address = companyAddress.Address;
-                        objCompanyAddress.UpdateSource = "ShowCompanyController - AddCompany";
-                        objCompanyAddress = ShowHelper.CreateOrUpdateCompanyAddress(ObjectService, objCompanyAddress);
+                        objAddress = new ShowAddress();
+                        objAddress.Id = company.AddressId;
+                        objAddress.Phone = !String.IsNullOrEmpty(company.Phone) ? company.Phone.Trim() : null;
+                        objAddress.PhoneAreaCode = !String.IsNullOrEmpty(company.PhoneAreaCode) ? company.PhoneAreaCode.Trim() : null;
+                        objAddress.FaxAreaCode = !String.IsNullOrEmpty(company.FaxAreaCode) ? company.FaxAreaCode.Trim() : null;
+                        objAddress.Fax = !String.IsNullOrEmpty(company.Fax) ? company.Fax.Trim() : null;
+                        objAddress.Street1 = company.Address1;
+                        objAddress.Street2 = company.Address2;
+                        objAddress.Zip = company.Zip;
+                        objAddress.State = company.IsNonUSAddress ? company.InternationalState : company.State;
+                        objAddress.Country = company.IsNonUSAddress ? company.Country : "USA";
+                        objAddress.City = company.City;
+                        objAddress.UpdateSource = "ShowCompanyController - AddCompany";
+                        objAddress = ShowHelper.CreateOrUpdateAddress(ObjectService, objAddress);
                     }
-                    else
+                    if (objAddress != null)
                     {
-                        objCompanyAddress.CompanyId = objCompany.Id;
-                        objCompanyAddress.Address = objAddress;
-                        objCompanyAddress.UpdateSource = "ShowCompanyController - AddAddress";
-                        objCompanyAddress = ShowHelper.CreateOrUpdateCompanyAddress(ObjectService, objCompanyAddress);
+                        ShowCompanyAddress companyAddress = ObjectService.GetAll<ShowCompanyAddress>().Where(item => item.CompanyId == company.Id && item.Address.Id == company.AddressId).FirstOrDefault();
+                        if (companyAddress != null)
+                        {
+                            objCompanyAddress.Id = companyAddress.Id;
+                            objCompanyAddress.CompanyId = companyAddress.CompanyId;
+                            objCompanyAddress.Address = companyAddress.Address;
+                            objCompanyAddress.UpdateSource = "ShowCompanyController - AddCompany";
+                            objCompanyAddress = ShowHelper.CreateOrUpdateCompanyAddress(ObjectService, objCompanyAddress);
+                        }
+                        else
+                        {
+                            objCompanyAddress.CompanyId = objCompany.Id;
+                            objCompanyAddress.Address = objAddress;
+                            objCompanyAddress.UpdateSource = "ShowCompanyController - AddAddress";
+                            objCompanyAddress = ShowHelper.CreateOrUpdateCompanyAddress(ObjectService, objCompanyAddress);
+                        }
                     }
                     ObjectService.SaveChanges();
                 }
@@ -285,7 +292,6 @@ namespace asi.asicentral.web.Controllers.Show
                     objAddress.City = address.City;
                     objAddress.UpdateSource = "ShowCompanyController - AddAddress";
                     objAddress = ShowHelper.CreateOrUpdateAddress(ObjectService, objAddress);
-
                     ShowCompanyAddress companyAddress = ObjectService.GetAll<ShowCompanyAddress>().FirstOrDefault(item => item.CompanyId == address.CompanyId && item.Address.Id == objAddress.Id);
                     if (companyAddress != null)
                     {
@@ -595,7 +601,7 @@ namespace asi.asicentral.web.Controllers.Show
             IList<ShowEmployee> employees = ObjectService.GetAll<ShowEmployee>(true).Where(e => e.CompanyId == companyId).ToList();
             var showCompanies = new ShowCompaniesModel();
             var prfolilePackages = ObjectService.GetAll<ProfilePackage>();
-            if(prfolilePackages!=null && prfolilePackages.Any())
+            if (prfolilePackages != null && prfolilePackages.Any())
             {
                 showCompanies.ProfilePackages = new List<SelectListItem>();
                 foreach (var package in prfolilePackages)
