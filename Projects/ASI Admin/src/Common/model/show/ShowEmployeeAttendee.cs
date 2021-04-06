@@ -20,5 +20,6 @@ namespace asi.asicentral.model.show
         public virtual IList<ShowProfileRequests> ProfileRequests { get; set; }
         public virtual IList<ShowFormInstance> TravelForms { get; set; }
         public int? PriorityOrder { get; set; }
+        public bool? HasReviewedGuidelines { get; set; }
     }
 }
