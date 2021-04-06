@@ -45,6 +45,9 @@ namespace asi.asicentral.model.show
         ThirdAttendeeCommEmail = 22,
         ThirdAttendeeCellPhone = 23,
         ThirdAttendeeWorkPhone = 24,
-        ThirdAttendeeImage = 25
+        ThirdAttendeeImage = 25,
+        SellingProposition =26,
+        Prop65Compliant =27,
+        LoyaltyProgramOffer =28
     }
 }
