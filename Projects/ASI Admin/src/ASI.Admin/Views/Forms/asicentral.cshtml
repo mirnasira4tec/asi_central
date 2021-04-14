@@ -6,9 +6,10 @@
     ViewBag.Title = "Asicentral Forms";
     var formTypeName = string.Empty;
     var formTypeId = Request["FormType"];
+    var showDownload = false;
     if(Model!=null && Model.AsicentralForms!=null && Model.AsicentralForms.Any())
     {
-        formTypeName= Model.AsicentralForms.FirstOrDefault().FormType.Name;
+        showDownload = Model.AsicentralForms.FirstOrDefault().FormType.Name != "Distributor Join Now Form" ? true : false;
     }
 }
 <h1>Asicentral Forms</h1>
@@ -33,7 +34,7 @@
 </div>
 <br />
 <br />
-@if (!string.IsNullOrWhiteSpace(Request["FormType"]) && formTypeName == "ASI AD Impression Study")
+@if (!string.IsNullOrWhiteSpace(Request["FormType"]) && showDownload)
 {
 <div>
     <span class="pull-right"><button class="btn btn-red" onclick="downLoadExcel()">Download</button></span>

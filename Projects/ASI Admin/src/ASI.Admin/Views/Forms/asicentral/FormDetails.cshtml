@@ -51,9 +51,10 @@
         {
             <div class="span12 field-validation-error">@TempData["ErrorMessage"].ToString()</div>
         }
-
-        if (ccAttached)
+        if (form.FormType.Name == "Distributor Join Now Form")
         {
+            if (ccAttached)
+            {
             <div class="timms-info ajax">
                 <div class="span8">
                     <label class="order-status-label">
@@ -64,11 +65,11 @@
                     </label>
                 </div>
             </div>
-        }
-        else
-        {
-            if (hasCCSubmit)
+            }
+            else
             {
+                if (hasCCSubmit)
+                {
                 <div class="timms-info ajax">
                     <div class="span4">
                         <label class="order-status-label">Constituent ID:</label>
@@ -103,23 +104,23 @@
                         <div class="span12 field-validation-error">@TempData["IDErrors"].ToString()</div>
                     }
                 </div>
-            }
-            else  // no CC card
-            {
-                var info = !form.IsCCRequestSent ? string.Empty : " (Request email Sent)";
+                }
+                else  // no CC card
+                {
+                    var info = !form.IsCCRequestSent ? string.Empty : " (Request email Sent)";
                 <div class="timms-info ajax">
                     <div class="span3"><strong>No Credit card provided</strong></div>
                     <button type="button" class="btn" onclick="OpenCustomerEmailPopup()">Send CC Request</button> @info
                 </div>
-                // pop up modal
-                var fromEmail = "membership@asicentral.com";
-                var firstNameField = form.Values.FirstOrDefault(v => v.Name == "Name");
-                var firstName = firstNameField != null ? firstNameField.Value.Split(' ')[0] : string.Empty;
-                var asicentralUrl = System.Configuration.ConfigurationManager.AppSettings["BaseUrl"];
-                var link = string.Format("{0}/distributor/asi-membership/billing?reference={1}", asicentralUrl, form.Reference);
-                var message = string.Format("Hi {0}, \r\n\r\nThank you for applying to become an ASI member. We're so excited to welcome you to the family! \r\n\r\nBefore we process your application, " +
-                                "we'll need your payment information. Please provide your information here {1} or give us a call at 1-877-813-1183 and we’ll get your membership started." +
-                                "\r\n\r\nWe look forward to hearing from you. \r\n\r\n Thanks,\r\n\r\n The ASI Team", firstName, link);
+                    // pop up modal
+                    var fromEmail = "membership@asicentral.com";
+                    var firstNameField = form.Values.FirstOrDefault(v => v.Name == "Name");
+                    var firstName = firstNameField != null ? firstNameField.Value.Split(' ')[0] : string.Empty;
+                    var asicentralUrl = System.Configuration.ConfigurationManager.AppSettings["BaseUrl"];
+                    var link = string.Format("{0}/distributor/asi-membership/billing?reference={1}", asicentralUrl, form.Reference);
+                    var message = string.Format("Hi {0}, \r\n\r\nThank you for applying to become an ASI member. We're so excited to welcome you to the family! \r\n\r\nBefore we process your application, " +
+                                    "we'll need your payment information. Please provide your information here {1} or give us a call at 1-877-813-1183 and we’ll get your membership started." +
+                                    "\r\n\r\nWe look forward to hearing from you. \r\n\r\n Thanks,\r\n\r\n The ASI Team", firstName, link);
                 <div id="emailModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true" style="display:none">
                     <div class="modal-dialog modal-xl">
                         <div class="modal-content">
@@ -163,14 +164,14 @@
                         </div>
                     </div>
                 </div>
+                }
             }
-        }
 
-        if (hasCCSubmit)
-        {
-            if (Model.Company != null)
+            if (hasCCSubmit)
             {
-                var company = Model.Company;
+                if (Model.Company != null)
+                {
+                    var company = Model.Company;
                 <div>Personify Company: </div>
                 <table class="table table-bordered table-condensed table-striped" style="width:100%">
                     <tbody>
@@ -192,7 +193,7 @@
                         </tr>
                     </tbody>
                 </table>
-            }
+                }
 
             <div>Credit Card Information</div>
             <table class="table table-bordered table-condensed table-striped" style="width:100%">
@@ -221,6 +222,7 @@
                     </tr>
                 </tbody>
             </table>
+            }
         }
 
         if (form.Values != null && form.Values.Count() > 0)

@@ -167,7 +167,7 @@ namespace asi.asicentral.web.Controllers.forms
         }
 
         #region ASICentral form
-        public ActionResult Asicentral(DateTime? dateStart, DateTime? dateEnd, string status = "", string formType = "", string command= "Search")
+        public ActionResult Asicentral(DateTime? dateStart, DateTime? dateEnd, string status = "", string formType = "", string command = "Search")
         {
             var viewModel = _initAsicentralForm();
 
@@ -194,7 +194,7 @@ namespace asi.asicentral.web.Controllers.forms
             formInstanceQuery = formInstanceQuery.Where(form => form.CreateDate >= dateStartParam && form.CreateDate <= dateEndParam);
             if (command == "download")
             {
-                return _downloadAdImpressionCSV(formInstanceQuery);
+                return _downloadFormCSV(formInstanceQuery);
             }
             else
             {
@@ -495,11 +495,16 @@ namespace asi.asicentral.web.Controllers.forms
 
             return companyInfo;
         }
-
-        private ActionResult _downloadAdImpressionCSV(IQueryable<AsicentralFormInstance> formInstanceQuery)
+        private ActionResult _downloadFormCSV(IQueryable<AsicentralFormInstance> formInstanceQuery)
         {
             var columnNames = string.Empty;
-            columnNames = "Date,First Name,Last Name,Company Name,Job Title,Email,ASI Number";
+            var formTypeName = formInstanceQuery.FirstOrDefault()?.FormType.Name;
+            columnNames = string.Join(",", formInstanceQuery.FirstOrDefault().Values.Where(n => n.Name != "IPAddress").Select(n => n.Name));
+            var isAddImpressionForm = formTypeName == "ASI AD Impression Study";
+            if (isAddImpressionForm)
+            {
+                columnNames = "Date," + columnNames;
+            }
             var csvString = new StringBuilder();
             csvString.AppendLine(columnNames);
             if (formInstanceQuery != null && formInstanceQuery.Count() > 0)
@@ -509,22 +514,29 @@ namespace asi.asicentral.web.Controllers.forms
                     if (instance.Values != null && instance.Values.Any())
                     {
                         var line = string.Empty;
-                        var firstName = instance.Values?.Where(v => v.Name == "First Name").FirstOrDefault()?.Value;
-                        if (!string.IsNullOrWhiteSpace(firstName))
+                        var email = instance.Values?.Where(v => v.Name == "Email").FirstOrDefault()?.Value;
+                        if (!string.IsNullOrWhiteSpace(email))
                         {
-                            var lastName = instance.Values?.Where(v => v.Name == "Last Name").FirstOrDefault()?.Value;
-                            var companyName = instance.Values?.Where(v => v.Name == "Company Name").FirstOrDefault()?.Value;
-                            var jobTitle = instance.Values?.Where(v => v.Name == "JobTitle").FirstOrDefault()?.Value;
-                            var email = instance.Values?.Where(v => v.Name == "Email").FirstOrDefault()?.Value;
-                            var asiNumber = instance.Values?.Where(v => v.Name == "ASINumber").FirstOrDefault()?.Value;
-                            line = string.Join(",", instance.CreateDate.ToString("MM/dd/yyyy: hh:mm tt"), Utility.ParseCSVValue(firstName), Utility.ParseCSVValue(lastName), Utility.ParseCSVValue(companyName), Utility.ParseCSVValue(jobTitle), Utility.ParseCSVValue(email), Utility.ParseCSVValue(asiNumber));
+                            foreach (var value in instance.Values)
+                            {
+                                if (value.Name != "IPAddress")
+                                {
+                                    var data = Utility.ParseCSVValue(value.Value);
+                                    line += data + ",";
+                                }
+                            }
+                            line = line.Remove(line.Length - 1, 1);
+                            if (isAddImpressionForm)
+                            {
+                                line = $"{ instance.CreateDate.ToString("MM/dd/yyyy: hh:mm tt")},{line}";
+                            }
                             csvString.AppendLine(line);
                         }
                     }
                 }
             }
-            var filename = "AddImpression_" + DateTime.Now.ToString("MM/dd/yyyy: hh:mm tt") + ".csv";
-            return File(new System.Text.UTF8Encoding().GetBytes(csvString.ToString()), "text/csv", filename);
+            var filename = formTypeName + "_" + DateTime.Now.ToString("MM/dd/yyyy: hh:mm tt") + ".csv";
+            return File(new UTF8Encoding().GetBytes(csvString.ToString()), "text/csv", filename);
         }
         #endregion ASICentral form
     }
