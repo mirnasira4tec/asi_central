@@ -665,6 +665,51 @@ namespace asi.asicentral.Tests
             Assert.IsNotNull(result);
         }
 
+        [Test]
+        public void SaveCreditCardJetPayTest()
+        {
+            var parameters = new List<string>()
+            {
+                "000022867573",   // "@ip_master_customer_id",
+                "0",    //"@ip_sub_customer_id",
+                "ASI",    //"@ip_org_id",
+                "ASI",    //"@ip_org_unit_id",
+                "visa",    //"@ip_receipt_type_code",
+                "May",   //"@ip_first_name",
+                "test", //"@ip_last_name",
+                "ASI TEsting",   //"@ip_company_name",
+                    ////"@ip_cc_name",
+                "4800 Street Rd",    //"@ip_address_1",
+                "Trevose",    //"@ip_city",
+                "PA",    //"@ip_state",
+                "19053",    //"@ip_postal_code",
+                "US",    //"@ip_country_code",
+                "ASI_Store",    //"@ip_requester",
+                "411111******1111",    //"@ip_cc_acct_no",
+                "2023-10-01",   //"@ip_cc_exp_date",
+                "USD",    //"@ip_currency_code",
+                "ASIcompanies",   //"@ip_merchant_id",
+                "126.45.789",    //"@ip_customer_ip_address",
+                "QnTjTiPnRjPhQbQbRbSoRcSi",    //"@ip_cc_authorization",  // origianl paypal token
+                "e7eec4f3ca50b89170",    //"@ip_auth_reference",
+                "KNNJNIJNHJJHKBKBHBIOHCII",    //"@ip_request_token",      // new for JetPay
+                "000",   //"@ip_response_code",      // new for JetPay 
+                "TOKENIZED",    //"@ip_response_message",   // new for JetPay
+                "U",    //"@ip_avs_result",         // new for JetPay                                              
+                "WEBUSER",    //"@ip_user",
+                "1",    //"@ip_prosessing_mode",  //0: Insert CC but it won’t show on Personify front-end
+                    //                        //1: Insert CC and it will be listed on Personify front-end
+                "0",    //"@ip_total_payment",
+                null,    //    "@op_profile_id",
+                "0",    //    "op_ErrNo",
+                null,    //    "op_ErrMsg"
+                    //}                
+            };
+
+            var result = PersonifyClient.ExecutePersonifySP("USR_OAM_INSERT_ASICCTP_PROC", parameters, false);
+            Assert.IsNotNull(result);
+        }
+
         private CompanyInformation GetPersonifyCompany(IBackendService personify, StoreCompany storeCompany)
         {
             personify = personify ?? new PersonifyService(MockupStoreService());

@@ -290,7 +290,14 @@ namespace asi.asicentral.web.Controllers.forms
                             AuthReference = form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_AUTH_REFERENCE)?.Value,
                             ExpirationDate = new DateTime(Int32.Parse(form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_EXP_YEAR)?.Value),
                                                           Int32.Parse(form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_EXP_MONTH)?.Value),
-                                                          01)
+                                                          01),
+                            FirstName = form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_FIRST_NAME)?.Value,
+                            LastName = form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_LAST_NAME)?.Value,
+                            CompanyName = form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_COMPANY)?.Value,
+                            RequestToken = form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_REQUEST_TOKEN)?.Value,
+                            ResponseCode = form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_RESPONSE_CODE)?.Value,
+                            ResponseMessage = form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_RESPONSE_MESSAGE)?.Value,
+                            AVS_Result = form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_AVS_RESULT)?.Value
                         };
 
                         // attach credit card to the specified company

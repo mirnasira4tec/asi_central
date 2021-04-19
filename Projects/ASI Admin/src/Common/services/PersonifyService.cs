@@ -496,13 +496,20 @@ namespace asi.asicentral.services
                     Country = billingInfo.Address.Country,
                     //CountryCode = billingInfo.Address,  //TODO:: code ???
                     CardHolderName = order.CreditCard.CardHolderName,
+                    FirstName = order.CreditCard.FirstName ?? string.Empty,
+                    LastName = order.CreditCard.LastName ?? string.Empty,
                     Type = order.CreditCard.CardType,
                     Number = order.CreditCard.CardNumber,
                     MaskedPAN = order.CreditCard.CardNumber,
                     ExpirationDate = new DateTime(Int32.Parse(order.CreditCard.ExpYear), Int32.Parse(order.CreditCard.ExpMonth), 01),
                     ExternalReference = order.CreditCard.ExternalReference,
                     TokenId = order.CreditCard.TokenId,
-                    AuthReference = order.CreditCard.AuthReference
+                    AuthReference = order.CreditCard.AuthReference,
+                    CompanyName = order.CreditCard.CompanyName,
+                    RequestToken = order.CreditCard.RequestToken,
+                    ResponseMessage = order.CreditCard.ResponseMessage,
+                    ResponseCode = order.CreditCard.ResponseCode,
+                    AVS_Result = order.CreditCard.AVS_Result
                 };
 
                 try

@@ -19,6 +19,15 @@ namespace asi.asicentral.model.store
 
         public string TokenId { get; set; }
         public string AuthReference { get; set; }
+        // new properties for JetPay
+        public string CompanyName { get; set; }
+        public string RequestToken { get; set; }
+        public string ResponseCode { get; set; }
+        public string ResponseMessage { get; set; }
+        public string AVS_Result { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
 
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }

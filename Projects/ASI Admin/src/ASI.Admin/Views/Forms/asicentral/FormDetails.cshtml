@@ -117,7 +117,7 @@
                     var firstNameField = form.Values.FirstOrDefault(v => v.Name == "Name");
                     var firstName = firstNameField != null ? firstNameField.Value.Split(' ')[0] : string.Empty;
                     var asicentralUrl = System.Configuration.ConfigurationManager.AppSettings["BaseUrl"];
-                    var link = string.Format("{0}/distributor/asi-membership/billing?reference={1}", asicentralUrl, form.Reference);
+                var link = string.Format("{0}/joinnow/billing?reference={1}", asicentralUrl, form.Reference);
                     var message = string.Format("Hi {0}, \r\n\r\nThank you for applying to become an ASI member. We're so excited to welcome you to the family! \r\n\r\nBefore we process your application, " +
                                     "we'll need your payment information. Please provide your information here {1} or give us a call at 1-877-813-1183 and we’ll get your membership started." +
                                     "\r\n\r\nWe look forward to hearing from you. \r\n\r\n Thanks,\r\n\r\n The ASI Team", firstName, link);
@@ -169,6 +169,13 @@
 
             if (hasCCSubmit)
             {
+                string[] CC_DisplayLables =
+                    {
+                        AsicentralFormValue.CC_HOLDER_NAME, AsicentralFormValue.CC_TYPE, AsicentralFormValue.CC_NUMBER,
+                        AsicentralFormValue.CC_EXP_MONTH, AsicentralFormValue.CC_EXP_YEAR, AsicentralFormValue.CC_ADDRESS,
+                        AsicentralFormValue.CC_CITY, AsicentralFormValue.CC_STATE, AsicentralFormValue.CC_POSTALCODE, AsicentralFormValue.CC_COUNTRY
+                    };
+
                 if (Model.Company != null)
                 {
                     var company = Model.Company;
@@ -211,10 +218,10 @@
                         <td>Country</td>
                     </tr>
                     <tr>
-                        @foreach (var ccLabel in AsicentralFormValue.CC_Lables)
+                        @foreach (var ccLabel in CC_DisplayLables)
                         {
                             var formItem = form.Values.FirstOrDefault(m => m.Name == ccLabel);
-                            if (formItem != null && ccLabel != AsicentralFormValue.CC_TOKEN_ID && ccLabel != AsicentralFormValue.CC_AUTH_REFERENCE)
+                            if (formItem != null)
                             {
                                 <td>@formItem.Value</td>
                             }

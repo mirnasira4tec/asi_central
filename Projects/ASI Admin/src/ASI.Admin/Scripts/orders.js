@@ -8,7 +8,6 @@
         //    $("#timmsErrorMessage").text("You need to pass a Timms ID number to approve order.");
         //    e.preventDefault();
         //}
-		debugger;
 		if ($("#tdCanada").length > 0)
 		{
 			alert($("#tdCanada").text());

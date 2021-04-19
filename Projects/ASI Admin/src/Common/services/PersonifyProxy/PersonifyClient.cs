@@ -56,7 +56,7 @@ namespace asi.asicentral.services.PersonifyProxy
         private const string SP_UPDATE_DISTRIBUTOR_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_DISTRIBUTOR_PROC";
         private const string SP_UPDATE_SUPPLIER_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_SUPPLIER_PROC";
         private const string SP_UPDATE_DECORATOR_MEMBER_QUESTIONS = "USR_ASI_CENTRAL_MQ_UPDATE_DECORATOR_PROC";
-        private const string SP_OAM_INSERT_CREDIT_CARD_PLUS_PROC = "USR_OAM_INSERT_CREDIT_CARD_PLUS_PROC";
+        private const string SP_OAM_INSERT_CREDIT_CARD_PLUS_PROC = "USR_OAM_INSERT_ASICCTP_PROC";
         private const string SP_UPDATE_ASICOMP_DATA = "USR_CREATE_ASI_COMP_DATA";
         private const string SP_GET_ASICOMP_DATA = "USR_REPORT_ASI_COMP_DATA";
         public const string SP_UPDATE_MMS_EMS_SIGNON = "USR_UPDATE_MMS_EMS_SIGNON";
@@ -86,13 +86,16 @@ namespace asi.asicentral.services.PersonifyProxy
             {SP_GET_PRODUCT_DETAILS, new List<string>() { "@ip_parent_product", "@ip_product_code", "@ip_Rate_Structure", "@ip_Rate_Code" }},
             {SP_EEX_EMAIL_USAGE_UPDATE, new List<string>() { "@email_address", "@usage_code", "@unsubscribe", "@is_globally_suppressed" }},
             {SP_STORE_CUST_SEARCH_COMM_OPT_PROC, new List<string>() { "@ip_search_phone_address" }},
-            { SP_OAM_INSERT_CREDIT_CARD_PLUS_PROC, new List<string>()
+            {SP_OAM_INSERT_CREDIT_CARD_PLUS_PROC, new List<string>()
                                                           { "@ip_master_customer_id",
                                                             "@ip_sub_customer_id",
                                                             "@ip_org_id",
                                                             "@ip_org_unit_id",
                                                             "@ip_receipt_type_code",
-                                                            "@ip_cc_name",
+                                                            "@ip_first_name",
+                                                            "@ip_last_name",
+                                                            "@ip_company_name",
+                                                            //"@ip_cc_name",
                                                             "@ip_address_1",
                                                             "@ip_city",
                                                             "@ip_state",
@@ -104,10 +107,16 @@ namespace asi.asicentral.services.PersonifyProxy
                                                             "@ip_currency_code",
                                                             "@ip_merchant_id",
                                                             "@ip_customer_ip_address",
-                                                            "@ip_cc_authorization",
+                                                            "@ip_cc_authorization",  // origianl paypal token
                                                             "@ip_auth_reference",
+                                                            "@ip_request_token",      // new for JetPay
+                                                            "@ip_response_code",      // new for JetPay 
+                                                            "@ip_response_message",   // new for JetPay
+                                                            "@ip_avs_result",         // new for JetPay                                              
+
                                                             "@ip_user",
-                                                            "@ip_prosessing_mode",
+                                                            "@ip_prosessing_mode",  //0: Insert CC but it won’t show on Personify front-end
+                                                                                    //1: Insert CC and it will be listed on Personify front-end
                                                             "@ip_total_payment",
                                                              "@op_profile_id",
                                                              "op_ErrNo",
@@ -2444,6 +2453,8 @@ namespace asi.asicentral.services.PersonifyProxy
         {
             if (string.IsNullOrEmpty(asiCompany) || !CreditCardOrgID.Keys.Contains(asiCompany))
                 asiCompany = "ASI";
+            else if (asiCompany.Trim() == "ASI Canada")
+                currency = "CAD";
 
             var profileId = string.Empty;
             if (!string.IsNullOrEmpty(masterCustomerId) && creditCard != null && !string.IsNullOrEmpty(ipAddress) && !string.IsNullOrEmpty(currency))
@@ -2452,14 +2463,48 @@ namespace asi.asicentral.services.PersonifyProxy
                 {
                     ipAddress = "127.0.0.1";
                 }
+
+                if( string.IsNullOrEmpty(creditCard.FirstName) || string.IsNullOrEmpty(creditCard.LastName))
+                {  // get first and last name for orders before JetPay updates
+                    var nameMatch = Regex.Match(creditCard.CardHolderName, @"(.*?)\s(.*?)");
+                    if( nameMatch.Success )
+                    {
+                        creditCard.FirstName = nameMatch.Groups[1].Value;
+                        creditCard.FirstName = nameMatch.Groups[2].Value;
+                    }
+                    else
+                    {
+                        creditCard.FirstName = creditCard.CardHolderName;
+                        creditCard.LastName = creditCard.CardHolderName;
+                    }
+                }
+
                 var orgId = CreditCardOrgID[asiCompany];
+                var merchantId = string.Empty;
+
+                if (!string.IsNullOrEmpty(creditCard.RequestToken))
+                {
+                    var merchants = System.Configuration.ConfigurationManager.AppSettings["PCIMerchantId"]?.ToString();
+                    if (!string.IsNullOrEmpty(merchants))
+                    {
+                        var merchantIds = merchants.Split(';');
+                        merchantId = asiCompany == "ASI" || merchants.Length == 1 ? merchantIds[0] : merchantIds[1];
+                    }
+                }
+                else
+                {
+                    merchantId = CreditCardMerchantID[asiCompany];
+                }
+                
                 var response = ExecutePersonifySP(SP_OAM_INSERT_CREDIT_CARD_PLUS_PROC, new List<string>() {
                     masterCustomerId,
                     subCustomerId.ToString(),
                     orgId,
                     orgId,
                     creditCard.Type,
-                    creditCard.CardHolderName,
+                    creditCard.FirstName,  // firstName
+                    creditCard.LastName,  // lastName
+                    creditCard.CompanyName,  // company name
                     creditCard.Address,
                     creditCard.City,
                     creditCard.State,
@@ -2469,10 +2514,14 @@ namespace asi.asicentral.services.PersonifyProxy
                     creditCard.Number,
                     creditCard.ExpirationDate.ToString(),
                     currency,
-                    CreditCardMerchantID[asiCompany],
+                    merchantId,
                     ipAddress,
                     creditCard.TokenId,
                     creditCard.AuthReference,
+                    creditCard.RequestToken,
+                    creditCard.ResponseCode,
+                    creditCard.ResponseMessage,
+                    creditCard.AVS_Result,
                     "WEBUSER",
                     "1",
                     "0",
@@ -2481,6 +2530,7 @@ namespace asi.asicentral.services.PersonifyProxy
                     null
                 });
 
+                _log.Debug($"SaveCreditCard Parameters: orgId - {orgId}; merchatId - {merchantId}; cc-authorization: {creditCard.TokenId}; auth-referenece: {creditCard.AuthReference}; request_token: {creditCard.RequestToken}");
                 if (response != null && !string.IsNullOrEmpty(response.Data) && response.Data.Trim().ToUpper() != "NO DATA FOUND")
                 {
                     var match = Regex.Match(response.Data, @"<CUS_CREDIT_CARD_PROFILE_ID>(.*?)</CUS_CREDIT_CARD_PROFILE_ID>");
@@ -2541,7 +2591,7 @@ namespace asi.asicentral.services.PersonifyProxy
                 OrderLineNumbers = orderLineNumbers,
                 Amount = amount,
                 AcceptPartialPayment = true,
-                CurrencyCode = "USD",
+                CurrencyCode = isCanada ? "CAD" : "USD",
                 MasterCustomerId = masterCustomerId,
                 SubCustomerId = Convert.ToInt16(subCustomerId),
                 BillMasterCustomerId = masterCustomerId,
