@@ -23,6 +23,7 @@ namespace asi.asicentral.model.show.form
         public bool IsYesNoQuestion  { get; set; }
         public bool IsRequired  { get; set; }
         public bool IsVisible  { get; set; }
+        public bool IsAdminOnly { get; set; }
         public string ValidationRule { get; set; }
         public string ValidationMessage { get; set; }
 

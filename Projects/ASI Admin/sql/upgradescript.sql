@@ -1,10 +1,17 @@
-Alter Table ATT_EmployeeAttendee add HasReviewedGuidelines bit null
-  INSERT INTO [dbo].[ATT_ProfileOptionalDataLabel] VALUES  
-			('SellingProposition','What is your unique selling proposition?'
-           ,GETUTCDATE(),GETUTCDATE(),'Sql Query',0,1,0),
-		   ('Prop65Compliant','Is your company Prop 65 compliant?'
-           ,GETUTCDATE(),GETUTCDATE(),'Sql Query',0,1,0),
-		   ('LoyaltyProgramOffer','Do you offer a loyalty program?'
-           ,GETUTCDATE(),GETUTCDATE(),'Sql Query',0,1,0)
-		   
-update [ATT_ProfileOptionalDataLabel] set IsObsolete=1 where ProfileOptionalDataLabelId in (8,9)
+ALTER TABLE [SHW_FormQuestion]
+    ADD IsAdminOnly bit Not NULL 
+    CONSTRAINT DF__SHW_FormQ__IsAdminOnly DEFAULT 0
+    WITH VALUES;
+	
+	
+	SET IDENTITY_INSERT [dbo].[SHW_FormQuestion] ON 
+INSERT INTO [dbo].[SHW_FormQuestion]
+           ([FormQuestionId],[FormTypeId],[QuestionName],[Sequence],[InputType],[Category]
+           ,[Description],[ShortDescription],[IsYesNoQUestion],[IsRequired],[IsVisible]
+           ,[CreateDateUTC],[UpdateDateUTC],[UpdateSource],[ParentQuestionId],[IsAdminOnly])
+     VALUES
+           (21,1,'ESPproductionLink',40,'Text','Product'
+           ,'ESP production link','ESP production link:',0,0,1
+		   ,GETUTCDATE(),GETUTCDATE(),'Initial Script',NULL,1)
+GO
+SET IDENTITY_INSERT [dbo].[SHW_FormQuestion] OFF 
