@@ -13,6 +13,7 @@ using System.Linq.Dynamic;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Text;
+using System.IO;
 
 namespace asi.asicentral.web.Controllers.asicentral
 {
@@ -40,176 +41,195 @@ namespace asi.asicentral.web.Controllers.asicentral
             LogService log = LogService.GetLog(this.GetType());
             log.Debug("RateSupplierImport - start process");
             var startdate = DateTime.Now;
-            var sheets = UploadHelper.GetExcelSheets(file);
-
-            if (sheets != null && sheets.Count > 0)
+            var isFileValid = false;
+            if (file != null)
             {
-                var userName = ControllerContext.HttpContext.User.Identity.Name;
-                RateSupplierImport rateSupplierImport = null;
-                if (!importId.HasValue)
+                var fileName = Path.GetFileName(file.FileName);
+
+                string fileExtension = Path.GetExtension(fileName);
+
+                if (fileExtension == ".xls" || fileExtension == ".xlsx")
                 {
-                    rateSupplierImport = new RateSupplierImport()
-                    {
-                        LastUpdatedBy = userName,
-                        CreateDateUTC = DateTime.Now,
-                        UpdateDateUTC = DateTime.Now,
-                        UpdateSource = "RateSupplierController - Import",
-                        NumberOfImports = 1,
-                        IsActive = true,
-                        RateSupplierForms = new List<RateSupplierForm>()
-                    };
+                    isFileValid = true;
                 }
-                else
+            }
+
+            if (isFileValid)
+            {
+                using (XLWorkbook workBook = new XLWorkbook(file.InputStream))
                 {
-                    try
+                    var sheets = workBook.Worksheets;
+                    if (sheets != null && sheets.Count > 0)
                     {
-                        rateSupplierImport = ObjectService.GetAll<RateSupplierImport>("RateSupplierForms.RateSupplierFormDetails").Where(m => m.RateSupplierImportId == importId.Value).FirstOrDefault();
-                        if (rateSupplierImport == null)
+                        var userName = ControllerContext.HttpContext.User.Identity.Name;
+                        RateSupplierImport rateSupplierImport = null;
+                        if (!importId.HasValue)
                         {
-                            log.Debug("No existing import found for importId : " + importId.Value);
-                            TempData["ErrorMessage"] = "No existing import found for importId : " + importId.Value;
+                            rateSupplierImport = new RateSupplierImport()
+                            {
+                                LastUpdatedBy = userName,
+                                CreateDateUTC = DateTime.Now,
+                                UpdateDateUTC = DateTime.Now,
+                                UpdateSource = "RateSupplierController - Import",
+                                NumberOfImports = 1,
+                                IsActive = true,
+                                RateSupplierForms = new List<RateSupplierForm>()
+                            };
+                        }
+                        else
+                        {
+                            try
+                            {
+                                rateSupplierImport = ObjectService.GetAll<RateSupplierImport>("RateSupplierForms.RateSupplierFormDetails").Where(m => m.RateSupplierImportId == importId.Value).FirstOrDefault();
+                                if (rateSupplierImport == null)
+                                {
+                                    log.Debug("No existing import found for importId : " + importId.Value);
+                                    TempData["ErrorMessage"] = "No existing import found for importId : " + importId.Value;
+                                    return RedirectToAction("RateSupplierImport", "RateSupplier");
+                                }
+                                var minFormId = 0;
+                                var maxFormId = 0;
+                                if (rateSupplierImport.RateSupplierForms != null && rateSupplierImport.RateSupplierForms.Count > 0)
+                                {
+                                    var forms = rateSupplierImport.RateSupplierForms;
+                                    minFormId = forms.Min(m => m.RateSupplierFormId);
+                                    maxFormId = forms.Max(m => m.RateSupplierFormId); ;
+                                    DeleteSupplierFormAndDetails(rateSupplierImport.RateSupplierImportId, minFormId, maxFormId);
+                                }
+                                rateSupplierImport.UpdateDateUTC = DateTime.UtcNow;
+                                rateSupplierImport.NumberOfImports += 1;
+                                ObjectService.SaveChanges();
+                            }
+                            catch (Exception ex)
+                            {
+                                log.Debug("Exception while Deleting Previous data, exception message: " + ex.Message);
+                                TempData["ErrorMessage"] = "Error occured while removing previous data -'" + ex.Message;
+                                return RedirectToAction("RateSupplierImport", "RateSupplier");
+                            }
+                        }
+                        foreach (var sheet in sheets)
+                        {
+                            var rowCount = 0;
+                            try
+                            {
+                                Dictionary<int, string> headings = new Dictionary<int, string>();
+                                var rateSupplierForms = new List<RateSupplierForm>();
+                                bool isFirstRow = true;
+                                int distASIIndex = 0;
+                                int distNameIndex = 0;
+                                //int distFaxIndex = 0;
+                                int supplierCount = 0;
+                                var suplierNameColumn = "suppname";
+                                var suplierASINoColumn = "supp";
+                                var suplierTransactionColumn = "tran";
+                                var firstRow = sheet.Row(1);
+                                int cellIndex = 1;
+                                while (!firstRow.Cell(cellIndex).IsEmpty())
+                                {
+                                    headings.Add(cellIndex, firstRow.Cell(cellIndex).GetString());
+                                    cellIndex++;
+                                }
+                                distASIIndex = headings.FirstOrDefault(x => x.Value.ToLower() == "distasi").Key;
+                                distNameIndex = headings.FirstOrDefault(x => x.Value.ToLower() == "distname").Key;
+                                //distFaxIndex = headings.FirstOrDefault(x => x.Value.ToLower() == "distfax").Key;
+
+                                var lastValue = headings.LastOrDefault().Value;
+                                if (lastValue.ToLower().Contains(suplierNameColumn))
+                                    supplierCount = Convert.ToInt32(lastValue.Substring(suplierNameColumn.Length));
+                                else if (lastValue.ToLower().Contains(suplierASINoColumn))
+                                    supplierCount = Convert.ToInt32(lastValue.Substring(suplierASINoColumn.Length));
+                                else if (lastValue.ToLower().Contains(suplierTransactionColumn))
+                                    supplierCount = Convert.ToInt32(lastValue.Substring(suplierTransactionColumn.Length));
+                                foreach (IXLRow row in sheet.Rows())
+                                {
+                                    rowCount++;
+                                    if (isFirstRow)
+                                    {
+                                        isFirstRow = false;
+                                        continue;
+                                    }
+                                    var distAsi = row.Cell(distASIIndex).GetString();
+                                    if (string.IsNullOrWhiteSpace(distAsi))
+                                    {
+                                        break;
+                                    }
+                                    var rateSupplierForm = new RateSupplierForm()
+                                    {
+                                        DistASINum = row.Cell(distASIIndex).GetString(),
+                                        DistCompanyName = row.Cell(distNameIndex).GetString(),
+                                        IsDirty = false,
+                                        SubmitBy = string.Empty,
+                                        SubmitSuccessful = false,
+                                        CreateDateUTC = startdate,
+                                        UpdateDateUTC = startdate,
+                                        SubmitDateUTC = null,
+                                        UpdateSource = "RateSupplierController - Import",
+                                        SubmitName = string.Empty
+                                    };
+                                    rateSupplierForm.RateSupplierFormDetails = new List<RateSupplierFormDetail>();
+
+                                    int tranIndex, suppIndex, suppNameIndex;
+                                    for (int i = 1; i <= supplierCount; i++)
+                                    {
+                                        var rateSupplierFormDetail = new RateSupplierFormDetail()
+                                        {
+                                            CreateDateUTC = startdate,
+                                            UpdateDateUTC = startdate,
+                                            SubmitSuccessful = false,
+                                            UpdateSource = "RateSupplierController - Import"
+                                        };
+                                        tranIndex = headings.FirstOrDefault(x => x.Value.ToLower() == suplierTransactionColumn + i).Key;
+                                        suppIndex = headings.FirstOrDefault(x => x.Value.ToLower() == suplierASINoColumn + i).Key;
+                                        suppNameIndex = headings.FirstOrDefault(x => x.Value.ToLower() == suplierNameColumn + i).Key;
+                                        var tran = row.Cell(tranIndex).GetString();
+                                        var supp = row.Cell(suppIndex).GetString();
+                                        var suppName = row.Cell(suppNameIndex).GetString();
+
+                                        if (string.IsNullOrWhiteSpace(tran) && string.IsNullOrWhiteSpace(supp) && string.IsNullOrWhiteSpace(suppName))
+                                            break;
+                                        var noOfTransImport = Convert.ToInt32(tran);
+
+                                        rateSupplierFormDetail.NumOfTransImport = noOfTransImport < 100 ? noOfTransImport : 99;
+                                        rateSupplierFormDetail.NumOfTransSubmit = 0;
+                                        rateSupplierFormDetail.SupASINum = supp;
+                                        rateSupplierFormDetail.SupCompanyName = suppName;
+                                        rateSupplierForm.RateSupplierFormDetails.Add(rateSupplierFormDetail);
+                                    }
+                                    rateSupplierImport.RateSupplierForms.Add(rateSupplierForm);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                log.Debug("Exception while importing the file, exception message: " + ex.Message);
+                                TempData["ErrorMessage"] = "Please verify all cells having correct data in Sheet -'" + sheet.Name + "' at Row " + rowCount + "<br/>" + ex.Message;
+                                return RedirectToAction("RateSupplierImport", "RateSupplier");
+                            }
+                        }
+                        try
+                        {
+                            if (rateSupplierImport.RateSupplierImportId == 0)
+                            {
+                                ObjectService.Add(rateSupplierImport);
+                            }
+                            ObjectService.SaveChanges();
+
+                            TempData["SuccessMessage"] = "Data imported successfully";
+                        }
+                        catch (Exception ex)
+                        {
+                            log.Debug("Exception while storing the imported data of Supplier Rating Excel file, exception message: " + ex.Message);
+                            TempData["ErrorMessage"] = "Error occured while saving the data -'" + ex.Message;
                             return RedirectToAction("RateSupplierImport", "RateSupplier");
                         }
-                        var minFormId = 0;
-                        var maxFormId = 0;
-                        if (rateSupplierImport.RateSupplierForms != null && rateSupplierImport.RateSupplierForms.Count > 0)
-                        {
-                            var forms = rateSupplierImport.RateSupplierForms;
-                            minFormId = forms.Min(m => m.RateSupplierFormId);
-                            maxFormId = forms.Max(m => m.RateSupplierFormId); ;
-                            DeleteSupplierFormAndDetails(rateSupplierImport.RateSupplierImportId, minFormId, maxFormId);
-                        }
-                        rateSupplierImport.UpdateDateUTC = DateTime.UtcNow;
-                        rateSupplierImport.NumberOfImports += 1;
-                        ObjectService.SaveChanges();
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        log.Debug("Exception while Deleting Previous data, exception message: " + ex.Message);
-                        TempData["ErrorMessage"] = "Error occured while removing previous data -'" + ex.Message;
+                        TempData["ErrorMessage"] = "File don't have any sheets.";
                         return RedirectToAction("RateSupplierImport", "RateSupplier");
                     }
                 }
-                foreach (var sheet in sheets)
-                {
-                    var rowCount = 0;
-                    try
-                    {
-                        Dictionary<int, string> headings = new Dictionary<int, string>();
-                        var rateSupplierForms = new List<RateSupplierForm>();
-                        bool isFirstRow = true;
-                        int distASIIndex = 0;
-                        int distNameIndex = 0;
-                        //int distFaxIndex = 0;
-                        int supplierCount = 0;
-                        var suplierNameColumn = "suppname";
-                        var suplierASINoColumn = "supp";
-                        var suplierTransactionColumn = "tran";
-                        var firstRow = sheet.Row(1);
-                        int cellIndex = 1;
-                        while (!firstRow.Cell(cellIndex).IsEmpty())
-                        {
-                            headings.Add(cellIndex, firstRow.Cell(cellIndex).GetString());
-                            cellIndex++;
-                        }
-                        distASIIndex = headings.FirstOrDefault(x => x.Value.ToLower() == "distasi").Key;
-                        distNameIndex = headings.FirstOrDefault(x => x.Value.ToLower() == "distname").Key;
-                        //distFaxIndex = headings.FirstOrDefault(x => x.Value.ToLower() == "distfax").Key;
-
-                        var lastValue = headings.LastOrDefault().Value;
-                        if (lastValue.ToLower().Contains(suplierNameColumn))
-                            supplierCount = Convert.ToInt32(lastValue.Substring(suplierNameColumn.Length));
-                        else if (lastValue.ToLower().Contains(suplierASINoColumn))
-                            supplierCount = Convert.ToInt32(lastValue.Substring(suplierASINoColumn.Length));
-                        else if (lastValue.ToLower().Contains(suplierTransactionColumn))
-                            supplierCount = Convert.ToInt32(lastValue.Substring(suplierTransactionColumn.Length));
-                        foreach (IXLRow row in sheet.Rows())
-                        {
-                            rowCount++;
-                            if (isFirstRow)
-                            {
-                                isFirstRow = false;
-                                continue;
-                            }
-                            var distAsi = row.Cell(distASIIndex).GetString();
-                            if (string.IsNullOrWhiteSpace(distAsi))
-                            {
-                                break;
-                            }
-                            var rateSupplierForm = new RateSupplierForm()
-                            {
-                                DistASINum = row.Cell(distASIIndex).GetString(),
-                                DistCompanyName = row.Cell(distNameIndex).GetString(),
-                                IsDirty = false,
-                                SubmitBy = string.Empty,
-                                SubmitSuccessful = false,
-                                CreateDateUTC = startdate,
-                                UpdateDateUTC = startdate,
-                                SubmitDateUTC = null,
-                                UpdateSource = "RateSupplierController - Import",
-                                SubmitName = string.Empty
-                            };
-                            rateSupplierForm.RateSupplierFormDetails = new List<RateSupplierFormDetail>();
-
-                            int tranIndex, suppIndex, suppNameIndex;
-                            for (int i = 1; i <= supplierCount; i++)
-                            {
-                                var rateSupplierFormDetail = new RateSupplierFormDetail()
-                                {
-                                    CreateDateUTC = startdate,
-                                    UpdateDateUTC = startdate,
-                                    SubmitSuccessful = false,
-                                    UpdateSource = "RateSupplierController - Import"
-                                };
-                                tranIndex = headings.FirstOrDefault(x => x.Value.ToLower() == suplierTransactionColumn + i).Key;
-                                suppIndex = headings.FirstOrDefault(x => x.Value.ToLower() == suplierASINoColumn + i).Key;
-                                suppNameIndex = headings.FirstOrDefault(x => x.Value.ToLower() == suplierNameColumn + i).Key;
-                                var tran = row.Cell(tranIndex).GetString();
-                                var supp = row.Cell(suppIndex).GetString();
-                                var suppName = row.Cell(suppNameIndex).GetString();
-
-                                if (string.IsNullOrWhiteSpace(tran) && string.IsNullOrWhiteSpace(supp) && string.IsNullOrWhiteSpace(suppName))
-                                    break;
-                                var noOfTransImport = Convert.ToInt32(tran);
-
-                                rateSupplierFormDetail.NumOfTransImport = noOfTransImport < 100 ? noOfTransImport : 99;
-                                rateSupplierFormDetail.NumOfTransSubmit = 0;
-                                rateSupplierFormDetail.SupASINum = supp;
-                                rateSupplierFormDetail.SupCompanyName = suppName;
-                                rateSupplierForm.RateSupplierFormDetails.Add(rateSupplierFormDetail);
-                            }
-                            rateSupplierImport.RateSupplierForms.Add(rateSupplierForm);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        log.Debug("Exception while importing the file, exception message: " + ex.Message);
-                        TempData["ErrorMessage"] = "Please verify all cells having correct data in Sheet -'" + sheet.Name + "' at Row " + rowCount + "<br/>" + ex.Message;
-                        return RedirectToAction("RateSupplierImport", "RateSupplier");
-                    }
-                }
-                try
-                {
-                    if (rateSupplierImport.RateSupplierImportId == 0)
-                    {
-                        ObjectService.Add(rateSupplierImport);
-                    }
-                    ObjectService.SaveChanges();
-
-                    TempData["SuccessMessage"] = "Data imported successfully";
-                }
-                catch (Exception ex)
-                {
-                    log.Debug("Exception while storing the imported data of Supplier Rating Excel file, exception message: " + ex.Message);
-                    TempData["ErrorMessage"] = "Error occured while saving the data -'" + ex.Message;
-                    return RedirectToAction("RateSupplierImport", "RateSupplier");
-                }
             }
-            else
-            {
-                TempData["ErrorMessage"] = "File don't have any sheets.";
-                return RedirectToAction("RateSupplierImport", "RateSupplier");
-            }
+
             log.Debug("Index - end process - " + (DateTime.Now - startdate).TotalMilliseconds);
             return RedirectToAction("RateSupplierImport", "RateSupplier");
         }

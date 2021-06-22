@@ -8,14 +8,13 @@ using ASI.EntityModel;
 using asi.asicentral.services;
 using asi.asicentral.interfaces;
 using System.ComponentModel;
-using ASI.Services.Http.SmartLink;
 using ASI.Contracts.Messages.UserMgmt;
-using ASI.Services.Http.Security;
 using System.Security.Claims;
 using ASI.Services.Messaging;
 using System.Net;
 using System.Web;
 using asi.asicentral.services.PersonifyProxy;
+using ASI.Services.Security;
 
 namespace asi.asicentral.oauth
 {

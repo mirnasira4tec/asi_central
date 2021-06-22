@@ -11,7 +11,6 @@ namespace asi.asicentral.database
             : base("name=" + connectionName)
         {
             Database.SetInitializer<StoreContext>(null);
-            EnableTracing(typeof(StoreContext));
         }
 
         public StoreContext()

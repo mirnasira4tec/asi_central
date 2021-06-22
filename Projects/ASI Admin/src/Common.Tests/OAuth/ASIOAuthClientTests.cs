@@ -3,15 +3,11 @@ using System.Configuration;
 using asi.asicentral.services;
 using asi.asicentral.oauth;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using asi.asicentral.model;
-using System.Net.Http;
 using System.Net;
-using ASI.Services.Http.SmartLink;
-using ASI.Services.Http.Security;
 using System.Security.Claims;
 using NUnit.Framework;
 using asi.asicentral.util;
+using ASI.Services.Security;
 
 namespace Core.Tests.OAuth
 {

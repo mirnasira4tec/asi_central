@@ -14,7 +14,6 @@ namespace asi.asicentral.database
             : base("name=" + connectionName)
         {
             Database.SetInitializer<DM_MemberDemogrContext>(null);
-            EnableTracing(typeof(DM_MemberDemogrContext));
         }
 
         public DM_MemberDemogrContext()

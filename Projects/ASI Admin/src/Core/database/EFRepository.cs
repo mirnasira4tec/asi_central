@@ -37,7 +37,7 @@ namespace asi.asicentral.database
         {
             if (entity == null) throw new Exception("You cannot add a null entity");
             _context.Supports(entity.GetType());
-            _context.Entry(entity).State = System.Data.EntityState.Deleted;
+            _context.Entry(entity).State = EntityState.Deleted;
         }
 
         public virtual IQueryable<T> GetAll(bool readOnly = false)
@@ -67,7 +67,7 @@ namespace asi.asicentral.database
         public virtual void Update(T entity)
         {
             _context.Supports(typeof(T));
-            _context.Entry(entity).State = System.Data.EntityState.Modified;
+            _context.Entry(entity).State = EntityState.Modified;
         }
 
         public virtual int SaveChanges()

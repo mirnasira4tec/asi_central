@@ -44,7 +44,7 @@ namespace asi.asicentral.database.mappings.asiinternet
 
             // Relationships
             this.HasRequired(credit => credit.Order)
-                .WithRequiredDependent(order => order.CreditCard);
+                .WithOptional(order => order.CreditCard);
         }
     }
 }

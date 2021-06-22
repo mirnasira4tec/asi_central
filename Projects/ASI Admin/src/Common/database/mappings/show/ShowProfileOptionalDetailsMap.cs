@@ -28,7 +28,6 @@ namespace asi.asicentral.database.mappings.show
             HasRequired(x => x.ProfileRequests)
            .WithMany(x => x.ProfileRequestOptionalDetails)
            .HasForeignKey(x => x.ProfileRequestId);
-
         }
     }
 }

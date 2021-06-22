@@ -14,7 +14,6 @@ namespace asi.asicentral.database
             : base("name=" + connectionName)
         {
             System.Data.Entity.Database.SetInitializer<AsicentralContext>(null);
-            EnableTracing(typeof(AsicentralContext));
             Configuration.LazyLoadingEnabled = true;
         }
         public DbSet<RateSupplierFormDetail> ASPNetMemberships { get; set; }

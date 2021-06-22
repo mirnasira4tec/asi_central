@@ -11,10 +11,10 @@ using System.Web.Mvc;
 using asi.asicentral.interfaces;
 using asi.asicentral.model.asicentral;
 using asi.asicentral.services;
-using asi.asicentral.util;
 using asi.asicentral.web.Helpers;
 using asi.asicentral.web.Models.asicentral;
 using ClosedXML.Excel;
+using System.IO;
 namespace asi.asicentral.web.Controllers.asicentral
 {
     public class CatalogController : Controller
@@ -88,132 +88,148 @@ namespace asi.asicentral.web.Controllers.asicentral
             LogService log = LogService.GetLog(this.GetType());
             log.Debug("CatalogContactsImport - start process");
             var startdate = DateTime.Now;
-            IQueryable<CatalogContactSaleDetail> contactInSale = null;
-            var sheets = UploadHelper.GetExcelSheets(file);
-            IXLWorksheet sheet = null;
-            var catalogName = string.Empty;
-            if (sheets != null && sheets.Count > 0)
+            var isFileValid = false;
+            if (file != null)
             {
-                var userName = ControllerContext.HttpContext.User.Identity.Name;
-                sheet = sheets.First();
-                catalogName = sheet.Name;
-                CatalogContactImport catalogContactImport = null;
-                var rowCount = 0;
-                var isFirstRow = true;
-                var isOtherIdustry = false;
-                try
+                var fileName = Path.GetFileName(file.FileName);
+
+                string fileExtension = Path.GetExtension(fileName);
+
+                if (fileExtension == ".xls" || fileExtension == ".xlsx")
                 {
-                    #region Add or Update Import
-                    if (!importId.HasValue)
+                    isFileValid = true;
+                }
+            }
+
+            if( isFileValid)
+            {
+                using (XLWorkbook workBook = new XLWorkbook(file.InputStream))
+                {
+                    var sheets = workBook.Worksheets;
+                    if (sheets != null && sheets.Count > 0)
                     {
-                        DisableImportByIndustry(Industry);
-                        catalogContactImport = new CatalogContactImport()
+                        var userName = ControllerContext.HttpContext.User.Identity.Name;
+                        var sheet = sheets.First();
+                        var catalogName = sheet.Name;
+                        CatalogContactImport catalogContactImport = null;
+                        var rowCount = 0;
+                        var isFirstRow = true;
+                        var isOtherIdustry = false;
+                        try
                         {
-                            CatalogName = catalogName,
-                            ImportedBy = userName,
-                            IsActive = true,
-                            IndustryName = Industry,
-                            CreateDateUTC = DateTime.UtcNow,
-                            UpdateDateUTC = DateTime.UtcNow,
-                            UpdateSource = "CatalogController - Import",
-                            CatalogContacts = new List<CatalogContact>()
-                        };
-                    }
-                    else
-                    {
-                        catalogContactImport = ObjectService.GetAll<CatalogContactImport>().Where(m => m.CatalogContactImportId == importId.Value).FirstOrDefault();
-                        if (catalogContactImport == null)
+                            #region Add or Update Import
+                            if (!importId.HasValue)
+                            {
+                                DisableImportByIndustry(Industry);
+                                catalogContactImport = new CatalogContactImport()
+                                {
+                                    CatalogName = catalogName,
+                                    ImportedBy = userName,
+                                    IsActive = true,
+                                    IndustryName = Industry,
+                                    CreateDateUTC = DateTime.UtcNow,
+                                    UpdateDateUTC = DateTime.UtcNow,
+                                    UpdateSource = "CatalogController - Import",
+                                    CatalogContacts = new List<CatalogContact>()
+                                };
+                            }
+                            else
+                            {
+                                catalogContactImport = ObjectService.GetAll<CatalogContactImport>().Where(m => m.CatalogContactImportId == importId.Value).FirstOrDefault();
+                                if (catalogContactImport == null)
+                                {
+                                    log.Debug("No existing import found for importId : " + importId.Value);
+                                    TempData["ErrorMessage"] = "No existing import found for importId : " + importId.Value;
+                                    return RedirectToAction("CatalogContactImport", "Catalog");
+                                }
+
+                                return CatalogContactUpdate(catalogContactImport, sheet);
+                            }
+                            #endregion
+
+                            #region Reading Contacts From Excel
+                            Dictionary<int, string> headings = new Dictionary<int, string>();
+                            var firstRow = sheet.Row(1);
+                            int cellIndex = 1;
+                            while (!firstRow.Cell(cellIndex).IsEmpty())
+                            {
+                                headings.Add(cellIndex, firstRow.Cell(cellIndex).GetString());
+                                cellIndex++;
+                            }
+
+                            var industryColIndex = 0;
+                            var stateColIndex = 0;
+                            var countyColIndex = 0;
+                            var contactColIndex = 0;
+
+                            industryColIndex = headings.FirstOrDefault(x => x.Value.ToLower() == "industry").Key;
+                            stateColIndex = headings.FirstOrDefault(x => x.Value.ToLower() == "state").Key;
+                            countyColIndex = headings.FirstOrDefault(x => x.Value.ToLower() == "county").Key;
+                            contactColIndex = headings.FirstOrDefault(x => x.Value.ToLower() == "leads").Key;
+                            foreach (IXLRow row in sheet.Rows())
+                            {
+                                if (!row.IsEmpty())
+                                {
+                                    rowCount++;
+                                    if (isFirstRow)
+                                    {
+                                        isFirstRow = false;
+                                        continue;
+                                    }
+                                    var industry = row.Cell(industryColIndex).GetString();
+                                    if (industry != Industry)
+                                    {
+                                        isOtherIdustry = true;
+                                        continue;
+                                    }
+                                    var catalogContact = new CatalogContact()
+                                    {
+                                        State = row.Cell(stateColIndex).GetString(),
+                                        County = row.Cell(countyColIndex).GetString(),
+                                        Percentage = 0.0M,
+                                        OriginalContacts = Convert.ToInt32(row.Cell(contactColIndex).GetString()),
+                                        RemainingContacts = Convert.ToInt32(row.Cell(contactColIndex).GetString()),
+                                        CreateDateUTC = DateTime.UtcNow,
+                                        UpdateDateUTC = DateTime.UtcNow,
+                                        UpdateSource = "CatalogController - Import",
+                                    };
+                                    catalogContactImport.CatalogContacts.Add(catalogContact);
+                                }
+                            }
+                            #endregion
+                        }
+                        catch (Exception ex)
                         {
-                            log.Debug("No existing import found for importId : " + importId.Value);
-                            TempData["ErrorMessage"] = "No existing import found for importId : " + importId.Value;
+                            log.Debug("Exception while importing the file, exception message: " + ex.Message);
+                            TempData["ErrorMessage"] = "Please verify all cells having correct data in Sheet -'" + sheet.Name + "' at Row " + rowCount + "<br/>" + ex.Message;
                             return RedirectToAction("CatalogContactImport", "Catalog");
                         }
-
-                        return CatalogContactUpdate(catalogContactImport, sheet);
-                    }
-                    #endregion
-
-                    #region Reading Contacts From Excel
-                    Dictionary<int, string> headings = new Dictionary<int, string>();
-                    var firstRow = sheet.Row(1);
-                    int cellIndex = 1;
-                    while (!firstRow.Cell(cellIndex).IsEmpty())
-                    {
-                        headings.Add(cellIndex, firstRow.Cell(cellIndex).GetString());
-                        cellIndex++;
-                    }
-
-                    var industryColIndex = 0;
-                    var stateColIndex = 0;
-                    var countyColIndex = 0;
-                    var contactColIndex = 0;
-
-                    industryColIndex = headings.FirstOrDefault(x => x.Value.ToLower() == "industry").Key;
-                    stateColIndex = headings.FirstOrDefault(x => x.Value.ToLower() == "state").Key;
-                    countyColIndex = headings.FirstOrDefault(x => x.Value.ToLower() == "county").Key;
-                    contactColIndex = headings.FirstOrDefault(x => x.Value.ToLower() == "leads").Key;
-                    foreach (IXLRow row in sheet.Rows())
-                    {
-                        if (!row.IsEmpty())
+                        #region Saving Data In Database
+                        try
                         {
-                            rowCount++;
-                            if (isFirstRow)
+                            if (catalogContactImport.CatalogContactImportId == 0)
                             {
-                                isFirstRow = false;
-                                continue;
+                                ObjectService.Add(catalogContactImport);
                             }
-                            var industry = row.Cell(industryColIndex).GetString();
-                            if (industry != Industry)
+                            ObjectService.SaveChanges();
+                            if (isOtherIdustry)
                             {
-                                isOtherIdustry = true;
-                                continue;
+                                TempData["SuccessMessage"] = $"Data imported partialy, this excel contains records other than {Industry} industry, those records are skipped.";
                             }
-                            var catalogContact = new CatalogContact()
+                            else
                             {
-                                State = row.Cell(stateColIndex).GetString(),
-                                County = row.Cell(countyColIndex).GetString(),
-                                Percentage = 0.0M,
-                                OriginalContacts = Convert.ToInt32(row.Cell(contactColIndex).GetString()),
-                                RemainingContacts = Convert.ToInt32(row.Cell(contactColIndex).GetString()),
-                                CreateDateUTC = DateTime.UtcNow,
-                                UpdateDateUTC = DateTime.UtcNow,
-                                UpdateSource = "CatalogController - Import",
-                            };
-                            catalogContactImport.CatalogContacts.Add(catalogContact);
+                                TempData["SuccessMessage"] = "Data imported successfully";
+                            }
                         }
-                    }
-                    #endregion
-                }
-                catch (Exception ex)
-                {
-                    log.Debug("Exception while importing the file, exception message: " + ex.Message);
-                    TempData["ErrorMessage"] = "Please verify all cells having correct data in Sheet -'" + sheet.Name + "' at Row " + rowCount + "<br/>" + ex.Message;
-                    return RedirectToAction("CatalogContactImport", "Catalog");
-                }
-                #region Saving Data In Database
-                try
-                {
-                    if (catalogContactImport.CatalogContactImportId == 0)
-                    {
-                        ObjectService.Add(catalogContactImport);
-                    }
-                    ObjectService.SaveChanges();
-                    if (isOtherIdustry)
-                    {
-                        TempData["SuccessMessage"] = $"Data imported partialy, this excel contains records other than {Industry} industry, those records are skipped.";
-                    }
-                    else
-                    {
-                        TempData["SuccessMessage"] = "Data imported successfully";
+                        catch (Exception ex)
+                        {
+                            log.Debug("Exception while storing the imported data of Supplier Rating Excel file, exception message: " + ex.Message);
+                            TempData["ErrorMessage"] = "Error occured while saving the data -'" + ex.Message;
+                            return RedirectToAction("CatalogContactImport", "Catalog");
+                        }
+                        #endregion
                     }
                 }
-                catch (Exception ex)
-                {
-                    log.Debug("Exception while storing the imported data of Supplier Rating Excel file, exception message: " + ex.Message);
-                    TempData["ErrorMessage"] = "Error occured while saving the data -'" + ex.Message;
-                    return RedirectToAction("CatalogContactImport", "Catalog");
-                }
-                #endregion
             }
             log.Debug("Index - end process - " + (DateTime.Now - startdate).TotalMilliseconds);
             return RedirectToAction("CatalogContactImport", "Catalog");

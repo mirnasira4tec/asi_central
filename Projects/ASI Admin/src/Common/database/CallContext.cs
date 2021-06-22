@@ -15,7 +15,6 @@ namespace asi.asicentral.database
             : base("name=CallContext")
         {
             Database.SetInitializer<CallContext>(null);
-            EnableTracing(typeof(CallContext));
         }
 
         public DbSet<CallQueue> Queues { get; set; }

@@ -16,7 +16,6 @@ namespace asi.asicentral.database
             : base("name=" + connectionName)
         {
             Database.SetInitializer<Umbraco_ShowContext>(null);
-            EnableTracing(typeof(Umbraco_ShowContext));
         }
         public DbSet<ShowAddress> Address { get; set; }
         public DbSet<ShowAttendee> Attendee { get; set; }
