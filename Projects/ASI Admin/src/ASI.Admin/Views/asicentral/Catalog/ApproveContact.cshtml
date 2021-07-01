@@ -21,6 +21,7 @@
     {
         isSaleIdView = true;
     }
+    var totalResCatalog = 0;
 }
 @helper RenderArtWorkFileRows(List<CatalogArtWorks> artworks)
 {
@@ -212,6 +213,7 @@
                         @for (var i = 0; i < unApprovedContact.Count(); i++)
                         {
                             var stateFullName = apiStates.Where(m => m.Value == unApprovedContact[i].CatalogContacts.State).Select(m => m.Text).FirstOrDefault();
+                            totalResCatalog += unApprovedContact[i].ContactsRequested;
                             <tr>
                                 <td>
                                     <a class="delete" href="#" onclick="DeleteContactDetail(@unApprovedContact[i].CatalogContactSaleDetailId)">
@@ -229,7 +231,7 @@
                                 </td>
                                 <td>@unApprovedContact[i].UpdateDateUTC.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss")</td>
                                 <td>
-                                    @Html.TextBoxFor(m => unApprovedContact[i].ContactsRequested, new { type = "number", min = "1", max = unApprovedContact[i].CatalogContacts.RemainingContacts })
+                                    @Html.TextBoxFor(m => unApprovedContact[i].ContactsRequested, new { type = "number", min = "1", max = unApprovedContact[i].CatalogContacts.RemainingContacts, @class = "resContact", onkeyup = "CalculateTotalReservedContact()" })
                                     @Html.HiddenFor(m => unApprovedContact[i].CatalogContactSaleDetailId)
                                     @if (isSaleIdView)
                                     {
@@ -245,6 +247,7 @@
                     </tbody>
                 </table>
                 <div>
+                    <span style="font-weight:bold">Total Reserved: <span id="totalResContactDiv">@totalResCatalog</span></span>
                     <button type="button" style="margin-left:3px" onclick="validateResContacts()" class="btn pull-right" id="btnApproved" disabled="disabled">
                         Approve
                     </button>
@@ -679,6 +682,16 @@
         }
     }
 
+    function CalculateTotalReservedContact() {
+        var totlaResContact = 0;
+        $(".resContact").each(function () {
+            var resContact = $(this).val();
+            if (typeof resContact != "undefined" && $.isNumeric(resContact)) {
+                totlaResContact +=parseInt(resContact);
+            }
+        });
+        $("#totalResContactDiv").text(totlaResContact);
+    }
 </script>
 @section scripts{
     <script>
