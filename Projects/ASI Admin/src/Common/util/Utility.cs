@@ -149,6 +149,14 @@ namespace asi.asicentral.util
             }
             return value;
         }
-
+        public static string RemoveSpecialChars(string inputString)
+        {
+            if (!string.IsNullOrEmpty(inputString))
+            {
+                inputString = Regex.Replace(inputString.Trim(), @"[^0-9a-zA-Z]+", "");
+                return inputString.Replace("/", "");
+            }
+            return string.Empty;
+        }
     }
 }

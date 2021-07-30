@@ -465,11 +465,14 @@
     <Compile Include="database\AsicentralContext.cs" />
     <Compile Include="database\ASIEmailBlastContext.cs" />
     <Compile Include="database\ASIInternetContext.cs" />
+    <Compile Include="database\mappings\asicentral\AsicentralFormQuestionMap.cs" />
+    <Compile Include="database\mappings\asicentral\AsicentralFormQuestionOptionMap.cs" />
     <Compile Include="database\mappings\asicentral\CatalogArtWorksMap.cs" />
     <Compile Include="database\mappings\asicentral\CatalogContactImportMap.cs" />
     <Compile Include="database\mappings\asicentral\CatalogContactMap.cs" />
     <Compile Include="database\mappings\asicentral\CatalogContactSaleDetailMap.cs" />
     <Compile Include="database\mappings\asicentral\CatalogContactSaleMap.cs" />
+    <Compile Include="database\mappings\asicentral\FormDataValueMap.cs" />
     <Compile Include="database\mappings\asicentral\FormInstanceMap.cs" />
     <Compile Include="database\mappings\asicentral\FormTypeMap.cs" />
     <Compile Include="database\mappings\asicentral\FormValueMap.cs" />
@@ -586,6 +589,8 @@
     <Compile Include="database\MemberDemogrContext.cs" />
     <Compile Include="database\Umbraco_ShowContext.cs" />
     <Compile Include="interfaces\IImageConvertService.cs" />
+    <Compile Include="model\asicentral\AsicentralFormQuestion.cs" />
+    <Compile Include="model\asicentral\AsicentralFormQuestionOption.cs" />
     <Compile Include="model\asicentral\CatalogArtWorks.cs" />
     <Compile Include="model\asicentral\CatalogContact.cs" />
     <Compile Include="model\asicentral\CatalogContactImport.cs" />
@@ -594,6 +599,7 @@
     <Compile Include="model\asicentral\AsicentralFormInstance.cs" />
     <Compile Include="model\asicentral\AsicentralFormType.cs" />
     <Compile Include="model\asicentral\AsicentralFormValue.cs" />
+    <Compile Include="model\asicentral\FormDataValue.cs" />
     <Compile Include="model\asicentral\PagerBase.cs" />
     <Compile Include="model\asicentral\RateSupplierForm.cs" />
     <Compile Include="model\asicentral\RateSupplierFormDetail.cs" />

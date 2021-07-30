@@ -29,6 +29,9 @@ namespace asi.asicentral.database
         public DbSet<AsicentralFormType> FormTypes { get; set; }
         public DbSet<AsicentralFormInstance> FormInstances { get; set; }
         public DbSet<AsicentralFormValue> FormValues { get; set; }
+        public DbSet<AsicentralFormQuestion> FormQuestions { get; set; }
+        public DbSet<AsicentralFormQuestionOption> FormQuestionOptions { get; set; }
+        public DbSet<FormDataValue> FormDataValue { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -43,7 +46,10 @@ namespace asi.asicentral.database
                 .Add(new CatalogArtWorksMap())
                 .Add(new FormTypeMap())
                 .Add(new FormInstanceMap())
-                .Add(new FormValueMap());
+                .Add(new FormValueMap())
+                .Add(new AsicentralFormQuestionMap())
+                .Add(new AsicentralFormQuestionOptionMap())
+                .Add(new FormDataValueMap());
         }
     }
 }

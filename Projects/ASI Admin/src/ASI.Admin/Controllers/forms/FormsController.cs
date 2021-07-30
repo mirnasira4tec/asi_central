@@ -171,7 +171,7 @@ namespace asi.asicentral.web.Controllers.forms
         {
             var viewModel = _initAsicentralForm();
 
-            var formInstanceQuery = StoreService.GetAll<AsicentralFormInstance>(true);
+            var formInstanceQuery = StoreService.GetAll<AsicentralFormInstance>(true).Where(f => !f.FormType.IsDynamic);
             if (!string.IsNullOrEmpty(status))
             {
                 status = status.ToLower();
@@ -420,12 +420,14 @@ namespace asi.asicentral.web.Controllers.forms
 
             // initialize type list
             viewModel.TypeList = new List<SelectListItem>();
-            var allTypes = StoreService.GetAll<AsicentralFormType>(true).ToList();
-            foreach (var type in allTypes)
+            var allTypes = StoreService.GetAll<AsicentralFormType>(true).Where(f => !f.IsDynamic)?.ToList();
+            if (allTypes.Any())
             {
-                viewModel.TypeList.Add(new SelectListItem() { Selected = false, Text = type.Name, Value = type.Id.ToString() });
+                foreach (var type in allTypes)
+                {
+                    viewModel.TypeList.Add(new SelectListItem() { Selected = false, Text = type.Name, Value = type.Id.ToString() });
+                }
             }
-
             return viewModel;
         }
 

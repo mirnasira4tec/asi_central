@@ -462,6 +462,10 @@ namespace asi.asicentral.database.mappings
                 .Ctor<IValidatedContext>().Named("umbracoDbDSN");
             For<IRepository<AsicentralFormValue>>().Use<EFRepository<AsicentralFormValue>>()
                 .Ctor<IValidatedContext>().Named("umbracoDbDSN");
+            For<IRepository<AsicentralFormQuestion>>().Use<EFRepository<AsicentralFormQuestion>>()
+                     .Ctor<IValidatedContext>().Named("umbracoDbDSN");
+            For<IRepository<AsicentralFormQuestionOption>>().Use<EFRepository<AsicentralFormQuestionOption>>()
+                     .Ctor<IValidatedContext>().Named("umbracoDbDSN");
             #endregion
         }
     }

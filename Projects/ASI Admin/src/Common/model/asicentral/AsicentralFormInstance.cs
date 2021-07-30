@@ -32,5 +32,6 @@ namespace asi.asicentral.model.asicentral
 
         public virtual AsicentralFormType FormType { get; set; }
         public virtual IList<AsicentralFormValue> Values { get; set; }
+        public virtual IList<FormDataValue> DataValues { get; set; }
     }
 }

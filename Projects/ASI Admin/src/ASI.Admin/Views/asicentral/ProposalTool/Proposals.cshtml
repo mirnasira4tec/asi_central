@@ -1,0 +1,56 @@
+﻿@model List<asi.asicentral.model.asicentral.AsicentralFormInstance>
+@{
+    ViewBag.Title = "Proposals";
+}
+<div>
+    <h2 class="">List of Proposals</h2>
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <a href="@Url.Content("~/proposaltool/proposalform")" class="btn btn-primary">
+        Create
+    </a>
+    <br />
+    <br />
+    if (Model != null && Model.Count() > 0)
+    {
+        <table class="table table-bordered table-condensed table-striped">
+            <thead>
+                <tr>
+                    <th>Client Name</th>
+                    <th>Submit Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var instance in Model)
+                {
+                    var clientNameValueObj = instance.DataValues.Where(m => m.QuestionId == 1).FirstOrDefault();//1 is ClientName
+                    var clientName = string.Empty;
+                    if (clientNameValueObj != null)
+                    {
+                        clientName = clientNameValueObj.Value;
+                    }
+                    var sourceFileObj = instance.DataValues.Where(m => m.QuestionId == 14).FirstOrDefault();//14 is SouceFile
+                    var sourceFileUrl = string.Empty;
+                    if (sourceFileObj != null)
+                    {
+                        sourceFileUrl = sourceFileObj.Value;
+                    }
+                <tr>
+                    <td>
+                        @clientName
+                    </td>
+                    <td>
+                        @instance.CreateDate.ToString("MM/dd/yyyy")
+                    </td>
+                    <td>
+                        <a href="@sourceFileUrl" target="_blank" class="btn btn-primary" ><i class="icon-arrow-down icon-white"></i> Download</a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    }
+}

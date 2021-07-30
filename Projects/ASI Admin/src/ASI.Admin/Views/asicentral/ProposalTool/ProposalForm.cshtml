@@ -1,0 +1,405 @@
+﻿@model asi.asicentral.model.asicentral.AsicentralFormInstance
+@{
+    ViewBag.Title = "Proposal Form";
+    var _objectService = asi.asicentral.web.DependencyResolution.IoC.Initialize().GetInstance<asi.asicentral.interfaces.IObjectService>();
+    var mediaServerPath = System.Configuration.ConfigurationManager.AppSettings["MediaServerURL"];
+}
+<style>
+    #frmProposal input:not([type=checkbox]):not([type=radio]), select {
+        width: 95%;
+    }
+</style>
+@if (Model != null)
+{
+    <div class="row-fluid">
+
+        <div class="span10 offset1">
+            @if (TempData["fileName"] != null)
+            {
+                if (!string.IsNullOrWhiteSpace(TempData["fileName"].ToString()) && TempData["fileName"].ToString() != "error")
+                {
+                    <div class="alert alert-success" style="margin-top:20px">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <h4>Success!</h4>
+                        Your proposal is created. Please <a target="_blank" href="@TempData["fileName"].ToString()">Click here</a> to download.
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger" style="margin-top:20px">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <h4>Error!</h4>
+                        Some error occurred while creating your proposal.
+                    </div>
+                }
+            }
+            @using (Html.BeginForm("ProposalForm", "ProposalTool", FormMethod.Post, new { id = "frmProposal", enctype = "multipart/form-data" }))
+            {
+                <div id="tabbasic">
+                    <div class="form-group">
+                        <div class="text-right">
+                            <a href="/ProposalTool/Index">Back</a>
+                        </div>
+                        <label for="email"><h2>Proposal Form</h2></label>
+                        <hr />
+                    </div>
+                    @if (Model.FormType != null && Model.FormType.FormQuestions.Any())
+                    {
+                        var isRequired = false;
+                        var isChildQuestion = false;
+                        var data_val = string.Empty;
+                        var data_val_required = string.Empty;
+                        var display = string.Empty;
+                        @Html.HiddenFor(m => Model.Id)
+                        @Html.HiddenFor(m => Model.FormType.Id)
+                        @Html.HiddenFor(m => Model.FormType.Name)
+                        Model.FormType.FormQuestions = Model.FormType.FormQuestions.OrderBy(m => m.Sequence).ToList();
+                        for (int i = 0; i < Model.FormType.FormQuestions.Count; i++)
+                        {
+
+                            var isCheckBoxList = Model.FormType.FormQuestions[i].InputType == "checkboxlist";
+                            var isMultipleTextBox = Model.FormType.FormQuestions[i].Name == "CurrentServicesName" || Model.FormType.FormQuestions[i].Name == "ProposedServicesName";
+                            var isServiceCheckBox = Model.FormType.FormQuestions[i].Name == "CurrentServices" || Model.FormType.FormQuestions[i].Name == "ProposedServices";
+                            isRequired = Model.FormType.FormQuestions[i].IsRequired;
+                            isChildQuestion = Model.FormType.FormQuestions[i].ParentQuestionId.HasValue;
+                            <div class="form-group @(isCheckBoxList ? "chkList" : string.Empty)@(isMultipleTextBox ? " multiTextDiv" : string.Empty)@(isServiceCheckBox ? " serviceChk" : string.Empty)"
+                                 style="padding-bottom:10px; @(Model.FormType.FormQuestions[i].CssStyle);@(isChildQuestion ? "padding-left:20px;" : string.Empty)"
+                                 dvQuestionName="@Model.FormType.FormQuestions[i].Name"
+                                 questionId="@Model.FormType.FormQuestions[i].Id" ,
+                                 index="@i">
+
+                                @if (isRequired)
+                                {
+                                    isRequired = true;
+                                    data_val = "true";
+                                    data_val_required = "Field is required";
+                                }
+                                @Html.HiddenFor(m => Model.DataValues[i].QuestionId, new { Value = Model.FormType.FormQuestions[i].Id })
+                                @Html.HiddenFor(m => Model.DataValues[i].Id)
+                                @Html.HiddenFor(m => Model.DataValues[i].Question.Id)
+                                @Html.HiddenFor(m => Model.DataValues[i].Question.Name)
+                                @if (Model.FormType.FormQuestions[i].InputType != "sourceFile")
+                                {
+                                    if (Model.FormType.FormQuestions[i].InputType != "checkbox")
+                                    {
+                                        <label style="font-weight:bold;">
+                                            @Model.FormType.FormQuestions[i].Description
+                                            @if (isRequired)
+                                            {
+                                                <span style="color:red">
+                                                    *
+                                                </span>
+                                            }
+                                        </label>
+                                    }
+                                    if (Model.FormType.FormQuestions[i].InputType == "file")
+                                    {
+                                        if (Model.Id > 0)
+                                        {
+                                            data_val = string.Empty;
+                                            data_val_required = string.Empty;
+                                        }
+                                        @Html.TextBoxFor(m => Model.DataValues[i].Value, new { @class = "form-control", style = "width:80%", Type = "file", Name = "logo", data_val, data_val_required, accept = "image/png, image/jpeg" })
+                                        if (!string.IsNullOrWhiteSpace(Model.DataValues[i].Value))
+                                        {
+                                            @Html.HiddenFor(m => Model.DataValues[i].Value)
+                                            <img src="@(System.IO.Path.Combine(mediaServerPath, Model.DataValues[i].Value))" alt="logo" height="80px" width="80px" />
+                                        }
+                                    }
+                                    else if (Model.FormType.FormQuestions[i].InputType == "text")
+                                    {
+                                        if (isMultipleTextBox)
+                                        {
+                                            @Html.TextBox(Model.FormType.FormQuestions[i].Name + "[]", "", new { @class = "form-control multiText" })
+                                            <br />
+                                            <button class="btn btn-small" type="button" onclick="addTextBox(this)" id="@(Model.FormType.FormQuestions[i].Name)btn">+</button>
+                                            @Html.HiddenFor(m => Model.DataValues[i].Value, new { data_val, data_val_required })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(m => Model.DataValues[i].Value, new { @class = "form-control" + (isMultipleTextBox ? " multiText" : string.Empty), data_val, data_val_required })
+                                        }
+                                    }
+                                    else if (Model.FormType.FormQuestions[i].InputType == "dropdown")
+                                    {
+                                        if (Model.FormType.FormQuestions[i].QuestionOptions.Any())
+                                        {
+                                            var options = new List<SelectListItem>();
+                                            foreach (var option in Model.FormType.FormQuestions[i].QuestionOptions)
+                                            {
+                                                var value = string.Empty;
+                                                if (Model.FormType.FormQuestions[i].Name == "ExecutiveDirector" || Model.FormType.FormQuestions[i].Name == "AccountManager")
+                                                {
+                                                    value = option.Id.ToString();
+                                                }
+                                                else
+                                                {
+                                                    value = option.Name;
+                                                }
+                                                options.Add(new SelectListItem { Text = option.Name, Value = value });
+                                            }
+                                            @Html.DropDownListFor(m => Model.DataValues[i].Value, new SelectList(options, "Value", "Text", Model.DataValues[i].Value), "--Select--", new { @class = "form-control", data_val, data_val_required })
+                                        }
+                                    }
+                                    else if (Model.FormType.FormQuestions[i].InputType == "radio")
+                                    {
+                                        if (Model.FormType.FormQuestions[i].QuestionOptions.Any())
+                                        {
+                                            foreach (var option in Model.FormType.FormQuestions[i].QuestionOptions)
+                                            {
+                                                <label class="radio inline">
+                                                    @Html.RadioButtonFor(m => Model.DataValues[i].Value, option.Name, new { data_val, data_val_required })@option.Name
+                                                </label>
+                                            }
+                                        }
+                                    }
+                                    else if (isCheckBoxList)
+                                    {
+                                        if (Model.FormType.FormQuestions[i].QuestionOptions.Any())
+                                        {
+                                            foreach (var option in Model.FormType.FormQuestions[i].QuestionOptions)
+                                            {
+                                                <label class="checkbox inline">
+                                                    @Html.CheckBox(option.Name, false, new { data_val, data_val_required, Value = option.Name, onclick = (isRequired ? "setCheckListValues('" + Model.FormType.FormQuestions[i].Name + "')" : string.Empty) })@option.Name
+                                                </label>
+                                            }
+                                            @Html.HiddenFor(m => Model.DataValues[i].Value, new { data_val, data_val_required })
+                                        }
+                                    }
+                                    else if (Model.FormType.FormQuestions[i].InputType == "checkbox")
+                                    {
+                                        var isChecked = Model.DataValues[i].Value == "true";
+                                        <label class="checkbox inline">
+                                            @Html.CheckBox(Model.FormType.FormQuestions[i].Name, isChecked, new { followUpQuestionIds = Model.FormType.FormQuestions[i].FollowingUpQuestions, data_val, data_val_required, Value = Model.FormType.FormQuestions[i].Description, onclick = "showHideFollowUpQuestions(this); validateServiceChkBox()" })
+                                            @Model.FormType.FormQuestions[i].Description
+                                        </label>
+                                        @Html.HiddenFor(m => Model.DataValues[i].Value)
+                                    }
+                                    if (isRequired && Model.FormType.FormQuestions[i].InputType != "none")
+                                    {
+                                        <br />
+                                        <span name="@Model.FormType.FormQuestions[i].Name" style="color:red" data-valmsg-for=@("DataValues[" + i + "].Value") data-valmsg-replace="true"></span>
+                                    }
+                                }
+                            </div>
+
+                        }
+                    }
+                    <div class="text-center">
+                        <button type="button" class="btn btn-default" onclick="formSubmit()">Generate Proposal</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+@section scripts{
+    @Scripts.Render("~/bundles/form")
+    <script>
+        $(function () {
+            selectCheckBoxes();
+            fillMultipleTextboxes();
+        })
+
+        function selectCheckBoxes() {
+            $(".chkList").each(function (i, div) {
+                if ($(div).is(":visible")) {
+                    var index = $(div).attr('index');
+                    //  var questionName = $(div).attr('dvquestionname');
+                    var selectedValues = $("#DataValues_" + index + "__Value").val();
+                    var selectedValuesArr;
+                    if (selectedValues) {
+                        selectedValuesArr = selectedValues.split(',');
+                        for (i = 0; i < selectedValuesArr.length; i++) {
+                            $(div).find("input[type=checkbox]").each(function () {
+                                if ($(this).val() == selectedValuesArr[i]) {
+                                    $(this).prop('checked', true);
+                                }
+                            })
+                        }
+                    }
+                }
+            });
+        }
+
+        function fillMultipleTextboxes() {
+            $(".multiTextDiv").each(function (i, div) {
+
+                var index = $(div).attr('index');
+                var questionName = $(div).attr('dvquestionname');
+                var btnObj = $("#" + questionName + "btn");
+                var values = $("#DataValues_" + index + "__Value").val();
+                var valuesArr;
+                if (values) {
+                    valuesArr = values.split(',');
+                    for (i = 0; i < valuesArr.length; i++) {
+                        if (i == 0) {
+                            $(div).find("input").filter(':visible:first').val(valuesArr[i]);
+                        }
+                        else {
+                            addTextBox(btnObj, valuesArr[i]);
+                        }
+                    }
+                }
+            });
+        }
+
+        function addTextBox(obj, value) {
+            value = value ? value : "";
+            var newTextBox = '<div><input class="form-control multiText" style="width:82%" data-val="true" data-val-required="Field is required" id="CurrentServicesName__" name="CurrentServicesName[]" type="text" value="' + value + '"> <button style="margin-bottom:10px" class="btn" type="button" onclick="removeTextBox(this)">Remove</button></div>'
+            $(newTextBox).insertBefore(obj);
+        }
+        function removeTextBox(obj) {
+            $(obj).closest('div').remove();
+        }
+        function formSubmit() {
+            var isFormValid = $("#frmProposal").valid();
+            var isMultiTextValid = validateMultipleText();
+            var isChkListValid = setCheckListValues();
+            var isServiceChecked = validateServiceChkBox();
+            if (isFormValid && isMultiTextValid && isChkListValid && isServiceChecked) {
+                $("#frmProposal").submit();
+            }
+        }
+
+        function setCheckListValues() {
+            var count = 0;
+            var values = "";
+            var isValid = false;
+            $(".chkList").each(function (i, div) {
+                if ($(div).is(":visible")) {
+                    $(div).find("input:checked").each(function () {
+                        count++;
+                        values += $(this).val() + ",";
+                    })
+                    var index = $(div).attr('index');
+                    var questionName = $(div).attr('dvquestionname');
+                    $("#DataValues_" + index + "__Value").val('');
+                    if (count > 0) {
+                        $("#DataValues_" + index + "__Value").val(values.slice(0, -1));
+                        isValid = true;
+                    } else {
+                        $("#DataValues_" + index + "__Value").val('');
+                        $("span[name=" + questionName + "]").text("Field is Required.")
+                        values = "";
+                    }
+                    $("#DataValues_" + index + "__Value").valid();
+                }
+            });
+            return isValid;
+        }
+
+        function showHideFollowUpQuestions(obj) {
+            var type = $(obj).attr("type");
+            if (type != "checkbox") {
+                return;
+            }
+            var index = $(obj).closest('.form-group').attr('index');
+            var checkboxValue = $(obj).is(":checked");
+            $("#DataValues_" + index + "__Value").val(checkboxValue);
+            var followUpQuestionsIds = $(obj).attr("followupquestionids");
+            if (followUpQuestionsIds != undefined && followUpQuestionsIds != "") {
+                var arrIds = followUpQuestionsIds.split(',');
+                for (var i = 0; i < arrIds.length; i++) {
+                    if (arrIds[i] != "") {
+                        var questionDiv = $("div[questionid='" + arrIds[i] + "']");
+                        if (questionDiv != undefined) {
+                            if (checkboxValue) {
+                                questionDiv.show();
+                                questionDiv.find("input").each(function () {
+                                    $(this).removeAttr("disabled");
+                                })
+                            }
+                            else if (questionDiv.is(":visible")) {
+                                questionDiv.hide();
+                                questionDiv.find("input").each(function () {
+                                    ClearContol($(this));
+                                    if ($(this).attr('type') != 'hidden') {
+                                        $(this).attr("disabled", "disabled");
+                                    }
+                                })
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        function ClearContol(obj) {
+            if ($(obj).attr('type') == "radio" || $(obj).attr('type') == "checkbox") {
+                $(obj).prop('checked', false);
+
+                //hide all follow up
+                var followUpIds = $(obj).attr("followupquestionids");
+                if (followUpIds != undefined && followUpIds != "") {
+                    var arrIds = followUpIds.split(',');
+                    for (var j = 0; j < arrIds.length; j++) {
+                        if (arrIds[j] != "") {
+                            var followDiv = $("div[questionid='" + arrIds[j] + "']");
+                            if (followDiv.is(":visible")) {
+                                followDiv.hide();
+                                followDiv.find("input").each(function () {
+                                    if ($(this).attr('type') != 'hidden') {
+                                        ClearContol($(this));
+                                        $(this).attr("disabled", "disabled");
+                                    }
+                                })
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                if ($(obj).attr('type') != 'hidden') {
+                    $(obj).val('');
+                }
+            }
+        }
+
+        function validateMultipleText() {
+
+            var isValid = true;
+            $(".multiTextDiv").each(function (i, div) {
+                if ($(div).is(":visible")) {
+                    var values = "";
+                    $(div).find("input").each(function () {
+                        var index = $(div).attr('index');
+                        var questionName = $(div).attr('dvquestionname');
+                        if ($(this).attr('type') === 'text' && !($(this).prop('disabled'))) {
+                            if ($(this).val() === "") {
+                                $(this).addClass("input-validation-error");
+                                $("span[name=" + questionName + "]").addClass("field-validation-error").text("Field is Required.")
+                                $("#DataValues_" + index + "__Value").val("");
+                                isValid = false;
+                            }
+                            else {
+                                values += $(this).val() + ",";
+                                $(this).removeClass("input-validation-error");
+                                $("span[name=" + questionName + "]").text("")
+                            }
+                        }
+                        $("#DataValues_" + index + "__Value").val(values.slice(0, -1));
+                    });
+                }
+            });
+            return isValid;
+        }
+        function validateServiceChkBox() {
+            var isValid = false;
+            var count = 0;
+            var questionName = "";
+            $(".serviceChk").each(function (i, div) {
+                questionName = $(this).attr('dvquestionname');
+                $(div).find("input:checked").each(function () {
+                    count++;
+                });
+            });
+            if (count > 0) {
+                isValid = true;
+                $("span[name=" + questionName + "]").removeClass("field-validation-error").text("");
+            } else {
+                $("span[name=" + questionName + "]").addClass("field-validation-error").text("Field is Required.");
+            }
+            return isValid;
+        }
+    </script>
+}

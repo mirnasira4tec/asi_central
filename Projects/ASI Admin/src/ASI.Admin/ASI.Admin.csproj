@@ -435,6 +435,13 @@
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.WebData.3.2.7\lib\net45\WebMatrix.WebData.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
+    <Reference Include="Xceed.Document.NET, Version=1.7.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4" />
+    <Reference Include="Xceed.PDFCreator.NET, Version=1.8.21063.12590, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Xceed.PDFCreator.NET.1.8.21063.12590\lib\net40\Xceed.PDFCreator.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Words.NET, Version=1.7.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\DocX.1.7.1\lib\net40\Xceed.Words.NET.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\AuthConfig.cs" />
@@ -445,6 +452,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\asicentralApi\AsiCentralApiController.cs" />
     <Compile Include="Controllers\asicentral\CatalogController.cs" />
+    <Compile Include="Controllers\asicentral\ProposalToolController.cs" />
     <Compile Include="Controllers\asicentral\RateSupplierController.cs" />
     <Compile Include="Controllers\velocity\VelocityController.cs" />
     <Compile Include="Database\VelocityContext.cs" />
@@ -485,6 +493,7 @@
     <Compile Include="Models\CompanyInfoModel.cs" />
     <Compile Include="Models\forms\asicentral\FormInstanceModel.cs" />
     <Compile Include="Models\forms\asicentral\FormListModel.cs" />
+    <Compile Include="Models\forms\FormQuestions.cs" />
     <Compile Include="Models\velocity\ColorMapData.cs" />
     <Compile Include="Models\velocity\ColorMapping.cs" />
     <Compile Include="Models\asicentral\CallVolume.cs" />
@@ -732,6 +741,8 @@
     <Content Include="Views\Forms\FormsDetails.cshtml" />
     <Content Include="Views\Forms\asicentral.cshtml" />
     <Content Include="Views\Forms\asicentral\FormDetails.cshtml" />
+    <Content Include="Views\asicentral\ProposalTool\ProposalForm.cshtml" />
+    <Content Include="Views\asicentral\ProposalTool\Proposals.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -751,6 +762,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
+    <Folder Include="Views\ProposalTool\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
