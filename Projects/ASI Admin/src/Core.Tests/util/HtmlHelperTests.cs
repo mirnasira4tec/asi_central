@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+
 namespace asi.asicentral.util.Tests
 {
 
-    [TestClass()]
+    [TestFixture]
     public class HtmlHelperTests
     {
         private string url = "https://stage-store.asicentral.com/Store/Supplier/Package/9";
 
-        [TestMethod()]
+        [Test]
         public void SubmitWebRequest_Get_Test()
         {
             string result = HtmlHelper.SubmitWebRequest(url, null, null, false);
@@ -16,7 +17,7 @@ namespace asi.asicentral.util.Tests
             Assert.IsNotNull(result);
         }
 
-        [TestMethod()]
+        [Test]
         public void SubmitWebRequest_Post_Test()
         {
             var data = new Dictionary<string, string>

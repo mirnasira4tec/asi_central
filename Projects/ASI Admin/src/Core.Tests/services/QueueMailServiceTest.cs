@@ -1,6 +1,5 @@
 ﻿using System;
 using ASI.Contracts.Messages.Email;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using asi.asicentral.services;
 using asi.asicentral.interfaces;
 using System.Net.Mail;
@@ -9,14 +8,14 @@ using System.Collections.Generic;
 using ASI.Services.Messaging;
 using asi.asicentral.model;
 using System.Threading;
+using NUnit.Framework;
 
 namespace Core.Tests
 {
-    [Ignore]
-	[TestClass]
+	[TestFixture]
     public class QueueMailServiceTest
 	{
-		[TestMethod]
+		[Test]
 		public void TestSendMail()
 		{
             MailMessage mail = new MailMessage();
@@ -35,7 +34,7 @@ namespace Core.Tests
             
 		}
 
-        [TestMethod]
+        [Test]
         public void TestSendMailAsBarista()
         {
             var contentEmailMessage = new ContentEmailMessage();
@@ -49,7 +48,7 @@ namespace Core.Tests
             Assert.IsTrue(result);
         }
 
-        [TestMethod]
+        [Test]
         public void SendMailWithoutFrom()
         {
             MailMessage mail = new MailMessage();
@@ -63,7 +62,7 @@ namespace Core.Tests
             Assert.IsTrue(result);
         }
 
-        [TestMethod]
+        [Test]
         public void SendMailWithMailObject()
         {
             Mail mail = new Mail();

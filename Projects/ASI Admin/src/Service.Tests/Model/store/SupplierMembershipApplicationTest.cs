@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Linq;
 using asi.asicentral.model.store;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace asi.asicentral.WebApplication.Tests.Model.store
 {
-    [TestClass]
+    [TestFixture]
     public class SupplierMembershipApplicationTest
     {
-        [TestMethod]
+        [Test]
         public void CopyTo_SyncSuppContacts()
         {
             // prepare for SupplierMembershipApplication's CopyTo(SupplierMembershipApplication target)
@@ -34,7 +33,7 @@ namespace asi.asicentral.WebApplication.Tests.Model.store
             Assert.IsNotNull(contact);
         }
 
-        [TestMethod]
+        [Test]
         public void CopyTo_SyncDecorationTypes()
         {
             // prepare for SupplierMembershipApplication's CopyTo(SupplierMembershipApplication target)

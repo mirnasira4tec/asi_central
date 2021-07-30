@@ -12,7 +12,7 @@ def octopusServer = 'http://asi-deploy-02/'
 def octopusProject = 'asicentraladmin.asinetwork.local'
 def octopusVersion = "1.2.${env.BUILD_NUMBER}"
 def octopusEnvironments = ['STAGE-ASICentral-Family', 'UAT-ASICentral-Family']
-def defaultDeployTo = ['STAGE-ASICentral-Family']
+def defaultDeployTo = ['UAT-ASICentral-Family']
 def nugetServer = "\\\\asi-nuget-01\\Packages"
 def buildTarget = '\\\\asi-nas-01\\jenkins\\Releases'
 
@@ -157,7 +157,7 @@ node {
             
             buildSteps["Build Solution"] = {
                 withCredentials([string(credentialsId: 'octopus-api-key', variable: 'octoApiKey')]) {
-                    bat "\"${tool 'MSBuild2017'}\" asi_central.xml /t:Compile /p:RunOctoPack=${createArtifacts} /p:OctoPackPackageVersion=${octopusVersion} /p:OctoPackPublishPackageToFileShare=${buildTarget} /p:OctoPackPublishPackageToHttp=${octopusServer}nuget/packages /p:OctoPackPublishApiKey=${octoApiKey}"
+                    bat "\"${tool 'MSBuild2019'}\" asi_central.xml /t:Compile /p:RunOctoPack=${createArtifacts} /p:OctoPackPackageVersion=${octopusVersion} /p:OctoPackPublishPackageToFileShare=${buildTarget} /p:OctoPackPublishPackageToHttp=${octopusServer}nuget/packages /p:OctoPackPublishApiKey=${octoApiKey}"
                 }
             };
 
