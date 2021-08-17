@@ -431,6 +431,14 @@ namespace asi.asicentral.database.mappings
             For<IRepository<ProfilePackageOption>>().Use<EFRepository<ProfilePackageOption>>()
         .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
+            For<IRepository<AttendeeSchedule>>().Use<EFRepository<AttendeeSchedule>>()
+                .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+
+            For<IRepository<ShowSchedule>>().Use<EFRepository<ShowSchedule>>()
+                .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
+
+            For<IRepository<ShowScheduleDetail>>().Use<EFRepository<ShowScheduleDetail>>()
+                .Ctor<IValidatedContext>().Named("Umbraco_ShowContext");
 
             #endregion Umbraco_ShowContext
 

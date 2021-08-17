@@ -334,6 +334,25 @@ namespace asi.asicentral.util.show
                         objectService.Delete(distShowLogo);
                     }
                 }
+                if (objShowAttendee.AttendeeSchedulesSuppliers != null)
+                {
+                    int attSchedulesCount = objShowAttendee.AttendeeSchedulesSuppliers.Count();
+                    for (int i = attSchedulesCount; i > 0; i--)
+                    {
+                        var attSchedule = objShowAttendee.AttendeeSchedulesSuppliers.ElementAt(i - 1);
+                        objectService.Delete(attSchedule);
+                    }
+                }
+                if (objShowAttendee.AttendeeSchedulesDistributors != null)
+                {
+                    int attSchedulesCount = objShowAttendee.AttendeeSchedulesDistributors.Count();
+                    for (int i = attSchedulesCount; i > 0; i--)
+                    {
+                        var attSchedule = objShowAttendee.AttendeeSchedulesDistributors.ElementAt(i - 1);
+                        objectService.Delete(attSchedule);
+                    }
+                }
+                
                 // Deleting Attendee
                 objectService.Delete<ShowAttendee>(objShowAttendee);
                 objectService.SaveChanges();

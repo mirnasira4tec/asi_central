@@ -48,6 +48,10 @@ namespace asi.asicentral.database
         public DbSet<CompanyProfile> CompanyProfiles { get; set; }
         public DbSet<CompanyProfileData> CompanyProfileData { get; set; }
 
+        public DbSet<ShowSchedule> ShowSchedules { get; set; }
+        public DbSet<ShowScheduleDetail> ShowScheduleDetails { get; set; }
+        public DbSet<AttendeeSchedule> AttendeeSchedules { get; set; }
+
         /// <summary>
         /// Use to enhance the default mapping for the model
         /// </summary>
@@ -85,7 +89,10 @@ namespace asi.asicentral.database
                 .Add(new SHW_FormPropertyValueMap())
                 .Add(new SHW_ShowFormInstanceMap())
                 .Add(new SHW_FormQuestionMap())
-                .Add(new SHW_FormQuestionOptionMap());
+                .Add(new SHW_FormQuestionOptionMap())
+                .Add(new ShowScheduleMap())
+                .Add(new ShowScheduleDetailMap())
+                .Add(new AttendeeScheduleMap());
         }
     }
 }

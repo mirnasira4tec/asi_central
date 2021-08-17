@@ -479,6 +479,8 @@
     <Compile Include="database\mappings\asicentral\RateSupplierFormDetailMap.cs" />
     <Compile Include="database\mappings\asicentral\RateSupplierFormMap.cs" />
     <Compile Include="database\mappings\asicentral\RateSupplierImportMap.cs" />
+    <Compile Include="database\mappings\show\ShowScheduleMap.cs" />
+    <Compile Include="database\mappings\show\ShowScheduleDetailMap.cs" />
     <Compile Include="database\mappings\show\CompanyProfileDataMap.cs" />
     <Compile Include="database\mappings\show\CompanyProfileMap.cs" />
     <Compile Include="database\mappings\show\ProfileOptionMap.cs" />
@@ -491,6 +493,7 @@
     <Compile Include="database\mappings\show\form\SHW_FormQuestionOptionMap.cs" />
     <Compile Include="database\mappings\show\form\SHW_FormTypeMap.cs" />
     <Compile Include="database\mappings\show\form\SHW_ShowFormInstanceMap.cs" />
+    <Compile Include="database\mappings\show\AttendeeScheduleMap.cs" />
     <Compile Include="database\mappings\show\ShowFormInstanceMap.cs" />
     <Compile Include="database\mappings\show\ShowFormTypeMap.cs" />
     <Compile Include="database\mappings\show\ShowFormValueMap.cs" />
@@ -639,6 +642,9 @@
     <Compile Include="model\show\ShowProfileOptionalDetails.cs" />
     <Compile Include="model\show\ShowProfileRequests.cs" />
     <Compile Include="model\show\ShowProfileSupplierData.cs" />
+    <Compile Include="model\show\AttendeeSchedule.cs" />
+    <Compile Include="model\show\ShowScheduleDetail.cs" />
+    <Compile Include="model\show\ShowSchedule.cs" />
     <Compile Include="model\store\CompanyValidation.cs" />
     <Compile Include="model\OAuth\Security.cs" />
     <Compile Include="model\OAuth\User.cs" />

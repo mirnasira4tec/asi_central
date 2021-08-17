@@ -26,12 +26,14 @@ namespace asi.asicentral.model.show
         public bool IsCatalog { get; set; }
         public string BoothNumber { get; set; }
         public bool? HasTravelForm { get; set; }
+        public int? Suite { get; set; }
         public virtual ShowASI Show { get; set; }
         public virtual ShowCompany Company { get; set; }
         public virtual List<ShowDistShowLogo> DistShowLogos { get; set; }
         public virtual IList<ShowEmployeeAttendee> EmployeeAttendees { get; set; }
         public virtual IList<ShowProfileRequests> ProfileRequests { get; set; }
-
+        public virtual IList<AttendeeSchedule> AttendeeSchedulesSuppliers { get; set; }
+        public virtual IList<AttendeeSchedule> AttendeeSchedulesDistributors { get; set; }
         public virtual IList<ShowFormInstance> TravelForms { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
