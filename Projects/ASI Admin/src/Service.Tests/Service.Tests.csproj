@@ -289,23 +289,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="AsicentralRateSupplierTest.cs" />
-    <Compile Include="CatalogTest.cs" />
-    <Compile Include="InternetTest.cs" />
-    <Compile Include="Model\store\SupplierMembershipApplicationTest.cs" />
-    <Compile Include="Model\store\DistributorMembershipApplicationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ASIInternetTest.cs" />
-    <Compile Include="ObjectServiceTest.cs" />
-    <Compile Include="ShowFormTest.cs" />
-    <Compile Include="ShowServiceTest.cs" />
-    <Compile Include="StoreServiceTest.cs" />
-    <Compile Include="ProductTest.cs" />
-    <Compile Include="ROIServiceTest.cs" />
-    <Compile Include="ASIEmailBlastContextTest.cs" />
-    <Compile Include="PersonifyTest.cs" />
-    <Compile Include="DM_MemberDemogrContextTest.cs" />
-    <Compile Include="VelocityTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

@@ -55,6 +55,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void EditPayForPlacement()
         {
             StoreIndividual individual = new StoreIndividual() { LastName = "Last", FirstName = "First" };
@@ -164,6 +165,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void EditBannerTileTower()
         {
             StoreIndividual individual = new StoreIndividual() { LastName = "Last", FirstName = "First" };
@@ -224,6 +226,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void EditEventPlanner()
         {
             StoreIndividual individual = new StoreIndividual() { LastName = "Last", FirstName = "First" };
@@ -325,6 +328,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void EditClearanceNewSpecials()
         {
             StoreIndividual individual = new StoreIndividual() { LastName = "Last", FirstName = "First" };
@@ -399,6 +403,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void EditFeaturedProductsOrVideo()
         {
             StoreIndividual individual = new StoreIndividual() { LastName = "Last", FirstName = "First" };
@@ -488,6 +493,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void EditLoginScreen()
         {
             StoreIndividual individual = new StoreIndividual() { LastName = "Last", FirstName = "First" };

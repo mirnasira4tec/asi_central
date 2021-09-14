@@ -10,6 +10,7 @@ namespace asi.asicentral.util.Tests
         private string url = "https://stage-store.asicentral.com/Store/Supplier/Package/9";
 
         [Test]
+        [Ignore("Ignore a test")]
         public void SubmitWebRequest_Get_Test()
         {
             string result = HtmlHelper.SubmitWebRequest(url, null, null, false);
@@ -18,6 +19,7 @@ namespace asi.asicentral.util.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void SubmitWebRequest_Post_Test()
         {
             var data = new Dictionary<string, string>

@@ -7,7 +7,7 @@ using asi.asicentral.model.store;
 using System.Collections.Generic;
 using NUnit.Framework;
 
-namespace asi.asicentral.Tests
+namespace External.Test
 {
     [TestFixture]
     public class StoreServiceTest
@@ -52,6 +52,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void OrderSupplierProduct()
         {
             using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
@@ -178,6 +179,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void StoreDetailMagazineAdvertisingDbTest()
         {
             using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
@@ -195,6 +197,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void LookSendMyAdDbTest()
         {
             using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
@@ -210,6 +213,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void StoreDetailMagazineAdvertisingItemTest()
         {
             using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
@@ -236,7 +240,8 @@ namespace asi.asicentral.Tests
         }
 
 	    [Test]
-	    public void LookSendMyAdCountryCodeCachedTest()
+        [Ignore("Ignore a test")]
+        public void LookSendMyAdCountryCodeCachedTest()
 	    {
 		    using (IStoreService storeService = new StoreService(new Container(new EFRegistry())))
 		    {
@@ -247,6 +252,7 @@ namespace asi.asicentral.Tests
 	    }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void FormPersistenceTest()
         {
             string testKey = Guid.NewGuid().ToString();

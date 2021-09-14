@@ -24,6 +24,7 @@ namespace External.Test.Admin
 
 
         [Test]
+        [Ignore("Ignore a test")]
         public void ApproveContactRemaingCatalogMoreThanRequestTest()
         {
             //Initializing the objectService Object for db access
@@ -85,6 +86,7 @@ namespace External.Test.Admin
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void ApproveContactRemaingCatalogLessThanRequestTest()
         {
             

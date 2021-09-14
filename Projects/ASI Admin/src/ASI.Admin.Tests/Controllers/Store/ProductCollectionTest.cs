@@ -53,6 +53,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void EditProductCollections()
         {
             StoreIndividual individual = new StoreIndividual() { LastName = "Last", FirstName = "First" };

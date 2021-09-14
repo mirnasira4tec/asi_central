@@ -7,12 +7,13 @@ using asi.asicentral.services;
 using NUnit.Framework;
 using StructureMap.Configuration.DSL;
 
-namespace asi.asicentral.Tests
+namespace External.Test.Common
 {
     [TestFixture]
     public class AsicentralRateSupplierTest
     {
         [Test]
+        [Ignore("Ignore a test")]
         public void SaveRateSupplierImports()
         {
             Registry registry = new EFRegistry();
@@ -35,6 +36,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void SaveRateSupplierData()
         {
             Registry registry = new EFRegistry();
@@ -64,6 +66,7 @@ namespace asi.asicentral.Tests
             }
         }
         [Test]
+        [Ignore("Ignore a test")]
         public void DeleteRateSupplierData()
         {
             Registry registry = new EFRegistry();

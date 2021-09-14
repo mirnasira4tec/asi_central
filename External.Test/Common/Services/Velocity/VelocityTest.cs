@@ -10,6 +10,7 @@ namespace asi.asicentral.Tests
     public class VelocityTest 
     {
         [Test]
+        [Ignore("Ignore a test")]
         public void SupplierUpdateColourMappingTest()
         {
             ColorMapping colorMapping = new ColorMapping();

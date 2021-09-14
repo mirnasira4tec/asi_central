@@ -281,6 +281,7 @@ namespace External.Test.Show
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void DeleteDistributorAttendeeWithTravelForm()
         {
             using (var objectService = InitializeObjectService())
@@ -334,6 +335,7 @@ namespace External.Test.Show
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void DeleteDistributorAttendeeWithTravelFormAndProfile()
         {
             using (var objectService = InitializeObjectService())
@@ -397,6 +399,7 @@ namespace External.Test.Show
 
         }
         [Test]
+        [Ignore("Ignore a test")]
         public void DeleteDistributorAttendeeWithProfile()
         {
             using (var objectService = InitializeObjectService())
@@ -447,6 +450,7 @@ namespace External.Test.Show
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void DeleteDistributorAttendeeWithOutTravelFormAndProfile()
         {
             using (var objectService = InitializeObjectService())
@@ -487,6 +491,7 @@ namespace External.Test.Show
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void DeleteSupplierAttendeeWithTravelFormAndProfile()
         {
             using (var objectService = InitializeObjectService())
@@ -541,6 +546,7 @@ namespace External.Test.Show
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void DeleteSupplierAttendeeWithTravelForm()
         {
             using (var objectService = InitializeObjectService())
@@ -586,6 +592,7 @@ namespace External.Test.Show
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void DeleteSupplierAttendeeWithProfile()
         {
             using (var objectService = InitializeObjectService())
@@ -630,6 +637,7 @@ namespace External.Test.Show
             }
         }
         [Test]
+        [Ignore("Ignore a test")]
         public void DeleteSupplierAttendeeWithoutTravelFormAndProfile()
         {
             using (var objectService = InitializeObjectService())

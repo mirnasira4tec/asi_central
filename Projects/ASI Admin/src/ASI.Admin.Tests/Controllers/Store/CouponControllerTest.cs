@@ -28,6 +28,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
             return product;
         }   
         [Test]
+        [Ignore("Ignore a test")]
         public void SaveCouponDetails()
         {
             Coupon product = new Coupon();

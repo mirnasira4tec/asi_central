@@ -14,12 +14,13 @@ using asi.asicentral.model.personify;
 using asi.asicentral.oauth;
 using NUnit.Framework;
 
-namespace asi.asicentral.Tests
+namespace External.Test
 {
     [TestFixture]
     public class PersonifyTest
     {
         [Test]
+        [Ignore("Ignore a test")]
         public void PlaceOrderNewCompanyTest()
         {
             IStoreService storeService = MockupStoreService();
@@ -66,6 +67,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void AddEEXSubscription()
         {
             var tag = DateTime.Now.Ticks.ToString();
@@ -148,6 +150,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void PackageOrderTest()
         {
             IStoreService storeService = MockupStoreService();
@@ -159,6 +162,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void PackageOrderWithCoupon()
         {
             var storeService = MockupStoreService("STANDARD129");
@@ -171,6 +175,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void EmailMrktOrderTest()
         {
             IStoreService storeService = MockupStoreService();
@@ -183,6 +188,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void NoOrderCreatedForTerminatedCompany()
         {
             IStoreService storeService = MockupStoreService();
@@ -197,6 +203,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void AddPersonifyCompanyForDualDecorator()
         {
             var storeService = MockupStoreService();
@@ -248,6 +255,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void AddCompany()
         {
             var tag = DateTime.Now.Ticks;
@@ -273,6 +281,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void LookupCompany()
         {
             IBackendService personify = new PersonifyService();
@@ -288,6 +297,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void EquipmentASINumberTest()
         {
             IBackendService personify = new PersonifyService();
@@ -312,6 +322,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void AddPhoneNumberTest()
         {
             var companyInfo = PersonifyClient.GetCompanyInfoByASINumber("33020");
@@ -326,6 +337,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void TestSP()
         {
             var result = PersonifyClient.ExecutePersonifySP(PersonifyClient.SP_UPDATE_MMS_EMS_SIGNON, new List<string>() { "000000125724", "0", "240989" });
@@ -333,6 +345,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void GetCompanyCreditCards()
         {
             StoreCompany company = new StoreCompany()
@@ -355,6 +368,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void CreatCompany()
         {
             var companyName = "Createcompany" + DateTime.Now.Ticks;
@@ -391,6 +405,7 @@ namespace asi.asicentral.Tests
 
         #region Test company matching logic
         [Test]
+        [Ignore("Ignore a test")]
         public void ReconcileCompanyMatchNameOnly()
         {
             var personify = new PersonifyService();
@@ -423,6 +438,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void MatchDistributorChange()
         {
             //Distributor should match to a delisted supplier
@@ -450,6 +466,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void ReconcileCompanySupplierWithPhoneEmail()
         {
             // match email only
@@ -478,6 +495,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void ReconcileCompanyWithPhoneEmailForMMSLoad()
         {
             // match email only
@@ -496,6 +514,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void ReconcileCompanyNonSupplierPhoneEmail()
         {
             var personify = new PersonifyService();
@@ -534,6 +553,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void ReconcileCompanyMultipleMatches()
         {
             //Distributor matching both name and phone/email, one LEAD
@@ -628,6 +648,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void PersonifyAddActivity()
         {
             var activity = SvcClient.Create<CusActivity>();
@@ -657,7 +678,9 @@ namespace asi.asicentral.Tests
             PersonifyClient.GetASICOMPMasterCustomerId(acctid);
 
         }
+
         [Test]
+        [Ignore("Ignore a test")]
         public void CheckValidEmailTest()
         {
             var email = "jshifflette@plowandhearth.com";
@@ -666,6 +689,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void SaveCreditCardJetPayTest()
         {
             var parameters = new List<string>()

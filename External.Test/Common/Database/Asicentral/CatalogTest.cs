@@ -8,7 +8,7 @@ using asi.asicentral.services;
 using NUnit.Framework;
 using StructureMap.Configuration.DSL;
 
-namespace asi.asicentral.Tests
+namespace External.Test.Common
 {
     public class CatalogTest
     {
@@ -83,6 +83,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void SaveCatalogContactImport()
         {
             Registry registry = new EFRegistry();
@@ -101,6 +102,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void CatalogSale()
         {
             Registry registry = new EFRegistry();

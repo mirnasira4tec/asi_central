@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using asi.asicentral.services;
 using NUnit.Framework;
 
-namespace asi.asicentral.Tests
+namespace External.Test
 {
     [TestFixture]
     public class ProductTest
@@ -708,6 +708,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void ContextCrud()
         {
             int newId;
@@ -744,6 +745,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void ESPAdvertisingCrud()
         {
             int newId = 25000;
@@ -776,6 +778,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void TestLookups()
         {
             using (var objectContext = new StoreContext())
@@ -791,6 +794,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void CompanyTest()
         {
             int companyId;
@@ -861,6 +865,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void OrderCrud()
         {
             int newOrderId;
@@ -998,6 +1003,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void RetrieveProductStructure()
         {
             using (var objectContext = new StoreContext())
@@ -1032,6 +1038,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void RetrieveTax()
         {
             using (var objectContext = new StoreContext())

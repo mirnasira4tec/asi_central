@@ -449,7 +449,6 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="OAuth\ASIOAuthClientTests.cs" />
     <Compile Include="OAuth\SSOTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="util\show\ShowHelperTests.cs" />

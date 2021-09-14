@@ -27,6 +27,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void EditMagazineAdvertising()
         {
             Guid guid = Guid.NewGuid();

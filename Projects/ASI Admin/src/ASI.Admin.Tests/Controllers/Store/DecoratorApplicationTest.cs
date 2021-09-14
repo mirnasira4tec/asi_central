@@ -15,6 +15,7 @@ namespace asi.asicentral.WebApplication.Tests.Controllers.Store
     public class DecoratorApplicationTest
     {
         [Test]
+        [Ignore("Ignore a test")]
         public void EditDecorator()
         {
             //prepare for EditDecorator(DecoratorApplicationModel application)

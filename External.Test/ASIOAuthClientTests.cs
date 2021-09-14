@@ -9,7 +9,7 @@ using NUnit.Framework;
 using asi.asicentral.util;
 using ASI.Services.Security;
 
-namespace Core.Tests.OAuth
+namespace External.Test
 {
     [TestFixture]
     public class ASIOAuthClientTests
@@ -63,7 +63,7 @@ namespace Core.Tests.OAuth
         }
 
         [Test]
-
+        [Ignore("Ignore a test")]
         public void UserTestScenarios1()
         {
             var tag = DateTime.Now.Ticks;
@@ -114,6 +114,7 @@ namespace Core.Tests.OAuth
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void IsValidEmailTest()
         {
             bool result1 = ASIOAuthClient.IsValidEmail(email);
@@ -128,6 +129,7 @@ namespace Core.Tests.OAuth
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void GetUserBySSOTest()
         {
             var result1 = ASIOAuthClient.GetUser(4419);
@@ -136,6 +138,7 @@ namespace Core.Tests.OAuth
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void UpdateUserTest()
         {
             var result = ASIOAuthClient.GetUser(4419);
@@ -160,6 +163,7 @@ namespace Core.Tests.OAuth
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void ChangePasswordTest()
         {
             asi.asicentral.model.Security security = new asi.asicentral.model.Security();
@@ -174,6 +178,7 @@ namespace Core.Tests.OAuth
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void GetCopmanyByASITest()
         {
             asi.asicentral.model.User user = ASIOAuthClient.GetCompanyByASINumber("342495");
@@ -189,6 +194,7 @@ namespace Core.Tests.OAuth
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void IsValidUserByTrueCredentials()
         {
             IDictionary<string, string> result = ASIOAuthClient.IsValidUser(this.username, this.password);
@@ -205,6 +211,7 @@ namespace Core.Tests.OAuth
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void LoginTest()
         {
             var tokens = ASIOAuthClient.Login_FetchUserDetails(this.username, this.password);
@@ -214,6 +221,7 @@ namespace Core.Tests.OAuth
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void RefreshTokenTest()
         {
             var tokens = ASIOAuthClient.Login_FetchUserDetails(this.username, this.password);
@@ -228,6 +236,7 @@ namespace Core.Tests.OAuth
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void GenarateTokens()
         {
             var userName = this.username;
@@ -256,6 +265,7 @@ namespace Core.Tests.OAuth
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void TestRefreshTokenIfAccessTokenIsNotValid()
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
@@ -314,6 +324,7 @@ namespace Core.Tests.OAuth
             }
         }
         [Test]
+        [Ignore("Ignore a test")]
         public void TestIsServiceAvailable()
         {
             var sUrl = ConfigurationManager.AppSettings["svcUri"];
@@ -325,6 +336,7 @@ namespace Core.Tests.OAuth
             Assert.IsFalse(isServiceRunning);
         }
         [Test]
+        [Ignore("Ignore a test")]
         public void TestIsPersonifyAvailable()
         {
             var isPersonifyRunning = Utility.IsPersonifyAvailable();

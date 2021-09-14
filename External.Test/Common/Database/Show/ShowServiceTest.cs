@@ -20,12 +20,13 @@ using System.Dynamic;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 
-namespace asi.asicentral.Tests
+namespace External.Test.Common
 {
     [TestFixture]
     public class ShowServiceTest
     {
         [Test]
+        [Ignore("Ignore a test")]
         public void ShowTypeTest()
         {
             Registry registry = new EFRegistry();
@@ -51,8 +52,9 @@ namespace asi.asicentral.Tests
                 Assert.IsNull(objShowType);
             }
         }
-
+       
         [Test]
+        [Ignore("Ignore a test")]
         public void ShowTest()
         {
             Registry registry = new EFRegistry();
@@ -94,6 +96,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void AddressTest()
         {
             Registry registry = new EFRegistry();
@@ -136,6 +139,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void DistLogoTest()
         {
             Registry registry = new EFRegistry();
@@ -157,6 +161,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void EmployeeTest()
         {
             Registry registry = new EFRegistry();
@@ -226,6 +231,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void ShowCompanyTest()
         {
             Registry registry = new EFRegistry();
@@ -314,6 +320,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void Test()
         {
             Registry registry = new EFRegistry();
@@ -372,6 +379,7 @@ namespace asi.asicentral.Tests
 
         }
         [Test]
+        [Ignore("Ignore a test")]
         public void ExcelUploadTest()
         {
             IList<ShowASI> shows = new List<ShowASI>();
@@ -417,6 +425,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void GetProfileUpdateRequest()
         {
             using (var context = new Umbraco_ShowContext())
@@ -427,6 +436,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void SupplierProfileRequest()
         {
             var request = RequestForAttendee(101);
@@ -435,6 +445,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void DistributorProfileRequest()
         {
             var request = RequestForEmployeeAttendee(5183);
@@ -442,6 +453,34 @@ namespace asi.asicentral.Tests
             DeleteDistributorRequest(request.Id);
         }
 
+        [Test]
+        [Ignore("Ignore a test")]
+        public void ProfileUpdateRequestTest()
+        {
+            using (var context = new Umbraco_ShowContext())
+            {
+                var attendee = CreateAttendee();
+                if (attendee != null)
+                {
+                    var request = RequestForAttendee(attendee.Id);
+                    RequestProfile(request.Id);
+                    context.Attendee.Attach(attendee);
+                    context.Attendee.Remove(attendee);
+                    var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.AttendeeId == attendee.Id);
+                    if (profileRequests != null)
+                    {
+                        Assert.AreEqual(profileRequests.AttendeeId, attendee.Id);
+                        profileRequests.AttendeeId = null;
+                    }
+                    context.SaveChanges();
+                    Assert.AreNotEqual(profileRequests.AttendeeId, attendee.Id);
+                    DeleteRequest(profileRequests.Id);
+                }
+            }
+
+        }
+
+        #region Private Methods
         private ShowProfileRequests RequestForAttendee(int attnedeeId)
         {
             using (var context = new Umbraco_ShowContext())
@@ -660,8 +699,8 @@ namespace asi.asicentral.Tests
                         UpdateSource = "Admin",
                         IsUpdate = true,
                         AttendeeImage = "test image path",
-                        ClientLogo="test client logo path",
-                        HostedBuyerEventDetails="Nov 2016, NYc"
+                        ClientLogo = "test client logo path",
+                        HostedBuyerEventDetails = "Nov 2016, NYc"
                     };
                     context.ProfileDistributorData.Add(profileRequiredData);
                     context.SaveChanges();
@@ -759,10 +798,10 @@ namespace asi.asicentral.Tests
                             profileRequestOptionalDetails.UpdateValue = "updateValue" + distributorOptionalLable.Id;
                             context.SaveChanges();
                         }
-                        Assert.IsNotNull(profileRequestOptionalDetails); 
+                        Assert.IsNotNull(profileRequestOptionalDetails);
                     }
                 }
-               
+
             }
         }
 
@@ -784,15 +823,15 @@ namespace asi.asicentral.Tests
         {
             using (var context = new Umbraco_ShowContext())
             {
-                 var distributorOptionLableList = context.ProfileOptionalDataLabel.Where(m => m.IsDistributor == true).ToList();
-                 if (distributorOptionLableList != null && distributorOptionLableList.Count > 0)
-                 {
-                     foreach (var distributorOptionalLable in distributorOptionLableList)
-                     {
-                         var profileRequestOptionalDetails = context.ProfileOptionalDetails.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.ProfileOptionalDataLabelId == distributorOptionalLable.Id);
-                         context.ProfileOptionalDetails.Remove(profileRequestOptionalDetails);
-                     }
-                 }
+                var distributorOptionLableList = context.ProfileOptionalDataLabel.Where(m => m.IsDistributor == true).ToList();
+                if (distributorOptionLableList != null && distributorOptionLableList.Count > 0)
+                {
+                    foreach (var distributorOptionalLable in distributorOptionLableList)
+                    {
+                        var profileRequestOptionalDetails = context.ProfileOptionalDetails.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId && x.ProfileOptionalDataLabelId == distributorOptionalLable.Id);
+                        context.ProfileOptionalDetails.Remove(profileRequestOptionalDetails);
+                    }
+                }
                 var profileRequiredData = context.ProfileDistributorData.FirstOrDefault(x => x.ProfileRequestId == profileRequestsId);
                 context.ProfileDistributorData.Remove(profileRequiredData);
                 var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.Id == profileRequestsId);
@@ -820,33 +859,7 @@ namespace asi.asicentral.Tests
             }
         }
 
-        [Test]
-        public void ProfileUpdateRequestTest()
-        {
-            using (var context = new Umbraco_ShowContext())
-            {
-                var attendee = CreateAttendee();
-                if (attendee != null)
-                {
-                    var request = RequestForAttendee(attendee.Id);
-                    RequestProfile(request.Id);
-                    context.Attendee.Attach(attendee);
-                    context.Attendee.Remove(attendee);
-                    var profileRequests = context.ProfileRequests.FirstOrDefault(x => x.AttendeeId == attendee.Id);
-                    if (profileRequests != null)
-                    {
-                        Assert.AreEqual(profileRequests.AttendeeId, attendee.Id);
-                        profileRequests.AttendeeId = null;
-                    }
-                    context.SaveChanges();
-                    Assert.AreNotEqual(profileRequests.AttendeeId, attendee.Id);
-                    DeleteRequest(profileRequests.Id);
-                }
-            }
-
-        }
-
-        public DataTable GetDataTable()
+        private DataTable GetDataTable()
         {
             ExcelUploadController objExcel = new ExcelUploadController();
             DataTable dt = null;
@@ -1011,6 +1024,7 @@ namespace asi.asicentral.Tests
                 EmployeeId = EmployeeId
             };
             return objShowEmployeeAttendee;
-        }
+        } 
+        #endregion
     }
 }

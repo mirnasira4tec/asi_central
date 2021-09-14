@@ -7,12 +7,13 @@ using StructureMap.Configuration.DSL;
 using System;
 using System.Linq;
 
-namespace asi.asicentral.Tests
+namespace External.Test.Common
 {
     [TestFixture]
     public class ShowFormTest
     {
         [Test]
+        [Ignore("Ignore a test")]
         public void CreateShowFormTest()
         {
             Registry registry = new EFRegistry();
@@ -57,6 +58,7 @@ namespace asi.asicentral.Tests
         }
 
         [Test]
+        [Ignore("Ignore a test")]
         public void GetEmpAttendeeTravelForm()
         {
             Registry registry = new EFRegistry();

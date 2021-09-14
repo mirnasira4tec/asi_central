@@ -1,5 +1,6 @@
 ﻿using asi.asicentral.database.mappings;
 using asi.asicentral.interfaces;
+using asi.asicentral.model.asicentral;
 using asi.asicentral.model.show;
 using asi.asicentral.services;
 using NUnit.Framework;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 namespace External.Test.Show
 {
     [TestFixture]
-    public class ShowContextTest
+    public class AttendeeScheduleTest
     {
         private ObjectService InitializeObjectService()
         {
@@ -108,6 +109,19 @@ namespace External.Test.Show
             #endregion
         }
 
+
+        //private asi.asicentral.model.show ShowSchedule()
+        //{
+        //    return (new RateSupplierImport()
+        //    {
+        //        LastUpdatedBy = "test",
+        //        CreateDateUTC = DateTime.Now,
+        //        UpdateDateUTC = DateTime.Now,
+        //        UpdateSource = "Test Case",
+        //        NumberOfImports = 1,
+        //        IsActive = true,
+        //    });
+        //}
 
         private CompanyProfile _createCompanyProfile(int companyId, int showId, IObjectService objectService)
         {
