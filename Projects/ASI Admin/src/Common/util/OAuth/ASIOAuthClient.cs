@@ -556,7 +556,10 @@ namespace asi.asicentral.oauth
                 if (isCreate || isPasswordReset)
                 {
                     entityUser.Password = user.Password;
-                    entityUser.PasswordHint = user.Password;
+                    if (isCreate)
+                    {
+                        entityUser.PasswordHint = System.Text.RegularExpressions.Regex.Replace(user.Password, @"[^A-Za-z0-9 -]", "" );
+                    }
                     entityUser.PasswordResetRequired = "N";
                 }
                 entityUser.FirstName = user.FirstName;
