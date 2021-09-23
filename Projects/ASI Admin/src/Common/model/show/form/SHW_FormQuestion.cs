@@ -26,6 +26,7 @@ namespace asi.asicentral.model.show.form
         public bool IsAdminOnly { get; set; }
         public string ValidationRule { get; set; }
         public string ValidationMessage { get; set; }
+        public bool IsObsolete { get; set; }
 
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
