@@ -189,52 +189,87 @@ namespace asi.asicentral.oauth
             return rolename;
         }
 
-        public static int AddOrRemoveUserFromRole(string username, string email, string memberType, string memberStatus, bool isAddRole)
+        public static int AddOrRemoveUserFromRole(string username, string email, string memberType, string memberStatus, bool isAddRole, IMemberService memberService =null)
         {
             ILogService logService = LogService.GetLog(typeof(SSO));
             logService.Debug("AddOrRemoveUserFromRole - Start: U-" + username + " Type-" + memberType + " S-" + memberStatus);
             int status = 0;
-            if (!string.IsNullOrEmpty(username))
+            try
             {
-                string rolename = GetRoleName(memberType, memberStatus);
-                if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(rolename))
+                if (!string.IsNullOrEmpty(username))
                 {
-                    IMemberService memberService = ApplicationContext.Current.Services.MemberService;
-                    if (Roles.IsUserInRole(username, rolename))
+                    string rolename = GetRoleName(memberType, memberStatus);
+                    if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(rolename))
                     {
-                        status = 1; // When user already added in role
-                        if (Roles.IsUserInRole(username, "Guest") && string.Compare("Guest", rolename) != 0)
-                            Roles.RemoveUserFromRole(username, "Guest");
+                        if (memberService == null)
+                        {
+                            memberService = ApplicationContext.Current.Services.MemberService;
+                        }
+                        if (Roles.IsUserInRole(username, rolename))
+                        {
+                            status = 1; // When user already added in role
+                            if (Roles.IsUserInRole(username, "Guest") && string.Compare("Guest", rolename) != 0)
+                                Roles.RemoveUserFromRole(username, "Guest");
 
-                        IMember member = memberService.GetByUsername(username);
-                        if (!isAddRole)
+                            IMember member = memberService.GetByUsername(username);
+                            if (!isAddRole)
+                            {
+                                if (member != null)
+                                {
+                                    memberService.Delete(member);
+                                }
+                                else
+                                {
+                                    logService.Error($"AddOrRemoveUserFromRole - Delete Error: could not get member for username '{username}' for deleting");
+                                }
+                                status = 2; // when user is successfully removed from role
+                            }
+                            else if( member == null)
+                            {
+                                logService.Debug($"AddOrRemoveUserFromRole - member is null, need to add user to role: {rolename}");
+                            }
+                            else
+                            {
+                                logService.Debug($"AddOrRemoveUserFromRole - user '{username}' is already in role: {rolename}");
+                                isAddRole = false;
+                            }
+                        }
+                        
+                        if (isAddRole)
                         {
-                            memberService.Delete(member);
-                            status = 2; // when user is successfully removed from role
+                            IMember member = memberService.GetByUsername(username);
+                            if (member == null)
+                            {
+                                logService.Debug($"AddOrRemoveUserFromRole - Adding new member: username '{username}'");
+                                member = memberService.CreateMember(username, email, username, "Member");
+                                if (member != null)
+                                {                                 
+                                    memberService.Save(member);
+                                }
+                                else
+                                {
+                                    logService.Debug($"AddOrRemoveUserFromRole - failed to add new member: username '{username}'");
+                                }
+                            }
+                            IEnumerable<string> roles = memberService.GetAllRoles();
+                            if (member != null)
+                            {
+                                if (roles == null || (roles != null && roles.Count() > 0 && !roles.Contains(rolename)))
+                                    memberService.AddRole(rolename);
+                                memberService.AssignRole(member.Id, rolename);
+                            }
+                            if (Roles.IsUserInRole(username, "Guest") && string.Compare("Guest", rolename) != 0)
+                                Roles.RemoveUserFromRole(username, "Guest");
+                            status = 3; // when user newly added to the role
                         }
                     }
-                    else if (isAddRole)
-                    {
-                        IMember member = memberService.GetByUsername(username);
-                        if (member == null)
-                        {
-                            member = memberService.CreateMember(username, email, username, "Member");
-                            memberService.Save(member);
-                        }
-                        IEnumerable<string> roles = memberService.GetAllRoles();
-                        if (member != null)
-                        {
-                            if (roles == null || (roles != null && roles.Count() > 0 && !roles.Contains(rolename)))
-                                memberService.AddRole(rolename);
-                            memberService.AssignRole(member.Id, rolename);
-                        }
-                        if (Roles.IsUserInRole(username, "Guest") && string.Compare("Guest", rolename) != 0)
-                            Roles.RemoveUserFromRole(username, "Guest");
-                        status = 3; // when user newly added to the role
-                    }
+                    else status = 4; // Username or rolename are empty
+
                 }
-                else status = 4; // Username or rolename are empty
-
+            }
+            catch (Exception ex)
+            {
+                logService.Error("AddOrRemoveUserFromRole - Error:" + ex.Message);
             }
             logService.Debug("AddOrRemoveUserFromRole - End:" + status);
             return status;
