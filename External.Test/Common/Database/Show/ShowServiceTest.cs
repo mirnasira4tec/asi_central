@@ -419,7 +419,7 @@ namespace External.Test.Common
             Assert.AreEqual(supplierCompanyAddresses.ElementAt(0).City, supplierCompanyAddress.CompanyAddresses[0].Address.City);
             Assert.AreEqual(supplierCompanyAddresses.ElementAt(0).Zip, supplierCompanyAddress.CompanyAddresses[0].Address.Zip);
 
-            var attendee = objExcel.UpdateShowCompanyData(dataTable, 0, 4);
+            var attendee = objExcel.UpdateShowCompanyData(dataTable, 0, shows[0]);
             Assert.AreEqual(attendees.ElementAt(0).CompanyId, attendee.Attendees[1].CompanyId);
             Assert.AreEqual(attendees.ElementAt(0).ShowId, attendee.Attendees[1].ShowId);
         }

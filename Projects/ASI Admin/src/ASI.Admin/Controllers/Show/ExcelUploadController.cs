@@ -36,9 +36,10 @@ namespace asi.asicentral.web.Controllers.Show
             return View();
         }
 
-        public ShowCompany UpdateShowCompanyData(DataTable ds, int rowId, int showId = 0, bool fasiliateFlag = false, List<ShowEmployeeAttendee> employeeAttendees = null)
+        public ShowCompany UpdateShowCompanyData(DataTable ds, int rowId, ShowASI show = null, bool fasiliateFlag = false, List<ShowEmployeeAttendee> employeeAttendees = null)
         {
             ShowCompany company = null;
+            var showId = show.Id;
             var asinumber = ds.Rows[rowId]["ASINO"].ToString().Trim();
             var name = ds.Rows[rowId]["Company"].ToString().Trim();
             var memberType = ds.Rows[rowId]["MemberType"].ToString().Trim();
@@ -126,165 +127,19 @@ namespace asi.asicentral.web.Controllers.Show
             }
 
             attendee.CompanyId = company.Id;
+            attendee.Company = company;
             attendee.ShowId = showId;
-            if (ds.Columns.Contains("Sponsor"))
-            {
-                attendee.IsSponsor = Convert.ToBoolean(ds.Rows[rowId]["Sponsor"].ToString().Contains('X')) ? true : false;
-            }
-            if (ds.Columns.Contains("Presentation"))
-            {
-                attendee.IsPresentation = Convert.ToBoolean(ds.Rows[rowId]["Presentation"].ToString().Contains('X')) ? true : false;
-            }
-            if (ds.Columns.Contains("Roundtable"))
-            {
-                attendee.IsRoundTable = Convert.ToBoolean(ds.Rows[rowId]["Roundtable"].ToString().Contains('X')) ? true : false;
-            }
-            if (ds.Columns.Contains("ExhibitOnly"))
-            {
-                attendee.IsExhibitDay = Convert.ToBoolean(ds.Rows[rowId]["ExhibitOnly"].ToString().Contains('X')) ? true : false;
-            }
-            if (ds.Columns.Contains("IsCatalog"))
-            {
-                attendee.IsCatalog = Convert.ToBoolean(ds.Rows[rowId]["IsCatalog"].ToString().Contains('X')) ? true : false;
-            }
-            if (ds.Columns.Contains("BoothNumber"))
-            {
-                attendee.BoothNumber = ds.Rows[rowId]["BoothNumber"].ToString();
-            }
-            if (ds.Columns.Contains("New!"))
-            {
-                var colValue = ds.Rows[rowId]["New!"] != null ? ds.Rows[rowId]["New!"].ToString() : string.Empty;
-                var isYes = false;
-                if (!string.IsNullOrWhiteSpace(colValue))
-                {
-                    isYes = colValue.Substring(0, 1).ToLower() == "y" ? true : false;
-                }
-                attendee.IsNew = isYes;
-            }
-            if (ds.Columns.Contains("Exhibitor Package") && memberType.Equals("supplier", StringComparison.InvariantCultureIgnoreCase))
-            {
-                var colValue = ds.Rows[rowId]["Exhibitor Package"].ToString().ToLower();
-                switch (colValue)
-                {
-                    case "basic":
-                        attendee.ProfilePackageId = 1;
-                        break;
-                    case "high":
-                    case "plus":
-                        attendee.ProfilePackageId = 2;
-                        break;
-                    case "premium":
-                        attendee.ProfilePackageId = 3;
-                        break;
-                    default:
-                        attendee.ProfilePackageId = null;
-                        break;
-                }
-            }
+            attendee.Show = show;
+            _updateExhibitorInfo(ds, rowId, attendee, memberType);
             attendee.IsExisting = true;
             attendee.UpdateSource = "ExcelUploadcontroller-Index";
             attendee.UpdateDate = DateTime.UtcNow;
-
             #endregion
+
             #region update employee data for distributors or fasilitate
             if (company.MemberType == "Distributor" || fasiliateFlag)
             {
-                // update showEmployee
-                var firstName = ds.Rows[rowId]["FirstName"].ToString().Trim();
-                var lastName = ds.Rows[rowId]["LastName"].ToString().Trim();
-                string phone = string.Empty;
-                string email = string.Empty;
-                string loginEmail = string.Empty;
-                if (ds.Columns.Contains("Phone"))
-                {
-                    phone = ds.Rows[rowId]["Phone"].ToString().Trim();
-                }
-                if (ds.Columns.Contains("Email Address"))
-                {
-                    email = ds.Rows[rowId]["Email Address"].ToString().Trim();
-                }
-                if (ds.Columns.Contains("Login Email"))
-                {
-                    loginEmail = ds.Rows[rowId]["Login Email"].ToString().Trim();
-                }
-                if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName))
-                {
-                    ShowEmployee employee = null;
-                    if (!string.IsNullOrEmpty(email))
-                    {
-                        employee = company.Employees.FirstOrDefault(item => !string.IsNullOrEmpty(item.Email) && item.Email.Trim().Equals(email, StringComparison.CurrentCultureIgnoreCase));
-                    }
-                    if (employee == null)
-                    {
-                        employee = company.Employees.FirstOrDefault(item => (item.FirstName.Trim().Equals(firstName, StringComparison.CurrentCultureIgnoreCase) &&
-                                                                             item.LastName.Trim().Equals(lastName, StringComparison.CurrentCultureIgnoreCase)));
-                    }
-
-                    if (employee == null)
-                    {
-                        employee = new ShowEmployee()
-                        {
-                            CreateDate = DateTime.UtcNow,
-                        };
-                        company.Employees.Add(employee);
-                    }
-                    employee.CompanyId = company.Id;
-                    employee.FirstName = firstName;
-                    employee.LastName = lastName;
-                    employee.EPhone = phone;
-                    employee.Email = email;
-                    employee.LoginEmail = loginEmail;
-                    employee.UpdateDate = DateTime.UtcNow;
-                    employee.UpdateSource = "ExcelUploadcontroller-Index";
-
-                    if (fasiliateFlag)
-                    {
-                        var street1 = ds.Columns.Contains("Shipping Address 1") ? ds.Rows[rowId]["Shipping Address 1"].ToString() : string.Empty;
-                        var city = ds.Columns.Contains("Shipping City") ? ds.Rows[rowId]["Shipping City"].ToString() : string.Empty;
-                        var zip = ds.Columns.Contains("Shipping Zip Code") ? ds.Rows[rowId]["Shipping Zip Code"].ToString() : string.Empty;
-                        var state = ds.Columns.Contains("Shipping State") ? ds.Rows[rowId]["Shipping State"].ToString() : string.Empty;
-                        var country = ds.Columns.Contains("Shipping Country") ? ds.Rows[rowId]["Shipping Country"].ToString() : string.Empty;
-                        if (!string.IsNullOrEmpty(street1) && !string.IsNullOrEmpty(city) && !string.IsNullOrEmpty(zip) && !string.IsNullOrEmpty(state))
-                        {
-                            employee.Address = employee.Address ?? new ShowAddress() { CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow };
-                            employee.Address.Street1 = street1;
-                            employee.Address.Street2 = ds.Rows[rowId]["Shipping Address 2"].ToString();
-                            employee.Address.City = city;
-                            employee.Address.Zip = zip;
-                            employee.Address.State = state;
-                            employee.Address.Country = string.IsNullOrEmpty(country) ? "United States" : country;
-                            employee.Address.UpdateSource = "ExcelUploadcontroller-Index";
-                        }
-                    }
-
-                    if (employee.Id == 0 || attendee.Id == 0)
-                        ObjectService.SaveChanges();
-
-                    // update employeeAttendee
-                    var employeeAttendee = attendee.EmployeeAttendees.FirstOrDefault(item => item.EmployeeId == employee.Id);
-                    if (employeeAttendee == null)
-                    {
-                        employeeAttendee = new ShowEmployeeAttendee()
-                        {
-                            CreateDate = DateTime.UtcNow,
-                            UpdateDate = DateTime.UtcNow,
-                            AttendeeId = attendee.Id,
-                            EmployeeId = employee.Id,
-                            UpdateSource = "ExcelUploadcontroller-Index",
-                        };
-
-                        employeeAttendee.Employee = employee;
-                        employeeAttendee.Attendee = attendee;
-
-                        attendee.EmployeeAttendees.Add(employeeAttendee);
-                    }
-                    if (ds.Columns.Contains("PriorityOrder"))
-                    {
-                        employeeAttendee.PriorityOrder = ds.Rows[rowId]["PriorityOrder"].ToString() == string.Empty ? (int?)null : Convert.ToInt32(ds.Rows[rowId]["PriorityOrder"]);
-                    }
-                    if (employeeAttendees != null)
-                        employeeAttendees.Add(employeeAttendee);
-                }
+                _updateDistributorAttendee(ds, rowId, attendee, company, fasiliateFlag, employeeAttendees);
             }
 
             #endregion update distributor data
@@ -467,7 +322,7 @@ namespace asi.asicentral.web.Controllers.Show
                                         return View("../Show/ViewError", objErrors);
                                     }
 
-                                    UpdateShowCompanyData(excelDataTable, i, objShow.Id, fasiliateFlag, employeeAttendees);
+                                    UpdateShowCompanyData(excelDataTable, i, objShow, fasiliateFlag, employeeAttendees);
                                 }
 
                                 ObjectService.SaveChanges();
@@ -1010,5 +865,181 @@ namespace asi.asicentral.web.Controllers.Show
             return countryCode;
         }
 
+        private void _updateExhibitorInfo(DataTable ds, int rowId, ShowAttendee attendee, string memberType)
+        {
+            if (ds.Columns.Contains("Sponsor"))
+            {
+                attendee.IsSponsor = Convert.ToBoolean(ds.Rows[rowId]["Sponsor"].ToString().Contains('X')) ? true : false;
+            }
+            if (ds.Columns.Contains("Presentation"))
+            {
+                attendee.IsPresentation = Convert.ToBoolean(ds.Rows[rowId]["Presentation"].ToString().Contains('X')) ? true : false;
+            }
+            if (ds.Columns.Contains("Roundtable"))
+            {
+                attendee.IsRoundTable = Convert.ToBoolean(ds.Rows[rowId]["Roundtable"].ToString().Contains('X')) ? true : false;
+            }
+            if (ds.Columns.Contains("ExhibitOnly"))
+            {
+                attendee.IsExhibitDay = Convert.ToBoolean(ds.Rows[rowId]["ExhibitOnly"].ToString().Contains('X')) ? true : false;
+            }
+            if (ds.Columns.Contains("IsCatalog"))
+            {
+                attendee.IsCatalog = Convert.ToBoolean(ds.Rows[rowId]["IsCatalog"].ToString().Contains('X')) ? true : false;
+            }
+            if (ds.Columns.Contains("BoothNumber"))
+            {
+                attendee.BoothNumber = ds.Rows[rowId]["BoothNumber"].ToString();
+            }
+            if (ds.Columns.Contains("New!"))
+            {
+                var colValue = ds.Rows[rowId]["New!"] != null ? ds.Rows[rowId]["New!"].ToString() : string.Empty;
+                var isYes = false;
+                if (!string.IsNullOrWhiteSpace(colValue))
+                {
+                    isYes = colValue.Substring(0, 1).ToLower() == "y" ? true : false;
+                }
+                attendee.IsNew = isYes;
+            }
+            if (ds.Columns.Contains("Exhibitor Package") && memberType.Equals("supplier", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var colValue = ds.Rows[rowId]["Exhibitor Package"].ToString().ToLower();
+                switch (colValue)
+                {
+                    case "basic":
+                        attendee.ProfilePackageId = 1;
+                        break;
+                    case "high":
+                    case "plus":
+                        attendee.ProfilePackageId = 2;
+                        break;
+                    case "premium":
+                        attendee.ProfilePackageId = 3;
+                        break;
+                    default:
+                        attendee.ProfilePackageId = null;
+                        break;
+                }
+            }
+
+            if(ds.Columns.Contains("Phone") && attendee.Show.ShowTypeId == 4)
+            {
+                var colValue = ds.Rows[rowId]["Phone"].ToString().ToLower();
+                if (!string.IsNullOrWhiteSpace(colValue))
+                {
+                    attendee.Company.Phone = colValue;
+                }
+            }
+
+            if (ds.Columns.Contains("Website"))
+            {
+                var colValue = ds.Rows[rowId]["Website"].ToString().ToLower();
+                if (!string.IsNullOrWhiteSpace(colValue))
+                {
+                    attendee.Company.WebUrl = colValue;
+                }
+            }
+        }
+
+        private void _updateDistributorAttendee(DataTable ds, int rowId, ShowAttendee attendee, ShowCompany company, 
+                                                bool fasiliateFlag, List<ShowEmployeeAttendee> employeeAttendees = null)
+        {
+            // update showEmployee
+            var firstName = ds.Rows[rowId]["FirstName"].ToString().Trim();
+            var lastName = ds.Rows[rowId]["LastName"].ToString().Trim();
+            string phone = string.Empty;
+            string email = string.Empty;
+            string loginEmail = string.Empty;
+            if (ds.Columns.Contains("Phone"))
+            {
+                phone = ds.Rows[rowId]["Phone"].ToString().Trim();
+            }
+            if (ds.Columns.Contains("Email Address"))
+            {
+                email = ds.Rows[rowId]["Email Address"].ToString().Trim();
+            }
+            if (ds.Columns.Contains("Login Email"))
+            {
+                loginEmail = ds.Rows[rowId]["Login Email"].ToString().Trim();
+            }
+            if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName))
+            {
+                ShowEmployee employee = null;
+                if (!string.IsNullOrEmpty(email))
+                {
+                    employee = company.Employees.FirstOrDefault(item => !string.IsNullOrEmpty(item.Email) && item.Email.Trim().Equals(email, StringComparison.CurrentCultureIgnoreCase));
+                }
+                if (employee == null)
+                {
+                    employee = company.Employees.FirstOrDefault(item => (item.FirstName.Trim().Equals(firstName, StringComparison.CurrentCultureIgnoreCase) &&
+                                                                            item.LastName.Trim().Equals(lastName, StringComparison.CurrentCultureIgnoreCase)));
+                }
+
+                if (employee == null)
+                {
+                    employee = new ShowEmployee()
+                    {
+                        CreateDate = DateTime.UtcNow,
+                    };
+                    company.Employees.Add(employee);
+                }
+                employee.CompanyId = company.Id;
+                employee.FirstName = firstName;
+                employee.LastName = lastName;
+                employee.EPhone = phone;
+                employee.Email = email;
+                employee.LoginEmail = loginEmail;
+                employee.UpdateDate = DateTime.UtcNow;
+                employee.UpdateSource = "ExcelUploadcontroller-Index";
+
+                if (fasiliateFlag)
+                {
+                    var street1 = ds.Columns.Contains("Shipping Address 1") ? ds.Rows[rowId]["Shipping Address 1"].ToString() : string.Empty;
+                    var city = ds.Columns.Contains("Shipping City") ? ds.Rows[rowId]["Shipping City"].ToString() : string.Empty;
+                    var zip = ds.Columns.Contains("Shipping Zip Code") ? ds.Rows[rowId]["Shipping Zip Code"].ToString() : string.Empty;
+                    var state = ds.Columns.Contains("Shipping State") ? ds.Rows[rowId]["Shipping State"].ToString() : string.Empty;
+                    var country = ds.Columns.Contains("Shipping Country") ? ds.Rows[rowId]["Shipping Country"].ToString() : string.Empty;
+                    if (!string.IsNullOrEmpty(street1) && !string.IsNullOrEmpty(city) && !string.IsNullOrEmpty(zip) && !string.IsNullOrEmpty(state))
+                    {
+                        employee.Address = employee.Address ?? new ShowAddress() { CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow };
+                        employee.Address.Street1 = street1;
+                        employee.Address.Street2 = ds.Rows[rowId]["Shipping Address 2"].ToString();
+                        employee.Address.City = city;
+                        employee.Address.Zip = zip;
+                        employee.Address.State = state;
+                        employee.Address.Country = string.IsNullOrEmpty(country) ? "United States" : country;
+                        employee.Address.UpdateSource = "ExcelUploadcontroller-Index";
+                    }
+                }
+
+                if (employee.Id == 0 || attendee.Id == 0)
+                    ObjectService.SaveChanges();
+
+                // update employeeAttendee
+                var employeeAttendee = attendee.EmployeeAttendees.FirstOrDefault(item => item.EmployeeId == employee.Id);
+                if (employeeAttendee == null)
+                {
+                    employeeAttendee = new ShowEmployeeAttendee()
+                    {
+                        CreateDate = DateTime.UtcNow,
+                        UpdateDate = DateTime.UtcNow,
+                        AttendeeId = attendee.Id,
+                        EmployeeId = employee.Id,
+                        UpdateSource = "ExcelUploadcontroller-Index",
+                    };
+
+                    employeeAttendee.Employee = employee;
+                    employeeAttendee.Attendee = attendee;
+
+                    attendee.EmployeeAttendees.Add(employeeAttendee);
+                }
+                if (ds.Columns.Contains("PriorityOrder"))
+                {
+                    employeeAttendee.PriorityOrder = ds.Rows[rowId]["PriorityOrder"].ToString() == string.Empty ? (int?)null : Convert.ToInt32(ds.Rows[rowId]["PriorityOrder"]);
+                }
+                if (employeeAttendees != null)
+                    employeeAttendees.Add(employeeAttendee);
+            }
+        }
     }
 }

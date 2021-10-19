@@ -31,3 +31,7 @@ REFERENCES [dbo].[ATT_ShowSchedule] ([ShowScheduleId])
 GO
 
 --------------------------- ASIEVENT-147 - End -------------------------------------------------------
+---------------------BEGIN-----------------------------
+Alter table ATT_Company
+Add Phone [nvarchar] (50) NULL
+---------------------END--------------------

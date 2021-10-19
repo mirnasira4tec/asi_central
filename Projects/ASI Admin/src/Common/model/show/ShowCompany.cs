@@ -26,6 +26,7 @@ namespace asi.asicentral.model.show
         public string ASINumber { get; set; }
         public string SecondaryASINo { get; set; }
         public string LogoUrl { get; set; }
+        public string Phone { get; set; }
         public virtual IList<ShowCompanyAddress> CompanyAddresses { get; set; }
         public virtual IList<ShowEmployee> Employees { get; set; }
         public virtual IList<ShowAttendee> Attendees { get; set; }
