@@ -298,45 +298,49 @@ namespace asi.asicentral.web.Controllers.asicentral
             var search = Request.Form.GetValues("search[value]").FirstOrDefault();
             //Find Order Column
             var sortColumn = Request.Form.GetValues("columns[" + Request.Form.GetValues("order[0][column]").FirstOrDefault() + "][name]").FirstOrDefault();
-            var sortColumnDir = Request.Form.GetValues("order[0][dir]").FirstOrDefault();
+
+            // get ratings for the requested type
             IQueryable<RateDistributor> forms = null;
             IQueryable<RateSupplierFormDetail> details = null;
             var distributors = GetFilterQuery(importId, reportType, search, out forms, out details);
-            int pageSize = length != null ? Convert.ToInt32(length) : 0;
-            int skip = start != null ? Convert.ToInt32(start) : 0;
-            int recordsTotal = 0;
+
+            // get sorted ratings
+            int recordsTotal = 0;                
             IQueryable result = null;
-            if (distributors != null)
-            { 
-                recordsTotal = (from dist in distributors
-                                join rating in details
-                             on dist.RateSupplierFormId equals rating.RateSupplierFormId
-                                select 1).Count();
-                if (forms != null && details != null)
+            if (distributors != null && details != null)
+            {
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+                recordsTotal = details.Count();
+                var sortedRatings = _getSortedRatings(details, sortColumn);
+                var ratings = sortedRatings.Skip(skip).Take(pageSize).ToList();
+                var summaries = new List<RateSupplierSummaryModel>();
+                foreach ( var rating in ratings) 
                 {
-                    var summaries = (from dist in forms
-                                     join rating in details
-                                     on dist.RateSupplierFormId equals rating.RateSupplierFormId
-                                     select new RateSupplierSummaryModel
-                                     {
-                                         DistASINum = dist.DistASINum,
-                                         DistName = dist.DistCompanyName,
-                                         SupASINum = rating.SupASINum,
-                                         SupCompanyName = rating.SupCompanyName,
-                                         NumOfTransImport = rating.NumOfTransImport,
-                                         NumOfTransSubmit = rating.NumOfTransSubmit,
-                                         TransDifference = Math.Abs(rating.NumOfTransImport - rating.NumOfTransSubmit),
-                                         OverallRating = rating.OverallRating.HasValue ? rating.OverallRating.Value : 0,
-                                         ProdQualityRating = rating.ProdQualityRating.HasValue ? rating.ProdQualityRating.Value : 0,
-                                         CommunicationRating = rating.CommunicationRating.HasValue ? rating.CommunicationRating.Value : 0,
-                                         DeliveryRating = rating.DeliveryRating.HasValue ? rating.DeliveryRating.Value : 0,
-                                         ProbResolutionRating = rating.ProbResolutionRating.HasValue ? rating.ProbResolutionRating.Value : 0,
-                                         ImprintingRating = rating.ImprintingRating.HasValue ? rating.ImprintingRating.Value : 0,
-                                     }).OrderBy(sortColumn + " " + sortColumnDir).Skip(skip).Take(pageSize);
-                   
-                    result = summaries.AsQueryable();
+                    var dist = distributors.FirstOrDefault(d => d.RateSupplierFormId == rating.RateSupplierFormId);
+                    if( dist != null)
+                    {
+                        var supRatings = new RateSupplierSummaryModel
+                        {
+                            DistASINum = dist.DistASINum,
+                            DistName = dist.DistCompanyName,
+                            SupASINum = rating.SupASINum,
+                            SupCompanyName = rating.SupCompanyName,
+                            NumOfTransImport = rating.NumOfTransImport,
+                            NumOfTransSubmit = rating.NumOfTransSubmit,
+                            TransDifference = Math.Abs(rating.NumOfTransImport - rating.NumOfTransSubmit),
+                            OverallRating = rating.OverallRating.HasValue ? rating.OverallRating.Value : 0,
+                            ProdQualityRating = rating.ProdQualityRating.HasValue ? rating.ProdQualityRating.Value : 0,
+                            CommunicationRating = rating.CommunicationRating.HasValue ? rating.CommunicationRating.Value : 0,
+                            DeliveryRating = rating.DeliveryRating.HasValue ? rating.DeliveryRating.Value : 0,
+                            ProbResolutionRating = rating.ProbResolutionRating.HasValue ? rating.ProbResolutionRating.Value : 0,
+                            ImprintingRating = rating.ImprintingRating.HasValue ? rating.ImprintingRating.Value : 0,
+                        };
+                        summaries.Add(supRatings);
+                    }
                 }
-        }
+                result = summaries.AsQueryable(); 
+            }
             return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = result == null ? Enumerable.Empty<RateSupplierSummaryModel>().AsQueryable() : result }, JsonRequestBehavior.AllowGet);
         }
 
@@ -472,6 +476,51 @@ namespace asi.asicentral.web.Controllers.asicentral
             return distributors;
         }
 
+        private IQueryable<RateSupplierFormDetail> _getSortedRatings(IQueryable<RateSupplierFormDetail> allRatings, string sortBy)
+        {
+            var sortedRatings = allRatings;
+            switch (sortBy)
+            {
+                case "DistASINum":
+                    sortedRatings = allRatings.OrderBy(d => d.RateSupplierForm.DistASINum);
+                    break;
+                case "DistName":
+                    sortedRatings = allRatings.OrderBy(d => d.RateSupplierForm.DistCompanyName);
+                    break;
+                case "SupASINum":
+                    sortedRatings = allRatings.OrderBy(d => d.SupASINum);
+                    break;
+                case "SupCompanyName":
+                    sortedRatings = allRatings.OrderBy(d => d.SupCompanyName);
+                    break;
+                case "NumOfTransImport":
+                    sortedRatings = allRatings.OrderBy(d => d.NumOfTransImport);
+                    break;
+                case "NumOfTransSubmit":
+                    sortedRatings = allRatings.OrderBy(d => d.NumOfTransSubmit);
+                    break;
+                case "OverallRating":
+                    sortedRatings = allRatings.OrderBy(d => d.OverallRating);
+                    break;
+                case "ProdQualityRating":
+                    sortedRatings = allRatings.OrderBy(d => d.ProdQualityRating);
+                    break;
+                case "CommunicationRating":
+                    sortedRatings = allRatings.OrderBy(d => d.CommunicationRating);
+                    break;
+                case "DeliveryRating":
+                    sortedRatings = allRatings.OrderBy(d => d.DeliveryRating);
+                    break;
+                case "ImprintingRating":
+                    sortedRatings = allRatings.OrderBy(d => d.ImprintingRating);
+                    break;
+                case "ProbResolutionRating":
+                    sortedRatings = allRatings.OrderBy(d => d.ProbResolutionRating);
+                    break;
+            };
+
+            return sortedRatings;
+        }
         private class RateDistributor
         {
             public int RateSupplierFormId { get; set; }
