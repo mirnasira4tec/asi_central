@@ -409,7 +409,7 @@ namespace asi.asicentral.web.Controllers.asicentral
                             var formRatings = ratings.Where(q => q.RateSupplierFormId == form.RateSupplierFormId).ToList();
                             foreach (var rating in formRatings)
                             {
-                                line = string.Join(",", form.DistASINum, form.DistCompanyName, rating.SupASINum, rating.NumOfTransImport, rating.NumOfTransSubmit, Math.Abs(rating.NumOfTransImport - rating.NumOfTransSubmit), rating.OverallRating, rating.ProdQualityRating, rating.CommunicationRating, rating.DeliveryRating, rating.ImprintingRating);
+                                line = string.Join(",", form.DistASINum, form.DistCompanyName, rating.SupASINum, rating.SupCompanyName, rating.NumOfTransImport, rating.NumOfTransSubmit, Math.Abs(rating.NumOfTransImport - rating.NumOfTransSubmit), rating.OverallRating, rating.ProdQualityRating, rating.CommunicationRating, rating.DeliveryRating, rating.ProbResolutionRating, rating.ImprintingRating); csvString.AppendLine(line);
                                 csvString.AppendLine(line);
                             }
                         }
