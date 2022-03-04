@@ -14,6 +14,7 @@ namespace asi.asicentral.model.show
         public int? ShowId { get; set; }
         public string Status { get; set; }
         public string SubmitBy { get; set; }
+        public string SenderIP { get; set; }
         public DateTime CreateDateUTC { get; set; }
         public DateTime UpdateDateUTC { get; set; }
         public string UpdateSource { get; set; }
