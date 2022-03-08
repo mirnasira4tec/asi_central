@@ -31,7 +31,8 @@ namespace asi.asicentral.web.Controllers.asicentral
         public ActionResult CatalogContactImport()
         {
             CatalogContactImportModel importModel = new CatalogContactImportModel();
-            var imports = ObjectService.GetAll<CatalogContactImport>()?.OrderByDescending(m => m.CreateDateUTC);
+            var imports = ObjectService.GetAll<CatalogContactImport>().Where(q => q.IsActive)?.OrderByDescending(m => m.CreateDateUTC);
+
             var industries = imports.Select(m => m.IndustryName).Distinct();
             importModel.Industries = new List<SelectListItem>();
             importModel.Industries.Add(new SelectListItem { Value = "", Text = "--Select--" });
