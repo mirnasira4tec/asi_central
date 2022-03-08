@@ -186,7 +186,7 @@ namespace asi.asicentral.web.Controllers.forms
                 }
             }
             //assume first time if no dates specified
-            if (dateStart == null) dateStart = DateTime.Now.AddDays(-1);
+            if (dateStart == null) dateStart = DateTime.Now.AddDays(-7);
             if (dateEnd == null) dateEnd = DateTime.Now;
             else dateEnd = dateEnd.Value.Date + new TimeSpan(23, 59, 59);
             DateTime dateStartParam = dateStart.Value.ToUniversalTime();
