@@ -8,6 +8,7 @@ using asi.asicentral.util.show;
 using asi.asicentral.web.models.show;
 using asi.asicentral.web.Models;
 using ClosedXML.Excel;
+using ExcelDataReader;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -15,6 +16,7 @@ using System.Data;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Linq.Dynamic;
 using System.Net.Mail;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -455,6 +457,91 @@ namespace asi.asicentral.web.Controllers.Show
             SendMigrationNotificationEmail(createdCompanyUserCollection, "Asicomp migration report – updating password accounts");
 
             return View("~/Views/Show/ExcelUpload/MigrateCompanies.cshtml", companyUserCollection);
+        }
+
+
+        [HttpPost]
+        public ActionResult UploadMobileIdsExcel(int showId, HttpPostedFileBase file)
+        {
+            LogService log = LogService.GetLog(this.GetType());
+            var startdate = DateTime.Now;
+            log.Debug("UploadMobileIdsExcel - start process");
+            if (file != null && showId != 0)
+            {
+                log.Debug("UploadMobileIdsExcel - start Process the file");
+                if (file.FileName.EndsWith(".xls") || file.FileName.EndsWith(".xlsx"))
+                {
+                    var mobileAppDict = new Dictionary<string, string>();
+                    var emails = new List<string>();
+                    try
+                    {
+                        using (var reader = ExcelReaderFactory.CreateReader(file.InputStream))
+                        {
+                            var dataSet = reader.AsDataSet(new ExcelDataSetConfiguration
+                            {
+                                ConfigureDataTable = _ => new ExcelDataTableConfiguration
+                                {
+                                    UseHeaderRow = true // To set First Row As Column Names  
+                                }
+                            });
+
+                            if (dataSet.Tables.Count > 0)
+                            {
+                                log.Debug("UploadMobileIdsExcel - Start main loop for sheets");
+                                foreach (DataTable sheetData in dataSet.Tables)
+                                {
+                                    if (sheetData.Rows.Count > 0 && sheetData != null)
+                                    {
+                                        foreach (DataRow dataRow in sheetData.Rows)
+                                        {
+                                            if (dataRow.ItemArray.All(x => string.IsNullOrEmpty(x?.ToString()))) continue;
+
+                                            var uniqueId = dataRow["Unique ID"]?.ToString();
+                                            var email = dataRow["Email"]?.ToString();
+
+                                            if (mobileAppDict.ContainsKey(email))
+                                            {
+                                                mobileAppDict[email] = uniqueId;
+                                            }
+                                            else
+                                            {
+                                                mobileAppDict.Add(email, uniqueId);
+                                            }
+                                        }
+                                        emails = UpdateMobileAppIds(ObjectService, showId, mobileAppDict);
+                                        if (emails.Any())
+                                        {
+                                            TempData["EmailList"] = emails;
+                                        }
+                                        TempData["SuccessMessage"] = "File Upload Successfully";
+                                    }
+                                    else
+                                    {
+                                        TempData["ErrorMessage"] = "File does not contain any data.";
+                                    }
+                                }
+                                log.Debug("UploadMobileIdsExcel - end main loop for sheets - " + (DateTime.Now - startdate).TotalMilliseconds);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Debug("Exception while importing the file, exception message: " + ex.Message);
+                        TempData["ErrorMessage"] = "Error! Please Try Again";
+                    }
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Please upload  Excel file in format .xls or .xlsx ";
+                }
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Please select file to upload.";
+            }
+
+            log.Debug("UploadMobileIdsExcel - end process - " + (DateTime.Now - startdate).TotalMilliseconds);
+            return RedirectToAction("GetAttendeeCompany", "ShowCompany", new { showId = showId });
         }
 
         private void SendMigrationNotificationEmail(CompanyUserCollection infoCollection, string subject)
@@ -922,7 +1009,7 @@ namespace asi.asicentral.web.Controllers.Show
                 }
             }
 
-            if(ds.Columns.Contains("Phone") && attendee.Show.ShowTypeId == 4)
+            if (ds.Columns.Contains("Phone") && attendee.Show.ShowTypeId == 4)
             {
                 var colValue = ds.Rows[rowId]["Phone"].ToString().ToLower();
                 if (!string.IsNullOrWhiteSpace(colValue))
@@ -941,7 +1028,7 @@ namespace asi.asicentral.web.Controllers.Show
             }
         }
 
-        private void _updateDistributorAttendee(DataTable ds, int rowId, ShowAttendee attendee, ShowCompany company, 
+        private void _updateDistributorAttendee(DataTable ds, int rowId, ShowAttendee attendee, ShowCompany company,
                                                 bool fasiliateFlag, List<ShowEmployeeAttendee> employeeAttendees = null)
         {
             // update showEmployee
@@ -1040,6 +1127,47 @@ namespace asi.asicentral.web.Controllers.Show
                 if (employeeAttendees != null)
                     employeeAttendees.Add(employeeAttendee);
             }
+        }
+
+        public List<string> UpdateMobileAppIds(IObjectService objectService, int showId, Dictionary<string, string> mobileAppIdEmails)
+        {
+            if (objectService == null)
+            {
+                objectService = ObjectService;
+            }
+            var emailsMissignMobileId = new List<string>();
+            if (showId != 0)
+            {
+                if (mobileAppIdEmails.Any())
+                {
+                    var employeeAttendees = objectService.GetAll<ShowEmployeeAttendee>().Where(q => q.Attendee.ShowId == showId).ToList();
+                    foreach (var item in mobileAppIdEmails)
+                    {
+                        if (!string.IsNullOrEmpty(item.Key))
+                        {
+                            var empAtt = employeeAttendees.Where(q => q.Employee.Email == item.Key).FirstOrDefault();
+                            if (empAtt == null)
+                            {
+                                continue;
+                            }
+                            empAtt.MobileAppID = item.Value;
+                            empAtt.UpdateDate = DateTime.UtcNow;
+                            empAtt.UpdateSource = "ExcelUploadcontroller-UploadMobileIdsExcel";
+                        }
+                    }
+                    objectService.SaveChanges();
+
+                    var mobileAppIdMissingEmails = objectService.GetAll<ShowEmployeeAttendee>()
+                                                                .Where(att => att.Attendee.ShowId == showId && att.MobileAppID == null)
+                                                                .Select(s => s.Employee)
+                                                                .Select(s => s.Email).ToList();
+                    if (mobileAppIdMissingEmails.Any())
+                    {
+                        emailsMissignMobileId = mobileAppIdMissingEmails;
+                    }
+                }
+            }
+            return emailsMissignMobileId;
         }
     }
 }

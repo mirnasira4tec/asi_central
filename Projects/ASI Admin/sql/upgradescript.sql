@@ -35,3 +35,8 @@ GO
 Alter table ATT_Company
 Add Phone [nvarchar] (50) NULL
 ---------------------END--------------------
+--------------------------- ASIEVENT-252 -------------------------------------------------------
+---------------------BEGIN-----------------------------
+Alter table ATT_EmployeeAttendee
+Add MobileAppID [nvarchar] (100) NULL
+---------------------END--------------------

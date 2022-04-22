@@ -3,15 +3,54 @@
 @model ShowCompaniesModel
 @{
     Layout = "~/Views/Show/Shared/_Layout.cshtml";
+    var valueAvailable = Model.ShowAttendees.Count == 0 ? false : true;
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="dvSuccess" class="alert alert-block alert-success" style="padding-top:12px;margin-top:15px;">@Html.Raw(TempData["SuccessMessage"])</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div id="dvErr" class="alert alert-danger" style="padding-top:12px;margin-top:15px;">@Html.Raw(TempData["ErrorMessage"])</div>
 }
 <h1>Company Attendee List</h1>
+@using (Html.BeginForm("UploadMobileIdsExcel", "ExcelUpload", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="hidden" id="showId" name="showId" value="@Model.ShowId" />
+    <div id="ImportExcel" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 id="myModalLabel1">Import Excel</h3>
+        </div>
+        <div class="modal-body">
+            <input type="file" id="fileImport" name="file" multiple="multiple" />
+        </div>
+        <div class="modal-footer">
+            <input class="btn btn-primary" type="submit" id="btnExcel" value="Import" />
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        </div>
+    </div>
+}
+
 <div>
     @if (Model.Show != null)
     {
         <h2 class="pull-left">@Model.Show.Name (@Model.Show.StartDate.ToString("MMM") @Model.Show.StartDate.Day.ToString() - @Model.Show.EndDate.ToString("MMM") @Model.Show.EndDate.Day.ToString()) </h2>
     }
-    <span class="pull-right"><a href="/Show/ValidateAttendeeEmails/@Model.ShowId" class="btn btn-red">Validate Attendee Emails</a>&nbsp;<a href="/showCompany/AddCompaniesToShow?showId=@Model.ShowId" class="btn btn-red">Add Attendees </a></span>
+</div>
+<br />
+<br />
+<div>
+    @if (valueAvailable)
+    {
+        <a href="#ImportExcel" class="modal-link" data-toggle="modal">
+            <img src="/images/upload.png" title="Excel Import" /> Upload MobileAppIds Excel
+        </a>
+        <span class="pull-right"><a href="/Show/ValidateAttendeeEmails/@Model.ShowId" class="btn btn-red">Validate Attendee Emails</a></span>
+    }
 
+<span class="pull-right"> <a href="/showCompany/AddCompaniesToShow?showId=@Model.ShowId" class="btn btn-red">Add Attendees</a>&nbsp;</span>
 </div>
 <br />
 <br />
@@ -125,11 +164,37 @@
 
     </tbody>
 </table>
+@if (TempData["EmailList"] != null)
+{
+    var emailsList = TempData["EmailList"] as List<string>;
+    <div id="EmailList" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 id="myModalLabel1">List of Emails Missing Mobile AppIds </h3>
+        </div>
+        <div class="modal-body">
+            @foreach (var email in emailsList)
+            {
+                <p>@email</p>
+            }
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        </div>
+    </div>
+}
 <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
 @section scripts {
     <script src="~/Scripts/jquery.dataTables-1.10.3.min.js"></script>
     <script type="text/javascript">
-        $('a.delete').click(function () {
+
+ $(document).ready(function () {
+  var hasData  =  @Html.Raw(Json.Encode(TempData["EmailList"]));
+    if (hasData) {
+        $('#EmailList').modal('show');
+    }
+});
+ $('a.delete').click(function () {
             var confirms = confirm("Are you sure you want to delete the company?");
             if (confirms)
                 return true

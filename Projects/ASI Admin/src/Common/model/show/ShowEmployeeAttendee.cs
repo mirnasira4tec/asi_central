@@ -18,6 +18,7 @@ namespace asi.asicentral.model.show
         public int? PriorityOrder { get; set; }
         public int Team { get; set; } = 1;
         public bool? HasReviewedGuidelines { get; set; }
+        public string MobileAppID { get; set; }
         public virtual ShowAttendee Attendee { get; set; }
         public virtual ShowEmployee Employee { get; set; }
         public virtual IList<ShowProfileRequests> ProfileRequests { get; set; }
