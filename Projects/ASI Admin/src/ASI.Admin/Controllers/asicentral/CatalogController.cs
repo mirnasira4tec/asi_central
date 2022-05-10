@@ -1334,6 +1334,7 @@ namespace asi.asicentral.web.Controllers.asicentral
             #region Saving Data In Database
             try
             {
+                import.UpdateDateUTC = DateTime.Now;
                 ObjectService.SaveChanges();
                 if (isOtherIdustry)
                 {

@@ -210,7 +210,7 @@ namespace asi.asicentral.web.Controllers.forms
             var form = new FormInstanceModel();
             if (id.HasValue)
             {
-                form.AsicentralForm = StoreService.GetAll<AsicentralFormInstance>().Where(f => f.Id == id.Value).FirstOrDefault();
+                form.AsicentralForm = StoreService.GetAll<AsicentralFormInstance>("FormType;DataValues.Question").Where(f => f.Id == id.Value).FirstOrDefault();
                 if (!string.IsNullOrEmpty(form.AsicentralForm.CompanyConstituentId))
                 {
                     form.Company = PersonifyService.GetPersonifyCompanyInfo(form.AsicentralForm.CompanyConstituentId, 0);
@@ -507,39 +507,69 @@ namespace asi.asicentral.web.Controllers.forms
         private ActionResult _downloadFormCSV(IQueryable<AsicentralFormInstance> formInstanceQuery)
         {
             var columnNames = string.Empty;
-            var formTypeName = formInstanceQuery.FirstOrDefault()?.FormType.Name;
-            columnNames = string.Join(",", formInstanceQuery.FirstOrDefault().Values.Where(n => n.Name != "IPAddress").Select(n => n.Name));
-            var isAddImpressionForm = formTypeName == "ASI AD Impression Study";
-            if (isAddImpressionForm)
-            {
-                columnNames = "Date," + columnNames;
-            }
+            var formTypeName = string.Empty;
             var csvString = new StringBuilder();
-            csvString.AppendLine(columnNames);
+
             if (formInstanceQuery != null && formInstanceQuery.Count() > 0)
             {
-                foreach (var instance in formInstanceQuery.ToList())
+                var firstInstance = formInstanceQuery.FirstOrDefault();
+                if (firstInstance != null)
                 {
-                    if (instance.Values != null && instance.Values.Any())
+                    formTypeName = formInstanceQuery.FirstOrDefault()?.FormType.Name;
+                    var isAddImpressionForm = formTypeName == "ASI AD Impression Study";
+                    var isNewForm = firstInstance.DataValues != null && firstInstance.DataValues.Count() > 0;
+                    if (isNewForm && firstInstance.FormType != null && firstInstance.FormType.FormQuestions != null)
                     {
-                        var line = string.Empty;
-                        var email = instance.Values?.Where(v => v.Name == "Email").FirstOrDefault()?.Value;
-                        if (!string.IsNullOrWhiteSpace(email))
+                        columnNames = string.Join(",", firstInstance.FormType.FormQuestions.OrderBy(q => q.Sequence).Select(q => q.Description));
+                    }
+                    else
+                    {
+                        columnNames = string.Join(",", formInstanceQuery.FirstOrDefault().Values.Where(n => n.Name != "IPAddress").Select(n => n.Name));                        
+                        if (isAddImpressionForm)
                         {
-                            foreach (var value in instance.Values)
+                            columnNames = "Date," + columnNames;
+                        }
+                    }
+                    csvString.AppendLine(columnNames);
+
+                    foreach (var instance in formInstanceQuery.ToList())
+                    {
+                        if (instance.Values != null && instance.Values.Any())
+                        {
+                            var line = string.Empty;
+                            var email = instance.Values?.Where(v => v.Name == "Email").FirstOrDefault()?.Value;
+                            if (!string.IsNullOrWhiteSpace(email))
                             {
-                                if (value.Name != "IPAddress")
+                                foreach (var value in instance.Values)
+                                {
+                                    if (value.Name != "IPAddress")
+                                    {
+                                        var data = Utility.ParseCSVValue(value.Value);
+                                        line += data + ",";
+                                    }
+                                }
+                                line = line.Remove(line.Length - 1, 1);
+                                if (isAddImpressionForm)
+                                {
+                                    line = $"{ instance.CreateDate.ToString("MM/dd/yyyy: hh:mm tt")},{line}";
+                                }
+                                csvString.AppendLine(line);
+                            }
+                        }
+                        else if (instance.DataValues != null && instance.DataValues.Any())
+                        {
+                            var line = string.Empty;
+                            var email = instance.Email;
+                            if (!string.IsNullOrWhiteSpace(email))
+                            {
+                                foreach (var value in instance.DataValues)
                                 {
                                     var data = Utility.ParseCSVValue(value.Value);
                                     line += data + ",";
                                 }
+                                line = line.Remove(line.Length - 1, 1);
+                                csvString.AppendLine(line);
                             }
-                            line = line.Remove(line.Length - 1, 1);
-                            if (isAddImpressionForm)
-                            {
-                                line = $"{ instance.CreateDate.ToString("MM/dd/yyyy: hh:mm tt")},{line}";
-                            }
-                            csvString.AppendLine(line);
                         }
                     }
                 }

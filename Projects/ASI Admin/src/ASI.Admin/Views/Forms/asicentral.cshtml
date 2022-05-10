@@ -7,7 +7,7 @@
     var formTypeName = string.Empty;
     var formTypeId = Request["FormType"];
     var showDownload = false;
-    if(Model!=null && Model.AsicentralForms!=null && Model.AsicentralForms.Any())
+    if (Model != null && Model.AsicentralForms != null && Model.AsicentralForms.Any())
     {
         showDownload = Model.AsicentralForms.FirstOrDefault().FormType.Name != "Distributor Join Now Form" ? true : false;
     }
@@ -36,11 +36,11 @@
 <br />
 @if (!string.IsNullOrWhiteSpace(Request["FormType"]) && showDownload)
 {
-<div>
-    <span class="pull-right"><button class="btn btn-red" onclick="downLoadExcel()">Download</button></span>
-</div>
-<br />
-<br />
+    <div>
+        <span class="pull-right"><button class="btn btn-red" onclick="downLoadExcel()">Download</button></span>
+    </div>
+    <br />
+    <br />
 }
 <table class="table table-bordered table-condensed table-striped">
     <thead>
@@ -57,8 +57,26 @@
         @foreach (AsicentralFormInstance form in @Model.AsicentralForms)
         {
             var ccInfo = string.Empty;
-            var comanpayField = form.Values.FirstOrDefault(n => n.Name == AsicentralFormValue.COMPANY_NAME) ?? form.Values.FirstOrDefault(n => n.Name == "CompanyName");
-            var companyName = comanpayField != null ? comanpayField.Value : string.Empty;
+            var companyName = string.Empty;
+            if (form.Values != null && form.Values.Count() > 0)
+            {
+                var comanpayField = form.Values.FirstOrDefault(n => n.Name == AsicentralFormValue.COMPANY_NAME) ?? form.Values.FirstOrDefault(n => n.Name == "CompanyName");
+                companyName = comanpayField != null ? comanpayField.Value : string.Empty;
+            }
+            else if (form != null && form.DataValues != null && form.DataValues.Count() > 0 && form.FormType != null && form.FormType.FormQuestions != null) /* New Form with Form Questions */
+            {
+                var companyQuestion = form.FormType.FormQuestions.Where(q => q.Name == AsicentralFormValue.COMPANY_NAME).FirstOrDefault();
+                if (companyQuestion != null)
+                {
+                    var comanpayField = form.DataValues.FirstOrDefault(q => q.QuestionId == companyQuestion.Id);
+                    if (comanpayField != null)
+                    {
+                        companyName = comanpayField.Value;
+                    }
+                }
+
+
+            }
             if (form.Status == "Submitted")
             {
                 if (form.Values.FirstOrDefault(n => n.Name == AsicentralFormValue.CC_HOLDER_NAME) != null)
@@ -86,7 +104,7 @@
     <script src="/Scripts/asi.js"></script>
     <script>
         $('input[data-type*="date"]').datepicker();
-        function downLoadExcel(){
+        function downLoadExcel() {
             var input = $("<input>")
                 .attr("type", "hidden")
                 .attr("name", "command").val("download");
@@ -94,5 +112,5 @@
             $('#asicentralForm').submit();
         }
     </script>
-   
+
 }
