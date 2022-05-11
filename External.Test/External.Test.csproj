@@ -313,6 +313,7 @@
     <Compile Include="ASIOAuthClientTests.cs" />
     <Compile Include="Common\ASIOAuthClientTests.cs" />
     <Compile Include="Common\Database\Asicentral\AsicentralRateSupplierTest.cs" />
+    <Compile Include="Common\Database\Asicentral\ResearchDatabaseTest.cs" />
     <Compile Include="Show\ShowScheduleTest.cs" />
     <Compile Include="Common\Database\Asicentral\CatalogTest.cs" />
     <Compile Include="Common\Database\Show\ShowFormTest.cs" />

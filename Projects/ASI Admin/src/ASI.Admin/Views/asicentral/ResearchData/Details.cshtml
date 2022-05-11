@@ -1,0 +1,51 @@
+﻿@using asi.asicentral.model.asicentral
+@model ResearchImport
+@{
+    ViewBag.Title = "Research Data Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div tabindex="-1"><a href="/ResearchData/Index">Back to All Uploads </a></div>
+<br />
+<div>
+    <h4>Research Data Details</h4>
+    <h5>Name:  @Model.Name</h5>
+    <h5>Last Updated By:  @Model.LastUpdatedBy</h5>
+    <h5>Create Date:  @Model.CreateDateUTC</h5>
+    <h5>Update Date:  @Model.UpdateDateUTC</h5>
+</div>
+<br />
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Visual</th>
+            <th>Year</th>
+            <th>Product</th>
+            <th>Region</th>
+            <th>Country</th>
+            <th>State</th>
+            <th>Industry</th>
+            <th>Gender</th>
+            <th>Generation</th>
+            <th>Topic</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var data in Model.ResearchDataList)
+        {
+            var match = System.Text.RegularExpressions.Regex.Match(data.ImageUrl, @"/Ad_impressions_\d+-(\d+).*?\.[jpgpng]+$");
+            var imageName = match.Success ? "Page" + match.Groups[1].Value : "Link";
+            <tr>
+                <td><a rel="tooltip" href="@data.ImageUrl">@imageName</a></td>
+                <td>@data.Year</td>
+                <td>@data.Product</td>
+                <td>@data.Region</td>
+                <td>@data.Country</td>
+                <td>@data.State</td>
+                <td>@data.Industry</td>
+                <td>@data.Gender</td>
+                <td>@data.Generation</td>
+                <td>@data.Topic</td>
+            </tr>
+        }
+    </tbody>
+</table>

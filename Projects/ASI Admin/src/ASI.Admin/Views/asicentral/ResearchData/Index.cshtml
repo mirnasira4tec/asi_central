@@ -1,0 +1,136 @@
+﻿@using asi.asicentral.web.Models.asicentral
+@model ResearchDataUploadModel
+@{
+    ViewBag.Title = "Research Data";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div id="dvSuccess" class="alert alert-block alert-success" style="padding-top:12px;margin-top:15px;">@Html.Raw(TempData["SuccessMessage"])</div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div id="dvErr" class="alert alert-danger" style="padding-top:12px;margin-top:15px;">@Html.Raw(TempData["ErrorMessage"])</div>
+    }
+    @using (Html.BeginForm("Upload", "ResearchData", FormMethod.Post, new { enctype = "multipart/form-data", id = "uploadResearchData" }))
+    {
+       @Html.HiddenFor(m => m.CurrentImportId)
+        <div id="ImportExcel" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 id="myModalLabel1">Upload Research Data</h3>
+            </div>
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>
+                            Select Research Data:
+
+                            @Html.DropDownList("ResearchNameList", new SelectList(Model.ResearchNames, "Value", "Text"), new { onchange = "showResearchNameTextBox(this)" })
+                            @Html.ValidationMessageFor(m => m.ResearchName)
+                        </td>
+                        <td style="vertical-align:baseline; padding-left:5px">
+                            &nbsp;
+                            <input type="file" id="fileImport" name="file" multiple="multiple" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            @Html.TextBox("researchNameText", "", new { palceholder = "Research Data Name", style = "display:none" })
+                            @Html.HiddenFor(m => m.ResearchName)
+                        </td>
+                    </tr>
+                </table>
+                <div>
+                    <br />
+                    (Note: Please upload all visual images <a href="http://asicentraladmin.asinetwork.local/Media/List?path=/ASICentral/Resources/AdImpressionStudy/">here</a>)
+                    <br/>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" id="btnExcel" value="Import" onclick="SubmitImportForm()">Submit</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            </div>
+        </div>
+    }
+</div>
+<a href="#ImportExcel" class="modal-link btn" data-toggle="modal" style="margin-bottom:5px" onclick="openUpdatePopup('','')">
+    Import Data
+</a>
+
+@if (Model != null && Model.UploadedImports != null && Model.UploadedImports.Count() > 0)
+{
+    var imports = Model.UploadedImports;
+    <table class="table table-bordered table-condensed table-striped">
+        <thead>
+            <tr>
+                @*<th>&nbsp;</th>*@
+                <th>Name</th>
+                <th>Last Updated by</th>
+                <th>Update Date</th>
+                <th>Create Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var import in imports)
+            {
+                var onClick = string.Format("onclick({0}, '{1}')", import.Id, import.Name);
+            <tr>
+                @*<td>
+                    <a rel="tooltip" class="modal-link btn" data-toggle="modal" data-placement="right" href="#ImportExcel" onclick="@onClick">Update</a>
+                </td>*@
+                
+                <td><a rel="tooltip" data-placement="right" href="/ResearchData/details?importId=@import.Id">@import.Name</a></td>
+                <td>@import.LastUpdatedBy</td>
+                <td>@import.UpdateDateUTC.ToString("MM/dd/yyyy")</td>
+                <td>@import.CreateDateUTC.ToString("MM/dd/yyyy")</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <hr />
+    <ul>
+        <li>No data available!</li>
+    </ul>
+}
+
+<script>
+    function openUpdatePopup(importId, researchName) {
+        $("#CurrentImportId").val(importId);
+        $("#ResearchNameList").val(researchName);
+        if (researchName == "" || typeof researchName == "undefined") {
+            $('#ResearchNameList').removeAttr("disabled");
+        }
+        else {
+            $('#ResearchNameList').attr("disabled", true);
+        }
+
+        $("#ResearchName").val(researchName);
+    }
+
+    function showResearchNameTextBox(obj) {
+        var researchName = $("#ResearchNameList").val();
+        if (researchName === "Other") {
+            researchName = "";
+            $("#researchNameText").show();
+        }
+        else {
+            $("#researchNameText").hide();
+        }
+        $("#ResearchName").val(researchName);
+    }
+
+    function SubmitImportForm() {
+        var research = $("#researchNameText").val();
+        if (research !== "" && typeof research !== "undefined") {
+            $("#ResearchName").val(research);
+        }
+        $("#uploadResearchData").submit();
+    }
+
+</script>

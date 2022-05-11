@@ -32,6 +32,8 @@ namespace asi.asicentral.database
         public DbSet<AsicentralFormQuestion> FormQuestions { get; set; }
         public DbSet<AsicentralFormQuestionOption> FormQuestionOptions { get; set; }
         public DbSet<FormDataValue> FormDataValue { get; set; }
+        public DbSet<ResearchImport> ResearchImports { get; set; }
+        public DbSet<ResearchData> ResearchData { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -49,7 +51,9 @@ namespace asi.asicentral.database
                 .Add(new FormValueMap())
                 .Add(new AsicentralFormQuestionMap())
                 .Add(new AsicentralFormQuestionOptionMap())
-                .Add(new FormDataValueMap());
+                .Add(new FormDataValueMap())
+                .Add(new ResearchImportMap())
+                .Add(new ResearchDataMap());
         }
     }
 }

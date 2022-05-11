@@ -460,6 +460,7 @@
     <Compile Include="Controllers\asicentral\CatalogController.cs" />
     <Compile Include="Controllers\asicentral\ProposalToolController.cs" />
     <Compile Include="Controllers\asicentral\RateSupplierController.cs" />
+    <Compile Include="Controllers\asicentral\ResearchDataController.cs" />
     <Compile Include="Controllers\velocity\VelocityController.cs" />
     <Compile Include="Database\VelocityContext.cs" />
     <Compile Include="Helpers\Authorized.cs" />
@@ -496,6 +497,7 @@
     <Compile Include="Models\asicentral\CatalogContactsSalesModel.cs" />
     <Compile Include="Models\asicentral\RateSupplierImportModel.cs" />
     <Compile Include="Models\asicentral\RateSupplierSummaryModel.cs" />
+    <Compile Include="Models\asicentral\ResearchDataUploadModel.cs" />
     <Compile Include="Models\CompanyInfoModel.cs" />
     <Compile Include="Models\forms\asicentral\FormInstanceModel.cs" />
     <Compile Include="Models\forms\asicentral\FormListModel.cs" />
@@ -749,6 +751,8 @@
     <Content Include="Views\Forms\asicentral\FormDetails.cshtml" />
     <Content Include="Views\asicentral\ProposalTool\ProposalForm.cshtml" />
     <Content Include="Views\asicentral\ProposalTool\Proposals.cshtml" />
+    <Content Include="Views\asicentral\ResearchData\Index.cshtml" />
+    <Content Include="Views\asicentral\ResearchData\Details.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -769,6 +773,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
     <Folder Include="Views\ProposalTool\" />
+    <Folder Include="Views\ResearchData\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
