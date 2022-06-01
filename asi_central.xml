@@ -9,7 +9,7 @@
 	</PropertyGroup>
 	
 	<Target Name="Compile ASI Admin">
-		<MSBuild Projects=".\Admin Tool.sln" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU"/>
+		<MSBuild Projects=".\AdminTool.sln" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU"/>
 	</Target>
 	
 	<Target Name="Config ASI Admin">

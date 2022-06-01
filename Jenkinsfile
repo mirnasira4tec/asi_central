@@ -5,16 +5,14 @@ import com.cwctravel.hudson.plugins.extended_choice_parameter.ExtendedChoicePara
 /**
  * JOB CONFIGURATION
  */
-def adminSolutionName = 'Admin Tool.sln'
+def adminSolutionName = 'AdminTool.sln'
 def packageNames = []
 
 def octopusServer = 'http://asi-deploy-02/'
 def octopusProject = 'asicentraladmin.asinetwork.local'
 def octopusVersion = "1.2.${env.BUILD_NUMBER}"
-def octopusEnvironments = ['STAGE-ASICentral-Family', 'UAT-ASICentral-Family']
+def octopusEnvironments = ['DEV-ASICentral-Family', 'UAT-ASICentral-Family', 'PROD-ASI Central-Family']
 def defaultDeployTo = ['UAT-ASICentral-Family']
-def nugetServer = "\\\\asi-nuget-01\\Packages"
-def buildTarget = '\\\\asi-nas-01\\jenkins\\Releases'
 
 def deployToParameter = new ExtendedChoiceParameterDefinition("deployTo", "PT_CHECKBOX",
     octopusEnvironments.join(','), "", "", "", "", "", "", "", // source of value
@@ -32,7 +30,6 @@ def projectProperties = [
     //disableConcurrentBuilds(),
     parameters([
         choice(choices: "Release\nDebug\n", description: 'Solution configuration used for build.', name: 'BUILDCONFIGURATION'),
-        string(defaultValue: buildTarget, description: 'The target location for the distribution package', name: 'BUILDTARGETDIR'),
         choice(choices: buildOptionsParameter.join('\n'), description: 'Build/deployment options', name: 'buildOptions'),
         deployToParameter
     ]),
@@ -50,10 +47,6 @@ def tobeRecycled = 'False'
 
 if (params.BUILDCONFIGURATION != null) {
     buildConfiguration = params.BUILDCONFIGURATION
-}
-
-if (params.BUILDTARGETDIR != null) {
-    buildTarget = params.BUILDTARGETDIR
 }
 
 if (params.DeploymentType != null) {
@@ -123,8 +116,6 @@ node {
     try {
         def unstableReason = '';
         def artifactStr = createArtifacts ? "Artifacts enabled" : ""
- 
-        slackSend message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>) ${artifactStr}"
     
         stage('Checkout') {
             step([$class: 'GitHubSetCommitStatusBuilder'])
@@ -146,7 +137,7 @@ node {
             def preBuildSteps = [:]
             
             preBuildSteps["Nuget Restore"] = {
-                bat("${nuget} restore \"${adminSolutionName}\"")
+                bat("${nuget} restore ${adminSolutionName}")
             };
 
             parallel(preBuildSteps)
@@ -157,7 +148,7 @@ node {
             
             buildSteps["Build Solution"] = {
                 withCredentials([string(credentialsId: 'octopus-api-key', variable: 'octoApiKey')]) {
-                    bat "\"${tool 'MSBuild2019'}\" asi_central.xml /t:Compile /p:RunOctoPack=${createArtifacts} /p:OctoPackPackageVersion=${octopusVersion} /p:OctoPackPublishPackageToFileShare=${buildTarget} /p:OctoPackPublishPackageToHttp=${octopusServer}nuget/packages /p:OctoPackPublishApiKey=${octoApiKey}"
+                    bat "\"${tool 'MSBuild2019'}\" asi_central.xml /t:Compile /p:RunOctoPack=${createArtifacts} /p:OctoPackPackageVersion=${octopusVersion} /p:OctoPackPublishPackageToHttp=${octopusServer}nuget/packages /p:OctoPackPublishApiKey=${octoApiKey}"
                 }
             };
 
@@ -233,12 +224,8 @@ node {
                 message = message + ' Reason: ' + unstableReason
             }
 
-            slackSend color: 'warning', message: message
-        } else {
-            slackSend color: 'good', message: "Build Completed - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
-        }
+        } 
     } catch (error) {
-        slackSend color: 'danger', message: "Build Failed - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
         
         throw error
     } finally {
