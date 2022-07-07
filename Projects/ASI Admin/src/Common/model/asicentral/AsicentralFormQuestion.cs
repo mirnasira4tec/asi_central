@@ -18,13 +18,18 @@ namespace asi.asicentral.model.asicentral
         public int? ParentQuestionId { get; set; }
         public string FollowingUpQuestions { get; set; }
         public bool IsRequired { get; set; }
+        public string ParentQuestionValue { get; set; }
+        public bool IsObsolete { get; set; }
         public bool IsVisible { get; set; }
+        public bool IsLabel { get; set; }
         public string ValidationRule { get; set; }
         public string ValidationMessage { get; set; }
         public string CssStyle { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UpdateSource { get; set; }
+        public int? GroupId { get; set; }
+        public bool IsAdminOnly { get; set; }
         virtual public AsicentralFormType FormType { get; set; }
         virtual public List<AsicentralFormQuestionOption> QuestionOptions { get; set; }
     }

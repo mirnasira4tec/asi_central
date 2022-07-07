@@ -29,7 +29,7 @@ namespace asi.asicentral.model.asicentral
         public string ApprovedBy { get; set; }
         public string Status { get; set; }
         public bool IsCCRequestSent { get; set; }
-
+        public string LastUpdatedBy { get; set; }
         public virtual AsicentralFormType FormType { get; set; }
         public virtual IList<AsicentralFormValue> Values { get; set; }
         public virtual IList<FormDataValue> DataValues { get; set; }

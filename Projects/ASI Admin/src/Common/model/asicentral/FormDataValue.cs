@@ -13,11 +13,12 @@ namespace asi.asicentral.model.asicentral
         public int InstanceId { get; set; }
         public string Value { get; set; }
         public string UpdateValue { get; set; }
+        public int? GroupSequence { get; set; }
         public DateTime CreateDateUTC { get; set; }
         public DateTime UpdateDateUTC { get; set; }
         public string UpdateSource { get; set; }
-        public AsicentralFormInstance FormInstance { get; set; }
-        public AsicentralFormQuestion Question { get; set; }
+        virtual public AsicentralFormInstance FormInstance { get; set; }
+        virtual public AsicentralFormQuestion Question { get; set; }
 
     }
 }

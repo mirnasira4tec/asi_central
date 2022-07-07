@@ -40,3 +40,12 @@ Add Phone [nvarchar] (50) NULL
 Alter table ATT_EmployeeAttendee
 Add MobileAppID [nvarchar] (100) NULL
 ---------------------END--------------------
+
+  ----------ASCN-3823: Company profile ---
+  Use [Umbraco]
+
+alter table [USR_FormQuestion] add ParentQuestionValue nvarchar(250) NULL
+
+ALTER TABLE USR_FormQuestion ADD IsLabel bit CONSTRAINT USR_FormQuestion_IsLabel DEFAULT 0 WITH VALUES
+
+ALTER TABLE USR_FormQuestion ADD IsObsolete bit CONSTRAINT USR_FormQuestion_IsObsolete DEFAULT 0 WITH VALUES
