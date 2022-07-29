@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Asicentral Forms";
     var formTypeName = string.Empty;
+    var formId = 1;
     var formTypeId = Request["FormType"];
     var showDownload = false;
     if (Model != null && Model.AsicentralForms != null && Model.AsicentralForms.Any())
@@ -90,7 +91,15 @@
             }
             <tr>
                 <td style="width: 9%">@Html.Raw(string.Format("{0:MM/dd/yy} <br /> {0:hh:mm tt}", form.CreateDate))</td>
-                <td><a href="/Forms/AsicentralFormsDetails/@form.Id">@companyName</a></td>
+                @if (formId == form.TypeId)
+                {
+                    <td><a href="/Forms/DistributorMembershipApplication/@form.Id">@companyName</a></td>
+                }
+                else
+                {
+                    <td><a href="/Forms/AsicentralFormsDetails/@form.Id">@companyName</a></td>
+                }
+
                 <td>@form.CompanyConstituentId</td>
                 <td><a href="/Forms/AsicentralFormsDetails/@form.Id">@form.Email</td>
                 <td>@form.FormType.Name</td>

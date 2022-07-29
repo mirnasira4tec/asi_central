@@ -222,6 +222,51 @@ namespace asi.asicentral.web.Controllers.forms
             }
             return View("../Forms/asicentral/FormDetails", form);
         }
+        public ActionResult DistributorMembershipApplication(int? id)
+        {
+            var form = new FormInstanceModel();
+            if (id.HasValue)
+            {
+                form.AsicentralForm = StoreService.GetAll<AsicentralFormInstance>("FormType;DataValues.Question").Where(f => f.Id == id.Value).FirstOrDefault();
+                if (!string.IsNullOrEmpty(form.AsicentralForm.CompanyConstituentId))
+                {
+                    form.Company = PersonifyService.GetPersonifyCompanyInfo(form.AsicentralForm.CompanyConstituentId, 0);
+                    //if( form.Company == null)
+                    //{
+                    //    form.Company = new CompanyInformation() { MasterCustomerId = "112121" };
+                    //}
+                }
+                //else
+                //{
+
+                //    var hasCCSubmit = form != null && form.AsicentralForm.Values != null && form.AsicentralForm.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_HOLDER_NAME) != null;
+                //    form.Company = new CompanyInformation() { MasterCustomerId = "" };
+                //    foreach (var item in form.AsicentralForm.Values)
+                //    {
+                //        switch (item.Name)
+                //        {
+                //            case "Company Name":
+                //                form.Company.Name = item.Value;
+                //                break;
+                //            case "Phone":
+                //                form.Company.Phone = item.Value;
+                //                break;
+                //            case "Email":
+                //                form.Company.Email = item.Value;
+                //                break;
+                //            case "Name":
+                //                form.Company.Name = item.Value;
+                //                break;
+
+
+                //        }
+                //    }
+
+                //}
+            }
+
+            return View("../Forms/asicentral/DistributorMembershipApplication", form);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -524,7 +569,7 @@ namespace asi.asicentral.web.Controllers.forms
                     }
                     else
                     {
-                        columnNames = string.Join(",", formInstanceQuery.FirstOrDefault().Values.Where(n => n.Name != "IPAddress").Select(n => n.Name));                        
+                        columnNames = string.Join(",", formInstanceQuery.FirstOrDefault().Values.Where(n => n.Name != "IPAddress").Select(n => n.Name));
                         if (isAddImpressionForm)
                         {
                             columnNames = "Date," + columnNames;

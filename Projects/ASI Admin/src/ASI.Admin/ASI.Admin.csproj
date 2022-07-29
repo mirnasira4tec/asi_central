@@ -753,6 +753,7 @@
     <Content Include="Views\asicentral\ProposalTool\Proposals.cshtml" />
     <Content Include="Views\asicentral\ResearchData\Index.cshtml" />
     <Content Include="Views\asicentral\ResearchData\Details.cshtml" />
+    <Content Include="Views\Forms\asicentral\DistributorMembershipApplication.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

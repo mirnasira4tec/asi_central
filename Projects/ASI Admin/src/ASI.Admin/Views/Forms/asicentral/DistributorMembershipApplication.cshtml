@@ -1,0 +1,300 @@
+﻿@using asi.asicentral.model.asicentral
+@using asi.asicentral.web.Models.forms.asicentral
+@inherits System.Web.Mvc.WebViewPage<FormInstanceModel>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Form Details";
+    var form = Model.AsicentralForm;
+    var hasCCSubmit = Model != null && form.Values != null && form.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_HOLDER_NAME) != null;
+    var ccAttached = Model != null && form.CCProfileId != null && form.CCProfileId > 0;
+    var actionName = hasCCSubmit ? "PostAsicentralForm" : "SendCCRequest";
+
+    if (Model.Company != null && string.IsNullOrEmpty(form.CompanyConstituentId))
+    {
+        Model.AsicentralForm.CompanyConstituentId = Model.Company.MasterCustomerId;
+    }
+}
+
+<div tabindex="-1"><a href="/Forms/Asicentral">Back to Asicentral Forms </a></div>
+<br />
+<h2>@Html.DisplayFor(m => m.AsicentralForm.FormType.Name) </h2>
+<div class="clearfix"></div>
+@if (Model != null)
+{
+    using (Html.BeginForm(actionName, "../Forms", FormMethod.Post, new { id = "joinNowForm" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(m => m.AsicentralForm.Email)
+        @Html.HiddenFor(m => m.AsicentralForm.IPAddress)
+        @Html.HiddenFor(m => m.AsicentralForm.CreateDate)
+        @Html.HiddenFor(m => m.AsicentralForm.TypeId)
+        @Html.HiddenFor(m => m.AsicentralForm.Status)
+        @Html.HiddenFor(m => m.AsicentralForm.Id)
+        @Html.HiddenFor(m => m.AsicentralForm.Reference)
+        <h5>
+            Email: @Html.Raw(form.Email)
+            <br />
+            IP: @Html.Raw(form.IPAddress)
+            <br />
+            Created: @Html.Raw(string.Format("{0:MM/dd/yy} {0:hh:mm tt}", form.CreateDate))
+            <br />
+            Updated: @Html.Raw(string.Format("{0:MM/dd/yy} {0:hh:mm tt}", form.UpdateDate))
+            <br />
+            Status: @Html.Raw(form.Status)
+        </h5>
+        if (TempData["SuccessMessage"] != null)
+        {
+            <div class="timms-info ajax" style="color: blue;">@TempData["SuccessMessage"].ToString()</div>
+        }
+        if (TempData["ErrorMessage"] != null)
+        {
+            <div class="span12 field-validation-error">@TempData["ErrorMessage"].ToString()</div>
+        }
+        if (form.FormType.Name == "Distributor Join Now Form")
+        {
+            if (ccAttached)
+            {
+                <div class="timms-info ajax">
+                    <div class="span8">
+                        <label class="order-status-label">
+                            <strong>Constituent ID:</strong> @Html.DisplayFor(m => m.AsicentralForm.CompanyConstituentId, new { @class = "span2", disabled = "disabled", @readonly = "readonly" })
+                        </label>
+                        <label class="order-status-label">
+                            <strong>CC Profile Id:</strong> @Html.DisplayFor(m => m.AsicentralForm.CCProfileId, new { @class = "span2", disabled = "disabled", @readonly = "readonly" })
+                        </label>
+                    </div>
+                </div>
+            }
+            else
+            {
+                if (hasCCSubmit)
+                {
+                    <div class="timms-info ajax">
+                        <div class="span4">
+                            <label class="order-status-label">Constituent ID:</label>
+                            <div class="order-status-input">
+                                @Html.EditorFor(m => m.AsicentralForm.CompanyConstituentId, new { @class = "span2" })
+                            </div>
+                        </div>
+                        <span id="timmsErrorMessage" data-type="errormessage" class="field-validation-error"></span>
+                        @if (Model.Company == null || !Model.IsNewCompany)
+                        {
+                            <div class="span2">
+                                <input class="command btn-primary" type="submit" name="submitBtn" value="Create Company" />
+                            </div>
+                        }
+                        <div class="span2">
+                            <input class="command btn-primary" type="submit" name="submitBtn" value="Verify Company" />
+                        </div>
+                        <div class="span2">
+                            @if (Model.Company != null)
+                            {
+                                <input class="command btn-primary" type="submit" name="submitBtn" value="Attach credit card" />
+                            }
+                            else
+                            {
+                                <input class="command" type="submit" name="submitBtn" disabled value="Attach credit card" />
+                            }
+                        </div>
+                        <div class="span12">@Html.ValidationMessageFor(model => model.AsicentralForm.CompanyConstituentId)</div>
+
+                        @if (TempData["IDErrors"] != null)
+                        {
+                            <div class="span12 field-validation-error">@TempData["IDErrors"].ToString()</div>
+                        }
+                    </div>
+                }
+                else  // no CC card
+                {
+                    var info = !form.IsCCRequestSent ? string.Empty : " (Request email Sent)";
+                    <div class="timms-info ajax">
+                        <div class="span3"><strong>No Credit card provided</strong></div>
+                        <button type="button" class="btn" onclick="OpenCustomerEmailPopup()">Send CC Request</button> @info
+                    </div>
+                    // pop up modal
+                    var fromEmail = "membership@asicentral.com";
+                    var firstNameField = form.Values.FirstOrDefault(v => v.Name == "Name");
+                    var firstName = firstNameField != null ? firstNameField.Value.Split(' ')[0] : string.Empty;
+                    var asicentralUrl = System.Configuration.ConfigurationManager.AppSettings["BaseUrl"];
+                    var link = string.Format("{0}/joinnow/billing?reference={1}", asicentralUrl, form.Reference);
+                    var message = string.Format("Hi {0}, \r\n\r\nThank you for applying to become an ASI member. We're so excited to welcome you to the family! \r\n\r\nBefore we process your application, " +
+                                    "we'll need your payment information. Please provide your information here {1} or give us a call at 1-877-813-1183 and we’ll get your membership started." +
+                                    "\r\n\r\nWe look forward to hearing from you. \r\n\r\n Thanks,\r\n\r\n The ASI Team", firstName, link);
+                    <div id="emailModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true" style="display:none">
+                        <div class="modal-dialog modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h3 id="myModalLabel1"></h3>
+                                </div>
+                                <div class="modal-body">
+                                    <table width="100%">
+                                        <tr>
+                                            <td>
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td style="width:10%"> From:</td>
+                                                        <td>  <input type="email" name="fromEmail" value="@fromEmail" required style="width:100%" /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="width:10%">  To:</td>
+                                                        <td>  <input type="text" name="toEmail" value="@form.Email" required style="width:100%" /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="width:10%"> Subject: </td>
+                                                        <td>  <input type="text" name="subject" value="Please provide credit card for your membership form" required style="width:100%" /></td>
+                                                    </tr>
+                                                </table>
+                                                <input type="hidden" id="formReference" name="formReference" value="@form.Reference" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <textarea id="customerEmailHidden" name="mailMessage" class="email-msg">@message
+                                    </textarea>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" type="button" onclick="SendEmail()">Send</button>
+                                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+            if (hasCCSubmit)
+            {
+                string[] CC_DisplayLables =
+                    {
+                        AsicentralFormValue.CC_HOLDER_NAME, AsicentralFormValue.CC_TYPE, AsicentralFormValue.CC_NUMBER,
+                        AsicentralFormValue.CC_EXP_MONTH, AsicentralFormValue.CC_EXP_YEAR, AsicentralFormValue.CC_ADDRESS,
+                        AsicentralFormValue.CC_CITY, AsicentralFormValue.CC_STATE, AsicentralFormValue.CC_POSTALCODE, AsicentralFormValue.CC_COUNTRY
+                    };
+
+                if (Model.Company != null)
+                {
+                    var company = Model.Company;
+                    <div>Personify Company: </div>
+                    <table class="table table-bordered table-condensed table-striped" style="width:100%">
+                        <tbody>
+                            <tr>
+                                <td>Name</td>
+                                <td>ContituentId</td>
+                                <td>Type</td>
+                                <td>Status</td>
+                                <td>Email</td>
+                                <td>PHone</td>
+                            </tr>
+                            <tr>
+                                <td>@company.Name</td>
+                                <td>@company.MasterCustomerId</td>
+                                <td>@company.MemberType</td>
+                                <td>@company.MemberStatus</td>
+                                <td>@company.Email</td>
+                                <td>@company.Phone</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+
+                <div>Credit Card Information</div>
+                <table class="table table-bordered table-condensed table-striped" style="width:100%">
+                    <tbody>
+                        <tr>
+                            <td>Holder Name</td>
+                            <td>Type</td>
+                            <td>Number</td>
+                            <td>Exp Mo.</td>
+                            <td>Exp Year</td>
+                            <td>Street</td>
+                            <td>City</td>
+                            <td>State</td>
+                            <td>Zip</td>
+                            <td>Country</td>
+                        </tr>
+                        <tr>
+                            @foreach (var ccLabel in CC_DisplayLables)
+                            {
+                                var formItem = form.Values.FirstOrDefault(m => m.Name == ccLabel);
+                                if (formItem != null)
+                                {
+                                    <td>@formItem.Value</td>
+                                }
+                            }
+                        </tr>
+                    </tbody>
+                </table>
+            }
+        }
+        /* Legavy Form - (Join Now...) */
+        <h5> Form Data</h5>
+        if (form.Values != null && form.Values.Count() > 0)
+        {
+            <table class="table table-bordered table-condensed table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th style="width:315px">Field</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < form.Values.Count(); i++)
+                    {
+                        var formData = form.Values[i];
+                        @Html.HiddenFor(m => m.AsicentralForm.Values[i].Name);
+                        @Html.HiddenFor(m => m.AsicentralForm.Values[i].Value);
+                        if (Array.IndexOf(AsicentralFormValue.CC_Lables, formData.Name) < 0)
+                        {
+                            <tr>
+                                <td style="width:315px">@formData.Name </td>
+                                <td>@formData.Value </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+        else if (form != null && form.DataValues != null && form.DataValues.Count() > 0) /* New Form with Form Questions */
+        {
+            <table class="table table-bordered table-condensed table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th style="width:315px">Field</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < form.DataValues.Count(); i++)
+                    {
+                        var formData = form.DataValues[i];
+                        var question = "";
+                        if (formData.Question != null)
+                        {
+                            question = formData.Question.Description;
+                        }
+                        <tr>
+                            <td style="width:315px">@question </td>
+                            <td>@formData.Value </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+
+    <script>
+        function SendEmail() {
+            $("#joinNowForm").submit();
+        }
+        function OpenCustomerEmailPopup() {
+            $("#emailModel").modal('show');
+        }
+    </script>
+}
+
+
