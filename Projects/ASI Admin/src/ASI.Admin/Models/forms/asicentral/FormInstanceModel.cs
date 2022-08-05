@@ -9,5 +9,6 @@ namespace asi.asicentral.web.Models.forms.asicentral
         public CompanyInformation Company { get; set; }
         public AsicentralFormInstance AsicentralForm { get; set; }
         public bool IsNewCompany { get; set; } = false;
+        public List<AsicentralFormQuestion> FormQuestions { get; set; }
     }
 }

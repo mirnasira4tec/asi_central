@@ -225,44 +225,34 @@ namespace asi.asicentral.web.Controllers.forms
         public ActionResult DistributorMembershipApplication(int? id)
         {
             var form = new FormInstanceModel();
+            var formQuestions = new FormQuestions();
+
             if (id.HasValue)
             {
-                form.AsicentralForm = StoreService.GetAll<AsicentralFormInstance>("FormType;DataValues.Question").Where(f => f.Id == id.Value).FirstOrDefault();
-                if (!string.IsNullOrEmpty(form.AsicentralForm.CompanyConstituentId))
+                form.AsicentralForm = StoreService.GetAll<AsicentralFormInstance>("FormType;DataValues.Question;DataValues.Question.QuestionOptions").Where(f => f.Id == id.Value).FirstOrDefault();
+                form.FormQuestions= StoreService.GetAll<AsicentralFormQuestion>("QuestionOptions").Where(f => f.FormTypeId == form.AsicentralForm.TypeId).ToList();
+                var hasCCSubmit = form != null && form.AsicentralForm.Values != null && form.AsicentralForm.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_HOLDER_NAME) != null;
+                form.FormQuestions.Where(q => q.InputType != "None" && q.InputType != "Section").OrderBy(q => q.Sequence);
+                form.FormQuestions= form.FormQuestions.OrderBy(q => q.Sequence)
+                             .ToList();
+                foreach (var question in form.FormQuestions)
                 {
-                    form.Company = PersonifyService.GetPersonifyCompanyInfo(form.AsicentralForm.CompanyConstituentId, 0);
-                    //if( form.Company == null)
-                    //{
-                    //    form.Company = new CompanyInformation() { MasterCustomerId = "112121" };
-                    //}
+                    var data = form.AsicentralForm.DataValues.FirstOrDefault(q => q.QuestionId == question.Id);
+                    if (data==null)
+                    {
+                        form.AsicentralForm.DataValues.Add(new FormDataValue()
+                        {
+                            InstanceId = Convert.ToInt32(id),
+                            Value = "",
+                            QuestionId = question.Id,
+                            Question = question
+
+                        });
+                         
+                    }
                 }
-                //else
-                //{
+              //  form.AsicentralForm.DataValues.OrderBy(o => o.Question.Sequence);
 
-                //    var hasCCSubmit = form != null && form.AsicentralForm.Values != null && form.AsicentralForm.Values.FirstOrDefault(v => v.Name == AsicentralFormValue.CC_HOLDER_NAME) != null;
-                //    form.Company = new CompanyInformation() { MasterCustomerId = "" };
-                //    foreach (var item in form.AsicentralForm.Values)
-                //    {
-                //        switch (item.Name)
-                //        {
-                //            case "Company Name":
-                //                form.Company.Name = item.Value;
-                //                break;
-                //            case "Phone":
-                //                form.Company.Phone = item.Value;
-                //                break;
-                //            case "Email":
-                //                form.Company.Email = item.Value;
-                //                break;
-                //            case "Name":
-                //                form.Company.Name = item.Value;
-                //                break;
-
-
-                //        }
-                //    }
-
-                //}
             }
 
             return View("../Forms/asicentral/DistributorMembershipApplication", form);
