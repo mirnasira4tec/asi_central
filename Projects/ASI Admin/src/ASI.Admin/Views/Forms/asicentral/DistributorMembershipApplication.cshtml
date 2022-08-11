@@ -6,12 +6,12 @@
     var counter = 0;
     string[] otherControles = ("radio,checkbox").Split(',');
     var form = Model.AsicentralForm;
-    string MinorityOwnedBussiness = "";
-    
+    string minorityOwnedBussiness = "";
+
 }
 
 <link href="~/Content/bootstrap5.min.css" rel="stylesheet">
-<script src="~/Content/bootstrap5.bundle.min.js"></script>
+<script src="~/Scripts/bootstrap5.bundle.min.js"></script>
 <style>
     .normal {
         padding-left: 20%;
@@ -108,12 +108,6 @@
                 var formData = Model.AsicentralForm.DataValues.FirstOrDefault(q => q.QuestionId == question.Id);
                 if (formData != null)
                 {
-                    if (formData.Question.Name == "MinorityOwnedBussiness")
-                    {
-                        MinorityOwnedBussiness = formData.Question.QuestionOptions.FirstOrDefault(o => o.Id.ToString() == formData.Value.ToString()).Description;
-
-                    }
-
                     <div style="margin-bottom:15px !important" class="row">
 
                         @if (formData.Question.InputType.ToLower() == "text")
@@ -147,13 +141,9 @@
                             if (formData.Question.Description == "Choose Your Membership:")
                             {
                                 <div class="col-md-4">
-
                                     <label class="control-label">@(question.Description != null ? question.Description : question.Name) </label>
-
                                 </div>
-
                                 <div class="col-md-8">
-
                                     <select class="round" style="height:40px" id="@formData.Id" placeholder="@question.PlaceHolder"
                                             name="@formData.Question.Name" value="@formData.Value.ToString()" class="form-control">
                                         @foreach (var option in question.QuestionOptions)
@@ -165,7 +155,12 @@
                             }
                             else if (formData.Question.QuestionOptions.Count > 0)
                             {
-                                <div attr-id="@formData.Question.Name" style="@(formData.Question.Name == "MinorityOwnedBussinessOptions" && MinorityOwnedBussiness!="Yes"?"display:none":"")">
+                                if (formData.Question.Name == "MinorityOwnedBussiness")
+                                {
+                                    minorityOwnedBussiness = formData.Question.QuestionOptions.FirstOrDefault(o => o.Id.ToString() == formData.Value.ToString()).Description;
+
+                                }
+                                <div attr-id="@formData.Question.Name" style="@(formData.Question.Name == "MinorityOwnedBussinessOptions" && minorityOwnedBussiness!="Yes"?"display:none":"")">
                                     <div class="col-md-6">
                                         <label class="control-label">@(question.Description != null ? question.Description : question.Name)</label>
                                     </div>
@@ -194,7 +189,6 @@
 
                                                     <span> @option.Description </span>
                                                 }
-
                                             }
                                         </div>
                                     </div>
@@ -204,9 +198,6 @@
                             {
                                 if (question.Description.Length < 50)
                                 {
-
-
-
                                     <div class="col-md-1">
                                         <div style="width:15px">
                                             <input id="@formData.Id" type="@question.InputType.ToLower()" placeholder="@question.PlaceHolder"
@@ -214,9 +205,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-11">
-
                                         <label class="control-label"> @textToHtml(question.Description != null ? question.Description : question.Name) </label>
-
                                     </div>
                                 }
                                 else
